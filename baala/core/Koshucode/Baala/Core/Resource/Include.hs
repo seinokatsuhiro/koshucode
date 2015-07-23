@@ -55,6 +55,7 @@ resIncludeBody cd res abcl =
          C.COutput  _      -> call output
          C.COption  _      -> call option
          C.CEcho    _      -> call echo
+         C.CLicense _      -> call license
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
@@ -114,6 +115,10 @@ resIncludeBody cd res abcl =
       echo :: Include c
       echo _ _ (C.CEcho clause) =
           Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
+
+      license :: Include c
+      license _ _ (C.CLicense line) =
+          Right $ res { C.resLicense = C.resLicense << line }
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)

@@ -81,20 +81,22 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
     dispatch [B.TTextSect _] = Right $ B.codeChange prev r
     dispatch [B.TTextSect _, B.TTextRaw _ name] =
         case name of
-          "rel"    -> Right $ B.codeChange relation r
-          "note"   -> Right $ B.codeChange note r
-          "end"    -> Right $ B.codeChange end r
-          "local"  -> Msg.notImplemented "local section"
-          "attr"   -> Msg.notImplemented "attr section"
-          "text"   -> Msg.notImplemented "text section"
-          "doc"    -> Msg.notImplemented "doc section"
-          "data"   -> Msg.notImplemented "data section"
-          _        -> Msg.unexpSect help
-    dispatch _      = Msg.unexpSect help
+          "rel"      -> Right $ B.codeChange relation r
+          "note"     -> Right $ B.codeChange note r
+          "end"      -> Right $ B.codeChange end r
+          "license"  -> Right $ B.codeChange license r
+          "local"    -> Msg.notImplemented "local section"
+          "attr"     -> Msg.notImplemented "attr section"
+          "text"     -> Msg.notImplemented "text section"
+          "doc"      -> Msg.notImplemented "doc section"
+          "data"     -> Msg.notImplemented "data section"
+          _          -> Msg.unexpSect help
+    dispatch _        = Msg.unexpSect help
 
-    help = [ "=== rel    for relational calculation"
-           , "=== note   for commentary section"
-           , "=== end    for ending of input" ]
+    help = [ "=== rel      for relational calculation"
+           , "=== note     for commentary section"
+           , "=== license  for license section"
+           , "=== end      for ending of input" ]
 
 -- Tokenizer for end section.
 end :: B.AbMap TokenRoll
@@ -104,10 +106,19 @@ end r@B.CodeRoll { B.codeInput = cs } = comment r cs
 note :: B.AbMap TokenRoll
 note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
 
+license :: B.AbMap TokenRoll
+license r@B.CodeRoll { B.codeInputPt = cp } = start (textLicense r) cp r
+
 comment :: TokenRoll -> String -> B.Ab TokenRoll
 comment r "" = Right r
 comment r cs = Right $ B.codeUpdate "" tok r where
     tok  = B.TComment cp cs
+    cp   = B.codeInputPt r
+
+textLicense :: TokenRoll -> String -> B.Ab TokenRoll
+textLicense r "" = Right r
+textLicense r cs = Right $ B.codeUpdate "" tok r where
+    tok  = B.TText cp B.TextLicense cs
     cp   = B.codeInputPt r
 
 

@@ -49,6 +49,7 @@ data ClauseBody
     | COption   [B.Token]                          -- ^ Option settings
     | COutput   [B.Token]                          -- ^ Output point
     | CEcho     B.TokenClause                      -- ^ Echo text
+    | CLicense  String                             -- ^ License text
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -74,6 +75,7 @@ clauseTypeText (Clause _ body) =
       COption   _       -> "option"
       COutput   _       -> "output"
       CEcho     _       -> "echo"
+      CLicense  _       -> "license"
 
 
 
@@ -145,6 +147,7 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
         | k == "****"               = normal    []
     dispatch (B.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
     dispatch []                     = normal    []
+    dispatch [B.TTextLicense _ ln]  = normal    $ c1 $ CLicense ln
     dispatch _                      = normal    $ unkAtStart []
 
     normal cs             = (cs, h)

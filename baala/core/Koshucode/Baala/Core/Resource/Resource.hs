@@ -46,6 +46,7 @@ data Resource c = Resource
     , resInputStack :: ([B.InputPoint], [B.InputPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint          -- ^ Output point
     , resEcho       :: [[B.TokenLine]]    -- ^ Echo text
+    , resLicense    :: [String]           -- ^ License text
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
     , resSelect     :: C.RelSelect c
@@ -78,6 +79,7 @@ resEmpty = Resource
            , resInputStack = ([], [], [])
            , resOutput     = B.IOPointStdout
            , resEcho       = []
+           , resLicense    = []
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee

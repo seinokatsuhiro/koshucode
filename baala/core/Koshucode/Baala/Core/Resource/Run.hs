@@ -31,6 +31,7 @@ runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
     C.Resource c -> B.Ab B.Result
 runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resEcho    = echo
+                               , C.resLicense = license
                                , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
@@ -38,6 +39,7 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                  { B.resultInput     = C.resInputPoint res
                  , B.resultOutput    = C.resOutput res
                  , B.resultEcho      = map B.lineContent `map` echo
+                 , B.resultLicense   = license
                  , B.resultViolated  = B.shortTrim js1
                  , B.resultNormal    = msgChunk : B.shortTrim js2
                  , B.resultPattern   = C.resPattern res }

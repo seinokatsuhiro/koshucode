@@ -25,6 +25,7 @@ module Koshucode.Baala.Base.Token.Token
     pattern TTextKey,
     pattern TTextBar,
     pattern TTextName,
+    pattern TTextLicense,
     pattern TTextSect,
 
     -- * TermType
@@ -141,34 +142,37 @@ unlocal (LocalSymbol a) = a
 -- ----------------------  TextForm
 
 data TextForm
-    = TextUnk     -- ^ Unknown keyword
-    | TextRaw     -- ^ Naked text
-    | TextQ       -- ^ Single-quoted text
-    | TextQQ      -- ^ Double-quoted text
-    | TextKey     -- ^ Keyword literal
-    | TextBar     -- ^ Text enclosed in bars
-    | TextName    -- ^ Text used as name
+    = TextUnk      -- ^ Unknown keyword
+    | TextRaw      -- ^ Naked text
+    | TextQ        -- ^ Single-quoted text
+    | TextQQ       -- ^ Double-quoted text
+    | TextKey      -- ^ Keyword literal
+    | TextBar      -- ^ Text enclosed in bars
+    | TextName     -- ^ Text used as name
+    | TextLicense  -- ^ Text used as name
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-pattern TTextUnk  cp w   = TText cp TextUnk  w
-pattern TTextRaw  cp w   = TText cp TextRaw  w
-pattern TTextQ    cp w   = TText cp TextQ    w
-pattern TTextQQ   cp w   = TText cp TextQQ   w
-pattern TTextKey  cp w   = TText cp TextKey  w
-pattern TTextBar  cp w   = TText cp TextBar  w
-pattern TTextName cp w   = TText cp TextName w
-pattern TTextSect cp     = TTextRaw cp "==="
+pattern TTextUnk  cp w     = TText cp TextUnk  w
+pattern TTextRaw  cp w     = TText cp TextRaw  w
+pattern TTextQ    cp w     = TText cp TextQ    w
+pattern TTextQQ   cp w     = TText cp TextQQ   w
+pattern TTextKey  cp w     = TText cp TextKey  w
+pattern TTextBar  cp w     = TText cp TextBar  w
+pattern TTextName cp w     = TText cp TextName w
+pattern TTextLicense cp w  = TText cp TextLicense w
+pattern TTextSect cp       = TTextRaw cp "==="
 
 textFormTypeText :: TextForm -> String
 textFormTypeText form =
     case form of
-      TextUnk   -> "unknown"
-      TextRaw   -> "raw"
-      TextQ     -> "q"
-      TextQQ    -> "qq"
-      TextKey   -> "key"
-      TextBar   -> "bar"
-      TextName  -> "name"
+      TextUnk      -> "unknown"
+      TextRaw      -> "raw"
+      TextQ        -> "q"
+      TextQQ       -> "qq"
+      TextKey      -> "key"
+      TextBar      -> "bar"
+      TextName     -> "name"
+      TextLicense  -> "license"
 
 
 -- ----------------------  Term type
@@ -283,13 +287,14 @@ untoken :: Token -> String
 untoken tok =
     case tok of
       TText     _ q s    -> case q of
-                              TextUnk  -> s
-                              TextRaw  -> s
-                              TextQ    -> "'" ++ s
-                              TextQQ   -> "\"" ++ s ++ "\""
-                              TextKey  -> s
-                              TextBar  -> s
-                              TextName -> s
+                              TextUnk     -> s
+                              TextRaw     -> s
+                              TextQ       -> "'" ++ s
+                              TextQQ      -> "\"" ++ s ++ "\""
+                              TextKey     -> s
+                              TextBar     -> s
+                              TextName    -> s
+                              TextLicense -> s
       TName     _ op     -> B.name op
       TShort    _ a b    -> a ++ "." ++ b
       TTermN    _ n      -> '/' : n

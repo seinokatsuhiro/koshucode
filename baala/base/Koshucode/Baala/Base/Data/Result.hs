@@ -37,6 +37,7 @@ data Result = Result
     , resultInput      :: [InputPoint]
     , resultOutput     :: B.IOPoint
     , resultEcho       :: [[String]]
+    , resultLicense    :: [String]
     , resultViolated   :: [ResultShortChunks]
     , resultNormal     :: [ResultShortChunks]
     , resultPattern    :: [B.JudgePat]
@@ -65,6 +66,7 @@ resultEmpty =
            , resultInput      = []
            , resultOutput     = B.IOPointStdout
            , resultEcho       = []
+           , resultLicense    = []
            , resultViolated   = []
            , resultNormal     = []
            , resultPattern    = [] }
@@ -104,6 +106,8 @@ hPutAllChunks h status result sh =
     do IO.hSetEncoding h IO.utf8
        -- head
        B.when (resultPrintHead result) $ hPutHead h result
+       -- license
+       hPutLicense h result
        -- echo
        hPutEcho h result
        -- body
@@ -112,6 +116,16 @@ hPutAllChunks h status result sh =
        -- foot
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
+
+hPutLicense :: IO.Handle -> Result -> IO ()
+hPutLicense h Result { resultLicense = license}
+    | null license = return ()
+    | otherwise    = do IO.hPutStrLn h "=== license"
+                        B.hPutEmptyLine h
+                        B.hPutLines h license
+                        B.hPutEmptyLine h
+                        IO.hPutStrLn h "=== rel"
+                        B.hPutEmptyLine h
 
 hPutEcho :: IO.Handle -> Result -> IO ()
 hPutEcho h result =
