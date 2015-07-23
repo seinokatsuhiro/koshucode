@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Text.Http
   ) where
 
 import qualified Data.ByteString.Char8           as Byte
-import qualified Data.ByteString.Lazy.Char8      as Lazy
+import qualified Data.ByteString.Lazy.UTF8       as UTF
 import qualified Control.Exception               as Ex
 import qualified Network.HTTP.Conduit            as H
 import qualified Network.HTTP.Types.Status       as H
@@ -24,8 +24,10 @@ uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
 uriContent proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
-         res <- H.withManager $ H.httpLbs req
-         return $ Right $ Lazy.unpack $ H.responseBody res
+         man <- H.newManager H.conduitManagerSettings
+         res <- H.httpLbs req man
+         -- Deprecated: res <- H.withManager $ H.httpLbs req
+         return $ Right $ UTF.toString $ H.responseBody res
 
 requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
 requestFromURI proxies uriText =
@@ -83,4 +85,6 @@ httpExceptionSummary e = case e of
     H.InvalidDestinationHost _                -> "Invalid destination host"
     H.HttpZlibException _                     -> "Zlib error"
     H.InternalIOException _                   -> "Internal I/O error"
+    H.InvalidProxyEnvironmentVariable _ _     -> "Invalid proxy env"
+    H.ResponseLengthAndChunkingBothUsed       -> "Length and chunked"
 
