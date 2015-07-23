@@ -147,7 +147,7 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
         | k == "****"               = normal    []
     dispatch (B.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
     dispatch []                     = normal    []
-    dispatch [B.TTextLicense _ ln]  = normal    $ c1 $ CLicense ln
+    dispatch [B.TTextLicense _ ln]  = normal    $ c1 $ CLicense $ B.trimRight ln
     dispatch _                      = normal    $ unkAtStart []
 
     normal cs             = (cs, h)

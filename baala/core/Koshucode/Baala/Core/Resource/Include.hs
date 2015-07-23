@@ -117,8 +117,8 @@ resIncludeBody cd res abcl =
           Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
 
       license :: Include c
-      license _ _ (C.CLicense line) =
-          Right $ res { C.resLicense = C.resLicense << line }
+      license h _ (C.CLicense line) =
+          Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)

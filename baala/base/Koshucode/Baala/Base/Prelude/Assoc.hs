@@ -30,10 +30,8 @@ module Koshucode.Baala.Base.Prelude.Assoc
     -- $OnceMore
   
     -- * Gather
-    Gather,
-    gather,
-    gatherWith,
-    gatherToMap,
+    Gather, gather, gatherWith,
+    gatherToMap, gatherToAssoc,
   ) where
 
 import qualified Data.Map   as Map
@@ -269,3 +267,5 @@ gatherToMap xs = loop xs Map.empty where
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
 
+gatherToAssoc :: (Ord k) => [(k,v)] -> [(k, [v])]
+gatherToAssoc = Map.assocs . gatherToMap

@@ -35,20 +35,20 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 
 -- | Relational data resource
 data Resource c = Resource
-    { resGlobal     :: Global c           -- ^ Global parameter
-    , resOption     :: C.Option c         -- ^ Options
-    , resImport     :: [Resource c]       -- ^ Importing resources
-    , resExport     :: [String]           -- ^ Exporting names
-    , resSlot       :: [B.NamedTrees]     -- ^ Global slots
-    , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
-    , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
-    , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
+    { resGlobal     :: Global c            -- ^ Global parameter
+    , resOption     :: C.Option c          -- ^ Options
+    , resImport     :: [Resource c]        -- ^ Importing resources
+    , resExport     :: [String]            -- ^ Exporting names
+    , resSlot       :: [B.NamedTrees]      -- ^ Global slots
+    , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
+    , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
+    , resJudge      :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , resInputStack :: ([B.InputPoint], [B.InputPoint], [B.CodePiece])  -- ^ Input points
-    , resOutput     :: B.IOPoint          -- ^ Output point
-    , resEcho       :: [[B.TokenLine]]    -- ^ Echo text
-    , resLicense    :: [String]           -- ^ License text
-    , resMessage    :: [String]           -- ^ Collection of messages
-    , resLastSecNo  :: C.SecNo            -- ^ Last section number
+    , resOutput     :: B.IOPoint           -- ^ Output point
+    , resEcho       :: [[B.TokenLine]]     -- ^ Echo text
+    , resLicense    :: [(C.SecNo, String)] -- ^ License text
+    , resMessage    :: [String]            -- ^ Collection of messages
+    , resLastSecNo  :: C.SecNo             -- ^ Last section number
     , resSelect     :: C.RelSelect c
     }
 

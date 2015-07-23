@@ -39,7 +39,7 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                  { B.resultInput     = C.resInputPoint res
                  , B.resultOutput    = C.resOutput res
                  , B.resultEcho      = map B.lineContent `map` echo
-                 , B.resultLicense   = license
+                 , B.resultLicense   = group license
                  , B.resultViolated  = B.shortTrim js1
                  , B.resultNormal    = msgChunk : B.shortTrim js2
                  , B.resultPattern   = C.resPattern res }
@@ -53,6 +53,9 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                | otherwise = B.Short [] [] [B.ResultNote message]
 
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
+
+      group :: [(C.SecNo, String)] -> [[String]]
+      group = B.unique . map (reverse . snd) . B.gatherToAssoc
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
 assembleRelmap res@C.Resource { C.resSlot    = slots

@@ -37,7 +37,7 @@ data Result = Result
     , resultInput      :: [InputPoint]
     , resultOutput     :: B.IOPoint
     , resultEcho       :: [[String]]
-    , resultLicense    :: [String]
+    , resultLicense    :: [[String]]
     , resultViolated   :: [ResultShortChunks]
     , resultNormal     :: [ResultShortChunks]
     , resultPattern    :: [B.JudgePat]
@@ -118,14 +118,17 @@ hPutAllChunks h status result sh =
        return status
 
 hPutLicense :: IO.Handle -> Result -> IO ()
-hPutLicense h Result { resultLicense = license}
-    | null license = return ()
-    | otherwise    = do IO.hPutStrLn h "=== license"
-                        B.hPutEmptyLine h
-                        B.hPutLines h license
-                        B.hPutEmptyLine h
-                        IO.hPutStrLn h "=== rel"
-                        B.hPutEmptyLine h
+hPutLicense h Result { resultLicense = ls }
+    | null ls    = return ()
+    | otherwise  = do mapM_ put ls
+                      IO.hPutStrLn h "=== rel"
+                      B.hPutEmptyLine h
+    where
+      put license =
+          do IO.hPutStrLn h "=== license"
+             B.hPutEmptyLine h
+             B.hPutLines h license
+             B.hPutEmptyLine h
 
 hPutEcho :: IO.Handle -> Result -> IO ()
 hPutEcho h result =
