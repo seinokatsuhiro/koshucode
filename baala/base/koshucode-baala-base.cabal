@@ -97,6 +97,7 @@ library
         Koshucode.Baala.Base.Token
         Koshucode.Baala.Base.Token.AngleText
         Koshucode.Baala.Base.Token.Short
+        Koshucode.Baala.Base.Token.Term
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause
         Koshucode.Baala.Base.Token.TokenLine

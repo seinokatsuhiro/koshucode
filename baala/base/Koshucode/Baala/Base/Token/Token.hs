@@ -33,14 +33,6 @@ module Koshucode.Baala.Base.Token.Token
     pattern TTermPath,
     pattern TTermQ,
 
-    -- * Term name
-    TermName, TermName2, TermName3, TermName4,
-    TermPath,
-    showTermName,
-    showNestedTermName,
-    termP, termN, termPN,
-    termsP, termsN, termsPN,
-  
     -- * Selectors
     tokenContent, untoken,
     tokenTypeText, tokenSubtypeText,
@@ -55,30 +47,31 @@ module Koshucode.Baala.Base.Token.Token
     -- $Predicate
   ) where
 
-import qualified Data.Generics                  as G
-import qualified Koshucode.Baala.Base.Prelude   as B
-import qualified Koshucode.Baala.Base.Text      as B
+import qualified Data.Generics                    as G
+import qualified Koshucode.Baala.Base.Prelude     as B
+import qualified Koshucode.Baala.Base.Text        as B
+import qualified Koshucode.Baala.Base.Token.Term  as B
 
 
 -- ----------------------  Token type
 
 -- | There are nine types of tokens.
 data Token
-    = TText     B.CodePt TextForm String    -- ^ Text.
-    | TName     B.CodePt BlankName          -- ^ Blank name.
-    | TSlot     B.CodePt Int String         -- ^ Slot name.
-                                            --   'Int' represents slot level, i.e.,
-                                            --   0 for local positional slots,
-                                            --   1 for local named slots,
-                                            --   2 for global slots.
-    | TShort    B.CodePt String String      -- ^ Prefixed shorten text.
-    | TTermN    B.CodePt TermName           -- ^ Term name.
-    | TTerm     B.CodePt TermType TermPath  -- ^ Term path.
+    = TText     B.CodePt TextForm String      -- ^ Text.
+    | TName     B.CodePt BlankName            -- ^ Blank name.
+    | TSlot     B.CodePt Int String           -- ^ Slot name.
+                                              --   'Int' represents slot level, i.e.,
+                                              --   0 for local positional slots,
+                                              --   1 for local named slots,
+                                              --   2 for global slots.
+    | TShort    B.CodePt String String        -- ^ Prefixed shorten text.
+    | TTermN    B.CodePt B.TermName           -- ^ Term name.
+    | TTerm     B.CodePt TermType B.TermPath  -- ^ Term path.
     | TLocal    B.CodePt (Local String) Int [Token]  -- ^ Local name.
-    | TOpen     B.CodePt String             -- ^ Opening bracket.
-    | TClose    B.CodePt String             -- ^ Closing bracket.
-    | TSpace    B.CodePt Int                -- ^ /N/ space characters.
-    | TComment  B.CodePt String             -- ^ Comment.
+    | TOpen     B.CodePt String               -- ^ Opening bracket.
+    | TClose    B.CodePt String               -- ^ Closing bracket.
+    | TSpace    B.CodePt Int                  -- ^ /N/ space characters.
+    | TComment  B.CodePt String               -- ^ Comment.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
@@ -149,7 +142,7 @@ data TextForm
     | TextKey      -- ^ Keyword literal
     | TextBar      -- ^ Text enclosed in bars
     | TextName     -- ^ Text used as name
-    | TextLicense  -- ^ Text used as name
+    | TextLicense  -- ^ Text ins license section
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 pattern TTextUnk  cp w     = TText cp TextUnk  w
@@ -218,43 +211,6 @@ blankNameTypeText n =
       BlankPrefix   _   -> "prefix"
       BlankInfix    _   -> "infix"
       BlankPostfix  _   -> "postfix"
-
-
--- ---------------------- Term name
-
--- | Name of term, e.g., @\"file\"@ for the term name @\/file@.
-type TermName    = String
-type TermName2   = (String, String)
-type TermName3   = (String, String, String)
-type TermName4   = (String, String, String, String)
-
--- | Path of term names, e.g., term name @\/r\/x@
---   is correspond to path @[\"r\", \"x\"]@.
-type TermPath    = [TermName]
-
-showTermName :: B.Map String
-showTermName n = ('/' : n)
-
-showNestedTermName :: [String] -> String
-showNestedTermName = concat . map showTermName
-
-termP :: Int -> Bool
-termP = (>= 0)
-
-termN :: Int -> Bool
-termN = (< 0)
-
-termPN :: Int -> Int -> Bool
-termPN p n = termP p && termN n
-
-termsP :: [Int] -> Bool
-termsP = all termP
-
-termsN :: [Int] -> Bool
-termsN = all termN
-
-termsPN :: [Int] -> [Int] -> Bool
-termsPN p n = termsP p && termsN n
 
 
 -- ----------------------  Selector
