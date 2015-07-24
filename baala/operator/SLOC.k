@@ -3,12 +3,12 @@
 about /package 'operator
 
 |-- DIR  /code 29   /comment 6    /dir "operator/Koshucode/Baala"
-|-- DIR  /code 1180  /comment 730  /dir "operator/Koshucode/Baala/Op"
+|-- DIR  /code 1193  /comment 737  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 227  /comment 152  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 181  /comment 174  /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- DIR  /code 239  /comment 241  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1856  /comment 1303
+|-- DIR-TOTAL  /code 1869  /comment 1310
 
 |-- FILE  /code 29   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -34,7 +34,7 @@ about /package 'operator
 |-- FILE  /code 197  /comment 107  /file "Peripheral.hs"  /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 64   /comment 36   /file "Resource.hs"    /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 48   /comment 73   /file "Source.hs"      /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 127  /comment 76   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 140  /comment 83   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 76   /comment 53   /file "TermGadget.hs"  /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1856  /comment 1303
+|-- FILE-TOTAL  /code 1869  /comment 1310
