@@ -9,7 +9,7 @@
 --   <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-content
-@version 0.89.0.0
+@version 0.113.0.0
 
 module Koshucode.Baala.Op.Cox.Get
 
@@ -44,18 +44,18 @@ module Koshucode.Baala.Op.Cox.Range
 ropsCoxRange :: CContent c => [Rop c]
 type RangeAttr c = (TermName, CopSet c, Cox c, Cox c)
 consRange :: CContent c => RopCons c
-relmapRange :: CContent c => RopUse c -> RangeAttr c -> Relmap c
-relmapRangeYear :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRange :: CContent c => Intmed c -> RangeAttr c -> Relmap c
+relmapRangeYear :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeYear :: CContent c => RangeAttr c -> RelkitFlow c
-relmapRangeMonth :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeMonth :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeMonth :: CContent c => RangeAttr c -> RelkitFlow c
-relmapRangeDay :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeDay :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeDay :: CContent c => RangeAttr c -> RelkitFlow c
-relmapRangeHour :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeHour :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeHour :: CContent c => RangeAttr c -> RelkitFlow c
-relmapRangeMinute :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeMinute :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeMinute :: CContent c => RangeAttr c -> RelkitFlow c
-relmapRangeSecond :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeSecond :: CContent c => Intmed c -> RangeAttr c -> Relmap c
 relkitRangeSecond :: CContent c => RangeAttr c -> RelkitFlow c
 
 module Koshucode.Baala.Op.Cox.Gadget
@@ -63,12 +63,12 @@ module Koshucode.Baala.Op.Cox.Gadget
 -- | Implementation of relational operators.
 ropsCoxGadget :: CContent c => [Rop c]
 consNumber :: (Ord c, CContent c) => RopCons c
-relmapNumber :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relmapNumber :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 relkitNumber :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
 consRank :: (Ord c, CContent c) => RopCons c
-relmapGapRank :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relmapGapRank :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 relkitGapRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
-relmapDenseRank :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relmapDenseRank :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 relkitDenseRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
 consRepeat :: (Ord c, CContent c) => RopCons c
 
@@ -82,13 +82,13 @@ module Koshucode.Baala.Op.Cox.Filter
 --   </ul>
 ropsCoxFilter :: CContent c => [Rop c]
 consFilter :: CContent c => Bool -> RopCons c
-relmapFilter :: (CList c, CRel c, CBool c, Write c) => RopUse c -> (Bool, CopSet c, Cox c) -> Relmap c
+relmapFilter :: (CList c, CRel c, CBool c, Write c) => Intmed c -> (Bool, CopSet c, Cox c) -> Relmap c
 relkitFilter :: (CList c, CRel c, CBool c, Write c) => (Bool, CopSet c, Cox c) -> RelkitFlow c
 consContain :: CContent c => RopCons c
-relmapContain :: Eq c => RopUse c -> c -> Relmap c
+relmapContain :: Eq c => Intmed c -> c -> Relmap c
 relkitContain :: Eq c => c -> RelkitFlow c
 consOmitAll :: RopCons c
-relmapOmitAll :: RopUse c -> Relmap c
+relmapOmitAll :: Intmed c -> Relmap c
 
 module Koshucode.Baala.Op.Cox.Empty
 
@@ -101,10 +101,10 @@ module Koshucode.Baala.Op.Cox.Empty
 --   </ul>
 ropsCoxEmpty :: CContent c => [Rop c]
 consBoth :: CContent c => RopCons c
-relmapBoth :: Ord c => RopUse c -> c -> Map (Relmap c)
+relmapBoth :: (Ord c, CRel c) => Intmed c -> c -> Map (Relmap c)
 consMaybe :: CContent c => RopCons c
-relmapMaybe :: Ord c => RopUse c -> c -> Map (Relmap c)
-relkitMaybe :: Ord c => c -> RelkitBinary c
+relmapMaybe :: (Ord c, CRel c) => Intmed c -> c -> Map (Relmap c)
+relkitMaybe :: (Ord c, CRel c) => c -> RelkitBinary c
 
 module Koshucode.Baala.Op.Cox.Calc
 
@@ -116,29 +116,29 @@ module Koshucode.Baala.Op.Cox.Calc
 --   </ul>
 ropsCoxCalc :: CContent c => [Rop c]
 consAdd :: CContent c => RopCons c
-relmapAdd :: (CList c, CRel c, Write c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapAdd :: (CList c, CRel c, Write c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 consSubst :: CContent c => RopCons c
-relmapSubst :: (CList c, CRel c, Write c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapSubst :: (CList c, CRel c, Write c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 consFill :: CContent c => RopCons c
-relmapFill :: CContent c => RopUse c -> ([TermName], CopSet c, Cox c) -> Relmap c
+relmapFill :: CContent c => Intmed c -> ([TermName], CopSet c, Cox c) -> Relmap c
 consReplace :: CContent c => RopCons c
 consReplaceAll :: CContent c => RopCons c
-relmapReplaceAll :: CContent c => RopUse c -> (CopSet c, Cox c, Cox c) -> Relmap c
+relmapReplaceAll :: CContent c => Intmed c -> (CopSet c, Cox c, Cox c) -> Relmap c
 consSplit :: CContent c => RopCons c
-relmapSplit :: (CList c, CRel c, Write c, CBool c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapSplit :: (CList c, CRel c, Write c, CBool c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 relkitSplit :: (CList c, CRel c, Write c, CBool c) => (CopSet c, [NamedCox c]) -> RelkitFlow c
 consUnary :: CContent c => RopCons c
-relmapUnary :: CContent c => RopUse c -> (TermName, [c]) -> Relmap c
+relmapUnary :: CContent c => Intmed c -> (TermName, [c]) -> Relmap c
 
 module Koshucode.Baala.Op.Cox.Accessor
 
 -- | Implementation of relational operators.
 ropsCoxAccessor :: CContent c => [Rop c]
-relmapClock :: CContent c => RopUse c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
+relmapClock :: CContent c => Intmed c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
 relkitClock :: CContent c => (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> RelkitFlow c
-relmapClockGet :: CContent c => RopUse c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
+relmapClockGet :: CContent c => Intmed c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
 relkitClockGet :: CContent c => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
-relmapClockAlter :: CContent c => RopUse c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
+relmapClockAlter :: CContent c => Intmed c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
 relkitClockAlter :: CContent c => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
 
@@ -181,6 +181,11 @@ b3 :: Cox c
 
 
 -- | Content operators.
+module Koshucode.Baala.Op.Cop.Type
+copsType :: CContent c => [Cop c]
+
+
+-- | Content operators.
 module Koshucode.Baala.Op.Cop.Time
 copsTime :: (CTime c, CDec c) => [Cop c]
 
@@ -210,10 +215,14 @@ module Koshucode.Baala.Op.Cop.Arith
 copsArith :: CContent c => [Cop c]
 
 
--- | Vanilla type.
+-- | Vanilla content type.
 module Koshucode.Baala.Type.Vanilla
+type JudgeC = Judge VContent
+type AboutC = About VContent
+type AboutJudgesC = AboutJudges VContent
+type ResourceC = Resource VContent
 
--- | Vanilla type
+-- | Vanilla content type
 data VContent
 
 -- | Boolean type
