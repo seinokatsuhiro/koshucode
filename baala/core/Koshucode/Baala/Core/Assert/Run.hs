@@ -44,7 +44,7 @@ runAssertDataset hook option (B.Short _ sh ass) =
       assert True  q p = C.assertAs q p
       assert False q p = C.assertAs q p . omitEmpty
 
-      omitEmpty :: (C.CEmpty c) => B.Map [B.Named c]
+      omitEmpty :: (C.CEmpty c) => B.Map [B.Term c]
       omitEmpty =  B.omit (C.isEmpty . snd)
 
 runRelmapViaRelkit :: (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)

@@ -46,12 +46,12 @@ import qualified Koshucode.Baala.Base.Token        as B
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      JudgePat [B.Named c]  -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        JudgePat [B.Named c]  -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   JudgePat [B.Named c]  -- ^ @|-xx P \/x 10 \/y 20@
-    | JudgeChange      JudgePat [B.Named c] [B.Named c]  -- ^ @|-c P \/x 10 +\/y 20@
-    | JudgeMultiChange JudgePat [B.Named c] [B.Named c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     JudgePat [B.Named c]  -- ^ @|-v P \/x 10 \/y 20@
+    = JudgeAffirm      JudgePat [B.Term c]  -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        JudgePat [B.Term c]  -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   JudgePat [B.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
+    | JudgeChange      JudgePat [B.Term c] [B.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
+    | JudgeMultiChange JudgePat [B.Term c] [B.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
+    | JudgeViolate     JudgePat [B.Term c]  -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -86,7 +86,7 @@ judgePat (JudgeMultiChange p _ _)      = p
 judgePat (JudgeViolate     p _)        = p
 
 -- | Return term list of judgement.
-judgeTerms :: Judge c -> [B.Named c]
+judgeTerms :: Judge c -> [B.Term c]
 judgeTerms (JudgeAffirm      _ xs)     = xs
 judgeTerms (JudgeDeny        _ xs)     = xs
 judgeTerms (JudgeMultiDeny   _ xs)     = xs
@@ -94,7 +94,7 @@ judgeTerms (JudgeChange      _ xs _)   = xs
 judgeTerms (JudgeMultiChange _ xs _)   = xs
 judgeTerms (JudgeViolate     _ xs)     = xs
 
-judgeTermsMap :: ([B.Named a] -> [B.Named b]) -> Judge a -> Judge b
+judgeTermsMap :: ([B.Term a] -> [B.Term b]) -> Judge a -> Judge b
 judgeTermsMap f (JudgeAffirm      p xs)      = JudgeAffirm    p (f xs)
 judgeTermsMap f (JudgeDeny        p xs)      = JudgeDeny      p (f xs)
 judgeTermsMap f (JudgeMultiDeny   p xs)      = JudgeMultiDeny p (f xs)
@@ -103,7 +103,7 @@ judgeTermsMap f (JudgeMultiChange p xs xs')  = JudgeChange    p (f xs) (f xs')
 judgeTermsMap f (JudgeViolate     p xs)      = JudgeViolate   p (f xs)
 
 -- | Prepend a term into judgement.
-judgeCons :: B.Named c -> B.Map (Judge c)
+judgeCons :: B.Term c -> B.Map (Judge c)
 judgeCons x = judgeTermsMap (x :)
 
 -- | Sort terms in alphabetical order.
@@ -114,7 +114,7 @@ sortJudgeTerms = judgeTermsMap B.sort
 -- ----------------------  Logical quality
 
 -- | Construct judgement from its pattern and terms.
-type JudgeOf c = JudgePat -> [B.Named c] -> Judge c
+type JudgeOf c = JudgePat -> [B.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 affirm :: JudgeOf c
@@ -156,7 +156,7 @@ isViolative _                   = False
 writeDownJudge :: (B.Write c) => B.StringMap -> Judge c -> String
 writeDownJudge sh = judgeText . textualjudge sh
 
-writeDownTerms :: (B.Write c) => B.StringMap -> [B.Named c] -> String
+writeDownTerms :: (B.Write c) => B.StringMap -> [B.Term c] -> String
 writeDownTerms sh = concatMap term where
     term (n, c) = termText n $ show $ B.write sh c
 
@@ -179,7 +179,7 @@ judgeText jud =
 termText :: String -> String -> String
 termText n c = "  /" ++ n ++ " " ++ c
 
-termsText :: [B.Named String] -> String
+termsText :: [B.Term String] -> String
 termsText = concatMap term where
     term (n, c)  = termText n c
 

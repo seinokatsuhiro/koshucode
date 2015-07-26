@@ -123,7 +123,7 @@ consAngle _ _ = Msg.adlib "unknown angle bracket"
 --      :
 --      consAssn
 
-consAssn :: (C.CContent c) => ContentCons c -> B.TTreesToAb [B.Named c]
+consAssn :: (C.CContent c) => ContentCons c -> B.TTreesToAb [B.Term c]
 consAssn cons = mapM p B.<=< C.treesToTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 

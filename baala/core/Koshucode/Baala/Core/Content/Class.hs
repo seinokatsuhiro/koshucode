@@ -215,13 +215,13 @@ class (CTypeOf c) => CSet c where
 
 class (CTypeOf c) => CAssn c where
     isAssn      ::           c -> Bool
-    gAssn       ::           c -> [B.Named c]
-    pAssn       :: [B.Named c] -> c
+    gAssn       ::           c -> [B.Term c]
+    pAssn       ::  [B.Term c] -> c
 
-    getAssn     ::      B.Ab c -> B.Ab [B.Named c]
+    getAssn     ::      B.Ab c -> B.Ab [B.Term c]
     getAssn     =       getAbAb isAssn gAssn
 
-    putAssn     :: [B.Named c] -> B.Ab c
+    putAssn     ::  [B.Term c] -> B.Ab c
     putAssn     =  Right . pAssn
 
 class (CTypeOf c) => CRel c where

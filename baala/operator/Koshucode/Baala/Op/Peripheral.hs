@@ -256,7 +256,7 @@ relkitUnassn (from, ns) (Just he1) = Right kit2 where
                     cs <- assnPick ns $ C.gAssn assn
                     Right $ cs ++ cs1
 
-assnPick :: [B.TermName] -> [B.Named c] -> B.Ab [c]
+assnPick :: [B.TermName] -> [B.Term c] -> B.Ab [c]
 assnPick ns assn = mapM pick ns where
     pick n = case lookup n assn of
                Just c   ->  Right c

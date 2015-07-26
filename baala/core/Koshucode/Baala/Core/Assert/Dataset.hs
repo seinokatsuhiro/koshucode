@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Relkit  as C
 
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Map.Map B.JudgePat [[B.Named c]])
+data Dataset c = Dataset (Map.Map B.JudgePat [[B.Term c]])
 
 -- | Dataset that has no judges.
 datasetEmpty :: Dataset c
@@ -55,7 +55,7 @@ datasetSelect (Dataset m) sign ns = B.Rel h1 b1 where
       Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (C.CEmpty c) => [String] -> [B.Named c] -> [c]
+subarg :: (C.CEmpty c) => [String] -> [B.Term c] -> [c]
 subarg ns arg = map pick ns where
     pick n = Maybe.fromMaybe C.empty $ lookup n arg
 
