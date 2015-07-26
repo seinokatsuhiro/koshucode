@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Content.Class
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
     -- ** Text
-    CText (..), pTextList, pTextSet,
+    CText (..), pMaybeText, pTextList, pTextSet,
     -- ** List
     CList (..),
   
@@ -105,6 +105,10 @@ class (CTypeOf c) => CText c where
 
     putText     ::  String -> B.Ab c
     putText     =    Right . pText
+
+pMaybeText :: (CText c, CEmpty c) => String -> c
+pMaybeText s | B.trimLeft s == "" = empty
+             | otherwise          = pText s
 
 pTextSet :: (CText c, CSet c) => [String] -> c
 pTextSet = pSet . map pText
