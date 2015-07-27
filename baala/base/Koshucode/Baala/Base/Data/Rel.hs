@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Data.Rel
     judgesFromRel,
   ) where
 
+import qualified Text.Blaze.XHtml5                 as H
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
@@ -57,6 +58,13 @@ instance (B.Write c) => B.Write (Rel c) where
             d xs = B.docWraps "[" "]" $ B.writeBar sh xs
         in B.docWraps "{|" "|}" $ he' B.<+> bo'
 
+    writeHtmlWith sh (Rel he bo) =
+        H.table $ do
+          H.tr $ mapM_ H.td $ map (H.toHtml . B.showTermName) $ B.headNames $ he
+          mapM_ row bo
+        where
+          row cs = H.tr $ mapM_ col cs
+          col c  = H.td $ B.writeHtmlWith sh c
 
 
 -- ----------------------  Sort contents

@@ -109,13 +109,14 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base             == 4.*
+       , blaze-html       == 0.*
+       , bytestring       == 0.*
        , containers       == 0.5.*
+       , http-conduit     == 2.*
+       , http-types       == 0.*
        , pretty           == 1.1.*
        , syb              == 0.4.*
        , time             == 1.4.*
-       , bytestring       == 0.*
-       , http-conduit     == 2.*
-       , http-types       == 0.*
        , uri              == 0.*
        , utf8-string      == 0.*
 

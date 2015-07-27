@@ -5,6 +5,8 @@ module Koshucode.Baala.Base.Text.Write
   ( -- * Class
     StringMap,
     Write (..),
+    H.renderHtml,
+    H.toHtml,
 
     -- * Derivative
     writeH, writeV,
@@ -20,9 +22,11 @@ module Koshucode.Baala.Base.Text.Write
     -- $Simple
   ) where
 
-import qualified Data.List                     as L
-import qualified Text.PrettyPrint              as D
-import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Data.List                        as L
+import qualified Text.Blaze.Html.Renderer.String  as H
+import qualified Text.Blaze.XHtml5                as H
+import qualified Text.PrettyPrint                 as D
+import qualified Koshucode.Baala.Base.Prelude     as B
 
 
 
@@ -37,6 +41,9 @@ class Write a where
 
     writeString :: StringMap -> a -> String
     writeString sh a = show $ writeDocWith sh a
+
+    writeHtmlWith :: StringMap -> a -> H.Html
+    writeHtmlWith sh a = H.toHtml $ writeString sh a
 
 instance Write B.Doc where
     writeDocWith _ x = x

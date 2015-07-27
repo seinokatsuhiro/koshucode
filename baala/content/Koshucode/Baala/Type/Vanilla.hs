@@ -103,11 +103,11 @@ instance C.CContent VContent where
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
 instance B.Write VContent where
-    writeDocWith sh a = case a of
+    writeDocWith sh c = case c of
         VText s      -> B.doc $ sh s
         VTerm s      -> B.doc $ "'/" ++ s
         VDec  n      -> B.doc $ B.decimalString n
-        VClock c     -> B.doc c
+        VClock t     -> B.doc t
         VTime t      -> B.doc t
         VBool b      -> B.doc b
         VEmpty       -> B.doc "()"
@@ -117,6 +117,10 @@ instance B.Write VContent where
         VSet  xs     -> B.docWraps "{"   "}" $ B.writeBar sh xs
         VAssn xs     -> B.docWraps "<<" ">>" $ B.writeH   sh xs
         VRel r       -> B.writeDocWith sh r
+
+    writeHtmlWith sh c = case c of
+        VRel r       -> B.writeHtmlWith sh r
+        _            -> B.toHtml $ B.writeString sh c
 
 
 -- ----------------------  haskell data
