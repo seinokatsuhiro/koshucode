@@ -51,6 +51,10 @@ instance (Ord c) => Ord (Rel c) where
 instance (Ord c) => Eq (Rel c) where
     a == b = (compare a b == EQ)
 
+instance Functor Rel where
+    fmap f (Rel he bo) = let bo' = fmap f `fmap` bo
+                         in Rel he bo'
+
 instance (B.Write c) => B.Write (Rel c) where
     writeDocWith sh (Rel he bo) =
         let he'  = B.writeDocWith  sh he
