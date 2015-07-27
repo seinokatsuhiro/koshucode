@@ -48,7 +48,7 @@ data CodeClause a = CodeClause
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Write (CodeLine a) where
-    write sh (CodeLine _ line _) = B.write sh line
+    writeDocWith sh (CodeLine _ line _) = B.writeDocWith sh line
 
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
     codePtList (CodeLine _ _ ts) = B.codePtList $ head ts

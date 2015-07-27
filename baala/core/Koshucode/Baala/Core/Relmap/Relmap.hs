@@ -72,20 +72,20 @@ instance B.Name (Relmap' h c) where
     name _ = undefined
 
 instance B.Write (Relmap' h c) where
-    write sh (RelmapConst  lx _)    = B.write sh lx
-    write sh (RelmapSource lx _ _)  = B.write sh lx
+    writeDocWith sh (RelmapConst  lx _)    = B.writeDocWith sh lx
+    writeDocWith sh (RelmapSource lx _ _)  = B.writeDocWith sh lx
 
-    write sh (RelmapCalc   lx _ _)  = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
-    write sh (RelmapHook   lx _)    = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
+    writeDocWith sh (RelmapCalc   lx _ _)  = B.writeDocWith sh lx -- hang (text $ name m) 2 (writeh (map write ms))
+    writeDocWith sh (RelmapHook   lx _)    = B.writeDocWith sh lx -- hang (text $ name m) 2 (writeh (map write ms))
 
-    write sh (RelmapCopy   _ _ r1)  = B.write sh r1
-    write sh (RelmapNest   _ r1)    = B.write sh r1
-    write sh (RelmapLink   lx)      = B.write sh lx
-    write sh (RelmapAppend r1 r2)   = B.docHang (B.write sh r1) 2 (docRelmapAppend sh r2)
+    writeDocWith sh (RelmapCopy   _ _ r1)  = B.writeDocWith sh r1
+    writeDocWith sh (RelmapNest   _ r1)    = B.writeDocWith sh r1
+    writeDocWith sh (RelmapLink   lx)      = B.writeDocWith sh lx
+    writeDocWith sh (RelmapAppend r1 r2)   = B.docHang (B.writeDocWith sh r1) 2 (docRelmapAppend sh r2)
 
 docRelmapAppend :: B.StringMap -> Relmap' h c -> B.Doc
 docRelmapAppend sh = B.writeV sh . map pipe . relmapAppendList where
-    pipe m = B.write sh "|" B.<+> B.write sh m
+    pipe m = B.writeDocWith sh "|" B.<+> B.writeDocWith sh m
 
 -- | Expand 'RelmapAppend' to list of 'Relmap'
 relmapAppendList :: Relmap' h c -> [Relmap' h c]

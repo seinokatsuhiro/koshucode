@@ -84,7 +84,7 @@ instance B.Name Token where
     name x = error $ "unknown name: " ++ show x
 
 instance B.Write Token where
-    write sh = d where
+    writeDocWith sh = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TName      cp w)      = pretty "TName"    cp [show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
@@ -197,11 +197,11 @@ instance B.Name BlankName where
     name (BlankPostfix  n)   = n
 
 instance B.Write BlankName where
-    write sh (BlankNormal   n)   = B.write sh n
-    write sh (BlankInternal n)   = B.write sh n
-    write sh (BlankPrefix   n)   = B.write sh n B.<+> B.doc "(prefix)"
-    write sh (BlankInfix    n)   = B.write sh n B.<+> B.doc "(infix)"
-    write sh (BlankPostfix  n)   = B.write sh n B.<+> B.doc "(postfix)"
+    writeDocWith sh (BlankNormal   n)   = B.writeDocWith sh n
+    writeDocWith sh (BlankInternal n)   = B.writeDocWith sh n
+    writeDocWith sh (BlankPrefix   n)   = B.writeDocWith sh n B.<+> B.doc "(prefix)"
+    writeDocWith sh (BlankInfix    n)   = B.writeDocWith sh n B.<+> B.doc "(infix)"
+    writeDocWith sh (BlankPostfix  n)   = B.writeDocWith sh n B.<+> B.doc "(postfix)"
 
 blankNameTypeText :: BlankName -> String
 blankNameTypeText n =

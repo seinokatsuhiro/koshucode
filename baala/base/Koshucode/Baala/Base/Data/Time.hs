@@ -85,14 +85,14 @@ timeMapDate _ (TimeYm    d)      = TimeYm    d
 -- ----------------------  Write
 
 instance B.Write Time where
-    write _ = writeTime
+    writeDocWith _ = writeTime
 
 writeTime :: Time -> B.Doc
 writeTime time =
     case time of
       TimeYmdcz d c z  -> dcz d c z B.<+> szone z
       TimeYmdc  d c    -> dc d c
-      TimeYmd   d      -> B.write id d
+      TimeYmd   d      -> B.writeDocWith id d
       TimeYw    day    -> yw $ T.toWeekDate  day
       TimeYm    day    -> ym $ T.toGregorian day
     where
@@ -103,7 +103,7 @@ writeTime time =
                             LT -> B.doc "-" B.<> zone z
                             GT -> B.doc "+" B.<> zone z
 
-      dc d c            = B.write id d B.<+> B.writeClockBody c
+      dc d c            = B.writeDocWith id d B.<+> B.writeClockBody c
 
       hm (_, h, m, _)   = B.doc02 h `co`  B.doc02 m
       yw (y, w, _)      = B.doc y   `hyw` B.doc w

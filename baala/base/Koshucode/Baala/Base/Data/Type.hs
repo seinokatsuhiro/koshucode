@@ -53,7 +53,7 @@ data Type
 type NamedType = B.Named Type
 
 instance B.Write Type where
-    write _ = writeType
+    writeDocWith _ = writeType
 
 writeType :: Type -> B.Doc
 writeType = wf where

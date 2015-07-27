@@ -33,29 +33,29 @@ type StringMap = B.Map String
 
 -- | Writer with string mapping.
 class Write a where
-    write :: StringMap -> a -> B.Doc
+    writeDocWith :: StringMap -> a -> B.Doc
 
     writeString :: StringMap -> a -> String
-    writeString sh a = show $ write sh a
+    writeString sh a = show $ writeDocWith sh a
 
 instance Write B.Doc where
-    write _ x = x
+    writeDocWith _ x = x
 
 instance Write Int where
-    write _ = D.int
+    writeDocWith _ = D.int
 
 instance Write Integer where
-    write _ = D.integer
+    writeDocWith _ = D.integer
 
 instance Write String where
-    write _ = D.text
+    writeDocWith _ = D.text
 
 instance Write Bool where
-    write _ True  = D.text "<1>"
-    write _ False = D.text "<0>"
+    writeDocWith _ True  = D.text "<1>"
+    writeDocWith _ False = D.text "<0>"
 
 instance (Write a) => Write (B.Named a) where
-    write sh = writeTerm $ write sh
+    writeDocWith sh = writeTerm $ writeDocWith sh
 
 
 
@@ -76,10 +76,10 @@ instance (Write a) => Write (B.Named a) where
 --     /x <0> /y <1>
 
 writeH :: (Write a) => StringMap -> [a] -> B.Doc
-writeH sh = D.hsep . map (write sh)
+writeH sh = D.hsep . map (writeDocWith sh)
 
 writeV :: (Write a) => StringMap -> [a] -> B.Doc
-writeV sh = D.vcat . map (write sh)
+writeV sh = D.vcat . map (writeDocWith sh)
 
 writeColon :: (Write a) => StringMap -> [a] -> B.Doc
 writeColon sh = writeSep ":" sh
@@ -91,7 +91,7 @@ writeSep :: (Write a) => String -> StringMap -> [a] -> B.Doc
 writeSep sep sh = D.hsep . writeSeps sep sh
 
 writeSeps :: (Write a) => String -> StringMap -> [a] -> [B.Doc]
-writeSeps sep sh = writeSepsWith (write sh) sep
+writeSeps sep sh = writeSepsWith (writeDocWith sh) sep
 
 writeSepsWith :: (Write a) => (a -> B.Doc) -> String -> [a] -> [B.Doc]
 writeSepsWith w sep = L.intersperse (D.text sep) . map w
@@ -124,7 +124,7 @@ writeTerms w = doch . (writeTerm w `map`)
 --     [ abc ]
 
 doc :: (Write a) => a -> B.Doc
-doc = write id
+doc = writeDocWith id
 
 docv :: (Write a) => [a] -> B.Doc
 docv = writeV id

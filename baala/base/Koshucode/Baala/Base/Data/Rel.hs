@@ -51,8 +51,8 @@ instance (Ord c) => Eq (Rel c) where
     a == b = (compare a b == EQ)
 
 instance (B.Write c) => B.Write (Rel c) where
-    write sh (Rel he bo) =
-        let he'  = B.write  sh he
+    writeDocWith sh (Rel he bo) =
+        let he'  = B.writeDocWith  sh he
             bo'  = B.writeH sh $ map d bo
             d xs = B.docWraps "[" "]" $ B.writeBar sh xs
         in B.docWraps "{|" "|}" $ he' B.<+> bo'

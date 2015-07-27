@@ -21,15 +21,15 @@ data InterpWord
     deriving (Show, Eq, Ord)
 
 instance B.Write Interp where
-    write = interpDoc
+    writeDocWith = interpDoc
 
 instance B.Write InterpWord where
-    write = interpWordDoc
+    writeDocWith = interpWordDoc
 
 interpDoc :: B.StringMap -> Interp -> B.Doc
 interpDoc sh Interp { interpWords = xs } = doc where
     doc    = B.doc "<<<" B.<+> xsDoc B.<+> B.doc ">>>"
-    xsDoc  = B.doch $ map (B.write sh) xs
+    xsDoc  = B.doch $ map (B.writeDocWith sh) xs
 
 interpWordDoc :: B.StringMap -> InterpWord -> B.Doc
 interpWordDoc _ (InterpText w) = B.doc w

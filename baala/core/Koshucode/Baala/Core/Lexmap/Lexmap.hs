@@ -40,7 +40,7 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
-    write sh lx@Lexmap { lexAttr = para } =
+    writeDocWith sh lx@Lexmap { lexAttr = para } =
         case B.paraAll para of
           [] -> B.writeH sh [op, "..."]
           xs -> B.writeH sh [op, show xs]

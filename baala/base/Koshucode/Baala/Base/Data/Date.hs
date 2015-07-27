@@ -62,7 +62,7 @@ dateFromYdAb y d =
 -- ----------------------  Write
 
 instance B.Write Date where
-    write _ = writeDate
+    writeDocWith _ = writeDate
 
 writeDate :: Date -> B.Doc
 writeDate date =

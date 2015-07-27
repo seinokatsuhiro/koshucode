@@ -131,7 +131,7 @@ clockAlter d' h' m' s' clock =
 -- ----------------------  Writer
 
 instance B.Write Clock where
-    write _ = writeClock
+    writeDocWith _ = writeClock
 
 writeClock :: Clock -> B.Doc
 writeClock = B.docWrap "|" "|" . writeClockBody

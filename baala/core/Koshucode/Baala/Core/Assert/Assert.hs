@@ -37,7 +37,7 @@ instance B.CodePtr (Assert' h c) where
     codePtList = concatMap B.codePtList . assToken
 
 instance B.Write (Assert' h c) where
-    write sh (Assert _ q pat toks _ _ _) =
+    writeDocWith sh (Assert _ q pat toks _ _ _) =
         let qs = B.writeH sh [C.assertSymbol q, pat]
         in B.docHang qs 2 (B.writeH sh toks)
 

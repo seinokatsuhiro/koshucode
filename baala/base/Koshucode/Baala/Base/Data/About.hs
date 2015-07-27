@@ -14,4 +14,4 @@ data About c = About [B.Term c] deriving (Show)
 type AboutJudges c = (Maybe (About c), [B.Judge c])
 
 instance (B.Write c) => B.Write (About c) where
-    write sh (About xs) = B.doc "about" B.<> B.doc (B.writeDownTerms sh xs)
+    writeDocWith sh (About xs) = B.doc "about" B.<> B.doc (B.writeDownTerms sh xs)

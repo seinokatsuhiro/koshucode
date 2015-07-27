@@ -103,7 +103,7 @@ instance C.CContent VContent where
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
 instance B.Write VContent where
-    write sh a = case a of
+    writeDocWith sh a = case a of
         VText s      -> B.doc $ sh s
         VTerm s      -> B.doc $ "'/" ++ s
         VDec  n      -> B.doc $ B.decimalString n
@@ -111,12 +111,12 @@ instance B.Write VContent where
         VTime t      -> B.doc t
         VBool b      -> B.doc b
         VEmpty       -> B.doc "()"
-        VInterp i    -> B.write sh i
-        VType t      -> B.docWraps "[-" "-]" $ B.write    sh t
+        VInterp i    -> B.writeDocWith sh i
+        VType t      -> B.docWraps "[-" "-]" $ B.writeDocWith    sh t
         VList xs     -> B.docWraps "["   "]" $ B.writeBar sh xs
         VSet  xs     -> B.docWraps "{"   "}" $ B.writeBar sh xs
         VAssn xs     -> B.docWraps "<<" ">>" $ B.writeH   sh xs
-        VRel r       -> B.write sh r
+        VRel r       -> B.writeDocWith sh r
 
 
 -- ----------------------  haskell data

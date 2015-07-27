@@ -58,13 +58,13 @@ instance (B.Write c) => Show (Cox c) where
     show = show . B.doc
 
 instance (B.Write c) => B.Write (Cox c) where
-    write = docCox
+    writeDocWith = docCox
 
 docCox :: (B.Write c) => B.StringMap -> Cox c -> B.Doc
 docCox sh = d (0 :: Int) . coxFold where
     wr           :: forall c. (B.Write c) => c -> B.Doc
     wrH, wrV     :: forall c. (B.Write c) => [c] -> B.Doc
-    wr           = B.write  sh
+    wr           = B.writeDocWith  sh
     wrH          = B.writeH sh
     wrV          = B.writeV sh
 

@@ -65,7 +65,7 @@ instance B.Monoid Head where
               a _ _ = B.TypeAny
 
 instance B.Write Head where
-    write _ = B.typeTermDoc . headType
+    writeDocWith _ = B.typeTermDoc . headType
 
 headExplain :: Head -> B.Doc
 headExplain = B.typeExplain . headType
