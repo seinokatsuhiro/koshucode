@@ -158,11 +158,10 @@ writeDownJudge sh = judgeText . textualjudge sh
 
 writeDownTerms :: (B.Write c) => B.StringMap -> [B.Term c] -> String
 writeDownTerms sh = concatMap term where
-    term (n, c) = termText n $ show $ B.write sh c
+    term (n, c) = termText n $ B.writeString sh c
 
 textualjudge :: (B.Write c) => B.StringMap -> Judge c -> Judge String
-textualjudge sh = (text `fmap`) where
-    text = show . B.write sh
+textualjudge sh = (B.writeString sh `fmap`)
 
 judgeText :: Judge String -> String
 judgeText jud =
@@ -176,12 +175,14 @@ judgeText jud =
     where
       line j p xs  = j ++ " " ++ p ++ termsText xs
 
-termText :: String -> String -> String
+termText :: B.TermName -> String -> String
 termText n c = "  /" ++ n ++ " " ++ c
 
+termTextPair :: (B.Term String) -> String
+termTextPair (n, c) = termText n c
+
 termsText :: [B.Term String] -> String
-termsText = concatMap term where
-    term (n, c)  = termText n c
+termsText = concatMap termTextPair
 
 putJudge :: (B.Write c) => Judge c -> IO ()
 putJudge = hPutJudge IO.stdout

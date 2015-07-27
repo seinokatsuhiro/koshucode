@@ -35,6 +35,9 @@ type StringMap = B.Map String
 class Write a where
     write :: StringMap -> a -> B.Doc
 
+    writeString :: StringMap -> a -> String
+    writeString sh a = show $ write sh a
+
 instance Write B.Doc where
     write _ x = x
 
