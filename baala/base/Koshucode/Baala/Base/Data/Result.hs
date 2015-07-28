@@ -24,6 +24,7 @@ import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Judge   as B
+import qualified Koshucode.Baala.Base.Data.Rel     as B
 
 
 -- ----------------------  Result
@@ -53,6 +54,7 @@ type ResultShortChunks  = B.Short [ResultChunk]
 -- | Chunk of judgements.
 data ResultChunk
     = ResultJudge  [B.Judge String]
+    | ResultRel    B.JudgePat (B.Rel String)
     | ResultNote   [String]
       deriving (Show, Eq, Ord)
 
@@ -90,16 +92,17 @@ putResult result =
 -- | Print result of calculation, and return status.
 hPutResult :: IO.Handle -> Result -> IO Int
 hPutResult h result
+    -- | null vio   = do hPutRel h $ resultNormal result
+    --                   return 0
     | null vio   = hPutAllChunks h 0 result $ resultNormal result
     | otherwise  = hPutAllChunks h 1 result vio
     where
       vio :: [ResultShortChunks]
-      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resultViolated result
+      vio = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
-      existJudge :: ResultChunk -> Bool
-      existJudge (ResultNote _)    = False
-      existJudge (ResultJudge [])  = False
-      existJudge _                 = True
+      hasJudge :: ResultChunk -> Bool
+      hasJudge (ResultJudge js)  = js /= []
+      hasJudge _                 = False
 
 hPutAllChunks :: IO.Handle -> Int -> Result -> [ResultShortChunks] -> IO Int
 hPutAllChunks h status result sh =
@@ -116,6 +119,12 @@ hPutAllChunks h status result sh =
        -- foot
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
+
+hPutRel :: IO.Handle -> [ResultShortChunks] -> IO ()
+hPutRel h sh = mapM_ put chunks where
+    chunks = concatMap B.shortBody sh
+    put (ResultRel _ r) = IO.hPutStrLn h $ B.renderHtml $ B.writeHtmlWith id r
+    put _               = return ()
 
 hPutLicense :: IO.Handle -> Result -> IO ()
 hPutLicense h Result { resultLicense = ls }
@@ -166,6 +175,7 @@ hPutChunks h result = loop where
     loop (ResultNote [] : xs) cnt        = loop xs cnt
     loop (ResultNote ls : xs) cnt        = do hPutNote h ls
                                               loop xs cnt
+    loop (ResultRel _ _ : xs) cnt        = loop xs cnt
 
 hPutNote :: IO.Handle -> [String] -> IO ()
 hPutNote h ls =

@@ -86,10 +86,14 @@ optionProcess sh judgeOf pat option opt r1 =
        showEmpty <- B.paraGetSwitch opt "empty"
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
-       let js  = B.judgesFromRel (judgeOf showEmpty) pat r3
-           js' = B.textualjudge (B.shortText sh) `map` js
+       let sh' = B.shortText sh
+           js  = B.judgesFromRel (judgeOf showEmpty) pat r3
+           js' = B.textualjudge sh' `map` js
+           r4  = B.writeString sh' `fmap` r3
        comment <- optionComment sh pat opt r3
-       Right [ B.ResultJudge js', B.ResultNote comment ]
+       Right [ B.ResultJudge js'
+             , B.ResultRel pat r4
+             , B.ResultNote comment ]
 
 optionRelmapResource :: (Ord c, C.CRel c) => C.Option c -> B.AbMap (B.Rel c)
 optionRelmapResource option r1 =
