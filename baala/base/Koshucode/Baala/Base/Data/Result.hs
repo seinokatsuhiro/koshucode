@@ -59,7 +59,7 @@ data ResultChunk c
       deriving (Show, Eq, Ord)
 
 -- | Empty result.
-resultEmpty :: Result String
+resultEmpty :: Result c
 resultEmpty =
     Result { resultPrintHead  = True
            , resultPrintFoot  = True
@@ -77,7 +77,7 @@ resultEmpty =
 -- ----------------------  Writer
 
 -- | `IO.stdout` version of `hPutResult`.
-putResult :: Result String -> IO Int
+putResult :: (Ord c, B.Write c) => Result c -> IO Int
 putResult result =
     case resultOutput result of
       B.IOPointStdout ->
@@ -90,21 +90,21 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: IO.Handle -> Result String -> IO Int
+hPutResult :: forall c. (Ord c, B.Write c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
     -- | null vio   = do hPutRel h $ resultNormal result
     --                   return 0
     | null vio   = hPutAllChunks h 0 result $ resultNormal result
     | otherwise  = hPutAllChunks h 1 result vio
     where
-      vio :: [ResultShortChunks String]
+      vio :: [ResultShortChunks c]
       vio = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
-      hasJudge :: ResultChunk String -> Bool
+      hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = js /= []
       hasJudge _                 = False
 
-hPutAllChunks :: IO.Handle -> Int -> Result String -> [ResultShortChunks String] -> IO Int
+hPutAllChunks :: (Ord c, B.Write c) => IO.Handle -> Int -> Result c -> [ResultShortChunks c] -> IO Int
 hPutAllChunks h status result sh =
     do IO.hSetEncoding h IO.utf8
        -- head
@@ -120,13 +120,13 @@ hPutAllChunks h status result sh =
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
 
-hPutRel :: IO.Handle -> [ResultShortChunks String] -> IO ()
+hPutRel :: (B.Write c) => IO.Handle -> [ResultShortChunks c] -> IO ()
 hPutRel h sh = mapM_ put chunks where
     chunks = concatMap B.shortBody sh
     put (ResultRel _ r) = IO.hPutStrLn h $ B.renderHtml $ B.writeHtmlWith id r
     put _               = return ()
 
-hPutLicense :: IO.Handle -> Result String -> IO ()
+hPutLicense :: IO.Handle -> Result c -> IO ()
 hPutLicense h Result { resultLicense = ls }
     | null ls    = return ()
     | otherwise  = do mapM_ put ls
@@ -139,7 +139,7 @@ hPutLicense h Result { resultLicense = ls }
              B.hPutLines h license
              B.hPutEmptyLine h
 
-hPutEcho :: IO.Handle -> Result String -> IO ()
+hPutEcho :: IO.Handle -> Result c -> IO ()
 hPutEcho h result =
     do let echo = resultEcho result
        B.hPutLines h $ concat echo
@@ -148,10 +148,10 @@ hPutEcho h result =
 
 -- ----------------------  Chunk
 
-hPutShortChunk :: IO.Handle -> Result String -> Counter -> ResultShortChunks String -> IO Counter
+hPutShortChunk :: (Ord c, B.Write c) => IO.Handle -> Result c -> Counter -> ResultShortChunks c -> IO Counter
 hPutShortChunk h result cnt (B.Short _ def output) =
     do hPutShort h def
-       hPutChunks h result output cnt
+       hPutChunks h result (B.shortText def) output cnt
 
 hPutShort :: IO.Handle -> [B.ShortDef] -> IO ()
 hPutShort _ [] = return ()
@@ -165,9 +165,9 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
-hPutChunks :: IO.Handle -> Result String -> [ResultChunk String] -> Counter -> IO Counter
-hPutChunks h result = loop where
-    writer = IO.hPutStrLn h . B.judgeText
+hPutChunks :: (Ord c, B.Write c) => IO.Handle -> Result c -> B.StringMap -> [ResultChunk c] -> Counter -> IO Counter
+hPutChunks h result sh = loop where
+    writer = IO.hPutStrLn h . B.writeDownJudge sh
 
     loop [] cnt                          = return cnt
     loop (ResultJudge js : xs) (_, tab)  = do cnt' <- hPutJudgesCount h result writer js (0, tab)
@@ -189,7 +189,7 @@ hPutNote h ls =
 
 -- ----------------------  Header and Footer
 
-hPutHead :: IO.Handle -> Result String -> IO ()
+hPutHead :: IO.Handle -> Result c -> IO ()
 hPutHead h result =
     do IO.hPutStrLn h B.emacsModeComment
        B.hPutLines  h $ B.texts comm
@@ -244,14 +244,14 @@ putJudgesWith :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
 putJudgesWith = hPutJudgesWith IO.stdout resultEmpty
 
 -- | Print list of judges.
-hPutJudgesWith :: (Ord c, B.Write c) => IO.Handle -> Result String -> Int -> [B.Judge c] -> IO Int
+hPutJudgesWith :: (Ord c, B.Write c) => IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int
 hPutJudgesWith h result status js =
     do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ initCounter []
        B.hPutLines h $ summaryLines status cnt
        return status
 
 hPutJudgesCount :: forall c. (Ord c, B.Write c) =>
-    IO.Handle -> Result String -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
+    IO.Handle -> Result c -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
 hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h

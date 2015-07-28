@@ -22,14 +22,14 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (B.ResultShortChunks String)
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (B.ResultShortChunks c)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { B.shortBody = chunks }
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.ResultChunk String]
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.ResultChunk c]
 runAssertDataset hook option (B.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
@@ -78,7 +78,7 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
 optionProcess :: (Ord c, B.Write c, C.CRel c)
     => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat
     -> C.Option c -> C.TTreePara
-    -> B.Rel c -> B.Ab [B.ResultChunk String]
+    -> B.Rel c -> B.Ab [B.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
     do case B.paraUnmatch opt optionType of
          Nothing  -> Right ()
@@ -86,13 +86,10 @@ optionProcess sh judgeOf pat option opt r1 =
        showEmpty <- B.paraGetSwitch opt "empty"
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
-       let sh' = B.shortText sh
-           js  = B.judgesFromRel (judgeOf showEmpty) pat r3
-           js' = B.textualjudge sh' `map` js
-           r4  = B.writeString sh' `fmap` r3
+       let js  = B.judgesFromRel (judgeOf showEmpty) pat r3
        comment <- optionComment sh pat opt r3
-       Right [ B.ResultJudge js'
-             , B.ResultRel pat r4
+       Right [ B.ResultJudge js
+             , B.ResultRel pat r3
              , B.ResultNote comment ]
 
 optionRelmapResource :: (Ord c, C.CRel c) => C.Option c -> B.AbMap (B.Rel c)
