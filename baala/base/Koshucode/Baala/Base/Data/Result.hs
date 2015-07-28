@@ -31,7 +31,8 @@ import qualified Koshucode.Baala.Base.Data.Rel     as B
 
 -- | Result of calculation.
 data Result c = Result
-    { resultPrintHead  :: Bool
+    { resultHtml       :: Bool
+    , resultPrintHead  :: Bool
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
     , resultMeasure    :: Int
@@ -61,7 +62,8 @@ data ResultChunk c
 -- | Empty result.
 resultEmpty :: Result c
 resultEmpty =
-    Result { resultPrintHead  = True
+    Result { resultHtml       = False
+           , resultPrintHead  = True
            , resultPrintFoot  = True
            , resultGutter     = 5
            , resultMeasure    = 25
@@ -92,10 +94,8 @@ putResult result =
 -- | Print result of calculation, and return status.
 hPutResult :: forall c. (Ord c, B.Write c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
-    -- | null vio   = do hPutRel h $ resultNormal result
-    --                   return 0
-    | null vio   = hPutAllChunks h 0 result $ resultNormal result
-    | otherwise  = hPutAllChunks h 1 result vio
+    | null vio   = hPutAllChunks result h 0 $ resultNormal result
+    | otherwise  = hPutAllChunks result h 1 vio
     where
       vio :: [ResultShortChunks c]
       vio = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
@@ -104,8 +104,18 @@ hPutResult h result
       hasJudge (ResultJudge js)  = js /= []
       hasJudge _                 = False
 
-hPutAllChunks :: (Ord c, B.Write c) => IO.Handle -> Int -> Result c -> [ResultShortChunks c] -> IO Int
-hPutAllChunks h status result sh =
+hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunks result
+    | resultHtml result = hPutAllChunksHtml  result
+    | otherwise         = hPutAllChunksKoshu result
+
+hPutAllChunksHtml :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunksHtml _ h status sh =
+    do hPutRel h sh
+       return status
+
+hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunksKoshu result h status sh =
     do IO.hSetEncoding h IO.utf8
        -- head
        B.when (resultPrintHead result) $ hPutHead h result
