@@ -22,14 +22,14 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab B.ResultShortChunks
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (B.ResultShortChunks String)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { B.shortBody = chunks }
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.ResultChunk]
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.ResultChunk String]
 runAssertDataset hook option (B.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
@@ -78,7 +78,7 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
 optionProcess :: (Ord c, B.Write c, C.CRel c)
     => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat
     -> C.Option c -> C.TTreePara
-    -> B.Rel c -> B.Ab [B.ResultChunk]
+    -> B.Rel c -> B.Ab [B.ResultChunk String]
 optionProcess sh judgeOf pat option opt r1 =
     do case B.paraUnmatch opt optionType of
          Nothing  -> Right ()

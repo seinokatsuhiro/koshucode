@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Resource c -> B.Ab B.Result
+runResource :: (C.CContent c) => C.Resource c -> B.Ab (B.Result String)
 runResource res =
     do res' <- assembleRelmap res
        let js = C.resJudge res'
@@ -28,7 +28,7 @@ runResource res =
                        , B.resultViolated = [B.Short [] [] [B.ResultJudge jsV']] }
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Resource c -> B.Ab B.Result
+    C.Resource c -> B.Ab (B.Result String)
 runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resEcho    = echo
                                , C.resLicense = license
@@ -44,11 +44,11 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                  , B.resultNormal    = msgChunk : B.shortTrim js2
                  , B.resultPattern   = C.resPattern res }
     where
-      run :: [C.ShortAssert c] -> B.Ab [B.ResultShortChunks]
+      run :: [C.ShortAssert c] -> B.Ab [B.ResultShortChunks String]
       run = let opt = C.resOption res
             in mapM (C.runAssertJudges res opt) . B.shortGroup
 
-      msgChunk :: B.ResultShortChunks
+      msgChunk :: B.ResultShortChunks String
       msgChunk | null msg  = B.Short [] [] []
                | otherwise = B.Short [] [] [B.ResultNote message]
 
