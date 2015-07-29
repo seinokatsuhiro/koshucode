@@ -3,7 +3,9 @@
 -- | Vanilla content type.
 
 module Koshucode.Baala.Type.Vanilla
-  ( JudgeC, AboutC, AboutJudgesC, ResourceC,
+  ( -- * Derived type
+    AboutC, AboutJudgesC, JudgeC, ResourceC, ResultC,
+    -- * Content type
     VContent (..),
   ) where
 
@@ -13,13 +15,16 @@ import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Message as Msg
 
 
+-- ----------------------  Derived type
 
--- ----------------------  vanilla type
-
-type JudgeC        = B.Judge VContent
 type AboutC        = B.About VContent
 type AboutJudgesC  = B.AboutJudges VContent
+type JudgeC        = B.Judge VContent
 type ResourceC     = C.Resource VContent
+type ResultC       = B.Result VContent
+
+
+-- ----------------------  Content type
 
 -- | Vanilla content type
 data VContent
