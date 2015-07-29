@@ -39,11 +39,11 @@ type StringMap = B.Map String
 class Write a where
     writeDocWith :: StringMap -> a -> B.Doc
 
-    writeString :: StringMap -> a -> String
-    writeString sh a = show $ writeDocWith sh a
+    writeStringWith :: StringMap -> a -> String
+    writeStringWith sh a = show $ writeDocWith sh a
 
     writeHtmlWith :: StringMap -> a -> H.Html
-    writeHtmlWith sh a = H.toHtml $ writeString sh a
+    writeHtmlWith sh a = H.toHtml $ writeStringWith sh a
 
 instance Write B.Doc where
     writeDocWith _ x = x

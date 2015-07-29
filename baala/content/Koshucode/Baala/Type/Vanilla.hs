@@ -125,7 +125,7 @@ instance B.Write VContent where
 
     writeHtmlWith sh c = case c of
         VRel r       -> B.writeHtmlWith sh r
-        _            -> B.toHtml $ B.writeString sh c
+        _            -> B.toHtml $ B.writeStringWith sh c
 
 
 -- ----------------------  haskell data

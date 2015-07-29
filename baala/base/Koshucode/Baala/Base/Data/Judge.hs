@@ -158,10 +158,10 @@ writeDownJudge sh = judgeText . textualjudge sh
 
 writeDownTerms :: (B.Write c) => B.StringMap -> [B.Term c] -> String
 writeDownTerms sh = concatMap term where
-    term (n, c) = termText n $ B.writeString sh c
+    term (n, c) = termText n $ B.writeStringWith sh c
 
 textualjudge :: (B.Write c) => B.StringMap -> Judge c -> Judge String
-textualjudge sh = (B.writeString sh `fmap`)
+textualjudge sh = (B.writeStringWith sh `fmap`)
 
 judgeText :: Judge String -> String
 judgeText jud =
