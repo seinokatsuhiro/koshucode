@@ -68,10 +68,10 @@ instance (B.Write c) => B.Write (Rel c) where
     writeHtmlWith sh (Rel he bo) =
         H.table ! class_ "relation" $ do
           let terms = term `map` B.headNames he
-          H.tr ! class_ "tuple" $ mapM_ H.td terms
+          H.tr ! class_ "heading" $ mapM_ H.td terms
           mapM_ row bo
         where
-          row cs = H.tr $ mapM_ col cs
+          row cs = H.tr ! class_ "tuple" $ mapM_ col cs
           col c  = H.td $ B.writeHtmlWith sh c
           term   = (H.span ! class_ "termname") . H.toHtml . B.showTermName
 

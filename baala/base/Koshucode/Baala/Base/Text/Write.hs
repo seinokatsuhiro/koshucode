@@ -23,7 +23,7 @@ module Koshucode.Baala.Base.Text.Write
   ) where
 
 import qualified Data.List                        as L
-import qualified Text.Blaze.Html.Renderer.String  as H
+import qualified Text.Blaze.Html.Renderer.Pretty  as H
 import qualified Text.Blaze.XHtml5                as H
 import qualified Text.PrettyPrint                 as D
 import qualified Koshucode.Baala.Base.Prelude     as B

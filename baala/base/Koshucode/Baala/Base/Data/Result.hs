@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -20,6 +21,9 @@ module Koshucode.Baala.Base.Data.Result
 import qualified Control.Monad                     as M
 import qualified Data.Map                          as Map
 import qualified System.IO                         as IO
+import qualified Text.Blaze.XHtml5                 as H
+import           Text.Blaze.XHtml5                 ((!))
+import           Text.Blaze.XHtml5.Attributes      (class_)
 import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
@@ -147,8 +151,11 @@ hPutAllChunksKoshu result h status sh =
 hPutRel :: (B.Write c) => IO.Handle -> [ShortResultChunks c] -> IO ()
 hPutRel h sh = mapM_ put chunks where
     chunks = concatMap B.shortBody sh
-    put (ResultRel _ r) = IO.hPutStrLn h $ B.renderHtml $ B.writeHtmlWith id r
-    put _               = return ()
+    put (ResultRel pat r) = IO.hPutStrLn h $ B.renderHtml $ html pat r
+    put _                 = return ()
+    html pat r = H.div ! class_ "named-relation" $ do
+                   H.p ! class_ "name" $ H.toHtml pat
+                   B.writeHtmlWith id r
 
 hPutLicense :: IO.Handle -> Result c -> IO ()
 hPutLicense h Result { resultLicense = ls }
