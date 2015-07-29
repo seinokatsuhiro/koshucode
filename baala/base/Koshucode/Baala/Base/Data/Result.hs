@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Data.Result
     resultEmpty,
 
     -- * ResultChunk
-    ResultShortChunks, ResultChunk (..),
+    ShortResultChunks, ResultChunk (..),
   
     -- * Writer
     putResult, hPutResult,
@@ -41,8 +41,8 @@ data Result c = Result
     , resultOutput     :: B.IOPoint
     , resultEcho       :: [[String]]
     , resultLicense    :: [[String]]
-    , resultViolated   :: [ResultShortChunks c]
-    , resultNormal     :: [ResultShortChunks c]
+    , resultViolated   :: [ShortResultChunks c]
+    , resultNormal     :: [ShortResultChunks c]
     , resultPattern    :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
@@ -58,7 +58,7 @@ data InputPoint = InputPoint
     , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
 
-type ResultShortChunks c = B.Short [ResultChunk c]
+type ShortResultChunks c = B.Short [ResultChunk c]
 
 -- | Chunk of judgements.
 data ResultChunk c
@@ -105,14 +105,14 @@ hPutResult h result
     | null vio   = hPutAllChunks result h 0 $ resultNormal result
     | otherwise  = hPutAllChunks result h 1 vio
     where
-      vio :: [ResultShortChunks c]
+      vio :: [ShortResultChunks c]
       vio = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
       hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = js /= []
       hasJudge _                 = False
 
-hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunks result h status sh =
     do hSetup h
        put result h status sh
@@ -126,12 +126,12 @@ hPutAllChunks result h status sh =
 hSetup :: IO.Handle -> IO ()
 hSetup h = IO.hSetEncoding h IO.utf8
 
-hPutAllChunksHtml :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunksHtml :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunksHtml _ h status sh =
     do hPutRel h sh
        return status
 
-hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
+hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunksKoshu result h status sh =
     do -- head
        B.when (resultPrintHead result) $ hPutHead h result
@@ -144,7 +144,7 @@ hPutAllChunksKoshu result h status sh =
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
 
-hPutRel :: (B.Write c) => IO.Handle -> [ResultShortChunks c] -> IO ()
+hPutRel :: (B.Write c) => IO.Handle -> [ShortResultChunks c] -> IO ()
 hPutRel h sh = mapM_ put chunks where
     chunks = concatMap B.shortBody sh
     put (ResultRel _ r) = IO.hPutStrLn h $ B.renderHtml $ B.writeHtmlWith id r
@@ -172,7 +172,7 @@ hPutEcho h result =
 
 -- ----------------------  Chunk
 
-hPutShortChunk :: (Ord c, B.Write c) => IO.Handle -> Result c -> Counter -> ResultShortChunks c -> IO Counter
+hPutShortChunk :: (Ord c, B.Write c) => IO.Handle -> Result c -> Counter -> ShortResultChunks c -> IO Counter
 hPutShortChunk h result cnt (B.Short _ def output) =
     do hPutShort h def
        hPutChunks h result (B.shortText def) output cnt
