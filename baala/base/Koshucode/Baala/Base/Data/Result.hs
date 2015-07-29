@@ -5,7 +5,8 @@
 
 module Koshucode.Baala.Base.Data.Result
   ( -- * Result
-    Result (..), InputPoint (..),
+    Result (..), ResultForm (..),
+    InputPoint (..),
     resultEmpty,
 
     -- * ResultChunk
@@ -31,7 +32,7 @@ import qualified Koshucode.Baala.Base.Data.Rel     as B
 
 -- | Result of calculation.
 data Result c = Result
-    { resultHtml       :: Bool
+    { resultFrom       :: ResultForm
     , resultPrintHead  :: Bool
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
@@ -44,6 +45,13 @@ data Result c = Result
     , resultNormal     :: [ResultShortChunks c]
     , resultPattern    :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
+
+data ResultForm
+    = ResultKoshu
+    | ResultHtml
+    | ResultCsv
+    | ResultTab
+      deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
     { inputPoint      :: B.IOPoint
@@ -62,7 +70,7 @@ data ResultChunk c
 -- | Empty result.
 resultEmpty :: Result c
 resultEmpty =
-    Result { resultHtml       = False
+    Result { resultFrom       = ResultKoshu
            , resultPrintHead  = True
            , resultPrintFoot  = True
            , resultGutter     = 5
@@ -105,9 +113,18 @@ hPutResult h result
       hasJudge _                 = False
 
 hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
-hPutAllChunks result
-    | resultHtml result = hPutAllChunksHtml  result
-    | otherwise         = hPutAllChunksKoshu result
+hPutAllChunks result h status sh =
+    do hSetup h
+       put result h status sh
+    where
+      put = case resultFrom result of
+              ResultKoshu -> hPutAllChunksKoshu
+              ResultHtml  -> hPutAllChunksHtml
+              ResultCsv   -> error "not implemented"
+              ResultTab   -> error "not implemented"
+
+hSetup :: IO.Handle -> IO ()
+hSetup h = IO.hSetEncoding h IO.utf8
 
 hPutAllChunksHtml :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
 hPutAllChunksHtml _ h status sh =
@@ -116,12 +133,9 @@ hPutAllChunksHtml _ h status sh =
 
 hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ResultShortChunks c] -> IO Int
 hPutAllChunksKoshu result h status sh =
-    do IO.hSetEncoding h IO.utf8
-       -- head
+    do -- head
        B.when (resultPrintHead result) $ hPutHead h result
-       -- license
        hPutLicense h result
-       -- echo
        hPutEcho h result
        -- body
        let cnt = initCounter $ resultPattern result
