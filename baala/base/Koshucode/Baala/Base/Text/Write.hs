@@ -5,8 +5,8 @@ module Koshucode.Baala.Base.Text.Write
   ( -- * Class
     StringMap,
     Write (..),
-    H.renderHtml,
-    H.toHtml,
+    writeDoc, writeString, writeHtml,
+    H.renderHtml, H.toHtml,
 
     -- * Derivative
     writeH, writeV,
@@ -29,7 +29,6 @@ import qualified Text.PrettyPrint                 as D
 import qualified Koshucode.Baala.Base.Prelude     as B
 
 
-
 -- ----------------------  Data type
 
 -- | Mapping from string to string.
@@ -44,6 +43,15 @@ class Write a where
 
     writeHtmlWith :: StringMap -> a -> H.Html
     writeHtmlWith sh a = H.toHtml $ writeStringWith sh a
+
+writeDoc :: (Write a) => a -> B.Doc
+writeDoc = writeDocWith id
+
+writeString :: (Write a) => a -> String
+writeString = writeStringWith id
+
+writeHtml :: (Write a) => a -> H.Html
+writeHtml = writeHtmlWith id
 
 instance Write B.Doc where
     writeDocWith _ x = x
@@ -63,7 +71,6 @@ instance Write Bool where
 
 instance (Write a) => Write (B.Named a) where
     writeDocWith sh = writeTerm $ writeDocWith sh
-
 
 
 -- ----------------------  Derivative

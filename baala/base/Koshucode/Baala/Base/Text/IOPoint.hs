@@ -19,11 +19,11 @@ import qualified Koshucode.Baala.Base.Prelude as B
 -- ----------------------  IOPoint
 
 data IOPoint
-    = IOPointFile  FilePath FilePath   -- ^ Context directory and target path
-    | IOPointUri   String              -- ^ Universal resource identifier
-    | IOPointText  String              -- ^ Code itself
-    | IOPointStdin                     -- ^ Sandard input
-    | IOPointStdout                    -- ^ Sandard output
+    = IOPointFile  FilePath FilePath      -- ^ Context directory and target path
+    | IOPointUri   String                 -- ^ Universal resource identifier
+    | IOPointText  (Maybe String) String  -- ^ Code itself
+    | IOPointStdin                        -- ^ Sandard input
+    | IOPointStdout                       -- ^ Sandard output
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
@@ -31,16 +31,17 @@ data IOPoint
 ioPointType :: IOPoint -> String
 ioPointType (IOPointFile _ _)   = "file"
 ioPointType (IOPointUri  _)     = "url"
-ioPointType (IOPointText _)     = "text"
+ioPointType (IOPointText _ _)   = "text"
 ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
 
 ioPointText :: IOPoint -> String
-ioPointText (IOPointFile dir file) = dir ++ file
-ioPointText (IOPointUri  url)      = url
-ioPointText (IOPointText text)     = text
-ioPointText (IOPointStdin)         = "<stdin>"
-ioPointText (IOPointStdout)        = "<stdout>"
+ioPointText (IOPointFile dir file)       = dir ++ file
+ioPointText (IOPointUri  url)            = url
+ioPointText (IOPointText (Just name) _)  = name
+ioPointText (IOPointText (Nothing) _)    = "<text>"
+ioPointText (IOPointStdin)               = "<stdin>"
+ioPointText (IOPointStdout)              = "<stdout>"
 
 ioPointFrom :: FilePath -> FilePath -> IOPoint
 ioPointFrom context path
@@ -53,7 +54,7 @@ ioPointFrom context path
 ioPointList :: Bool -> [String] -> FilePath -> [FilePath] -> [IOPoint]
 ioPointList stdin texts context paths =
     B.consIf stdin IOPointStdin $
-         IOPointText `map` texts ++
+         IOPointText Nothing `map` texts ++
          ioPointFrom context `map` paths
 
 
@@ -76,5 +77,5 @@ codeEmpty = codeTextOf ""
 
 -- | Create text code.
 codeTextOf :: String -> CodePiece
-codeTextOf = CodePiece 0 . IOPointText
+codeTextOf = CodePiece 0 . IOPointText Nothing
 

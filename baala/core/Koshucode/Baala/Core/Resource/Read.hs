@@ -87,9 +87,9 @@ readResourceOne res src add = dispatch $ B.codeName src where
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.IOPointText text)  = gio $ include text
-    dispatch (B.IOPointStdin)      = gio $ include =<< getContents
-    dispatch (B.IOPointStdout)     = B.bug "readResourceOne"
+    dispatch (B.IOPointText _ text)  = gio $ include text
+    dispatch (B.IOPointStdin)        = gio $ include =<< getContents
+    dispatch (B.IOPointStdout)       = B.bug "readResourceOne"
 
     putDir dir path  = cutDot dir ++ cutDot path
 
