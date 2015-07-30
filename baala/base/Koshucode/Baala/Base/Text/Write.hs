@@ -6,7 +6,10 @@ module Koshucode.Baala.Base.Text.Write
     StringMap,
     Write (..),
     writeDoc, writeString, writeHtml,
+
+    -- * Html
     H.renderHtml, H.toHtml,
+    div_, span_,
 
     -- * Derivative
     writeH, writeV,
@@ -25,6 +28,7 @@ module Koshucode.Baala.Base.Text.Write
 import qualified Data.List                        as L
 import qualified Text.Blaze.Html.Renderer.Pretty  as H
 import qualified Text.Blaze.XHtml5                as H
+import qualified Text.Blaze.XHtml5.Attributes     as H (class_)
 import qualified Text.PrettyPrint                 as D
 import qualified Koshucode.Baala.Base.Prelude     as B
 
@@ -52,6 +56,12 @@ writeString = writeStringWith id
 
 writeHtml :: (Write a) => a -> H.Html
 writeHtml = writeHtmlWith id
+
+div_ :: H.AttributeValue -> B.Map H.Html
+div_ c = H.div H.! H.class_ c
+
+span_ :: H.AttributeValue -> B.Map H.Html
+span_ c = H.span H.! H.class_ c
 
 instance Write B.Doc where
     writeDocWith _ x = x

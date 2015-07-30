@@ -1,14 +1,45 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Reporting abort reasons.
+
+--  Text
+--
+--    ABORTED  (main reason)
+--    -------- --------------------------------------------
+--    Detail   (detailed reason)
+--             (detailed reason)
+--    Source   (line #) (col #) (filename)
+--             > (line text)
+--             (line #) (col #) (filename)
+--             > (line text)
+--    Command  koshu
+--             (arg 1)
+--             (arg 2)
+
+--  HTML
+--
+--    Aborted
+--
+--    (main reason)
+--      (detailed reason)
+--      (detailed reason)
+--
+--    Source
+--      (line #) (col #) (filename)
+--        (line text)
+--      (line #) (col #) (filename)
+--        (line text)
 
 module Koshucode.Baala.Base.Abort.Report
   ( CommandLine,
     abort, abortPrint,
     abortMessage, bug,
+    abortHtml,
   ) where
 
 import qualified System.Exit                        as Sys
+import qualified Text.Blaze.Html5                   as H
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
@@ -69,4 +100,25 @@ source = concatMap B.codePtDisplay . B.unique . reverse
 -- | Stop on error @'BUG DISCOVERED'@
 bug :: String -> a
 bug msg = error $ "BUG DISCOVERED: " ++ msg
+
+abortHtml :: B.AbortReason -> H.Html
+abortHtml a =
+    B.div_ "abort" $ do
+      B.div_ "abort-title"    $ text "Aborted"
+      B.div_ "abort-reason"   $ text $ B.abortReason a
+      B.div_ "abort-detail"   $ mapM_ detail  $ B.abortDetail a
+      B.div_ "abort-subtitle" $ text "Source"
+      B.div_ "abort-source"   $ mapM_ code $ B.abortPoint a
+    where
+      text n         = H.toHtml (n :: String)
+      detail x       = H.div $ H.toHtml x
+      code (ctx, p)  = point p ctx >> line p
+      line p         = B.div_ "abort-line" $ text $ B.codePtText p
+      point p ctx    = B.div_ "abort-point" $ do
+                         B.span_ "abort-point-line"
+                              $ text "Line " >> (H.toHtml $ B.codePtLineNo p)
+                         B.span_ "abort-point-column"
+                              $ text "Column " >> (H.toHtml $ B.codePtColumnNo p)
+                         B.span_ "abort-point-context"
+                              $ text "Context " >> (H.toHtml ctx)
 
