@@ -8,8 +8,9 @@ module Koshucode.Baala.Base.Text.Write
     writeDoc, writeString, writeHtml,
 
     -- * Html
+    H.ToMarkup, H.toMarkup,
     H.renderHtml, H.toHtml,
-    div_, span_,
+    H.div, div_, H.span, span_,
 
     -- * Derivative
     writeH, writeV,
@@ -26,6 +27,7 @@ module Koshucode.Baala.Base.Text.Write
   ) where
 
 import qualified Data.List                        as L
+import qualified Text.Blaze                       as H
 import qualified Text.Blaze.Html.Renderer.Pretty  as H
 import qualified Text.Blaze.XHtml5                as H
 import qualified Text.Blaze.XHtml5.Attributes     as H (class_)

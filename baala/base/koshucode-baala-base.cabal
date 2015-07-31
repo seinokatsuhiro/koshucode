@@ -110,6 +110,7 @@ library
   build-depends:
          base             == 4.*
        , blaze-html       == 0.*
+       , blaze-markup     == 0.*
        , bytestring       == 0.*
        , containers       == 0.5.*
        , http-conduit     == 2.*
