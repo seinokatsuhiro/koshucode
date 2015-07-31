@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Base.Data.Rel     as B
 
 -- | Result of calculation.
 data Result c = Result
-    { resultFrom       :: ResultForm
+    { resultForm       :: ResultForm
     , resultPrintHead  :: Bool
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
@@ -74,7 +74,7 @@ data ResultChunk c
 -- | Empty result.
 resultEmpty :: Result c
 resultEmpty =
-    Result { resultFrom       = ResultKoshu
+    Result { resultForm       = ResultKoshu
            , resultPrintHead  = True
            , resultPrintFoot  = True
            , resultGutter     = 5
@@ -121,7 +121,7 @@ hPutAllChunks result h status sh =
     do hSetup h
        put result h status sh
     where
-      put = case resultFrom result of
+      put = case resultForm result of
               ResultKoshu -> hPutAllChunksKoshu
               ResultHtml  -> hPutAllChunksHtml
               ResultCsv   -> error "not implemented"
