@@ -19,29 +19,30 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 runResource :: (C.CContent c) => C.Resource c -> B.Ab (B.Result c)
 runResource res =
     do res' <- assembleRelmap res
-       let js = C.resJudge res'
+       let rslt = C.globalResult $ C.resGlobal res'
+           js   = C.resJudge res'
        case filter B.isViolative js of
-         []  -> runResourceBody res'
-         jsV -> Right $ B.resultEmpty
+         []  -> runResourceBody rslt res'
+         jsV -> Right rslt
                   { B.resultOutput   = C.resOutput res
                   , B.resultViolated = [B.Short [] [] [B.ResultJudge jsV]] }
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Resource c -> B.Ab (B.Result c)
-runResourceBody res@C.Resource { C.resAssert  = ass
-                               , C.resEcho    = echo
-                               , C.resLicense = license
-                               , C.resMessage = msg } =
+    B.Result c -> C.Resource c -> B.Ab (B.Result c)
+runResourceBody rslt res@C.Resource { C.resAssert  = ass
+                                    , C.resEcho    = echo
+                                    , C.resLicense = license
+                                    , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
-       Right $ B.resultEmpty
-                 { B.resultInput     = C.resInputPoint res
-                 , B.resultOutput    = C.resOutput res
-                 , B.resultEcho      = map B.lineContent `map` echo
-                 , B.resultLicense   = group license
-                 , B.resultViolated  = B.shortTrim js1
-                 , B.resultNormal    = msgChunk : B.shortTrim js2
-                 , B.resultPattern   = C.resPattern res }
+       Right rslt
+               { B.resultInput     = C.resInputPoint res
+               , B.resultOutput    = C.resOutput res
+               , B.resultEcho      = map B.lineContent `map` echo
+               , B.resultLicense   = group license
+               , B.resultViolated  = B.shortTrim js1
+               , B.resultNormal    = msgChunk : B.shortTrim js2
+               , B.resultPattern   = C.resPattern res }
     where
       run :: [C.ShortAssert c] -> B.Ab [B.ShortResultChunks c]
       run = let opt = C.resOption res

@@ -104,13 +104,18 @@ koshuMain g =
              ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
-             root  = C.resEmpty { C.resGlobal = g2 }
              src   = B.ioPointList (has OptStdin) text "" paths
+
+             -- global parameter
+             root  = C.resEmpty { C.resGlobal = g2 }
+             rslt  = (C.globalResult g)
+                       { B.resultForm = B.ResultKoshu }
              g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy
                        , C.globalTime      = B.timeYmd day
+                       , C.globalResult    = rslt
                        , C.globalHook      = root }
 
        (_, _, errs) -> L.putFailure $ concat errs
