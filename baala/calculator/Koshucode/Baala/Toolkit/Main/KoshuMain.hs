@@ -40,26 +40,29 @@ import qualified Koshucode.Baala.Toolkit.Library.Run      as L
 data Option
     = OptHelp
     | OptVersion
-    | OptShowEncoding
-    | OptRun
-    | OptPretty
-    | OptStdin
-    | OptLiner String
     | OptAssertX String
     | OptElement
+    | OptHtml Bool
+    | OptLiner String
+    | OptPretty
+    | OptRun
+    | OptShowEncoding
+    | OptStdin
       deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
 koshuOptions =
-    [ Option "h" ["help"]     (NoArg OptHelp)    "Print help message"
-    , Option "V" ["version"]  (NoArg OptVersion) "Print version number"
-    , Option ""  ["run"]      (NoArg OptRun)     "Run input code"
-    , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding"
-    , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print"
-    , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin"
-    , Option ""  ["liner"]    (ReqArg OptLiner "CODE") "One liner"
-    , Option "x" ["assert-x"] (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
-    , Option ""  ["element"]  (NoArg OptElement) "Analize input code"
+    [ Option "h" ["help"]          (NoArg OptHelp)    "Print help message"
+    , Option "i" ["stdin"]         (NoArg OptStdin)   "Read from stdin"
+    , Option "x" ["assert-x"]      (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
+    , Option "V" ["version"]       (NoArg OptVersion) "Print version number"
+    , Option ""  ["element"]       (NoArg OptElement) "Analize input code"
+    , Option ""  ["indent-html"]   (NoArg $ OptHtml True)    "HTML output with indent"
+    , Option ""  ["compact-html"]  (NoArg $ OptHtml False)   "HTML output without indent"
+    , Option ""  ["liner"]         (ReqArg OptLiner "CODE") "One liner"
+    , Option ""  ["pretty"]        (NoArg OptPretty)  "Pretty print"
+    , Option ""  ["run"]           (NoArg OptRun)     "Run input code"
+    , Option ""  ["show-encoding"] (NoArg OptShowEncoding)  "Show character encoding"
     ]
 
 usage :: String
@@ -109,7 +112,7 @@ koshuMain g =
              -- global parameter
              root  = C.resEmpty { C.resGlobal = g2 }
              rslt  = (C.globalResult g)
-                       { B.resultForm = B.ResultKoshu }
+                       { B.resultForm = resultForm has }
              g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
@@ -119,6 +122,12 @@ koshuMain g =
                        , C.globalHook      = root }
 
        (_, _, errs) -> L.putFailure $ concat errs
+
+resultForm :: (Option -> Bool) -> B.ResultForm
+resultForm has
+    | has (OptHtml True)  = B.ResultHtmlIndented
+    | has (OptHtml False) = B.ResultHtmlIndented
+    | otherwise           = B.ResultKoshu
 
 oneLiner :: Option -> [String]
 oneLiner (OptLiner code)    = [oneLinerPreprocess code]

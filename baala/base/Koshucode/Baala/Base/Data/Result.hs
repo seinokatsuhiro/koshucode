@@ -52,7 +52,7 @@ data Result c = Result
 
 data ResultForm
     = ResultKoshu
-    | ResultHtml
+    | ResultHtmlIndented
     | ResultCsv
     | ResultTab
       deriving (Show, Eq, Ord)
@@ -122,10 +122,10 @@ hPutAllChunks result h status sh =
        put result h status sh
     where
       put = case resultForm result of
-              ResultKoshu -> hPutAllChunksKoshu
-              ResultHtml  -> hPutAllChunksHtml
-              ResultCsv   -> error "not implemented"
-              ResultTab   -> error "not implemented"
+              ResultKoshu        -> hPutAllChunksKoshu
+              ResultHtmlIndented -> hPutAllChunksHtml
+              ResultCsv          -> error "not implemented"
+              ResultTab          -> error "not implemented"
 
 hSetup :: IO.Handle -> IO ()
 hSetup h = IO.hSetEncoding h IO.utf8
