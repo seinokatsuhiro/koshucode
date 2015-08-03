@@ -8,9 +8,10 @@ module Koshucode.Baala.Base.Text.Write
     writeDoc, writeString, writeHtml,
 
     -- * Html
-    H.ToMarkup, H.toMarkup,
-    H.renderHtml, H.toHtml,
+    H.ToMarkup, H.toMarkup, H.toHtml,
     H.div, div_, H.span, span_,
+    renderHtmlIndented,
+    renderHtmlCompact,
 
     -- * Derivative
     writeH, writeV,
@@ -28,7 +29,8 @@ module Koshucode.Baala.Base.Text.Write
 
 import qualified Data.List                        as L
 import qualified Text.Blaze                       as H
-import qualified Text.Blaze.Html.Renderer.Pretty  as H
+import qualified Text.Blaze.Html.Renderer.Pretty  as HI
+import qualified Text.Blaze.Html.Renderer.String  as HC
 import qualified Text.Blaze.XHtml5                as H
 import qualified Text.Blaze.XHtml5.Attributes     as H (class_)
 import qualified Text.PrettyPrint                 as D
@@ -59,12 +61,6 @@ writeString = writeStringWith id
 writeHtml :: (Write a) => a -> H.Html
 writeHtml = writeHtmlWith id
 
-div_ :: H.AttributeValue -> B.Map H.Html
-div_ c = H.div H.! H.class_ c
-
-span_ :: H.AttributeValue -> B.Map H.Html
-span_ c = H.span H.! H.class_ c
-
 instance Write B.Doc where
     writeDocWith _ x = x
 
@@ -83,6 +79,21 @@ instance Write Bool where
 
 instance (Write a) => Write (B.Named a) where
     writeDocWith sh = writeTerm $ writeDocWith sh
+
+
+-- ----------------------  Html
+
+div_ :: H.AttributeValue -> B.Map H.Html
+div_ c = H.div H.! H.class_ c
+
+span_ :: H.AttributeValue -> B.Map H.Html
+span_ c = H.span H.! H.class_ c
+
+renderHtmlIndented :: H.Html -> String
+renderHtmlIndented = HI.renderHtml
+
+renderHtmlCompact :: H.Html -> String
+renderHtmlCompact  = HC.renderHtml
 
 
 -- ----------------------  Derivative

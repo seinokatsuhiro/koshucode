@@ -57,8 +57,8 @@ koshuOptions =
     , Option "x" ["assert-x"]      (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
     , Option "V" ["version"]       (NoArg OptVersion) "Print version number"
     , Option ""  ["element"]       (NoArg OptElement) "Analize input code"
-    , Option ""  ["indent-html"]   (NoArg $ OptHtml True)    "HTML output with indent"
-    , Option ""  ["compact-html"]  (NoArg $ OptHtml False)   "HTML output without indent"
+    , Option ""  ["html-indented", "html"] (NoArg $ OptHtml True) "HTML output with indent"
+    , Option ""  ["html-compact"]  (NoArg $ OptHtml False)   "HTML output without indent"
     , Option ""  ["liner"]         (ReqArg OptLiner "CODE") "One liner"
     , Option ""  ["pretty"]        (NoArg OptPretty)  "Pretty print"
     , Option ""  ["run"]           (NoArg OptRun)     "Run input code"
@@ -126,7 +126,7 @@ koshuMain g =
 resultForm :: (Option -> Bool) -> B.ResultForm
 resultForm has
     | has (OptHtml True)  = B.ResultHtmlIndented
-    | has (OptHtml False) = B.ResultHtmlIndented
+    | has (OptHtml False) = B.ResultHtmlCompact
     | otherwise           = B.ResultKoshu
 
 oneLiner :: Option -> [String]

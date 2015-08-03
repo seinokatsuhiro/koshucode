@@ -53,6 +53,7 @@ data Result c = Result
 data ResultForm
     = ResultKoshu
     | ResultHtmlIndented
+    | ResultHtmlCompact
     | ResultCsv
     | ResultTab
       deriving (Show, Eq, Ord)
@@ -123,16 +124,17 @@ hPutAllChunks result h status sh =
     where
       put = case resultForm result of
               ResultKoshu        -> hPutAllChunksKoshu
-              ResultHtmlIndented -> hPutAllChunksHtml
+              ResultHtmlIndented -> hPutAllChunksHtml B.renderHtmlIndented
+              ResultHtmlCompact  -> hPutAllChunksHtml B.renderHtmlCompact
               ResultCsv          -> error "not implemented"
               ResultTab          -> error "not implemented"
 
 hSetup :: IO.Handle -> IO ()
 hSetup h = IO.hSetEncoding h IO.utf8
 
-hPutAllChunksHtml :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
-hPutAllChunksHtml _ h status sh =
-    do hPutRel h sh
+hPutAllChunksHtml :: (Ord c, B.Write c) => (H.Html -> String) -> Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+hPutAllChunksHtml render _ h status sh =
+    do hPutRel h render sh
        return status
 
 hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
@@ -148,10 +150,10 @@ hPutAllChunksKoshu result h status sh =
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
 
-hPutRel :: (B.Write c) => IO.Handle -> [ShortResultChunks c] -> IO ()
-hPutRel h sh = mapM_ put chunks where
+hPutRel :: (B.Write c) => IO.Handle -> (H.Html -> String) -> [ShortResultChunks c] -> IO ()
+hPutRel h render sh = mapM_ put chunks where
     chunks = concatMap B.shortBody sh
-    put (ResultRel pat r) = IO.hPutStrLn h $ B.renderHtml $ html pat r
+    put (ResultRel pat r) = IO.hPutStrLn h $ render $ html pat r
     put _                 = return ()
     html pat r = H.div ! class_ "named-relation" $ do
                    H.p ! class_ "name" $ H.toHtml pat
