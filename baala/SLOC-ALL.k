@@ -15,20 +15,20 @@
 
 |-- DIR  /package 'base  /code 14  /comment 4  /dir "base/Koshucode/Baala"
 |-- DIR  /package 'base  /code 169  /comment 82  /dir "base/Koshucode/Baala/Base"
-|-- DIR  /package 'base  /code 100  /comment 58  /dir "base/Koshucode/Baala/Base/Abort"
-|-- DIR  /package 'base  /code 1 565  /comment 863  /dir "base/Koshucode/Baala/Base/Data"
+|-- DIR  /package 'base  /code 117  /comment 86  /dir "base/Koshucode/Baala/Base/Abort"
+|-- DIR  /package 'base  /code 1 588  /comment 863  /dir "base/Koshucode/Baala/Base/Data"
 |-- DIR  /package 'base  /code 526  /comment 485  /dir "base/Koshucode/Baala/Base/Prelude"
 
 |-- DIR  /package 'base  /code 281  /comment 192  /dir "base/Koshucode/Baala/Base/Syntax"
-|-- DIR  /package 'base  /code 538  /comment 296  /dir "base/Koshucode/Baala/Base/Text"
+|-- DIR  /package 'base  /code 559  /comment 306  /dir "base/Koshucode/Baala/Base/Text"
 |-- DIR  /package 'base  /code 806  /comment 542  /dir "base/Koshucode/Baala/Base/Token"
 |-- DIR  /package 'calculator  /code 142  /comment 107  /dir "calculator/Koshucode/Baala/Toolkit/Library"
-|-- DIR  /package 'calculator  /code 175  /comment 120  /dir "calculator/Koshucode/Baala/Toolkit/Main"
+|-- DIR  /package 'calculator  /code 186  /comment 123  /dir "calculator/Koshucode/Baala/Toolkit/Main"
 
 |-- DIR  /package 'content  /code 124  /comment 45  /dir "content/Koshucode/Baala/Op"
 |-- DIR  /package 'content  /code 647  /comment 381  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /package 'content  /code 717  /comment 371  /dir "content/Koshucode/Baala/Op/Cox"
-|-- DIR  /package 'content  /code 178  /comment 42  /dir "content/Koshucode/Baala/Type"
+|-- DIR  /package 'content  /code 180  /comment 45  /dir "content/Koshucode/Baala/Type"
 |-- DIR  /package 'core  /code 15  /comment 72  /dir "core/Koshucode/Baala"
 
 |-- DIR  /package 'core  /code 358  /comment 234  /dir "core/Koshucode/Baala/Core"
@@ -37,8 +37,8 @@
 |-- DIR  /package 'core  /code 475  /comment 268  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /package 'core  /code 211  /comment 110  /dir "core/Koshucode/Baala/Core/Relkit"
 
-|-- DIR  /package 'core  /code 432  /comment 238  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /package 'core  /code 599  /comment 269  /dir "core/Koshucode/Baala/Core/Resource"
+|-- DIR  /package 'core  /code 434  /comment 238  /dir "core/Koshucode/Baala/Core/Relmap"
+|-- DIR  /package 'core  /code 600  /comment 269  /dir "core/Koshucode/Baala/Core/Resource"
 |-- DIR  /package 'operator  /code 29  /comment 6  /dir "operator/Koshucode/Baala"
 |-- DIR  /package 'operator  /code 1 193  /comment 737  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /package 'operator  /code 227  /comment 152  /dir "operator/Koshucode/Baala/Op/Builtin"
@@ -51,10 +51,10 @@
 
 *** 29 judges
 
-|-- DIR-TOTAL  /package 'base  /code 3 999  /comment 2 522
-|-- DIR-TOTAL  /package 'calculator  /code 317  /comment 227
-|-- DIR-TOTAL  /package 'content  /code 1 666  /comment 839
-|-- DIR-TOTAL  /package 'core  /code 3 353  /comment 1 884
+|-- DIR-TOTAL  /package 'base  /code 4 060  /comment 2 560
+|-- DIR-TOTAL  /package 'calculator  /code 328  /comment 230
+|-- DIR-TOTAL  /package 'content  /code 1 668  /comment 842
+|-- DIR-TOTAL  /package 'core  /code 3 356  /comment 1 884
 |-- DIR-TOTAL  /package 'operator  /code 1 869  /comment 1 310
 
 |-- DIR-TOTAL  /package 'toolkit  /code 480  /comment 221
@@ -64,8 +64,8 @@
 |-- FILE  /package 'base  /code 14  /comment 4  /file 'Base.hs  /dir "base/Koshucode/Baala"
 |-- FILE  /package 'base  /code 8  /comment 6  /file 'Abort.hs  /dir "base/Koshucode/Baala/Base"
 |-- FILE  /package 'base  /code 22  /comment 12  /file 'Abortable.hs  /dir "base/Koshucode/Baala/Base/Abort"
-|-- FILE  /package 'base  /code 28  /comment 24  /file 'Reason.hs  /dir "base/Koshucode/Baala/Base/Abort"
-|-- FILE  /package 'base  /code 50  /comment 22  /file 'Report.hs  /dir "base/Koshucode/Baala/Base/Abort"
+|-- FILE  /package 'base  /code 45  /comment 38  /file 'Reason.hs  /dir "base/Koshucode/Baala/Base/Abort"
+|-- FILE  /package 'base  /code 50  /comment 36  /file 'Report.hs  /dir "base/Koshucode/Baala/Base/Abort"
 
 |-- FILE  /package 'base  /code 29  /comment 5  /file 'Data.hs  /dir "base/Koshucode/Baala/Base"
 |-- FILE  /package 'base  /code 12  /comment 5  /file 'About.hs  /dir "base/Koshucode/Baala/Base/Data"
@@ -80,7 +80,7 @@
 |-- FILE  /package 'base  /code 193  /comment 73  /file 'Para.hs  /dir "base/Koshucode/Baala/Base/Data"
 
 |-- FILE  /package 'base  /code 67  /comment 67  /file 'Rel.hs  /dir "base/Koshucode/Baala/Base/Data"
-|-- FILE  /package 'base  /code 216  /comment 77  /file 'Result.hs  /dir "base/Koshucode/Baala/Base/Data"
+|-- FILE  /package 'base  /code 239  /comment 77  /file 'Result.hs  /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /package 'base  /code 179  /comment 107  /file 'Time.hs  /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /package 'base  /code 135  /comment 91  /file 'Type.hs  /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /package 'base  /code 72  /comment 53  /file 'Message.hs  /dir "base/Koshucode/Baala/Base"
@@ -106,12 +106,12 @@
 
 |-- FILE  /package 'base  /code 36  /comment 24  /file 'Comment.hs  /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /package 'base  /code 76  /comment 14  /file 'Http.hs  /dir "base/Koshucode/Baala/Base/Text"
-|-- FILE  /package 'base  /code 52  /comment 28  /file 'IOPoint.hs  /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /package 'base  /code 53  /comment 28  /file 'IOPoint.hs  /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /package 'base  /code 124  /comment 57  /file 'TextTable.hs  /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /package 'base  /code 65  /comment 14  /file 'Unicode.hs  /dir "base/Koshucode/Baala/Base/Text"
 
 |-- FILE  /package 'base  /code 53  /comment 43  /file 'Utility.hs  /dir "base/Koshucode/Baala/Base/Text"
-|-- FILE  /package 'base  /code 74  /comment 83  /file 'Write.hs  /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /package 'base  /code 94  /comment 93  /file 'Write.hs  /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /package 'base  /code 16  /comment 6  /file 'Token.hs  /dir "base/Koshucode/Baala/Base"
 |-- FILE  /package 'base  /code 53  /comment 72  /file 'AngleText.hs  /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /package 'base  /code 57  /comment 32  /file 'Short.hs  /dir "base/Koshucode/Baala/Base/Token"
@@ -129,7 +129,7 @@
 |-- FILE  /package 'calculator  /code 10  /comment 8  /file 'Version.hs  /dir "calculator/Koshucode/Baala/Toolkit/Library"
 |-- FILE  /package 'calculator  /code 71  /comment 14  /file 'KoshuFilter.hs  /dir "calculator/Koshucode/Baala/Toolkit/Main"
 
-|-- FILE  /package 'calculator  /code 104  /comment 106  /file 'KoshuMain.hs  /dir "calculator/Koshucode/Baala/Toolkit/Main"
+|-- FILE  /package 'calculator  /code 115  /comment 109  /file 'KoshuMain.hs  /dir "calculator/Koshucode/Baala/Toolkit/Main"
 |-- FILE  /package 'content  /code 16  /comment 5  /file 'Cop.hs  /dir "content/Koshucode/Baala/Op"
 |-- FILE  /package 'content  /code 78  /comment 39  /file 'Arith.hs  /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /package 'content  /code 32  /comment 40  /file 'Coxhand.hs  /dir "content/Koshucode/Baala/Op/Cop"
@@ -154,7 +154,7 @@
 |-- FILE  /package 'content  /code 11  /comment 11  /file 'Quoter.hs  /dir "content/Koshucode/Baala/Op"
 *** 75
 
-|-- FILE  /package 'content  /code 178  /comment 42  /file 'Vanilla.hs  /dir "content/Koshucode/Baala/Type"
+|-- FILE  /package 'content  /code 180  /comment 45  /file 'Vanilla.hs  /dir "content/Koshucode/Baala/Type"
 |-- FILE  /package 'core  /code 15  /comment 72  /file 'Core.hs  /dir "core/Koshucode/Baala"
 |-- FILE  /package 'core  /code 10  /comment 6  /file 'Assert.hs  /dir "core/Koshucode/Baala/Core"
 |-- FILE  /package 'core  /code 33  /comment 30  /file 'Assert.hs  /dir "core/Koshucode/Baala/Core/Assert"
@@ -191,7 +191,7 @@
 |-- FILE  /package 'core  /code 14  /comment 55  /file 'Relmap.hs  /dir "core/Koshucode/Baala/Core"
 |-- FILE  /package 'core  /code 56  /comment 77  /file 'Construct.hs  /dir "core/Koshucode/Baala/Core/Relmap"
 
-|-- FILE  /package 'core  /code 96  /comment 43  /file 'Global.hs  /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /package 'core  /code 98  /comment 43  /file 'Global.hs  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /package 'core  /code 62  /comment 20  /file 'Option.hs  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /package 'core  /code 92  /comment 52  /file 'Relmap.hs  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /package 'core  /code 31  /comment 26  /file 'Rop.hs  /dir "core/Koshucode/Baala/Core/Relmap"
@@ -204,7 +204,7 @@
 |-- FILE  /package 'core  /code 90  /comment 30  /file 'Read.hs  /dir "core/Koshucode/Baala/Core/Resource"
 
 |-- FILE  /package 'core  /code 87  /comment 37  /file 'Resource.hs  /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /package 'core  /code 86  /comment 16  /file 'Run.hs  /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /package 'core  /code 87  /comment 16  /file 'Run.hs  /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /package 'operator  /code 29  /comment 6  /file 'Op.hs  /dir "operator/Koshucode/Baala"
 |-- FILE  /package 'operator  /code 10  /comment 6  /file 'Builtin.hs  /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /package 'operator  /code 49  /comment 13  /file 'Define.hs  /dir "operator/Koshucode/Baala/Op/Builtin"
@@ -247,10 +247,10 @@
 
 *** 149 judges
 
-|-- FILE-TOTAL  /package 'base  /code 3 999  /comment 2 522
-|-- FILE-TOTAL  /package 'calculator  /code 317  /comment 227
-|-- FILE-TOTAL  /package 'content  /code 1 666  /comment 839
-|-- FILE-TOTAL  /package 'core  /code 3 353  /comment 1 884
+|-- FILE-TOTAL  /package 'base  /code 4 060  /comment 2 560
+|-- FILE-TOTAL  /package 'calculator  /code 328  /comment 230
+|-- FILE-TOTAL  /package 'content  /code 1 668  /comment 842
+|-- FILE-TOTAL  /package 'core  /code 3 356  /comment 1 884
 |-- FILE-TOTAL  /package 'operator  /code 1 869  /comment 1 310
 
 |-- FILE-TOTAL  /package 'toolkit  /code 480  /comment 221
@@ -261,13 +261,13 @@
 |-- FILE-LONG  /rank 2  /package 'core  /code 279  /file 'Message.hs  /dir "core/Koshucode/Baala/Core"
 |-- FILE-LONG  /rank 3  /package 'base  /code 261  /file 'TokenLine.hs  /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE-LONG  /rank 4  /package 'base  /code 253  /file 'Token.hs  /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE-LONG  /rank 5  /package 'base  /code 216  /file 'Result.hs  /dir "base/Koshucode/Baala/Base/Data"
+|-- FILE-LONG  /rank 5  /package 'base  /code 239  /file 'Result.hs  /dir "base/Koshucode/Baala/Base/Data"
 
 |-- FILE-LONG  /rank 6  /package 'operator  /code 197  /file 'Peripheral.hs  /dir "operator/Koshucode/Baala/Op"
 |-- FILE-LONG  /rank 7  /package 'base  /code 193  /file 'Para.hs  /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE-LONG  /rank 8  /package 'base  /code 185  /file 'Clock.hs  /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE-LONG  /rank 9  /package 'core  /code 181  /file 'Class.hs  /dir "core/Koshucode/Baala/Core/Content"
-|-- FILE-LONG  /rank 10  /package 'base  /code 179  /file 'Time.hs  /dir "base/Koshucode/Baala/Base/Data"
+|-- FILE-LONG  /rank 10  /package 'content  /code 180  /file 'Vanilla.hs  /dir "content/Koshucode/Baala/Type"
 
 *** 10 judges
 

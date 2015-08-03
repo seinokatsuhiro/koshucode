@@ -47,7 +47,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    223 judges
+**    229 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -126,6 +126,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5.Attributes"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Text"
@@ -253,8 +256,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Utility"         /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.Blaze"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.Blaze.Html.Renderer.Pretty"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.Blaze.Html.Renderer.String"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.Blaze.XHtml5"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.Blaze.XHtml5.Attributes"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.Prelude"
 
