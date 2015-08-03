@@ -2,8 +2,7 @@
 
 module Koshucode.Baala.Toolkit.Library.Exit
   ( prelude,
-    putSuccess,
-    putFailure,
+    putSuccess, putFailure,
     currentEncodings,
     exit,
   ) where
@@ -15,12 +14,11 @@ import qualified System.IO             as IO
 import qualified Koshucode.Baala.Base  as B
 
 prelude :: IO (String, [String])
-prelude = do
-  IO.setLocaleEncoding IO.utf8_bom
-  IO.hSetEncoding IO.stdout IO.utf8
-  prog <- Sys.getProgName
-  args <- Sys.getArgs
-  return (prog, deleteCr args)
+prelude =
+    do B.useUtf8 IO.stdout
+       prog <- Sys.getProgName
+       args <- Sys.getArgs
+       return (prog, deleteCr args)
 
 -- Delete carriage return from command line argument.
 deleteCr :: [String] -> [String]

@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Data.Result
     Result (..), ResultForm (..),
     InputPoint (..),
     resultEmpty,
+    useUtf8,
 
     -- * ResultChunk
     ShortResultChunks, ResultChunk (..),
@@ -20,6 +21,7 @@ module Koshucode.Baala.Base.Data.Result
 
 import qualified Control.Monad                     as M
 import qualified Data.Map                          as Map
+import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
 import qualified Text.Blaze.XHtml5                 as H
 import           Text.Blaze.XHtml5                 ((!))
@@ -119,7 +121,7 @@ hPutResult h result
 
 hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunks result h status sh =
-    do hSetup h
+    do useUtf8 h
        put result h status sh
     where
       put = case resultForm result of
@@ -129,8 +131,10 @@ hPutAllChunks result h status sh =
               ResultCsv          -> error "not implemented"
               ResultTab          -> error "not implemented"
 
-hSetup :: IO.Handle -> IO ()
-hSetup h = IO.hSetEncoding h IO.utf8
+useUtf8 :: IO.Handle -> IO ()
+useUtf8 h =
+    do IO.setLocaleEncoding IO.utf8_bom
+       IO.hSetEncoding h IO.utf8
 
 hPutAllChunksHtml :: (Ord c, B.Write c) => (H.Html -> String) -> Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunksHtml render _ h status sh =
