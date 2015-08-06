@@ -67,7 +67,7 @@ koshuFilter g withRes =
        (_, _, errs) -> L.putFailure $ concat errs
 
 runFiles :: (C.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
-runFiles = hRunFiles IO.stdout
+runFiles = hRunFiles B.stdout
 
 hRunFiles
     :: (C.CContent c)

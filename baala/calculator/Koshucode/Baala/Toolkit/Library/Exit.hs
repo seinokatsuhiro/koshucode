@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Base  as B
 
 prelude :: IO (String, [String])
 prelude =
-    do B.useUtf8 IO.stdout
+    do B.useUtf8 B.stdout
        prog <- Sys.getProgName
        args <- Sys.getArgs
        return (prog, deleteCr args)

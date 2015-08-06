@@ -93,12 +93,12 @@ resultEmpty =
 
 -- ----------------------  Writer
 
--- | `IO.stdout` version of `hPutResult`.
+-- | `B.stdout` version of `hPutResult`.
 putResult :: (Ord c, B.Write c) => Result c -> IO Int
 putResult result =
     case resultOutput result of
       B.IOPointStdout ->
-          hPutResult IO.stdout result
+          hPutResult B.stdout result
       B.IOPointFile _ path ->
           do h <- IO.openFile path IO.WriteMode
              n <- hPutResult h result
@@ -276,9 +276,9 @@ putJudges js =
     do _ <- putJudgesWith 0 js
        return ()
 
--- | `IO.stdout` version of `hPutJudgesWith`.
+-- | `B.stdout` version of `hPutJudgesWith`.
 putJudgesWith :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
-putJudgesWith = hPutJudgesWith IO.stdout resultEmpty
+putJudgesWith = hPutJudgesWith B.stdout resultEmpty
 
 -- | Print list of judges.
 hPutJudgesWith :: (Ord c, B.Write c) => IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int

@@ -41,6 +41,9 @@ module Koshucode.Baala.Base.Prelude.Import
   
     -- * Data.Tuple
     Data.Tuple.swap,
+
+    -- * System.IO
+    System.IO.stdout,
   
     -- * Text.PrettyPrint
     Text.PrettyPrint.Doc,
@@ -55,10 +58,11 @@ module Koshucode.Baala.Base.Prelude.Import
 
 import qualified Control.Monad
 import qualified Data.List
-import qualified Data.Tuple
 import qualified Data.Map
 import qualified Data.Maybe
 import qualified Data.Monoid
+import qualified Data.Tuple
+import qualified System.IO
 import qualified Text.PrettyPrint
 
 

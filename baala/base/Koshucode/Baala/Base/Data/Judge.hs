@@ -185,7 +185,7 @@ termsText :: [B.Term String] -> String
 termsText = concatMap termTextPair
 
 putJudge :: (B.Write c) => Judge c -> IO ()
-putJudge = hPutJudge IO.stdout
+putJudge = hPutJudge B.stdout
 
 hPutJudge :: (B.Write c) => IO.Handle -> Judge c -> IO ()
 hPutJudge h = IO.hPutStrLn h . writeDownJudge B.shortEmpty
