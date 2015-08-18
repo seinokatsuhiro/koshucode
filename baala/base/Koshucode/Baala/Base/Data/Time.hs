@@ -40,20 +40,20 @@ data Time
     = TimeYmdcz B.Date B.Clock B.Sec  -- ^ Date and time with time zone
     | TimeYmdc  B.Date B.Clock        -- ^ Date and time
     | TimeYmd   B.Date                -- ^ Year, month, and day
-    | TimeYw    T.Day                 -- ^ Year and week
-    | TimeYm    T.Day                 -- ^ Year and month
+    | TimeYw    B.MJDay               -- ^ Year and week
+    | TimeYm    B.MJDay               -- ^ Year and month
       deriving (Show, Eq, Ord)
 
-timeYmdc  :: T.Day -> B.Clock -> Time
+timeYmdc  :: B.MJDay -> B.Clock -> Time
 timeYmdc   = TimeYmdc . B.Monthly
 
-timeYmd   :: T.Day -> Time
+timeYmd   :: B.MJDay -> Time
 timeYmd    = TimeYmd . B.Monthly
 
 timeMjd :: Time -> B.DayCount
 timeMjd = T.toModifiedJulianDay . timeDay
 
-timeDay :: Time -> T.Day
+timeDay :: Time -> B.MJDay
 timeDay (TimeYmdcz d _ _)        = B.dateDay d
 timeDay (TimeYmdc  d _)          = B.dateDay d
 timeDay (TimeYmd   d)            = B.dateDay d
@@ -67,7 +67,7 @@ timePrecision (TimeYmd   _)      = "day"
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
-timeMapDay :: B.Map T.Day -> B.Map Time
+timeMapDay :: B.Map B.MJDay -> B.Map Time
 timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (B.dateMapDay f d) c z
 timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (B.dateMapDay f d) c
 timeMapDay f (TimeYmd   d)       = TimeYmd   (B.dateMapDay f d)
@@ -96,14 +96,19 @@ writeTime time =
       TimeYw    day    -> yw $ T.toWeekDate  day
       TimeYm    day    -> ym $ T.toGregorian day
     where
-      dcz d c z         = dc d $ B.clockAddSec z c
+      dcz               :: B.Date -> B.Clock -> B.Sec -> B.Doc
+      dcz d c z         = let c'  = B.clockAddSec z c
+                              day = B.clockDayCount c'
+                          in dc (day `B.dateAdd` d) (B.clockCutDay c')
+
+      dc                :: B.Date -> B.Clock -> B.Doc
+      dc d c            = B.writeDocWith id d B.<+> B.writeClockBody c
+
       zone z            = hm $ B.dhmsFromSec z
       szone z           = case z `compare` 0 of
                             EQ -> B.doc "UTC"
                             LT -> B.doc "-" B.<> zone z
                             GT -> B.doc "+" B.<> zone z
-
-      dc d c            = B.writeDocWith id d B.<+> B.writeClockBody c
 
       hm (_, h, m, _)   = B.doc02 h `co`  B.doc02 m
       yw (y, w, _)      = B.doc y   `hyw` B.doc w
@@ -137,10 +142,11 @@ timeFromDczAb d c (Just z)  = Right $ TimeYmdcz d c z
 timeFromYmd :: B.Year -> B.Month -> B.Day -> Time
 timeFromYmd y m d = timeYmd $ T.fromGregorian y m d
 
-timeFromYmdTuple :: (B.Year, B.Month, B.Day) -> Time
-timeFromYmdTuple = timeYmd . B.dayFromYmd
+timeFromYmdTuple :: B.YmdTuple -> Time
+timeFromYmdTuple = timeYmd . dayFromYmdTuple where
+    dayFromYmdTuple (y, m, d) = T.fromGregorian y m d
 
-timeYmdTuple :: Time -> (B.Year, B.Month, B.Day)
+timeYmdTuple :: Time -> B.YmdTuple
 timeYmdTuple = T.toGregorian . timeDay
 
 -- | Create time data form modified Julian date.
@@ -210,17 +216,17 @@ timeRangeMonth = timeRangeBy monthStep
 timeRangeYear :: B.RangeBy Time
 timeRangeYear = timeRangeBy yearStep
 
-timeRangeBy :: B.Map (B.Year, B.Month, B.Day) -> B.RangeBy Time
+timeRangeBy :: B.Map B.YmdTuple -> B.RangeBy Time
 timeRangeBy step from to = times where
     dayFrom =  timeYmdTuple from
     dayTo   =  timeYmdTuple to
     times   =  map timeFromYmdTuple $ B.rangeBy step dayFrom dayTo
 
-monthStep :: B.Map (B.Year, B.Month, B.Day)
+monthStep :: B.Map B.YmdTuple
 monthStep (y, m, d) | m < 12    = (y, m + 1, d)
                     | otherwise = (y + 1, 1, d)
 
-yearStep :: B.Map (B.Year, B.Month, B.Day)
+yearStep :: B.Map B.YmdTuple
 yearStep (y, m, d)  | y == (-1) = (1, m, d)
                     | otherwise = (y + 1, m, d)
 
@@ -282,5 +288,5 @@ timeDiffDc d2 c2 d1 c1 =
 timeDiffDate :: B.Date -> B.Date -> Integer
 timeDiffDate d2 d1 = B.dateDay d2 `timeDiffDay` B.dateDay d1
 
-timeDiffDay :: T.Day -> T.Day -> Integer
+timeDiffDay :: B.MJDay -> B.MJDay -> Integer
 timeDiffDay d2 d1 = T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1

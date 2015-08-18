@@ -1,11 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Date
-  ( Date (..),
+  ( -- * Data type
+    Date (..), MJDay, YmdTuple,
     Year, Month, Week, Day,
-    dayFromYmd, dateFromYmdAb,
-    dateFromYwdAb, dateFromYdAb,
-    dateDay, dateMapDay,
+
+    -- * Construction
+    dateFromYmdAb, dateFromYwdAb, dateFromYdAb,
+
+    -- * Utility
+    dateDay, dateMapDay, dateAdd,
     monthly, weekly, yearly,
   ) where
 
@@ -18,45 +22,24 @@ import qualified Koshucode.Baala.Base.Text        as B
 import qualified Koshucode.Baala.Base.Message     as Msg
 
 
--- ----------------------  Date
+-- ----------------------  Type
 
 data Date
-    = Monthly T.Day    -- ^ Date in /YYYY-MM-DD/
-    | Weekly  T.Day    -- ^ Date in /YYYY-#W-D/
-    | Yearly  T.Day    -- ^ Date in /YYYY-##D/
+    = Monthly MJDay    -- ^ Date in /YYYY-MM-DD/
+    | Weekly  MJDay    -- ^ Date in /YYYY-#W-D/
+    | Yearly  MJDay    -- ^ Date in /YYYY-##D/
       deriving (Show)
 
 instance Eq  Date where  a == b         = dateDay a == dateDay b
 instance Ord Date where  a `compare` b  = dateDay a `compare` dateDay b
 
-type Year   = Integer
-type Week   = Int
-type Month  = Int
-type Day    = Int
+type MJDay    = T.Day     -- ^ The Modified Julian Day
+type Year     = Integer
+type Week     = Int
+type Month    = Int
+type Day      = Int
 
-dayFromYmd :: (Year, Month, Day) -> T.Day
-dayFromYmd (y, m, d) = T.fromGregorian y m d
-
--- | Create date from year, month, and day.
-dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
-dateFromYmdAb y m d =
-    case T.fromGregorianValid y m d of
-      Just day -> Right $ Monthly day
-      Nothing  -> Msg.notDate y m d
-
--- | Create date from year, week, and day.
-dateFromYwdAb :: Year -> Week -> Day -> B.Ab Date
-dateFromYwdAb y w d =
-    case T.fromWeekDateValid y w d of
-      Just day -> Right $ Weekly day
-      Nothing  -> Msg.notDate y w d
-
--- | Create date from year and day.
-dateFromYdAb :: Year -> Day -> B.Ab Date
-dateFromYdAb y d =
-    case T.fromOrdinalDateValid y d of
-      Just day -> Right $ Yearly day
-      Nothing  -> Msg.notDate y 0 d
+type YmdTuple = (Year, Month, Day)
 
 
 -- ----------------------  Write
@@ -81,23 +64,55 @@ hyw   = B.docConcat "-#"
 hyww  = B.docConcat "-##"
 
 
+-- ----------------------  Construction
+
+-- | Create date from year, month, and day.
+dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
+dateFromYmdAb y m d =
+    case T.fromGregorianValid y m d of
+      Just day -> Right $ Monthly day
+      Nothing  -> Msg.notDate y m d
+
+-- | Create date from year, week, and day.
+dateFromYwdAb :: Year -> Week -> Day -> B.Ab Date
+dateFromYwdAb y w d =
+    case T.fromWeekDateValid y w d of
+      Just day -> Right $ Weekly day
+      Nothing  -> Msg.notDate y w d
+
+-- | Create date from year and day.
+dateFromYdAb :: Year -> Day -> B.Ab Date
+dateFromYdAb y d =
+    case T.fromOrdinalDateValid y d of
+      Just day -> Right $ Yearly day
+      Nothing  -> Msg.notDate y 0 d
+
+
 -- ----------------------  Utility
 
-dateDay :: Date -> T.Day
-dateDay (Monthly d)  = d
-dateDay (Weekly  d)  = d
-dateDay (Yearly  d)  = d
+-- | Get the internal Modified Julian Day.
+dateDay :: Date -> MJDay
+dateDay (Monthly day)  = day
+dateDay (Weekly  day)  = day
+dateDay (Yearly  day)  = day
 
-dateMapDay :: B.Map T.Day -> B.Map Date
-dateMapDay f (Monthly d)  = Monthly $ f d
-dateMapDay f (Weekly  d)  = Weekly  $ f d
-dateMapDay f (Yearly  d)  = Yearly  $ f d
+dateMapDay :: B.Map MJDay -> B.Map Date
+dateMapDay f (Monthly day)  = Monthly $ f day
+dateMapDay f (Weekly  day)  = Weekly  $ f day
+dateMapDay f (Yearly  day)  = Yearly  $ f day
 
+dateAdd :: (Integral n) => n -> B.Map Date
+dateAdd d = dateMapDay $ T.addDays (fromIntegral d)
+
+-- ^ Convert into monthly date.
 monthly :: B.Map Date
 monthly = Monthly . dateDay
 
+-- ^ Convert into weekly date.
 weekly :: B.Map Date
 weekly  = Weekly . dateDay
 
+-- ^ Convert into yearly date.
 yearly :: B.Map Date
 yearly  = Yearly . dateDay
+
