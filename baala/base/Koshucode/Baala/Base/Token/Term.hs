@@ -2,7 +2,8 @@
 
 module Koshucode.Baala.Base.Token.Term
   ( -- * Term name
-    TermName, TermName2, TermName3, TermName4,
+    TermName, TermName2, TermName3,
+    TermName4, TermName5, TermName6,
     TermPath, showTermName, showTermPath,
 
     -- * Term
@@ -21,6 +22,8 @@ type TermName    = String
 type TermName2   = (String, String)
 type TermName3   = (String, String, String)
 type TermName4   = (String, String, String, String)
+type TermName5   = (String, String, String, String, String)
+type TermName6   = (String, String, String, String, String, String)
 
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
