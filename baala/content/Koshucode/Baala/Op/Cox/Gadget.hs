@@ -17,22 +17,24 @@ module Koshucode.Baala.Op.Cox.Gadget
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Op.Builtin  as Op
-import qualified Koshucode.Baala.Op.Cox.Get  as Op
-import qualified Koshucode.Baala.Op.Message  as Msg
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Op.Builtin        as Op
+import qualified Koshucode.Baala.Op.Cox.Get        as Op
+import qualified Koshucode.Baala.Op.Cox.GeoDatumJp as Op
+import qualified Koshucode.Baala.Op.Message        as Msg
 
 
 -- | Implementation of relational operators.
 ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
-    --        CONSTRUCTOR    USAGE                        ATTRIBUTE
-    [ Op.def  consConst      "const R"                    "1 -lit"
-    , Op.def  consInterp     "interp E"                   "1 -interp | -x"
-    , Op.def  consNumber     "number /N -order /N ..."    "1 -term | -order -from"
-    , Op.def  consRank       "rank /N -order /N ..."      "1 -term | -order -from -dense"
-    , Op.def  consRepeat     "repeat N R"                 "2 -count -relmap/"
+    --       CONSTRUCTOR    USAGE                            ATTRIBUTE
+    [ Op.def consConst      "const R"                        "1 -lit"
+    , Op.def consGeoDatumJp "geo-datum-jp E /P /P -to /N /N" "3 -n -x -y | -to"
+    , Op.def consInterp     "interp E"                       "1 -interp | -x"
+    , Op.def consNumber     "number /N -order /N ..."        "1 -term | -order -from"
+    , Op.def consRank       "rank /N -order /N ..."          "1 -term | -order -from -dense"
+    , Op.def consRepeat     "repeat N R"                     "2 -count -relmap/"
     ]
 
 
@@ -62,6 +64,37 @@ relkitConst :: B.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
 relkitConst (B.Rel he bo) _ = Right kit2 where
     kit2 = C.relkitJust he $ C.RelkitConst bo
+
+
+-- ----------------------  geo-datum-jp
+
+--  geo-datum-jp /n /x /y -to /lat /long
+
+consGeoDatumJp :: (Ord c, C.CContent c) => C.RopCons c
+consGeoDatumJp med =
+    do n <- Op.getInt med "-n"
+       x <- Op.getTerm med "-x"
+       y <- Op.getTerm med "-y"
+       (lat, long) <- Op.getTerm2 med "-to"
+       Right $ relmapGeoDatumJp med (n, (x,y,lat,long))
+
+relmapGeoDatumJp :: (Ord c, C.CContent c) => C.Intmed c -> (Int, B.TermName4) -> C.Relmap c
+relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
+
+relkitGeoDatumJp :: (Ord c, C.CContent c) => (Int, B.TermName4) -> C.RelkitFlow c
+relkitGeoDatumJp _ Nothing = Right C.relkitNothing
+relkitGeoDatumJp (n,(x,y,lat,long)) (Just he1) = Right kit2 where
+    he2         = B.headAppend [lat, long] he1
+    kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    pick        = Op.picker he1 [x,y]
+    pReal       = C.pDec . B.decimalFromRealFloat 4
+    f2 _ cs     = do let [cx,cy] = pick cs
+                     decx <- C.getDec $ Right cx
+                     decy <- C.getDec $ Right cy
+                     let dx = B.decimalToRealFloat decx :: Double
+                         dy = B.decimalToRealFloat decy :: Double
+                         (dlat, dlong) = Op.convDegree n (dx, dy)
+                     Right $ pReal dlat : pReal dlong : cs
 
 
 -- ----------------------  interp

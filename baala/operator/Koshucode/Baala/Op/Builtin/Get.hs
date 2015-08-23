@@ -20,7 +20,7 @@ module Koshucode.Baala.Op.Builtin.Get
     getRelmap, getRelmaps, getOptRelmap,
   
     -- * Term
-    getTerm, getTermOpt,
+    getTerm, getTerm2, getTermOpt,
     getTerms, getTermsCo,
     getTermPairs, getTermsColon,
     getTermTrees,
@@ -167,6 +167,13 @@ getTerm :: RopGet c B.TermName
 getTerm = getAbortable get where
     get [x] = Op.termName x
     get _   = Msg.unexpAttr "Require one term"
+
+getTerm2 :: RopGet c (B.TermName, B.TermName)
+getTerm2 med n =
+    do terms <- getTerms med n
+       case terms of
+         [x,y] -> Right (x, y)
+         _     -> Msg.unexpAttr "Require two term"
 
 getTermOpt :: RopGet c (Maybe B.TermName)
 getTermOpt = getMaybe getTerm
