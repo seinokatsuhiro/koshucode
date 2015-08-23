@@ -3,11 +3,11 @@
 module Koshucode.Baala.Base.Data.Decimal
   ( -- * Type
     Decimal (..),
-    decimalNum,
-    intDecimal,
-    decimalSetPoint,
-    decimalDenom,
     isDecimalZero,
+    decimalNum, decimalDenom,
+    decimalSetPoint,
+    intDecimal,
+    decimalFromRealFloat, decimalToRealFloat,
   
     -- * Reader
     LitString,
@@ -33,6 +33,7 @@ module Koshucode.Baala.Base.Data.Decimal
   ) where
 
 import qualified Data.Char as Ch
+import qualified Data.Ratio as R
 import Control.Monad
 import qualified Koshucode.Baala.Base.Message as Msg
 import qualified Koshucode.Baala.Base.Abort   as B
@@ -44,33 +45,46 @@ import qualified Koshucode.Baala.Base.Prelude as B
 
 data Decimal = Decimal 
     { decimalRatio   :: (Int, Int)
-    , decimalLength  :: Int
+    , decimalLength  :: Int             
     , decimalApprox  :: Bool
     } deriving (Show, Eq, Ord)
 
+-- | Test decimal is zero.
+isDecimalZero :: Decimal -> Bool
+isDecimalZero (Decimal (n, _) _ _)  = n == 0
+
+-- | Numerator part of decimal number.
 decimalNum :: Decimal -> Int
 decimalNum = fst . decimalRatio
 
+-- | Denominator part of decimal number.
 decimalDenom :: Decimal -> Int
 decimalDenom = snd . decimalRatio
 
-type DecimalBinary =
-    Decimal -> Decimal -> B.Ab Decimal
-
-intDecimal :: Int -> Decimal
-intDecimal n = Decimal (n, 1) 0 False
-
+-- | Change precision.
 decimalSetPoint :: Int -> B.AbMap Decimal
-decimalSetPoint p2 (Decimal nd1 _ e1) =
-    Right $ Decimal nd1 p2 e1
+decimalSetPoint p2 (Decimal r1 _ e1) =
+    Right $ Decimal r1 p2 e1
 
 reduceDecimal :: (Int, Int) -> Int -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
 
-isDecimalZero :: Decimal -> Bool
-isDecimalZero (Decimal (n, _) _ _)  =  n == 0
+-- | Convert integral number to decimal number.
+intDecimal :: Int -> Decimal
+intDecimal n = Decimal (n, 1) 0 False
 
+-- | Convert real-float number to decimal number.
+decimalFromRealFloat :: (RealFloat n) => Int -> n -> Decimal
+decimalFromRealFloat k n = Decimal (fromInteger num, fromInteger den) k False where
+    r   = toRational n
+    num = R.numerator   r
+    den = R.denominator r
+
+-- | Convert decimal number to read-float number.
+decimalToRealFloat :: (RealFloat n) => Decimal -> n
+decimalToRealFloat (Decimal { decimalRatio = (num, den)}) =
+    fromRational $ toRational $ (num R.% den)
 
 
 -- ----------------------  Reader
@@ -171,6 +185,9 @@ quoteDigit n = let (n', d) = quotRem n 10
 
 
 -- ----------------------  Arithmetic
+
+type DecimalBinary =
+    Decimal -> Decimal -> B.Ab Decimal
 
 decimalAdd :: DecimalBinary
 decimalAdd d1@(Decimal (n1, den1) p1 a1)
