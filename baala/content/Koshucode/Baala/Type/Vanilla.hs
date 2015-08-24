@@ -127,6 +127,23 @@ instance B.Write VContent where
         VRel r       -> B.writeHtmlWith sh r
         _            -> B.toHtml $ B.writeStringWith sh c
 
+instance B.ToJSON VContent where
+    toJSON c = case c of
+        VText s      -> B.toJSON s
+        VTerm s      -> B.toJSON $ '/' : s
+        VDec  n      -> B.toJSON (B.decimalToRealFloat n :: Double)
+        VClock t     -> unimplemented t
+        VTime t      -> unimplemented t
+        VBool b      -> B.toJSON b
+        VEmpty       -> B.jsonNull
+        VInterp i    -> unimplemented i
+        VType t      -> unimplemented t
+        VList xs     -> B.toJSON xs
+        VSet  xs     -> B.toJSON xs
+        VAssn xs     -> B.termsToJSON xs
+        VRel r       -> unimplemented r
+        where unimplemented x = B.toJSON $ "<unimplemented>" ++ show x
+
 
 -- ----------------------  haskell data
 

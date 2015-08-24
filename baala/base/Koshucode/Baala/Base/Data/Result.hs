@@ -17,10 +17,14 @@ module Koshucode.Baala.Base.Data.Result
     -- * Writer
     putResult, hPutResult,
     putJudges, putJudgesWith, hPutJudgesWith,
+    termsToJSON, jsonNull, A.ToJSON (..),
   ) where
 
 import qualified Control.Monad                     as M
+import qualified Data.Aeson                        as A
+import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Map                          as Map
+import qualified Data.Text                         as T
 import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
 import qualified Text.Blaze.XHtml5                 as H
@@ -54,6 +58,7 @@ data Result c = Result
 
 data ResultForm
     = ResultKoshu
+    | ResultJson
     | ResultHtmlIndented
     | ResultHtmlCompact
     | ResultCsv
@@ -73,6 +78,10 @@ data ResultChunk c
     | ResultRel    B.JudgePat (B.Rel c)
     | ResultNote   [String]
       deriving (Show, Eq, Ord)
+
+resultChunkJudges :: ResultChunk c -> [B.Judge c]
+resultChunkJudges (ResultJudge js) = js
+resultChunkJudges _ = []
 
 -- | Empty result.
 resultEmpty :: Result c
@@ -94,7 +103,7 @@ resultEmpty =
 -- ----------------------  Writer
 
 -- | `B.stdout` version of `hPutResult`.
-putResult :: (Ord c, B.Write c) => Result c -> IO Int
+putResult :: (Ord c, B.Write c, A.ToJSON c) => Result c -> IO Int
 putResult result =
     case resultOutput result of
       B.IOPointStdout ->
@@ -107,7 +116,7 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: forall c. (Ord c, B.Write c) => IO.Handle -> Result c -> IO Int
+hPutResult :: forall c. (Ord c, B.Write c, A.ToJSON c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
     | null vio   = hPutAllChunks result h 0 $ resultNormal result
     | otherwise  = hPutAllChunks result h 1 vio
@@ -119,13 +128,14 @@ hPutResult h result
       hasJudge (ResultJudge js)  = js /= []
       hasJudge _                 = False
 
-hPutAllChunks :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+hPutAllChunks :: (Ord c, B.Write c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunks result h status sh =
     do useUtf8 h
        put result h status sh
     where
       put = case resultForm result of
               ResultKoshu        -> hPutAllChunksKoshu
+              ResultJson         -> hPutAllChunksJson
               ResultHtmlIndented -> hPutAllChunksHtml B.renderHtmlIndented
               ResultHtmlCompact  -> hPutAllChunksHtml B.renderHtmlCompact
               ResultCsv          -> error "not implemented"
@@ -140,6 +150,34 @@ hPutAllChunksHtml :: (Ord c, B.Write c) => (H.Html -> String) -> Result c -> IO.
 hPutAllChunksHtml render _ h status sh =
     do hPutRel h render sh
        return status
+
+hPutAllChunksJson :: (Ord c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+hPutAllChunksJson _ h status sh =
+    case concatMap resultChunkJudges $ concatMap B.shortBody sh of
+      []     -> return status
+      j : js -> do IO.hPutStr h "[ "
+                   put j
+                   mapM_ cput js
+                   IO.hPutStrLn h "]"
+                   return status
+    where
+      put j  = do Byte.hPutStr h $ A.encode j
+                  IO.hPutChar h '\n'
+      cput j = do IO.hPutStr h ", "
+                  put j
+
+instance (A.ToJSON c) => A.ToJSON (B.Judge c) where
+    toJSON (B.JudgeAffirm p xs) =
+        A.object [ ("judge" , A.toJSON ("|--" :: T.Text))
+                 , ("name"  , A.toJSON p)
+                 , ("args"  , termsToJSON xs) ]
+
+termsToJSON :: (A.ToJSON c) => [B.Term c] -> A.Value
+termsToJSON xs = A.object $ map json xs where
+    json (n, c) = (T.pack n, A.toJSON c)
+
+jsonNull :: A.Value
+jsonNull = A.Null
 
 hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 hPutAllChunksKoshu result h status sh =

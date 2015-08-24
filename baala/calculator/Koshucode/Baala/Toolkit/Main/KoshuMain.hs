@@ -43,6 +43,7 @@ data Option
     | OptAssertX String
     | OptElement
     | OptHtml Bool
+    | OptJson
     | OptLiner String
     | OptPretty
     | OptRun
@@ -59,6 +60,7 @@ koshuOptions =
     , Option ""  ["element"]       (NoArg OptElement) "Analize input code"
     , Option ""  ["html-indented", "html"] (NoArg $ OptHtml True) "HTML output with indent"
     , Option ""  ["html-compact"]  (NoArg $ OptHtml False)   "HTML output without indent"
+    , Option ""  ["json"]          (NoArg OptJson)          "JSON output"
     , Option ""  ["liner"]         (ReqArg OptLiner "CODE") "One liner"
     , Option ""  ["pretty"]        (NoArg OptPretty)  "Pretty print"
     , Option ""  ["run"]           (NoArg OptRun)     "Run input code"
@@ -90,7 +92,7 @@ header = unlines
 -- | The main function for @koshu@ command.
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
-koshuMain :: (C.CContent c) => C.Global c -> IO Int
+koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO Int
 koshuMain g =
   do (prog, argv) <- L.prelude
      proxy        <- L.getProxies
@@ -127,6 +129,7 @@ resultForm :: (Option -> Bool) -> B.ResultForm
 resultForm has
     | has (OptHtml True)  = B.ResultHtmlIndented
     | has (OptHtml False) = B.ResultHtmlCompact
+    | has (OptJson)       = B.ResultJson
     | otherwise           = B.ResultKoshu
 
 oneLiner :: Option -> [String]

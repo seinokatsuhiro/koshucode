@@ -109,6 +109,8 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base             == 4.*
+       , aeson            == 0.*
+       , text             == 1.*
        , blaze-html       == 0.*
        , blaze-markup     == 0.*
        , bytestring       == 0.*

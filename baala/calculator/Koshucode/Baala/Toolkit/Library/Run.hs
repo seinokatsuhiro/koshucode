@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Core as C
 -- ----------------------
 
 -- | Read and union sections from files, and run the section.
-runFiles :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO Int
+runFiles :: (C.CContent c, B.ToJSON c) => C.Global c -> [B.IOPoint] -> IO Int
 runFiles g ns =
     do (abRes, _) <- C.gioResource (C.readSources ns) g
        case abRes of
