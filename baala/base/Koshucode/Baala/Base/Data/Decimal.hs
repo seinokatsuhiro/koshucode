@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Data.Decimal
   ( -- * Type
     Decimal (..),
+    DecimalInteger,
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalSetPoint,
@@ -43,9 +44,11 @@ import qualified Koshucode.Baala.Base.Prelude as B
 
 -- ----------------------  Type
 
+type DecimalInteger = Integer
+
 data Decimal = Decimal 
-    { decimalRatio   :: (Int, Int)
-    , decimalLength  :: Int             
+    { decimalRatio   :: (DecimalInteger, DecimalInteger)
+    , decimalLength  :: Int
     , decimalApprox  :: Bool
     } deriving (Show, Eq, Ord)
 
@@ -54,11 +57,11 @@ isDecimalZero :: Decimal -> Bool
 isDecimalZero (Decimal (n, _) _ _)  = n == 0
 
 -- | Numerator part of decimal number.
-decimalNum :: Decimal -> Int
+decimalNum :: Decimal -> DecimalInteger
 decimalNum = fst . decimalRatio
 
 -- | Denominator part of decimal number.
-decimalDenom :: Decimal -> Int
+decimalDenom :: Decimal -> DecimalInteger
 decimalDenom = snd . decimalRatio
 
 -- | Change precision.
@@ -66,12 +69,12 @@ decimalSetPoint :: Int -> B.AbMap Decimal
 decimalSetPoint p2 (Decimal r1 _ e1) =
     Right $ Decimal r1 p2 e1
 
-reduceDecimal :: (Int, Int) -> Int -> Bool -> Decimal
+reduceDecimal :: (DecimalInteger, DecimalInteger) -> Int -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
 
 -- | Convert integral number to decimal number.
-intDecimal :: Int -> Decimal
+intDecimal :: DecimalInteger -> Decimal
 intDecimal n = Decimal (n, 1) 0 False
 
 -- | Convert real-float number to decimal number.
@@ -105,7 +108,7 @@ litDecimal ccs = headPart id ccs where
         '+'  ->  headPart id    cs
         _    ->  intPart sign 0 (c:cs)
 
-    intPart :: B.Map Int -> Int -> LitDecimal
+    intPart :: B.Map DecimalInteger -> DecimalInteger -> LitDecimal
     intPart sign n [] = Right $ Decimal (sign n, 1) 0 False
     intPart sign n (c:cs)
         | Ch.isDigit c =  intPart sign (10 * n + fromDigit c) cs
@@ -113,14 +116,14 @@ litDecimal ccs = headPart id ccs where
         | c == '.'     =  decPart sign n 0 cs
         | otherwise    =  tailPart False sign (n, 0) (c:cs)
 
-    decPart :: B.Map Int -> Int -> Int -> LitDecimal
+    decPart :: B.Map DecimalInteger -> DecimalInteger -> Int -> LitDecimal
     decPart sign n p [] = Right $ Decimal (sign n, 10 ^ p) p False
     decPart sign n p (c:cs)
         | Ch.isDigit c = decPart sign (10 * n + fromDigit c) (p + 1) cs
         | c == ' '     =  decPart sign n p cs
         | otherwise    =  tailPart False sign (n, p) (c:cs)
 
-    tailPart :: Bool -> B.Map Int -> (Int, Int) -> LitDecimal
+    tailPart :: Bool -> B.Map DecimalInteger -> (DecimalInteger, Int) -> LitDecimal
     tailPart approx sign (n, p) [] = Right $ Decimal (sign n, 10 ^ p) p approx
     tailPart approx sign dec (c:cs) = case c of
         ' '  ->  tailPart approx sign  dec cs
@@ -130,7 +133,7 @@ litDecimal ccs = headPart id ccs where
         'A'  ->  tailPart True   sign  dec cs
         _    ->  Msg.notNumber ccs
 
-fromDigit :: Char -> Int
+fromDigit :: Char -> DecimalInteger
 fromDigit '0' = 0
 fromDigit '1' = 1
 fromDigit '2' = 2
@@ -153,17 +156,17 @@ decimalString (Decimal (n, den) p a)
     | otherwise  = '-' : digits
     where digits = decimalDigits a p (abs n * 10 ^ p `div` den)
 
-decimalDigits :: Bool -> Int -> Int -> String
+decimalDigits :: Bool -> Int -> DecimalInteger -> String
 decimalDigits approx pt
     | pt == 0   = zero . reverse . intPart pt
     | otherwise = zero . reverse . decPart pt
     where
-    decPart :: Int -> Int -> String
+    decPart :: Int -> DecimalInteger -> String
     decPart 0 n = '.' : intPart 0 n
     decPart p n = let (n', d) = quoteDigit n
                   in d : decPart (p - 1) n'
 
-    intPart :: Int -> Int -> String
+    intPart :: Int -> DecimalInteger -> String
     intPart _ 0 | approx    = " a"
                 | otherwise = ""
     intPart 3 n = ' ' : intPart 0 n
@@ -174,9 +177,9 @@ decimalDigits approx pt
     zero ds@('.' : _) = '0' : ds
     zero ds           = ds
 
-quoteDigit :: Int -> (Int, Char)
+quoteDigit :: DecimalInteger -> (DecimalInteger, Char)
 quoteDigit n = let (n', d) = quotRem n 10
-             in (n', Ch.chr $ d + Ch.ord '0')
+             in (n', Ch.chr $ fromInteger d + Ch.ord '0')
 
 -- map quoteDigit [0..9]
 -- map quoteDigit [10..19]
@@ -224,7 +227,7 @@ decimalQuo = decimalQR quot
 decimalRem :: DecimalBinary
 decimalRem = decimalQR rem
 
-decimalQR :: (Int -> Int -> Int) -> DecimalBinary
+decimalQR :: (DecimalInteger -> DecimalInteger -> DecimalInteger) -> DecimalBinary
 decimalQR qr
           d1@(Decimal (n1, den1) p1 a1)
           d2@(Decimal (n2, den2) p2 a2)

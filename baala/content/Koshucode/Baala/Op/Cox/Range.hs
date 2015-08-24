@@ -73,12 +73,12 @@ relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do decLow    <-  C.getDec $ C.coxRunCox cops he1 cs coxLow
-                  decHigh   <-  C.getDec $ C.coxRunCox cops he1 cs coxHigh
+    f2 _ cs  = do decLow    <- C.getDec $ C.coxRunCox cops he1 cs coxLow
+                  decHigh   <- C.getDec $ C.coxRunCox cops he1 cs coxHigh
 
-                  let low   =   B.decimalNum decLow
-                      high  =   B.decimalNum decHigh
-                      decs  =   map C.pInt [low .. high]
+                  let low    = B.decimalNum decLow
+                      high   = B.decimalNum decHigh
+                      decs   = map C.pInteger [low .. high]
 
                   Right $ map (: cs) decs
 

@@ -188,13 +188,13 @@ copSubLength = op where
 
 subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
 subIndexDecimal from to = subIndex intFrom intTo where
-    intFrom = B.decimalNum from
-    intTo   = B.decimalNum to
+    intFrom = fromInteger $ B.decimalNum from
+    intTo   = fromInteger $ B.decimalNum to
 
 subLengthDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
 subLengthDecimal from len = subLength intFrom intLen where
-    intFrom = B.decimalNum from
-    intLen  = B.decimalNum len
+    intFrom = fromInteger $ B.decimalNum from
+    intLen  = fromInteger $ B.decimalNum len
 
 subIndex :: Int -> Int -> [a] -> [a]
 subIndex from to xs = xs2 where
@@ -278,7 +278,7 @@ copCoxIn _       = Msg.adlib "require operand"
 -- char 70 => "F"
 copChar :: (C.CContent c) => C.CopCalc c
 copChar = op where
-    op [Right c] | C.isDec c = C.putText [Char.chr $ B.decimalNum $ C.gDec c]
+    op [Right c] | C.isDec c = C.putText [Char.chr $ fromInteger $ B.decimalNum $ C.gDec c]
     op xs = typeUnmatch xs
 
 -- code-list "abc" => [ 97 : 98 : 99 ]

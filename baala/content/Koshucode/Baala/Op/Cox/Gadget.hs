@@ -76,7 +76,7 @@ consGeoDatumJp med =
        x <- Op.getTerm med "-x"
        y <- Op.getTerm med "-y"
        (lat, long) <- Op.getTerm2 med "-to"
-       Right $ relmapGeoDatumJp med (n, (x,y,lat,long))
+       Right $ relmapGeoDatumJp med (fromInteger n, (x,y,lat,long))
 
 relmapGeoDatumJp :: (Ord c, C.CContent c) => C.Intmed c -> (Int, B.TermName4) -> C.Relmap c
 relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
@@ -87,7 +87,7 @@ relkitGeoDatumJp (n,(x,y,lat,long)) (Just he1) = Right kit2 where
     he2         = B.headAppend [lat, long] he1
     kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
     pick        = Op.picker he1 [x,y]
-    pReal       = C.pDec . B.decimalFromRealFloat 4
+    pReal       = C.pDec . B.decimalFromRealFloat 3
     f2 _ cs     = do let [cx,cy] = pick cs
                      decx <- C.getDec $ Right cx
                      decy <- C.getDec $ Right cy
@@ -135,7 +135,7 @@ consNumber med =
     do n    <- Op.getTerm med "-term"
        ns   <- Op.getOption [] Op.getTerms med "-order"
        from <- Op.getOption 0  Op.getInt   med "-from"
-       Right $ relmapNumber med (n, ns, from)
+       Right $ relmapNumber med (n, ns, fromInteger from)
 
 relmapNumber :: (C.CDec c, Ord c) => C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
@@ -167,7 +167,7 @@ consRank med =
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
-       Right $ relmapRank med (n, ns, from)
+       Right $ relmapRank med (n, ns, fromInteger from)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
    C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
@@ -192,10 +192,10 @@ consRepeat med =
      rmap <- Op.getRelmap med "-relmap"
      Right $ relmapRepeat med cnt rmap
 
-relmapRepeat :: (Ord c) => C.Intmed c -> Int -> B.Map (C.Relmap c)
+relmapRepeat :: (Ord c) => C.Intmed c -> Integer -> B.Map (C.Relmap c)
 relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
-relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
+relkitRepeat :: forall c. (Ord c) => Integer -> C.RelkitBinary c
 relkitRepeat cnt (C.Relkit _ (Just he2) kitb2) (Just he1)
     | B.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]

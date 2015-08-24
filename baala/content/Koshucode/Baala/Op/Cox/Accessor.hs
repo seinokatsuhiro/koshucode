@@ -83,7 +83,7 @@ getMaybe _ _         = return Nothing
 
 getInt :: (C.CContent c) => B.Ab c -> B.Ab Int
 getInt c = do d <- C.getDec c
-              return $ B.decimalNum d
+              return $ fromInteger $ B.decimalNum d
 
 getInteger :: (C.CContent c) => B.Ab c -> B.Ab Integer
 getInteger c = do i <- getInt c

@@ -155,10 +155,10 @@ class (CTypeOf c) => CDec c where
     putDec      =    Right . pDec
 
 pInt :: (CDec c) => Int -> c
-pInt = pDec . B.intDecimal
+pInt = pDec . B.intDecimal . toInteger
 
 pInteger :: (CDec c) => Integer -> c
-pInteger = pDec . B.intDecimal . fromInteger
+pInteger = pDec . B.intDecimal
 
 pDecFromInt :: (CDec c) => Int -> c
 pDecFromInt = pInt

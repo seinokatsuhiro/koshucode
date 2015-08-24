@@ -120,7 +120,7 @@ getOptContent opt = Op.getOption opt getContent
 getFiller :: (C.CContent c) => Op.RopGet c c
 getFiller = getOptContent C.empty
 
-getInt :: (C.CContent c) => Op.RopGet c Int
+getInt :: (C.CContent c) => Op.RopGet c B.DecimalInteger
 getInt med name =
     do dec <- C.getDec $ getContent med name
        Right $ B.decimalNum dec
