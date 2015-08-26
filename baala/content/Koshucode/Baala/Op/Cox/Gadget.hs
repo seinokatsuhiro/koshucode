@@ -31,6 +31,7 @@ ropsCoxGadget = Op.ropList "cox-gadget"
     --       CONSTRUCTOR    USAGE                            ATTRIBUTE
     [ Op.def consConst      "const R"                        "1 -lit"
     , Op.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "3 -n -x -y | -to"
+    , Op.def consGeoDegree  "geo-degree /N /P /P /P"         "4 -real -deg -min -sec"
     , Op.def consInterp     "interp E"                       "1 -interp | -x"
     , Op.def consNumber     "number /N -order /N ..."        "1 -term | -order -from"
     , Op.def consRank       "rank /N -order /N ..."          "1 -term | -order -from -dense"
@@ -103,6 +104,44 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
                        (dlat, dlong) = Op.convDegree n (dx, dy)
 
                    Right $ pReal dlat : pReal dlong : cs
+
+
+-- ----------------------  geo-degree
+
+--  geo-degree /deg-real /deg /min /sec
+
+consGeoDegree :: (Ord c, C.CContent c) => C.RopCons c
+consGeoDegree med =
+    do real <- Op.getTerm med "-real"
+       deg  <- Op.getTerm med "-deg"
+       mnt  <- Op.getTerm med "-min"
+       sec  <- Op.getTerm med "-sec"
+       Right $ relmapGeoDegree med (real, deg, mnt, sec)
+
+relmapGeoDegree :: (Ord c, C.CContent c) => C.Intmed c -> B.TermName4 -> C.Relmap c
+relmapGeoDegree med = C.relmapFlow med . relkitGeoDegree
+
+relkitGeoDegree :: (Ord c, C.CContent c) => B.TermName4 -> C.RelkitFlow c
+relkitGeoDegree _ Nothing = Right C.relkitNothing
+relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
+    he2       = B.headCons real he1
+    kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    pick      = Op.picker he1 [deg, mnt, sec]
+    pReal     = C.pDec . B.decimalFromRealFloat 4
+
+    f2 _ cs   = do let [cdeg, cmnt, csec] = pick cs
+
+                   hdeg <- C.getDec $ Right cdeg
+                   hmnt <- C.getDec $ Right cmnt
+                   hsec <- C.getDec $ Right csec
+
+                   let ddeg = B.decimalToRealFloat hdeg :: Double
+                       dmnt = B.decimalToRealFloat hmnt :: Double
+                       dsec = B.decimalToRealFloat hsec :: Double
+                       dmnt' = dmnt + dsec  / 60
+                       ddeg' = ddeg + dmnt' / 60
+
+                   Right $ pReal ddeg' : cs
 
 
 -- ----------------------  interp
