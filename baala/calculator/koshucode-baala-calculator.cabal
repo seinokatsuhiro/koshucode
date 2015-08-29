@@ -67,6 +67,7 @@ library
         Koshucode.Baala.Toolkit.Library.Element
         Koshucode.Baala.Toolkit.Library.Exit
         Koshucode.Baala.Toolkit.Library.Run
+        Koshucode.Baala.Toolkit.Library.SimpleOption
         Koshucode.Baala.Toolkit.Library.Version
 
   -- Modules included in this library but not exported.
