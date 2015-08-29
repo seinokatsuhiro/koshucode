@@ -5,13 +5,13 @@ about /package 'core
 |-- DIR  /code 15   /comment 72   /dir "core/Koshucode/Baala"
 |-- DIR  /code 358  /comment 234  /dir "core/Koshucode/Baala/Core"
 |-- DIR  /code 259  /comment 129  /dir "core/Koshucode/Baala/Core/Assert"
-|-- DIR  /code 1004  /comment 564  /dir "core/Koshucode/Baala/Core/Content"
+|-- DIR  /code 1008  /comment 565  /dir "core/Koshucode/Baala/Core/Content"
 |-- DIR  /code 475  /comment 268  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 211  /comment 110  /dir "core/Koshucode/Baala/Core/Relkit"
 |-- DIR  /code 434  /comment 238  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- DIR  /code 600  /comment 269  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 3356  /comment 1884
+|-- DIR-TOTAL  /code 3360  /comment 1885
 
 |-- FILE  /code 15   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -23,7 +23,7 @@ about /package 'core
 |-- FILE  /code 167  /comment 45   /file "Build.hs"       /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 181  /comment 98   /file "Class.hs"       /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 67   /comment 55   /file "Cop.hs"         /dir "core/Koshucode/Baala/Core/Content"
-|-- FILE  /code 105  /comment 85   /file "Cox.hs"         /dir "core/Koshucode/Baala/Core/Content"
+|-- FILE  /code 109  /comment 86   /file "Cox.hs"         /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 157  /comment 158  /file "Literal.hs"     /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 154  /comment 48   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 173  /comment 75   /file "Tree.hs"        /dir "core/Koshucode/Baala/Core/Content"
@@ -55,4 +55,4 @@ about /package 'core
 |-- FILE  /code 87   /comment 37   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 87   /comment 16   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 3356  /comment 1884
+|-- FILE-TOTAL  /code 3360  /comment 1885

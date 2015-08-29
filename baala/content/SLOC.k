@@ -4,10 +4,10 @@ about /package 'content
 
 |-- DIR  /code 124  /comment 45   /dir "content/Koshucode/Baala/Op"
 |-- DIR  /code 647  /comment 381  /dir "content/Koshucode/Baala/Op/Cop"
-|-- DIR  /code 717  /comment 371  /dir "content/Koshucode/Baala/Op/Cox"
-|-- DIR  /code 180  /comment 45   /dir "content/Koshucode/Baala/Type"
+|-- DIR  /code 875  /comment 442  /dir "content/Koshucode/Baala/Op/Cox"
+|-- DIR  /code 196  /comment 46   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1668  /comment 842
+|-- DIR-TOTAL  /code 1842  /comment 914
 
 |-- FILE  /code 16   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 78   /comment 39   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -23,11 +23,12 @@ about /package 'content
 |-- FILE  /code 174  /comment 85   /file "Calc.hs"        /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 53   /comment 31   /file "Empty.hs"       /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 53   /comment 41   /file "Filter.hs"      /dir "content/Koshucode/Baala/Op/Cox"
-|-- FILE  /code 120  /comment 61   /file "Gadget.hs"      /dir "content/Koshucode/Baala/Op/Cox"
+|-- FILE  /code 176  /comment 85   /file "Gadget.hs"      /dir "content/Koshucode/Baala/Op/Cox"
+|-- FILE  /code 102  /comment 47   /file "GeoDatumJp.hs"  /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 81   /comment 46   /file "Get.hs"         /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 104  /comment 72   /file "Range.hs"       /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 81   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
-|-- FILE  /code 180  /comment 45   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
+|-- FILE  /code 196  /comment 46   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1668  /comment 842
+|-- FILE-TOTAL  /code 1842  /comment 914

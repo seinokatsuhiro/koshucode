@@ -69,7 +69,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    229 judges
+**    235 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -106,6 +106,7 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Date"            /import "Koshucode.Baala.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Abort"
@@ -146,7 +147,11 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Data.Judge"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Aeson"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "GHC.IO.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
@@ -196,10 +201,11 @@ imp : source IMPORT /module /import
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.List"
-|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Maybe"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Text.PrettyPrint"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.List"         /import "Data.List"
@@ -1098,7 +1104,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    90 judges
+**    91 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Arith"              /import "Koshucode.Baala.Base"
@@ -1175,7 +1181,9 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Gadget"             /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Gadget"             /import "Koshucode.Baala.Op.Builtin"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Gadget"             /import "Koshucode.Baala.Op.Cox.Get"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cox.Gadget"             /import "Koshucode.Baala.Op.Cox.GeoDatumJp"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Gadget"             /import "Koshucode.Baala.Op.Message"
+
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Get"                /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Get"                /import "Koshucode.Baala.Base"
@@ -1229,7 +1237,7 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 0 | 'Base | [ ] ] [ 0 | 'Core | [ ] ] [ 0 | 'Op | [ ] ] |}
 |-- DIR-RANK  /dir-rank 1  /dir 'Koshucode.Baala.Type  /base-rank {| /rank /base /import-dir [ 1 | 'Vanilla | [ ] ] |}
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cop  /base-rank {| /rank /base /import-dir [ 1 | 'Arith | [ ] ] [ 1 | 'Coxhand | [ ] ] [ 1 | 'Time | [ ] ] [ 1 | 'Type | [ ] ] [ 2 | 'List | [ ] ] [ 2 | 'Logic | [ ] ] [ 2 | 'Misc | [ ] ] [ 2 | 'Order | [ ] ] |}
-|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cox  /base-rank {| /rank /base /import-dir [ 1 | 'Get | [ ] ] [ 2 | 'Accessor | [ ] ] [ 2 | 'Calc | [ ] ] [ 2 | 'Empty | [ ] ] [ 2 | 'Filter | [ ] ] [ 2 | 'Gadget | [ ] ] [ 2 | 'Range | [ ] ] |}
+|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cox  /base-rank {| /rank /base /import-dir [ 0 | 'GeoDatumJp | [ ] ] [ 1 | 'Get | [ ] ] [ 2 | 'Accessor | [ ] ] [ 2 | 'Calc | [ ] ] [ 2 | 'Empty | [ ] ] [ 2 | 'Filter | [ ] ] [ 2 | 'Gadget | [ ] ] [ 2 | 'Range | [ ] ] |}
 |-- DIR-RANK  /dir-rank 4  /dir 'Koshucode.Baala.Op  /base-rank {| /rank /base /import-dir [ 0 | 'Builtin | [ ] ] [ 0 | 'Lattice | [ ] ] [ 0 | 'Message | [ ] ] [ 2 | 'Quoter | [ ] ] [ 3 | 'Cop | [ ] ] [ 3 | 'Cox | [ ] ] [ 4 | 'Global | [ 'Cop | 'Cox | 'Op ] ] |}
 
 *** 5 judges
@@ -1239,47 +1247,48 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 TABLE : DIR-RANK
 
   /dir-rank /dir                      /base-rank
-  --------- ------------------------- -----------------------------------------
-  0         'Koshucode.Baala          /rank /base       /import-dir
-                                      ----- ----------- -----------------------
-                                      0     'Base       [ ]
-                                      0     'Core       [ ]
-                                      0     'Op         [ ]
+  --------- ------------------------- -------------------------------------------
+  0         'Koshucode.Baala          /rank /base         /import-dir
+                                      ----- ------------- -----------------------
+                                      0     'Base         [ ]
+                                      0     'Core         [ ]
+                                      0     'Op           [ ]
                                       
-  1         'Koshucode.Baala.Type     /rank /base       /import-dir
-                                      ----- ----------- -----------------------
-                                      1     'Vanilla    [ ]
+  1         'Koshucode.Baala.Type     /rank /base         /import-dir
+                                      ----- ------------- -----------------------
+                                      1     'Vanilla      [ ]
                                       
-  2         'Koshucode.Baala.Op.Cop   /rank /base       /import-dir
-                                      ----- ----------- -----------------------
-                                      1     'Arith      [ ]
-                                      1     'Coxhand    [ ]
-                                      1     'Time       [ ]
-                                      1     'Type       [ ]
-                                      2     'List       [ ]
-                                      2     'Logic      [ ]
-                                      2     'Misc       [ ]
-                                      2     'Order      [ ]
+  2         'Koshucode.Baala.Op.Cop   /rank /base         /import-dir
+                                      ----- ------------- -----------------------
+                                      1     'Arith        [ ]
+                                      1     'Coxhand      [ ]
+                                      1     'Time         [ ]
+                                      1     'Type         [ ]
+                                      2     'List         [ ]
+                                      2     'Logic        [ ]
+                                      2     'Misc         [ ]
+                                      2     'Order        [ ]
                                       
-  2         'Koshucode.Baala.Op.Cox   /rank /base       /import-dir
-                                      ----- ----------- -----------------------
-                                      1     'Get        [ ]
-                                      2     'Accessor   [ ]
-                                      2     'Calc       [ ]
-                                      2     'Empty      [ ]
-                                      2     'Filter     [ ]
-                                      2     'Gadget     [ ]
-                                      2     'Range      [ ]
+  2         'Koshucode.Baala.Op.Cox   /rank /base         /import-dir
+                                      ----- ------------- -----------------------
+                                      0     'GeoDatumJp   [ ]
+                                      1     'Get          [ ]
+                                      2     'Accessor     [ ]
+                                      2     'Calc         [ ]
+                                      2     'Empty        [ ]
+                                      2     'Filter       [ ]
+                                      2     'Gadget       [ ]
+                                      2     'Range        [ ]
                                       
-  4         'Koshucode.Baala.Op       /rank /base       /import-dir
-                                      ----- ----------- -----------------------
-                                      0     'Builtin    [ ]
-                                      0     'Lattice    [ ]
-                                      0     'Message    [ ]
-                                      2     'Quoter     [ ]
-                                      3     'Cop        [ ]
-                                      3     'Cox        [ ]
-                                      4     'Global     [ 'Cop | 'Cox | 'Op ]
+  4         'Koshucode.Baala.Op       /rank /base         /import-dir
+                                      ----- ------------- -----------------------
+                                      0     'Builtin      [ ]
+                                      0     'Lattice      [ ]
+                                      0     'Message      [ ]
+                                      2     'Quoter       [ ]
+                                      3     'Cop          [ ]
+                                      3     'Cox          [ ]
+                                      4     'Global       [ 'Cop | 'Cox | 'Op ]
                                       
 
 === rel

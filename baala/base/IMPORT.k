@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    229 judges
+**    235 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -44,6 +44,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Date"            /import "Koshucode.Baala.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Abort"
@@ -84,7 +85,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Data.Judge"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Aeson"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "GHC.IO.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Text.Blaze.XHtml5"
@@ -134,10 +139,11 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.List"
-|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Maybe"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Text.PrettyPrint"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.List"         /import "Data.List"
