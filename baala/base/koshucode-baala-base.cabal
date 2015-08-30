@@ -121,7 +121,7 @@ library
        , syb              == 0.4.*
        , time             == 1.4.*
        , uri              == 0.*
-       , utf8-string      == 0.*
+       , utf8-string      == 1.*
 
   ghc-options:         -Wall
 
