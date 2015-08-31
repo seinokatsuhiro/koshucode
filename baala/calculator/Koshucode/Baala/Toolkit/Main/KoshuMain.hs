@@ -9,13 +9,14 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   -- $koshu.hs
   ) where
 
-import System.Console.GetOpt
+import qualified System.Console.GetOpt as Opt
 import qualified Data.Time as T
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Toolkit.Library.Element  as L
-import qualified Koshucode.Baala.Toolkit.Library.Exit     as L
-import qualified Koshucode.Baala.Toolkit.Library.Run      as L
+import qualified Koshucode.Baala.Toolkit.Library.Element       as L
+import qualified Koshucode.Baala.Toolkit.Library.Exit          as L
+import qualified Koshucode.Baala.Toolkit.Library.Run           as L
+import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
 
 -- Flow
@@ -37,41 +38,71 @@ import qualified Koshucode.Baala.Toolkit.Library.Run      as L
 
 -- ----------------------  Option
 
-data Option
-    = OptHelp
-    | OptVersion
-    | OptAssertX String
-    | OptElement
-    | OptHtml Bool
-    | OptJson
-    | OptLiner String
-    | OptPretty
-    | OptRun
-    | OptShowEncoding
-    | OptStdin
-      deriving (Show, Eq)
+data Param = Param
+    { paramElement       :: Bool
+    , paramForm          :: B.ResultForm
+    , paramLiner         :: [String]
+    , paramPretty        :: Bool
+    , paramRun           :: Bool
+    , paramShowEncoding  :: Bool
+    , paramStdin         :: Bool
+    , paramHelp          :: Bool
+    , paramVersion       :: Bool
 
-koshuOptions :: [OptDescr Option]
-koshuOptions =
-    [ Option "h" ["help"]          (NoArg OptHelp)    "Print help message"
-    , Option "i" ["stdin"]         (NoArg OptStdin)   "Read from stdin"
-    , Option "x" ["assert-x"]      (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
-    , Option "V" ["version"]       (NoArg OptVersion) "Print version number"
-    , Option ""  ["element"]       (NoArg OptElement) "Analize input code"
-    , Option ""  ["html-indented", "html"] (NoArg $ OptHtml True) "HTML output with indent"
-    , Option ""  ["html-compact"]  (NoArg $ OptHtml False)   "HTML output without indent"
-    , Option ""  ["json"]          (NoArg OptJson)          "JSON output"
-    , Option ""  ["liner"]         (ReqArg OptLiner "CODE") "One liner"
-    , Option ""  ["pretty"]        (NoArg OptPretty)  "Pretty print"
-    , Option ""  ["run"]           (NoArg OptRun)     "Run input code"
-    , Option ""  ["show-encoding"] (NoArg OptShowEncoding)  "Show character encoding"
-    ]
+    , paramProg          :: String
+    , paramArgs          :: [String]
+    , paramProxy         :: [(String, Maybe String)]
+    , paramTime          :: T.ZonedTime
+    , paramDay           :: T.Day
+    } deriving (Show)
+
+initParam :: Opt.ParseResult -> IO Param
+initParam (Left errs) = L.putFailure $ concat errs
+initParam (Right (opts, args)) =
+    do (prog, _)  <- L.prelude
+       proxy <- L.getProxies
+       time  <- T.getZonedTime
+       let day = T.localDay $ T.zonedTimeToLocalTime time
+       return $ Param { paramElement       = getFlag "element"
+                      , paramForm          = form
+                      , paramLiner         = liner
+                      , paramPretty        = getFlag "pretty"
+                      , paramRun           = getFlag "run"
+                      , paramShowEncoding  = getFlag "show-encoding"
+                      , paramStdin         = getFlag "stdin"
+                      , paramHelp          = getFlag "help"
+                      , paramVersion       = getFlag "version"
+
+                      , paramProg          = prog
+                      , paramArgs          = args
+                      , paramProxy         = proxy
+                      , paramTime          = time
+                      , paramDay           = day }
+    where
+      getFlag  = Opt.getFlag opts
+      getReq   = Opt.getReq  opts
+
+      assertX  = getReq "assert-x"
+
+      liner | null assertX = map oneLiner $ getReq "liner"
+            | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
+
+      form | getFlag "html-compact"   = B.ResultHtmlCompact
+           | getFlag "html-indented"  = B.ResultHtmlIndented
+           | getFlag "json"           = B.ResultJson
+           | otherwise                = B.ResultKoshu
+
+      -- replace "||" to "\n"
+      oneLiner :: B.Map String
+      oneLiner []               = []
+      oneLiner ('|' : '|' : xs) = '\n' : oneLiner (B.trimLeft xs)
+      oneLiner (x : xs)         = x : oneLiner xs
 
 usage :: String
-usage = usageInfo header koshuOptions
+usage = Opt.usageInfo (unlines usageHeader ++ "OPTIONS") options
 
-header :: String
-header = unlines
+usageHeader :: [String]
+usageHeader =
     [ "DESCRIPTION"
     , "  This is a relational data processor in Koshucode."
     , "  Koshucode is a notation for people and computers"
@@ -83,8 +114,23 @@ header = unlines
     , "  koshu -i CALC.k < DATA.k       Read input data from"
     , "                                 standard input"
     , ""
-    ] ++ "OPTIONS"
+    ]
 
+options :: Opt.SimpleOptions
+options =
+    [ Opt.help
+    , Opt.version
+    , Opt.flag "i" ["stdin"]                   "Read from stdin"
+    , Opt.req  "x" ["assert-x"] "EXPR"         "|== X : add /x ( EXPR )"
+    , Opt.flag ""  ["element"]                 "Analize input code"
+    , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
+    , Opt.flag ""  ["html-compact"]            "HTML output without indent"
+    , Opt.flag ""  ["json"]                    "JSON output"
+    , Opt.req  ""  ["liner"] "CODE"            "One liner"
+    , Opt.flag ""  ["pretty"]                  "Pretty print"
+    , Opt.flag ""  ["run"]                     "Run input code"
+    , Opt.flag ""  ["show-encoding"]           "Show character encoding"
+    ]
 
 
 -- ----------------------  Main
@@ -94,55 +140,31 @@ header = unlines
 --   for default argument.
 koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO Int
 koshuMain g =
-  do (prog, argv) <- L.prelude
-     proxy        <- L.getProxies
-     time         <- T.getZonedTime
-     let day       = T.localDay $ T.zonedTimeToLocalTime time
-     case getOpt Permute koshuOptions argv of
-       (opts, paths, [])
-           | has OptHelp         -> L.putSuccess usage
-           | has OptVersion      -> L.putSuccess $ ver ++ "\n"
-           | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
-           | has OptElement      -> putElems   g2 src
-           | otherwise           -> L.runFiles g2 src
-           where
-             ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
-             has   = (`elem` opts)
-             text  = concatMap oneLiner opts
-             src   = B.ioPointList (has OptStdin) text "" paths
+  do cmd <- Opt.parseCommand options
+     p   <- initParam cmd
+     koshuMainParam g p
 
-             -- global parameter
-             root  = C.resEmpty { C.resGlobal = g2 }
-             rslt  = (C.globalResult g)
-                       { B.resultForm = resultForm has }
-             g2    = C.globalFill g
-                       { C.globalProgram   = prog
-                       , C.globalArgs      = argv
-                       , C.globalProxy     = proxy
-                       , C.globalTime      = B.timeYmd day
-                       , C.globalResult    = rslt
-                       , C.globalHook      = root }
+koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param -> IO Int
+koshuMainParam g p
+    | paramHelp p         = L.putSuccess usage
+    | paramVersion p      = L.putSuccess $ ver ++ "\n"
+    | paramShowEncoding p = L.putSuccess =<< L.currentEncodings
+    | paramElement p      = putElems   g2 src
+    | otherwise           = L.runFiles g2 src
+    where
+      ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
+      src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
 
-       (_, _, errs) -> L.putFailure $ concat errs
-
-resultForm :: (Option -> Bool) -> B.ResultForm
-resultForm has
-    | has (OptHtml True)  = B.ResultHtmlIndented
-    | has (OptHtml False) = B.ResultHtmlCompact
-    | has (OptJson)       = B.ResultJson
-    | otherwise           = B.ResultKoshu
-
-oneLiner :: Option -> [String]
-oneLiner (OptLiner code)    = [oneLinerPreprocess code]
-oneLiner (OptAssertX expr)  = ["|== X : add /x ( " ++ expr ++ " )"]
-oneLiner _ = []
-
--- replace "||" to "\n"
-oneLinerPreprocess :: B.Map String
-oneLinerPreprocess = loop where
-    loop [] = []
-    loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
-    loop (x : xs) = x : loop xs
+      -- global parameter
+      rslt  = (C.globalResult g) { B.resultForm = paramForm p }
+      root  = C.resEmpty { C.resGlobal = g2 }
+      g2    = C.globalFill g
+              { C.globalProgram   = paramProg p
+              , C.globalArgs      = paramArgs p
+              , C.globalProxy     = paramProxy p
+              , C.globalTime      = B.timeYmd $ paramDay p
+              , C.globalResult    = rslt
+              , C.globalHook      = root }
 
 putElems :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO Int
 putElems g src =
