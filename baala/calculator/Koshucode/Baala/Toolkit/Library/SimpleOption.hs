@@ -17,11 +17,12 @@ module Koshucode.Baala.Toolkit.Library.SimpleOption
 
    -- * Predefined option
    help, version,
+   printHelp, helpMessage,
    Ver.showVersion,
 
    -- * Parsing
    ParseResult', ParseResult,
-   parse, parseCommand, usage,
+   parse, parseCommand,
  ) where
 
 import qualified Data.Maybe            as Maybe
@@ -126,7 +127,11 @@ parseCommand :: SimpleOptions -> IO ParseResult
 parseCommand opts = do args <- Env.getArgs
                        return $ parse opts args
 
--- | Print usage.
-usage :: [String] -> SimpleOptions -> IO ()
-usage text opts = do putStr $ Opt.usageInfo (unlines text ++ "OPTION") opts
-                     putStrLn ""
+-- | Print help message.
+printHelp :: [String] -> SimpleOptions -> IO ()
+printHelp text opts = do putStr $ helpMessage text opts
+                         putStrLn ""
+
+helpMessage :: [String] -> SimpleOptions -> String
+helpMessage text = Opt.usageInfo (unlines text ++ "OPTION")
+

@@ -9,7 +9,6 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   -- $koshu.hs
   ) where
 
-import qualified System.Console.GetOpt as Opt
 import qualified Data.Time as T
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
@@ -36,7 +35,7 @@ import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
 
 
--- ----------------------  Option
+-- ----------------------  Parameter
 
 data Param = Param
     { paramElement       :: Bool
@@ -59,9 +58,9 @@ data Param = Param
 initParam :: Opt.ParseResult -> IO Param
 initParam (Left errs) = L.putFailure $ concat errs
 initParam (Right (opts, args)) =
-    do (prog, _)  <- L.prelude
-       proxy <- L.getProxies
-       time  <- T.getZonedTime
+    do (prog, _) <- L.prelude
+       proxy  <- L.getProxies
+       time   <- T.getZonedTime
        let day = T.localDay $ T.zonedTimeToLocalTime time
        return $ Param { paramElement       = getFlag "element"
                       , paramForm          = form
@@ -98,11 +97,11 @@ initParam (Right (opts, args)) =
       oneLiner ('|' : '|' : xs) = '\n' : oneLiner (B.trimLeft xs)
       oneLiner (x : xs)         = x : oneLiner xs
 
-usage :: String
-usage = Opt.usageInfo (unlines usageHeader ++ "OPTIONS") options
 
-usageHeader :: [String]
-usageHeader =
+-- ----------------------  Main
+
+help :: [String]
+help =
     [ "DESCRIPTION"
     , "  This is a relational data processor in Koshucode."
     , "  Koshucode is a notation for people and computers"
@@ -132,25 +131,19 @@ options =
     , Opt.flag ""  ["show-encoding"]           "Show character encoding"
     ]
 
-
--- ----------------------  Main
-
 -- | The main function for @koshu@ command.
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
 koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO Int
-koshuMain g =
-  do cmd <- Opt.parseCommand options
-     p   <- initParam cmd
-     koshuMainParam g p
+koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
 koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param -> IO Int
 koshuMainParam g p
-    | paramHelp p         = L.putSuccess usage
-    | paramVersion p      = L.putSuccess $ ver ++ "\n"
-    | paramShowEncoding p = L.putSuccess =<< L.currentEncodings
-    | paramElement p      = putElems   g2 src
-    | otherwise           = L.runFiles g2 src
+    | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
+    | paramVersion p       = L.putSuccess $ ver ++ "\n"
+    | paramShowEncoding p  = L.putSuccess =<< L.currentEncodings
+    | paramElement p       = putElems   g2 src
+    | otherwise            = L.runFiles g2 src
     where
       ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
       src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
