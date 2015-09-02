@@ -4,7 +4,7 @@
 
 -- | Result of relational calculation.
 
-module Koshucode.Baala.Base.Data.Result
+module Koshucode.Baala.Base.Result.Result
   ( -- * Result
     Result (..), ResultWriter (..),
     ResultWriterChunk, InputPoint (..),
@@ -17,22 +17,14 @@ module Koshucode.Baala.Base.Data.Result
     -- * Writer
     putResult, hPutResult,
     putJudges, putJudgesWith, hPutJudgesWith,
-    termsToJSON, jsonNull, A.ToJSON (..),
-    resultKoshu, resultHtmlIndented, resultHtmlCompact,
-    resultJson, resultGeoJson,
+    resultKoshu,
+    resultChunkJudges,
   ) where
 
 import qualified Control.Monad                     as M
-import           Data.Aeson                        ((.=))
-import qualified Data.Aeson                        as A
-import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Map                          as Map
-import qualified Data.Text                         as T
 import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
-import qualified Text.Blaze.XHtml5                 as H
-import           Text.Blaze.XHtml5                 ((!))
-import           Text.Blaze.XHtml5.Attributes      (class_)
 import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
@@ -111,7 +103,7 @@ resultEmpty =
 -- ----------------------  Writer
 
 -- | `B.stdout` version of `hPutResult`.
-putResult :: (B.Write c, A.ToJSON c) => Result c -> IO Int
+putResult :: (B.Write c) => Result c -> IO Int
 putResult result =
     case resultOutput result of
       B.IOPointStdout ->
@@ -124,7 +116,7 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: forall c. (B.Write c, A.ToJSON c) => IO.Handle -> Result c -> IO Int
+hPutResult :: forall c. (B.Write c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
     | null vio   = hPutAllChunks result h 0 $ resultNormal result
     | otherwise  = hPutAllChunks result h 1 vio
@@ -136,7 +128,7 @@ hPutResult h result
       hasJudge (ResultJudge js)  = B.notNull js
       hasJudge _                 = False
 
-hPutAllChunks :: (B.Write c, A.ToJSON c) => ResultWriterChunk c
+hPutAllChunks :: (B.Write c) => ResultWriterChunk c
 hPutAllChunks result h status sh =
     do useUtf8 h
        put result h status sh
@@ -148,88 +140,6 @@ useUtf8 :: IO.Handle -> IO ()
 useUtf8 h =
     do IO.setLocaleEncoding IO.utf8_bom
        IO.hSetEncoding h IO.utf8
-
-resultHtmlIndented :: (B.Write c) => ResultWriter c
-resultHtmlIndented = ResultWriterChunk "html-indented" (hPutAllChunksHtml B.renderHtmlIndented)
-
-resultHtmlCompact :: (B.Write c) => ResultWriter c
-resultHtmlCompact  = ResultWriterChunk "html-compact"  (hPutAllChunksHtml B.renderHtmlCompact)
-
-hPutAllChunksHtml :: (B.Write c) => (H.Html -> String) -> ResultWriterChunk c
-hPutAllChunksHtml render _ h status sh =
-    do hPutRel h render sh
-       return status
-
-resultJson :: (A.ToJSON c) => ResultWriter c
-resultJson = ResultWriterChunk "json" hPutAllChunksJson
-
-hPutAllChunksJson :: (A.ToJSON c) => ResultWriterChunk c
-hPutAllChunksJson _ h status sh =
-    case concatMap resultChunkJudges $ concatMap B.shortBody sh of
-      []     -> return status
-      j : js -> do IO.hPutStr h "[ "
-                   put j
-                   mapM_ cput js
-                   IO.hPutStrLn h "]"
-                   return status
-    where
-      put j  = do Byte.hPutStr h $ A.encode j
-                  IO.hPutChar h '\n'
-      cput j = do IO.hPutStr h ", "
-                  put j
-
-instance (A.ToJSON c) => A.ToJSON (B.Judge c) where
-    toJSON (B.JudgeAffirm p xs) =
-        A.object [ "judge" .= text "|--"
-                 , "name"  .= p
-                 , "args"  .= termsToJSON xs ]
-    toJSON _ = undefined
-
-resultGeoJson :: (A.ToJSON c) => ResultWriter c
-resultGeoJson = ResultWriterChunk "geojson" hPutAllChunksGeoJson
-
-hPutAllChunksGeoJson :: (A.ToJSON c) => ResultWriterChunk c
-hPutAllChunksGeoJson _ h status sh =
-    case concatMap resultChunkJudges $ concatMap B.shortBody sh of
-      []     -> return status
-      j : js -> do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
-                   IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
-                   IO.hPutStrLn h ", \"features\": ["
-                   IO.hPutStr   h "  "
-                   put j
-                   mapM_ cput js
-                   IO.hPutStrLn h "]}"
-                   return status
-    where
-      put j  = do Byte.hPutStr h $ A.encode $ toGeoJSON j
-                  IO.hPutChar h '\n'
-      cput j = do IO.hPutStr h ", "
-                  put j
-
-class ToGeoJSON a where
-    toGeoJSON :: a -> A.Value
-
-instance (A.ToJSON c) => ToGeoJSON (B.Judge c) where
-    toGeoJSON (B.JudgeAffirm _ xs) =
-        A.object [ "type"       .= text "Feature"
-                 , "properties" .= A.object [ "name" .= name ]
-                 , "geometry"   .= geo ]
-            where name   = lookup "name" xs
-                  lat    = lookup "lat"  xs
-                  long   = lookup "long" xs
-                  geo    = A.object [ "type"        .= text "Point"
-                                    , "coordinates" .= [long, lat]]
-    toGeoJSON _ = undefined
-
-termsToJSON :: (A.ToJSON c) => [B.Term c] -> A.Value
-termsToJSON xs = A.object $ map json xs where
-    json (n, c) = (T.pack n, A.toJSON c)
-
-text :: T.Text -> T.Text
-text s = s
-
-jsonNull :: A.Value
-jsonNull = A.Null
 
 resultKoshu :: (B.Write c) => ResultWriter c
 resultKoshu = ResultWriterChunk "koshu" hPutAllChunksKoshu
@@ -246,15 +156,6 @@ hPutAllChunksKoshu result h status sh =
        -- foot
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
-
-hPutRel :: (B.Write c) => IO.Handle -> (H.Html -> String) -> [ShortResultChunks c] -> IO ()
-hPutRel h render sh = mapM_ put chunks where
-    chunks = concatMap B.shortBody sh
-    put (ResultRel pat r) = IO.hPutStrLn h $ render $ html pat r
-    put _                 = return ()
-    html pat r = H.div ! class_ "named-relation" $ do
-                   H.p ! class_ "name" $ H.toHtml pat
-                   B.writeHtmlWith id r
 
 hPutLicense :: IO.Handle -> Result c -> IO ()
 hPutLicense h Result { resultLicense = ls }

@@ -65,7 +65,6 @@ library
         Koshucode.Baala.Base.Data.Mono
         Koshucode.Baala.Base.Data.Para
         Koshucode.Baala.Base.Data.Rel
-        Koshucode.Baala.Base.Data.Result
         Koshucode.Baala.Base.Data.Time
         Koshucode.Baala.Base.Data.Type
 
@@ -77,6 +76,11 @@ library
         Koshucode.Baala.Base.Prelude.Order
         Koshucode.Baala.Base.Prelude.Pair
         Koshucode.Baala.Base.Prelude.Snip
+
+        Koshucode.Baala.Base.Result
+        Koshucode.Baala.Base.Result.Html
+        Koshucode.Baala.Base.Result.Json
+        Koshucode.Baala.Base.Result.Result
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Code
