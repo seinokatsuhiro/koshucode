@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Type.Vanilla
   ( -- * Derived type
-    AboutC, AboutJudgesC, JudgeC, ResourceC, ResultC,
+    AboutC, AboutJudgesC, JudgeC,
+    ResourceC, ResultC, ResultWriterC,
     -- * Content type
     VContent (..),
   ) where
@@ -17,11 +18,12 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 -- ----------------------  Derived type
 
-type AboutC        = B.About VContent
-type AboutJudgesC  = B.AboutJudges VContent
-type JudgeC        = B.Judge VContent
-type ResourceC     = C.Resource VContent
-type ResultC       = B.Result VContent
+type AboutC         = B.About        VContent
+type AboutJudgesC   = B.AboutJudges  VContent
+type JudgeC         = B.Judge        VContent
+type ResourceC      = C.Resource     VContent
+type ResultC        = B.Result       VContent
+type ResultWriterC  = B.ResultWriter VContent
 
 
 -- ----------------------  Content type

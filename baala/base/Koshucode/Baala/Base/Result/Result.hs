@@ -102,14 +102,17 @@ hPutShow result h status _ = do IO.hPutStrLn h $ show result
 data ResultWriter c
     = ResultWriterChunk String (ResultWriterChunk c)
 
+instance Show (ResultWriter c) where
+    show (ResultWriterChunk n _) = "ResultWriterChunk " ++ n
+
 instance Ord (ResultWriter c) where
     compare (ResultWriterChunk n1 _) (ResultWriterChunk n2 _) = compare n1 n2
 
 instance Eq (ResultWriter c) where
     a == b  = compare a b == EQ
 
-instance Show (ResultWriter c) where
-    show (ResultWriterChunk n _) = "ResultWriterChunk " ++ n
+instance B.Name (ResultWriter c) where
+    name (ResultWriterChunk n _) = n
 
 -- | `B.stdout` version of `hPutResult`.
 putResult :: (B.Write c) => Result c -> IO Int
