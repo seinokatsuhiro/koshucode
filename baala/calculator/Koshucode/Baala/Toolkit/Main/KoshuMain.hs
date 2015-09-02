@@ -37,9 +37,9 @@ import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
 -- ----------------------  Parameter
 
-data Param = Param
+data Param c = Param
     { paramElement       :: Bool
-    , paramForm          :: B.ResultForm
+    , paramWriter        :: B.ResultWriter c
     , paramLiner         :: [String]
     , paramPretty        :: Bool
     , paramRun           :: Bool
@@ -55,7 +55,7 @@ data Param = Param
     , paramDay           :: T.Day
     } deriving (Show)
 
-initParam :: Opt.ParseResult -> IO Param
+initParam :: (B.Write c, B.ToJSON c) => Opt.ParseResult -> IO (Param c)
 initParam (Left errs) = L.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- L.prelude
@@ -63,7 +63,7 @@ initParam (Right (opts, args)) =
        time   <- T.getZonedTime
        let day = T.localDay $ T.zonedTimeToLocalTime time
        return $ Param { paramElement       = getFlag "element"
-                      , paramForm          = form
+                      , paramWriter        = writer
                       , paramLiner         = liner
                       , paramPretty        = getFlag "pretty"
                       , paramRun           = getFlag "run"
@@ -83,14 +83,14 @@ initParam (Right (opts, args)) =
 
       assertX  = getReq "assert-x"
 
-      liner | null assertX = map oneLiner $ getReq "liner"
-            | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
+      liner  | null assertX = map oneLiner $ getReq "liner"
+             | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
 
-      form | getFlag "html-compact"   = B.ResultHtmlCompact
-           | getFlag "html-indented"  = B.ResultHtmlIndented
-           | getFlag "json"           = B.ResultJson
-           | getFlag "geojson"        = B.ResultGeoJson
-           | otherwise                = B.ResultKoshu
+      writer | getFlag "html-compact"   = B.resultHtmlCompact
+             | getFlag "html-indented"  = B.resultHtmlIndented
+             | getFlag "json"           = B.resultJson
+             | getFlag "geojson"        = B.resultGeoJson
+             | otherwise                = B.resultKoshu
 
       -- replace "||" to "\n"
       oneLiner :: B.Map String
@@ -139,7 +139,7 @@ options =
 koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO Int
 koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
-koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param -> IO Int
+koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param c -> IO Int
 koshuMainParam g p
     | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
     | paramVersion p       = L.putSuccess $ ver ++ "\n"
@@ -151,7 +151,7 @@ koshuMainParam g p
       src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
 
       -- global parameter
-      rslt  = (C.globalResult g) { B.resultForm = paramForm p }
+      rslt  = (C.globalResult g) { B.resultWriter = paramWriter p }
       root  = C.resEmpty { C.resGlobal = g2 }
       g2    = C.globalFill g
               { C.globalProgram   = paramProg p

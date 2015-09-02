@@ -6,8 +6,8 @@
 
 module Koshucode.Baala.Base.Data.Result
   ( -- * Result
-    Result (..), ResultForm (..),
-    InputPoint (..),
+    Result (..), ResultWriter (..),
+    ResultWriterChunk, InputPoint (..),
     resultEmpty,
     useUtf8,
 
@@ -18,6 +18,8 @@ module Koshucode.Baala.Base.Data.Result
     putResult, hPutResult,
     putJudges, putJudgesWith, hPutJudgesWith,
     termsToJSON, jsonNull, A.ToJSON (..),
+    resultKoshu, resultHtmlIndented, resultHtmlCompact,
+    resultJson, resultGeoJson,
   ) where
 
 import qualified Control.Monad                     as M
@@ -43,7 +45,7 @@ import qualified Koshucode.Baala.Base.Data.Rel     as B
 
 -- | Result of calculation.
 data Result c = Result
-    { resultForm       :: ResultForm
+    { resultWriter     :: ResultWriter c
     , resultPrintHead  :: Bool
     , resultPrintFoot  :: Bool
     , resultGutter     :: Int
@@ -57,20 +59,24 @@ data Result c = Result
     , resultPattern    :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
-data ResultForm
-    = ResultKoshu
-    | ResultJson
-    | ResultGeoJson
-    | ResultHtmlIndented
-    | ResultHtmlCompact
-    | ResultCsv
-    | ResultTab
-      deriving (Show, Eq, Ord)
-
 data InputPoint = InputPoint
     { inputPoint      :: B.IOPoint
     , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
+
+data ResultWriter c
+    = ResultWriterChunk String (ResultWriterChunk c)
+
+instance Ord (ResultWriter c) where
+    compare (ResultWriterChunk n1 _) (ResultWriterChunk n2 _) = compare n1 n2
+
+instance Eq (ResultWriter c) where
+    a == b  = compare a b == EQ
+
+instance Show (ResultWriter c) where
+    show (ResultWriterChunk n _) = "ResultWriterChunk " ++ n
+
+type ResultWriterChunk c = Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
 
 type ShortResultChunks c = B.Short [ResultChunk c]
 
@@ -86,9 +92,9 @@ resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
 -- | Empty result.
-resultEmpty :: Result c
+resultEmpty :: (B.Write c) => Result c
 resultEmpty =
-    Result { resultForm       = ResultKoshu
+    Result { resultWriter     = resultKoshu
            , resultPrintHead  = True
            , resultPrintFoot  = True
            , resultGutter     = 5
@@ -105,7 +111,7 @@ resultEmpty =
 -- ----------------------  Writer
 
 -- | `B.stdout` version of `hPutResult`.
-putResult :: (Ord c, B.Write c, A.ToJSON c) => Result c -> IO Int
+putResult :: (B.Write c, A.ToJSON c) => Result c -> IO Int
 putResult result =
     case resultOutput result of
       B.IOPointStdout ->
@@ -118,7 +124,7 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: forall c. (Ord c, B.Write c, A.ToJSON c) => IO.Handle -> Result c -> IO Int
+hPutResult :: forall c. (B.Write c, A.ToJSON c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
     | null vio   = hPutAllChunks result h 0 $ resultNormal result
     | otherwise  = hPutAllChunks result h 1 vio
@@ -127,34 +133,37 @@ hPutResult h result
       vio = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
       hasJudge :: ResultChunk c -> Bool
-      hasJudge (ResultJudge js)  = js /= []
+      hasJudge (ResultJudge js)  = B.notNull js
       hasJudge _                 = False
 
-hPutAllChunks :: (Ord c, B.Write c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+hPutAllChunks :: (B.Write c, A.ToJSON c) => ResultWriterChunk c
 hPutAllChunks result h status sh =
     do useUtf8 h
        put result h status sh
     where
-      put = case resultForm result of
-              ResultKoshu        -> hPutAllChunksKoshu
-              ResultJson         -> hPutAllChunksJson
-              ResultGeoJson      -> hPutAllChunksGeoJson
-              ResultHtmlIndented -> hPutAllChunksHtml B.renderHtmlIndented
-              ResultHtmlCompact  -> hPutAllChunksHtml B.renderHtmlCompact
-              ResultCsv          -> error "not implemented"
-              ResultTab          -> error "not implemented"
+      put = case resultWriter result of
+              ResultWriterChunk _ w  -> w
 
 useUtf8 :: IO.Handle -> IO ()
 useUtf8 h =
     do IO.setLocaleEncoding IO.utf8_bom
        IO.hSetEncoding h IO.utf8
 
-hPutAllChunksHtml :: (Ord c, B.Write c) => (H.Html -> String) -> Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+resultHtmlIndented :: (B.Write c) => ResultWriter c
+resultHtmlIndented = ResultWriterChunk "html-indented" (hPutAllChunksHtml B.renderHtmlIndented)
+
+resultHtmlCompact :: (B.Write c) => ResultWriter c
+resultHtmlCompact  = ResultWriterChunk "html-compact"  (hPutAllChunksHtml B.renderHtmlCompact)
+
+hPutAllChunksHtml :: (B.Write c) => (H.Html -> String) -> ResultWriterChunk c
 hPutAllChunksHtml render _ h status sh =
     do hPutRel h render sh
        return status
 
-hPutAllChunksJson :: (Ord c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+resultJson :: (A.ToJSON c) => ResultWriter c
+resultJson = ResultWriterChunk "json" hPutAllChunksJson
+
+hPutAllChunksJson :: (A.ToJSON c) => ResultWriterChunk c
 hPutAllChunksJson _ h status sh =
     case concatMap resultChunkJudges $ concatMap B.shortBody sh of
       []     -> return status
@@ -176,7 +185,10 @@ instance (A.ToJSON c) => A.ToJSON (B.Judge c) where
                  , "args"  .= termsToJSON xs ]
     toJSON _ = undefined
 
-hPutAllChunksGeoJson :: (Ord c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+resultGeoJson :: (A.ToJSON c) => ResultWriter c
+resultGeoJson = ResultWriterChunk "geojson" hPutAllChunksGeoJson
+
+hPutAllChunksGeoJson :: (A.ToJSON c) => ResultWriterChunk c
 hPutAllChunksGeoJson _ h status sh =
     case concatMap resultChunkJudges $ concatMap B.shortBody sh of
       []     -> return status
@@ -219,7 +231,10 @@ text s = s
 jsonNull :: A.Value
 jsonNull = A.Null
 
-hPutAllChunksKoshu :: (Ord c, B.Write c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+resultKoshu :: (B.Write c) => ResultWriter c
+resultKoshu = ResultWriterChunk "koshu" hPutAllChunksKoshu
+
+hPutAllChunksKoshu :: (B.Write c) => ResultWriterChunk c
 hPutAllChunksKoshu result h status sh =
     do -- head
        B.when (resultPrintHead result) $ hPutHead h result
@@ -263,7 +278,7 @@ hPutEcho h result =
 
 -- ----------------------  Chunk
 
-hPutShortChunk :: (Ord c, B.Write c) => IO.Handle -> Result c -> Counter -> ShortResultChunks c -> IO Counter
+hPutShortChunk :: (B.Write c) => IO.Handle -> Result c -> Counter -> ShortResultChunks c -> IO Counter
 hPutShortChunk h result cnt (B.Short _ def output) =
     do hPutShort h def
        hPutChunks h result (B.shortText def) output cnt
@@ -280,7 +295,7 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
-hPutChunks :: (Ord c, B.Write c) => IO.Handle -> Result c -> B.StringMap -> [ResultChunk c] -> Counter -> IO Counter
+hPutChunks :: (B.Write c) => IO.Handle -> Result c -> B.StringMap -> [ResultChunk c] -> Counter -> IO Counter
 hPutChunks h result sh = loop where
     writer = IO.hPutStrLn h . B.writeDownJudge sh
 
@@ -349,23 +364,23 @@ type Counter = (Int, Map.Map B.JudgePat Int)
 initCounter :: [B.JudgePat] -> Counter
 initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
 
-putJudges :: (B.Write c, Ord c) => [B.Judge c] -> IO ()
+putJudges :: (B.Write c) => [B.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith 0 js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
+putJudgesWith :: (B.Write c) => Int -> [B.Judge c] -> IO Int
 putJudgesWith = hPutJudgesWith B.stdout resultEmpty
 
 -- | Print list of judges.
-hPutJudgesWith :: (Ord c, B.Write c) => IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int
+hPutJudgesWith :: (B.Write c) => IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int
 hPutJudgesWith h result status js =
     do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ initCounter []
        B.hPutLines h $ summaryLines status cnt
        return status
 
-hPutJudgesCount :: forall c. (Ord c, B.Write c) =>
+hPutJudgesCount :: forall c. (B.Write c) =>
     IO.Handle -> Result c -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
 hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
