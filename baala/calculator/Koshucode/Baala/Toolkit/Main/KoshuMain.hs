@@ -89,6 +89,7 @@ initParam (Right (opts, args)) =
       form | getFlag "html-compact"   = B.ResultHtmlCompact
            | getFlag "html-indented"  = B.ResultHtmlIndented
            | getFlag "json"           = B.ResultJson
+           | getFlag "geojson"        = B.ResultGeoJson
            | otherwise                = B.ResultKoshu
 
       -- replace "||" to "\n"
@@ -125,6 +126,7 @@ options =
     , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
     , Opt.flag ""  ["json"]                    "JSON output"
+    , Opt.flag ""  ["geojson"]                 "GeoJSON output"
     , Opt.req  ""  ["liner"] "CODE"            "One liner"
     , Opt.flag ""  ["pretty"]                  "Pretty print"
     , Opt.flag ""  ["run"]                     "Run input code"

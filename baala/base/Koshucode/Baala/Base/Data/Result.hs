@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.Data.Result
   ) where
 
 import qualified Control.Monad                     as M
+import           Data.Aeson                        ((.=))
 import qualified Data.Aeson                        as A
 import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Map                          as Map
@@ -59,6 +60,7 @@ data Result c = Result
 data ResultForm
     = ResultKoshu
     | ResultJson
+    | ResultGeoJson
     | ResultHtmlIndented
     | ResultHtmlCompact
     | ResultCsv
@@ -136,6 +138,7 @@ hPutAllChunks result h status sh =
       put = case resultForm result of
               ResultKoshu        -> hPutAllChunksKoshu
               ResultJson         -> hPutAllChunksJson
+              ResultGeoJson      -> hPutAllChunksGeoJson
               ResultHtmlIndented -> hPutAllChunksHtml B.renderHtmlIndented
               ResultHtmlCompact  -> hPutAllChunksHtml B.renderHtmlCompact
               ResultCsv          -> error "not implemented"
@@ -168,13 +171,50 @@ hPutAllChunksJson _ h status sh =
 
 instance (A.ToJSON c) => A.ToJSON (B.Judge c) where
     toJSON (B.JudgeAffirm p xs) =
-        A.object [ ("judge" , A.toJSON ("|--" :: T.Text))
-                 , ("name"  , A.toJSON p)
-                 , ("args"  , termsToJSON xs) ]
+        A.object [ "judge" .= text "|--"
+                 , "name"  .= p
+                 , "args"  .= termsToJSON xs ]
+    toJSON _ = undefined
+
+hPutAllChunksGeoJson :: (Ord c, A.ToJSON c) => Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+hPutAllChunksGeoJson _ h status sh =
+    case concatMap resultChunkJudges $ concatMap B.shortBody sh of
+      []     -> return status
+      j : js -> do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
+                   IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
+                   IO.hPutStrLn h ", \"features\": ["
+                   IO.hPutStr   h "  "
+                   put j
+                   mapM_ cput js
+                   IO.hPutStrLn h "]}"
+                   return status
+    where
+      put j  = do Byte.hPutStr h $ A.encode $ toGeoJSON j
+                  IO.hPutChar h '\n'
+      cput j = do IO.hPutStr h ", "
+                  put j
+
+class ToGeoJSON a where
+    toGeoJSON :: a -> A.Value
+
+instance (A.ToJSON c) => ToGeoJSON (B.Judge c) where
+    toGeoJSON (B.JudgeAffirm _ xs) =
+        A.object [ "type"       .= text "Feature"
+                 , "properties" .= A.object [ "name" .= name ]
+                 , "geometry"   .= geo ]
+            where name   = lookup "name" xs
+                  lat    = lookup "lat"  xs
+                  long   = lookup "long" xs
+                  geo    = A.object [ "type"        .= text "Point"
+                                    , "coordinates" .= [long, lat]]
+    toGeoJSON _ = undefined
 
 termsToJSON :: (A.ToJSON c) => [B.Term c] -> A.Value
 termsToJSON xs = A.object $ map json xs where
     json (n, c) = (T.pack n, A.toJSON c)
+
+text :: T.Text -> T.Text
+text s = s
 
 jsonNull :: A.Value
 jsonNull = A.Null
