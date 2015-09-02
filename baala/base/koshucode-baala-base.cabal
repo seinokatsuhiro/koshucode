@@ -80,6 +80,7 @@ library
         Koshucode.Baala.Base.Result
         Koshucode.Baala.Base.Result.Html
         Koshucode.Baala.Base.Result.Json
+        Koshucode.Baala.Base.Result.Koshu
         Koshucode.Baala.Base.Result.Result
 
         Koshucode.Baala.Base.Syntax
