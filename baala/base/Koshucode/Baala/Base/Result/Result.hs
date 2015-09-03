@@ -12,7 +12,7 @@ module Koshucode.Baala.Base.Result.Result
 
     -- * Chunk
     ResultChunk (..),
-    ResultWriterChunk,
+    ResultWriterChunk, ResultWriterJudge,
     ShortResultChunks,
     resultChunkJudges,
     resultShow,
@@ -82,6 +82,7 @@ data ResultChunk c
       deriving (Show, Eq, Ord)
 
 type ResultWriterChunk c = Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+type ResultWriterJudge c = IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int
 
 type ShortResultChunks c = B.Short [ResultChunk c]
 
@@ -101,18 +102,21 @@ hPutShow result h status _ = do IO.hPutStrLn h $ show result
 
 data ResultWriter c
     = ResultWriterChunk String (ResultWriterChunk c)
+    | ResultWriterJudge String (ResultWriterJudge c)
 
 instance Show (ResultWriter c) where
     show (ResultWriterChunk n _) = "ResultWriterChunk " ++ n
+    show (ResultWriterJudge n _) = "ResultWriterJudge " ++ n
 
 instance Ord (ResultWriter c) where
-    compare (ResultWriterChunk n1 _) (ResultWriterChunk n2 _) = compare n1 n2
+    compare w1 w2 = B.name w1 `compare` B.name w2
 
 instance Eq (ResultWriter c) where
     a == b  = compare a b == EQ
 
 instance B.Name (ResultWriter c) where
     name (ResultWriterChunk n _) = n
+    name (ResultWriterJudge n _) = n
 
 -- | `B.stdout` version of `hPutResult`.
 putResult :: (B.Write c) => Result c -> IO Int
@@ -141,9 +145,13 @@ hPutResult h result
 
 hPutAllChunks :: (B.Write c) => ResultWriterChunk c
 hPutAllChunks result h status sh =
-    case resultWriter result of
-      ResultWriterChunk _ w -> do useUtf8 h
-                                  w result h status sh
+    do useUtf8 h
+       case resultWriter result of
+         ResultWriterChunk _ w -> w result h status sh
+         ResultWriterJudge _ w -> w h result status $ judges sh
+    where
+      judges :: [ShortResultChunks c] -> [B.Judge c]
+      judges = concatMap resultChunkJudges . concatMap B.shortBody
 
 useUtf8 :: IO.Handle -> IO ()
 useUtf8 h = do IO.setLocaleEncoding IO.utf8_bom

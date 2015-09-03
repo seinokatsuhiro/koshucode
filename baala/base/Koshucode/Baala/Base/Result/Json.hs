@@ -26,17 +26,16 @@ import qualified Koshucode.Baala.Base.Result.Result as B
 -- --------------------------------------------  JSON
 
 resultJson :: (A.ToJSON c) => B.ResultWriter c
-resultJson = B.ResultWriterChunk "json" hPutJSON
+resultJson = B.ResultWriterJudge "json" hPutJSON
 
-hPutJSON :: (A.ToJSON c) => B.ResultWriterChunk c
-hPutJSON _ h status sh =
-    case concatMap B.resultChunkJudges $ concatMap B.shortBody sh of
-      []     -> return status
-      j : js -> do IO.hPutStr h "[ "
-                   put j
-                   mapM_ cput js
-                   IO.hPutStrLn h "]"
-                   return status
+hPutJSON :: (A.ToJSON c) => B.ResultWriterJudge c
+hPutJSON _ _ status [] = return status
+hPutJSON h _ status (j1:js) =
+    do IO.hPutStr h "[ "
+       put j1
+       mapM_ cput js
+       IO.hPutStrLn h "]"
+       return status
     where
       put j  = do Byte.hPutStr h $ A.encode j
                   IO.hPutChar h '\n'
@@ -64,20 +63,19 @@ jsonNull = A.Null
 -- --------------------------------------------  GeoJSON
 
 resultGeoJson :: (A.ToJSON c) => B.ResultWriter c
-resultGeoJson = B.ResultWriterChunk "geojson" hPutGeoJson
+resultGeoJson = B.ResultWriterJudge "geojson" hPutGeoJson
 
-hPutGeoJson :: (A.ToJSON c) => B.ResultWriterChunk c
-hPutGeoJson _ h status sh =
-    case concatMap B.resultChunkJudges $ concatMap B.shortBody sh of
-      []     -> return status
-      j : js -> do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
-                   IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
-                   IO.hPutStrLn h ", \"features\": ["
-                   IO.hPutStr   h "  "
-                   put j
-                   mapM_ cput js
-                   IO.hPutStrLn h "]}"
-                   return status
+hPutGeoJson :: (A.ToJSON c) => B.ResultWriterJudge c
+hPutGeoJson _ _ status [] = return status
+hPutGeoJson h _ status (j1:js) =
+    do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""
+       IO.hPutStrLn h ", \"crs\": {\"type\": \"name\", \"properties\": {\"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"}}"
+       IO.hPutStrLn h ", \"features\": ["
+       IO.hPutStr   h "  "
+       put j1
+       mapM_ cput js
+       IO.hPutStrLn h "]}"
+       return status
     where
       put j  = do Byte.hPutStr h $ A.encode $ toGeoJSON j
                   IO.hPutChar h '\n'
