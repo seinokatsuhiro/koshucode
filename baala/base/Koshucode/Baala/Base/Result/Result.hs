@@ -81,7 +81,7 @@ data ResultChunk c
     | ResultNote   [String]
       deriving (Show, Eq, Ord)
 
-type ResultWriterChunk c = Result c -> IO.Handle -> Int -> [ShortResultChunks c] -> IO Int
+type ResultWriterChunk c = IO.Handle -> Result c -> Int -> [ShortResultChunks c] -> IO Int
 type ResultWriterJudge c = IO.Handle -> Result c -> Int -> [B.Judge c] -> IO Int
 
 type ShortResultChunks c = B.Short [ResultChunk c]
@@ -94,7 +94,7 @@ resultShow :: (Show c) => ResultWriter c
 resultShow = ResultWriterChunk "show" hPutShow
 
 hPutShow :: (Show c) => ResultWriterChunk c
-hPutShow result h status _ = do IO.hPutStrLn h $ show result
+hPutShow h result status _ = do IO.hPutStrLn h $ show result
                                 return status
 
 
@@ -132,8 +132,8 @@ putResult result =
 -- | Print result of calculation, and return status.
 hPutResult :: forall c. (B.Write c) => IO.Handle -> Result c -> IO Int
 hPutResult h result
-    | null violated  = hPutAllChunks result h 0 normal
-    | otherwise      = hPutAllChunks result h 1 violated
+    | null violated  = hPutAllChunks h result 0 normal
+    | otherwise      = hPutAllChunks h result 1 violated
     where
       normal, violated :: [ShortResultChunks c]
       normal    = resultNormal result
@@ -144,10 +144,10 @@ hPutResult h result
       hasJudge _                 = False
 
 hPutAllChunks :: (B.Write c) => ResultWriterChunk c
-hPutAllChunks result h status sh =
+hPutAllChunks h result status sh =
     do useUtf8 h
        case resultWriter result of
-         ResultWriterChunk _ w -> w result h status sh
+         ResultWriterChunk _ w -> w h result status sh
          ResultWriterJudge _ w -> w h result status $ judges sh
     where
       judges :: [ShortResultChunks c] -> [B.Judge c]
@@ -156,5 +156,4 @@ hPutAllChunks result h status sh =
 useUtf8 :: IO.Handle -> IO ()
 useUtf8 h = do IO.setLocaleEncoding IO.utf8_bom
                IO.hSetEncoding h IO.utf8
-
 

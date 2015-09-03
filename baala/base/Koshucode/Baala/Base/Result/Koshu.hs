@@ -19,7 +19,7 @@ resultKoshu :: (B.Write c) => B.ResultWriter c
 resultKoshu = B.ResultWriterChunk "koshu" hPutKoshu
 
 hPutKoshu :: (B.Write c) => B.ResultWriterChunk c
-hPutKoshu result h status sh =
+hPutKoshu h result status sh =
     do -- head
        B.when (B.resultPrintHead result) $ hPutHead h result
        hPutLicense h result

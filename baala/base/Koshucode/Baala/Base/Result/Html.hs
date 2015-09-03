@@ -21,7 +21,7 @@ resultHtmlCompact :: (B.Write c) => B.ResultWriter c
 resultHtmlCompact  = B.ResultWriterChunk "html-compact"  (hPutHtml B.renderHtmlCompact)
 
 hPutHtml :: (B.Write c) => (H.Html -> String) -> B.ResultWriterChunk c
-hPutHtml render _ h status sh =
+hPutHtml render h _ status sh =
     do hPutRel h render sh
        return status
 
