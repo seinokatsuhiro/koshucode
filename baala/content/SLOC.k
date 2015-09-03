@@ -5,9 +5,9 @@ about /package 'content
 |-- DIR  /code 124  /comment 45   /dir "content/Koshucode/Baala/Op"
 |-- DIR  /code 647  /comment 381  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /code 875  /comment 442  /dir "content/Koshucode/Baala/Op/Cox"
-|-- DIR  /code 196  /comment 46   /dir "content/Koshucode/Baala/Type"
+|-- DIR  /code 198  /comment 46   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1842  /comment 914
+|-- DIR-TOTAL  /code 1844  /comment 914
 
 |-- FILE  /code 16   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 78   /comment 39   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -29,6 +29,6 @@ about /package 'content
 |-- FILE  /code 104  /comment 72   /file "Range.hs"       /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 81   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
-|-- FILE  /code 196  /comment 46   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
+|-- FILE  /code 198  /comment 46   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1842  /comment 914
+|-- FILE-TOTAL  /code 1844  /comment 914
