@@ -88,6 +88,7 @@ initParam (Right (opts, args)) =
 
       writer | getFlag "html-compact"   = B.resultHtmlCompact
              | getFlag "html-indented"  = B.resultHtmlIndented
+             | getFlag "csv"            = B.resultCsv
              | getFlag "json"           = B.resultJson
              | getFlag "geojson"        = B.resultGeoJson
              | otherwise                = B.resultKoshu
@@ -125,6 +126,7 @@ options =
     , Opt.flag ""  ["element"]                 "Analize input code"
     , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
+    , Opt.flag ""  ["csv"]                     "CSV output"
     , Opt.flag ""  ["json"]                    "JSON output"
     , Opt.flag ""  ["geojson"]                 "GeoJSON output"
     , Opt.req  ""  ["liner"] "CODE"            "One liner"
