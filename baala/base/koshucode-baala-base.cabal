@@ -81,6 +81,7 @@ library
         Koshucode.Baala.Base.Result.Csv
         Koshucode.Baala.Base.Result.Html
         Koshucode.Baala.Base.Result.Json
+        Koshucode.Baala.Base.Result.Judge
         Koshucode.Baala.Base.Result.Koshu
         Koshucode.Baala.Base.Result.Result
 
