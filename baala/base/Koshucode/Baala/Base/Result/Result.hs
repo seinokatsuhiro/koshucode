@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Result.Result
     ResultWriterChunk, ResultWriterJudge,
     ShortResultChunks,
     resultChunkJudges,
-    resultShow,
+    resultDump,
   
     -- * Writer
     ResultWriter (..),
@@ -58,7 +58,7 @@ data InputPoint = InputPoint
 -- | Empty result.
 resultEmpty :: (Show c, B.Write c) => Result c
 resultEmpty =
-    Result { resultWriter     = resultShow
+    Result { resultWriter     = resultDump
            , resultPrintHead  = True
            , resultPrintFoot  = True
            , resultGutter     = 5
@@ -90,8 +90,8 @@ resultChunkJudges :: ResultChunk c -> [B.Judge c]
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
-resultShow :: (Show c) => ResultWriter c
-resultShow = ResultWriterChunk "show" hPutShow
+resultDump :: (Show c) => ResultWriter c
+resultDump = ResultWriterChunk "show" hPutShow
 
 hPutShow :: (Show c) => ResultWriterChunk c
 hPutShow h result status _ = do IO.hPutStrLn h $ show result

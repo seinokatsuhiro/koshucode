@@ -55,7 +55,7 @@ data Param c = Param
     , paramDay           :: T.Day
     } deriving (Show)
 
-initParam :: (B.Write c, B.ToJSON c) => Opt.ParseResult -> IO (Param c)
+initParam :: (Show c, B.Write c, B.ToJSON c) => Opt.ParseResult -> IO (Param c)
 initParam (Left errs) = L.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- L.prelude
@@ -86,11 +86,12 @@ initParam (Right (opts, args)) =
       liner  | null assertX = map oneLiner $ getReq "liner"
              | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
 
-      writer | getFlag "html-compact"   = B.resultHtmlCompact
-             | getFlag "html-indented"  = B.resultHtmlIndented
-             | getFlag "csv"            = B.resultCsv
-             | getFlag "json"           = B.resultJson
+      writer | getFlag "csv"            = B.resultCsv
+             | getFlag "dump"           = B.resultDump
              | getFlag "geojson"        = B.resultGeoJson
+             | getFlag "html-compact"   = B.resultHtmlCompact
+             | getFlag "html-indented"  = B.resultHtmlIndented
+             | getFlag "json"           = B.resultJson
              | otherwise                = B.resultKoshu
 
       -- replace "||" to "\n"
@@ -127,6 +128,7 @@ options =
     , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
     , Opt.flag ""  ["csv"]                     "CSV output"
+    , Opt.flag ""  ["dump"]                    "Dump internal data"
     , Opt.flag ""  ["json"]                    "JSON output"
     , Opt.flag ""  ["geojson"]                 "GeoJSON output"
     , Opt.req  ""  ["liner"] "CODE"            "One liner"
