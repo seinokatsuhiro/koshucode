@@ -22,7 +22,6 @@ module Koshucode.Baala.Base.Abort.Report
     abortMessage, bug,
   ) where
 
-import qualified System.Exit                        as Sys
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
@@ -32,11 +31,11 @@ import qualified Koshucode.Baala.Base.Text          as B
 type CommandLine = [String]
 
 -- | Stop program execution abnormally.
-abort :: CommandLine -> B.AbortReason -> IO c
+abort :: CommandLine -> B.AbortReason -> IO x
 abort cmd a =
   do abortPrint cmd a
      B.putCommentLines ["Exit with status 2", ""]
-     Sys.exitWith $ Sys.ExitFailure 2
+     B.exitWith $ B.ExitFailure 2
 
 -- | Print abort message.
 abortPrint :: CommandLine -> B.AbortReason -> IO ()

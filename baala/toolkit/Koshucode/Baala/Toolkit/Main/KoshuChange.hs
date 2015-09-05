@@ -10,6 +10,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuChange
 
 import System.Console.GetOpt
 
+import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Toolkit.Library.Input   as L
 import qualified Koshucode.Baala.Toolkit.Library.Change  as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
@@ -67,10 +68,10 @@ header = unlines
 -- ----------------------  Main
 
 {-| The main function for @koshu-change@ command. -}
-koshuChangeMain :: IO Int
+koshuChangeMain :: IO B.ExitCode
 koshuChangeMain = koshuChangeMain' =<< L.prelude
 
-koshuChangeMain' :: (String, [String]) -> IO Int
+koshuChangeMain' :: (String, [String]) -> IO B.ExitCode
 koshuChangeMain' (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, [p1, p2], [])

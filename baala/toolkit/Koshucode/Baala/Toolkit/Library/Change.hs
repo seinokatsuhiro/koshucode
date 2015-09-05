@@ -30,12 +30,12 @@ import qualified Koshucode.Baala.Toolkit.Library.Input as L
 minusInput
     :: L.Input   -- ^ /B:/ Source of base section
     -> L.Input   -- ^ /A:/ Source of altered section
-    -> IO Int
+    -> IO B.ExitCode
 minusInput inputA inputB =
     do js <- minusInputJudge inputA inputB
        putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
-       B.putJudgesWith 0 js
+       B.putJudgesWith (B.exitCode 0) js
 
 minusInputJudge :: L.Input -> L.Input -> IO ([B.Judge Type.VContent])
 minusInputJudge inputA inputB =
@@ -70,12 +70,12 @@ minusHead inputA inputB =
 updateInput
     :: L.Input   -- ^ /B:/ Source of base section
     -> L.Input   -- ^ /C:/ Source of change section
-    -> IO Int  -- ^ 
+    -> IO B.ExitCode  -- ^ 
 updateInput inputB inputC =
     do [textB, textC] <- L.readInputs [inputB, inputC]
        putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
-       B.putJudgesWith 0 $ L.readJudge textB `updateJudge` L.readJudge textC
+       B.putJudgesWith (B.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
 
 updateJudge :: (Ord c) => [B.Judge c] -> [B.Judge c] -> [B.Judge c]
 updateJudge judB judC = judA where

@@ -42,6 +42,10 @@ module Koshucode.Baala.Base.Prelude.Import
     -- * Data.Tuple
     Data.Tuple.swap,
 
+    -- * System.Exit
+    System.Exit.ExitCode (..),
+    System.Exit.exitWith,
+
     -- * System.IO
     System.IO.stdout,
   
@@ -63,6 +67,7 @@ import qualified Data.Maybe
 import qualified Data.Monoid
 import qualified Data.Tuple
 import qualified System.IO
+import qualified System.Exit
 import qualified Text.PrettyPrint
 
 

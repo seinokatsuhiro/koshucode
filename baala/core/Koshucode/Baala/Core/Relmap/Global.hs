@@ -94,7 +94,7 @@ globalInfix   = C.copsetInfixList . opsetCop . globalOpset
 globalCopset :: Global' h c -> C.CopSet c
 globalCopset  = opsetCop . globalOpset
 
-globalAbort :: Global' h c -> B.AbortReason -> IO Int
+globalAbort :: Global' h c -> B.AbortReason -> IO a
 globalAbort = B.abort . globalCommandLine
 
 -- | Empty global parameters.

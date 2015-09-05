@@ -105,14 +105,14 @@ hPutHead h result =
       comm  = B.CommentDoc [ B.CommentSec "INPUT"  itext
                            , B.CommentSec "OUTPUT" [otext] ]
 
-hPutFoot :: IO.Handle -> Int -> Counter -> IO ()
+hPutFoot :: IO.Handle -> B.ExitCode -> Counter -> IO ()
 hPutFoot h status cnt = B.hPutLines h $ summaryLines status cnt
 
 -- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
-summaryLines :: Int -> Counter -> [String]
+summaryLines :: B.ExitCode -> Counter -> [String]
 summaryLines status (_, tab) = B.texts sumDoc where
-    label | status == 0 = "SUMMARY"
-          | otherwise   = "SUMMARY (VIOLATED)"
+    label | status == B.ExitSuccess = "SUMMARY"
+          | otherwise               = "SUMMARY (VIOLATED)"
 
     sumDoc              = B.CommentDoc [sumSec]
     sumSec              = B.CommentSec label $ sumLines ++ [total]
@@ -141,15 +141,15 @@ initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 putJudges :: (Show c, B.Write c) => [B.Judge c] -> IO ()
 putJudges js =
-    do _ <- putJudgesWith 0 js
+    do _ <- putJudgesWith (B.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Show c, B.Write c) => Int -> [B.Judge c] -> IO Int
+putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [B.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout B.resultEmpty
 
 -- | Print list of judges.
-hPutJudgesWith :: (B.Write c) => IO.Handle -> B.Result c -> Int -> [B.Judge c] -> IO Int
+hPutJudgesWith :: (B.Write c) => B.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ initCounter []
        B.hPutLines h $ summaryLines status cnt

@@ -138,10 +138,10 @@ options =
 -- | The main function for @koshu@ command.
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
-koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO Int
+koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO B.ExitCode
 koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
-koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param c -> IO Int
+koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
     | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
     | paramVersion p       = L.putSuccess $ ver ++ "\n"
@@ -163,14 +163,14 @@ koshuMainParam g p
               , C.globalResult    = rslt
               , C.globalHook      = root }
 
-putElems :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO Int
+putElems :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
        res2 <- abio abres
        res3 <- abio $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
-       B.putJudgesWith 0 $ L.resourceElem res3
+       B.putJudgesWith (B.exitCode 0) $ L.resourceElem res3
     where
       abio mx = case mx of
                   Left  a -> B.abort [] a
