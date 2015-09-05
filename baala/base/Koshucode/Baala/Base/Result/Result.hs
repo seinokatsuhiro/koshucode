@@ -9,7 +9,6 @@ module Koshucode.Baala.Base.Result.Result
     Result (..),
     InputPoint (..),
     resultEmpty,
-    exit, exitCode,
 
     -- * Chunk
     ResultChunk (..),
@@ -133,8 +132,8 @@ putResult result =
 -- | Print result of calculation, and return status.
 hPutResult :: forall c. (B.Write c) => IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result
-    | null violated  = hPutAllChunks h result (exitCode 0) normal
-    | otherwise      = hPutAllChunks h result (exitCode 1) violated
+    | null violated  = hPutAllChunks h result (B.exitCode 0) normal
+    | otherwise      = hPutAllChunks h result (B.exitCode 1) violated
     where
       normal, violated :: [ShortResultChunks c]
       normal    = resultNormal result
@@ -143,14 +142,6 @@ hPutResult h result
       hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = B.notNull js
       hasJudge _                 = False
-
-exit :: Int -> IO B.ExitCode
-exit 0 = return $ B.ExitSuccess
-exit n = return $ B.ExitFailure n
-
-exitCode :: Int -> B.ExitCode
-exitCode 0 = B.ExitSuccess
-exitCode n = B.ExitFailure n
 
 hPutAllChunks :: (B.Write c) => ResultWriterChunk c
 hPutAllChunks h result status sh =

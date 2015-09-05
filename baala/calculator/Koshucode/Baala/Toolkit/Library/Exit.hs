@@ -9,7 +9,6 @@ module Koshucode.Baala.Toolkit.Library.Exit
 
 import qualified GHC.IO.Encoding       as IO
 import qualified System.Environment    as Sys
-import qualified System.Exit           as Sys
 import qualified System.IO             as IO
 import qualified Koshucode.Baala.Base  as B
 
@@ -31,14 +30,14 @@ deleteCr = map (filter notCrChar) . filter notCrString where
 putSuccess :: String -> IO a
 putSuccess msg = do
   putStr msg
-  Sys.exitWith $ Sys.ExitSuccess
+  B.exitWith $ B.ExitSuccess
 
 -- | Print error message and exit on 1.
 
 putFailure :: String -> IO a
 putFailure msg = do
   IO.hPutStr IO.stderr msg
-  Sys.exitWith $ Sys.ExitFailure 1
+  B.exitWith $ B.ExitFailure 1
 
 currentEncodings :: IO String
 currentEncodings =
@@ -50,9 +49,5 @@ currentEncodings =
        return $ B.writeDownJudge B.shortEmpty j ++ "\n"
 
 exit :: Int -> IO a
-exit = Sys.exitWith . exitStatus
-
-exitStatus :: Int -> Sys.ExitCode
-exitStatus 0 = Sys.ExitSuccess
-exitStatus n = Sys.ExitFailure n
+exit = B.exitWith . B.exitCode
 
