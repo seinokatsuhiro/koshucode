@@ -56,6 +56,7 @@ executable koshu-change
        , koshucode-baala-core       == 0.117.*
        , koshucode-baala-operator   == 0.117.*
        , koshucode-baala-content    == 0.117.*
+       , koshucode-baala-writer     == 0.117.*
        , koshucode-baala-calculator == 0.117.*
 
 executable koshu-rdf
@@ -112,5 +113,6 @@ library
        , koshucode-baala-core       == 0.117.*
        , koshucode-baala-operator   == 0.117.*
        , koshucode-baala-content    == 0.117.*
+       , koshucode-baala-writer     == 0.117.*
        , koshucode-baala-calculator == 0.117.*
 

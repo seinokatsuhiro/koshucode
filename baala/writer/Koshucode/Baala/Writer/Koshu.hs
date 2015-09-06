@@ -1,18 +1,14 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Result.Koshu
+module Koshucode.Baala.Writer.Koshu
   ( resultKoshu,
   ) where
 
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
-import qualified Koshucode.Baala.Base.Data           as B
-import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Token          as B
-import qualified Koshucode.Baala.Base.Result.Result  as B
-import qualified Koshucode.Baala.Base.Result.Judge   as B
+import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Writer.Judge        as B
 
 resultKoshu :: (B.Write c) => B.ResultWriter c
 resultKoshu = B.ResultWriterChunk "koshu" hPutKoshu

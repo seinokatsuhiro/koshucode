@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Result.Judge
+module Koshucode.Baala.Writer.Judge
   ( -- * Writer
     putJudges, putJudgesWith, hPutJudgesWith, hPutJudgesCount,
     -- * Counter
@@ -11,10 +11,7 @@ module Koshucode.Baala.Base.Result.Judge
 import qualified Control.Monad                       as M
 import qualified Data.Map                            as Map
 import qualified System.IO                           as IO
-import qualified Koshucode.Baala.Base.Data           as B
-import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Result.Result  as B
+import qualified Koshucode.Baala.Base                as B
 
 
 -- ----------------------  Writer

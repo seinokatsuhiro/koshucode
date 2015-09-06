@@ -1,15 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Result.Csv
+module Koshucode.Baala.Writer.Csv
   ( resultCsv,
   ) where
 
-import qualified System.IO                           as IO
-import qualified Text.CSV                            as CSV
-import qualified Koshucode.Baala.Base.Data           as B
-import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Result.Result  as B
+import qualified System.IO                 as IO
+import qualified Text.CSV                  as CSV
+import qualified Koshucode.Baala.Base      as B
 
 resultCsv :: (B.Write c) => B.ResultWriter c
 resultCsv = B.ResultWriterJudge "csv" hPutCsv

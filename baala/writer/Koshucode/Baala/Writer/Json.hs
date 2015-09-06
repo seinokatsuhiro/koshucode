@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Result.Json
+module Koshucode.Baala.Writer.Json
   ( -- * JSON
     resultJson,
     termsToJSON,
@@ -18,9 +18,7 @@ import qualified Data.Aeson                        as A
 import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Base.Token        as B
-import qualified Koshucode.Baala.Base.Data.Judge   as B
-import qualified Koshucode.Baala.Base.Result.Result as B
+import qualified Koshucode.Baala.Base              as B
 
 
 -- --------------------------------------------  JSON

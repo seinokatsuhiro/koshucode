@@ -9,9 +9,10 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   -- $koshu.hs
   ) where
 
-import qualified Data.Time as T
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Data.Time              as T
+import qualified Koshucode.Baala.Base   as B
+import qualified Koshucode.Baala.Core   as C
+import qualified Koshucode.Baala.Writer as W
 import qualified Koshucode.Baala.Toolkit.Library.Element       as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit          as L
 import qualified Koshucode.Baala.Toolkit.Library.Run           as L
@@ -55,7 +56,7 @@ data Param c = Param
     , paramDay           :: T.Day
     } deriving (Show)
 
-initParam :: (Show c, B.Write c, B.ToJSON c) => Opt.ParseResult -> IO (Param c)
+initParam :: (Show c, B.Write c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
 initParam (Left errs) = L.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- L.prelude
@@ -86,13 +87,13 @@ initParam (Right (opts, args)) =
       liner  | null assertX = map oneLiner $ getReq "liner"
              | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
 
-      writer | getFlag "csv"            = B.resultCsv
+      writer | getFlag "csv"            = W.resultCsv
              | getFlag "dump"           = B.resultDump
-             | getFlag "geojson"        = B.resultGeoJson
-             | getFlag "html-compact"   = B.resultHtmlCompact
-             | getFlag "html-indented"  = B.resultHtmlIndented
-             | getFlag "json"           = B.resultJson
-             | otherwise                = B.resultKoshu
+             | getFlag "geojson"        = W.resultGeoJson
+             | getFlag "html-compact"   = W.resultHtmlCompact
+             | getFlag "html-indented"  = W.resultHtmlIndented
+             | getFlag "json"           = W.resultJson
+             | otherwise                = W.resultKoshu
 
       -- replace "||" to "\n"
       oneLiner :: B.Map String
@@ -140,10 +141,10 @@ options =
 -- | The main function for @koshu@ command.
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
-koshuMain :: (C.CContent c, B.ToJSON c) => C.Global c -> IO B.ExitCode
+koshuMain :: (C.CContent c, W.ToJSON c) => C.Global c -> IO B.ExitCode
 koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
-koshuMainParam :: (C.CContent c, B.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
+koshuMainParam :: (C.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
     | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
     | paramVersion p       = L.putSuccess $ ver ++ "\n"
@@ -172,7 +173,7 @@ putElems g src =
        res3 <- abio $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
-       B.putJudgesWith (B.exitCode 0) $ L.resourceElem res3
+       W.putJudgesWith (B.exitCode 0) $ L.resourceElem res3
     where
       abio mx = case mx of
                   Left  a -> B.abort [] a

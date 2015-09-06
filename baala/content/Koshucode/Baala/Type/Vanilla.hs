@@ -13,6 +13,7 @@ module Koshucode.Baala.Type.Vanilla
 import qualified Data.Set                   as Set
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Writer     as W
 import qualified Koshucode.Baala.Op.Message as Msg
 
 
@@ -129,22 +130,22 @@ instance B.Write VContent where
         VRel r       -> B.writeHtmlWith sh r
         _            -> B.toHtml $ B.writeStringWith sh c
 
-instance B.ToJSON VContent where
+instance W.ToJSON VContent where
     toJSON c = case c of
-        VText s      -> B.toJSON s
-        VTerm s      -> B.toJSON $ '/' : s
-        VDec  n      -> B.toJSON (B.decimalToRealFloat n :: Double)
+        VText s      -> W.toJSON s
+        VTerm s      -> W.toJSON $ '/' : s
+        VDec  n      -> W.toJSON (B.decimalToRealFloat n :: Double)
         VClock t     -> unimplemented t
         VTime t      -> unimplemented t
-        VBool b      -> B.toJSON b
-        VEmpty       -> B.jsonNull
+        VBool b      -> W.toJSON b
+        VEmpty       -> W.jsonNull
         VInterp i    -> unimplemented i
         VType t      -> unimplemented t
-        VList xs     -> B.toJSON xs
-        VSet  xs     -> B.toJSON xs
-        VAssn xs     -> B.termsToJSON xs
+        VList xs     -> W.toJSON xs
+        VSet  xs     -> W.toJSON xs
+        VAssn xs     -> W.termsToJSON xs
         VRel r       -> unimplemented r
-        where unimplemented x = B.toJSON $ "<unimplemented>" ++ show x
+        where unimplemented x = W.toJSON $ "<unimplemented>" ++ show x
 
 
 -- ----------------------  haskell data

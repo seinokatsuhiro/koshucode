@@ -58,6 +58,7 @@ executable koshu
        , koshucode-baala-core     == 0.117.*
        , koshucode-baala-operator == 0.117.*
        , koshucode-baala-content  == 0.117.*
+       , koshucode-baala-writer   == 0.117.*
 
 library
   -- Modules exported by the library.
@@ -84,4 +85,5 @@ library
        , koshucode-baala-core     == 0.117.*
        , koshucode-baala-operator == 0.117.*
        , koshucode-baala-content  == 0.117.*
+       , koshucode-baala-writer   == 0.117.*
 

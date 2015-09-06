@@ -82,4 +82,5 @@ library
        , koshucode-baala-base      == 0.117.*
        , koshucode-baala-core      == 0.117.*
        , koshucode-baala-operator  == 0.117.*
+       , koshucode-baala-writer    == 0.117.*
 

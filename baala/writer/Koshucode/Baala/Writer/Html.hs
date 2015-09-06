@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Result.Html
+module Koshucode.Baala.Writer.Html
   ( resultHtmlIndented, resultHtmlCompact,
   ) where
 
@@ -9,10 +9,7 @@ import qualified System.IO                          as IO
 import qualified Text.Blaze.XHtml5                  as H
 import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
-import qualified Koshucode.Baala.Base.Text          as B
-import qualified Koshucode.Baala.Base.Token         as B
-import qualified Koshucode.Baala.Base.Result.Result as B
-
+import qualified Koshucode.Baala.Base               as B
 
 resultHtmlIndented :: (B.Write c) => B.ResultWriter c
 resultHtmlIndented = B.ResultWriterChunk "html-indented" (hPutHtml B.renderHtmlIndented)

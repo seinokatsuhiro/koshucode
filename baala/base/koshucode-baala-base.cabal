@@ -78,11 +78,6 @@ library
         Koshucode.Baala.Base.Prelude.Snip
 
         Koshucode.Baala.Base.Result
-        Koshucode.Baala.Base.Result.Csv
-        Koshucode.Baala.Base.Result.Html
-        Koshucode.Baala.Base.Result.Json
-        Koshucode.Baala.Base.Result.Judge
-        Koshucode.Baala.Base.Result.Koshu
         Koshucode.Baala.Base.Result.Result
 
         Koshucode.Baala.Base.Syntax
@@ -116,17 +111,14 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base             == 4.*
-       , aeson            == 0.*
        , blaze-html       == 0.*
        , blaze-markup     == 0.*
        , bytestring       == 0.*
        , containers       == 0.5.*
-       , csv              == 0.*
        , http-conduit     == 2.*
        , http-types       == 0.*
        , pretty           == 1.1.*
        , syb              == 0.4.*
-       , text             == 1.*
        , time             == 1.4.*
        , uri              == 0.*
        , utf8-string      == 1.*
