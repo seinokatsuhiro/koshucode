@@ -36,6 +36,7 @@ goto :EOF
 
 		cabal sandbox add-source ..\base
 		cabal sandbox add-source ..\core
+		cabal sandbox add-source ..\writer
 		cabal sandbox add-source ..\operator
 		cabal sandbox add-source ..\content
 
