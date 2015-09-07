@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Resource c -> B.Ab (B.Result c)
+runResource :: (C.CContent c) => C.Resource c -> B.Ab (C.Result c)
 runResource res =
     do res' <- assembleRelmap res
        let rslt = C.globalResult $ C.resGlobal res'
@@ -24,11 +24,11 @@ runResource res =
        case filter B.isViolative js of
          []  -> runResourceBody rslt res'
          jsV -> Right rslt
-                  { B.resultOutput   = C.resOutput res
-                  , B.resultViolated = [B.Short [] [] [B.ResultJudge jsV]] }
+                  { C.resultOutput   = C.resOutput res
+                  , C.resultViolated = [B.Short [] [] [C.ResultJudge jsV]] }
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    B.Result c -> C.Resource c -> B.Ab (B.Result c)
+    C.Result c -> C.Resource c -> B.Ab (C.Result c)
 runResourceBody rslt res@C.Resource { C.resAssert  = ass
                                     , C.resEcho    = echo
                                     , C.resLicense = license
@@ -36,21 +36,21 @@ runResourceBody rslt res@C.Resource { C.resAssert  = ass
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        Right rslt
-               { B.resultInput     = C.resInputPoint res
-               , B.resultOutput    = C.resOutput res
-               , B.resultEcho      = map B.lineContent `map` echo
-               , B.resultLicense   = group license
-               , B.resultViolated  = B.shortTrim js1
-               , B.resultNormal    = msgChunk : B.shortTrim js2
-               , B.resultPattern   = C.resPattern res }
+               { C.resultInput     = C.resInputPoint res
+               , C.resultOutput    = C.resOutput res
+               , C.resultEcho      = map B.lineContent `map` echo
+               , C.resultLicense   = group license
+               , C.resultViolated  = B.shortTrim js1
+               , C.resultNormal    = msgChunk : B.shortTrim js2
+               , C.resultPattern   = C.resPattern res }
     where
-      run :: [C.ShortAssert c] -> B.Ab [B.ShortResultChunks c]
+      run :: [C.ShortAssert c] -> B.Ab [C.ShortResultChunks c]
       run = let opt = C.resOption res
             in mapM (C.runAssertJudges res opt) . B.shortGroup
 
-      msgChunk :: B.ShortResultChunks c
+      msgChunk :: C.ShortResultChunks c
       msgChunk | null msg  = B.Short [] [] []
-               | otherwise = B.Short [] [] [B.ResultNote message]
+               | otherwise = B.Short [] [] [C.ResultNote message]
 
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 

@@ -77,9 +77,6 @@ library
         Koshucode.Baala.Base.Prelude.Pair
         Koshucode.Baala.Base.Prelude.Snip
 
-        Koshucode.Baala.Base.Result
-        Koshucode.Baala.Base.Result.Result
-
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Code
         Koshucode.Baala.Base.Syntax.Infix

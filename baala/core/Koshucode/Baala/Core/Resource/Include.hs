@@ -100,9 +100,9 @@ resIncludeBody cd res abcl =
       output :: Include c
       output _ _ (C.COutput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ res { C.resOutput = B.inputPoint io }
+             checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [B.Token] -> B.Ab B.InputPoint
+      ioPoint :: [B.Token] -> B.Ab C.InputPoint
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
@@ -126,22 +126,22 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.ContentCalc c
 calcContG = C.calcContent . C.globalCopset
 
-paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab B.InputPoint
+paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
 paraToIOPoint cd = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1 `B.paraOpt` ["about"])
          , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
-    just1 :: C.TTreePara -> B.Ab B.InputPoint
+    just1 :: C.TTreePara -> B.Ab C.InputPoint
     just1 p = do arg   <- B.paraGetFst p
                  about <- B.paraGetOpt [] p "about"
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ B.InputPoint (B.ioPointFrom cd path) about
+                   B.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
                    _ -> Msg.adlib "input not text"
 
-    stdin :: C.TTreePara -> B.Ab B.InputPoint
+    stdin :: C.TTreePara -> B.Ab C.InputPoint
     stdin p = do args <- B.paraGet p "stdin"
                  case args of
-                   [] -> Right $ B.InputPoint B.IOPointStdin []
+                   [] -> Right $ C.InputPoint B.IOPointStdin []
                    _  -> Msg.adlib "input no args"
 
     unmatch = Msg.adlib "input unknown"

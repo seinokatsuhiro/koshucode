@@ -78,7 +78,7 @@ hRunFiles
     -> IO Int
 hRunFiles h g withRes ns =
     do (abRes, _) <- C.gioResource (C.readSources ns) g
-       B.useUtf8 h
+       C.useUtf8 h
        case abRes of
          Left  a   -> C.globalAbort g a
          Right res -> withRes res

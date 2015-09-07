@@ -10,22 +10,23 @@ import qualified Text.Blaze.XHtml5                  as H
 import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
 import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Core               as C
 
-resultHtmlIndented :: (B.Write c) => B.ResultWriter c
-resultHtmlIndented = B.ResultWriterChunk "html-indented" (hPutHtml B.renderHtmlIndented)
+resultHtmlIndented :: (B.Write c) => C.ResultWriter c
+resultHtmlIndented = C.ResultWriterChunk "html-indented" (hPutHtml B.renderHtmlIndented)
 
-resultHtmlCompact :: (B.Write c) => B.ResultWriter c
-resultHtmlCompact  = B.ResultWriterChunk "html-compact"  (hPutHtml B.renderHtmlCompact)
+resultHtmlCompact :: (B.Write c) => C.ResultWriter c
+resultHtmlCompact  = C.ResultWriterChunk "html-compact"  (hPutHtml B.renderHtmlCompact)
 
-hPutHtml :: (B.Write c) => (H.Html -> String) -> B.ResultWriterChunk c
+hPutHtml :: (B.Write c) => (H.Html -> String) -> C.ResultWriterChunk c
 hPutHtml render h _ status sh =
     do hPutRel h render sh
        return status
 
-hPutRel :: (B.Write c) => IO.Handle -> (H.Html -> String) -> [B.ShortResultChunks c] -> IO ()
+hPutRel :: (B.Write c) => IO.Handle -> (H.Html -> String) -> [C.ShortResultChunks c] -> IO ()
 hPutRel h render sh = mapM_ put chunks where
     chunks = concatMap B.shortBody sh
-    put (B.ResultRel pat r) = IO.hPutStrLn h $ render $ html pat r
+    put (C.ResultRel pat r) = IO.hPutStrLn h $ render $ html pat r
     put _                 = return ()
     html pat r = H.div ! class_ "named-relation" $ do
                    H.p ! class_ "name" $ H.toHtml pat

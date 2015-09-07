@@ -40,7 +40,7 @@ import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
 data Param c = Param
     { paramElement       :: Bool
-    , paramWriter        :: B.ResultWriter c
+    , paramWriter        :: C.ResultWriter c
     , paramLiner         :: [String]
     , paramPretty        :: Bool
     , paramRun           :: Bool
@@ -88,7 +88,7 @@ initParam (Right (opts, args)) =
              | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
 
       writer | getFlag "csv"            = W.resultCsv
-             | getFlag "dump"           = B.resultDump
+             | getFlag "dump"           = C.resultDump
              | getFlag "geojson"        = W.resultGeoJson
              | getFlag "html-compact"   = W.resultHtmlCompact
              | getFlag "html-indented"  = W.resultHtmlIndented
@@ -156,7 +156,7 @@ koshuMainParam g p
       src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
 
       -- global parameter
-      rslt  = (C.globalResult g) { B.resultWriter = paramWriter p }
+      rslt  = (C.globalResult g) { C.resultWriter = paramWriter p }
       root  = C.resEmpty { C.resGlobal = g2 }
       g2    = C.globalFill g
               { C.globalProgram   = paramProg p

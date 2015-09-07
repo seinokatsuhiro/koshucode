@@ -23,8 +23,8 @@ type AboutC         = B.About        VContent
 type AboutJudgesC   = B.AboutJudges  VContent
 type JudgeC         = B.Judge        VContent
 type ResourceC      = C.Resource     VContent
-type ResultC        = B.Result       VContent
-type ResultWriterC  = B.ResultWriter VContent
+type ResultC        = C.Result       VContent
+type ResultWriterC  = C.ResultWriter VContent
 
 
 -- ----------------------  Content type

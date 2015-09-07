@@ -22,14 +22,14 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (B.ShortResultChunks c)
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (C.ShortResultChunks c)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { B.shortBody = chunks }
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.ResultChunk c]
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [C.ResultChunk c]
 runAssertDataset hook option (B.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
@@ -78,7 +78,7 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
 optionProcess :: (Ord c, B.Write c, C.CRel c)
     => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat
     -> C.Option c -> C.TTreePara
-    -> B.Rel c -> B.Ab [B.ResultChunk c]
+    -> B.Rel c -> B.Ab [C.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
     do case B.paraUnmatch opt optionType of
          Nothing  -> Right ()
@@ -88,9 +88,9 @@ optionProcess sh judgeOf pat option opt r1 =
        r3 <- optionRelmapAssert   opt    r2
        let js  = B.judgesFromRel (judgeOf showEmpty) pat r3
        comment <- optionComment sh pat opt r3
-       Right [ B.ResultJudge js
-             , B.ResultRel pat r3
-             , B.ResultNote comment ]
+       Right [ C.ResultJudge js
+             , C.ResultRel pat r3
+             , C.ResultNote comment ]
 
 optionRelmapResource :: (Ord c, C.CRel c) => C.Option c -> B.AbMap (B.Rel c)
 optionRelmapResource option r1 =

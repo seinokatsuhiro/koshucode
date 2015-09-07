@@ -43,7 +43,7 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , resInputStack :: ([B.InputPoint], [B.InputPoint], [B.CodePiece])  -- ^ Input points
+    , resInputStack :: ([C.InputPoint], [C.InputPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
     , resEcho       :: [[B.TokenLine]]     -- ^ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
@@ -89,12 +89,12 @@ resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInputStack = (_, _, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
-resInput = map B.inputPoint . resInputPoint
+resInput = map C.inputPoint . resInputPoint
 
-resInputPoint :: Resource c -> [B.InputPoint]
+resInputPoint :: Resource c -> [C.InputPoint]
 resInputPoint Resource { resInputStack = (in1, in2, in3) }
     = in1 ++ in2 ++ map (ip . B.codeName) in3 where
-      ip p = B.InputPoint p []
+      ip p = C.InputPoint p []
 
 resPattern :: Resource c -> [B.JudgePat]
 resPattern Resource { resAssert = ass } = map (C.assPattern . B.shortBody) ass

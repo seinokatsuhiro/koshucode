@@ -8,11 +8,12 @@ module Koshucode.Baala.Writer.Csv
 import qualified System.IO                 as IO
 import qualified Text.CSV                  as CSV
 import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.Core      as C
 
-resultCsv :: (B.Write c) => B.ResultWriter c
-resultCsv = B.ResultWriterJudge "csv" hPutCsv
+resultCsv :: (B.Write c) => C.ResultWriter c
+resultCsv = C.ResultWriterJudge "csv" hPutCsv
 
-hPutCsv :: (B.Write c) => B.ResultWriterJudge c
+hPutCsv :: (B.Write c) => C.ResultWriterJudge c
 hPutCsv h _ status js =
     do let csvLines = map (toCSV . B.textualjudge id) js
        IO.hPutStrLn h $ CSV.printCSV csvLines

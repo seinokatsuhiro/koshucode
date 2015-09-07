@@ -19,14 +19,15 @@ import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Core              as C
 
 
 -- --------------------------------------------  JSON
 
-resultJson :: (A.ToJSON c) => B.ResultWriter c
-resultJson = B.ResultWriterJudge "json" hPutJSON
+resultJson :: (A.ToJSON c) => C.ResultWriter c
+resultJson = C.ResultWriterJudge "json" hPutJSON
 
-hPutJSON :: (A.ToJSON c) => B.ResultWriterJudge c
+hPutJSON :: (A.ToJSON c) => C.ResultWriterJudge c
 hPutJSON _ _ status [] = return status
 hPutJSON h _ status (j1:js) =
     do IO.hPutStr h "[ "
@@ -60,10 +61,10 @@ jsonNull = A.Null
 
 -- --------------------------------------------  GeoJSON
 
-resultGeoJson :: (A.ToJSON c) => B.ResultWriter c
-resultGeoJson = B.ResultWriterJudge "geojson" hPutGeoJson
+resultGeoJson :: (A.ToJSON c) => C.ResultWriter c
+resultGeoJson = C.ResultWriterJudge "geojson" hPutGeoJson
 
-hPutGeoJson :: (A.ToJSON c) => B.ResultWriterJudge c
+hPutGeoJson :: (A.ToJSON c) => C.ResultWriterJudge c
 hPutGeoJson _ _ status [] = return status
 hPutGeoJson h _ status (j1:js) =
     do IO.hPutStrLn h "{ \"type\": \"FeatureCollection\""

@@ -12,6 +12,7 @@ import qualified Control.Monad                       as M
 import qualified Data.Map                            as Map
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Core                as C
 
 
 -- ----------------------  Writer
@@ -23,17 +24,17 @@ putJudges js =
 
 -- | `B.stdout` version of `hPutJudgesWith`.
 putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [B.Judge c] -> IO B.ExitCode
-putJudgesWith = hPutJudgesWith B.stdout B.resultEmpty
+putJudgesWith = hPutJudgesWith B.stdout C.resultEmpty
 
 -- | Print list of judges.
-hPutJudgesWith :: (B.Write c) => B.ResultWriterJudge c
+hPutJudgesWith :: (B.Write c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ judgeCount []
        B.hPutLines h $ judgeSummary status cnt
        return status
 
 hPutJudgesCount :: forall c. (B.Write c) =>
-    IO.Handle -> B.Result c -> (B.Judge c -> IO ()) -> [B.Judge c] -> JudgeCount -> IO JudgeCount
+    IO.Handle -> C.Result c -> (B.Judge c -> IO ()) -> [B.Judge c] -> JudgeCount -> IO JudgeCount
 hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h
@@ -54,8 +55,8 @@ hPutJudgesCount h result writer = loop where
 
     mod25 n       = n `mod` measure == 0
     mod5  n       = n `mod` gutter  == 0
-    gutter        = B.resultGutter  result
-    measure       = B.resultMeasure result
+    gutter        = C.resultGutter  result
+    measure       = C.resultMeasure result
 
     total    n    = IO.hPutStrLn h $ "*** " ++ count n
     progress n    = IO.hPutStrLn h $ "*** " ++ show n

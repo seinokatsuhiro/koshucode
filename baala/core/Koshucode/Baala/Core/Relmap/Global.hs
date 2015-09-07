@@ -30,6 +30,7 @@ import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
+import qualified Koshucode.Baala.Core.Relmap.Result  as C
 
 
 -- ----------------------  GetGlobal
@@ -56,7 +57,7 @@ data Global' h c = Global
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
       , globalTime         :: B.Time                -- ^ Invocation time
-      , globalResult       :: B.Result c            -- ^ Result template
+      , globalResult       :: C.Result c            -- ^ Result template
       , globalOption       :: C.Option c            -- ^ Options
       , globalSourceCount  :: Int                   -- ^ Sequential number for sources
       , globalSources      :: [B.CodePiece]         -- ^ Included sources
@@ -107,7 +108,7 @@ global' h = Global
     , globalArgs         = []
     , globalProxy        = []
     , globalTime         = B.timeFromMjd 0
-    , globalResult       = B.resultEmpty
+    , globalResult       = C.resultEmpty
     , globalOption       = C.option
     , globalSourceCount  = 0
     , globalSources      = []

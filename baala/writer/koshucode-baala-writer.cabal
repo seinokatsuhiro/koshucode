@@ -66,6 +66,7 @@ library
        , csv                  == 0.*
        , text                 == 1.*
        , koshucode-baala-base == 0.117.*
+       , koshucode-baala-core == 0.117.*
 
   ghc-options:         -Wall
 

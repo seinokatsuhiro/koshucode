@@ -83,6 +83,7 @@ library
         Koshucode.Baala.Core.Relmap.Global
         Koshucode.Baala.Core.Relmap.Option
         Koshucode.Baala.Core.Relmap.Relmap
+        Koshucode.Baala.Core.Relmap.Result
         Koshucode.Baala.Core.Relmap.Rop
         Koshucode.Baala.Core.Relmap.Specialize
 

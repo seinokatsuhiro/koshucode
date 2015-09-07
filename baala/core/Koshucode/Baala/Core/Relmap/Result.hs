@@ -4,7 +4,7 @@
 
 -- | Result of relational calculation.
 
-module Koshucode.Baala.Base.Result.Result
+module Koshucode.Baala.Core.Relmap.Result
   ( -- * Result
     Result (..),
     InputPoint (..),
@@ -25,11 +25,7 @@ module Koshucode.Baala.Base.Result.Result
 
 import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Base.Abort        as B
-import qualified Koshucode.Baala.Base.Data         as B
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
+import qualified Koshucode.Baala.Base              as B
 
 
 -- ----------------------  Result

@@ -11,10 +11,11 @@ import qualified GHC.IO.Encoding       as IO
 import qualified System.Environment    as Sys
 import qualified System.IO             as IO
 import qualified Koshucode.Baala.Base  as B
+import qualified Koshucode.Baala.Core  as C
 
 prelude :: IO (String, [String])
 prelude =
-    do B.useUtf8 B.stdout
+    do C.useUtf8 B.stdout
        prog <- Sys.getProgName
        args <- Sys.getArgs
        return (prog, deleteCr args)
