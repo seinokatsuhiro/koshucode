@@ -1,5 +1,5 @@
-../base/IMPORT.k
-../core/IMPORT.k
-../operator/IMPORT.k
-../content/IMPORT.k
-../calculator/IMPORT.k
+../base/data/IMPORT.k
+../core/data/IMPORT.k
+../operator/data/IMPORT.k
+../content/data/IMPORT.k
+../calculator/data/IMPORT.k

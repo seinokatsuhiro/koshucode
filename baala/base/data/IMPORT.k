@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    253 judges
+**    218 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -16,7 +16,6 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Base.Text"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "System.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Abort.Reason"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Text"
@@ -126,6 +125,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Tuple"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "System.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Text.PrettyPrint"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.List"         /import "Data.List"
@@ -151,45 +151,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude"              /import "Koshucode.Baala.Base.Prelude.Order"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude"              /import "Koshucode.Baala.Base.Prelude.Pair"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude"              /import "Koshucode.Baala.Base.Prelude.Snip"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Text.Blaze.XHtml5"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Text.Blaze.XHtml5"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Text.Blaze.XHtml5.Attributes"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Koshucode.Baala.Base.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Koshucode.Baala.Base.Token"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Html"          /import "Koshucode.Baala.Base.Result.Result"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Data.Aeson"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Data.Aeson"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Data.ByteString.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Data.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Koshucode.Baala.Base.Token"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Koshucode.Baala.Base.Data.Judge"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Json"          /import "Koshucode.Baala.Base.Result.Result"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Control.Monad"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Koshucode.Baala.Base.Data"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Koshucode.Baala.Base.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Koshucode.Baala.Base.Token"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Koshu"         /import "Koshucode.Baala.Base.Result.Result"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "GHC.IO.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "Koshucode.Baala.Base.Abort"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "Koshucode.Baala.Base.Data"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "Koshucode.Baala.Base.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result.Result"        /import "Koshucode.Baala.Base.Token"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Result"               /import "Koshucode.Baala.Base.Result.Result"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result"               /import "Koshucode.Baala.Base.Result.Html"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result"               /import "Koshucode.Baala.Base.Result.Json"
-|-- IMPORT  /module "Koshucode.Baala.Base.Result"               /import "Koshucode.Baala.Base.Result.Koshu"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Data.Map"
@@ -312,7 +273,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Data"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Result"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Token"

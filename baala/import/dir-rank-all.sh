@@ -1,2 +1,2 @@
 #!/bin/sh
-time koshu dir-rank.k ../*/IMPORT.k > DIR-RANK-ALL.k
+time koshu dir-rank.k ../*/data/IMPORT.k > DIR-RANK-ALL.k

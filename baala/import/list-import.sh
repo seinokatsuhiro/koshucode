@@ -26,7 +26,7 @@ esac
 
 imp_body () {
     echo "Imports for $1"
-    ./list-import.pl `imp_list $1` | imp_post "$1/$imp_file"
+    ./list-import.pl `imp_list $1` | imp_post "$1/data/$imp_file"
 }
 
 imp_list () {
@@ -44,7 +44,7 @@ imp_post () {
 }
 
 imp_main () {
-    for pkg in base core operator content calculator toolkit; do
+    for pkg in base core writer operator content calculator toolkit; do
         imp_body ../$pkg
     done
 }
