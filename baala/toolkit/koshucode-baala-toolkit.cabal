@@ -7,7 +7,7 @@ name:                koshucode-baala-toolkit
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.117.0.0
+version:             0.118.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Toolkit for Koshucode
@@ -52,12 +52,12 @@ executable koshu-change
   build-depends:
          base                       == 4.*
        , containers                 == 0.5.*
-       , koshucode-baala-base       == 0.117.*
-       , koshucode-baala-core       == 0.117.*
-       , koshucode-baala-operator   == 0.117.*
-       , koshucode-baala-content    == 0.117.*
-       , koshucode-baala-writer     == 0.117.*
-       , koshucode-baala-calculator == 0.117.*
+       , koshucode-baala-base       == 0.118.*
+       , koshucode-baala-core       == 0.118.*
+       , koshucode-baala-operator   == 0.118.*
+       , koshucode-baala-content    == 0.118.*
+       , koshucode-baala-writer     == 0.118.*
+       , koshucode-baala-calculator == 0.118.*
 
 executable koshu-rdf
   main-is:
@@ -69,11 +69,11 @@ executable koshu-rdf
        , containers                 == 0.5.*
        , rdf4h                      == 1.2.*
        , text                       == 1.*
-       , koshucode-baala-base       == 0.117.*
-       , koshucode-baala-core       == 0.117.*
-       , koshucode-baala-operator   == 0.117.*
-       , koshucode-baala-content    == 0.117.*
-       , koshucode-baala-calculator == 0.117.*
+       , koshucode-baala-base       == 0.118.*
+       , koshucode-baala-core       == 0.118.*
+       , koshucode-baala-operator   == 0.118.*
+       , koshucode-baala-content    == 0.118.*
+       , koshucode-baala-calculator == 0.118.*
 
 executable koshu-syntax
   main-is:
@@ -82,11 +82,11 @@ executable koshu-syntax
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
          base                       == 4.*
-       , koshucode-baala-base       == 0.117.*
-       , koshucode-baala-core       == 0.117.*
-       , koshucode-baala-operator   == 0.117.*
-       , koshucode-baala-content    == 0.117.*
-       , koshucode-baala-calculator == 0.117.*
+       , koshucode-baala-base       == 0.118.*
+       , koshucode-baala-core       == 0.118.*
+       , koshucode-baala-operator   == 0.118.*
+       , koshucode-baala-content    == 0.118.*
+       , koshucode-baala-calculator == 0.118.*
 
 
 library
@@ -109,10 +109,10 @@ library
        , directory                  == 1.2.*
        , rdf4h                      == 1.2.*
        , text                       == 1.*
-       , koshucode-baala-base       == 0.117.*
-       , koshucode-baala-core       == 0.117.*
-       , koshucode-baala-operator   == 0.117.*
-       , koshucode-baala-content    == 0.117.*
-       , koshucode-baala-writer     == 0.117.*
-       , koshucode-baala-calculator == 0.117.*
+       , koshucode-baala-base       == 0.118.*
+       , koshucode-baala-core       == 0.118.*
+       , koshucode-baala-operator   == 0.118.*
+       , koshucode-baala-content    == 0.118.*
+       , koshucode-baala-writer     == 0.118.*
+       , koshucode-baala-calculator == 0.118.*
 
