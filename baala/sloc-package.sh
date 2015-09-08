@@ -26,7 +26,7 @@ esac
 
 count () {
     echo "Count sloc for $1"
-    ./sloc-haskell.pl `list $1` | post "$1/SLOC.k"
+    ./sloc-haskell.pl `list $1` | post "$1/data/SLOC.k"
 }
 
 post () {
@@ -44,11 +44,11 @@ list () {
 }
 
 main () {
-    for pkg in base core operator content calculator toolkit; do
+    for pkg in base core writer operator content calculator toolkit; do
         count $pkg
     done
 
-    koshu sloc-all-list.k */SLOC.k > SLOC-ALL.k
+    koshu sloc-all-list.k */data/SLOC.k > SLOC-ALL.k
 }
 
 main
