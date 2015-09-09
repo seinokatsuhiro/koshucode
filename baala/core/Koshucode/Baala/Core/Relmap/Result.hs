@@ -150,6 +150,6 @@ hPutAllChunks h result status sh =
       judges = concatMap resultChunkJudges . concatMap B.shortBody
 
 useUtf8 :: IO.Handle -> IO ()
-useUtf8 h = do IO.setLocaleEncoding IO.utf8_bom
+useUtf8 h = do B.setLocaleUtf8
                IO.hSetEncoding h IO.utf8
 

@@ -42,6 +42,9 @@ module Koshucode.Baala.Base.Prelude.Import
     -- * Data.Tuple
     Data.Tuple.swap,
 
+    -- * GHC.IO.Encoding
+    setLocaleUtf8,
+
     -- * System.Exit
     System.Exit.ExitCode (..),
     System.Exit.exitWith,
@@ -67,6 +70,7 @@ import qualified Data.Map
 import qualified Data.Maybe
 import qualified Data.Monoid
 import qualified Data.Tuple
+import qualified GHC.IO.Encoding
 import qualified System.IO
 import qualified System.Exit
 import qualified Text.PrettyPrint
@@ -92,6 +96,11 @@ overlap a b = not $ disjoint a b
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
 lookupMap = Data.Map.lookup
 
+
+-- ----------------------  GHC
+
+setLocaleUtf8 :: IO ()
+setLocaleUtf8 = GHC.IO.Encoding.setLocaleEncoding GHC.IO.Encoding.utf8_bom
 
 -- ----------------------  System
 
