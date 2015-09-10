@@ -17,19 +17,8 @@ set CAB_SAMPLE=%CAB_BIN%\SAMPLE.k
 	pause
 
 goto :EOF
-:CD
-	cd %1
-
-	echo.
-	echo ======================================== %1
-	echo.
-	echo Entering %CD%
-	echo.
-
-goto :EOF
 :CALCULATOR
 	setlocal
-	call :CD calculator
 
 	if "%1" == "install" (
 		cabal sandbox init --sandbox=..\cabal\sandbox
