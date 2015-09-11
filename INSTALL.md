@@ -30,6 +30,10 @@ Files `*.k` are data itself and calculation in koshucode.
          * koshucode-baala-core.cabal
          / Koshucode / Baala / Core
 
+      / writer
+         * koshucode-baala-writer.cabal
+         / Koshucode / Baala / Writer
+
       / operator
          * koshucode-baala-operator.cabal
          / Koshucode / Baala / Op
@@ -47,7 +51,6 @@ Files `*.k` are data itself and calculation in koshucode.
       / toolkit
          * koshucode-baala-toolkit.cabal
          * koshu-change.hs
-         * koshu-rdf.hs
          * koshu-syntax.hs
          / Koshucode / Baala / Toolkit
 ```
@@ -59,7 +62,8 @@ Install Haskell
 This software is written in Haskell,
 and built with the Cabal packaging system.
 Before building koshucode libraries and executables,
-please install the [Haskell Platform](http://www.haskell.org/platform/).
+please install the [Haskell Platform](http://www.haskell.org/platform/)
+or [MinGHC](https://github.com/fpco/minghc) for Windows.
 Haskell Platform constains the Haskell compiler and
 related libraries and tools like Cabal.
 
@@ -68,61 +72,25 @@ related libraries and tools like Cabal.
 Install koshu command
 ---------------------------------
 
-There are six Cabal packages.
+There are seven Cabal packages.
 
-* `koshucode-baala-base`
-* `koshucode-baala-core`
-* `koshucode-baala-operator`
-* `koshucode-baala-content`
-* `koshucode-baala-calculator`
-* `koshucode-baala-toolkit` (optional)
+ 1. [`koshucode-baala-base`](baala/base/koshucode-baala-base.cabal)
+ 2. [`koshucode-baala-core`](baala/core/koshucode-baala-core.cabal)
+ 3. [`koshucode-baala-writer`](baala/writer/koshucode-baala-writer.cabal)
+ 4. [`koshucode-baala-operator`](baala/operator/koshucode-baala-operator.cabal)
+ 5. [`koshucode-baala-content`](baala/content/koshucode-baala-content.cabal)
+ 6. [`koshucode-baala-calculator`](baala/calculator/koshucode-baala-calculator.cabal)
+     contains [`koshu.hs`](baala/calculator/koshu.hs)
+ 7. [`koshucode-baala-toolkit`](baala/toolkit/koshucode-baala-toolkit.cabal)
 
-First, install `koshucode-baala-base` package.
-Type `cabal install` under the `base` directory.
-This package contains `Koshucode.Baala.Base` module.
-
-``` sh
-cd koshucode-master/baala/base
-cabal install
-```
-
-Install `koshucode-baala-core` package.
-This package contains `Koshucode.Baala.Core` module.
-`Core` module provides the central functionality of the language.
-
-``` sh
-cd koshucode-master/baala/core
-cabal install
-```
-
-Install `koshucode-baala-operator` and `koshucode-baala-content` packages.
-These packages provides relational operators.
-
-``` sh
-cd koshucode-master/baala/operator
-cabal install
-cd ../content
-cabal install
-```
-
-Install `koshucode-baala-calculator` package.
-This package contains `koshu` command.
+To build and install the `koshu` command inside sandbox, you can use
+[`cabal-sandbox-install.sh`](baala/calculator/cabal-sandbox-install.sh).
 
 ``` sh
 cd koshucode-master/baala/calculator
-cabal install
+sh cabal-sandbox-install.sh
 ```
 
-Optionally,
-you can install `koshucode-baala-toolkit` package.
-This package contains additional commands,
-e.g., `koshu-change`, `koshu-rdf` and `koshu-syntax`.
-
-``` sh
-# optional
-cd koshucode-master/baala/toolkit
-cabal install
-```
 
 
 Invoke koshu command
