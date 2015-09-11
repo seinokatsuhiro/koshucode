@@ -11,7 +11,7 @@ import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
 main :: IO ()
 main = B.exitWith =<< Main.koshuMain koshuGlobal
 
-koshuGlobal :: C.Global Type.VContent
+koshuGlobal :: Type.GlobalC
 koshuGlobal = Op.vanillaGlobal
               { C.globalSynopsis  = "The Koshucode Baala Implementation"
               , C.globalVersion   = Main.version }

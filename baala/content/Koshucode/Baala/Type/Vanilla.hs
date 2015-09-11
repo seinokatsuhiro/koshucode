@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Type.Vanilla
   ( -- * Derived type
-    AboutC, AboutJudgesC, JudgeC,
+    AboutC, AboutJudgesC, GlobalC, JudgeC,
     ResourceC, ResultC, ResultWriterC,
     -- * Content type
     VContent (..),
@@ -21,6 +21,7 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 type AboutC         = B.About        VContent
 type AboutJudgesC   = B.AboutJudges  VContent
+type GlobalC        = C.Global       VContent
 type JudgeC         = B.Judge        VContent
 type ResourceC      = C.Resource     VContent
 type ResultC        = C.Result       VContent
