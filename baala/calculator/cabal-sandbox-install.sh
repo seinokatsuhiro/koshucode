@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#  Build 'koshu' inside sandbox
+#  Build and install 'koshu' inside sandbox
 #
 
 check () {
@@ -29,5 +29,5 @@ cabal sandbox add-source ../content
 
 cabal install --only-dependencies
   check $? install --only-dependencies
-cabal build
-  check $? build
+cabal install
+  check $? install
