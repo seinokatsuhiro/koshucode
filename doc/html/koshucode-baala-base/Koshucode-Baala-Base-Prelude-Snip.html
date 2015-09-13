@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -94,8 +94,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:SnipPair"
-	    >SnipPair</a
+	    > <a href="#t:Snip2"
+	    >Snip2</a
 	    > a b = (<a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
 	    >Snip</a
 	    > a, <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
@@ -152,16 +152,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Snip</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:snipFore"
-	    >snipFore</a
+	  ><a href="#v:snipForward"
+	    >snipForward</a
 	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
 	    >Snip</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:snipFore2"
-	    >snipFore2</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:SnipPair"
-	    >SnipPair</a
+	  ><a href="#v:snipBackward"
+	    >snipBackward</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
+	    >Snip</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:snipForward2"
+	    >snipForward2</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip2"
+	    >Snip2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:snipBackward2"
+	    >snipBackward2</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip2"
+	    >Snip2</a
 	    > a b</li
 	  ><li class="src short"
 	  ><a href="#v:snipLeft"
@@ -208,8 +220,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Bool</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:operand"
-	    >operand</a
+	  ><a href="#v:-43--45-"
+	    >(+-)</a
 	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
@@ -235,20 +247,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > [a] <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#Snip" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Snipping elements using indicies.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:SnipPair" class="def"
-	    >SnipPair</a
+	    > <a name="t:Snip2" class="def"
+	    >Snip2</a
 	    > a b = (<a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
 	    >Snip</a
 	    > a, <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
 	    >Snip</a
-	    > b) <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#SnipPair" class="link"
+	    > b) <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#Snip2" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Snip for differenct type values.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -421,11 +441,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Derivative</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:snipFore" class="def"
-	    >snipFore</a
+	  ><a name="v:snipForward" class="def"
+	    >snipForward</a
 	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
 	    >Snip</a
-	    > a <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipFore" class="link"
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipForward" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -435,11 +455,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:snipFore2" class="def"
-	    >snipFore2</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:SnipPair"
-	    >SnipPair</a
-	    > a b <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipFore2" class="link"
+	  ><a name="v:snipBackward" class="def"
+	    >snipBackward</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip"
+	    >Snip</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipBackward" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Move indexed elements to the rear.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipForward2" class="def"
+	    >snipForward2</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip2"
+	    >Snip2</a
+	    > a b <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipForward2" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipBackward2" class="def"
+	    >snipBackward2</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Snip2"
+	    >Snip2</a
+	    > a b <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#snipBackward2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -529,15 +573,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operand" class="def"
-	    >operand</a
+	  ><a name="v:-43--45-" class="def"
+	    >(+-)</a
 	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#operand" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Snip.html#%2B-" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -552,16 +596,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Examples</em
 	    ></p
 	  ><p
-	  >Move snipping elements to the front.</p
+	  >Move snipping elements to the front and rear.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipFore` &quot;ABCDEFG&quot;
+	      >(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipForward` &quot;ABCDEFG&quot;
 </code
 	      ></strong
 	    >&quot;CDABEFG&quot;
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipBackward` &quot;ABCDEFG&quot;
+</code
+	      ></strong
+	    >&quot;ABEFGCD&quot;
 </pre
 	  ><p
 	  >Shared elements of <code
@@ -607,7 +659,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >operand [0, 1] [-1]
+	      >[0, 1] +- [-1]
 </code
 	      ></strong
 	    >True
@@ -615,7 +667,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >operand [0] [1, -1]
+	      >[0] +- [1, -1]
 </code
 	      ></strong
 	    >False

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,6 +62,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li
 	  ><a href="#g:2"
 	    >Constant</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Converter</a
 	    ></li
 	  ></ul
 	></div
@@ -133,6 +137,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
 	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:SelectRel"
+	    >SelectRel</a
+	    > r <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:selectRel"
+		>selectRel</a
+		> ::  r c -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+		>JudgePat</a
+		> -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+		>TermName</a
+		>] -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>Rel</a
+		> c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgesFromRel"
+	    >judgesFromRel</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+	    >JudgePat</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -208,6 +244,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ><div id="section.i:Rel" class="show"
 	    ><table
 	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+		    >Functor</a
+		    > <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		    >Rel</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
@@ -360,8 +406,62 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      >B.doc (reldee :: Rel Bool)
 </code
 	      ></strong
-	    >{| | |}
+	    >{| [] |}
 </pre
+	  ></div
+	><h1 id="g:3"
+	>Converter</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:SelectRel" class="def"
+	    >SelectRel</a
+	    > r <span class="keyword"
+	    >where</span
+	    > <a href="src/Koshucode-Baala-Base-Data-Rel.html#SelectRel" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:selectRel" class="def"
+	      >selectRel</a
+	      > ::  r c -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+	      >JudgePat</a
+	      > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	      >TermName</a
+	      >] -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	      >Rel</a
+	      > c <a href="src/Koshucode-Baala-Base-Data-Rel.html#selectRel" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Convert judges to relation.</p
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgesFromRel" class="def"
+	    >judgesFromRel</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+	    >JudgePat</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] <a href="src/Koshucode-Baala-Base-Data-Rel.html#judgesFromRel" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert relation to list of judges.</p
+	    ></div
 	  ></div
 	></div
       ></div

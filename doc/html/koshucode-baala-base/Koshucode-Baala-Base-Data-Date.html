@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="caption"
 	>Koshucode.Baala.Base.Data.Date</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Data type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Construction</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Utility</a
+	    ></li
+	  ></ul
+	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
@@ -64,23 +82,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ><li
 	      >= <a href="#v:Monthly"
 		>Monthly</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		>Day</a
+		> <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		>MJDay</a
 		></li
 	      ><li
 	      >| <a href="#v:Weekly"
 		>Weekly</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		>Day</a
+		> <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		>MJDay</a
 		></li
 	      ><li
 	      >| <a href="#v:Yearly"
 		>Yearly</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		>Day</a
+		> <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		>MJDay</a
 		></li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:MJDay"
+	    >MJDay</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:YmdTuple"
+	    >YmdTuple</a
+	    > = (<a href="Koshucode-Baala-Base-Data-Date.html#t:Year"
+	    >Year</a
+	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Month"
+	    >Month</a
+	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Day"
+	    >Day</a
+	    >)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -112,18 +150,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Day</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:dayFromYmd"
-	    >dayFromYmd</a
-	    > :: (<a href="Koshucode-Baala-Base-Data-Date.html#t:Year"
-	    >Year</a
-	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Month"
-	    >Month</a
-	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Day"
-	    >Day</a
-	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:dateFromYmdAb"
@@ -170,17 +196,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >dateDay</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
 	    >Date</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+	    >MJDay</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:dateMapDay"
 	    >dateMapDay</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
+	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+	    >MJDay</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
+	    >Date</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:dateAdd"
+	    >dateAdd</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
 	    >Date</a
@@ -212,8 +248,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -231,8 +267,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ><td class="src"
 		><a name="v:Monthly" class="def"
 		  >Monthly</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		  >Day</a
+		  > <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		  >MJDay</a
 		  ></td
 		><td class="doc"
 		><p
@@ -245,8 +281,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ><td class="src"
 		><a name="v:Weekly" class="def"
 		  >Weekly</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		  >Day</a
+		  > <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		  >MJDay</a
 		  ></td
 		><td class="doc"
 		><p
@@ -259,8 +295,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ><td class="src"
 		><a name="v:Yearly" class="def"
 		  >Yearly</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-		  >Day</a
+		  > <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+		  >MJDay</a
 		  ></td
 		><td class="doc"
 		><p
@@ -324,6 +360,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
+	    > <a name="t:MJDay" class="def"
+	    >MJDay</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#MJDay" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>&nbsp;= <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+		  >Day</a
+		  ></td
+		><td class="doc"
+		><p
+		  >The Modified Julian Day</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:YmdTuple" class="def"
+	    >YmdTuple</a
+	    > = (<a href="Koshucode-Baala-Base-Data-Date.html#t:Year"
+	    >Year</a
+	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Month"
+	    >Month</a
+	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Day"
+	    >Day</a
+	    >) <a href="src/Koshucode-Baala-Base-Data-Date.html#YmdTuple" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
 	    > <a name="t:Year" class="def"
 	    >Year</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
@@ -368,22 +446,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Source</a
 	    ></p
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:dayFromYmd" class="def"
-	    >dayFromYmd</a
-	    > :: (<a href="Koshucode-Baala-Base-Data-Date.html#t:Year"
-	    >Year</a
-	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Month"
-	    >Month</a
-	    >, <a href="Koshucode-Baala-Base-Data-Date.html#t:Day"
-	    >Day</a
-	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
-	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#dayFromYmd" class="link"
-	    >Source</a
-	    ></p
-	  ></div
+	><h1 id="g:2"
+	>Construction</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dateFromYmdAb" class="def"
@@ -448,17 +512,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Create date from year and day.</p
 	    ></div
 	  ></div
+	><h1 id="g:3"
+	>Utility</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dateDay" class="def"
 	    >dateDay</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
 	    >Date</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+	    >MJDay</a
 	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#dateDay" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get the internal Modified Julian Day.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -466,8 +536,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >dateMapDay</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
-	    >Day</a
+	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:MJDay"
+	    >MJDay</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
@@ -475,6 +545,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#dateMapDay" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dateAdd" class="def"
+	    >dateAdd</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
+	    >Date</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#dateAdd" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert into monthly date.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -487,6 +575,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#monthly" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert into weekly date.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -499,6 +591,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > <a href="src/Koshucode-Baala-Base-Data-Date.html#weekly" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert into yearly date.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"

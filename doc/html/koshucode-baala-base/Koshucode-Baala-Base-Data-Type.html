@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -184,7 +184,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:typeFlatRel"
 	    >typeFlatRel</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
@@ -192,7 +192,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:typeConsRel"
 	    >typeConsRel</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -202,7 +202,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:typeConsNest"
 	    >typeConsNest</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
@@ -214,7 +214,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:typeAppendRel"
 	    >typeAppendRel</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -226,7 +226,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelTermNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >]</li
 	  ><li class="src short"
@@ -242,7 +242,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelIndex</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -252,7 +252,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelIndexList</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -310,7 +310,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelMapName</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -638,7 +638,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:typeFlatRel" class="def"
 	    >typeFlatRel</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
@@ -650,7 +650,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:typeConsRel" class="def"
 	    >typeConsRel</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -664,7 +664,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:typeConsNest" class="def"
 	    >typeConsNest</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
@@ -680,7 +680,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:typeAppendRel" class="def"
 	    >typeAppendRel</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -696,7 +696,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelTermNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelTermNames" class="link"
 	    >Source</a
@@ -720,7 +720,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelIndex</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -768,7 +768,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelIndexList</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -850,7 +850,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >typeRelMapName</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a

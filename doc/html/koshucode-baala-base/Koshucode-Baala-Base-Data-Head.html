@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -74,6 +74,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li
 	  ><a href="#g:5"
 	    >Mapping</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >Picker</a
 	    ></li
 	  ></ul
 	></div
@@ -124,7 +128,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headFrom"
 	    >headFrom</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -170,7 +174,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >]</li
 	  ><li class="src short"
@@ -186,7 +190,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNested</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [(<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [(<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >, <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -196,15 +200,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headIndex1</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:headTypes"
+	    >headTypes</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
+	    >Type</a
+	    >]</li
+	  ><li class="src short"
 	  ><a href="#v:headCons"
 	    >headCons</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -214,7 +226,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headAppend"
 	    >headAppend</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -224,7 +236,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headConsNest"
 	    >headConsNest</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -236,7 +248,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headNests"
 	    >headNests</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -260,7 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headMapName</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -295,6 +307,128 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [[c]]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:HeadLR"
+	    >HeadLR</a
+	    > c = <a href="#v:HeadLR"
+	    >HeadLR</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:headLShareIndex"
+		>headLShareIndex</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		>]</li
+	      ><li
+	      ><a href="#v:headRShareIndex"
+		>headRShareIndex</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		>]</li
+	      ><li
+	      ><a href="#v:headDisjoint"
+		>headDisjoint</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:headLSideNames"
+		>headLSideNames</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+		>TermName</a
+		>]</li
+	      ><li
+	      ><a href="#v:headLShareNames"
+		>headLShareNames</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+		>TermName</a
+		>]</li
+	      ><li
+	      ><a href="#v:headRShareNames"
+		>headRShareNames</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+		>TermName</a
+		>]</li
+	      ><li
+	      ><a href="#v:headRSideNames"
+		>headRSideNames</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+		>TermName</a
+		>]</li
+	      ><li
+	      ><a href="#v:headLSide"
+		>headLSide</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headLShare"
+		>headLShare</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headRShare"
+		>headRShare</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headRSide"
+		>headRSide</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headRForward"
+		>headRForward</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headRBackward"
+		>headRBackward</a
+		> :: [c] -&gt; [c]</li
+	      ><li
+	      ><a href="#v:headRSplit"
+		>headRSplit</a
+		> :: [c] -&gt; ([c], [c])</li
+	      ><li
+	      ><a href="#v:headRAssoc"
+		>headRAssoc</a
+		> :: [c] -&gt; ([c], [c])</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:HeadLRMap"
+	    >HeadLRMap</a
+	    > c = <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > c -&gt; [c] -&gt; [c]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:HeadLRMap2"
+	    >HeadLRMap2</a
+	    > a b = (<a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLRMap"
+	    >HeadLRMap</a
+	    > a, <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLRMap"
+	    >HeadLRMap</a
+	    > b)</li
+	  ><li class="src short"
+	  ><a href="#v:headLR"
+	    >headLR</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:headLROrd"
+	    >headLROrd</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > a</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -440,7 +574,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headFrom" class="def"
 	    >headFrom</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -574,7 +708,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] <a href="src/Koshucode-Baala-Base-Data-Head.html#headNames" class="link"
 	    >Source</a
@@ -606,7 +740,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNested</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [(<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > -&gt; [(<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >, <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -624,7 +758,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headIndex1</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -635,6 +769,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><p
 	    >Index of a term.</p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:headTypes" class="def"
+	    >headTypes</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
+	    >Type</a
+	    >] <a href="src/Koshucode-Baala-Base-Data-Head.html#headTypes" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="doc"
 	><p
@@ -702,7 +848,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headCons" class="def"
 	    >headCons</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -720,7 +866,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headAppend" class="def"
 	    >headAppend</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -738,7 +884,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headConsNest" class="def"
 	    >headConsNest</a
-	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
 	    >Head</a
@@ -754,7 +900,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headNests" class="def"
 	    >headNests</a
-	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -812,7 +958,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headMapName</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -879,6 +1025,228 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></strong
 	    >Head { headType = TypeRel [(&quot;b&quot;, TypeAny), (&quot;a&quot;, TypeAny)] }
 </pre
+	  ></div
+	><h1 id="g:6"
+	>Picker</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:HeadLR" class="def"
+	    >HeadLR</a
+	    > c <a href="src/Koshucode-Baala-Base-Data-Head.html#HeadLR" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:HeadLR" class="def"
+		  >HeadLR</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:headLShareIndex" class="def"
+			>headLShareIndex</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+			>Int</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Indicies of right-shared part</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRShareIndex" class="def"
+			>headRShareIndex</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+			>Int</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Indicies of left-shared part</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headDisjoint" class="def"
+			>headDisjoint</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+			>Bool</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Whether shared part is empty</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headLSideNames" class="def"
+			>headLSideNames</a
+			> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+			>TermName</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Left-side term names</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headLShareNames" class="def"
+			>headLShareNames</a
+			> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+			>TermName</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Left-shared term names</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRShareNames" class="def"
+			>headRShareNames</a
+			> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+			>TermName</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Right-shared term names</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRSideNames" class="def"
+			>headRSideNames</a
+			> :: [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+			>TermName</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Right-side term names</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headLSide" class="def"
+			>headLSide</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick left-side part from left contents</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headLShare" class="def"
+			>headLShare</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick left-shared part from left contents</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRShare" class="def"
+			>headRShare</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick right-shared part from right contents</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRSide" class="def"
+			>headRSide</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick right-side part from right contents</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRForward" class="def"
+			>headRForward</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:headRBackward" class="def"
+			>headRBackward</a
+			> :: [c] -&gt; [c]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:headRSplit" class="def"
+			>headRSplit</a
+			> :: [c] -&gt; ([c], [c])</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick right-shared and right-side part</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:headRAssoc" class="def"
+			>headRAssoc</a
+			> :: [c] -&gt; ([c], [c])</dt
+		      ><dd class="doc"
+		      ><p
+			>Pick right-shared part and right contents</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:HeadLRMap" class="def"
+	    >HeadLRMap</a
+	    > c = <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > c -&gt; [c] -&gt; [c] <a href="src/Koshucode-Baala-Base-Data-Head.html#HeadLRMap" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:HeadLRMap2" class="def"
+	    >HeadLRMap2</a
+	    > a b = (<a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLRMap"
+	    >HeadLRMap</a
+	    > a, <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLRMap"
+	    >HeadLRMap</a
+	    > b) <a href="src/Koshucode-Baala-Base-Data-Head.html#HeadLRMap2" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:headLR" class="def"
+	    >headLR</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > a <a href="src/Koshucode-Baala-Base-Data-Head.html#headLR" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:headLROrd" class="def"
+	    >headLROrd</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Head.html#t:HeadLR"
+	    >HeadLR</a
+	    > a <a href="src/Koshucode-Baala-Base-Data-Head.html#headLROrd" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	></div
       ></div

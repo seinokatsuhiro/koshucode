@@ -140,7 +140,7 @@
 <a name="line-131"></a><span class='hs-comment'>-- ----------------------  Writer</span>
 <a name="line-132"></a>
 <a name="line-133"></a><a name="instance%20B.Write%20Clock"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Write</span> <span class='hs-conid'>Clock</span> <span class='hs-keyword'>where</span>
-<a name="line-134"></a>    <span class='hs-varid'>write</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>writeClock</span>
+<a name="line-134"></a>    <span class='hs-varid'>writeDocWith</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>writeClock</span>
 <a name="line-135"></a>
 <a name="line-136"></a><a name="writeClock"></a><span class='hs-definition'>writeClock</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Clock</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
 <a name="line-137"></a><span class='hs-definition'>writeClock</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docWrap</span> <span class='hs-str'>"|"</span> <span class='hs-str'>"|"</span> <span class='hs-varop'>.</span> <span class='hs-varid'>writeClockBody</span>

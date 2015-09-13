@@ -8,7 +8,35 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.102.0.0
+@version 0.118.0.0
+
+module Koshucode.Baala.Base.Token.Term
+
+-- | Name of term, e.g., <tt>"file"</tt> for the term name <tt>/file</tt>.
+type TermName = String
+type TermName2 = (String, String)
+type TermName3 = (String, String, String)
+type TermName4 = (String, String, String, String)
+type TermName5 = (String, String, String, String, String)
+type TermName6 = (String, String, String, String, String, String)
+
+-- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
+--   path <tt>["r", "x"]</tt>.
+type TermPath = [TermName]
+showTermName :: TermName -> String
+showTermPath :: TermPath -> String
+type Term c = (TermName, c)
+term :: TermName -> c -> Term c
+
+-- | Check present term.
+termP :: Int -> Bool
+
+-- | Check new term.
+termN :: Int -> Bool
+termPN :: Int -> Int -> Bool
+termsP :: [Int] -> Bool
+termsN :: [Int] -> Bool
+termsPN :: [Int] -> [Int] -> Bool
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -178,6 +206,23 @@ intersect :: Eq a => [a] -> [a] -> [a]
 --   iff the first list is a prefix of the second.
 isPrefixOf :: Eq a => [a] -> [a] -> Bool
 
+-- | The <a>isInfixOf</a> function takes two lists and returns <a>True</a>
+--   iff the first list is contained, wholly and intact, anywhere within
+--   the second.
+--   
+--   Example:
+--   
+--   <pre>
+--   isInfixOf "Haskell" "I really like Haskell." == True
+--   isInfixOf "Ial" "I really like Haskell." == False
+--   </pre>
+isInfixOf :: Eq a => [a] -> [a] -> Bool
+
+-- | The <a>isSuffixOf</a> function takes two lists and returns <a>True</a>
+--   iff the first list is a suffix of the second. Both lists must be
+--   finite.
+isSuffixOf :: Eq a => [a] -> [a] -> Bool
+
 -- | The <a>sort</a> function implements a stable sorting algorithm. It is
 --   a special case of <a>sortBy</a>, which allows the programmer to supply
 --   their own comparison function.
@@ -272,6 +317,51 @@ mempty :: Monoid a => a
 
 -- | Swap the components of a pair.
 swap :: (a, b) -> (b, a)
+setLocaleUtf8 :: IO ()
+
+-- | Defines the exit codes that a program can return.
+data ExitCode :: *
+
+-- | indicates successful termination;
+ExitSuccess :: ExitCode
+
+-- | indicates program failure with an exit code. The exact interpretation
+--   of the code is operating-system dependent. In particular, some values
+--   may be prohibited (e.g. 0 on a POSIX-compliant system).
+ExitFailure :: Int -> ExitCode
+
+-- | Computation <a>exitWith</a> <tt>code</tt> throws <a>ExitCode</a>
+--   <tt>code</tt>. Normally this terminates the program, returning
+--   <tt>code</tt> to the program's caller.
+--   
+--   On program termination, the standard <tt>Handle</tt>s <tt>stdout</tt>
+--   and <tt>stderr</tt> are flushed automatically; any other buffered
+--   <tt>Handle</tt>s need to be flushed manually, otherwise the buffered
+--   data will be discarded.
+--   
+--   A program that fails in any other way is treated as if it had called
+--   <a>exitFailure</a>. A program that terminates successfully without
+--   calling <a>exitWith</a> explicitly is treated as it it had called
+--   <a>exitWith</a> <a>ExitSuccess</a>.
+--   
+--   As an <a>ExitCode</a> is not an <a>IOError</a>, <a>exitWith</a>
+--   bypasses the error handling in the <a>IO</a> monad and cannot be
+--   intercepted by <tt>catch</tt> from the <a>Prelude</a>. However it is a
+--   <tt>SomeException</tt>, and can be caught using the functions of
+--   <a>Control.Exception</a>. This means that cleanup computations added
+--   with <a>bracket</a> (from <a>Control.Exception</a>) are also executed
+--   properly on <a>exitWith</a>.
+--   
+--   Note: in GHC, <a>exitWith</a> should be called from the main program
+--   thread in order to exit the process. When called from another thread,
+--   <a>exitWith</a> will throw an <tt>ExitException</tt> as normal, but
+--   the exception will not cause the process itself to exit.
+exitWith :: ExitCode -> IO a
+exitCode :: Int -> ExitCode
+
+-- | A handle managing output to the Haskell program's standard output
+--   channel.
+stdout :: Handle
 
 -- | The abstract type of documents. A Doc represents a *set* of layouts. A
 --   Doc with no occurrences of Union or NoDoc represents just one layout.
@@ -351,6 +441,7 @@ names :: Name a => [a] -> [String]
 type Named a = (String, a)
 named :: Name a => a -> Named a
 type Map a = a -> a
+type ManyMap a = a -> [a]
 type Pred a = a -> Bool
 data YesNo a
 Yes :: a -> YesNo a
@@ -390,6 +481,7 @@ unique :: Ord a => [a] -> [a]
 
 -- | Union list to base list.
 unionUp :: Eq a => [a] -> [a] -> [a]
+intersectionFilter :: Ord a => [a] -> [a] -> [a]
 
 -- | Make singleton list.
 li1 :: a -> [a]
@@ -435,8 +527,12 @@ sequenceSnd :: Monad m => [(a, m b)] -> m [(a, b)]
 
 -- | Snipping elements.
 module Koshucode.Baala.Base.Prelude.Snip
+
+-- | Snipping elements using indicies.
 type Snip a = [Int] -> Map [a]
-type SnipPair a b = (Snip a, Snip b)
+
+-- | Snip for differenct type values.
+type Snip2 a b = (Snip a, Snip b)
 type Bin a = a -> a -> a
 snipFull :: Eq a => [a] -> [a] -> [Int]
 
@@ -454,8 +550,12 @@ snipFrom :: Snip a
 snipOff :: Snip a
 
 -- | Move indexed elements to the front.
-snipFore :: Snip a
-snipFore2 :: SnipPair a b
+snipForward :: Snip a
+
+-- | Move indexed elements to the rear.
+snipBackward :: Snip a
+snipForward2 :: Snip2 a b
+snipBackward2 :: Snip2 a b
 
 -- | Take left-side elements.
 snipLeft :: Eq a => Bin [a]
@@ -473,7 +573,7 @@ notSameLength :: [a] -> [b] -> Bool
 
 -- | Check elements in the first list are non-negative, and elements in the
 --   second are negative.
-operand :: [Int] -> [Int] -> Bool
+(+-) :: [Int] -> [Int] -> Bool
 
 module Koshucode.Baala.Base.Prelude.Order
 data OrderCap a
@@ -497,7 +597,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
 type Lookup a = String -> Maybe a
 
 -- | Construct assoc list by splitting base list.
-assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
+assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
 
 -- | Check which given key is there in assoc list.
 assocExist :: Eq k => k -> [(k, a)] -> Bool
@@ -540,43 +640,55 @@ gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
 -- | Gather (<i>key</i>, <i>value</i>) to <tt>Map</tt> <i>key</i>
 --   [<i>value</i>].
 gatherToMap :: Ord k => [(k, v)] -> Map k [v]
+gatherToAssoc :: Ord k => [(k, v)] -> [(k, [v])]
 instance Show a => Show (OnceMore a)
 instance Eq a => Eq (OnceMore a)
 instance Ord a => Ord (OnceMore a)
 
 module Koshucode.Baala.Base.Prelude
 
-module Koshucode.Baala.Base.Text.CodeName
-data CodeName
-CodeFile :: FilePath -> CodeName
-CodeUri :: String -> CodeName
-CodeText :: String -> CodeName
-CodeStdin :: CodeName
+module Koshucode.Baala.Base.Text.IOPoint
+data IOPoint
 
--- | Name of code type, i.e., <tt>"file"</tt>, <tt>"url"</tt>,
---   <tt>"text"</tt>, or <tt>"stdin"</tt>.
-codeNameType :: CodeName -> String
-codeNameText :: CodeName -> String
-codeNameFrom :: String -> CodeName
+-- | Context directory and target path
+IOPointFile :: FilePath -> FilePath -> IOPoint
 
--- | Create sources from using stdin, texts itself, filenames, and urls.
-codeNameList :: Bool -> [String] -> [String] -> [CodeName]
+-- | Universal resource identifier
+IOPointUri :: String -> IOPoint
+
+-- | Code itself
+IOPointText :: (Maybe String) -> String -> IOPoint
+
+-- | Sandard input
+IOPointStdin :: IOPoint
+
+-- | Sandard output
+IOPointStdout :: IOPoint
+
+-- | Name of I/O point, i.e., <tt>"file"</tt>, <tt>"url"</tt>,
+--   <tt>"text"</tt>, <tt>"stdin"</tt>, or <tt>"stdout"</tt>.
+ioPointType :: IOPoint -> String
+ioPointText :: IOPoint -> String
+ioPointFrom :: FilePath -> FilePath -> IOPoint
+
+-- | Create I/O points from using stdin, texts itself, filenames, and urls.
+ioPointList :: Bool -> [String] -> FilePath -> [FilePath] -> [IOPoint]
 data CodePiece
-CodePiece :: Int -> CodeName -> CodePiece
+CodePiece :: Int -> IOPoint -> CodePiece
 codeNumber :: CodePiece -> Int
-codeName :: CodePiece -> CodeName
+codeName :: CodePiece -> IOPoint
 
 -- | Empty code.
 codeEmpty :: CodePiece
 
 -- | Create text code.
 codeTextOf :: String -> CodePiece
-instance Typeable CodeName
+instance Typeable IOPoint
 instance Typeable CodePiece
-instance Show CodeName
-instance Eq CodeName
-instance Ord CodeName
-instance Data CodeName
+instance Show IOPoint
+instance Eq IOPoint
+instance Ord IOPoint
+instance Data IOPoint
 instance Show CodePiece
 instance Data CodePiece
 instance Ord CodePiece
@@ -683,9 +795,12 @@ padRight :: Int -> Map String
 --   "       abc"
 --   </pre>
 padLeft :: Int -> Map String
+stringWidth :: String -> Int
 putShow :: Show a => a -> IO ()
 putShowLn :: Show a => a -> IO ()
 putLines :: [String] -> IO ()
+hPutLines :: Handle -> [String] -> IO ()
+hPutEmptyLine :: Handle -> IO ()
 readInt :: String -> Maybe Int
 readInteger :: String -> Maybe Integer
 
@@ -695,8 +810,23 @@ module Koshucode.Baala.Base.Text.Write
 type StringMap = Map String
 
 -- | Writer with string mapping.
-class Write a
-write :: Write a => StringMap -> a -> Doc
+class Write a where writeStringWith sh a = show $ writeDocWith sh a writeHtmlWith sh a = toHtml $ writeStringWith sh a
+writeDocWith :: Write a => StringMap -> a -> Doc
+writeStringWith :: Write a => StringMap -> a -> String
+writeHtmlWith :: Write a => StringMap -> a -> Html
+writeDoc :: Write a => a -> Doc
+writeString :: Write a => a -> String
+writeHtml :: Write a => a -> Html
+class ToMarkup a
+toMarkup :: ToMarkup a => a -> Markup
+toMarkup :: ToMarkup a => a -> Markup
+toHtml :: ToMarkup a => a -> Html
+div :: Html -> Html
+div_ :: AttributeValue -> Map Html
+span :: Html -> Html
+span_ :: AttributeValue -> Map Html
+renderHtmlIndented :: Html -> String
+renderHtmlCompact :: Html -> String
 writeH :: Write a => StringMap -> [a] -> Doc
 writeV :: Write a => StringMap -> [a] -> Doc
 writeColon :: Write a => StringMap -> [a] -> Doc
@@ -744,6 +874,8 @@ type Ab a = Either AbortReason a
 
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
+type AbManyMap a = a -> Ab [a]
+type AbPred a = a -> Ab Bool
 type IOAb a = IO (Ab a)
 
 -- | Construct abort reason with reason text.
@@ -760,6 +892,7 @@ abortPage :: String -> [String] -> AbortReason
 instance Show AbortReason
 instance Eq AbortReason
 instance Ord AbortReason
+instance ToMarkup AbortReason
 
 
 -- | Abortable process
@@ -777,10 +910,13 @@ module Koshucode.Baala.Base.Abort.Report
 type CommandLine = [String]
 
 -- | Stop program execution abnormally.
-abort :: CommandLine -> AbortReason -> IO c
+abort :: CommandLine -> AbortReason -> IO x
 
 -- | Print abort message.
 abortPrint :: CommandLine -> AbortReason -> IO ()
+
+-- | Convert abort reason to message lines.
+abortMessage :: CommandLine -> AbortReason -> [String]
 
 -- | Stop on error <tt>'BUG DISCOVERED'</tt>
 bug :: String -> a
@@ -843,6 +979,9 @@ TSlot :: CodePt -> Int -> String -> Token
 -- | Prefixed shorten text.
 TShort :: CodePt -> String -> String -> Token
 
+-- | Term name.
+TTermN :: CodePt -> TermName -> Token
+
 -- | Term path.
 TTerm :: CodePt -> TermType -> TermPath -> Token
 
@@ -894,6 +1033,9 @@ TextBar :: TextForm
 
 -- | Text used as name
 TextName :: TextForm
+
+-- | Text ins license section
+TextLicense :: TextForm
 data TermType
 
 -- | Normal term path
@@ -902,20 +1044,9 @@ TermTypePath :: TermType
 -- | Quoted term name
 TermTypeQuoted :: TermType
 
--- | Name of term, e.g., <tt>"file"</tt> for the term name <tt>/file</tt>.
-type TermName = String
-type TermName2 = (String, String)
-type TermName3 = (String, String, String)
-type TermName4 = (String, String, String, String)
-
--- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
---   path <tt>["r", "x"]</tt>.
-type TermPath = [TermName]
-showTermName :: Map String
-showNestedTermName :: [String] -> String
-
 -- | Get the content of token.
 tokenContent :: Token -> String
+untoken :: Token -> String
 
 -- | Text of token type, e.g., <tt>"text"</tt>, <tt>"open"</tt>.
 tokenTypeText :: Token -> String
@@ -1107,18 +1238,19 @@ module Koshucode.Baala.Base.Data.Date
 data Date
 
 -- | Date in <i>YYYY-MM-DD</i>
-Monthly :: Day -> Date
+Monthly :: MJDay -> Date
 
 -- | Date in <i>YYYY-#W-D</i>
-Weekly :: Day -> Date
+Weekly :: MJDay -> Date
 
 -- | Date in <i>YYYY-##D</i>
-Yearly :: Day -> Date
+Yearly :: MJDay -> Date
+type MJDay = Day
+type YmdTuple = (Year, Month, Day)
 type Year = Integer
 type Month = Int
 type Week = Int
 type Day = Int
-dayFromYmd :: (Year, Month, Day) -> Day
 
 -- | Create date from year, month, and day.
 dateFromYmdAb :: Year -> Month -> Day -> Ab Date
@@ -1128,9 +1260,18 @@ dateFromYwdAb :: Year -> Week -> Day -> Ab Date
 
 -- | Create date from year and day.
 dateFromYdAb :: Year -> Day -> Ab Date
-dateDay :: Date -> Day
-dateMapDay :: Map Day -> Map Date
+
+-- | Get the internal Modified Julian Day.
+dateDay :: Date -> MJDay
+dateMapDay :: Map MJDay -> Map Date
+
+-- | Convert into monthly date.
+dateAdd :: Integral n => n -> Map Date
+
+-- | Convert into weekly date.
 monthly :: Map Date
+
+-- | Convert into yearly date.
 weekly :: Map Date
 yearly :: Map Date
 instance Show Date
@@ -1140,15 +1281,32 @@ instance Eq Date
 
 module Koshucode.Baala.Base.Data.Decimal
 data Decimal
-Decimal :: (Int, Int) -> Int -> Bool -> Decimal
-decimalRatio :: Decimal -> (Int, Int)
+Decimal :: (DecimalInteger, DecimalInteger) -> Int -> Bool -> Decimal
+decimalRatio :: Decimal -> (DecimalInteger, DecimalInteger)
 decimalLength :: Decimal -> Int
 decimalApprox :: Decimal -> Bool
-decimalNum :: Decimal -> Int
-intDecimal :: Int -> Decimal
-decimalSetPoint :: Int -> AbMap Decimal
-decimalDenom :: Decimal -> Int
+type DecimalInteger = Integer
+
+-- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
+
+-- | Numerator part of decimal number.
+decimalNum :: Decimal -> DecimalInteger
+
+-- | Denominator part of decimal number.
+decimalDenom :: Decimal -> DecimalInteger
+
+-- | Change precision.
+decimalSetPoint :: Int -> AbMap Decimal
+
+-- | Convert integral number to decimal number.
+intDecimal :: DecimalInteger -> Decimal
+
+-- | Convert real-float number to decimal number.
+decimalFromRealFloat :: RealFloat n => Int -> n -> Decimal
+
+-- | Convert decimal number to read-float number.
+decimalToRealFloat :: RealFloat n => Decimal -> n
 
 -- | Make <tt>a</tt> from a string.
 type LitString a = String -> Ab a
@@ -1249,6 +1407,7 @@ instance Ord n => Ord (ParaType n)
 instance Show n => Show (ParaUnmatch n)
 instance Eq n => Eq (ParaUnmatch n)
 instance Ord n => Ord (ParaUnmatch n)
+instance Ord n => Monoid (ParaBody n a)
 
 module Koshucode.Baala.Base.Data.Time
 data Time
@@ -1263,12 +1422,12 @@ TimeYmdc :: Date -> Clock -> Time
 TimeYmd :: Date -> Time
 
 -- | Year and week
-TimeYw :: Day -> Time
+TimeYw :: MJDay -> Time
 
 -- | Year and month
-TimeYm :: Day -> Time
-timeYmd :: Day -> Time
-timeYmdc :: Day -> Clock -> Time
+TimeYm :: MJDay -> Time
+timeYmd :: MJDay -> Time
+timeYmdc :: MJDay -> Clock -> Time
 
 -- | Create time data from year and month.
 timeFromYmAb :: Year -> Month -> Ab Time
@@ -1348,11 +1507,13 @@ lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 splitClause :: Gather [(Int, a)] [a]
 codeClauseEmpty :: CodeClause a
 data CodeRoll a
-CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> CodeRoll a
+CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> WordTable -> CodeRoll a
 codeMap :: CodeRoll a -> AbMap (CodeRoll a)
 codeInputPt :: CodeRoll a -> CodePt
 codeInput :: CodeRoll a -> String
 codeOutput :: CodeRoll a -> [a]
+codeWords :: CodeRoll a -> WordTable
+type WordTable = Map String String
 
 -- | Split source text into <a>CodeLine</a> list.
 --   
@@ -1369,6 +1530,7 @@ codeRollUp :: AbMap (CodeRoll a) -> CodePiece -> String -> Ab [CodeLine a]
 
 -- | Update <a>codeInput</a> and push result element to <a>codeOutput</a>.
 codeUpdate :: String -> a -> Map (CodeRoll a)
+codeUpdateWords :: WordTable -> String -> a -> Map (CodeRoll a)
 
 -- | Change mapper of code roll.
 codeChange :: AbMap (CodeRoll a) -> Map (CodeRoll a)
@@ -1550,10 +1712,10 @@ type TTreesToAb a = [TTree] -> Ab a
 
 -- | Parse tokens with brackets into trees. Blank tokens and comments are
 --   excluded.
-tokenTrees :: [Token] -> Ab [TTree]
+ttrees :: [Token] -> Ab [TTree]
 
 -- | Wrap trees in group.
-wrapTrees :: TTreesTo TTree
+ttreeGroup :: TTreesTo TTree
 
 -- | There are six types of brackets
 data BracketType
@@ -1661,6 +1823,111 @@ instance Eq Interp
 instance Ord Interp
 instance Write InterpWord
 instance Write Interp
+
+
+-- | Judgements: a symbolic representations of affirmed or denied
+--   statements.
+module Koshucode.Baala.Base.Data.Judge
+
+-- | Judgement on type <tt>c</tt>.
+--   
+--   Judgement (or judge for short) is divided into three parts: logical
+--   quality, name of pattern, and argument. Boolean values <a>True</a> or
+--   <a>False</a> of logical quality corresponds to affirmed or denied
+--   judge. A name of judgement pattern represents certain sentence pattern
+--   that gives intepretation of data. Sentence pattern has placeholders
+--   filled by <a>Named</a> <tt>c</tt> in argument.
+data Judge c
+
+-- | <pre>
+--   |-- P /x 10 /y 20
+--   </pre>
+JudgeAffirm :: JudgePat -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-x P /x 10 /y 20
+--   </pre>
+JudgeDeny :: JudgePat -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-xx P /x 10 /y 20
+--   </pre>
+JudgeMultiDeny :: JudgePat -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-c P /x 10 +/y 20
+--   </pre>
+JudgeChange :: JudgePat -> [Term c] -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-cc P /x 10 +/y 20
+--   </pre>
+JudgeMultiChange :: JudgePat -> [Term c] -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-v P /x 10 /y 20
+--   </pre>
+JudgeViolate :: JudgePat -> [Term c] -> Judge c
+
+-- | Name of judgement pattern, in other words, name of propositional
+--   function.
+type JudgePat = String
+
+-- | Return pattern of judgement.
+judgePat :: Judge c -> JudgePat
+
+-- | Return term list of judgement.
+judgeTerms :: Judge c -> [Term c]
+judgeTermsMap :: ([Term a] -> [Term b]) -> Judge a -> Judge b
+
+-- | Prepend a term into judgement.
+judgeCons :: Term c -> Map (Judge c)
+
+-- | Sort terms in alphabetical order.
+sortJudgeTerms :: Ord c => Map (Judge c)
+
+-- | Construct judgement from its pattern and terms.
+type JudgeOf c = JudgePat -> [Term c] -> Judge c
+
+-- | Construct affirmative judgement.
+affirm :: JudgeOf c
+
+-- | Construct denial judgement.
+deny :: JudgeOf c
+
+-- | Affirm judgement, i.e., change logical quality to affirmative.
+affirmJudge :: Map (Judge c)
+
+-- | Deny judgement, i.e., change logical quality to denial.
+denyJudge :: Map (Judge c)
+
+-- | Test which judgement is affirmed.
+isAffirmative :: Judge c -> Bool
+
+-- | Test which judgement is denied.
+isDenial :: Judge c -> Bool
+
+-- | Test which judgement is for violation.
+isViolative :: Judge c -> Bool
+writeDownJudge :: Write c => StringMap -> Judge c -> String
+writeDownTerms :: Write c => StringMap -> [Term c] -> String
+textualjudge :: Write c => StringMap -> Judge c -> Judge String
+judgeText :: Judge String -> String
+termText :: TermName -> String -> String
+termsText :: [Term String] -> String
+putJudge :: Write c => Judge c -> IO ()
+hPutJudge :: Write c => Handle -> Judge c -> IO ()
+instance Show c => Show (Judge c)
+instance Functor Judge
+instance Ord c => Ord (Judge c)
+instance Ord c => Eq (Judge c)
+
+module Koshucode.Baala.Base.Data.About
+data About c
+About :: [Term c] -> About c
+type AboutJudges c = (Maybe (About c), [Judge c])
+instance Show c => Show (About c)
+instance Write c => Write (About c)
 
 module Koshucode.Baala.Base.Data.Type
 
@@ -1796,6 +2063,7 @@ headNested :: Head -> [(TermName, Head)]
 
 -- | Index of a term.
 headIndex1 :: Head -> TermPath -> [Int]
+headTypes :: Head -> [Type]
 
 -- | Add term name to head.
 headCons :: TermName -> Map Head
@@ -1811,6 +2079,53 @@ headMapName :: Map TermName -> Map Head
 headUp :: Map Head
 headAlign :: Head -> Head -> Map [c]
 bodyAlign :: Head -> Head -> Map [[c]]
+data HeadLR c
+HeadLR :: [Int] -> [Int] -> Bool -> [TermName] -> [TermName] -> [TermName] -> [TermName] -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> ([c], [c])) -> ([c] -> ([c], [c])) -> HeadLR c
+
+-- | Indicies of right-shared part
+headLShareIndex :: HeadLR c -> [Int]
+
+-- | Indicies of left-shared part
+headRShareIndex :: HeadLR c -> [Int]
+
+-- | Whether shared part is empty
+headDisjoint :: HeadLR c -> Bool
+
+-- | Left-side term names
+headLSideNames :: HeadLR c -> [TermName]
+
+-- | Left-shared term names
+headLShareNames :: HeadLR c -> [TermName]
+
+-- | Right-shared term names
+headRShareNames :: HeadLR c -> [TermName]
+
+-- | Right-side term names
+headRSideNames :: HeadLR c -> [TermName]
+
+-- | Pick left-side part from left contents
+headLSide :: HeadLR c -> [c] -> [c]
+
+-- | Pick left-shared part from left contents
+headLShare :: HeadLR c -> [c] -> [c]
+
+-- | Pick right-shared part from right contents
+headRShare :: HeadLR c -> [c] -> [c]
+
+-- | Pick right-side part from right contents
+headRSide :: HeadLR c -> [c] -> [c]
+headRForward :: HeadLR c -> [c] -> [c]
+headRBackward :: HeadLR c -> [c] -> [c]
+
+-- | Pick right-shared and right-side part
+headRSplit :: HeadLR c -> [c] -> ([c], [c])
+
+-- | Pick right-shared part and right contents
+headRAssoc :: HeadLR c -> [c] -> ([c], [c])
+type HeadLRMap c = HeadLR c -> [c] -> [c]
+type HeadLRMap2 a b = (HeadLRMap a, HeadLRMap b)
+headLR :: [TermName] -> [TermName] -> HeadLR a
+headLROrd :: [TermName] -> [TermName] -> HeadLR a
 instance Show Head
 instance Eq Head
 instance Ord Head
@@ -1847,107 +2162,54 @@ reldee :: Rel c
 
 -- | The empty relation with all terms. This is fake.
 reldau :: Rel c
+class SelectRel r
+selectRel :: SelectRel r => r c -> JudgePat -> [TermName] -> Rel c
+
+-- | Convert relation to list of judges.
+judgesFromRel :: JudgeOf c -> JudgePat -> Rel c -> [Judge c]
 instance Show c => Show (Rel c)
 instance Write c => Write (Rel c)
+instance Functor Rel
 instance Ord c => Eq (Rel c)
 instance Ord c => Ord (Rel c)
 
 
--- | Judgements: a symbolic representations of affirmed or denied
---   statements.
-module Koshucode.Baala.Base.Data.Judge
-
--- | Judgement on type <tt>c</tt>.
---   
---   Judgement (or judge for short) is divided into three parts: logical
---   quality, name of pattern, and argument. Boolean values <a>True</a> or
---   <a>False</a> of logical quality corresponds to affirmed or denied
---   judge. A name of judgement pattern represents certain sentence pattern
---   that gives intepretation of data. Sentence pattern has placeholders
---   filled by <a>Named</a> <tt>c</tt> in argument.
-data Judge c
-JudgeAffirm :: JudgePat -> [Named c] -> Judge c
-JudgeDeny :: JudgePat -> [Named c] -> Judge c
-JudgeMultiDeny :: JudgePat -> [Named c] -> Judge c
-JudgeChange :: JudgePat -> [Named c] -> [Named c] -> Judge c
-JudgeMultiChange :: JudgePat -> [Named c] -> [Named c] -> Judge c
-JudgeViolate :: JudgePat -> [Named c] -> Judge c
-type JudgeOf c = JudgePat -> [Named c] -> Judge c
-
--- | Name of judgement pattern.
-type JudgePat = String
-class SelectRel r
-selectRel :: SelectRel r => r c -> JudgePat -> [TermName] -> Rel c
-judgePat :: Judge c -> JudgePat
-judgeTerms :: Judge c -> [Named c]
-judgeTermsMap :: ([Named a] -> [Named b]) -> Judge a -> Judge b
-judgeCons :: Named c -> Map (Judge c)
-
--- | Convert relation to list of judges.
-judgesFromRel :: JudgeOf c -> JudgePat -> Rel c -> [Judge c]
-
--- | Sort terms in alphabetical order.
-abcJudge :: Ord c => Map (Judge c)
-
--- | Construct affirmative judgement.
-affirm :: JudgeOf c
-
--- | Construct denial judgement.
-deny :: JudgeOf c
-
--- | Affirm judgement, i.e., change logical quality to affirmative.
-affirmJudge :: Map (Judge c)
-
--- | Deny judgement, i.e., change logical quality to denial.
-denyJudge :: Map (Judge c)
-
--- | Test that judgement is affirmd.
-isAffirmative :: Judge c -> Bool
-
--- | Test that judgement is denied.
-isDenial :: Judge c -> Bool
-isViolative :: Judge c -> Bool
-instance Show c => Show (Judge c)
-instance (Ord c, Write c) => Write (Judge c)
-instance Functor Judge
-instance Ord c => Ord (Judge c)
-instance Ord c => Eq (Judge c)
-
-
--- | Output judgements.
-module Koshucode.Baala.Base.Data.Output
-type OutputResult c = ([OutputChunks c], [OutputChunks c])
-type OutputChunks c = Short [OutputChunk c]
-data OutputChunk c
-OutputJudge :: [Judge c] -> OutputChunk c
-OutputComment :: [String] -> OutputChunk c
-
--- | Print judges to <a>stdout</a>.
-putJudges :: (Ord c, Write c) => Int -> [Judge c] -> IO Int
-hPutJudges :: (Ord c, Write c) => Handle -> Int -> [Judge c] -> IO Int
-
--- | Print result of calculation, and return status.
-hPutOutputResult :: (Ord c, Write c) => Handle -> OutputResult c -> IO Int
-instance Show c => Show (OutputChunk c)
-instance Ord c => Eq (OutputChunk c)
-instance Ord c => Ord (OutputChunk c)
-
-
 -- | Content type for nested relations.
 module Koshucode.Baala.Base.Data.Mono
-data Mono a
-MonoType :: a -> Mono a
-MonoNest :: (Rel (Mono a)) -> Mono a
-type RelText = Rel (Mono String)
-isMonoType :: Mono a -> Bool
-isMonoNest :: Mono a -> Bool
-gMonoType :: Mono a -> a
-gMonoNest :: Mono a -> Rel (Mono a)
-pMonoNest :: Rel (Mono a) -> Mono a
-pMonoType :: a -> Mono a
-instance Show a => Show (Mono a)
-instance Ord a => Eq (Mono a)
-instance Ord a => Ord (Mono a)
+
+-- | Monotype relation.
+data Mono c
+
+-- | Terminal content
+MonoTerm :: c -> Mono c
+
+-- | Nested relation
+MonoNest :: (RelMono c) -> Mono c
+type RelMono c = Rel (Mono c)
+
+-- | Text relation.
+type RelText = RelMono String
+
+-- | Test terminal content.
+isMonoTerm :: Mono c -> Bool
+
+-- | Test nested relation.
+isMonoNest :: Mono c -> Bool
+
+-- | Get terminal content.
+gMonoTerm :: Mono c -> c
+
+-- | Get nested relation.
+gMonoNest :: Mono c -> RelMono c
+
+-- | Put terminal content.
+pMonoTerm :: c -> Mono c
+
+-- | Put nested relation.
+pMonoNest :: RelMono c -> Mono c
+instance Show c => Show (Mono c)
+instance Ord c => Eq (Mono c)
+instance Ord c => Ord (Mono c)
 
 
 -- | Definitions of data for Koshucode.

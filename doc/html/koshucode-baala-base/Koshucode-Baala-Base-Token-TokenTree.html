@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -162,8 +162,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Ab</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:tokenTrees"
-	    >tokenTrees</a
+	  ><a href="#v:ttrees"
+	    >ttrees</a
 	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
@@ -172,8 +172,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >TTree</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:wrapTrees"
-	    >wrapTrees</a
+	  ><a href="#v:ttreeGroup"
+	    >ttreeGroup</a
 	    > :: <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TTreesTo"
 	    >TTreesTo</a
 	    > <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
@@ -186,8 +186,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >CodePt</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermType"
 	    >TermType</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TermLeafName"
+	    >TermLeafName</a
+	    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
 	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -198,7 +210,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >TermLeafPath</a
 	    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
 	    >CodePt</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
@@ -574,15 +586,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:tokenTrees" class="def"
-	    >tokenTrees</a
+	  ><a name="v:ttrees" class="def"
+	    >ttrees</a
 	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
 	    >TTree</a
-	    >] <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#tokenTrees" class="link"
+	    >] <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#ttrees" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -593,13 +605,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:wrapTrees" class="def"
-	    >wrapTrees</a
+	  ><a name="v:ttreeGroup" class="def"
+	    >ttreeGroup</a
 	    > :: <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TTreesTo"
 	    >TTreesTo</a
 	    > <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
 	    >TTree</a
-	    > <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#wrapTrees" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#ttreeGroup" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -617,7 +629,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >CodePt</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermType"
 	    >TermType</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
@@ -629,11 +641,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
+	  >pattern  <a name="v:TermLeafName" class="def"
+	    >TermLeafName</a
+	    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermName"
+	    >TermName</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#TermLeafName" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  >pattern  <a name="v:TermLeafPath" class="def"
 	    >TermLeafPath</a
 	    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
 	    >CodePt</a
-	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
+	    > <a href="Koshucode-Baala-Base-Token-Term.html#t:TermPath"
 	    >TermPath</a
 	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a

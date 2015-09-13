@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,6 +81,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></li
 	  ><li
 	  ><a href="#g:7"
+	    >GHC.IO.Encoding</a
+	    ></li
+	  ><li
+	  ><a href="#g:8"
+	    >System.Exit</a
+	    ></li
+	  ><li
+	  ><a href="#g:9"
+	    >System.IO</a
+	    ></li
+	  ><li
+	  ><a href="#g:10"
 	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
@@ -164,6 +176,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:isPrefixOf"
 	    >isPrefixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isInfixOf"
+	    >isInfixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isSuffixOf"
+	    >isSuffixOf</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 	    >Eq</a
 	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -279,6 +307,52 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><a href="#v:swap"
 	    >swap</a
 	    > ::  (a, b) -&gt; (b, a)</li
+	  ><li class="src short"
+	  ><a href="#v:setLocaleUtf8"
+	    >setLocaleUtf8</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ExitCode"
+	    >ExitCode</a
+	    > :: *<ul class="subs"
+	    ><li
+	      >= <a href="#v:ExitSuccess"
+		>ExitSuccess</a
+		></li
+	      ><li
+	      >| <a href="#v:ExitFailure"
+		>ExitFailure</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:exitWith"
+	    >exitWith</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:exitCode"
+	    >exitCode</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    >ExitCode</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stdout"
+	    >stdout</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -654,6 +728,59 @@ and otherwise do nothing.</p
 		></code
 	      >
  iff the first list is a prefix of the second.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isInfixOf" class="def"
+	    >isInfixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:isInfixOf"
+		>isInfixOf</a
+		></code
+	      > function takes two lists and returns <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      >
+ iff the first list is contained, wholly and intact,
+ anywhere within the second.</p
+	    ><p
+	    >Example:</p
+	    ><pre
+	    >isInfixOf &quot;Haskell&quot; &quot;I really like Haskell.&quot; == True
+isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSuffixOf" class="def"
+	    >isSuffixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:isSuffixOf"
+		>isSuffixOf</a
+		></code
+	      > function takes two lists and returns <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      >
+ iff the first list is a suffix of the second.
+ Both lists must be finite.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1090,7 +1217,7 @@ and otherwise do nothing.</p
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
 		    >ByteString</a
 		    ></td
 		  ><td class="doc empty"
@@ -1100,7 +1227,7 @@ and otherwise do nothing.</p
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
 		    >ByteString</a
 		    ></td
 		  ><td class="doc empty"
@@ -1153,6 +1280,30 @@ and otherwise do nothing.</p
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
 		    > Text</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > AttributeValue</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > Attribute</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > ChoiceString</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1305,6 +1456,16 @@ and otherwise do nothing.</p
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > (MarkupM a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
 		    > b =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
 		    > (a -&gt; b)</td
@@ -1354,6 +1515,18 @@ and otherwise do nothing.</p
 		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 		    >Map</a
 		    > k v)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > n =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > (<a href="Koshucode-Baala-Base-Data-Para.html#t:ParaBody"
+		    >ParaBody</a
+		    > n a)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1481,6 +1654,277 @@ and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><h1 id="g:7"
+	>GHC.IO.Encoding</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:setLocaleUtf8" class="def"
+	    >setLocaleUtf8</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a href="src/Koshucode-Baala-Base-Prelude-Import.html#setLocaleUtf8" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:8"
+	>System.Exit</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ExitCode" class="def"
+	    >ExitCode</a
+	    > :: *</p
+	  ><div class="doc"
+	  ><p
+	    >Defines the exit codes that a program can return.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ExitSuccess" class="def"
+		  >ExitSuccess</a
+		  ></td
+		><td class="doc"
+		><p
+		  >indicates successful termination;</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ExitFailure" class="def"
+		  >ExitFailure</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		  >Int</a
+		  ></td
+		><td class="doc"
+		><p
+		  >indicates program failure with an exit code.
+ The exact interpretation of the code is
+ operating-system dependent.  In particular, some values
+ may be prohibited (e.g. 0 on a POSIX-compliant system).</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ExitCode" class="caption collapser" onclick="toggleSection('i:ExitCode')"
+	    >Instances</p
+	    ><div id="section.i:ExitCode" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Read.html#t:Read"
+		    >Read</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception-Base.html#t:Exception"
+		    >Exception</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > * <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		    >ExitCode</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:exitWith" class="def"
+	    >exitWith</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > a</p
+	  ><div class="doc"
+	  ><p
+	    >Computation <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      > <code
+	      >code</code
+	      > throws <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		>ExitCode</a
+		></code
+	      > <code
+	      >code</code
+	      >.
+ Normally this terminates the program, returning <code
+	      >code</code
+	      > to the
+ program's caller.</p
+	    ><p
+	    >On program termination, the standard <code
+	      >Handle</code
+	      >s <code
+	      >stdout</code
+	      > and
+ <code
+	      >stderr</code
+	      > are flushed automatically; any other buffered <code
+	      >Handle</code
+	      >s
+ need to be flushed manually, otherwise the buffered data will be
+ discarded.</p
+	    ><p
+	    >A program that fails in any other way is treated as if it had
+ called <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-Exit.html#v:exitFailure"
+		>exitFailure</a
+		></code
+	      >.
+ A program that terminates successfully without calling <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      >
+ explicitly is treated as it it had called <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      > <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:ExitSuccess"
+		>ExitSuccess</a
+		></code
+	      >.</p
+	    ><p
+	    >As an <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		>ExitCode</a
+		></code
+	      > is not an <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO-Error.html#t:IOError"
+		>IOError</a
+		></code
+	      >, <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      > bypasses
+ the error handling in the <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+		>IO</a
+		></code
+	      > monad and cannot be intercepted by
+ <code
+	      >catch</code
+	      > from the <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html"
+	      >Prelude</a
+	      >.  However it is a <code
+	      >SomeException</code
+	      >, and can
+ be caught using the functions of <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception.html"
+	      >Control.Exception</a
+	      >.  This means
+ that cleanup computations added with <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception.html#v:bracket"
+		>bracket</a
+		></code
+	      >
+ (from <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception.html"
+	      >Control.Exception</a
+	      >) are also executed properly on <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      >.</p
+	    ><p
+	    >Note: in GHC, <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      > should be called from the main program
+ thread in order to exit the process.  When called from another
+ thread, <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:exitWith"
+		>exitWith</a
+		></code
+	      > will throw an <code
+	      >ExitException</code
+	      > as normal, but the
+ exception will not cause the process itself to exit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:exitCode" class="def"
+	    >exitCode</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    >ExitCode</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#exitCode" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:9"
+	>System.IO</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stdout" class="def"
+	    >stdout</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A handle managing output to the Haskell program's standard output channel.</p
+	    ></div
+	  ></div
+	><h1 id="g:10"
 	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"
