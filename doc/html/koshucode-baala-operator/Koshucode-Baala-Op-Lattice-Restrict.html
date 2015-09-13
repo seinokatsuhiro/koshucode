@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.102.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-operator-0.118.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -65,10 +65,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >sub</a
+	    >some-meet</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
+	    >none-meet</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >sub</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
 	    >compose</a
 	    ></li
 	  ></ul
@@ -140,6 +148,46 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >Ord</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consSomeMeet"
+	    >consSomeMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapSomeMeet"
+	    >relmapSomeMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consNoneMeet"
+	    >consNoneMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapNoneMeet"
+	    >relmapNoneMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consSub"
@@ -287,6 +335,66 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    ></p
 	  ></div
 	><h1 id="g:3"
+	>some-meet</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consSomeMeet" class="def"
+	    >consSomeMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Restrict.html#consSomeMeet" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapSomeMeet" class="def"
+	    >relmapSomeMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Restrict.html#relmapSomeMeet" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>none-meet</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consNoneMeet" class="def"
+	    >consNoneMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Restrict.html#consNoneMeet" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapNoneMeet" class="def"
+	    >relmapNoneMeet</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Restrict.html#relmapNoneMeet" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
 	>sub</h1
 	><div class="top"
 	><p class="src"
@@ -328,7 +436,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:6"
 	>compose</h1
 	><div class="top"
 	><p class="src"

@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-operator
-@version 0.102.0.0
+@version 0.118.0.0
 
 module Koshucode.Baala.Op.Builtin.Define
 
@@ -108,10 +108,11 @@ termNamesCo :: [TTree] -> Ab (Bool, [TermName])
 -- | Extract a list of name-and-name pairs.
 --   
 --   <pre>
---   &gt;&gt;&gt; termNamePairs . B.tt $ "/a /x /b /y"
+--   &gt;&gt;&gt; termNamePairs =&lt;&lt; B.tt "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
 --   </pre>
 termNamePairs :: [TTree] -> Ab [TermName2]
+termNamesColon :: [TTree] -> Ab [[TermName]]
 picker :: Head -> [TermName] -> Map [c]
 
 
@@ -154,6 +155,7 @@ getOptRelmap :: Relmap c -> Intmed c -> String -> Ab (Relmap c)
 
 -- | Get a term name from named attribute.
 getTerm :: RopGet c TermName
+getTerm2 :: RopGet c (TermName, TermName)
 getTermOpt :: RopGet c (Maybe TermName)
 
 -- | Get list of term names from named attribute.
@@ -164,6 +166,7 @@ getTermsCo :: RopGet c (Bool, [TermName])
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [TermName2]
+getTermsColon :: RopGet c [[TermName]]
 getTermTrees :: RopGet c [Named TTree]
 
 module Koshucode.Baala.Op.DepRank
@@ -210,9 +213,14 @@ consContents :: Ord c => RopCons c
 relmapContents :: Ord c => Intmed c -> TermName -> Relmap c
 consDepRank :: (Ord c, CDec c) => RopCons c
 relmapDepRank :: (Ord c, CDec c) => Intmed c -> TermName3 -> Relmap c
+consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
+relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
 consSize :: CDec c => RopCons c
 relmapSize :: CDec c => Intmed c -> TermName -> Relmap c
 relkitSize :: CDec c => TermName -> RelkitFlow c
+consEqlize :: Ord c => RopCons c
+relmapEqlize :: Ord c => Intmed c -> Relmap c
+relkitEqlize :: Ord c => RelkitFlow c
 consDumpTree :: CDec c => RopCons c
 
 module Koshucode.Baala.Op.Meta
@@ -312,6 +320,12 @@ relmapMove :: Intmed c -> ([TermName], [TermName]) -> Relmap c
 relkitMove :: ([TermName], [TermName]) -> RelkitFlow c
 consRename :: RopCons c
 relmapRename :: Intmed c -> [TermName2] -> Relmap c
+consForward :: RopCons c
+relmapForward :: Intmed c -> [TermName] -> Relmap c
+consBackward :: RopCons c
+relmapBackward :: Intmed c -> [TermName] -> Relmap c
+consLexical :: RopCons c
+relmapLexical :: Intmed c -> Relmap c
 
 module Koshucode.Baala.Op.Peripheral
 
@@ -326,6 +340,12 @@ ropsPeripheral :: CContent c => [Rop c]
 consMember :: (Ord c, CSet c, CList c, CText c) => RopCons c
 relmapMember :: (Ord c, CSet c, CList c, CText c) => Intmed c -> TermName2 -> Relmap c
 relkitMember :: (Ord c, CSet c, CList c, CText c) => TermName2 -> RelkitFlow c
+consIndexElem :: (Ord c, CSet c, CList c, CText c, CDec c) => RopCons c
+relmapIndexElem :: (Ord c, CSet c, CList c, CText c, CDec c) => Intmed c -> TermName3 -> Relmap c
+relkitIndexElem :: (Ord c, CSet c, CList c, CText c, CDec c) => TermName3 -> RelkitFlow c
+consUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => RopCons c
+relmapUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => Intmed c -> (TermName, [TermName]) -> Relmap c
+relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermName, [TermName]) -> RelkitFlow c
 consRdf :: RopCons c
 consAssn :: CAssn c => RopCons c
 relmapAssn :: CAssn c => Intmed c -> ([TermName], TermName) -> Relmap c
@@ -406,6 +426,10 @@ relkitSome :: Ord c => RelkitBinary c
 consNone :: Ord c => RopCons c
 relmapNone :: Ord c => Intmed c -> Map (Relmap c)
 relkitNone :: Ord c => RelkitBinary c
+consSomeMeet :: Ord c => RopCons c
+relmapSomeMeet :: Ord c => Intmed c -> Relmap c -> Relmap c
+consNoneMeet :: Ord c => RopCons c
+relmapNoneMeet :: Ord c => Intmed c -> Relmap c -> Relmap c
 consSub :: Ord c => RopCons c
 relmapSub :: Ord c => Intmed c -> Map (Relmap c)
 relkitSub :: Ord c => RelkitBinary c
@@ -488,14 +512,14 @@ relkitSliceUp :: CRel c => RelkitBinary c
 
 -- | Derived operators for nested relations.
 module Koshucode.Baala.Op.Nest.Deriv
-consGroupBy :: (Ord c, CRel c) => RopCons c
+consOppGroup :: (Ord c, CRel c) => RopCons c
 consJoinUp :: Ord c => RopCons c
 relmapJoinUp :: Ord c => Intmed c -> [TermName] -> Relmap c
-consHang :: (Ord c, CRel c) => RopCons c
+consPickGroup :: (Ord c, CRel c) => RopCons c
 consNest :: (Ord c, CRel c) => RopCons c
 relmapNest :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
-consUnnest :: (Ord c, CRel c) => RopCons c
-relmapUnnest :: (Ord c, CRel c) => Intmed c -> TermName -> Relmap c
+consUngroup :: (Ord c, CRel c) => RopCons c
+relmapUngroup :: (Ord c, CRel c) => Intmed c -> TermName -> Relmap c
 
 
 -- | Relational operators for nested relations.
