@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -94,30 +94,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:CalcContent"
-	    >CalcContent</a
+	    > <a href="#t:ContentCons"
+	    >ContentCons</a
 	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
 	    >TTreeToAb</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:literal"
-	    >literal</a
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ContentCalc"
+	    >ContentCalc</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:contentCons"
+	    >contentCons</a
 	    > :: <span class="keyword"
 	    >forall</span
 	    > c. <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
-	    >CalcContent</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
-	    >TTreeToAb</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCalc"
+	    >ContentCalc</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCons"
+	    >ContentCons</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:treesToJudge"
 	    >treesToJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
-	    >CalcContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCalc"
+	    >ContentCalc</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
 	    >AssertType</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
@@ -184,11 +192,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:CalcContent" class="def"
-	    >CalcContent</a
+	    > <a name="t:ContentCons" class="def"
+	    >ContentCons</a
 	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
 	    >TTreeToAb</a
-	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#CalcContent" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#ContentCons" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Content constructor.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ContentCalc" class="def"
+	    >ContentCalc</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#ContentCalc" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -198,17 +222,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:literal" class="def"
-	    >literal</a
+	  ><a name="v:contentCons" class="def"
+	    >contentCons</a
 	    > :: <span class="keyword"
 	    >forall</span
 	    > c. <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
-	    >CalcContent</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
-	    >TTreeToAb</a
-	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#literal" class="link"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCalc"
+	    >ContentCalc</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCons"
+	    >ContentCons</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#contentCons" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -222,8 +246,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >treesToJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
-	    >CalcContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:ContentCalc"
+	    >ContentCalc</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
 	    >AssertType</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
@@ -469,21 +493,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let trees = B.tokenTrees . B.tokens
+	      >let trees = B.ttrees . B.tokens
 </code
 	      ></strong
 	    ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lit  = literal [] :: B.TTree -&gt; B.Ab VContent
+	      >let lit  = contentCons [] :: B.TTree -&gt; B.Ab VContent
 </code
 	      ></strong
 	    ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lits = litColon lit . trees
+	      >let lits = consContents lit . trees
 </code
 	      ></strong
 	    ></pre

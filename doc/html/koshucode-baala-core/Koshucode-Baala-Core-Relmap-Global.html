@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -132,6 +132,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>Time</a
 		></li
 	      ><li
+	      ><a href="#v:globalResult"
+		>globalResult</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
+		>Result</a
+		> c</li
+	      ><li
+	      ><a href="#v:globalOption"
+		>globalOption</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Option.html#t:Option"
+		>Option</a
+		> c</li
+	      ><li
 	      ><a href="#v:globalSourceCount"
 		>globalSourceCount</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
@@ -140,7 +152,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      ><a href="#v:globalSources"
 		>globalSources</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-CodeName.html#t:CodePiece"
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
 		>CodePiece</a
 		>]</li
 	      ><li
@@ -220,9 +232,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >InfixHeight</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:globalAbort"
+	    >globalAbort</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	    >Global'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > a</li
+	  ><li class="src short"
 	  ><a href="#v:global-39-"
 	    >global'</a
-	    > ::  h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c) =&gt; h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
 	    >Global'</a
 	    > h c</li
 	  ><li class="src short"
@@ -410,6 +436,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 			>Invocation time</p
 			></dd
 		      ><dt class="src"
+		      ><a name="v:globalResult" class="def"
+			>globalResult</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
+			>Result</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Result template</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:globalOption" class="def"
+			>globalOption</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Option.html#t:Option"
+			>Option</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Options</p
+			></dd
+		      ><dt class="src"
 		      ><a name="v:globalSourceCount" class="def"
 			>globalSourceCount</a
 			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
@@ -422,7 +468,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dt class="src"
 		      ><a name="v:globalSources" class="def"
 			>globalSources</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-CodeName.html#t:CodePiece"
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
 			>CodePiece</a
 			>]</dt
 		      ><dd class="doc"
@@ -568,9 +614,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:globalAbort" class="def"
+	    >globalAbort</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	    >Global'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > a <a href="src/Koshucode-Baala-Core-Relmap-Global.html#globalAbort" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:global-39-" class="def"
 	    >global'</a
-	    > ::  h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c) =&gt; h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
 	    >Global'</a
 	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Global.html#global%27" class="link"
 	    >Source</a

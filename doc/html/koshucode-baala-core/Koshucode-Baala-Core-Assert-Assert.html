@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.118.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -104,23 +104,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		>JudgePat</a
 		></li
 	      ><li
-	      ><a href="#v:assOption"
-		>assOption</a
-		> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:TokenPara"
-		>TokenPara</a
-		></li
-	      ><li
 	      ><a href="#v:assToken"
 		>assToken</a
 		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
 	      ><li
-	      ><a href="#v:assTree"
-		>assTree</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
-		>TTree</a
-		>]</li
+	      ><a href="#v:assPara"
+		>assPara</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-LexmapTrees.html#t:TTreePara"
+		>TTreePara</a
+		></li
 	      ><li
 	      ><a href="#v:assRelmap"
 		>assRelmap</a
@@ -137,26 +131,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		> h c</li
 	      ></ul
 	    >}</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:TokenPara"
-	    >TokenPara</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Para.html#t:Para"
-	    >Para</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
-	    >TTree</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:tokenPara"
-	    >tokenPara</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Assert-Assert.html#t:TokenPara"
-	    >TokenPara</a
-	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -266,16 +240,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			>Pattern of judgement</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assOption" class="def"
-			>assOption</a
-			> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:TokenPara"
-			>TokenPara</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Assert option</p
-			></dd
-		      ><dt class="src"
 		      ><a name="v:assToken" class="def"
 			>assToken</a
 			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -286,15 +250,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			>Source token list</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assTree" class="def"
-			>assTree</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
-			>TTree</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Token relmap</p
-			></dd
+		      ><a name="v:assPara" class="def"
+			>assPara</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-LexmapTrees.html#t:TTreePara"
+			>TTreePara</a
+			></dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
 		      ><dt class="src"
 		      ><a name="v:assRelmap" class="def"
 			>assRelmap</a
@@ -361,34 +323,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		></table
 	      ></div
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:TokenPara" class="def"
-	    >TokenPara</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Para.html#t:Para"
-	    >Para</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > <a href="src/Koshucode-Baala-Core-Assert-Assert.html#TokenPara" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:tokenPara" class="def"
-	    >tokenPara</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Assert-Assert.html#t:TokenPara"
-	    >TokenPara</a
-	    > <a href="src/Koshucode-Baala-Core-Assert-Assert.html#tokenPara" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	><h1 id="g:2"
 	>Short assertion</h1

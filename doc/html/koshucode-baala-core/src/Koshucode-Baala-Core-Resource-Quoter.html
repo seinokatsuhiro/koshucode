@@ -43,7 +43,7 @@
 <a name="line-34"></a>    <span class='hs-keyword'>where</span>
 <a name="line-35"></a>      <span class='hs-varid'>dispatch</span> <span class='hs-varid'>src</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>resQ</span> <span class='hs-varid'>src</span> <span class='hs-comment'>-- relmapQ src</span>
 <a name="line-36"></a>      <span class='hs-varid'>resQ</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>resIncludeQ</span> <span class='hs-varid'>fullQ</span> <span class='hs-varop'>.</span> <span class='hs-comment'>{- C.consClause -}</span> <span class='hs-varid'>undefined</span>
-<a name="line-37"></a>      <span class='hs-comment'>--relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees</span>
+<a name="line-37"></a>      <span class='hs-comment'>--relmapQ  = consFullRelmapQ fullQ . lx [] . ttrees</span>
 <a name="line-38"></a>
 <a name="line-39"></a><a name="resIncludeQ"></a><span class='hs-comment'>{- Construct ExpQ of Resource
 <a name="line-40"></a>   Tokens like @name in resource context and relmap context
@@ -54,7 +54,7 @@
 <a name="line-45"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TH</span><span class='hs-varop'>.</span><span class='hs-conid'>ExpQ</span>      <span class='hs-comment'>-- ^ ExpQ of 'Resource'</span>
 <a name="line-46"></a><span class='hs-definition'>resIncludeQ</span> <span class='hs-varid'>fullQ</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span>
 <a name="line-47"></a>    <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>|</span> <span class='hs-varid'>either</span> <span class='hs-varid'>consError</span> <span class='hs-varid'>id</span>
-<a name="line-48"></a>         <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resInclude</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resEmpty</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>codeTextOf</span> <span class='hs-str'>"qq"</span><span class='hs-layout'>)</span>
+<a name="line-48"></a>         <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resInclude</span> <span class='hs-str'>""</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resEmpty</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>codeTextOf</span> <span class='hs-str'>"qq"</span><span class='hs-layout'>)</span>
 <a name="line-49"></a>               <span class='hs-varop'>$</span><span class='hs-layout'>(</span><span class='hs-conid'>TH</span><span class='hs-varop'>.</span><span class='hs-varid'>dataToExpQ</span> <span class='hs-varid'>plain</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span><span class='hs-keyglyph'>]</span>
 <a name="line-50"></a>
 <a name="line-51"></a><a name="consError"></a><span class='hs-comment'>{- construction error -}</span>
