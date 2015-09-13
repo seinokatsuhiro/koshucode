@@ -3,7 +3,7 @@
 
 -- | Term-content expression.
 
-module Koshucode.Baala.Core.Content.Cox
+module Koshucode.Baala.Core.Church.Cox
   ( -- * Data types
     Cox (..), Cox2, Cox3, Cox4,
     MaybeCox, NamedCox, CopCalc, CoxTag,

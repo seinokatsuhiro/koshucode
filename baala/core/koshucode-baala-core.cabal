@@ -55,13 +55,14 @@ library
         Koshucode.Baala.Core.Assert.RelTable
         Koshucode.Baala.Core.Assert.Run
 
+        Koshucode.Baala.Core.Church.Build
+        Koshucode.Baala.Core.Church.Cop
+        Koshucode.Baala.Core.Church.Cox
+        Koshucode.Baala.Core.Church.Run
+
         Koshucode.Baala.Core.Content
-        Koshucode.Baala.Core.Content.Build
-        Koshucode.Baala.Core.Content.Cop
-        Koshucode.Baala.Core.Content.Cox
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Literal
-        Koshucode.Baala.Core.Content.Run
         Koshucode.Baala.Core.Content.Tree
 
         Koshucode.Baala.Core.Lexmap

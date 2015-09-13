@@ -4,15 +4,14 @@
 
 -- | Term-content calcutation.
 
-module Koshucode.Baala.Core.Content.Build
+module Koshucode.Baala.Core.Church.Build
   ( coxBuild, coxForm,
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Content.Class     as C
-import qualified Koshucode.Baala.Core.Content.Cop       as C
-import qualified Koshucode.Baala.Core.Content.Cox       as C
-import qualified Koshucode.Baala.Core.Content.Literal   as C
+import qualified Koshucode.Baala.Core.Content           as C
+import qualified Koshucode.Baala.Core.Church.Cop        as C
+import qualified Koshucode.Baala.Core.Church.Cox        as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Construct content expression from token tree

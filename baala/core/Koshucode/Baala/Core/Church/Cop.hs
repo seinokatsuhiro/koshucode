@@ -3,7 +3,7 @@
 
 -- | Term-content operator.
 
-module Koshucode.Baala.Core.Content.Cop
+module Koshucode.Baala.Core.Church.Cop
   ( -- * Operator
     Cop (..), CopCox, CopTree, copName, 
   
@@ -14,8 +14,8 @@ module Koshucode.Baala.Core.Content.Cop
     CopSet (..), CopFind, copset, copsetFill,
   ) where
 
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Core.Content.Cox  as C
+import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Core.Church.Cox  as C
 
 
 -- ----------------------  Operator
