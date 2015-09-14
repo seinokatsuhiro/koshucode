@@ -1,9 +1,10 @@
 @echo off
 rem
-rem  Build and install the koshu command using cabal sandbox.
+rem  Build and install 'koshu' inside sandbox
 rem
 
-set CAB_BIN=%CD%\cabal\sandbox\bin
+set CAB_SANDBOX=%CD%\..\cabal\sandbox
+set CAB_BIN=%CAB_SANDBOX%\bin
 set CAB_KOSHU=%CAB_BIN%\koshu-cmd.bat
 set CAB_SAMPLE=%CAB_BIN%\SAMPLE.k
 
@@ -21,7 +22,7 @@ goto :EOF
 	setlocal
 
 	if "%1" == "install" (
-		cabal sandbox init --sandbox=..\cabal\sandbox
+		cabal sandbox init --sandbox=%CAB_SANDBOX%
 
 		cabal sandbox add-source ..\base
 		cabal sandbox add-source ..\core
