@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-content-0.113.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-content-0.118.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	><p class="caption"
 	>Koshucode.Baala.Type.Vanilla</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Derived type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Content type</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -64,16 +78,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:JudgeC"
-	    >JudgeC</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
-	    >VContent</a
-	    ></li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:AboutC"
@@ -96,10 +100,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
+	    > <a href="#t:GlobalC"
+	    >GlobalC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeC"
+	    >JudgeC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
 	    > <a href="#t:ResourceC"
 	    >ResourceC</a
 	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
 	    >Resource</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ResultC"
+	    >ResultC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Result.html#t:Result"
+	    >Result</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ResultWriterC"
+	    >ResultWriterC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
+	    >ResultWriter</a
 	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 	    >VContent</a
 	    ></li
@@ -194,22 +238,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:JudgeC" class="def"
-	    >JudgeC</a
-	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
-	    >VContent</a
-	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#JudgeC" class="link"
-	    >Source</a
-	    ></p
-	  ></div
+      ><h1 id="g:1"
+	>Derived type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -242,6 +272,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
+	    > <a name="t:GlobalC" class="def"
+	    >GlobalC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#GlobalC" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeC" class="def"
+	    >JudgeC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#JudgeC" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
 	    > <a name="t:ResourceC" class="def"
 	    >ResourceC</a
 	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
@@ -252,6 +310,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	    >Source</a
 	    ></p
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ResultC" class="def"
+	    >ResultC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Result.html#t:Result"
+	    >Result</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#ResultC" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ResultWriterC" class="def"
+	    >ResultWriterC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
+	    >ResultWriter</a
+	    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+	    >VContent</a
+	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#ResultWriterC" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Content type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -618,6 +706,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		><td class="src"
 		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CType"
 		    >CType</a
+		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/Koshucode-Baala-Writer-Json.html#t:ToJSON"
+		    >ToJSON</a
 		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		    >VContent</a
 		    ></td

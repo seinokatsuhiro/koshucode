@@ -9,7 +9,21 @@
 --   <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-content
-@version 0.113.0.0
+@version 0.118.0.0
+
+
+-- | Conversion geographic point from the plane rectangular coordinates
+--   <tt>/n</tt> <tt>/x</tt> <tt>/y</tt> to the geographic coordinates
+--   <tt>/latitude</tt> <tt>/longtitude</tt>. This program is based on the
+--   method described in <i>Kazushige KAWASE, 2011,</i> <i>A More Concise
+--   Method of Calculation for the Coordinate</i> <i>Conversion between
+--   Geographic and Plane Rectangular</i> <i>Coordinates on the
+--   Gauss-Krüger Projection,</i> <i>Bulletin of the Geospatial
+--   Information Authority of Japan, 121</i>.
+module Koshucode.Baala.Op.Cox.GeoDatumJp
+type GeoPoint = (Double, Double)
+convDegree :: Int -> GeoPoint -> GeoPoint
+convRadian :: Int -> GeoPoint -> GeoPoint
 
 module Koshucode.Baala.Op.Cox.Get
 
@@ -36,7 +50,7 @@ getOptContent :: CContent c => c -> RopGet c c
 
 -- | Get relmap attribute as filler content, i.e., given content or empty.
 getFiller :: CContent c => RopGet c c
-getInt :: CContent c => RopGet c Int
+getInt :: CContent c => RopGet c DecimalInteger
 
 module Koshucode.Baala.Op.Cox.Range
 
@@ -217,10 +231,13 @@ copsArith :: CContent c => [Cop c]
 
 -- | Vanilla content type.
 module Koshucode.Baala.Type.Vanilla
-type JudgeC = Judge VContent
 type AboutC = About VContent
 type AboutJudgesC = AboutJudges VContent
+type GlobalC = Global VContent
+type JudgeC = Judge VContent
 type ResourceC = Resource VContent
+type ResultC = Result VContent
+type ResultWriterC = ResultWriter VContent
 
 -- | Vanilla content type
 data VContent
@@ -277,6 +294,7 @@ instance CTime VContent
 instance CClock VContent
 instance CDec VContent
 instance CBool VContent
+instance ToJSON VContent
 instance Write VContent
 instance CContent VContent
 instance CTypeOf VContent
