@@ -11,61 +11,55 @@
 <a name="line-2"></a>
 <a name="line-3"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Toolkit</span><span class='hs-varop'>.</span><span class='hs-conid'>Library</span><span class='hs-varop'>.</span><span class='hs-conid'>Exit</span>
 <a name="line-4"></a>  <span class='hs-layout'>(</span> <span class='hs-varid'>prelude</span><span class='hs-layout'>,</span>
-<a name="line-5"></a>    <span class='hs-varid'>putSuccess</span><span class='hs-layout'>,</span>
-<a name="line-6"></a>    <span class='hs-varid'>putFailure</span><span class='hs-layout'>,</span>
-<a name="line-7"></a>    <span class='hs-varid'>currentEncodings</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>    <span class='hs-varid'>exit</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-10"></a>
-<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>GHC</span><span class='hs-varop'>.</span><span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>IO</span>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>Environment</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>Sys</span>
-<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>Exit</span>           <span class='hs-keyword'>as</span> <span class='hs-conid'>Sys</span>
-<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>IO</span>             <span class='hs-keyword'>as</span> <span class='hs-conid'>IO</span>
-<a name="line-15"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-16"></a>
-<a name="line-17"></a><a name="prelude"></a><span class='hs-definition'>prelude</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-layout'>(</span><span class='hs-conid'>String</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
-<a name="line-18"></a><span class='hs-definition'>prelude</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-19"></a>  <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>setLocaleEncoding</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>utf8_bom</span>
-<a name="line-20"></a>  <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hSetEncoding</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stdout</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>utf8</span>
-<a name="line-21"></a>  <span class='hs-varid'>prog</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getProgName</span>
-<a name="line-22"></a>  <span class='hs-varid'>args</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getArgs</span>
-<a name="line-23"></a>  <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>prog</span><span class='hs-layout'>,</span> <span class='hs-varid'>deleteCr</span> <span class='hs-varid'>args</span><span class='hs-layout'>)</span>
-<a name="line-24"></a>
-<a name="line-25"></a><a name="deleteCr"></a><span class='hs-comment'>-- Delete carriage return from command line argument.</span>
-<a name="line-26"></a><span class='hs-definition'>deleteCr</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
-<a name="line-27"></a><span class='hs-definition'>deleteCr</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varid'>filter</span> <span class='hs-varid'>notCrChar</span><span class='hs-layout'>)</span> <span class='hs-varop'>.</span> <span class='hs-varid'>filter</span> <span class='hs-varid'>notCrString</span> <span class='hs-keyword'>where</span>
-<a name="line-28"></a>    <span class='hs-varid'>notCrChar</span>   <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span> <span class='hs-chr'>'\r'</span><span class='hs-layout'>)</span>
-<a name="line-29"></a>    <span class='hs-varid'>notCrString</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span> <span class='hs-str'>"\r"</span><span class='hs-layout'>)</span>
+<a name="line-5"></a>    <span class='hs-varid'>putSuccess</span><span class='hs-layout'>,</span> <span class='hs-varid'>putFailure</span><span class='hs-layout'>,</span>
+<a name="line-6"></a>    <span class='hs-varid'>currentEncodings</span><span class='hs-layout'>,</span>
+<a name="line-7"></a>    <span class='hs-varid'>exit</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-9"></a>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>GHC</span><span class='hs-varop'>.</span><span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-conid'>Encoding</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>IO</span>
+<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>Environment</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>Sys</span>
+<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>IO</span>             <span class='hs-keyword'>as</span> <span class='hs-conid'>IO</span>
+<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-15"></a>
+<a name="line-16"></a><a name="prelude"></a><span class='hs-definition'>prelude</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-layout'>(</span><span class='hs-conid'>String</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-17"></a><span class='hs-definition'>prelude</span> <span class='hs-keyglyph'>=</span>
+<a name="line-18"></a>    <span class='hs-keyword'>do</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>useUtf8</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>stdout</span>
+<a name="line-19"></a>       <span class='hs-varid'>prog</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getProgName</span>
+<a name="line-20"></a>       <span class='hs-varid'>args</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getArgs</span>
+<a name="line-21"></a>       <span class='hs-varid'>return</span> <span class='hs-layout'>(</span><span class='hs-varid'>prog</span><span class='hs-layout'>,</span> <span class='hs-varid'>deleteCr</span> <span class='hs-varid'>args</span><span class='hs-layout'>)</span>
+<a name="line-22"></a>
+<a name="line-23"></a><a name="deleteCr"></a><span class='hs-comment'>-- Delete carriage return from command line argument.</span>
+<a name="line-24"></a><span class='hs-definition'>deleteCr</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
+<a name="line-25"></a><span class='hs-definition'>deleteCr</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varid'>filter</span> <span class='hs-varid'>notCrChar</span><span class='hs-layout'>)</span> <span class='hs-varop'>.</span> <span class='hs-varid'>filter</span> <span class='hs-varid'>notCrString</span> <span class='hs-keyword'>where</span>
+<a name="line-26"></a>    <span class='hs-varid'>notCrChar</span>   <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span> <span class='hs-chr'>'\r'</span><span class='hs-layout'>)</span>
+<a name="line-27"></a>    <span class='hs-varid'>notCrString</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span> <span class='hs-str'>"\r"</span><span class='hs-layout'>)</span>
+<a name="line-28"></a>
+<a name="line-29"></a><span class='hs-comment'>-- | Print message and exit on 0.</span>
 <a name="line-30"></a>
-<a name="line-31"></a><span class='hs-comment'>-- | Print message and exit on 0.</span>
-<a name="line-32"></a>
-<a name="line-33"></a><a name="putSuccess"></a><span class='hs-definition'>putSuccess</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a name="line-34"></a><span class='hs-definition'>putSuccess</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-35"></a>  <span class='hs-varid'>putStr</span> <span class='hs-varid'>msg</span>
-<a name="line-36"></a>  <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitSuccess</span>
+<a name="line-31"></a><a name="putSuccess"></a><span class='hs-definition'>putSuccess</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a name="line-32"></a><span class='hs-definition'>putSuccess</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-33"></a>  <span class='hs-varid'>putStr</span> <span class='hs-varid'>msg</span>
+<a name="line-34"></a>  <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitSuccess</span>
+<a name="line-35"></a>
+<a name="line-36"></a><span class='hs-comment'>-- | Print error message and exit on 1.</span>
 <a name="line-37"></a>
-<a name="line-38"></a><span class='hs-comment'>-- | Print error message and exit on 1.</span>
-<a name="line-39"></a>
-<a name="line-40"></a><a name="putFailure"></a><span class='hs-definition'>putFailure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a name="line-41"></a><span class='hs-definition'>putFailure</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-42"></a>  <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStr</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
-<a name="line-43"></a>  <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitFailure</span> <span class='hs-num'>1</span>
-<a name="line-44"></a>
-<a name="line-45"></a><a name="currentEncodings"></a><span class='hs-definition'>currentEncodings</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
-<a name="line-46"></a><span class='hs-definition'>currentEncodings</span> <span class='hs-keyglyph'>=</span>
-<a name="line-47"></a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>locale</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>getLocaleEncoding</span>
-<a name="line-48"></a>       <span class='hs-varid'>file</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>getFileSystemEncoding</span>
-<a name="line-49"></a>       <span class='hs-keyword'>let</span> <span class='hs-varid'>q</span>    <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-str'>"'"</span> <span class='hs-varop'>++</span><span class='hs-layout'>)</span>
-<a name="line-50"></a>           <span class='hs-varid'>j</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>affirm</span> <span class='hs-str'>"ENCODING"</span> <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-str'>"content"</span><span class='hs-layout'>,</span> <span class='hs-varid'>q</span> <span class='hs-varop'>$</span> <span class='hs-varid'>show</span> <span class='hs-varid'>locale</span><span class='hs-layout'>)</span>
-<a name="line-51"></a>                                      <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-str'>"file"</span><span class='hs-layout'>,</span>    <span class='hs-varid'>q</span> <span class='hs-varop'>$</span> <span class='hs-varid'>show</span> <span class='hs-varid'>file</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>]</span>
-<a name="line-52"></a>       <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-varid'>show</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>write</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>shortEmpty</span> <span class='hs-varid'>j</span><span class='hs-layout'>)</span> <span class='hs-varop'>++</span> <span class='hs-str'>"\n"</span>
-<a name="line-53"></a>
-<a name="line-54"></a><a name="exit"></a><span class='hs-definition'>exit</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a name="line-55"></a><span class='hs-definition'>exit</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>.</span> <span class='hs-varid'>exitStatus</span>
-<a name="line-56"></a>
-<a name="line-57"></a><a name="exitStatus"></a><span class='hs-definition'>exitStatus</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitCode</span>
-<a name="line-58"></a><span class='hs-definition'>exitStatus</span> <span class='hs-num'>0</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitSuccess</span>
-<a name="line-59"></a><span class='hs-definition'>exitStatus</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitFailure</span> <span class='hs-varid'>n</span>
-<a name="line-60"></a>
+<a name="line-38"></a><a name="putFailure"></a><span class='hs-definition'>putFailure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a name="line-39"></a><span class='hs-definition'>putFailure</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-40"></a>  <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStr</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
+<a name="line-41"></a>  <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitFailure</span> <span class='hs-num'>1</span>
+<a name="line-42"></a>
+<a name="line-43"></a><a name="currentEncodings"></a><span class='hs-definition'>currentEncodings</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
+<a name="line-44"></a><span class='hs-definition'>currentEncodings</span> <span class='hs-keyglyph'>=</span>
+<a name="line-45"></a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>locale</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>getLocaleEncoding</span>
+<a name="line-46"></a>       <span class='hs-varid'>file</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>getFileSystemEncoding</span>
+<a name="line-47"></a>       <span class='hs-keyword'>let</span> <span class='hs-varid'>q</span>    <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-str'>"'"</span> <span class='hs-varop'>++</span><span class='hs-layout'>)</span>
+<a name="line-48"></a>           <span class='hs-varid'>j</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>affirm</span> <span class='hs-str'>"ENCODING"</span> <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-str'>"content"</span><span class='hs-layout'>,</span> <span class='hs-varid'>q</span> <span class='hs-varop'>$</span> <span class='hs-varid'>show</span> <span class='hs-varid'>locale</span><span class='hs-layout'>)</span>
+<a name="line-49"></a>                                      <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-str'>"file"</span><span class='hs-layout'>,</span>    <span class='hs-varid'>q</span> <span class='hs-varop'>$</span> <span class='hs-varid'>show</span> <span class='hs-varid'>file</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>]</span>
+<a name="line-50"></a>       <span class='hs-varid'>return</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>writeDownJudge</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>shortEmpty</span> <span class='hs-varid'>j</span> <span class='hs-varop'>++</span> <span class='hs-str'>"\n"</span>
+<a name="line-51"></a>
+<a name="line-52"></a><a name="exit"></a><span class='hs-definition'>exit</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a name="line-53"></a><span class='hs-definition'>exit</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>exitWith</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>exitCode</span>
+<a name="line-54"></a>
 </pre></body>
 </html>
