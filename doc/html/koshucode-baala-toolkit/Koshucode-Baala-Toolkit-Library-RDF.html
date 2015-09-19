@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-toolkit-0.39.0.0: Toolkit for Koshucode</p
+      >koshucode-baala-toolkit-0.118.0.0: Toolkit for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Toolkit.Library.RDF</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Description</p
 	><div class="doc"
 	><p
-	  >RDF-to-Koshucode conversion 
-</p
+	  >RDF-to-Koshucode conversion</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -61,9 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><li class="src short"
 	  ><a href="#v:judgesFromRdf"
 	    >judgesFromRdf</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-RDF-Types.html#t:RDF"
-	    >RDF</a
-	    > g, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    > :: (RDF g, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CText"
 	    >CText</a
 	    > c) =&gt; <a href="Koshucode-Baala-Toolkit-Library-RDF.html#t:RDFTupleType"
 	    >RDFTupleType</a
@@ -77,25 +80,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >CText</a
 	    > c =&gt; <a href="Koshucode-Baala-Toolkit-Library-RDF.html#t:RDFTupleType"
 	    >RDFTupleType</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-RDF-Types.html#t:Triple"
-	    >Triple</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > -&gt; Triple -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:RDFTupleType"
+	    > <a href="#t:RDFTupleType"
 	    >RDFTupleType</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:RDFTuple2"
 		>RDFTuple2</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:RDFTuple3"
 		>RDFTuple3</a
-		>  </li
+		></li
 	      ></ul
 	    ></li
 	  ></ul
@@ -107,21 +108,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><p class="src"
 	  ><a name="v:judgesFromRdf" class="def"
 	    >judgesFromRdf</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-RDF-Types.html#t:RDF"
-	    >RDF</a
-	    > g, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    > :: (RDF g, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CText"
 	    >CText</a
 	    > c) =&gt; <a href="Koshucode-Baala-Toolkit-Library-RDF.html#t:RDFTupleType"
 	    >RDFTupleType</a
 	    > -&gt; g -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c]<a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#judgesFromRdf" class="link"
+	    > c] <a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#judgesFromRdf" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert RDF graph to list of judges.
-</p
+	    >Convert RDF graph to list of judges.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -132,32 +130,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >CText</a
 	    > c =&gt; <a href="Koshucode-Baala-Toolkit-Library-RDF.html#t:RDFTupleType"
 	    >RDFTupleType</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-RDF-Types.html#t:Triple"
-	    >Triple</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > -&gt; Triple -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c<a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#judgeFromTriple" class="link"
+	    > c <a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#judgeFromTriple" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert RDF triple to affirmed judge.
-</p
+	    >Convert RDF triple to affirmed judge.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:RDFTupleType" class="def"
+	    > <a name="t:RDFTupleType" class="def"
 	    >RDFTupleType</a
-	    >  <a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#RDFTupleType" class="link"
+	    > <a href="src/Koshucode-Baala-Toolkit-Library-RDF.html#RDFTupleType" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Type of conversion
-</p
+	    >Type of conversion</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -174,8 +168,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 		    >/s</code
 		    > subject and <code
 		    >/o</code
-		    > object.
-</p
+		    > object.</p
 		  ></td
 		></tr
 	      ><tr
@@ -191,8 +184,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 		    >/p</code
 		    > predicate, and <code
 		    >/o</code
-		    > object.
-</p
+		    > object.</p
 		  ></td
 		></tr
 	      ></table
@@ -262,7 +254,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html
