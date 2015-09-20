@@ -45,6 +45,7 @@ Documentations of software libraries at
 
 * [koshucode-baala-base]
 * [koshucode-baala-core]
+* [koshucode-baala-writer]
 * [koshucode-baala-operator]
 * [koshucode-baala-content]
 * [koshucode-baala-calculator]
@@ -67,6 +68,7 @@ There are many bugs and potentials.
 
 [koshucode-baala-base]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
 [koshucode-baala-core]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
+[koshucode-baala-writer]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/
 [koshucode-baala-operator]:   http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/
 [koshucode-baala-content]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-content/
 [koshucode-baala-calculator]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
