@@ -27,7 +27,7 @@ module Koshucode.Baala.Core.Content.Class
 
     -- * Koshu complex data type
     -- ** Set
-    CSet (..),
+    CSet (..), gSetSort,
     -- ** Association
     CAssn (..),
     -- ** Relation
@@ -212,6 +212,9 @@ class (CTypeOf c) => CSet c where
 
     putSet      ::        [c] -> B.Ab c
     putSet      =       Right . pSet
+
+gSetSort :: (Ord c, CSet c) => c -> [c]
+gSetSort = B.sort . gSet
 
 class (CTypeOf c) => CAssn c where
     isAssn      ::           c -> Bool

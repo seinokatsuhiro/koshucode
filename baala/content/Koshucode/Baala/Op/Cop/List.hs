@@ -56,6 +56,7 @@ copsList =
     , C.CopCalc  (C.copNormal "char-group-1")   copCharGroup1
     , C.CopCalc  (C.copNormal "code-list")      copCodeList
     , C.CopCalc  (C.copNormal "dir-part")       copDirPart
+    , C.CopCalc  (C.copNormal "drop")           copDrop
     , C.CopCalc  (C.copNormal "intersect")      copIntersect
     , C.CopCalc  (C.copNormal "length")         copLength
     , C.CopCalc  (C.copNormal "list")           copList
@@ -76,6 +77,7 @@ copsList =
     , C.CopCalc  (C.copNormal "sort")           copSort
     , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
     , C.CopCalc  (C.copNormal "sub-length")     copSubLength
+    , C.CopCalc  (C.copNormal "take")           copTake
     , C.CopCalc  (C.copNormal "term-set")       copTermSet
     , C.CopCalc  (C.copNormal "total")          copTotal
     ]
@@ -158,6 +160,47 @@ copReverse = op where
     op [Right c] | C.isText c  = C.putText $ reverse $ C.gText c
                  | C.isList c  = C.putList $ reverse $ C.gList c
     op xs = typeUnmatch xs
+
+
+-- ----------------------  take & drop
+
+copTake :: (C.CContent c) => C.CopCalc c
+copTake arg =
+    do arg2 <- C.getArg2 arg
+       (n', xs') <- B.right2 arg2
+       if C.isDec n'
+          then takeDispatch arg n' xs'
+          else typeUnmatch arg
+
+copDrop :: (C.CContent c) => C.CopCalc c
+copDrop arg =
+    do arg2 <- C.getArg2 arg
+       (n', xs') <- B.right2 arg2
+       if C.isDec n'
+          then dropDispatch arg n' xs'
+          else typeUnmatch arg
+
+takeDispatch :: (C.CContent c) => [B.Ab c] -> c -> c -> B.Ab c
+takeDispatch arg n' xs'
+    | C.isText  xs'  = takeOrDrop take C.gText    C.putText n' xs'
+    | C.isList  xs'  = takeOrDrop take C.gList    C.putList n' xs'
+    | C.isSet   xs'  = takeOrDrop take C.gSetSort C.putSet  n' xs'
+    | C.isEmpty xs'  = Right C.empty
+    | otherwise      = typeUnmatch arg
+
+dropDispatch :: (C.CContent c) => [B.Ab c] -> c -> c -> B.Ab c
+dropDispatch arg n' xs'
+    | C.isText  xs'  = takeOrDrop drop C.gText    C.putText n' xs'
+    | C.isList  xs'  = takeOrDrop drop C.gList    C.putList n' xs'
+    | C.isSet   xs'  = takeOrDrop drop C.gSetSort C.putSet n' xs'
+    | C.isEmpty xs'  = Right C.empty
+    | otherwise      = typeUnmatch arg
+
+takeOrDrop :: (C.CDec c) => (Int -> [a] -> [a]) -> (c -> [a]) -> ([a] -> B.Ab c) -> c -> c -> B.Ab c
+takeOrDrop f get put n' xs' =
+    let n  = fromInteger $ B.decimalNum $ C.gDec n'
+        xs = get xs'
+    in put $ f n xs
 
 
 -- ----------------------  others
