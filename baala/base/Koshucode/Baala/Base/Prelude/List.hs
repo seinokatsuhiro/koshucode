@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Prelude.List
     -- * Map
     map2, mapAt, mapWithLast,
     omit, filterFst, squeeze, squeezeEmptyLines,
+    reverseMap,
   
     -- * Divide
     chunks,
@@ -199,6 +200,9 @@ squeeze p = loop where
 
 squeezeEmptyLines :: B.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
+
+reverseMap :: B.Map [a] -> B.Map [a]
+reverseMap f = reverse . f . reverse
 
 
 -- ----------------------  Divide
