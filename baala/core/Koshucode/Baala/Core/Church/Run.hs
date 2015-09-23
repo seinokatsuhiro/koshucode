@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Church.Run
   
     -- * Getting arguments
     getArg1, getArg2, getArg3,
+    getRightArg1, getRightArg2, getRightArg3,
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -198,4 +199,13 @@ getArg2 _         = Msg.unmatchType ""
 getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
 getArg3 _         = Msg.unmatchType ""
+
+getRightArg1 :: [B.Ab c] -> B.Ab c
+getRightArg1 = getArg1 B.>=> id
+
+getRightArg2 :: [B.Ab c] -> B.Ab (c, c)
+getRightArg2 = getArg2 B.>=> B.right2
+
+getRightArg3 :: [B.Ab c] -> B.Ab (c, c, c)
+getRightArg3 = getArg3 B.>=> B.right3
 

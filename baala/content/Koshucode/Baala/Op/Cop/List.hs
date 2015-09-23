@@ -61,14 +61,12 @@ copsList =
     , C.CopCalc  (C.copNormal "intersect")      copIntersect
     , C.CopCalc  (C.copNormal "length")         copLength
     , C.CopCalc  (C.copNormal "list")           copList
-    , C.CopCalc  (C.copNormal "match-beg")      copBeginWithNormal
-    , C.CopCalc  (C.copNormal "match-end")      copEndWithNormal
-    , C.CopCalc  (C.copNormal "match-mid")      copContainNormal
     , C.CopCalc  (C.copNormal "max")            copMax
     , C.CopCalc  (C.copNormal "min")            copMin
     , C.CopCalc  (C.copNormal "minus")          copMinus
     , C.CopCalc  (C.copNormal "part")           copPart
     , C.CopCalc  (C.copNormal "push")           copPush
+    , C.CopCalc  (C.copNormal "push-tail")      copPushTail
     , C.CopCalc  (C.copNormal "replace-all")    copReplaceAll
     , C.CopCalc  (C.copNormal "replace-begin")  copReplaceBegin
     , C.CopCalc  (C.copNormal "replace-end")    copReplaceEnd
@@ -76,12 +74,16 @@ copsList =
     , C.CopCalc  (C.copNormal "replace-last")   copReplaceLast
     , C.CopCalc  (C.copNormal "reverse")        copReverse
     , C.CopCalc  (C.copNormal "sort")           copSort
-    , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
-    , C.CopCalc  (C.copNormal "sub-length")     copSubLength
     , C.CopCalc  (C.copNormal "take")           copTake
     , C.CopCalc  (C.copNormal "take-tail")      copTakeTail
     , C.CopCalc  (C.copNormal "term-set")       copTermSet
     , C.CopCalc  (C.copNormal "total")          copTotal
+
+    , C.CopCalc  (C.copNormal "match-beg")      copBeginWithNormal
+    , C.CopCalc  (C.copNormal "match-end")      copEndWithNormal
+    , C.CopCalc  (C.copNormal "match-mid")      copContainNormal
+    , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
+    , C.CopCalc  (C.copNormal "sub-length")     copSubLength
     ]
 
 copList :: (C.CList c) => C.CopCalc c
@@ -185,8 +187,7 @@ copDropTail = copTakeOrDrop (drop', drop') where
 
 copTakeOrDrop :: (C.CContent c) => TakeDrop2 c -> C.CopCalc c
 copTakeOrDrop fg arg =
-    do arg2 <- C.getArg2 arg
-       (n', xs') <- B.right2 arg2
+    do (n', xs') <- C.getRightArg2 arg
        if C.isDec n'
           then takeOrDropDispatch fg arg n' xs'
           else typeUnmatch arg
@@ -253,13 +254,17 @@ subLength from len xs = xs2 where
     xs2 = take len $ drop (from - 1) xs
 
 copPush :: (C.CContent c) => C.CopCalc c
-copPush arg =
-    do arg2 <- C.getArg2 arg
-       case arg2 of
-         (Right c, Right cs)
-             | C.isSet cs -> C.putSet $ c : C.gSet cs
-             | otherwise  -> Msg.reqCollection
-         _ -> typeUnmatch arg
+copPush = push (:) B.<=< C.getRightArg2
+
+copPushTail :: (C.CContent c) => C.CopCalc c
+copPushTail = push f B.<=< C.getRightArg2 where
+    f c = B.reverseMap (c:)
+
+push :: (C.CContent c) => (c -> [c] -> [c]) -> (c, c) -> B.Ab c
+push f (c, cs)
+    | C.isList cs = C.putList $ c `f` C.gList cs
+    | C.isSet  cs = C.putSet  $ c `f` C.gSet  cs
+    | otherwise   = Msg.reqCollection
 
 
 -- --------------------------------------------  begin-with / end-with
@@ -276,21 +281,17 @@ copContainInfix    = copMatchInfix B.isInfixOf  B.isInfixOf
 
 copMatchNormal :: (C.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> C.CopCalc c
 copMatchNormal bf1 bf2 arg =
-    do arg2  <- C.getArg2 arg
-       whole <- snd arg2
-       part  <- fst arg2
-       copMatch bf1 bf2 part whole
+    do (part, whole) <- C.getRightArg2 arg
+       copMatch bf1 bf2 (part, whole)
 
 copMatchInfix :: (C.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> C.CopCalc c
 copMatchInfix bf1 bf2 arg =
-    do arg2  <- C.getArg2 arg
-       whole <- fst arg2
-       part  <- snd arg2
-       copMatch bf1 bf2 part whole
+    do (whole, part) <- C.getRightArg2 arg
+       copMatch bf1 bf2 (part, whole)
 
 copMatch :: (C.CContent c)
-  => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> c -> c -> B.Ab c
-copMatch bf1 bf2 part whole
+  => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> (c, c) -> B.Ab c
+copMatch bf1 bf2 (part, whole)
     | isText2 part whole = match bf1 C.gText
     | isList2 part whole = match bf2 C.gList
     | otherwise          = C.putFalse
@@ -305,20 +306,19 @@ isText2 x y = C.isText x && C.isText y
 
 -- --------------------------------------------  in
 
-copFunIn :: (C.CContent c) => C.CopCalc c
-copFunIn arg =
-    do arg2 <- C.getArg2 arg
-       case arg2 of
-         (Right c, Right cs)
-             | C.isSet  cs -> C.putBool $ c `elem` C.gSet  cs
-             | C.isList cs -> C.putBool $ c `elem` C.gList cs
-             | otherwise   -> Msg.reqCollection
-         _ -> typeUnmatch arg
-
+-- syntax
 copCoxIn :: C.CopCox c
 copCoxIn [xs]    = Right $ H.f1 $ H.bin "in" H.b1 xs
 copCoxIn [x, xs] = Right $ H.f1 $ H.bin "in" x    xs
 copCoxIn _       = Msg.adlib "require operand"
+
+-- function
+copFunIn :: (C.CContent c) => C.CopCalc c
+copFunIn = f B.<=< C.getRightArg2 where
+    f (c, cs)
+        | C.isSet  cs  = C.putBool $ c `elem` C.gSet  cs
+        | C.isList cs  = C.putBool $ c `elem` C.gList cs
+        | otherwise    = Msg.reqCollection
 
 
 -- ----------------------  text
