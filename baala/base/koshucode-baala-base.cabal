@@ -115,8 +115,8 @@ library
        , http-conduit     == 2.*
        , http-types       == 0.*
        , pretty           == 1.1.*
-       , syb              == 0.4.*
-       , time             == 1.4.*
+       , syb              == 0.*
+       , time             == 1.*
        , uri              == 0.*
        , utf8-string      == 1.*
 

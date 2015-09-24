@@ -105,7 +105,7 @@ library
        , containers           == 0.5.*
        , directory            == 1.2.*
        , filepath             == 1.*
-       , syb                  == 0.4.*
+       , syb                  == 0.*
        , template-haskell     == 2.*
        , mtl                  == 2.*
        , koshucode-baala-base == 0.118.*
