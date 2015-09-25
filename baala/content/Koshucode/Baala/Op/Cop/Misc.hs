@@ -44,8 +44,7 @@ copsMisc =
 
 copType :: (C.CType c, C.CTypeOf c) => C.CopCalc c
 copType arg =
-    do xc <- C.getArg1 arg
-       x  <- xc
+    do x <- C.getRightArg1 arg
        C.putType $ C.typeOf x
 
 -- ----------------------  is, of, to
@@ -73,8 +72,9 @@ treeOrList xs = B.ttreeGroup $ (nameLeaf $ C.copNormal "or") : xs
 copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopCalc c
 copFunIf arg =
     do (testC, conC, altC) <- C.getArg3 arg
-       test <- C.getBool testC
-       case test of
+       test <- testC
+       testB <- C.getBool $ Right test
+       case testB of
          True  -> conC
          False -> altC
 

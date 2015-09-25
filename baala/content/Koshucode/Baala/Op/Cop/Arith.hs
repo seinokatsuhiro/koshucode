@@ -53,6 +53,11 @@ copDec (Right c) | C.isDec  c = Right $ C.gDec c
                  | C.isText c = B.litDecimal $ C.gText c
 copDec x = Msg.notNumber (show x)
 
+getDecFrom :: (C.CDec c, C.CText c) => c -> B.Ab B.Decimal
+getDecFrom c | C.isDec  c  = Right $ C.gDec c
+             | C.isText c  = B.litDecimal $ C.gText c
+             | otherwise   = Right $ B.intDecimal 0
+
 copPlus :: (C.CText c, C.CDec c) => C.CopCalc c
 copPlus xs = fmap C.pDec $ loop xs where
     loop [] = Right $ B.intDecimal 0
@@ -91,18 +96,18 @@ copMinus1 [Right x] | C.isDec x = C.putDec $ B.decimalRevsign (C.gDec x)
 copMinus1 _ = Msg.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopCalc c
-copQuo [a, b] =
-    do a' <- copDec a
-       b' <- copDec b
-       c' <- B.decimalQuo a' b'
-       Right $ C.pDec c'
-copQuo _ = Msg.unexpAttr "quo"
+copQuo arg =
+    do (ac, bc) <- C.getRightArg2 arg
+       a <- getDecFrom ac
+       b <- getDecFrom bc
+       c <- B.decimalQuo a b
+       C.putDec c
 
 copRem :: (C.CText c, C.CDec c) => C.CopCalc c
 copRem arg =
-    do (ac, bc) <- C.getArg2 arg
-       a <- copDec ac
-       b <- copDec bc
+    do (ac, bc) <- C.getRightArg2 arg
+       a <- getDecFrom ac
+       b <- getDecFrom bc
        c <- B.decimalRem a b
        C.putDec $ c
 

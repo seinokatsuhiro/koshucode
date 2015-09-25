@@ -41,46 +41,49 @@ copsLogic =
     , C.CopCalc  (C.copNormal   "or")      copOr
     , C.CopCalc  (C.copNormal   "then")    copImp
     , C.CopCalc  (C.copNormal   "when")    copWhen
+
     , C.CopCox   (C.copNormal   "all")   $ copCollect "and"
     , C.CopCox   (C.copNormal   "any")   $ copCollect "or"
     ]
 
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopCalc c
 cop1 p arg =
-    do xc <- C.getArg1 arg
-       x  <- C.getBool xc
+    do xc <- C.getRightArg1 arg
+       x  <- C.getBool $ Right xc
        C.putBool $ p x
 
 cop2 :: (C.CBool c) => B.Bin Bool -> C.CopCalc c
 cop2 p arg =
-    do (xc, yc) <- C.getArg2 arg
-       x <- C.getBool xc
-       y <- C.getBool yc
+    do (xc, yc) <- C.getRightArg2 arg
+       x <- C.getBool $ Right xc
+       y <- C.getBool $ Right yc
        C.putBool $ p x y
 
 copN :: (C.CBool c) => Bool -> B.Bin Bool -> C.CopCalc c
-copN unit p = loop where
+copN unit op = loop where
     loop []   = C.putBool unit
     loop [xc] = xc
     loop (xc1 : xc2 : xs) =
-        do x1 <- C.getBool xc1
-           x2 <- C.getBool xc2
-           loop $ C.putBool (p x1 x2) : xs
+        do xc1' <- xc1
+           xc2' <- xc2
+           x1 <- C.getBool $ Right xc1'
+           x2 <- C.getBool $ Right xc2'
+           loop $ C.putBool (x1 `op` x2) : xs
 
-copNot :: (C.CBool c) => C.CopCalc c
-copNot =  cop1 not
+copNot  :: (C.CBool c) => C.CopCalc c
+copNot  = cop1 not
 
-copWhen  :: (C.CBool c) => C.CopCalc c
-copWhen  =  cop2 $ \x y -> x || not y
+copWhen :: (C.CBool c) => C.CopCalc c
+copWhen = cop2 $ \x y -> x || not y
 
-copImp :: (C.CBool c) => C.CopCalc c
-copImp =  cop2 $ \x y -> not x || y
+copImp  :: (C.CBool c) => C.CopCalc c
+copImp  = cop2 $ \x y -> not x || y
 
-copAnd :: (C.CBool c) => C.CopCalc c
-copAnd =  copN True (&&)
+copAnd  :: (C.CBool c) => C.CopCalc c
+copAnd  = copN True (&&)
 
-copOr  :: (C.CBool c) => C.CopCalc c
-copOr  =  copN False (||)
+copOr   :: (C.CBool c) => C.CopCalc c
+copOr   = copN False (||)
 
 copCollect :: String -> C.CopCox c
 copCollect n fs = Right $ H.f1 $ H.ib (C.copInfix n) (map fill fs) where

@@ -82,8 +82,6 @@ copsList =
     , C.CopCalc  (C.copNormal "match-beg")      copBeginWithNormal
     , C.CopCalc  (C.copNormal "match-end")      copEndWithNormal
     , C.CopCalc  (C.copNormal "match-mid")      copContainNormal
-    , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
-    , C.CopCalc  (C.copNormal "sub-length")     copSubLength
     ]
 
 copList :: (C.CList c) => C.CopCalc c
@@ -209,49 +207,7 @@ takeOrDrop f get put n' xs' =
     in put $ f n xs
 
 
--- ----------------------  others
-
-copSubIndex :: (C.CContent c) => C.CopCalc c
-copSubIndex = op where
-    op arg = do arg3 <- C.getArg3 arg
-                case arg3 of
-                  (Right xs', Right from', Right to')
-                      | C.isText xs' && C.isDec from' && C.isDec to'
-                      -> let xs   = C.gText xs'
-                             from = C.gDec from'
-                             to   = C.gDec to'
-                         in C.putText (subIndexDecimal from to xs)
-                  _ -> typeUnmatch arg
-
-copSubLength :: (C.CContent c) => C.CopCalc c
-copSubLength = op where
-    op arg = do arg3 <- C.getArg3 arg
-                case arg3 of
-                  (Right xs', Right from', Right to')
-                      | C.isText xs' && C.isDec from' && C.isDec to'
-                      -> let xs   = C.gText xs'
-                             from = C.gDec from'
-                             to   = C.gDec to'
-                         in C.putText (subLengthDecimal from to xs)
-                  _ -> typeUnmatch arg
-
-subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
-subIndexDecimal from to = subIndex intFrom intTo where
-    intFrom = fromInteger $ B.decimalNum from
-    intTo   = fromInteger $ B.decimalNum to
-
-subLengthDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
-subLengthDecimal from len = subLength intFrom intLen where
-    intFrom = fromInteger $ B.decimalNum from
-    intLen  = fromInteger $ B.decimalNum len
-
-subIndex :: Int -> Int -> [a] -> [a]
-subIndex from to xs = xs2 where
-    xs2 = take to $ drop (from - 1) xs
-
-subLength :: Int -> Int -> [a] -> [a]
-subLength from len xs = xs2 where
-    xs2 = take len $ drop (from - 1) xs
+-- ----------------------  push
 
 copPush :: (C.CContent c) => C.CopCalc c
 copPush = push (:) B.<=< C.getRightArg2
@@ -267,7 +223,7 @@ push f (c, cs)
     | otherwise   = Msg.reqCollection
 
 
--- --------------------------------------------  begin-with / end-with
+-- ----------------------  begin-with / end-with
 
 copBeginWithNormal, copEndWithNormal, copContainNormal :: (C.CContent c) => C.CopCalc c
 copBeginWithNormal  = copMatchNormal B.isPrefixOf B.isPrefixOf
