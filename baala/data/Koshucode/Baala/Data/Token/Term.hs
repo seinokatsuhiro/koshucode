@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Token.Term
+module Koshucode.Baala.Data.Token.Term
   ( -- * Term name
     TermName, TermName2, TermName3,
     TermName4, TermName5, TermName6,

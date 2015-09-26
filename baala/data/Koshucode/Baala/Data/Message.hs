@@ -41,15 +41,16 @@ module Koshucode.Baala.Data.Message
     expect2Actual,
   ) where
 
-import qualified Koshucode.Baala.Base      as B
-import qualified Koshucode.Baala.Data.Type as D
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Data.Token as D
+import qualified Koshucode.Baala.Data.Type  as D
 import Koshucode.Baala.Base.Message
 
 
 -- ----------------------  Abortables
 
-abCoxBuild :: B.TTreeTo (B.Map (B.Ab b))
-abCoxBuild = B.abortableTree "cox-build"
+abCoxBuild :: D.TTreeTo (B.Map (B.Ab b))
+abCoxBuild = D.abortableTree "cox-build"
 
 abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxCalc = B.abortable "cox-calc"
@@ -63,17 +64,17 @@ abCoxIrrep = B.abortable "cox-irrep"
 abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxPosition = B.abortable "cox-position"
 
-abCoxPrefix :: B.TTreeTo (B.Map (B.Ab b))
-abCoxPrefix = B.abortableTree "cox-prefix"
+abCoxPrefix :: D.TTreeTo (B.Map (B.Ab b))
+abCoxPrefix = D.abortableTree "cox-prefix"
 
 abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxReduce = B.abortable "cox-reduce"
 
-abCoxSyntax :: B.TTreeTo (B.Map (B.Ab b))
-abCoxSyntax = B.abortableTree "cox-syntax"
+abCoxSyntax :: D.TTreeTo (B.Map (B.Ab b))
+abCoxSyntax = D.abortableTree "cox-syntax"
 
-abLiteral :: B.TTreeTo (B.Map (B.Ab b))
-abLiteral = B.abortableTree "literal"
+abLiteral :: D.TTreeTo (B.Map (B.Ab b))
+abLiteral = D.abortableTree "literal"
 
 
 -- ----------------------  Data package
@@ -105,9 +106,9 @@ quoteType :: String -> B.Ab a
 quoteType = Left . B.abortLine "Quoted type name"
 
 -- | Require flat name
-reqFlatName :: B.Token -> B.Ab a
+reqFlatName :: D.Token -> B.Ab a
 reqFlatName tok = Left $ B.abortLine "Require flat name" n where
-    n = B.tokenContent tok
+    n = D.tokenContent tok
 
 -- | Require term name
 reqTermName :: B.Ab a
@@ -143,7 +144,7 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: [B.TermName] -> D.Head -> B.Ab a
+unkTerm :: [D.TermName] -> D.Head -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
@@ -181,6 +182,6 @@ detailTermRel :: String -> [String] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
     indent = map ("  " ++)
-    ns'    = map B.showTermName ns
+    ns'    = map D.showTermName ns
     ns1    = B.linesFrom $ D.headExplain he1
 

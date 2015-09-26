@@ -9,6 +9,7 @@ module Koshucode.Baala.Core.Lexmap.Slot
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Data                   as B
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 

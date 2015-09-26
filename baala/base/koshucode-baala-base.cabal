@@ -79,15 +79,6 @@ library
         Koshucode.Baala.Base.Text.Utility
         Koshucode.Baala.Base.Text.Write
 
-        Koshucode.Baala.Base.Token
-        Koshucode.Baala.Base.Token.AngleText
-        Koshucode.Baala.Base.Token.Short
-        Koshucode.Baala.Base.Token.Term
-        Koshucode.Baala.Base.Token.Token
-        Koshucode.Baala.Base.Token.TokenClause
-        Koshucode.Baala.Base.Token.TokenLine
-        Koshucode.Baala.Base.Token.TokenTree
-
   -- Modules included in this library but not exported.
   --other-modules:       
   
@@ -100,7 +91,7 @@ library
        , containers           == 0.5.*
        , http-conduit         == 2.*
        , http-types           == 0.*
-       , pretty               == 1.1.*
+       , pretty               == 1.*
        , syb                  == 0.*
        , uri                  == 0.*
        , utf8-string          == 1.*

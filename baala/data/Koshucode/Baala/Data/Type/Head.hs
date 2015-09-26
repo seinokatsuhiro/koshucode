@@ -46,7 +46,7 @@ module Koshucode.Baala.Data.Type.Head
 import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
+import qualified Koshucode.Baala.Data.Token        as B
 import qualified Koshucode.Baala.Data.Type.Type    as B
 
 

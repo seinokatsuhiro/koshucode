@@ -4,7 +4,7 @@
 
 -- | Tokenizer of koshucode.
 
-module Koshucode.Baala.Base.Token.TokenLine
+module Koshucode.Baala.Data.Token.TokenLine
   (
     -- * Library
     TokenLine,
@@ -30,9 +30,9 @@ import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
-import qualified Koshucode.Baala.Base.Token.AngleText as B
-import qualified Koshucode.Baala.Base.Token.Short     as B
-import qualified Koshucode.Baala.Base.Token.Token     as B
+import qualified Koshucode.Baala.Data.Token.AngleText as B
+import qualified Koshucode.Baala.Data.Token.Short     as B
+import qualified Koshucode.Baala.Data.Token.Token     as B
 import qualified Koshucode.Baala.Base.Message         as Msg
 
 

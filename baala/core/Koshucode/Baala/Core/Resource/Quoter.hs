@@ -14,6 +14,7 @@ import qualified Language.Haskell.TH       as TH
 import qualified Language.Haskell.TH.Quote as TH
 
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Data                    as B
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Resource.Clause    as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C

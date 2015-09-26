@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
-module Koshucode.Baala.Base.Token.TokenClause
+module Koshucode.Baala.Data.Token.TokenClause
   ( TokenClause,
     tokenClauses,
   ) where
@@ -9,8 +9,8 @@ module Koshucode.Baala.Base.Token.TokenClause
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
-import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Token.TokenLine as B
+import qualified Koshucode.Baala.Data.Token.Token     as B
+import qualified Koshucode.Baala.Data.Token.TokenLine as B
 
 type TokenClause = B.CodeClause B.Token
 

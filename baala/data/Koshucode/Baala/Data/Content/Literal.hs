@@ -27,6 +27,7 @@ module Koshucode.Baala.Data.Content.Literal
 
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Data.Token          as B
 import qualified Koshucode.Baala.Data.Type           as B
 import qualified Koshucode.Baala.Data.Content.Class  as C
 import qualified Koshucode.Baala.Data.Content.Tree   as C

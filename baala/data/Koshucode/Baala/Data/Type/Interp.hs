@@ -8,7 +8,7 @@ module Koshucode.Baala.Data.Type.Interp
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
+import qualified Koshucode.Baala.Data.Token        as B
 
 data Interp =
     Interp { interpWords :: [InterpWord]

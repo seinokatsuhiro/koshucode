@@ -11,8 +11,7 @@ module Koshucode.Baala.Core.Relkit.Run
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data                  as B
-import qualified Koshucode.Baala.Data                  as C
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit    as C
 import qualified Koshucode.Baala.Core.Relkit.Construct as C
 import qualified Koshucode.Baala.Core.Message          as Msg
@@ -43,7 +42,7 @@ relkitLink kits = linkKit where
            _                             -> core
 
 -- todo: optimization
-relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h)
+relkitRun :: forall h. forall c. (Ord c, D.CRel c, D.SelectRel h)
     => h c -> [C.Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
@@ -66,8 +65,8 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
                                    -> do bo2 <- run b1 bo1
                                          Msg.abRun toks1 $ run b2 bo2
 
-       C.RelkitSource pat ns       -> let r = B.selectRel hook pat ns
-                                      in Right $ B.relBody r
+       C.RelkitSource pat ns       -> let r = D.selectRel hook pat ns
+                                      in Right $ D.relBody r
 
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
@@ -96,21 +95,21 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: B.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel :: D.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel p nest b cs =
           let cs2 = pickup cs `map` nest
           in relkitRun hook ((p, cs2) : rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
-      pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)
+      pickup cs (name, ind) = (name, D.relBody $ D.gRel $ cs !! ind)
 
 fixedRelation :: (Ord c) => B.Map (B.AbMap [[c]])
 fixedRelation f = fix where
     fix bo1 = do bo2 <- f bo1
                  if bo1 == bo2 then Right bo2 else fix bo2
 
-bmapAlign :: B.Head -> B.Head -> B.Map (B.AbMap [[c]])
+bmapAlign :: D.Head -> D.Head -> B.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
-               Right $ B.bodyAlign he1 he2 bo2
+               Right $ D.bodyAlign he1 he2 bo2
 

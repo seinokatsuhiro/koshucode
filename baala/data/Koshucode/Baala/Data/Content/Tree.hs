@@ -18,6 +18,7 @@ module Koshucode.Baala.Data.Content.Tree
   ) where
 
 import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Data.Token    as B
 import qualified Koshucode.Baala.Data.Type     as B
 import qualified Koshucode.Baala.Data.Message  as Msg
 

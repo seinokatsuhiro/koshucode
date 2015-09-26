@@ -22,7 +22,7 @@ import           Text.Blaze.XHtml5                 ((!))
 import           Text.Blaze.XHtml5.Attributes      (class_)
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
+import qualified Koshucode.Baala.Data.Token        as B
 import qualified Koshucode.Baala.Data.Type.Head    as B
 import qualified Koshucode.Baala.Data.Type.Judge   as B
 

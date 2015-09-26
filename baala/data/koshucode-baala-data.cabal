@@ -60,6 +60,15 @@ library
         Koshucode.Baala.Data.Content.Literal
         Koshucode.Baala.Data.Content.Tree
 
+        Koshucode.Baala.Data.Token
+        Koshucode.Baala.Data.Token.AngleText
+        Koshucode.Baala.Data.Token.Short
+        Koshucode.Baala.Data.Token.Term
+        Koshucode.Baala.Data.Token.Token
+        Koshucode.Baala.Data.Token.TokenClause
+        Koshucode.Baala.Data.Token.TokenLine
+        Koshucode.Baala.Data.Token.TokenTree
+
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
         Koshucode.Baala.Data.Type.Clock
@@ -82,6 +91,7 @@ library
          base                 == 4.*
        , blaze-html           == 0.*
        , containers           == 0.5.*
+       , pretty               == 1.*
        , syb                  == 0.*
        , time                 == 1.*
        , koshucode-baala-base == 0.119.*

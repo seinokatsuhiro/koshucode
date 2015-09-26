@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Token.Short
+module Koshucode.Baala.Data.Token.Short
   ( -- * Data type
     Short (..), ShortDef,
   
@@ -17,7 +17,7 @@ module Koshucode.Baala.Base.Token.Short
 import qualified Data.List                             as L
 import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Text             as B
-import qualified Koshucode.Baala.Base.Token.AngleText  as B
+import qualified Koshucode.Baala.Data.Token.AngleText  as B
 
 
 -- ----------------------  Data type

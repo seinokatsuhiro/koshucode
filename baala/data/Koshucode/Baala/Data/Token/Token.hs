@@ -4,7 +4,7 @@
 
 -- | Tokens in Koshucode.
 
-module Koshucode.Baala.Base.Token.Token
+module Koshucode.Baala.Data.Token.Token
   (
     -- * Token
     Token (..),
@@ -50,7 +50,7 @@ module Koshucode.Baala.Base.Token.Token
 import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
-import qualified Koshucode.Baala.Base.Token.Term  as B
+import qualified Koshucode.Baala.Data.Token.Term  as B
 
 
 -- ----------------------  Token type

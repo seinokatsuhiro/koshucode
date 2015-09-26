@@ -21,6 +21,7 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
 
 import qualified Data.Generics                  as G
 import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Data           as B
 import qualified Koshucode.Baala.Core.Message   as Msg
 
 

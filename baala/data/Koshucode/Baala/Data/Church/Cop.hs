@@ -15,6 +15,7 @@ module Koshucode.Baala.Data.Church.Cop
   ) where
 
 import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Data.Token       as B
 import qualified Koshucode.Baala.Data.Church.Cox  as C
 
 
