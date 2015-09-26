@@ -28,7 +28,7 @@ module Koshucode.Baala.Core.Relmap.Global
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Church         as C
-import qualified Koshucode.Baala.Core.Content        as C
+import qualified Koshucode.Baala.Data                as C
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
 import qualified Koshucode.Baala.Core.Relmap.Result  as C

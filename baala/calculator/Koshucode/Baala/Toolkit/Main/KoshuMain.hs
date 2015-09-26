@@ -11,6 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 import qualified Data.Time              as T
 import qualified Koshucode.Baala.Base   as B
+import qualified Koshucode.Baala.Data   as C
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
 import qualified Koshucode.Baala.Toolkit.Library.Element       as L

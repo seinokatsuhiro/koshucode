@@ -27,6 +27,7 @@ module Koshucode.Baala.Op.Builtin.Get
   ) where
 
 import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Data            as C
 import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
 import qualified Koshucode.Baala.Op.Message      as Msg

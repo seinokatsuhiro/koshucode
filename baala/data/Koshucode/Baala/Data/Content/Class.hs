@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Content.Class
+module Koshucode.Baala.Data.Content.Class
   ( -- * Generic content
     CContent (..),
     CTypeOf (..),
@@ -48,7 +48,7 @@ module Koshucode.Baala.Core.Content.Class
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Message as Msg
+import qualified Koshucode.Baala.Data.Message as Msg
 
 
 

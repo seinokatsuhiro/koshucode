@@ -70,6 +70,7 @@ executable koshu-rdf
        , rdf4h                      == 1.2.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.119.*
+       , koshucode-baala-data       == 0.119.*
        , koshucode-baala-core       == 0.119.*
        , koshucode-baala-operator   == 0.119.*
        , koshucode-baala-content    == 0.119.*
@@ -83,6 +84,7 @@ executable koshu-syntax
   build-depends:
          base                       == 4.*
        , koshucode-baala-base       == 0.119.*
+       , koshucode-baala-data       == 0.119.*
        , koshucode-baala-core       == 0.119.*
        , koshucode-baala-operator   == 0.119.*
        , koshucode-baala-content    == 0.119.*
@@ -110,6 +112,7 @@ library
        , rdf4h                      == 1.2.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.119.*
+       , koshucode-baala-data       == 0.119.*
        , koshucode-baala-core       == 0.119.*
        , koshucode-baala-operator   == 0.119.*
        , koshucode-baala-content    == 0.119.*

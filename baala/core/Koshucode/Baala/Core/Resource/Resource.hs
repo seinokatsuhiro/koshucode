@@ -24,8 +24,8 @@ module Koshucode.Baala.Core.Resource.Resource
   ) where
 
 import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Data           as C
 import qualified Koshucode.Baala.Core.Assert    as C
-import qualified Koshucode.Baala.Core.Content   as C
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relkit    as C
 import qualified Koshucode.Baala.Core.Relmap    as C

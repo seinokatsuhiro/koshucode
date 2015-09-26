@@ -6,6 +6,7 @@ module Koshucode.Baala.Op.Lattice.Rop
   ( ropsLattice,
   ) where
 
+import qualified Koshucode.Baala.Data                 as C
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Lattice.Restrict  as Op

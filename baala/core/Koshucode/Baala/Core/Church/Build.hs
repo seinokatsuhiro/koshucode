@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Church.Build
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Content           as C
+import qualified Koshucode.Baala.Data                   as C
 import qualified Koshucode.Baala.Core.Church.Cop        as C
 import qualified Koshucode.Baala.Core.Church.Cox        as C
 import qualified Koshucode.Baala.Core.Message           as Msg

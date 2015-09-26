@@ -4,7 +4,6 @@ module Koshucode.Baala.Core
   ( -- * Modules
     module Koshucode.Baala.Core.Assert,
     module Koshucode.Baala.Core.Church,
-    module Koshucode.Baala.Core.Content,
     module Koshucode.Baala.Core.Lexmap,
     module Koshucode.Baala.Core.Relkit,
     module Koshucode.Baala.Core.Relmap,
@@ -16,7 +15,6 @@ module Koshucode.Baala.Core
 
 import Koshucode.Baala.Core.Assert
 import Koshucode.Baala.Core.Church
-import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Lexmap
 import Koshucode.Baala.Core.Relkit
 import Koshucode.Baala.Core.Relmap

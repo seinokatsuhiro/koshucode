@@ -3,7 +3,7 @@
 
 -- | Utilities for token trees.
 
-module Koshucode.Baala.Core.Content.Tree
+module Koshucode.Baala.Data.Content.Tree
   ( treesToTokens,
     treesToTexts,
     treeToText,
@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Content.Tree
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Core.Message  as Msg
+import qualified Koshucode.Baala.Data.Message  as Msg
 
 -- $Function
 --

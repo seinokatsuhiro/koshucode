@@ -6,7 +6,7 @@
 
 -- | Make literal contents from token tree.
 
-module Koshucode.Baala.Core.Content.Literal
+module Koshucode.Baala.Data.Content.Literal
   ( -- * Functions
     ContentCons, ContentCalc, 
     contentCons, treesToJudge,
@@ -27,9 +27,9 @@ module Koshucode.Baala.Core.Content.Literal
 
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Core.Content.Class  as C
-import qualified Koshucode.Baala.Core.Content.Tree   as C
-import qualified Koshucode.Baala.Core.Message        as Msg
+import qualified Koshucode.Baala.Data.Content.Class  as C
+import qualified Koshucode.Baala.Data.Content.Tree   as C
+import qualified Koshucode.Baala.Data.Message        as Msg
 
 
 

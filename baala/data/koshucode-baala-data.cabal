@@ -48,12 +48,20 @@ library
   exposed-modules:
         Koshucode.Baala.Data
 
+        Koshucode.Baala.Data.Message
+
+        Koshucode.Baala.Data.Content
+        Koshucode.Baala.Data.Content.Class
+        Koshucode.Baala.Data.Content.Literal
+        Koshucode.Baala.Data.Content.Tree
+
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
          base                 == 4.*
+       , syb                  == 0.*
        , koshucode-baala-base == 0.119.*
 
   ghc-options:         -Wall

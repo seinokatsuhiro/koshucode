@@ -60,11 +60,6 @@ library
         Koshucode.Baala.Core.Church.Cox
         Koshucode.Baala.Core.Church.Run
 
-        Koshucode.Baala.Core.Content
-        Koshucode.Baala.Core.Content.Class
-        Koshucode.Baala.Core.Content.Literal
-        Koshucode.Baala.Core.Content.Tree
-
         Koshucode.Baala.Core.Lexmap
         Koshucode.Baala.Core.Lexmap.Attr
         Koshucode.Baala.Core.Lexmap.AttrEd
@@ -109,6 +104,7 @@ library
        , template-haskell     == 2.*
        , mtl                  == 2.*
        , koshucode-baala-base == 0.119.*
+       , koshucode-baala-data == 0.119.*
 
   ghc-options:         -Wall
 

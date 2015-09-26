@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Relkit.Run
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Content          as C
+import qualified Koshucode.Baala.Data                  as C
 import qualified Koshucode.Baala.Core.Relkit.Relkit    as C
 import qualified Koshucode.Baala.Core.Relkit.Construct as C
 import qualified Koshucode.Baala.Core.Message          as Msg

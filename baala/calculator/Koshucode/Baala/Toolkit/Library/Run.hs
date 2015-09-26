@@ -9,6 +9,7 @@ module Koshucode.Baala.Toolkit.Library.Run
 
 import qualified System.Environment     as Env
 import qualified Koshucode.Baala.Base   as B
+import qualified Koshucode.Baala.Data   as C
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
 

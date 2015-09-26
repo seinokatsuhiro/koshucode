@@ -3,6 +3,7 @@
 module Koshucode.Baala.Core.Message
   ( -- * Base package
     module Koshucode.Baala.Base.Message,
+    module Koshucode.Baala.Data.Message,
   
     -- * Abortables
     abAssert,
@@ -18,7 +19,6 @@ module Koshucode.Baala.Core.Message
     abCoxReduce,
     abCoxSyntax,
     abLexmap,
-    abLiteral,
     abOption,
     abRelmap,
     abRun,
@@ -40,15 +40,9 @@ module Koshucode.Baala.Core.Message
     noFile,
     noSlotName,
     noSlotIndex,
-    nothing,
-    oddRelation,
-    quoteType,
     reqAttr,
     reqAttrName,
-    reqFlatName,
     reqGroup,
-    reqRelTuple,
-    reqTermName,
     sameIOPoints,
     unexpAttr,
     unexpAttr0,
@@ -58,7 +52,6 @@ module Koshucode.Baala.Core.Message
     unexpAttr4,
     unexpAttr1V,
     unexpAttr1Q,
-    unkBracket,
     unkClause,
     unkCop,
     unkCox,
@@ -70,20 +63,16 @@ module Koshucode.Baala.Core.Message
     unkRelmap,
     unkShow,
     unkTerm,
-    unkType,
-    unkWord,
-    unmatchType,
     unmatchBlank,
     unresPrefix,
   
     -- * Utility
     detailTermRel,
-    expectActual,
-    expect2Actual,
   ) where
 
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Base.Message
+import Koshucode.Baala.Data.Message
 
 
 -- ----------------------  Abortables
@@ -126,9 +115,6 @@ abCoxSyntax = B.abortableTree "cox-syntax"
 
 abLexmap :: B.TTreesTo (B.Map (B.Ab b))
 abLexmap = B.abortableTrees "lexmap"
-
-abLiteral :: B.TTreeTo (B.Map (B.Ab b))
-abLiteral = B.abortableTree "literal"
 
 abOption :: B.TTreesTo (B.Map (B.Ab b))
 abOption = B.abortableTrees "option"
@@ -212,24 +198,6 @@ noSlotIndex :: [String] -> Int -> B.Ab a
 noSlotIndex xs n = Left $ B.abortLines "No slot content" $
                    ("No index @'" ++ show n ++ " in") : xs
 
--- | Nothing
-nothing :: B.Ab a
-nothing = Left $ B.abortBecause "Nothing"
-
--- | Odd relation literal
-oddRelation :: Int -> Int -> B.Ab a
-oddRelation e a  = Left $ B.abortLines "Odd relation literal"
-                        $ expectActual (len e) (len a)
-    where len n = show n ++ " contents"
-
--- | Require tuple in list
-reqRelTuple :: B.Ab a
-reqRelTuple = Left $ B.abortBecause "Require tuple in list"
-
--- | Quoted type name
-quoteType :: String -> B.Ab a
-quoteType = Left . B.abortLine "Quoted type name"
-
 -- | Require attribute
 reqAttr :: String -> B.Ab a
 reqAttr = Left . B.abortLine "Require attribute"
@@ -238,18 +206,9 @@ reqAttr = Left . B.abortLine "Require attribute"
 reqAttrName :: String -> B.Ab a
 reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 
--- | Require flat name
-reqFlatName :: B.Token -> B.Ab a
-reqFlatName tok = Left $ B.abortLine "Require flat name" n where
-    n = B.tokenContent tok
-
 -- | Require grouping paren
 reqGroup :: B.Ab a
 reqGroup = Left $ B.abortBecause "Require grouping parens"
-
--- | Require term name
-reqTermName :: B.Ab a
-reqTermName = Left $ B.abortBecause "Require term name"
 
 -- | Same I/O points
 sameIOPoints :: B.IOPoint -> B.Ab a
@@ -279,10 +238,6 @@ unexpAttr1V = unexpAttr "Require attributes"
 
 unexpAttr1Q :: B.Ab a
 unexpAttr1Q = unexpAttr "Require one or two attributes"
-
--- | Unknown bracket
-unkBracket :: B.Ab a
-unkBracket = Left $ B.abortBecause "Unknown bracket"
 
 -- | Unknown clause
 unkClause :: [String] -> B.Ab a
@@ -363,17 +318,6 @@ unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
 
--- | Unknown type name
-unkType :: String -> B.Ab a
-unkType = Left . B.abortLine "Unknown type name"
-
--- | Unknown word
-unkWord :: String -> B.Ab a
-unkWord = Left . B.abortLine "Unknown word"
-
-unmatchType :: String -> B.Ab a
-unmatchType = Left . B.abortLine "Type unmatch"
-
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
 unmatchBlank v k _ vs =
@@ -398,13 +342,4 @@ detailTermRel label ns he1 = detail where
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
     ns1    = B.linesFrom $ B.headExplain he1
-
-expectActual :: String -> String -> [String]
-expectActual e a       = [ "Expect " ++ e
-                         , "Actual " ++ a ]
-
-expect2Actual :: String -> String -> String -> [String]
-expect2Actual e1 e2 a  = [ "Expect " ++ e1
-                         , "       " ++ e2
-                         , "Actual " ++ a ]
 
