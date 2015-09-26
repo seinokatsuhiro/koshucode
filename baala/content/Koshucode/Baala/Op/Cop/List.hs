@@ -189,24 +189,21 @@ copTakeOrDrop :: (C.CContent c) => TakeDrop2 c -> C.CopCalc c
 copTakeOrDrop fg arg =
     do (n', xs') <- C.getRightArg2 arg
        if C.isDec n'
-          then takeOrDropDispatch fg arg n' xs'
+          then takeOrDropDispatch fg arg (int n') xs'
           else typeUnmatch arg
+    where
+      int = fromInteger . B.decimalNum . C.gDec
 
-takeOrDropDispatch :: (C.CContent c) => TakeDrop2 c -> [B.Ab c]
-                   -> c -> c -> B.Ab c
-takeOrDropDispatch (f, g) arg n' xs'
-    | C.isText  xs'  = takeOrDrop f C.gText    C.putText n' xs'
-    | C.isList  xs'  = takeOrDrop g C.gList    C.putList n' xs'
-    | C.isSet   xs'  = takeOrDrop g C.gSetSort C.putSet  n' xs'
+takeOrDropDispatch :: (C.CContent c) => TakeDrop2 c -> [B.Ab c] -> Int -> c -> B.Ab c
+takeOrDropDispatch (f, g) arg n xs'
+    | C.isText  xs'  = gpMap C.gpText    (f n) xs'
+    | C.isList  xs'  = gpMap C.gpList    (g n) xs'
+    | C.isSet   xs'  = gpMap C.gpSetSort (g n) xs'
     | C.isEmpty xs'  = Right C.empty
     | otherwise      = typeUnmatch arg
 
-takeOrDrop :: (C.CDec c) => TakeDrop a -> (c -> [a]) -> ([a] -> B.Ab c)
-           -> c -> c -> B.Ab c
-takeOrDrop f get put n' xs' =
-    let n  = fromInteger $ B.decimalNum $ C.gDec n'
-        xs = get xs'
-    in put $ f n xs
+gpMap :: C.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
+gpMap (get, put) f = Right . put . f . get
 
 
 -- ----------------------  drop-take
@@ -235,14 +232,11 @@ dropTakeCop fg arg =
 
 dropTakeDispatch :: (C.CContent c) => DropTake2 c -> [B.Ab c] -> Int -> Int -> c -> B.Ab c
 dropTakeDispatch (f, g) arg d t xs'
-    | C.isText  xs'  = dropTakeGetPut C.gpText (f d t) xs'
-    | C.isList  xs'  = dropTakeGetPut C.gpList (g d t) xs'
-    | C.isSet   xs'  = dropTakeGetPut C.gpSet  (g d t) xs'
+    | C.isText  xs'  = gpMap C.gpText    (f d t) xs'
+    | C.isList  xs'  = gpMap C.gpList    (g d t) xs'
+    | C.isSet   xs'  = gpMap C.gpSetSort (g d t) xs'
     | C.isEmpty xs'  = Right C.empty
     | otherwise      = typeUnmatch arg
-
-dropTakeGetPut :: C.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
-dropTakeGetPut (get, put) f = Right . put . f . get
 
 
 -- ----------------------  push

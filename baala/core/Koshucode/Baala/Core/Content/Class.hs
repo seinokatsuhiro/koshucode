@@ -44,7 +44,7 @@ module Koshucode.Baala.Core.Content.Class
 
     -- * Get & Put
     CGetPut,
-    gpText, gpList, gpSet,
+    gpText, gpList, gpSet, gpSetSort,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -301,3 +301,6 @@ gpList = (gList, pList)
 
 gpSet :: (CSet c) => CGetPut [c] c
 gpSet = (gSet, pSet)
+
+gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
+gpSetSort = (gSetSort, pSet)
