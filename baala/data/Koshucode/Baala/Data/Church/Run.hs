@@ -3,7 +3,7 @@
 
 -- | Term-content calcutation.
 
-module Koshucode.Baala.Core.Church.Run
+module Koshucode.Baala.Data.Church.Run
   ( RunCox, RunList,
     coxRunCox, coxRunList,
     calcContent,
@@ -14,11 +14,11 @@ module Koshucode.Baala.Core.Church.Run
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as C
-import qualified Koshucode.Baala.Core.Church.Build      as C
-import qualified Koshucode.Baala.Core.Church.Cop        as C
-import qualified Koshucode.Baala.Core.Church.Cox        as C
-import qualified Koshucode.Baala.Core.Message           as Msg
+import qualified Koshucode.Baala.Data.Content           as C
+import qualified Koshucode.Baala.Data.Church.Build      as C
+import qualified Koshucode.Baala.Data.Church.Cop        as C
+import qualified Koshucode.Baala.Data.Church.Cox        as C
+import qualified Koshucode.Baala.Data.Message           as Msg
 
 
 -- --------------------------------------------  Beta reduction

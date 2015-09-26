@@ -5,9 +5,19 @@ module Koshucode.Baala.Data.Message
     module Koshucode.Baala.Base.Message,
   
     -- * Abortables
+    abCoxBuild,
+    abCoxCalc,
+    abCoxFill,
+    abCoxIrrep,
+    abCoxPosition,
+    abCoxPrefix,
+    abCoxReduce,
+    abCoxSyntax,
     abLiteral,
   
     -- * Data package
+    ambInfixes,
+    lackArg,
     nothing,
     oddRelation,
     quoteType,
@@ -15,11 +25,18 @@ module Koshucode.Baala.Data.Message
     reqRelTuple,
     reqTermName,
     unkBracket,
+    unkCox,
+    unkGlobalVar,
+    unkRefVar,
+    unkShow,
+    unkTerm,
     unkType,
     unkWord,
+    unmatchBlank,
     unmatchType,
   
     -- * Utility
+    detailTermRel,
     expectActual,
     expect2Actual,
   ) where
@@ -30,11 +47,43 @@ import Koshucode.Baala.Base.Message
 
 -- ----------------------  Abortables
 
+abCoxBuild :: B.TTreeTo (B.Map (B.Ab b))
+abCoxBuild = B.abortableTree "cox-build"
+
+abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxCalc = B.abortable "cox-calc"
+
+abCoxFill :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxFill = B.abortable "cox-fill"
+
+abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxIrrep = B.abortable "cox-irrep"
+
+abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxPosition = B.abortable "cox-position"
+
+abCoxPrefix :: B.TTreeTo (B.Map (B.Ab b))
+abCoxPrefix = B.abortableTree "cox-prefix"
+
+abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxReduce = B.abortable "cox-reduce"
+
+abCoxSyntax :: B.TTreeTo (B.Map (B.Ab b))
+abCoxSyntax = B.abortableTree "cox-syntax"
+
 abLiteral :: B.TTreeTo (B.Map (B.Ab b))
 abLiteral = B.abortableTree "literal"
 
 
 -- ----------------------  Data package
+
+-- | Ambiguous infix operators
+ambInfixes :: [String] -> B.Ab a
+ambInfixes = Left . B.abortLines "Ambiguous infix operators"
+
+-- | Lack of argument
+lackArg :: String -> B.Ab a
+lackArg = Left . B.abortLine "Lack of argument"
 
 -- | Nothing
 nothing :: B.Ab a
@@ -67,6 +116,37 @@ reqTermName = Left $ B.abortBecause "Require term name"
 unkBracket :: B.Ab a
 unkBracket = Left $ B.abortBecause "Unknown bracket"
 
+-- | Unknown expression
+unkCox :: String -> B.Ab a
+unkCox = Left . B.abortLine "Unknown expression"
+
+-- | Unknown global variable
+unkGlobalVar :: String -> B.Ab a
+unkGlobalVar = Left . B.abortLine "Unknown global variable"
+
+-- | Unmatch blank (bug)
+unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
+unmatchBlank v k _ vs =
+    Left $ B.abortLines "Unmatch blank (bug)"
+           [ "look up " ++ var (v, k)
+           , "in " ++ args vs ]
+
+-- | Unknown reference for variable
+unkRefVar :: (String, Int) -> [String] -> B.Ab a
+unkRefVar (v, k) vs = Left $ B.abortLines "Unknown reference for variable"
+                [ "look up " ++ var (v, k)
+                , "in " ++ args vs ]
+
+-- | Unknown object
+unkShow :: (Show x) => x -> B.Ab a
+unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
+
+-- | Unknown term name
+unkTerm :: [B.TermName] -> B.Head -> B.Ab a
+unkTerm ns he1 =
+    Left $ B.abortLines "Unknown term name"
+         $ detailTermRel "Unknown" ns he1
+
 -- | Unknown type name
 unkType :: String -> B.Ab a
 unkType = Left . B.abortLine "Unknown type name"
@@ -81,6 +161,12 @@ unmatchType = Left . B.abortLine "Type unmatch"
 
 -- ----------------------  Utility
 
+var :: (String, Int) -> String
+var (v, k) = v ++ "/" ++ show k
+
+args :: [String] -> String
+args vs = unwords $ map var $ zip vs [1..]
+
 expectActual :: String -> String -> [String]
 expectActual e a       = [ "Expect " ++ e
                          , "Actual " ++ a ]
@@ -89,4 +175,11 @@ expect2Actual :: String -> String -> String -> [String]
 expect2Actual e1 e2 a  = [ "Expect " ++ e1
                          , "       " ++ e2
                          , "Actual " ++ a ]
+
+detailTermRel :: String -> [String] -> B.Head -> [String]
+detailTermRel label ns he1 = detail where
+    detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
+    indent = map ("  " ++)
+    ns'    = map B.showTermName ns
+    ns1    = B.linesFrom $ B.headExplain he1
 

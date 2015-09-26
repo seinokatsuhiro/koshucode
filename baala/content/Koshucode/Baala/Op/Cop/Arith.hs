@@ -10,7 +10,6 @@ module Koshucode.Baala.Op.Cop.Arith
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Data       as C
-import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Message as Msg
 
 

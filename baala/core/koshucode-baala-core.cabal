@@ -55,11 +55,6 @@ library
         Koshucode.Baala.Core.Assert.RelTable
         Koshucode.Baala.Core.Assert.Run
 
-        Koshucode.Baala.Core.Church.Build
-        Koshucode.Baala.Core.Church.Cop
-        Koshucode.Baala.Core.Church.Cox
-        Koshucode.Baala.Core.Church.Run
-
         Koshucode.Baala.Core.Lexmap
         Koshucode.Baala.Core.Lexmap.Attr
         Koshucode.Baala.Core.Lexmap.AttrEd

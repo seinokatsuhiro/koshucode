@@ -3,7 +3,7 @@
 
 -- | Term-content expression.
 
-module Koshucode.Baala.Core.Church.Cox
+module Koshucode.Baala.Data.Church.Cox
   ( -- * Data types
     Cox (..), Cox2, Cox3, Cox4,
     MaybeCox, NamedCox, CopCalc, CoxTag,
@@ -19,7 +19,7 @@ module Koshucode.Baala.Core.Church.Cox
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Core.Message    as Msg
+import qualified Koshucode.Baala.Data.Message    as Msg
 
 
 -- ----------------------  Expression
@@ -161,7 +161,7 @@ irreducible cox =
 --
 --  /Phase 2/. Transform token trees,
 --             and convert into abstract syntax trees.
---             See "Koshucode.Baala.Core.Content.Build" module.
+--             See "Koshucode.Baala.Data.Content.Build" module.
 --
 --    [4. 'BTree.TTree'@ -> @'BTree.TTree']
 --       Expand tree-level syntax operators.
@@ -179,7 +179,7 @@ irreducible cox =
 --       Expand expression-level syntax operators.
 --
 --  /Phase 3/. Calculate content expressions.
---             See "Koshucode.Baala.Core.Content.Run" module.
+--             See "Koshucode.Baala.Data.Content.Run" module.
 --
 --    [9. 'B.Relhead'@ -> @'Cox'@ c -> @'Cox'@ c@]
 --       Attach term positions using actural heading of relation.

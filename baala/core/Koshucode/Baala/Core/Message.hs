@@ -10,14 +10,6 @@ module Koshucode.Baala.Core.Message
     abAttr,
     abAttrTrees,
     abClause,
-    abCoxBuild,
-    abCoxCalc,
-    abCoxFill,
-    abCoxIrrep,
-    abCoxPosition,
-    abCoxPrefix,
-    abCoxReduce,
-    abCoxSyntax,
     abLexmap,
     abOption,
     abRelmap,
@@ -27,7 +19,6 @@ module Koshucode.Baala.Core.Message
     abSpecialize,
   
     -- * Core package
-    ambInfixes,
     ambRelmap,
     dupAttr,
     dupPrefix,
@@ -36,7 +27,6 @@ module Koshucode.Baala.Core.Message
     extraAttr,
     httpError,
     invalidPrefix,
-    lackArg,
     noFile,
     noSlotName,
     noSlotIndex,
@@ -54,20 +44,11 @@ module Koshucode.Baala.Core.Message
     unexpAttr1Q,
     unkClause,
     unkCop,
-    unkCox,
-    unkGlobalVar,
     unkNestRel,
     unkNestVar,
     unkOption,
-    unkRefVar,
     unkRelmap,
-    unkShow,
-    unkTerm,
-    unmatchBlank,
     unresPrefix,
-  
-    -- * Utility
-    detailTermRel,
   ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -88,30 +69,6 @@ abAttrTrees = B.abortableTrees "attr"
 
 abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abClause = B.abortable "clause"
-
-abCoxBuild :: B.TTreeTo (B.Map (B.Ab b))
-abCoxBuild = B.abortableTree "cox-build"
-
-abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abCoxCalc = B.abortable "cox-calc"
-
-abCoxFill :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abCoxFill = B.abortable "cox-fill"
-
-abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abCoxIrrep = B.abortable "cox-irrep"
-
-abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abCoxPosition = B.abortable "cox-position"
-
-abCoxPrefix :: B.TTreeTo (B.Map (B.Ab b))
-abCoxPrefix = B.abortableTree "cox-prefix"
-
-abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abCoxReduce = B.abortable "cox-reduce"
-
-abCoxSyntax :: B.TTreeTo (B.Map (B.Ab b))
-abCoxSyntax = B.abortableTree "cox-syntax"
 
 abLexmap :: B.TTreesTo (B.Map (B.Ab b))
 abLexmap = B.abortableTrees "lexmap"
@@ -136,10 +93,6 @@ abSpecialize = B.abortable "specialize"
 
 
 -- ----------------------  Core package
-
--- | Ambiguous infix operators
-ambInfixes :: [String] -> B.Ab a
-ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> B.Ab a
@@ -175,10 +128,6 @@ httpError url code msg = Left $ B.abortLines "HTTP Error" detail where
 -- | Invalid prefix character
 invalidPrefix :: [String] -> B.Ab a
 invalidPrefix = Left . B.abortLine "Invalid prefix character" . unwords
-
--- | Lack of argument
-lackArg :: String -> B.Ab a
-lackArg = Left . B.abortLine "Lack of argument"
 
 -- | File not found
 noFile :: FilePath -> String -> B.Ab a
@@ -243,17 +192,9 @@ unexpAttr1Q = unexpAttr "Require one or two attributes"
 unkClause :: [String] -> B.Ab a
 unkClause = Left . B.abortLines "Unknown clause"
 
--- | Unknown expression
-unkCox :: String -> B.Ab a
-unkCox = Left . B.abortLine "Unknown expression"
-
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
-
--- | Unknown global variable
-unkGlobalVar :: String -> B.Ab a
-unkGlobalVar = Left . B.abortLine "Unknown global variable"
 
 -- | Unknown nested relation
 unkNestRel :: B.Token -> String -> [String] -> B.Ab a
@@ -298,48 +239,12 @@ unkOption un = Left $ B.abortLines "Unknown option" detail where
     expect (B.ParaPosMax  n)     = "maximum " ++ show n
     expect (B.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n
 
--- | Unknown reference for variable
-unkRefVar :: (String, Int) -> [String] -> B.Ab a
-unkRefVar (v, k) vs = Left $ B.abortLines "Unknown reference for variable"
-                [ "look up " ++ var (v, k)
-                , "in " ++ args vs ]
-
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
-
--- | Unknown object
-unkShow :: (Show x) => x -> B.Ab a
-unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
-
--- | Unknown term name
-unkTerm :: [B.TermName] -> B.Head -> B.Ab a
-unkTerm ns he1 =
-    Left $ B.abortLines "Unknown term name"
-         $ detailTermRel "Unknown" ns he1
-
--- | Unmatch blank (bug)
-unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
-unmatchBlank v k _ vs =
-    Left $ B.abortLines "Unmatch blank (bug)"
-           [ "look up " ++ var (v, k)
-           , "in " ++ args vs ]
-
-var :: (String, Int) -> String
-var (v, k) = v ++ "/" ++ show k
-
-args :: [String] -> String
-args vs = unwords $ map var $ zip vs [1..]
 
 -- | Unresolved prefix
 unresPrefix :: String -> B.Ab a
 unresPrefix pre = Left $ B.abortLine "Unresolved prefix"
                        $ "Require short definition : short " ++ pre ++ " ..."
-
-detailTermRel :: String -> [String] -> B.Head -> [String]
-detailTermRel label ns he1 = detail where
-    detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
-    indent = map ("  " ++)
-    ns'    = map B.showTermName ns
-    ns1    = B.linesFrom $ B.headExplain he1
 
