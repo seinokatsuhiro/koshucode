@@ -41,7 +41,8 @@ module Koshucode.Baala.Data.Message
     expect2Actual,
   ) where
 
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.Data.Type as D
 import Koshucode.Baala.Base.Message
 
 
@@ -142,7 +143,7 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: [B.TermName] -> B.Head -> B.Ab a
+unkTerm :: [B.TermName] -> D.Head -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
@@ -176,10 +177,10 @@ expect2Actual e1 e2 a  = [ "Expect " ++ e1
                          , "       " ++ e2
                          , "Actual " ++ a ]
 
-detailTermRel :: String -> [String] -> B.Head -> [String]
+detailTermRel :: String -> [String] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
-    ns1    = B.linesFrom $ B.headExplain he1
+    ns1    = B.linesFrom $ D.headExplain he1
 

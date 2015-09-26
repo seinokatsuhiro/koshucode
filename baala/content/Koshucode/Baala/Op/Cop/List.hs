@@ -11,6 +11,7 @@ module Koshucode.Baala.Op.Cop.List
 import qualified Data.List                          as List
 import qualified Data.Char                          as Char
 import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Data               as B
 import qualified Koshucode.Baala.Data               as C
 import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
 import qualified Koshucode.Baala.Op.Message         as Msg

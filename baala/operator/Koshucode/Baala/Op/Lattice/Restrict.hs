@@ -20,6 +20,7 @@ module Koshucode.Baala.Op.Lattice.Restrict
 
 import qualified Data.Set                             as Set
 import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Data                 as B
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op

@@ -23,6 +23,7 @@ module Koshucode.Baala.Core.Relkit.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Data                as B
 import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
 

@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
   ) where
 
 import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as B
 import qualified Koshucode.Baala.Core.Lexmap  as C
 
 

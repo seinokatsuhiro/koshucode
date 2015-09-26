@@ -3,7 +3,7 @@
 -- | Judgements: a symbolic representations of
 --   affirmed or denied statements.
 
-module Koshucode.Baala.Base.Data.Judge
+module Koshucode.Baala.Data.Type.Judge
   (
     -- * Datatype
     Judge (..), JudgePat,

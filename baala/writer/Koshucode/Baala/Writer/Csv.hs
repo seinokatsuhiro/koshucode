@@ -8,6 +8,7 @@ module Koshucode.Baala.Writer.Csv
 import qualified System.IO                 as IO
 import qualified Text.CSV                  as CSV
 import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.Data      as B
 import qualified Koshucode.Baala.Core      as C
 
 resultCsv :: (B.Write c) => C.ResultWriter c

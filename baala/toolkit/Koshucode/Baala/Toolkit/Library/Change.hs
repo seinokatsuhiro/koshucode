@@ -19,6 +19,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 
 import qualified Data.Set                              as S
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data                  as B
 import qualified Koshucode.Baala.Writer                as W
 import qualified Koshucode.Baala.Type.Vanilla          as Type
 import qualified Koshucode.Baala.Toolkit.Library.Input as L

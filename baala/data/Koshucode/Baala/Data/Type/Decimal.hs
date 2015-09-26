@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Decimal
+module Koshucode.Baala.Data.Type.Decimal
   ( -- * Type
     Decimal (..),
     DecimalInteger,

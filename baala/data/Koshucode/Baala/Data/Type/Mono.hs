@@ -2,14 +2,14 @@
 
 -- | Content type for nested relations.
 
-module Koshucode.Baala.Base.Data.Mono
+module Koshucode.Baala.Data.Type.Mono
   ( Mono (..), RelMono, RelText,
     isMonoTerm, isMonoNest,
     gMonoTerm, gMonoNest,
     pMonoTerm, pMonoNest,
   ) where
 
-import qualified Koshucode.Baala.Base.Data.Rel  as B
+import qualified Koshucode.Baala.Data.Type.Rel  as B
 import qualified Koshucode.Baala.Base.Abort     as B
 
 -- | Monotype relation.

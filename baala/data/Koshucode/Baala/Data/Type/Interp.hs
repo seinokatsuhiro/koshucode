@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Interp
+module Koshucode.Baala.Data.Type.Interp
   ( Interp (..),
     InterpWord (..),
     interp,

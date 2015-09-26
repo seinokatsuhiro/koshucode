@@ -22,6 +22,7 @@ module Koshucode.Baala.Core.Relmap.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data                  as B
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relkit           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C

@@ -10,6 +10,7 @@ import qualified System.Console.GetOpt                 as G
 import qualified Data.Time                             as T
 import qualified System.IO                             as IO
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data                  as B
 import qualified Koshucode.Baala.Data                  as C
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Toolkit.Library.Run   as L

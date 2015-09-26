@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Clock
+module Koshucode.Baala.Data.Type.Clock
   ( -- * Data type
     Clock (..), DayCount, Hour, Min, Sec,
     AbBin,

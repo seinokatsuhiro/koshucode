@@ -14,6 +14,7 @@ module Koshucode.Baala.Data.Church.Run
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Data.Type              as B
 import qualified Koshucode.Baala.Data.Content           as C
 import qualified Koshucode.Baala.Data.Church.Build      as C
 import qualified Koshucode.Baala.Data.Church.Cop        as C

@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Resource.Clause
 import qualified Data.Generics                 as G
 import qualified Data.Char                     as Char
 import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Data          as B
 import qualified Koshucode.Baala.Data          as C
 import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Message  as Msg

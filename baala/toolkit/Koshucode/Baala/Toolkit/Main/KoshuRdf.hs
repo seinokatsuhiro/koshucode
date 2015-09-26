@@ -15,6 +15,7 @@ import qualified Data.Text                as Text
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Data                    as B
 import qualified Koshucode.Baala.Type.Vanilla            as Type
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.RDF     as L

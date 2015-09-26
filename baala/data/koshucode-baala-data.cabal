@@ -60,13 +60,30 @@ library
         Koshucode.Baala.Data.Content.Literal
         Koshucode.Baala.Data.Content.Tree
 
+        Koshucode.Baala.Data.Type
+        Koshucode.Baala.Data.Type.About
+        Koshucode.Baala.Data.Type.Clock
+        Koshucode.Baala.Data.Type.Date
+        Koshucode.Baala.Data.Type.Decimal
+        Koshucode.Baala.Data.Type.Head
+        Koshucode.Baala.Data.Type.Interp
+        Koshucode.Baala.Data.Type.Judge
+        Koshucode.Baala.Data.Type.Mono
+        Koshucode.Baala.Data.Type.Para
+        Koshucode.Baala.Data.Type.Rel
+        Koshucode.Baala.Data.Type.Time
+        Koshucode.Baala.Data.Type.Type
+
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
          base                 == 4.*
+       , blaze-html           == 0.*
+       , containers           == 0.5.*
        , syb                  == 0.*
+       , time                 == 1.*
        , koshucode-baala-base == 0.119.*
 
   ghc-options:         -Wall

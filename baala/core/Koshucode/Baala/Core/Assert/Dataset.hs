@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Assert.Dataset
 import qualified Data.Map                     as Map
 import qualified Data.Maybe                   as Maybe
 import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as B
 import qualified Koshucode.Baala.Data         as C
 import qualified Koshucode.Baala.Core.Relkit  as C
 

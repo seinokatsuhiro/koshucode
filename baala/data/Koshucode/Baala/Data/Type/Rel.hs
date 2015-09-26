@@ -3,7 +3,7 @@
 
 -- | Relation type
 
-module Koshucode.Baala.Base.Data.Rel
+module Koshucode.Baala.Data.Type.Rel
   ( -- * Data type
     Rel (..), Body,
     relSort,
@@ -23,8 +23,8 @@ import           Text.Blaze.XHtml5.Attributes      (class_)
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
-import qualified Koshucode.Baala.Base.Data.Head    as B
-import qualified Koshucode.Baala.Base.Data.Judge   as B
+import qualified Koshucode.Baala.Data.Type.Head    as B
+import qualified Koshucode.Baala.Data.Type.Judge   as B
 
 
 -- ----------------------  Data

@@ -12,6 +12,7 @@ import qualified Control.Monad                       as M
 import qualified Data.Map                            as Map
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Data                as B
 import qualified Koshucode.Baala.Core                as C
 
 

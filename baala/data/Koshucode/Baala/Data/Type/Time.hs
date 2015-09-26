@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Time
+module Koshucode.Baala.Data.Type.Time
   ( -- * Data type
     Time (..),
 
@@ -29,8 +29,8 @@ import qualified Data.Time.Calendar.WeekDate      as T
 import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
-import qualified Koshucode.Baala.Base.Data.Clock  as B
-import qualified Koshucode.Baala.Base.Data.Date   as B
+import qualified Koshucode.Baala.Data.Type.Clock  as B
+import qualified Koshucode.Baala.Data.Type.Date   as B
 import qualified Koshucode.Baala.Base.Message     as Msg
 
 

@@ -19,6 +19,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Data                   as B
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 

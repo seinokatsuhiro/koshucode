@@ -8,6 +8,7 @@ module Koshucode.Baala.Writer.Koshu
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Data                as B
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 

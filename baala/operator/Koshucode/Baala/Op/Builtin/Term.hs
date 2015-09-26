@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Builtin.Term
   ) where
 
 import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Data       as B
 import qualified Koshucode.Baala.Op.Message as Msg
 
 -- | Extract a term name.

@@ -54,20 +54,6 @@ library
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
 
-        Koshucode.Baala.Base.Data
-        Koshucode.Baala.Base.Data.About
-        Koshucode.Baala.Base.Data.Clock
-        Koshucode.Baala.Base.Data.Date
-        Koshucode.Baala.Base.Data.Decimal
-        Koshucode.Baala.Base.Data.Head
-        Koshucode.Baala.Base.Data.Interp
-        Koshucode.Baala.Base.Data.Judge
-        Koshucode.Baala.Base.Data.Mono
-        Koshucode.Baala.Base.Data.Para
-        Koshucode.Baala.Base.Data.Rel
-        Koshucode.Baala.Base.Data.Time
-        Koshucode.Baala.Base.Data.Type
-
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Class
@@ -107,18 +93,17 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base             == 4.*
-       , blaze-html       == 0.*
-       , blaze-markup     == 0.*
-       , bytestring       == 0.*
-       , containers       == 0.5.*
-       , http-conduit     == 2.*
-       , http-types       == 0.*
-       , pretty           == 1.1.*
-       , syb              == 0.*
-       , time             == 1.*
-       , uri              == 0.*
-       , utf8-string      == 1.*
+         base                 == 4.*
+       , blaze-html           == 0.*
+       , blaze-markup         == 0.*
+       , bytestring           == 0.*
+       , containers           == 0.5.*
+       , http-conduit         == 2.*
+       , http-types           == 0.*
+       , pretty               == 1.1.*
+       , syb                  == 0.*
+       , uri                  == 0.*
+       , utf8-string          == 1.*
 
   ghc-options:         -Wall
 

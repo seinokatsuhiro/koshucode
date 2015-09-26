@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.About
+module Koshucode.Baala.Data.Type.About
   ( About (..),
     AboutJudges,
   ) where
@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Data.About
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
-import qualified Koshucode.Baala.Base.Data.Judge   as B
+import qualified Koshucode.Baala.Data.Type.Judge   as B
 
 data About c = About [B.Term c] deriving (Show)
 type AboutJudges c = (Maybe (About c), [B.Judge c])

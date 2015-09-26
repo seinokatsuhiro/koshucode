@@ -13,7 +13,7 @@ module Koshucode.Baala.Op.TermGadget
   ) where
 
 import qualified Data.List                  as List
-import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Data       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Term    as Op

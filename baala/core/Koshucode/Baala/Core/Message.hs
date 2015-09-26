@@ -52,6 +52,7 @@ module Koshucode.Baala.Core.Message
   ) where
 
 import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Data as B
 import Koshucode.Baala.Base.Message
 import Koshucode.Baala.Data.Message
 

@@ -18,6 +18,7 @@ module Koshucode.Baala.Op.Meta
 
 import qualified Data.Version                  as V
 import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Data          as C
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
@@ -85,7 +86,7 @@ relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     g     = C.getGlobal res
     kit2  = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
-    he2   = B.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
+    he2   = D.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
     put (n, ih)  = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
     heightMaybe = B.maybeEmpty height
@@ -244,7 +245,7 @@ consKoshuAngleText med =
 relmapKoshuAngleText :: (Ord c, C.CText c) => C.Intmed c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
 relmapKoshuAngleText med = C.relmapFlow med . relkitKoshuAngleText
 
-relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Head -> B.Ab (C.Relkit c)
+relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitKoshuAngleText (n, Just c) _ = Right kit2 where
     kit2 = koshuAngleTextBody [n, c] assn
     assn (name, text) = [C.pText $ "<" ++ name ++ ">", C.pText $ text]

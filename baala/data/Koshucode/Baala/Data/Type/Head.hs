@@ -2,7 +2,7 @@
 
 -- | Heading of relations
 
-module Koshucode.Baala.Base.Data.Head
+module Koshucode.Baala.Data.Type.Head
   ( -- * Type
     Head (..),
     headExplain,
@@ -47,7 +47,7 @@ import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
-import qualified Koshucode.Baala.Base.Data.Type    as B
+import qualified Koshucode.Baala.Data.Type.Type    as B
 
 
 

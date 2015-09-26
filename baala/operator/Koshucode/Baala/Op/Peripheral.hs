@@ -31,6 +31,7 @@ module Koshucode.Baala.Op.Peripheral
   ) where
 
 import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as B
 import qualified Koshucode.Baala.Data         as C
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Op.Builtin   as Op

@@ -53,6 +53,7 @@ executable koshu-change
          base                       == 4.*
        , containers                 == 0.5.*
        , koshucode-baala-base       == 0.119.*
+       , koshucode-baala-data       == 0.119.*
        , koshucode-baala-core       == 0.119.*
        , koshucode-baala-operator   == 0.119.*
        , koshucode-baala-content    == 0.119.*

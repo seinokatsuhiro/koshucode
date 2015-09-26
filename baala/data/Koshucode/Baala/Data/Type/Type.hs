@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE TupleSections #-}
 
-module Koshucode.Baala.Base.Data.Type
+module Koshucode.Baala.Data.Type.Type
   ( Type (..),
     NamedType,
     typeExplain,
