@@ -41,6 +41,7 @@ usage () {
         echo "  $0 koshu             cabal to install koshu program"
         echo ""
         echo "  $0 base              cabal for base package"
+        echo "  $0 data              cabal for data package"
         echo "  $0 core              cabal for core package"
         echo "  $0 writer            cabal for writer package"
         echo "  $0 operator          cabal for operator package"
@@ -91,13 +92,14 @@ main () {
             unregister operator
             unregister writer
             unregister core
+            unregister data
             unregister base
             ;;
 
         update)
             cabal_cmd update ;;
 
-        '' | base* | core* | writer* | operator* | content* | calculator* | toolkit* | koshu )
+        '' | base* | data* | core* | writer* | operator* | content* | calculator* | toolkit* | koshu )
             cab_time=time
             cabal_for `directories "$1"`
             ;;
@@ -149,14 +151,15 @@ unregister () {(
 directories () {
     case `basename "$1"` in
         base)        echo base ;;
+        data)        echo data ;;
         core)        echo core ;;
         writer)      echo writer ;;
         operator)    echo operator ;;
         content)     echo content ;;
         calculator)  echo calculator ;;
         toolkit)     echo toolkit ;;
-        koshu)       echo base core writer operator content calculator ;;
-        '')          echo base core writer operator content calculator toolkit ;;
+        koshu)       echo base data core writer operator content calculator ;;
+        '')          echo base data core writer operator content calculator toolkit ;;
     esac
 }
 
@@ -194,7 +197,7 @@ cabal_for () {
 
 cabal_for_all () {
     cab_command=$1
-    cabal_for base core writer operator content calculator toolkit
+    cabal_for base data core writer operator content calculator toolkit
 }
 
 section () {
@@ -236,8 +239,9 @@ cabal_sandbox_deps () {
 
 cabal_sandbox_add_source () {
     case $cab_dir in
-        core)        cabal_cmd sandbox add-source ../base       ;;
-        writer)      cabal_cmd sandbox add-source ../base       ;;
+        data)        cabal_cmd sandbox add-source ../base       ;;
+        core)        cabal_cmd sandbox add-source ../data       ;;
+        writer)      cabal_cmd sandbox add-source ../core       ;;
         operator)    cabal_cmd sandbox add-source ../core       ;;
         content)     cabal_cmd sandbox add-source ../operator
                      cabal_cmd sandbox add-source ../writer     ;;
@@ -289,6 +293,7 @@ cabal_sdist () {
         --hscolour-css=../hscolour.css \
         --haddock-option=--pretty-html \
         --haddock-option=`if_file base` \
+        --haddock-option=`if_file data` \
         --haddock-option=`if_file core` \
         --haddock-option=`if_file writer` \
         --haddock-option=`if_file operator` \

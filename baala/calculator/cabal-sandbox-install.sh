@@ -16,16 +16,10 @@ check () {
 cabal sandbox init
   check $? init
 
-cabal sandbox add-source ../base
-  check $? base
-cabal sandbox add-source ../core
-  check $? core
-cabal sandbox add-source ../writer
-  check $? writer
-cabal sandbox add-source ../operator
-  check $? operator
-cabal sandbox add-source ../content
-  check $? content
+for pkg in base data core writer operator content; do
+    cabal sandbox add-source ../$pkg
+    check $? $pkg
+done
 
 cabal install --only-dependencies
   check $? install --only-dependencies
