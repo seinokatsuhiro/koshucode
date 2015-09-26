@@ -41,6 +41,10 @@ module Koshucode.Baala.Core.Content.Class
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
+
+    -- * Get & Put
+    CGetPut,
+    gpText, gpList, gpSet,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -264,6 +268,9 @@ class (CTypeOf c) => CType c where
     putType     ::      B.Type -> B.Ab c
     putType     =       Right . pType
 
+
+-- ----------------------  Utility
+
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
 isMember x xs | isList xs = x `elem` gList xs
@@ -280,3 +287,17 @@ contApTextToText = contAp gText putText
 
 contMapTextToList :: (CList c, CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap gText putList
+
+
+-- ----------------------  Get & Put
+
+type CGetPut a c = (c -> a, a -> c)
+
+gpText :: (CText c) => CGetPut [Char] c
+gpText = (gText, pText)
+
+gpList :: (CList c) => CGetPut [c] c
+gpList = (gList, pList)
+
+gpSet :: (CSet c) => CGetPut [c] c
+gpSet = (gSet, pSet)

@@ -58,6 +58,8 @@ copsList =
     , C.CopCalc  (C.copNormal "dir-part")       copDirPart
     , C.CopCalc  (C.copNormal "drop")           copDrop
     , C.CopCalc  (C.copNormal "drop-tail")      copDropTail
+    , C.CopCalc  (C.copNormal "drop-take")      copDropTake
+    , C.CopCalc  (C.copNormal "drop-take-tail") copDropTakeTail
     , C.CopCalc  (C.copNormal "intersect")      copIntersect
     , C.CopCalc  (C.copNormal "length")         copLength
     , C.CopCalc  (C.copNormal "list")           copList
@@ -166,8 +168,8 @@ copReverse = op where
 
 -- ----------------------  take & drop
 
-type TakeDrop a = Int -> [a] -> [a]
-type TakeDrop2 a = (TakeDrop Char, TakeDrop a)
+type TakeDrop a   = Int -> [a] -> [a]
+type TakeDrop2 a  = (TakeDrop Char, TakeDrop a)
 
 copTake :: (C.CContent c) => C.CopCalc c
 copTake = copTakeOrDrop (take, take)
@@ -205,6 +207,42 @@ takeOrDrop f get put n' xs' =
     let n  = fromInteger $ B.decimalNum $ C.gDec n'
         xs = get xs'
     in put $ f n xs
+
+
+-- ----------------------  drop-take
+
+type DropTake a   = Int -> Int -> [a] -> [a]
+type DropTake2 a  = (DropTake Char, DropTake a)
+
+copDropTake :: (C.CContent c) => C.CopCalc c
+copDropTake = dropTakeCop (dropTake, dropTake)
+
+copDropTakeTail :: (C.CContent c) => C.CopCalc c
+copDropTakeTail = dropTakeCop (dropTake', dropTake') where
+    dropTake' d t = B.reverseMap $ dropTake d t
+
+dropTake :: DropTake a
+dropTake d t = take t . drop d
+
+dropTakeCop :: (C.CContent c) => DropTake2 c -> C.CopCalc c
+dropTakeCop fg arg =
+    do (d', t', xs') <- C.getRightArg3 arg
+       if C.isDec d' && C.isDec t'
+          then dropTakeDispatch fg arg (int d') (int t') xs'
+          else typeUnmatch arg
+    where
+      int = fromInteger . B.decimalNum . C.gDec
+
+dropTakeDispatch :: (C.CContent c) => DropTake2 c -> [B.Ab c] -> Int -> Int -> c -> B.Ab c
+dropTakeDispatch (f, g) arg d t xs'
+    | C.isText  xs'  = dropTakeGetPut C.gpText (f d t) xs'
+    | C.isList  xs'  = dropTakeGetPut C.gpList (g d t) xs'
+    | C.isSet   xs'  = dropTakeGetPut C.gpSet  (g d t) xs'
+    | C.isEmpty xs'  = Right C.empty
+    | otherwise      = typeUnmatch arg
+
+dropTakeGetPut :: C.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
+dropTakeGetPut (get, put) f = Right . put . f . get
 
 
 -- ----------------------  push
