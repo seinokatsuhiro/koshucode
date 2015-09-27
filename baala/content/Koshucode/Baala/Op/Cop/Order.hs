@@ -8,7 +8,7 @@ module Koshucode.Baala.Op.Cop.Order
   ) where
 
 import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Data               as C
+import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
 import qualified Koshucode.Baala.Op.Message         as Msg
 
@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Op.Message         as Msg
 --  [@>=@]    Grater than or equal.
 --
 
-copsOrder :: (C.CBool c, Eq c, Ord c) => [C.Cop c]
+copsOrder :: (D.CBool c, Eq c, Ord c) => [D.Cop c]
 copsOrder =
     [ orderInfix     "="   (==)
     , orderInfix     "<>"  (/=)
@@ -52,33 +52,33 @@ copsOrder =
     , orderPostfix   ">"
     , orderPostfix   ">="
 
-    , C.CopCox  (C.copNormal "between") between
+    , D.CopCox  (D.copNormal "between") between
     ]
 
-orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
-orderInfix n f = C.CopCalc (C.copInfix n) g where
-    g [Right x, Right y] = C.putBool $ x `f` y
+orderInfix :: (D.CBool c) => String -> (c -> c -> Bool) -> D.Cop c
+orderInfix n f = D.CopCalc (D.copInfix n) g where
+    g [Right x, Right y] = D.putBool $ x `f` y
     g _                  = Msg.notFound ""
 
-orderPrefix :: String -> C.Cop c
-orderPrefix n = C.CopCox (C.copPrefix n) $ cop where
+orderPrefix :: String -> D.Cop c
+orderPrefix n = D.CopCox (D.copPrefix n) $ cop where
     cop [x] = Right $ H.f1 (H.b1 `op` x)
     cop _   = Msg.adlib "require operand"
     op      = H.bin n
 
-orderPostfix :: String -> C.Cop c
-orderPostfix n = C.CopCox (C.copPostfix n) $ cop where
+orderPostfix :: String -> D.Cop c
+orderPostfix n = D.CopCox (D.copPostfix n) $ cop where
     cop [x] = Right $ H.f1 (x `op` H.b1)
     cop _   = Msg.adlib "require operand"
     op      = H.bin n
 
-between :: C.CopCox c
+between :: D.CopCox c
 between [low, high] = Right $ H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
 between _ = Msg.adlib "require operand"
 
-binAnd :: B.Bin (C.Cox c)
+binAnd :: B.Bin (D.Cox c)
 binAnd  = H.bin "and"
 
-binAsc :: B.Bin (C.Cox c)
+binAsc :: B.Bin (D.Cox c)
 binAsc  = H.bin "<="
 

@@ -8,8 +8,7 @@ module Koshucode.Baala.Op.Cop.Misc
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data            as B
-import qualified Koshucode.Baala.Data            as C
+import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Op.Cop.Coxhand  as H
 import qualified Koshucode.Baala.Op.Message      as Msg
 
@@ -28,53 +27,53 @@ import qualified Koshucode.Baala.Op.Message      as Msg
 --  [@type@]      Type of content.
 --
 
-copsMisc :: (C.CBool c, C.CEmpty c, C.CType c) => [C.Cop c]
+copsMisc :: (D.CBool c, D.CEmpty c, D.CType c) => [D.Cop c]
 copsMisc =
-    [ C.CopCalc  (C.copNormal   "type")    copType
+    [ D.CopCalc  (D.copNormal   "type")    copType
 
-    , C.CopCox   (C.copInfix    "is")      toInfix
-    , C.CopCox   (C.copInfix    "of")      ofInfix
-    , C.CopCox   (C.copInfix    "to")      toInfix
+    , D.CopCox   (D.copInfix    "is")      toInfix
+    , D.CopCox   (D.copInfix    "of")      ofInfix
+    , D.CopCox   (D.copInfix    "to")      toInfix
 
-    , C.CopCalc  (C.copInternal "#if")     copFunIf
-    , C.CopTree  (C.copNormal   "if")      copTreeIf
+    , D.CopCalc  (D.copInternal "#if")     copFunIf
+    , D.CopTree  (D.copNormal   "if")      copTreeIf
     ]
 
 
 -- ----------------------  type
 
-copType :: (C.CType c, C.CTypeOf c) => C.CopCalc c
+copType :: (D.CType c, D.CTypeOf c) => D.CopCalc c
 copType arg =
-    do x <- C.getRightArg1 arg
-       C.putType $ C.typeOf x
+    do x <- D.getRightArg1 arg
+       D.putType $ D.typeOf x
 
 -- ----------------------  is, of, to
 
-ofInfix :: C.CopCox c
+ofInfix :: D.CopCox c
 ofInfix [f, x] = Right $ H.ix f [x]
 ofInfix _ = Msg.adlib "require operand"
 
-toInfix :: C.CopCox c
+toInfix :: D.CopCox c
 toInfix [x, f] = Right $ H.ix f [x]
 toInfix _ = Msg.adlib "require operand"
 
 -- ----------------------  if
 
-nameLeaf :: B.BlankName -> B.TTree
-nameLeaf = B.TreeL . B.TName B.codePtZero
+nameLeaf :: D.BlankName -> D.TTree
+nameLeaf = B.TreeL . D.TName B.codePtZero
 
-treeIf :: B.TTree -> B.TTree -> B.TTree -> B.TTree
-treeIf test con alt = B.ttreeGroup [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
+treeIf :: D.TTree -> D.TTree -> D.TTree -> D.TTree
+treeIf test con alt = D.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]
 
-treeOrList :: [B.TTree] -> B.TTree
+treeOrList :: [D.TTree] -> D.TTree
 treeOrList [x] = x
-treeOrList xs = B.ttreeGroup $ (nameLeaf $ C.copNormal "or") : xs
+treeOrList xs = D.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
 
-copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopCalc c
+copFunIf  :: (D.CBool c, D.CEmpty c) => D.CopCalc c
 copFunIf arg =
-    do (testC, conC, altC) <- C.getArg3 arg
+    do (testC, conC, altC) <- D.getArg3 arg
        test <- testC
-       testB <- C.getBool $ Right test
+       testB <- D.getBool $ Right test
        case testB of
          True  -> conC
          False -> altC
@@ -84,40 +83,40 @@ copFunIf arg =
 --  if TEST -> CON : TEST -> CON : TEST -> CON
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
-copTreeIf :: C.CopTree
-copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
-    folding :: [[B.TTree]] -> B.Ab B.TTree
-    folding []        = Right $ B.TreeL $ B.textToken "()"
+copTreeIf :: D.CopTree
+copTreeIf trees = folding $ filter (/= []) $ D.divideTreesBy ":" trees where
+    folding :: [[D.TTree]] -> B.Ab D.TTree
+    folding []        = Right $ B.TreeL $ D.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
-    fore :: [B.TTree] -> B.AbMap B.TTree
+    fore :: [D.TTree] -> B.AbMap D.TTree
     fore trees2 alt =
-        case B.divideTreesBy "->" trees2 of
+        case D.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
           [test, con] -> do test2 <- stairs ">>" "<<" test
-                            Right $ treeIf test2 (B.ttreeGroup con) alt
+                            Right $ treeIf test2 (D.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
-    back :: [B.TTree] -> B.AbMap B.TTree
+    back :: [D.TTree] -> B.AbMap D.TTree
     back trees2 alt =
-        case B.divideTreesBy "<-" trees2 of
-          [alt2]      -> Right $ B.ttreeGroup alt2
+        case D.divideTreesBy "<-" trees2 of
+          [alt2]      -> Right $ D.ttreeGroup alt2
           [con, test] -> do test2 <- stairs "<<" ">>" test
-                            Right $ treeIf test2 (B.ttreeGroup con) alt
+                            Right $ treeIf test2 (D.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
-    stairs :: String -> String -> [B.TTree] -> B.Ab B.TTree
+    stairs :: String -> String -> [D.TTree] -> B.Ab D.TTree
     stairs del del2 xs =
         do notInclude del2 xs
-           Right $ treeOrList $ map B.ttreeGroup $ B.divideTreesBy del xs
+           Right $ treeOrList $ map D.ttreeGroup $ D.divideTreesBy del xs
 
-    notInclude :: String -> [B.TTree] -> B.Ab ()
+    notInclude :: String -> [D.TTree] -> B.Ab ()
     notInclude del xs =
-        case B.divideTreesBy del xs of
+        case D.divideTreesBy del xs of
           [_] -> Right ()
           _   -> abortSyntax xs "Mixed arrows"
 
     abortSyntax xs msg =
-        B.abortableTrees "if" xs $
+        D.abortableTrees "if" xs $
          Msg.unexpAttr msg
 

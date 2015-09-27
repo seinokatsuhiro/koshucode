@@ -9,8 +9,7 @@ module Koshucode.Baala.Op.Cop.Arith
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
-import qualified Koshucode.Baala.Data       as C
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Op.Message as Msg
 
 
@@ -31,93 +30,93 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --  [@abs@]   Absolute value.
 --
 
-copsArith :: (C.CContent c) => [C.Cop c]
+copsArith :: (D.CContent c) => [D.Cop c]
 copsArith =
-    [ C.CopCalc  (C.copPrefix "+")     copPlus1
-    , C.CopCalc  (C.copPrefix "-")     copMinus1
-    , C.CopCalc  (C.copInfix  "+")     copPlus2
-    , C.CopCalc  (C.copInfix  "-")     copMinus2
-    , C.CopCalc  (C.copInfix  "*")     copTimes
-    , C.CopCalc  (C.copInfix  "quo")   copQuo
-    , C.CopCalc  (C.copInfix  "rem")   copRem
+    [ D.CopCalc  (D.copPrefix "+")     copPlus1
+    , D.CopCalc  (D.copPrefix "-")     copMinus1
+    , D.CopCalc  (D.copInfix  "+")     copPlus2
+    , D.CopCalc  (D.copInfix  "-")     copMinus2
+    , D.CopCalc  (D.copInfix  "*")     copTimes
+    , D.CopCalc  (D.copInfix  "quo")   copQuo
+    , D.CopCalc  (D.copInfix  "rem")   copRem
 
-    , C.CopCalc  (C.copNormal "+")     copPlus
-    , C.CopCalc  (C.copNormal "-")     copMinus2
-    , C.CopCalc  (C.copNormal "*")     copTimes
-    , C.CopCalc  (C.copNormal "quo")   copQuo
-    , C.CopCalc  (C.copNormal "rem")   copRem
-    , C.CopCalc  (C.copNormal "abs")   copAbs
+    , D.CopCalc  (D.copNormal "+")     copPlus
+    , D.CopCalc  (D.copNormal "-")     copMinus2
+    , D.CopCalc  (D.copNormal "*")     copTimes
+    , D.CopCalc  (D.copNormal "quo")   copQuo
+    , D.CopCalc  (D.copNormal "rem")   copRem
+    , D.CopCalc  (D.copNormal "abs")   copAbs
     ]
 
-copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal
-copDec (Right c) | C.isDec  c = Right $ C.gDec c
-                 | C.isText c = B.litDecimal $ C.gText c
+copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab D.Decimal
+copDec (Right c) | D.isDec  c = Right $ D.gDec c
+                 | D.isText c = D.litDecimal $ D.gText c
 copDec x = Msg.notNumber (show x)
 
-getDecFrom :: (C.CDec c, C.CText c) => c -> B.Ab B.Decimal
-getDecFrom c | C.isDec  c  = Right $ C.gDec c
-             | C.isText c  = B.litDecimal $ C.gText c
-             | otherwise   = Right $ B.intDecimal 0
+getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
+getDecFrom c | D.isDec  c  = Right $ D.gDec c
+             | D.isText c  = D.litDecimal $ D.gText c
+             | otherwise   = Right $ D.intDecimal 0
 
-copPlus :: (C.CText c, C.CDec c) => C.CopCalc c
-copPlus xs = fmap C.pDec $ loop xs where
-    loop [] = Right $ B.intDecimal 0
+copPlus :: (D.CText c, D.CDec c) => D.CopCalc c
+copPlus xs = fmap D.pDec $ loop xs where
+    loop [] = Right $ D.intDecimal 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      B.decimalAdd n' m'
+                      D.decimalAdd n' m'
 
-copPlus2 :: (C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
+copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
 copPlus2 [Right xc, Right yc]
-    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalAdd   (C.gDec   xc) (C.gDec   yc)
-    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockAdd     (C.gClock xc) (C.gClock yc)
-    | C.isTime  xc && C.isClock yc = C.putTime  =<< B.timeAddClock (C.gClock yc) (C.gTime  xc) 
-    | C.isClock xc && C.isTime  yc = C.putTime  =<< B.timeAddClock (C.gClock xc) (C.gTime  yc)
+    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd   (D.gDec   xc) (D.gDec   yc)
+    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd     (D.gClock xc) (D.gClock yc)
+    | D.isTime  xc && D.isClock yc = D.putTime  =<< D.timeAddClock (D.gClock yc) (D.gTime  xc) 
+    | D.isClock xc && D.isTime  yc = D.putTime  =<< D.timeAddClock (D.gClock xc) (D.gTime  yc)
 copPlus2 _ = Msg.unexpAttr "+"
 
-copPlus1 :: (C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
-copPlus1 [Right x] | C.isDec x = Right x
+copPlus1 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
+copPlus1 [Right x] | D.isDec x = Right x
 copPlus1 _ = Msg.unexpAttr "+"
 
-copTimes :: (C.CText c, C.CDec c) => C.CopCalc c
-copTimes xs = fmap C.pDec $ loop xs where
-    loop [] = Right $ B.intDecimal 1
+copTimes :: (D.CText c, D.CDec c) => D.CopCalc c
+copTimes xs = fmap D.pDec $ loop xs where
+    loop [] = Right $ D.intDecimal 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      B.decimalMul n' m'
+                      D.decimalMul n' m'
 
-copMinus2 :: (C.CText c, C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
+copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
 copMinus2 [Right xc, Right yc]
-    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalSub (C.gDec   xc) (C.gDec   yc)
-    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockSub   (C.gClock xc) (C.gClock yc)
-    | C.isTime  xc && C.isTime  yc = C.putClock =<< B.timeDiff   (C.gTime  xc) (C.gTime  yc)
+    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalSub (D.gDec   xc) (D.gDec   yc)
+    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockSub   (D.gClock xc) (D.gClock yc)
+    | D.isTime  xc && D.isTime  yc = D.putClock =<< D.timeDiff   (D.gTime  xc) (D.gTime  yc)
 copMinus2 _ = Msg.unexpAttr "-"
 
-copMinus1 :: (C.CDec c) => C.CopCalc c
-copMinus1 [Right x] | C.isDec x = C.putDec $ B.decimalRevsign (C.gDec x)
+copMinus1 :: (D.CDec c) => D.CopCalc c
+copMinus1 [Right x] | D.isDec x = D.putDec $ D.decimalRevsign (D.gDec x)
 copMinus1 _ = Msg.unexpAttr "-"
 
-copQuo :: (C.CText c, C.CDec c) => C.CopCalc c
+copQuo :: (D.CText c, D.CDec c) => D.CopCalc c
 copQuo arg =
-    do (ac, bc) <- C.getRightArg2 arg
+    do (ac, bc) <- D.getRightArg2 arg
        a <- getDecFrom ac
        b <- getDecFrom bc
-       c <- B.decimalQuo a b
-       C.putDec c
+       c <- D.decimalQuo a b
+       D.putDec c
 
-copRem :: (C.CText c, C.CDec c) => C.CopCalc c
+copRem :: (D.CText c, D.CDec c) => D.CopCalc c
 copRem arg =
-    do (ac, bc) <- C.getRightArg2 arg
+    do (ac, bc) <- D.getRightArg2 arg
        a <- getDecFrom ac
        b <- getDecFrom bc
-       c <- B.decimalRem a b
-       C.putDec $ c
+       c <- D.decimalRem a b
+       D.putDec $ c
 
-copAbs :: (C.CList c, C.CDec c) => C.CopCalc c
-copAbs [Right c] | C.isList c = Right . C.pList =<< mapM copAbs1 (C.gList c)
+copAbs :: (D.CList c, D.CDec c) => D.CopCalc c
+copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
                  | otherwise  = copAbs1 c
 copAbs _ = Msg.unexpAttr "abs"
 
-copAbs1 :: (C.CDec c) => B.AbMap c
-copAbs1 c | C.isDec c = C.putDec $ B.decimalAbs $ C.gDec c
+copAbs1 :: (D.CDec c) => B.AbMap c
+copAbs1 c | D.isDec c = D.putDec $ D.decimalAbs $ D.gDec c
 copAbs1 _ = Msg.unexpAttr "abc"
 

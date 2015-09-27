@@ -16,7 +16,7 @@ module Koshucode.Baala.Op.Cox.Filter
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as C
+import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
@@ -31,7 +31,7 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 --   [@omit E@]
 --     Omit tuples @E@ equals true.
 -- 
-ropsCoxFilter :: (C.CContent c) => [C.Rop c]
+ropsCoxFilter :: (D.CContent c) => [C.Rop c]
 ropsCoxFilter = Op.ropList "cox-filter"
     --        CONSTRUCTOR         USAGE         ATTRIBUTE
     [ Op.def  consContain         "contain E"   "1 -expr"
@@ -43,30 +43,30 @@ ropsCoxFilter = Op.ropList "cox-filter"
 
 -- ----------------------  filter
 
-consFilter :: (C.CContent c) => Bool -> C.RopCons c
+consFilter :: (D.CContent c) => Bool -> C.RopCons c
 consFilter b med =
     do cops   <- Op.getWhere med "-where"
        coxIn  <- Op.getCox med "-in"
        Right $ relmapFilter med (b, cops, coxIn)
 
-relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => C.Intmed c -> (Bool, C.CopSet c, C.Cox c) -> C.Relmap c
+relmapFilter :: (D.CList c, D.CRel c, D.CBool c, B.Write c)
+  => C.Intmed c -> (Bool, D.CopSet c, D.Cox c) -> C.Relmap c
 relmapFilter med = C.relmapFlow med . relkitFilter
 
-relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => (Bool, C.CopSet c, C.Cox c) -> C.RelkitFlow c
+relkitFilter :: (D.CList c, D.CRel c, D.CBool c, B.Write c)
+  => (Bool, D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, cops, body) (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitAbPred p
-    p cs1 = do c <- C.coxRunCox cops he1 cs1 body
-               case C.isBool c of
-                 True  -> Right $ C.gBool c == which
+    p cs1 = do c <- D.coxRunCox cops he1 cs1 body
+               case D.isBool c of
+                 True  -> Right $ D.gBool c == which
                  False -> Msg.reqBool
 
 
 -- ----------------------  contain
 
-consContain :: (C.CContent c) => C.RopCons c
+consContain :: (D.CContent c) => C.RopCons c
 consContain med =
     do c <- Op.getContent med "-expr"
        Right $ relmapContain med c

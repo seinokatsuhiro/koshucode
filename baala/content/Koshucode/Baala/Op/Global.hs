@@ -9,26 +9,26 @@ module Koshucode.Baala.Op.Global
   ) where
 
 import qualified Koshucode.Baala.Base      as B
-import qualified Koshucode.Baala.Data      as C
+import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 import qualified Koshucode.Baala.Op        as Rop
 import qualified Koshucode.Baala.Op.Cox    as Rop
 import qualified Koshucode.Baala.Op.Cop    as Cop
 
 -- | Global with operators.
-vanillaGlobal :: (C.CContent c) => C.Global c
+vanillaGlobal :: (D.CContent c) => C.Global c
 vanillaGlobal = global where
     global    = C.global { C.globalOpset     = C.opsetFill opset }
     opset     = C.opset  { C.opsetRopList    = vanillaRops
                          , C.opsetCop        = copset }
-    copset    = C.copset { C.copsetCopList   = vanillaCops
-                         , C.copsetInfixList = vanillaInfix }
+    copset    = D.copset { D.copsetCopList   = vanillaCops
+                         , D.copsetInfixList = vanillaInfix }
 
 -- | Relmap operators
-vanillaRops :: (C.CContent c) => [C.Rop c]
+vanillaRops :: (D.CContent c) => [C.Rop c]
 vanillaRops = ropsCox ++ ropsNonCox
 
-ropsCox :: (C.CContent c) => [C.Rop c]
+ropsCox :: (D.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxAccessor
           ++ Rop.ropsCoxCalc
           ++ Rop.ropsCoxEmpty
@@ -36,7 +36,7 @@ ropsCox    = Rop.ropsCoxAccessor
           ++ Rop.ropsCoxGadget
           ++ Rop.ropsCoxRange
 
-ropsNonCox :: (C.CContent c) => [C.Rop c]
+ropsNonCox :: (D.CContent c) => [C.Rop c]
 ropsNonCox = Rop.ropsMeta
           ++ Rop.ropsResource
           ++ Rop.ropsNest
@@ -51,7 +51,7 @@ ropsNonCox = Rop.ropsMeta
           ++ Rop.ropsBuiltin
 
 -- | Term-content operators.
-vanillaCops :: (C.CContent c) => [C.Cop c]
+vanillaCops :: (D.CContent c) => [D.Cop c]
 vanillaCops = concat [ Cop.copsArith
                      , Cop.copsLogic
                      , Cop.copsList

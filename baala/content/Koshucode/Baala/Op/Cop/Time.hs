@@ -8,8 +8,7 @@ module Koshucode.Baala.Op.Cop.Time
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
-import qualified Koshucode.Baala.Data       as C
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Op.Message as Msg
 
 
@@ -28,32 +27,32 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --  [@mjd@]        Modified Jurian Day of time.
 --
 
-copsTime :: (C.CTime c, C.CDec c) => [C.Cop c]
+copsTime :: (D.CTime c, D.CDec c) => [D.Cop c]
 copsTime =
-    [ C.CopCalc  (C.copNormal "add-day")    $ copTimeAdd B.timeAddDay
-    , C.CopCalc  (C.copNormal "add-week")   $ copTimeAdd B.timeAddWeek
-    , C.CopCalc  (C.copNormal "add-month")  $ copTimeAdd B.timeAddMonth
-    , C.CopCalc  (C.copNormal "add-year")   $ copTimeAdd B.timeAddYear
-    , C.CopCalc  (C.copNormal "mjd")        copMjd
-    , C.CopCalc  (C.copNormal "weekly")     $ copDateForm B.weekly
-    , C.CopCalc  (C.copNormal "monthly")    $ copDateForm B.monthly
-    , C.CopCalc  (C.copNormal "yearly")     $ copDateForm B.yearly
+    [ D.CopCalc  (D.copNormal "add-day")    $ copTimeAdd D.timeAddDay
+    , D.CopCalc  (D.copNormal "add-week")   $ copTimeAdd D.timeAddWeek
+    , D.CopCalc  (D.copNormal "add-month")  $ copTimeAdd D.timeAddMonth
+    , D.CopCalc  (D.copNormal "add-year")   $ copTimeAdd D.timeAddYear
+    , D.CopCalc  (D.copNormal "mjd")        copMjd
+    , D.CopCalc  (D.copNormal "weekly")     $ copDateForm D.weekly
+    , D.CopCalc  (D.copNormal "monthly")    $ copDateForm D.monthly
+    , D.CopCalc  (D.copNormal "yearly")     $ copDateForm D.yearly
     ]
 
-copTimeAdd :: (C.CTime c, C.CDec c) => (Integer -> B.Map B.Time) -> C.CopCalc c
+copTimeAdd :: (D.CTime c, D.CDec c) => (Integer -> B.Map D.Time) -> D.CopCalc c
 copTimeAdd add [Right c1, Right c2]
-    | C.isDec c1 && C.isTime c2 = addc c1 c2
-    | C.isDec c2 && C.isTime c1 = addc c2 c1
-    where addc nc tc = let n = toInteger $ B.decimalNum $ C.gDec nc
-                           t = C.gTime tc
-                       in Right $ C.pTime $ add n t
+    | D.isDec c1 && D.isTime c2 = addc c1 c2
+    | D.isDec c2 && D.isTime c1 = addc c2 c1
+    where addc nc tc = let n = toInteger $ D.decimalNum $ D.gDec nc
+                           t = D.gTime tc
+                       in Right $ D.pTime $ add n t
 copTimeAdd _ _ = Msg.unexpAttr "add-time"
 
-copMjd :: (C.CTime c, C.CDec c) => C.CopCalc c
-copMjd [Right c] | C.isTime c = Right $ C.pInteger $ B.timeMjd $ C.gTime c
+copMjd :: (D.CTime c, D.CDec c) => D.CopCalc c
+copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
 
-copDateForm :: (C.CTime c) => B.Map B.Date -> C.CopCalc c
-copDateForm f [Right c] | C.isTime c = C.putTime $ B.timeMapDate f $ C.gTime c
+copDateForm :: (D.CTime c) => B.Map D.Date -> D.CopCalc c
+copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeMapDate f $ D.gTime c
 copDateForm _ _ = Msg.unexpAttr "date"
 

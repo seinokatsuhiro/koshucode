@@ -18,8 +18,7 @@ module Koshucode.Baala.Op.Cox.Gadget
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data              as B
-import qualified Koshucode.Baala.Data              as C
+import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Op.Builtin        as Op
 import qualified Koshucode.Baala.Op.Cox.Get        as Op
@@ -28,7 +27,7 @@ import qualified Koshucode.Baala.Op.Message        as Msg
 
 
 -- | Implementation of relational operators.
-ropsCoxGadget :: (C.CContent c) => [C.Rop c]
+ropsCoxGadget :: (D.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --       CONSTRUCTOR    USAGE                            ATTRIBUTE
     [ Op.def consConst      "const R"                        "1 -lit"
@@ -53,19 +52,19 @@ ropsCoxGadget = Op.ropList "cox-gadget"
 --  
 --    > const {| |}
 
-consConst :: (C.CContent c) => C.RopCons c
+consConst :: (D.CContent c) => C.RopCons c
 consConst med =
     do lit <- Op.getContent med "-lit"
-       case C.isRel lit of
-         True  -> Right $ relmapConst med $ C.gRel lit
+       case D.isRel lit of
+         True  -> Right $ relmapConst med $ D.gRel lit
          False -> Msg.reqRel
 
-relmapConst :: C.Intmed c -> B.Rel c -> C.Relmap c
+relmapConst :: C.Intmed c -> D.Rel c -> C.Relmap c
 relmapConst med = C.relmapFlow med . relkitConst
 
-relkitConst :: B.Rel c -> C.RelkitFlow c
+relkitConst :: D.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
-relkitConst (B.Rel he bo) _ = Right kit2 where
+relkitConst (D.Rel he bo) _ = Right kit2 where
     kit2 = C.relkitJust he $ C.RelkitConst bo
 
 
@@ -73,7 +72,7 @@ relkitConst (B.Rel he bo) _ = Right kit2 where
 
 --  geo-datum-jp /n /x /y -to /lat /long
 
-consGeoDatumJp :: (Ord c, C.CContent c) => C.RopCons c
+consGeoDatumJp :: (Ord c, D.CContent c) => C.RopCons c
 consGeoDatumJp med =
     do n  <- Op.getCox med "-n"
        x  <- Op.getCox med "-x"
@@ -82,27 +81,27 @@ consGeoDatumJp med =
        let cops = C.globalCopset $ C.ropGlobal med
        Right $ relmapGeoDatumJp med (cops, (n,x,y), (lat,long))
 
-relmapGeoDatumJp :: (Ord c, C.CContent c) => C.Intmed c -> (C.CopSet c, C.Cox3 c, B.TermName2) -> C.Relmap c
+relmapGeoDatumJp :: (Ord c, D.CContent c) => C.Intmed c -> (D.CopSet c, D.Cox3 c, D.TermName2) -> C.Relmap c
 relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
 
-relkitGeoDatumJp :: (Ord c, C.CContent c) => (C.CopSet c, C.Cox3 c, B.TermName2) -> C.RelkitFlow c
+relkitGeoDatumJp :: (Ord c, D.CContent c) => (D.CopSet c, D.Cox3 c, D.TermName2) -> C.RelkitFlow c
 relkitGeoDatumJp _ Nothing = Right C.relkitNothing
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
-    he2       = B.headAppend [lat, long] he1
+    he2       = D.headAppend [lat, long] he1
     kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
-    pReal     = C.pDec . B.decimalFromRealFloat 4
+    pReal     = D.pDec . D.decimalFromRealFloat 4
 
-    f2 _ cs   = do cn    <- C.coxRunCox cops he1 cs coxn
-                   cx    <- C.coxRunCox cops he1 cs coxx
-                   cy    <- C.coxRunCox cops he1 cs coxy
+    f2 _ cs   = do cn    <- D.coxRunCox cops he1 cs coxn
+                   cx    <- D.coxRunCox cops he1 cs coxx
+                   cy    <- D.coxRunCox cops he1 cs coxy
 
-                   decn  <- C.getDec $ Right cn
-                   decx  <- C.getDec $ Right cx
-                   decy  <- C.getDec $ Right cy
+                   decn  <- D.getDec $ Right cn
+                   decx  <- D.getDec $ Right cx
+                   decy  <- D.getDec $ Right cy
 
-                   let n  = fromInteger $ B.decimalNum decn
-                       dx = B.decimalToRealFloat decx :: Double
-                       dy = B.decimalToRealFloat decy :: Double
+                   let n  = fromInteger $ D.decimalNum decn
+                       dx = D.decimalToRealFloat decx :: Double
+                       dy = D.decimalToRealFloat decy :: Double
                        (dlat, dlong) = Op.convDegree n (dx, dy)
 
                    Right $ pReal dlat : pReal dlong : cs
@@ -112,7 +111,7 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
 
 --  geo-degree /deg-real /deg /min /sec
 
-consGeoDegree :: (Ord c, C.CContent c) => C.RopCons c
+consGeoDegree :: (Ord c, D.CContent c) => C.RopCons c
 consGeoDegree med =
     do real <- Op.getTerm med "-real"
        deg  <- Op.getTerm med "-deg"
@@ -120,26 +119,26 @@ consGeoDegree med =
        sec  <- Op.getTerm med "-sec"
        Right $ relmapGeoDegree med (real, deg, mnt, sec)
 
-relmapGeoDegree :: (Ord c, C.CContent c) => C.Intmed c -> B.TermName4 -> C.Relmap c
+relmapGeoDegree :: (Ord c, D.CContent c) => C.Intmed c -> D.TermName4 -> C.Relmap c
 relmapGeoDegree med = C.relmapFlow med . relkitGeoDegree
 
-relkitGeoDegree :: (Ord c, C.CContent c) => B.TermName4 -> C.RelkitFlow c
+relkitGeoDegree :: (Ord c, D.CContent c) => D.TermName4 -> C.RelkitFlow c
 relkitGeoDegree _ Nothing = Right C.relkitNothing
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
-    he2       = B.headCons real he1
+    he2       = D.headCons real he1
     kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
     pick      = Op.picker he1 [deg, mnt, sec]
-    pReal     = C.pDec . B.decimalFromRealFloat 4
+    pReal     = D.pDec . D.decimalFromRealFloat 4
 
     f2 _ cs   = do let [cdeg, cmnt, csec] = pick cs
 
-                   hdeg <- C.getDec $ Right cdeg
-                   hmnt <- C.getDec $ Right cmnt
-                   hsec <- C.getDec $ Right csec
+                   hdeg <- D.getDec $ Right cdeg
+                   hmnt <- D.getDec $ Right cmnt
+                   hsec <- D.getDec $ Right csec
 
-                   let ddeg = B.decimalToRealFloat hdeg :: Double
-                       dmnt = B.decimalToRealFloat hmnt :: Double
-                       dsec = B.decimalToRealFloat hsec :: Double
+                   let ddeg = D.decimalToRealFloat hdeg :: Double
+                       dmnt = D.decimalToRealFloat hmnt :: Double
+                       dsec = D.decimalToRealFloat hsec :: Double
                        dmnt' = dmnt + dsec  / 60
                        ddeg' = ddeg + dmnt' / 60
 
@@ -148,66 +147,66 @@ relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
 
 -- ----------------------  interp
 
-consInterp :: (C.CContent c) => C.RopCons c
+consInterp :: (D.CContent c) => C.RopCons c
 consInterp med =
     do skip <- Op.getSwitch med "-x"
        case skip of
          True  -> Right $ Op.relmapId med
          False -> consInterp2 med
 
-consInterp2 :: (C.CContent c) => C.RopCons c
+consInterp2 :: (D.CContent c) => C.RopCons c
 consInterp2 med =
     do c <- Op.getContent med "-interp"
-       case C.isInterp c of
-         True  -> Right $ relmapInterp med $ C.gInterp c
+       case D.isInterp c of
+         True  -> Right $ relmapInterp med $ D.gInterp c
          False -> Msg.reqInterp
 
-relmapInterp :: (C.CContent c) => C.Intmed c -> B.Interp -> C.Relmap c
+relmapInterp :: (D.CContent c) => C.Intmed c -> D.Interp -> C.Relmap c
 relmapInterp med = C.relmapFlow med . relkitInterp
 
-relkitInterp :: (C.CContent c) => B.Interp -> C.RelkitFlow c
+relkitInterp :: (D.CContent c) => D.Interp -> C.RelkitFlow c
 relkitInterp _ Nothing = Right C.relkitNothing
 relkitInterp interp (Just he1)
     | interpMatch interp he1 = Right $ C.relkitJust he1 C.RelkitId
-    | otherwise              = Msg.unkTerm (B.interpTerms interp) he1
+    | otherwise              = Msg.unkTerm (D.interpTerms interp) he1
 
-interpMatch :: B.Interp -> B.Head -> Bool
+interpMatch :: D.Interp -> D.Head -> Bool
 interpMatch interp he = ns1 == ns2 where
-    ns1 = B.sort $ B.interpTerms interp
-    ns2 = B.sort $ B.headNames he
+    ns1 = B.sort $ D.interpTerms interp
+    ns2 = B.sort $ D.headNames he
 
 
 -- ----------------------  number
 
-consNumber :: (Ord c, C.CContent c) => C.RopCons c
+consNumber :: (Ord c, D.CContent c) => C.RopCons c
 consNumber med =
     do n    <- Op.getTerm med "-term"
        ns   <- Op.getOption [] Op.getTerms med "-order"
        from <- Op.getOption 0  Op.getInt   med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
-relmapNumber :: (C.CDec c, Ord c) => C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
 
-relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
+relkitNumber :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
-    :: (Ord c, C.CDec c)
-    => B.Ranking B.TermName c
-    -> (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
+    :: (Ord c, D.CDec c)
+    => B.Ranking D.TermName c
+    -> (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
-    he2   = B.headCons n he1
+    he2   = D.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = let (rank, bo2) = ranking from ords (B.headNames he1) bo1
-                in zipWith (:) (map C.pInt rank) bo2
+    kitf2 bo1 = let (rank, bo2) = ranking from ords (D.headNames he1) bo1
+                in zipWith (:) (map D.pInt rank) bo2
     ords  = map B.Asc ns
 
 
 -- ----------------------  rank
 
-consRank :: (Ord c, C.CContent c) => C.RopCons c
+consRank :: (Ord c, D.CContent c) => C.RopCons c
 consRank med =
     do n     <- Op.getTerm   med "-term"
        ns    <- Op.getTerms  med "-order"
@@ -218,24 +217,24 @@ consRank med =
                         else relmapGapRank
        Right $ relmapRank med (n, ns, fromInteger from)
 
-relmapDenseRank :: (C.CDec c, Ord c) =>
-   C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+relmapDenseRank :: (D.CDec c, Ord c) =>
+   C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
 relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
-relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
+relkitDenseRank :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
-relmapGapRank :: (C.CDec c, Ord c) =>
-   C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+relmapGapRank :: (D.CDec c, Ord c) =>
+   C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
 relmapGapRank med = C.relmapFlow med . relkitGapRank
 
-relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
+relkitGapRank :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
 
 -- ----------------------  repeat
 
-consRepeat :: (Ord c, C.CContent c) => C.RopCons c
+consRepeat :: (Ord c, D.CContent c) => C.RopCons c
 consRepeat med =
   do cnt  <- Op.getInt    med "-count"
      rmap <- Op.getRelmap med "-relmap"
@@ -246,7 +245,7 @@ relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
 relkitRepeat :: forall c. (Ord c) => Integer -> C.RelkitBinary c
 relkitRepeat cnt (C.Relkit _ (Just he2) kitb2) (Just he1)
-    | B.headEquiv he1 he2 = Right $ kit3
+    | D.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
     kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]

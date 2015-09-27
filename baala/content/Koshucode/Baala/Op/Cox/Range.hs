@@ -25,15 +25,14 @@ module Koshucode.Baala.Op.Cox.Range
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as B
-import qualified Koshucode.Baala.Data        as C
+import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
 
 
 -- | Implementation of relational operators.
-ropsCoxRange :: (C.CContent c) => [C.Rop c]
+ropsCoxRange :: (D.CContent c) => [C.Rop c]
 ropsCoxRange = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                             ATTRIBUTE
     [ Op.def  consRange         "range /N -from E -to E"          "1 -term | -from -to"
@@ -54,9 +53,9 @@ ropsCoxRange = Op.ropList "cox-calc"
 --  
 --    > range /n -from 0 -to 9
 
-type RangeAttr c = (B.TermName, C.CopSet c, C.Cox c, C.Cox c)
+type RangeAttr c = (D.TermName, D.CopSet c, D.Cox c, D.Cox c)
 
-getRangeAttr :: (C.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
+getRangeAttr :: (D.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
 getRangeAttr med =
   do term     <- Op.getTerm med "-term"
      coxLow   <- Op.getCox  med "-from"
@@ -64,115 +63,115 @@ getRangeAttr med =
      let cops = C.globalCopset $ C.ropGlobal med
      Right (term, cops, coxLow, coxHigh)
 
-consRange :: (C.CContent c) => C.RopCons c
+consRange :: (D.CContent c) => C.RopCons c
 consRange med = Right . relmapRange med =<< getRangeAttr med
 
-relmapRange :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRange :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRange med = C.relmapFlow med . relkitRange
 
-relkitRange :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRange :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
-    he2      = B.headCons n he1
+    he2      = D.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do decLow    <- C.getDec $ C.coxRunCox cops he1 cs coxLow
-                  decHigh   <- C.getDec $ C.coxRunCox cops he1 cs coxHigh
+    f2 _ cs  = do decLow    <- D.getDec $ D.coxRunCox cops he1 cs coxLow
+                  decHigh   <- D.getDec $ D.coxRunCox cops he1 cs coxHigh
 
-                  let low    = B.decimalNum decLow
-                      high   = B.decimalNum decHigh
-                      decs   = map C.pInteger [low .. high]
+                  let low    = D.decimalNum decLow
+                      high   = D.decimalNum decHigh
+                      decs   = map D.pInteger [low .. high]
 
                   Right $ map (: cs) decs
 
 
 -- ----------------------  range-year
 
-consRangeYear :: (C.CContent c) => C.RopCons c
+consRangeYear :: (D.CContent c) => C.RopCons c
 consRangeYear med = Right . relmapRangeYear med =<< getRangeAttr med
 
-relmapRangeYear :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeYear :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeYear med = C.relmapFlow med . relkitRangeYear
 
-relkitRangeYear :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeYear = relkitRangeBy B.timeRangeYear
+relkitRangeYear :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeYear = relkitRangeBy D.timeRangeYear
 
 
 -- ----------------------  range-month
 
-consRangeMonth :: (C.CContent c) => C.RopCons c
+consRangeMonth :: (D.CContent c) => C.RopCons c
 consRangeMonth med = Right . relmapRangeMonth med =<< getRangeAttr med
 
-relmapRangeMonth :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeMonth :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeMonth med = C.relmapFlow med . relkitRangeMonth
 
-relkitRangeMonth :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeMonth = relkitRangeBy B.timeRangeMonth
+relkitRangeMonth :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeMonth = relkitRangeBy D.timeRangeMonth
 
 
 -- ----------------------  range-day
 
-consRangeDay :: (C.CContent c) => C.RopCons c
+consRangeDay :: (D.CContent c) => C.RopCons c
 consRangeDay med = Right . relmapRangeDay med =<< getRangeAttr med
 
-relmapRangeDay :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeDay :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeDay med = C.relmapFlow med . relkitRangeDay
 
-relkitRangeDay :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeDay = relkitRangeBy B.timeRangeDay
+relkitRangeDay :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeDay = relkitRangeBy D.timeRangeDay
 
-relkitRangeBy :: (C.CContent c) => B.RangeBy B.Time -> RangeAttr c -> C.RelkitFlow c
+relkitRangeBy :: (D.CContent c) => B.RangeBy D.Time -> RangeAttr c -> C.RelkitFlow c
 relkitRangeBy _ _ Nothing = Right C.relkitNothing
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
-    he2      = B.headCons n he1
+    he2      = D.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do timeFrom  <-  C.getTime $ C.coxRunCox cops he1 cs from
-                  timeTo    <-  C.getTime $ C.coxRunCox cops he1 cs to
-                  let ts    =   map C.pTime $ range timeFrom timeTo
+    f2 _ cs  = do timeFrom  <-  D.getTime $ D.coxRunCox cops he1 cs from
+                  timeTo    <-  D.getTime $ D.coxRunCox cops he1 cs to
+                  let ts    =   map D.pTime $ range timeFrom timeTo
                   Right $ map (: cs) ts
 
 
 -- ----------------------  range-hour
 
-consRangeHour :: (C.CContent c) => C.RopCons c
+consRangeHour :: (D.CContent c) => C.RopCons c
 consRangeHour med = Right . relmapRangeHour med =<< getRangeAttr med
 
-relmapRangeHour :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeHour :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeHour med = C.relmapFlow med . relkitRangeHour
 
-relkitRangeHour :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeHour :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeHour = relkitRangeClock 3600
 
 
 -- ----------------------  range-minute
 
-consRangeMinute :: (C.CContent c) => C.RopCons c
+consRangeMinute :: (D.CContent c) => C.RopCons c
 consRangeMinute med = Right . relmapRangeMinute med =<< getRangeAttr med
 
-relmapRangeMinute :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeMinute :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeMinute med = C.relmapFlow med . relkitRangeMinute
 
-relkitRangeMinute :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeMinute :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMinute = relkitRangeClock 60
 
 
 -- ----------------------  range-second
 
-consRangeSecond :: (C.CContent c) => C.RopCons c
+consRangeSecond :: (D.CContent c) => C.RopCons c
 consRangeSecond med = Right . relmapRangeSecond med =<< getRangeAttr med
 
-relmapRangeSecond :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
+relmapRangeSecond :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeSecond med = C.relmapFlow med . relkitRangeSecond
 
-relkitRangeSecond :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeSecond :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeSecond = relkitRangeClock 1
 
-relkitRangeClock :: (C.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
+relkitRangeClock :: (D.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
 relkitRangeClock _ _ Nothing = Right C.relkitNothing
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
-    he2      = B.headCons n he1
+    he2      = D.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do clockFrom  <- C.getClock $ C.coxRunCox cops he1 cs from
-                  clockTo    <- C.getClock $ C.coxRunCox cops he1 cs to
-                  let range   = B.clockRangeBy $ B.clockStep sec
-                      clocks  = map C.pClock $ range clockFrom clockTo
+    f2 _ cs  = do clockFrom  <- D.getClock $ D.coxRunCox cops he1 cs from
+                  clockTo    <- D.getClock $ D.coxRunCox cops he1 cs to
+                  let range   = D.clockRangeBy $ D.clockStep sec
+                      clocks  = map D.pClock $ range clockFrom clockTo
                   Right $ map (: cs) clocks

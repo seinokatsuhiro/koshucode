@@ -8,8 +8,7 @@ module Koshucode.Baala.Op.Cop.Type
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data            as B
-import qualified Koshucode.Baala.Data            as C
+import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Op.Message      as Msg
 
 
@@ -26,43 +25,43 @@ import qualified Koshucode.Baala.Op.Message      as Msg
 --  [@to-text@]    Convert to text.
 --
 
-copsType :: (C.CContent c) => [C.Cop c]
+copsType :: (D.CContent c) => [D.Cop c]
 copsType =
-    [ C.CopCalc  (C.copNormal "to-dec")       copToDec
-    , C.CopCalc  (C.copNormal "to-list")      copToList
-    , C.CopCalc  (C.copNormal "to-set")       copToSet
-    , C.CopCalc  (C.copNormal "to-text")      copToText
+    [ D.CopCalc  (D.copNormal "to-dec")       copToDec
+    , D.CopCalc  (D.copNormal "to-list")      copToList
+    , D.CopCalc  (D.copNormal "to-set")       copToSet
+    , D.CopCalc  (D.copNormal "to-text")      copToText
     ]
 
-typeUnmatch :: C.CTypeOf c => [B.Ab c] -> B.Ab c
+typeUnmatch :: D.CTypeOf c => [B.Ab c] -> B.Ab c
 typeUnmatch _ = Msg.unmatchType ""
 
-copToDec :: (C.CContent c) => C.CopCalc c
+copToDec :: (D.CContent c) => D.CopCalc c
 copToDec = op where
-    op [Right c] | C.isText c  = case B.litDecimal $ C.gText c of
-                                   Right n  -> Right $ C.pDec n
+    op [Right c] | D.isText c  = case D.litDecimal $ D.gText c of
+                                   Right n  -> Right $ D.pDec n
                                    Left _   -> Right c
-                 | C.isBool c  = case C.gBool c of
-                                   True   -> Right $ C.pInt 1
-                                   False  -> Right $ C.pInt 0
+                 | D.isBool c  = case D.gBool c of
+                                   True   -> Right $ D.pInt 1
+                                   False  -> Right $ D.pInt 0
                  | otherwise   = Right c
     op xs = typeUnmatch xs
 
-copToText :: (C.CContent c) => C.CopCalc c
+copToText :: (D.CContent c) => D.CopCalc c
 copToText = op where
-    op [Right c] | C.isDec  c  = Right $ C.pText $ B.decimalString $ C.gDec c
+    op [Right c] | D.isDec  c  = Right $ D.pText $ D.decimalString $ D.gDec c
                  | otherwise   = Right c
     op xs = typeUnmatch xs
 
-copToList :: (C.CContent c) => C.CopCalc c
+copToList :: (D.CContent c) => D.CopCalc c
 copToList = op where
-    op [Right c] | C.isSet c   = Right $ C.pList $ C.gSet c
+    op [Right c] | D.isSet c   = Right $ D.pList $ D.gSet c
                  | otherwise   = Right c
     op xs = typeUnmatch xs
 
-copToSet :: (C.CContent c) => C.CopCalc c
+copToSet :: (D.CContent c) => D.CopCalc c
 copToSet = op where
-    op [Right c] | C.isList c  = Right $ C.pSet $ C.gList c
+    op [Right c] | D.isList c  = Right $ D.pSet $ D.gList c
                  | otherwise   = Right c
     op xs = typeUnmatch xs
 

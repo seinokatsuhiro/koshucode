@@ -12,62 +12,61 @@ module Koshucode.Baala.Op.Cop.Coxhand
   ) where
 
 import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Data   as B
-import qualified Koshucode.Baala.Data   as C
+import qualified Koshucode.Baala.Data   as D
 
 
 -- --------------------------------------------  Form
 
 -- | Create a form with named blanks.
-f :: [String] -> B.Map (C.Cox c)
-f vs = C.coxForm [] Nothing vs
+f :: [String] -> B.Map (D.Cox c)
+f vs = D.coxForm [] Nothing vs
 
 -- | Shorthand for one-blank form — @f [\"\#1\"]@
-f1 :: B.Map (C.Cox c)
+f1 :: B.Map (D.Cox c)
 f1 = f ["#1"]
 
 -- | Shorthand for two-blanks form — @f [\"\#1\", \"\#2\"]@
-f2 :: B.Map (C.Cox c)
+f2 :: B.Map (D.Cox c)
 f2 = f ["#1", "#2"]
 
 -- | Shorthand for three-blanks form — @f [\"\#1\", \"\#2\", \"\#3\"]@
-f3 :: B.Map (C.Cox c)
+f3 :: B.Map (D.Cox c)
 f3 = f ["#1", "#2", "#3"]
 
 
 -- --------------------------------------------  Fill
 
 -- | Fill blanks in a named form.
-i :: String -> [C.Cox c] -> C.Cox c
+i :: String -> [D.Cox c] -> D.Cox c
 i = ix . b
 
-ib :: B.BlankName -> [C.Cox c] -> C.Cox c
-ib = ix . C.CoxBlank []
+ib :: D.BlankName -> [D.Cox c] -> D.Cox c
+ib = ix . D.CoxBlank []
 
 -- | Fill blanks in the given form.
-ix :: C.Cox c -> [C.Cox c] -> C.Cox c
-ix = C.CoxFill []
+ix :: D.Cox c -> [D.Cox c] -> D.Cox c
+ix = D.CoxFill []
 
 -- | Fill two blanks in a named binary form.
-bin :: String -> C.Cox c -> C.Cox c -> C.Cox c
-bin n x y = ib (C.copInfix n) [x, y]
+bin :: String -> D.Cox c -> D.Cox c -> D.Cox c
+bin n x y = ib (D.copInfix n) [x, y]
 
 
 -- --------------------------------------------  Blank
 
 -- | Create a named blank in a form.
-b :: String -> C.Cox c
-b = C.CoxBlank [] . B.BlankNormal
+b :: String -> D.Cox c
+b = D.CoxBlank [] . D.BlankNormal
 
 -- | Shorthand for the first blank — @b \"\#1\"@
-b1 :: C.Cox c
+b1 :: D.Cox c
 b1 = b "#1"
 
 -- | Shorthand for the second blank — @b \"\#2\"@
-b2 :: C.Cox c
+b2 :: D.Cox c
 b2 = b "#2"
 
 -- | Shorthand for the third blank — @b \"\#3\"@
-b3 :: C.Cox c
+b3 :: D.Cox c
 b3 = b "#3"
 

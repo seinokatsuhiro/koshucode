@@ -8,7 +8,7 @@ module Koshucode.Baala.Op.Cop.Logic
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data            as C
+import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Op.Cop.Coxhand  as H
 
 
@@ -30,62 +30,62 @@ import qualified Koshucode.Baala.Op.Cop.Coxhand  as H
 --  [@when@]     Inverse implication.
 --
 
-copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
+copsLogic :: (D.CBool c, D.CEmpty c) => [D.Cop c]
 copsLogic =
-    [ C.CopCalc  (C.copInfix    "and")     copAnd
-    , C.CopCalc  (C.copInfix    "or")      copOr
-    , C.CopCalc  (C.copInfix    "then")    copImp
-    , C.CopCalc  (C.copInfix    "when")    copWhen
-    , C.CopCalc  (C.copNormal   "not")     copNot
-    , C.CopCalc  (C.copNormal   "and")     copAnd
-    , C.CopCalc  (C.copNormal   "or")      copOr
-    , C.CopCalc  (C.copNormal   "then")    copImp
-    , C.CopCalc  (C.copNormal   "when")    copWhen
+    [ D.CopCalc  (D.copInfix    "and")     copAnd
+    , D.CopCalc  (D.copInfix    "or")      copOr
+    , D.CopCalc  (D.copInfix    "then")    copImp
+    , D.CopCalc  (D.copInfix    "when")    copWhen
+    , D.CopCalc  (D.copNormal   "not")     copNot
+    , D.CopCalc  (D.copNormal   "and")     copAnd
+    , D.CopCalc  (D.copNormal   "or")      copOr
+    , D.CopCalc  (D.copNormal   "then")    copImp
+    , D.CopCalc  (D.copNormal   "when")    copWhen
 
-    , C.CopCox   (C.copNormal   "all")   $ copCollect "and"
-    , C.CopCox   (C.copNormal   "any")   $ copCollect "or"
+    , D.CopCox   (D.copNormal   "all")   $ copCollect "and"
+    , D.CopCox   (D.copNormal   "any")   $ copCollect "or"
     ]
 
-cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopCalc c
+cop1 :: (D.CBool c) => (Bool -> Bool) -> D.CopCalc c
 cop1 p arg =
-    do xc <- C.getRightArg1 arg
-       x  <- C.getBool $ Right xc
-       C.putBool $ p x
+    do xc <- D.getRightArg1 arg
+       x  <- D.getBool $ Right xc
+       D.putBool $ p x
 
-cop2 :: (C.CBool c) => B.Bin Bool -> C.CopCalc c
+cop2 :: (D.CBool c) => B.Bin Bool -> D.CopCalc c
 cop2 p arg =
-    do (xc, yc) <- C.getRightArg2 arg
-       x <- C.getBool $ Right xc
-       y <- C.getBool $ Right yc
-       C.putBool $ p x y
+    do (xc, yc) <- D.getRightArg2 arg
+       x <- D.getBool $ Right xc
+       y <- D.getBool $ Right yc
+       D.putBool $ p x y
 
-copN :: (C.CBool c) => Bool -> B.Bin Bool -> C.CopCalc c
+copN :: (D.CBool c) => Bool -> B.Bin Bool -> D.CopCalc c
 copN unit op = loop where
-    loop []   = C.putBool unit
+    loop []   = D.putBool unit
     loop [xc] = xc
     loop (xc1 : xc2 : xs) =
         do xc1' <- xc1
            xc2' <- xc2
-           x1 <- C.getBool $ Right xc1'
-           x2 <- C.getBool $ Right xc2'
-           loop $ C.putBool (x1 `op` x2) : xs
+           x1 <- D.getBool $ Right xc1'
+           x2 <- D.getBool $ Right xc2'
+           loop $ D.putBool (x1 `op` x2) : xs
 
-copNot  :: (C.CBool c) => C.CopCalc c
+copNot  :: (D.CBool c) => D.CopCalc c
 copNot  = cop1 not
 
-copWhen :: (C.CBool c) => C.CopCalc c
+copWhen :: (D.CBool c) => D.CopCalc c
 copWhen = cop2 $ \x y -> x || not y
 
-copImp  :: (C.CBool c) => C.CopCalc c
+copImp  :: (D.CBool c) => D.CopCalc c
 copImp  = cop2 $ \x y -> not x || y
 
-copAnd  :: (C.CBool c) => C.CopCalc c
+copAnd  :: (D.CBool c) => D.CopCalc c
 copAnd  = copN True (&&)
 
-copOr   :: (C.CBool c) => C.CopCalc c
+copOr   :: (D.CBool c) => D.CopCalc c
 copOr   = copN False (||)
 
-copCollect :: String -> C.CopCox c
-copCollect n fs = Right $ H.f1 $ H.ib (C.copInfix n) (map fill fs) where
+copCollect :: String -> D.CopCox c
+copCollect n fs = Right $ H.f1 $ H.ib (D.copInfix n) (map fill fs) where
     fill f = H.ix f [H.b1]
 

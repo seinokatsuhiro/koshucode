@@ -12,8 +12,7 @@ module Koshucode.Baala.Type.Vanilla
 
 import qualified Data.Set                   as Set
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
-import qualified Koshucode.Baala.Data       as C
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Writer     as W
 import qualified Koshucode.Baala.Op.Message as Msg
@@ -21,10 +20,10 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 -- ----------------------  Derived type
 
-type AboutC         = B.About        VContent
-type AboutJudgesC   = B.AboutJudges  VContent
+type AboutC         = D.About        VContent
+type AboutJudgesC   = D.AboutJudges  VContent
 type GlobalC        = C.Global       VContent
-type JudgeC         = B.Judge        VContent
+type JudgeC         = D.Judge        VContent
 type ResourceC      = C.Resource     VContent
 type ResultC        = C.Result       VContent
 type ResultWriterC  = C.ResultWriter VContent
@@ -37,16 +36,16 @@ data VContent
     = VBool    Bool               -- ^ Boolean type
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
-    | VDec     B.Decimal          -- ^ Decimal number type
-    | VClock   B.Clock            -- ^ Clock type
-    | VTime    B.Time             -- ^ Time type
+    | VDec     D.Decimal          -- ^ Decimal number type
+    | VClock   D.Clock            -- ^ Clock type
+    | VTime    D.Time             -- ^ Time type
     | VEmpty                      -- ^ Sign of no ordinary type
-    | VInterp  B.Interp           -- ^ Interpretation type
-    | VType    B.Type             -- ^ Type for type
+    | VInterp  D.Interp           -- ^ Interpretation type
+    | VType    D.Type             -- ^ Type for type
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
-    | VRel     (B.Rel VContent)   -- ^ Relation type
+    | VRel     (D.Rel VContent)   -- ^ Relation type
     deriving (Show)
 
 instance Eq VContent where
@@ -87,27 +86,27 @@ typeOrder (VRel     _)  = 15
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
-instance C.CTypeOf VContent where
-    typeOf (VBool    _)  = B.TypeBool
-    typeOf (VText    _)  = B.TypeText
-    typeOf (VTerm    _)  = B.TypeTerm
-    typeOf (VDec     _)  = B.TypeDec
-    typeOf (VClock   c)  = B.TypeClock $ Just $ B.clockPrecision c
-    typeOf (VTime    t)  = B.TypeTime  $ Just $ B.timePrecision t
-    typeOf (VEmpty    )  = B.TypeEmpty
-    typeOf (VInterp  _)  = B.TypeInterp
-    typeOf (VType    _)  = B.TypeType
-    typeOf (VList   cs)  = B.TypeList $ typeSum cs
-    typeOf (VSet    cs)  = B.TypeSet  $ typeSum cs
-    typeOf (VAssn   cs)  = B.TypeAssn $ B.mapSndTo C.typeOf cs
-    typeOf (VRel     _)  = B.TypeRel []
+instance D.CTypeOf VContent where
+    typeOf (VBool    _)  = D.TypeBool
+    typeOf (VText    _)  = D.TypeText
+    typeOf (VTerm    _)  = D.TypeTerm
+    typeOf (VDec     _)  = D.TypeDec
+    typeOf (VClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
+    typeOf (VTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
+    typeOf (VEmpty    )  = D.TypeEmpty
+    typeOf (VInterp  _)  = D.TypeInterp
+    typeOf (VType    _)  = D.TypeType
+    typeOf (VList   cs)  = D.TypeList $ typeSum cs
+    typeOf (VSet    cs)  = D.TypeSet  $ typeSum cs
+    typeOf (VAssn   cs)  = D.TypeAssn $ B.mapSndTo D.typeOf cs
+    typeOf (VRel     _)  = D.TypeRel []
 
-typeSum :: C.CTypeOf c => [c] -> B.Type
-typeSum cs = case B.unique $ map C.typeOf cs of
+typeSum :: D.CTypeOf c => [c] -> D.Type
+typeSum cs = case B.unique $ map D.typeOf cs of
                [t] -> t
-               ts  -> B.TypeSum ts
+               ts  -> D.TypeSum ts
 
-instance C.CContent VContent where
+instance D.CContent VContent where
     appendContent (VEmpty) x           = Right x
     appendContent x (VEmpty)           = Right x
     appendContent (VText x) (VText y)  = Right . VText $ x ++ y
@@ -117,7 +116,7 @@ instance B.Write VContent where
     writeDocWith sh c = case c of
         VText s      -> B.doc $ sh s
         VTerm s      -> B.doc $ "'/" ++ s
-        VDec  n      -> B.doc $ B.decimalString n
+        VDec  n      -> B.doc $ D.decimalString n
         VClock t     -> B.doc t
         VTime t      -> B.doc t
         VBool b      -> B.doc b
@@ -137,7 +136,7 @@ instance W.ToJSON VContent where
     toJSON c = case c of
         VText s      -> W.toJSON s
         VTerm s      -> W.toJSON $ '/' : s
-        VDec  n      -> W.toJSON (B.decimalToRealFloat n :: Double)
+        VDec  n      -> W.toJSON (D.decimalToRealFloat n :: Double)
         VClock t     -> unimplemented t
         VTime t      -> unimplemented t
         VBool b      -> W.toJSON b
@@ -153,42 +152,42 @@ instance W.ToJSON VContent where
 
 -- ----------------------  haskell data
 
-instance C.CBool VContent where
+instance D.CBool VContent where
     pBool                    = VBool
     gBool (VBool x)          = x
     gBool _                  = B.bug "gBool"
     isBool  (VBool _)        = True
     isBool  _                = False
 
-instance C.CDec VContent where
+instance D.CDec VContent where
     pDec                     = VDec
     gDec (VDec x)            = x
     gDec _                   = B.bug "gDec"
     isDec  (VDec _)          = True
     isDec  _                 = False
 
-instance C.CClock VContent where
+instance D.CClock VContent where
     pClock                   = VClock
     gClock  (VClock x)       = x
     gClock  _                = B.bug "gClock"
     isClock (VClock _)       = True
     isClock _                = False
 
-instance C.CTime VContent where
+instance D.CTime VContent where
     pTime                    = VTime
     gTime  (VTime x)         = x
     gTime  _                 = B.bug "gTime"
     isTime (VTime _)         = True
     isTime _                 = False
 
-instance C.CText VContent where
+instance D.CText VContent where
     pText                    = VText
     gText (VText s)          = s
     gText _                  = B.bug "gText"
     isText  (VText _)        = True
     isText  _                = False
 
-instance C.CList VContent where
+instance D.CList VContent where
     pList                    = VList
     gList (VList xs)         = xs
     gList _                  = []
@@ -199,47 +198,47 @@ instance C.CList VContent where
 
 -- ----------------------  koshu data
 
-instance C.CEmpty VContent where
+instance D.CEmpty VContent where
     empty                    = VEmpty
     isEmpty VEmpty           = True
     isEmpty _                = False
 
-instance C.CTerm VContent where
+instance D.CTerm VContent where
     pTerm                    = VTerm
     gTerm (VTerm s)          = s
     gTerm _                  = B.bug "gTerm"
     isTerm  (VTerm _)        = True
     isTerm  _                = False
 
-instance C.CInterp VContent where
+instance D.CInterp VContent where
     pInterp                  = VInterp
     gInterp (VInterp r)      = r
     gInterp _                = B.bug "gInterp"
     isInterp  (VInterp _)    = True
     isInterp  _              = False
 
-instance C.CType VContent where
+instance D.CType VContent where
     pType                    = VType
     gType (VType r)          = r
     gType _                  = B.bug "gType"
     isType  (VType _)        = True
     isType  _                = False
 
-instance C.CSet VContent where
-    pSet                     = VSet . B.omit C.isEmpty . B.unique
+instance D.CSet VContent where
+    pSet                     = VSet . B.omit D.isEmpty . B.unique
     gSet (VSet x)            = x
     gSet _                   = B.bug "gSet"
     isSet  (VSet _)          = True
     isSet  _                 = False
 
-instance C.CAssn VContent where
+instance D.CAssn VContent where
     pAssn                    = VAssn
     gAssn (VAssn x)          = x
     gAssn _                  = B.bug "gAssn"
     isAssn  (VAssn _)        = True
     isAssn  _                = False
 
-instance C.CRel VContent where
+instance D.CRel VContent where
     pRel                     = VRel
     gRel (VRel r)            = r
     gRel _                   = B.bug "gRel"
