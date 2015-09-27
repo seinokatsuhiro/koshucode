@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Lexmap.Attr
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data                  as B
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos   as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
@@ -69,36 +69,36 @@ attrClassify posNames branchNames n = n2 where
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSortPara = [B.TTree] -> B.Ab AttrPara
+type AttrSortPara = [D.TTree] -> B.Ab AttrPara
 
-type AttrPara = B.ParaBody C.AttrName B.TTree
+type AttrPara = D.ParaBody C.AttrName D.TTree
 
 attrSort :: RopAttr -> AttrSortPara
 attrSort def = attrBranch B.>=> attrSortPos def
 
 attrBranch :: AttrSortPara
 attrBranch trees =
-    do let p   = B.para maybeSingleHyphen trees
-           p2  = B.paraNameAdd "@trunk" (B.paraPos p) p
-           dup = B.paraMultipleNames p2
+    do let p   = D.para maybeSingleHyphen trees
+           p2  = D.paraNameAdd "@trunk" (D.paraPos p) p
+           dup = D.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.paraNameMapKeys C.AttrNormal p2
+       Right $ D.paraNameMapKeys C.AttrNormal p2
 
-maybeSingleHyphen :: B.TTreeTo (Maybe String)
-maybeSingleHyphen (B.TextLeafRaw _ ('-' : n))  = Just n
+maybeSingleHyphen :: D.TTreeTo (Maybe String)
+maybeSingleHyphen (D.TextLeafRaw _ ('-' : n))  = Just n
 maybeSingleHyphen _                            = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =
-    do let noPos      = null $ B.paraPos p
-           nameList   = map fst $ B.paraNameList p
+    do let noPos      = null $ D.paraPos p
+           nameList   = map fst $ D.paraNameList p
            overlapped = pos `B.overlap` nameList
 
        p2            <- case noPos && overlapped of
                           True  -> Right p
-                          False -> B.paraPosName sorter p
+                          False -> D.paraPosName sorter p
 
-       let p3         = B.paraNameMapKeys classify p2
+       let p3         = D.paraNameMapKeys classify p2
            attr       = attrList p3
 
        attrCheck pos named attr
@@ -113,6 +113,6 @@ attrCheck posNames branchNames attr =
       textAll = "@trunk" : t posNames ++ t branchNames
       t       = map C.attrNameText
 
-attrList :: B.ParaBody n a -> [(n, [a])]
-attrList = map (B.mapSnd concat) . B.paraNameList
+attrList :: D.ParaBody n a -> [(n, [a])]
+attrList = map (B.mapSnd concat) . D.paraNameList
 

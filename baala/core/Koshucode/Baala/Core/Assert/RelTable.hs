@@ -12,30 +12,29 @@ module Koshucode.Baala.Core.Assert.RelTable
 import qualified Data.List                    as List
 import qualified Data.Map                     as Map
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data         as B
-import qualified Koshucode.Baala.Data         as C
+import qualified Koshucode.Baala.Data         as D
 
 
 
 -- --------------------------------------------  Rel table
 
-relTable :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> String
+relTable :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> String
 relTable sh = unlines . relTableLines sh
 
-relTableLines :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> [String]
+relTableLines :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> [String]
 relTableLines sh r = render $ relCells 2 size [] text where
     text = relText sh r
     size = maxTermSize text
 
-relCells :: Int -> TermSize -> B.TermPath -> B.RelText -> [[B.Cell]]
-relCells pad m path (B.Rel he bo) = table where
-    table = let ns = B.headNames he
-                h  = map (text . B.showTermName) ns
+relCells :: Int -> TermSize -> D.TermPath -> D.RelText -> [[B.Cell]]
+relCells pad m path (D.Rel he bo) = table where
+    table = let ns = D.headNames he
+                h  = map (text . D.showTermName) ns
             in h : map rule h : map (tuple ns) bo
     tuple ns cs = map content $ zip ns cs
     content (n, c) = case c of
-                       B.MonoNest r -> texts $ render $ relCells pad m path' r
-                       B.MonoTerm s -> width $ text s
+                       D.MonoNest r -> texts $ render $ relCells pad m path' r
+                       D.MonoTerm s -> width $ text s
         where path' = n : path
               width cell = let w = Map.findWithDefault 0 path' m
                            in cell { B.cellWidth = pad + w }
@@ -44,10 +43,10 @@ relCells pad m path (B.Rel he bo) = table where
     text   = B.textCell B.Front
     rule _ = B.textRuleCell '-'
 
-relText :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> B.RelText
-relText sh (B.Rel he bo) = B.Rel he $ map (map content) bo where
-    content c | C.isRel c  = B.MonoNest $ relText sh $ C.gRel c
-              | otherwise  = B.MonoTerm $ B.writeStringWith (B.shortText sh) c
+relText :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> D.RelText
+relText sh (D.Rel he bo) = D.Rel he $ map (map content) bo where
+    content c | D.isRel c  = D.MonoNest $ relText sh $ D.gRel c
+              | otherwise  = D.MonoTerm $ B.writeStringWith (D.shortText sh) c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable
@@ -56,28 +55,28 @@ render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable
 
 -- --------------------------------------------  Term Map
 
-type TermMap a = Map.Map B.TermPath a
+type TermMap a = Map.Map D.TermPath a
 type TermSize = TermMap Int
 
-maxTermSize :: B.RelText -> TermSize
-maxTermSize = termMap B.gMonoNest (B.stringWidth . B.gMonoTerm) max
+maxTermSize :: D.RelText -> TermSize
+maxTermSize = termMap D.gMonoNest (B.stringWidth . D.gMonoTerm) max
 
 termMap :: forall a. forall c.
-    (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
-termMap gRel from f (B.Rel he bo) = accum [] ts bo Map.empty where
+    (c -> D.Rel c) -> (c -> a) -> (a -> a -> a) -> D.Rel c -> TermMap a
+termMap gRel from f (D.Rel he bo) = accum [] ts bo Map.empty where
 
-    ts = B.typeTerms $ B.headType he
+    ts = D.typeTerms $ D.headType he
 
-    accum :: B.TermPath -> [B.NamedType] -> [[c]] -> B.Map (TermMap a)
+    accum :: D.TermPath -> [D.NamedType] -> [[c]] -> B.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
 
-    column :: B.TermPath -> (B.NamedType, [c]) -> B.Map (TermMap a)
-    column path ((n, B.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
+    column :: D.TermPath -> (D.NamedType, [c]) -> B.Map (TermMap a)
+    column path ((n, D.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
     column path ((n, _)            , cs2) m = foldr (add $ n : path) m cs2
 
-    add :: B.TermPath -> c -> B.Map (TermMap a)
+    add :: D.TermPath -> c -> B.Map (TermMap a)
     add path c m = Map.insertWith f path (from c) m
 
     bodies :: [c] -> [[c]]
-    bodies = concatMap (B.relBody . gRel)
+    bodies = concatMap (D.relBody . gRel)
 

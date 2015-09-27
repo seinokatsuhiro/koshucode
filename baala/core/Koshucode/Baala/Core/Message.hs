@@ -52,7 +52,7 @@ module Koshucode.Baala.Core.Message
   ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as B
+import qualified Koshucode.Baala.Data as D
 import Koshucode.Baala.Base.Message
 import Koshucode.Baala.Data.Message
 
@@ -65,17 +65,17 @@ abAssert = B.abortable "assert"
 abAttr :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr = B.abortable "attr"
 
-abAttrTrees :: B.TTreesTo (B.Map (B.Ab b))
-abAttrTrees = B.abortableTrees "attr"
+abAttrTrees :: D.TTreesTo (B.Map (B.Ab b))
+abAttrTrees = D.abortableTrees "attr"
 
 abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abClause = B.abortable "clause"
 
-abLexmap :: B.TTreesTo (B.Map (B.Ab b))
-abLexmap = B.abortableTrees "lexmap"
+abLexmap :: D.TTreesTo (B.Map (B.Ab b))
+abLexmap = D.abortableTrees "lexmap"
 
-abOption :: B.TTreesTo (B.Map (B.Ab b))
-abOption = B.abortableTrees "option"
+abOption :: D.TTreesTo (B.Map (B.Ab b))
+abOption = D.abortableTrees "option"
 
 abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
@@ -86,8 +86,8 @@ abRun = B.abortable "run"
 abSlot :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot = B.abortable "slot"
 
-abSlotTree :: B.TTreeTo (B.Map (B.Ab b))
-abSlotTree = B.abortableTree "slot"
+abSlotTree :: D.TTreeTo (B.Map (B.Ab b))
+abSlotTree = D.abortableTree "slot"
 
 abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
@@ -102,7 +102,7 @@ ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> B.Ab a
-dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map B.showTermName ns)
+dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map D.showTermName ns)
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> B.Ab a
@@ -198,25 +198,25 @@ unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
 
 -- | Unknown nested relation
-unkNestRel :: B.Token -> String -> [String] -> B.Ab a
+unkNestRel :: D.Token -> String -> [String] -> B.Ab a
 unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
-    where ref = "/" ++ n ++ " in " ++ B.tokenContent p
+    where ref = "/" ++ n ++ " in " ++ D.tokenContent p
 
-unkNestVar :: String -> [B.Token] -> [((B.Token, B.Local String), B.Head)] -> B.Ab a
+unkNestVar :: String -> [D.Token] -> [((D.Token, D.Local String), D.Head)] -> B.Ab a
 unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
                            $ ("search" : map indent dynamic)
                           ++ ("for"    : map indent lexical)
-    where lexical = map (text $ B.LocalSymbol n) ls
+    where lexical = map (text $ D.LocalSymbol n) ls
           dynamic = map f ds
           f ((tk, k), _) = text k tk
-          text (B.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
-          text (B.LocalNest   k) tk = unwords ["nested relation", term  k, "in", tokenAtPoint tk]
+          text (D.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
+          text (D.LocalNest   k) tk = unwords ["nested relation", term  k, "in", tokenAtPoint tk]
           indent    = ("  " ++)
           term      = ('/' :)
 
-tokenAtPoint :: B.Token -> String
+tokenAtPoint :: D.Token -> String
 tokenAtPoint tok = unwords ws where
-    ws    = [B.tokenContent tok, "at L" ++ line, "C" ++ col]
+    ws    = [D.tokenContent tok, "at L" ++ line, "C" ++ col]
     cp    = B.codePt tok
     line  = show $ B.codePtLineNo   cp
     col   = show $ B.codePtColumnNo cp
@@ -225,20 +225,20 @@ quote :: B.Map String
 quote s = "'" ++ s ++ "'"
 
 -- | Unknown option
-unkOption :: B.ParaUnmatch String -> B.Ab a
+unkOption :: D.ParaUnmatch String -> B.Ab a
 unkOption un = Left $ B.abortLines "Unknown option" detail where
     detail = case un of
-               B.ParaOutOfRange n p  -> ["Positional parameter out of range",
+               D.ParaOutOfRange n p  -> ["Positional parameter out of range",
                                          "Expect " ++ expect p ++
                                          ", but actural " ++ show n]
-               B.ParaUnknown  ns     -> ["Unknown parameter name", unwords ns]
-               B.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
-               B.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
+               D.ParaUnknown  ns     -> ["Unknown parameter name", unwords ns]
+               D.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
+               D.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
 
-    expect (B.ParaPosJust n)     = "just "    ++ show n
-    expect (B.ParaPosMin  n)     = "minimum " ++ show n
-    expect (B.ParaPosMax  n)     = "maximum " ++ show n
-    expect (B.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n
+    expect (D.ParaPosJust n)     = "just "    ++ show n
+    expect (D.ParaPosMin  n)     = "minimum " ++ show n
+    expect (D.ParaPosMax  n)     = "maximum " ++ show n
+    expect (D.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a

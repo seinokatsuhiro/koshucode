@@ -19,7 +19,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as B
+import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 
@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
-    , lexToken     :: B.Token       -- ^ Token of operator
+    , lexToken     :: D.Token       -- ^ Token of operator
     , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
@@ -42,7 +42,7 @@ data LexmapType
 
 instance B.Write Lexmap where
     writeDocWith sh lx@Lexmap { lexAttr = para } =
-        case B.paraAll para of
+        case D.paraAll para of
           [] -> B.writeH sh [op, "..."]
           xs -> B.writeH sh [op, show xs]
         where op = lexName lx
@@ -55,19 +55,19 @@ type RopName = String
 
 -- | Attribute of relmap operation.
 lexAttrTree :: Lexmap -> [C.AttrTree]
-lexAttrTree = map (B.mapSnd head) . B.paraNameList . lexAttr
+lexAttrTree = map (B.mapSnd head) . D.paraNameList . lexAttr
 
 -- | Empty base lexmap.
 lexBase :: Lexmap
 lexBase = Lexmap { lexType     = LexmapBase
-                 , lexToken    = B.textToken ""
-                 , lexAttr     = B.paraEmpty
+                 , lexToken    = D.textToken ""
+                 , lexAttr     = D.paraEmpty
                  , lexSubmap   = []
                  , lexMessage  = [] }
 
 -- | Name of relmap operator
 lexName :: Lexmap -> RopName
-lexName = B.tokenContent . lexToken
+lexName = D.tokenContent . lexToken
 
 lexAddMessage :: String -> B.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }

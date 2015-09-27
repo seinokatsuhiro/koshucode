@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data         as B
+import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core.Lexmap  as C
 
 
@@ -25,8 +25,8 @@ import qualified Koshucode.Baala.Core.Lexmap  as C
 
 -- | Specialized relmap.
 data Relkit c = Relkit
-    { relkitInput  :: Maybe B.Head
-    , relkitOutput :: Maybe B.Head
+    { relkitInput  :: Maybe D.Head
+    , relkitOutput :: Maybe D.Head
     , relkitBody   :: RelkitBody c
     }
 
@@ -46,12 +46,12 @@ data RelkitCore c
     | RelkitConst        [[c]]
     | RelkitId
 
-    | RelkitSource       B.JudgePat [B.TermName]
+    | RelkitSource       D.JudgePat [D.TermName]
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
-    | RelkitCopy         B.Token C.RopName (RelkitBody c)
-    | RelkitNestVar      B.Token C.RopName
-    | RelkitNest         B.Token [(String, Int)] (RelkitBody c)
+    | RelkitCopy         D.Token C.RopName (RelkitBody c)
+    | RelkitNestVar      D.Token C.RopName
+    | RelkitNest         D.Token [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
@@ -76,17 +76,17 @@ instance Show (RelkitCore c) where
     show (RelkitNest      _ _ _)   = "RelkitNest "
 
 type RelkitBody c = B.Sourced (RelkitCore c)
-type RelkitKey    = (Maybe B.Head, [C.Lexmap])
+type RelkitKey    = (Maybe D.Head, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- | Relation selector
-type RelSelect c = B.JudgePat -> [String] -> B.Rel c
+type RelSelect c = D.JudgePat -> [String] -> D.Rel c
 
 -- | Mapping for body of relation.
 type BodyMap c = B.AbMap [[c]]
 
 -- | Make 'C.Relkit' from heading of input relation.
-type RelkitFlow c     = Maybe B.Head -> B.Ab (Relkit c)
+type RelkitFlow c     = Maybe D.Head -> B.Ab (Relkit c)
 
 -- | Make 'C.Relkit' from hook data and input heading.
 type RelkitHook' h c  = h c -> RelkitFlow c

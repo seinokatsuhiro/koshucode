@@ -9,26 +9,25 @@ module Koshucode.Baala.Core.Resource.Run
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Data                    as B
-import qualified Koshucode.Baala.Data                    as C
+import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Resource c -> B.Ab (C.Result c)
+runResource :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
 runResource res =
     do res' <- assembleRelmap res
        let rslt = C.globalResult $ C.resGlobal res'
            js   = C.resJudge res'
-       case filter B.isViolative js of
+       case filter D.isViolative js of
          []  -> runResourceBody rslt res'
          jsV -> Right rslt
                   { C.resultOutput   = C.resOutput res
-                  , C.resultViolated = [B.Short [] [] [C.ResultJudge jsV]] }
+                  , C.resultViolated = [D.Short [] [] [C.ResultJudge jsV]] }
 
-runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
+runResourceBody :: forall c. (Ord c, B.Write c, D.CRel c, D.CEmpty c) =>
     C.Result c -> C.Resource c -> B.Ab (C.Result c)
 runResourceBody rslt res@C.Resource { C.resAssert  = ass
                                     , C.resEcho    = echo
@@ -41,17 +40,17 @@ runResourceBody rslt res@C.Resource { C.resAssert  = ass
                , C.resultOutput    = C.resOutput res
                , C.resultEcho      = map B.lineContent `map` echo
                , C.resultLicense   = group license
-               , C.resultViolated  = B.shortTrim js1
-               , C.resultNormal    = msgChunk : B.shortTrim js2
+               , C.resultViolated  = D.shortTrim js1
+               , C.resultNormal    = msgChunk : D.shortTrim js2
                , C.resultPattern   = C.resPattern res }
     where
       run :: [C.ShortAssert c] -> B.Ab [C.ShortResultChunks c]
       run = let opt = C.resOption res
-            in mapM (C.runAssertJudges res opt) . B.shortGroup
+            in mapM (C.runAssertJudges res opt) . D.shortGroup
 
       msgChunk :: C.ShortResultChunks c
-      msgChunk | null msg  = B.Short [] [] []
-               | otherwise = B.Short [] [] [C.ResultNote message]
+      msgChunk | null msg  = D.Short [] [] []
+               | otherwise = D.Short [] [] [C.ResultNote message]
 
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 
@@ -63,10 +62,10 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                               , C.resLexmap  = derives
                               , C.resAssert  = asserts } = res'
     where
-      res' = do result <- B.shortListM $ fmap assemble `map` asserts
+      res' = do result <- D.shortListM $ fmap assemble `map` asserts
                 let asserts2  = fmap fst `map` result
                     msg       = fmap snd `map` result
-                    msg2      = concat $ map B.shortBody msg
+                    msg2      = concat $ map D.shortBody msg
                 Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
 
       (consLexmap, consRelmap) = relmapCons res
@@ -74,7 +73,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
-            trees      <- C.substSlot slots [] $ B.paraPos $ C.assPara ass
+            trees      <- C.substSlot slots [] $ D.paraPos $ C.assPara ass
             (lx, lxs)  <- consLexmap slots (findRelmap derives) sec trees
             relmap     <- consRelmap lx
             links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs

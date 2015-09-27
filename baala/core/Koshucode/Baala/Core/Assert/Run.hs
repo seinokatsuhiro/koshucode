@@ -9,8 +9,7 @@ module Koshucode.Baala.Core.Assert.Run
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as B
-import qualified Koshucode.Baala.Data                 as C
+import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -22,41 +21,41 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
+runAssertJudges :: (Ord c, B.Write c, D.CRel c, D.CEmpty c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (C.ShortResultChunks c)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
-       Right $ a { B.shortBody = chunks }
+       Right $ a { D.shortBody = chunks }
 
 -- | Calculate assertion list.
-runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
+runAssertDataset :: forall h. forall c. (Ord c, B.Write c, D.CRel c, D.CEmpty c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [C.ResultChunk c]
-runAssertDataset hook option (B.Short _ sh ass) =
+runAssertDataset hook option (D.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat _ opt (Just relmap) libs) =
           Msg.abAssert [a] $ do
-            r1 <- runRelmapViaRelkit hook libs relmap B.reldee
+            r1 <- runRelmapViaRelkit hook libs relmap D.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat option opt r1
 
-      assert :: (C.CEmpty c) => Bool -> C.AssertType -> B.JudgeOf c
-      assert True  q p = C.assertAs q p
-      assert False q p = C.assertAs q p . omitEmpty
+      assert :: (D.CEmpty c) => Bool -> D.AssertType -> D.JudgeOf c
+      assert True  q p = D.assertAs q p
+      assert False q p = D.assertAs q p . omitEmpty
 
-      omitEmpty :: (C.CEmpty c) => B.Map [B.Term c]
-      omitEmpty =  B.omit (C.isEmpty . snd)
+      omitEmpty :: (D.CEmpty c) => B.Map [D.Term c]
+      omitEmpty =  B.omit (D.isEmpty . snd)
 
-runRelmapViaRelkit :: (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)
+runRelmapViaRelkit :: (Ord c, D.CRel c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.RelmapLinkTable' h c
-  -> C.Relmap' h c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
+  -> C.Relmap' h c -> B.AbMap (D.Rel c)
+runRelmapViaRelkit hook links r (D.Rel he1 bo1) =
     do (kdef, C.Relkit hi2' ho2' f2') <- C.relmapSpecialize hook links [] (Just he1) r
        let C.Relkit _ mhe2 f2 = C.relkitLink kdef $ C.Relkit hi2' ho2' f2'
        he2 <- just "unknown relhead" mhe2
        bo2 <- C.relkitRun hook [] f2 bo1
-       Right $ B.Rel he2 bo2
+       Right $ D.Rel he2 bo2
     where
       just :: String -> Maybe a -> B.Ab a
       just _ (Just h) = Right h
@@ -65,8 +64,8 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 
 -- ---------------------------------  Options
 
-optionType :: B.ParaType String
-optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
+optionType :: D.ParaType String
+optionType = D.paraType `D.paraMin` 0 `D.paraOpt`
              [ "empty"     -- show empty filler
              , "forward"   -- move terms to front
              , "backward"  -- move terms to rear
@@ -76,43 +75,43 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
              , "table"     -- output relation in tabular format
              ]
 
-optionProcess :: (Ord c, B.Write c, C.CRel c)
-    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat
+optionProcess :: (Ord c, B.Write c, D.CRel c)
+    => [D.ShortDef] -> (Bool -> D.JudgeOf c) -> D.JudgePat
     -> C.Option c -> C.TTreePara
-    -> B.Rel c -> B.Ab [C.ResultChunk c]
+    -> D.Rel c -> B.Ab [C.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
-    do case B.paraUnmatch opt optionType of
+    do case D.paraUnmatch opt optionType of
          Nothing  -> Right ()
          Just un  -> Msg.unkOption un
-       showEmpty <- B.paraGetSwitch opt "empty"
+       showEmpty <- D.paraGetSwitch opt "empty"
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
-       let js  = B.judgesFromRel (judgeOf showEmpty) pat r3
+       let js  = D.judgesFromRel (judgeOf showEmpty) pat r3
        comment <- optionComment sh pat opt r3
        Right [ C.ResultJudge js
              , C.ResultRel pat r3
              , C.ResultNote comment ]
 
-optionRelmapResource :: (Ord c, C.CRel c) => C.Option c -> B.AbMap (B.Rel c)
+optionRelmapResource :: (Ord c, D.CRel c) => C.Option c -> B.AbMap (D.Rel c)
 optionRelmapResource option r1 =
     Right r1 >>= call optionOrder (C.optionBool "order" option)
     where call f True  r2 = f [] r2
           call _ False r2 = Right r2
 
-optionRelmapAssert :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
+optionRelmapAssert :: (Ord c, D.CRel c) => C.TTreePara -> B.AbMap (D.Rel c)
 optionRelmapAssert opt r1 =
     Right r1 >>= call optionForward  "forward"
              >>= call optionBackward "backward"
              >>= call optionLexical  "lexical"
              >>= call optionOrder    "order"
-    where call f name r2 = case B.paraGet opt name of
+    where call f name r2 = case D.paraGet opt name of
                              Right args -> f args r2
                              Left _     -> Right r2
 
-optionComment :: (B.Write c, C.CRel c) =>
-    [B.ShortDef] -> B.JudgePat -> C.TTreePara -> B.Rel c -> B.Ab [String]
+optionComment :: (B.Write c, D.CRel c) =>
+    [D.ShortDef] -> D.JudgePat -> C.TTreePara -> D.Rel c -> B.Ab [String]
 optionComment sh p opt r =
-    do optTable <- B.paraGetSwitch opt "table"
+    do optTable <- D.paraGetSwitch opt "table"
        case optTable of
          True  -> Right $ title : "" : table
          False -> Right []
@@ -123,61 +122,61 @@ optionComment sh p opt r =
 
 -- ---------------------------------  Option "forward" and "backward"
 
-type SnipRel c = B.Snip2 B.NamedType c
+type SnipRel c = B.Snip2 D.NamedType c
 
-optionForward, optionBackward :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
+optionForward, optionBackward :: (Ord c) => [D.TTree] -> B.AbMap (D.Rel c)
 optionForward  = optionToward B.snipForward2
 optionBackward = optionToward B.snipBackward2
 
-optionToward :: (Ord c) => SnipRel c -> [B.TTree] -> B.AbMap (B.Rel c)
+optionToward :: (Ord c) => SnipRel c -> [D.TTree] -> B.AbMap (D.Rel c)
 optionToward snip2 opt2 r1 =
     do ns <- flatnames opt2
        snipRel snip2 ns r1
 
-flatnames :: [B.TTree] -> B.Ab [B.TermName]
+flatnames :: [D.TTree] -> B.Ab [D.TermName]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
       Nothing -> Msg.reqTermName
 
 -- | Get term name as string only if term is flat.
-flatname :: B.TTree -> Maybe B.TermName
-flatname (B.TermLeafName _ n)  = Just n
-flatname (B.TermLeaf _ _ [n])  = Just n
+flatname :: D.TTree -> Maybe D.TermName
+flatname (D.TermLeafName _ n)  = Just n
+flatname (D.TermLeaf _ _ [n])  = Just n
 flatname _                     = Nothing
 
-snipRel :: (Ord c) => SnipRel c -> [B.TermName] -> B.AbMap (B.Rel c)
-snipRel (heSnip, boSnip) ns (B.Rel he1 bo1)
+snipRel :: (Ord c) => SnipRel c -> [D.TermName] -> B.AbMap (D.Rel c)
+snipRel (heSnip, boSnip) ns (D.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Msg.unkTerm left he1
     where
-      ns1   = B.headNames he1
+      ns1   = D.headNames he1
       ind   = ns `B.snipIndex` ns1
       left  = ns `B.snipLeft`  ns1
 
-      r2    = B.Rel he2 bo2
-      he2   = heSnip ind `B.headMap` he1
+      r2    = D.Rel he2 bo2
+      he2   = heSnip ind `D.headMap` he1
       bo2   = boSnip ind `map` bo1
 
-optionLexical :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
+optionLexical :: (Ord c) => [D.TTree] -> B.AbMap (D.Rel c)
 optionLexical _ = lexicalOrderRel
 
-lexicalOrderRel :: (Ord c) => B.AbMap (B.Rel c)
-lexicalOrderRel rel@(B.Rel he1 _) = snipRel B.snipForward2 ns' rel where
-    ns' = B.sort $ B.headNames he1
+lexicalOrderRel :: (Ord c) => B.AbMap (D.Rel c)
+lexicalOrderRel rel@(D.Rel he1 _) = snipRel B.snipForward2 ns' rel where
+    ns' = B.sort $ D.headNames he1
 
 
 -- ---------------------------------  Option "order"
 
-optionOrder :: (Ord c, C.CRel c) => [B.TTree] ->  B.AbMap (B.Rel c)
+optionOrder :: (Ord c, D.CRel c) => [D.TTree] ->  B.AbMap (D.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1
 
-relSortDeep :: (Ord c, C.CRel c) => B.Map (B.Rel c)
+relSortDeep :: (Ord c, D.CRel c) => B.Map (D.Rel c)
 relSortDeep = relApply f where
-    f (B.Rel he bo) = B.Rel he $ B.sort bo
+    f (D.Rel he bo) = D.Rel he $ B.sort bo
 
-relApply :: (C.CRel c) => B.Map (B.Map (B.Rel c))
-relApply f (B.Rel he bo) = f $ B.Rel he $ B.map2 nest bo where
-    nest c | C.isRel c = C.pRel $ relApply f $ C.gRel c
+relApply :: (D.CRel c) => B.Map (B.Map (D.Rel c))
+relApply f (D.Rel he bo) = f $ D.Rel he $ B.map2 nest bo where
+    nest c | D.isRel c = D.pRel $ relApply f $ D.gRel c
            | otherwise = c
 

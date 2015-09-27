@@ -27,8 +27,7 @@ module Koshucode.Baala.Core.Relmap.Global
 
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as B
-import qualified Koshucode.Baala.Data                as C
+import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
 import qualified Koshucode.Baala.Core.Relmap.Result  as C
@@ -43,7 +42,7 @@ ropGlobal :: (GetGlobal h) => C.Intmed' h c -> Global' h c
 ropGlobal = getGlobal . C.medHook
 
 -- | Get operator set from 'Intmed'.
-ropCopset :: (GetGlobal h) => C.Intmed' h c -> C.CopSet c
+ropCopset :: (GetGlobal h) => C.Intmed' h c -> D.CopSet c
 ropCopset = globalCopset . ropGlobal
 
 
@@ -57,7 +56,7 @@ data Global' h c = Global
       , globalProgram      :: String                -- ^ Name of invoked program
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
-      , globalTime         :: B.Time                -- ^ Invocation time
+      , globalTime         :: D.Time                -- ^ Invocation time
       , globalResult       :: C.Result c            -- ^ Result template
       , globalOption       :: C.Option c            -- ^ Options
       , globalSourceCount  :: Int                   -- ^ Sequential number for sources
@@ -76,7 +75,7 @@ globalCommandLine :: Global' h c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
-globalFill :: (C.CContent c) => B.Map (Global' h c)
+globalFill :: (D.CContent c) => B.Map (Global' h c)
 globalFill g = g
 
 globalRops   :: Global' h c -> [C.Rop' h c]
@@ -87,20 +86,20 @@ globalRopsAdd rops g = g { globalOpset = opsetFill ops' } where
     ops' = opsetRopsAdd rops ops
     ops  = globalOpset g
 
-globalCops   :: Global' h c -> [C.Cop c]
-globalCops    = C.copsetCopList . opsetCop . globalOpset
+globalCops   :: Global' h c -> [D.Cop c]
+globalCops    = D.copsetCopList . opsetCop . globalOpset
 
 globalInfix  :: Global' h c -> [B.Named B.InfixHeight]
-globalInfix   = C.copsetInfixList . opsetCop . globalOpset
+globalInfix   = D.copsetInfixList . opsetCop . globalOpset
 
-globalCopset :: Global' h c -> C.CopSet c
+globalCopset :: Global' h c -> D.CopSet c
 globalCopset  = opsetCop . globalOpset
 
 globalAbort :: Global' h c -> B.AbortReason -> IO a
 globalAbort = B.abort . globalCommandLine
 
 -- | Empty global parameters.
-global' :: (C.CBool c, C.CText c) => h c -> Global' h c
+global' :: (D.CBool c, D.CText c) => h c -> Global' h c
 global' h = Global
     { globalSynopsis     = "koshu"
     , globalVersion      = Ver.Version [] []
@@ -108,7 +107,7 @@ global' h = Global
     , globalProgram      = ""
     , globalArgs         = []
     , globalProxy        = []
-    , globalTime         = B.timeFromMjd 0
+    , globalTime         = D.timeFromMjd 0
     , globalResult       = C.resultEmpty
     , globalOption       = C.option
     , globalSourceCount  = 0
@@ -122,19 +121,19 @@ global' h = Global
 data OpSet' h c = OpSet
     { opsetRopList     :: [C.Rop' h c]
     , opsetFindRop     :: C.FindRop' h c
-    , opsetCop         :: C.CopSet c
+    , opsetCop         :: D.CopSet c
     }
 
 -- | Empty operator set.
 opset :: OpSet' h c
-opset = OpSet [] find C.copset where
+opset = OpSet [] find D.copset where
     find _ = Nothing
 
 opsetFill :: B.Map (OpSet' h c)
 opsetFill ops = ops2 where
     ops2      = ops { opsetFindRop = findRop
                     , opsetCop     = copset2 }
-    copset2   = C.copsetFill $ opsetCop ops
+    copset2   = D.copsetFill $ opsetCop ops
     findRop   = B.assocFinder rops
     rops      = map name $ opsetRopList ops
     name rop  = (B.name rop, rop)

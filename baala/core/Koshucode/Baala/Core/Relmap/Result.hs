@@ -26,7 +26,7 @@ module Koshucode.Baala.Core.Relmap.Result
 import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data              as B
+import qualified Koshucode.Baala.Data              as D
 
 
 -- ----------------------  Result
@@ -44,12 +44,12 @@ data Result c = Result
     , resultLicense    :: [[String]]
     , resultViolated   :: [ShortResultChunks c]
     , resultNormal     :: [ShortResultChunks c]
-    , resultPattern    :: [B.JudgePat]
+    , resultPattern    :: [D.JudgePat]
     } deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
     { inputPoint      :: B.IOPoint
-    , inputPointAbout :: [B.TTree]
+    , inputPointAbout :: [D.TTree]
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.
@@ -73,17 +73,17 @@ resultEmpty =
 
 -- | Chunk of judgements.
 data ResultChunk c
-    = ResultJudge  [B.Judge c]
-    | ResultRel    B.JudgePat (B.Rel c)
+    = ResultJudge  [D.Judge c]
+    | ResultRel    D.JudgePat (D.Rel c)
     | ResultNote   [String]
       deriving (Show, Eq, Ord)
 
 type ResultWriterChunk c = IO.Handle -> Result c -> B.ExitCode -> [ShortResultChunks c] -> IO B.ExitCode
-type ResultWriterJudge c = IO.Handle -> Result c -> B.ExitCode -> [B.Judge c] -> IO B.ExitCode
+type ResultWriterJudge c = IO.Handle -> Result c -> B.ExitCode -> [D.Judge c] -> IO B.ExitCode
 
-type ShortResultChunks c = B.Short [ResultChunk c]
+type ShortResultChunks c = D.Short [ResultChunk c]
 
-resultChunkJudges :: ResultChunk c -> [B.Judge c]
+resultChunkJudges :: ResultChunk c -> [D.Judge c]
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
@@ -134,7 +134,7 @@ hPutResult h result
     where
       normal, violated :: [ShortResultChunks c]
       normal    = resultNormal result
-      violated  = B.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
+      violated  = D.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
       hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = B.notNull js
@@ -147,8 +147,8 @@ hPutAllChunks h result status sh =
          ResultWriterChunk _ w -> w h result status sh
          ResultWriterJudge _ w -> w h result status $ judges sh
     where
-      judges :: [ShortResultChunks c] -> [B.Judge c]
-      judges = concatMap resultChunkJudges . concatMap B.shortBody
+      judges :: [ShortResultChunks c] -> [D.Judge c]
+      judges = concatMap resultChunkJudges . concatMap D.shortBody
 
 useUtf8 :: IO.Handle -> IO ()
 useUtf8 h = do B.setLocaleUtf8

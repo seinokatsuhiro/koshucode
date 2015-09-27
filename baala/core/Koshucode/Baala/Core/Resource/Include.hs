@@ -11,8 +11,7 @@ module Koshucode.Baala.Core.Resource.Include
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Data                    as B
-import qualified Koshucode.Baala.Data                    as C
+import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Assert             as C
@@ -21,24 +20,24 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
 
-type Include c = C.ClauseHead -> [B.Token] -> C.ClauseBody -> B.Ab (C.Resource c)
+type Include c = C.ClauseHead -> [D.Token] -> C.ClauseBody -> B.Ab (C.Resource c)
 
 -- | Include source code into resource.
-resInclude :: forall c. (C.CContent c)
-    => [B.Token]        -- ^ Additional terms
+resInclude :: forall c. (D.CContent c)
+    => [D.Token]        -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.CodePiece      -- ^ Source name
     -> String           -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude add cd res src code =
-    do ls <- B.tokenLines src code
+    do ls <- D.tokenLines src code
        let sec  = C.resLastSecNo res + 1
            cs   = C.consClause add sec ls
        res2 <- B.foldM (resIncludeBody cd) res $ reverse cs
        Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
 
-resIncludeBody :: forall c. (C.CContent c) =>
+resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> B.Ab C.Clause -> C.AbResource c
 resIncludeBody cd res abcl =
     do C.Clause h b <- abcl
@@ -63,11 +62,11 @@ resIncludeBody cd res abcl =
 
       judge :: Include c
       judge _ _ (C.CJudge q p toks) =
-          do trees <- B.ttrees toks
-             js    <- C.treesToJudge calc q p trees
+          do trees <- D.ttrees toks
+             js    <- D.treesToJudge calc q p trees
              Right $ res { C.resJudge = C.resJudge << js }
 
-      calc :: C.ContentCalc c
+      calc :: D.ContentCalc c
       calc = calcContG $ C.resGlobal res
 
       assert :: Include c
@@ -75,7 +74,7 @@ resIncludeBody cd res abcl =
                           src (C.CAssert typ pat toks) =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ pat src optPara Nothing []
-                 ass'  = B.Short (B.codePtList $ head src) sh ass
+                 ass'  = D.Short (B.codePtList $ head src) sh ass
              Right $ res { C.resAssert = C.resAssert << ass' }
 
       relmap :: Include c
@@ -85,7 +84,7 @@ resIncludeBody cd res abcl =
 
       slot :: Include c
       slot _ _ (C.CSlot n toks) =
-          do trees <- B.ttrees toks
+          do trees <- D.ttrees toks
              Right res { C.resSlot = C.resSlot << (n, trees) }
 
       option :: Include c
@@ -103,7 +102,7 @@ resIncludeBody cd res abcl =
           do io <- ioPoint toks
              checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [B.Token] -> B.Ab C.InputPoint
+      ioPoint :: [D.Token] -> B.Ab C.InputPoint
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
@@ -121,26 +120,26 @@ resIncludeBody cd res abcl =
       license h _ (C.CLicense line) =
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
-coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
-coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
+coxBuildG :: (D.CContent c) => C.Global c -> D.TTreeToAb (D.Cox c)
+coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
 
-calcContG :: (C.CContent c) => C.Global c -> C.ContentCalc c
-calcContG = C.calcContent . C.globalCopset
+calcContG :: (D.CContent c) => C.Global c -> D.ContentCalc c
+calcContG = D.calcContent . C.globalCopset
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
-paraToIOPoint cd = B.paraSelect unmatch ps where
-    ps = [ (just1, B.paraType `B.paraJust` 1 `B.paraOpt` ["about"])
-         , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
+paraToIOPoint cd = D.paraSelect unmatch ps where
+    ps = [ (just1, D.paraType `D.paraJust` 1 `D.paraOpt` ["about"])
+         , (stdin, D.paraType `D.paraReq` ["stdin"]) ]
 
     just1 :: C.TTreePara -> B.Ab C.InputPoint
-    just1 p = do arg   <- B.paraGetFst p
-                 about <- B.paraGetOpt [] p "about"
+    just1 p = do arg   <- D.paraGetFst p
+                 about <- D.paraGetOpt [] p "about"
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
+                   D.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
                    _ -> Msg.adlib "input not text"
 
     stdin :: C.TTreePara -> B.Ab C.InputPoint
-    stdin p = do args <- B.paraGet p "stdin"
+    stdin p = do args <- D.paraGet p "stdin"
                  case args of
                    [] -> Right $ C.InputPoint B.IOPointStdin []
                    _  -> Msg.adlib "input no args"

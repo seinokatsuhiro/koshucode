@@ -22,7 +22,7 @@ module Koshucode.Baala.Core.Relmap.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data                  as B
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relkit           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
@@ -33,11 +33,11 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Source
 
 -- | Make a constant relmap.
-relmapConst :: C.Intmed' h c -> B.Rel c -> C.Relmap' h c
+relmapConst :: C.Intmed' h c -> D.Rel c -> C.Relmap' h c
 relmapConst = C.RelmapConst . C.medLexmap
 
 -- | Relmap for retrieving relation from dataset.
-relmapSource :: C.Intmed' h c -> B.JudgePat -> [B.TermName] -> C.Relmap' h c
+relmapSource :: C.Intmed' h c -> D.JudgePat -> [D.TermName] -> C.Relmap' h c
 relmapSource = C.RelmapSource . C.medLexmap
 
 
@@ -75,19 +75,19 @@ relmapLink :: C.Intmed' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.medLexmap
 
 relmapLocalSymbol :: C.Intmed' h c -> String -> C.Relmap' h c
-relmapLocalSymbol = relmapVar B.LocalSymbol
+relmapLocalSymbol = relmapVar D.LocalSymbol
 
 relmapLocalNest :: C.Intmed' h c -> String -> C.Relmap' h c
-relmapLocalNest = relmapVar B.LocalNest
+relmapLocalNest = relmapVar D.LocalNest
 
-relmapVar :: (String -> B.Local String) -> C.Intmed' h c -> String -> C.Relmap' h c
+relmapVar :: (String -> D.Local String) -> C.Intmed' h c -> String -> C.Relmap' h c
 relmapVar k use n = relmapLink use' where
     lx    = C.medLexmap use
     cp    = B.codePt lx
     tok   = C.lexToken lx
     use'  = use { C.medLexmap = lx' }
     lx'   = lx  { C.lexType   = C.LexmapLocal
-                , C.lexToken  = B.TLocal cp (k n) (-1) [tok] }
+                , C.lexToken  = D.TLocal cp (k n) (-1) [tok] }
 
 -- ----------------------
 -- $AppendRelmaps

@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Relmap.Specialize
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as B
+import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
@@ -19,12 +19,12 @@ type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 
 relmapSpecialize :: forall h. forall c.
     h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
-    -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+    -> Maybe D.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [((B.Token, B.Local String), B.Head)]  -- name of local relation, and its heading
+    spec :: [((D.Token, D.Local String), D.Head)]  -- name of local relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
-         -> Maybe B.Head         -- input head feeding into generic relmap
+         -> Maybe D.Head         -- input head feeding into generic relmap
          -> C.Relmap' h c        -- generic relmap to specialize
          -> B.Ab ([C.RelkitDef c], C.Relkit c)
     spec local keys kdef he1 rmap = s where
@@ -51,17 +51,17 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapCopy lx n rmap1 ->
                   do let p      = C.lexToken lx
                          heJust = B.fromJust he1
-                         local' = ((p, B.LocalSymbol n), heJust) : local
+                         local' = ((p, D.LocalSymbol n), heJust) : local
                      (kdef2, kit2) <- post lx $ spec local' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy p n kit2)
 
               C.RelmapNest lx rmap1 ->
                   do let heJust    = B.fromJust he1
-                         heNest    = B.headNested heJust
+                         heNest    = D.headNested heJust
                          vars      = map fst heNest
                          p         = C.lexToken lx
-                         tk (n,he) = ((p, B.LocalNest n), he)
-                         heInd     = vars `B.snipIndex` B.headNames heJust
+                         tk (n,he) = ((p, D.LocalNest n), he)
+                         heInd     = vars `B.snipIndex` D.headNames heJust
                          local'     = map tk heNest ++ local
                          nestInd   = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec local' keys kdef he1 rmap1
@@ -79,7 +79,7 @@ relmapSpecialize hook links = spec [] [] where
                   where
                     tok = C.lexToken  lx
                     n   = C.lexName   lx
-                    ps  = B.tokenParents tok
+                    ps  = D.tokenParents tok
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =
@@ -87,10 +87,10 @@ relmapSpecialize hook links = spec [] [] where
                (kdef2, kit) <- result
                Right (kdef2, C.relkitSetSource lx kit)
 
-        find (B.TLocal cp v eid (p:ps)) =
+        find (D.TLocal cp v eid (p:ps)) =
             case lookup ((p,v)) local of
               Just he -> Just (p,he)
-              Nothing -> find (B.TLocal cp v eid ps)
+              Nothing -> find (D.TLocal cp v eid ps)
         find _ = Nothing
 
         -- specialize subrelmaps to subrelkits

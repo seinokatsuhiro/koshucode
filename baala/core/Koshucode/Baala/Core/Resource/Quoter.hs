@@ -14,7 +14,7 @@ import qualified Language.Haskell.TH       as TH
 import qualified Language.Haskell.TH.Quote as TH
 
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Data                    as B
+import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Resource.Clause    as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
@@ -31,7 +31,7 @@ koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
 koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ _ fullQ text =
-    dispatch $ B.tokenLines (B.codeTextOf text) text
+    dispatch $ D.tokenLines (B.codeTextOf text) text
     where
       dispatch src = resQ src -- relmapQ src
       resQ = resIncludeQ fullQ . {- C.consClause -} undefined
@@ -64,7 +64,7 @@ consFullRelmapQ
     -> TH.ExpQ     -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = TH.dataToExpQ (plain `extQ` custom)
-    custom (C.Lexmap _ (B.TTextRaw _ ('@':op)) _ _ _) =
+    custom (C.Lexmap _ (D.TTextRaw _ ('@':op)) _ _ _) =
         Just $ TH.varE $ TH.mkName op
     custom h@(C.Lexmap _ op _ subs _) =
         Just $ [| either consError id

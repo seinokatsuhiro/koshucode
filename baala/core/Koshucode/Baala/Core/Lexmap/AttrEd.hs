@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Lexmap.AttrEd
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as B
+import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
 import qualified Koshucode.Baala.Core.Message           as Msg
@@ -25,11 +25,11 @@ type AttrEd = B.Sourced AttrEdBody
 -- | Operators for attribute editors.
 data AttrEdBody
     = AttrEdId                             -- ^ Identity editor
-    | AttrEdAdd     Bool String [B.TTree]  -- ^ Add attribute
+    | AttrEdAdd     Bool String [D.TTree]  -- ^ Add attribute
     | AttrEdRename  (String, String)       -- ^ Rename attribute keyword
-    | AttrEdFill    [Maybe B.TTree]        -- ^ Fill positional attributes
-    | AttrEdTerm    String [B.TTree]       -- ^ Make term name
-    | AttrEdNest    String [B.TTree]       -- ^ Nested relation reference
+    | AttrEdFill    [Maybe D.TTree]        -- ^ Fill positional attributes
+    | AttrEdTerm    String [D.TTree]       -- ^ Make term name
+    | AttrEdNest    String [D.TTree]       -- ^ Nested relation reference
     | AttrEdAppend  [AttrEd]               -- ^ Append editors
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -37,37 +37,37 @@ data AttrEdBody
 -- ----------------------  Cons and run
 
 -- | Construct attribute editor.
-consAttrEd :: [B.TTree] -> B.Ab AttrEd
+consAttrEd :: [D.TTree] -> B.Ab AttrEd
 consAttrEd = loop where
     notKeyword ('-' : _)  = False
     notKeyword _          = True
 
-    fill (B.TextLeafRaw _ "*" : xs)  = Nothing : fill xs
+    fill (D.TextLeafRaw _ "*" : xs)  = Nothing : fill xs
     fill (x : xs)                    = Just x  : fill xs
     fill []                          = []
 
-    right :: [B.TTree] -> AttrEdBody -> B.Ab AttrEd
+    right :: [D.TTree] -> AttrEdBody -> B.Ab AttrEd
     right trees = Right . B.Sourced (concatMap B.codePtList $ B.untrees trees)
 
     loop trees =
-        Msg.abAttrTrees trees $ case B.divideTreesByBar trees of
-          [ B.TextLeafRaw _ op : xs ]
+        Msg.abAttrTrees trees $ case D.divideTreesByBar trees of
+          [ D.TextLeafRaw _ op : xs ]
             | op == "id"        -> right trees $ AttrEdId
             | op == "fill"      -> right trees $ AttrEdFill $ fill xs
 
-          [ B.TextLeafRaw _ op : B.TextLeafRaw _ ('-' : k) : xs ]
+          [ D.TextLeafRaw _ op : D.TextLeafRaw _ ('-' : k) : xs ]
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
             | op == "term"      -> right trees $ AttrEdTerm k xs
             | op == "nest"      -> right trees $ AttrEdNest k xs
 
-          [ B.TextLeafRaw _ op : B.TextLeafRaw _ k'
-                : B.TextLeafRaw _ k : _ ]
+          [ D.TextLeafRaw _ op : D.TextLeafRaw _ k'
+                : D.TextLeafRaw _ k : _ ]
             | notKeyword k'     -> Msg.reqAttrName k'
             | notKeyword k      -> Msg.reqAttrName k
             | op == "rename"    -> right trees $ AttrEdRename (k', k)
 
-          [[ B.TreeB B.BracketGroup _ xs ]]  ->  loop xs
+          [[ B.TreeB D.BracketGroup _ xs ]]  ->  loop xs
 
           [[]]                  -> right [] AttrEdId
           [_]                   -> Msg.adlib "unknown attribute editor"
@@ -108,22 +108,22 @@ runAttrEd (B.Sourced toks edit) attr = run where
           Just _   -> Right $ B.assocRename1 k' k attr
           Nothing  -> Msg.reqAttr $ C.attrNameText k
 
-    fill :: [B.TTree] -> [Maybe B.TTree] -> B.Ab [B.TTree]
+    fill :: [D.TTree] -> [Maybe D.TTree] -> B.Ab [D.TTree]
     fill (p : ps) (Nothing : xs)   = Right . (p:) =<< fill ps xs
     fill (p : ps) (_       : xs)   = Right . (p:) =<< fill ps xs
     fill []       (Just x  : xs)   = Right . (x:) =<< fill [] xs
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
 
-termPath :: B.AbMap [B.TTree]
+termPath :: B.AbMap [D.TTree]
 termPath = loop [] where
-    loop path [] = Right [B.TreeL $ B.TTermPath B.codePtZero $ reverse path]
-    loop path (B.TermLeafName _ p  : xs)  = loop (p : path) xs
-    loop path (B.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
+    loop path [] = Right [B.TreeL $ D.TTermPath B.codePtZero $ reverse path]
+    loop path (D.TermLeafName _ p  : xs)  = loop (p : path) xs
+    loop path (D.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
     loop _ _                              = Msg.adlib "require term name"
 
-nestName :: B.AbMap [B.TTree]
-nestName [B.TermLeafName _ p]   = Right [B.TreeL $ B.TLocal B.codePtZero (B.LocalNest p) (-1) []]
-nestName [B.TermLeafPath _ [p]] = Right [B.TreeL $ B.TLocal B.codePtZero (B.LocalNest p) (-1) []]
+nestName :: B.AbMap [D.TTree]
+nestName [D.TermLeafName _ p]   = Right [B.TreeL $ D.TLocal B.codePtZero (D.LocalNest p) (-1) []]
+nestName [D.TermLeafPath _ [p]] = Right [B.TreeL $ D.TLocal B.codePtZero (D.LocalNest p) (-1) []]
 nestName _ = Msg.adlib "require term name"
 

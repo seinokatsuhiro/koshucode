@@ -14,8 +14,7 @@ import qualified System.Directory                        as Dir
 import qualified System.FilePath                         as Path
 import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Data                    as B
-import qualified Koshucode.Baala.Data                    as C
+import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Include   as C
@@ -44,7 +43,7 @@ nextSourceCount =
        M.put $ g { C.globalSourceCount = n }
        return n
 
-readResource :: (C.CContent c) => C.Resource c -> ResourceIO c
+readResource :: (D.CContent c) => C.Resource c -> ResourceIO c
 readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
     = case article of
         ([], [], _)            -> return $ Right res
@@ -69,8 +68,8 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
         cons3 x (a, b, c)       = (a, b, x : c)
 
 -- | Read resource from certain source.
-readResourceOne :: forall c. (C.CContent c) =>
-    C.Resource c -> B.CodePiece -> [B.TTree] -> ResourceIO c
+readResourceOne :: forall c. (D.CContent c) =>
+    C.Resource c -> B.CodePiece -> [D.TTree] -> ResourceIO c
 readResourceOne res src add = dispatch $ B.codeName src where
     dispatch (B.IOPointFile cd path) =
         gio $ do let path' = putDir cd path
@@ -106,10 +105,10 @@ readResourceOne res src add = dispatch $ B.codeName src where
     add' = concatMap B.untree add
 
 -- | Read resource from text.
-readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
+readResourceText :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
 readResourceText res code = C.resInclude [] "" res (B.codeTextOf code) code
 
-readSources :: forall c. (C.CContent c) => [B.IOPoint] -> ResourceIO c
+readSources :: forall c. (D.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
        readResource $ res { C.resInputStack = ([]

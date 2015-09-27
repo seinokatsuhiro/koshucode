@@ -24,8 +24,7 @@ module Koshucode.Baala.Core.Resource.Resource
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Data           as B
-import qualified Koshucode.Baala.Data           as C
+import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core.Assert    as C
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relkit    as C
@@ -40,13 +39,13 @@ data Resource c = Resource
     , resOption     :: C.Option c          -- ^ Options
     , resImport     :: [Resource c]        -- ^ Importing resources
     , resExport     :: [String]            -- ^ Exporting names
-    , resSlot       :: [B.NamedTrees]      -- ^ Global slots
+    , resSlot       :: [D.NamedTrees]      -- ^ Global slots
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
-    , resJudge      :: [B.Judge c]         -- ^ Affirmative or denial judgements
+    , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
     , resInputStack :: ([C.InputPoint], [C.InputPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
-    , resEcho       :: [[B.TokenLine]]     -- ^ Echo text
+    , resEcho       :: [[D.TokenLine]]     -- ^ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
@@ -57,7 +56,7 @@ instance Show (Resource c) where
     show Resource { resInputStack = art }
         = "Resources " ++ show art
 
-instance B.SelectRel Resource where
+instance D.SelectRel Resource where
     selectRel Resource { resSelect = sel } = sel
 
 instance C.GetGlobal Resource where
@@ -67,7 +66,7 @@ instance C.GetGlobal Resource where
 type AbResource c = B.Ab (Resource c)
 
 -- | Resource that has no contents.
-resEmpty :: (C.CContent c) => Resource c
+resEmpty :: (D.CContent c) => Resource c
 resEmpty = Resource
            { resGlobal     = global
            , resOption     = C.option
@@ -83,7 +82,7 @@ resEmpty = Resource
            , resLicense    = []
            , resMessage    = []
            , resLastSecNo  = 0
-           , resSelect     = \_ _ -> B.reldee
+           , resSelect     = \_ _ -> D.reldee
            }
 
 resIncluded :: Resource c -> [B.CodePiece]
@@ -97,8 +96,8 @@ resInputPoint Resource { resInputStack = (in1, in2, in3) }
     = in1 ++ in2 ++ map (ip . B.codeName) in3 where
       ip p = C.InputPoint p []
 
-resPattern :: Resource c -> [B.JudgePat]
-resPattern Resource { resAssert = ass } = map (C.assPattern . B.shortBody) ass
+resPattern :: Resource c -> [D.JudgePat]
+resPattern Resource { resAssert = ass } = map (C.assPattern . D.shortBody) ass
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }
@@ -121,5 +120,5 @@ type Intmed          c = C.Intmed'          Resource c
 type ShortAssert     c = C.ShortAssert'     Resource c
 type ShortAsserts    c = C.ShortAsserts'    Resource c
 
-global :: (C.CContent c) => Global c
+global :: (D.CContent c) => Global c
 global = C.global' resEmpty

@@ -9,21 +9,21 @@ module Koshucode.Baala.Core.Lexmap.Slot
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as B
+import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
-type GlobalSlot = B.NamedTrees
+type GlobalSlot = D.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [C.AttrTree] -> B.AbMap [B.TTree]
+substSlot :: [GlobalSlot] -> [C.AttrTree] -> B.AbMap [D.TTree]
 substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot] -> [C.AttrTree] -> B.TTree -> B.Ab [B.TTree]
+substTree :: [GlobalSlot] -> [C.AttrTree] -> D.TTree -> B.Ab [D.TTree]
 substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
-    loop (B.TreeL (B.TSlot _ n name))
+    loop (B.TreeL (D.TSlot _ n name))
         | n == 0    = replace n name C.attrNameTrunk attr (`pos` name)
         | n == 1    = replace n name (C.AttrNormal name) attr Right
         | n == 2    = replace n name name gslot Right
@@ -35,13 +35,13 @@ substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
           Just od -> f od
           Nothing -> Msg.noSlotName n name
 
-    pos :: [B.TTree] -> String -> B.Ab [B.TTree]
+    pos :: [D.TTree] -> String -> B.Ab [D.TTree]
     pos od "all" = Right od
     pos od n     = case B.readInt n of
                      Just i  -> Right . B.li1 =<< od `at` i
                      Nothing -> Msg.noSlotName 0 n
 
-    at = substIndex $ unwords . map B.tokenContent . B.untree
+    at = substIndex $ unwords . map D.tokenContent . B.untree
 
 substIndex :: (a -> String) -> [a] -> Int -> B.Ab a
 substIndex toString xxs n = loop xxs n where

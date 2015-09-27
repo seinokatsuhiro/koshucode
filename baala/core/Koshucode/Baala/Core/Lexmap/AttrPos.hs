@@ -21,7 +21,7 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
 
 import qualified Data.Generics                  as G
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Data           as B
+import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core.Message   as Msg
 
 
@@ -51,10 +51,10 @@ attrTypeNames attrType = case attrType of
     AttrPos1V a b      -> [a,b]
     AttrPos1Q a b      -> [a,b]
 
-type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
+type AttrSortTree = [D.TTree] -> B.Ab [AttrTree]
 
 -- | Attribute name and its contents.
-type AttrTree = (AttrName, [B.TTree])
+type AttrTree = (AttrName, [D.TTree])
 
 ropAttrPos :: AttrPos AttrName -> AttrSortTree
 ropAttrPos (AttrPos0)         []         = Right []
