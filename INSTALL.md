@@ -26,6 +26,10 @@ Files `*.k` are data itself and calculation in koshucode.
          * koshucode-baala-base.cabal
          / Koshucode / Baala / Base
 
+      / data
+         * koshucode-baala-data.cabal
+         / Koshucode / Baala / Data
+
       / core
          * koshucode-baala-core.cabal
          / Koshucode / Baala / Core
@@ -72,16 +76,17 @@ related libraries and tools like Cabal.
 Install koshu command
 ---------------------------------
 
-There are seven Cabal packages.
+There are eight Cabal packages.
 
  1. [`koshucode-baala-base`](baala/base/koshucode-baala-base.cabal)
- 2. [`koshucode-baala-core`](baala/core/koshucode-baala-core.cabal)
- 3. [`koshucode-baala-writer`](baala/writer/koshucode-baala-writer.cabal)
- 4. [`koshucode-baala-operator`](baala/operator/koshucode-baala-operator.cabal)
- 5. [`koshucode-baala-content`](baala/content/koshucode-baala-content.cabal)
- 6. [`koshucode-baala-calculator`](baala/calculator/koshucode-baala-calculator.cabal)
+ 2. [`koshucode-baala-data`](baala/data/koshucode-baala-data.cabal)
+ 3. [`koshucode-baala-core`](baala/core/koshucode-baala-core.cabal)
+ 4. [`koshucode-baala-writer`](baala/writer/koshucode-baala-writer.cabal)
+ 5. [`koshucode-baala-operator`](baala/operator/koshucode-baala-operator.cabal)
+ 6. [`koshucode-baala-content`](baala/content/koshucode-baala-content.cabal)
+ 7. [`koshucode-baala-calculator`](baala/calculator/koshucode-baala-calculator.cabal)
      contains [`koshu.hs`](baala/calculator/koshu.hs)
- 7. [`koshucode-baala-toolkit`](baala/toolkit/koshucode-baala-toolkit.cabal)
+ 8. [`koshucode-baala-toolkit`](baala/toolkit/koshucode-baala-toolkit.cabal)
 
 To build and install the `koshu` command inside sandbox, you can use
 [`cabal-sandbox-install.sh`](baala/calculator/cabal-sandbox-install.sh).
