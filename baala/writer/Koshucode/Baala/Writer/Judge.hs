@@ -12,30 +12,30 @@ import qualified Control.Monad                       as M
 import qualified Data.Map                            as Map
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as B
+import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
 
 
 -- ----------------------  Writer
 
-putJudges :: (Show c, B.Write c) => [B.Judge c] -> IO ()
+putJudges :: (Show c, B.Write c) => [D.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (B.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [B.Judge c] -> IO B.ExitCode
+putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout C.resultEmpty
 
 -- | Print list of judges.
 hPutJudgesWith :: (B.Write c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
-    do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ judgeCount []
+    do cnt <- hPutJudgesCount h result (D.hPutJudge h) js $ judgeCount []
        B.hPutLines h $ judgeSummary status cnt
        return status
 
 hPutJudgesCount :: forall c. (B.Write c) =>
-    IO.Handle -> C.Result c -> (B.Judge c -> IO ()) -> [B.Judge c] -> JudgeCount -> IO JudgeCount
+    IO.Handle -> C.Result c -> (D.Judge c -> IO ()) -> [D.Judge c] -> JudgeCount -> IO JudgeCount
 hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h
@@ -43,11 +43,11 @@ hPutJudgesCount h result writer = loop where
                             B.hPutEmptyLine h
                             return cnt
 
-    put :: B.Judge c -> JudgeCount -> IO JudgeCount
+    put :: D.Judge c -> JudgeCount -> IO JudgeCount
     put judge (c, tab) = do putGutter c
                             writer judge
                             let c'  = c + 1
-                                pat = B.judgePat judge
+                                pat = D.judgePat judge
                             return (c', Map.alter inc pat tab)
 
     putGutter c   = M.when (mod5 c && c > 0) $
@@ -69,9 +69,9 @@ hPutJudgesCount h result writer = loop where
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter
-type JudgeCount = (Int, Map.Map B.JudgePat Int)
+type JudgeCount = (Int, Map.Map D.JudgePat Int)
 
-judgeCount :: [B.JudgePat] -> JudgeCount
+judgeCount :: [D.JudgePat] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])

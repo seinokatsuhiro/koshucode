@@ -18,7 +18,7 @@ import qualified Data.Aeson                        as A
 import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Data              as B
+import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 
 
@@ -41,14 +41,14 @@ hPutJSON h _ status (j1:js) =
       cput j = do IO.hPutStr h ", "
                   put j
 
-instance (A.ToJSON c) => A.ToJSON (B.Judge c) where
-    toJSON (B.JudgeAffirm p xs) =
+instance (A.ToJSON c) => A.ToJSON (D.Judge c) where
+    toJSON (D.JudgeAffirm p xs) =
         A.object [ "judge" .= text "|--"
                  , "name"  .= p
                  , "args"  .= termsToJSON xs ]
     toJSON _ = undefined
 
-termsToJSON :: (A.ToJSON c) => [B.Term c] -> A.Value
+termsToJSON :: (A.ToJSON c) => [D.Term c] -> A.Value
 termsToJSON xs = A.object $ map json xs where
     json (n, c) = (T.pack n, A.toJSON c)
 
@@ -84,8 +84,8 @@ hPutGeoJson h _ status (j1:js) =
 class ToGeoJSON a where
     toGeoJSON :: a -> A.Value
 
-instance (A.ToJSON c) => ToGeoJSON (B.Judge c) where
-    toGeoJSON (B.JudgeAffirm _ xs) =
+instance (A.ToJSON c) => ToGeoJSON (D.Judge c) where
+    toGeoJSON (D.JudgeAffirm _ xs) =
         A.object [ "type"       .= text "Feature"
                  , "properties" .= A.object [ "name" .= name ]
                  , "geometry"   .= geo ]

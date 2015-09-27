@@ -8,7 +8,7 @@ module Koshucode.Baala.Writer.Koshu
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as B
+import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 
@@ -65,11 +65,11 @@ hPutFoot h status cnt = B.hPutLines h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 hPutShortChunk :: (B.Write c) => IO.Handle -> C.Result c -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
-hPutShortChunk h result cnt (B.Short _ def output) =
+hPutShortChunk h result cnt (D.Short _ def output) =
     do hPutShort h def
-       hPutChunks h result (B.shortText def) output cnt
+       hPutChunks h result (D.shortText def) output cnt
 
-hPutShort :: IO.Handle -> [B.ShortDef] -> IO ()
+hPutShort :: IO.Handle -> [D.ShortDef] -> IO ()
 hPutShort _ [] = return ()
 hPutShort h def =
     do B.hPutLines h $ "short" : map shortLine def
@@ -83,7 +83,7 @@ hPutShort h def =
 
 hPutChunks :: (B.Write c) => IO.Handle -> C.Result c -> B.StringMap -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks h result sh = loop where
-    writer = IO.hPutStrLn h . B.writeDownJudge sh
+    writer = IO.hPutStrLn h . D.writeDownJudge sh
 
     loop [] cnt                            = return cnt
     loop (C.ResultJudge js : xs) (_, tab)  = do cnt' <- W.hPutJudgesCount h result writer js (0, tab)
