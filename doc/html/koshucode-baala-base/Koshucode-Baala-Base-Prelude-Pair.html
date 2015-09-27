@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.118.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.119.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,9 +51,113 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="caption"
 	>Koshucode.Baala.Base.Prelude.Pair</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Map</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Either</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Monad</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:mapFst"
+	    >mapFst</a
+	    > ::  (a -&gt; c) -&gt; (a, b) -&gt; (c, b)</li
+	  ><li class="src short"
+	  ><a href="#v:mapSnd"
+	    >mapSnd</a
+	    > ::  (b -&gt; c) -&gt; (a, b) -&gt; (a, c)</li
+	  ><li class="src short"
+	  ><a href="#v:consFst"
+	    >consFst</a
+	    > ::  a -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > ([a], b)</li
+	  ><li class="src short"
+	  ><a href="#v:consSnd"
+	    >consSnd</a
+	    > ::  b -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (a, [b])</li
+	  ><li class="src short"
+	  ><a href="#v:mapFstTo"
+	    >mapFstTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b)</li
+	  ><li class="src short"
+	  ><a href="#v:mapSndTo"
+	    >mapSndTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c)</li
+	  ><li class="src short"
+	  ><a href="#v:right2"
+	    >right2</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c)</li
+	  ><li class="src short"
+	  ><a href="#v:right3"
+	    >right3</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a d) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c, d)</li
+	  ><li class="src short"
+	  ><a href="#v:right4"
+	    >right4</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a e) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c, d, e)</li
+	  ><li class="src short"
+	  ><a href="#v:sequenceFst"
+	    >sequenceFst</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [(m a, b)] -&gt; m [(a, b)]</li
+	  ><li class="src short"
+	  ><a href="#v:sequenceSnd"
+	    >sequenceSnd</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [(a, m b)] -&gt; m [(a, b)]</li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:mapFst" class="def"
@@ -110,16 +214,58 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Source</a
 	    ></p
 	  ></div
+	><h1 id="g:2"
+	>Either</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:maybePairs" class="def"
-	    >maybePairs</a
-	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > [(a, a)] <a href="src/Koshucode-Baala-Base-Prelude-Pair.html#maybePairs" class="link"
+	  ><a name="v:right2" class="def"
+	    >right2</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c) <a href="src/Koshucode-Baala-Base-Prelude-Pair.html#right2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:right3" class="def"
+	    >right3</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a d) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c, d) <a href="src/Koshucode-Baala-Base-Prelude-Pair.html#right3" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:right4" class="def"
+	    >right4</a
+	    > ::  (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a b, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a c, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a e) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > a (b, c, d, e) <a href="src/Koshucode-Baala-Base-Prelude-Pair.html#right4" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Monad</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:sequenceFst" class="def"
