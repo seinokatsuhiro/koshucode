@@ -26,9 +26,7 @@ module Koshucode.Baala.Data.Type.Judge
   ) where
 
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Base.Abort        as B
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Token        as B
 
 

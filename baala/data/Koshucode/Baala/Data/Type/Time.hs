@@ -26,9 +26,7 @@ module Koshucode.Baala.Data.Type.Time
 
 import qualified Data.Time.Calendar               as T
 import qualified Data.Time.Calendar.WeekDate      as T
-import qualified Koshucode.Baala.Base.Abort       as B
-import qualified Koshucode.Baala.Base.Prelude     as B
-import qualified Koshucode.Baala.Base.Text        as B
+import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Data.Type.Clock  as B
 import qualified Koshucode.Baala.Data.Type.Date   as B
 import qualified Koshucode.Baala.Base.Message     as Msg

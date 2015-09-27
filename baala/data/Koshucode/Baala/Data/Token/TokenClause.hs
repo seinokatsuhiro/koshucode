@@ -6,9 +6,7 @@ module Koshucode.Baala.Data.Token.TokenClause
     tokenClauses,
   ) where
 
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax          as B
-import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Token.Token     as B
 import qualified Koshucode.Baala.Data.Token.TokenLine as B
 

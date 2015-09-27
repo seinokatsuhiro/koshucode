@@ -30,8 +30,7 @@ module Koshucode.Baala.Data.Type.Para
 
 import qualified Data.Generics                 as G
 import qualified Data.Map.Strict               as Map
-import qualified Koshucode.Baala.Base.Abort    as B
-import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Base.Message  as Msg
 
 

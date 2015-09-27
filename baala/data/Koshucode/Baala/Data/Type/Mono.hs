@@ -9,8 +9,8 @@ module Koshucode.Baala.Data.Type.Mono
     pMonoTerm, pMonoNest,
   ) where
 
+import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Data.Type.Rel  as B
-import qualified Koshucode.Baala.Base.Abort     as B
 
 -- | Monotype relation.
 data Mono c

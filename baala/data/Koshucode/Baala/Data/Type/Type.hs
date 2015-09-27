@@ -20,8 +20,7 @@ module Koshucode.Baala.Data.Type.Type
     -- $Types
   ) where
 
-import qualified Koshucode.Baala.Base.Prelude  as B
-import qualified Koshucode.Baala.Base.Text     as B
+import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Data.Token    as B
 
 -- | Type for types.

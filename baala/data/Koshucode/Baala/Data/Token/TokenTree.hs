@@ -40,10 +40,7 @@ module Koshucode.Baala.Data.Token.TokenTree
 
 import qualified Data.Generics                        as G
 import qualified Text.PrettyPrint                     as P
-import qualified Koshucode.Baala.Base.Abort           as B
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax          as B
-import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Token.Token     as B
 import qualified Koshucode.Baala.Data.Token.TokenLine as B
 

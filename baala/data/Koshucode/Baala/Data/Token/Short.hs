@@ -15,8 +15,7 @@ module Koshucode.Baala.Data.Token.Short
   ) where
 
 import qualified Data.List                             as L
-import qualified Koshucode.Baala.Base.Prelude          as B
-import qualified Koshucode.Baala.Base.Text             as B
+import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data.Token.AngleText  as B
 
 

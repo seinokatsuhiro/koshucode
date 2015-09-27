@@ -48,8 +48,7 @@ module Koshucode.Baala.Data.Token.Token
   ) where
 
 import qualified Data.Generics                    as G
-import qualified Koshucode.Baala.Base.Prelude     as B
-import qualified Koshucode.Baala.Base.Text        as B
+import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Data.Token.Term  as B
 
 

@@ -43,9 +43,7 @@ module Koshucode.Baala.Data.Type.Head
     headLR, headLROrd,
   ) where
 
-import qualified Koshucode.Baala.Base.Abort        as B
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Token        as B
 import qualified Koshucode.Baala.Data.Type.Type    as B
 

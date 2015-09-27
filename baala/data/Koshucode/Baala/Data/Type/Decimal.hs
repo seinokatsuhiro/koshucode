@@ -36,9 +36,8 @@ module Koshucode.Baala.Data.Type.Decimal
 import qualified Data.Char as Ch
 import qualified Data.Ratio as R
 import Control.Monad
+import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Base.Message as Msg
-import qualified Koshucode.Baala.Base.Abort   as B
-import qualified Koshucode.Baala.Base.Prelude as B
 
 
 

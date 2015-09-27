@@ -26,10 +26,7 @@ module Koshucode.Baala.Data.Token.TokenLine
 
 import qualified Data.Map                             as Map
 import qualified Data.Char                            as Ch
-import qualified Koshucode.Baala.Base.Abort           as B
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax          as B
-import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Token.AngleText as B
 import qualified Koshucode.Baala.Data.Token.Short     as B
 import qualified Koshucode.Baala.Data.Token.Token     as B
