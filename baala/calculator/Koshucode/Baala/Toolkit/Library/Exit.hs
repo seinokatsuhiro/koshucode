@@ -11,7 +11,7 @@ import qualified GHC.IO.Encoding       as IO
 import qualified System.Environment    as Sys
 import qualified System.IO             as IO
 import qualified Koshucode.Baala.Base  as B
-import qualified Koshucode.Baala.Data  as B
+import qualified Koshucode.Baala.Data  as D
 import qualified Koshucode.Baala.Core  as C
 
 prelude :: IO (String, [String])
@@ -46,9 +46,9 @@ currentEncodings =
     do locale  <- IO.getLocaleEncoding
        file    <- IO.getFileSystemEncoding
        let q    = ("'" ++)
-           j    = B.affirm "ENCODING" [ ("content", q $ show locale)
+           j    = D.affirm "ENCODING" [ ("content", q $ show locale)
                                       , ("file",    q $ show file) ]
-       return $ B.writeDownJudge B.shortEmpty j ++ "\n"
+       return $ D.writeDownJudge D.shortEmpty j ++ "\n"
 
 exit :: Int -> IO a
 exit = B.exitWith . B.exitCode

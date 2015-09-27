@@ -10,8 +10,7 @@ import qualified System.Console.GetOpt                 as G
 import qualified Data.Time                             as T
 import qualified System.IO                             as IO
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data                  as B
-import qualified Koshucode.Baala.Data                  as C
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Toolkit.Library.Run   as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit  as L
@@ -43,7 +42,7 @@ header = unlines
     , ""
     ] ++ "OPTIONS"
 
-koshuFilter :: (C.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO Int
+koshuFilter :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO Int
 koshuFilter g withRes =
   do (prog, argv) <- L.prelude
      proxy        <- L.getProxies
@@ -63,16 +62,16 @@ koshuFilter g withRes =
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy
-                       , C.globalTime      = B.timeYmd day
+                       , C.globalTime      = D.timeYmd day
                        , C.globalHook      = root }
 
        (_, _, errs) -> L.putFailure $ concat errs
 
-runFiles :: (C.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
+runFiles :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
 runFiles = hRunFiles B.stdout
 
 hRunFiles
-    :: (C.CContent c)
+    :: (D.CContent c)
     => IO.Handle                 -- ^ Output file handler
     -> C.Global c                -- ^ Global parameters
     -> (C.Resource c -> IO Int)  -- ^ Resource handler

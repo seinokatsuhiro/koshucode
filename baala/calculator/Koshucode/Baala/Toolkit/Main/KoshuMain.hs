@@ -11,8 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 import qualified Data.Time              as T
 import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Data   as B
-import qualified Koshucode.Baala.Data   as C
+import qualified Koshucode.Baala.Data   as D
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
 import qualified Koshucode.Baala.Toolkit.Library.Element       as L
@@ -143,10 +142,10 @@ options =
 -- | The main function for @koshu@ command.
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
-koshuMain :: (C.CContent c, W.ToJSON c) => C.Global c -> IO B.ExitCode
+koshuMain :: (D.CContent c, W.ToJSON c) => C.Global c -> IO B.ExitCode
 koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
-koshuMainParam :: (C.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
+koshuMainParam :: (D.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
     | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
     | paramVersion p       = L.putSuccess $ ver ++ "\n"
@@ -164,11 +163,11 @@ koshuMainParam g p
               { C.globalProgram   = paramProg p
               , C.globalArgs      = paramArgs p
               , C.globalProxy     = paramProxy p
-              , C.globalTime      = B.timeYmd $ paramDay p
+              , C.globalTime      = D.timeYmd $ paramDay p
               , C.globalResult    = rslt
               , C.globalHook      = root }
 
-putElems :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
+putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
        res2 <- abio abres
@@ -184,7 +183,7 @@ putElems g src =
 
 -- ----------------------  Pretty printing
 
--- prettySection :: (C.CContent c) => C.SourceBundle c -> IO Int
+-- prettySection :: (D.CContent c) => C.SourceBundle c -> IO Int
 -- prettySection (C.SourceBundle root _ files _) =
 --     case files of
 --       [file] -> do md <- C.readSection root (B.CodeFile file)
