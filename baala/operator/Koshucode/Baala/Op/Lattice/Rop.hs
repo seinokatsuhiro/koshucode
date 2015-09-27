@@ -6,7 +6,7 @@ module Koshucode.Baala.Op.Lattice.Rop
   ( ropsLattice,
   ) where
 
-import qualified Koshucode.Baala.Data                 as C
+import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Lattice.Restrict  as Op
@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 --
 --   [@sub@]     Restriction to subrelation.
 --
-ropsLattice :: (Ord c, C.CRel c) => [C.Rop c]
+ropsLattice :: (Ord c, D.CRel c) => [C.Rop c]
 ropsLattice = Op.ropList "lattice"  -- GROUP
     --         CONSTRUCTOR      USAGE          ATTRIBUTE
     [ Op.def  Op.consCompose   "compose R"    "1 -relmap/"

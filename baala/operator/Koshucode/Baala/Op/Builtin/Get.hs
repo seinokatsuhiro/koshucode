@@ -27,8 +27,7 @@ module Koshucode.Baala.Op.Builtin.Get
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data            as B
-import qualified Koshucode.Baala.Data            as C
+import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
 import qualified Koshucode.Baala.Op.Message      as Msg
@@ -41,20 +40,20 @@ type RopGet c a
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-lookupTree, lookupRelmap :: String -> C.Intmed c -> Maybe [B.TTree]
+lookupTree, lookupRelmap :: String -> C.Intmed c -> Maybe [D.TTree]
 lookupTree    = lookupAttr C.AttrNormal
 lookupRelmap  = lookupAttr C.AttrRelmapNormal `B.mappend` lookupAttr C.AttrRelmapLocal
 
-lookupAttr :: (String -> C.AttrName) -> String -> C.Intmed c -> Maybe [B.TTree]
-lookupAttr c ('-' : name) = B.paraLookupSingle (c name) . C.lexAttr . C.medLexmap
+lookupAttr :: (String -> C.AttrName) -> String -> C.Intmed c -> Maybe [D.TTree]
+lookupAttr c ('-' : name) = D.paraLookupSingle (c name) . C.lexAttr . C.medLexmap
 lookupAttr _ _ = B.bug "lookupAttr"
 
-getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
+getAbortable :: ([D.TTree] -> B.Ab b) -> RopGet c b
 getAbortable f med name =
     do trees <- getTrees med name
        Msg.abAttrTrees trees $ f trees
 
-getAbortableOption :: b -> ([B.TTree] -> B.Ab b) -> RopGet c b
+getAbortableOption :: b -> ([D.TTree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f med name =
     do m <- getMaybe getTrees med name
        case m of
@@ -90,30 +89,30 @@ getSwitch med name = getAbortableOption False get med name where
 --   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
-    get [B.TextLeaf _ _ s] = Right s
+    get [D.TextLeaf _ _ s] = Right s
     get _ = Msg.unexpAttr "Require one word"
 
 
 -- ----------------------  Tree
 
-getTrees :: RopGet c [B.TTree]
+getTrees :: RopGet c [D.TTree]
 getTrees med name =
     case lookupTree name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
-getTree :: RopGet c B.TTree
+getTree :: RopGet c D.TTree
 getTree med name =
     do trees <- getTrees med name
-       Right $ B.ttreeGroup trees
+       Right $ D.ttreeGroup trees
 
-getWordTrees :: RopGet c [B.Named B.TTree]
+getWordTrees :: RopGet c [B.Named D.TTree]
 getWordTrees med name =
     case lookupTree name med of
       Just trees -> wordTrees trees
       Nothing    -> Msg.noAttr name
 
-wordTrees :: [B.TTree] -> B.Ab [B.Named B.TTree]
+wordTrees :: [D.TTree] -> B.Ab [B.Named D.TTree]
 wordTrees []  = Right []
 wordTrees [_] = Msg.unexpAttr "Require word and tree"
 wordTrees (w : tree : xs) =
@@ -121,14 +120,14 @@ wordTrees (w : tree : xs) =
        xs' <- wordTrees xs
        Right $ (w', tree) : xs'
 
-word :: B.TTree -> B.Ab String
-word (B.TextLeaf _ _ w) = Right w
+word :: D.TTree -> B.Ab String
+word (D.TextLeaf _ _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
-getTreesByColon :: RopGet c [[B.TTree]]
+getTreesByColon :: RopGet c [[D.TTree]]
 getTreesByColon med name =
     do trees <- getTrees med name
-       Right $ B.omit null $ B.divideTreesByColon trees
+       Right $ B.omit null $ D.divideTreesByColon trees
 
 
 -- ----------------------  Relmap
@@ -147,7 +146,7 @@ getRelmap med name =
          [m] -> Right m
          _   -> Msg.unexpAttr "Require one relmap"
 
-getRelmapRaw :: RopGet c [B.TTree]
+getRelmapRaw :: RopGet c [D.TTree]
 getRelmapRaw med name =
     case lookupRelmap name med of
       Just trees -> Right trees
@@ -165,35 +164,35 @@ getOptRelmap rmap0 med = B.right rmap0 . getRelmap med
 -- ----------------------  Term
 
 -- | Get a term name from named attribute.
-getTerm :: RopGet c B.TermName
+getTerm :: RopGet c D.TermName
 getTerm = getAbortable get where
     get [x] = Op.termName x
     get _   = Msg.unexpAttr "Require one term"
 
-getTerm2 :: RopGet c (B.TermName, B.TermName)
+getTerm2 :: RopGet c (D.TermName, D.TermName)
 getTerm2 med n =
     do terms <- getTerms med n
        case terms of
          [x,y] -> Right (x, y)
          _     -> Msg.unexpAttr "Require two term"
 
-getTermOpt :: RopGet c (Maybe B.TermName)
+getTermOpt :: RopGet c (Maybe D.TermName)
 getTermOpt = getMaybe getTerm
 
 -- | Get list of term names from named attribute.
-getTerms :: RopGet c [B.TermName]
+getTerms :: RopGet c [D.TermName]
 getTerms = getAbortable Op.termNames
 
 -- | Get term names and complement sign (@~@) .
-getTermsCo :: RopGet c (Bool, [B.TermName])
+getTermsCo :: RopGet c (Bool, [D.TermName])
 getTermsCo = getAbortable Op.termNamesCo
 
 -- | Get list of term-name pairs from named attribute.
-getTermPairs :: RopGet c [B.TermName2]
+getTermPairs :: RopGet c [D.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
-getTermsColon :: RopGet c [[B.TermName]]
+getTermsColon :: RopGet c [[D.TermName]]
 getTermsColon = getAbortable Op.termNamesColon
 
-getTermTrees :: RopGet c [B.Named B.TTree]
-getTermTrees = getAbortable C.treesToTerms1
+getTermTrees :: RopGet c [B.Named D.TTree]
+getTermTrees = getAbortable D.treesToTerms1

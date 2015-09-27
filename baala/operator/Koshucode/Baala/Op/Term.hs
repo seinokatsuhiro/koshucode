@@ -23,7 +23,7 @@ module Koshucode.Baala.Op.Term
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Message as Msg
@@ -66,22 +66,22 @@ consPick med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapPick med ns
 
-relmapPick :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapPick :: C.Intmed c -> [D.TermName] -> C.Relmap c
 relmapPick med = C.relmapFlow med . relkitPick
 
-relkitPick :: [B.TermName] -> C.RelkitFlow c
-relkitPick = relkitProject (B.headRShare, B.headRShare)
+relkitPick :: [D.TermName] -> C.RelkitFlow c
+relkitPick = relkitProject (D.headRShare, D.headRShare)
 
 consCut :: C.RopCons c
 consCut med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapCut med ns
 
-relmapCut :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapCut :: C.Intmed c -> [D.TermName] -> C.Relmap c
 relmapCut med = C.relmapFlow med . relkitCut
 
-relkitCut :: [B.TermName] -> C.RelkitFlow c
-relkitCut = relkitProject (B.headRSide, B.headRSide)
+relkitCut :: [D.TermName] -> C.RelkitFlow c
+relkitCut = relkitProject (D.headRSide, D.headRSide)
 
 
 -- ----------------------  pick-term & cut-term
@@ -95,7 +95,7 @@ relmapPickTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapPickTerm med = C.relmapBinary med relkitPickTerm
 
 relkitPickTerm :: C.RelkitBinary c
-relkitPickTerm = relkitProjectTerm (B.headRShare, B.headRShare)
+relkitPickTerm = relkitProjectTerm (D.headRShare, D.headRShare)
 
 consCutTerm :: C.RopCons c
 consCutTerm med =
@@ -106,25 +106,25 @@ relmapCutTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 relkitCutTerm :: C.RelkitBinary c
-relkitCutTerm = relkitProjectTerm (B.headRSide, B.headRSide)
+relkitCutTerm = relkitProjectTerm (D.headRSide, D.headRSide)
 
 
 -- ----------------------  project
 
-relkitProjectTerm :: B.HeadLRMap2 B.NamedType c -> C.RelkitBinary c
+relkitProjectTerm :: D.HeadLRMap2 D.NamedType c -> C.RelkitBinary c
 relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
 relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
-    relkitProject lrMap $ B.headNames he2
+    relkitProject lrMap $ D.headNames he2
 
-relkitProject :: B.HeadLRMap2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
+relkitProject :: D.HeadLRMap2 D.NamedType c -> [D.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
 relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = ns `B.headLROrd` B.headNames he1
-      unk   = B.headLSideNames lr
-      he2   = heMap lr `B.headMap` he1
+      lr    = ns `D.headLROrd` D.headNames he1
+      unk   = D.headLSideNames lr
+      he2   = heMap lr `D.headMap` he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr
 
 
@@ -135,7 +135,7 @@ consRename med =
   do np <- Op.getTermPairs med "-term"
      Right $ relmapRename med np
 
-relmapRename :: C.Intmed c -> [B.TermName2] -> C.Relmap c
+relmapRename :: C.Intmed c -> [D.TermName2] -> C.Relmap c
 relmapRename med = C.relmapFlow med . relkitMove . unzip . map B.swap
 
 
@@ -147,10 +147,10 @@ consMove med =
      ns <- Op.getTerms med "-to"
      Right $ relmapMove med (ps, ns)
 
-relmapMove :: C.Intmed c -> ([B.TermName], [B.TermName]) -> C.Relmap c
+relmapMove :: C.Intmed c -> ([D.TermName], [D.TermName]) -> C.Relmap c
 relmapMove med = C.relmapFlow med . relkitMove
 
-relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c
+relkitMove :: ([D.TermName], [D.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
     | B.notSameLength ps ns = Msg.oddAttr
@@ -159,8 +159,8 @@ relkitMove (ps, ns) (Just he1)
     | psLeft  /= []         = Msg.unkTerm psLeft he1
     | otherwise             = Right kit2
     where
-      ns1        =  B.headNames he1
-      ns2        =  B.headNames he2
+      ns1        =  D.headNames he1
+      ns2        =  D.headNames he2
 
       ns2Dup     =  B.duplicates ns2
       psDup      =  B.duplicates ps
@@ -168,7 +168,7 @@ relkitMove (ps, ns) (Just he1)
       psLeft     =  ps `B.snipLeft`  ns1
       psIndex    =  ps `B.snipIndex` ns1
 
-      he2        =  B.headMap moveTerms he1
+      he2        =  D.headMap moveTerms he1
       kit2       =  C.relkitJust he2 C.RelkitId
 
       moveTerms ts       =  foldr moveTerm ts $ zip ns psIndex
@@ -183,26 +183,26 @@ consForward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapForward med ns
 
-relmapForward :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapForward med = C.relmapFlow med . relkitToward (B.headRForward, B.headRForward)
+relmapForward :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapForward med = C.relmapFlow med . relkitToward (D.headRForward, D.headRForward)
 
 consBackward :: C.RopCons c
 consBackward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapBackward med ns
 
-relmapBackward :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapBackward med = C.relmapFlow med . relkitToward (B.headRBackward, B.headRBackward)
+relmapBackward :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapBackward med = C.relmapFlow med . relkitToward (D.headRBackward, D.headRBackward)
 
-relkitToward :: B.HeadLRMap2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
+relkitToward :: D.HeadLRMap2 D.NamedType c -> [D.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = ns `B.headLR` B.headNames he1
-      unk   = B.headLSide lr ns
-      he2   = B.headMap (heMap lr) he1
+      lr    = ns `D.headLR` D.headNames he1
+      unk   = D.headLSide lr ns
+      he2   = D.headMap (heMap lr) he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boMap lr
 
 
@@ -217,8 +217,8 @@ relmapLexical med = C.relmapFlow med relkitLexical
 relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
-    ns    = B.headNames he1
-    lr    = B.sort ns `B.headLR` ns
-    he2   = B.headMap (B.headRForward lr) he1
-    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ B.headRForward lr
+    ns    = D.headNames he1
+    lr    = B.sort ns `D.headLR` ns
+    he2   = D.headMap (D.headRForward lr) he1
+    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.headRForward lr
 

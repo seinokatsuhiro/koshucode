@@ -28,7 +28,7 @@ module Koshucode.Baala.Op.Lattice.Tropashko
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 
@@ -51,7 +51,7 @@ relmapMeet med = C.relmapBinary med relkitMeet
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
 relkitMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    lr     = B.headNames he1 `B.headLR` B.headNames he2
+    lr     = D.headNames he1 `D.headLR` D.headNames he2
     he3    = he2 `B.mappend` he1
     kit3   = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
 
@@ -59,12 +59,12 @@ relkitMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           case B.headLShareIndex lr of
+           case D.headLShareIndex lr of
              [] -> Right $ cartesian bo1 bo2
-             _  -> let b2map = B.gatherToMap $ map (B.headRSplit lr) bo2
+             _  -> let b2map = B.gatherToMap $ map (D.headRSplit lr) bo2
                    in Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case B.headLShare lr cs1 `B.lookupMap` b2map of
+    step b2map cs1 = case D.headLShare lr cs1 `B.lookupMap` b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
@@ -93,7 +93,7 @@ relmapJoin
 relmapJoin med = C.relmapBinary med relkitJoin
 
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
-relmapJoinList med [] = C.relmapConst med B.reldau
+relmapJoinList med [] = C.relmapConst med D.reldau
 relmapJoinList _ [rmap] = rmap
 relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
     rmaps' = relmapJoin med $ relmapJoinList med rmaps
@@ -101,13 +101,13 @@ relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
 relkitJoin (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    lr     = B.headNames he1 `B.headLR` B.headNames he2
-    he3    = B.headLShare lr `B.headMap` he1
+    lr     = D.headNames he1 `D.headLR` D.headNames he2
+    he3    = D.headLShare lr `D.headMap` he1
     kit3   = C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-               left    = map $ B.headLShare lr
-               right   = map $ B.headRShare lr
+               left    = map $ D.headLShare lr
+               right   = map $ D.headRShare lr
            bo2 <- bmap2 bo1
            Right $ left bo1 ++ right bo2
 

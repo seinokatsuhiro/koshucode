@@ -20,7 +20,7 @@ module Koshucode.Baala.Op.Lattice.Restrict
 
 import qualified Data.Set                             as Set
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as B
+import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
@@ -83,7 +83,7 @@ relmapNoneMeet med = C.relmapBinary med $ relkitFilterMeet False
 
 relkitFilterMeet :: forall c. (Ord c) => Bool -> C.RelkitBinary c
 relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    lr     = B.headNames he1 `B.headLR` B.headNames he2
+    lr     = D.headNames he1 `D.headLR` D.headNames he2
     kit3   = C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
 
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
@@ -92,8 +92,8 @@ relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 whe
            bo2 <- bmap2 bo1
            Right $ test (toSet bo2) `filter` bo1
 
-    toSet = Set.fromList . map (B.headRShare lr)
-    test b2set cs1 = B.headLShare lr cs1 `Set.member` b2set == which
+    toSet = Set.fromList . map (D.headRShare lr)
+    test b2set cs1 = D.headLShare lr cs1 `Set.member` b2set == which
 
 relkitFilterMeet _ _ _ = Right C.relkitNothing
 
@@ -111,7 +111,7 @@ relmapSub med = C.relmapBinary med relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
 relkitSub kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
-    | B.isSuperhead he1 he2 = kit
+    | D.isSuperhead he1 he2 = kit
     | otherwise = Right $ C.relkitJust he1 $ C.RelkitConst []
     where
       kit = do kit3 <- Op.relkitMeet kit2 he1'
@@ -138,9 +138,9 @@ relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
        Right $ kitMeet `B.mappend` kitCut
 relkitCompose _ _ = Right C.relkitNothing
 
-sharedNames :: B.Head -> B.Head -> [B.TermName]
+sharedNames :: D.Head -> D.Head -> [D.TermName]
 sharedNames he1 he2 = shared where
-    ns1     = B.headNames he1
-    ns2     = B.headNames he2
-    lr      = B.headLR ns1 ns2
-    shared  = B.headRShare lr ns2
+    ns1     = D.headNames he1
+    ns2     = D.headNames he2
+    lr      = D.headLR ns1 ns2
+    shared  = D.headRShare lr ns2

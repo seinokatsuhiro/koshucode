@@ -25,8 +25,7 @@ module Koshucode.Baala.Op.Gadget
 
 import qualified Data.Map.Strict            as Map
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
-import qualified Koshucode.Baala.Data       as C
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.DepRank as Op
@@ -47,7 +46,7 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --   [@size \/N@]
 --     Calculate cardinality of input relation.
 --
-ropsGadget :: (C.CContent c) => [C.Rop c]
+ropsGadget :: (D.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --        CONSTRUCTOR       USAGE                      ATTRIBUTE
     [ Op.def  consContents      "contents /N"              "V -term"
@@ -66,12 +65,12 @@ consContents med =
     do n <- Op.getTerm med "-term"
        Right $ relmapContents med n
 
-relmapContents :: (Ord c) => C.Intmed c -> B.TermName -> C.Relmap c
+relmapContents :: (Ord c) => C.Intmed c -> D.TermName -> C.Relmap c
 relmapContents med = C.relmapFlow med . relkitContents
 
-relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
+relkitContents :: (Ord c) => D.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
-    he2  = B.headFrom [n]
+    he2  = D.headFrom [n]
     kitf = map B.li1 . B.unique . concat
 
 
@@ -79,25 +78,25 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 
 --  dependent-rank /x /y -rank /r
 
-consDepRank :: (Ord c, C.CDec c) => C.RopCons c
+consDepRank :: (Ord c, D.CDec c) => C.RopCons c
 consDepRank med =
     do x <- Op.getTerm med "-x"
        y <- Op.getTerm med "-y"
        r <- Op.getTerm med "-rank"
        Right $ relmapDepRank med (x,y,r)
 
-relmapDepRank :: (Ord c, C.CDec c) => C.Intmed c -> B.TermName3 -> C.Relmap c
+relmapDepRank :: (Ord c, D.CDec c) => C.Intmed c -> D.TermName3 -> C.Relmap c
 relmapDepRank med = C.relmapFlow med . relkitDepRank
 
-relkitDepRank :: (Ord c, C.CDec c) => B.TermName3 -> C.RelkitFlow c
+relkitDepRank :: (Ord c, D.CDec c) => D.TermName3 -> C.RelkitFlow c
 relkitDepRank _  Nothing = Right C.relkitNothing
 relkitDepRank (x,y,r) (Just he1) = Right kit2 where
-    he2         = B.headFrom [x,r]
+    he2         = D.headFrom [x,r]
     kit2        = C.relkitJust he2 $ C.RelkitFull False f2
     xyPick      = Op.picker he1 [x,y]
     f2 bo1      = map put $ rank $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
-    put (cx,i)  = [cx, C.pInt i]
+    put (cx,i)  = [cx, D.pInt i]
     rank        = Op.depRankList . Op.depRankUpdateAll . Op.depRankFromPairs
 
 
@@ -105,7 +104,7 @@ relkitDepRank (x,y,r) (Just he1) = Right kit2 where
 
 --  visit-distance r -step /a /b : /c /d -to /v -distance /n
 
-consVisitDistance :: (Ord c, C.CDec c, C.CRel c) => C.RopCons c
+consVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.RopCons c
 consVisitDistance med =
     do rmap  <- Op.getRelmap med "-relmap"
        to    <- Op.getTerm   med "-to"
@@ -115,10 +114,10 @@ consVisitDistance med =
          [step1, step2] -> Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
          _              -> Msg.adlib "Require two sets of terms"
 
-relmapVisitDistance :: (Ord c, C.CDec c, C.CRel c) => C.Intmed c -> ([B.TermName], [B.TermName], B.TermName, B.TermName) -> B.Map (C.Relmap c)
+relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([D.TermName], [D.TermName], D.TermName, D.TermName) -> B.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
-relkitVisitDistance :: (Ord c, C.CDec c, C.CRel c) => ([B.TermName], [B.TermName], B.TermName, B.TermName) -> C.RelkitBinary c
+relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([D.TermName], [D.TermName], D.TermName, D.TermName) -> C.RelkitBinary c
 relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
     | unkStart /= []     = Msg.unkTerm unkStart he1
     | unkFrom  /= []     = Msg.unkTerm unkFrom  he2
@@ -128,28 +127,28 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
     | lenFrom  /= lenTo  = Msg.adlib "Require same number of terms"
     | otherwise          = Right kit3
     where
-      lrStart   = step1 `B.headLROrd` B.headNames he1
-      lrDist    = [to]  `B.headLROrd` B.headNames he1
-      lrFrom    = step1 `B.headLROrd` B.headNames he2
-      lrTo      = step2 `B.headLROrd` B.headNames he2
+      lrStart   = step1 `D.headLROrd` D.headNames he1
+      lrDist    = [to]  `D.headLROrd` D.headNames he1
+      lrFrom    = step1 `D.headLROrd` D.headNames he2
+      lrTo      = step2 `D.headLROrd` D.headNames he2
 
-      unkStart  = B.headLSideNames lrStart
-      unkFrom   = B.headLSideNames lrFrom
-      unkTo     = B.headLSideNames lrTo
-      newDist   = B.headLSideNames lrDist
+      unkStart  = D.headLSideNames lrStart
+      unkFrom   = D.headLSideNames lrFrom
+      unkTo     = D.headLSideNames lrTo
+      newDist   = D.headLSideNames lrDist
 
       lenFrom   = length step1
       lenTo     = length step2
       dup       = B.duplicates $ dist : step1
-      he3       = B.headConsNest to heTo he1
-      heTo      = B.headFrom $ dist : step1
+      he3       = D.headConsNest to heTo he1
+      heTo      = D.headFrom $ dist : step1
       kit3      = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
       kitf3     = relkitVisitDistanceBody (lenFrom == 1) lrStart lrFrom lrTo heTo
 
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 
-relkitVisitDistanceBody :: (C.CDec c, C.CRel c, Ord c) =>
-  Bool -> B.HeadLR c -> B.HeadLR c -> B.HeadLR c -> B.Head -> [C.BodyMap c] -> B.AbMap [[c]]
+relkitVisitDistanceBody :: (D.CDec c, D.CRel c, Ord c) =>
+  Bool -> D.HeadLR c -> D.HeadLR c -> D.HeadLR c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
 relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
     | optimize1 = kitf3 (add1, tuple1, vdist1)
     | otherwise = kitf3 (addN, tupleN, vdistN)
@@ -160,21 +159,21 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
              Right $ calc x vstep `map` bo1
 
       calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
-          rel    = C.pRel $ B.Rel heTo body
+          rel    = D.pRel $ D.Rel heTo body
           body   = map tupleX $ Map.assocs $ vdistX vstep start
-          start  = B.headRShare lrStart cs1
+          start  = D.headRShare lrStart cs1
 
       vdistN vstep cs   = visitDistanceFrom vstep cs
       vdist1 vstep [c]  = visitDistanceFrom vstep c
       vdist1 _ _        = B.bug "visit-distance"
 
-      tupleN (cs, n)    = C.pInt n : cs
-      tuple1 (c, n)     = [C.pInt n, c]
+      tupleN (cs, n)    = D.pInt n : cs
+      tuple1 (c, n)     = [D.pInt n, c]
 
-      addN cs           = insertPush (B.headRShare lrFrom cs)
-                                     (B.headRShare lrTo cs)
-      add1 cs           = insertPush (head $ B.headRShare lrFrom cs)
-                                     (head $ B.headRShare lrTo cs)
+      addN cs           = insertPush (D.headRShare lrFrom cs)
+                                     (D.headRShare lrTo cs)
+      add1 cs           = insertPush (head $ D.headRShare lrFrom cs)
+                                     (head $ D.headRShare lrTo cs)
 
 calcBody :: [C.BodyMap c] -> [[c]] -> B.Ab [[[c]]]
 calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps
@@ -219,19 +218,19 @@ insertPush k a = Map.insertWith push k [a] where
 --    > a | size /c
 --
 
-consSize :: (C.CDec c) => C.RopCons c
+consSize :: (D.CDec c) => C.RopCons c
 consSize med =
   do n <- Op.getTerm med "-term"
      Right $ relmapSize med n
 
-relmapSize :: (C.CDec c) => C.Intmed c -> B.TermName -> C.Relmap c
+relmapSize :: (D.CDec c) => C.Intmed c -> D.TermName -> C.Relmap c
 relmapSize med n = C.relmapFlow med $ relkitSize n
 
-relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c
+relkitSize :: (D.CDec c) => D.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
-    he2       = B.headFrom [n]
+    he2       = D.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ C.pInt $ length bo1 ]]
+    kitf2 bo1 = [[ D.pInt $ length bo1 ]]
 
 
 -- ----------------------  eqlize
@@ -271,7 +270,7 @@ eqlizeBody = loop where
 
 -- ----------------------  dump-tree
 
-consDumpTree :: (C.CDec c) => C.RopCons c
+consDumpTree :: (D.CDec c) => C.RopCons c
 consDumpTree med =
   do trees <- Op.getTrees med "-tree"
      Msg.dumpTrees trees

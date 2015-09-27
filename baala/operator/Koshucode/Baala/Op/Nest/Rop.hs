@@ -6,7 +6,7 @@ module Koshucode.Baala.Op.Nest.Rop
   ( ropsNest,
   ) where
 
-import qualified Koshucode.Baala.Data               as C
+import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Op.Builtin         as Op
 import qualified Koshucode.Baala.Op.Nest.Confl      as Op
@@ -54,7 +54,7 @@ import qualified Koshucode.Baala.Op.Nest.Flow       as Op
 --  [@up \/P@]
 --    Lift up nested relation.
 
-ropsNest :: (C.CContent c) => [C.Rop c]
+ropsNest :: (D.CContent c) => [C.Rop c]
 ropsNest = Op.ropList "nest"
     --        CONSTRUCTOR       USAGE                           ATTRIBUTE
     [ Op.def  Op.consChunk      "chunk /T ... [-order /P ...]"  "V -term | -order"

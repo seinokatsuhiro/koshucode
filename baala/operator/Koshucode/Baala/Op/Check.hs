@@ -6,8 +6,7 @@ module Koshucode.Baala.Op.Check
 
 import qualified Data.Map                    as Map
 import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as B
-import qualified Koshucode.Baala.Data        as C
+import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Lattice  as Op
@@ -23,7 +22,7 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 --   [@duplicate \/P ...@]
 --     Pass duplicate tuples on @\/P@ ...
 
-ropsCheck :: (C.CContent c) => [C.Rop c]
+ropsCheck :: (D.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
     [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
                                                       "0 | -just -has -but"
@@ -46,21 +45,21 @@ consCheckTerm med =
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  med ns
        _ -> Msg.unexpAttr "require one of -just / -has / -but"
 
-relmapCheckTermJust :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapCheckTermHas  :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapCheckTermBut  :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapCheckTermJust :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapCheckTermHas  :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapCheckTermBut  :: C.Intmed c -> [D.TermName] -> C.Relmap c
 relmapCheckTermJust med = C.relmapFlow med . relkitCheckTermJust
 relmapCheckTermHas  med = C.relmapFlow med . relkitCheckTermHas
 relmapCheckTermBut  med = C.relmapFlow med . relkitCheckTermBut
 
-relkitCheckTermJust :: [B.TermName] -> C.RelkitFlow c
-relkitCheckTermHas  :: [B.TermName] -> C.RelkitFlow c
-relkitCheckTermBut  :: [B.TermName] -> C.RelkitFlow c
-relkitCheckTermJust = checkTerm "Just" (\ns he1 -> B.headFrom ns `B.headEquiv` he1)
-relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
-relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` B.headNames he1)
+relkitCheckTermJust :: [D.TermName] -> C.RelkitFlow c
+relkitCheckTermHas  :: [D.TermName] -> C.RelkitFlow c
+relkitCheckTermBut  :: [D.TermName] -> C.RelkitFlow c
+relkitCheckTermJust = checkTerm "Just" (\ns he1 -> D.headFrom ns `D.headEquiv` he1)
+relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> D.headFrom ns `D.isSubhead` he1)
+relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` D.headNames he1)
 
-checkTerm :: String -> ([B.TermName] -> B.Head -> Bool) -> [B.TermName] -> C.RelkitFlow c
+checkTerm :: String -> ([D.TermName] -> D.Head -> Bool) -> [D.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
@@ -82,22 +81,22 @@ consDuplicate med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapDuplicate med ns
 
-relmapDuplicate :: (Ord c) => C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapDuplicate :: (Ord c) => C.Intmed c -> [D.TermName] -> C.Relmap c
 relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 
-relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
+relkitDuplicate :: (Ord c) => [D.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr     = ns `B.headLR` B.headNames he1
-      unk    = B.headLSideNames lr
+      lr     = ns `D.headLR` D.headNames he1
+      unk    = D.headLSideNames lr
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
       dup    = not . B.isSingleton
 
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = B.gatherToMap $ map (B.headRAssoc lr) bo1
+      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.headRAssoc lr) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 
@@ -112,7 +111,7 @@ consExclude med =
      m  <- Op.getRelmap med "-from"
      Right $ relmapExclude med (ns, m)
 
-relmapExclude :: (Ord c) => C.Intmed c -> ([B.TermName], C.Relmap c) -> C.Relmap c
+relmapExclude :: (Ord c) => C.Intmed c -> ([D.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
     excl = Op.relmapNone med (pick `B.mappend` meet)
     pick = Op.relmapPick med ns
@@ -121,12 +120,12 @@ relmapExclude med (ns, m) = excl where
 
 -- ----------------------  dump
 
-consDump :: (B.Write c, C.CRel c) => C.RopCons c
+consDump :: (B.Write c, D.CRel c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 
-relkitDump :: (B.Write c, C.CRel c) => C.RelkitFlow c
+relkitDump :: (B.Write c, D.CRel c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
-    kitf2 _ bo1 = Msg.dumpRel $ B.Rel he1 bo1
+    kitf2 _ bo1 = Msg.dumpRel $ D.Rel he1 bo1
 

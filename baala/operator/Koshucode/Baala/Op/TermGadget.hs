@@ -13,7 +13,7 @@ module Koshucode.Baala.Op.TermGadget
   ) where
 
 import qualified Data.List                  as List
-import qualified Koshucode.Baala.Data       as B
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Term    as Op
@@ -58,7 +58,7 @@ relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 relkitPrefix :: String -> [String] -> C.RelkitFlow c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
 relkitPrefix pre ns (Just he1) = Right kit2 where
-    he2 =  B.headMapName f he1
+    he2 =  D.headMapName f he1
     kit2 = C.relkitId $ Just he2
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -81,7 +81,7 @@ relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 relkitUnprefix :: String -> C.RelkitFlow c
 relkitUnprefix _ Nothing = Right C.relkitNothing
 relkitUnprefix pre (Just he1) = Right kit2 where
-    he2  = B.headMapName (unprefixName pre) he1
+    he2  = D.headMapName (unprefixName pre) he1
     kit2 = C.relkitId $ Just he2
 
 unprefixName :: String -> String -> String
@@ -106,7 +106,7 @@ relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 relkitPrefixChange :: (String, String) -> C.RelkitFlow c
 relkitPrefixChange _ Nothing = Right C.relkitNothing
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
-    he2  = B.headMapName f he1
+    he2  = D.headMapName f he1
     kit2 = C.relkitId $ Just he2
     new' = new ++ "-"
     old' = old ++ "-"
@@ -126,4 +126,4 @@ relmapWipe med = C.relmapFlow med relkitWipe
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing
 relkitWipe (Just he1) = Op.relkitCut ns1 (Just he1) where
-    ns1 = filter (elem '=') $ B.headNames he1
+    ns1 = filter (elem '=') $ D.headNames he1

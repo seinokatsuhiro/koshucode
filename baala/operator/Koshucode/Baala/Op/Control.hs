@@ -18,8 +18,7 @@ module Koshucode.Baala.Op.Control
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
-import qualified Koshucode.Baala.Data       as C
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Lattice as Op
@@ -27,7 +26,7 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 
 -- | Implementation of relational operators.
-ropsControl :: (C.CContent c) => [C.Rop c]
+ropsControl :: (D.CContent c) => [C.Rop c]
 ropsControl = Op.ropList "control"
     --        CONSTRUCTOR   USAGE          ATTRIBUTE
     [ Op.def  consEqual     "equal"        "1 -relmap/"
@@ -54,7 +53,7 @@ relmapIf med = C.relmapConfl med relkitIf
 
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB) kitbB] _
-    | B.headEquiv heA heB = Right $ kit3
+    | D.headEquiv heA heB = Right $ kit3
     | otherwise = Msg.diffHead [heA, heB]
     where
       kit3 = C.relkitJust heA $ C.RelkitAbFull True kitf3 [kitbT, kitbA, kitbB]
@@ -65,7 +64,7 @@ relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB)
                [] -> align $ bmapB bo1
                _  -> bmapA bo1
       align :: B.Map (B.Ab [[c]])
-      align = fmap $ B.bodyAlign heA heB
+      align = fmap $ D.bodyAlign heA heB
 
 relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit hiB' hoB' kitbB)] _
     | isNothing2 hoA' hoB' = Right C.relkitNothing
@@ -73,10 +72,10 @@ relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit
     | isNothing hoB'       = relkitIf [kitT, kitA, C.Relkit hiA' hoA' kitbB] Nothing
 relkitIf _ _ = Msg.unexpAttr "if T A b"
 
-isNothing :: Maybe B.Head -> Bool
+isNothing :: Maybe D.Head -> Bool
 isNothing = (== Nothing)
 
-isNothing2 :: Maybe B.Head -> Maybe B.Head -> Bool
+isNothing2 :: Maybe D.Head -> Maybe D.Head -> Bool
 isNothing2 a b = isNothing a && isNothing b
 
 
@@ -112,7 +111,7 @@ relmapFix med = C.relmapBinary med relkitFix
 
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
 relkitFix (C.Relkit _ (Just he2) kitb2) (Just he1)
-    | B.headEquiv he1 he2 = Right $ kit3
+    | D.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
       kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
@@ -134,10 +133,10 @@ relmapEqual med = C.relmapBinary med relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    kit3 = C.relkitJust B.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3 = C.relkitJust D.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           Right $ if B.Rel he1 bo1 == B.Rel he2 bo2
+           Right $ if D.Rel he1 bo1 == D.Rel he2 bo2
                    then [[]] else []
 relkitEqual _ _ = Right C.relkitNothing

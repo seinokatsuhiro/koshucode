@@ -25,8 +25,7 @@ module Koshucode.Baala.Op.Message
   ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as B
-import qualified Koshucode.Baala.Data as C
+import qualified Koshucode.Baala.Data as D
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Core.Message
 
@@ -34,13 +33,13 @@ import Koshucode.Baala.Core.Message
 -- ----------------------  Op package
 
 -- | check-term failed
-checkTerm :: String -> [B.TermName] -> B.Head -> B.Ab a
+checkTerm :: String -> [D.TermName] -> D.Head -> B.Ab a
 checkTerm label ns he =
     Left $ B.abortLines "check-term failed"
          $ detailTermRel label ns he
 
 -- | Different headings
-diffHead :: [B.Head] -> B.Ab a
+diffHead :: [D.Head] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
 
 -- | Dump content expression
@@ -49,16 +48,16 @@ dumpCox cox = Left $ B.abortLines "Dump content expression"
                    $ lines $ show cox
 
 -- | Dump relation
-dumpRel :: (B.Write c, C.CRel c) => B.Rel c -> B.Ab a
+dumpRel :: (B.Write c, D.CRel c) => D.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
-dumpTrees :: [B.TTree] -> B.Ab a
+dumpTrees :: [D.TTree] -> B.Ab a
 dumpTrees trees = Left $ B.abortLines "Dump token trees"
-                   $ lines $ show $ B.ttDoc trees
+                   $ lines $ show $ D.ttDoc trees
 
 -- | Duplicate term name
-dupTerm :: [B.TermName] -> B.Head -> B.Ab a
+dupTerm :: [D.TermName] -> D.Head -> B.Ab a
 dupTerm ns he =
     Left $ B.abortLines "Duplicate term name"
          $ detailTermRel "Duplicated" ns he
@@ -76,7 +75,7 @@ notImpl :: B.Ab a
 notImpl = Left $ B.abortBecause "Not implemented"
 
 -- | Not a nested relation
-notNestRel :: [B.TermName] -> B.Head -> B.Ab a
+notNestRel :: [D.TermName] -> D.Head -> B.Ab a
 notNestRel ns he =
     Left $ B.abortLines "Not a nested relation"
          $ detailTermRel "Given" ns he
@@ -98,7 +97,7 @@ reqInterp :: B.Ab a
 reqInterp = Left $ B.abortBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: [B.TermName] -> B.Head -> B.Ab a
+reqNewTerm :: [D.TermName] -> D.Head -> B.Ab a
 reqNewTerm ns he =
     Left $ B.abortLines "Require new term names"
          $ detailTermRel "Known" ns he
@@ -111,5 +110,5 @@ reqUnaryFn = Left $ B.abortBecause "Require unary function"
 unexpTermName :: B.Ab a
 unexpTermName = Left $ B.abortBecause "Unexpected term names"
 
-showHead :: B.Head -> String
-showHead = unwords . B.headNames
+showHead :: D.Head -> String
+showHead = unwords . D.headNames

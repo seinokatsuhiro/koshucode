@@ -10,38 +10,38 @@ module Koshucode.Baala.Op.Builtin.Term
   ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as B
+import qualified Koshucode.Baala.Data       as D
 import qualified Koshucode.Baala.Op.Message as Msg
 
 -- | Extract a term name.
-termName :: B.TTree -> B.Ab B.TermName
-termName (B.TermLeafName _ n) = Right n
-termName (B.TermLeaf _ _ [n]) = Right n
+termName :: D.TTree -> B.Ab D.TermName
+termName (D.TermLeafName _ n) = Right n
+termName (D.TermLeaf _ _ [n]) = Right n
 termName _                    = Msg.reqTermName
 
 -- | Extract a list of term names.
 -- 
 --   >>> termNames B.<=< B.tt $ "/a /b /c"
 --   Right ["a", "b", "c"]
-termNames :: [B.TTree] -> B.Ab [B.TermName]
+termNames :: [D.TTree] -> B.Ab [D.TermName]
 termNames = mapM termName
 
-termNamesCo :: [B.TTree] -> B.Ab (Bool, [B.TermName])
+termNamesCo :: [D.TTree] -> B.Ab (Bool, [D.TermName])
 termNamesCo trees =
     do (co, trees2) <- termCo trees
        ns <- mapM termName trees2
        Right (co, ns)
 
 -- Term complement symbol
-termCo :: [B.TTree] -> B.Ab (Bool, [B.TTree])
-termCo (B.TextLeafRaw _ "~" : trees)  = Right (True,  trees)
+termCo :: [D.TTree] -> B.Ab (Bool, [D.TTree])
+termCo (D.TextLeafRaw _ "~" : trees)  = Right (True,  trees)
 termCo trees                          = Right (False, trees)
 
 -- | Extract a list of name-and-name pairs.
 -- 
 --   >>> termNamePairs =<< B.tt "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
-termNamePairs :: [B.TTree] -> B.Ab [B.TermName2]
+termNamePairs :: [D.TTree] -> B.Ab [D.TermName2]
 termNamePairs = loop where
     loop (a : b : xs) =
         do a'  <- termName a
@@ -53,15 +53,15 @@ termNamePairs = loop where
 
 -- >>> termNamesColon =<< B.tt "/a /b : /x /y"
 -- Right [["a", "b"], ["x", "y"]]
-termNamesColon :: [B.TTree] -> B.Ab [[B.TermName]]
+termNamesColon :: [D.TTree] -> B.Ab [[D.TermName]]
 termNamesColon = loop [] [] where
-    loop ret ns (B.TermLeafName _ n : ts)   = loop ret (n : ns) ts
-    loop ret ns (B.TermLeaf _ _ [n] : ts)   = loop ret (n : ns) ts
-    loop ret ns (B.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
+    loop ret ns (D.TermLeafName _ n : ts)   = loop ret (n : ns) ts
+    loop ret ns (D.TermLeaf _ _ [n] : ts)   = loop ret (n : ns) ts
+    loop ret ns (D.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                          = Right $ reverse $ reverse ns : ret
     loop _ _ _                              = Msg.reqTermName
 
-picker :: B.Head -> [B.TermName] -> B.Map [c]
+picker :: D.Head -> [D.TermName] -> B.Map [c]
 picker he ts = B.snipFrom ind where
-    ind = ts `B.snipIndex` B.headNames he
+    ind = ts `B.snipIndex` D.headNames he
 

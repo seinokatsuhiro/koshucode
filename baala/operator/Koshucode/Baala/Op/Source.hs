@@ -21,8 +21,7 @@ module Koshucode.Baala.Op.Source
   ) where
 
 import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as B
-import qualified Koshucode.Baala.Data        as C
+import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 
@@ -37,7 +36,7 @@ import qualified Koshucode.Baala.Op.Builtin  as Op
 --
 --   [@source@]     Read relation from data source.
 --
-ropsSource :: (C.CContent c) => [C.Rop c]
+ropsSource :: (D.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
     --        CONSTRUCTOR     USAGE               ATTRIBUTE
     [ Op.def  consDee         "dee"               "0"
@@ -55,12 +54,12 @@ consEmpty med =
     do ns <- Op.getTerms med "-term"
        Right $ relmapEmpty med ns
 
-relmapEmpty :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapEmpty :: C.Intmed c -> [D.TermName] -> C.Relmap c
 relmapEmpty med = C.relmapFlow med . relkitEmpty
 
-relkitEmpty :: [B.TermName] -> C.RelkitFlow c
+relkitEmpty :: [D.TermName] -> C.RelkitFlow c
 relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
-    he2 = Just $ B.headFrom ns
+    he2 = Just $ D.headFrom ns
 
 
 -- ----------------------  source
@@ -100,7 +99,7 @@ relkitSourceTerm :: String -> C.RelkitBinary c
 relkitSourceTerm _   (C.Relkit _ Nothing    _) _ = Right C.relkitNothing
 relkitSourceTerm pat (C.Relkit _ (Just he2) _) _ = Right kit3 where
     kit3   = C.relkitJust he2 $ C.RelkitSource pat ns2
-    ns2    = B.headNames he2
+    ns2    = D.headNames he2
 
 
 -- ----------------------  dee & dum
@@ -116,8 +115,8 @@ relkitSourceTerm pat (C.Relkit _ (Just he2) _) _ = Right kit3 where
 --    > dum
 
 consDee :: C.RopCons c
-consDee med = Right $ C.relmapConst med B.reldee
+consDee med = Right $ C.relmapConst med D.reldee
 
 consDum :: C.RopCons c
-consDum med = Right $ C.relmapConst med B.reldum
+consDum med = Right $ C.relmapConst med D.reldum
 
