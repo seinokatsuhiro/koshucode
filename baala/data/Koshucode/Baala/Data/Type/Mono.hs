@@ -10,7 +10,7 @@ module Koshucode.Baala.Data.Type.Mono
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Data.Type.Rel  as B
+import qualified Koshucode.Baala.Data.Type.Rel  as D
 
 -- | Monotype relation.
 data Mono c
@@ -18,7 +18,7 @@ data Mono c
     | MonoNest (RelMono c)       -- ^ Nested relation
       deriving (Show, Eq, Ord)
 
-type RelMono c = B.Rel (Mono c)
+type RelMono c = D.Rel (Mono c)
 
 -- | Text relation.
 type RelText = RelMono String

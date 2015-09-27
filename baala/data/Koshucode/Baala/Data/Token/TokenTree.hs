@@ -41,14 +41,14 @@ module Koshucode.Baala.Data.Token.TokenTree
 import qualified Data.Generics                        as G
 import qualified Text.PrettyPrint                     as P
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Token.Token     as B
-import qualified Koshucode.Baala.Data.Token.TokenLine as B
+import qualified Koshucode.Baala.Data.Token.Token     as D
+import qualified Koshucode.Baala.Data.Token.TokenLine as D
 
 
 -- ---------------------- Token tree
 
 -- | Tree of tokens.
-type TTree = B.CodeTree BracketType B.Token
+type TTree = B.CodeTree BracketType D.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TTree]
@@ -69,23 +69,23 @@ type TTreeToAb a  = TTree -> B.Ab a
 type TTreesToAb a = [TTree] -> B.Ab a
 
 -- local leaf
-pattern TermLeafLocal cp v e ps = B.TreeL (B.TLocal cp v e ps)
+pattern TermLeafLocal cp v e ps = B.TreeL (D.TLocal cp v e ps)
 
 -- term leaf
-pattern TermLeaf      cp q ws   = B.TreeL (B.TTerm   cp q ws)
-pattern TermLeafName  cp w      = B.TreeL (B.TTermN  cp w)
-pattern TermLeafPath  cp ws     = TermLeaf cp B.TermTypePath ws
+pattern TermLeaf      cp q ws   = B.TreeL (D.TTerm   cp q ws)
+pattern TermLeafName  cp w      = B.TreeL (D.TTermN  cp w)
+pattern TermLeafPath  cp ws     = TermLeaf cp D.TermTypePath ws
 
 -- text leaf
-pattern TextLeaf form cp w     = B.TreeL (B.TText   cp form w)
-pattern TextLeafRaw   cp w     = TextLeaf B.TextRaw cp w
-pattern TextLeafQ     cp w     = TextLeaf B.TextQ   cp w
-pattern TextLeafQQ    cp w     = TextLeaf B.TextQQ  cp w
-pattern TextLeafKey   cp w     = TextLeaf B.TextKey cp w
+pattern TextLeaf form cp w     = B.TreeL (D.TText   cp form w)
+pattern TextLeafRaw   cp w     = TextLeaf D.TextRaw cp w
+pattern TextLeafQ     cp w     = TextLeaf D.TextQ   cp w
+pattern TextLeafQQ    cp w     = TextLeaf D.TextQQ  cp w
+pattern TextLeafKey   cp w     = TextLeaf D.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-ttrees :: [B.Token] -> B.Ab [TTree]
+ttrees :: [D.Token] -> B.Ab [TTree]
 ttrees = B.trees getBracketType B.BracketNone where
     --und = map (B.undouble (== BracketGroup))
 
@@ -109,7 +109,7 @@ data BracketType
     | BracketUnknown  -- ^ Unknown bracket
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-getBracketType :: B.GetBracketType BracketType B.Token
+getBracketType :: B.GetBracketType BracketType D.Token
 getBracketType = B.bracketTable
     [ o BracketGroup   "("     ")"
     , o BracketForm    "(|"    "|)"
@@ -119,8 +119,8 @@ getBracketType = B.bracketTable
     , o BracketRel     "{|"    "|}"
     , o BracketInterp  "<<<"   ">>>"
     , o BracketType    "[-"    "-]"
-    , (BracketUnknown, B.isOpenToken, B.isCloseToken)
-    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
+    , (BracketUnknown, D.isOpenToken, D.isCloseToken)
+    ] where o n a b = (n, D.isOpenTokenOf a, D.isCloseTokenOf b)
 
 
 -- ----------------------  Divide trees
@@ -142,11 +142,11 @@ getBracketType = B.bracketTable
 --
 splitTokensBy
     :: B.Pred String   -- ^ Predicate
-    -> [B.Token]       -- ^ Tokens
-    -> Either [B.Token] ([B.Token], B.Token, [B.Token])
+    -> [D.Token]       -- ^ Tokens
+    -> Either [D.Token] ([D.Token], D.Token, [D.Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
 splitTokensBy p = B.splitBy p2 where
-    p2 (B.TTextRaw _ x)  = p x
+    p2 (D.TTextRaw _ x)  = p x
     p2 _ = False
 
 -- | Divide token trees by quoteless token of given string.
@@ -170,13 +170,13 @@ divideTreesByEqual = divideTreesBy "="
 
 -- ----------------------  Abortable
 
--- | Same as 'abortable' except for using 'B.TTree'
---   instead of list of 'B.Token'.
+-- | Same as 'abortable' except for using 'D.TTree'
+--   instead of list of 'D.Token'.
 abortableTree :: String -> TTreeTo (B.Map (B.Ab b))
 abortableTree tag = B.abortable tag . B.untree
 
--- | Same as 'abortable' except for using list of 'B.TTree'
---   instead of list of 'B.Token'.
+-- | Same as 'abortable' except for using list of 'D.TTree'
+--   instead of list of 'D.Token'.
 abortableTrees :: String -> TTreesTo (B.Map (B.Ab b))
 abortableTrees tag = B.abortable tag . B.untrees
 
@@ -185,8 +185,8 @@ abortableTrees tag = B.abortable tag . B.untrees
 
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
-tt s = do toks <- B.tokens (B.codeTextOf s) s
-          ttrees $ B.sweepToken toks
+tt s = do toks <- D.tokens (B.codeTextOf s) s
+          ttrees $ D.sweepToken toks
 
 tt1 :: String -> B.Ab TTree
 tt1 = Right . ttreeGroup B.<=< tt

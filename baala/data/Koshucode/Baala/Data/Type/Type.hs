@@ -21,7 +21,7 @@ module Koshucode.Baala.Data.Type.Type
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data.Token    as B
+import qualified Koshucode.Baala.Data.Token    as D
 
 -- | Type for types.
 data Type
@@ -107,23 +107,23 @@ typeExplain ty =
 
 -- ----------------------  Relation utilities
 
-typeFlatRel :: [B.TermName] -> Type
+typeFlatRel :: [D.TermName] -> Type
 typeFlatRel ns = TypeRel $ map term ns where
     term n = (n, TypeAny)
 
-typeConsRel :: B.TermName -> B.Map Type
+typeConsRel :: D.TermName -> B.Map Type
 typeConsRel n (TypeRel ts) = TypeRel $ (n, TypeAny) : ts
 typeConsRel _ t = t
 
-typeConsNest :: B.TermName -> Type -> B.Map Type
+typeConsNest :: D.TermName -> Type -> B.Map Type
 typeConsNest n t (TypeRel ts) = TypeRel $ (n, t) : ts
 typeConsNest _ _ t = t
 
-typeAppendRel :: [B.TermName] -> B.Map Type
+typeAppendRel :: [D.TermName] -> B.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
 typeAppendRel _ t = t
 
-typeRelTermNames :: Type -> [B.TermName]
+typeRelTermNames :: Type -> [D.TermName]
 typeRelTermNames (TypeRel ts) = map fst ts
 typeRelTermNames _ = []
 
@@ -142,7 +142,7 @@ typeRelDegree _ = 0
 --   >>> typeRelIndex (typeConsNest "r" (typeFlatRel ["a", "b"]) (typeFlatRel [])) ["r", "b"]
 --   [0, 1]
 --
-typeRelIndex :: Type -> B.TermPath -> [Int]
+typeRelIndex :: Type -> D.TermPath -> [Int]
 typeRelIndex (TypeRel ts) p = loop ts p 0 where
     loop _ [] _ = []
     loop [] _ _ = [-1]
@@ -154,12 +154,12 @@ typeRelIndex (TypeRel ts) p = loop ts p 0 where
         | otherwise = loop ts2 nns (i + 1)
 typeRelIndex _ _ = []
 
-typeRelIndexList :: Type -> [B.TermPath] -> [[Int]]
+typeRelIndexList :: Type -> [D.TermPath] -> [[Int]]
 typeRelIndexList = map . typeRelIndex
 
 typeTermDoc :: Type -> B.Doc
 typeTermDoc (TypeRel ts) = B.doch $ map name ts where
-    name (n, _) = B.doc $ B.showTermName n
+    name (n, _) = B.doc $ D.showTermName n
 typeTermDoc _ = B.docEmpty
 
 typeTerms :: Type -> [NamedType]
@@ -178,7 +178,7 @@ typeRelMapTerms _ t = t
 typeRelMapTerm :: B.Map NamedType -> B.Map Type
 typeRelMapTerm f t = typeRelMapTerms (map f) t
 
-typeRelMapName :: B.Map B.TermName -> B.Map Type
+typeRelMapName :: B.Map D.TermName -> B.Map Type
 typeRelMapName = typeRelMapTerm . B.mapFst
 
 

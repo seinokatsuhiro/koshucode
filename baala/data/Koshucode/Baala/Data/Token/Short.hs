@@ -16,7 +16,7 @@ module Koshucode.Baala.Data.Token.Short
 
 import qualified Data.List                             as L
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data.Token.AngleText  as B
+import qualified Koshucode.Baala.Data.Token.AngleText  as D
 
 
 -- ----------------------  Data type
@@ -64,7 +64,7 @@ shortText = loop . reverse . B.sortWith len where
     len = length . snd
     loop [] s | null s         =  "\"\""
               | isCodeText s   =  '\'' : s
-              | otherwise      =  B.angleQuote s
+              | otherwise      =  D.angleQuote s
 
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
@@ -72,7 +72,7 @@ shortText = loop . reverse . B.sortWith len where
           _                   ->  loop sh s
 
     text2 s   | isCodeText s   =  s
-              | otherwise      =  B.angleQuote s
+              | otherwise      =  D.angleQuote s
 
 isCodeText :: B.Pred String
 isCodeText = all isCodeChar

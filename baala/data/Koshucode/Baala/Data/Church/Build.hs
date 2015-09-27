@@ -9,15 +9,15 @@ module Koshucode.Baala.Data.Church.Build
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data.Token             as B
-import qualified Koshucode.Baala.Data.Content           as C
-import qualified Koshucode.Baala.Data.Church.Cop        as C
-import qualified Koshucode.Baala.Data.Church.Cox        as C
+import qualified Koshucode.Baala.Data.Token             as D
+import qualified Koshucode.Baala.Data.Content           as D
+import qualified Koshucode.Baala.Data.Church.Cop        as D
+import qualified Koshucode.Baala.Data.Church.Cox        as D
 import qualified Koshucode.Baala.Data.Message           as Msg
 
 -- | Construct content expression from token tree
-coxBuild :: forall c. (C.CContent c)
-  => C.ContentCalc c -> C.CopSet c -> B.TTreeToAb (C.Cox c)
+coxBuild :: forall c. (D.CContent c)
+  => D.ContentCalc c -> D.CopSet c -> D.TTreeToAb (D.Cox c)
 coxBuild calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
@@ -27,18 +27,18 @@ coxBuild calc copset =
       B.<=< prefix htab        -- convert infix operator to prefix
       B.<=< convTree findTree  -- convert token tree to token tree
     where
-      findCox  = C.copsetFindCox   copset
-      findTree = C.copsetFindTree  copset
-      htab     = C.copsetInfixList copset
+      findCox  = D.copsetFindCox   copset
+      findTree = D.copsetFindTree  copset
+      htab     = D.copsetInfixList copset
 
-debruijn :: B.Map (C.Cox c)
+debruijn :: B.Map (D.Cox c)
 debruijn = index [] where
-    index :: [String] -> B.Map (C.Cox c)
+    index :: [String] -> B.Map (D.Cox c)
     index vars cox = case cox of
-       C.CoxBlank cp n     ->  let v = B.name n
-                               in maybe cox (C.CoxLocal cp v) $ indexFrom 1 v vars
-       C.CoxFill _ _ _     ->  C.coxCall cox (index vars)
-       C.CoxForm1 _ _ v _  ->  C.coxCall cox (index $ v : vars)
+       D.CoxBlank cp n     ->  let v = B.name n
+                               in maybe cox (D.CoxLocal cp v) $ indexFrom 1 v vars
+       D.CoxFill _ _ _     ->  D.coxCall cox (index vars)
+       D.CoxForm1 _ _ v _  ->  D.coxCall cox (index $ v : vars)
        _                   ->  cox
 
 indexFrom :: (Eq c) => Int -> c -> [c] -> Maybe Int
@@ -47,44 +47,44 @@ indexFrom origin key = loop origin where
     loop i (x:xs) | x == key  = Just i
                   | otherwise = loop (i + 1) xs
 
-coxUnfold :: B.Map (C.Cox c)
-coxUnfold = unfold . C.coxMap coxUnfold where
-    unfold :: B.Map (C.Cox c)
+coxUnfold :: B.Map (D.Cox c)
+coxUnfold = unfold . D.coxMap coxUnfold where
+    unfold :: B.Map (D.Cox c)
     unfold cox = case cox of
-        C.CoxForm _ _ [] b -> unfold b
-        C.CoxForm cp tag (v : vs) b
-            -> let sub = unfold $ C.CoxForm cp tag vs b
-               in C.CoxForm1 cp tag v sub
+        D.CoxForm _ _ [] b -> unfold b
+        D.CoxForm cp tag (v : vs) b
+            -> let sub = unfold $ D.CoxForm cp tag vs b
+               in D.CoxForm1 cp tag v sub
         _   -> cox
 
-convCox :: forall c. C.CopFind (C.CopCox c) -> B.AbMap (C.Cox c)
+convCox :: forall c. D.CopFind (D.CopCox c) -> B.AbMap (D.Cox c)
 convCox find = expand where
-    expand :: B.AbMap (C.Cox c)
-    expand (C.CoxForm1 cp tag n  x) = Right . C.CoxForm1 cp tag n  =<< expand x
-    expand (C.CoxForm  cp tag ns x) = Right . C.CoxForm  cp tag ns =<< expand x
-    expand (C.CoxFill  cp f@(C.CoxBlank _ n) xs)
+    expand :: B.AbMap (D.Cox c)
+    expand (D.CoxForm1 cp tag n  x) = Right . D.CoxForm1 cp tag n  =<< expand x
+    expand (D.CoxForm  cp tag ns x) = Right . D.CoxForm  cp tag ns =<< expand x
+    expand (D.CoxFill  cp f@(D.CoxBlank _ n) xs)
                                     = case find n of
                                         Just g -> expand =<< g xs
                                         _      -> fill cp f xs
-    expand (C.CoxFill  cp f xs)     = fill cp f xs
+    expand (D.CoxFill  cp f xs)     = fill cp f xs
     expand cox                      =  Right cox
 
     fill cp f xs = do f'  <- expand f
                       xs' <- mapM expand xs
-                      Right $ C.CoxFill cp f' xs'
+                      Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (C.CContent c) => C.ContentCalc c -> B.TTreeToAb (C.Cox c)
+construct :: forall c. (D.CContent c) => D.ContentCalc c -> D.TTreeToAb (D.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePtList $ B.front $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePt] -> B.TTreeToAb (C.Cox c)
-    cons cp tree@(B.TreeB B.BracketGroup _ subtrees)
+    cons :: [B.CodePt] -> D.TTreeToAb (D.Cox c)
+    cons cp tree@(B.TreeB D.BracketGroup _ subtrees)
          = case subtrees of
-             f@(B.TextLeaf q _ w) : xs
-                 | q == B.TextRaw && isName w -> fill cp f xs
+             f@(D.TextLeaf q _ w) : xs
+                 | q == D.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
              -- fill args in the blanks (application)
@@ -92,12 +92,12 @@ construct calc = expr where
              []     -> lit cp tree
 
     -- form with blanks (function)
-    cons cp (B.TreeB B.BracketForm _ [vars, b1]) =
+    cons cp (B.TreeB D.BracketForm _ [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
-           let vs = map B.tokenContent $ B.untree vars'
-           Right $ C.CoxForm cp tag vs b2
-    cons _ (B.TreeB B.BracketForm _ trees) =
+           let vs = map D.tokenContent $ B.untree vars'
+           Right $ D.CoxForm cp tag vs b2
+    cons _ (B.TreeB D.BracketForm _ trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
@@ -105,25 +105,25 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
-        B.TTermN _ n               -> Right $ C.CoxTerm  cp [n] []
-        B.TTermPath _ ns           -> Right $ C.CoxTerm  cp ns []
-        B.TName _ op               -> Right $ C.CoxBlank cp op
-        B.TTextRaw _ n | isName n  -> Right $ C.CoxBlank cp $ B.BlankNormal n
-        B.TText _ _ _              -> lit cp tree
-        B.TTermQ _ _               -> lit cp tree
+        D.TTermN _ n               -> Right $ D.CoxTerm  cp [n] []
+        D.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
+        D.TName _ op               -> Right $ D.CoxBlank cp op
+        D.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ D.BlankNormal n
+        D.TText _ _ _              -> lit cp tree
+        D.TTermQ _ _               -> lit cp tree
         _                          -> B.bug "core/leaf"
 
     fill cp f xs =
         do f'  <- expr f
            xs' <- expr `mapM` xs
-           Right $ C.CoxFill cp f' xs'
+           Right $ D.CoxFill cp f' xs'
 
-    lit cp tree  = fmap (C.CoxLit cp) $ C.contentCons (calc' tree) tree
+    lit cp tree  = fmap (D.CoxLit cp) $ D.contentCons (calc' tree) tree
     calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
                      | otherwise      = calc tree'
 
-    untag :: B.TTreeTo (C.CoxTag, B.TTree)
-    untag (B.TreeB l p (B.TextLeafQ _ tag : vars))
+    untag :: D.TTreeTo (D.CoxTag, D.TTree)
+    untag (B.TreeB l p (D.TextLeafQ _ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
@@ -139,74 +139,74 @@ isNameFirst c = case B.generalCategoryGroup c of
                   _                   ->  False
 
 -- convert from infix operator to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TTree
+prefix :: [B.Named B.InfixHeight] -> B.AbMap D.TTree
 prefix htab tree =
     Msg.abCoxPrefix tree $
-     case B.infixToPrefix conv ht (B.TreeB B.BracketGroup Nothing) mapper tree of
+     case B.infixToPrefix conv ht (B.TreeB D.BracketGroup Nothing) mapper tree of
        Right tree3 -> Right $ undoubleGroup tree3
        Left  xs    -> Msg.ambInfixes $ map detail xs
     where
-      conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
-      c :: (String -> B.BlankName) -> B.Map B.Token
-      c f (B.TTextRaw cp s) = B.TName cp $ f s
+      conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
+      c :: (String -> D.BlankName) -> B.Map D.Token
+      c f (D.TTextRaw cp s) = D.TName cp $ f s
       c _ x = x
 
-      ht :: B.Token -> B.InfixHeight
+      ht :: D.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
-      wordText :: B.Token -> Maybe String
-      wordText (B.TTextRaw _ w) = Just w
+      wordText :: D.Token -> Maybe String
+      wordText (D.TTextRaw _ w) = Just w
       wordText _               = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
 
-      detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+      detailText tok dir n = D.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
-mapper :: B.InfixMapper B.BracketType B.Token
+mapper :: B.InfixMapper D.BracketType D.Token
 mapper f = loop where
-    loop (B.TreeB B.BracketGroup p xs) =
+    loop (B.TreeB D.BracketGroup p xs) =
         do xs' <- f xs
-           Right $ B.TreeB B.BracketGroup p xs'
-    loop (B.TreeB B.BracketForm p1 [vs, B.TreeB B.BracketGroup p2 body]) =
+           Right $ B.TreeB D.BracketGroup p xs'
+    loop (B.TreeB D.BracketForm p1 [vs, B.TreeB D.BracketGroup p2 body]) =
         do body' <- f body
-           Right $ B.TreeB B.BracketForm p1 [vs, undoubleGroup $ B.TreeB B.BracketGroup p2 body']
+           Right $ B.TreeB D.BracketForm p1 [vs, undoubleGroup $ B.TreeB D.BracketGroup p2 body']
     loop tree = Right tree
 
-undoubleGroup :: B.Map (B.CodeTree B.BracketType a)
-undoubleGroup = B.undouble (== B.BracketGroup)
+undoubleGroup :: B.Map (B.CodeTree D.BracketType a)
+undoubleGroup = B.undouble (== D.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: C.CopFind C.CopTree -> B.AbMap B.TTree
+convTree :: D.CopFind D.CopTree -> B.AbMap D.TTree
 convTree find = expand where
-    expand tree@(B.TreeB B.BracketGroup p subtrees) =
+    expand tree@(B.TreeB D.BracketGroup p subtrees) =
         case subtrees of
-          op@(B.TextLeafRaw _ name) : args
+          op@(D.TextLeafRaw _ name) : args
               -> Msg.abCoxSyntax tree $
-                 case find $ B.BlankNormal name of
+                 case find $ D.BlankNormal name of
                    Just f -> expand =<< f args
                    _      -> do args2 <- mapM expand args
-                                Right $ B.TreeB B.BracketGroup p (op : args2)
+                                Right $ B.TreeB D.BracketGroup p (op : args2)
           _ -> do sub2 <- mapM expand subtrees
-                  Right $ B.TreeB B.BracketGroup p sub2
+                  Right $ B.TreeB D.BracketGroup p sub2
 
-    expand (B.TreeB B.BracketForm p trees) =
-        case B.divideTreesByBar trees of
-          [vars, b1] -> do b2 <- expand $ B.ttreeGroup b1
-                           Right $ B.TreeB B.BracketForm p [B.ttreeGroup vars, b2]
+    expand (B.TreeB D.BracketForm p trees) =
+        case D.divideTreesByBar trees of
+          [vars, b1] -> do b2 <- expand $ D.ttreeGroup b1
+                           Right $ B.TreeB D.BracketForm p [D.ttreeGroup vars, b2]
           _ -> Msg.unkCox "abstruction"
 
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePt] -> C.CoxTag -> [String] -> B.Map (C.Cox c)
-coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . C.CoxForm cp0 tag vs where
+coxForm :: [B.CodePt] -> D.CoxTag -> [String] -> B.Map (D.Cox c)
+coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . D.CoxForm cp0 tag vs where
     n = length vs
     outside vars cox = case cox of
-       C.CoxLocal cp v i    
-           | v `elem` vars  ->  C.CoxLocal cp v i        -- inside blank
-           | otherwise      ->  C.CoxLocal cp v (i + n)  -- outside blank
-       C.CoxFill _ _ _      ->  C.coxCall cox (outside vars)
-       C.CoxForm1 _ _ v _   ->  C.coxCall cox (outside $ v : vars)
+       D.CoxLocal cp v i    
+           | v `elem` vars  ->  D.CoxLocal cp v i        -- inside blank
+           | otherwise      ->  D.CoxLocal cp v (i + n)  -- outside blank
+       D.CoxFill _ _ _      ->  D.coxCall cox (outside vars)
+       D.CoxForm1 _ _ v _   ->  D.coxCall cox (outside $ v : vars)
        _                    ->  cox
 

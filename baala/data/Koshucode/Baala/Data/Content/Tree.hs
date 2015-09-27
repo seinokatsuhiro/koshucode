@@ -18,8 +18,8 @@ module Koshucode.Baala.Data.Content.Tree
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data.Token    as B
-import qualified Koshucode.Baala.Data.Type     as B
+import qualified Koshucode.Baala.Data.Token    as D
+import qualified Koshucode.Baala.Data.Type     as D
 import qualified Koshucode.Baala.Data.Message  as Msg
 
 -- $Function
@@ -34,7 +34,7 @@ import qualified Koshucode.Baala.Data.Message  as Msg
 
 -- ----------------------  Token
 
-treesToTokens :: B.TTreesToAb [B.Token]
+treesToTokens :: D.TTreesToAb [D.Token]
 treesToTokens = mapM token where
     token (B.TreeL t) = Right t
     token _ = Msg.adlib "not token"
@@ -42,24 +42,24 @@ treesToTokens = mapM token where
 
 -- ----------------------  Text
 
-treesToTexts :: Bool -> B.TTreesToAb [String]
+treesToTexts :: Bool -> D.TTreesToAb [String]
 treesToTexts q = loop [] where
     loop ss [] = Right $ reverse ss
     loop ss (B.TreeL x : xs) = do s <- tokenToText q x
                                   loop (s : ss) xs
     loop _ _ = Msg.nothing
 
-treeToText :: Bool -> B.TTreeToAb String
+treeToText :: Bool -> D.TTreeToAb String
 treeToText q (B.TreeL tok) = tokenToText q tok
 treeToText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
-tokenToText :: Bool -> B.Token -> B.Ab String
-tokenToText True  (B.TText _ q w) | q > B.TextRaw  = Right w
-tokenToText False (B.TTextRaw _ w)                 = Right w
+tokenToText :: Bool -> D.Token -> B.Ab String
+tokenToText True  (D.TText _ q w) | q > D.TextRaw  = Right w
+tokenToText False (D.TTextRaw _ w)                 = Right w
 tokenToText _ _  =  Msg.nothing
 
-treesToDigits :: B.TTreesToAb String
+treesToDigits :: D.TTreesToAb String
 treesToDigits = concatDigits B.<=< treesToTexts False
 
 concatDigits :: [String] -> B.Ab String
@@ -74,42 +74,42 @@ concatDigits = first where
 
 -- ----------------------  Clock
 
-tokenClock :: B.Token -> B.Ab B.Clock
-tokenClock (B.TTextBar _ ('|' : w)) = textClock w
+tokenClock :: D.Token -> B.Ab D.Clock
+tokenClock (D.TTextBar _ ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
-textClock :: String -> B.Ab B.Clock
+textClock :: String -> B.Ab D.Clock
 textClock = sign where
-    sign ('-' : cs)  = B.clockNeg `fmap` dayOrHour cs
+    sign ('-' : cs)  = D.clockNeg `fmap` dayOrHour cs
     sign ('+' : cs)  = dayOrHour cs
     sign cs          = dayOrHour cs
 
     dayOrHour cs     = case getInt cs of
                          (h, ':'  : cs')  ->  minute 0 h cs'
-                         (d, "'|")        ->  Right $ B.ClockD $ toInteger d
-                         (h, "|")         ->  clock B.ClockDh 0 h 0 0
+                         (d, "'|")        ->  Right $ D.ClockD $ toInteger d
+                         (h, "|")         ->  clock D.ClockDh 0 h 0 0
                          (d, '\'' : cs')  ->  hour (toInteger d) cs'
                          _                ->  Msg.nothing
 
     hour d cs        = case getInt cs of
                          (h, ':' : cs')   ->  minute d h cs'
-                         (h, "|")         ->  clock B.ClockDh d h 0 0
+                         (h, "|")         ->  clock D.ClockDh d h 0 0
                          _                ->  Msg.nothing
 
     minute d h cs    = case getInt cs of
                          (m, ':' : cs')   ->  second d h m cs'
-                         (m, "|")         ->  clock B.ClockDhm d h m 0
+                         (m, "|")         ->  clock D.ClockDhm d h m 0
                          _                ->  Msg.nothing
 
     second d h m cs  = case getInt cs of
-                         (s, "|")         ->  clock B.ClockDhms d h m s
+                         (s, "|")         ->  clock D.ClockDhms d h m s
                          _                ->  Msg.nothing
 
     clock k d h m s
         | m >= 60    = Msg.nothing
         | s >= 60    = Msg.nothing
         | otherwise  = let (d', h') = h `divMod` 24
-                       in Right $ k (d + toInteger d') $ B.secFromHms (h', m, s)
+                       in Right $ k (d + toInteger d') $ D.secFromHms (h', m, s)
 
 getInt :: String -> (Int, String)
 getInt = loop 0 where
@@ -134,10 +134,10 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
-treesToTime :: B.TTreesToAb B.Time
+treesToTime :: D.TTreesToAb D.Time
 treesToTime = concatTime B.<=< treesToTexts False
 
-concatTime :: [String] -> B.Ab B.Time
+concatTime :: [String] -> B.Ab D.Time
 concatTime = year where
 
     year []             = Msg.nothing
@@ -146,42 +146,42 @@ concatTime = year where
                             _                -> Msg.nothing
 
     mwd _ []                      = Msg.nothing
-    mwd y (('#' : '#': cs) : xs)  = day (B.dateFromYdAb y) $ cs : xs
+    mwd y (('#' : '#': cs) : xs)  = day (D.dateFromYdAb y) $ cs : xs
     mwd y (('#' : cs) : xs)       = week y $ cs : xs
     mwd y xs                      = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, '-'  : cs')  -> day (B.dateFromYmdAb y m) $ cs' : xs
-                            (m, "")          -> B.timeFromYmAb y m
+                            (m, '-'  : cs')  -> day (D.dateFromYmdAb y m) $ cs' : xs
+                            (m, "")          -> D.timeFromYmAb y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, '-'  : cs')  -> day (B.dateFromYwdAb y w) $ cs' : xs
-                            (w, "")          -> B.timeFromYwAb y w
+                            (w, '-'  : cs')  -> day (D.dateFromYwdAb y w) $ cs' : xs
+                            (w, "")          -> D.timeFromYwAb y w
                             _                -> Msg.nothing
 
     day _ []            = Msg.nothing
     day date (cs : xs)  = case getInt cs of
                             (d, "") | null xs    -> do d' <- date d
-                                                       Right $ B.TimeYmd d'
+                                                       Right $ D.TimeYmd d'
                                     | otherwise  -> do d' <- date d
-                                                       hour (B.timeFromDczAb d') $ concat xs
+                                                       hour (D.timeFromDczAb d') $ concat xs
                             _                    -> Msg.nothing
 
     hour k cs           = case getInt cs of
-                            (h, "")          -> k (B.clockFromDh 0 h) Nothing
+                            (h, "")          -> k (D.clockFromDh 0 h) Nothing
                             (h, ':' : cs')   -> minute k h cs'
                             _                -> Msg.nothing
 
     minute k h cs       = case getInt cs of
-                            (m, "")          -> k (B.clockFromDhm 0 h m) Nothing
+                            (m, "")          -> k (D.clockFromDhm 0 h m) Nothing
                             (m, ':' : cs')   -> second k h m cs'
                             (m, cs')         -> zone1 k h m Nothing cs'
 
     second k h m cs     = case getInt cs of
-                            (s, "")          -> k (B.clockFromDhms 0 h m s) Nothing
+                            (s, "")          -> k (D.clockFromDhms 0 h m s) Nothing
                             (s, cs')         -> zone1 k h m (Just s) cs'
 
     zone1 k h m s cs    = case cs of
@@ -198,8 +198,8 @@ concatTime = year where
                             (zm, "")         -> zone4 k h m s zh zm
                             _                -> Msg.nothing
 
-    zone4 k h m s zh zm = let c = B.clockFromHms (h - zh) (m - zm) s
-                              z = B.secFromHms (zh, zm, 0)
+    zone4 k h m s zh zm = let c = D.clockFromHms (h - zh) (m - zm) s
+                              z = D.secFromHms (zh, zm, 0)
                           in k c $ Just z
 
 
@@ -207,13 +207,13 @@ concatTime = year where
 
 -- | Get flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
-treeToFlatTerm :: B.TTreeToAb B.TermName
-treeToFlatTerm (B.TermLeafName _ n)    = Right n
+treeToFlatTerm :: D.TTreeToAb D.TermName
+treeToFlatTerm (D.TermLeafName _ n)    = Right n
 treeToFlatTerm (B.TreeL t)             = Msg.reqFlatName t
 treeToFlatTerm _                       = Msg.reqTermName
 
 -- | Convert token trees into a list of named token trees.
-treesToTerms :: B.TTreesToAb [B.NamedTrees]
+treesToTerms :: D.TTreesToAb [D.NamedTrees]
 treesToTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -221,30 +221,30 @@ treesToTerms = name where
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
-    cont :: B.TTreesTo ([B.TTree], [B.TTree])
+    cont :: D.TTreesTo ([D.TTree], [D.TTree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
-    isTermLeaf (B.TermLeafName _ _) = True
-    isTermLeaf (B.TermLeafPath _ _) = True
+    isTermLeaf (D.TermLeafName _ _) = True
+    isTermLeaf (D.TermLeafPath _ _) = True
     isTermLeaf _                    = False
 
-treesToTerms1 :: B.TTreesToAb [B.NamedTree]
+treesToTerms1 :: D.TTreesToAb [D.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
-                      Right $ B.mapSndTo B.ttreeGroup xs'
+                      Right $ B.mapSndTo D.ttreeGroup xs'
 
 
 -- ----------------------  Interp
 
-treesToInterp :: B.TTreesToAb B.Interp
-treesToInterp = Right . B.interp B.<=< mapM treeToInterpWord
+treesToInterp :: D.TTreesToAb D.Interp
+treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
 
-treeToInterpWord :: B.TTreeToAb B.InterpWord
+treeToInterpWord :: D.TTreeToAb D.InterpWord
 treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeToInterpWord (B.TreeL x) =
     case x of
-      B.TText _ _ w    ->  Right $ B.InterpText w
-      B.TTermN _ n     ->  Right $ B.InterpTerm n
-      B.TTerm _ _ [n]  ->  Right $ B.InterpTerm n
+      D.TText _ _ w    ->  Right $ D.InterpText w
+      D.TTermN _ n     ->  Right $ D.InterpTerm n
+      D.TTerm _ _ [n]  ->  Right $ D.InterpTerm n
       _                ->  Msg.nothing

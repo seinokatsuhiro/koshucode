@@ -7,16 +7,16 @@ module Koshucode.Baala.Data.Type.Interp
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data.Token        as B
+import qualified Koshucode.Baala.Data.Token        as D
 
 data Interp =
     Interp { interpWords :: [InterpWord]
-           , interpTerms :: [B.TermName]
+           , interpTerms :: [D.TermName]
            } deriving (Show, Eq, Ord)
 
 data InterpWord
     = InterpText String
-    | InterpTerm B.TermName
+    | InterpTerm D.TermName
     deriving (Show, Eq, Ord)
 
 instance B.Write Interp where
@@ -40,7 +40,7 @@ interp ws = intp where
     intp  = Interp { interpWords = ws
                    , interpTerms = terms }
 
-getTermName :: InterpWord -> Maybe B.TermName
+getTermName :: InterpWord -> Maybe D.TermName
 getTermName (InterpTerm n) = Just n
 getTermName _              = Nothing
 

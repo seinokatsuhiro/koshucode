@@ -15,23 +15,23 @@ module Koshucode.Baala.Data.Church.Cop
   ) where
 
 import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Data.Token       as B
-import qualified Koshucode.Baala.Data.Church.Cox  as C
+import qualified Koshucode.Baala.Data.Token       as D
+import qualified Koshucode.Baala.Data.Church.Cox  as D
 
 
 -- ----------------------  Operator
 
 -- | Term-content operator.
 data Cop c
-    = CopCalc B.BlankName (C.CopCalc c) -- ^ Convert @c@ (content)
-    | CopCox  B.BlankName (CopCox c)    -- ^ Convert 'C.Cox' c
-    | CopTree B.BlankName (CopTree)     -- ^ Convert 'B.TTree'
+    = CopCalc D.BlankName (D.CopCalc c) -- ^ Convert @c@ (content)
+    | CopCox  D.BlankName (CopCox c)    -- ^ Convert 'D.Cox' c
+    | CopTree D.BlankName (CopTree)     -- ^ Convert 'B.TTree'
 
 -- | Expression-level syntax.
-type CopCox c = [C.Cox c] -> B.Ab (C.Cox c)
+type CopCox c = [D.Cox c] -> B.Ab (D.Cox c)
 
 -- | Tree-level syntax.
-type CopTree  = [B.TTree] -> B.Ab B.TTree
+type CopTree  = [D.TTree] -> B.Ab D.TTree
 
 instance Show (Cop c) where
     show (CopCalc n _) = "(CopCalc " ++ show n ++ " _)"
@@ -41,7 +41,7 @@ instance Show (Cop c) where
 instance B.Name (Cop c) where
     name = B.name . copName
 
-copName :: Cop c -> B.BlankName
+copName :: Cop c -> D.BlankName
 copName (CopCalc  n _) = n
 copName (CopCox   n _) = n
 copName (CopTree  n _) = n
@@ -50,24 +50,24 @@ copName (CopTree  n _) = n
 -- ----------------------  Operator name
 
 -- | Name for non-binary operator.
-copNormal :: String -> B.BlankName
-copNormal = B.BlankNormal
+copNormal :: String -> D.BlankName
+copNormal = D.BlankNormal
 
 -- | Name for program-generated operator.
-copInternal :: String -> B.BlankName
-copInternal = B.BlankInternal
+copInternal :: String -> D.BlankName
+copInternal = D.BlankInternal
 
 -- | Name for prefix operator.
-copPrefix :: String -> B.BlankName
-copPrefix = B.BlankPrefix
+copPrefix :: String -> D.BlankName
+copPrefix = D.BlankPrefix
 
 -- | Name for postfix operator.
-copPostfix :: String -> B.BlankName
-copPostfix = B.BlankPostfix
+copPostfix :: String -> D.BlankName
+copPostfix = D.BlankPostfix
 
 -- | Name for infix operator.
-copInfix :: String -> B.BlankName
-copInfix = B.BlankInfix
+copInfix :: String -> D.BlankName
+copInfix = D.BlankInfix
 
 
 -- ----------------------  Operator set
@@ -80,15 +80,15 @@ data CopSet c = CopSet
     , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
     , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
 
-    , copsetFindCalc   :: CopFind (C.Cox c)
+    , copsetFindCalc   :: CopFind (D.Cox c)
     , copsetFindCox    :: CopFind (CopCox c)
     , copsetFindTree   :: CopFind CopTree
 
-    , copsetDerived    :: [C.NamedCox c]
+    , copsetDerived    :: [D.NamedCox c]
     }
 
 -- | Find content operator from its name.
-type CopFind f = B.BlankName -> Maybe f
+type CopFind f = D.BlankName -> Maybe f
 
 -- | Empty operator set.
 copset :: CopSet c
@@ -110,7 +110,7 @@ copsetFill opset = opset2 where
     coxList     =  B.catMaybes $ map cox  cops
     treeList    =  B.catMaybes $ map tree cops
 
-    cont (CopCalc n f)   =  Just (n, C.CoxCalc [] n f)
+    cont (CopCalc n f)   =  Just (n, D.CoxCalc [] n f)
     cont _               =  Nothing
 
     cox (CopCox n f)     =  Just (n, f)

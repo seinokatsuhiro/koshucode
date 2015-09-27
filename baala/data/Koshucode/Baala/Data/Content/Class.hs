@@ -48,8 +48,8 @@ module Koshucode.Baala.Data.Content.Class
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data.Token   as B
-import qualified Koshucode.Baala.Data.Type    as B
+import qualified Koshucode.Baala.Data.Token   as D
+import qualified Koshucode.Baala.Data.Type    as D
 import qualified Koshucode.Baala.Data.Message as Msg
 
 
@@ -68,7 +68,7 @@ class (Ord c, B.Write c, CTypeOf c,
     joinContent = B.foldM appendContent empty
 
 class (Show c, B.Write c) => CTypeOf c where
-    typeOf :: c -> B.Type
+    typeOf :: c -> D.Type
 
 getAbAb :: CTypeOf c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
@@ -151,20 +151,20 @@ omitEmpty = B.omit (isEmpty . snd)
 
 class (CTypeOf c) => CDec c where
     isDec       ::           c -> Bool
-    gDec        ::           c -> B.Decimal
-    pDec        ::   B.Decimal -> c
+    gDec        ::           c -> D.Decimal
+    pDec        ::   D.Decimal -> c
 
-    getDec      ::     B.Ab c -> B.Ab B.Decimal
+    getDec      ::     B.Ab c -> B.Ab D.Decimal
     getDec      =      getAbAb isDec gDec
 
-    putDec      ::   B.Decimal -> B.Ab c
+    putDec      ::   D.Decimal -> B.Ab c
     putDec      =    Right . pDec
 
 pInt :: (CDec c) => Int -> c
-pInt = pDec . B.intDecimal . toInteger
+pInt = pDec . D.intDecimal . toInteger
 
 pInteger :: (CDec c) => Integer -> c
-pInteger = pDec . B.intDecimal
+pInteger = pDec . D.intDecimal
 
 pDecFromInt :: (CDec c) => Int -> c
 pDecFromInt = pInt
@@ -174,24 +174,24 @@ pDecFromInteger = pInteger
 
 class (CTypeOf c) => CClock c where
     isClock      ::           c -> Bool
-    gClock       ::           c -> B.Clock
-    pClock       ::     B.Clock -> c
+    gClock       ::           c -> D.Clock
+    pClock       ::     D.Clock -> c
 
-    getClock     ::      B.Ab c -> B.Ab B.Clock
+    getClock     ::      B.Ab c -> B.Ab D.Clock
     getClock     =       getAbAb isClock gClock
 
-    putClock     ::     B.Clock -> B.Ab c
+    putClock     ::     D.Clock -> B.Ab c
     putClock     =      Right . pClock
 
 class (CTypeOf c) => CTime c where
     isTime       ::           c -> Bool
-    gTime        ::           c -> B.Time
-    pTime        ::      B.Time -> c
+    gTime        ::           c -> D.Time
+    pTime        ::      D.Time -> c
 
-    getTime      ::     B.Ab c -> B.Ab B.Time
+    getTime      ::     B.Ab c -> B.Ab D.Time
     getTime      =      getAbAb isTime gTime
 
-    putTime      ::   B.Time -> B.Ab c
+    putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
 
 class (CTypeOf c) => CTerm c where
@@ -224,50 +224,50 @@ gSetSort = B.sort . gSet
 
 class (CTypeOf c) => CAssn c where
     isAssn      ::           c -> Bool
-    gAssn       ::           c -> [B.Term c]
-    pAssn       ::  [B.Term c] -> c
+    gAssn       ::           c -> [D.Term c]
+    pAssn       ::  [D.Term c] -> c
 
-    getAssn     ::      B.Ab c -> B.Ab [B.Term c]
+    getAssn     ::      B.Ab c -> B.Ab [D.Term c]
     getAssn     =       getAbAb isAssn gAssn
 
-    putAssn     ::  [B.Term c] -> B.Ab c
+    putAssn     ::  [D.Term c] -> B.Ab c
     putAssn     =  Right . pAssn
 
 class (CTypeOf c) => CRel c where
     isRel       ::           c -> Bool
-    gRel        ::           c -> B.Rel c
-    pRel        ::     B.Rel c -> c
+    gRel        ::           c -> D.Rel c
+    pRel        ::     D.Rel c -> c
 
-    getRel      ::      B.Ab c -> B.Ab (B.Rel c)
+    getRel      ::      B.Ab c -> B.Ab (D.Rel c)
     getRel      =       getAbAb isRel gRel
 
-    putRel      ::     B.Rel c -> B.Ab c
+    putRel      ::     D.Rel c -> B.Ab c
     putRel      =      Right . pRel
 
 dee, dum :: (CRel c) => c
-dee = pRel $ B.reldee
-dum = pRel $ B.reldum
+dee = pRel $ D.reldee
+dum = pRel $ D.reldum
 
 class (CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
-    gInterp     ::           c -> B.Interp
-    pInterp     ::    B.Interp -> c
+    gInterp     ::           c -> D.Interp
+    pInterp     ::    D.Interp -> c
 
-    getInterp   ::      B.Ab c -> B.Ab B.Interp
+    getInterp   ::      B.Ab c -> B.Ab D.Interp
     getInterp   =       getAbAb isInterp gInterp
 
-    putInterp   ::    B.Interp -> B.Ab c
+    putInterp   ::    D.Interp -> B.Ab c
     putInterp   =     Right . pInterp
 
 class (CTypeOf c) => CType c where
     isType      ::           c -> Bool
-    gType       ::           c -> B.Type
-    pType       ::      B.Type -> c
+    gType       ::           c -> D.Type
+    pType       ::      D.Type -> c
 
-    getType     ::      B.Ab c -> B.Ab B.Type
+    getType     ::      B.Ab c -> B.Ab D.Type
     getType     =       getAbAb isType gType
 
-    putType     ::      B.Type -> B.Ab c
+    putType     ::      D.Type -> B.Ab c
     putType     =       Right . pType
 
 

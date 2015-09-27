@@ -49,7 +49,7 @@ module Koshucode.Baala.Data.Token.Token
 
 import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Data.Token.Term  as B
+import qualified Koshucode.Baala.Data.Token.Term  as D
 
 
 -- ----------------------  Token type
@@ -64,8 +64,8 @@ data Token
                                               --   1 for local named slots,
                                               --   2 for global slots.
     | TShort    B.CodePt String String        -- ^ Prefixed shorten text.
-    | TTermN    B.CodePt B.TermName           -- ^ Term name.
-    | TTerm     B.CodePt TermType B.TermPath  -- ^ Term path.
+    | TTermN    B.CodePt D.TermName           -- ^ Term name.
+    | TTerm     B.CodePt TermType D.TermPath  -- ^ Term path.
     | TLocal    B.CodePt (Local String) Int [Token]  -- ^ Local name.
     | TOpen     B.CodePt String               -- ^ Opening bracket.
     | TClose    B.CodePt String               -- ^ Closing bracket.

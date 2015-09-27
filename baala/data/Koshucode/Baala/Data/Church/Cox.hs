@@ -19,7 +19,7 @@ module Koshucode.Baala.Data.Church.Cox
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data.Token      as B
+import qualified Koshucode.Baala.Data.Token      as D
 import qualified Koshucode.Baala.Data.Message    as Msg
 
 
@@ -28,10 +28,10 @@ import qualified Koshucode.Baala.Data.Message    as Msg
 -- | Term-content expressions.
 data Cox c
     = CoxLit   [B.CodePt] c                        -- ^ Literal content
-    | CoxTerm  [B.CodePt] [B.TermName] [Int]       -- ^ Term reference, its name and position
-    | CoxCalc  [B.CodePt] B.BlankName (CopCalc c)  -- ^ Content calculator
+    | CoxTerm  [B.CodePt] [D.TermName] [Int]       -- ^ Term reference, its name and position
+    | CoxCalc  [B.CodePt] D.BlankName (CopCalc c)  -- ^ Content calculator
     | CoxLocal [B.CodePt] String Int               -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank [B.CodePt] B.BlankName              -- ^ Blank in form
+    | CoxBlank [B.CodePt] D.BlankName              -- ^ Blank in form
     | CoxFill  [B.CodePt] (Cox c) [Cox c]          -- ^ Fill args in a form
     | CoxForm1 [B.CodePt] CoxTag  String  (Cox c)  -- ^ Form with single blank
     | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks

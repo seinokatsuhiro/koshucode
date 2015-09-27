@@ -20,11 +20,10 @@ module Koshucode.Baala.Data.Type.Rel
 import qualified Text.Blaze.XHtml5                 as H
 import           Text.Blaze.XHtml5                 ((!))
 import           Text.Blaze.XHtml5.Attributes      (class_)
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Data.Token        as B
-import qualified Koshucode.Baala.Data.Type.Head    as B
-import qualified Koshucode.Baala.Data.Type.Judge   as B
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Token        as D
+import qualified Koshucode.Baala.Data.Type.Head    as D
+import qualified Koshucode.Baala.Data.Type.Judge   as D
 
 
 -- ----------------------  Data
@@ -34,7 +33,7 @@ import qualified Koshucode.Baala.Data.Type.Judge   as B
 --   Body is thoretically a set of tuples,
 --   but implemented using list of list.
 data Rel c = Rel
-    { relHead :: B.Head       -- ^ Heading of relation
+    { relHead :: D.Head       -- ^ Heading of relation
     , relBody :: Body c    -- ^ Body of relation
     } deriving (Show)
 
@@ -42,7 +41,7 @@ data Rel c = Rel
 --   Tuple is a list of contents.
 type Body c = [[c]]
 
-relPair :: Rel c -> (B.Head, Body c)
+relPair :: Rel c -> (D.Head, Body c)
 relPair (Rel he bo) = (he, bo)
 
 -- This order is different from the order of relational lattice.
@@ -67,13 +66,13 @@ instance (B.Write c) => B.Write (Rel c) where
 
     writeHtmlWith sh (Rel he bo) =
         H.table ! class_ "relation" $ do
-          let terms = term `map` B.headNames he
+          let terms = term `map` D.headNames he
           H.tr ! class_ "heading" $ mapM_ H.td terms
           mapM_ row bo
         where
           row cs = H.tr ! class_ "tuple" $ mapM_ col cs
           col c  = H.td $ B.writeHtmlWith sh c
-          term   = (H.span ! class_ "termname") . H.toHtml . B.showTermName
+          term   = (H.span ! class_ "termname") . H.toHtml . D.showTermName
 
 
 -- ----------------------  Sort contents
@@ -83,8 +82,8 @@ relSort = relSortBody . relSortHead
 
 relSortHead :: B.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
-    he' = B.headMap B.sort he
-    bo' = B.bodyAlign he' he bo
+    he' = D.headMap B.sort he
+    bo' = D.bodyAlign he' he bo
 
 relSortBody :: (Ord c) => B.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
@@ -125,10 +124,10 @@ reldau = Rel B.mempty []
 
 class SelectRel r where
     -- | Convert judges to relation.
-    selectRel :: r c -> B.JudgePat -> [B.TermName] -> Rel c
+    selectRel :: r c -> D.JudgePat -> [D.TermName] -> Rel c
 
 -- | Convert relation to list of judges.
-judgesFromRel :: B.JudgeOf c -> B.JudgePat -> Rel c -> [B.Judge c]
+judgesFromRel :: D.JudgeOf c -> D.JudgePat -> Rel c -> [D.Judge c]
 judgesFromRel judgeOf pat (Rel he bo) = map judge bo where
     judge = judgeOf pat . zip names
-    names = B.headNames he
+    names = D.headNames he

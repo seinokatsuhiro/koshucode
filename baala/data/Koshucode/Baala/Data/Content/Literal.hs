@@ -27,10 +27,10 @@ module Koshucode.Baala.Data.Content.Literal
 
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data.Token          as B
-import qualified Koshucode.Baala.Data.Type           as B
-import qualified Koshucode.Baala.Data.Content.Class  as C
-import qualified Koshucode.Baala.Data.Content.Tree   as C
+import qualified Koshucode.Baala.Data.Token          as D
+import qualified Koshucode.Baala.Data.Type           as D
+import qualified Koshucode.Baala.Data.Content.Class  as D
+import qualified Koshucode.Baala.Data.Content.Tree   as D
 import qualified Koshucode.Baala.Data.Message        as Msg
 
 
@@ -38,56 +38,56 @@ import qualified Koshucode.Baala.Data.Message        as Msg
 -- ----------------------  General content
 
 -- | Content constructor.
-type ContentCons c = B.TTreeToAb c
+type ContentCons c = D.TTreeToAb c
 
 -- | Content calculator.
-type ContentCalc c = B.TTreeToAb c
+type ContentCalc c = D.TTreeToAb c
 
 -- | Convert token tree into internal form of content.
-contentCons :: forall c. (C.CContent c) => ContentCalc c -> ContentCons c
+contentCons :: forall c. (D.CContent c) => ContentCalc c -> ContentCons c
 contentCons calc tree = Msg.abLiteral tree $ cons tree where
     cons :: ContentCons c
     cons x@(B.TreeL t)
         = eithcon (eithcon (eithcon (token t)
-            C.putClock  $ C.tokenClock t)
-            C.putTime   $ C.treesToTime   [x])
-            decimal     $ C.treesToDigits [x]
+            D.putClock  $ D.tokenClock t)
+            D.putTime   $ D.treesToTime   [x])
+            decimal     $ D.treesToDigits [x]
     cons g@(B.TreeB b _ xs) = case b of
-        B.BracketGroup   -> group g
-        B.BracketList    -> C.putList   =<< consContents cons xs
-        B.BracketSet     -> C.putSet    =<< consContents cons xs
-        B.BracketAssn    ->                 consAngle    cons xs
-        B.BracketRel     -> C.putRel    =<< consRel      cons xs
-        B.BracketType    -> C.putType   =<< consType          xs
-        B.BracketInterp  -> C.putInterp =<< C.treesToInterp   xs
+        D.BracketGroup   -> group g
+        D.BracketList    -> D.putList   =<< consContents cons xs
+        D.BracketSet     -> D.putSet    =<< consContents cons xs
+        D.BracketAssn    ->                 consAngle    cons xs
+        D.BracketRel     -> D.putRel    =<< consRel      cons xs
+        D.BracketType    -> D.putType   =<< consType          xs
+        D.BracketInterp  -> D.putInterp =<< D.treesToInterp   xs
         _                -> Msg.unkBracket
 
-    token :: B.Token -> B.Ab c
-    token (B.TText _ n w) | n <= B.TextRaw  = keyword w
-    token (B.TText _ _ w)                   = C.putText w
-    token (B.TTermN _ n)                    = C.putTerm n
-    token (B.TTerm _ _ [n])                 = C.putTerm n
-    token t                                 = Msg.unkWord $ B.tokenContent t
+    token :: D.Token -> B.Ab c
+    token (D.TText _ n w) | n <= D.TextRaw  = keyword w
+    token (D.TText _ _ w)                   = D.putText w
+    token (D.TTermN _ n)                    = D.putTerm n
+    token (D.TTerm _ _ [n])                 = D.putTerm n
+    token t                                 = Msg.unkWord $ D.tokenContent t
 
-    group :: B.TTreeToAb c
-    group g@(B.TreeB _ _ xs@(B.TextLeaf f _ _ : _))
-        | f  > B.TextRaw    = eith g text $ C.treesToTexts True xs
-        | f == B.TextRaw    = eithcon (eith g
-                                C.putTime $ C.treesToTime   xs)
-                                decimal   $ C.treesToDigits xs
-    group (B.TreeB _ _ [])  = Right C.empty
+    group :: D.TTreeToAb c
+    group g@(B.TreeB _ _ xs@(D.TextLeaf f _ _ : _))
+        | f  > D.TextRaw    = eith g text $ D.treesToTexts True xs
+        | f == D.TextRaw    = eithcon (eith g
+                                D.putTime $ D.treesToTime   xs)
+                                decimal   $ D.treesToDigits xs
+    group (B.TreeB _ _ [])  = Right D.empty
     group g                 = calc g
 
     eithcon f    = either (const f)
     eith g       = either (const $ calc g)
-    text         = C.putText . concat
-    decimal      = C.putDec B.<=< B.litDecimal
+    text         = D.putText . concat
+    decimal      = D.putDec B.<=< D.litDecimal
 
-    keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-    keyword "0"    = Right C.false
-    keyword "1"    = Right C.true
-    keyword "dum"  = Right C.dum
-    keyword "dee"  = Right C.dee
+    keyword :: (D.CEmpty c, D.CBool c) => String -> B.Ab c
+    keyword "0"    = Right D.false
+    keyword "1"    = Right D.true
+    keyword "dum"  = Right D.dum
+    keyword "dee"  = Right D.dee
     keyword w      = Msg.unkWord w
 
 -- List of contents
@@ -98,12 +98,12 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
 --     :
 --     consContents
 
-consContents :: (C.CContent c) => ContentCons c -> B.TTreesToAb [c]
+consContents :: (D.CContent c) => ContentCons c -> D.TTreesToAb [c]
 consContents _   [] = Right []
-consContents cons cs = lt `mapM` B.divideTreesByBar cs where
-    lt []   = Right C.empty
+consContents cons cs = lt `mapM` D.divideTreesByBar cs where
+    lt []   = Right D.empty
     lt [x]  = cons x
-    lt xs   = cons $ B.TreeB B.BracketGroup Nothing xs
+    lt xs   = cons $ B.TreeB D.BracketGroup Nothing xs
 
 -- Contents enclosed in angle brackets
 --
@@ -112,10 +112,10 @@ consContents cons cs = lt `mapM` B.divideTreesByBar cs where
 --      :                        :
 --      consAngle                consAngle
 
-consAngle :: (C.CContent c) => ContentCons c -> B.TTreesToAb c
-consAngle cons xs@(B.TermLeafName _ _ : _) = C.putAssn =<< consAssn cons xs
-consAngle _ [] = C.putAssn []
-consAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] = C.putList $ map C.pText $ words ws
+consAngle :: (D.CContent c) => ContentCons c -> D.TTreesToAb c
+consAngle cons xs@(D.TermLeafName _ _ : _) = D.putAssn =<< consAssn cons xs
+consAngle _ [] = D.putAssn []
+consAngle _ [D.TextLeafRaw _ "words", D.TextLeafQQ _ ws] = D.putList $ map D.pText $ words ws
 consAngle _ _ = Msg.adlib "unknown angle bracket"
 
 -- Association
@@ -125,14 +125,14 @@ consAngle _ _ = Msg.adlib "unknown angle bracket"
 --      :
 --      consAssn
 
-consAssn :: (C.CContent c) => ContentCons c -> B.TTreesToAb [B.Term c]
-consAssn cons = mapM p B.<=< C.treesToTerms1 where
+consAssn :: (D.CContent c) => ContentCons c -> D.TTreesToAb [D.Term c]
+consAssn cons = mapM p B.<=< D.treesToTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (C.CContent c) => ContentCalc c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
+treesToJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgePat -> D.TTreesToAb (D.Judge c)
 treesToJudge calc q p = Right . assertAs q p B.<=< consAssn (contentCons calc)
 
 
@@ -147,22 +147,22 @@ treesToJudge calc q p = Right . assertAs q p B.<=< consAssn (contentCons calc)
 --        consTermNames
 --
 
-consRel :: (C.CContent c) => ContentCons c -> B.TTreesToAb (B.Rel c)
+consRel :: (D.CContent c) => ContentCons c -> D.TTreesToAb (D.Rel c)
 consRel cons xs =
     do bo <- consRelTuple cons n `mapM` xs'
-       Right $ B.Rel he $ B.unique bo
+       Right $ D.Rel he $ B.unique bo
     where
       (ns, xs')  = consTermNames xs
       n          = length ns
-      he         = B.headFrom ns
+      he         = D.headFrom ns
 
-consTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
+consTermNames :: D.TTreesTo ([D.TermName], [D.TTree])
 consTermNames = terms [] where
-    terms ns (B.TermLeafName _ n   : xs) = terms (n : ns) xs
+    terms ns (D.TermLeafName _ n   : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
-consRelTuple :: (C.CContent c) => ContentCons c -> Int -> B.TTreeToAb [c]
-consRelTuple cons n g@(B.TreeB B.BracketList _ xs) =
+consRelTuple :: (D.CContent c) => ContentCons c -> Int -> D.TTreeToAb [c]
+consRelTuple cons n g@(B.TreeB D.BracketList _ xs) =
     do cs <- consContents cons xs
        let n' = length cs
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
@@ -189,68 +189,68 @@ assertSymbol AssertChange       = "|=C"
 assertSymbol AssertMultiChange  = "|=CC"
 assertSymbol AssertViolate      = "|=V"
 
-assertAs :: AssertType -> B.JudgeOf c
-assertAs AssertAffirm        = B.JudgeAffirm
-assertAs AssertDeny          = B.JudgeDeny
-assertAs AssertMultiDeny     = B.JudgeMultiDeny
--- assertAs AssertChange        = B.JudgeChange
--- assertAs AssertMultiChange   = B.JudgeMultiChange
-assertAs AssertViolate       = B.JudgeViolate
+assertAs :: AssertType -> D.JudgeOf c
+assertAs AssertAffirm        = D.JudgeAffirm
+assertAs AssertDeny          = D.JudgeDeny
+assertAs AssertMultiDeny     = D.JudgeMultiDeny
+-- assertAs AssertChange        = D.JudgeChange
+-- assertAs AssertMultiChange   = D.JudgeMultiChange
+assertAs AssertViolate       = D.JudgeViolate
 
 
 -- ----------------------  Type
 
 -- | Literal reader for types.
-consType :: B.TTreesToAb B.Type
+consType :: D.TTreesToAb D.Type
 consType = gen where
-    gen xs = case B.divideTreesByBar xs of
+    gen xs = case D.divideTreesByBar xs of
                [x] ->  single x
-               xs2 ->  Right . B.TypeSum =<< mapM gen xs2
+               xs2 ->  Right . D.TypeSum =<< mapM gen xs2
 
     single [B.TreeB _ _ xs]  = gen xs
-    single (B.TextLeaf f _ n : xs)
-        | f == B.TextRaw     = dispatch n xs
+    single (D.TextLeaf f _ n : xs)
+        | f == D.TextRaw     = dispatch n xs
         | otherwise          = Msg.quoteType n
-    single []                = Right $ B.TypeSum []
+    single []                = Right $ D.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [B.TextLeafRaw _ w] | w `elem` ws = Right $ Just w
+    precision ws [D.TextLeafRaw _ w] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 
     clock = ["sec", "min", "hour", "day"]
     time  = "month" : clock
 
-    dispatch "any"     _    = Right B.TypeAny
-    dispatch "empty"   _    = Right B.TypeEmpty
-    dispatch "boolean" _    = Right B.TypeBool
-    dispatch "text"    _    = Right B.TypeText
-    dispatch "code"    _    = Right B.TypeCode
-    dispatch "decimal" _    = Right B.TypeDec
-    dispatch "clock"   xs   = Right . B.TypeClock  =<< precision clock xs
-    dispatch "time"    xs   = Right . B.TypeTime   =<< precision time  xs
-    dispatch "binary"  _    = Right B.TypeBin
-    dispatch "term"    _    = Right B.TypeTerm
-    dispatch "type"    _    = Right B.TypeType
-    dispatch "interp"  _    = Right B.TypeInterp
+    dispatch "any"     _    = Right D.TypeAny
+    dispatch "empty"   _    = Right D.TypeEmpty
+    dispatch "boolean" _    = Right D.TypeBool
+    dispatch "text"    _    = Right D.TypeText
+    dispatch "code"    _    = Right D.TypeCode
+    dispatch "decimal" _    = Right D.TypeDec
+    dispatch "clock"   xs   = Right . D.TypeClock  =<< precision clock xs
+    dispatch "time"    xs   = Right . D.TypeTime   =<< precision time  xs
+    dispatch "binary"  _    = Right D.TypeBin
+    dispatch "term"    _    = Right D.TypeTerm
+    dispatch "type"    _    = Right D.TypeType
+    dispatch "interp"  _    = Right D.TypeInterp
 
     dispatch "tag"   xs     = case xs of
                                 [tag, colon, typ]
-                                    | C.treeToText False colon == Right ":"
-                                      -> do tag' <- C.treeToText False tag
+                                    | D.treeToText False colon == Right ":"
+                                      -> do tag' <- D.treeToText False tag
                                             typ' <- gen [typ]
-                                            Right $ B.TypeTag tag' typ'
+                                            Right $ D.TypeTag tag' typ'
                                 _   -> Msg.unkType "tag"
-    dispatch "list"  xs     = Right . B.TypeList =<< gen xs
-    dispatch "set"   xs     = Right . B.TypeSet  =<< gen xs
+    dispatch "list"  xs     = Right . D.TypeList =<< gen xs
+    dispatch "set"   xs     = Right . D.TypeSet  =<< gen xs
     dispatch "tuple" xs     = do ts <- mapM (gen. B.li1) xs
-                                 Right $ B.TypeTuple ts
-    dispatch "assn"  xs     = do ts1 <- C.treesToTerms xs
+                                 Right $ D.TypeTuple ts
+    dispatch "assn"  xs     = do ts1 <- D.treesToTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ B.TypeAssn ts2
-    dispatch "rel"   xs     = do ts1 <- C.treesToTerms xs
+                                 Right $ D.TypeAssn ts2
+    dispatch "rel"   xs     = do ts1 <- D.treesToTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ B.TypeRel ts2
+                                 Right $ D.TypeRel ts2
     dispatch n _            = Msg.unkType n
 
 
@@ -261,7 +261,7 @@ consType = gen where
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.ttrees . B.tokens
---  >>> let lit  = contentCons [] :: B.TTree -> B.Ab VContent
+--  >>> let lit  = contentCons [] :: D.TTree -> B.Ab VContent
 --  >>> let lits = consContents lit . trees
 --
 --  Boolean.
