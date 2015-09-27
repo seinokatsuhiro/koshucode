@@ -10,8 +10,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 
 import qualified System.Console.GetOpt                   as G
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Data                    as B
-import qualified Koshucode.Baala.Data                    as C
+import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
 import qualified Koshucode.Baala.Type.Vanilla            as Type
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
@@ -97,23 +96,23 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "    Type of the token is /token-type ."
              , "    Some tokens are classified into /token-subtype . >>>" ]
 
-judgeClause :: Int -> C.Clause -> B.Judge Type.VContent
-judgeClause clseq c = B.affirm "CLAUSE" args where
-    args = [ ("clause"       , C.pInt clseq)
-           , ("clause-type"  , C.pText $ C.clauseTypeText c)]
+judgeClause :: Int -> C.Clause -> D.Judge Type.VContent
+judgeClause clseq c = D.affirm "CLAUSE" args where
+    args = [ ("clause"       , D.pInt clseq)
+           , ("clause-type"  , D.pText $ C.clauseTypeText c)]
 
-judgeLine :: Int -> B.TokenLine -> B.Judge Type.VContent
-judgeLine clseq (B.CodeLine ln _ _) = B.affirm "LINE" args where
-    args = [ ("line"         , C.pInt ln)
-           , ("clause"       , C.pInt clseq) ]
+judgeLine :: Int -> D.TokenLine -> D.Judge Type.VContent
+judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
+    args = [ ("line"         , D.pInt ln)
+           , ("clause"       , D.pInt clseq) ]
 
-judgeToken :: Int -> B.Token -> B.Judge Type.VContent
-judgeToken ln tok = B.affirm "TOKEN" $ C.omitEmpty args where
-    args = [ ("line"           , C.pInt ln)
-           , ("column"         , C.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
-           , ("token-type"     , C.pText $ B.tokenTypeText tok)
-           , ("token-subtype"  , C.maybeEmpty C.pText $ B.tokenSubtypeText tok)
-           , ("cont"           , C.pText $ B.tokenContent  tok) ]
+judgeToken :: Int -> D.Token -> D.Judge Type.VContent
+judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
+    args = [ ("line"           , D.pInt ln)
+           , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
+           , ("token-type"     , D.pText $ D.tokenTypeText tok)
+           , ("token-subtype"  , D.maybeEmpty D.pText $ D.tokenSubtypeText tok)
+           , ("cont"           , D.pText $ D.tokenContent  tok) ]
 
 dumpFile :: Bool -> FilePath -> IO ()
 dumpFile omit path = dumpCode omit path =<< readFile path
@@ -123,7 +122,7 @@ dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
 
 dumpCode :: Bool -> FilePath -> String -> IO ()
 dumpCode omit path code = 
-    ab f $ B.tokenLines (B.CodePiece 0 $ B.IOPointFile "" path) code
+    ab f $ D.tokenLines (B.CodePiece 0 $ B.IOPointFile "" path) code
     where f ts = do let cs = C.consClause [] 0 ts
                     B.putLines $ B.texts $ dumpDesc path
                     dumpClause omit `mapM_` zip [1 ..] cs
@@ -145,15 +144,15 @@ dumpClause omit (clseq, Right c) =
     where
       comment line = "*** " ++ B.lineContent line
 
-dumpLine :: Int -> [B.TokenLine] -> IO ()
+dumpLine :: Int -> [D.TokenLine] -> IO ()
 dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
 
-dumpToken :: Bool -> B.TokenLine -> IO ()
+dumpToken :: Bool -> D.TokenLine -> IO ()
 dumpToken omit (B.CodeLine ln _ toks) =
     do putNewline
        putJudges $ map (judgeToken ln) toks'
     where
-      toks' | omit       = B.omit B.isBlankToken toks
+      toks' | omit       = B.omit D.isBlankToken toks
             | otherwise  = toks
 
 
@@ -178,43 +177,43 @@ descDict = B.CommentDoc [desc, js] where
              , "<<< /clause-type is one of cluase types."
              , "    /token-type is one of token types. >>>" ]
 
-judgeClauseType :: C.Clause -> B.Judge Type.VContent
-judgeClauseType c = B.affirm "CLAUSE-TYPE" args where
-    args = [ ("clause-type", C.pText $ C.clauseTypeText c) ]
+judgeClauseType :: C.Clause -> D.Judge Type.VContent
+judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
+    args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
 
-judgeTokenType :: B.Token -> B.Judge Type.VContent
-judgeTokenType t = B.affirm "TOKEN-TYPE" args where
-    args = [ ("token-type", C.pText $ B.tokenTypeText t) ]
+judgeTokenType :: D.Token -> D.Judge Type.VContent
+judgeTokenType t = D.affirm "TOKEN-TYPE" args where
+    args = [ ("token-type", D.pText $ D.tokenTypeText t) ]
 
-judgesClauseType :: [B.Judge Type.VContent]
+judgesClauseType :: [D.Judge Type.VContent]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause C.clauseHeadEmpty x
     cs  = [ C.CRelmap "" []
-          , C.CAssert C.AssertAffirm "" []
-          , C.CJudge  C.AssertAffirm "" []
+          , C.CAssert D.AssertAffirm "" []
+          , C.CJudge  D.AssertAffirm "" []
           , C.CSlot "" []
           ]
 
-judgesTokenType :: [B.Judge Type.VContent]
+judgesTokenType :: [D.Judge Type.VContent]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
-    cs  = [ B.TTextRaw  B.codePtZero ""
-          , B.TSlot     B.codePtZero 0 ""
-          , B.TTermPath B.codePtZero []
-          , B.TOpen     B.codePtZero ""
-          , B.TClose    B.codePtZero ""
-          , B.TSpace    B.codePtZero 0
-          , B.TComment  B.codePtZero ""
+    cs  = [ D.TTextRaw  B.codePtZero ""
+          , D.TSlot     B.codePtZero 0 ""
+          , D.TTermPath B.codePtZero []
+          , D.TOpen     B.codePtZero ""
+          , D.TClose    B.codePtZero ""
+          , D.TSpace    B.codePtZero 0
+          , D.TComment  B.codePtZero ""
           ]
 
 
 -- ----------------------  Utility
 
-putJudges :: (Ord c, B.Write c) => [B.Judge c] -> IO ()
+putJudges :: (Ord c, B.Write c) => [D.Judge c] -> IO ()
 putJudges = mapM_ putJudge
 
-putJudge :: (Ord c, B.Write c) => B.Judge c -> IO ()
-putJudge = putStrLn . B.writeDownJudge B.shortEmpty
+putJudge :: (Ord c, B.Write c) => D.Judge c -> IO ()
+putJudge = putStrLn . D.writeDownJudge D.shortEmpty
 
 putNewline :: IO ()
 putNewline = putStrLn ""

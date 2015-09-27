@@ -12,7 +12,7 @@ module Koshucode.Baala.Toolkit.Library.Input
     readJudge,
   ) where
 
-import qualified Koshucode.Baala.Data          as B
+import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Type.Vanilla  as Type
 
@@ -30,7 +30,7 @@ readInput (File p)  = readFile p
 readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
-readJudge :: String -> [B.Judge Type.VContent]
+readJudge :: String -> [D.Judge Type.VContent]
 readJudge src =
     let root = C.resEmpty :: C.Resource Type.VContent
     in case C.readResourceText root src of

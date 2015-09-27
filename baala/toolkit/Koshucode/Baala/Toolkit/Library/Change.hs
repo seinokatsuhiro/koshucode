@@ -19,7 +19,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 
 import qualified Data.Set                              as S
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data                  as B
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Writer                as W
 import qualified Koshucode.Baala.Type.Vanilla          as Type
 import qualified Koshucode.Baala.Toolkit.Library.Input as L
@@ -39,13 +39,13 @@ minusInput inputA inputB =
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) js
 
-minusInputJudge :: L.Input -> L.Input -> IO ([B.Judge Type.VContent])
+minusInputJudge :: L.Input -> L.Input -> IO ([D.Judge Type.VContent])
 minusInputJudge inputA inputB =
     do [textA, textB] <- L.readInputs [inputA, inputB]
        return $ L.readJudge textA `minusJudge` L.readJudge textB
 
-minusJudge :: (Ord c) => [B.Judge c] -> [B.Judge c] -> [B.Judge c]
-minusJudge judA judB = map B.denyJudge judC ++ judD where
+minusJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
+minusJudge judA judB = map D.denyJudge judC ++ judD where
     setA = S.fromList judA
     setB = S.fromList judB
     judC = S.toList $ setB `S.difference` setA
@@ -79,11 +79,11 @@ updateInput inputB inputC =
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
 
-updateJudge :: (Ord c) => [B.Judge c] -> [B.Judge c] -> [B.Judge c]
+updateJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
 updateJudge judB judC = judA where
     setB = S.fromList $ judB
-    denC = S.fromList $ map B.affirmJudge $ filter B.isDenial judC
-    affC = S.fromList $ filter B.isAffirmative judC
+    denC = S.fromList $ map D.affirmJudge $ filter D.isDenial judC
+    affC = S.fromList $ filter D.isAffirmative judC
     judA = S.toList $ setB `S.difference` denC `S.union` affC
 
 updateHead :: L.Input -> L.Input -> B.CommentDoc
