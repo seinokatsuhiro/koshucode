@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.118.0.0
+@version 0.119.0.0
 
 
 -- | Result of relational calculation.
@@ -71,30 +71,25 @@ instance Eq (ResultWriter c)
 instance Ord (ResultWriter c)
 instance Show (ResultWriter c)
 
+
+-- | Convert relation to text table.
+module Koshucode.Baala.Core.Assert.RelTable
+relTable :: (Write c, CRel c) => [ShortDef] -> Rel c -> String
+relTableLines :: (Write c, CRel c) => [ShortDef] -> Rel c -> [String]
+relText :: (Write c, CRel c) => [ShortDef] -> Rel c -> RelText
+
 module Koshucode.Baala.Core.Message
 abAssert :: CodePtr cp => [cp] -> Map (Ab b)
 abAttr :: CodePtr cp => [cp] -> Map (Ab b)
 abAttrTrees :: TTreesTo (Map (Ab b))
 abClause :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxBuild :: TTreeTo (Map (Ab b))
-abCoxCalc :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxFill :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxIrrep :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxPosition :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxPrefix :: TTreeTo (Map (Ab b))
-abCoxReduce :: CodePtr cp => [cp] -> Map (Ab b)
-abCoxSyntax :: TTreeTo (Map (Ab b))
 abLexmap :: TTreesTo (Map (Ab b))
-abLiteral :: TTreeTo (Map (Ab b))
 abOption :: TTreesTo (Map (Ab b))
 abRelmap :: CodePtr cp => [cp] -> Map (Ab b)
 abRun :: CodePtr cp => [cp] -> Map (Ab b)
 abSlot :: CodePtr cp => [cp] -> Map (Ab b)
 abSlotTree :: TTreeTo (Map (Ab b))
 abSpecialize :: CodePtr cp => [cp] -> Map (Ab b)
-
--- | Ambiguous infix operators
-ambInfixes :: [String] -> Ab a
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> Ab a
@@ -120,9 +115,6 @@ httpError :: String -> Int -> String -> Ab a
 -- | Invalid prefix character
 invalidPrefix :: [String] -> Ab a
 
--- | Lack of argument
-lackArg :: String -> Ab a
-
 -- | File not found
 noFile :: FilePath -> String -> Ab a
 
@@ -132,32 +124,14 @@ noSlotName :: Int -> String -> Ab a
 -- | No slot content
 noSlotIndex :: [String] -> Int -> Ab a
 
--- | Nothing
-nothing :: Ab a
-
--- | Odd relation literal
-oddRelation :: Int -> Int -> Ab a
-
--- | Quoted type name
-quoteType :: String -> Ab a
-
 -- | Require attribute
 reqAttr :: String -> Ab a
 
 -- | Require attribute
 reqAttrName :: String -> Ab a
 
--- | Require flat name
-reqFlatName :: Token -> Ab a
-
 -- | Require grouping paren
 reqGroup :: Ab a
-
--- | Require tuple in list
-reqRelTuple :: Ab a
-
--- | Require term name
-reqTermName :: Ab a
 
 -- | Same I/O points
 sameIOPoints :: IOPoint -> Ab a
@@ -172,20 +146,11 @@ unexpAttr4 :: Ab a
 unexpAttr1V :: Ab a
 unexpAttr1Q :: Ab a
 
--- | Unknown bracket
-unkBracket :: Ab a
-
 -- | Unknown clause
 unkClause :: [String] -> Ab a
 
 -- | Unknown content operator
 unkCop :: String -> Ab a
-
--- | Unknown expression
-unkCox :: String -> Ab a
-
--- | Unknown global variable
-unkGlobalVar :: String -> Ab a
 
 -- | Unknown nested relation
 unkNestRel :: Token -> String -> [String] -> Ab a
@@ -194,332 +159,11 @@ unkNestVar :: String -> [Token] -> [((Token, Local String), Head)] -> Ab a
 -- | Unknown option
 unkOption :: ParaUnmatch String -> Ab a
 
--- | Unknown reference for variable
-unkRefVar :: (String, Int) -> [String] -> Ab a
-
 -- | Unknown relmap operator
 unkRelmap :: String -> Ab a
 
--- | Unknown object
-unkShow :: Show x => x -> Ab a
-
--- | Unknown term name
-unkTerm :: [TermName] -> Head -> Ab a
-
--- | Unknown type name
-unkType :: String -> Ab a
-
--- | Unknown word
-unkWord :: String -> Ab a
-unmatchType :: String -> Ab a
-
--- | Unmatch blank (bug)
-unmatchBlank :: String -> Int -> String -> [String] -> Ab a
-
 -- | Unresolved prefix
 unresPrefix :: String -> Ab a
-detailTermRel :: String -> [String] -> Head -> [String]
-expectActual :: String -> String -> [String]
-expect2Actual :: String -> String -> String -> [String]
-
-module Koshucode.Baala.Core.Content.Class
-class (Ord c, Write c, CTypeOf c, CEmpty c, CBool c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CAssn c, CRel c) => CContent c where joinContent = foldM appendContent empty
-appendContent :: CContent c => c -> c -> Ab c
-joinContent :: CContent c => [c] -> Ab c
-class (Show c, Write c) => CTypeOf c
-typeOf :: CTypeOf c => c -> Type
-class CTypeOf c => CBool c where getBool = getAbAb isBool gBool putBool = Right . pBool
-isBool :: CBool c => c -> Bool
-pBool :: CBool c => Bool -> c
-gBool :: CBool c => c -> Bool
-getBool :: CBool c => Ab c -> Ab Bool
-putBool :: CBool c => Bool -> Ab c
-true :: CBool c => c
-false :: CBool c => c
-putTrue :: CBool c => Ab c
-putFalse :: CBool c => Ab c
-class CTypeOf c => CText c where getText = getAbAb isText gText putText = Right . pText
-isText :: CText c => c -> Bool
-gText :: CText c => c -> String
-pText :: CText c => String -> c
-getText :: CText c => Ab c -> Ab String
-putText :: CText c => String -> Ab c
-pMaybeText :: (CText c, CEmpty c) => String -> c
-pTextList :: (CText c, CList c) => [String] -> c
-pTextSet :: (CText c, CSet c) => [String] -> c
-class CTypeOf c => CList c where getList = getAbAb isList gList putList = Right . pList
-isList :: CList c => c -> Bool
-gList :: CList c => c -> [c]
-pList :: CList c => [c] -> c
-getList :: CList c => Ab c -> Ab [c]
-putList :: CList c => [c] -> Ab c
-
--- | Types that can be empty
-class CTypeOf c => CEmpty c
-isEmpty :: CEmpty c => c -> Bool
-empty :: CEmpty c => c
-maybeEmpty :: CEmpty c => (a -> c) -> Maybe a -> c
-omitEmpty :: CEmpty c => Map [(a, c)]
-class CTypeOf c => CDec c where getDec = getAbAb isDec gDec putDec = Right . pDec
-isDec :: CDec c => c -> Bool
-gDec :: CDec c => c -> Decimal
-pDec :: CDec c => Decimal -> c
-getDec :: CDec c => Ab c -> Ab Decimal
-putDec :: CDec c => Decimal -> Ab c
-pInt :: CDec c => Int -> c
-pInteger :: CDec c => Integer -> c
-pDecFromInt :: CDec c => Int -> c
-pDecFromInteger :: CDec c => Integer -> c
-class CTypeOf c => CClock c where getClock = getAbAb isClock gClock putClock = Right . pClock
-isClock :: CClock c => c -> Bool
-gClock :: CClock c => c -> Clock
-pClock :: CClock c => Clock -> c
-getClock :: CClock c => Ab c -> Ab Clock
-putClock :: CClock c => Clock -> Ab c
-class CTypeOf c => CTime c where getTime = getAbAb isTime gTime putTime = Right . pTime
-isTime :: CTime c => c -> Bool
-gTime :: CTime c => c -> Time
-pTime :: CTime c => Time -> c
-getTime :: CTime c => Ab c -> Ab Time
-putTime :: CTime c => Time -> Ab c
-class CTypeOf c => CTerm c where getTerm = getAbAb isTerm gTerm putTerm = Right . pTerm
-isTerm :: CTerm c => c -> Bool
-gTerm :: CTerm c => c -> String
-pTerm :: CTerm c => String -> c
-getTerm :: CTerm c => Ab c -> Ab String
-putTerm :: CTerm c => String -> Ab c
-pTermSet :: (CTerm c, CSet c) => [String] -> c
-class CTypeOf c => CSet c where getSet = getAbAb isSet gSet putSet = Right . pSet
-isSet :: CSet c => c -> Bool
-gSet :: CSet c => c -> [c]
-pSet :: CSet c => [c] -> c
-getSet :: CSet c => Ab c -> Ab [c]
-putSet :: CSet c => [c] -> Ab c
-class CTypeOf c => CAssn c where getAssn = getAbAb isAssn gAssn putAssn = Right . pAssn
-isAssn :: CAssn c => c -> Bool
-gAssn :: CAssn c => c -> [Term c]
-pAssn :: CAssn c => [Term c] -> c
-getAssn :: CAssn c => Ab c -> Ab [Term c]
-putAssn :: CAssn c => [Term c] -> Ab c
-class CTypeOf c => CRel c where getRel = getAbAb isRel gRel putRel = Right . pRel
-isRel :: CRel c => c -> Bool
-gRel :: CRel c => c -> Rel c
-pRel :: CRel c => Rel c -> c
-getRel :: CRel c => Ab c -> Ab (Rel c)
-putRel :: CRel c => Rel c -> Ab c
-isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
-dee :: CRel c => c
-dum :: CRel c => c
-class CTypeOf c => CInterp c where getInterp = getAbAb isInterp gInterp putInterp = Right . pInterp
-isInterp :: CInterp c => c -> Bool
-gInterp :: CInterp c => c -> Interp
-pInterp :: CInterp c => Interp -> c
-getInterp :: CInterp c => Ab c -> Ab Interp
-putInterp :: CInterp c => Interp -> Ab c
-class CTypeOf c => CType c where getType = getAbAb isType gType putType = Right . pType
-isType :: CType c => c -> Bool
-gType :: CType c => c -> Type
-pType :: CType c => Type -> c
-getType :: CType c => Ab c -> Ab Type
-putType :: CType c => Type -> Ab c
-contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
-contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
-contApTextToText :: CText c => Map String -> AbMap c
-contMapTextToList :: (CList c, CText c) => (Char -> c) -> AbMap c
-
-
--- | Term-content expression.
-module Koshucode.Baala.Core.Content.Cox
-
--- | Term-content expressions.
-data Cox c
-
--- | Literal content
-CoxLit :: [CodePt] -> c -> Cox c
-
--- | Term reference, its name and position
-CoxTerm :: [CodePt] -> [TermName] -> [Int] -> Cox c
-
--- | Content calculator
-CoxCalc :: [CodePt] -> BlankName -> (CopCalc c) -> Cox c
-
--- | Local blank, its name and De Bruijn index
-CoxLocal :: [CodePt] -> String -> Int -> Cox c
-
--- | Blank in form
-CoxBlank :: [CodePt] -> BlankName -> Cox c
-
--- | Fill args in a form
-CoxFill :: [CodePt] -> (Cox c) -> [Cox c] -> Cox c
-
--- | Form with single blank
-CoxForm1 :: [CodePt] -> CoxTag -> String -> (Cox c) -> Cox c
-
--- | Form with multiple blanks
-CoxForm :: [CodePt] -> CoxTag -> [String] -> (Cox c) -> Cox c
-
--- | Cox with outside arguments
-CoxWith :: [CodePt] -> [NamedCox c] -> (Cox c) -> Cox c
-type Cox2 c = (Cox c, Cox c)
-type Cox3 c = (Cox c, Cox c, Cox c)
-type Cox4 c = (Cox c, Cox c, Cox c, Cox c)
-type MaybeCox c = Maybe (Cox c)
-type NamedCox c = Named (Cox c)
-
--- | Term-content calculator.
-type CopCalc c = [Ab c] -> Ab c
-type CoxTag = Maybe String
-coxLit :: c -> Cox c
-coxSyntacticArity :: Cox c -> Int
-coxMap :: Map (Map (Cox c))
-coxCall :: Cox c -> (Map (Cox c)) -> Cox c
-checkIrreducible :: AbMap (Cox c)
-instance Write c => Write (Cox c)
-instance Write c => Show (Cox c)
-instance CodePtr (Cox c)
-
-
--- | Term-content operator.
-module Koshucode.Baala.Core.Content.Cop
-
--- | Term-content operator.
-data Cop c
-
--- | Convert <tt>c</tt> (content)
-CopCalc :: BlankName -> (CopCalc c) -> Cop c
-
--- | Convert <a>Cox</a> c
-CopCox :: BlankName -> (CopCox c) -> Cop c
-
--- | Convert <a>TTree</a>
-CopTree :: BlankName -> (CopTree) -> Cop c
-
--- | Expression-level syntax.
-type CopCox c = [Cox c] -> Ab (Cox c)
-
--- | Tree-level syntax.
-type CopTree = [TTree] -> Ab TTree
-copName :: Cop c -> BlankName
-
--- | Name for non-binary operator.
-copNormal :: String -> BlankName
-
--- | Name for program-generated operator.
-copInternal :: String -> BlankName
-
--- | Name for prefix operator.
-copPrefix :: String -> BlankName
-
--- | Name for infix operator.
-copInfix :: String -> BlankName
-
--- | Name for postfix operator.
-copPostfix :: String -> BlankName
-data CopSet c
-CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -> [Named (Cop c)] -> CopFind (Cox c) -> CopFind (CopCox c) -> CopFind CopTree -> [NamedCox c] -> CopSet c
-copsetCopList :: CopSet c -> [Cop c]
-copsetInfixList :: CopSet c -> [Named InfixHeight]
-copsetCalcList :: CopSet c -> [Named (Cop c)]
-copsetCoxList :: CopSet c -> [Named (Cop c)]
-copsetTreeList :: CopSet c -> [Named (Cop c)]
-copsetFindCalc :: CopSet c -> CopFind (Cox c)
-copsetFindCox :: CopSet c -> CopFind (CopCox c)
-copsetFindTree :: CopSet c -> CopFind CopTree
-copsetDerived :: CopSet c -> [NamedCox c]
-
--- | Find content operator from its name.
-type CopFind f = BlankName -> Maybe f
-
--- | Empty operator set.
-copset :: CopSet c
-copsetFill :: Map (CopSet c)
-instance Name (Cop c)
-instance Show (Cop c)
-
-
--- | Utilities for token trees.
-module Koshucode.Baala.Core.Content.Tree
-treesToTokens :: TTreesToAb [Token]
-treesToTexts :: Bool -> TTreesToAb [String]
-treeToText :: Bool -> TTreeToAb String
-treesToDigits :: TTreesToAb String
-tokenClock :: Token -> Ab Clock
-treesToTime :: TTreesToAb Time
-
--- | Get flat term name from token tree. If the token tree contains nested
---   term name, this function failed.
-treeToFlatTerm :: TTreeToAb TermName
-
--- | Convert token trees into a list of named token trees.
-treesToTerms :: TTreesToAb [NamedTrees]
-treesToTerms1 :: TTreesToAb [NamedTree]
-treesToInterp :: TTreesToAb Interp
-
-
--- | Make literal contents from token tree.
-module Koshucode.Baala.Core.Content.Literal
-
--- | Content constructor.
-type ContentCons c = TTreeToAb c
-
--- | Content calculator.
-type ContentCalc c = TTreeToAb c
-
--- | Convert token tree into internal form of content.
-contentCons :: CContent c => ContentCalc c -> ContentCons c
-
--- | Convert token trees into a judge. Judges itself are not content type.
---   It can be only used in the top-level of resources.
-treesToJudge :: CContent c => ContentCalc c -> AssertType -> JudgePat -> TTreesToAb (Judge c)
-data AssertType
-
--- | <tt>|==</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertAffirm :: AssertType
-
--- | <tt>|=x</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertDeny :: AssertType
-
--- | <tt>|=xx</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertMultiDeny :: AssertType
-
--- | <tt>|=c</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertChange :: AssertType
-
--- | <tt>|=cc</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertMultiChange :: AssertType
-
--- | <tt>|=v</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
-AssertViolate :: AssertType
-assertAs :: AssertType -> JudgeOf c
-assertSymbol :: AssertType -> String
-instance Typeable AssertType
-instance Show AssertType
-instance Eq AssertType
-instance Ord AssertType
-instance Data AssertType
-
-
--- | Term-content calcutation.
-module Koshucode.Baala.Core.Content.Build
-
--- | Construct content expression from token tree
-coxBuild :: CContent c => ContentCalc c -> CopSet c -> TTreeToAb (Cox c)
-
--- | Insert fresh form into indexed expression.
-coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)
-
-
--- | Term-content calcutation.
-module Koshucode.Baala.Core.Content.Run
-type RunCox c = Cox c -> Ab c
-type RunList c = [c] -> Ab c
-coxRunCox :: (Write c, CRel c, CList c) => CopSet c -> Head -> [c] -> RunCox c
-coxRunList :: (Write c, CRel c, CList c) => CopSet c -> Head -> Cox c -> RunList c
-calcContent :: CContent c => CopSet c -> ContentCalc c
-getArg1 :: [Ab c] -> Ab (Ab c)
-getArg2 :: [Ab c] -> Ab (Ab c, Ab c)
-getArg3 :: [Ab c] -> Ab (Ab c, Ab c, Ab c)
-instance CodePtr (Beta c)
 
 
 -- | Positional attributes.
@@ -754,6 +398,21 @@ type FindSorter = RopName -> Maybe AttrSortPara
 type ConsLexmapBody = [TTree] -> Ab (Lexmap, LexmapLinkTable)
 type LexmapLinkTable = [(Lexmap, Lexmap)]
 
+
+-- | Options.
+module Koshucode.Baala.Core.Relmap.Option
+type Option c = Map String (OptionContent c)
+data OptionContent c
+OptionBool :: Bool -> OptionContent c
+OptionChar :: [Char] -> Char -> OptionContent c
+OptionTerms :: [TermName] -> OptionContent c
+option :: (CBool c, CText c) => Option c
+optionBool :: String -> Option c -> Bool
+optionParse :: (Eq c, CBool c, CText c) => ContentCalc c -> [Token] -> AbMap (Option c)
+instance Show (OptionContent c)
+instance Eq (OptionContent c)
+instance Ord (OptionContent c)
+
 module Koshucode.Baala.Core.Lexmap
 
 
@@ -828,17 +487,6 @@ type Lexical a = (Token, a)
 localsLines :: [Local a] -> [String]
 a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
 instance Monoid (Relkit c)
-
-
--- | Content of term in judgement.
-module Koshucode.Baala.Core.Content
-
-
--- | Convert relation to text table.
-module Koshucode.Baala.Core.Assert.RelTable
-relTable :: (Write c, CRel c) => [ShortDef] -> Rel c -> String
-relTableLines :: (Write c, CRel c) => [ShortDef] -> Rel c -> [String]
-relText :: (Write c, CRel c) => [ShortDef] -> Rel c -> RelText
 
 
 -- | Link and run relmaps.
@@ -1006,27 +654,6 @@ type ConsRelmap' h c = Lexmap -> Ab (Relmap' h c)
 consRelmap :: FindRop' h c -> h c -> ConsRelmap' h c
 
 
--- | Specialize generic relmaps to specific relmaps
-module Koshucode.Baala.Core.Relmap.Specialize
-relmapSpecialize :: h c -> RelmapLinkTable' h c -> [RelkitDef c] -> Maybe Head -> Relmap' h c -> Ab ([RelkitDef c], Relkit c)
-type RelmapLinkTable' h c = [(Lexmap, Relmap' h c)]
-
-
--- | Options.
-module Koshucode.Baala.Core.Relmap.Option
-type Option c = Map String (OptionContent c)
-data OptionContent c
-OptionBool :: Bool -> OptionContent c
-OptionChar :: [Char] -> Char -> OptionContent c
-OptionTerms :: [TermName] -> OptionContent c
-option :: (CBool c, CText c) => Option c
-optionBool :: String -> Option c -> Bool
-optionParse :: (Eq c, CBool c, CText c) => ContentCalc c -> [Token] -> AbMap (Option c)
-instance Show (OptionContent c)
-instance Eq (OptionContent c)
-instance Ord (OptionContent c)
-
-
 -- | Global parameters.
 module Koshucode.Baala.Core.Relmap.Global
 
@@ -1099,6 +726,12 @@ opsetCop :: OpSet' h c -> CopSet c
 opset :: OpSet' h c
 opsetFill :: Map (OpSet' h c)
 instance Show (Global' h c)
+
+
+-- | Specialize generic relmaps to specific relmaps
+module Koshucode.Baala.Core.Relmap.Specialize
+relmapSpecialize :: h c -> RelmapLinkTable' h c -> [RelkitDef c] -> Maybe Head -> Relmap' h c -> Ab ([RelkitDef c], Relkit c)
+type RelmapLinkTable' h c = [(Lexmap, Relmap' h c)]
 
 
 -- | Relation-to-relation mapping.
