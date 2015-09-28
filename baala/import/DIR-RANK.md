@@ -29,7 +29,7 @@
 dir : dep
     | add /dir  ( dir-part  <dot> /module )
           /base ( base-part <dot> /module )
-    | pick-group /dir -to /base-rank
+    | hier /dir -to /base-rank
     | for /base-rank ( pick /rank /base /import-dir )
     | add /dir-rank ( max /base-rank/rank )
     | interp <<< Module directory /dir has dependent rank /dir-rank ,
@@ -52,7 +52,7 @@ imp-dir : imp
                  The base part of /import is /dirname . >>>
 
 imp : source IMPORT /module /import
-    | keep part "Koshucode" /import
+    | keep /import =* "Koshucode"
 ```
 
 
