@@ -17,7 +17,7 @@ under the BSD3 license.
 in a directry tree like the following.
 Files `*.cabal` are Cabal files for building software.
 Files `*.hs` are Haskell source files.
-Files `*.k` are data itself and calculation in koshucode.
+Files `*.k` are data itself and calculation in Koshucode.
 
 ```
 / koshucode-master
@@ -65,7 +65,7 @@ Install Haskell
 
 This software is written in Haskell,
 and built with the Cabal packaging system.
-Before building koshucode libraries and executables,
+Before building Koshucode libraries and executables,
 please install the [Haskell Platform](http://www.haskell.org/platform/)
 or [MinGHC](https://github.com/fpco/minghc) for Windows.
 Haskell Platform constains the Haskell compiler and
@@ -98,62 +98,116 @@ sh cabal-sandbox-install.sh
 
 
 
-Invoke koshu command
+Calculation
 ---------------------------------
 
-`koshu` command is a portable relational calculator.
-This calculator reads data and formula in koshucode,
-and writes results of the calculations.
-The results are also written in koshucode.
+The `koshu` command is a portable data calculator.
+This calculator reads calculation formula and data in Koshucode,
+and writes result data of the calculation.
+The result data are also written in Koshucode.
+
+For example, dependency table for implementation modules
+are calculated by the following command.
 
 ``` sh
-cd koshucode-example/dictionary
-koshu DATA.k calc/N/natural-join.k
+cd koshucode-master/baala
+koshu import/dir-rank.k base/data/IMPORT.k
 ```
 
 The order of files is not significant.
-You can also type `koshu calc/N/natural-join.k DATA.k`.
-With the `-i` option, `koshu` reads data from the standard input.
+You can also type:
 
 ``` sh
-koshu -i calc/N/natural-join.k < DATA.k
+koshu base/data/IMPORT.k import/dir-rank.k
 ```
 
-These commands calculate [`natural-join.k`][natural-join.k]
-for input [`DATA.k`][DATA.k] and writes the following output data.
+These commands calculate [`import/dir-rank.k`][dir-rank.k]
+for input data [`base/data/IMPORT.k`][IMPORT.k]
+and writes the following output data.
 
 ``` text
 ** -*- koshu -*-
 **
 **  INPUT
-**    DATA.k
-**    calc/N/natural-join.k
+**    import/dir-rank.k
+**    base/data/IMPORT.k
+**
+**  OUTPUT
+**    <stdout>
 **
 
-|-- SSP  /pno 'P6  /qty 100  /sno 'S1  /sname 'Smith  /status 20  /city 'London
-|-- SSP  /pno 'P5  /qty 100  /sno 'S1  /sname 'Smith  /status 20  /city 'London
-|-- SSP  /pno 'P4  /qty 200  /sno 'S1  /sname 'Smith  /status 20  /city 'London
-|-- SSP  /pno 'P3  /qty 400  /sno 'S1  /sname 'Smith  /status 20  /city 'London
-|-- SSP  /pno 'P2  /qty 200  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank /base /import-dir [ 0 | 'Class | [ ] ] [ 0 | 'Import | [ ] ] [ 1 | 'Assoc | [ ] ] [ 1 | 'List | [ ] ] [ 1 | 'Pair | [ ] ] [ 1 | 'Snip | [ ] ] [ 2 | 'Order | [ ] ] |}
+|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank /base /import-dir [ 0 | 'Comment | [ ] ] [ 0 | 'Unicode | [ ] ] [ 4 | 'Http | [ 'Prelude ] ] [ 4 | 'IOPoint | [ 'Prelude ] ] [ 4 | 'TextTable | [ 'Prelude ] ] [ 4 | 'Utility | [ 'Prelude ] ] [ 4 | 'Write | [ 'Prelude ] ] [ 5 | 'CodePt | [ 'Prelude ] ] |}
+|-- DIR-RANK  /dir-rank 8  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank /base /import-dir [ 7 | 'Reason | [ 'Text ] ] [ 8 | 'Abortable | [ 'Prelude | 'Text ] ] [ 8 | 'Report | [ 'Prelude | 'Text ] ] |}
+|-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank /base /import-dir [ 0 | 'Line | [ ] ] [ 11 | 'Code | [ 'Abort | 'Prelude | 'Text ] ] [ 11 | 'Tree | [ 'Abort | 'Prelude | 'Text ] ] [ 12 | 'Infix | [ 'Prelude ] ] |}
+|-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Base  /base-rank {| /rank /base /import-dir [ 3 | 'Prelude | [ ] ] [ 6 | 'Text | [ ] ] [ 9 | 'Abort | [ ] ] [ 10 | 'Message | [ 'Abort | 'Prelude | 'Text ] ] [ 13 | 'Syntax | [ ] ] |}
 
-|-- SSP  /pno 'P1  /qty 300  /sno 'S1  /sname 'Smith  /status 20  /city 'London
-|-- SSP  /pno 'P2  /qty 400  /sno 'S2  /sname 'Jones  /status 10  /city 'Paris
-|-- SSP  /pno 'P1  /qty 300  /sno 'S2  /sname 'Jones  /status 10  /city 'Paris
-|-- SSP  /pno 'P2  /qty 200  /sno 'S3  /sname 'Blake  /status 30  /city 'Paris
-|-- SSP  /pno 'P5  /qty 400  /sno 'S4  /sname 'Clark  /status 20  /city 'London
+|-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 14 | 'Base | [ 'Abort | 'Prelude | 'Syntax | 'Text ] ] |}
 
-|-- SSP  /pno 'P4  /qty 300  /sno 'S4  /sname 'Clark  /status 20  /city 'London
-|-- SSP  /pno 'P2  /qty 200  /sno 'S4  /sname 'Clark  /status 20  /city 'London
+*** 6 judges
 
-*** 12 judges
+=== note
+
+TABLE : DIR-RANK
+
+  /dir-rank /dir                            /base-rank
+  --------- ------------------------------- ------------------------------------------------------------
+  2         'Koshucode.Baala.Base.Prelude   /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            0     'Class       [ ]
+                                            0     'Import      [ ]
+                                            1     'Assoc       [ ]
+                                            1     'List        [ ]
+                                            1     'Pair        [ ]
+                                            1     'Snip        [ ]
+                                            2     'Order       [ ]
+                                            
+  5         'Koshucode.Baala.Base.Text      /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            0     'Comment     [ ]
+                                            0     'Unicode     [ ]
+                                            4     'Http        [ 'Prelude ]
+                                            4     'IOPoint     [ 'Prelude ]
+                                            4     'TextTable   [ 'Prelude ]
+                                            4     'Utility     [ 'Prelude ]
+                                            4     'Write       [ 'Prelude ]
+                                            5     'CodePt      [ 'Prelude ]
+                                            
+  8         'Koshucode.Baala.Base.Abort     /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            7     'Reason      [ 'Text ]
+                                            8     'Abortable   [ 'Prelude | 'Text ]
+                                            8     'Report      [ 'Prelude | 'Text ]
+                                            
+  12        'Koshucode.Baala.Base.Syntax    /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            0     'Line        [ ]
+                                            11    'Code        [ 'Abort | 'Prelude | 'Text ]
+                                            11    'Tree        [ 'Abort | 'Prelude | 'Text ]
+                                            12    'Infix       [ 'Prelude ]
+                                            
+  13        'Koshucode.Baala.Base           /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            3     'Prelude     [ ]
+                                            6     'Text        [ ]
+                                            9     'Abort       [ ]
+                                            10    'Message     [ 'Abort | 'Prelude | 'Text ]
+                                            13    'Syntax      [ ]
+                                            
+  14        'Koshucode.Baala                /rank /base        /import-dir
+                                            ----- ------------ -----------------------------------------
+                                            14    'Base        [ 'Abort | 'Prelude | 'Syntax | 'Text ]
+                                            
+
+=== rel
 
 **
 **  SUMMARY
-**      12 judges on SSP
-**      12 judges in total
+**       6 judges on DIR-RANK
+**       6 judges in total
 **
 ```
 
 
-[DATA.k]:          https://github.com/seinokatsuhiro/koshucode-example/blob/master/dictionary/DATA.k
-[natural-join.k]:  https://github.com/seinokatsuhiro/koshucode-example/blob/master/dictionary/calc/N/natural-join.k
+[IMPORT.k]: baala/base/data/IMPORT.k
+[dir-rank.k]: baala/import/dir-rank.k
