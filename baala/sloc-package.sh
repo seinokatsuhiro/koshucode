@@ -44,7 +44,7 @@ list () {
 }
 
 main () {
-    for pkg in base core writer operator content calculator toolkit; do
+    for pkg in base data core writer operator content calculator toolkit; do
         count $pkg
     done
 
