@@ -54,6 +54,7 @@ library
         Koshucode.Baala.Core.Assert.Dataset
         Koshucode.Baala.Core.Assert.RelTable
         Koshucode.Baala.Core.Assert.Run
+        Koshucode.Baala.Core.Assert.Message
 
         Koshucode.Baala.Core.Lexmap
         Koshucode.Baala.Core.Lexmap.Attr

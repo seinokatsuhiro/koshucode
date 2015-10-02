@@ -8,14 +8,15 @@ module Koshucode.Baala.Core.Assert.Run
   ( runAssertJudges,
   ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as D
-import qualified Koshucode.Baala.Core.Lexmap          as C
-import qualified Koshucode.Baala.Core.Relkit          as C
-import qualified Koshucode.Baala.Core.Relmap          as C
-import qualified Koshucode.Baala.Core.Assert.Assert   as C
-import qualified Koshucode.Baala.Core.Assert.RelTable as C
-import qualified Koshucode.Baala.Core.Message         as Msg
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data                  as D
+import qualified Koshucode.Baala.Core.Lexmap           as C
+import qualified Koshucode.Baala.Core.Relkit           as C
+import qualified Koshucode.Baala.Core.Relmap           as C
+import qualified Koshucode.Baala.Core.Assert.Assert    as C
+import qualified Koshucode.Baala.Core.Assert.RelTable  as C
+import qualified Koshucode.Baala.Data.Message          as Msg
+import qualified Koshucode.Baala.Core.Assert.Message   as Msg
 
 
 -- ----------------------  Assert

@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
-import qualified Koshucode.Baala.Core.Message            as Msg
+import qualified Koshucode.Baala.Core.Assert.Message     as Msg
 
 runResource :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
 runResource res =
