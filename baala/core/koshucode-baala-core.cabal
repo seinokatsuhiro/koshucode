@@ -68,6 +68,7 @@ library
 
         Koshucode.Baala.Core.Relkit
         Koshucode.Baala.Core.Relkit.Construct
+        Koshucode.Baala.Core.Relkit.Message
         Koshucode.Baala.Core.Relkit.Relkit
         Koshucode.Baala.Core.Relkit.Run
 

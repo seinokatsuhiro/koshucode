@@ -5,11 +5,11 @@ module Koshucode.Baala.Core.Message
     module Koshucode.Baala.Data.Message,
     module Koshucode.Baala.Core.Assert.Message,
     module Koshucode.Baala.Core.Lexmap.Message,
+    module Koshucode.Baala.Core.Relkit.Message,
   
     abClause,
     abOption,
     abRelmap,
-    abRun,
     abSpecialize,
   
     dupPrefix,
@@ -21,7 +21,6 @@ module Koshucode.Baala.Core.Message
     sameIOPoints,
     unkClause,
     unkCop,
-    unkNestRel,
     unkNestVar,
     unresPrefix,
   ) where
@@ -32,6 +31,7 @@ import Koshucode.Baala.Base.Message
 import Koshucode.Baala.Data.Message
 import Koshucode.Baala.Core.Assert.Message
 import Koshucode.Baala.Core.Lexmap.Message
+import Koshucode.Baala.Core.Relkit.Message
 
 
 -- ----------------------  Abortables
@@ -44,9 +44,6 @@ abOption = D.abortableTrees "option"
 
 abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
-
-abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abRun = B.abortable "run"
 
 abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
@@ -92,11 +89,6 @@ unkClause = Left . B.abortLines "Unknown clause"
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
-
--- | Unknown nested relation
-unkNestRel :: D.Token -> String -> [String] -> B.Ab a
-unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
-    where ref = "/" ++ n ++ " in " ++ D.tokenContent p
 
 unkNestVar :: String -> [D.Token] -> [((D.Token, D.Local String), D.Head)] -> B.Ab a
 unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
