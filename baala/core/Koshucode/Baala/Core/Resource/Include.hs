@@ -17,7 +17,8 @@ import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Clause    as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
-import qualified Koshucode.Baala.Core.Message            as Msg
+import qualified Koshucode.Baala.Data.Message            as Msg
+import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 
 type Include c = C.ClauseHead -> [D.Token] -> C.ClauseBody -> B.Ab (C.Resource c)

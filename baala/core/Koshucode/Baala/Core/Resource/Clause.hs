@@ -17,12 +17,13 @@ module Koshucode.Baala.Core.Resource.Clause
     consClause,
   ) where
 
-import qualified Data.Generics                 as G
-import qualified Data.Char                     as Char
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Core.Lexmap   as C
-import qualified Koshucode.Baala.Core.Message  as Msg
+import qualified Data.Generics                          as G
+import qualified Data.Char                              as Char
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Data                   as D
+import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Data.Message           as Msg
+import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 
 
 -- ----------------------  Data type

@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Include   as C
-import qualified Koshucode.Baala.Core.Message            as Msg
+import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 
 -- | I/O with global state.
