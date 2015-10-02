@@ -13,7 +13,8 @@ import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
-import qualified Koshucode.Baala.Core.Message         as Msg
+import qualified Koshucode.Baala.Core.Lexmap.Message  as Msg
+import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 

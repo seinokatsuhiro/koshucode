@@ -11,10 +11,11 @@ module Koshucode.Baala.Core.Relmap.Option
     optionParse,
   ) where
 
-import qualified Data.Map.Strict               as Map
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Core.Message  as Msg
+import qualified Data.Map.Strict                      as Map
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Data.Message         as Msg
+import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
 
 type Option c = Map.Map String (OptionContent c)

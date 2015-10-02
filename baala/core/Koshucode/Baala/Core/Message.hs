@@ -8,9 +8,6 @@ module Koshucode.Baala.Core.Message
     module Koshucode.Baala.Core.Relkit.Message,
   
     abClause,
-    abOption,
-    abRelmap,
-    abSpecialize,
   
     dupPrefix,
     dupReplacement,
@@ -21,7 +18,6 @@ module Koshucode.Baala.Core.Message
     sameIOPoints,
     unkClause,
     unkCop,
-    unkNestVar,
     unresPrefix,
   ) where
 
@@ -39,14 +35,6 @@ import Koshucode.Baala.Core.Relkit.Message
 abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abClause = B.abortable "clause"
 
-abOption :: D.TTreesTo (B.Map (B.Ab b))
-abOption = D.abortableTrees "option"
-
-abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abRelmap = B.abortable "relmap"
-
-abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abSpecialize = B.abortable "specialize"
 
 
 -- ----------------------  Core package
@@ -89,28 +77,6 @@ unkClause = Left . B.abortLines "Unknown clause"
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
-
-unkNestVar :: String -> [D.Token] -> [((D.Token, D.Local String), D.Head)] -> B.Ab a
-unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
-                           $ ("search" : map indent dynamic)
-                          ++ ("for"    : map indent lexical)
-    where lexical = map (text $ D.LocalSymbol n) ls
-          dynamic = map f ds
-          f ((tk, k), _) = text k tk
-          text (D.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
-          text (D.LocalNest   k) tk = unwords ["nested relation", term  k, "in", tokenAtPoint tk]
-          indent    = ("  " ++)
-          term      = ('/' :)
-
-tokenAtPoint :: D.Token -> String
-tokenAtPoint tok = unwords ws where
-    ws    = [D.tokenContent tok, "at L" ++ line, "C" ++ col]
-    cp    = B.codePt tok
-    line  = show $ B.codePtLineNo   cp
-    col   = show $ B.codePtColumnNo cp
-
-quote :: B.Map String
-quote s = "'" ++ s ++ "'"
 
 -- | Unresolved prefix
 unresPrefix :: String -> B.Ab a
