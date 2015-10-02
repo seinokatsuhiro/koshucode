@@ -29,7 +29,7 @@
 
 |== IMPORT-RANK
   : source IMPORT /module /import
-  | keep part "Koshucode" /import
+  | keep /import =* "Koshucode"
   | dependent-rank /module /import -rank /rank
   | interp <<< /module has dependent rank /rank . >>>
   --order --forward /rank

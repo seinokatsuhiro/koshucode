@@ -66,7 +66,6 @@ copsList =
     , D.CopCalc  (D.copNormal "max")            copMax
     , D.CopCalc  (D.copNormal "min")            copMin
     , D.CopCalc  (D.copNormal "minus")          copMinus
-    , D.CopCalc  (D.copNormal "part")           copPart
     , D.CopCalc  (D.copNormal "push")           copPush
     , D.CopCalc  (D.copNormal "push-tail")      copPushTail
     , D.CopCalc  (D.copNormal "replace-all")    copReplaceAll
@@ -430,20 +429,6 @@ replaceEnd from to xs = reverse $ replaceBegin from' to' xs' where
     from' = reverse from
     to'   = reverse to
     xs'   = reverse xs
-
-
--- ----------------------  part
-
--- part "bc" "abcde" => <1>
-copPart :: (D.CContent c) => D.CopCalc c
-copPart = op where
-    op [Right part, Right whole]
-        | D.isText part && D.isText whole =
-            let p  = D.gText part
-                w  = D.gText whole
-                ws = B.tails w
-            in D.putBool $ List.isPrefixOf p `any` ws
-    op xs = typeUnmatch xs
 
 
 -- ----------------------  term-set
