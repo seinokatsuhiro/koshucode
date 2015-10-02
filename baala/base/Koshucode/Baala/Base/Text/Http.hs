@@ -24,9 +24,8 @@ uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
 uriContent proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
-         man <- H.newManager H.conduitManagerSettings
+         man <- H.newManager H.tlsManagerSettings
          res <- H.httpLbs req man
-         -- Deprecated: res <- H.withManager $ H.httpLbs req
          return $ Right $ UTF.toString $ H.responseBody res
 
 requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
