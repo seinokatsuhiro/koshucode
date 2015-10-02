@@ -25,6 +25,7 @@ module Koshucode.Baala.Data.Message
     reqRelTuple,
     reqTermName,
     unkBracket,
+    unkCop,
     unkCox,
     unkGlobalVar,
     unkRefVar,
@@ -117,6 +118,10 @@ reqTermName = Left $ B.abortBecause "Require term name"
 -- | Unknown bracket
 unkBracket :: B.Ab a
 unkBracket = Left $ B.abortBecause "Unknown bracket"
+
+-- | Unknown content operator
+unkCop :: String -> B.Ab a
+unkCop = Left . B.abortLine "Unknown content operator"
 
 -- | Unknown expression
 unkCox :: String -> B.Ab a
