@@ -25,7 +25,8 @@ import qualified Koshucode.Baala.Core.Lexmap.AttrPos      as C
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
 import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot         as C
-import qualified Koshucode.Baala.Core.Message             as Msg
+import qualified Koshucode.Baala.Data.Message             as Msg
+import qualified Koshucode.Baala.Core.Lexmap.Message      as Msg
 
 
 -- ----------------------  Section number

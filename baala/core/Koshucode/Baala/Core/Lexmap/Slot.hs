@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Lexmap.Slot
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
-import qualified Koshucode.Baala.Core.Message           as Msg
+import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
 
 type GlobalSlot = D.NamedTrees
 

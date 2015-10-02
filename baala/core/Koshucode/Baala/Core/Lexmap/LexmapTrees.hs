@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core.Lexmap.AttrEd   as C
 import qualified Koshucode.Baala.Core.Lexmap.Attr     as C
-import qualified Koshucode.Baala.Core.Message         as Msg
+import qualified Koshucode.Baala.Data.Message         as Msg
 
 
 -- ----------------------  Type and constructor

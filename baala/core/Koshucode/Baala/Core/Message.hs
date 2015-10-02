@@ -4,46 +4,25 @@ module Koshucode.Baala.Core.Message
   ( module Koshucode.Baala.Base.Message,
     module Koshucode.Baala.Data.Message,
     module Koshucode.Baala.Core.Assert.Message,
+    module Koshucode.Baala.Core.Lexmap.Message,
   
-    abAttr,
-    abAttrTrees,
     abClause,
-    abLexmap,
     abOption,
     abRelmap,
     abRun,
-    abSlot,
-    abSlotTree,
     abSpecialize,
   
-    ambRelmap,
-    dupAttr,
     dupPrefix,
     dupReplacement,
     emptyLiteral,
-    extraAttr,
     httpError,
     invalidPrefix,
     noFile,
-    noSlotName,
-    noSlotIndex,
-    reqAttr,
-    reqAttrName,
-    reqGroup,
     sameIOPoints,
-    unexpAttr,
-    unexpAttr0,
-    unexpAttr1,
-    unexpAttr2,
-    unexpAttr3,
-    unexpAttr4,
-    unexpAttr1V,
-    unexpAttr1Q,
     unkClause,
     unkCop,
     unkNestRel,
     unkNestVar,
-    unkRelmap,
     unresPrefix,
   ) where
 
@@ -52,21 +31,13 @@ import qualified Koshucode.Baala.Data as D
 import Koshucode.Baala.Base.Message
 import Koshucode.Baala.Data.Message
 import Koshucode.Baala.Core.Assert.Message
+import Koshucode.Baala.Core.Lexmap.Message
 
 
 -- ----------------------  Abortables
 
-abAttr :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abAttr = B.abortable "attr"
-
-abAttrTrees :: D.TTreesTo (B.Map (B.Ab b))
-abAttrTrees = D.abortableTrees "attr"
-
 abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abClause = B.abortable "clause"
-
-abLexmap :: D.TTreesTo (B.Map (B.Ab b))
-abLexmap = D.abortableTrees "lexmap"
 
 abOption :: D.TTreesTo (B.Map (B.Ab b))
 abOption = D.abortableTrees "option"
@@ -77,26 +48,11 @@ abRelmap = B.abortable "relmap"
 abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRun = B.abortable "run"
 
-abSlot :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abSlot = B.abortable "slot"
-
-abSlotTree :: D.TTreeTo (B.Map (B.Ab b))
-abSlotTree = D.abortableTree "slot"
-
 abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
 
 
 -- ----------------------  Core package
-
--- | Ambiguous relmaps
-ambRelmap :: String -> [d] -> B.Ab a
-ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
-                         $ name ++ " (" ++ show (length ds) ++ ")"
-
--- | Unexpected attribute / Duplicate
-dupAttr :: [String] -> B.Ab a
-dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map D.showTermName ns)
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> B.Ab a
@@ -109,10 +65,6 @@ dupReplacement = Left . B.abortLine "Duplicate replacement" . unwords
 -- | Empty literal
 emptyLiteral :: B.Ab a
 emptyLiteral = Left $ B.abortBecause "Empty literal"
-
--- | Extra attribute
-extraAttr :: B.Ab a
-extraAttr = Left $ B.abortBecause "Extra attribute"
 
 -- | HTTP Error
 httpError :: String -> Int -> String -> B.Ab a
@@ -129,59 +81,9 @@ noFile :: FilePath -> String -> B.Ab a
 noFile "" path = Left $ B.abortLine "File not found" path
 noFile cd path = Left $ B.abortLines "File not found" [path, "directory: " ++ cd]
 
--- | No slot content
-noSlotName :: Int -> String -> B.Ab a
-noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
-    detail 0 = "Positional attribute @'" ++ name
-    detail 1 = "Named attribute -"       ++ name
-    detail 2 = "Global slot @@"          ++ name
-    detail a = "Unknown slot level "     ++ show a
-
--- | No slot content
-noSlotIndex :: [String] -> Int -> B.Ab a
-noSlotIndex xs n = Left $ B.abortLines "No slot content" $
-                   ("No index @'" ++ show n ++ " in") : xs
-
--- | Require attribute
-reqAttr :: String -> B.Ab a
-reqAttr = Left . B.abortLine "Require attribute"
-
--- | Require attribute
-reqAttrName :: String -> B.Ab a
-reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
-
--- | Require grouping paren
-reqGroup :: B.Ab a
-reqGroup = Left $ B.abortBecause "Require grouping parens"
-
 -- | Same I/O points
 sameIOPoints :: B.IOPoint -> B.Ab a
 sameIOPoints = Left . B.abortLine "Same I/O points" . B.ioPointText
-
--- | Unexpected attribute
-unexpAttr :: String -> B.Ab a
-unexpAttr = Left . B.abortLine "Unexpected attribute"
-
-unexpAttr0 :: B.Ab a
-unexpAttr0 = unexpAttr "Attributes not required"
-
-unexpAttr1 :: B.Ab a
-unexpAttr1 = unexpAttr "Require one attribute"
-
-unexpAttr2 :: B.Ab a
-unexpAttr2 = unexpAttr "Require two attributes"
-
-unexpAttr3 :: B.Ab a
-unexpAttr3 = unexpAttr "Require three attributes"
-
-unexpAttr4 :: B.Ab a
-unexpAttr4 = unexpAttr "Require four attributes"
-
-unexpAttr1V :: B.Ab a
-unexpAttr1V = unexpAttr "Require attributes"
-
-unexpAttr1Q :: B.Ab a
-unexpAttr1Q = unexpAttr "Require one or two attributes"
 
 -- | Unknown clause
 unkClause :: [String] -> B.Ab a
@@ -217,10 +119,6 @@ tokenAtPoint tok = unwords ws where
 
 quote :: B.Map String
 quote s = "'" ++ s ++ "'"
-
--- | Unknown relmap operator
-unkRelmap :: String -> B.Ab a
-unkRelmap = Left . B.abortLine "Unknown relmap operator"
 
 -- | Unresolved prefix
 unresPrefix :: String -> B.Ab a
