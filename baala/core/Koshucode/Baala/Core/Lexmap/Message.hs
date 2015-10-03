@@ -27,23 +27,24 @@ module Koshucode.Baala.Core.Lexmap.Message
     unkRelmap,
   ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as D
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Data          as D
+import qualified Koshucode.Baala.Data.Message  as Msg
 
 abAttr        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr        = B.abortable "attr"
 
 abAttrTrees   :: D.TTreesTo (B.Map (B.Ab b))
-abAttrTrees   = D.abortableTrees "attr"
+abAttrTrees   = Msg.abortableTrees "attr"
 
 abLexmap      :: D.TTreesTo (B.Map (B.Ab b))
-abLexmap      = D.abortableTrees "lexmap"
+abLexmap      = Msg.abortableTrees "lexmap"
 
 abSlot        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot        = B.abortable "slot"
 
 abSlotTree    :: D.TTreeTo (B.Map (B.Ab b))
-abSlotTree    = D.abortableTree "slot"
+abSlotTree    = Msg.abortableTree "slot"
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> B.Ab a

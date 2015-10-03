@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Cop.Misc
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Op.Cop.Coxhand  as H
+import qualified Koshucode.Baala.Data.Message    as Msg
 import qualified Koshucode.Baala.Op.Message      as Msg
 
 
@@ -117,6 +118,6 @@ copTreeIf trees = folding $ filter (/= []) $ D.divideTreesBy ":" trees where
           _   -> abortSyntax xs "Mixed arrows"
 
     abortSyntax xs msg =
-        D.abortableTrees "if" xs $
+        Msg.abortableTrees "if" xs $
          Msg.unexpAttr msg
 

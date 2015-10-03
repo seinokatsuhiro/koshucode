@@ -58,6 +58,7 @@ library
         Koshucode.Baala.Data.Content
         Koshucode.Baala.Data.Content.Class
         Koshucode.Baala.Data.Content.Literal
+        Koshucode.Baala.Data.Content.Message
         Koshucode.Baala.Data.Content.Tree
 
         Koshucode.Baala.Data.Token

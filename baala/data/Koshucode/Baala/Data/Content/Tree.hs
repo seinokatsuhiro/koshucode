@@ -17,10 +17,11 @@ module Koshucode.Baala.Data.Content.Tree
     -- $Function
   ) where
 
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data.Token    as D
-import qualified Koshucode.Baala.Data.Type     as D
-import qualified Koshucode.Baala.Data.Message  as Msg
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data.Token            as D
+import qualified Koshucode.Baala.Data.Type             as D
+import qualified Koshucode.Baala.Base.Message          as Msg
+import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 -- $Function
 --

@@ -9,11 +9,12 @@ module Koshucode.Baala.Core.Relmap.Message
     unkNestVar,
   ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as D
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Data          as D
+import qualified Koshucode.Baala.Data.Message  as Msg
 
 abOption :: D.TTreesTo (B.Map (B.Ab b))
-abOption = D.abortableTrees "option"
+abOption = Msg.abortableTrees "option"
 
 abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRelmap = B.abortable "relmap"

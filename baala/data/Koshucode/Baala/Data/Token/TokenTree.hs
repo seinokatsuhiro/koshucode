@@ -31,9 +31,6 @@ module Koshucode.Baala.Data.Token.TokenTree
     splitTokensBy, divideTreesBy,
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
   
-    -- * Abortable
-    abortableTree, abortableTrees,
-  
     -- * Abbreviation
     tt, tt1, ttDoc, ttPrint,
   ) where
@@ -166,19 +163,6 @@ divideTreesByColon = divideTreesBy ":"
 -- | Divide token trees by equal sign @\"=\"@.
 divideTreesByEqual :: TTreesTo [[TTree]]
 divideTreesByEqual = divideTreesBy "="
-
-
--- ----------------------  Abortable
-
--- | Same as 'abortable' except for using 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTree :: String -> TTreeTo (B.Map (B.Ab b))
-abortableTree tag = B.abortable tag . B.untree
-
--- | Same as 'abortable' except for using list of 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTrees :: String -> TTreesTo (B.Map (B.Ab b))
-abortableTrees tag = B.abortable tag . B.untrees
 
 
 -- ----------------------  Abbreviation

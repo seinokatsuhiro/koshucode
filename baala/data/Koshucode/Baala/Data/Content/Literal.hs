@@ -25,13 +25,14 @@ module Koshucode.Baala.Data.Content.Literal
     -- $CompoundData
   ) where
 
-import qualified Data.Generics                       as G
-import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data.Token          as D
-import qualified Koshucode.Baala.Data.Type           as D
-import qualified Koshucode.Baala.Data.Content.Class  as D
-import qualified Koshucode.Baala.Data.Content.Tree   as D
-import qualified Koshucode.Baala.Data.Message        as Msg
+import qualified Data.Generics                         as G
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data.Token            as D
+import qualified Koshucode.Baala.Data.Type             as D
+import qualified Koshucode.Baala.Data.Content.Class    as D
+import qualified Koshucode.Baala.Data.Content.Tree     as D
+import qualified Koshucode.Baala.Base.Message          as Msg
+import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 
 
