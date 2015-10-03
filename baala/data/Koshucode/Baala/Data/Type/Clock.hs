@@ -23,8 +23,8 @@ module Koshucode.Baala.Data.Type.Clock
     clockRangeBy, clockStep,
   ) where
 
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Base.Message  as Msg
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Base.Message       as Msg
 
 
 -- ----------------------  Data type

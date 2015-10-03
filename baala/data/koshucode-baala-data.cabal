@@ -78,6 +78,7 @@ library
         Koshucode.Baala.Data.Type.Head
         Koshucode.Baala.Data.Type.Interp
         Koshucode.Baala.Data.Type.Judge
+        Koshucode.Baala.Data.Type.Message
         Koshucode.Baala.Data.Type.Mono
         Koshucode.Baala.Data.Type.Para
         Koshucode.Baala.Data.Type.Rel

@@ -12,10 +12,6 @@ module Koshucode.Baala.Base.Message
     extraCloseBracket,
     extraOpenBracket,
     notFound,
-    divideByZero,
-    heteroDecimal,
-    notDate,
-    notNumber,
     notImplemented,
     (<!!>),
   ) where
@@ -54,25 +50,6 @@ extraCloseBracket = Left $ B.abortBecause "Extra close bracket"
 -- | Unclosed open bracket
 extraOpenBracket :: B.Ab a
 extraOpenBracket = Left $ B.abortBecause "Unclosed open bracket"
-
--- | Different decimal length
-heteroDecimal :: String -> String -> B.Ab a
-heteroDecimal a b = Left $ B.abortLines "Different decimal length" [a, b]
-
--- | Can't read as date
-notDate :: Integer -> Int -> Int -> B.Ab a
-notDate y m d = Left $ B.abortLines "Can't read as date"
-                [ "/year  " ++ show y
-                , "/month " ++ show m
-                , "/day   " ++ show d]
-
--- | Can't read as number
-notNumber :: String -> B.Ab a
-notNumber = Left . B.abortLine "Can't read as number"
-
--- | Divide by zero
-divideByZero :: B.Ab a
-divideByZero = Left $ B.abortBecause "Divide by zero"
 
 -- | Not found
 notFound :: String -> B.Ab a

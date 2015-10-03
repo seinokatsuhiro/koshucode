@@ -33,11 +33,11 @@ module Koshucode.Baala.Data.Type.Decimal
     decimalSum,
   ) where
 
-import qualified Data.Char as Ch
-import qualified Data.Ratio as R
-import Control.Monad
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Base.Message as Msg
+import qualified Data.Char                         as Ch
+import qualified Data.Ratio                        as R
+import qualified Control.Monad                     as M
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Type.Message as Msg
 
 
 
@@ -250,5 +250,5 @@ decimalAbs :: B.Map Decimal
 decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
 
 decimalSum :: [Decimal] -> B.Ab Decimal
-decimalSum = foldM decimalAdd $ intDecimal 0
+decimalSum = M.foldM decimalAdd $ intDecimal 0
 

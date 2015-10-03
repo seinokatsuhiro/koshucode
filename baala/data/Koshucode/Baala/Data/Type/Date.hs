@@ -13,11 +13,11 @@ module Koshucode.Baala.Data.Type.Date
     monthly, weekly, yearly,
   ) where
 
-import qualified Data.Time.Calendar               as T
-import qualified Data.Time.Calendar.WeekDate      as T
-import qualified Data.Time.Calendar.OrdinalDate   as T
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Base.Message     as Msg
+import qualified Data.Time.Calendar                as T
+import qualified Data.Time.Calendar.WeekDate       as T
+import qualified Data.Time.Calendar.OrdinalDate    as T
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Type.Message as Msg
 
 
 -- ----------------------  Type

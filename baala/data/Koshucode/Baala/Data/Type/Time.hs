@@ -24,12 +24,13 @@ module Koshucode.Baala.Data.Type.Time
     timeAddClock, timeDiff,
   ) where
 
-import qualified Data.Time.Calendar               as T
-import qualified Data.Time.Calendar.WeekDate      as T
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Data.Type.Clock  as D
-import qualified Koshucode.Baala.Data.Type.Date   as D
-import qualified Koshucode.Baala.Base.Message     as Msg
+import qualified Data.Time.Calendar                as T
+import qualified Data.Time.Calendar.WeekDate       as T
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Type.Clock   as D
+import qualified Koshucode.Baala.Data.Type.Date    as D
+import qualified Koshucode.Baala.Base.Message      as Msg
+import qualified Koshucode.Baala.Data.Type.Message as Msg
 
 
 -- ----------------------  Time
