@@ -102,7 +102,7 @@ codeRollUp f res = loop (CodeRoll f cp "" [] Map.empty) . B.linesCrlfNumbered wh
     loop _ [] = Right []
     loop r ((num, line) : ls) =
        do let cp' = setLine num line cp
-          r' <- Msg.abToken [cp'] $ codeRoll $ setRoll cp' line r
+          r' <- Msg.abCode [cp'] $ codeRoll $ setRoll cp' line r
           let toks = reverse $ codeOutput r'
           ls' <- loop r' ls
           Right $ CodeLine num line toks : ls'

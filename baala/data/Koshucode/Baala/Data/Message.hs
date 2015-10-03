@@ -3,6 +3,7 @@
 module Koshucode.Baala.Data.Message
   ( -- * Base package
     module Koshucode.Baala.Base.Message,
+    module Koshucode.Baala.Data.Token.Message,
   
     -- * Abortables
     abCoxBuild,
@@ -46,6 +47,7 @@ import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Data.Token as D
 import qualified Koshucode.Baala.Data.Type  as D
 import Koshucode.Baala.Base.Message
+import Koshucode.Baala.Data.Token.Message
 
 
 -- ----------------------  Abortables

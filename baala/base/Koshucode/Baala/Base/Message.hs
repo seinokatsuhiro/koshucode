@@ -2,7 +2,7 @@
 
 module Koshucode.Baala.Base.Message
   ( -- * Abortables
-    abToken,
+    abCode,
     abTree,
   
     -- * Base package
@@ -18,14 +18,6 @@ module Koshucode.Baala.Base.Message
     notNumber,
     notImplemented,
     (<!!>),
-  
-    -- * Tokenizer
-    forbiddenInput,
-    forbiddenTerm,
-    quotNotEnd,
-    reqFlatTerm,
-    unexpSect,
-    unkAngleText,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
@@ -35,8 +27,8 @@ import qualified Koshucode.Baala.Base.Text     as B
 
 -- ----------------------  Abortables
 
-abToken :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abToken = B.abortable "token"
+abCode :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCode = B.abortable "code"
 
 abTree :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abTree = B.abortable "tree"
@@ -98,28 +90,3 @@ notImplemented = Left . B.abortLine "Not implemented"
                        | otherwise = loop kvs
 
 
--- --------------------  Tokenizer
-
--- | Forbidden input
-forbiddenInput :: String -> B.Ab a
-forbiddenInput = Left . B.abortLine "Forbidden input"
-
--- | Forbidden term name
-forbiddenTerm :: B.Ab a
-forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
-
--- | Quotation not end in line
-quotNotEnd :: B.Ab a
-quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
-
--- | Require flat term name
-reqFlatTerm :: String -> B.Ab a
-reqFlatTerm = Left . B.abortLine "Require flat term name"
-
--- | Unexpedted section delimiter
-unexpSect :: [String] -> B.Ab a
-unexpSect = Left . B.abortLines "Unexpedted section delimiter"
-
--- | Unknown bracket text
-unkAngleText :: String -> B.Ab a
-unkAngleText = Left . B.abortLine "Unknown bracket text"

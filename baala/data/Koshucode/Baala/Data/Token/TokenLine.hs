@@ -31,6 +31,7 @@ import qualified Koshucode.Baala.Data.Token.AngleText as D
 import qualified Koshucode.Baala.Data.Token.Short     as D
 import qualified Koshucode.Baala.Data.Token.Token     as D
 import qualified Koshucode.Baala.Base.Message         as Msg
+import qualified Koshucode.Baala.Data.Token.Message   as Msg
 
 
 
