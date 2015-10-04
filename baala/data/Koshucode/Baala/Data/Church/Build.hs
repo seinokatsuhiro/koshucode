@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Data.Token             as D
 import qualified Koshucode.Baala.Data.Content           as D
 import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D
-import qualified Koshucode.Baala.Data.Message           as Msg
+import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (D.CContent c)
