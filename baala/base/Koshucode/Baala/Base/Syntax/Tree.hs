@@ -3,8 +3,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Syntax.Tree
-  ( 
-    -- * Data type
+  ( -- * Data type
     Bracket (..),
     CodeTree (..),
   
@@ -20,11 +19,11 @@ module Koshucode.Baala.Base.Syntax.Tree
     bracketTable
   ) where
 
-import qualified Data.Generics                as G
-import qualified Koshucode.Baala.Base.Abort   as B
-import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Text    as B
-import qualified Koshucode.Baala.Base.Message as Msg
+import qualified Data.Generics                         as G
+import qualified Koshucode.Baala.Base.Abort            as B
+import qualified Koshucode.Baala.Base.Prelude          as B
+import qualified Koshucode.Baala.Base.Text             as B
+import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
 
 
 

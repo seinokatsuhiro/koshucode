@@ -22,13 +22,13 @@ module Koshucode.Baala.Base.Syntax.Code
     codeChange,
   ) where
 
-import qualified Data.Generics                    as G
-import qualified Data.Map                         as Map
-import qualified Koshucode.Baala.Base.Abort       as B
-import qualified Koshucode.Baala.Base.Prelude     as B
-import qualified Koshucode.Baala.Base.Text        as B
-import qualified Koshucode.Baala.Base.Syntax.Line as B
-import qualified Koshucode.Baala.Base.Message     as Msg
+import qualified Data.Generics                        as G
+import qualified Data.Map                             as Map
+import qualified Koshucode.Baala.Base.Abort           as B
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base.Syntax.Line     as B
+import qualified Koshucode.Baala.Base.Syntax.Message  as Msg
 
 
 

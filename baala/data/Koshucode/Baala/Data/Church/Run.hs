@@ -168,8 +168,8 @@ coxRun args = run 0 where
              BetaCall _ _ f xs  ->  f . map run' =<< sequence xs
 
     term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Msg.notFound "empty term"
-    term (-1 : _) _ = Msg.notFound "negative term"
+    term []       _ = Msg.adlib "empty term"
+    term (-1 : _) _ = Msg.adlib "negative term"
     term (p : ps) args2 =
         let c = args2 !!! p
         in if D.isRel c

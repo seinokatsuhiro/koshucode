@@ -83,11 +83,11 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
           "note"     -> Right $ B.codeChange note r
           "end"      -> Right $ B.codeChange end r
           "license"  -> Right $ B.codeChange license r
-          "local"    -> Msg.notImplemented "local section"
-          "attr"     -> Msg.notImplemented "attr section"
-          "text"     -> Msg.notImplemented "text section"
-          "doc"      -> Msg.notImplemented "doc section"
-          "data"     -> Msg.notImplemented "data section"
+          "local"    -> Msg.unsupported "local section"
+          "attr"     -> Msg.unsupported "attr section"
+          "text"     -> Msg.unsupported "text section"
+          "doc"      -> Msg.unsupported "doc section"
+          "data"     -> Msg.unsupported "data section"
           _          -> Msg.unexpSect help
     dispatch _        = Msg.unexpSect help
 

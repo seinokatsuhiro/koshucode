@@ -51,6 +51,7 @@ library
 
         Koshucode.Baala.Base.Abort
         Koshucode.Baala.Base.Abort.Abortable
+        Koshucode.Baala.Base.Abort.Message
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
 
@@ -67,6 +68,7 @@ library
         Koshucode.Baala.Base.Syntax.Code
         Koshucode.Baala.Base.Syntax.Infix
         Koshucode.Baala.Base.Syntax.Line
+        Koshucode.Baala.Base.Syntax.Message
         Koshucode.Baala.Base.Syntax.Tree
 
         Koshucode.Baala.Base.Text

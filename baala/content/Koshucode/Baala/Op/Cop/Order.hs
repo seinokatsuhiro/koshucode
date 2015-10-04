@@ -57,8 +57,8 @@ copsOrder =
 
 orderInfix :: (D.CBool c) => String -> (c -> c -> Bool) -> D.Cop c
 orderInfix n f = D.CopCalc (D.copInfix n) g where
-    g [Right x, Right y] = D.putBool $ x `f` y
-    g _                  = Msg.notFound ""
+    g args = do (x, y) <- D.getRightArg2 args
+                D.putBool $ x `f` y
 
 orderPrefix :: String -> D.Cop c
 orderPrefix n = D.CopCox (D.copPrefix n) $ cop where
