@@ -65,7 +65,7 @@ library
         Koshucode.Baala.Base.Prelude.Snip
 
         Koshucode.Baala.Base.Syntax
-        Koshucode.Baala.Base.Syntax.Code
+        Koshucode.Baala.Base.Syntax.Clause
         Koshucode.Baala.Base.Syntax.Infix
         Koshucode.Baala.Base.Syntax.Line
         Koshucode.Baala.Base.Syntax.Message

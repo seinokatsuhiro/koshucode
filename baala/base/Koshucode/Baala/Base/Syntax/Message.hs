@@ -3,7 +3,6 @@
 module Koshucode.Baala.Base.Syntax.Message
   ( -- * Abortable
     abCode,
-    abTree,
     -- * Message
     extraCloseBracket,
     extraOpenBracket,
@@ -15,9 +14,6 @@ import qualified Koshucode.Baala.Base.Text           as B
 
 abCode :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCode = B.abortable "code"
-
-abTree :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abTree = B.abortable "tree"
 
 -- | Extra close bracket
 extraCloseBracket :: B.Ab a

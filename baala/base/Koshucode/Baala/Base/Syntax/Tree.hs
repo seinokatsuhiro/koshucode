@@ -3,18 +3,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Syntax.Tree
-  ( -- * Data type
-    Bracket (..),
+  ( -- * Tree
     CodeTree (..),
-  
-    -- * Parsing
     tree, trees,
     treeWrap,
     untree, untrees,
     leaves, undouble,
     mapToLeaf,
   
-    -- * Bracket table
+    -- * Bracket
+    Bracket (..),
     GetBracketType,
     bracketTable
   ) where
@@ -25,28 +23,6 @@ import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Text             as B
 import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
 
-
-
--- ----------------------  Bracket
-
--- | Bracket type.
-data Bracket p
-    = BracketNone       -- ^ None bracket
-    | BracketOpen  p    -- ^ Open bracket
-    | BracketClose p    -- ^ Close bracket
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-isNotBracket :: B.Pred (Bracket p)
-isNotBracket (BracketNone)      = True
-isNotBracket _                  = False
-
-isOpenBracket :: B.Pred (Bracket p)
-isOpenBracket (BracketOpen _)   = True
-isOpenBracket _                 = False
-
-isCloseBracket :: B.Pred (Bracket p)
-isCloseBracket (BracketClose _) = True
-isCloseBracket _                = False
 
 
 -- ----------------------  Tree
@@ -89,7 +65,7 @@ trees bracketType zero xs = result where
         | isCloseBracket px  = Right ([], x : xs2)
         | otherwise          = ab Msg.extraCloseBracket
         where px  = bracketType x
-              ab  = Msg.abTree [x]
+              ab  = Msg.abCode [x]
 
 
 -- ----------------------  Utility
@@ -137,6 +113,28 @@ mapToLeaf :: (a -> a) -> B.Map (CodeTree p a)
 mapToLeaf f = loop where
     loop (TreeB p aa sub)  = TreeB p aa $ map loop sub
     loop (TreeL a)        = TreeL $ f a
+
+
+-- ----------------------  Bracket
+
+-- | Bracket type.
+data Bracket p
+    = BracketNone       -- ^ None bracket
+    | BracketOpen  p    -- ^ Open bracket
+    | BracketClose p    -- ^ Close bracket
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+isNotBracket :: B.Pred (Bracket p)
+isNotBracket (BracketNone)       = True
+isNotBracket _                   = False
+
+isOpenBracket :: B.Pred (Bracket p)
+isOpenBracket (BracketOpen _)    = True
+isOpenBracket _                  = False
+
+isCloseBracket :: B.Pred (Bracket p)
+isCloseBracket (BracketClose _)  = True
+isCloseBracket _                 = False
 
 
 -- ----------------------  Bracket table
