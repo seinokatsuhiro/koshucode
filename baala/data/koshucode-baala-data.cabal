@@ -50,6 +50,7 @@ library
 
         Koshucode.Baala.Data.Message
 
+        Koshucode.Baala.Data.Church
         Koshucode.Baala.Data.Church.Build
         Koshucode.Baala.Data.Church.Cop
         Koshucode.Baala.Data.Church.Cox
