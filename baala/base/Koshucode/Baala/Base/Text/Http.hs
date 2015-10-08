@@ -12,7 +12,7 @@ import qualified Data.ByteString.Lazy.UTF8       as UTF
 import qualified Control.Exception               as Ex
 import qualified Network.HTTP.Conduit            as H
 import qualified Network.HTTP.Types.Status       as H
-import qualified Text.URI                        as H
+import qualified Text.URI                        as URI
 import qualified Koshucode.Baala.Base.Prelude    as B
 
 type UriText = String
@@ -31,7 +31,7 @@ uriContent proxies uriText =
 requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
 requestFromURI proxies uriText =
     do req <- H.parseUrl uriText
-       case H.parseURI uriText of
+       case URI.parseURI uriText of
          Nothing  -> return req
          Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
@@ -39,16 +39,16 @@ requestFromURI proxies uriText =
       add :: Maybe String -> B.Map H.Request
       add proxy req = B.fromMaybe req $ do
           proxy'    <- proxy
-          uri       <- H.parseURI proxy'
-          host      <- H.uriRegName uri
+          uri       <- URI.parseURI proxy'
+          host      <- URI.uriRegName uri
           let host'  = Byte.pack host
-              port   = B.fromMaybe 80 $ H.uriPort uri
+              port   = B.fromMaybe 80 $ URI.uriPort uri
               port'  = fromInteger port :: Int
           Just $ H.addProxy host' port' req
 
-selectProxy :: [HttpProxy] -> H.URI -> Maybe UriText
+selectProxy :: [HttpProxy] -> URI.URI -> Maybe UriText
 selectProxy proxies uri =
-    do uriText <- H.uriScheme uri
+    do uriText <- URI.uriScheme uri
        proxy <- lookup uriText proxies
        proxy
 
