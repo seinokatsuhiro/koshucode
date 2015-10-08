@@ -7,13 +7,14 @@ module Koshucode.Baala.Base.Text.Http
     httpExceptionSummary,
   ) where
 
-import qualified Data.ByteString.Char8           as Byte
-import qualified Data.ByteString.Lazy.UTF8       as UTF
-import qualified Control.Exception               as Ex
-import qualified Network.HTTP.Conduit            as H
-import qualified Network.HTTP.Types.Status       as H
-import qualified Text.URI                        as URI
-import qualified Koshucode.Baala.Base.Prelude    as B
+import qualified Data.ByteString.Char8              as Byte
+import qualified Data.ByteString.Lazy.UTF8          as UTF
+import qualified Control.Exception                  as Ex
+import qualified Network.HTTP.Conduit               as H
+import qualified Network.HTTP.Types.Status          as H
+import qualified Network.URI                        as URI
+import qualified Koshucode.Baala.Base.Prelude       as B
+import qualified Koshucode.Baala.Base.Text.Utility  as B
 
 type UriText = String
 
@@ -36,20 +37,26 @@ requestFromURI proxies uriText =
          Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
     where 
-      add :: Maybe String -> B.Map H.Request
+      add :: Maybe UriText -> B.Map H.Request
       add proxy req = B.fromMaybe req $ do
           proxy'    <- proxy
           uri       <- URI.parseURI proxy'
-          host      <- URI.uriRegName uri
-          let host'  = Byte.pack host
-              port   = B.fromMaybe 80 $ URI.uriPort uri
-              port'  = fromInteger port :: Int
-          Just $ H.addProxy host' port' req
+          auth      <- URI.uriAuthority uri
+          let host'  = Byte.pack $ URI.uriRegName auth
+              port   = uriPortNumber $ URI.uriPort auth
+          Just $ H.addProxy host' port req
+
+uriPortNumber :: String -> Int
+uriPortNumber (':' : n) = B.fromMaybe defaultPortNumber $ B.readInt n
+uriPortNumber _         = defaultPortNumber
+
+defaultPortNumber :: Int
+defaultPortNumber = 80
 
 selectProxy :: [HttpProxy] -> URI.URI -> Maybe UriText
 selectProxy proxies uri =
-    do uriText <- URI.uriScheme uri
-       proxy <- lookup uriText proxies
+    do let scheme = URI.uriScheme uri
+       proxy <- lookup scheme proxies
        proxy
 
 catchHttpException :: B.Map (IO (Either (Int, String) String))

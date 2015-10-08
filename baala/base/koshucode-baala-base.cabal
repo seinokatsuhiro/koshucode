@@ -93,9 +93,9 @@ library
        , containers           == 0.5.*
        , http-conduit         == 2.*
        , http-types           == 0.*
+       , network-uri          == 2.*
        , pretty               == 1.*
        , syb                  == 0.*
-       , uri                  == 0.*
        , utf8-string          == 1.*
 
   ghc-options:         -Wall
