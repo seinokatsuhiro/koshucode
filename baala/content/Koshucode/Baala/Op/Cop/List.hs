@@ -79,6 +79,8 @@ copsList =
     , D.CopCalc  (D.copNormal "take-tail")      copTakeTail
     , D.CopCalc  (D.copNormal "term-set")       copTermSet
     , D.CopCalc  (D.copNormal "total")          copTotal
+    , D.CopCalc  (D.copNormal "words")          copWords
+    , D.CopCalc  (D.copNormal "words-by")       copWordsBy
 
     , D.CopCalc  (D.copNormal "match-beg")      copBeginWithNormal
     , D.CopCalc  (D.copNormal "match-end")      copEndWithNormal
@@ -439,3 +441,26 @@ copTermSet [Right c] | D.isInterp c = D.putSet ts where
                      ts = map D.pTerm $ D.interpTerms $ D.gInterp c
 copTermSet xs = typeUnmatch xs
 
+
+-- ----------------------  words
+
+copWords :: (D.CContent c) => D.CopCalc c
+copWords arg =
+    do ws <- D.getRightArg1 arg
+       if D.isText ws
+          then D.putList $ map D.pText $ words $ D.gText ws
+          else typeUnmatch arg
+
+copWordsBy :: (D.CContent c) => D.CopCalc c
+copWordsBy arg =
+    do (sep, ws) <- D.getRightArg2 arg
+       case D.isText ws && D.isText sep of
+         False -> typeUnmatch arg
+         True  -> let isSep = (`elem` D.gText sep)
+                  in D.putList $ map D.pText $ wordsBy isSep $ D.gText ws
+
+wordsBy :: B.Pred Char -> String -> [String]
+wordsBy p s = case dropWhile p s of
+                "" -> []
+                s' -> let (w, s'') = break p s'
+                      in w : wordsBy p s''
