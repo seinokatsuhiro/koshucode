@@ -13,8 +13,8 @@ version:             0.121.0.0
 synopsis:            Term-content operators in Koshucode
 
 -- A longer description of the package.
-description:         An impelemntation of term-content operators and
-                     related relation-mapping operators.
+description:         An impelemntation of relation-mapping operators
+                     that use term-content calculations.
                      These operators are used in the @koshu@ calculator
                      that is contained in the
                      @koshucode-baala-calculator@ package.
@@ -50,16 +50,6 @@ library
         Koshucode.Baala.Op.Global
         Koshucode.Baala.Op.Quoter
 
-        Koshucode.Baala.Op.Cop
-        Koshucode.Baala.Op.Cop.Arith
-        Koshucode.Baala.Op.Cop.Coxhand
-        Koshucode.Baala.Op.Cop.List
-        Koshucode.Baala.Op.Cop.Logic
-        Koshucode.Baala.Op.Cop.Misc
-        Koshucode.Baala.Op.Cop.Order
-        Koshucode.Baala.Op.Cop.Time
-        Koshucode.Baala.Op.Cop.Type
-
         Koshucode.Baala.Op.Cox
         Koshucode.Baala.Op.Cox.Accessor
         Koshucode.Baala.Op.Cox.Calc
@@ -81,6 +71,7 @@ library
        , containers                == 0.5.*
        , koshucode-baala-base      == 0.121.*
        , koshucode-baala-data      == 0.121.*
+       , koshucode-baala-cop       == 0.121.*
        , koshucode-baala-core      == 0.121.*
        , koshucode-baala-operator  == 0.121.*
        , koshucode-baala-writer    == 0.121.*
