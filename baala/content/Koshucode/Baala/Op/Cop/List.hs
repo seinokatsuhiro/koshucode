@@ -79,6 +79,8 @@ copsList =
     , D.CopCalc  (D.copNormal "take-tail")      copTakeTail
     , D.CopCalc  (D.copNormal "term-set")       copTermSet
     , D.CopCalc  (D.copNormal "total")          copTotal
+    , D.CopCalc  (D.copNormal "unwords")        copUnwords
+    , D.CopCalc  (D.copNormal "unwords-by")     copUnwordsBy
     , D.CopCalc  (D.copNormal "words")          copWords
     , D.CopCalc  (D.copNormal "words-by")       copWordsBy
 
@@ -442,7 +444,7 @@ copTermSet [Right c] | D.isInterp c = D.putSet ts where
 copTermSet xs = typeUnmatch xs
 
 
--- ----------------------  words
+-- ----------------------  words words-by
 
 copWords :: (D.CContent c) => D.CopCalc c
 copWords arg =
@@ -464,3 +466,27 @@ wordsBy p s = case dropWhile p s of
                 "" -> []
                 s' -> let (w, s'') = break p s'
                       in w : wordsBy p s''
+
+
+-- ----------------------  unwords unwords-by
+
+copUnwords :: forall c. (D.CContent c) => D.CopCalc c
+copUnwords arg =
+    do x <- D.getRightArg1 arg
+       D.putText $ unwords $ wordList x
+
+copUnwordsBy :: forall c. (D.CContent c) => D.CopCalc c
+copUnwordsBy arg =
+    do (sep, x) <- D.getRightArg2 arg
+       case D.isText sep of
+         True  -> let sep' = D.gText sep
+                  in D.putText $ B.intercalate sep' $ wordList x
+         False -> typeUnmatch arg
+
+wordList :: (D.CContent c) => c -> [String]
+wordList c
+    | D.isList c  = concatMap wordList $ D.gList c
+    | D.isText c  = [D.gText c]
+    | D.isDec c   = [D.decimalString $ D.gDec c]
+    | otherwise   = []
+
