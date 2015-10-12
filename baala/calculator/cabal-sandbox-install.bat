@@ -29,6 +29,7 @@ goto :EOF
 		cabal sandbox add-source ..\core
 		cabal sandbox add-source ..\writer
 		cabal sandbox add-source ..\operator
+		cabal sandbox add-source ..\cop
 		cabal sandbox add-source ..\content
 
 		cabal install --only-dependencies

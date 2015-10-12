@@ -16,7 +16,7 @@ check () {
 cabal sandbox init
   check $? init
 
-for pkg in base data core writer operator content; do
+for pkg in base data core writer operator cop content; do
     cabal sandbox add-source ../$pkg
     check $? $pkg
 done
