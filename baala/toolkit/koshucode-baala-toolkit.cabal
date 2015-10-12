@@ -68,7 +68,7 @@ executable koshu-rdf
   build-depends:
          base                       == 4.*
        , containers                 == 0.5.*
-       , rdf4h                      == 1.2.*
+       , rdf4h                      == 1.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.121.*
        , koshucode-baala-data       == 0.121.*
@@ -110,7 +110,7 @@ library
          base                       == 4.*
        , containers                 == 0.5.*
        , directory                  == 1.2.*
-       , rdf4h                      == 1.2.*
+       , rdf4h                      == 1.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.121.*
        , koshucode-baala-data       == 0.121.*
