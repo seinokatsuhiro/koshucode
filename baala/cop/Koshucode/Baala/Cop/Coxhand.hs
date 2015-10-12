@@ -2,7 +2,7 @@
 
 -- | Helper functions to construct content expressions.
 
-module Koshucode.Baala.Op.Cop.Coxhand
+module Koshucode.Baala.Cop.Coxhand
   ( -- * Form
     f, f1, f2, f3,
     -- * Fill

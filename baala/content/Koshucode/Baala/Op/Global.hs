@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 import qualified Koshucode.Baala.Op        as Rop
 import qualified Koshucode.Baala.Op.Cox    as Rop
-import qualified Koshucode.Baala.Op.Cop    as Cop
+import qualified Koshucode.Baala.Cop       as Cop
 
 -- | Global with operators.
 vanillaGlobal :: (D.CContent c) => C.Global c

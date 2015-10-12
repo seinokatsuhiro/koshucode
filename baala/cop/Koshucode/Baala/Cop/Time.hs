@@ -2,7 +2,7 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Cop.Time
+module Koshucode.Baala.Cop.Time
   ( copsTime
     -- $Operators
   ) where
