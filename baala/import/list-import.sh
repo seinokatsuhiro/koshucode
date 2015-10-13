@@ -44,7 +44,7 @@ imp_post () {
 }
 
 imp_main () {
-    for pkg in base data core writer operator content calculator toolkit; do
+    for pkg in base data core writer operator content cop calculator toolkit; do
         imp_body ../$pkg
     done
 }
