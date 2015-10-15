@@ -15,7 +15,7 @@ usage () {
 
 imp_body () {
     echo "Imports for $1"
-    ./list-import.pl `imp_list $1` | imp_post "$1/data/$imp_file"
+    perl list-import.pl `imp_list $1` | imp_post "$1/data/$imp_file"
 }
 
 imp_list () {
