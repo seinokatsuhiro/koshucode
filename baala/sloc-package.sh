@@ -14,42 +14,45 @@ usage () {
     echo
 }
 
-all=no
-update=no
-
-case "$1" in
-    -a) all=yes ;;
-    -u) update=yes ;;
-    -h) usage
-        exit 2 ;;
-esac
-
-count () {
+sloc_count () {
     echo "Count sloc for $1"
-    ./sloc-haskell.pl `list $1` | post "$1/data/SLOC.k"
+    ./sloc-haskell.pl `sloc_list $1` | sloc_post "$1/data/SLOC.k"
 }
 
-post () {
-    if [ $all = yes ]; then
+sloc_post () {
+    if [ $sloc_all = yes ]; then
         cat
-    elif [ $update = yes ]; then
+    elif [ $sloc_update = yes ]; then
         tee "$1" > /dev/null
     else
         grep TOTAL
     fi
 }
 
-list () {
+sloc_list () {
     find "$1" -name '[A-Z]*.hs' | grep -v _ | grep -v Setup.hs
 }
 
-main () {
-    for pkg in base data core writer operator content cop calculator toolkit; do
-        count $pkg
+sloc_main () {
+    for pkg in `koshu-pkg.sh dir`; do
+        sloc_count $pkg
     done
 
-    koshu sloc-all-list.k */data/SLOC.k > SLOC-ALL.k
+    if [ $sloc_update = yes ]; then
+        echo "Concat sloc files"
+        koshu sloc-all-list.k */data/SLOC.k > SLOC-ALL.k
+    fi
 }
 
-main
+sloc_all=no
+sloc_update=no
+
+case "$1" in
+    -a) sloc_all=yes ;;
+    -u) sloc_update=yes ;;
+    -h) usage
+        exit 2 ;;
+esac
+
+sloc_main
 

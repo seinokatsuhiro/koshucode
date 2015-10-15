@@ -13,17 +13,6 @@ usage () {
     echo
 }
 
-imp_all=no
-imp_update=no
-imp_file=IMPORT.k
-
-case "$1" in
-    -a) imp_all=yes ;;
-    -u) imp_update=yes ;;
-    -h) usage
-        exit 2 ;;
-esac
-
 imp_body () {
     echo "Imports for $1"
     ./list-import.pl `imp_list $1` | imp_post "$1/data/$imp_file"
@@ -44,10 +33,21 @@ imp_post () {
 }
 
 imp_main () {
-    for pkg in base data core writer operator content cop calculator toolkit; do
+    for pkg in `koshu-pkg.sh dir`; do
         imp_body ../$pkg
     done
 }
+
+imp_all=no
+imp_update=no
+imp_file=IMPORT.k
+
+case "$1" in
+    -a) imp_all=yes ;;
+    -u) imp_update=yes ;;
+    -h) usage
+        exit 2 ;;
+esac
 
 imp_main
 
