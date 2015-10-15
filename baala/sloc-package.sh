@@ -40,7 +40,7 @@ sloc_main () {
 
     if [ $sloc_update = yes ]; then
         echo "Concat sloc files"
-        koshu sloc-all-list.k */data/SLOC.k > SLOC-ALL.k
+        koshu sloc-all-calc.k */data/SLOC.k > sloc-all-data.k
     fi
 }
 

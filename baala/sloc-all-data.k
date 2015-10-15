@@ -1,7 +1,7 @@
 ** -*- koshu -*-
 **
 **  INPUT
-**    sloc-all-list.k
+**    sloc-all-calc.k
 **    base/data/SLOC.k
 **    calculator/data/SLOC.k
 **    content/data/SLOC.k
