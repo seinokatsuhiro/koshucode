@@ -5,9 +5,11 @@
 **    ../base/data/IMPORT.k
 **    ../calculator/data/IMPORT.k
 **    ../content/data/IMPORT.k
+**    ../cop/data/IMPORT.k
 **    ../core/data/IMPORT.k
 **    ../data/data/IMPORT.k
-**    ../operator/data/IMPORT.k
+**    ../rop-flat/data/IMPORT.k
+**    ../rop-nested/data/IMPORT.k
 **    ../toolkit/data/IMPORT.k
 **    ../writer/data/IMPORT.k
 **
@@ -16,7 +18,7 @@
 **
 
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank /base /import-dir [ 0 | 'Class | [ ] ] [ 0 | 'Import | [ ] ] [ 1 | 'Assoc | [ ] ] [ 1 | 'List | [ ] ] [ 1 | 'Pair | [ ] ] [ 1 | 'Snip | [ ] ] [ 2 | 'Order | [ ] ] |}
-|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank /base /import-dir [ 0 | 'Comment | [ ] ] [ 0 | 'Unicode | [ ] ] [ 4 | 'Http | [ 'Prelude ] ] [ 4 | 'IOPoint | [ 'Prelude ] ] [ 4 | 'TextTable | [ 'Prelude ] ] [ 4 | 'Utility | [ 'Prelude ] ] [ 4 | 'Write | [ 'Prelude ] ] [ 5 | 'CodePt | [ 'Prelude ] ] |}
+|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank /base /import-dir [ 0 | 'Comment | [ ] ] [ 0 | 'Unicode | [ ] ] [ 4 | 'IOPoint | [ 'Prelude ] ] [ 4 | 'TextTable | [ 'Prelude ] ] [ 4 | 'Utility | [ 'Prelude ] ] [ 4 | 'Write | [ 'Prelude ] ] [ 5 | 'CodePt | [ 'Prelude ] ] [ 5 | 'Http | [ 'Prelude ] ] |}
 |-- DIR-RANK  /dir-rank 10  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank /base /import-dir [ 7 | 'Reason | [ 'Text ] ] [ 8 | 'Abortable | [ 'Prelude | 'Text ] ] [ 8 | 'Report | [ 'Prelude | 'Text ] ] [ 10 | 'Message | [ 'Abort ] ] |}
 |-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank /base /import-dir [ 10 | 'Message | [ 'Abort | 'Prelude | 'Text ] ] [ 11 | 'Line | [ 'Abort | 'Prelude | 'Text ] ] [ 11 | 'Tree | [ 'Abort | 'Prelude | 'Text ] ] [ 12 | 'Clause | [ 'Prelude | 'Text ] ] [ 12 | 'Infix | [ 'Prelude ] ] |}
 |-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Base  /base-rank {| /rank /base /import-dir [ 3 | 'Prelude | [ ] ] [ 6 | 'Text | [ ] ] [ 9 | 'Abort | [ ] ] [ 11 | 'Message | [ ] ] [ 13 | 'Syntax | [ ] ] |}
@@ -34,22 +36,23 @@
 |-- DIR-RANK  /dir-rank 52  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank /base /import-dir [ 15 | 'Message | [ 'Base ] ] [ 39 | 'Clause | [ 'Base | 'Data | 'Lexmap ] ] [ 50 | 'Resource | [ 'Assert | 'Base | 'Data | 'Lexmap | 'Relkit | 'Relmap ] ] [ 51 | 'Include | [ 'Assert | 'Base | 'Data | 'Lexmap | 'Relmap ] ] [ 51 | 'Run | [ 'Assert | 'Base | 'Data | 'Lexmap | 'Relmap ] ] [ 52 | 'Quoter | [ 'Base | 'Data | 'Lexmap ] ] [ 52 | 'Read | [ 'Base | 'Data | 'Relmap ] ] |}
 
 |-- DIR-RANK  /dir-rank 53  /dir 'Koshucode.Baala.Core  /base-rank {| /rank /base /import-dir [ 33 | 'Message | [ ] ] [ 38 | 'Lexmap | [ ] ] [ 42 | 'Relkit | [ ] ] [ 46 | 'Relmap | [ ] ] [ 49 | 'Assert | [ ] ] [ 53 | 'Resource | [ ] ] |}
-|-- DIR-RANK  /dir-rank 56  /dir 'Koshucode.Baala.Op.Cop  /base-rank {| /rank /base /import-dir [ 32 | 'Coxhand | [ 'Base | 'Data ] ] [ 33 | 'Logic | [ 'Base | 'Data ] ] [ 56 | 'Arith | [ 'Base | 'Data ] ] [ 56 | 'List | [ 'Base | 'Data ] ] [ 56 | 'Misc | [ 'Base | 'Data ] ] [ 56 | 'Order | [ 'Base | 'Data ] ] [ 56 | 'Time | [ 'Base | 'Data ] ] [ 56 | 'Type | [ 'Base | 'Data ] ] |}
+|-- DIR-RANK  /dir-rank 56  /dir 'Koshucode.Baala.Cop  /base-rank {| /rank /base /import-dir [ 32 | 'Coxhand | [ 'Base | 'Data ] ] [ 33 | 'Logic | [ 'Base | 'Data ] ] [ 56 | 'Arith | [ 'Base | 'Data ] ] [ 56 | 'List | [ 'Base | 'Data ] ] [ 56 | 'Misc | [ 'Base | 'Data ] ] [ 56 | 'Order | [ 'Base | 'Data ] ] [ 56 | 'Time | [ 'Base | 'Data ] ] [ 56 | 'Type | [ 'Base | 'Data ] ] |}
 |-- DIR-RANK  /dir-rank 56  /dir 'Koshucode.Baala.Writer  /base-rank {| /rank /base /import-dir [ 55 | 'Csv | [ 'Base | 'Core | 'Data ] ] [ 55 | 'Html | [ 'Base | 'Core | 'Data ] ] [ 55 | 'Json | [ 'Core | 'Data ] ] [ 55 | 'Judge | [ 'Base | 'Core | 'Data ] ] [ 56 | 'Koshu | [ 'Base | 'Core | 'Data ] ] |}
 |-- DIR-RANK  /dir-rank 57  /dir 'Koshucode.Baala.Op.Builtin  /base-rank {| /rank /base /import-dir [ 55 | 'Define | [ 'Base | 'Core ] ] [ 56 | 'Rop | [ 'Base | 'Core ] ] [ 56 | 'Term | [ 'Base | 'Data ] ] [ 57 | 'Get | [ 'Base | 'Core | 'Data ] ] |}
 |-- DIR-RANK  /dir-rank 58  /dir 'Koshucode.Baala.Type  /base-rank {| /rank /base /import-dir [ 58 | 'Vanilla | [ 'Base | 'Core | 'Data | 'Writer ] ] |}
 
 |-- DIR-RANK  /dir-rank 60  /dir 'Koshucode.Baala.Toolkit.Library  /base-rank {| /rank /base /import-dir [ 0 | 'SimpleOption | [ ] ] [ 0 | 'Version | [ ] ] [ 32 | 'RDF | [ 'Data ] ] [ 55 | 'Element | [ 'Base | 'Core | 'Data ] ] [ 55 | 'Exit | [ 'Base | 'Core | 'Data ] ] [ 58 | 'Run | [ 'Base | 'Core | 'Data | 'Writer ] ] [ 59 | 'Input | [ 'Core | 'Data ] ] [ 60 | 'Change | [ 'Base | 'Data | 'Writer ] ] |}
-|-- DIR-RANK  /dir-rank 61  /dir 'Koshucode.Baala.Op.Lattice  /base-rank {| /rank /base /import-dir [ 59 | 'Tropashko | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Restrict | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 61 | 'Rop | [ 'Builtin | 'Core | 'Data ] ] |}
+|-- DIR-RANK  /dir-rank 61  /dir 'Koshucode.Baala.Op.Lattice  /base-rank {| /rank /base /import-dir [ 59 | 'Tropashko | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Restrict | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 61 | 'Rop | [ 'Builtin | 'Core ] ] |}
 |-- DIR-RANK  /dir-rank 61  /dir 'Koshucode.Baala.Toolkit.Main  /base-rank {| /rank /base /import-dir [ 59 | 'KoshuFilter | [ 'Base | 'Core | 'Data ] ] [ 59 | 'KoshuMain | [ 'Base | 'Core | 'Data | 'Writer ] ] [ 59 | 'KoshuRdf | [ 'Base | 'Data ] ] [ 59 | 'KoshuSyntax | [ 'Base | 'Core | 'Data ] ] [ 61 | 'KoshuChange | [ 'Base ] ] |}
 |-- DIR-RANK  /dir-rank 63  /dir 'Koshucode.Baala.Op.Cox  /base-rank {| /rank /base /import-dir [ 0 | 'GeoDatumJp | [ ] ] [ 59 | 'Get | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Accessor | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Calc | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Filter | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Gadget | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Range | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 63 | 'Empty | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] |}
-|-- DIR-RANK  /dir-rank 64  /dir 'Koshucode.Baala.Op.Nest  /base-rank {| /rank /base /import-dir [ 59 | 'Flow | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Confl | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 63 | 'Deriv | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 64 | 'Rop | [ 'Builtin | 'Core | 'Data ] ] |}
+|-- DIR-RANK  /dir-rank 64  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 14 | 'Base | [ 'Abort | 'Prelude | 'Syntax | 'Text ] ] [ 31 | 'Data | [ 'Church | 'Content | 'Token | 'Type ] ] [ 54 | 'Core | [ 'Assert | 'Lexmap | 'Relkit | 'Relmap | 'Resource ] ] [ 57 | 'Cop | [ ] ] [ 57 | 'Writer | [ ] ] [ 64 | 'Op | [ 'Builtin | 'Lattice ] ] |}
 *** 25
 
-|-- DIR-RANK  /dir-rank 66  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 14 | 'Base | [ 'Abort | 'Prelude | 'Syntax | 'Text ] ] [ 31 | 'Data | [ 'Church | 'Content | 'Token | 'Type ] ] [ 54 | 'Core | [ 'Assert | 'Lexmap | 'Relkit | 'Relmap | 'Resource ] ] [ 57 | 'Writer | [ ] ] [ 66 | 'Op | [ 'Builtin | 'Lattice | 'Nest ] ] |}
-|-- DIR-RANK  /dir-rank 67  /dir 'Koshucode.Baala.Op  /base-rank {| /rank /base /import-dir [ 15 | 'DepRank | [ 'Base ] ] [ 55 | 'Message | [ 'Base | 'Core | 'Data ] ] [ 57 | 'Cop | [ ] ] [ 58 | 'Builtin | [ ] ] [ 59 | 'Gadget | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Meta | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Quoter | [ 'Core ] ] [ 59 | 'Resource | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Source | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Term | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Peripheral | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'TermGadget | [ 'Builtin | 'Core | 'Data ] ] [ 62 | 'Lattice | [ ] ] [ 63 | 'Check | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 63 | 'Control | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 64 | 'Cox | [ ] ] [ 65 | 'Nest | [ ] ] [ 67 | 'Global | [ 'Base | 'Cop | 'Core | 'Cox | 'Data | 'Op ] ] |}
+|-- DIR-RANK  /dir-rank 64  /dir 'Koshucode.Baala.Rop.Nest  /base-rank {| /rank /base /import-dir [ 59 | 'Flow | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Confl | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 63 | 'Deriv | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 64 | 'Rop | [ 'Builtin | 'Core | 'Data ] ] |}
+|-- DIR-RANK  /dir-rank 65  /dir 'Koshucode.Baala.Rop  /base-rank {| /rank /base /import-dir [ 65 | 'Nest | [ ] ] |}
+|-- DIR-RANK  /dir-rank 66  /dir 'Koshucode.Baala.Op  /base-rank {| /rank /base /import-dir [ 15 | 'DepRank | [ 'Base ] ] [ 55 | 'Message | [ 'Base | 'Core | 'Data ] ] [ 58 | 'Builtin | [ ] ] [ 59 | 'Gadget | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Meta | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Quoter | [ 'Core ] ] [ 59 | 'Resource | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Source | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 59 | 'Term | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'Peripheral | [ 'Base | 'Builtin | 'Core | 'Data ] ] [ 60 | 'TermGadget | [ 'Builtin | 'Core | 'Data ] ] [ 62 | 'Lattice | [ ] ] [ 63 | 'Check | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 63 | 'Control | [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ] ] [ 64 | 'Cox | [ ] ] [ 66 | 'Global | [ 'Base | 'Cop | 'Core | 'Cox | 'Data | 'Nest | 'Op ] ] |}
 
-*** 27 judges
+*** 28 judges
 
 === note
 
@@ -71,12 +74,12 @@ TABLE : DIR-RANK
                                                ----- --------------- -----------------------------------------------------------
                                                0     'Comment        [ ]
                                                0     'Unicode        [ ]
-                                               4     'Http           [ 'Prelude ]
                                                4     'IOPoint        [ 'Prelude ]
                                                4     'TextTable      [ 'Prelude ]
                                                4     'Utility        [ 'Prelude ]
                                                4     'Write          [ 'Prelude ]
                                                5     'CodePt         [ 'Prelude ]
+                                               5     'Http           [ 'Prelude ]
                                                
   10        'Koshucode.Baala.Base.Abort        /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
@@ -207,7 +210,7 @@ TABLE : DIR-RANK
                                                49    'Assert         [ ]
                                                53    'Resource       [ ]
                                                
-  56        'Koshucode.Baala.Op.Cop            /rank /base           /import-dir
+  56        'Koshucode.Baala.Cop               /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
                                                32    'Coxhand        [ 'Base | 'Data ]
                                                33    'Logic          [ 'Base | 'Data ]
@@ -252,7 +255,7 @@ TABLE : DIR-RANK
                                                ----- --------------- -----------------------------------------------------------
                                                59    'Tropashko      [ 'Base | 'Builtin | 'Core | 'Data ]
                                                60    'Restrict       [ 'Base | 'Builtin | 'Core | 'Data ]
-                                               61    'Rop            [ 'Builtin | 'Core | 'Data ]
+                                               61    'Rop            [ 'Builtin | 'Core ]
                                                
   61        'Koshucode.Baala.Toolkit.Main      /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
@@ -273,26 +276,30 @@ TABLE : DIR-RANK
                                                60    'Range          [ 'Base | 'Builtin | 'Core | 'Data ]
                                                63    'Empty          [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ]
                                                
-  64        'Koshucode.Baala.Op.Nest           /rank /base           /import-dir
+  64        'Koshucode.Baala                   /rank /base           /import-dir
+                                               ----- --------------- -----------------------------------------------------------
+                                               14    'Base           [ 'Abort | 'Prelude | 'Syntax | 'Text ]
+                                               31    'Data           [ 'Church | 'Content | 'Token | 'Type ]
+                                               54    'Core           [ 'Assert | 'Lexmap | 'Relkit | 'Relmap | 'Resource ]
+                                               57    'Cop            [ ]
+                                               57    'Writer         [ ]
+                                               64    'Op             [ 'Builtin | 'Lattice ]
+                                               
+  64        'Koshucode.Baala.Rop.Nest          /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
                                                59    'Flow           [ 'Base | 'Builtin | 'Core | 'Data ]
                                                60    'Confl          [ 'Base | 'Builtin | 'Core | 'Data ]
                                                63    'Deriv          [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ]
                                                64    'Rop            [ 'Builtin | 'Core | 'Data ]
                                                
-  66        'Koshucode.Baala                   /rank /base           /import-dir
+  65        'Koshucode.Baala.Rop               /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
-                                               14    'Base           [ 'Abort | 'Prelude | 'Syntax | 'Text ]
-                                               31    'Data           [ 'Church | 'Content | 'Token | 'Type ]
-                                               54    'Core           [ 'Assert | 'Lexmap | 'Relkit | 'Relmap | 'Resource ]
-                                               57    'Writer         [ ]
-                                               66    'Op             [ 'Builtin | 'Lattice | 'Nest ]
+                                               65    'Nest           [ ]
                                                
-  67        'Koshucode.Baala.Op                /rank /base           /import-dir
+  66        'Koshucode.Baala.Op                /rank /base           /import-dir
                                                ----- --------------- -----------------------------------------------------------
                                                15    'DepRank        [ 'Base ]
                                                55    'Message        [ 'Base | 'Core | 'Data ]
-                                               57    'Cop            [ ]
                                                58    'Builtin        [ ]
                                                59    'Gadget         [ 'Base | 'Builtin | 'Core | 'Data ]
                                                59    'Meta           [ 'Base | 'Builtin | 'Core | 'Data ]
@@ -306,14 +313,13 @@ TABLE : DIR-RANK
                                                63    'Check          [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ]
                                                63    'Control        [ 'Base | 'Builtin | 'Core | 'Data | 'Lattice ]
                                                64    'Cox            [ ]
-                                               65    'Nest           [ ]
-                                               67    'Global         [ 'Base | 'Cop | 'Core | 'Cox | 'Data | 'Op ]
+                                               66    'Global         [ 'Base | 'Cop | 'Core | 'Cox | 'Data | 'Nest | 'Op ]
                                                
 
 === rel
 
 **
 **  SUMMARY
-**      27 judges on DIR-RANK
-**      27 judges in total
+**      28 judges on DIR-RANK
+**      28 judges in total
 **

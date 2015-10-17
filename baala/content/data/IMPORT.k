@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    66 judges
+**    67 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Accessor"           /import "Koshucode.Baala.Base"
@@ -75,6 +75,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Op"
+|-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Rop.Nest"
 |-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Op.Cox"
 |-- IMPORT  /module "Koshucode.Baala.Op.Global"                 /import "Koshucode.Baala.Cop"
 

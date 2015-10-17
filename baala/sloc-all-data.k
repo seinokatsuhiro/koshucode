@@ -8,7 +8,8 @@
 **    cop/data/SLOC.k
 **    core/data/SLOC.k
 **    data/data/SLOC.k
-**    operator/data/SLOC.k
+**    rop-flat/data/SLOC.k
+**    rop-nested/data/SLOC.k
 **    toolkit/data/SLOC.k
 **    writer/data/SLOC.k
 **
@@ -25,7 +26,7 @@
 |-- DIR  /package 'base  /code 564  /comment 307  /dir "base/Koshucode/Baala/Base/Text"
 |-- DIR  /package 'calculator  /code 212  /comment 172  /dir "calculator/Koshucode/Baala/Toolkit/Library"
 |-- DIR  /package 'calculator  /code 211  /comment 125  /dir "calculator/Koshucode/Baala/Toolkit/Main"
-|-- DIR  /package 'content  /code 109  /comment 40  /dir "content/Koshucode/Baala/Op"
+|-- DIR  /package 'content  /code 110  /comment 40  /dir "content/Koshucode/Baala/Op"
 |-- DIR  /package 'content  /code 882  /comment 442  /dir "content/Koshucode/Baala/Op/Cox"
 
 |-- DIR  /package 'content  /code 201  /comment 46  /dir "content/Koshucode/Baala/Type"
@@ -48,31 +49,34 @@
 *** 25
 
 |-- DIR  /package 'data  /code 1 371  /comment 822  /dir "data/Koshucode/Baala/Data/Type"
-|-- DIR  /package 'operator  /code 29  /comment 6  /dir "operator/Koshucode/Baala"
-|-- DIR  /package 'operator  /code 1 202  /comment 737  /dir "operator/Koshucode/Baala/Op"
-|-- DIR  /package 'operator  /code 235  /comment 153  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- DIR  /package 'operator  /code 184  /comment 174  /dir "operator/Koshucode/Baala/Op/Lattice"
+|-- DIR  /package 'rop-flat  /code 27  /comment 6  /dir "rop-flat/Koshucode/Baala"
+|-- DIR  /package 'rop-flat  /code 1 192  /comment 731  /dir "rop-flat/Koshucode/Baala/Op"
+|-- DIR  /package 'rop-flat  /code 235  /comment 153  /dir "rop-flat/Koshucode/Baala/Op/Builtin"
+|-- DIR  /package 'rop-flat  /code 183  /comment 174  /dir "rop-flat/Koshucode/Baala/Op/Lattice"
 
-|-- DIR  /package 'operator  /code 243  /comment 241  /dir "operator/Koshucode/Baala/Op/Nest"
+|-- DIR  /package 'rop-nested  /code 10  /comment 6  /dir "rop-nested/Koshucode/Baala/Rop"
+|-- DIR  /package 'rop-nested  /code 243  /comment 241  /dir "rop-nested/Koshucode/Baala/Rop/Nest"
 |-- DIR  /package 'toolkit  /code 128  /comment 75  /dir "toolkit/Koshucode/Baala/Toolkit/Library"
 |-- DIR  /package 'toolkit  /code 356  /comment 146  /dir "toolkit/Koshucode/Baala/Toolkit/Main"
 |-- DIR  /package 'writer  /code 12  /comment 3  /dir "writer/Koshucode/Baala"
+
 |-- DIR  /package 'writer  /code 268  /comment 92  /dir "writer/Koshucode/Baala/Writer"
 
-*** 35 judges
+*** 36 judges
 
 |-- DIR-TOTAL  /package 'base  /code 1 615  /comment 1 153
 |-- DIR-TOTAL  /package 'calculator  /code 423  /comment 297
-|-- DIR-TOTAL  /package 'content  /code 1 192  /comment 528
+|-- DIR-TOTAL  /package 'content  /code 1 193  /comment 528
 |-- DIR-TOTAL  /package 'cop  /code 716  /comment 414
 |-- DIR-TOTAL  /package 'core  /code 2 389  /comment 1 319
 
 |-- DIR-TOTAL  /package 'data  /code 3 442  /comment 2 047
-|-- DIR-TOTAL  /package 'operator  /code 1 893  /comment 1 311
+|-- DIR-TOTAL  /package 'rop-flat  /code 1 637  /comment 1 064
+|-- DIR-TOTAL  /package 'rop-nested  /code 253  /comment 247
 |-- DIR-TOTAL  /package 'toolkit  /code 484  /comment 221
 |-- DIR-TOTAL  /package 'writer  /code 280  /comment 95
 
-*** 9 judges
+*** 10 judges
 
 |-- FILE  /package 'base  /code 10  /comment 4  /file 'Base.hs  /dir "base/Koshucode/Baala"
 |-- FILE  /package 'base  /code 8  /comment 6  /file 'Abort.hs  /dir "base/Koshucode/Baala/Base"
@@ -130,7 +134,7 @@
 |-- FILE  /package 'content  /code 82  /comment 46  /file 'Get.hs  /dir "content/Koshucode/Baala/Op/Cox"
 
 |-- FILE  /package 'content  /code 105  /comment 72  /file 'Range.hs  /dir "content/Koshucode/Baala/Op/Cox"
-|-- FILE  /package 'content  /code 82  /comment 23  /file 'Global.hs  /dir "content/Koshucode/Baala/Op"
+|-- FILE  /package 'content  /code 83  /comment 23  /file 'Global.hs  /dir "content/Koshucode/Baala/Op"
 |-- FILE  /package 'content  /code 11  /comment 11  /file 'Quoter.hs  /dir "content/Koshucode/Baala/Op"
 |-- FILE  /package 'content  /code 201  /comment 46  /file 'Vanilla.hs  /dir "content/Koshucode/Baala/Type"
 |-- FILE  /package 'cop  /code 16  /comment 5  /file 'Cop.hs  /dir "cop/Koshucode/Baala"
@@ -238,38 +242,38 @@
 |-- FILE  /package 'data  /code 66  /comment 67  /file 'Rel.hs  /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /package 'data  /code 183  /comment 108  /file 'Time.hs  /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /package 'data  /code 134  /comment 91  /file 'Type.hs  /dir "data/Koshucode/Baala/Data/Type"
-|-- FILE  /package 'operator  /code 29  /comment 6  /file 'Op.hs  /dir "operator/Koshucode/Baala"
-|-- FILE  /package 'operator  /code 10  /comment 6  /file 'Builtin.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 27  /comment 6  /file 'Op.hs  /dir "rop-flat/Koshucode/Baala"
+|-- FILE  /package 'rop-flat  /code 10  /comment 6  /file 'Builtin.hs  /dir "rop-flat/Koshucode/Baala/Op"
 
-|-- FILE  /package 'operator  /code 49  /comment 13  /file 'Define.hs  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- FILE  /package 'operator  /code 123  /comment 75  /file 'Get.hs  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- FILE  /package 'operator  /code 22  /comment 39  /file 'Rop.hs  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- FILE  /package 'operator  /code 41  /comment 26  /file 'Term.hs  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- FILE  /package 'operator  /code 82  /comment 49  /file 'Check.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 49  /comment 13  /file 'Define.hs  /dir "rop-flat/Koshucode/Baala/Op/Builtin"
+|-- FILE  /package 'rop-flat  /code 123  /comment 75  /file 'Get.hs  /dir "rop-flat/Koshucode/Baala/Op/Builtin"
+|-- FILE  /package 'rop-flat  /code 22  /comment 39  /file 'Rop.hs  /dir "rop-flat/Koshucode/Baala/Op/Builtin"
+|-- FILE  /package 'rop-flat  /code 41  /comment 26  /file 'Term.hs  /dir "rop-flat/Koshucode/Baala/Op/Builtin"
+|-- FILE  /package 'rop-flat  /code 82  /comment 49  /file 'Check.hs  /dir "rop-flat/Koshucode/Baala/Op"
 
-|-- FILE  /package 'operator  /code 94  /comment 48  /file 'Control.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 49  /comment 23  /file 'DepRank.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 177  /comment 100  /file 'Gadget.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 8  /comment 26  /file 'Lattice.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 93  /comment 53  /file 'Restrict.hs  /dir "operator/Koshucode/Baala/Op/Lattice"
+|-- FILE  /package 'rop-flat  /code 94  /comment 48  /file 'Control.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 49  /comment 23  /file 'DepRank.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 177  /comment 100  /file 'Gadget.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 8  /comment 26  /file 'Lattice.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 93  /comment 53  /file 'Restrict.hs  /dir "rop-flat/Koshucode/Baala/Op/Lattice"
 
-|-- FILE  /package 'operator  /code 19  /comment 21  /file 'Rop.hs  /dir "operator/Koshucode/Baala/Op/Lattice"
-|-- FILE  /package 'operator  /code 72  /comment 100  /file 'Tropashko.hs  /dir "operator/Koshucode/Baala/Op/Lattice"
-|-- FILE  /package 'operator  /code 71  /comment 43  /file 'Message.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 172  /comment 84  /file 'Meta.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 10  /comment 6  /file 'Nest.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 18  /comment 21  /file 'Rop.hs  /dir "rop-flat/Koshucode/Baala/Op/Lattice"
+|-- FILE  /package 'rop-flat  /code 72  /comment 100  /file 'Tropashko.hs  /dir "rop-flat/Koshucode/Baala/Op/Lattice"
+|-- FILE  /package 'rop-flat  /code 71  /comment 43  /file 'Message.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 172  /comment 84  /file 'Meta.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 198  /comment 107  /file 'Peripheral.hs  /dir "rop-flat/Koshucode/Baala/Op"
 *** 150
 
-|-- FILE  /package 'operator  /code 93  /comment 86  /file 'Confl.hs  /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /package 'operator  /code 59  /comment 59  /file 'Deriv.hs  /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /package 'operator  /code 65  /comment 47  /file 'Flow.hs  /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /package 'operator  /code 26  /comment 49  /file 'Rop.hs  /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /package 'operator  /code 198  /comment 107  /file 'Peripheral.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 65  /comment 36  /file 'Resource.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 49  /comment 73  /file 'Source.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 141  /comment 83  /file 'Term.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-flat  /code 76  /comment 53  /file 'TermGadget.hs  /dir "rop-flat/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-nested  /code 10  /comment 6  /file 'Nest.hs  /dir "rop-nested/Koshucode/Baala/Rop"
 
-|-- FILE  /package 'operator  /code 65  /comment 36  /file 'Resource.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 49  /comment 73  /file 'Source.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 141  /comment 83  /file 'Term.hs  /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /package 'operator  /code 76  /comment 53  /file 'TermGadget.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /package 'rop-nested  /code 93  /comment 86  /file 'Confl.hs  /dir "rop-nested/Koshucode/Baala/Rop/Nest"
+|-- FILE  /package 'rop-nested  /code 59  /comment 59  /file 'Deriv.hs  /dir "rop-nested/Koshucode/Baala/Rop/Nest"
+|-- FILE  /package 'rop-nested  /code 65  /comment 47  /file 'Flow.hs  /dir "rop-nested/Koshucode/Baala/Rop/Nest"
+|-- FILE  /package 'rop-nested  /code 26  /comment 49  /file 'Rop.hs  /dir "rop-nested/Koshucode/Baala/Rop/Nest"
 |-- FILE  /package 'toolkit  /code 69  /comment 46  /file 'Change.hs  /dir "toolkit/Koshucode/Baala/Toolkit/Library"
 
 |-- FILE  /package 'toolkit  /code 27  /comment 12  /file 'Input.hs  /dir "toolkit/Koshucode/Baala/Toolkit/Library"
@@ -290,22 +294,23 @@
 
 |-- FILE-TOTAL  /package 'base  /code 1 615  /comment 1 153
 |-- FILE-TOTAL  /package 'calculator  /code 423  /comment 297
-|-- FILE-TOTAL  /package 'content  /code 1 192  /comment 528
+|-- FILE-TOTAL  /package 'content  /code 1 193  /comment 528
 |-- FILE-TOTAL  /package 'cop  /code 716  /comment 414
 |-- FILE-TOTAL  /package 'core  /code 2 389  /comment 1 319
 
 |-- FILE-TOTAL  /package 'data  /code 3 442  /comment 2 047
-|-- FILE-TOTAL  /package 'operator  /code 1 893  /comment 1 311
+|-- FILE-TOTAL  /package 'rop-flat  /code 1 637  /comment 1 064
+|-- FILE-TOTAL  /package 'rop-nested  /code 253  /comment 247
 |-- FILE-TOTAL  /package 'toolkit  /code 484  /comment 221
 |-- FILE-TOTAL  /package 'writer  /code 280  /comment 95
 
-*** 9 judges
+*** 10 judges
 
 |-- FILE-LONG  /rank 1  /package 'cop  /code 338  /file 'List.hs  /dir "cop/Koshucode/Baala/Cop"
 |-- FILE-LONG  /rank 2  /package 'data  /code 259  /file 'TokenLine.hs  /dir "data/Koshucode/Baala/Data/Token"
 |-- FILE-LONG  /rank 3  /package 'data  /code 252  /file 'Token.hs  /dir "data/Koshucode/Baala/Data/Token"
 |-- FILE-LONG  /rank 4  /package 'content  /code 201  /file 'Vanilla.hs  /dir "content/Koshucode/Baala/Type"
-|-- FILE-LONG  /rank 5  /package 'operator  /code 198  /file 'Peripheral.hs  /dir "operator/Koshucode/Baala/Op"
+|-- FILE-LONG  /rank 5  /package 'rop-flat  /code 198  /file 'Peripheral.hs  /dir "rop-flat/Koshucode/Baala/Op"
 
 |-- FILE-LONG  /rank 6  /package 'data  /code 196  /file 'Class.hs  /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE-LONG  /rank 7  /package 'data  /code 192  /file 'Para.hs  /dir "data/Koshucode/Baala/Data/Type"
@@ -317,10 +322,10 @@
 
 **
 **  SUMMARY
-**      35 judges on DIR
-**       9 judges on DIR-TOTAL
+**      36 judges on DIR
+**      10 judges on DIR-TOTAL
 **     171 judges on FILE
 **      10 judges on FILE-LONG
-**       9 judges on FILE-TOTAL
-**     234 judges in total
+**      10 judges on FILE-TOTAL
+**     237 judges in total
 **
