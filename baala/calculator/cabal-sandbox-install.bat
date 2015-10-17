@@ -28,7 +28,8 @@ goto :EOF
 		cabal sandbox add-source ..\data
 		cabal sandbox add-source ..\core
 		cabal sandbox add-source ..\writer
-		cabal sandbox add-source ..\operator
+		cabal sandbox add-source ..\rop-flat
+		cabal sandbox add-source ..\rop-nested
 		cabal sandbox add-source ..\cop
 		cabal sandbox add-source ..\content
 

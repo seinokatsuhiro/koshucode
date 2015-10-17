@@ -15,7 +15,7 @@ pkg_help () {
 }
 
 pkg_names () {
-    echo base data core writer operator cop content calculator toolkit
+    echo base data core writer rop-flat rop-nested cop content calculator toolkit
 }
 
 pkg_cabal () {

@@ -3,6 +3,9 @@
 #  Build and install 'koshu' inside sandbox
 #
 
+install_pwd=`pwd`
+install_dir=`basename $install_pwd`
+
 check () {
     if [ "$1" = 0 ]; then
         shift
@@ -16,7 +19,10 @@ check () {
 cabal sandbox init
   check $? init
 
-for pkg in base data core writer operator cop content; do
+for pkg in `sh ../koshu-pkg.sh dir`; do
+    if [ $pkg = $install_dir ]; then
+        break
+    fi
     cabal sandbox add-source ../$pkg
     check $? $pkg
 done
