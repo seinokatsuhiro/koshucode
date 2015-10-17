@@ -1,0 +1,66 @@
+-- The name of the package.
+name:                koshucode-baala-rop-nested
+
+-- The package version.  See the Haskell package versioning policy (PVP) 
+-- for standards guiding when and how versions should be incremented.
+-- http://www.haskell.org/haskellwiki/Package_versioning_policy
+-- PVP summary:      +-+------- breaking API changes
+--                   | | +----- non-breaking API additions
+--                   | | | +--- code changes with no API change
+version:             0.122.0.0
+
+-- A short (one-line) description of the package.
+synopsis:            Relation-mapping operators for nested relations
+
+-- A longer description of the package.
+description:         An impelemntation of relation-mapping operators.
+                     Operators are used in the @koshu@ calculator
+                     that is contained in the
+                     @koshucode-baala-calculator@ package.
+
+-- The license under which the package is released.
+license:             BSD3
+
+-- The file containing the license text.
+license-file:        LICENSE
+
+-- The package author(s).
+author:              SEINO Katsuhiro
+
+-- An email address to which users can send suggestions, bug reports, and 
+-- patches.
+maintainer:
+
+-- A copyright notice.
+copyright:           2013, 2015, SEINO Katsuhiro
+
+category:            Data, Database, Language, Text
+
+build-type:          Simple
+
+-- Constraint on the version of Cabal needed to build this package.
+cabal-version:       >= 1.8
+
+extra-source-files:
+
+library
+  -- Modules exported by the library.
+  exposed-modules:
+        Koshucode.Baala.Rop.Nest
+        Koshucode.Baala.Rop.Nest.Confl
+        Koshucode.Baala.Rop.Nest.Deriv
+        Koshucode.Baala.Rop.Nest.Flow
+        Koshucode.Baala.Rop.Nest.Rop
+
+  -- Modules included in this library but not exported.
+  --other-modules:       
+  
+  -- Other library packages from which modules are imported.
+  build-depends:
+         base                      == 4.*
+       , containers                == 0.5.*
+       , koshucode-baala-base      == 0.122.*
+       , koshucode-baala-data      == 0.122.*
+       , koshucode-baala-core      == 0.122.*
+       , koshucode-baala-operator  == 0.122.*
+
