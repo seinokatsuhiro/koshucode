@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Cox.Get
+module Koshucode.Baala.Rop.Cox.Get
   ( -- * Cox
     getCox, getMaybeCox, getOptionCox,
     getTermCoxes,

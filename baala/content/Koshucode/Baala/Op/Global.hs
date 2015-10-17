@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 import qualified Koshucode.Baala.Rop       as Rop
 import qualified Koshucode.Baala.Rop.Nest  as Rop
-import qualified Koshucode.Baala.Op.Cox    as Rop
+import qualified Koshucode.Baala.Rop.Cox   as Rop
 import qualified Koshucode.Baala.Cop       as Cop
 
 -- | Global with operators.

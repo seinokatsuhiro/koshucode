@@ -13,7 +13,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Cox.GeoDatumJp
+module Koshucode.Baala.Rop.Cox.GeoDatumJp
  ( GeoPoint,
    convDegree, convRadian,
  ) where

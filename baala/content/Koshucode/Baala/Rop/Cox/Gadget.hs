@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Koshucode.Baala.Op.Cox.Gadget
+module Koshucode.Baala.Rop.Cox.Gadget
   ( ropsCoxGadget,
   
     -- * number
@@ -17,13 +17,13 @@ module Koshucode.Baala.Op.Cox.Gadget
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data              as D
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Builtin       as Op
-import qualified Koshucode.Baala.Op.Cox.Get        as Op
-import qualified Koshucode.Baala.Op.Cox.GeoDatumJp as Op
-import qualified Koshucode.Baala.Rop.Message       as Msg
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Rop.Builtin        as Op
+import qualified Koshucode.Baala.Rop.Cox.Get        as Op
+import qualified Koshucode.Baala.Rop.Cox.GeoDatumJp as Op
+import qualified Koshucode.Baala.Rop.Message        as Msg
 
 
 -- | Implementation of relational operators.

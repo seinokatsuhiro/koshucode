@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Cox.Empty
+module Koshucode.Baala.Rop.Cox.Empty
   ( ropsCoxEmpty,
     -- * both
     consBoth, relmapBoth,
@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Builtin  as Op
 import qualified Koshucode.Baala.Rop.Lattice  as Op
-import qualified Koshucode.Baala.Op.Cox.Get   as Op
+import qualified Koshucode.Baala.Rop.Cox.Get  as Op
 
 
 -- | Relmap operators that handles empties.

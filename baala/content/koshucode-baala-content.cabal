@@ -50,15 +50,15 @@ library
         Koshucode.Baala.Op.Global
         Koshucode.Baala.Op.Quoter
 
-        Koshucode.Baala.Op.Cox
-        Koshucode.Baala.Op.Cox.Accessor
-        Koshucode.Baala.Op.Cox.Calc
-        Koshucode.Baala.Op.Cox.Empty
-        Koshucode.Baala.Op.Cox.Filter
-        Koshucode.Baala.Op.Cox.Gadget
-        Koshucode.Baala.Op.Cox.GeoDatumJp
-        Koshucode.Baala.Op.Cox.Get
-        Koshucode.Baala.Op.Cox.Range
+        Koshucode.Baala.Rop.Cox
+        Koshucode.Baala.Rop.Cox.Accessor
+        Koshucode.Baala.Rop.Cox.Calc
+        Koshucode.Baala.Rop.Cox.Empty
+        Koshucode.Baala.Rop.Cox.Filter
+        Koshucode.Baala.Rop.Cox.Gadget
+        Koshucode.Baala.Rop.Cox.GeoDatumJp
+        Koshucode.Baala.Rop.Cox.Get
+        Koshucode.Baala.Rop.Cox.Range
 
         Koshucode.Baala.Type.Vanilla
 
