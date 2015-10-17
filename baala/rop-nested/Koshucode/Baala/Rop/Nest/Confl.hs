@@ -26,7 +26,7 @@ module Koshucode.Baala.Rop.Nest.Confl
 import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Op.Builtin     as Op
+import qualified Koshucode.Baala.Rop.Builtin    as Op
 import qualified Koshucode.Baala.Rop.Nest.Flow  as Op
 
 

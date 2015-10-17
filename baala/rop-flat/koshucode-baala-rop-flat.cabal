@@ -46,32 +46,32 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Op
-        Koshucode.Baala.Op.Message
+        Koshucode.Baala.Rop
+        Koshucode.Baala.Rop.Message
 
-        Koshucode.Baala.Op.Builtin
-        Koshucode.Baala.Op.Builtin.Define
-        Koshucode.Baala.Op.Builtin.Get
-        Koshucode.Baala.Op.Builtin.Rop
-        Koshucode.Baala.Op.Builtin.Term
+        Koshucode.Baala.Rop.Builtin
+        Koshucode.Baala.Rop.Builtin.Define
+        Koshucode.Baala.Rop.Builtin.Get
+        Koshucode.Baala.Rop.Builtin.Rop
+        Koshucode.Baala.Rop.Builtin.Term
 
-        Koshucode.Baala.Op.Check
-        Koshucode.Baala.Op.Control
-        Koshucode.Baala.Op.DepRank
-        Koshucode.Baala.Op.Gadget
+        Koshucode.Baala.Rop.Check
+        Koshucode.Baala.Rop.Control
+        Koshucode.Baala.Rop.DepRank
+        Koshucode.Baala.Rop.Gadget
 
-        Koshucode.Baala.Op.Lattice
-        Koshucode.Baala.Op.Lattice.Restrict
-        Koshucode.Baala.Op.Lattice.Rop
-        Koshucode.Baala.Op.Lattice.Tropashko
+        Koshucode.Baala.Rop.Lattice
+        Koshucode.Baala.Rop.Lattice.Restrict
+        Koshucode.Baala.Rop.Lattice.Rop
+        Koshucode.Baala.Rop.Lattice.Tropashko
 
-        Koshucode.Baala.Op.Meta
+        Koshucode.Baala.Rop.Meta
 
-        Koshucode.Baala.Op.Peripheral
-        Koshucode.Baala.Op.Resource
-        Koshucode.Baala.Op.Source
-        Koshucode.Baala.Op.Term
-        Koshucode.Baala.Op.TermGadget
+        Koshucode.Baala.Rop.Peripheral
+        Koshucode.Baala.Rop.Resource
+        Koshucode.Baala.Rop.Source
+        Koshucode.Baala.Rop.Term
+        Koshucode.Baala.Rop.TermGadget
 
   -- Modules included in this library but not exported.
   --other-modules:       

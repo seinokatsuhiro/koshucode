@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Meta
+module Koshucode.Baala.Rop.Meta
   ( ropsMeta,
     -- * koshu-cop
     consKoshuCop, relkitKoshuCop,
@@ -16,12 +16,12 @@ module Koshucode.Baala.Op.Meta
     consKoshuVersion, relkitKoshuVersion,
   ) where
 
-import qualified Data.Version                  as V
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Message    as Msg
+import qualified Data.Version                   as V
+import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.Core           as C
+import qualified Koshucode.Baala.Rop.Builtin    as Op
+import qualified Koshucode.Baala.Rop.Message    as Msg
 
 
 -- | Implementation of relational operators.

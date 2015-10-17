@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.DepRank
+module Koshucode.Baala.Rop.DepRank
   ( DepRank (..),
     DepRankMap,
     depRankFromPairs,

@@ -3,15 +3,15 @@
 
 -- | Parsing list of terms.
 
-module Koshucode.Baala.Op.Builtin.Term
+module Koshucode.Baala.Rop.Builtin.Term
   ( termName, termNames, termNamesCo,
     termNamePairs, termNamesColon,
     picker,
   ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as D
-import qualified Koshucode.Baala.Op.Message as Msg
+import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Data        as D
+import qualified Koshucode.Baala.Rop.Message as Msg
 
 -- | Extract a term name.
 termName :: D.TTree -> B.Ab D.TermName

@@ -1,17 +1,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Check
+module Koshucode.Baala.Rop.Check
   ( ropsCheck,
   ) where
 
-import qualified Data.Map                    as Map
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Op.Builtin  as Op
-import qualified Koshucode.Baala.Op.Lattice  as Op
-import qualified Koshucode.Baala.Op.Term     as Op
-import qualified Koshucode.Baala.Op.Message  as Msg
+import qualified Data.Map                     as Map
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.Core         as C
+import qualified Koshucode.Baala.Rop.Builtin  as Op
+import qualified Koshucode.Baala.Rop.Lattice  as Op
+import qualified Koshucode.Baala.Rop.Term     as Op
+import qualified Koshucode.Baala.Rop.Message  as Msg
 
 
 -- | Implementation of relational operators.

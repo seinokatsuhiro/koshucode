@@ -2,7 +2,7 @@
 
 -- | Built-in relmap operator.
 
-module Koshucode.Baala.Op.Builtin.Rop
+module Koshucode.Baala.Rop.Builtin.Rop
   ( ropsBuiltin,
     -- * id
     consId, relmapId,
@@ -12,10 +12,10 @@ module Koshucode.Baala.Op.Builtin.Rop
     consXxx
   ) where
 
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Op.Builtin.Define as Op
-import qualified Koshucode.Baala.Op.Message        as Msg
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Rop.Builtin.Define as Op
+import qualified Koshucode.Baala.Rop.Message        as Msg
 
 
 -- | Built-in relmap operator.

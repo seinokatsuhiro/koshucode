@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Control
+module Koshucode.Baala.Rop.Control
   ( ropsControl,
   
     -- * if
@@ -17,12 +17,12 @@ module Koshucode.Baala.Op.Control
     consEqual, relmapEqual, relkitEqual,
   ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as D
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Lattice as Op
-import qualified Koshucode.Baala.Op.Message as Msg
+import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Data        as D
+import qualified Koshucode.Baala.Core        as C
+import qualified Koshucode.Baala.Rop.Builtin as Op
+import qualified Koshucode.Baala.Rop.Lattice as Op
+import qualified Koshucode.Baala.Rop.Message as Msg
 
 
 -- | Implementation of relational operators.

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Gadget
+module Koshucode.Baala.Rop.Gadget
   ( ropsGadget,
   
     -- * contents
@@ -23,13 +23,13 @@ module Koshucode.Baala.Op.Gadget
     consDumpTree,
   ) where
 
-import qualified Data.Map.Strict            as Map
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Data       as D
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.DepRank as Op
-import qualified Koshucode.Baala.Op.Message as Msg
+import qualified Data.Map.Strict             as Map
+import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Data        as D
+import qualified Koshucode.Baala.Core        as C
+import qualified Koshucode.Baala.Rop.Builtin as Op
+import qualified Koshucode.Baala.Rop.DepRank as Op
+import qualified Koshucode.Baala.Rop.Message as Msg
 
 
 -- | Gadgets

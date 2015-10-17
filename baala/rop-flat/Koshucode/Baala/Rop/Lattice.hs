@@ -2,17 +2,17 @@
 
 -- | Lattice relmap operators.
 
-module Koshucode.Baala.Op.Lattice
-  ( module Koshucode.Baala.Op.Lattice.Restrict,
-    module Koshucode.Baala.Op.Lattice.Rop,
-    module Koshucode.Baala.Op.Lattice.Tropashko,
+module Koshucode.Baala.Rop.Lattice
+  ( module Koshucode.Baala.Rop.Lattice.Restrict,
+    module Koshucode.Baala.Rop.Lattice.Rop,
+    module Koshucode.Baala.Rop.Lattice.Tropashko,
     -- * Naming conventions
     -- $NamingConventions
   ) where
 
-import Koshucode.Baala.Op.Lattice.Restrict
-import Koshucode.Baala.Op.Lattice.Rop
-import Koshucode.Baala.Op.Lattice.Tropashko
+import Koshucode.Baala.Rop.Lattice.Restrict
+import Koshucode.Baala.Rop.Lattice.Rop
+import Koshucode.Baala.Rop.Lattice.Tropashko
 
 
 -- ----------------------

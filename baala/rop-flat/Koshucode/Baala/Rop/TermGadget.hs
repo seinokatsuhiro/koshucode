@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.TermGadget
+module Koshucode.Baala.Rop.TermGadget
   ( ropsTermGadget,
     -- * prefix
     consPrefix, relmapPrefix, relkitPrefix,
@@ -12,11 +12,11 @@ module Koshucode.Baala.Op.TermGadget
     consWipe, relmapWipe, relkitWipe,
   ) where
 
-import qualified Data.List                  as List
-import qualified Koshucode.Baala.Data       as D
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Term    as Op
+import qualified Data.List                   as List
+import qualified Koshucode.Baala.Data        as D
+import qualified Koshucode.Baala.Core        as C
+import qualified Koshucode.Baala.Rop.Builtin as Op
+import qualified Koshucode.Baala.Rop.Term    as Op
 
 
 -- | Relmap operators for manipulating term names.

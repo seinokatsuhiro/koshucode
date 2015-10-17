@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Resource
+module Koshucode.Baala.Rop.Resource
   ( ropsResource,
     -- * koshu-res-rop
     consKoshuResRop, relkitKoshuResRop,
@@ -10,10 +10,10 @@ module Koshucode.Baala.Op.Resource
     consKoshuResArticle, relkitKoshuResArticle,
   ) where
 
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Op.Builtin    as Op
+import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.Core           as C
+import qualified Koshucode.Baala.Rop.Builtin    as Op
 
 
 -- | Relmap operators about resources.
