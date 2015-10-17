@@ -67,12 +67,13 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                      == 4.*
-       , containers                == 0.5.*
-       , koshucode-baala-base      == 0.122.*
-       , koshucode-baala-data      == 0.122.*
-       , koshucode-baala-cop       == 0.122.*
-       , koshucode-baala-core      == 0.122.*
-       , koshucode-baala-operator  == 0.122.*
-       , koshucode-baala-writer    == 0.122.*
+         base                        == 4.*
+       , containers                  == 0.5.*
+       , koshucode-baala-base        == 0.122.*
+       , koshucode-baala-data        == 0.122.*
+       , koshucode-baala-cop         == 0.122.*
+       , koshucode-baala-core        == 0.122.*
+       , koshucode-baala-operator    == 0.122.*
+       , koshucode-baala-rop-nested  == 0.122.*
+       , koshucode-baala-writer      == 0.122.*
 

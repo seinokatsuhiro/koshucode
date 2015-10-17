@@ -11,7 +11,6 @@ module Koshucode.Baala.Op
     module Koshucode.Baala.Op.Gadget,
     module Koshucode.Baala.Op.Lattice,
     module Koshucode.Baala.Op.Meta,
-    module Koshucode.Baala.Op.Nest,
     module Koshucode.Baala.Op.Peripheral,
     module Koshucode.Baala.Op.Resource,
     module Koshucode.Baala.Op.Source,
@@ -26,7 +25,6 @@ import Koshucode.Baala.Op.DepRank
 import Koshucode.Baala.Op.Lattice
 import Koshucode.Baala.Op.Gadget
 import Koshucode.Baala.Op.Meta
-import Koshucode.Baala.Op.Nest
 import Koshucode.Baala.Op.Peripheral
 import Koshucode.Baala.Op.Resource
 import Koshucode.Baala.Op.Source

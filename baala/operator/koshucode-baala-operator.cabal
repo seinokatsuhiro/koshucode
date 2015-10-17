@@ -67,12 +67,6 @@ library
 
         Koshucode.Baala.Op.Meta
 
-        Koshucode.Baala.Op.Nest
-        Koshucode.Baala.Op.Nest.Confl
-        Koshucode.Baala.Op.Nest.Deriv
-        Koshucode.Baala.Op.Nest.Flow
-        Koshucode.Baala.Op.Nest.Rop
-
         Koshucode.Baala.Op.Peripheral
         Koshucode.Baala.Op.Resource
         Koshucode.Baala.Op.Source
