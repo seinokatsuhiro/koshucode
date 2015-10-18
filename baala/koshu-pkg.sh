@@ -1,31 +1,49 @@
 #!/bin/sh
 
 pkg_help () {
+    echo "DESCRIPTION"
+    echo "  Operations for each packages"
+    echo
     echo "USAGE"
     echo "  $pkg_prog COMMAND"
     echo
-    echo "COMMAND"
-    echo "  cabal        List cabal files"
-    echo "  cabal-path   List paths of cabal files"
-    echo "  copyright    List copyright in cabal files"
-    echo "  dir          List package directory names"
-    echo "  sandbox      List installed packages in sandbox"
-    echo "  synopsis     List synopses in cabal files"
+    echo "COMMAND for listing"
+    echo "  cabal            List cabal files"
+    echo "  cabal-path       List paths of cabal files"
+    echo "  copyright        List copyright in cabal files"
+    echo "  dir              List package directory names"
+    echo "  installed        List installed packages in sandbox"
+    echo "  hoogle           List Hoogle files"
+    echo "  hoogle P ...     Grep P ... for Hoogle files"
+    echo "  synopsis         List synopses in cabal files"
+    echo
+    echo "COMMAND for executing"
+    echo "  build-haddock    Build and generate Haddock documents"
+    echo "  exec C           Execute C in each package directories"
+    echo "  exec-all C       Same as exec except for ignoring exit status"
+    echo "  init             Initilize sandbox"
+    echo "  haddock          Generate Haddock documents"
     echo
 }
 
-pkg_names () {
+pkg_section () {
+    echo
+    echo "***********  $*"
+    echo
+}
+
+pkg_dirs () {
     echo base data core writer rop-flat rop-nested cop content calculator toolkit
 }
 
 pkg_cabal () {
-    for pkg in `pkg_names`; do
+    for pkg in `pkg_dirs`; do
         echo "koshucode-baala-$pkg.cabal"
     done
 }
 
 pkg_cabal_path () {
-    for pkg in `pkg_names`; do
+    for pkg in `pkg_dirs`; do
         pkg_cabal="$pkg_dir/$pkg/koshucode-baala-$pkg.cabal"
         if [ -e "$pkg_cabal" ]; then
             echo "$pkg_cabal"
@@ -34,10 +52,98 @@ pkg_cabal_path () {
 }
 
 pkg_dir () {
-    pkg_names | xargs -n 1
+    pkg_dirs | xargs -n 1
 }
 
-pkg_sandbox () {
+pkg_exec () {
+    for pkg in `pkg_dirs`; do
+        ( cd "$pkg"
+          pkg_section "$* (in $pkg)"
+          "$@"
+        )
+        pkg_status=$?
+        if [ $pkg_status != 0 ]; then
+            echo 
+            echo "ABORTED (status $pkg_status)"
+            exit 2
+        fi
+    done
+}
+
+pkg_exec_all () {
+    for pkg in `pkg_dirs`; do
+        ( cd "$pkg"
+          pkg_section "$* (in $pkg)"
+          "$@"
+        )
+        pkg_status=$?
+        if [ $pkg_status != 0 ]; then
+            echo "ABORTED (status $pkg_status)"
+        fi
+    done
+}
+
+pkg_haddock () {
+    for pkg in `pkg_dirs`; do
+        ( cd "$pkg"
+          pkg_section "haddock (in $pkg)"
+          cabal haddock \
+              --hoogle \
+              --hyperlink-source \
+              --haddock-option=--pretty-html \
+              --html-location=$pkg_doc_haskell \
+              `pkg_haddock_option $pkg`
+        )
+    done
+}
+
+pkg_haddock_option () {
+    for pkg in `pkg_dirs`; do
+        if [ $pkg = $1 ]; then
+            break
+        fi
+        pkg_name="koshucode-baala-$pkg"
+        pkg_interface="../$pkg/dist/doc/html/$pkg_name/$pkg_name.haddock"
+        if [ -e "$pkg_interface" ]; then
+            echo "--haddock-option=--read-interface=$pkg_doc_koshu/$pkg_name,$pkg_interface"
+        fi
+    done
+}
+
+pkg_hoogle () {
+    for pkg in `pkg_dirs`; do
+        pkg_name="koshucode-baala-$pkg"
+        pkg_hoogle=$pkg/dist/doc/html/$pkg_name/$pkg_name.txt
+        if [ -e $pkg_hoogle ]; then
+            echo $pkg_hoogle
+        fi
+    done
+}
+
+pkg_hoogle_grep () {
+    for pkg in `pkg_hoogle`; do
+        pkg_section "$pkg"
+        grep -v "^--" $pkg | pkg_grep_$# "$@" | sort | cat -n
+    done
+}
+
+g () { grep -i "$1" ; }
+
+pkg_grep_1 () { g "$1" ; }
+pkg_grep_2 () { g "$1" | g "$2" ; }
+pkg_grep_3 () { g "$1" | g "$2" | g "$3" ; }
+pkg_grep_4 () { g "$1" | g "$2" | g "$3" | g "$4" ; }
+pkg_grep_5 () { g "$1" | g "$2" | g "$3" | g "$4" | g "$5" ; }
+
+pkg_sandbox_init () {
+    if [ -e cabal.sandbox.config ]; then
+        echo "Sandbox is already initialized."
+    else
+        cabal sandbox init --sandbox ../cabal/sandbox
+    fi
+}
+
+pkg_sandbox_installed () {
     if [ -e "$pkg_dir/toolkit/cabal.sandbox.config" ]; then
         ( cd "$pkg_dir/toolkit" ;
           cabal exec ghc-pkg -- list 'koshu*' --simple-output | xargs -n 1
@@ -58,7 +164,13 @@ pkg_cabal_section () {
 pkg_prog=koshu-pkg.sh
 pkg_dir=`pwd | sed -n 's:\(.*/koshucode-master/baala\).*:\1:p'`
 
+pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/doc/html
+pkg_doc_haskell=http://hackage.haskell.org/packages/archive/base/latest/doc/html
+
 case "$1" in
+    build-haddock)
+        pkg_exec cabal build
+        pkg_haddock ;;
     cabal)
         pkg_cabal ;;
     cabal-path)
@@ -67,8 +179,25 @@ case "$1" in
         pkg_cabal_section copyright ;;
     dir)
         pkg_dir ;;
-    sandbox)
-        pkg_sandbox ;;
+    exec)
+        shift
+        pkg_exec "$@" ;;
+    exec-all)
+        shift
+        pkg_exec_all "$@" ;;
+    init)
+        pkg_exec pkg_sandbox_init ;;
+    installed)
+        pkg_sandbox_installed ;;
+    haddock)
+        pkg_haddock ;;
+    hoogle)
+        shift
+        if [ $# = 0 ]; then
+            pkg_hoogle
+        else
+            pkg_hoogle_grep "$@"
+        fi ;;
     synopsis)
         pkg_cabal_section synopsis ;;
     *)
