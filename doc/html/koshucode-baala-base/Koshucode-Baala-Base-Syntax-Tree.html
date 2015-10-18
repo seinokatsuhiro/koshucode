@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.119.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,15 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type</a
+	    >Tree</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Parsing</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Bracket table</a
+	    >Bracket</a
 	    ></li
 	  ></ul
 	></div
@@ -74,26 +70,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    > <a href="#t:Bracket"
-	    >Bracket</a
-	    > p<ul class="subs"
-	    ><li
-	      >= <a href="#v:BracketNone"
-		>BracketNone</a
-		></li
-	      ><li
-	      >| <a href="#v:BracketOpen"
-		>BracketOpen</a
-		> p</li
-	      ><li
-	      >| <a href="#v:BracketClose"
-		>BracketClose</a
-		> p</li
-	      ></ul
-	    ></li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:CodeTree"
@@ -193,6 +169,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    > p a)</li
 	  ><li class="src short"
 	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Bracket"
+	    >Bracket</a
+	    > p<ul class="subs"
+	    ><li
+	      >= <a href="#v:BracketNone"
+		>BracketNone</a
+		></li
+	      ><li
+	      >| <a href="#v:BracketOpen"
+		>BracketOpen</a
+		> p</li
+	      ><li
+	      >| <a href="#v:BracketClose"
+		>BracketClose</a
+		> p</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:GetBracketType"
 	    >GetBracketType</a
@@ -215,123 +211,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    > <a name="t:Bracket" class="def"
-	    >Bracket</a
-	    > p <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#Bracket" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Bracket type.</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:BracketNone" class="def"
-		  >BracketNone</a
-		  ></td
-		><td class="doc"
-		><p
-		  >None bracket</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:BracketOpen" class="def"
-		  >BracketOpen</a
-		  > p</td
-		><td class="doc"
-		><p
-		  >Open bracket</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:BracketClose" class="def"
-		  >BracketClose</a
-		  > p</td
-		><td class="doc"
-		><p
-		  >Close bracket</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Bracket" class="caption collapser" onclick="toggleSection('i:Bracket')"
-	    >Instances</p
-	    ><div id="section.i:Bracket" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    > p)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    > p)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    > p)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    > p)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > (* -&gt; *) <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
+	>Tree</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -460,8 +340,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Parsing</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tree" class="def"
@@ -607,8 +485,124 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:3"
-	>Bracket table</h1
+	><h1 id="g:2"
+	>Bracket</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Bracket" class="def"
+	    >Bracket</a
+	    > p <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#Bracket" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Bracket type.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:BracketNone" class="def"
+		  >BracketNone</a
+		  ></td
+		><td class="doc"
+		><p
+		  >None bracket</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:BracketOpen" class="def"
+		  >BracketOpen</a
+		  > p</td
+		><td class="doc"
+		><p
+		  >Open bracket</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:BracketClose" class="def"
+		  >BracketClose</a
+		  > p</td
+		><td class="doc"
+		><p
+		  >Close bracket</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Bracket" class="caption collapser" onclick="toggleSection('i:Bracket')"
+	    >Instances</p
+	    ><div id="section.i:Bracket" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    > p)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    > p)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    > p)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    > p)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > (* -&gt; *) <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"

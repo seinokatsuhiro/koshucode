@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.119.0.0
+@version 0.123.0.0
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -75,22 +75,6 @@ instance Eq CommentDoc
 instance Ord CommentDoc
 instance Texts CommentSec
 instance Texts CommentDoc
-
-
--- | Text lines delimited by carriage returns or line feeds.
-module Koshucode.Baala.Base.Syntax.Line
-
--- | Line number.
-type LineNumber = Int
-type NumberedLine = (LineNumber, String)
-
--- | Line number and its content.
-linesCrlfNumbered :: String -> [NumberedLine]
-
--- | Split string into lines. The result strings do not contain carriage
---   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
-linesCrlf :: String -> [String]
-linesFrom :: Show a => a -> [String]
 
 module Koshucode.Baala.Base.Prelude.Import
 
@@ -712,14 +696,6 @@ instance Functor Sourced
 instance CodePtr CodePt
 instance Ord CodePt
 
-module Koshucode.Baala.Base.Text.Http
-type UriText = String
-
--- | Pair of protocol name and proxy URI.
-type HttpProxy = (String, Maybe UriText)
-uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
-httpExceptionSummary :: HttpException -> String
-
 
 -- | Text table
 module Koshucode.Baala.Base.Text.TextTable
@@ -778,6 +754,14 @@ hPutLines :: Handle -> [String] -> IO ()
 hPutEmptyLine :: Handle -> IO ()
 readInt :: String -> Maybe Int
 readInteger :: String -> Maybe Integer
+
+module Koshucode.Baala.Base.Text.Http
+type UriText = String
+
+-- | Pair of protocol name and proxy URI.
+type HttpProxy = (String, Maybe UriText)
+uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
+httpExceptionSummary :: HttpException -> String
 
 module Koshucode.Baala.Base.Text.Write
 
@@ -900,16 +884,19 @@ bug :: String -> a
 -- | Abort symbols
 module Koshucode.Baala.Base.Abort
 
-module Koshucode.Baala.Base.Message
-abToken :: CodePtr cp => [cp] -> Map (Ab b)
-abTree :: CodePtr cp => [cp] -> Map (Ab b)
+module Koshucode.Baala.Base.Abort.Message
+
+-- | AD-LIB: reason
+adlib :: String -> Ab a
 
 -- | BUG: reason
 bug :: String -> Ab a
 
--- | AD-LIB: reason
-adlib :: String -> Ab a
-adlibs :: [String] -> Ab a
+-- | Unsupported feature
+unsupported :: String -> Ab a
+
+module Koshucode.Baala.Base.Syntax.Message
+abCode :: CodePtr cp => [cp] -> Map (Ab b)
 
 -- | Extra close bracket
 extraCloseBracket :: Ab a
@@ -917,51 +904,25 @@ extraCloseBracket :: Ab a
 -- | Unclosed open bracket
 extraOpenBracket :: Ab a
 
--- | Not found
-notFound :: String -> Ab a
-
--- | Divide by zero
-divideByZero :: Ab a
-
--- | Different decimal length
-heteroDecimal :: String -> String -> Ab a
-
--- | Can't read as date
-notDate :: Integer -> Int -> Int -> Ab a
-
--- | Can't read as number
-notNumber :: String -> Ab a
-
--- | Not implemented
-notImplemented :: String -> Ab a
-
--- | Lookup association list. This function may abort.
-(<!!>) :: [Named b] -> String -> Ab b
-
--- | Forbidden input
-forbiddenInput :: String -> Ab a
-
--- | Forbidden term name
-forbiddenTerm :: Ab a
-
--- | Quotation not end in line
-quotNotEnd :: Ab a
-
--- | Require flat term name
-reqFlatTerm :: String -> Ab a
-
--- | Unexpedted section delimiter
-unexpSect :: [String] -> Ab a
-
--- | Unknown bracket text
-unkAngleText :: String -> Ab a
+module Koshucode.Baala.Base.Message
 
 
--- | This module provides a container for tokens. No tokens in Koshucode
---   are in a extent of multiple lines. <a>CodeLine</a> includes whole
---   tokens in a line. You can represent tokenized source code as a list of
---   <a>CodeLine</a>.
-module Koshucode.Baala.Base.Syntax.Code
+-- | Text lines delimited by carriage returns or line feeds.
+module Koshucode.Baala.Base.Syntax.Line
+
+-- | Line number.
+type LineNumber = Int
+
+-- | Line with number.
+type NumberedLine = (LineNumber, String)
+
+-- | Line number and its content.
+linesCrlfNumbered :: String -> [NumberedLine]
+
+-- | Split string into lines. The result strings do not contain carriage
+--   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
+linesCrlf :: String -> [String]
+linesFrom :: Show a => a -> [String]
 
 -- | Tokens in line.
 data CodeLine a
@@ -975,19 +936,8 @@ lineContent :: CodeLine a -> String
 
 -- | Tokens in the line.
 lineTokens :: CodeLine a -> [a]
-
--- | Tokens in clause.
-data CodeClause a
-CodeClause :: [CodeLine a] -> [a] -> CodeClause a
-
--- | Source lines of clause
-clauseLines :: CodeClause a -> [CodeLine a]
-
--- | Source tokens of clause
-clauseTokens :: CodeClause a -> [a]
-lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
-splitClause :: Gather [(Int, a)] [a]
-codeClauseEmpty :: CodeClause a
+type IndentSize = Int
+lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
 data CodeRoll a
 CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> WordTable -> CodeRoll a
 codeMap :: CodeRoll a -> AbMap (CodeRoll a)
@@ -1017,30 +967,39 @@ codeUpdateWords :: WordTable -> String -> a -> Map (CodeRoll a)
 -- | Change mapper of code roll.
 codeChange :: AbMap (CodeRoll a) -> Map (CodeRoll a)
 instance Typeable CodeLine
-instance Typeable CodeClause
 instance Show a => Show (CodeLine a)
 instance Eq a => Eq (CodeLine a)
 instance Ord a => Ord (CodeLine a)
 instance Data a => Data (CodeLine a)
-instance Show a => Show (CodeClause a)
-instance Data a => Data (CodeClause a)
-instance CodePtr a => CodePtr (CodeClause a)
 instance CodePtr a => CodePtr (CodeLine a)
 instance Write (CodeLine a)
 
+
+-- | This module provides a container for tokens. No tokens in Koshucode
+--   are in a extent of multiple lines. <tt>CodeLine</tt> includes whole
+--   tokens in a line. You can represent tokenized source code as a list of
+--   <tt>CodeLine</tt>.
+module Koshucode.Baala.Base.Syntax.Clause
+
+-- | Tokens in clause.
+data CodeClause a
+CodeClause :: [CodeLine a] -> [a] -> CodeClause a
+
+-- | Source lines of clause
+clauseLines :: CodeClause a -> [CodeLine a]
+
+-- | Source tokens of clause
+clauseTokens :: CodeClause a -> [a]
+
+-- | Clause with no tokens.
+codeClauseEmpty :: CodeClause a
+splitClause :: Gather [(IndentSize, a)] [a]
+instance Typeable CodeClause
+instance Show a => Show (CodeClause a)
+instance Data a => Data (CodeClause a)
+instance CodePtr a => CodePtr (CodeClause a)
+
 module Koshucode.Baala.Base.Syntax.Tree
-
--- | Bracket type.
-data Bracket p
-
--- | None bracket
-BracketNone :: Bracket p
-
--- | Open bracket
-BracketOpen :: p -> Bracket p
-
--- | Close bracket
-BracketClose :: p -> Bracket p
 
 -- | Tree of leaf and branch.
 data CodeTree p a
@@ -1075,6 +1034,18 @@ leaves :: CodeTree p a -> [a]
 undouble :: Pred p -> Map (CodeTree p a)
 mapToLeaf :: (a -> a) -> Map (CodeTree p a)
 
+-- | Bracket type.
+data Bracket p
+
+-- | None bracket
+BracketNone :: Bracket p
+
+-- | Open bracket
+BracketOpen :: p -> Bracket p
+
+-- | Close bracket
+BracketClose :: p -> Bracket p
+
 -- | Get a bracket type.
 type GetBracketType p a = a -> Bracket p
 
@@ -1096,16 +1067,16 @@ type GetBracketType p a = a -> Bracket p
 --   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --   </pre>
 bracketTable :: Eq a => [(p, Pred a, Pred a)] -> GetBracketType p a
-instance Typeable Bracket
 instance Typeable CodeTree
-instance Show p => Show (Bracket p)
-instance Eq p => Eq (Bracket p)
-instance Ord p => Ord (Bracket p)
-instance Data p => Data (Bracket p)
+instance Typeable Bracket
 instance (Show p, Show a) => Show (CodeTree p a)
 instance (Eq p, Eq a) => Eq (CodeTree p a)
 instance (Ord p, Ord a) => Ord (CodeTree p a)
 instance (Data p, Data a) => Data (CodeTree p a)
+instance Show p => Show (Bracket p)
+instance Eq p => Eq (Bracket p)
+instance Ord p => Ord (Bracket p)
+instance Data p => Data (Bracket p)
 instance Functor (CodeTree p)
 
 
