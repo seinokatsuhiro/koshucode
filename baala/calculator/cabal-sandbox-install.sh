@@ -16,7 +16,7 @@ check () {
     fi
 }
 
-cabal sandbox init
+cabal sandbox init --sandbox ../cabal/sandbox
   check $? init
 
 for pkg in `sh ../koshu-pkg.sh dir`; do
@@ -24,7 +24,7 @@ for pkg in `sh ../koshu-pkg.sh dir`; do
         break
     fi
     cabal sandbox add-source ../$pkg
-    check $? $pkg
+    check $? add-source ../$pkg
 done
 
 cabal install --only-dependencies
