@@ -10,7 +10,7 @@ module Koshucode.Baala.Toolkit.Library.RDF
   ) where
 
 import qualified Data.RDF             as RDF
-import qualified Data.Text            as T
+import qualified Data.Text.Lazy       as T
 import qualified Koshucode.Baala.Data as D
 
 -- | Type of conversion

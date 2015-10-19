@@ -11,7 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuRdf
 import qualified Data.List                as List
 import qualified Data.Map                 as Map
 import qualified Data.RDF                 as RDF
-import qualified Data.Text                as Text
+import qualified Data.Text.Lazy           as Text
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base                    as B
