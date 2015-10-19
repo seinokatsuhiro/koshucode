@@ -88,7 +88,6 @@ library
         Koshucode.Baala.Core.Resource.Message
         Koshucode.Baala.Core.Resource.Read
         Koshucode.Baala.Core.Resource.Run
-        Koshucode.Baala.Core.Resource.Quoter
         Koshucode.Baala.Core.Resource.Resource
 
   -- Modules included in this library but not exported.
@@ -101,7 +100,6 @@ library
        , directory            == 1.2.*
        , filepath             == 1.*
        , syb                  == 0.*
-       , template-haskell     == 2.*
        , mtl                  == 2.*
        , koshucode-baala-base == 0.123.*
        , koshucode-baala-data == 0.123.*

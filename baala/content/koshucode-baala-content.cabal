@@ -48,7 +48,6 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Op.Global
-        Koshucode.Baala.Op.Quoter
 
         Koshucode.Baala.Rop.Cox
         Koshucode.Baala.Rop.Cox.Accessor
