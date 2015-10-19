@@ -124,7 +124,7 @@ readRdfGraph parser path =
     do rdf <- RDF.parseFile parser path
        return $ RDF.fromEither rdf
 
-writeJudges :: [D.ShortDef] -> [D.Judge Type.VContent] -> IO ()
+writeJudges :: [D.ShortDef] -> [Type.JudgeC] -> IO ()
 writeJudges sh js =
     do putStrLn B.emacsModeComment
        putStrLn ""

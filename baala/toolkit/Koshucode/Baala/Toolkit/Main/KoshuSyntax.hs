@@ -96,17 +96,17 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "    Type of the token is /token-type ."
              , "    Some tokens are classified into /token-subtype . >>>" ]
 
-judgeClause :: Int -> C.Clause -> D.Judge Type.VContent
+judgeClause :: Int -> C.Clause -> Type.JudgeC
 judgeClause clseq c = D.affirm "CLAUSE" args where
     args = [ ("clause"       , D.pInt clseq)
            , ("clause-type"  , D.pText $ C.clauseTypeText c)]
 
-judgeLine :: Int -> D.TokenLine -> D.Judge Type.VContent
+judgeLine :: Int -> D.TokenLine -> Type.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
     args = [ ("line"         , D.pInt ln)
            , ("clause"       , D.pInt clseq) ]
 
-judgeToken :: Int -> D.Token -> D.Judge Type.VContent
+judgeToken :: Int -> D.Token -> Type.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
     args = [ ("line"           , D.pInt ln)
            , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
@@ -177,15 +177,15 @@ descDict = B.CommentDoc [desc, js] where
              , "<<< /clause-type is one of cluase types."
              , "    /token-type is one of token types. >>>" ]
 
-judgeClauseType :: C.Clause -> D.Judge Type.VContent
+judgeClauseType :: C.Clause -> Type.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
     args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
 
-judgeTokenType :: D.Token -> D.Judge Type.VContent
+judgeTokenType :: D.Token -> Type.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
     args = [ ("token-type", D.pText $ D.tokenTypeText t) ]
 
-judgesClauseType :: [D.Judge Type.VContent]
+judgesClauseType :: [Type.JudgeC]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause C.clauseHeadEmpty x
     cs  = [ C.CRelmap "" []
@@ -194,7 +194,7 @@ judgesClauseType = map j cs where
           , C.CSlot "" []
           ]
 
-judgesTokenType :: [D.Judge Type.VContent]
+judgesTokenType :: [Type.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ D.TTextRaw  B.codePtZero ""

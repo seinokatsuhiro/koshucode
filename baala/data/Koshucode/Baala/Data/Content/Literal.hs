@@ -262,7 +262,7 @@ consType = gen where
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.ttrees . B.tokens
---  >>> let lit  = contentCons [] :: D.TTree -> B.Ab VContent
+--  >>> let lit  = contentCons [] :: D.TTree -> B.Ab BaalaC
 --  >>> let lits = consContents lit . trees
 --
 --  Boolean.

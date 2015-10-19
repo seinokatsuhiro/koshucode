@@ -39,7 +39,7 @@ minusInput inputA inputB =
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) js
 
-minusInputJudge :: L.Input -> L.Input -> IO ([D.Judge Type.VContent])
+minusInputJudge :: L.Input -> L.Input -> IO ([Type.JudgeC])
 minusInputJudge inputA inputB =
     do [textA, textB] <- L.readInputs [inputA, inputB]
        return $ L.readJudge textA `minusJudge` L.readJudge textB

@@ -7,7 +7,7 @@ module Koshucode.Baala.Type.Vanilla
     AboutC, AboutJudgesC, GlobalC, JudgeC,
     ResourceC, ResultC, ResultWriterC,
     -- * Content type
-    VContent (..),
+    BaalaC (..),
   ) where
 
 import qualified Data.Set                    as Set
@@ -20,19 +20,19 @@ import qualified Koshucode.Baala.Rop.Message as Msg
 
 -- ----------------------  Derived type
 
-type AboutC         = D.About        VContent
-type AboutJudgesC   = D.AboutJudges  VContent
-type GlobalC        = C.Global       VContent
-type JudgeC         = D.Judge        VContent
-type ResourceC      = C.Resource     VContent
-type ResultC        = C.Result       VContent
-type ResultWriterC  = C.ResultWriter VContent
+type AboutC         = D.About        BaalaC
+type AboutJudgesC   = D.AboutJudges  BaalaC
+type GlobalC        = C.Global       BaalaC
+type JudgeC         = D.Judge        BaalaC
+type ResourceC      = C.Resource     BaalaC
+type ResultC        = C.Result       BaalaC
+type ResultWriterC  = C.ResultWriter BaalaC
 
 
 -- ----------------------  Content type
 
 -- | Vanilla content type
-data VContent
+data BaalaC
     = VBool    Bool               -- ^ Boolean type
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
@@ -42,17 +42,17 @@ data VContent
     | VEmpty                      -- ^ Sign of no ordinary type
     | VInterp  D.Interp           -- ^ Interpretation type
     | VType    D.Type             -- ^ Type for type
-    | VList    [VContent]         -- ^ List type (objective collection)
-    | VSet     [VContent]         -- ^ Set type (informative collection)
-    | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
-    | VRel     (D.Rel VContent)   -- ^ Relation type
+    | VList    [BaalaC]           -- ^ List type (objective collection)
+    | VSet     [BaalaC]           -- ^ Set type (informative collection)
+    | VAssn    [B.Named BaalaC]   -- ^ Assn type (set of terms)
+    | VRel     (D.Rel BaalaC)     -- ^ Relation type
     deriving (Show)
 
-instance Eq VContent where
+instance Eq BaalaC where
     x == y  = compare x y == EQ
     x /= y  = compare x y /= EQ
 
-instance Ord VContent where
+instance Ord BaalaC where
     compare (VBool    x) (VBool    y)  = compare x y
     compare (VText    x) (VText    y)  = compare x y
     compare (VTerm    x) (VTerm    y)  = compare x y
@@ -68,7 +68,7 @@ instance Ord VContent where
     compare (VRel     x) (VRel     y)  = compare x y
     compare x y                        = typeOrder x `compare` typeOrder y
 
-typeOrder :: VContent -> Int
+typeOrder :: BaalaC -> Int
 typeOrder (VBool    _)  = 1
 typeOrder (VText    _)  = 2
 typeOrder (VTerm    _)  = 3
@@ -86,7 +86,7 @@ typeOrder (VRel     _)  = 15
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
-instance D.CTypeOf VContent where
+instance D.CTypeOf BaalaC where
     typeOf (VBool    _)  = D.TypeBool
     typeOf (VText    _)  = D.TypeText
     typeOf (VTerm    _)  = D.TypeTerm
@@ -106,13 +106,13 @@ typeSum cs = case B.unique $ map D.typeOf cs of
                [t] -> t
                ts  -> D.TypeSum ts
 
-instance D.CContent VContent where
+instance D.CContent BaalaC where
     appendContent (VEmpty) x           = Right x
     appendContent x (VEmpty)           = Right x
     appendContent (VText x) (VText y)  = Right . VText $ x ++ y
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
-instance B.Write VContent where
+instance B.Write BaalaC where
     writeDocWith sh c = case c of
         VText s      -> B.doc $ sh s
         VTerm s      -> B.doc $ "'/" ++ s
@@ -132,7 +132,7 @@ instance B.Write VContent where
         VRel r       -> B.writeHtmlWith sh r
         _            -> B.toHtml $ B.writeStringWith sh c
 
-instance W.ToJSON VContent where
+instance W.ToJSON BaalaC where
     toJSON c = case c of
         VText s      -> W.toJSON s
         VTerm s      -> W.toJSON $ '/' : s
@@ -152,42 +152,42 @@ instance W.ToJSON VContent where
 
 -- ----------------------  haskell data
 
-instance D.CBool VContent where
+instance D.CBool BaalaC where
     pBool                    = VBool
     gBool (VBool x)          = x
     gBool _                  = B.bug "gBool"
     isBool  (VBool _)        = True
     isBool  _                = False
 
-instance D.CDec VContent where
+instance D.CDec BaalaC where
     pDec                     = VDec
     gDec (VDec x)            = x
     gDec _                   = B.bug "gDec"
     isDec  (VDec _)          = True
     isDec  _                 = False
 
-instance D.CClock VContent where
+instance D.CClock BaalaC where
     pClock                   = VClock
     gClock  (VClock x)       = x
     gClock  _                = B.bug "gClock"
     isClock (VClock _)       = True
     isClock _                = False
 
-instance D.CTime VContent where
+instance D.CTime BaalaC where
     pTime                    = VTime
     gTime  (VTime x)         = x
     gTime  _                 = B.bug "gTime"
     isTime (VTime _)         = True
     isTime _                 = False
 
-instance D.CText VContent where
+instance D.CText BaalaC where
     pText                    = VText
     gText (VText s)          = s
     gText _                  = B.bug "gText"
     isText  (VText _)        = True
     isText  _                = False
 
-instance D.CList VContent where
+instance D.CList BaalaC where
     pList                    = VList
     gList (VList xs)         = xs
     gList _                  = []
@@ -198,47 +198,47 @@ instance D.CList VContent where
 
 -- ----------------------  koshu data
 
-instance D.CEmpty VContent where
+instance D.CEmpty BaalaC where
     empty                    = VEmpty
     isEmpty VEmpty           = True
     isEmpty _                = False
 
-instance D.CTerm VContent where
+instance D.CTerm BaalaC where
     pTerm                    = VTerm
     gTerm (VTerm s)          = s
     gTerm _                  = B.bug "gTerm"
     isTerm  (VTerm _)        = True
     isTerm  _                = False
 
-instance D.CInterp VContent where
+instance D.CInterp BaalaC where
     pInterp                  = VInterp
     gInterp (VInterp r)      = r
     gInterp _                = B.bug "gInterp"
     isInterp  (VInterp _)    = True
     isInterp  _              = False
 
-instance D.CType VContent where
+instance D.CType BaalaC where
     pType                    = VType
     gType (VType r)          = r
     gType _                  = B.bug "gType"
     isType  (VType _)        = True
     isType  _                = False
 
-instance D.CSet VContent where
+instance D.CSet BaalaC where
     pSet                     = VSet . B.omit D.isEmpty . B.unique
     gSet (VSet x)            = x
     gSet _                   = B.bug "gSet"
     isSet  (VSet _)          = True
     isSet  _                 = False
 
-instance D.CAssn VContent where
+instance D.CAssn BaalaC where
     pAssn                    = VAssn
     gAssn (VAssn x)          = x
     gAssn _                  = B.bug "gAssn"
     isAssn  (VAssn _)        = True
     isAssn  _                = False
 
-instance D.CRel VContent where
+instance D.CRel BaalaC where
     pRel                     = VRel
     gRel (VRel r)            = r
     gRel _                   = B.bug "gRel"
