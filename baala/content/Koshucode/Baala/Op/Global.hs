@@ -3,9 +3,9 @@
 -- | Rops and cops.
 
 module Koshucode.Baala.Op.Global
-  ( vanillaGlobal,
-    vanillaRops,
-    vanillaCops,
+  ( baalaGlobal,
+    baalaRops,
+    baalaCops,
   ) where
 
 import qualified Koshucode.Baala.Base      as B
@@ -17,17 +17,17 @@ import qualified Koshucode.Baala.Rop.Cox   as Rop
 import qualified Koshucode.Baala.Cop       as Cop
 
 -- | Global with operators.
-vanillaGlobal :: (D.CContent c) => C.Global c
-vanillaGlobal = global where
+baalaGlobal :: (D.CContent c) => C.Global c
+baalaGlobal = global where
     global    = C.global { C.globalOpset     = C.opsetFill opset }
-    opset     = C.opset  { C.opsetRopList    = vanillaRops
+    opset     = C.opset  { C.opsetRopList    = baalaRops
                          , C.opsetCop        = copset }
-    copset    = D.copset { D.copsetCopList   = vanillaCops
-                         , D.copsetInfixList = vanillaInfix }
+    copset    = D.copset { D.copsetCopList   = baalaCops
+                         , D.copsetInfixList = baalaInfix }
 
 -- | Relmap operators
-vanillaRops :: (D.CContent c) => [C.Rop c]
-vanillaRops = ropsCox ++ ropsNonCox
+baalaRops :: (D.CContent c) => [C.Rop c]
+baalaRops = ropsCox ++ ropsNonCox
 
 ropsCox :: (D.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxAccessor
@@ -52,18 +52,18 @@ ropsNonCox = Rop.ropsMeta
           ++ Rop.ropsBuiltin
 
 -- | Term-content operators.
-vanillaCops :: (D.CContent c) => [D.Cop c]
-vanillaCops = concat [ Cop.copsArith
-                     , Cop.copsLogic
-                     , Cop.copsList
-                     , Cop.copsMisc
-                     , Cop.copsOrder
-                     , Cop.copsTime
-                     , Cop.copsType ]
+baalaCops :: (D.CContent c) => [D.Cop c]
+baalaCops = concat [ Cop.copsArith
+                   , Cop.copsLogic
+                   , Cop.copsList
+                   , Cop.copsMisc
+                   , Cop.copsOrder
+                   , Cop.copsTime
+                   , Cop.copsType ]
 
 -- | Height table.
-vanillaInfix :: [B.Named B.InfixHeight]
-vanillaInfix = htab where
+baalaInfix :: [B.Named B.InfixHeight]
+baalaInfix = htab where
     h ! name = (name, Right h)
 
     htab =

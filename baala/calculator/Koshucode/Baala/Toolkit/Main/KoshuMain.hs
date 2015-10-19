@@ -140,7 +140,7 @@ options =
     ]
 
 -- | The main function for @koshu@ command.
---   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
+--   See 'Koshucode.Baala.Op.Global.baalaRops'
 --   for default argument.
 koshuMain :: (D.CContent c, W.ToJSON c) => C.Global c -> IO B.ExitCode
 koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
@@ -241,10 +241,19 @@ putElems g src =
   
    @koshu@ command is implemented using 'koshuMain'.
   
-   > import Koshucode.Baala.Toolkit.Main.KoshuMain
-   > import Koshucode.Baala.Op.Vanilla
+   > import qualified Koshucode.Baala.Base                     as B
+   > import qualified Koshucode.Baala.Core                     as C
+   > import qualified Koshucode.Baala.Type.Vanilla             as Type
+   > import qualified Koshucode.Baala.Op.Global                as Op
+   > import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
+   > import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
    > 
    > main :: IO ()
-   > main = koshuMain vanillaRops
+   > main = B.exitWith =<< Main.koshuMain koshuGlobal
+   > 
+   > koshuGlobal :: Type.GlobalC
+   > koshuGlobal = Op.baalaGlobal
+   >               { C.globalSynopsis  = "The Koshucode Baala Implementation"
+   >               , C.globalVersion   = Main.version }
 -}
 
