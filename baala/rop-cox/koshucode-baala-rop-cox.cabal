@@ -67,9 +67,6 @@ library
        , containers                  == 0.5.*
        , koshucode-baala-base        == 0.124.*
        , koshucode-baala-data        == 0.124.*
-       , koshucode-baala-cop         == 0.124.*
        , koshucode-baala-core        == 0.124.*
        , koshucode-baala-rop-flat    == 0.124.*
-       , koshucode-baala-rop-nested  == 0.124.*
-       , koshucode-baala-writer      == 0.124.*
 
