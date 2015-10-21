@@ -25,17 +25,7 @@ baalaGlobal = global where
 
 -- | Relmap operators
 baalaRops :: (D.CContent c) => [C.Rop c]
-baalaRops = ropsCox ++ ropsNonCox
-
-ropsCox :: (D.CContent c) => [C.Rop c]
-ropsCox    = Rop.ropsCoxAccessor
-          ++ Rop.ropsCoxCalc
-          ++ Rop.ropsCoxEmpty
-          ++ Rop.ropsCoxFilter
-          ++ Rop.ropsCoxGadget
-          ++ Rop.ropsCoxRange
-
-ropsNonCox :: (D.CContent c) => [C.Rop c]
-ropsNonCox = Rop.ropsFlat
-          ++ Rop.ropsNest
+baalaRops = Rop.ropsCox
+         ++ Rop.ropsFlat
+         ++ Rop.ropsNest
 
