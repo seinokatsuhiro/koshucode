@@ -59,7 +59,7 @@ executable koshu
        , koshucode-baala-core        == 0.123.*
        , koshucode-baala-rop-flat    == 0.123.*
        , koshucode-baala-rop-nested  == 0.123.*
-       , koshucode-baala-content     == 0.123.*
+       , koshucode-baala-rop-cox     == 0.123.*
        , koshucode-baala-cop         == 0.123.*
        , koshucode-baala-writer      == 0.123.*
 
@@ -91,7 +91,7 @@ library
        , koshucode-baala-core        == 0.123.*
        , koshucode-baala-rop-flat    == 0.123.*
        , koshucode-baala-rop-nested  == 0.123.*
-       , koshucode-baala-content     == 0.123.*
+       , koshucode-baala-rop-cox     == 0.123.*
        , koshucode-baala-cop         == 0.123.*
        , koshucode-baala-writer      == 0.123.*
 

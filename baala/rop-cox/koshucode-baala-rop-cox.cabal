@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-content
+name:                koshucode-baala-rop-cox
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,7 +10,7 @@ name:                koshucode-baala-content
 version:             0.123.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            Term-content operators in Koshucode
+synopsis:            Relation-mapping operators with content calculations
 
 -- A longer description of the package.
 description:         An impelemntation of relation-mapping operators
