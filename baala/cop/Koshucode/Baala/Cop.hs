@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Cop
   ( module Koshucode.Baala.Cop.Arith,
+    module Koshucode.Baala.Cop.Bundle,
     module Koshucode.Baala.Cop.List,
     module Koshucode.Baala.Cop.Logic,
     module Koshucode.Baala.Cop.Misc,
@@ -13,9 +14,11 @@ module Koshucode.Baala.Cop
   ) where
 
 import Koshucode.Baala.Cop.Arith
+import Koshucode.Baala.Cop.Bundle
 import Koshucode.Baala.Cop.List
 import Koshucode.Baala.Cop.Logic
 import Koshucode.Baala.Cop.Misc
 import Koshucode.Baala.Cop.Order
 import Koshucode.Baala.Cop.Time
 import Koshucode.Baala.Cop.Type
+

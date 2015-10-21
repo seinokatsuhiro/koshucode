@@ -48,6 +48,7 @@ library
   exposed-modules:
         Koshucode.Baala.Cop
         Koshucode.Baala.Cop.Arith
+        Koshucode.Baala.Cop.Bundle
         Koshucode.Baala.Cop.Coxhand
         Koshucode.Baala.Cop.List
         Koshucode.Baala.Cop.Logic
