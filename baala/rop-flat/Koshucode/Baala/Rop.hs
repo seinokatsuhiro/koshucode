@@ -3,8 +3,8 @@
 -- | Operators in Koshucode.
 
 module Koshucode.Baala.Rop
-  (
-    module Koshucode.Baala.Rop.Builtin,
+  ( module Koshucode.Baala.Rop.Builtin,
+    module Koshucode.Baala.Rop.Bundle,
     module Koshucode.Baala.Rop.Check,
     module Koshucode.Baala.Rop.Control,
     module Koshucode.Baala.Rop.DepRank,
@@ -19,6 +19,7 @@ module Koshucode.Baala.Rop
   ) where
 
 import Koshucode.Baala.Rop.Builtin
+import Koshucode.Baala.Rop.Bundle
 import Koshucode.Baala.Rop.Check
 import Koshucode.Baala.Rop.Control
 import Koshucode.Baala.Rop.DepRank

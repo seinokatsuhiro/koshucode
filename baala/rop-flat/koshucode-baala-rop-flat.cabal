@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Rop.Builtin.Rop
         Koshucode.Baala.Rop.Builtin.Term
 
+        Koshucode.Baala.Rop.Bundle
         Koshucode.Baala.Rop.Check
         Koshucode.Baala.Rop.Control
         Koshucode.Baala.Rop.DepRank

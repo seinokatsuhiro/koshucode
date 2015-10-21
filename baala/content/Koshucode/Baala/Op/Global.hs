@@ -36,16 +36,6 @@ ropsCox    = Rop.ropsCoxAccessor
           ++ Rop.ropsCoxRange
 
 ropsNonCox :: (D.CContent c) => [C.Rop c]
-ropsNonCox = Rop.ropsMeta
-          ++ Rop.ropsResource
+ropsNonCox = Rop.ropsFlat
           ++ Rop.ropsNest
-          ++ Rop.ropsCheck
-          ++ Rop.ropsPeripheral
-          ++ Rop.ropsControl
-          ++ Rop.ropsGadget
-          ++ Rop.ropsTerm
-          ++ Rop.ropsTermGadget
-          ++ Rop.ropsLattice
-          ++ Rop.ropsSource
-          ++ Rop.ropsBuiltin
 
