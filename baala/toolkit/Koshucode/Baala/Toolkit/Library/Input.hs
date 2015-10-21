@@ -3,8 +3,7 @@
 -- | Input sources.
 
 module Koshucode.Baala.Toolkit.Library.Input
-  (
-    -- * Input
+  ( -- * Input
     Input (..),
     inputText,
     readInput,
@@ -12,8 +11,7 @@ module Koshucode.Baala.Toolkit.Library.Input
     readJudge,
   ) where
 
-import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Type.Vanilla  as Type
+import qualified Koshucode.Baala.Core  as C
 
 data Input = Stdin | File FilePath
              deriving (Show, Eq)
@@ -29,9 +27,9 @@ readInput (File p)  = readFile p
 readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
-readJudge :: String -> [Type.JudgeC]
+readJudge :: String -> [C.JudgeC]
 readJudge src =
-    let root = C.resEmpty :: Type.ResourceC
+    let root = C.resEmpty :: C.ResourceC
     in case C.readResourceText root src of
          Right sec  -> C.resJudge sec
          Left _     -> []

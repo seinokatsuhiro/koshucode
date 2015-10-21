@@ -21,6 +21,10 @@ module Koshucode.Baala.Core.Resource.Resource
     Rop, RopCons, Intmed,
     ShortAssert, ShortAsserts,
     global,
+
+    -- * Concrete type
+    AboutC, AboutJudgesC, GlobalC, JudgeC,
+    ResourceC, ResultC, ResultWriterC,
   ) where
 
 import qualified Koshucode.Baala.Base           as B
@@ -122,3 +126,15 @@ type ShortAsserts    c = C.ShortAsserts'    Resource c
 
 global :: (D.CContent c) => Global c
 global = C.global' resEmpty
+
+
+-- ----------------------  Concrete type
+
+type AboutC            = D.About        D.BaalaC
+type AboutJudgesC      = D.AboutJudges  D.BaalaC
+type GlobalC           = Global         D.BaalaC
+type JudgeC            = D.Judge        D.BaalaC
+type ResourceC         = Resource       D.BaalaC
+type ResultC           = C.Result       D.BaalaC
+type ResultWriterC     = C.ResultWriter D.BaalaC
+

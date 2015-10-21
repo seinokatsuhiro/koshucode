@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Koshucode.Baala.Writer.Json
   ( -- * JSON
@@ -57,6 +58,23 @@ text s = s
 
 jsonNull :: A.Value
 jsonNull = A.Null
+
+instance A.ToJSON D.BaalaC where
+    toJSON c = case c of
+        D.VText s      -> A.toJSON s
+        D.VTerm s      -> A.toJSON $ '/' : s
+        D.VDec  n      -> A.toJSON (D.decimalToRealFloat n :: Double)
+        D.VClock t     -> unimplemented t
+        D.VTime t      -> unimplemented t
+        D.VBool b      -> A.toJSON b
+        D.VEmpty       -> jsonNull
+        D.VInterp i    -> unimplemented i
+        D.VType t      -> unimplemented t
+        D.VList xs     -> A.toJSON xs
+        D.VSet  xs     -> A.toJSON xs
+        D.VAssn xs     -> termsToJSON xs
+        D.VRel r       -> unimplemented r
+        where unimplemented x = A.toJSON $ "<unimplemented>" ++ show x
 
 
 -- --------------------------------------------  GeoJSON

@@ -1,32 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Vanilla content type.
+-- | Baala content type.
 
-module Koshucode.Baala.Type.Vanilla
-  ( -- * Derived type
-    AboutC, AboutJudgesC, GlobalC, JudgeC,
-    ResourceC, ResultC, ResultWriterC,
-    -- * Content type
-    BaalaC (..),
+module Koshucode.Baala.Data.Content.BaalaC
+  ( BaalaC (..),
   ) where
 
-import qualified Data.Set                    as Set
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Writer      as W
-import qualified Koshucode.Baala.Rop.Message as Msg
-
-
--- ----------------------  Derived type
-
-type AboutC         = D.About        BaalaC
-type AboutJudgesC   = D.AboutJudges  BaalaC
-type GlobalC        = C.Global       BaalaC
-type JudgeC         = D.Judge        BaalaC
-type ResourceC      = C.Resource     BaalaC
-type ResultC        = C.Result       BaalaC
-type ResultWriterC  = C.ResultWriter BaalaC
+import qualified Data.Set                              as Set
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data.Type             as D
+import qualified Koshucode.Baala.Data.Content.Class    as D
+import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 
 -- ----------------------  Content type
@@ -131,23 +115,6 @@ instance B.Write BaalaC where
     writeHtmlWith sh c = case c of
         VRel r       -> B.writeHtmlWith sh r
         _            -> B.toHtml $ B.writeStringWith sh c
-
-instance W.ToJSON BaalaC where
-    toJSON c = case c of
-        VText s      -> W.toJSON s
-        VTerm s      -> W.toJSON $ '/' : s
-        VDec  n      -> W.toJSON (D.decimalToRealFloat n :: Double)
-        VClock t     -> unimplemented t
-        VTime t      -> unimplemented t
-        VBool b      -> W.toJSON b
-        VEmpty       -> W.jsonNull
-        VInterp i    -> unimplemented i
-        VType t      -> unimplemented t
-        VList xs     -> W.toJSON xs
-        VSet  xs     -> W.toJSON xs
-        VAssn xs     -> W.termsToJSON xs
-        VRel r       -> unimplemented r
-        where unimplemented x = W.toJSON $ "<unimplemented>" ++ show x
 
 
 -- ----------------------  haskell data

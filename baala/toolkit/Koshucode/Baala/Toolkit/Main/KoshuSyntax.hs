@@ -12,7 +12,6 @@ import qualified System.Console.GetOpt                   as G
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
-import qualified Koshucode.Baala.Type.Vanilla            as Type
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
@@ -96,17 +95,17 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "    Type of the token is /token-type ."
              , "    Some tokens are classified into /token-subtype . >>>" ]
 
-judgeClause :: Int -> C.Clause -> Type.JudgeC
+judgeClause :: Int -> C.Clause -> C.JudgeC
 judgeClause clseq c = D.affirm "CLAUSE" args where
     args = [ ("clause"       , D.pInt clseq)
            , ("clause-type"  , D.pText $ C.clauseTypeText c)]
 
-judgeLine :: Int -> D.TokenLine -> Type.JudgeC
+judgeLine :: Int -> D.TokenLine -> C.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
     args = [ ("line"         , D.pInt ln)
            , ("clause"       , D.pInt clseq) ]
 
-judgeToken :: Int -> D.Token -> Type.JudgeC
+judgeToken :: Int -> D.Token -> C.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
     args = [ ("line"           , D.pInt ln)
            , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
@@ -177,15 +176,15 @@ descDict = B.CommentDoc [desc, js] where
              , "<<< /clause-type is one of cluase types."
              , "    /token-type is one of token types. >>>" ]
 
-judgeClauseType :: C.Clause -> Type.JudgeC
+judgeClauseType :: C.Clause -> C.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
     args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
 
-judgeTokenType :: D.Token -> Type.JudgeC
+judgeTokenType :: D.Token -> C.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
     args = [ ("token-type", D.pText $ D.tokenTypeText t) ]
 
-judgesClauseType :: [Type.JudgeC]
+judgesClauseType :: [C.JudgeC]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause C.clauseHeadEmpty x
     cs  = [ C.CRelmap "" []
@@ -194,7 +193,7 @@ judgesClauseType = map j cs where
           , C.CSlot "" []
           ]
 
-judgesTokenType :: [Type.JudgeC]
+judgesTokenType :: [C.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ D.TTextRaw  B.codePtZero ""
