@@ -3,15 +3,15 @@
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Core                     as C
-import qualified Koshucode.Baala.Op.Global                as Op
+import qualified Koshucode.Baala.Toolkit.Library.Global   as Gl
+import qualified Koshucode.Baala.Toolkit.Library.Version  as Ver
 import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
-import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
 
 main :: IO ()
 main = B.exitWith =<< Main.koshuMain koshuGlobal
 
 koshuGlobal :: C.GlobalC
-koshuGlobal = Op.baalaGlobal
+koshuGlobal = Gl.baalaGlobal
               { C.globalSynopsis  = "The Koshucode Baala Implementation"
-              , C.globalVersion   = Main.version }
+              , C.globalVersion   = Ver.version }
 

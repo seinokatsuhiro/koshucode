@@ -50,27 +50,31 @@ executable koshu
   ghc-options: -rtsopts
   other-modules:
   build-depends:
-         base                     == 4.*
-       , directory                == 1.*
-       , filepath                 == 1.*
-       , time                     == 1.*
-       , koshucode-baala-base     == 0.123.*
-       , koshucode-baala-data     == 0.123.*
-       , koshucode-baala-core     == 0.123.*
-       , koshucode-baala-rop-flat == 0.123.*
-       , koshucode-baala-content  == 0.123.*
-       , koshucode-baala-writer   == 0.123.*
+         base                        == 4.*
+       , directory                   == 1.*
+       , filepath                    == 1.*
+       , time                        == 1.*
+       , koshucode-baala-base        == 0.123.*
+       , koshucode-baala-data        == 0.123.*
+       , koshucode-baala-core        == 0.123.*
+       , koshucode-baala-rop-flat    == 0.123.*
+       , koshucode-baala-rop-nested  == 0.123.*
+       , koshucode-baala-content     == 0.123.*
+       , koshucode-baala-cop         == 0.123.*
+       , koshucode-baala-writer      == 0.123.*
 
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuMain
-        Koshucode.Baala.Toolkit.Main.KoshuFilter
         Koshucode.Baala.Toolkit.Library.Element
         Koshucode.Baala.Toolkit.Library.Exit
+        Koshucode.Baala.Toolkit.Library.Global
         Koshucode.Baala.Toolkit.Library.Run
         Koshucode.Baala.Toolkit.Library.SimpleOption
         Koshucode.Baala.Toolkit.Library.Version
+
+        Koshucode.Baala.Toolkit.Main.KoshuMain
+        Koshucode.Baala.Toolkit.Main.KoshuFilter
 
   -- Modules included in this library but not exported.
   other-modules:       
@@ -78,14 +82,16 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                     == 4.*
-       , directory                == 1.*
-       , filepath                 == 1.*
-       , time                     == 1.*
-       , koshucode-baala-base     == 0.123.*
-       , koshucode-baala-data     == 0.123.*
-       , koshucode-baala-core     == 0.123.*
-       , koshucode-baala-rop-flat == 0.123.*
-       , koshucode-baala-content  == 0.123.*
-       , koshucode-baala-writer   == 0.123.*
+         base                        == 4.*
+       , directory                   == 1.*
+       , filepath                    == 1.*
+       , time                        == 1.*
+       , koshucode-baala-base        == 0.123.*
+       , koshucode-baala-data        == 0.123.*
+       , koshucode-baala-core        == 0.123.*
+       , koshucode-baala-rop-flat    == 0.123.*
+       , koshucode-baala-rop-nested  == 0.123.*
+       , koshucode-baala-content     == 0.123.*
+       , koshucode-baala-cop         == 0.123.*
+       , koshucode-baala-writer      == 0.123.*
 

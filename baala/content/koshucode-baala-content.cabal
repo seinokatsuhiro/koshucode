@@ -47,8 +47,6 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Op.Global
-
         Koshucode.Baala.Rop.Cox
         Koshucode.Baala.Rop.Cox.Accessor
         Koshucode.Baala.Rop.Cox.Bundle

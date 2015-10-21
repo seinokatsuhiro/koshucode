@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Rops and cops.
+-- | Baala global data.
 
-module Koshucode.Baala.Op.Global
+module Koshucode.Baala.Toolkit.Library.Global
   ( baalaGlobal,
     baalaRops,
   ) where
