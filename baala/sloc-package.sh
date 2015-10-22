@@ -16,7 +16,7 @@ usage () {
 
 sloc_count () {
     echo "Count sloc for $1"
-    ./sloc-haskell.pl `sloc_list $1` | sloc_post "$1/data/SLOC.k"
+    perl sloc-haskell.pl `sloc_list $1` | sloc_post "$1/data/SLOC.k"
 }
 
 sloc_post () {
