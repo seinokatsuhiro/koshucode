@@ -18,11 +18,11 @@ pkg_help () {
     echo "  synopsis         List synopses in cabal files"
     echo
     echo "COMMAND for executing"
-    echo "  build-haddock    Build and generate Haddock documents"
     echo "  exec C           Execute C in each package directories"
     echo "  exec-all C       Same as exec except for ignoring exit status"
     echo "  init             Initilize sandbox"
     echo "  haddock          Generate Haddock documents"
+    echo "  rehaddock        Regenerate Haddock documents"
     echo
 }
 
@@ -33,7 +33,7 @@ pkg_section () {
 }
 
 pkg_dirs () {
-    echo base data core writer rop-flat rop-nested cop content calculator toolkit
+    echo base data core writer rop-flat rop-nested rop-cox cop calculator toolkit
 }
 
 pkg_cabal () {
@@ -168,9 +168,6 @@ pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/doc/html
 pkg_doc_haskell=http://hackage.haskell.org/packages/archive/base/latest/doc/html
 
 case "$1" in
-    build-haddock)
-        pkg_exec cabal build
-        pkg_haddock ;;
     cabal)
         pkg_cabal ;;
     cabal-path)
@@ -198,6 +195,10 @@ case "$1" in
         else
             pkg_hoogle_grep "$@"
         fi ;;
+    rehaddock)
+        pkg_exec cabal configure
+        pkg_exec cabal build
+        pkg_haddock ;;
     synopsis)
         pkg_cabal_section synopsis ;;
     *)
