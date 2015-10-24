@@ -46,15 +46,14 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Rop.Flat
-        Koshucode.Baala.Rop.Flat.Message
-
         Koshucode.Baala.Rop.Base
         Koshucode.Baala.Rop.Base.Define
         Koshucode.Baala.Rop.Base.Get
+        Koshucode.Baala.Rop.Base.Message
         Koshucode.Baala.Rop.Base.Rop
         Koshucode.Baala.Rop.Base.Term
 
+        Koshucode.Baala.Rop.Flat
         Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check
         Koshucode.Baala.Rop.Flat.Control
@@ -66,8 +65,8 @@ library
         Koshucode.Baala.Rop.Flat.Lattice.Rop
         Koshucode.Baala.Rop.Flat.Lattice.Tropashko
 
+        Koshucode.Baala.Rop.Flat.Message
         Koshucode.Baala.Rop.Flat.Meta
-
         Koshucode.Baala.Rop.Flat.Peripheral
         Koshucode.Baala.Rop.Flat.Resource
         Koshucode.Baala.Rop.Flat.Source

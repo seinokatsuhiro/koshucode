@@ -15,7 +15,7 @@ module Koshucode.Baala.Rop.Base.Rop
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base.Define    as Op
-import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
+import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 
 
 -- | Built-in relmap operator.

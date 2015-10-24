@@ -1,18 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Rop.Flat.Message
-  ( -- * Core package
-    module Koshucode.Baala.Core.Message,
-  
-    -- * Op package
+  ( module Koshucode.Baala.Rop.Base.Message,
     checkTerm,
     diffHead,
     dupTerm,
     dumpCox,
     dumpRel,
     dumpTrees,
-    noAttr,
-    notImpl,
     notNestRel,
     oddAttr,
     reqBool,
@@ -27,7 +22,7 @@ module Koshucode.Baala.Rop.Flat.Message
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Data as D
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Core.Message
+import Koshucode.Baala.Rop.Base.Message
 
 
 -- ----------------------  Op package
@@ -65,14 +60,6 @@ dupTerm ns he =
 -- | Odd attribute
 oddAttr :: B.Ab a
 oddAttr = Left $ B.abortBecause "Odd attribute"
-
--- | Attribute not found
-noAttr :: String -> B.Ab a
-noAttr n = Left $ B.abortLine "Attribute not found" n
-
--- | Not implemented
-notImpl :: B.Ab a
-notImpl = Left $ B.abortBecause "Not implemented"
 
 -- | Not a nested relation
 notNestRel :: [D.TermName] -> D.Head -> B.Ab a
