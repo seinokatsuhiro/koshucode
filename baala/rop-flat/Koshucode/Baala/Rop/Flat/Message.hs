@@ -8,7 +8,6 @@ module Koshucode.Baala.Rop.Flat.Message
     dumpCox,
     dumpRel,
     dumpTrees,
-    notNestRel,
     oddAttr,
     reqBool,
     reqRel,
@@ -60,12 +59,6 @@ dupTerm ns he =
 -- | Odd attribute
 oddAttr :: B.Ab a
 oddAttr = Left $ B.abortBecause "Odd attribute"
-
--- | Not a nested relation
-notNestRel :: [D.TermName] -> D.Head -> B.Ab a
-notNestRel ns he =
-    Left $ B.abortLines "Not a nested relation"
-         $ detailTermRel "Given" ns he
 
 -- | Require Boolean
 reqBool :: B.Ab a

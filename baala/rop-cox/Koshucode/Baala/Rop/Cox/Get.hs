@@ -18,11 +18,11 @@ module Koshucode.Baala.Rop.Cox.Get
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data         as D
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Op
-import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
+import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.Core             as C
+import qualified Koshucode.Baala.Rop.Base         as Op
+import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 
 -- --------------------------------------------  Cox
