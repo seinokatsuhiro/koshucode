@@ -16,6 +16,7 @@ pkg_help () {
     echo "  hoogle           List Hoogle files"
     echo "  hoogle P ...     Grep P ... for Hoogle files"
     echo "  synopsis         List synopses in cabal files"
+    echo "  unreg            Unregister koshucode libraries"
     echo
     echo "COMMAND for executing"
     echo "  exec C           Execute C in each package directories"
@@ -36,6 +37,10 @@ pkg_dirs () {
     echo base data core writer rop-flat rop-nested rop-cox cop calculator toolkit
 }
 
+pkg_dirs_rev () {
+    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data base
+}
+
 pkg_cabal () {
     for pkg in `pkg_dirs`; do
         echo "koshucode-baala-$pkg.cabal"
@@ -49,10 +54,6 @@ pkg_cabal_path () {
             echo "$pkg_cabal"
         fi
     done
-}
-
-pkg_dir () {
-    pkg_dirs | xargs -n 1
 }
 
 pkg_exec () {
@@ -159,6 +160,17 @@ pkg_cabal_section () {
     done
 }
 
+pkg_unreg () {
+    if [ -e cabal.sandbox.config ]; then
+        for pkg in `pkg_dirs_rev`; do
+            cabal exec ghc-pkg unregister koshucode-baala-$pkg
+        done
+    else
+        echo "No sandbox config"
+    fi
+
+}
+
 # --------------------------------------------  main
 
 pkg_prog=koshu-pkg.sh
@@ -175,7 +187,9 @@ case "$1" in
     copyright)
         pkg_cabal_section copyright ;;
     dir)
-        pkg_dir ;;
+        pkg_dirs | xargs -n 1 ;;
+    dir-rev)
+        pkg_dirs_rev | xargs -n 1 ;;
     exec)
         shift
         pkg_exec "$@" ;;
@@ -201,6 +215,8 @@ case "$1" in
         pkg_haddock ;;
     synopsis)
         pkg_cabal_section synopsis ;;
+    unreg)
+        pkg_unreg ;;
     *)
         pkg_help ;;
 esac
