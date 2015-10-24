@@ -7,7 +7,7 @@ module Koshucode.Baala.Rop.Flat.Lattice.Rop
   ) where
 
 import qualified Koshucode.Baala.Core                  as C
-import qualified Koshucode.Baala.Rop.Builtin           as Op
+import qualified Koshucode.Baala.Rop.Base              as Op
 import qualified Koshucode.Baala.Rop.Flat.Lattice.Restrict  as Op
 import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
 

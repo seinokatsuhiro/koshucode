@@ -8,7 +8,7 @@ module Koshucode.Baala.Rop.Nest.Rop
 
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Builtin        as Op
+import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Rop.Nest.Confl     as Op
 import qualified Koshucode.Baala.Rop.Nest.Deriv     as Op
 import qualified Koshucode.Baala.Rop.Nest.Flow      as Op

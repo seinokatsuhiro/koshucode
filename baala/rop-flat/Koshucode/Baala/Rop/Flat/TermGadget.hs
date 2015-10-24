@@ -15,7 +15,7 @@ module Koshucode.Baala.Rop.Flat.TermGadget
 import qualified Data.List                   as List
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Builtin as Op
+import qualified Koshucode.Baala.Rop.Base    as Op
 import qualified Koshucode.Baala.Rop.Flat.Term    as Op
 
 

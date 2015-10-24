@@ -50,11 +50,11 @@ library
         Koshucode.Baala.Rop.Flat
         Koshucode.Baala.Rop.Flat.Message
 
-        Koshucode.Baala.Rop.Builtin
-        Koshucode.Baala.Rop.Builtin.Define
-        Koshucode.Baala.Rop.Builtin.Get
-        Koshucode.Baala.Rop.Builtin.Rop
-        Koshucode.Baala.Rop.Builtin.Term
+        Koshucode.Baala.Rop.Base
+        Koshucode.Baala.Rop.Base.Define
+        Koshucode.Baala.Rop.Base.Get
+        Koshucode.Baala.Rop.Base.Rop
+        Koshucode.Baala.Rop.Base.Term
 
         Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check

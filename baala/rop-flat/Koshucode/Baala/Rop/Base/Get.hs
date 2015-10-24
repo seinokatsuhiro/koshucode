@@ -3,7 +3,7 @@
 
 -- | Attribute getters: Extract attribute from use of relmap.
 
-module Koshucode.Baala.Rop.Builtin.Get
+module Koshucode.Baala.Rop.Base.Get
   ( -- * Datatype
     RopGet,
   
@@ -29,7 +29,7 @@ module Koshucode.Baala.Rop.Builtin.Get
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Builtin.Term as Op
+import qualified Koshucode.Baala.Rop.Base.Term    as Op
 import qualified Koshucode.Baala.Rop.Flat.Message      as Msg
 
 

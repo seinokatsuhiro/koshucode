@@ -3,7 +3,7 @@
 -- | Operators in Koshucode.
 
 module Koshucode.Baala.Rop.Flat
-  ( module Koshucode.Baala.Rop.Builtin,
+  ( module Koshucode.Baala.Rop.Base,
     module Koshucode.Baala.Rop.Flat.Bundle,
     module Koshucode.Baala.Rop.Flat.Check,
     module Koshucode.Baala.Rop.Flat.Control,
@@ -18,7 +18,7 @@ module Koshucode.Baala.Rop.Flat
     module Koshucode.Baala.Rop.Flat.TermGadget,
   ) where
 
-import Koshucode.Baala.Rop.Builtin
+import Koshucode.Baala.Rop.Base
 import Koshucode.Baala.Rop.Flat.Bundle
 import Koshucode.Baala.Rop.Flat.Check
 import Koshucode.Baala.Rop.Flat.Control

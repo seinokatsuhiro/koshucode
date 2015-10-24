@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Builtin.Define
+module Koshucode.Baala.Rop.Base.Define
   ( RopDefine,
     ropList, def,
   ) where

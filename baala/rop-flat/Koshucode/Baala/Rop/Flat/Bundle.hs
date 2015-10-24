@@ -4,9 +4,9 @@ module Koshucode.Baala.Rop.Flat.Bundle
   ( ropsFlat,
   ) where
 
-import qualified Koshucode.Baala.Data            as D
-import qualified Koshucode.Baala.Core            as C
-import qualified Koshucode.Baala.Rop.Builtin     as Rop
+import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Core                 as C
+import qualified Koshucode.Baala.Rop.Base             as Rop
 import qualified Koshucode.Baala.Rop.Flat.Check       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Control     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Lattice     as Rop

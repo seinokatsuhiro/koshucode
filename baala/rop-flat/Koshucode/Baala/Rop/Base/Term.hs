@@ -3,7 +3,7 @@
 
 -- | Parsing list of terms.
 
-module Koshucode.Baala.Rop.Builtin.Term
+module Koshucode.Baala.Rop.Base.Term
   ( termName, termNames, termNamesCo,
     termNamePairs, termNamesColon,
     picker,
