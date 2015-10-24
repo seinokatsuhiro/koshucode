@@ -46,7 +46,6 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Rop
         Koshucode.Baala.Rop.Flat
         Koshucode.Baala.Rop.Flat.Message
 
