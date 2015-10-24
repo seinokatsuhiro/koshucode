@@ -736,7 +736,7 @@ Command `./dir-rank.k ../content/data/IMPORT.k` exits with 2 and produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Rop"
+|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Rop.Flat"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Rop.Nest"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Rop.Cox"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Cop"
@@ -789,8 +789,8 @@ Command `./dir-rank.k ../calculator/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 0 | 'Base | [ ] ] [ 0 | 'Cop | [ ] ] [ 0 | 'Core | [ ] ] [ 0 | 'Data | [ ] ] [ 0 | 'Rop | [ ] ] [ 0 | 'Writer | [ ] ] |}
-|-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala.Rop  /base-rank {| /rank /base /import-dir [ 0 | 'Cox | [ ] ] [ 0 | 'Nest | [ ] ] |}
+|-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 0 | 'Base | [ ] ] [ 0 | 'Cop | [ ] ] [ 0 | 'Core | [ ] ] [ 0 | 'Data | [ ] ] [ 0 | 'Writer | [ ] ] |}
+|-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala.Rop  /base-rank {| /rank /base /import-dir [ 0 | 'Cox | [ ] ] [ 0 | 'Flat | [ ] ] [ 0 | 'Nest | [ ] ] |}
 |-- DIR-RANK  /dir-rank 1  /dir 'Koshucode.Baala.Toolkit.Library  /base-rank {| /rank /base /import-dir [ 0 | 'SimpleOption | [ ] ] [ 1 | 'Element | [ ] ] [ 1 | 'Exit | [ ] ] [ 1 | 'Global | [ ] ] [ 1 | 'Run | [ ] ] |}
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Toolkit.Main  /base-rank {| /rank /base /import-dir [ 2 | 'KoshuFilter | [ ] ] [ 2 | 'KoshuMain | [ ] ] |}
 
@@ -808,12 +808,12 @@ TABLE : DIR-RANK
                                                0     'Cop            [ ]
                                                0     'Core           [ ]
                                                0     'Data           [ ]
-                                               0     'Rop            [ ]
                                                0     'Writer         [ ]
                                                
   0         'Koshucode.Baala.Rop               /rank /base           /import-dir
                                                ----- --------------- -----------
                                                0     'Cox            [ ]
+                                               0     'Flat           [ ]
                                                0     'Nest           [ ]
                                                
   1         'Koshucode.Baala.Toolkit.Library   /rank /base           /import-dir
