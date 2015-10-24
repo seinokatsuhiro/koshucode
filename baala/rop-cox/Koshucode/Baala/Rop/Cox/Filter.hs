@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Rop.Builtin   as Op
 import qualified Koshucode.Baala.Rop.Cox.Get   as Op
-import qualified Koshucode.Baala.Rop.Message   as Msg
+import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
 -- | Implementation of relational operators.

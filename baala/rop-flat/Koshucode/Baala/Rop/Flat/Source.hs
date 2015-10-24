@@ -1,7 +1,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Source
+module Koshucode.Baala.Rop.Flat.Source
   ( ropsSource,
   
     -- * dee & dum

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Resource
+module Koshucode.Baala.Rop.Flat.Resource
   ( ropsResource,
     -- * koshu-res-rop
     consKoshuResRop, relkitKoshuResRop,

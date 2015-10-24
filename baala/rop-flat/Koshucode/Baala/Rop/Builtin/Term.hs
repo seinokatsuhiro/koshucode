@@ -11,7 +11,7 @@ module Koshucode.Baala.Rop.Builtin.Term
 
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Rop.Message as Msg
+import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 -- | Extract a term name.
 termName :: D.TTree -> B.Ab D.TermName

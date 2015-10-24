@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Message
+module Koshucode.Baala.Rop.Flat.Message
   ( -- * Core package
     module Koshucode.Baala.Core.Message,
   

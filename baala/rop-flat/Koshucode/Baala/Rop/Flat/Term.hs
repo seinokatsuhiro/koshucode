@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Term
+module Koshucode.Baala.Rop.Flat.Term
   ( ropsTerm,
     -- * pick
     consPick, relmapPick, relkitPick,
@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Rop.Builtin as Op
-import qualified Koshucode.Baala.Rop.Message as Msg
+import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
 -- | Relmap operators for manipulating term names.

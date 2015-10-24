@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Rop.Gadget
+module Koshucode.Baala.Rop.Flat.Gadget
   ( ropsGadget,
   
     -- * contents
@@ -28,8 +28,8 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Rop.Builtin as Op
-import qualified Koshucode.Baala.Rop.DepRank as Op
-import qualified Koshucode.Baala.Rop.Message as Msg
+import qualified Koshucode.Baala.Rop.Flat.DepRank as Op
+import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
 -- | Gadgets

@@ -10,7 +10,7 @@
 --   The lattice has fundamental operators from which
 --   other operators are derived.
 
-module Koshucode.Baala.Rop.Lattice.Tropashko
+module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
   ( -- * Fundamental operators
     -- $FundamentalOperators
   

@@ -3,7 +3,7 @@
 
 -- | Restrict by relmap
 
-module Koshucode.Baala.Rop.Lattice.Restrict
+module Koshucode.Baala.Rop.Flat.Lattice.Restrict
   ( -- * some
     consSome, relmapSome, relkitSome,
     -- * none
@@ -23,8 +23,8 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Rop.Builtin           as Op
-import qualified Koshucode.Baala.Rop.Lattice.Tropashko as Op
-import qualified Koshucode.Baala.Rop.Term              as Op
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
+import qualified Koshucode.Baala.Rop.Flat.Term              as Op
 
 
 

@@ -2,14 +2,14 @@
 
 -- | Relmap operators on relational lattice.
 
-module Koshucode.Baala.Rop.Lattice.Rop
+module Koshucode.Baala.Rop.Flat.Lattice.Rop
   ( ropsLattice,
   ) where
 
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Rop.Builtin           as Op
-import qualified Koshucode.Baala.Rop.Lattice.Restrict  as Op
-import qualified Koshucode.Baala.Rop.Lattice.Tropashko as Op
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Restrict  as Op
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
 
 
 -- | Lattice implementations of relmap operators.
