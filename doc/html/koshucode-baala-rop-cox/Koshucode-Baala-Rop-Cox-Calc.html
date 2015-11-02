@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Cox.Calc</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Cox-Calc.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Rop-Cox-Calc.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-cox-0.125.0.0: Relation-mapping operators with content calculations</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Cox.Calc</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >add</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >subst</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >fill</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >replace</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >replace-all</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >split</a
+	    ></li
+	  ><li
+	  ><a href="#g:7"
+	    >unary</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsCoxCalc"
+	    >ropsCoxCalc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:consAdd"
+	    >consAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapAdd"
+	    >relmapAdd</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consSubst"
+	    >consSubst</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapSubst"
+	    >relmapSubst</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consFill"
+	    >consFill</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapFill"
+	    >relmapFill</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consReplace"
+	    >consReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consReplaceAll"
+	    >consReplaceAll</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapReplaceAll"
+	    >relmapReplaceAll</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consSplit"
+	    >consSplit</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapSplit"
+	    >relmapSplit</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitSplit"
+	    >relkitSplit</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c) =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consUnary"
+	    >consUnary</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapUnary"
+	    >relmapUnary</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >, [c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsCoxCalc" class="def"
+	    >ropsCoxCalc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#ropsCoxCalc" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Implementation of relational operators.</p
+	    ><dl
+	    ><dt
+	      ><code
+		>add /N E ...</code
+		></dt
+	      ><dd
+	      >Add terms of name <code
+		>/N</code
+		> and content <code
+		>E</code
+		> ...</dd
+	      ></dl
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	>add</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consAdd" class="def"
+	    >consAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consAdd" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapAdd" class="def"
+	    >relmapAdd</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapAdd" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>subst</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consSubst" class="def"
+	    >consSubst</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consSubst" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapSubst" class="def"
+	    >relmapSubst</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapSubst" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>fill</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consFill" class="def"
+	    >consFill</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consFill" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapFill" class="def"
+	    >relmapFill</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapFill" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>replace</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consReplace" class="def"
+	    >consReplace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consReplace" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>replace-all</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consReplaceAll" class="def"
+	    >consReplaceAll</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consReplaceAll" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapReplaceAll" class="def"
+	    >relmapReplaceAll</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapReplaceAll" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:6"
+	>split</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consSplit" class="def"
+	    >consSplit</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consSplit" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapSplit" class="def"
+	    >relmapSplit</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapSplit" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitSplit" class="def"
+	    >relkitSplit</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c) =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relkitSplit" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:7"
+	>unary</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consUnary" class="def"
+	    >consUnary</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#consUnary" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapUnary" class="def"
+	    >relmapUnary</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >, [c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Calc.html#relmapUnary" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.14.3</p
+      ></div
+    ></body
+  ></html
+>

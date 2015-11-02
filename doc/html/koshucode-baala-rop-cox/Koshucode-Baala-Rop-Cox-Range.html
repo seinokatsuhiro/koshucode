@@ -1,0 +1,555 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Cox.Range</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Cox-Range.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Rop-Cox-Range.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-cox-0.125.0.0: Relation-mapping operators with content calculations</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Cox.Range</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >range</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >range-year</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >range-month</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >range-day</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >range-hour</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >range-minute</a
+	    ></li
+	  ><li
+	  ><a href="#g:7"
+	    >range-second</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsCoxRange"
+	    >ropsCoxRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RangeAttr"
+	    >RangeAttr</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:consRange"
+	    >consRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRange"
+	    >relmapRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeYear"
+	    >relmapRangeYear</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeYear"
+	    >relkitRangeYear</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeMonth"
+	    >relmapRangeMonth</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeMonth"
+	    >relkitRangeMonth</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeDay"
+	    >relmapRangeDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeDay"
+	    >relkitRangeDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeHour"
+	    >relmapRangeHour</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeHour"
+	    >relkitRangeHour</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeMinute"
+	    >relmapRangeMinute</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeMinute"
+	    >relkitRangeMinute</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRangeSecond"
+	    >relmapRangeSecond</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitRangeSecond"
+	    >relkitRangeSecond</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsCoxRange" class="def"
+	    >ropsCoxRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a href="src/Koshucode-Baala-Rop-Cox-Range.html#ropsCoxRange" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Implementation of relational operators.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RangeAttr" class="def"
+	    >RangeAttr</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Token-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a href="src/Koshucode-Baala-Rop-Cox-Range.html#RangeAttr" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:1"
+	>range</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consRange" class="def"
+	    >consRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#consRange" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRange" class="def"
+	    >relmapRange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRange" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="doc"
+	><p
+	  >Add term <code
+	    >/n</code
+	    > <code
+	    >0</code
+	    >, <code
+	    >/n</code
+	    > <code
+	    >1</code
+	    >, ..., and <code
+	    >/n</code
+	    > <code
+	    >9</code
+	    >.</p
+	  ><pre
+	  >range /n -from 0 -to 9</pre
+	  ></div
+	><h1 id="g:2"
+	>range-year</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeYear" class="def"
+	    >relmapRangeYear</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeYear" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeYear" class="def"
+	    >relkitRangeYear</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeYear" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>range-month</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeMonth" class="def"
+	    >relmapRangeMonth</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeMonth" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeMonth" class="def"
+	    >relkitRangeMonth</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeMonth" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>range-day</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeDay" class="def"
+	    >relmapRangeDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeDay" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeDay" class="def"
+	    >relkitRangeDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeDay" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>range-hour</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeHour" class="def"
+	    >relmapRangeHour</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeHour" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeHour" class="def"
+	    >relkitRangeHour</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeHour" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:6"
+	>range-minute</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeMinute" class="def"
+	    >relmapRangeMinute</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeMinute" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeMinute" class="def"
+	    >relkitRangeMinute</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeMinute" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:7"
+	>range-second</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRangeSecond" class="def"
+	    >relmapRangeSecond</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relmapRangeSecond" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitRangeSecond" class="def"
+	    >relkitRangeSecond</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Cox-Range.html#t:RangeAttr"
+	    >RangeAttr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a href="src/Koshucode-Baala-Rop-Cox-Range.html#relkitRangeSecond" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.14.3</p
+      ></div
+    ></body
+  ></html
+>
