@@ -47,8 +47,10 @@ Documentations of software libraries at
 * [koshucode-baala-data]
 * [koshucode-baala-core]
 * [koshucode-baala-writer]
-* [koshucode-baala-operator]
-* [koshucode-baala-content]
+* [koshucode-baala-rop-flat]
+* [koshucode-baala-rop-nested]
+* [koshucode-baala-rop-cox]
+* [koshucode-baala-cop]
 * [koshucode-baala-calculator]
 * [koshucode-baala-toolkit]
 
@@ -71,8 +73,10 @@ There are many bugs and potentials.
 [koshucode-baala-data]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/
 [koshucode-baala-core]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
 [koshucode-baala-writer]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/
-[koshucode-baala-operator]:   http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/
-[koshucode-baala-content]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-content/
+[koshucode-baala-rop-flat]:   http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/
+[koshucode-baala-rop-nested]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-nested/
+[koshucode-baala-rop-cox]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-cox/
+[koshucode-baala-cop]:        http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-cop/
 [koshucode-baala-calculator]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
 [koshucode-baala-toolkit]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
 
