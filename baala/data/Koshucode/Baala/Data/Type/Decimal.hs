@@ -6,7 +6,7 @@ module Koshucode.Baala.Data.Type.Decimal
     DecimalInteger,
     isDecimalZero,
     decimalNum, decimalDenom,
-    decimalSetPoint,
+    decimalPointSet,
     intDecimal,
     decimalFromRealFloat, decimalToRealFloat,
   
@@ -47,7 +47,7 @@ type DecimalInteger = Integer
 
 data Decimal = Decimal 
     { decimalRatio   :: (DecimalInteger, DecimalInteger)
-    , decimalLength  :: Int
+    , decimalPoint   :: Int
     , decimalApprox  :: Bool
     } deriving (Show, Eq, Ord)
 
@@ -63,18 +63,17 @@ decimalNum = fst . decimalRatio
 decimalDenom :: Decimal -> DecimalInteger
 decimalDenom = snd . decimalRatio
 
--- | Change precision.
-decimalSetPoint :: Int -> B.AbMap Decimal
-decimalSetPoint p2 (Decimal r1 _ e1) =
-    Right $ Decimal r1 p2 e1
+-- | Change decimal point.
+decimalPointSet :: Int -> B.AbMap Decimal
+decimalPointSet p (Decimal r _ a) = Right $ Decimal r p a
 
 reduceDecimal :: (DecimalInteger, DecimalInteger) -> Int -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
 
 -- | Convert integral number to decimal number.
-intDecimal :: DecimalInteger -> Decimal
-intDecimal n = Decimal (n, 1) 0 False
+intDecimal :: (Integral n) => n -> Decimal
+intDecimal n = Decimal (fromIntegral n, 1) 0 False
 
 -- | Convert real-float number to decimal number.
 decimalFromRealFloat :: (RealFloat n) => Int -> n -> Decimal
@@ -250,5 +249,5 @@ decimalAbs :: B.Map Decimal
 decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
 
 decimalSum :: [Decimal] -> B.Ab Decimal
-decimalSum = M.foldM decimalAdd $ intDecimal 0
+decimalSum = M.foldM decimalAdd $ intDecimal (0 :: Int)
 
