@@ -89,7 +89,7 @@ relkitGeoDatumJp _ Nothing = Right C.relkitNothing
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
     he2       = D.headAppend [lat, long] he1
     kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
-    pReal     = D.pDec . D.decimalFromRealFloat 4
+    pReal     = D.pDec . D.realDecimal 4
 
     f2 _ cs   = do cn    <- D.coxRunCox cops he1 cs coxn
                    cx    <- D.coxRunCox cops he1 cs coxx
@@ -100,8 +100,8 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
                    decy  <- D.getDec $ Right cy
 
                    let n  = fromInteger $ D.decimalNum decn
-                       dx = D.decimalToRealFloat decx :: Double
-                       dy = D.decimalToRealFloat decy :: Double
+                       dx = D.decimalFractional decx :: Double
+                       dy = D.decimalFractional decy :: Double
                        (dlat, dlong) = Op.convDegree n (dx, dy)
 
                    Right $ pReal dlat : pReal dlong : cs
@@ -128,7 +128,7 @@ relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
     he2       = D.headCons real he1
     kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
     pick      = Op.picker he1 [deg, mnt, sec]
-    pReal     = D.pDec . D.decimalFromRealFloat 4
+    pReal     = D.pDec . D.realDecimal 4
 
     f2 _ cs   = do let [cdeg, cmnt, csec] = pick cs
 
@@ -136,9 +136,9 @@ relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
                    hmnt <- D.getDec $ Right cmnt
                    hsec <- D.getDec $ Right csec
 
-                   let ddeg = D.decimalToRealFloat hdeg :: Double
-                       dmnt = D.decimalToRealFloat hmnt :: Double
-                       dsec = D.decimalToRealFloat hsec :: Double
+                   let ddeg = D.decimalFractional hdeg :: Double
+                       dmnt = D.decimalFractional hmnt :: Double
+                       dsec = D.decimalFractional hsec :: Double
                        dmnt' = dmnt + dsec  / 60
                        ddeg' = ddeg + dmnt' / 60
 

@@ -7,8 +7,11 @@ module Koshucode.Baala.Data.Type.Decimal
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalPointSet,
-    intDecimal,
-    decimalFromRealFloat, decimalToRealFloat,
+
+    -- * Convert
+    integralDecimal, realDecimal,
+    decimalFractional,
+    decimal0, decimal1,
   
     -- * Reader
     LitString,
@@ -71,21 +74,28 @@ reduceDecimal :: (DecimalInteger, DecimalInteger) -> Int -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
 
+
+-- ----------------------  Convert
+
 -- | Convert integral number to decimal number.
-intDecimal :: (Integral n) => n -> Decimal
-intDecimal n = Decimal (fromIntegral n, 1) 0 False
+integralDecimal :: (Integral n) => n -> Decimal
+integralDecimal = realDecimal 0
 
--- | Convert real-float number to decimal number.
-decimalFromRealFloat :: (RealFloat n) => Int -> n -> Decimal
-decimalFromRealFloat k n = Decimal (fromInteger num, fromInteger den) k False where
-    r   = toRational n
-    num = R.numerator   r
-    den = R.denominator r
+-- | Convert real number to decimal number.
+realDecimal :: (Real n) => Int -> n -> Decimal
+realDecimal p n = Decimal (R.numerator r, R.denominator r) p False where
+    r = toRational n
 
--- | Convert decimal number to read-float number.
-decimalToRealFloat :: (RealFloat n) => Decimal -> n
-decimalToRealFloat (Decimal { decimalRatio = (num, den)}) =
+-- | Convert decimal number to fractional number.
+decimalFractional :: (Fractional n) => Decimal -> n
+decimalFractional (Decimal { decimalRatio = (num, den)}) =
     fromRational $ toRational $ (num R.% den)
+
+decimal0 :: Decimal
+decimal0 = integralDecimal (0 :: DecimalInteger)
+
+decimal1 :: Decimal
+decimal1 = integralDecimal (1 :: DecimalInteger)
 
 
 -- ----------------------  Reader
@@ -249,5 +259,5 @@ decimalAbs :: B.Map Decimal
 decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
 
 decimalSum :: [Decimal] -> B.Ab Decimal
-decimalSum = M.foldM decimalAdd $ intDecimal (0 :: Int)
+decimalSum = M.foldM decimalAdd $ integralDecimal (0 :: Int)
 

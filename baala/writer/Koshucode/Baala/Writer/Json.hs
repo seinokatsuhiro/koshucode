@@ -63,7 +63,7 @@ instance A.ToJSON D.BaalaC where
     toJSON c = case c of
         D.VText s      -> A.toJSON s
         D.VTerm s      -> A.toJSON $ '/' : s
-        D.VDec  n      -> A.toJSON (D.decimalToRealFloat n :: Double)
+        D.VDec  n      -> A.toJSON (D.decimalFractional n :: Double)
         D.VClock t     -> unimplemented t
         D.VTime t      -> unimplemented t
         D.VBool b      -> A.toJSON b
