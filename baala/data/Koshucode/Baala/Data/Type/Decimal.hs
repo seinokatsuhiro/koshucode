@@ -7,6 +7,7 @@ module Koshucode.Baala.Data.Type.Decimal
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalPointSet,
+    reduceDecimal,
 
     -- * Convert
     integralDecimal, realDecimal,
@@ -20,25 +21,10 @@ module Koshucode.Baala.Data.Type.Decimal
   
     -- * Writer
     decimalString,
-  
-    -- * Arithmetic
-    DecimalBinary,
-    decimalAdd,
-    decimalSub,
-    decimalMul,
-    decimalDiv,
-    decimalQuo,
-    decimalRem,
-  
-    decimalRevsign,
-    decimalRevratio,
-    decimalAbs,
-    decimalSum,
   ) where
 
 import qualified Data.Char                         as Ch
 import qualified Data.Ratio                        as R
-import qualified Control.Monad                     as M
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Type.Message as Msg
 
@@ -192,72 +178,4 @@ quoteDigit n = let (n', d) = quotRem n 10
 -- map quoteDigit [0..9]
 -- map quoteDigit [10..19]
 -- map quoteDigit [100..109]
-
-
-
--- ----------------------  Arithmetic
-
-type DecimalBinary =
-    Decimal -> Decimal -> B.Ab Decimal
-
-decimalAdd :: DecimalBinary
-decimalAdd d1@(Decimal (n1, den1) p1 a1)
-           d2@(Decimal (n2, den2) p2 a2)
-    | p1 /= p2     = Msg.heteroDecimal txt1 txt2
-    | den1 == den2 = Right $ reduceDecimal (n1 + n2, den1) p1 a3
-    | otherwise    = Right $ reduceDecimal (n3, den3) p1 a3
-    where n3    =  (n1 * den2) + (n2 * den1)
-          den3  =  den1 * den2
-          a3    =  a1 || a2
-          txt1  =  decimalString d1
-          txt2  =  decimalString d2
-
-decimalSub :: DecimalBinary
-decimalSub d1 d2 = decimalAdd d1 $ decimalRevsign d2
-
-decimalMul :: DecimalBinary
-decimalMul (Decimal (n1, den1) p1 a1) (Decimal (n2, den2) p2 a2)
-    = Right $ Decimal (n3, den3) p3 a3
-    where n3    =  (n1   `div` g1) * (n2   `div` g2)
-          den3  =  (den2 `div` g1) * (den1 `div` g2)
-          g1    =  gcd n1 den2
-          g2    =  gcd n2 den1
-          p3    =  max p1 p2
-          a3    =  a1 || a2
-
-decimalDiv :: DecimalBinary
-decimalDiv dec1 dec2
-    = decimalMul dec1 $ decimalRevratio dec2
-
-decimalQuo :: DecimalBinary
-decimalQuo = decimalQR quot
-
-decimalRem :: DecimalBinary
-decimalRem = decimalQR rem
-
-decimalQR :: (DecimalInteger -> DecimalInteger -> DecimalInteger) -> DecimalBinary
-decimalQR qr
-          d1@(Decimal (n1, den1) p1 a1)
-          d2@(Decimal (n2, den2) p2 a2)
-    | p1 /= p2     = Msg.heteroDecimal txt1 txt2
-    | n2 == 0      = Msg.divideByZero
-    | otherwise    = Right $ Decimal (n3, 1) p1 a3
-    where n3    =  (n1 * den2) `qr` (n2 * den1)
-          a3    =  a1 || a2
-          txt1  =  decimalString d1
-          txt2  =  decimalString d2
-
--- ----------------------
-
-decimalRevsign :: B.Map Decimal
-decimalRevsign (Decimal (n, den) p a) = Decimal (- n, den) p a
-
-decimalRevratio :: B.Map Decimal
-decimalRevratio (Decimal (n, den) p a) = Decimal (den, n) p a
-
-decimalAbs :: B.Map Decimal
-decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
-
-decimalSum :: [Decimal] -> B.Ab Decimal
-decimalSum = M.foldM decimalAdd $ integralDecimal (0 :: Int)
 

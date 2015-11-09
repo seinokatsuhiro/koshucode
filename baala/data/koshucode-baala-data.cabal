@@ -76,6 +76,7 @@ library
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
+        Koshucode.Baala.Data.Type.Arithmetic
         Koshucode.Baala.Data.Type.Clock
         Koshucode.Baala.Data.Type.Date
         Koshucode.Baala.Data.Type.Decimal
