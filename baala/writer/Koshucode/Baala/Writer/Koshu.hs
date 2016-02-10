@@ -31,13 +31,17 @@ hPutKoshu h result status sh =
 hPutHead :: IO.Handle -> C.Result c -> IO ()
 hPutHead h result =
     do IO.hPutStrLn h B.emacsModeComment
-       B.hPutLines  h $ B.texts comm
+       B.hPutLines  h $ B.texts $ comm inputs
        B.hPutEmptyLine h
     where
-      itext = (B.ioPointText . C.inputPoint) `map` C.resultInput result
-      otext = B.ioPointText $ C.resultOutput result
-      comm  = B.CommentDoc [ B.CommentSec "INPUT"  itext
-                           , B.CommentSec "OUTPUT" [otext] ]
+      inputs = C.inputPoint  `map` C.resultInput result
+      itext  = B.ioPointText `map` inputs
+      otext  = B.ioPointText $ C.resultOutput result
+
+      comm [B.IOPointCustom _ _]
+             = B.CommentDoc [ B.CommentSec "INPUT / OUTPUT" itext ]
+      comm _ = B.CommentDoc [ B.CommentSec "INPUT"  itext
+                            , B.CommentSec "OUTPUT" [otext] ]
 
 hPutLicense :: IO.Handle -> C.Result c -> IO ()
 hPutLicense h C.Result { C.resultLicense = ls }

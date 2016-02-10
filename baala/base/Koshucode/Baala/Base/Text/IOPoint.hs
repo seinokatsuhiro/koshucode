@@ -19,11 +19,12 @@ import qualified Koshucode.Baala.Base.Prelude as B
 -- ----------------------  IOPoint
 
 data IOPoint
-    = IOPointFile  FilePath FilePath      -- ^ Context directory and target path
-    | IOPointUri   String                 -- ^ Universal resource identifier
-    | IOPointText  (Maybe String) String  -- ^ Code itself
-    | IOPointStdin                        -- ^ Sandard input
-    | IOPointStdout                       -- ^ Sandard output
+    = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
+    | IOPointUri    String                  -- ^ Universal resource identifier
+    | IOPointText   (Maybe String) String   -- ^ Code itself
+    | IOPointCustom String String           -- ^ Custom I/O
+    | IOPointStdin                          -- ^ Sandard input
+    | IOPointStdout                         -- ^ Sandard output
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
@@ -32,6 +33,7 @@ ioPointType :: IOPoint -> String
 ioPointType (IOPointFile _ _)   = "file"
 ioPointType (IOPointUri  _)     = "url"
 ioPointType (IOPointText _ _)   = "text"
+ioPointType (IOPointCustom _ _) = "custom"
 ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
 
@@ -40,6 +42,7 @@ ioPointText (IOPointFile dir file)       = dir ++ file
 ioPointText (IOPointUri  url)            = url
 ioPointText (IOPointText (Just name) _)  = name
 ioPointText (IOPointText (Nothing) _)    = "<text>"
+ioPointText (IOPointCustom name _)       = name
 ioPointText (IOPointStdin)               = "<stdin>"
 ioPointText (IOPointStdout)              = "<stdout>"
 
