@@ -57,7 +57,7 @@ data Param c = Param
     , paramDay           :: T.Day
     } deriving (Show)
 
-initParam :: (Show c, B.Write c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
+initParam :: (Show c, D.CContent c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
 initParam (Left errs) = L.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- L.prelude
@@ -89,6 +89,7 @@ initParam (Right (opts, args)) =
              | otherwise    = ["|== X : add /x ( " ++ concat assertX ++ " )"]
 
       writer | getFlag "csv"            = W.resultCsv
+             | getFlag "csv-heading"    = W.resultCsvHeading
              | getFlag "dump"           = C.resultDump
              | getFlag "geojson"        = W.resultGeoJson
              | getFlag "html-compact"   = W.resultHtmlCompact
@@ -129,7 +130,8 @@ options =
     , Opt.flag ""  ["element"]                 "Analize input code"
     , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
-    , Opt.flag ""  ["csv"]                     "CSV output"
+    , Opt.flag ""  ["csv"]                     "CSV output with judgement"
+    , Opt.flag ""  ["csv-heading"]             "CSV output with heading"
     , Opt.flag ""  ["dump"]                    "Dump internal data"
     , Opt.flag ""  ["json"]                    "JSON output"
     , Opt.flag ""  ["geojson"]                 "GeoJSON output"

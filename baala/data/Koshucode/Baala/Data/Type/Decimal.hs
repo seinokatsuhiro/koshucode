@@ -20,6 +20,7 @@ module Koshucode.Baala.Data.Type.Decimal
   
     -- * Writer
     decimalString,
+    decimalStringCompact,
   ) where
 
 import qualified Data.Char                         as Ch
@@ -145,10 +146,16 @@ fromDigit _   = B.bug "fromDigit"
 -- ----------------------  Writer
 
 decimalString :: Decimal -> String
-decimalString (Decimal (n, den) pt approx)
+decimalString = decimalStringWith (' ' :)
+
+decimalStringCompact :: Decimal -> String
+decimalStringCompact = decimalStringWith id
+
+decimalStringWith :: B.Map String -> Decimal -> String
+decimalStringWith g (Decimal (n, den) pt approx)
     | n >= 0     =       digits
     | otherwise  = '-' : digits
-    where digits = decimalDigits (' ' :) approx pt (decimalShift pt n `div` den)
+    where digits = decimalDigits g approx pt (decimalShift pt n `div` den)
 
 decimalShift :: DecimalPoint -> B.Map DecimalInteger
 decimalShift pt n = (10 ^ abs pt) * (abs n)
