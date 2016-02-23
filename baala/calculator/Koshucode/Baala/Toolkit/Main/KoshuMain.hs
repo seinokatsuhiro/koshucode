@@ -90,6 +90,7 @@ initParam (Right (opts, args)) =
 
       writer | getFlag "csv"            = W.resultCsv
              | getFlag "csv-heading"    = W.resultCsvHeading
+             | getFlag "tsv-heading"    = W.resultTsvHeading
              | getFlag "dump"           = C.resultDump
              | getFlag "geojson"        = W.resultGeoJson
              | getFlag "html-compact"   = W.resultHtmlCompact
@@ -132,6 +133,7 @@ options =
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
     , Opt.flag ""  ["csv"]                     "CSV output with judgement"
     , Opt.flag ""  ["csv-heading"]             "CSV output with heading"
+    , Opt.flag ""  ["tsv-heading"]             "TSV output with heading"
     , Opt.flag ""  ["dump"]                    "Dump internal data"
     , Opt.flag ""  ["json"]                    "JSON output"
     , Opt.flag ""  ["geojson"]                 "GeoJSON output"
