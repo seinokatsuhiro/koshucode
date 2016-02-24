@@ -55,7 +55,10 @@ baalaInfix = htab where
         , 6 ! "*="    -- end with
         , 6 ! "*=*"   -- contain
 
-        , 2 ! "+"
+        , 2 ! "+"     -- add
+        , 2 ! ".+"    -- left add
+        , 2 ! "+."    -- right add
+        , 2 ! ".+."   -- strict add
         , 2 ! "-"
         , 2 ! "++"
         , 2 ! "intersect"

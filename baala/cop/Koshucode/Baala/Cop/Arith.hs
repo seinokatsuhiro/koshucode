@@ -32,20 +32,26 @@ import qualified Koshucode.Baala.Cop.Message as Msg
 
 copsArith :: (D.CContent c) => [D.Cop c]
 copsArith =
-    [ D.CopCalc  (D.copPrefix "+")     copPlus1
-    , D.CopCalc  (D.copPrefix "-")     copMinus1
-    , D.CopCalc  (D.copInfix  "+")     copPlus2
-    , D.CopCalc  (D.copInfix  "-")     copMinus2
-    , D.CopCalc  (D.copInfix  "*")     copTimes
-    , D.CopCalc  (D.copInfix  "quo")   copQuo
-    , D.CopCalc  (D.copInfix  "rem")   copRem
+    [ D.CopCalc  (D.copPrefix "+")      copPlus1
+    , D.CopCalc  (D.copPrefix "-")      copMinus1
+    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.PrecisionHigh
+    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.PrecisionLeft
+    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.PrecisionRight
+    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.PrecisionStrict
+    , D.CopCalc  (D.copInfix  "-")      copMinus2
+    , D.CopCalc  (D.copInfix  "*")      copTimes
+    , D.CopCalc  (D.copInfix  "quo")    copQuo
+    , D.CopCalc  (D.copInfix  "rem")    copRem
 
-    , D.CopCalc  (D.copNormal "+")     copPlus
-    , D.CopCalc  (D.copNormal "-")     copMinus2
-    , D.CopCalc  (D.copNormal "*")     copTimes
-    , D.CopCalc  (D.copNormal "quo")   copQuo
-    , D.CopCalc  (D.copNormal "rem")   copRem
-    , D.CopCalc  (D.copNormal "abs")   copAbs
+    , D.CopCalc  (D.copNormal "+")    $ copPlus D.PrecisionHigh
+    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.PrecisionLeft
+    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.PrecisionRight
+    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.PrecisionStrict
+    , D.CopCalc  (D.copNormal "-")      copMinus2
+    , D.CopCalc  (D.copNormal "*")      copTimes
+    , D.CopCalc  (D.copNormal "quo")    copQuo
+    , D.CopCalc  (D.copNormal "rem")    copRem
+    , D.CopCalc  (D.copNormal "abs")    copAbs
     ]
 
 copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab D.Decimal
@@ -58,20 +64,20 @@ getDecFrom c | D.isDec  c  = Right $ D.gDec c
              | D.isText c  = D.litDecimal $ D.gText c
              | otherwise   = Right D.decimal0
 
-copPlus :: (D.CText c, D.CDec c) => D.CopCalc c
-copPlus xs = fmap D.pDec $ loop xs where
+copPlus :: (D.CText c, D.CDec c) => D.PrecisionSide -> D.CopCalc c
+copPlus pr xs = fmap D.pDec $ loop xs where
     loop [] = Right D.decimal0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      D.decimalAdd n' m'
+                      (D.decimalAdd pr) n' m'
 
-copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
-copPlus2 [Right xc, Right yc]
-    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd   (D.gDec   xc) (D.gDec   yc)
-    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd     (D.gClock xc) (D.gClock yc)
-    | D.isTime  xc && D.isClock yc = D.putTime  =<< D.timeAddClock (D.gClock yc) (D.gTime  xc) 
-    | D.isClock xc && D.isTime  yc = D.putTime  =<< D.timeAddClock (D.gClock xc) (D.gTime  yc)
-copPlus2 _ = Msg.unexpAttr "+"
+copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.PrecisionSide -> D.CopCalc c
+copPlus2 pr [Right xc, Right yc]
+    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
+    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd       (D.gClock xc) (D.gClock yc)
+    | D.isTime  xc && D.isClock yc = D.putTime  =<< D.timeAddClock   (D.gClock yc) (D.gTime  xc) 
+    | D.isClock xc && D.isTime  yc = D.putTime  =<< D.timeAddClock   (D.gClock xc) (D.gTime  yc)
+copPlus2 _ _ = Msg.unexpAttr "+"
 
 copPlus1 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
 copPlus1 [Right x] | D.isDec x = Right x
