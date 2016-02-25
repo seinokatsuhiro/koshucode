@@ -49,9 +49,26 @@ copToDec = op where
 
 copToText :: (D.CContent c) => D.CopCalc c
 copToText = op where
-    op [Right c] | D.isDec  c  = Right $ D.pText $ D.decimalString $ D.gDec c
-                 | otherwise   = Right c
+    op [Right c] = Right $ D.pText $ show $ toText c
     op xs = typeUnmatch xs
+
+toText :: (D.CContent c) => c -> B.Doc
+toText c
+    | D.isText   c  = B.doc $ D.gText c
+    | D.isDec    c  = B.doc $ D.decimalStringCompact $ D.gDec c
+    | D.isBool   c  = B.writeDoc $ D.gBool c
+    | D.isEmpty  c  = B.doc ""
+    | D.isClock  c  = B.doc $ show $ D.writeClockBody $ D.gClock c
+    | D.isTime   c  = B.doc $ B.writeString c
+    | D.isTerm   c  = B.doc $ '/' : D.gTerm c
+
+    | D.isList   c  = B.docWraps "[" "]" $ B.writeBar id $ map toText $ D.gList c 
+    | D.isSet    c  = B.docWraps "{" "}" $ B.writeBar id $ map toText $ D.gSet c 
+    | D.isAssn   c  = B.doc "<assn>"
+    | D.isRel    c  = B.doc "<rel>"
+    | D.isInterp c  = B.doc "<interp>"
+    | D.isType   c  = B.doc "<type>"
+    | otherwise     = B.doc "<?>"
 
 copToList :: (D.CContent c) => D.CopCalc c
 copToList = op where
