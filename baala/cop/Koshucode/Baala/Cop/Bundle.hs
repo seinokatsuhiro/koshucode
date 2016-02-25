@@ -59,7 +59,12 @@ baalaInfix = htab where
         , 2 ! ".+"    -- left add
         , 2 ! "+."    -- right add
         , 2 ! ".+."   -- strict add
-        , 2 ! "-"
+
+        , 2 ! "-"     -- sub
+        , 2 ! ".-"    -- left sub
+        , 2 ! "-."    -- right sub
+        , 2 ! ".-."   -- strict sub
+
         , 2 ! "++"
         , 2 ! "intersect"
         , 2 ! "minus"

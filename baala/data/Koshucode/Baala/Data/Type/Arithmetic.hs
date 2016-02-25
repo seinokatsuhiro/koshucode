@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Data.Type.Arithmetic
-  ( -- * Magnitude
+  ( -- * Precision
     PrecisionSide (..),
     PrecisionSelector,
 
@@ -41,6 +41,9 @@ constLeft = const
 constRight :: a -> b -> b
 constRight _ y = y
 
+
+-- ----------------------  Binary operator
+
 -- | Binary operation for two decimals
 type DecimalBinary =
     D.Decimal -> D.Decimal -> B.Ab D.Decimal
@@ -74,8 +77,8 @@ decimalAddStrict d1@(D.Decimal _ p1 _)
           txt2   = D.decimalString d2
 
 -- | Subtruction: /x/ - /y/
-decimalSub :: DecimalBinary
-decimalSub d1 d2 = decimalAddHigh d1 $ decimalRevsign d2
+decimalSub :: PrecisionSide -> DecimalBinary
+decimalSub pr d1 d2 = decimalAdd pr d1 $ decimalRevsign d2
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: DecimalBinary
@@ -111,7 +114,8 @@ decimalQR qr
           txt1  =  D.decimalString d1
           txt2  =  D.decimalString d2
 
--- ----------------------
+
+-- ----------------------  Unary operator
 
 -- | Invert sign of decimal
 decimalRevsign :: B.Map D.Decimal
