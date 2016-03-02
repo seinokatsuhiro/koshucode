@@ -3,13 +3,13 @@
 about /package 'data
 
 |-- DIR  /code 11   /comment 3    /dir "data/Koshucode/Baala"
-|-- DIR  /code 75   /comment 23   /dir "data/Koshucode/Baala/Data"
-|-- DIR  /code 583  /comment 274  /dir "data/Koshucode/Baala/Data/Church"
+|-- DIR  /code 77   /comment 23   /dir "data/Koshucode/Baala/Data"
+|-- DIR  /code 588  /comment 274  /dir "data/Koshucode/Baala/Data/Church"
 |-- DIR  /code 762  /comment 419  /dir "data/Koshucode/Baala/Data/Content"
 |-- DIR  /code 816  /comment 546  /dir "data/Koshucode/Baala/Data/Token"
-|-- DIR  /code 1371  /comment 822  /dir "data/Koshucode/Baala/Data/Type"
+|-- DIR  /code 1451  /comment 861  /dir "data/Koshucode/Baala/Data/Type"
 
-|-- DIR-TOTAL  /code 3618  /comment 2087
+|-- DIR-TOTAL  /code 3705  /comment 2126
 
 |-- FILE  /code 11   /comment 3    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 3    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -17,7 +17,7 @@ about /package 'data
 |-- FILE  /code 68   /comment 55   /file "Cop.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 110  /comment 86   /file "Cox.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 76   /comment 37   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Church"
-|-- FILE  /code 162  /comment 51   /file "Run.hs"         /dir "data/Koshucode/Baala/Data/Church"
+|-- FILE  /code 167  /comment 51   /file "Run.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 10   /comment 5    /file "Content.hs"     /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 174  /comment 40   /file "BaalaC.hs"      /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE  /code 196  /comment 112  /file "Class.hs"       /dir "data/Koshucode/Baala/Data/Content"
@@ -34,11 +34,13 @@ about /package 'data
 |-- FILE  /code 34   /comment 14   /file "TokenClause.hs"  /dir "data/Koshucode/Baala/Data/Token"
 |-- FILE  /code 259  /comment 192  /file "TokenLine.hs"   /dir "data/Koshucode/Baala/Data/Token"
 |-- FILE  /code 106  /comment 88   /file "TokenTree.hs"   /dir "data/Koshucode/Baala/Data/Token"
-|-- FILE  /code 27   /comment 5    /file "Type.hs"        /dir "data/Koshucode/Baala/Data"
+|-- FILE  /code 29   /comment 5    /file "Type.hs"        /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 11   /comment 5    /file "About.hs"       /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 93   /comment 41   /file "Arithmetic.hs"  /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 183  /comment 84   /file "Clock.hs"       /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 73   /comment 43   /file "Date.hs"        /dir "data/Koshucode/Baala/Data/Type"
-|-- FILE  /code 179  /comment 75   /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 127  /comment 64   /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 39   /comment 9    /file "Decimal2.hs"    /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 150  /comment 155  /file "Head.hs"        /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 34   /comment 12   /file "Interp.hs"      /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 117  /comment 73   /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type"
@@ -49,4 +51,4 @@ about /package 'data
 |-- FILE  /code 183  /comment 108  /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 134  /comment 91   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Type"
 
-|-- FILE-TOTAL  /code 3618  /comment 2087
+|-- FILE-TOTAL  /code 3705  /comment 2126

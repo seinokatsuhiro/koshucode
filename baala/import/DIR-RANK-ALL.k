@@ -24,7 +24,7 @@
 |-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Base  /base-rank {| /rank /base /import-dir [ 3 | 'Prelude | [ ] ] [ 6 | 'Text | [ ] ] [ 9 | 'Abort | [ ] ] [ 11 | 'Message | [ ] ] [ 13 | 'Syntax | [ ] ] |}
 
 |-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala.Data.Token  /base-rank {| /rank /base /import-dir [ 0 | 'Term | [ ] ] [ 15 | 'AngleText | [ 'Base ] ] [ 15 | 'Message | [ 'Base ] ] [ 15 | 'Token | [ 'Base ] ] [ 16 | 'Short | [ 'Base ] ] [ 17 | 'TokenLine | [ 'Base ] ] [ 18 | 'TokenClause | [ 'Base ] ] [ 18 | 'TokenTree | [ 'Base ] ] |}
-|-- DIR-RANK  /dir-rank 23  /dir 'Koshucode.Baala.Data.Type  /base-rank {| /rank /base /import-dir [ 15 | 'Clock | [ 'Base ] ] [ 15 | 'Message | [ 'Base ] ] [ 15 | 'Para | [ 'Base ] ] [ 16 | 'Date | [ 'Base ] ] [ 16 | 'Decimal | [ 'Base ] ] [ 17 | 'Time | [ 'Base ] ] [ 20 | 'Interp | [ 'Base | 'Token ] ] [ 20 | 'Judge | [ 'Base | 'Token ] ] [ 20 | 'Type | [ 'Base | 'Token ] ] [ 21 | 'About | [ 'Base | 'Token ] ] [ 21 | 'Head | [ 'Base | 'Token ] ] [ 22 | 'Rel | [ 'Base | 'Token ] ] [ 23 | 'Mono | [ 'Base ] ] |}
+|-- DIR-RANK  /dir-rank 23  /dir 'Koshucode.Baala.Data.Type  /base-rank {| /rank /base /import-dir [ 15 | 'Clock | [ 'Base ] ] [ 15 | 'Message | [ 'Base ] ] [ 15 | 'Para | [ 'Base ] ] [ 16 | 'Date | [ 'Base ] ] [ 16 | 'Decimal | [ 'Base ] ] [ 17 | 'Arithmetic | [ 'Base ] ] [ 17 | 'Time | [ 'Base ] ] [ 20 | 'Interp | [ 'Base | 'Token ] ] [ 20 | 'Judge | [ 'Base | 'Token ] ] [ 20 | 'Type | [ 'Base | 'Token ] ] [ 21 | 'About | [ 'Base | 'Token ] ] [ 21 | 'Head | [ 'Base | 'Token ] ] [ 22 | 'Rel | [ 'Base | 'Token ] ] [ 23 | 'Mono | [ 'Base ] ] |}
 |-- DIR-RANK  /dir-rank 26  /dir 'Koshucode.Baala.Data.Content  /base-rank {| /rank /base /import-dir [ 20 | 'Message | [ 'Base | 'Token ] ] [ 25 | 'Class | [ 'Base | 'Token | 'Type ] ] [ 25 | 'Tree | [ 'Base | 'Token | 'Type ] ] [ 26 | 'BaalaC | [ 'Base | 'Type ] ] [ 26 | 'Literal | [ 'Base | 'Token | 'Type ] ] |}
 |-- DIR-RANK  /dir-rank 29  /dir 'Koshucode.Baala.Data.Church  /base-rank {| /rank /base /import-dir [ 25 | 'Message | [ 'Base | 'Token | 'Type ] ] [ 26 | 'Cox | [ 'Base | 'Token ] ] [ 27 | 'Cop | [ 'Base | 'Token ] ] [ 28 | 'Build | [ 'Base | 'Content | 'Token ] ] [ 29 | 'Run | [ 'Base | 'Content | 'Token | 'Type ] ] |}
 |-- DIR-RANK  /dir-rank 30  /dir 'Koshucode.Baala.Data  /base-rank {| /rank /base /import-dir [ 19 | 'Token | [ ] ] [ 24 | 'Type | [ ] ] [ 26 | 'Message | [ ] ] [ 27 | 'Content | [ ] ] [ 30 | 'Church | [ ] ] |}
@@ -48,7 +48,7 @@
 |-- DIR-RANK  /dir-rank 66  /dir 'Koshucode.Baala.Rop.Nest  /base-rank {| /rank /base /import-dir [ 56 | 'Message | [ 'Base | 'Data ] ] [ 58 | 'Flow | [ 'Base | 'Base | 'Core | 'Data ] ] [ 59 | 'Confl | [ 'Base | 'Base | 'Core | 'Data ] ] [ 65 | 'Deriv | [ 'Base | 'Base | 'Core | 'Data | 'Flat ] ] [ 66 | 'Rop | [ 'Base | 'Core | 'Data ] ] |}
 *** 25
 
-|-- DIR-RANK  /dir-rank 67  /dir 'Koshucode.Baala.Rop  /base-rank {| /rank /base /import-dir [ 57 | 'Base | [ ] ] [ 64 | 'Flat | [ 'Base | 'Lattice ] ] [ 67 | 'Cox | [ ] ] [ 67 | 'Nest | [ ] ] |}
+|-- DIR-RANK  /dir-rank 67  /dir 'Koshucode.Baala.Rop  /base-rank {| /rank /base /import-dir [ 57 | 'Base | [ ] ] [ 64 | 'Flat | [ 'Lattice ] ] [ 67 | 'Cox | [ ] ] [ 67 | 'Nest | [ ] ] |}
 |-- DIR-RANK  /dir-rank 68  /dir 'Koshucode.Baala.Toolkit.Library  /base-rank {| /rank /base /import-dir [ 0 | 'SimpleOption | [ ] ] [ 0 | 'Version | [ ] ] [ 32 | 'RDF | [ 'Data ] ] [ 55 | 'Element | [ 'Base | 'Core | 'Data ] ] [ 55 | 'Exit | [ 'Base | 'Core | 'Data ] ] [ 55 | 'Input | [ 'Core ] ] [ 58 | 'Change | [ 'Base | 'Core | 'Data | 'Writer ] ] [ 58 | 'Run | [ 'Base | 'Core | 'Data | 'Writer ] ] [ 68 | 'Global | [ 'Cop | 'Core | 'Cox | 'Data | 'Flat | 'Nest ] ] |}
 
 *** 27 judges
@@ -121,6 +121,7 @@ TABLE : DIR-RANK
                                                 15    'Para           [ 'Base ]
                                                 16    'Date           [ 'Base ]
                                                 16    'Decimal        [ 'Base ]
+                                                17    'Arithmetic     [ 'Base ]
                                                 17    'Time           [ 'Base ]
                                                 20    'Interp         [ 'Base | 'Token ]
                                                 20    'Judge          [ 'Base | 'Token ]
@@ -300,7 +301,7 @@ TABLE : DIR-RANK
   67        'Koshucode.Baala.Rop                /rank /base           /import-dir
                                                 ----- --------------- -----------------------------------------------------------
                                                 57    'Base           [ ]
-                                                64    'Flat           [ 'Base | 'Lattice ]
+                                                64    'Flat           [ 'Lattice ]
                                                 67    'Cox            [ ]
                                                 67    'Nest           [ ]
                                                 
