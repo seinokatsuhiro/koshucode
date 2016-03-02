@@ -64,6 +64,10 @@ reduce = red [] where
         D.CoxBlank  cp v        -> Msg.abCoxReduce cp $ Msg.unkGlobalVar $ B.name v
 
     fill :: [D.NamedCox c] -> D.Cox c -> [B.Ab (D.Cox c)] -> B.Ab (Beta c)
+    fill args (D.CoxCalc cp n f) xs =
+                                   do xs2 <- sequence xs
+                                      let xs3 = red args `map` xs2
+                                      Right $ BetaCall cp n f xs3
     fill args f1 []              = red args f1
     fill args f1 xxs@(x:xs)      = Msg.abCoxFill (B.codePtList f1) $ case f1 of
         D.CoxForm1  cp _ v f2   -> do x' <- x
@@ -71,9 +75,6 @@ reduce = red [] where
                                       fill (vx : args) f2 xs
         D.CoxLocal  _ v k       -> do fn' <- kth v k args
                                       fill args fn' xxs
-        D.CoxCalc   cp n f2     -> do xxs2 <- mapM id xxs
-                                      let xxs3 = red args `map` xxs2
-                                      Right $ BetaCall cp n f2 xxs3
         D.CoxFill   _ f2 xs2    -> fill args f2 $ substL args xs2 ++ xxs
         D.CoxWith   _ arg2 e2   -> fill (arg2 ++ args) e2 xxs
         D.CoxBlank  _ n         -> Msg.unkCop $ B.name n
@@ -84,7 +85,7 @@ reduce = red [] where
 
     subst :: [D.NamedCox c] -> B.AbMap (D.Cox c)
     subst args (D.CoxLocal _ v k)    = kth v k args
-    subst args (D.CoxFill cp f xs)   = do f' <- subst args f
+    subst args (D.CoxFill cp f xs)   = do f'  <- subst args f
                                           xs' <- subst args `mapM` xs
                                           Right $ D.CoxFill cp f' xs'
     subst _ x                        = Right x
