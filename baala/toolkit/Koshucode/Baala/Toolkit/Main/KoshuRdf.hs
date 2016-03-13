@@ -11,7 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuRdf
 import qualified Data.List                as List
 import qualified Data.Map                 as Map
 import qualified Data.RDF                 as RDF
-import qualified Data.Text.Lazy           as Text
+import qualified Data.Text                as Tx
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base                    as B
@@ -107,8 +107,8 @@ writeRdf opts graph =
          pre = map unpackPair $ Map.toList pmap
      writeJudges pre js
 
-unpackPair :: (Text.Text, Text.Text) -> (String, String)
-unpackPair (a, b) = (Text.unpack a, Text.unpack b)
+unpackPair :: (Tx.Text, Tx.Text) -> (String, String)
+unpackPair (a, b) = (Tx.unpack a, Tx.unpack b)
 
 tupleType :: [Option] -> L.RDFTupleType
 tupleType opts
@@ -118,7 +118,7 @@ tupleType opts
 readRdfGraph :: (RDF.RdfParser p) => p -> String -> IO Graph
 readRdfGraph parser "-" =
     do str <- getContents
-       let rdf = RDF.parseString parser $ Text.pack str
+       let rdf = RDF.parseString parser $ Tx.pack str
        return $ RDF.fromEither rdf
 readRdfGraph parser path =
     do rdf <- RDF.parseFile parser path

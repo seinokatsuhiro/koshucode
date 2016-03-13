@@ -10,7 +10,7 @@ module Koshucode.Baala.Toolkit.Library.RDF
   ) where
 
 import qualified Data.RDF             as RDF
-import qualified Data.Text.Lazy       as T
+import qualified Data.Text            as Tx
 import qualified Koshucode.Baala.Data as D
 
 -- | Type of conversion
@@ -34,15 +34,15 @@ the :: (D.CText c) => RDF.Node -> c
 the = D.pText . nodeString
 
 nodeString :: RDF.Node -> String
-nodeString = T.unpack . nodeText
+nodeString = Tx.unpack . nodeText
 
-nodeText :: RDF.Node -> T.Text
+nodeText :: RDF.Node -> Tx.Text
 nodeText (RDF.UNode t)    = t
 nodeText (RDF.BNode t)    = t
 nodeText (RDF.BNodeGen _) = ""
 nodeText (RDF.LNode c)    = literalText c
 
-literalText :: RDF.LValue -> T.Text
+literalText :: RDF.LValue -> Tx.Text
 literalText (RDF.PlainL  t)   = t
 literalText (RDF.PlainLL t _) = t
 literalText (RDF.TypedL  t _) = t
