@@ -43,7 +43,7 @@ data Type
     | TypeList    Type            -- ^ List
     | TypeSet     Type            -- ^ Set
     | TypeTag     String Type     -- ^ Tagged type
-    | TypeAssn    [NamedType]     -- ^ Association
+    | TypeTie     [NamedType]     -- ^ Tie
     | TypeRel     [NamedType]     -- ^ Relation
 
     | TypeTuple   [Type]          -- ^ Tuple (Product type)
@@ -80,8 +80,8 @@ writeType = wf where
     w _ (TypeSet     t)        = B.doc "set"   B.<+> wt t
     w _ (TypeTag tag t)        = B.doc "tag"   B.<+> B.doc (tag ++ ":") B.<+> wt t
 
-    w q (TypeAssn   ts)        = wrap q $ B.doc "assn"  B.<+> B.writeTerms wt ts
-    w q (TypeRel    ts)        = wrap q $ B.doc "rel"   B.<+> B.writeTerms wt ts
+    w q (TypeTie    ts)        = wrap q $ B.doc "tie"  B.<+> B.writeTerms wt ts
+    w q (TypeRel    ts)        = wrap q $ B.doc "rel"  B.<+> B.writeTerms wt ts
 
     w _ (TypeTuple  ts)        = B.doc "tuple" B.<+> B.doch (map wt ts)
     w q (TypeSum ts)           = wrap q $ B.doch $ B.writeSepsWith wf "|" ts
@@ -93,14 +93,14 @@ writeType = wf where
 typeExplain :: Type -> B.Doc
 typeExplain ty =
     case ty of
-      TypeList     t  ->  B.doc "list"   B.<+>  typeExplain t
-      TypeSet      t  ->  B.doc "set"    B.<+>  typeExplain t
-      TypeTag  tag t  ->  B.doc "tag"    B.<+>  B.doc (tag ++ ":") B.<+> typeExplain t
-      TypeAssn    ts  ->  B.doc "assn"   B.<+>  vmap term ts
-      TypeRel     ts  ->  B.doc "rel"    B.<+>  vmap term ts
-      TypeTuple   ts  ->  B.doc "tuple"  B.<+>  vmap (item ":") ts
-      TypeSum     ts  ->  B.doc "sum"    B.<+>  vmap (item "|") ts
-      _               ->  writeType ty
+      TypeList     t  -> B.doc "list"   B.<+> typeExplain t
+      TypeSet      t  -> B.doc "set"    B.<+> typeExplain t
+      TypeTag  tag t  -> B.doc "tag"    B.<+> B.doc (tag ++ ":") B.<+> typeExplain t
+      TypeTie     ts  -> B.doc "tie"    B.<+> vmap term ts
+      TypeRel     ts  -> B.doc "rel"    B.<+> vmap term ts
+      TypeTuple   ts  -> B.doc "tuple"  B.<+> vmap (item ":") ts
+      TypeSum     ts  -> B.doc "sum"    B.<+> vmap (item "|") ts
+      _               -> writeType ty
     where
       term (n,t)  =  B.doc ('/' : n) B.<+> typeExplain t
       item i t    =  B.doc i B.<+> typeExplain t
@@ -165,13 +165,13 @@ typeTermDoc (TypeRel ts) = B.doch $ map name ts where
 typeTermDoc _ = B.docEmpty
 
 typeTerms :: Type -> [NamedType]
-typeTerms (TypeRel  ts) = ts
-typeTerms (TypeAssn ts) = ts
-typeTerms _             = []
+typeTerms (TypeRel ts) = ts
+typeTerms (TypeTie ts) = ts
+typeTerms _            = []
 
 isTypeRel :: Type -> Bool
-isTypeRel (TypeRel _)  =  True
-isTypeRel _            =  False
+isTypeRel (TypeRel _)  = True
+isTypeRel _            = False
 
 typeRelMapTerms :: B.Map [NamedType] -> B.Map Type
 typeRelMapTerms f (TypeRel ts) = TypeRel $ f ts
@@ -213,14 +213,14 @@ typeRelMapName = typeRelMapTerm . B.mapFst
 --              delimited by colon, enclosed in square brackets:
 --              @[ \'abc | \'def ]@.
 --
---  [Assn]      Assn is an association of terms,
+--  [Tie]       Tie is an bundle of terms,
 --              i.e., a list of named contents.
 --              Textual form is a sequence of terms
---              with bar-angles: @\<\< \/a 10 \/b 20 \>\>@.
+--              with hyphen-braces: @{- \/a 10 \/b 20 -}@.
 --
 --  [Relation]  Relation is a set of same-type tuples,
 --              Textual form is a sequence of tuples
---              enclosed in bar-braces.
+--              enclosed in equal-braces.
 --              The first tuple is a heading of relation,
 --              and succeeding tuples are delimited by vertical bar:
 --              @{= \/a \/b [ \'A1 | 20 ][ \'A3 | 40 ] =}@.

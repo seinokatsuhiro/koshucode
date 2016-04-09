@@ -74,7 +74,7 @@ instance A.ToJSON D.BaalaC where
         D.VType t      -> unimplemented t
         D.VList xs     -> A.toJSON xs
         D.VSet  xs     -> A.toJSON xs
-        D.VAssn xs     -> termsToJSON xs
+        D.VTie  xs     -> termsToJSON xs
         D.VRel r       -> unimplemented r
         where unimplemented x = A.toJSON $ "<unimplemented>" ++ show x
 

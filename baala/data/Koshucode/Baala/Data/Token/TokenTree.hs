@@ -106,7 +106,7 @@ data BracketType
     | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
     | BracketList     -- ^ Square brackets for lists: @[ C | ... ]@
     | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
-    | BracketAssn     -- ^ Curely-hyphen braces for associations etc.: @{- /N C ... -}@
+    | BracketTie      -- ^ Curely-hyphen braces for ties: @{- /N C ... -}@
     | BracketRel      -- ^ Curely-equal braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
     | BracketInterp   -- ^ Curely-bar braces for data interpretation: @{| ... /N ... |}@
     | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
@@ -119,7 +119,7 @@ getBracketType = B.bracketTable
     , o BracketForm    "(|"       "|)"
     , o BracketList    listOpen   listClose
     , o BracketSet     setOpen    setClose
-    , o BracketAssn    tieOpen    tieClose
+    , o BracketTie     tieOpen    tieClose
     , o BracketRel     relOpen    relClose
     , o BracketInterp  interpOpen interpClose
     , o BracketType    typeOpen   typeClose

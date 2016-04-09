@@ -63,7 +63,7 @@ csvContent text c
 
     | D.isList   c  = "<list>"
     | D.isSet    c  = "<set>"
-    | D.isAssn   c  = "<assn>"
+    | D.isTie    c  = "<tie>"
     | D.isRel    c  = "<rel>"
     | D.isInterp c  = "<interp>"
     | D.isType   c  = "<type>"

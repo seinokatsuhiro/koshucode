@@ -62,9 +62,9 @@ toText c
     | D.isTime   c  = B.doc $ B.writeString c
     | D.isTerm   c  = B.doc $ '/' : D.gTerm c
 
-    | D.isList   c  = B.docWraps "[" "]" $ B.writeBar B.nullShortener $ map toText $ D.gList c 
-    | D.isSet    c  = B.docWraps "{" "}" $ B.writeBar B.nullShortener $ map toText $ D.gSet c 
-    | D.isAssn   c  = B.doc "<assn>"
+    | D.isList   c  = B.docWraps D.listOpen D.listClose $ B.writeBar B.nullShortener $ map toText $ D.gList c 
+    | D.isSet    c  = B.docWraps D.setOpen  D.setClose $ B.writeBar B.nullShortener $ map toText $ D.gSet c 
+    | D.isTie    c  = B.doc "<tie>"
     | D.isRel    c  = B.doc "<rel>"
     | D.isInterp c  = B.doc "<interp>"
     | D.isType   c  = B.doc "<type>"

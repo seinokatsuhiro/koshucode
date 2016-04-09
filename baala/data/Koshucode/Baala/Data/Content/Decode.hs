@@ -57,7 +57,7 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
         D.BracketGroup   -> group g
         D.BracketList    -> D.putList   =<< consContents cons xs
         D.BracketSet     -> D.putSet    =<< consContents cons xs
-        D.BracketAssn    ->                 consAngle    cons xs
+        D.BracketTie     ->                 consAngle    cons xs
         D.BracketRel     -> D.putRel    =<< consRel      cons xs
         D.BracketType    -> D.putType   =<< consType          xs
         D.BracketInterp  -> D.putInterp =<< D.treesToInterp   xs
@@ -119,27 +119,27 @@ consContents cons cs = lt `mapM` D.divideTreesByBar cs where
 --      consAngle                consAngle
 
 consAngle :: (D.CContent c) => ContentCons c -> D.TTreesToAb c
-consAngle cons xs@(D.TermLeafName _ _ : _) = D.putAssn =<< consAssn cons xs
-consAngle _ [] = D.putAssn []
+consAngle cons xs@(D.TermLeafName _ _ : _) = D.putTie =<< consTie cons xs
+consAngle _ [] = D.putTie []
 consAngle _ [D.TextLeafRaw _ "words", D.TextLeafQQ _ ws] = D.putList $ map D.pText $ words ws
 consAngle _ _ = Msg.adlib "unknown angle bracket"
 
--- Association
+-- Tie
 --
---   << /a 1  /b 2  /c 3 >>
+--   {- /a 1  /b 2  /c 3 -}
 --      ................
 --      :
---      consAssn
+--      consTie
 
-consAssn :: (D.CContent c) => ContentCons c -> D.TTreesToAb [D.Term c]
-consAssn cons = mapM p B.<=< D.treesToTerms1 where
+consTie :: (D.CContent c) => ContentCons c -> D.TTreesToAb [D.Term c]
+consTie cons = mapM p B.<=< D.treesToTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesToJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgePat -> D.TTreesToAb (D.Judge c)
-treesToJudge calc q p = Right . assertAs q p B.<=< consAssn (contentCons calc)
+treesToJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
 
 
 -- ----------------------  Relation
@@ -251,9 +251,9 @@ consType = gen where
     dispatch "set"   xs     = Right . D.TypeSet  =<< gen xs
     dispatch "tuple" xs     = do ts <- mapM (gen. B.li1) xs
                                  Right $ D.TypeTuple ts
-    dispatch "assn"  xs     = do ts1 <- D.treesToTerms xs
+    dispatch "tie"   xs     = do ts1 <- D.treesToTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ D.TypeAssn ts2
+                                 Right $ D.TypeTie ts2
     dispatch "rel"   xs     = do ts1 <- D.treesToTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
                                  Right $ D.TypeRel ts2
@@ -296,18 +296,18 @@ consType = gen where
 --
 --  Set.
 --
---    >>> lits "{ 'b : 'a : 'a : 'c : 'a }"
+--    >>> lits "{ 'b | 'a | 'a | 'c | 'a }"
 --    Right [VSet [VText "b", VText "a", VText "c"]]
 --
 --  List.
 --
---    >>> lits "[ 'a : '10 : 20 ]"
+--    >>> lits "[ 'a | '10 | 20 ]"
 --    Right [VList [VText "a", VText "10", VDec (Decimal (20, 1), 0, False)]]
 --
---  Assn.
+--  Tie.
 --
---    >>> lits "<| /a 'x  /b { 'y : 'z } |>"
---    Right [VAssn
+--    >>> lits "{- /a 'x  /b { 'y | 'z } -}"
+--    Right [VTie 
 --      [ ("/a", VText "x")
 --      , ("/b", VSet [VText "y", VText "z"])]]
 --

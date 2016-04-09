@@ -366,7 +366,7 @@ isFigure c   = Ch.isDigit c
 --              @(@ /group/ @)@ ,
 --              @{@ /set/ @}@ ,
 --              @[@ /list/ @]@ ,
---              @\<\<@ /assn/ @\>\>@ , and
+--              @{-@ /tie/ @-}@ , and
 --              @{=@ /relation/ @=}@
 --
 --  [TermName]  Words beginning with slash, e.g., @\/aa@.

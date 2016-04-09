@@ -31,7 +31,7 @@ data BaalaC
     | VType    D.Type             -- ^ Type for type
     | VList    [BaalaC]           -- ^ List type (objective collection)
     | VSet     [BaalaC]           -- ^ Set type (informative collection)
-    | VAssn    [B.Named BaalaC]   -- ^ Assn type (set of terms)
+    | VTie     [B.Named BaalaC]   -- ^ Tie type (set of terms)
     | VRel     (D.Rel BaalaC)     -- ^ Relation type
     deriving (Show)
 
@@ -53,7 +53,7 @@ instance Ord BaalaC where
     compare (VType    x) (VType    y)  = compare x y
     compare (VList    x) (VList    y)  = compare x y
     compare (VSet     x) (VSet     y)  = compareAsSet x y
-    compare (VAssn    x) (VAssn    y)  = compareAsSet x y
+    compare (VTie     x) (VTie     y)  = compareAsSet x y
     compare (VRel     x) (VRel     y)  = compare x y
     compare x y                        = typeOrder x `compare` typeOrder y
 
@@ -69,7 +69,7 @@ typeOrder c
     | D.isText     c = 9
     | D.isList     c = 11
     | D.isSet      c = 12
-    | D.isAssn     c = 13
+    | D.isTie      c = 13
     | D.isRel      c = 14
     | D.isInterp   c = 15
     | D.isType     c = 17
@@ -93,7 +93,7 @@ instance D.CTypeOf BaalaC where
     typeOf (VType    _)  = D.TypeType
     typeOf (VList   cs)  = D.TypeList $ typeSum cs
     typeOf (VSet    cs)  = D.TypeSet  $ typeSum cs
-    typeOf (VAssn   cs)  = D.TypeAssn $ B.mapSndTo D.typeOf cs
+    typeOf (VTie    cs)  = D.TypeTie  $ B.mapSndTo D.typeOf cs
     typeOf (VRel     _)  = D.TypeRel []
 
 typeSum :: D.CTypeOf c => [c] -> D.Type
@@ -122,7 +122,7 @@ instance B.Write BaalaC where
         VType t      -> B.docWraps D.typeOpen D.typeClose $ B.writeDocWith    sh t
         VList xs     -> B.docWraps D.listOpen D.listClose $ B.writeBar sh xs
         VSet  xs     -> B.docWraps D.setOpen  D.setClose  $ B.writeBar sh xs
-        VAssn xs     -> B.docWraps D.tieOpen  D.tieClose  $ B.writeH   sh xs
+        VTie  xs     -> B.docWraps D.tieOpen  D.tieClose  $ B.writeH   sh xs
         VRel r       -> B.writeDocWith sh r
 
     writeHtmlWith sh c = case c of
@@ -231,12 +231,12 @@ instance D.CSet BaalaC where
     isSet  (VSet _)          = True
     isSet  _                 = False
 
-instance D.CAssn BaalaC where
-    pAssn                    = VAssn
-    gAssn (VAssn x)          = x
-    gAssn _                  = B.bug "gAssn"
-    isAssn  (VAssn _)        = True
-    isAssn  _                = False
+instance D.CTie BaalaC where
+    pTie                     = VTie 
+    gTie (VTie x)            = x
+    gTie _                   = B.bug "gTie"
+    isTie  (VTie _)          = True
+    isTie  _                 = False
 
 instance D.CRel BaalaC where
     pRel                     = VRel

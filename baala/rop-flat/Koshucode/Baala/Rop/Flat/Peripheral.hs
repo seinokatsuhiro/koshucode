@@ -17,11 +17,11 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     -- * RDF
     consRdf,
   
-    -- * assn
-    consAssn, relmapAssn, relkitAssn,
+    -- * tie
+    consTie, relmapTie, relkitTie,
   
-    -- * unassn
-    consUnassn, relmapUnassn, relkitUnassn,
+    -- * untie
+    consUntie, relmapUntie, relkitUntie,
   
     -- * term-name
     consTermName, relmapTermName, relkitTermName,
@@ -48,13 +48,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR   USAGE                      ATTRIBUTE
-    [ Op.def consAssn      "assn /P ... -to N"        "V -term | -to"
+    [ Op.def consTie       "tie /P ... -to N"         "V -term | -to"
     , Op.def consIndexElem "index-elem /N /N /P"      "3 -index -elem -list"
     , Op.def consMember    "member /N /N"             "E -1 -2"
     , Op.def consRdf       "rdf P /S /O"              "1V -pattern -term"
     , Op.def consTermName  "term-name /N"             "1 -term"
     , Op.def consToday     "today /N"                 "1 -term"
-    , Op.def consUnassn    "unassn /P -only /P ..."   "1 -from | -only"
+    , Op.def consUntie     "untie /P -only /P ..."    "1 -from | -only"
     , Op.def consUncollect "uncollect /P -to /N ..."  "1 -coll | -to"
     ]
 
@@ -211,55 +211,55 @@ consRdf med =
 
 
 
--- ----------------------  assn
+-- ----------------------  tie
 
---    > assn /x /y /z -to /a
+--    > tie /x /y /z -to /a
 
-consAssn :: (D.CAssn c) => C.RopCons c
-consAssn med =
+consTie :: (D.CTie c) => C.RopCons c
+consTie med =
   do ns <- Op.getTerms med "-term"
      to <- Op.getTerm  med "-to"
-     Right $ relmapAssn med (ns, to)
+     Right $ relmapTie med (ns, to)
 
-relmapAssn :: (D.CAssn c) => C.Intmed c -> ([D.TermName], D.TermName) -> C.Relmap c
-relmapAssn med = C.relmapFlow med . relkitAssn
+relmapTie :: (D.CTie c) => C.Intmed c -> ([D.TermName], D.TermName) -> C.Relmap c
+relmapTie med = C.relmapFlow med . relkitTie
 
-relkitAssn :: (D.CAssn c) => ([D.TermName], D.TermName) -> C.RelkitFlow c
-relkitAssn _ Nothing = Right C.relkitNothing
-relkitAssn (ns, to) (Just he1) = Right kit2 where
+relkitTie :: (D.CTie c) => ([D.TermName], D.TermName) -> C.RelkitFlow c
+relkitTie _ Nothing = Right C.relkitNothing
+relkitTie (ns, to) (Just he1) = Right kit2 where
     pick      =  Op.picker he1 ns
     he2       =  D.headCons to he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
-    f2 cs1    =  let assn = D.pAssn $ zip ns $ pick cs1
-                 in assn : cs1
+    f2 cs1    =  let tie = D.pTie $ zip ns $ pick cs1
+                 in tie : cs1
 
 
--- ----------------------  unassn
+-- ----------------------  untie
 
---    > unassn /a -only /x /y
+--    > untie /a -only /x /y
 
-consUnassn :: (D.CAssn c) => C.RopCons c
-consUnassn med =
+consUntie :: (D.CTie c) => C.RopCons c
+consUntie med =
   do from <- Op.getTerm  med "-from"
      ns   <- Op.getTerms med "-only"
-     Right $ relmapUnassn med (from, ns)
+     Right $ relmapUntie med (from, ns)
 
-relmapUnassn :: (D.CAssn c) => C.Intmed c -> (D.TermName, [D.TermName]) -> C.Relmap c
-relmapUnassn med = C.relmapFlow med . relkitUnassn
+relmapUntie :: (D.CTie c) => C.Intmed c -> (D.TermName, [D.TermName]) -> C.Relmap c
+relmapUntie med = C.relmapFlow med . relkitUntie
 
-relkitUnassn :: (D.CAssn c) => (D.TermName, [D.TermName]) -> C.RelkitFlow c
-relkitUnassn _ Nothing = Right C.relkitNothing
-relkitUnassn (from, ns) (Just he1) = Right kit2 where
+relkitUntie :: (D.CTie c) => (D.TermName, [D.TermName]) -> C.RelkitFlow c
+relkitUntie _ Nothing = Right C.relkitNothing
+relkitUntie (from, ns) (Just he1) = Right kit2 where
     pick      =  Op.picker he1 [from]
     he2       =  D.headAppend ns he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
-    f2 _ cs1  =  do let [assn] = pick cs1
-                    cs <- assnPick ns $ D.gAssn assn
+    f2 _ cs1  =  do let [tie] = pick cs1
+                    cs <- tiePick ns $ D.gTie tie
                     Right $ cs ++ cs1
 
-assnPick :: [D.TermName] -> [D.Term c] -> B.Ab [c]
-assnPick ns assn = mapM pick ns where
-    pick n = case lookup n assn of
+tiePick :: [D.TermName] -> [D.Term c] -> B.Ab [c]
+tiePick ns tie = mapM pick ns where
+    pick n = case lookup n tie of
                Just c   ->  Right c
                Nothing  ->  Msg.adlib "no term"
 

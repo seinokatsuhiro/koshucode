@@ -26,7 +26,7 @@ module Koshucode.Baala.Data.Content.Class
     CList (..),
     CSet (..), gSetSort,
     -- ** Relational
-    CAssn (..),
+    CTie (..),
     CRel (..), isMember, dee, dum,
     CInterp (..),
     -- ** Type
@@ -55,7 +55,7 @@ class (Ord c, B.Write c, CTypeOf c,
        CEmpty c, CFull c,
        CBool c, CCode c, CText c, CClock c, CTime c,
        CTerm c, CDec c, CType c, CInterp c,
-       CList c, CSet c, CAssn c, CRel c) =>
+       CList c, CSet c, CTie c, CRel c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
@@ -242,16 +242,16 @@ gSetSort :: (Ord c, CSet c) => c -> [c]
 gSetSort = B.sort . gSet
 
 -- | Tie of terms.
-class (CTypeOf c) => CAssn c where
-    isAssn      ::           c -> Bool
-    gAssn       ::           c -> [D.Term c]
-    pAssn       ::  [D.Term c] -> c
+class (CTypeOf c) => CTie c where
+    isTie       ::           c -> Bool
+    gTie        ::           c -> [D.Term c]
+    pTie        ::  [D.Term c] -> c
 
-    getAssn     ::      B.Ab c -> B.Ab [D.Term c]
-    getAssn     =       getAbAb isAssn gAssn
+    getTie      ::      B.Ab c -> B.Ab [D.Term c]
+    getTie      =       getAbAb isTie gTie
 
-    putAssn     ::  [D.Term c] -> B.Ab c
-    putAssn     =  Right . pAssn
+    putTie      ::  [D.Term c] -> B.Ab c
+    putTie      =  Right . pTie
 
 -- | Relation of terms.
 class (CTypeOf c) => CRel c where
@@ -265,9 +265,13 @@ class (CTypeOf c) => CRel c where
     putRel      ::     D.Rel c -> B.Ab c
     putRel      =      Right . pRel
 
-dee, dum :: (CRel c) => c
-dee = pRel $ D.reldee
-dum = pRel $ D.reldum
+-- | Nullary full relation.
+dee :: (CRel c) => c
+dee = pRel D.reldee
+
+-- | Nullary empty relation.
+dum :: (CRel c) => c
+dum = pRel D.reldum
 
 -- | Data intepretation.
 class (CTypeOf c) => CInterp c where
