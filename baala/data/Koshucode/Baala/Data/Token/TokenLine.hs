@@ -134,6 +134,10 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
 
     gen ""                           = Right r
 
+    gen ('(':c:')':cs)
+                   | c `elem` "+-=#"
+                                     = u cs            $ D.TTextRaw cp ['(',c,')']
+
     gen (a:b:cs)   | isOpen a &&
                      isGrip b        = u cs            $ D.TOpen    cp [a,b]
                    | isGrip a &&

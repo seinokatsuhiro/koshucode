@@ -74,8 +74,8 @@ instance Write String where
     writeDocWith _ = D.text
 
 instance Write Bool where
-    writeDocWith _ True  = D.text "<1>"
-    writeDocWith _ False = D.text "<0>"
+    writeDocWith _ True  = D.text "(+)"
+    writeDocWith _ False = D.text "(-)"
 
 instance (Write a) => Write (B.Named a) where
     writeDocWith sh = writeTerm $ writeDocWith sh
