@@ -31,6 +31,7 @@ data Type
     | TypeInterp                  -- ^ Data interpreation
 
     | TypeEmpty                   -- ^ Empty
+    | TypeFull                    -- ^ Full
     | TypeBool                    -- ^ Boolean
     | TypeText                    -- ^ Text
     | TypeCode                    -- ^ Code
@@ -61,6 +62,7 @@ writeType = wf where
 
     w _ TypeAny                = B.doc "any"
     w _ TypeEmpty              = B.doc "empty"
+    w _ TypeFull               = B.doc "full"
     w _ TypeBool               = B.doc "boolean"
     w _ TypeText               = B.doc "text"
     w _ TypeCode               = B.doc "code"

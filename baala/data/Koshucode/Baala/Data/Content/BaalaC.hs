@@ -24,6 +24,7 @@ data BaalaC
     | VClock   D.Clock            -- ^ Clock type
     | VTime    D.Time             -- ^ Time type
     | VEmpty                      -- ^ Sign of no ordinary type
+    | VFull                       -- ^ The maximum content
     | VInterp  D.Interp           -- ^ Interpretation type
     | VType    D.Type             -- ^ Type for type
     | VList    [BaalaC]           -- ^ List type (objective collection)
@@ -44,6 +45,7 @@ instance Ord BaalaC where
     compare (VClock   x) (VClock   y)  = compare x y
     compare (VTime    x) (VTime    y)  = compare x y
     compare (VEmpty    ) (VEmpty    )  = EQ
+    compare (VFull     ) (VFull     )  = EQ
     compare (VInterp  x) (VInterp  y)  = compare x y
     compare (VType    x) (VType    y)  = compare x y
     compare (VList    x) (VList    y)  = compare x y
@@ -66,6 +68,7 @@ typeOrder (VList    _)  = 11
 typeOrder (VSet     _)  = 13
 typeOrder (VAssn    _)  = 14
 typeOrder (VRel     _)  = 15
+typeOrder (VFull     )  = 18
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
@@ -78,6 +81,7 @@ instance D.CTypeOf BaalaC where
     typeOf (VClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
     typeOf (VTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
     typeOf (VEmpty    )  = D.TypeEmpty
+    typeOf (VFull     )  = D.TypeFull
     typeOf (VInterp  _)  = D.TypeInterp
     typeOf (VType    _)  = D.TypeType
     typeOf (VList   cs)  = D.TypeList $ typeSum cs
@@ -105,6 +109,7 @@ instance B.Write BaalaC where
         VTime t      -> B.doc t
         VBool b      -> B.doc b
         VEmpty       -> B.doc "()"
+        VFull        -> B.doc "(#)"
         VInterp i    -> B.writeDocWith sh i
         VType t      -> B.docWraps "[-" "-]" $ B.writeDocWith    sh t
         VList xs     -> B.docWraps "["   "]" $ B.writeBar sh xs
@@ -169,6 +174,11 @@ instance D.CEmpty BaalaC where
     empty                    = VEmpty
     isEmpty VEmpty           = True
     isEmpty _                = False
+
+instance D.CFull BaalaC where
+    full                     = VFull
+    isFull VFull             = True
+    isFull _                 = False
 
 instance D.CTerm BaalaC where
     pTerm                    = VTerm
