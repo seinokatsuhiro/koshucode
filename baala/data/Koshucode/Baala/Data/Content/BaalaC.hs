@@ -56,22 +56,24 @@ instance Ord BaalaC where
     compare (VRel     x) (VRel     y)  = compare x y
     compare x y                        = typeOrder x `compare` typeOrder y
 
-typeOrder :: BaalaC -> Int
-typeOrder (VEmpty    )  = 1
-typeOrder (VBool    _)  = 2
-typeOrder (VDec     _)  = 3
-typeOrder (VClock   _)  = 4
-typeOrder (VTime    _)  = 5
-typeOrder (VCode    _)  = 6
-typeOrder (VTerm    _)  = 7
-typeOrder (VText    _)  = 9
-typeOrder (VList    _)  = 11
-typeOrder (VSet     _)  = 12
-typeOrder (VAssn    _)  = 13
-typeOrder (VRel     _)  = 14
-typeOrder (VInterp  _)  = 15
-typeOrder (VType    _)  = 17
-typeOrder (VFull     )  = 18
+typeOrder :: (D.CContent c) => c -> Int
+typeOrder c
+    | D.isEmpty    c = 1
+    | D.isBool     c = 2
+    | D.isDec      c = 3
+    | D.isClock    c = 4
+    | D.isTime     c = 5
+    | D.isCode     c = 6
+    | D.isTerm     c = 7
+    | D.isText     c = 9
+    | D.isList     c = 11
+    | D.isSet      c = 12
+    | D.isAssn     c = 13
+    | D.isRel      c = 14
+    | D.isInterp   c = 15
+    | D.isType     c = 17
+    | D.isFull     c = 18
+    | otherwise      = error "unknown content"
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
