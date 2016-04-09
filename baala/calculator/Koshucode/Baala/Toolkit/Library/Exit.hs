@@ -48,7 +48,7 @@ currentEncodings =
        let q    = ("'" ++)
            j    = D.affirm "ENCODING" [ ("content", q $ show locale)
                                       , ("file",    q $ show file) ]
-       return $ D.writeDownJudge D.shortEmpty j ++ "\n"
+       return $ D.writeDownJudge B.nullShortener j ++ "\n"
 
 exit :: Int -> IO a
 exit = B.exitWith . B.exitCode

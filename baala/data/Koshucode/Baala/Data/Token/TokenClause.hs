@@ -15,7 +15,7 @@ type TokenClause = B.CodeClause D.Token
 instance B.Write TokenClause where
     writeDocWith = docTokenClause
 
-docTokenClause :: B.StringMap -> TokenClause -> B.Doc
+docTokenClause :: B.Shortener -> TokenClause -> B.Doc
 docTokenClause sh (B.CodeClause ls toks) = d where
     d      = B.docHang k 2 $ B.docv [dls, dtoks]
     k      = B.writeDocWith sh "TokenClause"

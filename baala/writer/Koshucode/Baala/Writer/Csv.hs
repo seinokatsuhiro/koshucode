@@ -19,7 +19,7 @@ resultCsv = C.ResultWriterJudge "csv" hPutCsv
 
 hPutCsv :: (B.Write c) => C.ResultWriterJudge c
 hPutCsv h _ status js =
-    do let csvLines = map (toCSV . D.textualjudge id) js
+    do let csvLines = map (toCSV . D.textualjudge B.nullShortener) js
        IO.hPutStrLn h $ CSV.printCSV csvLines
        return status
     where
@@ -67,7 +67,7 @@ csvContent text c
     | D.isRel    c  = "<rel>"
     | D.isInterp c  = "<interp>"
     | D.isType   c  = "<type>"
-    | otherwise     = "<unknown>"
+    | otherwise     = "<?>"
 
 enquote :: B.Map String
 enquote str = '"' : q str where

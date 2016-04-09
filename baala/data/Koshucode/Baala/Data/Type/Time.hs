@@ -91,7 +91,7 @@ writeTime time =
     case time of
       TimeYmdcz d c z  -> dcz d c z B.<+> szone z
       TimeYmdc  d c    -> dc d c
-      TimeYmd   d      -> B.writeDocWith id d
+      TimeYmd   d      -> B.writeDocWith B.nullShortener d
       TimeYw    day    -> yw $ T.toWeekDate  day
       TimeYm    day    -> ym $ T.toGregorian day
     where
@@ -101,7 +101,7 @@ writeTime time =
                           in dc (day `D.dateAdd` d) (D.clockCutDay c')
 
       dc                :: D.Date -> D.Clock -> B.Doc
-      dc d c            = B.writeDocWith id d B.<+> D.writeClockBody c
+      dc d c            = B.writeDocWith B.nullShortener d B.<+> D.writeClockBody c
 
       zone z            = hm $ D.dhmsFromSec z
       szone z           = case z `compare` 0 of

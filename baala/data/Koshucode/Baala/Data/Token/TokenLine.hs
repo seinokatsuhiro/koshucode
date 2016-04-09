@@ -161,7 +161,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | isShort c       = short cs [c]
                    | isCode c        = vw              $ scanCode   cp ws (c:cs)
                    | isSpace c       = v               $ scanSpace  cp cs
-                   | otherwise       = Msg.forbiddenInput $ D.shortEmpty [c]
+                   | otherwise       = Msg.forbiddenInput $ D.angleQuote [c]
 
     ast (c:cs) w   | w == "****"     = u    (c:cs)     $ D.TTextRaw cp w
                    | c == '*'        = ast  cs         $ c:w

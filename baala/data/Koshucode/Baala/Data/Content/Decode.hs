@@ -64,25 +64,27 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
         _                -> Msg.unkBracket
 
     token :: D.Token -> B.Ab c
-    token (D.TText _ n w) | n <= D.TextRaw  = keyword w
-    token (D.TText _ _ w)                   = D.putText w
-    token (D.TTermN _ n)                    = D.putTerm n
-    token (D.TTerm _ _ [n])                 = D.putTerm n
-    token t                                 = Msg.unkWord $ D.tokenContent t
+    token (D.TText _ n w)
+        | n <= D.TextRaw     = keyword w
+        | n == D.TextQ       = D.putCode w
+        | otherwise          = D.putText w
+    token (D.TTermN _ n)     = D.putTerm n
+    token (D.TTerm _ _ [n])  = D.putTerm n
+    token t                  = Msg.unkWord $ D.tokenContent t
 
     group :: D.TTreeToAb c
     group g@(B.TreeB _ _ xs@(D.TextLeaf f _ _ : _))
-        | f  > D.TextRaw    = eith g text $ D.treesToTexts True xs
-        | f == D.TextRaw    = eithcon (eith g
-                                D.putTime $ D.treesToTime   xs)
-                                decimal   $ D.treesToDigits xs
-    group (B.TreeB _ _ [])  = Right D.empty
-    group g                 = calc g
+        | f  > D.TextRaw     = eith g text $ D.treesToTexts True xs
+        | f == D.TextRaw     = eithcon (eith g
+                                 D.putTime $ D.treesToTime   xs)
+                                 decimal   $ D.treesToDigits xs
+    group (B.TreeB _ _ [])   = Right D.empty
+    group g                  = calc g
 
-    eithcon f    = either (const f)
-    eith g       = either (const $ calc g)
-    text         = D.putText . concat
-    decimal      = D.putDec B.<=< D.litDecimal
+    eithcon f      = either (const f)
+    eith g         = either (const $ calc g)
+    text           = D.putText . concat
+    decimal        = D.putDec B.<=< D.litDecimal
 
     keyword :: (D.CEmpty c, D.CBool c) => String -> B.Ab c
     keyword "(+)"  = Right D.true

@@ -10,7 +10,7 @@ module Koshucode.Baala.Data.Token.Short
     shortGroup,
   
     -- * Shortener
-    shortEmpty, shortText,
+    shortText,
     isCodeText, isCodeChar,
   ) where
 
@@ -54,25 +54,19 @@ shortGroup (Short cp1 sh1 a : xs) =
 
 -- ----------------------  Shortener
 
--- | String shortener with no short definition.
-shortEmpty :: B.StringMap
-shortEmpty = shortText []
-
 -- | String shortener.
-shortText :: [ShortDef] -> B.StringMap
+shortText :: [ShortDef] -> B.Shortener
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
-    loop [] s | null s         =  "\"\""
-              | isCodeText s   =  '\'' : s
-              | otherwise      =  D.angleQuote s
 
+    loop [] _ = Nothing
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
-          Just s2             ->  prefix ++ "." ++ text2 s2
-          _                   ->  loop sh s
+          Just s2             -> Just $ prefix ++ "." ++ text2 s2
+          _                   -> loop sh s
 
-    text2 s   | isCodeText s   =  s
-              | otherwise      =  D.angleQuote s
+    text2 s   | isCodeText s   = s
+              | otherwise      = D.angleQuote s
 
 isCodeText :: B.Pred String
 isCodeText = all isCodeChar
@@ -80,9 +74,9 @@ isCodeText = all isCodeChar
 isCodeChar :: B.Pred Char
 isCodeChar c =
     case B.generalCategoryGroup c of
-      B.UnicodeLetter       ->  True
-      B.UnicodeNumber       ->  True
-      B.UnicodeSymbol       ->  c `elem` "+<=>~"
-      B.UnicodePunctuation  ->  c `elem` "-_.*#"
-      _                     ->  False
+      B.UnicodeLetter       -> True
+      B.UnicodeNumber       -> True
+      B.UnicodeSymbol       -> c `elem` "+<=>~"
+      B.UnicodePunctuation  -> c `elem` "-_.*#"
+      _                     -> False
 

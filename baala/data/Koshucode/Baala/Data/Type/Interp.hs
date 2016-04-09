@@ -25,12 +25,12 @@ instance B.Write Interp where
 instance B.Write InterpWord where
     writeDocWith = interpWordDoc
 
-interpDoc :: B.StringMap -> Interp -> B.Doc
+interpDoc :: B.Shortener -> Interp -> B.Doc
 interpDoc sh Interp { interpWords = xs } = doc where
     doc    = B.doc "<<<" B.<+> xsDoc B.<+> B.doc ">>>"
     xsDoc  = B.doch $ map (B.writeDocWith sh) xs
 
-interpWordDoc :: B.StringMap -> InterpWord -> B.Doc
+interpWordDoc :: B.Shortener -> InterpWord -> B.Doc
 interpWordDoc _ (InterpText w) = B.doc w
 interpWordDoc _ (InterpTerm n) = B.doc $ '/' : n
 

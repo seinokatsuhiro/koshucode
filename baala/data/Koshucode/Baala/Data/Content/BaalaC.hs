@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Content.BaalaC
 
 import qualified Data.Set                              as Set
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data.Token            as D
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Content.Class    as D
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
@@ -108,8 +109,8 @@ instance D.CContent BaalaC where
 
 instance B.Write BaalaC where
     writeDocWith sh c = case c of
-        VCode s      -> B.doc $ sh s
-        VText s      -> B.doc $ sh s
+        VCode s      -> B.doc $ quote  (sh s) s
+        VText s      -> B.doc $ qquote (sh s) s
         VTerm s      -> B.doc $ "'/" ++ s
         VDec  n      -> B.doc $ D.decimalString n
         VClock t     -> B.doc t
@@ -128,6 +129,14 @@ instance B.Write BaalaC where
         VRel r       -> B.writeHtmlWith sh r
         _            -> B.toHtml $ B.writeStringWith sh c
 
+quote :: Maybe String -> String -> String
+quote (Nothing) s   = "'" ++ s
+quote (Just s)  _   = s
+
+qquote :: Maybe String -> String -> String
+qquote (Nothing) "" = "\"\""
+qquote (Nothing) s  = D.angleQuote s
+qquote (Just s)  _  = s
 
 -- ----------------------  haskell data
 
