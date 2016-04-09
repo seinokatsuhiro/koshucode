@@ -61,6 +61,7 @@ jsonNull = A.Null
 
 instance A.ToJSON D.BaalaC where
     toJSON c = case c of
+        D.VCode s      -> A.toJSON s
         D.VText s      -> A.toJSON s
         D.VTerm s      -> A.toJSON $ '/' : s
         D.VDec  n      -> A.toJSON (D.decimalFractional n :: Double)
@@ -68,6 +69,7 @@ instance A.ToJSON D.BaalaC where
         D.VTime t      -> unimplemented t
         D.VBool b      -> A.toJSON b
         D.VEmpty       -> jsonNull
+        D.VFull        -> jsonNull
         D.VInterp i    -> unimplemented i
         D.VType t      -> unimplemented t
         D.VList xs     -> A.toJSON xs
