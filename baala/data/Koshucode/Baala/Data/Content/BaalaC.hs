@@ -18,6 +18,7 @@ import qualified Koshucode.Baala.Data.Content.Message  as Msg
 -- | Vanilla content type
 data BaalaC
     = VBool    Bool               -- ^ Boolean type
+    | VCode    String             -- ^ Code type
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
     | VDec     D.Decimal          -- ^ Decimal number type
@@ -40,6 +41,7 @@ instance Eq BaalaC where
 instance Ord BaalaC where
     compare (VBool    x) (VBool    y)  = compare x y
     compare (VText    x) (VText    y)  = compare x y
+    compare (VCode    x) (VCode    y)  = compare x y
     compare (VTerm    x) (VTerm    y)  = compare x y
     compare (VDec     x) (VDec     y)  = compare x y
     compare (VClock   x) (VClock   y)  = compare x y
@@ -55,19 +57,20 @@ instance Ord BaalaC where
     compare x y                        = typeOrder x `compare` typeOrder y
 
 typeOrder :: BaalaC -> Int
-typeOrder (VBool    _)  = 1
-typeOrder (VText    _)  = 2
-typeOrder (VTerm    _)  = 3
-typeOrder (VDec     _)  = 4
-typeOrder (VClock   _)  = 6
-typeOrder (VTime    _)  = 7
-typeOrder (VEmpty    )  = 8
-typeOrder (VInterp  _)  = 9
-typeOrder (VType    _)  = 10
+typeOrder (VEmpty    )  = 1
+typeOrder (VBool    _)  = 2
+typeOrder (VDec     _)  = 3
+typeOrder (VClock   _)  = 4
+typeOrder (VTime    _)  = 5
+typeOrder (VCode    _)  = 6
+typeOrder (VTerm    _)  = 7
+typeOrder (VText    _)  = 9
 typeOrder (VList    _)  = 11
-typeOrder (VSet     _)  = 13
-typeOrder (VAssn    _)  = 14
-typeOrder (VRel     _)  = 15
+typeOrder (VSet     _)  = 12
+typeOrder (VAssn    _)  = 13
+typeOrder (VRel     _)  = 14
+typeOrder (VInterp  _)  = 15
+typeOrder (VType    _)  = 17
 typeOrder (VFull     )  = 18
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
@@ -75,6 +78,7 @@ compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
 instance D.CTypeOf BaalaC where
     typeOf (VBool    _)  = D.TypeBool
+    typeOf (VCode    _)  = D.TypeCode
     typeOf (VText    _)  = D.TypeText
     typeOf (VTerm    _)  = D.TypeTerm
     typeOf (VDec     _)  = D.TypeDec
@@ -102,6 +106,7 @@ instance D.CContent BaalaC where
 
 instance B.Write BaalaC where
     writeDocWith sh c = case c of
+        VCode s      -> B.doc $ sh s
         VText s      -> B.doc $ sh s
         VTerm s      -> B.doc $ "'/" ++ s
         VDec  n      -> B.doc $ D.decimalString n
@@ -151,6 +156,13 @@ instance D.CTime BaalaC where
     gTime  _                 = B.bug "gTime"
     isTime (VTime _)         = True
     isTime _                 = False
+
+instance D.CCode BaalaC where
+    pCode                    = VCode
+    gCode (VCode s)          = s
+    gCode _                  = B.bug "gCode"
+    isCode  (VCode _)        = True
+    isCode  _                = False
 
 instance D.CText BaalaC where
     pText                    = VText

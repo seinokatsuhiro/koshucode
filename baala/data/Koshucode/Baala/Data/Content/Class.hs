@@ -17,6 +17,7 @@ module Koshucode.Baala.Data.Content.Class
     CClock (..),
     CTime (..),
     -- ** Textual
+    CCode (..),
     CTerm (..), pTermSet,
     CText (..), pMaybeText, pTextList, pTextSet,
 
@@ -52,7 +53,7 @@ import qualified Koshucode.Baala.Data.Content.Message as Msg
 
 class (Ord c, B.Write c, CTypeOf c,
        CEmpty c, CFull c,
-       CBool c, CText c, CClock c, CTime c,
+       CBool c, CCode c, CText c, CClock c, CTime c,
        CTerm c, CDec c, CType c, CInterp c,
        CList c, CSet c, CAssn c, CRel c) =>
     CContent c where
@@ -160,6 +161,18 @@ class (CTypeOf c) => CTime c where
 
     putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
+
+-- | Code.
+class (CTypeOf c) => CCode c where
+    isCode       ::           c -> Bool
+    gCode        ::           c -> String
+    pCode        ::      String -> c
+
+    getCode      ::      B.Ab c -> B.Ab String
+    getCode      =       getAbAb isCode gCode
+
+    putCode      ::      String -> B.Ab c
+    putCode      =       Right . pCode
 
 -- | Term name.
 class (CTypeOf c) => CTerm c where
