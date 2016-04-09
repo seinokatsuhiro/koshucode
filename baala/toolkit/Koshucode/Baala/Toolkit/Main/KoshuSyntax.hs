@@ -89,11 +89,11 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "|-- LINE    /line -> /clause"
              , "|-- TOKEN   /line /column -> /token-type [/token-subtype] /cont"
              , ""
-             , "<<< There is a clause numbered /clause on /line ."
-             , "    Type of the clause is /clause-type ."
-             , "    There is a token of content /cont at /line and /column ."
-             , "    Type of the token is /token-type ."
-             , "    Some tokens are classified into /token-subtype . >>>" ]
+             , "{| There is a clause numbered /clause on /line ."
+             , "   Type of the clause is /clause-type ."
+             , "   There is a token of content /cont at /line and /column ."
+             , "   Type of the token is /token-type ."
+             , "   Some tokens are classified into /token-subtype . |}" ]
 
 judgeClause :: Int -> C.Clause -> C.JudgeC
 judgeClause clseq c = D.affirm "CLAUSE" args where
@@ -173,8 +173,8 @@ descDict = B.CommentDoc [desc, js] where
              [ "|-- CLAUSE-TYPE  /clause-type"
              , "|-- TOKEN-TYPE   /token-type"
              , ""
-             , "<<< /clause-type is one of cluase types."
-             , "    /token-type is one of token types. >>>" ]
+             , "{| /clause-type is one of cluase types."
+             , "   /token-type is one of token types. |}" ]
 
 judgeClauseType :: C.Clause -> C.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where

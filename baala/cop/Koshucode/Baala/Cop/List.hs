@@ -437,7 +437,7 @@ replaceEnd from to xs = reverse $ replaceBegin from' to' xs' where
 
 -- ----------------------  term-set
 
--- term-set <<< aaa /x bbb /y ccc => { '/x : '/y }
+-- term-set {| aaa /x bbb /y ccc |} => { '/x | '/y }
 copTermSet :: (D.CContent c) => D.CopCalc c
 copTermSet [Right c] | D.isInterp c = D.putSet ts where
                      ts = map D.pTerm $ D.interpTerms $ D.gInterp c

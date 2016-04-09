@@ -26,9 +26,11 @@ module Koshucode.Baala.Data.Token.TokenTree
 
     -- * Bracket type
     BracketType (..),
+    groupOpen, groupClose,
     listOpen, listClose,
     setOpen, setClose,
     relOpen, relClose,
+    interpOpen, interpClose,
     typeOpen, typeClose,
   
     -- * Divide trees
@@ -105,39 +107,47 @@ data BracketType
     | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
     | BracketRel      -- ^ Curely-bar braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
     | BracketAssn     -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
-    | BracketInterp   -- ^ Triple-angle brackets for data interpretation: @\<\<\< ... /N ... \>\>\>@
+    | BracketInterp   -- ^ Triple-angle brackets for data interpretation: @{| ... /N ... |}@
     | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
     | BracketUnknown  -- ^ Unknown bracket
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 getBracketType :: B.GetBracketType BracketType D.Token
 getBracketType = B.bracketTable
-    [ o BracketGroup   "("       ")"
-    , o BracketForm    "(|"      "|)"
-    , o BracketList    listOpen  listClose
-    , o BracketSet     setOpen   setClose
-    , o BracketAssn    "<<"      ">>"
-    , o BracketRel     relOpen   relClose
-    , o BracketInterp  "<<<"     ">>>"
-    , o BracketType    typeOpen  typeClose
+    [ o BracketGroup   groupOpen  groupClose
+    , o BracketForm    "(|"       "|)"
+    , o BracketList    listOpen   listClose
+    , o BracketSet     setOpen    setClose
+    , o BracketAssn    "<<"       ">>"
+    , o BracketRel     relOpen    relClose
+    , o BracketInterp  interpOpen interpClose
+    , o BracketType    typeOpen   typeClose
     , (BracketUnknown, D.isOpenToken, D.isCloseToken)
     ] where o n a b = (n, D.isOpenTokenOf a, D.isCloseTokenOf b)
 
+groupOpen, groupClose :: String
+groupOpen    = "("
+groupClose   = ")"
+
 listOpen, listClose :: String
-listOpen   = "["
-listClose  = "]"
+listOpen     = "["
+listClose    = "]"
 
 setOpen, setClose :: String
-setOpen   = "{"
-setClose  = "}"
+setOpen      = "{"
+setClose     = "}"
 
 relOpen, relClose :: String
-relOpen   = "{="
-relClose  = "=}"
+relOpen      = "{="
+relClose     = "=}"
+
+interpOpen, interpClose :: String
+interpOpen   = "{|"
+interpClose  = "|}"
 
 typeOpen, typeClose :: String
-typeOpen   = "[-"
-typeClose  = "-]"
+typeOpen     = "[-"
+typeClose    = "-]"
 
 
 -- ----------------------  Divide trees

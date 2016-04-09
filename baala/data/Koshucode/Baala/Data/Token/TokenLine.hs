@@ -138,7 +138,9 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | c `elem` "+-=#"
                                      = u cs            $ D.TTextRaw cp ['(',c,')']
 
-    gen (a:b:cs)   | isOpen a &&
+    gen (a:b:cs)   | a == '{' &&
+                     b == '|'        = int cs          $ D.TOpen    cp [a,b]
+                   | isOpen a &&
                      isGrip b        = u cs            $ D.TOpen    cp [a,b]
                    | isGrip a &&
                      isClose b       = u cs            $ D.TClose   cp [a,b]
@@ -172,13 +174,11 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
     bra (c:cs) w   | c == '<'        = bra  cs         $ c:w
     bra cs w       | w == "<"        = ang  cs ""
                    | w == "<<"       = u    cs         $ D.TOpen    cp w
-                   | w == "<<<"      = int  cs         $ D.TOpen    cp w
                    | otherwise       = Msg.unkAngleText w
 
     cket (c:cs) w  | c == '>'        = cket cs         $ c:w
     cket cs w      | w == ">"        = vw              $ scanCode   cp ws ('>':cs)
                    | w == ">>"       = u    cs         $ D.TClose   cp w
-                   | w == ">>>"      = u    cs         $ D.TClose   cp w
                    | otherwise       = Msg.unkAngleText w
 
     slot (c:cs) n  | c == '@'        = slot cs         $ n + 1
@@ -235,16 +235,16 @@ interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start int cp r wh
     u   cs tok  = Right $ B.codeUpdate cs tok r
     gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
 
-    int ""                           =  Right r
-    int (c:cs)    | isSpace c        =  v         $ scanSpace  cp cs
-                  | isTerm c         =  vw        $ scanTermP  cp ws cs
-                  | otherwise        =  word (c:cs) ""
+    int ""                           = Right r
+    int (c:cs)    | isSpace c        = v         $ scanSpace  cp cs
+                  | isTerm c         = vw        $ scanTermP  cp ws cs
+                  | otherwise        = word (c:cs) ""
 
-    word cs@('>':'>':'>':_) w        =  gen cs    $ D.TTextRaw cp $ rv w
-    word (c:cs) w | isSpace c        =  u (c:cs)  $ D.TTextRaw cp $ rv w
-                  | isTerm c         =  u (c:cs)  $ D.TTextRaw cp $ rv w
-                  | otherwise        =  word cs   $ c:w
-    word cs w                        =  u cs      $ D.TTextRaw cp $ rv w
+    word cs@('|':'}':_) w            = gen cs    $ D.TTextRaw cp $ rv w
+    word (c:cs) w | isSpace c        = u (c:cs)  $ D.TTextRaw cp $ rv w
+                  | isTerm c         = u (c:cs)  $ D.TTextRaw cp $ rv w
+                  | otherwise        = word cs   $ c:w
+    word cs w                        = u cs      $ D.TTextRaw cp $ rv w
 
 
 -- ----------------------  Scanner
