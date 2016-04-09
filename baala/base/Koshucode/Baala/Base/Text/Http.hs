@@ -93,4 +93,5 @@ httpExceptionSummary e = case e of
     H.InternalIOException _                   -> "Internal I/O error"
     H.InvalidProxyEnvironmentVariable _ _     -> "Invalid proxy env"
     H.ResponseLengthAndChunkingBothUsed       -> "Length and chunked"
+    H.TlsExceptionHostPort _ _ _              -> "TLS error"
 
