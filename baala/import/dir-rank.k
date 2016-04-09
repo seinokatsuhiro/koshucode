@@ -18,24 +18,24 @@ dir : dep
     | hier /dir -to /base-rank
     | for /base-rank ( pick /rank /base /import-dir )
     | add /dir-rank ( max /base-rank/rank )
-    | interp <<< Module directory /dir has dependent rank /dir-rank ,
-                 /base-rank exists under the /dir . >>>
+    | interp {| Module directory /dir has dependent rank /dir-rank ,
+                /base-rank exists under the /dir . |}
 
 dep : imp
     | dependent-rank /module /import -rank /rank
     | group ( imp | meet imp-dir ) -to /=import
     | add /import-dir ( sort /=import/dirname )
     | wipe
-    | interp <<< /module has dependent rank /rank .
-                 The module imports directory modules /import-dir . >>>
+    | interp {| /module has dependent rank /rank .
+                The module imports directory modules /import-dir . |}
 
 imp-dir : imp
     | pick /module
     | add /import   ( dir-part  <dot> /module )
     | add /dirname  ( base-part <dot> /import )
     | pick /import /dirname
-    | interp <<< Module directory /import can be imported from other module.
-                 The base part of /import is /dirname . >>>
+    | interp {| Module directory /import can be imported from other module.
+                The base part of /import is /dirname . |}
 
 imp : source IMPORT /module /import
     | keep /import =* "Koshucode"
