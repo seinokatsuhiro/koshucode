@@ -4,9 +4,9 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Make literal contents from token tree.
+-- | Decode token trees to contents.
 
-module Koshucode.Baala.Data.Content.Literal
+module Koshucode.Baala.Data.Content.Decode
   ( -- * Functions
     ContentCons, ContentCalc, 
     contentCons, treesToJudge,
