@@ -5,34 +5,27 @@ module Koshucode.Baala.Data.Content.Class
     CContent (..),
     CTypeOf (..),
   
-    -- * Haskell data type
-    -- ** Boolean
-    CBool (..), true, false, putTrue, putFalse,
-    -- ** Text
-    CText (..), pMaybeText, pTextList, pTextSet,
-    -- ** List
-    CList (..),
-  
-    -- * Koshu simple data type
+    -- * Simple contents
     -- ** Empty
     CEmpty (..), maybeEmpty, omitEmpty,
-    -- ** Decimal
+    -- ** Boolean
+    CBool (..), true, false, putTrue, putFalse,
+    -- ** Number
     CDec (..), pInt, pInteger, pDecFromInt, pDecFromInteger,
-    -- ** Clock
+    -- ** Clock and time
     CClock (..),
-    -- ** Time
     CTime (..),
-    -- ** Term
+    -- ** Textual
     CTerm (..), pTermSet,
+    CText (..), pMaybeText, pTextList, pTextSet,
 
-    -- * Koshu complex data type
-    -- ** Set
+    -- * Complex contents
+    -- ** Collection
+    CList (..),
     CSet (..), gSetSort,
-    -- ** Association
+    -- ** Relational
     CAssn (..),
-    -- ** Relation
     CRel (..), isMember, dee, dum,
-    -- ** Interpretation
     CInterp (..),
     -- ** Type
     CType (..),
@@ -57,7 +50,8 @@ import qualified Koshucode.Baala.Data.Content.Message as Msg
 -- ----------------------  Generic content
 
 class (Ord c, B.Write c, CTypeOf c,
-       CEmpty c, CBool c, CText c, CClock c, CTime c,
+       CEmpty c,
+       CBool c, CText c, CClock c, CTime c,
        CTerm c, CDec c, CType c, CInterp c,
        CList c, CSet c, CAssn c, CRel c) =>
     CContent c where
@@ -77,9 +71,21 @@ getAbAb is get (Right x)
     | otherwise = Msg.unmatchType $ show $ B.doc $ typeOf x
 
 
+-- ----------------------  Simple contents
 
--- ----------------------  Haskell built-in data
+-- | Types that can be empty.
+class (CTypeOf c) => CEmpty c where
+    isEmpty     ::          c -> Bool
+    empty       ::          c
 
+maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
+maybeEmpty f (Just a)   = f a
+maybeEmpty _ (Nothing)  = empty
+
+omitEmpty :: (CEmpty c) => B.Map [(a, c)]
+omitEmpty = B.omit (isEmpty . snd)
+
+-- | True or false, affirmed or denied.
 class (CTypeOf c) => CBool c where
     isBool      ::       c -> Bool
     pBool       ::    Bool -> c
@@ -101,54 +107,7 @@ putTrue  = putBool True
 putFalse :: (CBool c) => B.Ab c
 putFalse = putBool False
 
-class (CTypeOf c) => CText c where
-    isText      ::       c -> Bool
-    gText       ::       c -> String
-    pText       ::  String -> c
-
-    getText     ::  B.Ab c -> B.Ab String
-    getText     =   getAbAb isText gText
-
-    putText     ::  String -> B.Ab c
-    putText     =    Right . pText
-
-pMaybeText :: (CText c, CEmpty c) => String -> c
-pMaybeText s | B.trimLeft s == "" = empty
-             | otherwise          = pText s
-
-pTextSet :: (CText c, CSet c) => [String] -> c
-pTextSet = pSet . map pText
-
-pTextList :: (CText c, CList c) => [String] -> c
-pTextList = pList . map pText
-
-class (CTypeOf c) => CList c where
-    isList      ::       c -> Bool
-    gList       ::       c -> [c]
-    pList       ::     [c] -> c
-
-    getList     ::  B.Ab c -> B.Ab [c]
-    getList     =   getAbAb isList gList
-
-    putList     ::     [c] -> B.Ab c
-    putList     =    Right . pList
-
-
-
--- ----------------------  Data in koshucode
-
--- | Types that can be empty
-class (CTypeOf c) => CEmpty c where
-    isEmpty     ::          c -> Bool
-    empty       ::          c
-
-maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
-maybeEmpty f (Just a)   = f a
-maybeEmpty _ (Nothing)  = empty
-
-omitEmpty :: (CEmpty c) => B.Map [(a, c)]
-omitEmpty = B.omit (isEmpty . snd)
-
+-- | Decimal number.
 class (CTypeOf c) => CDec c where
     isDec       ::           c -> Bool
     gDec        ::           c -> D.Decimal
@@ -172,6 +131,7 @@ pDecFromInt = pInt
 pDecFromInteger :: (CDec c) => Integer -> c
 pDecFromInteger = pInteger
 
+-- | Distance between two points in timeline.
 class (CTypeOf c) => CClock c where
     isClock      ::           c -> Bool
     gClock       ::           c -> D.Clock
@@ -183,6 +143,7 @@ class (CTypeOf c) => CClock c where
     putClock     ::     D.Clock -> B.Ab c
     putClock     =      Right . pClock
 
+-- | Point in timeline.
 class (CTypeOf c) => CTime c where
     isTime       ::           c -> Bool
     gTime        ::           c -> D.Time
@@ -194,6 +155,7 @@ class (CTypeOf c) => CTime c where
     putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
 
+-- | Term name.
 class (CTypeOf c) => CTerm c where
     isTerm       ::           c -> Bool
     gTerm        ::           c -> String
@@ -208,6 +170,44 @@ class (CTypeOf c) => CTerm c where
 pTermSet :: (CTerm c, CSet c) => [String] -> c
 pTermSet = pSet . map pTerm
 
+-- | Double-quoted text content.
+class (CTypeOf c) => CText c where
+    isText      ::       c -> Bool
+    gText       ::       c -> String
+    pText       ::  String -> c
+
+    getText     ::  B.Ab c -> B.Ab String
+    getText     =   getAbAb isText gText
+
+    putText     ::  String -> B.Ab c
+    putText     =    Right . pText
+
+pMaybeText :: (CText c, CEmpty c) => String -> c
+pMaybeText s | B.trimLeft s == "" = empty
+             | otherwise          = pText s
+
+pTextSet :: (CText c, CSet c) => [String] -> c
+pTextSet = pSet . map pText
+
+pTextList :: (CText c, CList c) => [String] -> c
+pTextList = pList . map pText
+
+
+-- ----------------------  Complex contents
+
+-- | List of contents.
+class (CTypeOf c) => CList c where
+    isList      ::       c -> Bool
+    gList       ::       c -> [c]
+    pList       ::     [c] -> c
+
+    getList     ::  B.Ab c -> B.Ab [c]
+    getList     =   getAbAb isList gList
+
+    putList     ::     [c] -> B.Ab c
+    putList     =    Right . pList
+
+-- | Set of contents.
 class (CTypeOf c) => CSet c where
     isSet       ::          c -> Bool
     gSet        ::          c -> [c]
@@ -222,6 +222,7 @@ class (CTypeOf c) => CSet c where
 gSetSort :: (Ord c, CSet c) => c -> [c]
 gSetSort = B.sort . gSet
 
+-- | Tie of terms.
 class (CTypeOf c) => CAssn c where
     isAssn      ::           c -> Bool
     gAssn       ::           c -> [D.Term c]
@@ -233,6 +234,7 @@ class (CTypeOf c) => CAssn c where
     putAssn     ::  [D.Term c] -> B.Ab c
     putAssn     =  Right . pAssn
 
+-- | Relation of terms.
 class (CTypeOf c) => CRel c where
     isRel       ::           c -> Bool
     gRel        ::           c -> D.Rel c
@@ -248,6 +250,7 @@ dee, dum :: (CRel c) => c
 dee = pRel $ D.reldee
 dum = pRel $ D.reldum
 
+-- | Data intepretation.
 class (CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
     gInterp     ::           c -> D.Interp
@@ -259,6 +262,7 @@ class (CTypeOf c) => CInterp c where
     putInterp   ::    D.Interp -> B.Ab c
     putInterp   =     Right . pInterp
 
+-- | Type of content.
 class (CTypeOf c) => CType c where
     isType      ::           c -> Bool
     gType       ::           c -> D.Type
