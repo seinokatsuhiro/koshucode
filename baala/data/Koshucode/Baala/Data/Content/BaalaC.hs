@@ -119,10 +119,10 @@ instance B.Write BaalaC where
         VEmpty       -> B.doc "()"
         VFull        -> B.doc "(#)"
         VInterp i    -> B.writeDocWith sh i
-        VType t      -> B.docWraps "[-" "-]" $ B.writeDocWith    sh t
-        VList xs     -> B.docWraps "["   "]" $ B.writeBar sh xs
-        VSet  xs     -> B.docWraps "{"   "}" $ B.writeBar sh xs
-        VAssn xs     -> B.docWraps "<<" ">>" $ B.writeH   sh xs
+        VType t      -> B.docWraps D.typeOpen D.typeClose $ B.writeDocWith    sh t
+        VList xs     -> B.docWraps D.listOpen D.listClose $ B.writeBar sh xs
+        VSet  xs     -> B.docWraps D.setOpen  D.setClose  $ B.writeBar sh xs
+        VAssn xs     -> B.docWraps D.tieOpen  D.tieClose  $ B.writeH   sh xs
         VRel r       -> B.writeDocWith sh r
 
     writeHtmlWith sh c = case c of

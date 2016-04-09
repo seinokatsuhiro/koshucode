@@ -173,12 +173,10 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
 
     bra (c:cs) w   | c == '<'        = bra  cs         $ c:w
     bra cs w       | w == "<"        = ang  cs ""
-                   | w == "<<"       = u    cs         $ D.TOpen    cp w
                    | otherwise       = Msg.unkAngleText w
 
     cket (c:cs) w  | c == '>'        = cket cs         $ c:w
     cket cs w      | w == ">"        = vw              $ scanCode   cp ws ('>':cs)
-                   | w == ">>"       = u    cs         $ D.TClose   cp w
                    | otherwise       = Msg.unkAngleText w
 
     slot (c:cs) n  | c == '@'        = slot cs         $ n + 1

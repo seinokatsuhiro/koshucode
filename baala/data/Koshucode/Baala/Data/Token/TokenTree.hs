@@ -29,6 +29,7 @@ module Koshucode.Baala.Data.Token.TokenTree
     groupOpen, groupClose,
     listOpen, listClose,
     setOpen, setClose,
+    tieOpen, tieClose,
     relOpen, relClose,
     interpOpen, interpClose,
     typeOpen, typeClose,
@@ -105,9 +106,9 @@ data BracketType
     | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
     | BracketList     -- ^ Square brackets for lists: @[ C | ... ]@
     | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
-    | BracketRel      -- ^ Curely-bar braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
-    | BracketAssn     -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
-    | BracketInterp   -- ^ Triple-angle brackets for data interpretation: @{| ... /N ... |}@
+    | BracketAssn     -- ^ Curely-hyphen braces for associations etc.: @{- /N C ... -}@
+    | BracketRel      -- ^ Curely-equal braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
+    | BracketInterp   -- ^ Curely-bar braces for data interpretation: @{| ... /N ... |}@
     | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
     | BracketUnknown  -- ^ Unknown bracket
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -118,7 +119,7 @@ getBracketType = B.bracketTable
     , o BracketForm    "(|"       "|)"
     , o BracketList    listOpen   listClose
     , o BracketSet     setOpen    setClose
-    , o BracketAssn    "<<"       ">>"
+    , o BracketAssn    tieOpen    tieClose
     , o BracketRel     relOpen    relClose
     , o BracketInterp  interpOpen interpClose
     , o BracketType    typeOpen   typeClose
@@ -136,6 +137,10 @@ listClose    = "]"
 setOpen, setClose :: String
 setOpen      = "{"
 setClose     = "}"
+
+tieOpen, tieClose :: String
+tieOpen      = "{-"
+tieClose     = "-}"
 
 relOpen, relClose :: String
 relOpen      = "{="
