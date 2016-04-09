@@ -146,7 +146,7 @@ treesToJudge calc q p = Right . assertAs q p B.<=< consAssn (contentCons calc)
 --
 --        .............  consRel  ..............
 --        :                                    :
---     {| /a /b /c  [ 0 | 1 | 2 ]  [ 3 | 4 | 5 ] |}
+--     {= /a /b /c  [ 0 | 1 | 2 ]  [ 3 | 4 | 5 ] =}
 --        ........  .............  .............
 --        :         :              :
 --        :         consRelTuple   consRelTuple
@@ -313,7 +313,7 @@ consType = gen where
 --
 --  Relation.
 --
---    >>> lits "{| /a : /x | 'A1 : 20 | 'A3 : 40 | 'A4 : 60 |}"
+--    >>> lits "{= /a /x [ 'A1 | 20 ][ 'A3 | 40 ][ 'A4 | 60 ] =}"
 --    Right [VRel (Rel
 --      (Relhead [Term "/a", Term "/x"]),
 --      [ [VText "A1", VDec (Decimal (20,1), 0, False)]

@@ -59,10 +59,10 @@ instance Functor Rel where
 
 instance (B.Write c) => B.Write (Rel c) where
     writeDocWith sh (Rel he bo) =
-        let he'  = B.writeDocWith  sh he
+        let he'  = B.writeDocWith sh he
             bo'  = B.writeH sh $ map d bo
-            d xs = B.docWraps "[" "]" $ B.writeBar sh xs
-        in B.docWraps "{|" "|}" $ he' B.<+> bo'
+            d xs = B.docWraps D.listOpen D.listClose $ B.writeBar sh xs
+        in B.docWraps D.relOpen D.relClose $ he' B.<+> bo'
 
     writeHtmlWith sh (Rel he bo) =
         H.table ! class_ "relation" $ do
@@ -97,10 +97,10 @@ relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 --  /Examples/
 --
 --    >>> B.doc (reldum :: Rel Bool)
---    {| |}
+--    {= =}
 --
 --    >>> B.doc (reldee :: Rel Bool)
---    {| [] |}
+--    {= [] =}
 
 -- | The nullary empty relation.
 --   In other words, relational constant

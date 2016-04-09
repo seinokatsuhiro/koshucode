@@ -26,6 +26,10 @@ module Koshucode.Baala.Data.Token.TokenTree
 
     -- * Bracket type
     BracketType (..),
+    listOpen, listClose,
+    setOpen, setClose,
+    relOpen, relClose,
+    typeOpen, typeClose,
   
     -- * Divide trees
     splitTokensBy, divideTreesBy,
@@ -93,13 +97,13 @@ ttreeGroup = B.treeWrap BracketGroup
 
 -- ----------------------  Bracket type
 
--- | There are six types of brackets
+-- | There are nine types of brackets
 data BracketType
     = BracketGroup    -- ^ Round brackets for grouping: @( E ... )@
     | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
-    | BracketList     -- ^ Square brackets for lists: @[ C : ... ]@
-    | BracketSet      -- ^ Curely braces for sets: @{ C : .... }@
-    | BracketRel      -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
+    | BracketList     -- ^ Square brackets for lists: @[ C | ... ]@
+    | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
+    | BracketRel      -- ^ Curely-bar braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
     | BracketAssn     -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
     | BracketInterp   -- ^ Triple-angle brackets for data interpretation: @\<\<\< ... /N ... \>\>\>@
     | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
@@ -108,16 +112,32 @@ data BracketType
 
 getBracketType :: B.GetBracketType BracketType D.Token
 getBracketType = B.bracketTable
-    [ o BracketGroup   "("     ")"
-    , o BracketForm    "(|"    "|)"
-    , o BracketList    "["     "]"
-    , o BracketSet     "{"     "}"
-    , o BracketAssn    "<<"    ">>"
-    , o BracketRel     "{|"    "|}"
-    , o BracketInterp  "<<<"   ">>>"
-    , o BracketType    "[-"    "-]"
+    [ o BracketGroup   "("       ")"
+    , o BracketForm    "(|"      "|)"
+    , o BracketList    listOpen  listClose
+    , o BracketSet     setOpen   setClose
+    , o BracketAssn    "<<"      ">>"
+    , o BracketRel     relOpen   relClose
+    , o BracketInterp  "<<<"     ">>>"
+    , o BracketType    typeOpen  typeClose
     , (BracketUnknown, D.isOpenToken, D.isCloseToken)
     ] where o n a b = (n, D.isOpenTokenOf a, D.isCloseTokenOf b)
+
+listOpen, listClose :: String
+listOpen   = "["
+listClose  = "]"
+
+setOpen, setClose :: String
+setOpen   = "{"
+setClose  = "}"
+
+relOpen, relClose :: String
+relOpen   = "{="
+relClose  = "=}"
+
+typeOpen, typeClose :: String
+typeOpen   = "[-"
+typeClose  = "-]"
 
 
 -- ----------------------  Divide trees

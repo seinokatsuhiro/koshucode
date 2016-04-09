@@ -206,12 +206,12 @@ typeRelMapName = typeRelMapTerm . B.mapFst
 --              Duplication among contents is not significant.
 --              Textual form is a sequence of contents
 --              delimited by colon, enclosed in braces:
---              @{ \'a : \'b : \'c }@.
+--              @{ \'a | \'b | \'c }@.
 --
 --  [List]      List is an ordered list of contents.
 --              Textual form is a sequence of contents
 --              delimited by colon, enclosed in square brackets:
---              @[ \'abc : \'def ]@.
+--              @[ \'abc | \'def ]@.
 --
 --  [Assn]      Assn is an association of terms,
 --              i.e., a list of named contents.
@@ -223,5 +223,5 @@ typeRelMapName = typeRelMapTerm . B.mapFst
 --              enclosed in bar-braces.
 --              The first tuple is a heading of relation,
 --              and succeeding tuples are delimited by vertical bar:
---              @{| \/a : \/b | \'A1 : 20 | \'A3 : 40 |}@.
+--              @{= \/a \/b [ \'A1 | 20 ][ \'A3 | 40 ] =}@.
 --

@@ -337,15 +337,15 @@ scanSlot n cp cs = let (cs', w) = nextCode cs
 
 -- Punctuations
 isOpen, isClose, isGrip, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
-isOpen     =  ( `elem` "([{"   )  -- UnicodePunctuation
-isClose    =  ( `elem` "}])"   )  -- UnicodePunctuation
-isGrip     =  ( `elem` "|:*+-" )
-isSingle   =  ( `elem` ":|"    )  -- UnicodePunctuation | UnicodeSymbol
-isQ        =  (    ==  '\''    )  -- UnicodePunctuation
-isQQ       =  (    ==  '"'     )  -- UnicodePunctuation
-isTerm     =  (    ==  '/'     )  -- UnicodePunctuation
-isSpace    =  Ch.isSpace
-isCode     =  D.isCodeChar
+isOpen     = ( `elem` "([{"    )  -- Punctuation
+isClose    = ( `elem` "}])"    )  -- Punctuation
+isGrip     = ( `elem` "-=|:*+" )  -- Punctuation | Symbol
+isSingle   = ( `elem` ":|"     )  -- Punctuation | Symbol
+isQ        = (    ==  '\''     )  -- Punctuation
+isQQ       = (    ==  '"'      )  -- Punctuation
+isTerm     = (    ==  '/'      )  -- Punctuation
+isSpace    = Ch.isSpace
+isCode     = D.isCodeChar
 
 isShortPrefix :: B.Pred String
 isShortPrefix = all isShort
@@ -369,7 +369,7 @@ isFigure c   = Ch.isDigit c
 --              @{@ /set/ @}@ ,
 --              @[@ /list/ @]@ ,
 --              @\<\<@ /assn/ @\>\>@ , and
---              @{|@ /relation/ @|}@
+--              @{=@ /relation/ @=}@
 --
 --  [TermName]  Words beginning with slash, e.g., @\/aa@.
 --              Term name like @\/r\/x@ is used for nested relation,

@@ -46,11 +46,11 @@ ropsCoxGadget = Op.ropList "cox-gadget"
 --
 --  Same as relmap @dee@
 --  
---    > const {| | |}
+--    > const {= [] =}
 --
 --  Same as relmap @dum@
 --  
---    > const {| |}
+--    > const {= =}
 
 consConst :: (D.CContent c) => C.RopCons c
 consConst med =
