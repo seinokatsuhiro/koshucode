@@ -81,16 +81,16 @@ relkitLexical (Just he1) = Right kit2 where
 
 consOrder :: (Ord c) => C.RopCons c
 consOrder med =
-    do ns <- Op.getOption [] Op.getTerms med "-term"
+    do ns <- Op.getOption [] Op.getSignedTerms med "-term"
        Right $ relmapOrder med ns
 
-relmapOrder :: (Ord c) => C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapOrder :: (Ord c) => C.Intmed c -> [D.SignedTermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 
-relkitOrder :: (Ord c) => [D.TermName] -> C.RelkitFlow c
+relkitOrder :: (Ord c) => [D.SignedTermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2
     kitf2 = B.sortByName ords $ D.headNames he1
-    ords  = map B.Asc ns
+    ords  = map B.orderingCap ns
 

@@ -5,6 +5,7 @@
 
 module Koshucode.Baala.Rop.Base.Term
   ( termName, termNames, termNamesCo,
+    signedTermName, signedTermNames,
     termNamePairs, termNamesColon,
     picker,
   ) where
@@ -25,6 +26,14 @@ termName _                      = Msg.reqTermName
 --   Right ["a", "b", "c"]
 termNames :: [D.TTree] -> B.Ab [D.TermName]
 termNames = mapM termName
+
+-- | Extract a signed term name.
+signedTermName :: D.TTree -> B.Ab D.SignedTermName
+signedTermName (D.TermLeafName _ sign n) = Right (sign, n)
+signedTermName _                         = Msg.reqTermName
+
+signedTermNames :: [D.TTree] -> B.Ab [D.SignedTermName]
+signedTermNames = mapM signedTermName
 
 termNamesCo :: [D.TTree] -> B.Ab (Bool, [D.TermName])
 termNamesCo trees =

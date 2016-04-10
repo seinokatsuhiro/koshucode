@@ -4,7 +4,8 @@ module Koshucode.Baala.Data.Token.Term
   ( -- * Term name
     TermName, TermName2, TermName3,
     TermName4, TermName5, TermName6,
-    TermPath, showTermName, showTermPath,
+    TermPath, SignedTermName,
+    showTermName, showTermPath,
 
     -- * Term
     Term, term,
@@ -28,6 +29,8 @@ type TermName6   = (String, String, String, String, String, String)
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
 type TermPath    = [TermName]
+
+type SignedTermName = (Ordering, TermName)
 
 showTermName :: TermName -> String
 showTermName n = '/' : n

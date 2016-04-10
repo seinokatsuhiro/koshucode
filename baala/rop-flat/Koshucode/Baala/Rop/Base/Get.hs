@@ -21,7 +21,7 @@ module Koshucode.Baala.Rop.Base.Get
   
     -- * Term
     getTerm, getTerm2, getTermOpt,
-    getTerms, getTermsCo,
+    getTerms, getSignedTerms, getTermsCo,
     getTermPairs, getTermsColon,
     getTermTrees,
   ) where
@@ -182,6 +182,9 @@ getTermOpt = getMaybe getTerm
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [D.TermName]
 getTerms = getAbortable Op.termNames
+
+getSignedTerms :: RopGet c [D.SignedTermName]
+getSignedTerms = getAbortable Op.signedTermNames
 
 -- | Get term names and complement sign (@~@) .
 getTermsCo :: RopGet c (Bool, [D.TermName])

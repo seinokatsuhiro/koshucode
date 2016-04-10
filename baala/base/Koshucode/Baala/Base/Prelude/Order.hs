@@ -1,15 +1,19 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Order
-  ( OrderCap (..),
-    Ranking,
+  ( -- * Data type
+    OrderCap (..),
+    orderingCap,
     sortByName,
+    sortWith,
+
+    -- * Rank
+    Ranking,
+    sortByNameNumbering,
     sortByNameDenseRank,
     sortByNameGapRank,
-    sortByNameNumbering,
     denseRankFrom,
     gapRankFrom,
-    sortWith,
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
@@ -19,7 +23,8 @@ import qualified Koshucode.Baala.Base.Prelude.Pair    as B
 
 
 data OrderCap a
-    = Asc a | Desc a
+    = Asc a     -- ^ Ascending order
+    | Desc a    -- ^ Descending order
       deriving (Show, Eq)
 
 instance (Ord a) => Ord (OrderCap a) where
@@ -28,37 +33,65 @@ instance (Ord a) => Ord (OrderCap a) where
     compare (Asc  _) (Desc _) = LT
     compare (Desc _) (Asc  _) = GT
 
-type OrderCapSign a = a -> OrderCap a
+type OrderCapping a = a -> OrderCap a
 
-sign :: OrderCap a -> OrderCapSign b
-sign (Asc  _) = Asc
-sign (Desc _) = Desc
+-- | Select order cap for ordering value.
+--   'GT' and 'EQ' mean 'Asc', 'LT' means 'Desc'.
+orderingCap :: (Ordering, a) -> OrderCap a
+orderingCap (LT, a) = Desc a
+orderingCap (_ , a) = Asc  a
 
+cap :: OrderCap a -> OrderCapping b
+cap (Asc  _) = Asc
+cap (Desc _) = Desc
+
+-- | Extract content from order cap.
 uncap :: OrderCap a -> a
-uncap (Asc  x) = x
-uncap (Desc x) = x
+uncap (Asc  a) = a
+uncap (Desc a) = a
 
-caps :: [OrderCapSign a] -> [a] -> [OrderCap a]
-caps ords = zipWith ($) (ords ++ repeat Asc)
-
-sortBy :: (Ord a, Ord b) =>
-  [OrderCapSign a] -> [([a], b)] -> [([OrderCap a], b)]
-sortBy ords = B.sort . B.mapFstTo (caps ords)
-
+-- | Sort by capped name.
+--
+--   >>> sortByName (words "a b c") [Asc "b"] [[1,3,3], [1,2,3], [1,1,3 :: Int]]
+--   [[1,1,3], [1,2,3], [1,3,3]]
 sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> B.Map [[a]]
 sortByName ords ns = map snd . sortByNameOrder ords ns
 
+sortByNameOrder :: (Ord a, Eq n) => [OrderCap n] -> [n] -> [[a]] -> [([OrderCap a], [a])]
+sortByNameOrder ords ns xs = sortBy ords2 xs2 where
+    ords2  = map cap   ords
+    ns2    = map uncap ords
+    p      = ns2 `B.snipIndex` ns
+    xs2    = map f xs
+    f x    = (B.snipFrom p x, x)
+
+sortBy :: (Ord a, Ord b) => [OrderCapping a] -> [([a], b)] -> [([OrderCap a], b)]
+sortBy ords = B.sort . B.mapFstTo (caps ords)
+
+caps :: [OrderCapping a] -> [a] -> [OrderCap a]
+caps ords = zipWith ($) (ords ++ repeat Asc)
+
+sortWith :: (Ord a, Ord b) => (a -> b) -> B.Map [a]
+sortWith f = map snd . B.sort . map g where
+    g x = (f x, x)
+
+
+-- ----------------------  Rank
+
 type Ranking n a = Int -> [OrderCap n] -> [n] -> [[a]] -> ([Int], [[a]])
 
-sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
-sortByNameGapRank i = sortByNameWithRank (gapRankFrom i)
-
-sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
-sortByNameDenseRank i = sortByNameWithRank (denseRankFrom i)
-
+-- | Sort and numbering like 1234.
 sortByNameNumbering :: (Ord a, Eq n) => Ranking n a
 sortByNameNumbering i ords ns = number . sortByName ords ns where
     number xs = (take (length xs) [i..], xs)
+
+-- | Sort and rank like 1223.
+sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
+sortByNameDenseRank i = sortByNameWithRank (denseRankFrom i)
+
+-- | Sort and rank like 1224.
+sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
+sortByNameGapRank i = sortByNameWithRank (gapRankFrom i)
 
 sortByNameWithRank :: (Ord a, Eq n) => ([[OrderCap a]] -> [r]) -> [OrderCap n] -> [n] -> [[a]] -> ([r], [[a]])
 sortByNameWithRank ranking ords ns xs = (rank, xs3) where
@@ -67,15 +100,7 @@ sortByNameWithRank ranking ords ns xs = (rank, xs3) where
     xs3  = map snd xs2
     rank = ranking ord2
 
-sortByNameOrder :: (Ord a, Eq n) => [OrderCap n] -> [n] -> [[a]] -> [([OrderCap a], [a])]
-sortByNameOrder ords ns xs = sortBy ords2 xs2 where
-    ords2 = map sign  ords
-    ns2   = map uncap ords
-    p     = ns2 `B.snipIndex` ns
-    xs2   = map f xs
-    f x   = (B.snipFrom p x, x)
-
--- 1223 ranking
+-- | 1223 ranking start with given number.
 denseRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
 denseRankFrom start xs = rank xs start where
     rank []  _ = []
@@ -84,7 +109,7 @@ denseRankFrom start xs = rank xs start where
         | x == y    = r : rank ys r
         | otherwise = r : rank ys (r + 1)
 
--- 1224 ranking
+-- | 1224 ranking start with given number.
 gapRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
 gapRankFrom start xs = rank xs start start where
     rank []  _ _ = []
@@ -92,18 +117,4 @@ gapRankFrom start xs = rank xs start start where
     rank (x : ys@(y : _)) n r
         | x == y    = r : rank ys (n + 1) r
         | otherwise = r : rank ys (n + 1) (n + 1)
-
--- sortByName [Asc "b"] (words "a b c") [[1,3,3], [1,2,3], [1,1,3]]
-
--- orders :: String -> [OrderCap [Char]]
--- orders ns = map ord ns2 where
---     ns2 = words ns
---     ord (      '/' : n) = Asc  $ '/' : n
---     ord ('+' : '/' : n) = Asc  $ '/' : n
---     ord ('-' : '/' : n) = Desc $ '/' : n
---     ord n               = error $ "unknown name: " ++ n
-
-sortWith :: (Ord a, Ord b) => (a -> b) -> [a] -> [a]
-sortWith f = map snd . B.sort . map g where
-    g x = (f x, x)
 
