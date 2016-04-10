@@ -5,8 +5,8 @@
 -- | Partial-order scale.
 
 module Koshucode.Baala.Rop.Flat.PoScale
-  ( PoScale,
-    poScale,
+  ( PoScale, PoScaleCalc,
+    poScale, poScaleHeight, poScaleDepth,
     poHeight, poDepth,
   ) where
 
@@ -20,11 +20,19 @@ import qualified Koshucode.Baala.Base  as B
 --   If elements are cyclic, scales of these elements are -1.
 type PoScale a = Map.Map a ([a], Maybe Int)
 
+type PoScaleCalc a = [(a, a)] -> [(a, Int)]
+
 -- | Extract partial-order scales.
 poScale :: PoScale a -> [(a, Int)]
 poScale m = B.mapMaybe f $ Map.assocs m where
     f (x, (_, Just r))  = Just (x, r)
     f (_, (_, Nothing)) = Nothing
+
+poScaleHeight :: (Ord a) => PoScaleCalc a
+poScaleHeight = poScale . poHeight
+
+poScaleDepth :: (Ord a) => PoScaleCalc a
+poScaleDepth = poScale . poDepth
 
 -- | Calculate partial-order height.
 poHeight :: (Ord a) => [(a, a)] -> PoScale a

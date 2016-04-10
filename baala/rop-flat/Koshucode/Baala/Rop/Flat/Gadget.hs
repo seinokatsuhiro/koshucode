@@ -6,8 +6,10 @@ module Koshucode.Baala.Rop.Flat.Gadget
     -- * contents
     consContents, relmapContents,
   
-    -- * dependent-rank
-    consDepRank, relmapDepRank,
+    -- * partial-order
+    consPoHeight,
+    consPoDepth,
+    consPoScale, relmapPoScale, relkitPoScale,
   
     -- * visit-distance
     consVisitDistance, relmapVisitDistance,
@@ -51,7 +53,8 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
     --        CONSTRUCTOR       USAGE                      ATTRIBUTE
     [ Op.def  consContents      "contents /N"              "V -term"
     , Op.def  consDumpTree      "dump-tree X"              "V -tree"
-    , Op.def  consDepRank       "dependent-rank /P /P -rank /N"     "2 -x -y | -rank"
+    , Op.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "2 -x -y | -to"
+    , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "2 -x -y | -to"
     , Op.def  consEqlize        "eqlize"                   "0"
     , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "1 -relmap/ | -step -to -distance"
     , Op.def  consSize          "size /N"                  "1 -term"
@@ -74,30 +77,36 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     kitf = map B.li1 . B.unique . concat
 
 
--- ----------------------  dependent-rank
+-- ----------------------  partial-order
 
---  dependent-rank /x /y -rank /r
+--  partial-order-height /x /y -to /z /ht
+--  partial-order-depth /x /y -to /z /dp
 
-consDepRank :: (Ord c, D.CDec c) => C.RopCons c
-consDepRank med =
+consPoHeight :: (Ord c, D.CDec c) => C.RopCons c
+consPoHeight = consPoScale Op.poScaleHeight
+
+consPoDepth :: (Ord c, D.CDec c) => C.RopCons c
+consPoDepth = consPoScale Op.poScaleDepth
+
+consPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.RopCons c
+consPoScale scale med =
     do x <- Op.getTerm med "-x"
        y <- Op.getTerm med "-y"
-       r <- Op.getTerm med "-rank"
-       Right $ relmapDepRank med (x,y,r)
+       (z,r) <- Op.getTerm2 med "-to"
+       Right $ relmapPoScale scale med (x,y,z,r)
 
-relmapDepRank :: (Ord c, D.CDec c) => C.Intmed c -> D.TermName3 -> C.Relmap c
-relmapDepRank med = C.relmapFlow med . relkitDepRank
+relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> D.TermName4 -> C.Relmap c
+relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
-relkitDepRank :: (Ord c, D.CDec c) => D.TermName3 -> C.RelkitFlow c
-relkitDepRank _  Nothing = Right C.relkitNothing
-relkitDepRank (x,y,r) (Just he1) = Right kit2 where
-    he2         = D.headFrom [x,r]
+relkitPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> D.TermName4 -> C.RelkitFlow c
+relkitPoScale _ _ Nothing = Right C.relkitNothing
+relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
+    he2         = D.headFrom [z,r]
     kit2        = C.relkitJust he2 $ C.RelkitFull False f2
     xyPick      = Op.picker he1 [x,y]
-    f2 bo1      = map put $ rank $ map get bo1
+    f2 bo1      = map put $ scale $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  = [cx, D.pInt i]
-    rank        = Op.poScale . Op.poDepth
 
 
 -- ----------------------  visit-distance

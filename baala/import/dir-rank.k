@@ -22,7 +22,7 @@ dir : dep
                 /base-rank exists under the /dir . |}
 
 dep : imp
-    | dependent-rank /module /import -rank /rank
+    | partial-order-height /import /module -to /module /rank
     | group ( imp | meet imp-dir ) -to /=import
     | add /import-dir ( sort /=import/dirname )
     | wipe

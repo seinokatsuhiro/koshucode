@@ -32,7 +32,7 @@
 |== IMPORT-RANK
   : source IMPORT /module /import
   | keep /import =* "Koshucode"
-  | dependent-rank /module /import -rank /rank
+  | partial-order-height /import /module -to /module /rank
   | interp {| /module has dependent rank /rank . |}
   --order --forward /rank
 ```
