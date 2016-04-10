@@ -66,6 +66,7 @@ library
 
         Koshucode.Baala.Rop.Flat.Message
         Koshucode.Baala.Rop.Flat.Meta
+        Koshucode.Baala.Rop.Flat.Order
         Koshucode.Baala.Rop.Flat.Peripheral
         Koshucode.Baala.Rop.Flat.PoScale
         Koshucode.Baala.Rop.Flat.Resource

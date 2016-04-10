@@ -12,6 +12,7 @@ import qualified Koshucode.Baala.Rop.Flat.Control     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Lattice     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Gadget      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Meta        as Rop
+import qualified Koshucode.Baala.Rop.Flat.Order       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Peripheral  as Rop
 import qualified Koshucode.Baala.Rop.Flat.Resource    as Rop
 import qualified Koshucode.Baala.Rop.Flat.Source      as Rop
@@ -25,6 +26,7 @@ ropsFlat = Rop.ropsMeta
         ++ Rop.ropsPeripheral
         ++ Rop.ropsControl
         ++ Rop.ropsGadget
+        ++ Rop.ropsOrder
         ++ Rop.ropsTerm
         ++ Rop.ropsTermGadget
         ++ Rop.ropsLattice

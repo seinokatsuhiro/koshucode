@@ -9,6 +9,7 @@ module Koshucode.Baala.Rop.Flat
     module Koshucode.Baala.Rop.Flat.Gadget,
     module Koshucode.Baala.Rop.Flat.Lattice,
     module Koshucode.Baala.Rop.Flat.Meta,
+    module Koshucode.Baala.Rop.Flat.Order,
     module Koshucode.Baala.Rop.Flat.PoScale,
     module Koshucode.Baala.Rop.Flat.Peripheral,
     module Koshucode.Baala.Rop.Flat.Resource,
@@ -23,6 +24,7 @@ import Koshucode.Baala.Rop.Flat.Control
 import Koshucode.Baala.Rop.Flat.Gadget
 import Koshucode.Baala.Rop.Flat.Lattice
 import Koshucode.Baala.Rop.Flat.Meta
+import Koshucode.Baala.Rop.Flat.Order
 import Koshucode.Baala.Rop.Flat.PoScale
 import Koshucode.Baala.Rop.Flat.Peripheral
 import Koshucode.Baala.Rop.Flat.Resource
