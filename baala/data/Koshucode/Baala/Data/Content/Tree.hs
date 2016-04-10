@@ -245,7 +245,7 @@ treeToInterpWord :: D.TTreeToAb D.InterpWord
 treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeToInterpWord (B.TreeL x) =
     case x of
-      D.TText _ _ w    ->  Right $ D.InterpText w
-      D.TTermN _ n     ->  Right $ D.InterpTerm n
-      D.TTerm _ _ [n]  ->  Right $ D.InterpTerm n
-      _                ->  Msg.nothing
+      D.TText _ _ w    -> Right $ D.InterpText w
+      D.TTermN _ _ n   -> Right $ D.InterpTerm n
+      D.TTerm _ _ [n]  -> Right $ D.InterpTerm n
+      _                -> Msg.nothing

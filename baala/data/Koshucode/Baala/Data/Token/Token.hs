@@ -64,7 +64,7 @@ data Token
                                               --   1 for local named slots,
                                               --   2 for global slots.
     | TShort    B.CodePt String String        -- ^ Prefixed shorten text.
-    | TTermN    B.CodePt D.TermName           -- ^ Term name.
+    | TTermN    B.CodePt Ordering D.TermName  -- ^ Term name.
     | TTerm     B.CodePt TermType D.TermPath  -- ^ Term path.
     | TLocal    B.CodePt (Local String) Int [Token]  -- ^ Local name.
     | TOpen     B.CodePt String               -- ^ Opening bracket.
@@ -87,7 +87,7 @@ instance B.Write Token where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TName      cp w)      = pretty "TName"    cp [show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
-        d (TTermN     cp n)      = pretty "TTermN"   cp [show n]
+        d (TTermN     cp _ n)    = pretty "TTermN"   cp [show n]
         d (TTerm      cp q ns)   = pretty "TTerm"    cp [show q, show ns]
         d (TLocal     cp n _ _)  = pretty "TLocal"   cp [show n]
         d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
@@ -109,7 +109,7 @@ instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
     codePtList (TName    cp _)      = [cp]
     codePtList (TShort   cp _ _)    = [cp]
-    codePtList (TTermN   cp _)      = [cp]
+    codePtList (TTermN   cp _ _)    = [cp]
     codePtList (TTerm    cp _ _)    = [cp]
     codePtList (TLocal   cp _ _ _)  = [cp]
     codePtList (TSlot    cp _ _)    = [cp]
@@ -229,7 +229,7 @@ tokenContent tok =
       TText     _ _ s    -> s
       TName     _ op     -> B.name op
       TShort    _ a b    -> a ++ "." ++ b
-      TTermN    _ n      -> '/' : n
+      TTermN    _ _ n    -> '/' : n
       TTerm     _ _ ns   -> concatMap ('/' :) ns
       TLocal    _ n _ _  -> unlocal n
       TSlot     _ _ s    -> s
@@ -252,7 +252,7 @@ untoken tok =
                               TextLicense -> s
       TName     _ op     -> B.name op
       TShort    _ a b    -> a ++ "." ++ b
-      TTermN    _ n      -> '/' : n
+      TTermN    _ _ n    -> '/' : n
       TTerm     _ _ ns   -> concatMap ('/' :) ns
       TLocal    _ n _ _  -> unlocal n
       TSlot     _ _ s    -> s
@@ -268,7 +268,7 @@ tokenTypeText tok =
       TText     _ _ _    -> "text"
       TName     _ _      -> "name"
       TShort    _ _ _    -> "short"
-      TTermN    _ _      -> "term"
+      TTermN    _ _ _    -> "term"
       TTerm     _ _ _    -> "term"
       TLocal    _ _ _ _  -> "local"
       TSlot     _ _ _    -> "slot"
@@ -283,7 +283,7 @@ tokenSubtypeText tok =
       TText     _ f _    -> Just $ textFormTypeText f
       TName     _ b      -> Just $ blankNameTypeText b
       TShort    _ _ _    -> Nothing
-      TTermN    _ _      -> Nothing
+      TTermN    _ _ _    -> Nothing
       TTerm     _ _ _    -> Nothing
       TLocal    _ _ _ _  -> Nothing
       TSlot     _ n _    -> Just $ slotTypeText n
@@ -328,7 +328,7 @@ isShortToken (TShort _ _ _)     = True
 isShortToken _                  = False
 
 isTermToken :: B.Pred Token
-isTermToken (TTermN _ _)        = True
+isTermToken (TTermN _ _ _)      = True
 isTermToken (TTerm _ _ _)       = True
 isTermToken _                   = False
 

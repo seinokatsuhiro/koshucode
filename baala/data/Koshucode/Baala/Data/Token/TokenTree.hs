@@ -77,7 +77,7 @@ pattern TermLeafLocal cp v e ps = B.TreeL (D.TLocal cp v e ps)
 
 -- term leaf
 pattern TermLeaf      cp q ws   = B.TreeL (D.TTerm   cp q ws)
-pattern TermLeafName  cp w      = B.TreeL (D.TTermN  cp w)
+pattern TermLeafName  cp w      = B.TreeL (D.TTermN  cp EQ w)
 pattern TermLeafPath  cp ws     = TermLeaf cp D.TermTypePath ws
 
 -- text leaf

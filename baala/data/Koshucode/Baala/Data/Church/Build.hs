@@ -109,7 +109,7 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
-        D.TTermN _ n               -> Right $ D.CoxTerm  cp [n] []
+        D.TTermN _ _ n             -> Right $ D.CoxTerm  cp [n] []
         D.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
         D.TName _ op               -> Right $ D.CoxBlank cp op
         D.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ D.BlankNormal n

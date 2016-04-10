@@ -318,9 +318,9 @@ scanTerm q cp ws = word [] where
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == D.TermTypePath
                                 = case Map.lookup n ws of
-                                    Just n' -> Right (ws, cs, D.TTermN cp n')
+                                    Just n' -> Right (ws, cs, D.TTermN cp EQ n')
                                     Nothing -> let ws' = Map.insert n n ws
-                                               in Right (ws', cs, D.TTermN cp n)
+                                               in Right (ws', cs, D.TTermN cp EQ n)
     term ns cs                  = Right (ws, cs, D.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan

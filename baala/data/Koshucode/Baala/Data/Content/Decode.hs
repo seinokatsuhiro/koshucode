@@ -68,7 +68,7 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
         | n <= D.TextRaw     = keyword w
         | n == D.TextQ       = D.putCode w
         | otherwise          = D.putText w
-    token (D.TTermN _ n)     = D.putTerm n
+    token (D.TTermN _ _ n)   = D.putTerm n
     token (D.TTerm _ _ [n])  = D.putTerm n
     token t                  = Msg.unkWord $ D.tokenContent t
 
