@@ -11,7 +11,7 @@ help () {
 }
 
 pkg_dir () {
-    pwd | sed -n 's:\(.*/koshucode-master/baala/[a-z]*\).*:\1:p'
+    pwd | sed -n 's:\(.*/koshucode-master/baala/[-a-z]*\).*:\1:p'
 }
 
 cabal_repl () {(
