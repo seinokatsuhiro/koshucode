@@ -132,6 +132,9 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
     int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
     xs =^ pre   = pre `B.isPrefixOf` xs
 
+    sign '+' = GT
+    sign  _  = LT
+
     gen ""                           = Right r
 
     gen ('(':c:')':cs)
@@ -144,6 +147,8 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                      isGrip b        = u cs            $ D.TOpen    cp [a,b]
                    | isGrip a &&
                      isClose b       = u cs            $ D.TClose   cp [a,b]
+                   | (a == '+' || a == '-') &&
+                     b == '/'        = vw              $ scanTermSign (sign a) cp ws cs
 
     gen ccs@(c:cs) | c == '*'        = ast   cs [c]
                    | c == '<'        = bra   cs [c]
@@ -299,12 +304,15 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', D.TTextQQ cp w)
 
-scanTermP, scanTermQ :: ScanW
-scanTermP = scanTerm D.TermTypePath
-scanTermQ = scanTerm D.TermTypeQuoted
+scanTermSign :: Ordering -> ScanW
+scanTermSign = scanTerm D.TermTypePath
 
-scanTerm :: D.TermType -> ScanW
-scanTerm q cp ws = word [] where
+scanTermP, scanTermQ :: ScanW
+scanTermP = scanTerm D.TermTypePath   EQ
+scanTermQ = scanTerm D.TermTypeQuoted EQ
+
+scanTerm :: D.TermType -> Ordering -> ScanW
+scanTerm q sign cp ws = word [] where
     word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
@@ -318,9 +326,9 @@ scanTerm q cp ws = word [] where
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == D.TermTypePath
                                 = case Map.lookup n ws of
-                                    Just n' -> Right (ws, cs, D.TTermN cp EQ n')
+                                    Just n' -> Right (ws, cs, D.TTermN cp sign n')
                                     Nothing -> let ws' = Map.insert n n ws
-                                               in Right (ws', cs, D.TTermN cp EQ n)
+                                               in Right (ws', cs, D.TTermN cp sign n)
     term ns cs                  = Right (ws, cs, D.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan

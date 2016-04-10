@@ -76,16 +76,16 @@ type TTreesToAb a = [TTree] -> B.Ab a
 pattern TermLeafLocal cp v e ps = B.TreeL (D.TLocal cp v e ps)
 
 -- term leaf
-pattern TermLeaf      cp q ws   = B.TreeL (D.TTerm   cp q ws)
-pattern TermLeafName  cp w      = B.TreeL (D.TTermN  cp EQ w)
-pattern TermLeafPath  cp ws     = TermLeaf cp D.TermTypePath ws
+pattern TermLeaf      cp q ws    = B.TreeL (D.TTerm   cp q ws)
+pattern TermLeafName  cp sign w  = B.TreeL (D.TTermN  cp sign w)
+pattern TermLeafPath  cp ws      = TermLeaf cp D.TermTypePath ws
 
 -- text leaf
-pattern TextLeaf form cp w     = B.TreeL (D.TText   cp form w)
-pattern TextLeafRaw   cp w     = TextLeaf D.TextRaw cp w
-pattern TextLeafQ     cp w     = TextLeaf D.TextQ   cp w
-pattern TextLeafQQ    cp w     = TextLeaf D.TextQQ  cp w
-pattern TextLeafKey   cp w     = TextLeaf D.TextKey cp w
+pattern TextLeaf form cp w      = B.TreeL (D.TText   cp form w)
+pattern TextLeafRaw   cp w      = TextLeaf D.TextRaw cp w
+pattern TextLeafQ     cp w      = TextLeaf D.TextQ   cp w
+pattern TextLeafQQ    cp w      = TextLeaf D.TextQQ  cp w
+pattern TextLeafKey   cp w      = TextLeaf D.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.

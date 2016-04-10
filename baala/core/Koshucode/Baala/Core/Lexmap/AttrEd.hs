@@ -119,12 +119,12 @@ runAttrEd (B.Sourced toks edit) attr = run where
 termPath :: B.AbMap [D.TTree]
 termPath = loop [] where
     loop path [] = Right [B.TreeL $ D.TTermPath B.codePtZero $ reverse path]
-    loop path (D.TermLeafName _ p  : xs)  = loop (p : path) xs
-    loop path (D.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
-    loop _ _                              = Msg.adlib "require term name"
+    loop path (D.TermLeafName _ _ p : xs)  = loop (p : path) xs
+    loop path (D.TermLeafPath _ ps  : xs)  = loop (reverse ps ++ path) xs
+    loop _ _                               = Msg.adlib "require term name"
 
 nestName :: B.AbMap [D.TTree]
-nestName [D.TermLeafName _ p]   = Right [B.TreeL $ D.TLocal B.codePtZero (D.LocalNest p) (-1) []]
+nestName [D.TermLeafName _ _ p] = Right [B.TreeL $ D.TLocal B.codePtZero (D.LocalNest p) (-1) []]
 nestName [D.TermLeafPath _ [p]] = Right [B.TreeL $ D.TLocal B.codePtZero (D.LocalNest p) (-1) []]
 nestName _ = Msg.adlib "require term name"
 

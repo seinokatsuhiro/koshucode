@@ -119,7 +119,7 @@ consContents cons cs = lt `mapM` D.divideTreesByBar cs where
 --      consAngle                consAngle
 
 consAngle :: (D.CContent c) => ContentCons c -> D.TTreesToAb c
-consAngle cons xs@(D.TermLeafName _ _ : _) = D.putTie =<< consTie cons xs
+consAngle cons xs@(D.TermLeafName _ _ _ : _) = D.putTie =<< consTie cons xs
 consAngle _ [] = D.putTie []
 consAngle _ [D.TextLeafRaw _ "words", D.TextLeafQQ _ ws] = D.putList $ map D.pText $ words ws
 consAngle _ _ = Msg.adlib "unknown angle bracket"
@@ -164,7 +164,7 @@ consRel cons xs =
 
 consTermNames :: D.TTreesTo ([D.TermName], [D.TTree])
 consTermNames = terms [] where
-    terms ns (D.TermLeafName _ n   : xs) = terms (n : ns) xs
+    terms ns (D.TermLeafName _ _ n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 consRelTuple :: (D.CContent c) => ContentCons c -> Int -> D.TTreeToAb [c]
