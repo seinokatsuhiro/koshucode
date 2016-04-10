@@ -31,7 +31,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   
     -- * Gather
     Gather, gather, gatherWith,
-    gatherToMap, gatherToAssoc,
+    gatherToMap, gatherToMapSwap, gatherToAssoc,
   ) where
 
 import qualified Data.Map   as Map
@@ -258,7 +258,7 @@ gatherWith f = loop where
     loop (c:cs) as = let (b, as') = f c as
                      in b : loop cs as'
 
--- | Gather (/key/, /value/) to @Map@ /key/ [/value/].
+-- | Gather (/k/, /v/) to 'Map.Map' /k/ [/v/].
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
     loop [] m = m
@@ -266,6 +266,21 @@ gatherToMap xs = loop xs Map.empty where
         case Map.lookup k m of
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
+
+-- gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
+-- gatherToMap = foldr gath Map.empty where
+--     gath (k,v) = Map.alter (add v) k
+--
+--     add v (Just vs) = Just $ v:vs
+--     add v (Nothing) = Just [v]
+
+-- | Gather (/v/, /k/) to 'Map.Map' /k/ [/v/].
+gatherToMapSwap :: (Ord k) => [(v,k)] -> Map.Map k [v]
+gatherToMapSwap = foldr gath Map.empty where
+    gath (v,k) = Map.alter (add v) k
+
+    add v (Just vs) = Just $ v:vs
+    add v (Nothing) = Just [v]
 
 gatherToAssoc :: (Ord k) => [(k,v)] -> [(k, [v])]
 gatherToAssoc = Map.assocs . gatherToMap

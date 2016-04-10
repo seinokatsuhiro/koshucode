@@ -23,13 +23,13 @@ module Koshucode.Baala.Rop.Flat.Gadget
     consDumpTree,
   ) where
 
-import qualified Data.Map.Strict             as Map
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Base    as Op
-import qualified Koshucode.Baala.Rop.Flat.DepRank as Op
-import qualified Koshucode.Baala.Rop.Flat.Message as Msg
+import qualified Data.Map.Strict                   as Map
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Op
+import qualified Koshucode.Baala.Rop.Flat.PoScale  as Op
+import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Gadgets
@@ -97,7 +97,7 @@ relkitDepRank (x,y,r) (Just he1) = Right kit2 where
     f2 bo1      = map put $ rank $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  = [cx, D.pInt i]
-    rank        = Op.depRankList . Op.depRankUpdateAll . Op.depRankFromPairs
+    rank        = Op.poScale . Op.poDepth
 
 
 -- ----------------------  visit-distance

@@ -57,7 +57,6 @@ library
         Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check
         Koshucode.Baala.Rop.Flat.Control
-        Koshucode.Baala.Rop.Flat.DepRank
         Koshucode.Baala.Rop.Flat.Gadget
 
         Koshucode.Baala.Rop.Flat.Lattice
@@ -68,6 +67,7 @@ library
         Koshucode.Baala.Rop.Flat.Message
         Koshucode.Baala.Rop.Flat.Meta
         Koshucode.Baala.Rop.Flat.Peripheral
+        Koshucode.Baala.Rop.Flat.PoScale
         Koshucode.Baala.Rop.Flat.Resource
         Koshucode.Baala.Rop.Flat.Source
         Koshucode.Baala.Rop.Flat.Term
