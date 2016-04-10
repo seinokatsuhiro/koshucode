@@ -52,14 +52,10 @@ ttreePara1 = ttreeParaBy C.maybeSingleHyphen
 
 -- | Make token tree parameter with double-hyphen names.
 ttreePara2 :: [D.Token] -> B.Ab TTreePara
-ttreePara2 = ttreeParaBy maybeDoubleHyphen
+ttreePara2 = ttreeParaBy C.maybeDoubleHyphen
 
 ttreeParaBy :: D.TTreeTo (Maybe String) -> [D.Token] -> B.Ab TTreePara
 ttreeParaBy f toks =
     do trees <- D.ttrees toks
        Right $ D.para f trees
-
-maybeDoubleHyphen :: D.TTreeTo (Maybe String)
-maybeDoubleHyphen (D.TextLeafRaw _ ('-' : '-' : n))  = Just n
-maybeDoubleHyphen _                                  = Nothing
 

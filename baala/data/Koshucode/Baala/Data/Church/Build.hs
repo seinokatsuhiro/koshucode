@@ -87,6 +87,10 @@ construct calc = expr where
                  | q == D.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
+             -- term with options (experimental)
+             (B.TreeL (D.TTermPath _ ns)) : _
+                 -> Right $ D.CoxTerm cp ns []
+
              -- fill args in the blanks (application)
              f : xs -> fill cp f xs
              []     -> lit cp tree

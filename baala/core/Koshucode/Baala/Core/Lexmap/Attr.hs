@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Lexmap.Attr
     AttrPara, AttrSortPara,
     attrSort, attrBranch,
     maybeSingleHyphen,
+    maybeDoubleHyphen,
     -- $AttributeSorter
   ) where
 
@@ -32,6 +33,7 @@ data RopAttr = RopAttr
     , attrBranchNames  :: [C.AttrName]           -- Branch names
     }
 
+-- | Construct attribute-sorting specification.
 ropAttrCons :: C.AttrPos C.AttrName -> [C.AttrName] -> RopAttr
 ropAttrCons pos branchNames = ropAttr where
     ropAttr      = RopAttr posSorter classify pos posNames branchNames
@@ -61,10 +63,27 @@ attrClassify posNames branchNames n = n2 where
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> Right . hyphenAssc =<< B.tt "a b -x /c 'd -y e"
---   [ ("@trunk", [TreeL (TText 1 0 "a"), TreeL (TText 3 0 "b")])
---   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TText 9 1 "d")])
---   , ("-y", [TreeL (TText 14 0 "e")]) ]
+--   >>> let a = ropAttrCons (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
+--   >>> attrSort a =<< D.tt "a b -x /c 'd -y e"
+--   Right (ParaBody {
+--     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
+--                  TreeL (TText CodePt {..} TextRaw "b"),
+--                  TreeL (TText CodePt {..} TextRaw "-x"),
+--                  TreeL (TTermN CodePt {..} "c"),
+--                  TreeL (TText CodePt {..} TextQ "d"),
+--                  TreeL (TText CodePt {..} TextRaw "-y"),
+--                  TreeL (TText CodePt {..} TextRaw "e") ],
+--     paraPos  = [ TreeL (TText CodePt {..} TextRaw "a"),
+--                  TreeL (TText CodePt {..} TextRaw "b") ],
+--     paraName = fromList [ (AttrNormal "@trunk",
+--                                            [[TreeL (TText CodePt {..} TextRaw "a"),
+--                                              TreeL (TText CodePt {..} TextRaw "b")]]),
+--                           (AttrNormal "a", [[TreeL (TText CodePt {..} TextRaw "a")]]),
+--                           (AttrNormal "b", [[TreeL (TText CodePt {..} TextRaw "b")]]),
+--                           (AttrNormal "x", [[TreeL (TTermN CodePt {..} "c"),
+--                                              TreeL (TText CodePt {..} TextQ "d")]]),
+--                           (AttrNormal "y", [[TreeL (TText CodePt {..} TextRaw "e")]]) ]
+--     })
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
@@ -84,9 +103,15 @@ attrBranch trees =
        B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ D.paraNameMapKeys C.AttrNormal p2
 
+-- | Take out hyphened text (like @"-x"@) from token tree.
 maybeSingleHyphen :: D.TTreeTo (Maybe String)
 maybeSingleHyphen (D.TextLeafRaw _ ('-' : n))  = Just n
 maybeSingleHyphen _                            = Nothing
+
+-- | Take out double-hyphened text (like @"--xyz"@) from token tree.
+maybeDoubleHyphen :: D.TTreeTo (Maybe String)
+maybeDoubleHyphen (D.TextLeafRaw _ ('-' : '-' : n))  = Just n
+maybeDoubleHyphen _                                  = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =
