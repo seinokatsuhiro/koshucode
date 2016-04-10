@@ -20,6 +20,8 @@ module Koshucode.Baala.Rop.Flat.Term
     consBackward, relmapBackward,
     -- * lexical
     consLexical, relmapLexical,
+    -- * order
+    consOrder, relmapOrder, relkitOrder,
   ) where
 
 import qualified Koshucode.Baala.Base        as B
@@ -51,6 +53,7 @@ ropsTerm = Op.ropList "term"  -- GROUP
     , Op.def   consCutTerm        "cut-term /R"              "1 -relmap/"
     , Op.def   consForward        "forward /P ..."           "V -term"
     , Op.def   consLexical        "lexical"                  "0"
+    , Op.def   consOrder          "order /P ..."             "V -term"
     , Op.def   consPick           "pick /P ..."              "V -term"
     , Op.def   consPickTerm       "pick-term /R"             "1 -relmap/"
     , Op.def   consRename         "rename /N /P ..."         "V -term"
@@ -222,3 +225,20 @@ relkitLexical (Just he1) = Right kit2 where
     he2   = D.headMap (D.headRForward lr) he1
     kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.headRForward lr
 
+
+-- ----------------------  order
+
+consOrder :: (Ord c) => C.RopCons c
+consOrder med =
+    do ns <- Op.getOption [] Op.getTerms med "-term"
+       Right $ relmapOrder med ns
+
+relmapOrder :: (Ord c) => C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapOrder med = C.relmapFlow med . relkitOrder
+
+relkitOrder :: (Ord c) => [D.TermName] -> C.RelkitFlow c
+relkitOrder _ Nothing = Right C.relkitNothing
+relkitOrder ns (Just he1) = Right kit2 where
+    kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2
+    kitf2 = B.sortByName ords $ D.headNames he1
+    ords  = map B.Asc ns
