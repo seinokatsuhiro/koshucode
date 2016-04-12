@@ -12,6 +12,11 @@ module Koshucode.Baala.Data.Type.Decimal
     integralDecimal, realDecimal,
     decimalFractional,
     decimal0, decimal1,
+
+    -- * Chop
+    chopDigitsTrancate,
+    chopDigitsRound,
+    roundLastDigit,
   
     -- * Reader
     LitString,
@@ -83,6 +88,42 @@ decimal0 = integralDecimal (0 :: DecimalInteger)
 
 decimal1 :: Decimal
 decimal1 = integralDecimal (1 :: DecimalInteger)
+
+
+-- ----------------------  Chop
+
+-- | @chopDigitsTrancate@ /d/ /n/ returns a number
+--   which does not have the tailing /d/ digits.
+--   If /d/ is zero or negative, it returns just /n/.
+chopDigitsTrancate :: (Integral d, Integral n) => d -> n -> n
+chopDigitsTrancate d n = fst $ chopDigits d n
+
+-- | @chopDigitsRound@ is similar to 'chopDigitsTrancate',
+--   but rounds chopped digit.
+chopDigitsRound :: (Integral d, Integral n) => d -> n -> n
+chopDigitsRound d n =
+  case chopDigits d n of
+   (n', True)   -> n' + 1
+   (n', False)  -> n'
+
+chopDigits :: (Integral d, Integral n) => d -> n -> (n, Bool)
+chopDigits d n
+  | d <= 0     = (n, False)
+  | otherwise  = (sig * q, r >= half)
+  where
+    sig        = signum n
+    divisor    = 10 ^ d
+    half       = divisor `quot` 2
+    (q, r)     = abs n `quotRem` divisor
+
+-- | Round the last (least significant) digit.
+roundLastDigit :: (Integral n) => n -> n
+roundLastDigit n = sig * n' where
+  sig = signum n
+  a   = abs n
+  n'  = case a `rem` 10 of
+         r | r >= 5     -> a - r + 10
+           | otherwise  -> a - r
 
 
 -- ----------------------  Reader
