@@ -91,6 +91,5 @@ relkitOrder :: (Ord c) => [D.SignedTermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2
-    kitf2 = B.sortByName ords $ D.headNames he1
-    ords  = map B.orderingCap ns
+    kitf2 = D.relBodyOrder ns he1
 

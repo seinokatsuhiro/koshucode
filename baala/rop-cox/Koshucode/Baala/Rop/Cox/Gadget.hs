@@ -180,55 +180,55 @@ interpMatch interp he = ns1 == ns2 where
 
 consNumber :: (Ord c, D.CContent c) => C.RopCons c
 consNumber med =
-    do n    <- Op.getTerm med "-term"
-       ns   <- Op.getOption [] Op.getTerms med "-order"
-       from <- Op.getOption 0  Op.getInt   med "-from"
+    do n    <- Op.getTerm                        med "-term"
+       ns   <- Op.getOption [] Op.getSignedTerms med "-order"
+       from <- Op.getOption 0  Op.getInt         med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
-relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
+relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
 
-relkitNumber :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
+relkitNumber :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, D.CDec c)
     => B.Ranking D.TermName c
-    -> (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
+    -> (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = let (rank, bo2) = ranking from ords (D.headNames he1) bo1
                 in zipWith (:) (map D.pInt rank) bo2
-    ords  = map B.Asc ns
+    ords  = map B.orderingCap ns
 
 
 -- ----------------------  rank
 
 consRank :: (Ord c, D.CContent c) => C.RopCons c
 consRank med =
-    do n     <- Op.getTerm   med "-term"
-       ns    <- Op.getTerms  med "-order"
+    do n     <- Op.getTerm               med "-term"
+       ns    <- Op.getSignedTerms        med "-order"
        from  <- Op.getOption 0 Op.getInt med "-from"
-       dense <- Op.getSwitch med "-dense"
+       dense <- Op.getSwitch             med "-dense"
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
        Right $ relmapRank med (n, ns, fromInteger from)
 
 relmapDenseRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
+   C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
 relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
-relkitDenseRank :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
+relkitDenseRank :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (D.TermName, [D.TermName], Int) -> C.Relmap c
+   C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
 relmapGapRank med = C.relmapFlow med . relkitGapRank
 
-relkitGapRank :: (Ord c, D.CDec c) => (D.TermName, [D.TermName], Int) -> C.RelkitFlow c
+relkitGapRank :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
 

@@ -6,7 +6,7 @@
 module Koshucode.Baala.Data.Type.Rel
   ( -- * Data type
     Rel (..), Body,
-    relSort,
+    relSort, relBodyOrder,
   
     -- * Constant
     reldum, reldee, reldau,
@@ -87,6 +87,11 @@ relSortHead (Rel he bo) = Rel he' bo' where
 
 relSortBody :: (Ord c) => B.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
+
+relBodyOrder :: (Ord c) => [D.SignedTermName] -> D.Head -> B.Map [[c]]
+relBodyOrder ns he = ed where
+    ed    = B.sortByName ords $ D.headNames he
+    ords  = map B.orderingCap ns
 
 
 
