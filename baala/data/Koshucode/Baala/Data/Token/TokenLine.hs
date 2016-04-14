@@ -9,7 +9,7 @@ module Koshucode.Baala.Data.Token.TokenLine
     -- * Library
     TokenLine,
     tokenLines,
-    tokens,
+    tokens, toks,
     isShortPrefix,
   
     -- * Document
@@ -34,7 +34,6 @@ import qualified Koshucode.Baala.Base.Message         as Msg
 import qualified Koshucode.Baala.Data.Token.Message   as Msg
 
 
-
 -- ----------------------  Tokenizer
 
 -- | Token list on a line.
@@ -47,6 +46,10 @@ type TokenRoll = B.CodeRoll D.Token
 tokens :: B.CodePiece -> String -> B.Ab [D.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
+
+-- | Abbreviated tokenizer.
+toks :: String -> B.Ab [D.Token]
+toks s = tokens (B.codeTextOf s) s
 
 -- | Tokenize text.
 tokenLines :: B.CodePiece -> String -> B.Ab [TokenLine]
@@ -152,7 +155,6 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
 
     gen ccs@(c:cs) | c == '*'        = ast   cs [c]
                    | c == '<'        = bra   cs [c]
-                   | c == '>'        = cket  cs [c]
                    | c == '@'        = slot  cs 1
                    | c == '|'        = bar   cs [c]
                    | c == '^'        = local cs
@@ -178,10 +180,6 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
 
     bra (c:cs) w   | c == '<'        = bra  cs         $ c:w
     bra cs w       | w == "<"        = ang  cs ""
-                   | otherwise       = Msg.unkAngleText w
-
-    cket (c:cs) w  | c == '>'        = cket cs         $ c:w
-    cket cs w      | w == ">"        = vw              $ scanCode   cp ws ('>':cs)
                    | otherwise       = Msg.unkAngleText w
 
     slot (c:cs) n  | c == '@'        = slot cs         $ n + 1
@@ -270,10 +268,8 @@ scanW _ (Left message)        = Left message
 
 nextCode :: Next String
 nextCode = loop "" where
-    loop w cs@('>':'>':_)         =  (cs, rv w)
-    loop w cs@('<':'<':_)         =  (cs, rv w)
-    loop w (c:cs) | isCode c      =  loop (c:w) cs
-    loop w cs                     =  (cs, rv w)
+    loop w (c:cs) | isCode c      = loop (c:w) cs
+    loop w cs                     = (cs, rv w)
 
 nextQQ :: AbNext String
 nextQQ = loop "" where

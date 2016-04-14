@@ -204,8 +204,8 @@ divideTreesByEqual = divideTreesBy "="
 
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
-tt s = do toks <- D.tokens (B.codeTextOf s) s
-          ttrees $ D.sweepToken toks
+tt s = do ts <- D.toks s
+          ttrees $ D.sweepToken ts
 
 tt1 :: String -> B.Ab TTree
 tt1 = Right . ttreeGroup B.<=< tt
