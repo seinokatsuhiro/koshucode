@@ -922,7 +922,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    120 judges
+**    128 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Base"
@@ -959,6 +959,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Gadget"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Meta"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Order"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Peripheral"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Resource"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Source"
@@ -981,15 +982,12 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Control"          /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Control"          /import "Koshucode.Baala.Rop.Flat.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.DepRank"          /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.DepRank"          /import "Koshucode.Baala.Base"
-
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.DepRank"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.PoScale"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Lattice.Restrict"  /import "Data.Set"
@@ -1026,12 +1024,22 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Meta"             /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Meta"             /import "Koshucode.Baala.Rop.Flat.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Rop.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Rop.Flat.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Rop.Flat.Term"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Peripheral"       /import "Koshucode.Baala.Rop.Flat.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.PoScale"          /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.PoScale"          /import "Data.Set"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.PoScale"          /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Resource"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Resource"         /import "Koshucode.Baala.Data"
@@ -1058,10 +1066,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Check"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Control"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.DepRank"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Gadget"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Meta"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Order"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.PoScale"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Peripheral"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Resource"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat"                  /import "Koshucode.Baala.Rop.Flat.Source"
@@ -1321,7 +1330,7 @@ Command `./import-rank.k ../base/data/IMPORT.k ../calculator/data/IMPORT.k ../co
 |-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Data.Type.Para"
-|-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Rop.Flat.DepRank"
+|-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Rop.Flat.PoScale"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Token.Short"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Type.Date"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Type.Decimal"
@@ -1450,53 +1459,54 @@ Command `./import-rank.k ../base/data/IMPORT.k ../calculator/data/IMPORT.k ../co
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Lattice.Tropashko"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Meta"
 
+|-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Order"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Resource"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Source"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Flat.Term"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Rop.Nest.Flow"
-|-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Toolkit.Library.Change"
 *** 150
 
+|-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Toolkit.Library.Change"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Toolkit.Library.Run"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Cop"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Accessor"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Calc"
-|-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Filter"
 
+|-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Filter"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Gadget"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Cox.Range"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Flat.Lattice.Restrict"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Flat.Peripheral"
-|-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Flat.TermGadget"
 
+|-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Flat.TermGadget"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Rop.Nest.Confl"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"
-|-- IMPORT-RANK  /rank 60  /module "Koshucode.Baala.Rop.Flat.Lattice.Rop"
 
+|-- IMPORT-RANK  /rank 60  /module "Koshucode.Baala.Rop.Flat.Lattice.Rop"
 |-- IMPORT-RANK  /rank 61  /module "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Rop.Flat.Check"
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Rop.Flat.Control"
 |-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Rop.Flat.Bundle"
-|-- IMPORT-RANK  /rank 64  /module "Koshucode.Baala.Rop.Flat"
 
+|-- IMPORT-RANK  /rank 64  /module "Koshucode.Baala.Rop.Flat"
 |-- IMPORT-RANK  /rank 65  /module "Koshucode.Baala.Rop.Cox.Empty"
 |-- IMPORT-RANK  /rank 65  /module "Koshucode.Baala.Rop.Nest.Deriv"
 |-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Rop.Cox.Bundle"
 |-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Rop.Nest.Rop"
-|-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Rop.Cox"
 *** 175
 
+|-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Rop.Cox"
 |-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Rop.Nest"
 |-- IMPORT-RANK  /rank 68  /module "Koshucode.Baala.Toolkit.Library.Global"
 
-*** 177 judges
+*** 178 judges
 
 **
 **  SUMMARY
-**     177 judges on IMPORT-RANK
-**     177 judges in total
+**     178 judges on IMPORT-RANK
+**     178 judges in total
 **
 ```
 
