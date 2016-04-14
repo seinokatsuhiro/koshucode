@@ -127,107 +127,129 @@ textLicense r cs = Right $ B.codeUpdate "" tok r where
 
 -- | Split a next token from source text.
 relation :: B.AbMap TokenRoll
-relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r where
+relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
 
-    v           = scan r
-    vw          = scanW r
-    u   cs tok  = Right $ B.codeUpdate cs tok r
-    int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
-    xs =^ pre   = pre `B.isPrefixOf` xs
+    v              = scan r
+    vw             = scanW r
+    up             = u ""
+    u   cs tok     = Right $ B.codeUpdate cs tok r
+    int cs tok     = Right $ B.codeChange interp $ B.codeUpdate cs tok r
 
-    sign '+' = GT
-    sign  _  = LT
+    sign '+'       = GT
+    sign  _        = LT
 
-    gen ""                           = Right r
+    xs =^ pre      = pre `B.isPrefixOf` xs
 
-    gen ('(':c:')':cs)
-                   | c `elem` "+-=#"
-                                     = u cs            $ D.TTextRaw cp ['(',c,')']
+    -- ----------------------  dispatch
 
-    gen (a:b:cs)   | a == '{' &&
-                     b == '|'        = int cs          $ D.TOpen    cp [a,b]
-                   | isOpen a &&
-                     isGrip b        = u cs            $ D.TOpen    cp [a,b]
-                   | isGrip a &&
-                     isClose b       = u cs            $ D.TClose   cp [a,b]
-                   | (a == '+' || a == '-') &&
-                     b == '/'        = vw              $ scanTermSign (sign a) cp ws cs
+    r' = start dispatch cp r
 
-    gen ccs@(c:cs) | c == '*'        = ast   cs [c]
-                   | c == '<'        = bra   cs [c]
-                   | c == '@'        = slot  cs 1
-                   | c == '|'        = bar   cs [c]
-                   | c == '^'        = local cs
-                   | ccs =^ "'/"     = vw              $ scanTermQ  cp ws $ tail cs
-                   | ccs =^ "#!"     = u     ""        $ D.TComment cp cs
-                   | ccs =^ "-*-"    = u     ""        $ D.TComment cp cs
-                   | isOpen c        = u     cs        $ D.TOpen    cp [c]
-                   | isClose c       = u     cs        $ D.TClose   cp [c]
-                   | isSingle c      = u     cs        $ D.TTextRaw cp [c]
-                   | isTerm c        = vw              $ scanTermP  cp ws cs
-                   | isQQ c          = v               $ scanQQ     cp cs
-                   | isQ c           = vw              $ scanQ      cp ws cs
-                   | isShort c       = short cs [c]
-                   | isCode c        = vw              $ scanCode   cp ws (c:cs)
-                   | isSpace c       = v               $ scanSpace  cp cs
-                   | otherwise       = Msg.forbiddenInput $ D.angleQuote [c]
+    dispatch ('(' : c : ')' : cs)
+        | c `elem` "+-=#"        = u cs         $ D.TTextRaw cp ['(', c, ')']
+    dispatch (a : b : cs)
+        | a == '{' && b == '|'   = int cs       $ D.TOpen    cp [a,b]
+        | isOpen a && isGrip b   = u cs         $ D.TOpen    cp [a,b]
+        | isGrip a && isClose b  = u cs         $ D.TClose   cp [a,b]
+        | (a == '+' || a == '-') && b == '/'
+                                 = vw           $ scanTermSign (sign a) cp ws cs
+        | a == '\'' && b == '/'  = vw           $ scanTermQ             cp ws cs
+    dispatch ccs@(c : cs)
+        | c == '*'            = aster cs [c]
+        | c == '<'            = angle cs [c]
+        | c == '@'            = at    cs 1
+        | c == '|'            = bar   cs [c]
+        | c == '^'            = hat   cs
+        | ccs =^ "#!"         = up              $ D.TComment cp cs
+        | ccs =^ "-*-"        = up              $ D.TComment cp cs
+        | isOpen c            = u cs            $ D.TOpen    cp [c]
+        | isClose c           = u cs            $ D.TClose   cp [c]
+        | isSingle c          = u cs            $ D.TTextRaw cp [c]
+        | isTerm c            = vw              $ scanTermP  cp ws cs
+        | isQQ c              = v               $ scanQQ     cp cs
+        | isQ c               = vw              $ scanQ      cp ws cs
+        | isShort c           = short cs [c]
+        | isCode c            = vw              $ scanCode   cp ws (c:cs)
+        | isSpace c           = v               $ scanSpace  cp cs
+        | otherwise           = Msg.forbiddenInput $ D.angleQuote [c]
+    dispatch ""               = Right r
 
-    ast (c:cs) w   | w == "****"     = u    (c:cs)     $ D.TTextRaw cp w
-                   | c == '*'        = ast  cs         $ c:w
-    ast cs w       | w == "**"       = u    ""         $ D.TComment cp cs
-                   | w == "***"      = u    ""         $ D.TComment cp cs
-                   | otherwise       = vw              $ scanCode   cp ws $ w ++ cs
+    short (c:cs) w
+        | c == '.'            = let pre = rv w
+                                    (cs', body) = nextCode   cs
+                                in u cs'        $ D.TShort   cp pre body
+        | isCode c            = short cs (c:w)
+    short cs w                = u cs            $ D.TTextRaw cp $ rv w
 
-    bra (c:cs) w   | c == '<'        = bra  cs         $ c:w
-    bra cs w       | w == "<"        = ang  cs ""
-                   | otherwise       = Msg.unkAngleText w
+    -- ----------------------  begin with "@"
 
-    slot (c:cs) n  | c == '@'        = slot cs         $ n + 1
-                   | c == '\''       = v               $ scanSlot 0 cp cs  -- positional
-    slot cs n                        = v               $ scanSlot n cp cs
+    at (c:cs) n | c == '@'    = at cs           $ n + 1
+                | c == '\''   = v               $ scanSlot 0 cp cs  -- positional
+    at cs n                   = v               $ scanSlot n cp cs
 
-    short (c:cs) w  | c == '.'       = let pre = rv w
-                                           (cs', body) = nextCode   cs
-                                       in u cs'        $ D.TShort   cp pre body
-                    | isCode c       = short cs        $ c:w
-    short cs w                       = u cs            $ D.TTextRaw cp $ rv w
+    -- ----------------------  begin with "*"
 
-    bar [] w                         = u ""            $ D.TTextRaw cp w
-    bar (c:cs) w    | c == '|'       = bar cs          $ c:w
-                    | w == "||"      = let cs' = B.trimLeft (c:cs)
-                                       in u cs'        $ D.TTextRaw cp w
-                    | w == "|" && isCode  c = bar2 cs [c, '|']
-                    | w == "|" && isClose c = u cs      $ D.TClose   cp ['|', c]
-                    | otherwise      = u (c:cs)        $ D.TTextRaw cp w
+    aster (c:cs) w
+        | w == "****"         = u (c:cs)        $ D.TTextRaw cp w
+        | c == '*'            = aster cs (c:w)
+    aster cs w
+        | w == "**"           = up              $ D.TComment cp cs
+        | w == "***"          = up              $ D.TComment cp cs
+        | otherwise           = vw              $ scanCode   cp ws $ w ++ cs
 
-    bar2 [] w                        = u ""            $ D.TTextBar cp $ rv w
-    bar2 (c:cs) w  | c == '|'        = u cs            $ D.TTextBar cp $ rv (c:w)
-                    | isSpace c      = u (c:cs)        $ D.TTextBar cp $ rv w
-                    | otherwise      = bar2 cs (c:w)
+    -- ----------------------  begin with "^"
 
-    local ('/' : cs)                 = localToken cs D.LocalNest
-    local cs@(c : _) | isCode c      = localToken cs D.LocalSymbol
-    local _                          = Msg.adlib "local"
+    -- read local reference, like ^/g
+    hat ('/' : cs)                   = localToken cs D.LocalNest
+    hat cs@(c : _) | isCode c        = localToken cs D.LocalSymbol
+    hat _                            = Msg.adlib "local"
 
     localToken cs k                  = let (cs', w) = nextCode cs
-                                       in u cs'        $ D.TLocal cp (k w) (-1) []
+                                       in u cs' $ D.TLocal cp (k w) (-1) []
 
-    ang (c:cs) w    | c == '>'       = u     cs        $ angle $ rv w
-                    | isCode c       = ang   cs        $ c:w
-    ang cs w                         = u     cs        $ D.TTextRaw cp $ '<' : rv w
+    -- ----------------------  begin with "|"
 
-    angle ('c' : s)
-        | isCharCode s  =  case charCodes s of
-                             Just ns  ->  D.TTextKey cp $ map Ch.chr ns
-                             Nothing  ->  D.TTextUnk cp s
-    angle ""            =                 D.TTextRaw cp "<>"
-    angle s             =  case lookup s D.angleTexts of
-                             Just w   ->  D.TTextKey cp w
-                             Nothing  ->  D.TTextUnk cp s
+    bar (c:cs) w
+        | c == '|'                   = bar cs (c:w)
+        | w == "|" && isJudge c      = judge cs [c, '|']
+        | w == "|" && isCode c       = clock cs [c, '|']
+    bar cs w                         = let cs' = B.trimLeft cs
+                                       in u cs'        $ D.TTextRaw cp w
+
+    -- read judgement sign, like |--, |-x
+    judge (c:cs) w
+        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
+        | isCode c                   = clock (c:cs) w
+    judge cs w                       = u cs            $ D.TTextBar cp $ rv w
+
+    -- read clock, like |03:30|
+    clock (c:cs) w | c == '|'        = u cs            $ D.TTextBar cp $ rv (c:w)
+                   | isClock c       = clock cs (c:w)
+    clock cs w                       = u cs            $ D.TTextBar cp $ rv w
+
+    -- ----------------------  begin with "<"
+
+    angle (c:cs) w | c == '<'        = angle cs (c:w)
+    angle cs w     | w == "<"        = angleMid cs ""
+                   | otherwise       = u cs            $ D.TTextRaw cp w
+
+    -- read keyword, like <crlf>
+    angleMid (c:cs) w  | c == '>'    = u cs            $ angleToken $ rv w
+                       | isCode c    = angleMid cs (c:w)
+    angleMid cs w                    = u cs            $ D.TTextRaw cp $ '<' : rv w
+
+    angleToken ""                    = D.TTextRaw cp "<>"
+    angleToken ('c' : s)
+        | isCharCode s  = case charCodes s of
+                            Just ns  -> D.TTextKey cp $ map Ch.chr ns
+                            Nothing  -> D.TTextUnk cp s
+    angleToken s        = case lookup s D.angleTexts of
+                            Just w   -> D.TTextKey cp w
+                            Nothing  -> D.TTextUnk cp s
 
 charCodes :: String -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
+-- interpretation content between {| and |}
 interp :: B.AbMap TokenRoll
 interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start int cp r where
 
@@ -338,10 +360,11 @@ scanSlot n cp cs = let (cs', w) = nextCode cs
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isGrip, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
+isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
-isGrip     = ( `elem` "-=|:*+" )  -- Punctuation | Symbol
+isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
+isJudge    = ( `elem` "-="     )  -- Punctuation | Symbol
 isSingle   = ( `elem` ":|"     )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isQQ       = (    ==  '"'      )  -- Punctuation
@@ -362,6 +385,8 @@ isFigure :: B.Pred Char
 isFigure '-' = True
 isFigure c   = Ch.isDigit c
 
+isClock :: B.Pred Char
+isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
 -- ------------------------------------------------------------------
 -- $TokenType
