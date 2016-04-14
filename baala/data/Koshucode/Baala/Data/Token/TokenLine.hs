@@ -75,7 +75,7 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
     sec ""                    = dispatch out
     sec ('*' : '*' : _)       = dispatch out
     sec (c:cs)  | isSpace c   = v  $ scanSpace cp cs
-                | isCode c    = vw $ scanCode cp ws (c:cs)
+                | isGeneral c = vw $ scanCode cp ws (c:cs)
                 | otherwise   = Msg.unexpSect help
 
     dispatch :: [D.Token] -> B.Ab TokenRoll
@@ -168,7 +168,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
         | isQQ c              = v               $ scanQQ     cp cs
         | isQ c               = vw              $ scanQ      cp ws cs
         | isShort c           = short cs [c]
-        | isCode c            = vw              $ scanCode   cp ws (c:cs)
+        | isGeneral c         = vw              $ scanCode   cp ws (c:cs)
         | isSpace c           = v               $ scanSpace  cp cs
         | otherwise           = Msg.forbiddenInput $ D.angleQuote [c]
     dispatch ""               = Right r
@@ -177,7 +177,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
         | c == '.'            = let pre = rv w
                                     (cs', body) = nextCode   cs
                                 in u cs'        $ D.TShort   cp pre body
-        | isCode c            = short cs (c:w)
+        | isGeneral c         = short cs (c:w)
     short cs w                = u cs            $ D.TTextRaw cp $ rv w
 
     -- ----------------------  begin with "@"
@@ -200,7 +200,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
 
     -- read local reference, like ^/g
     hat ('/' : cs)                   = localToken cs D.LocalNest
-    hat cs@(c : _) | isCode c        = localToken cs D.LocalSymbol
+    hat cs@(c : _) | isGeneral c     = localToken cs D.LocalSymbol
     hat _                            = Msg.adlib "local"
 
     localToken cs k                  = let (cs', w) = nextCode cs
@@ -211,14 +211,14 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
     bar (c:cs) w
         | c == '|'                   = bar cs (c:w)
         | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && isCode c       = clock cs [c, '|']
+        | w == "|" && isGeneral c    = clock cs [c, '|']
     bar cs w                         = let cs' = B.trimLeft cs
                                        in u cs'        $ D.TTextRaw cp w
 
     -- read judgement sign, like |--, |-x
     judge (c:cs) w
         | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | isCode c                   = clock (c:cs) w
+        | isGeneral c                = clock (c:cs) w
     judge cs w                       = u cs            $ D.TTextBar cp $ rv w
 
     -- read clock, like |03:30|
@@ -234,7 +234,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
 
     -- read keyword, like <crlf>
     angleMid (c:cs) w  | c == '>'    = u cs            $ angleToken $ rv w
-                       | isCode c    = angleMid cs (c:w)
+                       | isGeneral c = angleMid cs (c:w)
     angleMid cs w                    = u cs            $ D.TTextRaw cp $ '<' : rv w
 
     angleToken ""                    = D.TTextRaw cp "<>"
@@ -290,7 +290,7 @@ scanW _ (Left message)        = Left message
 
 nextCode :: Next String
 nextCode = loop "" where
-    loop w (c:cs) | isCode c      = loop (c:w) cs
+    loop w (c:cs) | isGeneral c   = loop (c:w) cs
     loop w cs                     = (cs, rv w)
 
 nextQQ :: AbNext String
@@ -331,23 +331,24 @@ scanTermQ = scanTerm D.TermTypeQuoted EQ
 
 scanTerm :: D.TermType -> Ordering -> ScanW
 scanTerm q sign cp ws = word [] where
-    word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
-                                      n  = B.codeNumber $ B.codePtSource cp
-                                      w' = show n ++ w
-                                  in term (w' : ns) cs'
-                   | isCode c   = let (cs', w) = nextCode (c:cs)
-                                  in term (w : ns) cs'
-                   | isQQ c     = do (cs', w) <- nextQQ cs
-                                     term (w : ns) cs'
-    word _ _                    = Msg.forbiddenTerm
+    word ns (c:cs)
+        | c == '='     = let (cs', w) = nextCode (c:cs)
+                             n  = B.codeNumber $ B.codePtSource cp
+                             w' = show n ++ w
+                         in term (w' : ns) cs'
+        | isGeneral c  = let (cs', w) = nextCode (c:cs)
+                         in term (w : ns) cs'
+        | isQQ c       = do (cs', w) <- nextQQ cs
+                            term (w : ns) cs'
+    word _ _           = Msg.forbiddenTerm
 
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == D.TermTypePath
-                                = case Map.lookup n ws of
-                                    Just n' -> Right (ws, cs, D.TTermN cp sign n')
-                                    Nothing -> let ws' = Map.insert n n ws
-                                               in Right (ws', cs, D.TTermN cp sign n)
-    term ns cs                  = Right (ws, cs, D.TTerm cp q $ rv ns)
+                       = case Map.lookup n ws of
+                           Just n' -> Right (ws, cs, D.TTermN cp sign n')
+                           Nothing -> let ws' = Map.insert n n ws
+                                      in Right (ws', cs, D.TTermN cp sign n)
+    term ns cs         = Right (ws, cs, D.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan
 scanSlot n cp cs = let (cs', w) = nextCode cs
@@ -360,7 +361,7 @@ scanSlot n cp cs = let (cs', w) = nextCode cs
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
+isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isSpace, isGeneral :: B.Pred Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
@@ -370,7 +371,7 @@ isQ        = (    ==  '\''     )  -- Punctuation
 isQQ       = (    ==  '"'      )  -- Punctuation
 isTerm     = (    ==  '/'      )  -- Punctuation
 isSpace    = Ch.isSpace
-isCode     = D.isCodeChar
+isGeneral  = D.isGeneralChar
 
 isShortPrefix :: B.Pred String
 isShortPrefix = all isShort

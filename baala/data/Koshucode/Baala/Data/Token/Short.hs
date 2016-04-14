@@ -1,6 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Short sign.
+
 module Koshucode.Baala.Data.Token.Short
   ( -- * Data type
     Short (..), ShortDef,
@@ -11,7 +13,7 @@ module Koshucode.Baala.Data.Token.Short
   
     -- * Shortener
     shortText,
-    isCodeText, isCodeChar,
+    isGeneralText, isGeneralChar,
   ) where
 
 import qualified Data.List                             as L
@@ -65,14 +67,16 @@ shortText = loop . reverse . B.sortWith len where
           Just s2             -> Just $ prefix ++ "." ++ text2 s2
           _                   -> loop sh s
 
-    text2 s   | isCodeText s   = s
-              | otherwise      = D.angleQuote s
+    text2 s   | isGeneralText s   = s
+              | otherwise         = D.angleQuote s
 
-isCodeText :: B.Pred String
-isCodeText = all isCodeChar
+-- | Test string is general sign.
+isGeneralText :: B.Pred String
+isGeneralText = all isGeneralChar
 
-isCodeChar :: B.Pred Char
-isCodeChar c =
+-- | Test char is general sign.
+isGeneralChar :: B.Pred Char
+isGeneralChar c =
     case B.generalCategoryGroup c of
       B.UnicodeLetter       -> True
       B.UnicodeNumber       -> True
