@@ -7,6 +7,7 @@
 module Koshucode.Baala.Data.Token.TokenLine
   (
     -- * Library
+    InputText,
     TokenLine,
     tokenLines,
     tokens, toks,
@@ -36,27 +37,31 @@ import qualified Koshucode.Baala.Data.Token.Message   as Msg
 
 -- ----------------------  Tokenizer
 
+-- | Input data type
+type InputText = String
+
 -- | Token list on a line.
 type TokenLine = B.CodeLine D.Token
+
 -- | Code roll for token.
 type TokenRoll = B.CodeRoll D.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.CodePiece -> String -> B.Ab [D.Token]
+tokens :: B.CodePiece -> InputText -> B.Ab [D.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
 
 -- | Abbreviated tokenizer.
-toks :: String -> B.Ab [D.Token]
+toks :: InputText -> B.Ab [D.Token]
 toks s = tokens (B.codeTextOf s) s
 
 -- | Tokenize text.
-tokenLines :: B.CodePiece -> String -> B.Ab [TokenLine]
+tokenLines :: B.CodePiece -> InputText -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
 -- Line begins with the equal sign is treated as section delimter.
-start :: (String -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
+start :: (InputText -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
 start f cp r@B.CodeRoll { B.codeMap    = prev
                         , B.codeInput  = cs0
                         , B.codeOutput = out } = st out cs0 where
@@ -75,7 +80,7 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
     sec ""                    = dispatch out
     sec ('*' : '*' : _)       = dispatch out
     sec (c:cs)  | isSpace c   = v  $ scanSpace cp cs
-                | isGeneral c = vw $ scanCode cp ws (c:cs)
+                | isGeneral c = vw $ scanGeneral cp ws (c:cs)
                 | otherwise   = Msg.unexpSect help
 
     dispatch :: [D.Token] -> B.Ab TokenRoll
@@ -110,13 +115,13 @@ note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
 license :: B.AbMap TokenRoll
 license r@B.CodeRoll { B.codeInputPt = cp } = start (textLicense r) cp r
 
-comment :: TokenRoll -> String -> B.Ab TokenRoll
+comment :: TokenRoll -> InputText -> B.Ab TokenRoll
 comment r "" = Right r
 comment r cs = Right $ B.codeUpdate "" tok r where
     tok  = D.TComment cp cs
     cp   = B.codeInputPt r
 
-textLicense :: TokenRoll -> String -> B.Ab TokenRoll
+textLicense :: TokenRoll -> InputText -> B.Ab TokenRoll
 textLicense r "" = Right r
 textLicense r cs = Right $ B.codeUpdate "" tok r where
     tok  = D.TText cp D.TextLicense cs
@@ -159,23 +164,23 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
         | c == '@'            = at    cs 1
         | c == '|'            = bar   cs [c]
         | c == '^'            = hat   cs
-        | ccs =^ "#!"         = up              $ D.TComment cp cs
-        | ccs =^ "-*-"        = up              $ D.TComment cp cs
-        | isOpen c            = u cs            $ D.TOpen    cp [c]
-        | isClose c           = u cs            $ D.TClose   cp [c]
-        | isSingle c          = u cs            $ D.TTextRaw cp [c]
-        | isTerm c            = vw              $ scanTermP  cp ws cs
-        | isQQ c              = v               $ scanQQ     cp cs
-        | isQ c               = vw              $ scanQ      cp ws cs
+        | ccs =^ "#!"         = up              $ D.TComment   cp cs
+        | ccs =^ "-*-"        = up              $ D.TComment   cp cs
+        | isOpen c            = u cs            $ D.TOpen      cp [c]
+        | isClose c           = u cs            $ D.TClose     cp [c]
+        | isSingle c          = u cs            $ D.TTextRaw   cp [c]
+        | isTerm c            = vw              $ scanTermPath cp ws cs
+        | isQQ c              = v               $ scanQQ       cp cs
+        | isQ c               = vw              $ scanQ        cp ws cs
         | isShort c           = short cs [c]
-        | isGeneral c         = vw              $ scanCode   cp ws (c:cs)
-        | isSpace c           = v               $ scanSpace  cp cs
+        | isGeneral c         = vw              $ scanGeneral cp ws (c:cs)
+        | isSpace c           = v               $ scanSpace   cp cs
         | otherwise           = Msg.forbiddenInput $ D.angleQuote [c]
     dispatch ""               = Right r
 
     short (c:cs) w
         | c == '.'            = let pre = rv w
-                                    (cs', body) = nextCode   cs
+                                    (cs', body) = nextGeneral cs
                                 in u cs'        $ D.TShort   cp pre body
         | isGeneral c         = short cs (c:w)
     short cs w                = u cs            $ D.TTextRaw cp $ rv w
@@ -192,9 +197,9 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
         | w == "****"         = u (c:cs)        $ D.TTextRaw cp w
         | c == '*'            = aster cs (c:w)
     aster cs w
-        | w == "**"           = up              $ D.TComment cp cs
-        | w == "***"          = up              $ D.TComment cp cs
-        | otherwise           = vw              $ scanCode   cp ws $ w ++ cs
+        | w == "**"           = up              $ D.TComment  cp cs
+        | w == "***"          = up              $ D.TComment  cp cs
+        | otherwise           = vw              $ scanGeneral cp ws $ w ++ cs
 
     -- ----------------------  begin with "^"
 
@@ -203,7 +208,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
     hat cs@(c : _) | isGeneral c     = localToken cs D.LocalSymbol
     hat _                            = Msg.adlib "local"
 
-    localToken cs k                  = let (cs', w) = nextCode cs
+    localToken cs k                  = let (cs', w) = nextGeneral cs
                                        in u cs' $ D.TLocal cp (k w) (-1) []
 
     -- ----------------------  begin with "|"
@@ -246,7 +251,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = r' where
                             Just w   -> D.TTextKey cp w
                             Nothing  -> D.TTextUnk cp s
 
-charCodes :: String -> Maybe [Int]
+charCodes :: InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
@@ -259,8 +264,8 @@ interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start int cp r wh
     gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
 
     int ""                           = Right r
-    int (c:cs)    | isSpace c        = v         $ scanSpace  cp cs
-                  | isTerm c         = vw        $ scanTermP  cp ws cs
+    int (c:cs)    | isSpace c        = v         $ scanSpace    cp cs
+                  | isTerm c         = vw        $ scanTermPath cp ws cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs    $ D.TTextRaw cp $ rv w
@@ -270,73 +275,94 @@ interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start int cp r wh
     word cs w                        = u cs      $ D.TTextRaw cp $ rv w
 
 
--- ----------------------  Scanner
+-- ----------------------  Next
 
-type Next   a = String -> (String, a)
-type AbNext a = String -> B.Ab (String, a)
-type Scan     = B.CodePt -> String -> B.Ab (String, D.Token)
-type ScanW    = B.CodePt -> B.WordTable -> String -> B.Ab (B.WordTable, String, D.Token)
+type Next   a = InputText -> (InputText, a)
+type AbNext a = InputText -> B.Ab (InputText, a)
 
 rv :: B.Map [a]
 rv = reverse
 
-scan :: TokenRoll -> B.Ab (String, D.Token) -> B.Ab TokenRoll
-scan r (Right (cs, tok)) = Right $ B.codeUpdate cs tok r
-scan _ (Left message)    = Left message
+-- | Get next spaces.
+nextSpace :: Next Int
+nextSpace = loop 0 where
+    loop n (c:cs) | isSpace c   = loop (n + 1) cs
+    loop n cs                   = (cs, n)
 
-scanW :: TokenRoll -> B.Ab (B.WordTable, String, D.Token) -> B.Ab TokenRoll
-scanW r (Right (ws, cs, tok)) = Right $ B.codeUpdateWords ws cs tok r
-scanW _ (Left message)        = Left message
-
-nextCode :: Next String
-nextCode = loop "" where
+-- | Get next general sign.
+nextGeneral :: Next String
+nextGeneral = loop "" where
     loop w (c:cs) | isGeneral c   = loop (c:w) cs
     loop w cs                     = (cs, rv w)
 
+-- | Get next double-quoted text.
 nextQQ :: AbNext String
 nextQQ = loop "" where
     loop w (c:cs) | isQQ c        =  Right (cs, rv w)
                   | otherwise     =  loop (c:w) cs
     loop _ _                      =  Msg.quotNotEnd
 
-scanSpace :: Scan
-scanSpace cp = loop 1 where
-    loop n (c:cs) | isSpace c     =  loop (n + 1) cs
-    loop n cs                     =  Right (cs, D.TSpace cp n)
 
-scanCode :: ScanW
-scanCode cp ws cs = let (cs', w) = nextCode cs
-                    in case Map.lookup w ws of
-                         Just w' -> Right (ws, cs', D.TTextRaw cp w')
-                         Nothing -> let ws' = Map.insert w w ws
-                                    in Right (ws', cs', D.TTextRaw cp w)
+-- ----------------------  Scanner
+
+type Scan  = B.CodePt -> InputText -> B.Ab (InputText, D.Token)
+type ScanW = B.CodePt -> B.WordTable -> InputText -> B.Ab (B.WordTable, InputText, D.Token)
+
+scan :: TokenRoll -> B.Ab (InputText, D.Token) -> B.Ab TokenRoll
+scan r (Right (cs, tok)) = Right $ B.codeUpdate cs tok r
+scan _ (Left message)    = Left message
+
+-- Scan with word table.
+scanW :: TokenRoll -> B.Ab (B.WordTable, InputText, D.Token) -> B.Ab TokenRoll
+scanW r (Right (wtab, cs, tok))  = Right $ B.codeUpdateWords wtab cs tok r
+scanW _ (Left message)           = Left message
+
+scanSpace :: Scan
+scanSpace cp cs =
+    let (cs', n) = nextSpace cs
+    in Right (cs', D.TSpace cp $ n + 1)
+
+scanGeneral :: ScanW
+scanGeneral cp wtab cs =
+    let (cs', w) = nextGeneral cs
+    in case Map.lookup w wtab of
+         Just w' -> Right (wtab, cs', D.TTextRaw cp w')
+         Nothing -> let wtab' = Map.insert w w wtab
+                    in Right (wtab', cs', D.TTextRaw cp w)
 
 scanQ :: ScanW
-scanQ cp ws cs = let (cs', w) = nextCode cs
-                 in case Map.lookup w ws of
-                      Just w' -> Right (ws, cs', D.TTextQ cp w')
-                      Nothing -> let ws' = Map.insert w w ws
-                                 in Right (ws', cs', D.TTextQ cp w)
+scanQ cp wtab cs =
+    let (cs', w) = nextGeneral cs
+    in case Map.lookup w wtab of
+         Just w' -> Right (wtab, cs', D.TTextQ cp w')
+         Nothing -> let wtab' = Map.insert w w wtab
+                    in Right (wtab', cs', D.TTextQ cp w)
 
+-- | Scan double-quoted text.
 scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', D.TTextQQ cp w)
 
+-- | Scan signed term name
 scanTermSign :: Ordering -> ScanW
 scanTermSign = scanTerm D.TermTypePath
 
-scanTermP, scanTermQ :: ScanW
-scanTermP = scanTerm D.TermTypePath   EQ
+-- | Scan term name
+scanTermPath :: ScanW
+scanTermPath = scanTerm D.TermTypePath EQ
+
+-- | Scan quoted term
+scanTermQ :: ScanW
 scanTermQ = scanTerm D.TermTypeQuoted EQ
 
 scanTerm :: D.TermType -> Ordering -> ScanW
-scanTerm q sign cp ws = word [] where
+scanTerm q sign cp wtab = word [] where
     word ns (c:cs)
-        | c == '='     = let (cs', w) = nextCode (c:cs)
+        | c == '='     = let (cs', w) = nextGeneral (c:cs)
                              n  = B.codeNumber $ B.codePtSource cp
                              w' = show n ++ w
                          in term (w' : ns) cs'
-        | isGeneral c  = let (cs', w) = nextCode (c:cs)
+        | isGeneral c  = let (cs', w) = nextGeneral (c:cs)
                          in term (w : ns) cs'
         | isQQ c       = do (cs', w) <- nextQQ cs
                             term (w : ns) cs'
@@ -344,21 +370,18 @@ scanTerm q sign cp ws = word [] where
 
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == D.TermTypePath
-                       = case Map.lookup n ws of
-                           Just n' -> Right (ws, cs, D.TTermN cp sign n')
-                           Nothing -> let ws' = Map.insert n n ws
-                                      in Right (ws', cs, D.TTermN cp sign n)
-    term ns cs         = Right (ws, cs, D.TTerm cp q $ rv ns)
+                       = case Map.lookup n wtab of
+                           Just n' -> Right (wtab, cs, D.TTermN cp sign n')
+                           Nothing -> let wtab' = Map.insert n n wtab
+                                      in Right (wtab', cs, D.TTermN cp sign n)
+    term ns cs         = Right (wtab, cs, D.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan
-scanSlot n cp cs = let (cs', w) = nextCode cs
+scanSlot n cp cs = let (cs', w) = nextGeneral cs
                    in Right (cs', D.TSlot cp n w)
 
 
 -- ----------------------  Char category
-
---  ( ) [ ] { } | : " ' # /
---  O C O C O C S S Q Q H T
 
 -- Punctuations
 isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isSpace, isGeneral :: B.Pred Char
@@ -388,6 +411,7 @@ isFigure c   = Ch.isDigit c
 
 isClock :: B.Pred Char
 isClock c = Ch.isDigit c || c `elem` ".:'+-"
+
 
 -- ------------------------------------------------------------------
 -- $TokenType
