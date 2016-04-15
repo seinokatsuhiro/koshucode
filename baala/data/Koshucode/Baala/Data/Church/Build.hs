@@ -136,7 +136,7 @@ isName (c:_)  = isNameFirst c
 isName _      = False
 
 isNameFirst :: B.Pred Char
-isNameFirst c = case B.generalCategoryGroup c of
+isNameFirst c = case B.majorGeneralCategory c of
                   B.UnicodeLetter     ->  True
                   B.UnicodeMark       ->  True
                   B.UnicodeSymbol     ->  True

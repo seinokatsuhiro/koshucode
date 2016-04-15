@@ -347,7 +347,7 @@ copCharGroup1 = op where
     op xs = typeUnmatch xs
 
 charGroup :: Char -> String
-charGroup = B.generalCategoryName . B.generalCategoryGroup
+charGroup = B.generalCategoryName . B.majorGeneralCategory
 
 
 -- ----------------------  base-part / dir-part

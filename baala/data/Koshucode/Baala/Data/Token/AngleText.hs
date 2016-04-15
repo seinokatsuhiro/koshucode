@@ -64,7 +64,7 @@ angleQuote = open . loop where
 angleSplit :: String -> Maybe (String, String)
 angleSplit [] = Nothing
 angleSplit (c : cs)
-    = case B.generalCategoryGroup c of
+    = case B.majorGeneralCategory c of
         B.UnicodePunctuation -> punct c
         B.UnicodeOther       -> other c
         _                    -> Nothing

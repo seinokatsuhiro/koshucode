@@ -3,8 +3,9 @@
 -- | Unicode general categories.
 
 module Koshucode.Baala.Base.Text.Unicode
-  ( GeneralCategoryGroup (..),
-    generalCategoryGroup,
+  ( MajorGeneralCategory (..),
+    majorGeneralCategory,
+    toMajorGeneralCategory,
     generalCategoryName,
     generalCategoryLetter,
     generalCategoryMajorLetter,
@@ -14,7 +15,7 @@ module Koshucode.Baala.Base.Text.Unicode
 import qualified Data.Char as Ch
 
 -- | Major category of the Unicode general categories.
-data GeneralCategoryGroup
+data MajorGeneralCategory
     = UnicodeLetter          -- ^ Lu Ll Lt Lm Lo
     | UnicodeMark            -- ^ Mn Mc Me
     | UnicodeNumber          -- ^ Nd Nl No
@@ -25,47 +26,47 @@ data GeneralCategoryGroup
       deriving (Show, Eq, Ord, Bounded)
 
 -- | Major general category of character.
-generalCategoryGroup :: Char -> GeneralCategoryGroup
-generalCategoryGroup = toMajorCategory . Ch.generalCategory
+majorGeneralCategory :: Char -> MajorGeneralCategory
+majorGeneralCategory = toMajorGeneralCategory . Ch.generalCategory
 
 -- | Convert general category to major category.
-toMajorCategory :: Ch.GeneralCategory -> GeneralCategoryGroup
-toMajorCategory Ch.UppercaseLetter        = UnicodeLetter
-toMajorCategory Ch.LowercaseLetter        = UnicodeLetter
-toMajorCategory Ch.TitlecaseLetter        = UnicodeLetter
-toMajorCategory Ch.ModifierLetter         = UnicodeLetter
-toMajorCategory Ch.OtherLetter            = UnicodeLetter
+toMajorGeneralCategory :: Ch.GeneralCategory -> MajorGeneralCategory
+toMajorGeneralCategory Ch.UppercaseLetter        = UnicodeLetter
+toMajorGeneralCategory Ch.LowercaseLetter        = UnicodeLetter
+toMajorGeneralCategory Ch.TitlecaseLetter        = UnicodeLetter
+toMajorGeneralCategory Ch.ModifierLetter         = UnicodeLetter
+toMajorGeneralCategory Ch.OtherLetter            = UnicodeLetter
 
-toMajorCategory Ch.NonSpacingMark         = UnicodeMark
-toMajorCategory Ch.SpacingCombiningMark   = UnicodeMark
-toMajorCategory Ch.EnclosingMark          = UnicodeMark
+toMajorGeneralCategory Ch.NonSpacingMark         = UnicodeMark
+toMajorGeneralCategory Ch.SpacingCombiningMark   = UnicodeMark
+toMajorGeneralCategory Ch.EnclosingMark          = UnicodeMark
 
-toMajorCategory Ch.DecimalNumber          = UnicodeNumber
-toMajorCategory Ch.LetterNumber           = UnicodeNumber
-toMajorCategory Ch.OtherNumber            = UnicodeNumber
+toMajorGeneralCategory Ch.DecimalNumber          = UnicodeNumber
+toMajorGeneralCategory Ch.LetterNumber           = UnicodeNumber
+toMajorGeneralCategory Ch.OtherNumber            = UnicodeNumber
 
-toMajorCategory Ch.ConnectorPunctuation   = UnicodePunctuation
-toMajorCategory Ch.DashPunctuation        = UnicodePunctuation
-toMajorCategory Ch.OpenPunctuation        = UnicodePunctuation
-toMajorCategory Ch.ClosePunctuation       = UnicodePunctuation
-toMajorCategory Ch.InitialQuote           = UnicodePunctuation
-toMajorCategory Ch.FinalQuote             = UnicodePunctuation
-toMajorCategory Ch.OtherPunctuation       = UnicodePunctuation
+toMajorGeneralCategory Ch.ConnectorPunctuation   = UnicodePunctuation
+toMajorGeneralCategory Ch.DashPunctuation        = UnicodePunctuation
+toMajorGeneralCategory Ch.OpenPunctuation        = UnicodePunctuation
+toMajorGeneralCategory Ch.ClosePunctuation       = UnicodePunctuation
+toMajorGeneralCategory Ch.InitialQuote           = UnicodePunctuation
+toMajorGeneralCategory Ch.FinalQuote             = UnicodePunctuation
+toMajorGeneralCategory Ch.OtherPunctuation       = UnicodePunctuation
 
-toMajorCategory Ch.MathSymbol             = UnicodeSymbol
-toMajorCategory Ch.CurrencySymbol         = UnicodeSymbol
-toMajorCategory Ch.ModifierSymbol         = UnicodeSymbol
-toMajorCategory Ch.OtherSymbol            = UnicodeSymbol
+toMajorGeneralCategory Ch.MathSymbol             = UnicodeSymbol
+toMajorGeneralCategory Ch.CurrencySymbol         = UnicodeSymbol
+toMajorGeneralCategory Ch.ModifierSymbol         = UnicodeSymbol
+toMajorGeneralCategory Ch.OtherSymbol            = UnicodeSymbol
 
-toMajorCategory Ch.Space                  = UnicodeSeperator
-toMajorCategory Ch.LineSeparator          = UnicodeSeperator
-toMajorCategory Ch.ParagraphSeparator     = UnicodeSeperator
+toMajorGeneralCategory Ch.Space                  = UnicodeSeperator
+toMajorGeneralCategory Ch.LineSeparator          = UnicodeSeperator
+toMajorGeneralCategory Ch.ParagraphSeparator     = UnicodeSeperator
 
-toMajorCategory Ch.Control                = UnicodeOther
-toMajorCategory Ch.Format                 = UnicodeOther
-toMajorCategory Ch.Surrogate              = UnicodeOther
-toMajorCategory Ch.PrivateUse             = UnicodeOther
-toMajorCategory Ch.NotAssigned            = UnicodeOther
+toMajorGeneralCategory Ch.Control                = UnicodeOther
+toMajorGeneralCategory Ch.Format                 = UnicodeOther
+toMajorGeneralCategory Ch.Surrogate              = UnicodeOther
+toMajorGeneralCategory Ch.PrivateUse             = UnicodeOther
+toMajorGeneralCategory Ch.NotAssigned            = UnicodeOther
 
 
 -- --------------------------------------------  Name
@@ -73,7 +74,7 @@ toMajorCategory Ch.NotAssigned            = UnicodeOther
 -- | Name of general category.
 --   This function returns one of @letter@, @mark@,
 --   @number@, @punct@, @symbol@, @sep@, or @other@.
-generalCategoryName :: GeneralCategoryGroup -> String
+generalCategoryName :: MajorGeneralCategory -> String
 generalCategoryName UnicodeLetter         = "letter"
 generalCategoryName UnicodeMark           = "mark"
 generalCategoryName UnicodeNumber         = "number"
@@ -85,14 +86,14 @@ generalCategoryName UnicodeOther          = "other"
 -- | Major-minor category symbols like @Lu@.
 generalCategoryLetter :: Ch.GeneralCategory -> String
 generalCategoryLetter cat =
-    [ generalCategoryMajorLetter $ toMajorCategory cat
+    [ generalCategoryMajorLetter $ toMajorGeneralCategory cat
     , generalCategoryMinorLetter cat]
 
 -- | One-letter representation of general category.
 --   This function returns one of @L@ (letter),
 --   @M@ (mark), @N@ (number), @P@ (punctuation),
 --   @S@ (symbol), @Z@ (seperator), or @C@ (other).
-generalCategoryMajorLetter :: GeneralCategoryGroup -> Char
+generalCategoryMajorLetter :: MajorGeneralCategory -> Char
 generalCategoryMajorLetter UnicodeLetter             = 'L'
 generalCategoryMajorLetter UnicodeMark               = 'M'
 generalCategoryMajorLetter UnicodeNumber             = 'N'
