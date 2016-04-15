@@ -1,14 +1,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Unicode general categories.
+
 module Koshucode.Baala.Base.Text.Unicode
   ( GeneralCategoryGroup (..),
-    generalCategoryLetter,
     generalCategoryName,
+    generalCategoryLetter,
     generalCategoryGroup,
   ) where
 
-import Data.Char
+import qualified Data.Char as Ch
 
+-- | Major category of the Unicode general categories.
 data GeneralCategoryGroup
     = UnicodeLetter          -- ^ Lu Ll Lt Lm Lo
     | UnicodeMark            -- ^ Mn Mc Me
@@ -19,6 +22,22 @@ data GeneralCategoryGroup
     | UnicodeOther           -- ^ Cc Cf Cs Co Cn
       deriving (Show, Eq, Ord, Bounded)
 
+-- | Name of general category.
+--   This function returns one of @letter@, @mark@,
+--   @number@, @punct@, @symbol@, @sep@, or @other@.
+generalCategoryName :: GeneralCategoryGroup -> String
+generalCategoryName UnicodeLetter         = "letter"
+generalCategoryName UnicodeMark           = "mark"
+generalCategoryName UnicodeNumber         = "number"
+generalCategoryName UnicodePunctuation    = "punct"
+generalCategoryName UnicodeSymbol         = "symbol"
+generalCategoryName UnicodeSeperator      = "sep"
+generalCategoryName UnicodeOther          = "other"
+
+-- | One-letter representation of general category.
+--   This function returns one of @L@ (letter),
+--   @M@ (mark), @N@ (number), @P@ (punctuation),
+--   @S@ (symbol), @Z@ (seperator), or @C@ (other).
 generalCategoryLetter :: GeneralCategoryGroup -> Char
 generalCategoryLetter UnicodeLetter       = 'L'
 generalCategoryLetter UnicodeMark         = 'M'
@@ -28,52 +47,44 @@ generalCategoryLetter UnicodeSymbol       = 'S'
 generalCategoryLetter UnicodeSeperator    = 'Z'
 generalCategoryLetter UnicodeOther        = 'C'
 
-generalCategoryName   :: GeneralCategoryGroup -> String
-generalCategoryName   UnicodeLetter       = "letter"
-generalCategoryName   UnicodeMark         = "mark"
-generalCategoryName   UnicodeNumber       = "number"
-generalCategoryName   UnicodePunctuation  = "punct"
-generalCategoryName   UnicodeSymbol       = "symbol"
-generalCategoryName   UnicodeSeperator    = "seperator"
-generalCategoryName   UnicodeOther        = "other"
-
+-- | Major general category of character.
 generalCategoryGroup :: Char -> GeneralCategoryGroup
 generalCategoryGroup c =
-    case generalCategory c of
-      UppercaseLetter        -> UnicodeLetter
-      LowercaseLetter        -> UnicodeLetter
-      TitlecaseLetter        -> UnicodeLetter
-      ModifierLetter         -> UnicodeLetter
-      OtherLetter            -> UnicodeLetter
+    case Ch.generalCategory c of
+      Ch.UppercaseLetter        -> UnicodeLetter
+      Ch.LowercaseLetter        -> UnicodeLetter
+      Ch.TitlecaseLetter        -> UnicodeLetter
+      Ch.ModifierLetter         -> UnicodeLetter
+      Ch.OtherLetter            -> UnicodeLetter
 
-      NonSpacingMark         -> UnicodeMark
-      SpacingCombiningMark   -> UnicodeMark
-      EnclosingMark          -> UnicodeMark
+      Ch.NonSpacingMark         -> UnicodeMark
+      Ch.SpacingCombiningMark   -> UnicodeMark
+      Ch.EnclosingMark          -> UnicodeMark
 
-      DecimalNumber          -> UnicodeNumber
-      LetterNumber           -> UnicodeNumber
-      OtherNumber            -> UnicodeNumber
+      Ch.DecimalNumber          -> UnicodeNumber
+      Ch.LetterNumber           -> UnicodeNumber
+      Ch.OtherNumber            -> UnicodeNumber
 
-      ConnectorPunctuation   -> UnicodePunctuation
-      DashPunctuation        -> UnicodePunctuation
-      OpenPunctuation        -> UnicodePunctuation
-      ClosePunctuation       -> UnicodePunctuation
-      InitialQuote           -> UnicodePunctuation
-      FinalQuote             -> UnicodePunctuation
-      OtherPunctuation       -> UnicodePunctuation
+      Ch.ConnectorPunctuation   -> UnicodePunctuation
+      Ch.DashPunctuation        -> UnicodePunctuation
+      Ch.OpenPunctuation        -> UnicodePunctuation
+      Ch.ClosePunctuation       -> UnicodePunctuation
+      Ch.InitialQuote           -> UnicodePunctuation
+      Ch.FinalQuote             -> UnicodePunctuation
+      Ch.OtherPunctuation       -> UnicodePunctuation
 
-      MathSymbol             -> UnicodeSymbol
-      CurrencySymbol         -> UnicodeSymbol
-      ModifierSymbol         -> UnicodeSymbol
-      OtherSymbol            -> UnicodeSymbol
+      Ch.MathSymbol             -> UnicodeSymbol
+      Ch.CurrencySymbol         -> UnicodeSymbol
+      Ch.ModifierSymbol         -> UnicodeSymbol
+      Ch.OtherSymbol            -> UnicodeSymbol
 
-      Space                  -> UnicodeSeperator
-      LineSeparator          -> UnicodeSeperator
-      ParagraphSeparator     -> UnicodeSeperator
+      Ch.Space                  -> UnicodeSeperator
+      Ch.LineSeparator          -> UnicodeSeperator
+      Ch.ParagraphSeparator     -> UnicodeSeperator
 
-      Control                -> UnicodeOther
-      Format                 -> UnicodeOther
-      Surrogate              -> UnicodeOther
-      PrivateUse             -> UnicodeOther
-      NotAssigned            -> UnicodeOther
+      Ch.Control                -> UnicodeOther
+      Ch.Format                 -> UnicodeOther
+      Ch.Surrogate              -> UnicodeOther
+      Ch.PrivateUse             -> UnicodeOther
+      Ch.NotAssigned            -> UnicodeOther
 
