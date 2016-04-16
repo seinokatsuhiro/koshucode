@@ -4,8 +4,8 @@ module Koshucode.Baala.Data.Token.Message
   ( -- * Abortable
     abToken,
     -- * Message
+    expOrdSym,
     forbiddenInput,
-    forbiddenTerm,
     quotNotEnd,
     unexpSect,
     unkAngleText,
@@ -16,13 +16,13 @@ import qualified Koshucode.Baala.Base       as B
 abToken :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abToken = B.abortable "token"
 
+-- | Expect ordinary symbol
+expOrdSym :: B.Ab a
+expOrdSym = Left $ B.abortBecause "Expect ordinary symbol"
+
 -- | Forbidden input
 forbiddenInput :: String -> B.Ab a
 forbiddenInput = Left . B.abortLine "Forbidden input"
-
--- | Forbidden term name
-forbiddenTerm :: B.Ab a
-forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
 
 -- | Quotation not end in line
 quotNotEnd :: B.Ab a
