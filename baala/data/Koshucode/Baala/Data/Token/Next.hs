@@ -13,6 +13,7 @@ module Koshucode.Baala.Data.Token.Next
     -- * Symbol
     Symbol (..),
     nextSymbol,
+    nextSymbolOrdinary,
     isSymbol,
   ) where
 
@@ -185,4 +186,15 @@ nextSymbol = symbolGon "" where
     symbolUnk w (c:cs)
         | isSymbol c      = symbolUnk (c:w) cs
     symbolUnk w cs        = done w cs SymbolUnknown
+
+nextSymbolOrdinary :: AbNext String
+nextSymbolOrdinary cs =
+    case nextSymbol cs of
+      (cs', sym) -> do w <- getSymbolOrdinary sym
+                       Right (cs', w)
+
+getSymbolOrdinary :: Symbol -> B.Ab String
+getSymbolOrdinary (SymbolCommon   w)  = Right w
+getSymbolOrdinary (SymbolOrdinary w)  = Right w
+getSymbolOrdinary _                   = Msg.expOrdSym
 

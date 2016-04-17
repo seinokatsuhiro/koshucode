@@ -321,10 +321,9 @@ scanQQ cp cs = do (cs', w) <- D.nextQQ cs
 
 -- | Scan slot name, like @aaa.
 scanSlot :: Int -> Scan
-scanSlot n cp cs = case D.nextSymbol cs of
-                     (cs', D.SymbolCommon   w) -> Right (cs', D.TSlot cp n w)
-                     (cs', D.SymbolOrdinary w) -> Right (cs', D.TSlot cp n w)
-                     _ -> Msg.expOrdSym
+scanSlot n cp cs =
+    do (cs', w) <- D.nextSymbolOrdinary cs
+       Right (cs', D.TSlot cp n w)
 
 -- | Scan signed term name
 scanTermSign :: Ordering -> ScanW
@@ -341,14 +340,10 @@ scanTermQ = scanTerm D.TermTypeQuoted EQ
 scanTerm :: D.TermType -> Ordering -> ScanW
 scanTerm q sign cp wtab = word [] where
     word ns (c:cs)
-        | c == '='      = case D.nextSymbol cs of
-                            (cs', D.SymbolCommon   w) -> nterm ns w cs'
-                            (cs', D.SymbolOrdinary w) -> nterm ns w cs'
-                            _ -> Msg.expOrdSym
-        | D.isSymbol c  = case D.nextSymbol (c:cs) of
-                            (cs', D.SymbolCommon   w) -> term (w : ns) cs'
-                            (cs', D.SymbolOrdinary w) -> term (w : ns) cs'
-                            _ -> Msg.expOrdSym
+        | c == '='      = do (cs', w) <- D.nextSymbolOrdinary cs
+                             nterm ns w cs'
+        | D.isSymbol c  = do (cs', w) <- D.nextSymbolOrdinary (c:cs)
+                             term (w : ns) cs'
         | isQQ c        = do (cs', w) <- D.nextQQ cs
                              term (w : ns) cs'
     word _ _            = Msg.expOrdSym
