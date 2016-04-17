@@ -67,6 +67,7 @@ library
         Koshucode.Baala.Data.Token
         Koshucode.Baala.Data.Token.AngleText
         Koshucode.Baala.Data.Token.Message
+        Koshucode.Baala.Data.Token.Next
         Koshucode.Baala.Data.Token.Short
         Koshucode.Baala.Data.Token.Term
         Koshucode.Baala.Data.Token.Token
