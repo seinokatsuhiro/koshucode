@@ -8,18 +8,17 @@ module Koshucode.Baala.Data.Token.Next
     Next, AbNext,
     nextSpace,
     nextQQ,
-    nextGeneral,
 
     -- * Symbol
     Symbol (..),
     nextSymbol,
     nextSymbolOrdinary,
     isSymbol,
+    isCharGeneral,
   ) where
 
 import qualified Data.Char                            as Ch
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Token.Short     as D
 import qualified Koshucode.Baala.Data.Token.Message   as Msg
 
 -- | Input data type.
@@ -32,10 +31,9 @@ type Next a = InputText -> (InputText, a)
 type AbNext a = InputText -> B.Ab (InputText, a)
 
 -- Punctuations
-isQQ, isSpace, isGeneral :: B.Pred Char
+isQQ, isSpace :: B.Pred Char
 isQQ       = (== '"')
 isSpace    = Ch.isSpace
-isGeneral  = D.isGeneralChar
 
 -- | Get next spaces.
 nextSpace :: Next Int
@@ -50,12 +48,6 @@ nextQQ = loop "" where
                   | otherwise     = loop (c:w) cs
     loop _ _                      = Msg.quotNotEnd
 
--- | Get next general sign.
-nextGeneral :: Next String
-nextGeneral = loop "" where
-    loop w (c:cs) | isGeneral c   = loop (c:w) cs
-    loop w cs                     = (cs, reverse w)
-
 
 -- --------------------------------------------  Symbol
 
@@ -68,58 +60,53 @@ data Symbol
     | SymbolUnknown   String           -- ^ Unknown symbol
       deriving (Show, Eq, Ord)
 
---  Classification of character classes
+--  Classification of character classes.
+--  number' means Unicode number except for "0-9".
 --
 --    Char class   Symbol class
 --    ------------ ------------
 --    "0-9"        (G) (O) (N)
 --    "-"          (G) (O) (N)
---    letter       (G)  O 
---    mark         (G)  O 
---    number'      (G)  O 
---    "_"          (G)  O 
+--    letter       (G)  O
+--    mark         (G)  O
+--    number'      (G)  O
+--    "_"          (G)  O
 --    "+"          (G)      N
---    "*=<>"        G   
---    ".:#"                 N
+--    "*=<>~"       G   
+--    ".#"                  N
 
-isSymbolGon :: Char -> Bool
-isSymbolGon c = (c >= '0' && c <= '9') || c == '-'
+isSymbolGon, isSymbolDigit, isSymbolHyphen :: Char -> Bool
+isSymbolGon    c  = isSymbolDigit c || isSymbolHyphen c
+isSymbolDigit  c  = c >= '0' && c <= '9'
+isSymbolHyphen c  = c == '-'
 
 isSymbolGo :: Char -> Bool
 isSymbolGo c =
     case B.majorGeneralCategory c of
       B.UnicodeLetter    -> True
       B.UnicodeMark      -> True
-      B.UnicodeNumber    -> True
-      _                  -> c `elem` "_"
+      B.UnicodeNumber    -> True      -- include isSymbolDigit
+      _                  -> c == '_'
 
-isSymbolGo' :: Char -> Bool
-isSymbolGo' c = isSymbolGo c || isSymbolGon c
+isSymbolGn, isSymbolG, isSymbolN :: Char -> Bool
+isSymbolGn c   = c == '+'
+isSymbolG  c   = c `elem` "*=<>~"
+isSymbolN  c   = c `elem` ".#"
 
-isSymbolO' :: Char -> Bool
-isSymbolO' = isSymbolGo'
-
-isSymbolGn :: Char -> Bool
-isSymbolGn c = c == '+'
-
-isSymbolGn' :: Char -> Bool
-isSymbolGn' c = isSymbolGon c || isSymbolGn c
-
-isSymbolG :: Char -> Bool
-isSymbolG c = c `elem` "*=<>"
-
-isSymbolG' :: Char -> Bool
-isSymbolG' c = isSymbolGo c || isSymbolGn c || isSymbolG c
-
-isSymbolN :: Char -> Bool
-isSymbolN c = c `elem` ".#"
-
-isSymbolN' :: Char -> Bool
-isSymbolN' c = isSymbolGon c || isSymbolGn c || isSymbolN c
+isSymbolGo', isSymbolO', isSymbolGn', isSymbolG', isSymbolN' :: Char -> Bool
+isSymbolGo' c  = isSymbolGo  c || isSymbolHyphen c
+isSymbolO'     = isSymbolGo'
+isSymbolGn' c  = isSymbolGon c || isSymbolGn c
+isSymbolG'  c  = isSymbolGo' c || isSymbolGn c || isSymbolG c
+isSymbolN'  c  = isSymbolGn' c || isSymbolN  c
 
 -- | Test character is symbol component.
 isSymbol :: Char -> Bool
 isSymbol c = isSymbolG' c || isSymbolO' c || isSymbolN' c
+
+-- | Test character is general symbol component.
+isCharGeneral :: Char -> Bool
+isCharGeneral = isSymbolG'
 
 --  Partial order of symbol classes
 --

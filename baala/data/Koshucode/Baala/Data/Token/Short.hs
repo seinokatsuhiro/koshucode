@@ -13,13 +13,12 @@ module Koshucode.Baala.Data.Token.Short
   
     -- * Shortener
     shortText,
-    isGeneralText, isGeneralChar,
-    isOrdinaryChar,
   ) where
 
 import qualified Data.List                             as L
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data.Token.AngleText  as D
+import qualified Koshucode.Baala.Data.Token.Next       as D
 
 
 -- ----------------------  Data type
@@ -73,25 +72,5 @@ shortText = loop . reverse . B.sortWith len where
 
 -- | Test string is general sign.
 isGeneralText :: B.Pred String
-isGeneralText = all isGeneralChar
-
--- | Test char is general.
-isGeneralChar :: B.Pred Char
-isGeneralChar c =
-    case B.majorGeneralCategory c of
-      B.UnicodeLetter       -> True
-      B.UnicodeMark         -> True
-      B.UnicodeNumber       -> True
-      B.UnicodeSymbol       -> c `elem` "+<=>~"
-      B.UnicodePunctuation  -> c `elem` "-_.*#"
-      _                     -> False
-
--- | Test char is ordinary.
-isOrdinaryChar :: B.Pred Char
-isOrdinaryChar c =
-    case B.majorGeneralCategory c of
-      B.UnicodeLetter       -> True
-      B.UnicodeMark         -> True
-      B.UnicodeNumber       -> True
-      _                     -> c `elem` "-_"
+isGeneralText = all D.isCharGeneral
 
