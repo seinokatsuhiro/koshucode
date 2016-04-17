@@ -72,5 +72,5 @@ shortText = loop . reverse . B.sortWith len where
 
 -- | Test string is general sign.
 isGeneralText :: B.Pred String
-isGeneralText = all D.isCharGeneral
+isGeneralText = all D.isGeneral
 

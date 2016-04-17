@@ -201,7 +201,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     hat cs@(c : _) | D.isSymbol c    = localToken cs D.LocalSymbol
     hat _                            = Msg.adlib "local"
 
-    localToken cs k                  = do (cs', w) <- D.nextSymbolOrdinary cs
+    localToken cs k                  = do (cs', w) <- D.nextSymbolPlain cs
                                           u cs' $ D.TLocal cp (k w) (-1) []
 
     -- ----------------------  begin with "|"
@@ -300,7 +300,7 @@ scanSymbol cp wtab cs =
          D.SymbolShort pre w  -> Right (wtab, cs', D.TShort cp pre w)
          D.SymbolCommon w     -> symbolToken D.TTextRaw w cp wtab cs'
          D.SymbolGeneral w    -> symbolToken D.TTextRaw w cp wtab cs'
-         D.SymbolOrdinary w   -> symbolToken D.TTextRaw w cp wtab cs'
+         D.SymbolPlain w      -> symbolToken D.TTextRaw w cp wtab cs'
          D.SymbolNumeric w    -> symbolToken D.TTextRaw w cp wtab cs'
          D.SymbolUnknown w    -> Msg.forbiddenInput w
 
@@ -311,7 +311,7 @@ scanSpace cp cs =
 
 scanQ :: ScanW
 scanQ cp wtab cs =
-    do (cs', w) <- D.nextSymbolOrdinary cs
+    do (cs', w) <- D.nextSymbolPlain cs
        symbolToken D.TTextQ w cp wtab cs'
 
 -- | Scan double-quoted text.
@@ -322,7 +322,7 @@ scanQQ cp cs = do (cs', w) <- D.nextQQ cs
 -- | Scan slot name, like @aaa.
 scanSlot :: Int -> Scan
 scanSlot n cp cs =
-    do (cs', w) <- D.nextSymbolOrdinary cs
+    do (cs', w) <- D.nextSymbolPlain cs
        Right (cs', D.TSlot cp n w)
 
 -- | Scan signed term name
@@ -340,9 +340,9 @@ scanTermQ = scanTerm D.TermTypeQuoted EQ
 scanTerm :: D.TermType -> Ordering -> ScanW
 scanTerm q sign cp wtab = word [] where
     word ns (c:cs)
-        | c == '='      = do (cs', w) <- D.nextSymbolOrdinary cs
+        | c == '='      = do (cs', w) <- D.nextSymbolPlain cs
                              nterm ns w cs'
-        | D.isSymbol c  = do (cs', w) <- D.nextSymbolOrdinary (c:cs)
+        | D.isSymbol c  = do (cs', w) <- D.nextSymbolPlain (c:cs)
                              term (w : ns) cs'
         | isQQ c        = do (cs', w) <- D.nextQQ cs
                              term (w : ns) cs'

@@ -11,10 +11,8 @@ module Koshucode.Baala.Data.Token.Next
 
     -- * Symbol
     Symbol (..),
-    nextSymbol,
-    nextSymbolOrdinary,
-    isSymbol,
-    isCharGeneral,
+    nextSymbol, nextSymbolPlain,
+    isSymbol, isGeneral, isPlain, isNumeric,
   ) where
 
 import qualified Data.Char                            as Ch
@@ -54,9 +52,9 @@ nextQQ = loop "" where
 data Symbol
     = SymbolCommon    String           -- ^ General-ordinary-numeric symbol
     | SymbolGeneral   String           -- ^ General symbol
-    | SymbolOrdinary  String           -- ^ Ordinary symbol
+    | SymbolPlain     String           -- ^ Plain symbol
     | SymbolNumeric   String           -- ^ Numeric symbol
-    | SymbolShort     String String    -- ^ Short symbol (Ordinary "." Ordinary)
+    | SymbolShort     String String    -- ^ Short symbol (Plain "." Plain)
     | SymbolUnknown   String           -- ^ Unknown symbol
       deriving (Show, Eq, Ord)
 
@@ -65,54 +63,62 @@ data Symbol
 --
 --    Char class   Symbol class
 --    ------------ ------------
---    "0-9"        (G) (O) (N)
---    "-"          (G) (O) (N)
---    letter       (G)  O
---    mark         (G)  O
---    number'      (G)  O
---    "_"          (G)  O
+--    "0-9"        (G) (P) (N)
+--    "-"          (G) (P) (N)
+--    letter       (G)  P
+--    mark         (G)  P
+--    number'      (G)  P
+--    "_"          (G)  P
 --    "+"          (G)      N
 --    "*=<>~"       G   
 --    ".#"                  N
 
-isSymbolGon, isSymbolDigit, isSymbolHyphen :: Char -> Bool
-isSymbolGon    c  = isSymbolDigit c || isSymbolHyphen c
-isSymbolDigit  c  = c >= '0' && c <= '9'
-isSymbolHyphen c  = c == '-'
+isCharGpn, isCharDigit, isCharHyphen :: Char -> Bool
+isCharGpn    c  = isCharDigit c || isCharHyphen c
+isCharDigit  c  = c >= '0' && c <= '9'
+isCharHyphen c  = c == '-'
 
-isSymbolGo :: Char -> Bool
-isSymbolGo c =
+isCharGp :: Char -> Bool
+isCharGp c =
     case B.majorGeneralCategory c of
       B.UnicodeLetter    -> True
       B.UnicodeMark      -> True
-      B.UnicodeNumber    -> True      -- include isSymbolDigit
+      B.UnicodeNumber    -> True      -- include isCharDigit
       _                  -> c == '_'
 
-isSymbolGn, isSymbolG, isSymbolN :: Char -> Bool
-isSymbolGn c   = c == '+'
-isSymbolG  c   = c `elem` "*=<>~"
-isSymbolN  c   = c `elem` ".#"
+isCharGn, isCharG, isCharN :: Char -> Bool
+isCharGn c   = c == '+'
+isCharG  c   = c `elem` "*=<>~"
+isCharN  c   = c `elem` ".#"
 
-isSymbolGo', isSymbolO', isSymbolGn', isSymbolG', isSymbolN' :: Char -> Bool
-isSymbolGo' c  = isSymbolGo  c || isSymbolHyphen c
-isSymbolO'     = isSymbolGo'
-isSymbolGn' c  = isSymbolGon c || isSymbolGn c
-isSymbolG'  c  = isSymbolGo' c || isSymbolGn c || isSymbolG c
-isSymbolN'  c  = isSymbolGn' c || isSymbolN  c
+isCharGp', isCharP', isCharGn', isCharG', isCharN' :: Char -> Bool
+isCharGp' c  = isCharGp  c || isCharHyphen c
+isCharP'     = isCharGp'
+isCharGn' c  = isCharGpn c || isCharGn c
+isCharG'  c  = isCharGp' c || isCharGn c || isCharG c
+isCharN'  c  = isCharGn' c || isCharN  c
 
--- | Test character is symbol component.
+-- | Test character is a symbol component.
 isSymbol :: Char -> Bool
-isSymbol c = isSymbolG' c || isSymbolO' c || isSymbolN' c
+isSymbol c = isGeneral c || isNumeric c
 
--- | Test character is general symbol component.
-isCharGeneral :: Char -> Bool
-isCharGeneral = isSymbolG'
+-- | Test character is a general-symbol component.
+isGeneral :: Char -> Bool
+isGeneral = isCharG'
+
+-- | Test character is a plain-symbol component.
+isPlain :: Char -> Bool
+isPlain = isCharP'
+
+-- | Test character is a numeric-symbol component.
+isNumeric :: Char -> Bool
+isNumeric = isCharN'
 
 --  Partial order of symbol classes
 --
---      GON
+--      GPN
 --     /   |
---    GO   GN
+--    GP   GN
 --     | / |
 --     G   |
 --     |   N
@@ -121,52 +127,52 @@ isCharGeneral = isSymbolG'
 
 -- | Get next symbol.
 nextSymbol :: Next Symbol
-nextSymbol = symbolGon "" where
+nextSymbol = symbolGpn "" where
 
     done w cs k           = (cs, k $ reverse w)
 
-    -- General and Ordinary and Numeric
-    symbolGon w (c:cs)
-        | isSymbolGon c   = symbolGon (c:w) cs
-        | isSymbolGo  c   = symbolGo  (c:w) cs
-        | isSymbolGn  c   = symbolGn  (c:w) cs
-        | isSymbolG   c   = symbolG   (c:w) cs
-        | isSymbolN   c   = symbolN   (c:w) cs
-        | isSymbol    c   = symbolUnk (c:w) cs
-    symbolGon w cs        = done w cs SymbolCommon
+    -- General and Plain and Numeric
+    symbolGpn w (c:cs)
+        | isCharGpn c     = symbolGpn (c:w) cs
+        | isCharGp  c     = symbolGp  (c:w) cs
+        | isCharGn  c     = symbolGn  (c:w) cs
+        | isCharG   c     = symbolG   (c:w) cs
+        | isCharN   c     = symbolN   (c:w) cs
+        | isSymbol  c     = symbolUnk (c:w) cs
+    symbolGpn w cs        = done w cs SymbolCommon
 
-    -- General and Ordinary
-    symbolGo w (c:cs)
+    -- General and Plain
+    symbolGp w (c:cs)
         | c == '.'        = short (reverse w) "" cs
-        | isSymbolGo' c   = symbolGo  (c:w) cs
-        | isSymbolG   c   = symbolG   (c:w) cs
-        | isSymbol    c   = symbolUnk (c:w) cs
-    symbolGo w cs         = done w cs SymbolOrdinary
+        | isCharGp' c     = symbolGp  (c:w) cs
+        | isCharG   c     = symbolG   (c:w) cs
+        | isSymbol  c     = symbolUnk (c:w) cs
+    symbolGp w cs         = done w cs SymbolPlain
 
-    -- Ordinary "." Ordinary
+    -- Plain "." Plain
     short pre w (c:cs)
-        | isSymbolGo' c   = short pre (c:w) cs
-        | isSymbol    c   = symbolUnk (c:w) cs
+        | isCharGp' c     = short pre (c:w) cs
+        | isSymbol  c     = symbolUnk (c:w) cs
     short pre w cs        = done w cs $ SymbolShort pre
 
     -- General and Numeric
     symbolGn w (c:cs)
-        | isSymbolGn' c   = symbolGn  (c:w) cs
-        | isSymbolG   c   = symbolG   (c:w) cs
-        | isSymbolN   c   = symbolN   (c:w) cs
-        | isSymbol    c   = symbolUnk (c:w) cs
+        | isCharGn' c     = symbolGn  (c:w) cs
+        | isCharG   c     = symbolG   (c:w) cs
+        | isCharN   c     = symbolN   (c:w) cs
+        | isSymbol  c     = symbolUnk (c:w) cs
     symbolGn w cs         = done w cs SymbolNumeric
 
     -- General
     symbolG w (c:cs)
-        | isSymbolG' c    = symbolG   (c:w) cs
-        | isSymbol   c    = symbolUnk (c:w) cs
+        | isCharG' c      = symbolG   (c:w) cs
+        | isSymbol c      = symbolUnk (c:w) cs
     symbolG w cs          = done w cs SymbolGeneral
 
     -- Numeric
     symbolN w (c:cs)
-        | isSymbolN' c    = symbolN   (c:w) cs
-        | isSymbol   c    = symbolUnk (c:w) cs
+        | isCharN' c      = symbolN   (c:w) cs
+        | isSymbol c      = symbolUnk (c:w) cs
     symbolN w cs          = done w cs SymbolNumeric
 
     -- Unknown symbol
@@ -174,14 +180,14 @@ nextSymbol = symbolGon "" where
         | isSymbol c      = symbolUnk (c:w) cs
     symbolUnk w cs        = done w cs SymbolUnknown
 
-nextSymbolOrdinary :: AbNext String
-nextSymbolOrdinary cs =
+nextSymbolPlain :: AbNext String
+nextSymbolPlain cs =
     case nextSymbol cs of
-      (cs', sym) -> do w <- getSymbolOrdinary sym
+      (cs', sym) -> do w <- getSymbolPlain sym
                        Right (cs', w)
 
-getSymbolOrdinary :: Symbol -> B.Ab String
-getSymbolOrdinary (SymbolCommon   w)  = Right w
-getSymbolOrdinary (SymbolOrdinary w)  = Right w
-getSymbolOrdinary _                   = Msg.expOrdSym
+getSymbolPlain :: Symbol -> B.Ab String
+getSymbolPlain (SymbolCommon w)  = Right w
+getSymbolPlain (SymbolPlain  w)  = Right w
+getSymbolPlain _                 = Msg.expOrdSym
 
