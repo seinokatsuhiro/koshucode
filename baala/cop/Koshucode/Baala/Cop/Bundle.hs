@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Cop.List   as Cop
 import qualified Koshucode.Baala.Cop.Logic  as Cop
 import qualified Koshucode.Baala.Cop.Misc   as Cop
 import qualified Koshucode.Baala.Cop.Order  as Cop
+import qualified Koshucode.Baala.Cop.Text   as Cop
 import qualified Koshucode.Baala.Cop.Time   as Cop
 import qualified Koshucode.Baala.Cop.Type   as Cop
 
@@ -24,6 +25,7 @@ baalaCops = concat [ Cop.copsArith
                    , Cop.copsList
                    , Cop.copsMisc
                    , Cop.copsOrder
+                   , Cop.copsText
                    , Cop.copsTime
                    , Cop.copsType ]
 
