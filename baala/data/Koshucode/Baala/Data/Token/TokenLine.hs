@@ -7,7 +7,6 @@
 module Koshucode.Baala.Data.Token.TokenLine
   (
     -- * Library
-    InputText,
     TokenLine,
     tokenLines,
     tokens, toks,
@@ -37,9 +36,6 @@ import qualified Koshucode.Baala.Data.Token.Message   as Msg
 
 -- ----------------------  Tokenizer
 
--- | Input data type
-type InputText = String
-
 -- | Token list on a line.
 type TokenLine = B.CodeLine D.Token
 
@@ -48,20 +44,20 @@ type TokenRoll = B.CodeRoll D.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.CodePiece -> InputText -> B.Ab [D.Token]
+tokens :: B.CodePiece -> D.InputText -> B.Ab [D.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
 
 -- | Abbreviated tokenizer.
-toks :: InputText -> B.Ab [D.Token]
+toks :: D.InputText -> B.Ab [D.Token]
 toks s = tokens (B.codeTextOf s) s
 
 -- | Tokenize text.
-tokenLines :: B.CodePiece -> InputText -> B.Ab [TokenLine]
+tokenLines :: B.CodePiece -> D.InputText -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
 -- Line begins with the equal sign is treated as section delimter.
-start :: (InputText -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
+start :: (D.InputText -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
 start f cp r@B.CodeRoll { B.codeMap    = prev
                         , B.codeInput  = cs0
                         , B.codeOutput = out } = st out cs0 where
@@ -116,13 +112,13 @@ note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
 license :: B.AbMap TokenRoll
 license r@B.CodeRoll { B.codeInputPt = cp } = start (textLicense r) cp r
 
-comment :: TokenRoll -> InputText -> B.Ab TokenRoll
+comment :: TokenRoll -> D.InputText -> B.Ab TokenRoll
 comment r "" = Right r
 comment r cs = Right $ B.codeUpdate "" tok r where
     tok  = D.TComment cp cs
     cp   = B.codeInputPt r
 
-textLicense :: TokenRoll -> InputText -> B.Ab TokenRoll
+textLicense :: TokenRoll -> D.InputText -> B.Ab TokenRoll
 textLicense r "" = Right r
 textLicense r cs = Right $ B.codeUpdate "" tok r where
     tok  = D.TText cp D.TextLicense cs
@@ -245,7 +241,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
                             Just w   -> D.TTextKey cp w
                             Nothing  -> D.TTextUnk cp s
 
-charCodes :: InputText -> Maybe [Int]
+charCodes :: D.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
@@ -271,18 +267,18 @@ interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int cp r 
 
 -- ----------------------  Scanner
 
-type Scan  = B.CodePt -> InputText -> B.Ab (InputText, D.Token)
-type ScanW = B.CodePt -> B.WordTable -> InputText -> B.Ab (B.WordTable, InputText, D.Token)
+type Scan  = B.CodePt -> D.InputText -> B.Ab (D.InputText, D.Token)
+type ScanW = B.CodePt -> B.WordTable -> D.InputText -> B.Ab (B.WordTable, D.InputText, D.Token)
 
 rv :: B.Map [a]
 rv = reverse
 
-scan :: TokenRoll -> B.Ab (InputText, D.Token) -> B.Ab TokenRoll
+scan :: TokenRoll -> B.Ab (D.InputText, D.Token) -> B.Ab TokenRoll
 scan r (Right (cs, tok)) = Right $ B.codeUpdate cs tok r
 scan _ (Left message)    = Left message
 
 -- Scan with word table.
-scanW :: TokenRoll -> B.Ab (B.WordTable, InputText, D.Token) -> B.Ab TokenRoll
+scanW :: TokenRoll -> B.Ab (B.WordTable, D.InputText, D.Token) -> B.Ab TokenRoll
 scanW r (Right (wtab, cs, tok))  = Right $ B.codeUpdateWords wtab cs tok r
 scanW _ (Left message)           = Left message
 
