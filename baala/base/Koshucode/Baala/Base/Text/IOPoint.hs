@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | I/O point: file, standard input, direct text, etc.
+
 module Koshucode.Baala.Base.Text.IOPoint
   ( -- * I/O Point
     IOPoint (..),
@@ -37,6 +39,7 @@ ioPointType (IOPointCustom _ _) = "custom"
 ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
 
+-- | Name of I/O point.
 ioPointText :: IOPoint -> String
 ioPointText (IOPointFile dir file)       = dir ++ file
 ioPointText (IOPointUri  url)            = url
@@ -46,6 +49,7 @@ ioPointText (IOPointCustom name _)       = name
 ioPointText (IOPointStdin)               = "<stdin>"
 ioPointText (IOPointStdout)              = "<stdout>"
 
+-- | Create I/O point.
 ioPointFrom :: FilePath -> FilePath -> IOPoint
 ioPointFrom context path
     | B.isPrefixOf "http://"  path  = IOPointUri  path
@@ -63,16 +67,26 @@ ioPointList stdin texts context paths =
 
 -- ----------------------  CodePiece
 
+-- | A piece of code.
 data CodePiece
     = CodePiece { codeNumber :: Int
                 , codeName   :: IOPoint }
       deriving (Show, G.Data, G.Typeable)
 
 instance Eq CodePiece where
-    x == y = codeName x == codeName y
+    x == y
+      | xn == 0 && yn == 0  = codeName x == codeName y
+      | otherwise           = xn == yn
+      where xn = codeNumber x
+            yn = codeNumber y
+                          
 
 instance Ord CodePiece where
-    x `compare` y = codeName x `compare` codeName y
+    x `compare` y
+      | xn == 0 && yn == 0  = codeName x `compare` codeName y
+      | otherwise           = xn `compare` yn
+      where xn = codeNumber x
+            yn = codeNumber y
 
 -- | Empty code.
 codeEmpty :: CodePiece
