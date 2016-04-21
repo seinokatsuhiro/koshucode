@@ -369,7 +369,7 @@ isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
 isJudge    = ( `elem` "-="     )  -- Punctuation | Symbol
-isSingle   = ( `elem` ":|"     )  -- Punctuation | Symbol
+isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isQQ       = (    ==  '"'      )  -- Punctuation
 isTerm     = (    ==  '/'      )  -- Punctuation
