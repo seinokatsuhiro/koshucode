@@ -14,24 +14,28 @@ import qualified Koshucode.Baala.Cop.Message     as Msg
 
 copsText :: (D.CContent c) => [D.Cop c]
 copsText =
-    [ D.CopCalc  (D.copInfix "*=")              copEndWithInfix
-    , D.CopCalc  (D.copInfix "*=*")             copContainInfix
-    , D.CopCalc  (D.copInfix "=*")              copBeginWithInfix
+    [ D.CopCalc  (D.copInfix "*=")                copEndWithInfix
+    , D.CopCalc  (D.copInfix "*=*")               copContainInfix
+    , D.CopCalc  (D.copInfix "=*")                copBeginWithInfix
 
-    , D.CopCalc  (D.copNormal "base-part")      copBasePart
-    , D.CopCalc  (D.copNormal "char")           copChar
-    , D.CopCalc  (D.copNormal "char-group")     copCharGroup
-    , D.CopCalc  (D.copNormal "char-group-1")   copCharGroup1
-    , D.CopCalc  (D.copNormal "code-list")      copCodeList
-    , D.CopCalc  (D.copNormal "dir-part")       copDirPart
-    , D.CopCalc  (D.copNormal "unwords")        copUnwords
-    , D.CopCalc  (D.copNormal "unwords-by")     copUnwordsBy
-    , D.CopCalc  (D.copNormal "words")          copWords
-    , D.CopCalc  (D.copNormal "words-by")       copWordsBy
+    , D.CopCalc  (D.copNormal "base-part")        copBasePart
+    , D.CopCalc  (D.copNormal "char")             copChar
+    , D.CopCalc  (D.copNormal "char-group")       copCharGroup
+    , D.CopCalc  (D.copNormal "char-group-1")     copCharGroup1
+    , D.CopCalc  (D.copNormal "code-list")        copCodeList
+    , D.CopCalc  (D.copNormal "dir-part")         copDirPart
+    , D.CopCalc  (D.copNormal "general-symbol?")  copGeneralSymbol
+    , D.CopCalc  (D.copNormal "numeric-symbol?")  copNumericSymbol
+    , D.CopCalc  (D.copNormal "plain-symbol?")    copPlainSymbol
+    , D.CopCalc  (D.copNormal "short-symbol?")    copShortSymbol
+    , D.CopCalc  (D.copNormal "unwords")          copUnwords
+    , D.CopCalc  (D.copNormal "unwords-by")       copUnwordsBy
+    , D.CopCalc  (D.copNormal "words")            copWords
+    , D.CopCalc  (D.copNormal "words-by")         copWordsBy
 
-    , D.CopCalc  (D.copNormal "match-beg")      copBeginWithNormal
-    , D.CopCalc  (D.copNormal "match-end")      copEndWithNormal
-    , D.CopCalc  (D.copNormal "match-mid")      copContainNormal
+    , D.CopCalc  (D.copNormal "match-beg")        copBeginWithNormal
+    , D.CopCalc  (D.copNormal "match-end")        copEndWithNormal
+    , D.CopCalc  (D.copNormal "match-mid")        copContainNormal
     ]
 
 typeUnmatch :: D.CTypeOf c => [B.Ab c] -> B.Ab c
@@ -182,4 +186,47 @@ wordList c
     | D.isText c  = [D.gText c]
     | D.isDec c   = [D.decimalString $ D.gDec c]
     | otherwise   = []
+
+
+-- ----------------------  general-symbol?
+
+copGeneralSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copGeneralSymbol = copTestSymbol test where
+    test (D.SymbolCommon _)   = True
+    test (D.SymbolPlain _)    = True
+    test (D.SymbolGeneral _)  = True
+    test _                    = False
+
+copPlainSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copPlainSymbol = copTestSymbol test where
+    test (D.SymbolCommon _)   = True
+    test (D.SymbolPlain _)    = True
+    test _                    = False
+
+copNumericSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copNumericSymbol = copTestSymbol test where
+    test (D.SymbolCommon _)   = True
+    test (D.SymbolNumeric _)  = True
+    test _                    = False
+
+copShortSymbol :: forall c. (D.CContent c) => D.CopCalc c
+copShortSymbol = copTestSymbol test where
+    test (D.SymbolShort _ _)  = True
+    test _                    = False
+
+copTestSymbol :: forall c. (D.CContent c) => (D.Symbol -> Bool) -> D.CopCalc c
+copTestSymbol test arg =
+    do c <- D.getRightArg1 arg
+       D.putBool $ case extractText c of
+                     Nothing  -> False
+                     Just s   -> case D.nextSymbol s of
+                                   ("", sym) -> test sym
+                                   _         -> False
+
+extractText :: (D.CContent c) => c -> Maybe String
+extractText c
+    | D.isCode c  = Just $ D.gCode c
+    | D.isText c  = Just $ D.gText c
+    | D.isTerm c  = Just $ D.gTerm c
+    | otherwise   = Nothing
 

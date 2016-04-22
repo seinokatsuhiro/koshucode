@@ -49,29 +49,45 @@ nextQQ = loop "" where
 
 -- --------------------------------------------  Symbol
 
+-- | Symbol class.
+--
+-- Relation between character classes and symbol classes.
+-- The char class @number'@ means Unicode number except for @0-9@.
+-- @G@ for general symbol, @P@ for plain, @N@ for numeric.
+--
+-- >   Char class   Symbol class
+-- >   ------------ -----------------
+-- >   "0-9"        ( G ) ( P ) ( N )
+-- >   "-"          ( G ) ( P ) ( N )
+-- >   letter       ( G )   P
+-- >   mark         ( G )   P
+-- >   number'      ( G )   P
+-- >   "_?"         ( G )   P
+-- >   "+"          ( G )         N
+-- >   "*=<>~"        G
+-- >   ".#"                       N
+--
+-- Partial order of symbol classes.
+--
+-- >                     ( GPN ) Common
+-- >                    /      |
+-- >           Plain ( GP )  ( GN ) Numeric
+-- >                /  |    /  |
+-- >   Short ( P.P )   |   /   |
+-- >            :      |  /    |
+-- >         General ( G )     |
+-- >            :      :     ( N ) Numeric
+-- >            :      :       :
+-- >            ................ Unknown
+
 data Symbol
     = SymbolCommon    String           -- ^ General-ordinary-numeric symbol
     | SymbolGeneral   String           -- ^ General symbol
     | SymbolPlain     String           -- ^ Plain symbol
     | SymbolNumeric   String           -- ^ Numeric symbol
-    | SymbolShort     String String    -- ^ Short symbol (Plain "." Plain)
+    | SymbolShort     String String    -- ^ Short symbol (Plain @"."@ Plain)
     | SymbolUnknown   String           -- ^ Unknown symbol
       deriving (Show, Eq, Ord)
-
---  Classification of character classes.
---  number' means Unicode number except for "0-9".
---
---    Char class   Symbol class
---    ------------ ------------
---    "0-9"        (G) (P) (N)
---    "-"          (G) (P) (N)
---    letter       (G)  P
---    mark         (G)  P
---    number'      (G)  P
---    "_"          (G)  P
---    "+"          (G)      N
---    "*=<>~"       G   
---    ".#"                  N
 
 isCharGpn, isCharDigit, isCharHyphen :: Char -> Bool
 isCharGpn    c  = isCharDigit c || isCharHyphen c
@@ -84,12 +100,12 @@ isCharGp c =
       B.UnicodeLetter    -> True
       B.UnicodeMark      -> True
       B.UnicodeNumber    -> True      -- include isCharDigit
-      _                  -> c == '_'
+      _                  -> c == '_' || c == '?'
 
 isCharGn, isCharG, isCharN :: Char -> Bool
 isCharGn c   = c == '+'
 isCharG  c   = c `elem` "*=<>~"
-isCharN  c   = c `elem` ".#"
+isCharN  c   = c == '.' || c == '#'
 
 isCharGp', isCharP', isCharGn', isCharG', isCharN' :: Char -> Bool
 isCharGp' c  = isCharGp  c || isCharHyphen c
@@ -113,17 +129,6 @@ isPlain = isCharP'
 -- | Test character is a numeric-symbol component.
 isNumeric :: Char -> Bool
 isNumeric = isCharN'
-
---  Partial order of symbol classes
---
---      GPN
---     /   |
---    GP   GN
---     | / |
---     G   |
---     |   N
---     |   |
---     empty
 
 -- | Get next symbol.
 nextSymbol :: Next Symbol
