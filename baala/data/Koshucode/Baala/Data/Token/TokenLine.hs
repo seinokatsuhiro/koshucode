@@ -77,7 +77,7 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
     sec ('*' : '*' : _)       = dispatch out
     sec ccs@(c:cs)
         | isSpace c     = v  $ scanSpace cp cs
-        | D.isSymbol c  = vw $ scanSymbol cp ws ccs
+        | isSymbol c    = vw $ scanSymbol cp ws ccs
         | otherwise     = Msg.unexpSect help
 
     dispatch :: [D.Token] -> B.Ab TokenRoll
@@ -169,7 +169,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
         | isTerm c            = vw              $ scanTermPath cp wtab cs
         | isQQ c              = v               $ scanQQ       cp cs
         | isQ c               = vw              $ scanQ        cp wtab cs
-        | D.isSymbol c        = vw              $ scanSymbol   cp wtab ccs
+        | isSymbol c          = vw              $ scanSymbol   cp wtab ccs
         | isSpace c           = v               $ scanSpace   cp cs
         | otherwise           = Msg.forbiddenInput $ D.angleQuote [c]
     dispatch ""               = Right r
@@ -194,7 +194,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
     -- read local reference, like ^/g
     hat ('/' : cs)                   = localToken cs D.LocalNest
-    hat cs@(c : _) | D.isSymbol c    = localToken cs D.LocalSymbol
+    hat cs@(c : _) | isSymbol c      = localToken cs D.LocalSymbol
     hat _                            = Msg.adlib "local"
 
     localToken cs k                  = do (cs', w) <- D.nextSymbolPlain cs
@@ -205,14 +205,14 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     bar (c:cs) w
         | c == '|'                   = bar cs (c:w)
         | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && D.isSymbol c   = clock cs [c, '|']
+        | w == "|" && isSymbol c     = clock cs [c, '|']
     bar cs w                         = let cs' = B.trimLeft cs
                                        in u cs'        $ D.TTextRaw cp w
 
     -- read judgement sign, like |--, |-x
     judge (c:cs) w
         | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | D.isSymbol c               = clock (c:cs) w
+        | isSymbol c                 = clock (c:cs) w
     judge cs w                       = u cs            $ D.TTextBar cp $ rv w
 
     -- read clock, like |03:30|
@@ -229,7 +229,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     -- read keyword, like <crlf>
     angleMid (c:cs) w
         | c == '>'                   = u cs            $ angleToken $ rv w
-        | D.isSymbol c               = angleMid cs (c:w)
+        | isSymbol c                 = angleMid cs (c:w)
     angleMid cs w                    = u cs            $ D.TTextRaw cp $ '<' : rv w
 
     angleToken ""                    = D.TTextRaw cp "<>"
@@ -338,7 +338,7 @@ scanTerm q sign cp wtab = word [] where
     word ns (c:cs)
         | c == '='      = do (cs', w) <- D.nextSymbolPlain cs
                              nterm ns w cs'
-        | D.isSymbol c  = do (cs', w) <- D.nextSymbolPlain (c:cs)
+        | isSymbol c    = do (cs', w) <- D.nextSymbolPlain (c:cs)
                              term (w : ns) cs'
         | isQQ c        = do (cs', w) <- D.nextQQ cs
                              term (w : ns) cs'
@@ -360,7 +360,7 @@ scanTerm q sign cp wtab = word [] where
 -- ----------------------  Char category
 
 -- Punctuations
-isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isSpace :: B.Pred Char
+isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm :: B.Pred Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
@@ -369,23 +369,22 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isQQ       = (    ==  '"'      )  -- Punctuation
 isTerm     = (    ==  '/'      )  -- Punctuation
+
+isSymbol, isSpace, isShort :: B.Pred Char
+isSymbol   = D.isSymbolChar
 isSpace    = Ch.isSpace
-
-isShortPrefix :: B.Pred String
-isShortPrefix = all isShort
-
-isShort :: B.Pred Char
-isShort = Ch.isAlpha
-
-isCharCode :: B.Pred String
-isCharCode = all isFigure
+isShort    = Ch.isAlpha
 
 isFigure :: B.Pred Char
-isFigure '-' = True
-isFigure c   = Ch.isDigit c
+isFigure c     = c == '-' || Ch.isDigit c
 
 isClock :: B.Pred Char
-isClock c = Ch.isDigit c || c `elem` ".:'+-"
+isClock c      = Ch.isDigit c || c `elem` ".:'+-"
+
+isShortPrefix, isCharCode :: B.Pred String
+isShortPrefix  = all isShort
+isCharCode     = all isFigure
+
 
 
 -- ------------------------------------------------------------------

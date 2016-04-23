@@ -15,7 +15,7 @@ module Koshucode.Baala.Data.Token.Next
     -- ** Symbol test
     isGeneralSymbol, isPlainSymbol, isNumericSymbol, isShortSymbol,
     -- ** Char test
-    isSymbol, isGeneral, isPlain, isNumeric,
+    isSymbolChar, isGeneralChar, isPlainChar, isNumericChar,
     -- ** Next symbol
     nextSymbol, nextSymbolPlain,
   ) where
@@ -130,20 +130,20 @@ isShortSymbol _                    = False
 -- ----------------------  Char test
 
 -- | Test character is a symbol component.
-isSymbol :: Char -> Bool
-isSymbol c = isGeneral c || isNumeric c
+isSymbolChar :: Char -> Bool
+isSymbolChar c = isGeneralChar c || isNumericChar c
 
 -- | Test character is a general-symbol component.
-isGeneral :: Char -> Bool
-isGeneral = isCharG'
+isGeneralChar :: Char -> Bool
+isGeneralChar = isCharG'
 
 -- | Test character is a plain-symbol component.
-isPlain :: Char -> Bool
-isPlain = isCharP'
+isPlainChar :: Char -> Bool
+isPlainChar = isCharP'
 
 -- | Test character is a numeric-symbol component.
-isNumeric :: Char -> Bool
-isNumeric = isCharN'
+isNumericChar :: Char -> Bool
+isNumericChar = isCharN'
 
 isCharGpn, isCharDigit, isCharHyphen :: Char -> Bool
 isCharGpn    c  = isCharDigit c || isCharHyphen c
@@ -186,7 +186,7 @@ nextSymbol = symbolGpn "" where
         | isCharGn  c     = symbolGn  (c:w) cs
         | isCharG   c     = symbolG   (c:w) cs
         | isCharN   c     = symbolN   (c:w) cs
-        | isSymbol  c     = symbolUnk (c:w) cs
+        | isSymbolChar  c     = symbolUnk (c:w) cs
     symbolGpn w cs        = done w cs SymbolCommon
 
     -- General and Plain
@@ -194,13 +194,13 @@ nextSymbol = symbolGpn "" where
         | c == '.'        = short (reverse w) "" cs
         | isCharGp' c     = symbolGp  (c:w) cs
         | isCharG   c     = symbolG   (c:w) cs
-        | isSymbol  c     = symbolUnk (c:w) cs
+        | isSymbolChar  c     = symbolUnk (c:w) cs
     symbolGp w cs         = done w cs SymbolPlain
 
     -- Plain "." Plain
     short pre w (c:cs)
         | isCharGp' c     = short pre (c:w) cs
-        | isSymbol  c     = symbolUnk (c:w) cs
+        | isSymbolChar  c     = symbolUnk (c:w) cs
     short pre w cs        = done w cs $ SymbolShort pre
 
     -- General and Numeric
@@ -208,24 +208,24 @@ nextSymbol = symbolGpn "" where
         | isCharGn' c     = symbolGn  (c:w) cs
         | isCharG   c     = symbolG   (c:w) cs
         | isCharN   c     = symbolN   (c:w) cs
-        | isSymbol  c     = symbolUnk (c:w) cs
+        | isSymbolChar  c     = symbolUnk (c:w) cs
     symbolGn w cs         = done w cs SymbolNumeric
 
     -- General
     symbolG w (c:cs)
         | isCharG' c      = symbolG   (c:w) cs
-        | isSymbol c      = symbolUnk (c:w) cs
+        | isSymbolChar c      = symbolUnk (c:w) cs
     symbolG w cs          = done w cs SymbolGeneral
 
     -- Numeric
     symbolN w (c:cs)
         | isCharN' c      = symbolN   (c:w) cs
-        | isSymbol c      = symbolUnk (c:w) cs
+        | isSymbolChar c      = symbolUnk (c:w) cs
     symbolN w cs          = done w cs SymbolNumeric
 
     -- Unknown symbol
     symbolUnk w (c:cs)
-        | isSymbol c      = symbolUnk (c:w) cs
+        | isSymbolChar c      = symbolUnk (c:w) cs
     symbolUnk w cs        = done w cs SymbolUnknown
 
 nextSymbolPlain :: AbNext String
