@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    162 judges
+**    167 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Base"
@@ -92,9 +92,14 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Message"        /import "Koshucode.Baala.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Next"           /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Next"           /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Next"           /import "Koshucode.Baala.Data.Token.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Short"          /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Short"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Short"          /import "Koshucode.Baala.Data.Token.AngleText"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Short"          /import "Koshucode.Baala.Data.Token.Next"
 
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Token"          /import "Data.Generics"
@@ -109,7 +114,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.AngleText"
-|-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.Short"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.Next"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.Message"
@@ -121,6 +126,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Koshucode.Baala.Data.Token.TokenLine"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.AngleText"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Next"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Short"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Term"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Token"

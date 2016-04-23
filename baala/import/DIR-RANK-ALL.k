@@ -23,7 +23,7 @@
 |-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 10 | "Message" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Line" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Tree" | [ "Abort" | "Prelude" | "Text" ] ] [ 12 | "Clause" | [ "Prelude" | "Text" ] ] [ 12 | "Infix" | [ "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 3 | "Prelude" | [ ] ] [ 6 | "Text" | [ ] ] [ 9 | "Abort" | [ ] ] [ 11 | "Message" | [ ] ] [ 13 | "Syntax" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Data.Token"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 15 | "AngleText" | [ "Base" ] ] [ 15 | "Message" | [ "Base" ] ] [ 15 | "Token" | [ "Base" ] ] [ 16 | "Short" | [ "Base" ] ] [ 17 | "TokenLine" | [ "Base" ] ] [ 18 | "TokenClause" | [ "Base" ] ] [ 18 | "TokenTree" | [ "Base" ] ] =}
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Data.Token"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 15 | "AngleText" | [ "Base" ] ] [ 15 | "Message" | [ "Base" ] ] [ 15 | "Token" | [ "Base" ] ] [ 16 | "Next" | [ "Base" ] ] [ 17 | "Short" | [ "Base" ] ] [ 17 | "TokenLine" | [ "Base" ] ] [ 18 | "TokenClause" | [ "Base" ] ] [ 18 | "TokenTree" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 15 | "Clock" | [ "Base" ] ] [ 15 | "Message" | [ "Base" ] ] [ 15 | "Para" | [ "Base" ] ] [ 16 | "Date" | [ "Base" ] ] [ 16 | "Decimal" | [ "Base" ] ] [ 17 | "Arithmetic" | [ "Base" ] ] [ 17 | "Time" | [ "Base" ] ] [ 20 | "Interp" | [ "Base" | "Token" ] ] [ 20 | "Judge" | [ "Base" | "Token" ] ] [ 20 | "Type" | [ "Base" | "Token" ] ] [ 21 | "About" | [ "Base" | "Token" ] ] [ 21 | "Head" | [ "Base" | "Token" ] ] [ 22 | "Rel" | [ "Base" | "Token" ] ] [ 23 | "Mono" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 26  /dir "Koshucode.Baala.Data.Content"  /base-rank {= /rank /base /import-dir [ 20 | "Message" | [ "Base" | "Token" ] ] [ 25 | "Class" | [ "Base" | "Token" | "Type" ] ] [ 25 | "Tree" | [ "Base" | "Token" | "Type" ] ] [ 26 | "BaalaC" | [ "Base" | "Token" | "Type" ] ] [ 26 | "Decode" | [ "Base" | "Token" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 29  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 25 | "Message" | [ "Base" | "Token" | "Type" ] ] [ 26 | "Cox" | [ "Base" | "Token" ] ] [ 27 | "Cop" | [ "Base" | "Token" ] ] [ 28 | "Build" | [ "Base" | "Content" | "Token" ] ] [ 29 | "Run" | [ "Base" | "Content" | "Token" | "Type" ] ] =}
@@ -38,7 +38,7 @@
 |-- DIR-RANK  /dir-rank 53  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 33 | "Message" | [ ] ] [ 38 | "Lexmap" | [ ] ] [ 42 | "Relkit" | [ ] ] [ 46 | "Relmap" | [ ] ] [ 49 | "Assert" | [ ] ] [ 53 | "Resource" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 56  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 34 | "Message" | [ "Base" ] ] [ 35 | "Term" | [ "Base" | "Data" ] ] [ 55 | "Define" | [ "Base" | "Core" ] ] [ 55 | "Get" | [ "Base" | "Core" | "Data" ] ] [ 56 | "Rop" | [ "Base" | "Core" ] ] =}
 |-- DIR-RANK  /dir-rank 56  /dir "Koshucode.Baala.Writer"  /base-rank {= /rank /base /import-dir [ 55 | "Csv" | [ "Base" | "Core" | "Data" ] ] [ 55 | "Html" | [ "Base" | "Core" | "Data" ] ] [ 55 | "Json" | [ "Core" | "Data" ] ] [ 55 | "Judge" | [ "Base" | "Core" | "Data" ] ] [ 56 | "Koshu" | [ "Base" | "Core" | "Data" ] ] =}
-|-- DIR-RANK  /dir-rank 58  /dir "Koshucode.Baala.Cop"  /base-rank {= /rank /base /import-dir [ 32 | "Coxhand" | [ "Base" | "Data" ] ] [ 33 | "Logic" | [ "Base" | "Data" ] ] [ 56 | "Message" | [ ] ] [ 57 | "Arith" | [ "Base" | "Data" ] ] [ 57 | "List" | [ "Base" | "Data" ] ] [ 57 | "Misc" | [ "Base" | "Data" ] ] [ 57 | "Order" | [ "Base" | "Data" ] ] [ 57 | "Time" | [ "Base" | "Data" ] ] [ 57 | "Type" | [ "Base" | "Data" ] ] [ 58 | "Bundle" | [ "Base" | "Data" ] ] =}
+|-- DIR-RANK  /dir-rank 58  /dir "Koshucode.Baala.Cop"  /base-rank {= /rank /base /import-dir [ 32 | "Coxhand" | [ "Base" | "Data" ] ] [ 33 | "Logic" | [ "Base" | "Data" ] ] [ 56 | "Message" | [ ] ] [ 57 | "Arith" | [ "Base" | "Data" ] ] [ 57 | "List" | [ "Base" | "Data" ] ] [ 57 | "Misc" | [ "Base" | "Data" ] ] [ 57 | "Order" | [ "Base" | "Data" ] ] [ 57 | "Text" | [ "Base" | "Data" ] ] [ 57 | "Time" | [ "Base" | "Data" ] ] [ 57 | "Type" | [ "Base" | "Data" ] ] [ 58 | "Bundle" | [ "Base" | "Data" ] ] =}
 |-- DIR-RANK  /dir-rank 59  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 14 | "Base" | [ "Abort" | "Prelude" | "Syntax" | "Text" ] ] [ 31 | "Data" | [ "Church" | "Content" | "Token" | "Type" ] ] [ 54 | "Core" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 57 | "Writer" | [ ] ] [ 59 | "Cop" | [ ] ] =}
 
 |-- DIR-RANK  /dir-rank 59  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 56 | "KoshuRdf" | [ "Base" | "Core" | "Data" ] ] [ 56 | "KoshuSyntax" | [ "Base" | "Core" | "Data" ] ] [ 59 | "KoshuChange" | [ "Base" ] ] [ 59 | "KoshuFilter" | [ "Base" | "Core" | "Data" ] ] [ 59 | "KoshuMain" | [ "Base" | "Core" | "Data" | "Writer" ] ] =}
@@ -109,7 +109,8 @@ TABLE : DIR-RANK
                                                  15    "AngleText"      [ "Base" ]
                                                  15    "Message"        [ "Base" ]
                                                  15    "Token"          [ "Base" ]
-                                                 16    "Short"          [ "Base" ]
+                                                 16    "Next"           [ "Base" ]
+                                                 17    "Short"          [ "Base" ]
                                                  17    "TokenLine"      [ "Base" ]
                                                  18    "TokenClause"    [ "Base" ]
                                                  18    "TokenTree"      [ "Base" ]
@@ -235,6 +236,7 @@ TABLE : DIR-RANK
                                                  57    "List"           [ "Base" | "Data" ]
                                                  57    "Misc"           [ "Base" | "Data" ]
                                                  57    "Order"          [ "Base" | "Data" ]
+                                                 57    "Text"           [ "Base" | "Data" ]
                                                  57    "Time"           [ "Base" | "Data" ]
                                                  57    "Type"           [ "Base" | "Data" ]
                                                  58    "Bundle"         [ "Base" | "Data" ]
