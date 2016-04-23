@@ -191,28 +191,16 @@ wordList c
 -- ----------------------  general-symbol?
 
 copGeneralSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copGeneralSymbol = copTestSymbol test where
-    test (D.SymbolCommon _)   = True
-    test (D.SymbolPlain _)    = True
-    test (D.SymbolGeneral _)  = True
-    test _                    = False
+copGeneralSymbol = copTestSymbol D.isGeneralSymbol
 
 copPlainSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copPlainSymbol = copTestSymbol test where
-    test (D.SymbolCommon _)   = True
-    test (D.SymbolPlain _)    = True
-    test _                    = False
+copPlainSymbol = copTestSymbol D.isPlainSymbol
 
 copNumericSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copNumericSymbol = copTestSymbol test where
-    test (D.SymbolCommon _)   = True
-    test (D.SymbolNumeric _)  = True
-    test _                    = False
+copNumericSymbol = copTestSymbol D.isNumericSymbol
 
 copShortSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copShortSymbol = copTestSymbol test where
-    test (D.SymbolShort _ _)  = True
-    test _                    = False
+copShortSymbol = copTestSymbol D.isShortSymbol
 
 copTestSymbol :: forall c. (D.CContent c) => (D.Symbol -> Bool) -> D.CopCalc c
 copTestSymbol test arg =

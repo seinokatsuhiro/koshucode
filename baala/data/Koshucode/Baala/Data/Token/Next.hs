@@ -3,16 +3,21 @@
 -- | Next character sequence.
 
 module Koshucode.Baala.Data.Token.Next
-  ( -- * Data type
+  ( -- * Next
     InputText,
     Next, AbNext,
     nextSpace,
     nextQQ,
 
     -- * Symbol
+    -- ** Data type
     Symbol (..),
-    nextSymbol, nextSymbolPlain,
+    -- ** Symbol test
+    isGeneralSymbol, isPlainSymbol, isNumericSymbol, isShortSymbol,
+    -- ** Char test
     isSymbol, isGeneral, isPlain, isNumeric,
+    -- ** Next symbol
+    nextSymbol, nextSymbolPlain,
   ) where
 
 import qualified Data.Char                            as Ch
@@ -48,6 +53,8 @@ nextQQ = loop "" where
 
 
 -- --------------------------------------------  Symbol
+
+-- ----------------------  Data type
 
 -- | Symbol class.
 --
@@ -89,6 +96,55 @@ data Symbol
     | SymbolUnknown   String           -- ^ Unknown symbol
       deriving (Show, Eq, Ord)
 
+
+-- ----------------------  Symbol test
+
+-- | Test symbol is general, in other words,
+--   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.
+isGeneralSymbol :: Symbol -> Bool
+isGeneralSymbol (SymbolCommon _)   = True
+isGeneralSymbol (SymbolPlain _)    = True
+isGeneralSymbol (SymbolGeneral _)  = True
+isGeneralSymbol _                  = False
+
+-- | Test symbol is plain, in other words,
+--   'SymbolCommon' or 'SymbolPlain'.
+isPlainSymbol :: Symbol -> Bool
+isPlainSymbol (SymbolCommon _)     = True
+isPlainSymbol (SymbolPlain _)      = True
+isPlainSymbol _                    = False
+
+-- | Test symbol is numeric, in other words,
+--   'SymbolCommon' or 'SymbolNumeric'.
+isNumericSymbol :: Symbol -> Bool
+isNumericSymbol (SymbolCommon _)   = True
+isNumericSymbol (SymbolNumeric _)  = True
+isNumericSymbol _                  = False
+
+-- | Test symbol is 'SymbolShort'.
+isShortSymbol :: Symbol -> Bool
+isShortSymbol (SymbolShort _ _)    = True
+isShortSymbol _                    = False
+
+
+-- ----------------------  Char test
+
+-- | Test character is a symbol component.
+isSymbol :: Char -> Bool
+isSymbol c = isGeneral c || isNumeric c
+
+-- | Test character is a general-symbol component.
+isGeneral :: Char -> Bool
+isGeneral = isCharG'
+
+-- | Test character is a plain-symbol component.
+isPlain :: Char -> Bool
+isPlain = isCharP'
+
+-- | Test character is a numeric-symbol component.
+isNumeric :: Char -> Bool
+isNumeric = isCharN'
+
 isCharGpn, isCharDigit, isCharHyphen :: Char -> Bool
 isCharGpn    c  = isCharDigit c || isCharHyphen c
 isCharDigit  c  = c >= '0' && c <= '9'
@@ -114,21 +170,8 @@ isCharGn' c  = isCharGpn c || isCharGn c
 isCharG'  c  = isCharGp' c || isCharGn c || isCharG c
 isCharN'  c  = isCharGn' c || isCharN  c
 
--- | Test character is a symbol component.
-isSymbol :: Char -> Bool
-isSymbol c = isGeneral c || isNumeric c
 
--- | Test character is a general-symbol component.
-isGeneral :: Char -> Bool
-isGeneral = isCharG'
-
--- | Test character is a plain-symbol component.
-isPlain :: Char -> Bool
-isPlain = isCharP'
-
--- | Test character is a numeric-symbol component.
-isNumeric :: Char -> Bool
-isNumeric = isCharN'
+-- ---------------------- Next symbol
 
 -- | Get next symbol.
 nextSymbol :: Next Symbol
