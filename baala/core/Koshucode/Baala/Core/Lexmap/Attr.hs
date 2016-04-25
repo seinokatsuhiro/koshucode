@@ -105,13 +105,13 @@ attrBranch trees =
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
 maybeSingleHyphen :: D.TTreeTo (Maybe String)
-maybeSingleHyphen (D.TextLeafRaw _ ('-' : n))  = Just n
-maybeSingleHyphen _                            = Nothing
+maybeSingleHyphen (D.TextLeafAttr _ n)      = Just n
+maybeSingleHyphen _                         = Nothing
 
 -- | Take out double-hyphened text (like @"--xyz"@) from token tree.
 maybeDoubleHyphen :: D.TTreeTo (Maybe String)
-maybeDoubleHyphen (D.TextLeafRaw _ ('-' : '-' : n))  = Just n
-maybeDoubleHyphen _                                  = Nothing
+maybeDoubleHyphen (D.TextLeafAttr2 _ n)     = Just n
+maybeDoubleHyphen _                         = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =

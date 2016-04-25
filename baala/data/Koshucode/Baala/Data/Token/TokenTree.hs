@@ -6,20 +6,25 @@
 
 module Koshucode.Baala.Data.Token.TokenTree
   ( -- * Token tree
-    TTree,
-    NamedTree, NamedTrees,
+    -- ** Tree type
+    TTree, NamedTree, NamedTrees,
+    -- ** Conversion
     TTreeTo, TTreesTo,
     TTreeToAb, TTreesToAb,
-    ttrees,
-    ttreeGroup,
+    -- ** Parser
+    ttrees, ttreeGroup,
 
     -- * Pattern
+    -- ** Term
     pattern TermLeaf,
     pattern TermLeafName,
     pattern TermLeafPath,
     pattern TermLeafLocal,
+    -- ** Text
     pattern TextLeaf,
     pattern TextLeafRaw,
+    pattern TextLeafAttr,
+    pattern TextLeafAttr2,
     pattern TextLeafQ,
     pattern TextLeafQQ,
     pattern TextLeafKey,
@@ -39,7 +44,7 @@ module Koshucode.Baala.Data.Token.TokenTree
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
   
     -- * Abbreviation
-    tt, tt1, ttDoc, ttPrint,
+    tt, tt1, ttPrint, ttDoc,
   ) where
 
 import qualified Data.Generics                        as G
@@ -80,12 +85,20 @@ pattern TermLeaf      cp q ws    = B.TreeL (D.TTerm   cp q ws)
 pattern TermLeafName  cp sign w  = B.TreeL (D.TTermN  cp sign w)
 pattern TermLeafPath  cp ws      = TermLeaf cp D.TermTypePath ws
 
--- text leaf
-pattern TextLeaf form cp w      = B.TreeL (D.TText   cp form w)
-pattern TextLeafRaw   cp w      = TextLeaf D.TextRaw cp w
-pattern TextLeafQ     cp w      = TextLeaf D.TextQ   cp w
-pattern TextLeafQQ    cp w      = TextLeaf D.TextQQ  cp w
-pattern TextLeafKey   cp w      = TextLeaf D.TextKey cp w
+-- | Text leaf.
+pattern TextLeaf form cp w  = B.TreeL (D.TText   cp form w)
+-- | Text leaf of 'D.TextRaw'.
+pattern TextLeafRaw   cp w  = TextLeaf D.TextRaw cp w
+-- | Text leaf beginning with single hyphen.
+pattern TextLeafAttr  cp w  = TextLeaf D.TextRaw cp ('-' : w)
+-- | Text leaf beginning with double hyphens.
+pattern TextLeafAttr2 cp w  = TextLeaf D.TextRaw cp ('-' : '-' : w)
+-- | Text leaf of 'D.TextQ'.
+pattern TextLeafQ     cp w  = TextLeaf D.TextQ   cp w
+-- | Text leaf of 'D.TextQQ'.
+pattern TextLeafQQ    cp w  = TextLeaf D.TextQQ  cp w
+-- | Text leaf of 'D.TextKey'.
+pattern TextLeafKey   cp w  = TextLeaf D.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
@@ -126,33 +139,61 @@ getBracketType = B.bracketTable
     , (BracketUnknown, D.isOpenToken, D.isCloseToken)
     ] where o n a b = (n, D.isOpenTokenOf a, D.isCloseTokenOf b)
 
-groupOpen, groupClose :: String
-groupOpen    = "("
-groupClose   = ")"
+-- | Open group @"("@
+groupOpen :: String
+groupOpen = "("
 
-listOpen, listClose :: String
-listOpen     = "["
-listClose    = "]"
+-- | Close group @")"@
+groupClose :: String
+groupClose = ")"
 
-setOpen, setClose :: String
-setOpen      = "{"
-setClose     = "}"
+-- | Open list @"["@
+listOpen :: String
+listOpen = "["
 
-tieOpen, tieClose :: String
-tieOpen      = "{-"
-tieClose     = "-}"
+-- | Close list @"]"@
+listClose :: String
+listClose = "]"
 
-relOpen, relClose :: String
-relOpen      = "{="
-relClose     = "=}"
+-- | Open set @"{"@
+setOpen :: String
+setOpen = "{"
 
-interpOpen, interpClose :: String
-interpOpen   = "{|"
-interpClose  = "|}"
+-- | Close set @"}"@
+setClose :: String
+setClose = "}"
 
-typeOpen, typeClose :: String
-typeOpen     = "[-"
-typeClose    = "-]"
+-- | Open tie @"{-"@
+tieOpen :: String
+tieOpen = "{-"
+
+-- | Close tie @"-}"@
+tieClose :: String
+tieClose = "-}"
+
+-- | Open relation @"{="@
+relOpen :: String
+relOpen = "{="
+
+-- | Close relation @"=}"@
+relClose :: String
+relClose = "=}"
+
+-- | Open interpreation @"{|"@
+interpOpen :: String
+interpOpen = "{|"
+
+-- | Close interpreation @"|}"@
+interpClose :: String
+interpClose = "|}"
+
+-- | Open type @"[-"@
+typeOpen :: String
+typeOpen = "[-"
+
+-- | Close type @"-]"@
+typeClose :: String
+typeClose = "-]"
 
 
 -- ----------------------  Divide trees
@@ -207,8 +248,16 @@ tt :: String -> B.Ab [TTree]
 tt s = do ts <- D.toks s
           ttrees $ D.sweepToken ts
 
+-- | Parse string and group it.
 tt1 :: String -> B.Ab TTree
 tt1 = Right . ttreeGroup B.<=< tt
+
+-- | Parse string and print it.
+ttPrint :: String -> IO ()
+ttPrint s = case tt s of
+              Left msg    -> print msg
+              Right trees -> do print $ ttDoc trees
+                                return ()
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: TTreesTo B.Doc
@@ -222,8 +271,3 @@ ttDoc = dv where
     brackets Nothing = B.doc "no brackets"
     brackets (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc close]
 
-ttPrint :: String -> IO ()
-ttPrint s = case tt s of
-              Left msg    -> print msg
-              Right trees -> do print $ ttDoc trees
-                                return ()
