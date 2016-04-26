@@ -3,7 +3,7 @@
 -- | Parser for attribute sorter.
 
 module Koshucode.Baala.Core.Attr.Parse
-  ( parseAttrSorter,
+  ( parseAttrLayout,
   ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -12,16 +12,16 @@ import qualified Koshucode.Baala.Core.Attr.AttrPos  as C
 
 -- | Parse attribute sorter string.
 --
--- >>> parseAttrSorter "0 | -c"
--- AttrSorter { positional = AttrPos0,
+-- >>> parseAttrLayout "0 | -c"
+-- AttrLayout { positional = AttrPos0,
 --                   named = [AttrNormal "c"] }
 --
--- >>> parseAttrSorter "2 -a -b | -c"
--- AttrSorter { positional = AttrPos2 (AttrNormal "a") (AttrNormal "b"),
+-- >>> parseAttrLayout "2 -a -b | -c"
+-- AttrLayout { positional = AttrPos2 (AttrNormal "a") (AttrNormal "b"),
 --                   named = [AttrNormal "c"] }
 
-parseAttrSorter :: String -> C.AttrSorter
-parseAttrSorter s = attr where
+parseAttrLayout :: String -> C.AttrLayout
+parseAttrLayout s = attr where
     n = map attrName
     attr = case map words $ B.divideBy (== '|') s of
              [q : trunk]          -> attrDef q (n trunk) []
@@ -42,8 +42,8 @@ attrLocal n        | l == '/'    = C.AttrRelmapLocal i    -- "-xxx/^"
                    where l = last n
                          i = init n
 
-attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.AttrSorter
-attrDef q ns = C.attrSorter $ attrPosDef q ns
+attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.AttrLayout
+attrDef q ns = C.attrLayout $ attrPosDef q ns
 
 attrPosDef :: String -> [C.AttrName] -> C.AttrNamePos
 attrPosDef "E"  as         = C.AttrPosE as

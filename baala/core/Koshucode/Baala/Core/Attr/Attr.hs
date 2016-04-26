@@ -6,8 +6,8 @@
 
 module Koshucode.Baala.Core.Attr.Attr
   ( -- * Attribute layout
-    AttrSorter (..),
-    attrSorter,
+    AttrLayout (..),
+    attrLayout,
   
     -- * Attribute set
     AttrSet, AttrSetSort,
@@ -23,10 +23,10 @@ import qualified Koshucode.Baala.Core.Attr.AttrPos   as C
 import qualified Koshucode.Baala.Core.Attr.Message   as Msg
 
 
--- ----------------------  Attribute trees
+-- ----------------------  Attribute layout
 
--- | Definition of attribute sorter.
-data AttrSorter = AttrSorter
+-- | Attribute layout.
+data AttrLayout = AttrLayout
     { attrPosSorter   :: C.AttrSortTree     -- ^ Sorter for positional attributes
                                             --   (derived from @attrPos@)
     , attrClassifier  :: B.Map C.AttrName   -- ^ Attribute classifier
@@ -37,15 +37,15 @@ data AttrSorter = AttrSorter
     , attrNamesN      :: [C.AttrName]       -- ^ Names of named attributes
     }
 
-instance Show AttrSorter where
-    show AttrSorter {..} =
-        "AttrSorter { positional = " ++ show attrPos
+instance Show AttrLayout where
+    show AttrLayout {..} =
+        "AttrLayout { positional = " ++ show attrPos
                 ++ ", named = " ++ show attrNamesN ++ " }"
 
--- | Construct attribute-sorting specification.
-attrSorter :: C.AttrNamePos -> [C.AttrName] -> AttrSorter
-attrSorter pos namesN = sorter where
-    sorter     = AttrSorter sorterP classify pos namesP namesN
+-- | Construct attribute layout from positional and named attributes.
+attrLayout :: C.AttrNamePos -> [C.AttrName] -> AttrLayout
+attrLayout pos namesN = sorter where
+    sorter     = AttrLayout sorterP classify pos namesP namesN
     sorterP    = C.sortAttrTree pos
     namesP     = C.attrPosNameList pos
     classify   = attrClassify namesP namesN
@@ -72,7 +72,7 @@ attrClassify namesP namesN n = n2 where
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> let a = attrSorter (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
+--   >>> let a = attrLayout (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
 --   >>> attrSetSort a =<< D.tt "a b -x /c 'd -y e"
 --   Right (ParaBody {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
@@ -103,7 +103,7 @@ type AttrSet = D.ParaBody C.AttrName D.TTree
 type AttrSetSort = [D.TTree] -> B.Ab AttrSet
 
 -- | Sort attributes.
-attrSetSort :: AttrSorter -> AttrSetSort
+attrSetSort :: AttrLayout -> AttrSetSort
 attrSetSort def = attrSetSortNamed B.>=> attrSetSortPos def
 
 -- | Sort named part of attribute.
@@ -116,8 +116,8 @@ attrSetSortNamed trees =
        Right $ D.paraNameMapKeys C.AttrNormal p2
 
 -- | Sort positional part of attribute.
-attrSetSortPos :: AttrSorter -> B.AbMap AttrSet
-attrSetSortPos (AttrSorter sorter classify _ pos named) p =
+attrSetSortPos :: AttrLayout -> B.AbMap AttrSet
+attrSetSortPos (AttrLayout sorter classify _ pos named) p =
     do let noPos      = null $ D.paraPos p
            nameList   = map fst $ D.paraNameList p
            overlapped = pos `B.overlap` nameList
