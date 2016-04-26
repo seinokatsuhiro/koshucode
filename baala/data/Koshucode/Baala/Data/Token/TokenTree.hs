@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -29,16 +28,6 @@ module Koshucode.Baala.Data.Token.TokenTree
     pattern TextLeafQQ,
     pattern TextLeafKey,
 
-    -- * Bracket type
-    BracketType (..),
-    groupOpen, groupClose,
-    listOpen, listClose,
-    setOpen, setClose,
-    tieOpen, tieClose,
-    relOpen, relClose,
-    interpOpen, interpClose,
-    typeOpen, typeClose,
-  
     -- * Divide trees
     splitTokensBy, divideTreesBy,
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
@@ -47,17 +36,17 @@ module Koshucode.Baala.Data.Token.TokenTree
     tt, tt1, ttPrint, ttDoc,
   ) where
 
-import qualified Data.Generics                        as G
-import qualified Text.PrettyPrint                     as P
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Token.Token     as D
-import qualified Koshucode.Baala.Data.Token.TokenLine as D
+import qualified Text.PrettyPrint                      as P
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data.Token.Token      as D
+import qualified Koshucode.Baala.Data.Token.TokenLine  as D
+import qualified Koshucode.Baala.Data.Token.Bracket    as D
 
 
 -- ---------------------- Token tree
 
 -- | Tree of tokens.
-type TTree = B.CodeTree BracketType D.Token
+type TTree = B.CodeTree D.BracketType D.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TTree]
@@ -103,97 +92,12 @@ pattern TextLeafKey   cp w  = TextLeaf D.TextKey cp w
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 ttrees :: [D.Token] -> B.Ab [TTree]
-ttrees = B.trees getBracketType B.BracketNone where
+ttrees = B.trees D.getBracketType B.BracketNone where
     --und = map (B.undouble (== BracketGroup))
 
 -- | Wrap trees in group.
 ttreeGroup :: TTreesTo TTree
-ttreeGroup = B.treeWrap BracketGroup
-
-
--- ----------------------  Bracket type
-
--- | There are nine types of brackets
-data BracketType
-    = BracketGroup    -- ^ Round brackets for grouping: @( E ... )@
-    | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
-    | BracketList     -- ^ Square brackets for lists: @[ C | ... ]@
-    | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
-    | BracketTie      -- ^ Curely-hyphen braces for ties: @{- /N C ... -}@
-    | BracketRel      -- ^ Curely-equal braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
-    | BracketInterp   -- ^ Curely-bar braces for data interpretation: @{| ... /N ... |}@
-    | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
-    | BracketUnknown  -- ^ Unknown bracket
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-getBracketType :: B.GetBracketType BracketType D.Token
-getBracketType = B.bracketTable
-    [ o BracketGroup   groupOpen  groupClose
-    , o BracketForm    "(|"       "|)"
-    , o BracketList    listOpen   listClose
-    , o BracketSet     setOpen    setClose
-    , o BracketTie     tieOpen    tieClose
-    , o BracketRel     relOpen    relClose
-    , o BracketInterp  interpOpen interpClose
-    , o BracketType    typeOpen   typeClose
-    , (BracketUnknown, D.isOpenToken, D.isCloseToken)
-    ] where o n a b = (n, D.isOpenTokenOf a, D.isCloseTokenOf b)
-
--- | Open group @"("@
-groupOpen :: String
-groupOpen = "("
-
--- | Close group @")"@
-groupClose :: String
-groupClose = ")"
-
--- | Open list @"["@
-listOpen :: String
-listOpen = "["
-
--- | Close list @"]"@
-listClose :: String
-listClose = "]"
-
--- | Open set @"{"@
-setOpen :: String
-setOpen = "{"
-
--- | Close set @"}"@
-setClose :: String
-setClose = "}"
-
--- | Open tie @"{-"@
-tieOpen :: String
-tieOpen = "{-"
-
--- | Close tie @"-}"@
-tieClose :: String
-tieClose = "-}"
-
--- | Open relation @"{="@
-relOpen :: String
-relOpen = "{="
-
--- | Close relation @"=}"@
-relClose :: String
-relClose = "=}"
-
--- | Open interpreation @"{|"@
-interpOpen :: String
-interpOpen = "{|"
-
--- | Close interpreation @"|}"@
-interpClose :: String
-interpClose = "|}"
-
--- | Open type @"[-"@
-typeOpen :: String
-typeOpen = "[-"
-
--- | Close type @"-]"@
-typeClose :: String
-typeClose = "-]"
+ttreeGroup = B.treeWrap D.BracketGroup
 
 
 -- ----------------------  Divide trees
