@@ -37,8 +37,8 @@ data RopAttr = RopAttr
 ropAttrCons :: C.AttrPos C.AttrName -> [C.AttrName] -> RopAttr
 ropAttrCons pos branchNames = ropAttr where
     ropAttr      = RopAttr posSorter classify pos posNames branchNames
-    posSorter    = C.ropAttrPos pos
-    posNames     = C.attrTypeNames pos
+    posSorter    = C.sortAttrTree pos
+    posNames     = C.attrPosNameList pos
     classify     = attrClassify posNames branchNames
 
 attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
