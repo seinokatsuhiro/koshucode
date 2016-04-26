@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
     attrNameTrunk,
 
     -- * Positional name
-    AttrPosName,
+    AttrNamePos,
     AttrTree,
     AttrSortTree,
     sortAttrTree,
@@ -86,7 +86,7 @@ attrNameTrunk = AttrNormal "@trunk"
 -- --------------------------------------------  Positional name
 
 -- | Positional attribute
-type AttrPosName = AttrPos AttrName
+type AttrNamePos = AttrPos AttrName
 
 -- | Positional attribute sorter.
 type AttrSortTree = [D.TTree] -> B.Ab [AttrTree]
@@ -95,7 +95,7 @@ type AttrSortTree = [D.TTree] -> B.Ab [AttrTree]
 type AttrTree = (AttrName, [D.TTree])
 
 -- | Sort token trees by positional attributes.
-sortAttrTree :: AttrPosName -> AttrSortTree
+sortAttrTree :: AttrNamePos -> AttrSortTree
 sortAttrTree (AttrPos0)         []         = Right []
 sortAttrTree (AttrPos1 a)       [v]        = Right [a#v]
 sortAttrTree (AttrPos2 a b)     [v,w]      = Right [a#v, b#w]

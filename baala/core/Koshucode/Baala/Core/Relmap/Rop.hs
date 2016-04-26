@@ -21,7 +21,7 @@ data Rop' h c = Rop
     { ropName     :: C.RopName        -- ^ Operator name
     , ropGroup    :: String           -- ^ Operator group
     , ropUsage    :: RopUsage         -- ^ Usage text of operator
-    , ropAttr     :: C.RopAttr        -- ^ Attribute of operator
+    , ropAttr     :: C.AttrSorter     -- ^ Attribute of operator
     , ropSorter   :: C.AttrSortPara   -- ^ Attribute sorter
     , ropCons     :: RopCons' h c     -- ^ Constructor of operator
     }

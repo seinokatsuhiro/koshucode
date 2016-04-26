@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -5,8 +6,8 @@
 
 module Koshucode.Baala.Core.Lexmap.Attr
   ( -- * Attributes of relmap operator
-    RopAttr (..),
-    ropAttrCons,
+    AttrSorter (..),
+    attrSorter,
   
     -- * Attribute sorter
     AttrPara, AttrSortPara,
@@ -25,18 +26,23 @@ import qualified Koshucode.Baala.Core.Lexmap.Message   as Msg
 -- ----------------------  Attribute trees
 
 -- | Definition of attribute sorter.
-data RopAttr = RopAttr
-    { attrPosSorter    :: C.AttrSortTree         -- Sorter for positional attributes
-    , attrClassifier   :: B.Map C.AttrName       -- Attribute classifier
-    , attrPos          :: C.AttrPos C.AttrName   -- Positional attribute
-    , attrPosNames     :: [C.AttrName]           -- Positional names
-    , attrBranchNames  :: [C.AttrName]           -- Branch names
+data AttrSorter = AttrSorter
+    { attrPosSorter    :: C.AttrSortTree     -- ^ Sorter for positional attributes
+    , attrClassifier   :: B.Map C.AttrName   -- ^ Attribute classifier
+    , attrPos          :: C.AttrNamePos      -- ^ Positional attribute
+    , attrPosNames     :: [C.AttrName]       -- ^ Names of positional attributes
+    , attrBranchNames  :: [C.AttrName]       -- ^ Names of named attributes
     }
 
+instance Show AttrSorter where
+    show AttrSorter {..} =
+        "AttrSorter { positional = " ++ show attrPos
+                ++ ", named = " ++ show attrBranchNames ++ " }"
+
 -- | Construct attribute-sorting specification.
-ropAttrCons :: C.AttrPos C.AttrName -> [C.AttrName] -> RopAttr
-ropAttrCons pos branchNames = ropAttr where
-    ropAttr      = RopAttr posSorter classify pos posNames branchNames
+attrSorter :: C.AttrNamePos -> [C.AttrName] -> AttrSorter
+attrSorter pos branchNames = sorter where
+    sorter       = AttrSorter posSorter classify pos posNames branchNames
     posSorter    = C.sortAttrTree pos
     posNames     = C.attrPosNameList pos
     classify     = attrClassify posNames branchNames
@@ -63,7 +69,7 @@ attrClassify posNames branchNames n = n2 where
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> let a = ropAttrCons (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
+--   >>> let a = attrSorter (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
 --   >>> attrSort a =<< D.tt "a b -x /c 'd -y e"
 --   Right (ParaBody {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
@@ -92,7 +98,7 @@ type AttrSortPara = [D.TTree] -> B.Ab AttrPara
 
 type AttrPara = D.ParaBody C.AttrName D.TTree
 
-attrSort :: RopAttr -> AttrSortPara
+attrSort :: AttrSorter -> AttrSortPara
 attrSort def = attrBranch B.>=> attrSortPos def
 
 attrBranch :: AttrSortPara
@@ -113,8 +119,8 @@ maybeDoubleHyphen :: D.TTreeTo (Maybe String)
 maybeDoubleHyphen (D.TextLeafAttr2 _ n)     = Just n
 maybeDoubleHyphen _                         = Nothing
 
-attrSortPos :: RopAttr -> B.AbMap AttrPara
-attrSortPos (RopAttr sorter classify _ pos named) p =
+attrSortPos :: AttrSorter -> B.AbMap AttrPara
+attrSortPos (AttrSorter sorter classify _ pos named) p =
     do let noPos      = null $ D.paraPos p
            nameList   = map fst $ D.paraNameList p
            overlapped = pos `B.overlap` nameList
