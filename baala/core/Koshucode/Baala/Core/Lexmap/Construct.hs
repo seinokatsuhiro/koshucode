@@ -19,11 +19,9 @@ module Koshucode.Baala.Core.Lexmap.Construct
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Data                     as D
-import qualified Koshucode.Baala.Core.Attr                as C
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
 import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
 import qualified Koshucode.Baala.Data.Message             as Msg
-import qualified Koshucode.Baala.Core.Attr.Message        as Msg
 import qualified Koshucode.Baala.Core.Lexmap.Message      as Msg
 
 
@@ -41,14 +39,14 @@ type NNamed a = (NName, a)
 
 -- ----------------------  Constructor type
 
-type ConsLexmap = [C.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
+type ConsLexmap = [D.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
 
 type ConsLexmapBody = [D.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
 
 type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 
 -- | Find attribute sorter of relmap operator.
-type FindSorter = C.RopName -> Maybe C.AttrSetSort
+type FindSorter = C.RopName -> Maybe D.AttrSetSort
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
@@ -104,7 +102,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         deriv :: D.Token -> LexmapClause -> ConsLexmapBody
         deriv tok src ts =
-            do attr  <- C.attrSetSortNamed ts
+            do attr  <- D.attrSetSortNamed ts
                let lx = cons C.LexmapDerived tok attr
                tab   <- table lx src
                Right (lx, tab)
@@ -112,8 +110,8 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         table :: C.Lexmap -> LexmapClause -> B.Ab LexmapLinkTable
         table lx ((sec', _), C.LexmapTrees { C.lexmapTrees = form, C.lexmapAttrEd = edit }) =
             Msg.abSlot [lx] $ do
-              attr2       <- C.runAttrEd edit $ C.lexAttrTree lx
-              form2       <- C.substSlot gslot attr2 form
+              attr2       <- D.runAttrEd edit $ C.lexAttrTree lx
+              form2       <- D.substSlot gslot attr2 form
               (lx2, tab)  <- lexmap (eid + 1) sec' form2
               Right $ (lx, lx2) : tab
 
@@ -130,7 +128,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         -- -----------  construct lexmap except for submaps
 
-        cons :: C.LexmapType -> D.Token -> C.AttrSet -> C.Lexmap
+        cons :: C.LexmapType -> D.Token -> D.AttrSet -> C.Lexmap
         cons ty tok attr = check $ C.lexBase { C.lexType   = ty
                                              , C.lexToken  = tok
                                              , C.lexAttr   = attr }
@@ -150,9 +148,9 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         submap lx =
             let mark = B.mapToLeaf $ markLocal $ C.lexToken lx
                 attr = C.lexAttrTree lx
-            in case B.filterFst C.isAttrNameRelmap attr of
-                 [(C.AttrRelmapNormal _, ts)] -> submap2 lx ts
-                 [(C.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
+            in case B.filterFst D.isAttrNameRelmap attr of
+                 [(D.AttrRelmapNormal _, ts)] -> submap2 lx ts
+                 [(D.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
                  []                           -> Right (lx, [])  -- no submaps
                  _                            -> Msg.bug "submap"
 

@@ -56,14 +56,6 @@ library
         Koshucode.Baala.Core.Assert.Run
         Koshucode.Baala.Core.Assert.Message
 
-        Koshucode.Baala.Core.Attr
-        Koshucode.Baala.Core.Attr.Attr
-        Koshucode.Baala.Core.Attr.AttrEd
-        Koshucode.Baala.Core.Attr.AttrPos
-        Koshucode.Baala.Core.Attr.Message
-        Koshucode.Baala.Core.Attr.Parse
-        Koshucode.Baala.Core.Attr.Slot
-
         Koshucode.Baala.Core.Lexmap
         Koshucode.Baala.Core.Lexmap.Construct
         Koshucode.Baala.Core.Lexmap.Lexmap

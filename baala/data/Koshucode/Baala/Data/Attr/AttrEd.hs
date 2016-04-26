@@ -4,18 +4,18 @@
 
 -- | Attribute editor.
 
-module Koshucode.Baala.Core.Attr.AttrEd
+module Koshucode.Baala.Data.Attr.AttrEd
   ( AttrEd, AttrEdBody (..),
     consAttrEd, runAttrEd,
   ) where
 
 import qualified Data.Generics                        as G
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as D
-import qualified Koshucode.Baala.Core.Attr.AttrPos    as C
-import qualified Koshucode.Baala.Core.Attr.Slot       as C
-import qualified Koshucode.Baala.Data.Message         as Msg
-import qualified Koshucode.Baala.Core.Attr.Message    as Msg
+import qualified Koshucode.Baala.Data.Token           as D
+import qualified Koshucode.Baala.Data.Attr.AttrPos    as D
+import qualified Koshucode.Baala.Data.Attr.Slot       as D
+import qualified Koshucode.Baala.Base.Message         as Msg
+import qualified Koshucode.Baala.Data.Attr.Message    as Msg
 
 
 -- ----------------------  Data type
@@ -76,38 +76,38 @@ consAttrEd = loop where
                                       right trees $ AttrEdAppend subs
 
 -- | Edit relmap attributes.
-runAttrEd :: AttrEd -> B.AbMap [C.AttrTree]
+runAttrEd :: AttrEd -> B.AbMap [D.AttrTree]
 runAttrEd (B.Sourced toks edit) attr = run where
     run = Msg.abAttr toks $ case edit of
             AttrEdId                -> Right attr
-            AttrEdAdd opt k xs      -> add opt (C.AttrNormal k) xs
-            AttrEdRename (k', k)    -> rename (C.AttrNormal k') (C.AttrNormal k)
+            AttrEdAdd opt k xs      -> add opt (D.AttrNormal k) xs
+            AttrEdRename (k', k)    -> rename (D.AttrNormal k') (D.AttrNormal k)
             AttrEdFill xs           -> do xs2 <- fill pos xs
-                                          Right $ (C.attrNameTrunk, xs2) : attr
-            AttrEdTerm  k xs        -> term (C.AttrNormal k) xs
-            AttrEdNest  k xs        -> nest (C.AttrNormal k) xs
+                                          Right $ (D.attrNameTrunk, xs2) : attr
+            AttrEdTerm  k xs        -> term (D.AttrNormal k) xs
+            AttrEdNest  k xs        -> nest (D.AttrNormal k) xs
             AttrEdAppend rs         -> B.foldM (flip runAttrEd) attr rs
 
-    Just pos = lookup C.attrNameTrunk attr
+    Just pos = lookup D.attrNameTrunk attr
 
     add opt k xs = case lookup k attr of
                      Just _ | opt           -> Right attr
                             | otherwise     -> Msg.extraAttr
-                     Nothing                -> do xs' <- C.substSlot [] attr xs
+                     Nothing                -> do xs' <- D.substSlot [] attr xs
                                                   Right $ (k, xs') : attr
 
-    term k xs = do xs' <- C.substSlot [] attr xs
+    term k xs = do xs' <- D.substSlot [] attr xs
                    n   <- termPath xs'
                    Right $ (k, n) : attr
 
-    nest k xs = do xs' <- C.substSlot [] attr xs
+    nest k xs = do xs' <- D.substSlot [] attr xs
                    n   <- nestName xs'
                    Right $ (k, n) : attr
 
-    rename :: C.AttrName -> C.AttrName -> B.Ab [C.AttrTree]
+    rename :: D.AttrName -> D.AttrName -> B.Ab [D.AttrTree]
     rename k' k = case lookup k attr of
           Just _   -> Right $ B.assocRename1 k' k attr
-          Nothing  -> Msg.reqAttr $ C.attrNameText k
+          Nothing  -> Msg.reqAttr $ D.attrNameText k
 
     fill :: [D.TTree] -> [Maybe D.TTree] -> B.Ab [D.TTree]
     fill (p : ps) (Nothing : xs)   = Right . (p:) =<< fill ps xs

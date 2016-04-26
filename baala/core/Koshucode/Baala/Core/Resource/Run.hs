@@ -11,7 +11,6 @@ module Koshucode.Baala.Core.Resource.Run
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Assert             as C
-import qualified Koshucode.Baala.Core.Attr               as C
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
@@ -74,7 +73,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
-            trees      <- C.substSlot slots [] $ D.paraPos $ C.assPara ass
+            trees      <- D.substSlot slots [] $ D.paraPos $ C.assPara ass
             (lx, lxs)  <- consLexmap slots (findRelmap derives) sec trees
             relmap     <- consRelmap lx
             links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs

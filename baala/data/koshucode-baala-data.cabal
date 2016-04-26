@@ -50,6 +50,14 @@ library
 
         Koshucode.Baala.Data.Message
 
+        Koshucode.Baala.Data.Attr
+        Koshucode.Baala.Data.Attr.Attr
+        Koshucode.Baala.Data.Attr.AttrEd
+        Koshucode.Baala.Data.Attr.AttrPos
+        Koshucode.Baala.Data.Attr.Message
+        Koshucode.Baala.Data.Attr.Parse
+        Koshucode.Baala.Data.Attr.Slot
+
         Koshucode.Baala.Data.Church
         Koshucode.Baala.Data.Church.Build
         Koshucode.Baala.Data.Church.Cop

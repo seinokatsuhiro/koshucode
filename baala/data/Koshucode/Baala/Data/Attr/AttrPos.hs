@@ -4,7 +4,7 @@
 
 -- | Positional attributes.
 
-module Koshucode.Baala.Core.Attr.AttrPos
+module Koshucode.Baala.Data.Attr.AttrPos
   ( -- * Positional attribute
     AttrPos (..),
     attrPosNameList,
@@ -24,8 +24,8 @@ module Koshucode.Baala.Core.Attr.AttrPos
 
 import qualified Data.Generics                      as G
 import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Data               as D
-import qualified Koshucode.Baala.Core.Attr.Message  as Msg
+import qualified Koshucode.Baala.Data.Token         as D
+import qualified Koshucode.Baala.Data.Attr.Message  as Msg
 
 
 -- ----------------------  Positional attribute

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Attr.Message
+module Koshucode.Baala.Data.Attr.Message
   ( -- * Abortable
     abAttr,
     abAttrTrees,
@@ -24,8 +24,8 @@ module Koshucode.Baala.Core.Attr.Message
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Data.Message  as Msg
+import qualified Koshucode.Baala.Data.Token    as D
+import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 abAttr        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr        = B.abortable "attr"

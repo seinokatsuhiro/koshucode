@@ -3,29 +3,29 @@
 
 -- | Slot substitution.
 
-module Koshucode.Baala.Core.Attr.Slot
+module Koshucode.Baala.Data.Attr.Slot
   ( GlobalSlot,
     substSlot,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as D
-import qualified Koshucode.Baala.Core.Attr.AttrPos    as C
-import qualified Koshucode.Baala.Core.Attr.Message    as Msg
+import qualified Koshucode.Baala.Data.Token           as D
+import qualified Koshucode.Baala.Data.Attr.AttrPos    as D
+import qualified Koshucode.Baala.Data.Attr.Message    as Msg
 
 type GlobalSlot = D.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [C.AttrTree] -> B.AbMap [D.TTree]
+substSlot :: [GlobalSlot] -> [D.AttrTree] -> B.AbMap [D.TTree]
 substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot] -> [C.AttrTree] -> D.TTree -> B.Ab [D.TTree]
+substTree :: [GlobalSlot] -> [D.AttrTree] -> D.TTree -> B.Ab [D.TTree]
 substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (D.TSlot _ n name))
-        | n == 0    = replace n name C.attrNameTrunk attr (`pos` name)
-        | n == 1    = replace n name (C.AttrNormal name) attr Right
+        | n == 0    = replace n name D.attrNameTrunk attr (`pos` name)
+        | n == 1    = replace n name (D.AttrNormal name) attr Right
         | n == 2    = replace n name name gslot Right
         | otherwise = Msg.noSlotName n name
     loop tk = Right [tk]

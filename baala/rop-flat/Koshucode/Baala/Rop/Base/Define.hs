@@ -7,10 +7,11 @@ module Koshucode.Baala.Rop.Base.Define
     ropList, def,
   ) where
 
+import qualified Koshucode.Baala.Data as D
 import qualified Koshucode.Baala.Core as C
 
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (C.RopCons c, C.RopUsage, C.AttrLayout)
+type RopDefine c = (C.RopCons c, C.RopUsage, D.AttrLayout)
 
 -- | Make implementations of relmap operators.
 ropList
@@ -20,10 +21,10 @@ ropList
 ropList group = map rop where
     rop (cons, usage, attr) =
         let name   = head $ words usage
-            sorter = C.attrSetSort attr
+            sorter = D.attrSetSort attr
         in C.Rop name group usage attr sorter cons
 
 -- | Make definition of relmap operator.
 def :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
-def cons usage attr = (cons, usage, C.parseAttrLayout attr)
+def cons usage attr = (cons, usage, D.parseAttrLayout attr)
 

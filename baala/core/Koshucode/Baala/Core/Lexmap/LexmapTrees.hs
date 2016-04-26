@@ -14,7 +14,6 @@ module Koshucode.Baala.Core.Lexmap.LexmapTrees
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data                 as D
-import qualified Koshucode.Baala.Core.Attr            as C
 import qualified Koshucode.Baala.Data.Message         as Msg
 
 
@@ -23,7 +22,7 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 data LexmapTrees = LexmapTrees
     { lexmapTrees   :: [D.TTree]
     , lexmapPara    :: TTreePara
-    , lexmapAttrEd  :: C.AttrEd
+    , lexmapAttrEd  :: D.AttrEd
     } deriving (Show, Eq, Ord)
 
 clauseAttrType :: D.ParaType String
@@ -35,7 +34,7 @@ consLexmapTrees para =
          Nothing -> Right ()
          Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
        attr <- D.paraGetOpt [] para "attr"
-       edit <- C.consAttrEd attr
+       edit <- D.consAttrEd attr
        let body = D.paraPos para
        Right $ LexmapTrees body para edit
 
@@ -47,11 +46,11 @@ type TTreePara = D.Para D.TTree
 
 -- | Make token tree parameter with single-hyphen names.
 ttreePara1 :: [D.Token] -> B.Ab TTreePara
-ttreePara1 = ttreeParaBy C.maybeSingleHyphen
+ttreePara1 = ttreeParaBy D.maybeSingleHyphen
 
 -- | Make token tree parameter with double-hyphen names.
 ttreePara2 :: [D.Token] -> B.Ab TTreePara
-ttreePara2 = ttreeParaBy C.maybeDoubleHyphen
+ttreePara2 = ttreeParaBy D.maybeDoubleHyphen
 
 ttreeParaBy :: D.TTreeTo (Maybe String) -> [D.Token] -> B.Ab TTreePara
 ttreeParaBy f toks =

@@ -20,7 +20,6 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Data         as D
-import qualified Koshucode.Baala.Core.Attr    as C
 
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TTree',
@@ -28,7 +27,7 @@ import qualified Koshucode.Baala.Core.Attr    as C
 data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
     , lexToken     :: D.Token       -- ^ Token of operator
-    , lexAttr      :: C.AttrSet     -- ^ Attribute of relmap operation
+    , lexAttr      :: D.AttrSet     -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -53,7 +52,7 @@ instance B.CodePtr Lexmap where
 type RopName = String
 
 -- | Attribute of relmap operation.
-lexAttrTree :: Lexmap -> [C.AttrTree]
+lexAttrTree :: Lexmap -> [D.AttrTree]
 lexAttrTree = map (B.mapSnd head) . D.paraNameList . lexAttr
 
 -- | Empty base lexmap.

@@ -10,8 +10,8 @@ module Koshucode.Baala.Core.Relmap.Rop
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core.Lexmap           as C
-import qualified Koshucode.Baala.Core.Attr             as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
 
 
@@ -22,8 +22,8 @@ data Rop' h c = Rop
     { ropName     :: C.RopName        -- ^ Operator name
     , ropGroup    :: String           -- ^ Operator group
     , ropUsage    :: RopUsage         -- ^ Usage text of operator
-    , ropAttr     :: C.AttrLayout     -- ^ Attribute of operator
-    , ropSorter   :: C.AttrSetSort    -- ^ Attribute sorter
+    , ropAttr     :: D.AttrLayout     -- ^ Attribute of operator
+    , ropSorter   :: D.AttrSetSort    -- ^ Attribute sorter
     , ropCons     :: RopCons' h c     -- ^ Constructor of operator
     }
 

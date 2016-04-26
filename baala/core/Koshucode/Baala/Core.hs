@@ -3,7 +3,6 @@
 module Koshucode.Baala.Core
   ( -- * Modules
     module Koshucode.Baala.Core.Assert,
-    module Koshucode.Baala.Core.Attr,
     module Koshucode.Baala.Core.Lexmap,
     module Koshucode.Baala.Core.Relkit,
     module Koshucode.Baala.Core.Relmap,
@@ -14,7 +13,6 @@ module Koshucode.Baala.Core
   ) where
 
 import Koshucode.Baala.Core.Assert
-import Koshucode.Baala.Core.Attr
 import Koshucode.Baala.Core.Lexmap
 import Koshucode.Baala.Core.Relkit
 import Koshucode.Baala.Core.Relmap

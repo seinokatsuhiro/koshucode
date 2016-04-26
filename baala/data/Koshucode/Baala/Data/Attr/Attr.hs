@@ -4,7 +4,7 @@
 
 -- | Attributes of relmap operator.
 
-module Koshucode.Baala.Core.Attr.Attr
+module Koshucode.Baala.Data.Attr.Attr
   ( -- * Attribute layout
     AttrLayout (..),
     attrLayout,
@@ -18,23 +18,24 @@ module Koshucode.Baala.Core.Attr.Attr
   ) where
 
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as D
-import qualified Koshucode.Baala.Core.Attr.AttrPos   as C
-import qualified Koshucode.Baala.Core.Attr.Message   as Msg
+import qualified Koshucode.Baala.Data.Type           as D
+import qualified Koshucode.Baala.Data.Token          as D
+import qualified Koshucode.Baala.Data.Attr.AttrPos   as D
+import qualified Koshucode.Baala.Data.Attr.Message   as Msg
 
 
 -- ----------------------  Attribute layout
 
 -- | Attribute layout.
 data AttrLayout = AttrLayout
-    { attrPosSorter   :: C.AttrSortTree     -- ^ Sorter for positional attributes
+    { attrPosSorter   :: D.AttrSortTree     -- ^ Sorter for positional attributes
                                             --   (derived from @attrPos@)
-    , attrClassifier  :: B.Map C.AttrName   -- ^ Attribute classifier
+    , attrClassifier  :: B.Map D.AttrName   -- ^ Attribute classifier
                                             --   (derived from @attrNamesP@ and @attrNamesN@)
-    , attrPos         :: C.AttrNamePos      -- ^ Positional attribute
-    , attrNamesP      :: [C.AttrName]       -- ^ Names of positional attributes
+    , attrPos         :: D.AttrNamePos      -- ^ Positional attribute
+    , attrNamesP      :: [D.AttrName]       -- ^ Names of positional attributes
                                             --   (derived from @attrPos@)
-    , attrNamesN      :: [C.AttrName]       -- ^ Names of named attributes
+    , attrNamesN      :: [D.AttrName]       -- ^ Names of named attributes
     }
 
 instance Show AttrLayout where
@@ -43,25 +44,25 @@ instance Show AttrLayout where
                 ++ ", named = " ++ show attrNamesN ++ " }"
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: C.AttrNamePos -> [C.AttrName] -> AttrLayout
+attrLayout :: D.AttrNamePos -> [D.AttrName] -> AttrLayout
 attrLayout pos namesN = sorter where
     sorter     = AttrLayout sorterP classify pos namesP namesN
-    sorterP    = C.sortAttrTree pos
-    namesP     = C.attrPosNameList pos
+    sorterP    = D.sortAttrTree pos
+    namesP     = D.attrPosNameList pos
     classify   = attrClassify namesP namesN
 
-attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
+attrClassify :: [D.AttrName] -> [D.AttrName] -> B.Map D.AttrName
 attrClassify namesP namesN n = n2 where
-    n2 :: C.AttrName
-    n2 = let nam = C.attrNameText n
+    n2 :: D.AttrName
+    n2 = let nam = D.attrNameText n
          in case lookup nam pairs of
               Just k  -> k
               Nothing -> n
 
-    pairs    :: [B.Named C.AttrName]
+    pairs    :: [B.Named D.AttrName]
     pairs    = map pair alls
-    pair k   = (C.attrNameText k, k)
-    alls     = C.attrNameTrunk : namesP ++ namesN
+    pair k   = (D.attrNameText k, k)
+    alls     = D.attrNameTrunk : namesP ++ namesN
 
 
 -- ----------------------  Attribute sorter
@@ -72,7 +73,7 @@ attrClassify namesP namesN n = n2 where
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> let a = attrLayout (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
+--   >>> let a = attrLayout (D.AttrPos2 (D.AttrNormal "a") (D.AttrNormal "b")) [D.AttrNormal "x", D.AttrNormal "y"]
 --   >>> attrSetSort a =<< D.tt "a b -x /c 'd -y e"
 --   Right (ParaBody {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
@@ -95,7 +96,7 @@ attrClassify namesP namesN n = n2 where
 --     })
 
 -- | Attribute set.
-type AttrSet = D.ParaBody C.AttrName D.TTree
+type AttrSet = D.ParaBody D.AttrName D.TTree
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
@@ -113,7 +114,7 @@ attrSetSortNamed trees =
            p2  = D.paraNameAdd "@trunk" (D.paraPos p) p
            dup = D.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ D.paraNameMapKeys C.AttrNormal p2
+       Right $ D.paraNameMapKeys D.AttrNormal p2
 
 -- | Sort positional part of attribute.
 attrSetSortPos :: AttrLayout -> B.AbMap AttrSet
@@ -132,14 +133,14 @@ attrSetSortPos (AttrLayout sorter classify _ pos named) p =
        attrCheck pos named attr
        Right p3
 
-attrCheck :: [C.AttrName] -> [C.AttrName] -> [C.AttrTree] -> B.Ab ()
+attrCheck :: [D.AttrName] -> [D.AttrName] -> [D.AttrTree] -> B.Ab ()
 attrCheck namesP namesN attr =
     case t (map fst attr) B.\\ textAll of
       []    -> Right ()
       u : _ -> Msg.unexpAttr $ "Unknown " ++ ('-' : u)
     where
       textAll = "@trunk" : t namesP ++ t namesN
-      t       = map C.attrNameText
+      t       = map D.attrNameText
 
 attrList :: D.ParaBody n a -> [(n, [a])]
 attrList = map (B.mapSnd concat) . D.paraNameList
