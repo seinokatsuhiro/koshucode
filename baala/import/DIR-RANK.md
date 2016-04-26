@@ -319,7 +319,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    167 judges
+**    171 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Base"
@@ -402,6 +402,10 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.AngleText"      /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.AngleText"      /import "Koshucode.Baala.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Bracket"        /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Bracket"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.Bracket"        /import "Koshucode.Baala.Data.Token.Token"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Message"        /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.Next"           /import "Data.Char"
@@ -431,13 +435,14 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenLine"      /import "Koshucode.Baala.Data.Token.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Koshucode.Baala.Data.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Koshucode.Baala.Data.Token.TokenLine"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token.TokenTree"      /import "Koshucode.Baala.Data.Token.Bracket"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.AngleText"
+|-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Bracket"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Next"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Short"
 |-- IMPORT  /module "Koshucode.Baala.Data.Token"                /import "Koshucode.Baala.Data.Token.Term"
@@ -545,7 +550,7 @@ Command `./dir-rank.k ../data/data/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Token"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 1 | "AngleText" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Token" | [ ] ] [ 2 | "Next" | [ ] ] [ 3 | "Short" | [ ] ] [ 3 | "TokenLine" | [ ] ] [ 4 | "TokenClause" | [ ] ] [ 4 | "TokenTree" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Token"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 1 | "AngleText" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Token" | [ ] ] [ 2 | "Bracket" | [ ] ] [ 2 | "Next" | [ ] ] [ 3 | "Short" | [ ] ] [ 3 | "TokenLine" | [ ] ] [ 4 | "TokenClause" | [ ] ] [ 4 | "TokenTree" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Clock" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Para" | [ ] ] [ 2 | "Date" | [ ] ] [ 2 | "Decimal" | [ ] ] [ 3 | "Arithmetic" | [ ] ] [ 3 | "Time" | [ ] ] [ 6 | "Interp" | [ "Token" ] ] [ 6 | "Judge" | [ "Token" ] ] [ 6 | "Type" | [ "Token" ] ] [ 7 | "About" | [ "Token" ] ] [ 7 | "Head" | [ "Token" ] ] [ 8 | "Rel" | [ "Token" ] ] [ 9 | "Mono" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Data.Content"  /base-rank {= /rank /base /import-dir [ 6 | "Message" | [ "Token" ] ] [ 11 | "Class" | [ "Token" | "Type" ] ] [ 11 | "Tree" | [ "Token" | "Type" ] ] [ 12 | "BaalaC" | [ "Token" | "Type" ] ] [ 12 | "Decode" | [ "Token" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 11 | "Message" | [ "Token" | "Type" ] ] [ 12 | "Cox" | [ "Token" ] ] [ 13 | "Cop" | [ "Token" ] ] [ 14 | "Build" | [ "Content" | "Token" ] ] [ 15 | "Run" | [ "Content" | "Token" | "Type" ] ] =}
@@ -571,6 +576,7 @@ TABLE : DIR-RANK
                                              1     "AngleText"     [ ]
                                              1     "Message"       [ ]
                                              1     "Token"         [ ]
+                                             2     "Bracket"       [ ]
                                              2     "Next"          [ ]
                                              3     "Short"         [ ]
                                              3     "TokenLine"     [ ]
@@ -647,7 +653,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    197 judges
+**    199 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -684,68 +690,69 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.RelTable"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.Run"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Attr"            /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Attr"            /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Attr"            /import "Koshucode.Baala.Core.Attr.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Attr"            /import "Koshucode.Baala.Core.Attr.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Lexmap.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Lexmap.Slot"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Data.Message"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Core.Attr.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Core.Attr.Slot"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Data.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrEd"          /import "Koshucode.Baala.Core.Attr.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrPos"         /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrPos"         /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrPos"         /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.AttrPos"         /import "Koshucode.Baala.Core.Attr.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Message"         /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Message"         /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Message"         /import "Koshucode.Baala.Data.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Parse"           /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Parse"           /import "Koshucode.Baala.Core.Attr.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Parse"           /import "Koshucode.Baala.Core.Attr.AttrPos"
+
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Slot"            /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Slot"            /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Slot"            /import "Koshucode.Baala.Core.Attr.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr.Slot"            /import "Koshucode.Baala.Core.Attr.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr"                 /import "Koshucode.Baala.Core.Attr.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr"                 /import "Koshucode.Baala.Core.Attr.AttrEd"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr"                 /import "Koshucode.Baala.Core.Attr.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr"                 /import "Koshucode.Baala.Core.Attr.Parse"
+|-- IMPORT  /module "Koshucode.Baala.Core.Attr"                 /import "Koshucode.Baala.Core.Attr.Slot"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.AttrEd"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attr"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.LexmapTrees"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Data.Message"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Attr.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Attr"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Lexmap.AttrEd"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Lexmap.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Data.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Message"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Message"       /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Message"       /import "Koshucode.Baala.Data.Message"
-
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.Message"
-
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attr"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.AttrEd"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Construct"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.LexmapTrees"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Slot"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Data.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Assert.Message"
-|-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Attr.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Relkit.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Relmap.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Core.Resource.Message"
@@ -765,7 +772,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Relkit.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Relkit.Construct"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Attr.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Relkit.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit"               /import "Koshucode.Baala.Core.Relkit.Construct"
@@ -810,6 +817,7 @@ TABLE : DIR-RANK
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Core.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Core.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Core.Relmap.Relmap"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Base"
@@ -817,7 +825,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Relmap.Relmap"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Lexmap.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Attr.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Relmap.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap"               /import "Koshucode.Baala.Core.Relmap.Construct"
@@ -867,9 +875,10 @@ TABLE : DIR-RANK
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Assert"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Relmap"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Assert"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Resource.Resource"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Assert.Message"
 
@@ -880,6 +889,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Resource"
 
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Assert"
+|-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Relmap"
@@ -902,99 +912,105 @@ Command `./dir-rank.k ../core/data/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 2 | "AttrPos" | [ ] ] [ 3 | "Attr" | [ ] ] [ 3 | "Slot" | [ ] ] [ 4 | "AttrEd" | [ ] ] [ 4 | "Lexmap" | [ ] ] [ 5 | "LexmapTrees" | [ ] ] [ 6 | "Construct" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Core.Relkit"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 8 | "Relkit" | [ "Lexmap" ] ] [ 9 | "Construct" | [ ] ] [ 10 | "Run" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Core.Relmap"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 12 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 13 | "Rop" | [ "Lexmap" ] ] [ 13 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 14 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 14 | "Global" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Core.Attr"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 2 | "AttrPos" | [ ] ] [ 3 | "Attr" | [ ] ] [ 3 | "Slot" | [ ] ] [ 4 | "AttrEd" | [ ] ] [ 4 | "Parse" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 6 | "Lexmap" | [ "Attr" ] ] [ 6 | "LexmapTrees" | [ "Attr" ] ] [ 7 | "Construct" | [ "Attr" ] ] =}
+|-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Core.Relkit"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 9 | "Relkit" | [ "Lexmap" ] ] [ 10 | "Construct" | [ ] ] [ 11 | "Run" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "RelTable" | [ ] ] [ 12 | "Dataset" | [ "Relkit" ] ] [ 16 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 17 | "Run" | [ "Lexmap" | "Relkit" | "Relmap" ] ] =}
-|-- DIR-RANK  /dir-rank 21  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 8 | "Clause" | [ "Lexmap" ] ] [ 19 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 20 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 20 | "Run" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 21 | "Read" | [ "Relmap" ] ] =}
-|-- DIR-RANK  /dir-rank 22  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 2 | "Message" | [ ] ] [ 7 | "Lexmap" | [ ] ] [ 11 | "Relkit" | [ ] ] [ 15 | "Relmap" | [ ] ] [ 18 | "Assert" | [ ] ] [ 22 | "Resource" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Data" | [ ] ] [ 23 | "Core" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] =}
+|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Core.Relmap"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 13 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 14 | "Rop" | [ "Attr" | "Lexmap" ] ] [ 14 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 15 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 15 | "Global" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "RelTable" | [ ] ] [ 13 | "Dataset" | [ "Relkit" ] ] [ 17 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 18 | "Run" | [ "Lexmap" | "Relkit" | "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 22  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 9 | "Clause" | [ "Lexmap" ] ] [ 20 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 21 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 21 | "Run" | [ "Assert" | "Attr" | "Lexmap" | "Relmap" ] ] [ 22 | "Read" | [ "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 2 | "Message" | [ ] ] [ 5 | "Attr" | [ ] ] [ 8 | "Lexmap" | [ ] ] [ 12 | "Relkit" | [ ] ] [ 16 | "Relmap" | [ ] ] [ 19 | "Assert" | [ ] ] [ 23 | "Resource" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Data" | [ ] ] [ 24 | "Core" | [ "Assert" | "Attr" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] =}
 
-*** 9 judges
+*** 10 judges
 
 === note
 
 TABLE : DIR-RANK
 
   /dir-rank /dir                              /base-rank
-  --------- --------------------------------- ----------------------------------------------------------------------------------
+  --------- --------------------------------- -------------------------------------------------------------------------------------------
   0         "Koshucode.Baala.Base"            /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+                                              ----- --------------- ---------------------------------------------------------------------
                                               0     "Message"       [ ]
                                               
   0         "Koshucode.Baala.Data"            /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+                                              ----- --------------- ---------------------------------------------------------------------
                                               0     "Message"       [ ]
                                               
-  6         "Koshucode.Baala.Core.Lexmap"     /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  4         "Koshucode.Baala.Core.Attr"       /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               1     "Message"       [ ]
                                               2     "AttrPos"       [ ]
                                               3     "Attr"          [ ]
                                               3     "Slot"          [ ]
                                               4     "AttrEd"        [ ]
-                                              4     "Lexmap"        [ ]
-                                              5     "LexmapTrees"   [ ]
-                                              6     "Construct"     [ ]
+                                              4     "Parse"         [ ]
                                               
-  10        "Koshucode.Baala.Core.Relkit"     /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  7         "Koshucode.Baala.Core.Lexmap"     /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
+                                              6     "Lexmap"        [ "Attr" ]
+                                              6     "LexmapTrees"   [ "Attr" ]
+                                              7     "Construct"     [ "Attr" ]
+                                              
+  11        "Koshucode.Baala.Core.Relkit"     /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               1     "Message"       [ ]
-                                              8     "Relkit"        [ "Lexmap" ]
-                                              9     "Construct"     [ ]
-                                              10    "Run"           [ ]
+                                              9     "Relkit"        [ "Lexmap" ]
+                                              10    "Construct"     [ ]
+                                              11    "Run"           [ ]
                                               
-  14        "Koshucode.Baala.Core.Relmap"     /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  15        "Koshucode.Baala.Core.Relmap"     /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               1     "Message"       [ ]
                                               1     "Result"        [ ]
                                               2     "Option"        [ ]
-                                              12    "Relmap"        [ "Lexmap" | "Relkit" ]
-                                              13    "Rop"           [ "Lexmap" ]
-                                              13    "Specialize"    [ "Lexmap" | "Relkit" ]
-                                              14    "Construct"     [ "Lexmap" | "Relkit" ]
-                                              14    "Global"        [ ]
+                                              13    "Relmap"        [ "Lexmap" | "Relkit" ]
+                                              14    "Rop"           [ "Attr" | "Lexmap" ]
+                                              14    "Specialize"    [ "Lexmap" | "Relkit" ]
+                                              15    "Construct"     [ "Lexmap" | "Relkit" ]
+                                              15    "Global"        [ ]
                                               
-  17        "Koshucode.Baala.Core.Assert"     /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  18        "Koshucode.Baala.Core.Assert"     /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               1     "Message"       [ ]
                                               1     "RelTable"      [ ]
-                                              12    "Dataset"       [ "Relkit" ]
-                                              16    "Assert"        [ "Lexmap" | "Relmap" ]
-                                              17    "Run"           [ "Lexmap" | "Relkit" | "Relmap" ]
+                                              13    "Dataset"       [ "Relkit" ]
+                                              17    "Assert"        [ "Lexmap" | "Relmap" ]
+                                              18    "Run"           [ "Lexmap" | "Relkit" | "Relmap" ]
                                               
-  21        "Koshucode.Baala.Core.Resource"   /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  22        "Koshucode.Baala.Core.Resource"   /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               1     "Message"       [ ]
-                                              8     "Clause"        [ "Lexmap" ]
-                                              19    "Resource"      [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ]
-                                              20    "Include"       [ "Assert" | "Lexmap" | "Relmap" ]
-                                              20    "Run"           [ "Assert" | "Lexmap" | "Relmap" ]
-                                              21    "Read"          [ "Relmap" ]
+                                              9     "Clause"        [ "Lexmap" ]
+                                              20    "Resource"      [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ]
+                                              21    "Include"       [ "Assert" | "Lexmap" | "Relmap" ]
+                                              21    "Run"           [ "Assert" | "Attr" | "Lexmap" | "Relmap" ]
+                                              22    "Read"          [ "Relmap" ]
                                               
-  22        "Koshucode.Baala.Core"            /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  23        "Koshucode.Baala.Core"            /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               2     "Message"       [ ]
-                                              7     "Lexmap"        [ ]
-                                              11    "Relkit"        [ ]
-                                              15    "Relmap"        [ ]
-                                              18    "Assert"        [ ]
-                                              22    "Resource"      [ ]
+                                              5     "Attr"          [ ]
+                                              8     "Lexmap"        [ ]
+                                              12    "Relkit"        [ ]
+                                              16    "Relmap"        [ ]
+                                              19    "Assert"        [ ]
+                                              23    "Resource"      [ ]
                                               
-  23        "Koshucode.Baala"                 /rank /base           /import-dir
-                                              ----- --------------- ------------------------------------------------------------
+  24        "Koshucode.Baala"                 /rank /base           /import-dir
+                                              ----- --------------- ---------------------------------------------------------------------
                                               0     "Base"          [ ]
                                               0     "Data"          [ ]
-                                              23    "Core"          [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ]
+                                              24    "Core"          [ "Assert" | "Attr" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ]
                                               
 
 === rel
 
 **
 **  SUMMARY
-**       9 judges on DIR-RANK
-**       9 judges in total
+**      10 judges on DIR-RANK
+**      10 judges in total
 **
 ```
 
@@ -1123,10 +1139,9 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    128 judges
+**    127 judges
 **
 
-|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Core"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Base"

@@ -7,7 +7,7 @@ name:                koshucode-baala-calculator
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.129.0.0
+version:             0.130.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A portable relational calculator
@@ -54,14 +54,14 @@ executable koshu
        , directory                   == 1.*
        , filepath                    == 1.*
        , time                        == 1.*
-       , koshucode-baala-base        == 0.129.*
-       , koshucode-baala-data        == 0.129.*
-       , koshucode-baala-core        == 0.129.*
-       , koshucode-baala-rop-flat    == 0.129.*
-       , koshucode-baala-rop-nested  == 0.129.*
-       , koshucode-baala-rop-cox     == 0.129.*
-       , koshucode-baala-cop         == 0.129.*
-       , koshucode-baala-writer      == 0.129.*
+       , koshucode-baala-base        == 0.130.*
+       , koshucode-baala-data        == 0.130.*
+       , koshucode-baala-core        == 0.130.*
+       , koshucode-baala-rop-flat    == 0.130.*
+       , koshucode-baala-rop-nested  == 0.130.*
+       , koshucode-baala-rop-cox     == 0.130.*
+       , koshucode-baala-cop         == 0.130.*
+       , koshucode-baala-writer      == 0.130.*
 
 library
   -- Modules exported by the library.
@@ -86,12 +86,12 @@ library
        , directory                   == 1.*
        , filepath                    == 1.*
        , time                        == 1.*
-       , koshucode-baala-base        == 0.129.*
-       , koshucode-baala-data        == 0.129.*
-       , koshucode-baala-core        == 0.129.*
-       , koshucode-baala-rop-flat    == 0.129.*
-       , koshucode-baala-rop-nested  == 0.129.*
-       , koshucode-baala-rop-cox     == 0.129.*
-       , koshucode-baala-cop         == 0.129.*
-       , koshucode-baala-writer      == 0.129.*
+       , koshucode-baala-base        == 0.130.*
+       , koshucode-baala-data        == 0.130.*
+       , koshucode-baala-core        == 0.130.*
+       , koshucode-baala-rop-flat    == 0.130.*
+       , koshucode-baala-rop-nested  == 0.130.*
+       , koshucode-baala-rop-cox     == 0.130.*
+       , koshucode-baala-cop         == 0.130.*
+       , koshucode-baala-writer      == 0.130.*
 

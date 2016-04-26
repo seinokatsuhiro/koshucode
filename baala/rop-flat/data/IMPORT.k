@@ -7,10 +7,9 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    128 judges
+**    127 judges
 **
 
-|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Core"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Base"
