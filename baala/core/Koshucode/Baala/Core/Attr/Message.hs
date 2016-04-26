@@ -4,18 +4,15 @@ module Koshucode.Baala.Core.Attr.Message
   ( -- * Abortable
     abAttr,
     abAttrTrees,
-    abLexmap,
     abSlot,
     abSlotTree,
     -- * Message
-    ambRelmap,
     dupAttr,
     extraAttr,
     noSlotName,
     noSlotIndex,
     reqAttr,
     reqAttrName,
-    reqGroup,
     unexpAttr,
     unexpAttr0,
     unexpAttr1,
@@ -24,7 +21,6 @@ module Koshucode.Baala.Core.Attr.Message
     unexpAttr4,
     unexpAttr1V,
     unexpAttr1Q,
-    unkRelmap,
   ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -37,19 +33,11 @@ abAttr        = B.abortable "attr"
 abAttrTrees   :: D.TTreesTo (B.Map (B.Ab b))
 abAttrTrees   = Msg.abortableTrees "attr"
 
-abLexmap      :: D.TTreesTo (B.Map (B.Ab b))
-abLexmap      = Msg.abortableTrees "lexmap"
-
 abSlot        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot        = B.abortable "slot"
 
 abSlotTree    :: D.TTreeTo (B.Map (B.Ab b))
 abSlotTree    = Msg.abortableTree "slot"
-
--- | Ambiguous relmaps
-ambRelmap :: String -> [d] -> B.Ab a
-ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
-                         $ name ++ " (" ++ show (length ds) ++ ")"
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> B.Ab a
@@ -80,10 +68,6 @@ reqAttr = Left . B.abortLine "Require attribute"
 reqAttrName :: String -> B.Ab a
 reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 
--- | Require grouping paren
-reqGroup :: B.Ab a
-reqGroup = Left $ B.abortBecause "Require grouping parens"
-
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
@@ -108,8 +92,4 @@ unexpAttr1V = unexpAttr "Require attributes"
 
 unexpAttr1Q :: B.Ab a
 unexpAttr1Q = unexpAttr "Require one or two attributes"
-
--- | Unknown relmap operator
-unkRelmap :: String -> B.Ab a
-unkRelmap = Left . B.abortLine "Unknown relmap operator"
 

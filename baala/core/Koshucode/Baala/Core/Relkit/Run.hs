@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit     as C
 import qualified Koshucode.Baala.Core.Relkit.Construct  as C
-import qualified Koshucode.Baala.Core.Attr.Message      as Msg
+import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
 import qualified Koshucode.Baala.Core.Relkit.Message    as Msg
 
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
