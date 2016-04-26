@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Data.Attr.AttrEd
         Koshucode.Baala.Data.Attr.AttrPos
         Koshucode.Baala.Data.Attr.Message
+        Koshucode.Baala.Data.Attr.Para
         Koshucode.Baala.Data.Attr.Parse
         Koshucode.Baala.Data.Attr.Slot
 
@@ -95,7 +96,6 @@ library
         Koshucode.Baala.Data.Type.Judge
         Koshucode.Baala.Data.Type.Message
         Koshucode.Baala.Data.Type.Mono
-        Koshucode.Baala.Data.Type.Para
         Koshucode.Baala.Data.Type.Rel
         Koshucode.Baala.Data.Type.Time
         Koshucode.Baala.Data.Type.Type

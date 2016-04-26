@@ -3,7 +3,7 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Data.Type.Para
+module Koshucode.Baala.Data.Attr.Para
   ( -- * Parameter constructor
     Para, ParaBody (..), ParaMap,
     para, paraEmpty,

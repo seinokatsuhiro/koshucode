@@ -13,7 +13,6 @@ module Koshucode.Baala.Data.Type
     module Koshucode.Baala.Data.Type.Interp,
     module Koshucode.Baala.Data.Type.Judge,
     module Koshucode.Baala.Data.Type.Mono,
-    module Koshucode.Baala.Data.Type.Para,
     module Koshucode.Baala.Data.Type.Rel,
     module Koshucode.Baala.Data.Type.Time,
     module Koshucode.Baala.Data.Type.Type,
@@ -28,7 +27,6 @@ import Koshucode.Baala.Data.Type.Head
 import Koshucode.Baala.Data.Type.Interp
 import Koshucode.Baala.Data.Type.Judge
 import Koshucode.Baala.Data.Type.Mono
-import Koshucode.Baala.Data.Type.Para
 import Koshucode.Baala.Data.Type.Rel
 import Koshucode.Baala.Data.Type.Time
 import Koshucode.Baala.Data.Type.Type

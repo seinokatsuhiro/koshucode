@@ -18,9 +18,9 @@ module Koshucode.Baala.Data.Attr.Attr
   ) where
 
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data.Type           as D
 import qualified Koshucode.Baala.Data.Token          as D
 import qualified Koshucode.Baala.Data.Attr.AttrPos   as D
+import qualified Koshucode.Baala.Data.Attr.Para      as D
 import qualified Koshucode.Baala.Data.Attr.Message   as Msg
 
 
