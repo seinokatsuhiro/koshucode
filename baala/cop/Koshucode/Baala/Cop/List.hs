@@ -12,6 +12,7 @@ import qualified Data.List                       as List
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Coxhand     as H
+import qualified Koshucode.Baala.Cop.Replace     as Cop
 import qualified Koshucode.Baala.Cop.Message     as Msg
 
 
@@ -260,62 +261,26 @@ copFunIn = f B.<=< D.getRightArg2 where
 -- ----------------------  replace
 
 copReplaceAll :: (D.CContent c) => D.CopCalc c
-copReplaceAll = copReplace replaceAll
+copReplaceAll = copReplace Cop.replaceAll
 
 copReplaceFirst :: (D.CContent c) => D.CopCalc c
-copReplaceFirst = copReplace replaceFirst
+copReplaceFirst = copReplace Cop.replaceFirst
 
 copReplaceLast :: (D.CContent c) => D.CopCalc c
-copReplaceLast = copReplace replaceLast
+copReplaceLast = copReplace Cop.replaceLast
 
 copReplaceBegin :: (D.CContent c) => D.CopCalc c
-copReplaceBegin = copReplace replaceBegin
+copReplaceBegin = copReplace Cop.replaceBegin
 
 copReplaceEnd :: (D.CContent c) => D.CopCalc c
-copReplaceEnd = copReplace replaceEnd
+copReplaceEnd = copReplace Cop.replaceEnd
 
-copReplace :: (D.CContent c) => (String -> String -> String -> String) -> D.CopCalc c
+copReplace :: (D.CContent c) => Cop.Replace Char -> D.CopCalc c
 copReplace rep = op where
     op [Right from, Right to, Right text]
         | D.isText from && D.isText to && D.isText text =
             D.contApTextToText (D.gText from `rep` D.gText to) text
     op xs = typeUnmatch xs
-
-replaceAll :: (Eq a) => [a] -> [a] -> [a] -> [a]
-replaceAll from to = loop where
-    n           = length from
-    loop []     = []
-    loop xxs@(x:xs)
-        | from `B.isPrefixOf` xxs = to ++ loop (drop n xxs)
-        | otherwise               = x : loop xs
-
-replaceFirst :: (Eq a) => [a] -> [a] -> [a] -> [a]
-replaceFirst from to = loop where
-    n           = length from
-    loop []     = []
-    loop xxs@(x:xs)
-        | from `B.isPrefixOf` xxs = to ++ drop n xxs
-        | otherwise               = x : loop xs
-
-replaceLast :: (Eq a) => [a] -> [a] -> [a] -> [a]
-replaceLast from to xs = reverse $ replaceFirst from' to' xs' where
-    from' = reverse from
-    to'   = reverse to
-    xs'   = reverse xs
-
-replaceBegin :: (Eq a) => [a] -> [a] -> [a] -> [a]
-replaceBegin from to = loop where
-    n           = length from
-    loop []     = []
-    loop xxs
-        | from `B.isPrefixOf` xxs = to ++ drop n xxs
-        | otherwise               = xxs
-
-replaceEnd :: (Eq a) => [a] -> [a] -> [a] -> [a]
-replaceEnd from to xs = reverse $ replaceBegin from' to' xs' where
-    from' = reverse from
-    to'   = reverse to
-    xs'   = reverse xs
 
 
 -- ----------------------  term-set
@@ -325,5 +290,4 @@ copTermSet :: (D.CContent c) => D.CopCalc c
 copTermSet [Right c] | D.isInterp c = D.putSet ts where
                      ts = map D.pTerm $ D.interpTerms $ D.gInterp c
 copTermSet xs = typeUnmatch xs
-
 
