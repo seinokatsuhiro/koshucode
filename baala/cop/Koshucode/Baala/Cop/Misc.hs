@@ -27,9 +27,10 @@ import qualified Koshucode.Baala.Cop.Message     as Msg
 --  [@type@]      Type of content.
 --
 
-copsMisc :: (D.CBool c, D.CEmpty c, D.CType c) => [D.Cop c]
+copsMisc :: (D.CContent c) => [D.Cop c]
 copsMisc =
     [ D.CopCalc  (D.copNormal   "type")    copType
+    , D.CopCalc  (D.copNormal   "fill")    copFill
 
     , D.CopCox   (D.copInfix    "is")      toInfix
     , D.CopCox   (D.copInfix    "of")      ofInfix
@@ -42,10 +43,22 @@ copsMisc =
 
 -- ----------------------  type
 
+-- /input [- X -]  /output [- type -]
 copType :: (D.CType c, D.CTypeOf c) => D.CopCalc c
 copType arg =
     do x <- D.getRightArg1 arg
        D.putType $ D.typeOf x
+
+-- ----------------------  fill
+
+-- /input [- X -] [- X | empty -] ...  /output [- X -]
+copFill :: (D.CContent c) => D.CopCalc c
+copFill = op . reverse where
+    op [] = Right D.empty
+    op (c' : cs') = do c <- c'
+                       case D.isEmpty c of
+                         False -> Right c
+                         True  -> op cs'
 
 -- ----------------------  is, of, to
 
