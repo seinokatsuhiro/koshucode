@@ -61,6 +61,7 @@ library
         Koshucode.Baala.Core.Attr.AttrEd
         Koshucode.Baala.Core.Attr.AttrPos
         Koshucode.Baala.Core.Attr.Message
+        Koshucode.Baala.Core.Attr.Parse
         Koshucode.Baala.Core.Attr.Slot
 
         Koshucode.Baala.Core.Lexmap
