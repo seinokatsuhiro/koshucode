@@ -5,13 +5,13 @@
 -- | Attributes of relmap operator.
 
 module Koshucode.Baala.Core.Attr.Attr
-  ( -- * Attributes of relmap operator
+  ( -- * Attribute layout
     AttrSorter (..),
     attrSorter,
   
-    -- * Attribute sorter
-    AttrPara, AttrSortPara,
-    attrSort, attrBranch,
+    -- * Attribute set
+    AttrSet, AttrSetSort,
+    attrSetSort, attrSetSortNamed,
     maybeSingleHyphen,
     maybeDoubleHyphen,
     -- $AttributeSorter
@@ -27,28 +27,31 @@ import qualified Koshucode.Baala.Core.Attr.Message   as Msg
 
 -- | Definition of attribute sorter.
 data AttrSorter = AttrSorter
-    { attrPosSorter    :: C.AttrSortTree     -- ^ Sorter for positional attributes
-    , attrClassifier   :: B.Map C.AttrName   -- ^ Attribute classifier
-    , attrPos          :: C.AttrNamePos      -- ^ Positional attribute
-    , attrPosNames     :: [C.AttrName]       -- ^ Names of positional attributes
-    , attrBranchNames  :: [C.AttrName]       -- ^ Names of named attributes
+    { attrPosSorter   :: C.AttrSortTree     -- ^ Sorter for positional attributes
+                                            --   (derived from @attrPos@)
+    , attrClassifier  :: B.Map C.AttrName   -- ^ Attribute classifier
+                                            --   (derived from @attrNamesP@ and @attrNamesN@)
+    , attrPos         :: C.AttrNamePos      -- ^ Positional attribute
+    , attrNamesP      :: [C.AttrName]       -- ^ Names of positional attributes
+                                            --   (derived from @attrPos@)
+    , attrNamesN      :: [C.AttrName]       -- ^ Names of named attributes
     }
 
 instance Show AttrSorter where
     show AttrSorter {..} =
         "AttrSorter { positional = " ++ show attrPos
-                ++ ", named = " ++ show attrBranchNames ++ " }"
+                ++ ", named = " ++ show attrNamesN ++ " }"
 
 -- | Construct attribute-sorting specification.
 attrSorter :: C.AttrNamePos -> [C.AttrName] -> AttrSorter
-attrSorter pos branchNames = sorter where
-    sorter       = AttrSorter posSorter classify pos posNames branchNames
-    posSorter    = C.sortAttrTree pos
-    posNames     = C.attrPosNameList pos
-    classify     = attrClassify posNames branchNames
+attrSorter pos namesN = sorter where
+    sorter     = AttrSorter sorterP classify pos namesP namesN
+    sorterP    = C.sortAttrTree pos
+    namesP     = C.attrPosNameList pos
+    classify   = attrClassify namesP namesN
 
 attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
-attrClassify posNames branchNames n = n2 where
+attrClassify namesP namesN n = n2 where
     n2 :: C.AttrName
     n2 = let nam = C.attrNameText n
          in case lookup nam pairs of
@@ -58,7 +61,7 @@ attrClassify posNames branchNames n = n2 where
     pairs    :: [B.Named C.AttrName]
     pairs    = map pair alls
     pair k   = (C.attrNameText k, k)
-    alls     = C.attrNameTrunk : posNames ++ branchNames
+    alls     = C.attrNameTrunk : namesP ++ namesN
 
 
 -- ----------------------  Attribute sorter
@@ -70,7 +73,7 @@ attrClassify posNames branchNames n = n2 where
 --   are name of group.
 --
 --   >>> let a = attrSorter (C.AttrPos2 (C.AttrNormal "a") (C.AttrNormal "b")) [C.AttrNormal "x", C.AttrNormal "y"]
---   >>> attrSort a =<< D.tt "a b -x /c 'd -y e"
+--   >>> attrSetSort a =<< D.tt "a b -x /c 'd -y e"
 --   Right (ParaBody {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
 --                  TreeL (TText CodePt {..} TextRaw "b"),
@@ -91,36 +94,30 @@ attrClassify posNames branchNames n = n2 where
 --                           (AttrNormal "y", [[TreeL (TText CodePt {..} TextRaw "e")]]) ]
 --     })
 
+-- | Attribute set.
+type AttrSet = D.ParaBody C.AttrName D.TTree
+
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSortPara = [D.TTree] -> B.Ab AttrPara
+type AttrSetSort = [D.TTree] -> B.Ab AttrSet
 
-type AttrPara = D.ParaBody C.AttrName D.TTree
+-- | Sort attributes.
+attrSetSort :: AttrSorter -> AttrSetSort
+attrSetSort def = attrSetSortNamed B.>=> attrSetSortPos def
 
-attrSort :: AttrSorter -> AttrSortPara
-attrSort def = attrBranch B.>=> attrSortPos def
-
-attrBranch :: AttrSortPara
-attrBranch trees =
+-- | Sort named part of attribute.
+attrSetSortNamed :: AttrSetSort
+attrSetSortNamed trees =
     do let p   = D.para maybeSingleHyphen trees
            p2  = D.paraNameAdd "@trunk" (D.paraPos p) p
            dup = D.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ D.paraNameMapKeys C.AttrNormal p2
 
--- | Take out hyphened text (like @"-x"@) from token tree.
-maybeSingleHyphen :: D.TTreeTo (Maybe String)
-maybeSingleHyphen (D.TextLeafAttr _ n)      = Just n
-maybeSingleHyphen _                         = Nothing
-
--- | Take out double-hyphened text (like @"--xyz"@) from token tree.
-maybeDoubleHyphen :: D.TTreeTo (Maybe String)
-maybeDoubleHyphen (D.TextLeafAttr2 _ n)     = Just n
-maybeDoubleHyphen _                         = Nothing
-
-attrSortPos :: AttrSorter -> B.AbMap AttrPara
-attrSortPos (AttrSorter sorter classify _ pos named) p =
+-- | Sort positional part of attribute.
+attrSetSortPos :: AttrSorter -> B.AbMap AttrSet
+attrSetSortPos (AttrSorter sorter classify _ pos named) p =
     do let noPos      = null $ D.paraPos p
            nameList   = map fst $ D.paraNameList p
            overlapped = pos `B.overlap` nameList
@@ -136,14 +133,24 @@ attrSortPos (AttrSorter sorter classify _ pos named) p =
        Right p3
 
 attrCheck :: [C.AttrName] -> [C.AttrName] -> [C.AttrTree] -> B.Ab ()
-attrCheck posNames branchNames attr =
+attrCheck namesP namesN attr =
     case t (map fst attr) B.\\ textAll of
       []    -> Right ()
       u : _ -> Msg.unexpAttr $ "Unknown " ++ ('-' : u)
     where
-      textAll = "@trunk" : t posNames ++ t branchNames
+      textAll = "@trunk" : t namesP ++ t namesN
       t       = map C.attrNameText
 
 attrList :: D.ParaBody n a -> [(n, [a])]
 attrList = map (B.mapSnd concat) . D.paraNameList
+
+-- | Take out hyphened text (like @"-x"@) from token tree.
+maybeSingleHyphen :: D.TTreeTo (Maybe String)
+maybeSingleHyphen (D.TextLeafAttr _ n)      = Just n
+maybeSingleHyphen _                         = Nothing
+
+-- | Take out double-hyphened text (like @"--xyz"@) from token tree.
+maybeDoubleHyphen :: D.TTreeTo (Maybe String)
+maybeDoubleHyphen (D.TextLeafAttr2 _ n)     = Just n
+maybeDoubleHyphen _                         = Nothing
 

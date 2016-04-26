@@ -20,7 +20,7 @@ ropList
 ropList group = map rop where
     rop (cons, usage, attr) =
         let name   = head $ words usage
-            sorter = C.attrSort attr
+            sorter = C.attrSetSort attr
         in C.Rop name group usage attr sorter cons
 
 -- | Make definition of relmap operator.

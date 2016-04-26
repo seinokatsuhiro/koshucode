@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Core.Attr    as C
 data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
     , lexToken     :: D.Token       -- ^ Token of operator
-    , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
+    , lexAttr      :: C.AttrSet     -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
