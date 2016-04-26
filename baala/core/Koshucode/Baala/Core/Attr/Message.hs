@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Lexmap.Message
+module Koshucode.Baala.Core.Attr.Message
   ( -- * Abortable
     abAttr,
     abAttrTrees,

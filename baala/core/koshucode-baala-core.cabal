@@ -56,15 +56,17 @@ library
         Koshucode.Baala.Core.Assert.Run
         Koshucode.Baala.Core.Assert.Message
 
+        Koshucode.Baala.Core.Attr
+        Koshucode.Baala.Core.Attr.Attr
+        Koshucode.Baala.Core.Attr.AttrEd
+        Koshucode.Baala.Core.Attr.AttrPos
+        Koshucode.Baala.Core.Attr.Message
+        Koshucode.Baala.Core.Attr.Slot
+
         Koshucode.Baala.Core.Lexmap
-        Koshucode.Baala.Core.Lexmap.Attr
-        Koshucode.Baala.Core.Lexmap.AttrEd
-        Koshucode.Baala.Core.Lexmap.AttrPos
         Koshucode.Baala.Core.Lexmap.Construct
         Koshucode.Baala.Core.Lexmap.Lexmap
         Koshucode.Baala.Core.Lexmap.LexmapTrees
-        Koshucode.Baala.Core.Lexmap.Message
-        Koshucode.Baala.Core.Lexmap.Slot
 
         Koshucode.Baala.Core.Relkit
         Koshucode.Baala.Core.Relkit.Construct

@@ -17,11 +17,10 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     lexAttrTree,
   ) where
 
-import qualified Data.Generics                          as G
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as D
-import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
-import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
+import qualified Data.Generics                as G
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.Core.Attr    as C
 
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TTree',

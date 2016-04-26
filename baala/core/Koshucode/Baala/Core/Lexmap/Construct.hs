@@ -19,14 +19,11 @@ module Koshucode.Baala.Core.Lexmap.Construct
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Data                     as D
-import qualified Koshucode.Baala.Core.Lexmap.AttrEd       as C
-import qualified Koshucode.Baala.Core.Lexmap.Attr         as C
-import qualified Koshucode.Baala.Core.Lexmap.AttrPos      as C
+import qualified Koshucode.Baala.Core.Attr                as C
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
 import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
-import qualified Koshucode.Baala.Core.Lexmap.Slot         as C
 import qualified Koshucode.Baala.Data.Message             as Msg
-import qualified Koshucode.Baala.Core.Lexmap.Message      as Msg
+import qualified Koshucode.Baala.Core.Attr.Message        as Msg
 
 
 -- ----------------------  Section number

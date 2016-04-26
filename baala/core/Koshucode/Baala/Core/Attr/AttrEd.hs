@@ -4,18 +4,18 @@
 
 -- | Attribute editor.
 
-module Koshucode.Baala.Core.Lexmap.AttrEd
+module Koshucode.Baala.Core.Attr.AttrEd
   ( AttrEd, AttrEdBody (..),
     consAttrEd, runAttrEd,
   ) where
 
-import qualified Data.Generics                          as G
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data                   as D
-import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
-import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
-import qualified Koshucode.Baala.Data.Message           as Msg
-import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
+import qualified Data.Generics                        as G
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Core.Attr.AttrPos    as C
+import qualified Koshucode.Baala.Core.Attr.Slot       as C
+import qualified Koshucode.Baala.Data.Message         as Msg
+import qualified Koshucode.Baala.Core.Attr.Message    as Msg
 
 
 -- ----------------------  Data type

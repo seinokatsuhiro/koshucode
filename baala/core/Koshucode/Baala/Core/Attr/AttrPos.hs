@@ -4,7 +4,7 @@
 
 -- | Positional attributes.
 
-module Koshucode.Baala.Core.Lexmap.AttrPos
+module Koshucode.Baala.Core.Attr.AttrPos
   ( -- * Positional attribute
     AttrPos (..),
     attrPosNameList,
@@ -22,10 +22,10 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
     sortAttrTree,
   ) where
 
-import qualified Data.Generics                        as G
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data                 as D
-import qualified Koshucode.Baala.Core.Lexmap.Message  as Msg
+import qualified Data.Generics                      as G
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.Core.Attr.Message  as Msg
 
 
 -- ----------------------  Positional attribute
