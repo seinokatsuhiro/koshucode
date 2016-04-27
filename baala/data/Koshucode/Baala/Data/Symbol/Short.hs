@@ -3,7 +3,7 @@
 
 -- | Short sign.
 
-module Koshucode.Baala.Data.Token.Short
+module Koshucode.Baala.Data.Symbol.Short
   ( -- * Data type
     Short (..), ShortDef,
   
@@ -15,10 +15,10 @@ module Koshucode.Baala.Data.Token.Short
     shortText,
   ) where
 
-import qualified Data.List                             as L
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Data.Token.AngleText  as D
-import qualified Koshucode.Baala.Data.Token.Next       as D
+import qualified Data.List                              as L
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Data.Symbol.AngleText  as D
+import qualified Koshucode.Baala.Data.Symbol.Next       as D
 
 
 -- ----------------------  Data type

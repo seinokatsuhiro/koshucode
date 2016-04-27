@@ -49,7 +49,7 @@ module Koshucode.Baala.Data.Token.Token
 
 import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Data.Token.Term  as D
+import qualified Koshucode.Baala.Data.Symbol      as D
 
 
 -- ----------------------  Token type

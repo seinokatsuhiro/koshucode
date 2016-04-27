@@ -73,13 +73,16 @@ library
         Koshucode.Baala.Data.Content.Message
         Koshucode.Baala.Data.Content.Tree
 
+        Koshucode.Baala.Data.Symbol
+        Koshucode.Baala.Data.Symbol.AngleText
+        Koshucode.Baala.Data.Symbol.Message
+        Koshucode.Baala.Data.Symbol.Next
+        Koshucode.Baala.Data.Symbol.Short
+        Koshucode.Baala.Data.Symbol.Term
+
         Koshucode.Baala.Data.Token
-        Koshucode.Baala.Data.Token.AngleText
         Koshucode.Baala.Data.Token.Bracket
         Koshucode.Baala.Data.Token.Message
-        Koshucode.Baala.Data.Token.Next
-        Koshucode.Baala.Data.Token.Short
-        Koshucode.Baala.Data.Token.Term
         Koshucode.Baala.Data.Token.Token
         Koshucode.Baala.Data.Token.TokenClause
         Koshucode.Baala.Data.Token.TokenLine

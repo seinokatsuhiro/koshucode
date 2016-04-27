@@ -7,6 +7,7 @@ module Koshucode.Baala.Data.Type.Interp
   ) where
 
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Symbol       as D
 import qualified Koshucode.Baala.Data.Token        as D
 
 data Interp =

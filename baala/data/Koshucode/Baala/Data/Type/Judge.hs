@@ -27,7 +27,7 @@ module Koshucode.Baala.Data.Type.Judge
 
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data.Token        as D
+import qualified Koshucode.Baala.Data.Symbol       as D
 
 
 -- ----------------------  Datatype

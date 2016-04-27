@@ -2,7 +2,7 @@
 
 -- | Next character sequence.
 
-module Koshucode.Baala.Data.Token.Next
+module Koshucode.Baala.Data.Symbol.Next
   ( -- * Next
     InputText,
     Next, AbNext,
@@ -22,7 +22,7 @@ module Koshucode.Baala.Data.Token.Next
 
 import qualified Data.Char                            as Ch
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Token.Message   as Msg
+import qualified Koshucode.Baala.Data.Symbol.Message  as Msg
 
 -- | Input data type.
 type InputText = String

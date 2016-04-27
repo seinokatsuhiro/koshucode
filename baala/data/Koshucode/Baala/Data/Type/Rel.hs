@@ -21,6 +21,7 @@ import qualified Text.Blaze.XHtml5                 as H
 import           Text.Blaze.XHtml5                 ((!))
 import           Text.Blaze.XHtml5.Attributes      (class_)
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data.Symbol       as D
 import qualified Koshucode.Baala.Data.Token        as D
 import qualified Koshucode.Baala.Data.Type.Head    as D
 import qualified Koshucode.Baala.Data.Type.Judge   as D

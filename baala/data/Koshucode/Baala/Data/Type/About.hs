@@ -6,7 +6,7 @@ module Koshucode.Baala.Data.Type.About
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data.Token        as D
+import qualified Koshucode.Baala.Data.Symbol       as D
 import qualified Koshucode.Baala.Data.Type.Judge   as D
 
 data About c = About [D.Term c] deriving (Show)

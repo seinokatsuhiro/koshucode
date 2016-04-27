@@ -2,7 +2,7 @@
 
 -- | Text enclosed in angle brackets.
 
-module Koshucode.Baala.Data.Token.AngleText
+module Koshucode.Baala.Data.Symbol.AngleText
   ( 
     -- ** Functions
     angleQuote,
