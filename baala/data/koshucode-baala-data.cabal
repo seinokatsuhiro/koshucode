@@ -49,15 +49,7 @@ library
         Koshucode.Baala.Data
 
         Koshucode.Baala.Data.Message
-
         Koshucode.Baala.Data.Attr
-        Koshucode.Baala.Data.Attr.Attr
-        Koshucode.Baala.Data.Attr.AttrEd
-        Koshucode.Baala.Data.Attr.AttrPos
-        Koshucode.Baala.Data.Attr.Message
-        Koshucode.Baala.Data.Attr.Para
-        Koshucode.Baala.Data.Attr.Parse
-        Koshucode.Baala.Data.Attr.Slot
 
         Koshucode.Baala.Data.Church
         Koshucode.Baala.Data.Church.Build
@@ -74,19 +66,7 @@ library
         Koshucode.Baala.Data.Content.Tree
 
         Koshucode.Baala.Data.Symbol
-        Koshucode.Baala.Data.Symbol.AngleText
-        Koshucode.Baala.Data.Symbol.Message
-        Koshucode.Baala.Data.Symbol.Next
-        Koshucode.Baala.Data.Symbol.Short
-        Koshucode.Baala.Data.Symbol.Term
-
         Koshucode.Baala.Data.Token
-        Koshucode.Baala.Data.Token.Bracket
-        Koshucode.Baala.Data.Token.Message
-        Koshucode.Baala.Data.Token.Token
-        Koshucode.Baala.Data.Token.TokenClause
-        Koshucode.Baala.Data.Token.TokenLine
-        Koshucode.Baala.Data.Token.TokenTree
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
@@ -108,13 +88,14 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                 == 4.*
-       , blaze-html           == 0.*
-       , containers           == 0.5.*
-       , pretty               == 1.*
-       , syb                  == 0.*
-       , time                 == 1.*
-       , koshucode-baala-base == 0.130.*
+         base                    == 4.*
+       , blaze-html              == 0.*
+       , containers              == 0.5.*
+       , pretty                  == 1.*
+       , syb                     == 0.*
+       , time                    == 1.*
+       , koshucode-baala-base    == 0.130.*
+       , koshucode-baala-syntax  == 0.130.*
 
   ghc-options:         -Wall
 
