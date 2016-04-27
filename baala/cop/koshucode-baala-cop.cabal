@@ -67,6 +67,7 @@ library
   build-depends:
          base                      == 4.*
        , koshucode-baala-base      == 0.130.*
+       , koshucode-baala-syntax    == 0.130.*
        , koshucode-baala-data      == 0.130.*
        , koshucode-baala-rop-flat  == 0.130.*
 

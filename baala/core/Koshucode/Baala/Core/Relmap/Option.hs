@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Option
 
 import qualified Data.Map.Strict                      as Map
 import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Syntax               as D
 import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg

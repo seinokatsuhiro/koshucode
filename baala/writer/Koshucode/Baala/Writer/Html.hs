@@ -10,7 +10,7 @@ import qualified Text.Blaze.XHtml5                  as H
 import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
 import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.Syntax             as D
 import qualified Koshucode.Baala.Core               as C
 
 resultHtmlIndented :: (B.Write c) => C.ResultWriter c

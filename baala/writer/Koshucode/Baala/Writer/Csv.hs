@@ -11,6 +11,7 @@ import qualified Data.Char                 as Char
 import qualified System.IO                 as IO
 import qualified Text.CSV                  as CSV
 import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.Syntax    as D
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 

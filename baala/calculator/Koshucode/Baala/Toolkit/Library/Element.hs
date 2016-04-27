@@ -5,9 +5,10 @@ module Koshucode.Baala.Toolkit.Library.Element
     -- $Pattern
   ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as D
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Syntax  as D
+import qualified Koshucode.Baala.Data    as D
+import qualified Koshucode.Baala.Core    as C
 
 infixr 0 -:-
 (-:-) :: a -> b -> (a, b)

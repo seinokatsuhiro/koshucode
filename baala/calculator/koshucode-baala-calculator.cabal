@@ -55,6 +55,7 @@ executable koshu
        , filepath                    == 1.*
        , time                        == 1.*
        , koshucode-baala-base        == 0.130.*
+       , koshucode-baala-syntax      == 0.130.*
        , koshucode-baala-data        == 0.130.*
        , koshucode-baala-core        == 0.130.*
        , koshucode-baala-rop-flat    == 0.130.*
@@ -87,6 +88,7 @@ library
        , filepath                    == 1.*
        , time                        == 1.*
        , koshucode-baala-base        == 0.130.*
+       , koshucode-baala-syntax      == 0.130.*
        , koshucode-baala-data        == 0.130.*
        , koshucode-baala-core        == 0.130.*
        , koshucode-baala-rop-flat    == 0.130.*

@@ -9,6 +9,7 @@ module Koshucode.Baala.Cop.Text
 
 import qualified Data.Char                       as Char
 import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Syntax          as D
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Message     as Msg
 

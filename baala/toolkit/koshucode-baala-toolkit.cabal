@@ -53,6 +53,7 @@ executable koshu-change
          base                       == 4.*
        , containers                 == 0.5.*
        , koshucode-baala-base       == 0.130.*
+       , koshucode-baala-syntax     == 0.130.*
        , koshucode-baala-data       == 0.130.*
        , koshucode-baala-core       == 0.130.*
        , koshucode-baala-rop-flat   == 0.130.*
@@ -71,6 +72,7 @@ executable koshu-rdf
        , rdf4h                      == 1.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.130.*
+       , koshucode-baala-syntax     == 0.130.*
        , koshucode-baala-data       == 0.130.*
        , koshucode-baala-core       == 0.130.*
        , koshucode-baala-rop-flat   == 0.130.*
@@ -85,6 +87,7 @@ executable koshu-syntax
   build-depends:
          base                       == 4.*
        , koshucode-baala-base       == 0.130.*
+       , koshucode-baala-syntax     == 0.130.*
        , koshucode-baala-data       == 0.130.*
        , koshucode-baala-core       == 0.130.*
        , koshucode-baala-rop-flat   == 0.130.*
@@ -113,6 +116,7 @@ library
        , rdf4h                      == 1.*
        , text                       == 1.*
        , koshucode-baala-base       == 0.130.*
+       , koshucode-baala-syntax     == 0.130.*
        , koshucode-baala-data       == 0.130.*
        , koshucode-baala-core       == 0.130.*
        , koshucode-baala-rop-flat   == 0.130.*

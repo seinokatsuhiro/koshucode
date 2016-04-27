@@ -19,6 +19,7 @@ import qualified Data.Aeson                        as A
 import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
+import qualified Koshucode.Baala.Syntax            as D
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 

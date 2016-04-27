@@ -13,6 +13,7 @@ module Koshucode.Baala.Rop.Flat.Order
   ) where
 
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as D
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
