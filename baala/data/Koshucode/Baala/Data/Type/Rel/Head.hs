@@ -2,7 +2,7 @@
 
 -- | Heading of relations
 
-module Koshucode.Baala.Data.Type.Head
+module Koshucode.Baala.Data.Type.Rel.Head
   ( -- * Type
     Head (..),
     headExplain,

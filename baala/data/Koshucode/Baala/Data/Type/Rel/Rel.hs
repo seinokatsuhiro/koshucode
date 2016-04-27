@@ -3,7 +3,7 @@
 
 -- | Relation type
 
-module Koshucode.Baala.Data.Type.Rel
+module Koshucode.Baala.Data.Type.Rel.Rel
   ( -- * Data type
     Rel (..), Body,
     relSort, relBodyOrder,
@@ -17,13 +17,13 @@ module Koshucode.Baala.Data.Type.Rel
     judgesFromRel,
   ) where
 
-import qualified Text.Blaze.XHtml5                 as H
-import           Text.Blaze.XHtml5                 ((!))
-import           Text.Blaze.XHtml5.Attributes      (class_)
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
-import qualified Koshucode.Baala.Data.Type.Head    as D
-import qualified Koshucode.Baala.Data.Type.Judge   as D
+import qualified Text.Blaze.XHtml5                    as H
+import           Text.Blaze.XHtml5                    ((!))
+import           Text.Blaze.XHtml5.Attributes         (class_)
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Data.Type.Rel.Head   as D
+import qualified Koshucode.Baala.Data.Type.Judge      as D
 
 
 -- ----------------------  Data
