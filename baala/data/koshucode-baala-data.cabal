@@ -64,7 +64,6 @@ library
         Koshucode.Baala.Data.Content.Tree
 
         Koshucode.Baala.Data.Type
-        Koshucode.Baala.Data.Type.About
         Koshucode.Baala.Data.Type.Decimal
         Koshucode.Baala.Data.Type.Decimal.Arithmetic
         Koshucode.Baala.Data.Type.Decimal.Decimal

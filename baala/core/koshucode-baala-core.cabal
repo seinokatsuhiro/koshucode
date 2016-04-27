@@ -79,6 +79,7 @@ library
         Koshucode.Baala.Core.Relmap.Specialize
 
         Koshucode.Baala.Core.Resource
+        Koshucode.Baala.Core.Resource.About
         Koshucode.Baala.Core.Resource.Clause
         Koshucode.Baala.Core.Resource.Include
         Koshucode.Baala.Core.Resource.Message

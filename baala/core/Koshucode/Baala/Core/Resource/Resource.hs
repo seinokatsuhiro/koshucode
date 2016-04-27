@@ -34,6 +34,7 @@ import qualified Koshucode.Baala.Core.Assert    as C
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relkit    as C
 import qualified Koshucode.Baala.Core.Relmap    as C
+import qualified Koshucode.Baala.Core.Resource.About     as C
 
 
 -- ----------------------  Data type
@@ -131,8 +132,8 @@ global = C.global' resEmpty
 
 -- ----------------------  Concrete type
 
-type AboutC            = D.About        D.BaalaC
-type AboutJudgesC      = D.AboutJudges  D.BaalaC
+type AboutC            = C.About        D.BaalaC
+type AboutJudgesC      = C.AboutJudges  D.BaalaC
 type GlobalC           = Global         D.BaalaC
 type JudgeC            = D.Judge        D.BaalaC
 type ResourceC         = Resource       D.BaalaC
