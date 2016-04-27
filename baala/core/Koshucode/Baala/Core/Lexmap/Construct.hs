@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                     as B
-import qualified Koshucode.Baala.Data                     as D
+import qualified Koshucode.Baala.Syntax                   as D
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
 import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
 import qualified Koshucode.Baala.Data.Message             as Msg

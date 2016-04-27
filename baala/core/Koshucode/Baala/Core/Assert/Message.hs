@@ -7,8 +7,8 @@ module Koshucode.Baala.Core.Assert.Message
     unkOption,
   ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as D
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Syntax  as D
 
 abAssert :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAssert = B.abortable "assert"

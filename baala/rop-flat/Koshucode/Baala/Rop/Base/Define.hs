@@ -7,8 +7,8 @@ module Koshucode.Baala.Rop.Base.Define
     ropList, def,
   ) where
 
-import qualified Koshucode.Baala.Data as D
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Syntax  as D
+import qualified Koshucode.Baala.Core    as C
 
 -- | Constructor, usage, and attribute sorter
 type RopDefine c = (C.RopCons c, C.RopUsage, D.AttrLayout)
