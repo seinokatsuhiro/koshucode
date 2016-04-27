@@ -21,8 +21,9 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
     decimalSum,
   ) where
 
-import qualified Control.Monad                     as M
-import qualified Koshucode.Baala.Base              as B
+import qualified Control.Monad                             as M
+import qualified Koshucode.Baala.Base                      as B
+import qualified Koshucode.Baala.Data.Type.Decimal.Coder   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
 import qualified Koshucode.Baala.Data.Type.Message         as Msg
 
