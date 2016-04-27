@@ -25,6 +25,7 @@ goto :EOF
         call :INIT_SANDBOX
 
         cabal sandbox add-source ..\base
+        cabal sandbox add-source ..\syntax
         cabal sandbox add-source ..\data
         cabal sandbox add-source ..\core
         cabal sandbox add-source ..\writer
