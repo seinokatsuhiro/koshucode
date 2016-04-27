@@ -67,12 +67,12 @@ copsArith =
 
 copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab D.Decimal
 copDec (Right c) | D.isDec  c = Right $ D.gDec c
-                 | D.isText c = D.litDecimal $ D.gText c
+                 | D.isText c = D.decodeDecimal $ D.gText c
 copDec x = Msg.notNumber (show x)
 
 getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
 getDecFrom c | D.isDec  c  = Right $ D.gDec c
-             | D.isText c  = D.litDecimal $ D.gText c
+             | D.isText c  = D.decodeDecimal $ D.gText c
              | otherwise   = Right D.decimal0
 
 copPlus :: (D.CText c, D.CDec c) => D.PrecisionSide -> D.CopCalc c

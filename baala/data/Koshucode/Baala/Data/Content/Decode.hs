@@ -84,7 +84,7 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     eithcon f      = either (const f)
     eith g         = either (const $ calc g)
     text           = D.putText . concat
-    decimal        = D.putDec B.<=< D.litDecimal
+    decimal        = D.putDec B.<=< D.decodeDecimal
 
     keyword :: (D.CEmpty c, D.CBool c) => String -> B.Ab c
     keyword "(+)"  = Right D.true

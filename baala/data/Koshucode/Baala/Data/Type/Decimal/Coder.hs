@@ -4,9 +4,8 @@
 
 module Koshucode.Baala.Data.Type.Decimal.Coder
   ( -- * Decode
-    LitString,
-    LitDecimal,
-    litDecimal,  
+    DecodeAb,
+    decodeDecimal,  
   
     -- * Encode
     encodeDecimal,
@@ -22,14 +21,11 @@ import qualified Koshucode.Baala.Data.Type.Message         as Msg
 -- ----------------------  Decode
 
 -- | Decode to @a@.
-type LitString a = String -> B.Ab a
+type DecodeAb a = String -> B.Ab a
 
 -- | Decode decimals.
-type LitDecimal = LitString D.Decimal
-
--- | Decode decimals.
-litDecimal :: LitDecimal
-litDecimal ccs = headPart id ccs where
+decodeDecimal :: DecodeAb D.Decimal
+decodeDecimal ccs = headPart id ccs where
     minus x = - x
 
     headPart _ [] = Msg.notNumber []
@@ -39,7 +35,7 @@ litDecimal ccs = headPart id ccs where
         '+'  ->  headPart id    cs
         _    ->  intPart sign 0 (c:cs)
 
-    intPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> LitDecimal
+    intPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> DecodeAb D.Decimal
     intPart sign n [] = Right $ D.Decimal (sign n, 1) 0 False
     intPart sign n (c:cs)
         | Ch.isDigit c =  intPart sign (10 * n + fromDigit c) cs
@@ -47,14 +43,14 @@ litDecimal ccs = headPart id ccs where
         | c == '.'     =  decPart sign n 0 cs
         | otherwise    =  tailPart False sign (n, 0) (c:cs)
 
-    decPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> D.DecimalPoint -> LitDecimal
+    decPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> D.DecimalPoint -> DecodeAb D.Decimal
     decPart sign n p [] = Right $ D.Decimal (sign n, 10 ^ p) p False
     decPart sign n p (c:cs)
         | Ch.isDigit c = decPart sign (10 * n + fromDigit c) (p + 1) cs
         | c == ' '     =  decPart sign n p cs
         | otherwise    =  tailPart False sign (n, p) (c:cs)
 
-    tailPart :: Bool -> B.Map D.DecimalInteger -> (D.DecimalInteger, D.DecimalPoint) -> LitDecimal
+    tailPart :: Bool -> B.Map D.DecimalInteger -> (D.DecimalInteger, D.DecimalPoint) -> DecodeAb D.Decimal
     tailPart approx sign (n, p) [] = Right $ D.Decimal (sign n, 10 ^ p) p approx
     tailPart approx sign dec (c:cs) = case c of
         ' '  ->  tailPart approx sign  dec cs

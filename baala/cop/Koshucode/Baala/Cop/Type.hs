@@ -39,7 +39,7 @@ typeUnmatch _ = Msg.unmatchType ""
 
 copToDec :: (D.CContent c) => D.CopCalc c
 copToDec = op where
-    op [Right c] | D.isText c  = case D.litDecimal $ D.gText c of
+    op [Right c] | D.isText c  = case D.decodeDecimal $ D.gText c of
                                    Right n  -> Right $ D.pDec n
                                    Left _   -> Right c
                  | D.isBool c  = case D.gBool c of
