@@ -5,7 +5,6 @@
 module Koshucode.Baala.Data.Type
   (
     module Koshucode.Baala.Data.Type.About,
-    module Koshucode.Baala.Data.Type.Arithmetic,
     module Koshucode.Baala.Data.Type.Clock,
     module Koshucode.Baala.Data.Type.Date,
     module Koshucode.Baala.Data.Type.Decimal,
@@ -19,7 +18,6 @@ module Koshucode.Baala.Data.Type
   ) where
 
 import Koshucode.Baala.Data.Type.About
-import Koshucode.Baala.Data.Type.Arithmetic
 import Koshucode.Baala.Data.Type.Clock
 import Koshucode.Baala.Data.Type.Date
 import Koshucode.Baala.Data.Type.Decimal

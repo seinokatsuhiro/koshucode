@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Data.Type.Arithmetic
+module Koshucode.Baala.Data.Type.Decimal.Arithmetic
   ( -- * Precision
     PrecisionSide (..),
     PrecisionSelector,
@@ -23,8 +23,8 @@ module Koshucode.Baala.Data.Type.Arithmetic
 
 import qualified Control.Monad                     as M
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Data.Type.Decimal as D
-import qualified Koshucode.Baala.Data.Type.Message as Msg
+import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
+import qualified Koshucode.Baala.Data.Type.Message         as Msg
 
 data PrecisionSide
     = PrecisionHigh       -- ^ Select high precision

@@ -65,10 +65,11 @@ library
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
-        Koshucode.Baala.Data.Type.Arithmetic
         Koshucode.Baala.Data.Type.Clock
         Koshucode.Baala.Data.Type.Date
         Koshucode.Baala.Data.Type.Decimal
+        Koshucode.Baala.Data.Type.Decimal.Arithmetic
+        Koshucode.Baala.Data.Type.Decimal.Decimal
         Koshucode.Baala.Data.Type.Head
         Koshucode.Baala.Data.Type.Interp
         Koshucode.Baala.Data.Type.Judge
