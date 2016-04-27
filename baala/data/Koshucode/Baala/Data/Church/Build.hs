@@ -9,7 +9,7 @@ module Koshucode.Baala.Data.Church.Build
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data.Token             as D
+import qualified Koshucode.Baala.Syntax                 as D
 import qualified Koshucode.Baala.Data.Content           as D
 import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D

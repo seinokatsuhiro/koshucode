@@ -43,7 +43,7 @@ module Koshucode.Baala.Data.Content.Class
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Symbol          as D
+import qualified Koshucode.Baala.Syntax               as D
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Data.Content.Message as Msg
 

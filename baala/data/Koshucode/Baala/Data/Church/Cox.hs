@@ -19,8 +19,7 @@ module Koshucode.Baala.Data.Church.Cox
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Data.Symbol          as D
-import qualified Koshucode.Baala.Data.Token           as D
+import qualified Koshucode.Baala.Syntax               as D
 import qualified Koshucode.Baala.Data.Church.Message  as Msg
 
 

@@ -19,21 +19,12 @@ module Koshucode.Baala.Data.Content.Message
     expect2Actual,
   ) where
 
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data.Token   as D
+import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax.Message  as Msg
 
 abLiteral :: D.TTreeTo (B.Map (B.Ab b))
-abLiteral = abortableTree "literal"
-
--- | Same as 'abortable' except for using 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTree :: String -> D.TTreeTo (B.Map (B.Ab b))
-abortableTree tag = B.abortable tag . B.untree
-
--- | Same as 'abortable' except for using list of 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTrees :: String -> D.TTreesTo (B.Map (B.Ab b))
-abortableTrees tag = B.abortable tag . B.untrees
+abLiteral = Msg.abortableTree "literal"
 
 -- | Nothing
 nothing :: B.Ab a
