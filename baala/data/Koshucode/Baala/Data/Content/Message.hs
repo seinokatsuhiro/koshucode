@@ -3,8 +3,6 @@
 module Koshucode.Baala.Data.Content.Message
   ( -- * Abortable
     abLiteral,
-    abortableTree,
-    abortableTrees,
     -- * Message
     nothing,
     oddRelation,

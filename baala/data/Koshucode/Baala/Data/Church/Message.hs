@@ -28,6 +28,7 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Symbol          as D
 import qualified Koshucode.Baala.Data.Token           as D
 import qualified Koshucode.Baala.Data.Type            as D
+import qualified Koshucode.Baala.Syntax.Message       as Msg
 import qualified Koshucode.Baala.Data.Content.Message as Msg
 
 abCoxBuild :: D.TTreeTo (B.Map (B.Ab b))
