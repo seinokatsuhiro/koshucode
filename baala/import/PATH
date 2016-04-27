@@ -1,4 +1,5 @@
 ../base/data/IMPORT.k
+../syntax/data/IMPORT.k
 ../data/data/IMPORT.k
 ../core/data/IMPORT.k
 ../writer/data/IMPORT.k
