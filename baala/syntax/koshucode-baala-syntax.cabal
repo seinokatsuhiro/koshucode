@@ -1,0 +1,85 @@
+-- The name of the package.
+name:                koshucode-baala-syntax
+
+-- The package version.  See the Haskell package versioning policy (PVP) 
+-- for standards guiding when and how versions should be incremented.
+-- http://www.haskell.org/haskellwiki/Package_versioning_policy
+-- PVP summary:      +-+------- breaking API changes
+--                   | | +----- non-breaking API additions
+--                   | | | +--- code changes with no API change
+version:             0.130.0.0
+
+-- A short (one-line) description of the package.
+synopsis:            Syntax for Koshucode
+
+-- A longer description of the package.
+description:         Syntax for Koshucode
+
+-- The license under which the package is released.
+license:             BSD3
+
+-- The file containing the license text.
+license-file:        LICENSE
+
+-- The package author(s).
+author:              SEINO Katsuhiro
+
+-- An email address to which users can send suggestions, bug reports, and 
+-- patches.
+maintainer:
+
+-- A copyright notice.
+copyright:           2013, 2016, SEINO Katsuhiro
+
+category:            Data, Database, Language, Text
+
+build-type:          Simple
+
+-- Constraint on the version of Cabal needed to build this package.
+cabal-version:       >= 1.8
+
+extra-source-files:
+
+library
+  -- Modules exported by the library.
+  exposed-modules:
+        Koshucode.Baala.Syntax
+        Koshucode.Baala.Syntax.Message
+
+        Koshucode.Baala.Syntax.Attr
+        Koshucode.Baala.Syntax.Attr.Attr
+        Koshucode.Baala.Syntax.Attr.AttrEd
+        Koshucode.Baala.Syntax.Attr.AttrPos
+        Koshucode.Baala.Syntax.Attr.Message
+        Koshucode.Baala.Syntax.Attr.Para
+        Koshucode.Baala.Syntax.Attr.Parse
+        Koshucode.Baala.Syntax.Attr.Slot
+
+        Koshucode.Baala.Syntax.Symbol
+        Koshucode.Baala.Syntax.Symbol.AngleText
+        Koshucode.Baala.Syntax.Symbol.Message
+        Koshucode.Baala.Syntax.Symbol.Next
+        Koshucode.Baala.Syntax.Symbol.Short
+        Koshucode.Baala.Syntax.Symbol.Term
+
+        Koshucode.Baala.Syntax.Token
+        Koshucode.Baala.Syntax.Token.Bracket
+        Koshucode.Baala.Syntax.Token.Message
+        Koshucode.Baala.Syntax.Token.Token
+        Koshucode.Baala.Syntax.Token.TokenClause
+        Koshucode.Baala.Syntax.Token.TokenLine
+        Koshucode.Baala.Syntax.Token.TokenTree
+
+  -- Modules included in this library but not exported.
+  --other-modules:       
+  
+  -- Other library packages from which modules are imported.
+  build-depends:
+         base                  == 4.*
+       , containers            == 0.5.*
+       , pretty                == 1.*
+       , syb                   == 0.*
+       , koshucode-baala-base  == 0.130.*
+
+  ghc-options:         -Wall
+
