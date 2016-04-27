@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Data.Type.Date
+module Koshucode.Baala.Data.Type.Time.Date
   ( -- * Data type
     Date (..), MJDay, YmdTuple,
     Year, Month, Week, Day,

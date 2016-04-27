@@ -65,8 +65,6 @@ library
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
-        Koshucode.Baala.Data.Type.Clock
-        Koshucode.Baala.Data.Type.Date
         Koshucode.Baala.Data.Type.Decimal
         Koshucode.Baala.Data.Type.Decimal.Arithmetic
         Koshucode.Baala.Data.Type.Decimal.Decimal
@@ -77,6 +75,9 @@ library
         Koshucode.Baala.Data.Type.Mono
         Koshucode.Baala.Data.Type.Rel
         Koshucode.Baala.Data.Type.Time
+        Koshucode.Baala.Data.Type.Time.Clock
+        Koshucode.Baala.Data.Type.Time.Date
+        Koshucode.Baala.Data.Type.Time.Time
         Koshucode.Baala.Data.Type.Type
 
   -- Modules included in this library but not exported.
