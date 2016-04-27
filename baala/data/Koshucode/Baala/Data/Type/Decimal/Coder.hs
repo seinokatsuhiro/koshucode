@@ -9,8 +9,8 @@ module Koshucode.Baala.Data.Type.Decimal.Coder
     litDecimal,  
   
     -- * Encode
-    decimalString,
-    decimalStringCompact,
+    encodeDecimal,
+    encodeDecimalCompact,
   ) where
 
 import qualified Data.Char                                 as Ch
@@ -81,15 +81,15 @@ fromDigit _   = B.bug "fromDigit"
 -- ----------------------  Encode
 
 -- | Encode decimals.
-decimalString :: D.Decimal -> String
-decimalString = decimalStringWith (' ' :)
+encodeDecimal :: D.Decimal -> String
+encodeDecimal = encodeDecimalWith (' ' :)
 
 -- | Encode decimals without spaces.
-decimalStringCompact :: D.Decimal -> String
-decimalStringCompact = decimalStringWith id
+encodeDecimalCompact :: D.Decimal -> String
+encodeDecimalCompact = encodeDecimalWith id
 
-decimalStringWith :: B.Map String -> D.Decimal -> String
-decimalStringWith g (D.Decimal (n, den) pt approx)
+encodeDecimalWith :: B.Map String -> D.Decimal -> String
+encodeDecimalWith g (D.Decimal (n, den) pt approx)
     | n >= 0     =       digits
     | otherwise  = '-' : digits
     where digits = decimalDigits g approx pt (decimalShift pt n `div` den)

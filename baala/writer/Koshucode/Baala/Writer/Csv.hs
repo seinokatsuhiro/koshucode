@@ -55,7 +55,7 @@ hPutXsvHeading delim text h _ status sh =
 csvContent :: (D.CContent c, B.Write c) => B.Map String -> c -> String
 csvContent text c
     | D.isText   c  = text $ D.gText c
-    | D.isDec    c  = D.decimalStringCompact $ D.gDec c
+    | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
     | D.isEmpty  c  = ""
     | D.isBool   c  = if D.gBool c then "true" else "false"
     | D.isClock  c  = text $ show $ D.writeClockBody $ D.gClock c

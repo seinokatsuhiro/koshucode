@@ -112,7 +112,7 @@ instance B.Write BaalaC where
         VCode s      -> B.doc $ quote  (sh s) s
         VText s      -> B.doc $ qquote (sh s) s
         VTerm s      -> B.doc $ "'/" ++ s
-        VDec  n      -> B.doc $ D.decimalString n
+        VDec  n      -> B.doc $ D.encodeDecimal n
         VClock t     -> B.doc t
         VTime t      -> B.doc t
         VBool b      -> B.doc b

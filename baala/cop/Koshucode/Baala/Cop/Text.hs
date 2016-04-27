@@ -185,7 +185,7 @@ wordList :: (D.CContent c) => c -> [String]
 wordList c
     | D.isList c  = concatMap wordList $ D.gList c
     | D.isText c  = [D.gText c]
-    | D.isDec c   = [D.decimalString $ D.gDec c]
+    | D.isDec c   = [D.encodeDecimal $ D.gDec c]
     | otherwise   = []
 
 

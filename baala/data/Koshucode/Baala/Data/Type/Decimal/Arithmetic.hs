@@ -74,8 +74,8 @@ decimalAddStrict d1@(D.Decimal _ p1 _)
                  d2@(D.Decimal _ p2 _)
     | p1 == p2   = decimalAddHigh d1 d2
     | otherwise  = Msg.heteroDecimal txt1 txt2
-    where txt1   = D.decimalString d1
-          txt2   = D.decimalString d2
+    where txt1   = D.encodeDecimal d1
+          txt2   = D.encodeDecimal d2
 
 -- | Subtruction: /x/ - /y/
 decimalSub :: PrecisionSide -> DecimalBinary
@@ -112,8 +112,8 @@ decimalQR qr
     | otherwise    = Right $ D.Decimal (n3, 1) p1 a3
     where n3    =  (n1 * den2) `qr` (n2 * den1)
           a3    =  a1 || a2
-          txt1  =  D.decimalString d1
-          txt2  =  D.decimalString d2
+          txt1  =  D.encodeDecimal d1
+          txt2  =  D.encodeDecimal d2
 
 
 -- ----------------------  Unary operator

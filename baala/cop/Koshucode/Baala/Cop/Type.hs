@@ -56,7 +56,7 @@ copToText = op where
 toText :: (D.CContent c) => c -> B.Doc
 toText c
     | D.isText   c  = B.doc $ D.gText c
-    | D.isDec    c  = B.doc $ D.decimalStringCompact $ D.gDec c
+    | D.isDec    c  = B.doc $ D.encodeDecimalCompact $ D.gDec c
     | D.isBool   c  = B.writeDoc $ D.gBool c
     | D.isEmpty  c  = B.doc ""
     | D.isClock  c  = B.doc $ show $ D.writeClockBody $ D.gClock c
