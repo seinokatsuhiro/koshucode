@@ -7,8 +7,8 @@ module Koshucode.Baala.Core.Relkit.Message
     unkNestRel,
   ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Data as D
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Syntax  as D
 
 abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRun = B.abortable "run"

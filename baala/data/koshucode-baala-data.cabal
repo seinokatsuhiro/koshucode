@@ -63,8 +63,6 @@ library
         Koshucode.Baala.Data.Content.Message
         Koshucode.Baala.Data.Content.Tree
 
-        Koshucode.Baala.Data.Token
-
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.About
         Koshucode.Baala.Data.Type.Arithmetic
