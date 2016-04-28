@@ -13,6 +13,7 @@ module Koshucode.Baala.Data.Type.Decimal.Coder
   ) where
 
 import qualified Data.Char                                 as Ch
+import qualified Data.Ratio                                as R
 import qualified Koshucode.Baala.Base                      as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
 import qualified Koshucode.Baala.Data.Type.Message         as Msg
@@ -23,6 +24,8 @@ import qualified Koshucode.Baala.Data.Type.Message         as Msg
 -- | Decode to @a@.
 type DecodeAb a = String -> B.Ab a
 
+type Sign = B.Map D.DecimalInteger
+
 -- | Decode decimals.
 decodeDecimal :: DecodeAb D.Decimal
 decodeDecimal ccs = headPart id ccs where
@@ -30,35 +33,35 @@ decodeDecimal ccs = headPart id ccs where
 
     headPart _ [] = Msg.notNumber []
     headPart sign (c:cs) = case c of
-        ' '  ->  headPart sign  cs
-        '-'  ->  headPart minus cs
-        '+'  ->  headPart id    cs
-        _    ->  intPart sign 0 (c:cs)
+        ' '  -> headPart sign  cs
+        '-'  -> headPart minus cs
+        '+'  -> headPart id    cs
+        _    -> intPart sign 0 (c:cs)
 
-    intPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> DecodeAb D.Decimal
-    intPart sign n [] = Right $ D.Decimal (sign n, 1) 0 False
+    intPart :: Sign -> D.DecimalInteger -> DecodeAb D.Decimal
+    intPart sign n [] = Right $ D.Decimal (sign n D.%% 1) 0 False
     intPart sign n (c:cs)
-        | Ch.isDigit c =  intPart sign (10 * n + fromDigit c) cs
-        | c == ' '     =  intPart sign n cs
-        | c == '.'     =  decPart sign n 0 cs
-        | otherwise    =  tailPart False sign (n, 0) (c:cs)
+        | Ch.isDigit c = intPart  sign (10 * n + fromDigit c) cs
+        | c == ' '     = intPart  sign n cs
+        | c == '.'     = fracPart sign n 0 cs
+        | otherwise    = tailPart False sign (n, 0) (c:cs)
 
-    decPart :: B.Map D.DecimalInteger -> D.DecimalInteger -> D.DecimalFracl -> DecodeAb D.Decimal
-    decPart sign n p [] = Right $ D.Decimal (sign n, 10 ^ p) p False
-    decPart sign n p (c:cs)
-        | Ch.isDigit c = decPart sign (10 * n + fromDigit c) (p + 1) cs
-        | c == ' '     =  decPart sign n p cs
-        | otherwise    =  tailPart False sign (n, p) (c:cs)
+    fracPart :: Sign -> D.DecimalInteger -> D.DecimalFracl -> DecodeAb D.Decimal
+    fracPart sign n f [] = Right $ D.Decimal (sign n D.%% (10 ^ f)) f False
+    fracPart sign n f (c:cs)
+        | Ch.isDigit c = fracPart sign (10 * n + fromDigit c) (f + 1) cs
+        | c == ' '     = fracPart sign n f cs
+        | otherwise    = tailPart False sign (n, f) (c:cs)
 
-    tailPart :: Bool -> B.Map D.DecimalInteger -> (D.DecimalInteger, D.DecimalFracl) -> DecodeAb D.Decimal
-    tailPart approx sign (n, p) [] = Right $ D.Decimal (sign n, 10 ^ p) p approx
+    tailPart :: Bool -> Sign -> (D.DecimalInteger, D.DecimalFracl) -> DecodeAb D.Decimal
+    tailPart approx sign (n, f) [] = Right $ D.Decimal (sign n D.%% (10 ^ f)) f approx
     tailPart approx sign dec (c:cs) = case c of
-        ' '  ->  tailPart approx sign  dec cs
-        '-'  ->  tailPart approx minus dec cs
-        '+'  ->  tailPart approx id    dec cs
-        'a'  ->  tailPart True   sign  dec cs
-        'A'  ->  tailPart True   sign  dec cs
-        _    ->  Msg.notNumber ccs
+        ' '  -> tailPart approx sign  dec cs
+        '-'  -> tailPart approx minus dec cs
+        '+'  -> tailPart approx id    dec cs
+        'a'  -> tailPart True   sign  dec cs
+        'A'  -> tailPart True   sign  dec cs
+        _    -> Msg.notNumber ccs
 
 fromDigit :: Char -> D.DecimalInteger
 fromDigit '0' = 0
@@ -85,10 +88,12 @@ encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
 encodeDecimalWith :: B.Map String -> D.Decimal -> String
-encodeDecimalWith g (D.Decimal (n, den) pt approx)
+encodeDecimalWith g (D.Decimal r pt approx)
     | n >= 0     =       digits
     | otherwise  = '-' : digits
-    where digits = decimalDigits g approx pt (decimalShift pt n `div` den)
+    where n     = R.numerator   r
+          den   = R.denominator r
+          digits = decimalDigits g approx pt (decimalShift pt n `div` den)
 
 decimalShift :: D.DecimalFracl -> B.Map D.DecimalInteger
 decimalShift pt n = (10 ^ abs pt) * (abs n)
@@ -96,12 +101,12 @@ decimalShift pt n = (10 ^ abs pt) * (abs n)
 decimalDigits :: B.Map String -> Bool -> D.DecimalFracl -> D.DecimalInteger -> String
 decimalDigits g approx pt
     | pt == 0   = zero . reverse . intPart pt
-    | otherwise = zero . reverse . decPart pt
+    | otherwise = zero . reverse . fracPart pt
     where
-    decPart :: D.DecimalFracl -> D.DecimalInteger -> String
-    decPart 0 n = '.' : intPart 0 n
-    decPart p n = case quotDigit n of
-                    (n', d) -> d : decPart (p - 1) n'
+    fracPart :: D.DecimalFracl -> D.DecimalInteger -> String
+    fracPart 0 n = '.' : intPart 0 n
+    fracPart p n = case quotDigit n of
+                    (n', d) -> d : fracPart (p - 1) n'
 
     intPart :: D.DecimalFracl -> D.DecimalInteger -> String
     intPart _ 0 | approx      = " a"

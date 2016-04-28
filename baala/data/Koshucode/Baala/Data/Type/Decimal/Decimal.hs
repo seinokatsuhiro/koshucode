@@ -22,7 +22,8 @@
 
 module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Type
-    DecimalInteger, DecimalFracl, Decimal (..),
+    (%%),
+    DecimalRatio, DecimalInteger, DecimalFracl, Decimal (..),
     decimalRatioEq, decimalRatioCompare,
     isDecimalZero,
     decimalNum, decimalDenom,
@@ -47,6 +48,11 @@ import qualified Koshucode.Baala.Base              as B
 
 -- ----------------------  Type
 
+(%%) :: DecimalInteger -> DecimalInteger -> DecimalRatio
+x %% y = x R.% y
+
+type DecimalRatio = R.Ratio DecimalInteger
+
 type DecimalInteger = Integer
 
 -- | Length of fractional part.
@@ -54,8 +60,7 @@ type DecimalFracl   = Int
 
 -- | Decimal number.
 data Decimal = Decimal 
-    { decimalRatio   :: (DecimalInteger, DecimalInteger)
-                                       -- ^ Rational number for the decimal number
+    { decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
     , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
     , decimalApprox  :: Bool
     } deriving (Show)
@@ -76,22 +81,22 @@ decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
 -- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
-isDecimalZero (Decimal (n, _) _ _)  = n == 0
+isDecimalZero (Decimal r _ _)  = r == 0
 
 -- | Numerator part of decimal number.
 decimalNum :: Decimal -> DecimalInteger
-decimalNum = fst . decimalRatio
+decimalNum = R.numerator . decimalRatio
 
 -- | Denominator part of decimal number.
 decimalDenom :: Decimal -> DecimalInteger
-decimalDenom = snd . decimalRatio
+decimalDenom = R.denominator . decimalRatio
 
 -- | Change decimal fracl.
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
 decimalFraclSet f (Decimal r _ a) = Right $ Decimal r f a
 
 reduceDecimal :: (DecimalInteger, DecimalInteger) -> DecimalFracl -> Bool -> Decimal
-reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
+reduceDecimal (n, den) = Decimal (div n g %% div den g) where
     g = gcd n den
 
 
@@ -111,13 +116,12 @@ integralDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
 realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
-realDecimal p n = Decimal (R.numerator r, R.denominator r) p False where
-    r = toRational n
+realDecimal p n = Decimal (toRational n) p False where
 
 -- | Convert decimal number to fractional number.
 decimalFractional :: (Fractional n) => Decimal -> n
-decimalFractional (Decimal { decimalRatio = (num, den)}) =
-    fromRational $ toRational $ (num R.% den)
+decimalFractional (Decimal { decimalRatio = r }) =
+    fromRational $ toRational (R.numerator r %% R.denominator r)
 
 
 -- ----------------------  Chop

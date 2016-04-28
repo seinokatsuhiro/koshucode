@@ -7,7 +7,7 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
 
     -- * Binary operator
     DecimalBinary,
-    decimalAdd,
+    decimalAdd, decimalAddHigh,
     decimalSub,
     decimalMul,
     decimalDiv,
@@ -22,6 +22,7 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
   ) where
 
 import qualified Control.Monad                             as M
+import qualified Data.Ratio                                as R
 import qualified Koshucode.Baala.Base                      as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Coder   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
@@ -57,12 +58,16 @@ decimalAdd PrecisionRight   = decimalAddBy constRight
 decimalAdd PrecisionStrict  = decimalAddStrict
 
 decimalAddBy :: PrecisionSelector -> DecimalBinary
-decimalAddBy signi (D.Decimal (n1, d1) p1 a1)
-                   (D.Decimal (n2, d2) p2 a2)
-    | d1 == d2   = Right $ D.reduceDecimal (n1 + n2, d1) p3 a3
-    | otherwise  = Right $ D.reduceDecimal (n3, d3)      p3 a3
-    where n3     = (n1 * d2) + (n2 * d1)
-          d3     = d1 * d2
+decimalAddBy signi (D.Decimal r1 p1 a1)
+                   (D.Decimal r2 p2 a2)
+    | den1 == den2 = Right $ D.Decimal ((n1 + n2) D.%% den1) p3 a3
+    | otherwise    = Right $ D.Decimal (n3        D.%% den3) p3 a3
+    where n1     = R.numerator   r1
+          den1   = R.denominator r1
+          n2     = R.numerator   r2
+          den2   = R.denominator r2
+          n3     = (n1 * den2) + (n2 * den1)
+          den3   = den1 * den2
           p3     = signi p1 p2
           a3     = a1 || a2
 
@@ -83,9 +88,13 @@ decimalSub pr d1 d2 = decimalAdd pr d1 $ decimalRevsign d2
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: DecimalBinary
-decimalMul (D.Decimal (n1, den1) p1 a1) (D.Decimal (n2, den2) p2 a2)
-    = Right $ D.Decimal (n3, den3) p3 a3
-    where n3    = (n1   `div` g1) * (n2   `div` g2)
+decimalMul (D.Decimal r1 p1 a1) (D.Decimal r2 p2 a2)
+    = Right $ D.Decimal (n3 D.%% den3) p3 a3
+    where n1    = R.numerator   r1
+          den1  = R.denominator r1
+          n2    = R.numerator   r2
+          den2  = R.denominator r2
+          n3    = (n1   `div` g1) * (n2   `div` g2)
           den3  = (den2 `div` g1) * (den1 `div` g2)
           g1    = gcd n1 den2
           g2    = gcd n2 den1
@@ -105,30 +114,37 @@ decimalRem = decimalQR rem
 
 decimalQR :: (D.DecimalInteger -> D.DecimalInteger -> D.DecimalInteger) -> DecimalBinary
 decimalQR qr
-          d1@(D.Decimal (n1, den1) p1 a1)
-          d2@(D.Decimal (n2, den2) p2 a2)
+          d1@(D.Decimal r1 p1 a1)
+          d2@(D.Decimal r2 p2 a2)
     | p1 /= p2     = Msg.heteroDecimal txt1 txt2
     | n2 == 0      = Msg.divideByZero
-    | otherwise    = Right $ D.Decimal (n3, 1) p1 a3
-    where n3    =  (n1 * den2) `qr` (n2 * den1)
-          a3    =  a1 || a2
-          txt1  =  D.encodeDecimal d1
-          txt2  =  D.encodeDecimal d2
+    | otherwise    = Right $ D.Decimal (n3 D.%% 1) p1 a3
+    where n1    = R.numerator   r1
+          den1  = R.denominator r1
+          n2    = R.numerator   r2
+          den2  = R.denominator r2
+          n3    = (n1 * den2) `qr` (n2 * den1)
+          a3    = a1 || a2
+          txt1  = D.encodeDecimal d1
+          txt2  = D.encodeDecimal d2
 
 
 -- ----------------------  Unary operator
 
 -- | Invert sign of decimal
 decimalRevsign :: B.Map D.Decimal
-decimalRevsign (D.Decimal (n, den) p a) = D.Decimal (- n, den) p a
+decimalRevsign (D.Decimal r p a) = D.Decimal r' p a where
+    r' = - (R.numerator r) D.%% (R.denominator r)
 
 -- | Exchange numerator and denominator
 decimalRevratio :: B.Map D.Decimal
-decimalRevratio (D.Decimal (n, den) p a) = D.Decimal (den, n) p a
+decimalRevratio (D.Decimal r p a) = D.Decimal r' p a where
+    r' = R.denominator r D.%% R.numerator r
 
 -- | Absolute value
 decimalAbs :: B.Map D.Decimal
-decimalAbs (D.Decimal (n, den) p a) = D.Decimal (abs n, den) p a
+decimalAbs (D.Decimal r p a) = D.Decimal r' p a where
+    r' = abs (R.numerator r) D.%% (R.denominator r)
 
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal
 decimalSum = M.foldM decimalAddHigh $ D.integralDecimal (0 :: Int)
