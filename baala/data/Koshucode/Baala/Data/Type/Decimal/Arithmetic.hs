@@ -9,11 +9,11 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
     PrecisionCombine,
 
     -- * Binary operator
-    DecimalBinary,
+    DecimalBin, DecimalBinAb,
     Bin, BinAb,
-    decimalAdd, decimalAddHigh,
-    decimalSub,
-    decimalMul,
+    decimalAdd, decimalAddHigh, decimalAddSimple,
+    decimalSub, decimalSubSimple,
+    decimalMul, decimalMulSimple,
     decimalDiv,
     decimalQuo,
     decimalRem,
@@ -51,8 +51,10 @@ constRight _ y = y
 
 -- ----------------------  Type and Higher function
 
+type DecimalBin = Bin D.Decimal
+
 -- | Binary operation for two decimals
-type DecimalBinary = BinAb D.Decimal
+type DecimalBinAb = BinAb D.Decimal
 
 -- | Type for binary operators.
 type Bin a = a -> a -> a
@@ -60,41 +62,47 @@ type Bin a = a -> a -> a
 -- | Type for abortable binary operators.
 type BinAb a = a -> a -> B.Ab a
 
-decimalBinMax :: Bin D.DecimalRatio -> DecimalBinary
-decimalBinMax = decimalBin max
+decimalBinAbMax :: Bin D.DecimalRatio -> DecimalBinAb
+decimalBinAbMax = decimalBinAb max
 
-decimalBinPlus :: Bin D.DecimalRatio -> DecimalBinary
-decimalBinPlus = decimalBin (+)
+decimalBinAbPlus :: Bin D.DecimalRatio -> DecimalBinAb
+decimalBinAbPlus = decimalBinAb (+)
 
-decimalBinLeft :: Bin D.DecimalRatio -> DecimalBinary
-decimalBinLeft = decimalBin constLeft
+decimalBinAbLeft :: Bin D.DecimalRatio -> DecimalBinAb
+decimalBinAbLeft = decimalBinAb constLeft
 
-decimalBinRight :: Bin D.DecimalRatio -> DecimalBinary
-decimalBinRight = decimalBin constRight
+decimalBinAbRight :: Bin D.DecimalRatio -> DecimalBinAb
+decimalBinAbRight = decimalBinAb constRight
 
-decimalBin :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBinary
+decimalBinAb :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBinAb
+decimalBinAb pre bin x y = Right $ decimalBin pre bin x y
+
+decimalBin :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBin
 decimalBin pre bin
-           D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
-           D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
-    = Right $ D.Decimal { D.decimalRatio  = bin r1 r2
-                        , D.decimalFracl  = pre p1 p2
-                        , D.decimalApprox = a1 || a2 }
+      D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
+      D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
+    = D.Decimal { D.decimalRatio  = bin r1 r2
+                , D.decimalFracl  = pre p1 p2
+                , D.decimalApprox = a1 || a2 }
 
 
 -- ----------------------  Binary operator
 
 -- | Addition: /x/ + /y/
-decimalAdd :: PrecisionSide -> DecimalBinary
-decimalAdd PrecisionHigh    = decimalBinMax   (+)
-decimalAdd PrecisionLeft    = decimalBinLeft  (+)
-decimalAdd PrecisionRight   = decimalBinRight (+)
+decimalAdd :: PrecisionSide -> DecimalBinAb
+decimalAdd PrecisionHigh    = decimalBinAbMax   (+)
+decimalAdd PrecisionLeft    = decimalBinAbLeft  (+)
+decimalAdd PrecisionRight   = decimalBinAbRight (+)
 decimalAdd PrecisionStrict  = decimalAddStrict
 
 -- | Addition with 'PrecisionHigh'.
-decimalAddHigh :: DecimalBinary
-decimalAddHigh = decimalBinMax (+)
+decimalAddHigh :: DecimalBinAb
+decimalAddHigh = decimalBinAbMax (+)
 
-decimalAddStrict :: DecimalBinary
+decimalAddSimple :: DecimalBin
+decimalAddSimple = decimalBin max (+)
+
+decimalAddStrict :: DecimalBinAb
 decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
                  d2@D.Decimal { D.decimalFracl = p2 }
     | p1 == p2   = decimalAddHigh d1 d2
@@ -103,24 +111,30 @@ decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
           txt2   = D.encodeDecimal d2
 
 -- | Subtruction: /x/ - /y/
-decimalSub :: PrecisionSide -> DecimalBinary
+decimalSub :: PrecisionSide -> DecimalBinAb
 decimalSub pr x y = decimalAdd pr x $ decimalInvert y
 
+decimalSubSimple :: DecimalBin
+decimalSubSimple = decimalBin max (-)
+
 -- | Multiplication: /x/ × /y/
-decimalMul :: DecimalBinary
-decimalMul = decimalBinPlus (*)
+decimalMul :: DecimalBinAb
+decimalMul = decimalBinAbPlus (*)
+
+decimalMulSimple :: DecimalBin
+decimalMulSimple = decimalBin (+) (*)
 
 -- | Division: /x/ ÷ /y/
-decimalDiv :: DecimalBinary
-decimalDiv = decimalBinPlus (/)
+decimalDiv :: DecimalBinAb
+decimalDiv = decimalBinAbPlus (/)
 
 -- | Quotient: integral part of /x/ ÷ /y/
-decimalQuo :: DecimalBinary
+decimalQuo :: DecimalBinAb
 decimalQuo x y = do z <- decimalDiv x y
                     Right $ D.decimalIntPart z
 
 -- | Remainder.
-decimalRem :: DecimalBinary
+decimalRem :: DecimalBinAb
 decimalRem x y = do z <- decimalDiv x y
                     r <- y `decimalMul` D.decimalFracPart z
                     Right r
