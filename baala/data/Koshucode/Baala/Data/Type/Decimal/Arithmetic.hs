@@ -34,7 +34,7 @@ data PrecisionSide
     | PrecisionStrict     -- ^ Check same precision
       deriving (Show, Ord, Eq)
 
-type PrecisionSelector = D.DecimalPoint -> D.DecimalPoint -> D.DecimalPoint
+type PrecisionSelector = D.DecimalFracl -> D.DecimalFracl -> D.DecimalFracl
 
 constLeft :: a -> b -> a
 constLeft = const

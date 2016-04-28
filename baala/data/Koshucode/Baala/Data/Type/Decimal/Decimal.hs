@@ -1,17 +1,37 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Decimal number.
+--
+--   A decimal number in Koshucode is internally represented
+--   using a rational number ('decimalRatio')
+--   with a length of fractional part ('decimalFracl') .
+--   For example, the decimal number 11.250 correnponds to
+--   the rational number 45/4 with the fraction length 3.
+--
+--   [Decimal number]
+--     Number represented using 10 digits and the decimal separator.
+--   [Decimal separator]
+--     Symbol between integer part and fractional part.
+--   [Fractional part]
+--     The right part of decimal numbers, e.g., 250 for 11.250.
+--   [Integer part]
+--     The left part of decimal numbers, e.g., 11 for 11.250.
+--   [Integral decimal]
+--     Decimal number without fractional part.
+--     
+
 module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Type
-    DecimalInteger, DecimalPoint, Decimal (..),
+    DecimalInteger, DecimalFracl, Decimal (..),
     isDecimalZero,
     decimalNum, decimalDenom,
-    decimalPointSet,
+    decimalFraclSet,
     reduceDecimal,
 
-    -- * Convert
+    -- * Conversion
+    decimal0, decimal1,
     integralDecimal, realDecimal,
     decimalFractional,
-    decimal0, decimal1,
 
     -- * Chop
     chopDigitsTrancate,
@@ -27,11 +47,15 @@ import qualified Koshucode.Baala.Base              as B
 -- ----------------------  Type
 
 type DecimalInteger = Integer
-type DecimalPoint   = Int
 
+-- | Length of fractional part.
+type DecimalFracl   = Int
+
+-- | Decimal number.
 data Decimal = Decimal 
     { decimalRatio   :: (DecimalInteger, DecimalInteger)
-    , decimalPoint   :: DecimalPoint
+                                       -- ^ Rational number for the decimal number
+    , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
     , decimalApprox  :: Bool
     } deriving (Show, Eq, Ord)
 
@@ -47,23 +71,31 @@ decimalNum = fst . decimalRatio
 decimalDenom :: Decimal -> DecimalInteger
 decimalDenom = snd . decimalRatio
 
--- | Change decimal point.
-decimalPointSet :: DecimalPoint -> B.AbMap Decimal
-decimalPointSet p (Decimal r _ a) = Right $ Decimal r p a
+-- | Change decimal fracl.
+decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
+decimalFraclSet f (Decimal r _ a) = Right $ Decimal r f a
 
-reduceDecimal :: (DecimalInteger, DecimalInteger) -> DecimalPoint -> Bool -> Decimal
+reduceDecimal :: (DecimalInteger, DecimalInteger) -> DecimalFracl -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
 
 
--- ----------------------  Convert
+-- ----------------------  Conversion
 
--- | Convert integral number to decimal number.
+-- | The integral decimal 0, i.e., 'integralDecimal 0'.
+decimal0 :: Decimal
+decimal0 = integralDecimal (0 :: DecimalInteger)
+
+-- | The integral decimal 1, i.e., 'integralDecimal 1'.
+decimal1 :: Decimal
+decimal1 = integralDecimal (1 :: DecimalInteger)
+
+-- | Convert integral number to integral decimal number.
 integralDecimal :: (Integral n) => n -> Decimal
 integralDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
-realDecimal :: (Real n) => DecimalPoint -> n -> Decimal
+realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
 realDecimal p n = Decimal (R.numerator r, R.denominator r) p False where
     r = toRational n
 
@@ -71,12 +103,6 @@ realDecimal p n = Decimal (R.numerator r, R.denominator r) p False where
 decimalFractional :: (Fractional n) => Decimal -> n
 decimalFractional (Decimal { decimalRatio = (num, den)}) =
     fromRational $ toRational $ (num R.% den)
-
-decimal0 :: Decimal
-decimal0 = integralDecimal (0 :: DecimalInteger)
-
-decimal1 :: Decimal
-decimal1 = integralDecimal (1 :: DecimalInteger)
 
 
 -- ----------------------  Chop
