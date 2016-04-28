@@ -43,3 +43,8 @@ decimalFractional (D.Decimal { D.decimalRatio = r }) =
 instance Real D.Decimal where
     toRational = D.decimalRatio
 
+instance Fractional D.Decimal where
+    (/)           = D.decimalDivSimple
+    recip         = D.decimalRecip
+    fromRational  = realDecimal 0
+

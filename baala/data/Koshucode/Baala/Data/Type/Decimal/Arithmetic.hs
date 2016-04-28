@@ -14,7 +14,7 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
     decimalAdd, decimalAddHigh, decimalAddSimple,
     decimalSub, decimalSubSimple,
     decimalMul, decimalMulSimple,
-    decimalDiv,
+    decimalDiv, decimalDivSimple,
     decimalQuo,
     decimalRem,
 
@@ -127,6 +127,9 @@ decimalMulSimple = decimalBin (+) (*)
 -- | Division: /x/ ÷ /y/
 decimalDiv :: DecimalBinAb
 decimalDiv = decimalBinAbPlus (/)
+
+decimalDivSimple :: DecimalBin
+decimalDivSimple = decimalBin (+) (/)
 
 -- | Quotient: integral part of /x/ ÷ /y/
 decimalQuo :: DecimalBinAb
