@@ -119,7 +119,9 @@ decodeBase base ccs = headPart id ccs where
     up c i n | i < base   = Right $ base * n + i
              | otherwise  = Msg.tooLargeDigit [c]
 
-    decimal f n approx = Right $ D.Decimal (r f) f approx
+    decimal f n approx = Right $ D.Decimal { D.decimalRatio  = r f
+                                           , D.decimalFracl  = f
+                                           , D.decimalApprox = approx }
         where r 0 = n D.%% 1
               r 1 = n D.%% 10
               r 2 = n D.%% 100
@@ -149,7 +151,7 @@ encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
 encodeDecimalWith :: B.Map String -> D.Decimal -> String
-encodeDecimalWith g (D.Decimal r pt approx)
+encodeDecimalWith g D.Decimal { D.decimalRatio = r, D.decimalFracl = pt, D.decimalApprox = approx }
     | n >= 0     =       digits
     | otherwise  = '-' : digits
     where n     = R.numerator   r

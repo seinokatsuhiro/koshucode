@@ -79,8 +79,8 @@ decimalAddHigh :: DecimalBinary
 decimalAddHigh = decimalAddBy max
 
 decimalAddStrict :: DecimalBinary
-decimalAddStrict d1@(D.Decimal _ p1 _)
-                 d2@(D.Decimal _ p2 _)
+decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
+                 d2@D.Decimal { D.decimalFracl = p2 }
     | p1 == p2   = decimalAddHigh d1 d2
     | otherwise  = Msg.heteroDecimal txt1 txt2
     where txt1   = D.encodeDecimal d1

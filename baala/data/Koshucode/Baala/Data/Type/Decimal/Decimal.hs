@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decimal number.
@@ -28,7 +29,6 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalFraclSet,
-    reduceDecimal,
 
     -- * Conversion
     decimal0, decimal1,
@@ -50,14 +50,15 @@ type DecimalRatio = R.Ratio DecimalInteger
 
 type DecimalInteger = Integer
 
--- | Length of fractional part.
-type DecimalFracl   = Int
+-- | Length of fractional part,
+--   e.g., the length of the fractional part of 4.050 is 3.
+type DecimalFracl = Int
 
 -- | Decimal number.
 data Decimal = Decimal 
-    { decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
+    { decimalApprox  :: Bool
     , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
-    , decimalApprox  :: Bool
+    , decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
     } deriving (Show)
 
 instance Eq Decimal where
@@ -76,7 +77,7 @@ decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
 -- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
-isDecimalZero (Decimal r _ _)  = r == 0
+isDecimalZero Decimal {..} = decimalRatio == 0
 
 -- | Numerator part of decimal number.
 decimalNum :: Decimal -> DecimalInteger
@@ -88,11 +89,7 @@ decimalDenom = R.denominator . decimalRatio
 
 -- | Change decimal fracl.
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
-decimalFraclSet f (Decimal r _ a) = Right $ Decimal r f a
-
-reduceDecimal :: (DecimalInteger, DecimalInteger) -> DecimalFracl -> Bool -> Decimal
-reduceDecimal (n, den) = Decimal (div n g %% div den g) where
-    g = gcd n den
+decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
 
 -- ----------------------  Conversion
@@ -114,7 +111,9 @@ intDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
 realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
-realDecimal p n = Decimal (toRational n) p False where
+realDecimal p n = Decimal { decimalRatio  = toRational n
+                          , decimalFracl  = p
+                          , decimalApprox = False }
 
 -- | Convert decimal number to fractional number.
 decimalFractional :: (Fractional n) => Decimal -> n
