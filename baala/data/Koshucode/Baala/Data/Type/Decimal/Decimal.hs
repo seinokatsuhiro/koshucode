@@ -29,6 +29,9 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalFraclSet,
+    decimalRatioMap,
+
+    -- * Constant
     decimal0, decimal1,
     intDecimal,
   ) where
@@ -88,6 +91,8 @@ decimalDenom = R.denominator . decimalRatio
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
 decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
+decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
+decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 
 -- ----------------------  Constant
 

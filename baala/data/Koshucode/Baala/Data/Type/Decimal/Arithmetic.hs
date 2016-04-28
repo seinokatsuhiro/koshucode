@@ -145,20 +145,17 @@ decimalRem x y = do z <- decimalDiv x y
 
 -- ----------------------  Unary operator
 
-decimalRatioMap :: B.Map D.DecimalRatio -> B.Map D.Decimal
-decimalRatioMap f d@D.Decimal {..} = d { D.decimalRatio = f decimalRatio }
-
 -- | Invert sign of decimal
 decimalInvert :: B.Map D.Decimal
-decimalInvert = decimalRatioMap negate
+decimalInvert = D.decimalRatioMap negate
 
 -- | Exchange numerator and denominator
 decimalRecip :: B.Map D.Decimal
-decimalRecip = decimalRatioMap recip
+decimalRecip = D.decimalRatioMap recip
 
 -- | Absolute value
 decimalAbs :: B.Map D.Decimal
-decimalAbs = decimalRatioMap abs
+decimalAbs = D.decimalRatioMap abs
 
 -- | Add all decimals.
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal

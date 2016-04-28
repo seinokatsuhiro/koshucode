@@ -10,8 +10,9 @@ module Koshucode.Baala.Data.Type.Decimal.Instance
   ) where
 
 import qualified Data.Ratio                                    as R
-import qualified Koshucode.Baala.Data.Type.Decimal.Decimal     as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Arithmetic  as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Decimal     as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Fraction    as D
 
 instance Num D.Decimal where
     (+)          = D.decimalAddSimple
@@ -47,4 +48,7 @@ instance Fractional D.Decimal where
     (/)           = D.decimalDivSimple
     recip         = D.decimalRecip
     fromRational  = realDecimal 0
+
+instance RealFrac D.Decimal where
+    properFraction = D.decimalProperFractionSimple
 

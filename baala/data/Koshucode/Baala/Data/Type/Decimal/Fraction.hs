@@ -6,7 +6,7 @@
 module Koshucode.Baala.Data.Type.Decimal.Fraction
   ( decimalIntPart,
     decimalFracPart,
-    decimalProperFraction,
+    decimalProperFraction, decimalProperFractionSimple,
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
@@ -24,11 +24,14 @@ decimalFracPart :: B.Map D.Decimal
 decimalFracPart = snd . decimalProperFraction
 
 decimalProperFraction :: D.Decimal -> (D.Decimal, D.Decimal)
-decimalProperFraction D.Decimal {..} = (dec $ i D.%% 1, dec f) where
-    (i, f) = properFraction decimalRatio
-    dec r  = D.Decimal { D.decimalRatio  = r
-                       , D.decimalFracl  = decimalFracl
-                       , D.decimalApprox = decimalApprox }
+decimalProperFraction d = (dec $ i D.%% 1, dec f) where
+    (i, f) = properFraction $ D.decimalRatio d
+    dec r  = D.decimalRatioMap (const r) d
+
+decimalProperFractionSimple :: (Integral n) => D.Decimal -> (n, D.Decimal)
+decimalProperFractionSimple d = (i, dec f) where
+    (i, f) = properFraction $ D.decimalRatio d
+    dec r  = D.decimalRatioMap (const r) d
 
 -- | @chopDigitsTrancate@ /d/ /n/ returns a number
 --   which does not have the tailing /d/ digits.
