@@ -29,11 +29,8 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalFraclSet,
-
-    -- * Conversion
     decimal0, decimal1,
-    integralDecimal, intDecimal, realDecimal,
-    decimalFractional,
+    intDecimal,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -92,7 +89,7 @@ decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
 decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
 
--- ----------------------  Conversion
+-- ----------------------  Constant
 
 -- | The integral decimal 0, i.e., 'integralDecimal 0'.
 decimal0 :: Decimal
@@ -102,21 +99,8 @@ decimal0 = intDecimal 0
 decimal1 :: Decimal
 decimal1 = intDecimal 1
 
--- | Convert integral number to integral decimal number.
-integralDecimal :: (Integral n) => n -> Decimal
-integralDecimal = realDecimal 0
-
 intDecimal :: Int -> Decimal
-intDecimal = realDecimal 0
-
--- | Convert real number to decimal number.
-realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
-realDecimal p n = Decimal { decimalRatio  = toRational n
-                          , decimalFracl  = p
-                          , decimalApprox = False }
-
--- | Convert decimal number to fractional number.
-decimalFractional :: (Fractional n) => Decimal -> n
-decimalFractional (Decimal { decimalRatio = r }) =
-    fromRational $ toRational (R.numerator r %% R.denominator r)
+intDecimal n = Decimal { decimalRatio  = fromIntegral n %% 1
+                       , decimalFracl  = 0
+                       , decimalApprox = False }
 
