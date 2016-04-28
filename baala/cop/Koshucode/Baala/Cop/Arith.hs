@@ -109,7 +109,7 @@ copMinus2 pr [Right xc, Right yc]
 copMinus2 _ _ = Msg.unexpAttr "-"
 
 copMinus1 :: (D.CDec c) => D.CopCalc c
-copMinus1 [Right x] | D.isDec x = D.putDec $ D.decimalRevsign (D.gDec x)
+copMinus1 [Right x] | D.isDec x = D.putDec $ D.decimalInvert $ D.gDec x
 copMinus1 _ = Msg.unexpAttr "-"
 
 copQuo :: (D.CText c, D.CDec c) => D.CopCalc c

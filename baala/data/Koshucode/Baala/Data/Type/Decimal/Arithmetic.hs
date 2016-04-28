@@ -1,4 +1,7 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
+
+-- | Arithmetics on decimals.
 
 module Koshucode.Baala.Data.Type.Decimal.Arithmetic
   ( -- * Precision
@@ -7,6 +10,7 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
 
     -- * Binary operator
     DecimalBinary,
+    Bin, BinAb,
     decimalAdd, decimalAddHigh,
     decimalSub,
     decimalMul,
@@ -15,8 +19,8 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
     decimalRem,
 
     -- * Unary operator
-    decimalRevsign,
-    decimalRevratio,
+    decimalInvert,
+    decimalRecip,
     decimalAbs,
     decimalSum,
   ) where
@@ -47,8 +51,13 @@ constRight _ y = y
 -- ----------------------  Binary operator
 
 -- | Binary operation for two decimals
-type DecimalBinary =
-    D.Decimal -> D.Decimal -> B.Ab D.Decimal
+type DecimalBinary = BinAb D.Decimal
+
+-- | Type for binary operators.
+type Bin a = a -> a -> a
+
+-- | Type for abortable binary operators.
+type BinAb a = a -> a -> B.Ab a
 
 -- | Addition: /x/ + /y/
 decimalAdd :: PrecisionSide -> DecimalBinary
@@ -58,19 +67,14 @@ decimalAdd PrecisionRight   = decimalAddBy constRight
 decimalAdd PrecisionStrict  = decimalAddStrict
 
 decimalAddBy :: PrecisionSelector -> DecimalBinary
-decimalAddBy signi (D.Decimal r1 p1 a1)
-                   (D.Decimal r2 p2 a2)
-    | den1 == den2 = Right $ D.Decimal ((n1 + n2) D.%% den1) p3 a3
-    | otherwise    = Right $ D.Decimal (n3        D.%% den3) p3 a3
-    where n1     = R.numerator   r1
-          den1   = R.denominator r1
-          n2     = R.numerator   r2
-          den2   = R.denominator r2
-          n3     = (n1 * den2) + (n2 * den1)
-          den3   = den1 * den2
-          p3     = signi p1 p2
-          a3     = a1 || a2
+decimalAddBy sel
+             D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
+             D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
+    = Right $ D.Decimal { D.decimalRatio  = r1 + r2
+                        , D.decimalFracl  = sel p1 p2
+                        , D.decimalApprox = a1 || a2 }
 
+-- | Addition with 'PrecisionHigh'.
 decimalAddHigh :: DecimalBinary
 decimalAddHigh = decimalAddBy max
 
@@ -84,41 +88,37 @@ decimalAddStrict d1@(D.Decimal _ p1 _)
 
 -- | Subtruction: /x/ - /y/
 decimalSub :: PrecisionSide -> DecimalBinary
-decimalSub pr d1 d2 = decimalAdd pr d1 $ decimalRevsign d2
+decimalSub pr d1 d2 = decimalAdd pr d1 $ decimalInvert d2
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: DecimalBinary
-decimalMul (D.Decimal r1 p1 a1) (D.Decimal r2 p2 a2)
-    = Right $ D.Decimal (n3 D.%% den3) p3 a3
-    where n1    = R.numerator   r1
-          den1  = R.denominator r1
-          n2    = R.numerator   r2
-          den2  = R.denominator r2
-          n3    = (n1   `div` g1) * (n2   `div` g2)
-          den3  = (den2 `div` g1) * (den1 `div` g2)
-          g1    = gcd n1 den2
-          g2    = gcd n2 den1
-          p3    = max p1 p2
-          a3    = a1 || a2
+decimalMul D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
+           D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
+    = Right $ D.Decimal { D.decimalRatio  = r1 * r2
+                        , D.decimalFracl  = max p1 p2
+                        , D.decimalApprox = a1 || a2 }
 
 -- | Division: /x/ ÷ /y/
 decimalDiv :: DecimalBinary
-decimalDiv dec1 dec2
-    = decimalMul dec1 $ decimalRevratio dec2
+decimalDiv dec1 dec2 = decimalMul dec1 $ decimalRecip dec2
 
+-- | Quotient
 decimalQuo :: DecimalBinary
 decimalQuo = decimalQR quot
 
+-- | Remainder
 decimalRem :: DecimalBinary
 decimalRem = decimalQR rem
 
-decimalQR :: (D.DecimalInteger -> D.DecimalInteger -> D.DecimalInteger) -> DecimalBinary
+decimalQR :: Bin D.DecimalInteger -> DecimalBinary
 decimalQR qr
           d1@(D.Decimal r1 p1 a1)
           d2@(D.Decimal r2 p2 a2)
     | p1 /= p2     = Msg.heteroDecimal txt1 txt2
     | n2 == 0      = Msg.divideByZero
-    | otherwise    = Right $ D.Decimal (n3 D.%% 1) p1 a3
+    | otherwise    = Right $ D.Decimal { D.decimalRatio  = n3 D.%% 1
+                                       , D.decimalFracl  = p1
+                                       , D.decimalApprox = a3 }
     where n1    = R.numerator   r1
           den1  = R.denominator r1
           n2    = R.numerator   r2
@@ -131,21 +131,22 @@ decimalQR qr
 
 -- ----------------------  Unary operator
 
+decimalRatioMap :: B.Map D.DecimalRatio -> B.Map D.Decimal
+decimalRatioMap f d@D.Decimal {..} = d { D.decimalRatio = f decimalRatio }
+
 -- | Invert sign of decimal
-decimalRevsign :: B.Map D.Decimal
-decimalRevsign (D.Decimal r p a) = D.Decimal r' p a where
-    r' = - (R.numerator r) D.%% (R.denominator r)
+decimalInvert :: B.Map D.Decimal
+decimalInvert = decimalRatioMap negate
 
 -- | Exchange numerator and denominator
-decimalRevratio :: B.Map D.Decimal
-decimalRevratio (D.Decimal r p a) = D.Decimal r' p a where
-    r' = R.denominator r D.%% R.numerator r
+decimalRecip :: B.Map D.Decimal
+decimalRecip = decimalRatioMap recip
 
 -- | Absolute value
 decimalAbs :: B.Map D.Decimal
-decimalAbs (D.Decimal r p a) = D.Decimal r' p a where
-    r' = abs (R.numerator r) D.%% (R.denominator r)
+decimalAbs = decimalRatioMap abs
 
+-- | Add all decimals.
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal
-decimalSum = M.foldM decimalAddHigh $ D.integralDecimal (0 :: Int)
+decimalSum = M.foldM decimalAddHigh D.decimal0
 
