@@ -23,6 +23,7 @@
 module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Type
     DecimalInteger, DecimalFracl, Decimal (..),
+    decimalRatioEq, decimalRatioCompare,
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalFraclSet,
@@ -57,7 +58,21 @@ data Decimal = Decimal
                                        -- ^ Rational number for the decimal number
     , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
     , decimalApprox  :: Bool
-    } deriving (Show, Eq, Ord)
+    } deriving (Show)
+
+instance Eq Decimal where
+    (==) = decimalRatioEq
+
+instance Ord Decimal where
+    compare = decimalRatioCompare
+
+-- | Test numerical equality of two decimal numbers.
+decimalRatioEq :: Decimal -> Decimal -> Bool
+decimalRatioEq x y = decimalRatio x == decimalRatio y
+
+-- | Test numerical order of two decimal numbers.
+decimalRatioCompare :: Decimal -> Decimal -> Ordering
+decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
 -- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
