@@ -68,6 +68,7 @@ library
         Koshucode.Baala.Data.Type.Decimal.Arithmetic
         Koshucode.Baala.Data.Type.Decimal.Coder
         Koshucode.Baala.Data.Type.Decimal.Decimal
+        Koshucode.Baala.Data.Type.Decimal.Fraction
         Koshucode.Baala.Data.Type.Interp
         Koshucode.Baala.Data.Type.Judge
         Koshucode.Baala.Data.Type.Message

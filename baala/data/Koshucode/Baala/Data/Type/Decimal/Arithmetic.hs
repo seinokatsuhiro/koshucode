@@ -25,12 +25,12 @@ module Koshucode.Baala.Data.Type.Decimal.Arithmetic
     decimalSum,
   ) where
 
-import qualified Control.Monad                             as M
-import qualified Data.Ratio                                as R
-import qualified Koshucode.Baala.Base                      as B
-import qualified Koshucode.Baala.Data.Type.Decimal.Coder   as D
-import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
-import qualified Koshucode.Baala.Data.Type.Message         as Msg
+import qualified Control.Monad                               as M
+import qualified Koshucode.Baala.Base                        as B
+import qualified Koshucode.Baala.Data.Type.Decimal.Coder     as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
+import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
 data PrecisionSide
     = PrecisionHigh       -- ^ Select high precision
@@ -102,31 +102,16 @@ decimalMul D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox
 decimalDiv :: DecimalBinary
 decimalDiv dec1 dec2 = decimalMul dec1 $ decimalRecip dec2
 
--- | Quotient
+-- | Quotient: integral part of /x/ ÷ /y/
 decimalQuo :: DecimalBinary
-decimalQuo = decimalQR quot
+decimalQuo x y = do z <- decimalDiv x y
+                    Right $ D.decimalIntPart z
 
--- | Remainder
+-- | Remainder.
 decimalRem :: DecimalBinary
-decimalRem = decimalQR rem
-
-decimalQR :: Bin D.DecimalInteger -> DecimalBinary
-decimalQR qr
-          d1@(D.Decimal r1 p1 a1)
-          d2@(D.Decimal r2 p2 a2)
-    | p1 /= p2     = Msg.heteroDecimal txt1 txt2
-    | n2 == 0      = Msg.divideByZero
-    | otherwise    = Right $ D.Decimal { D.decimalRatio  = n3 D.%% 1
-                                       , D.decimalFracl  = p1
-                                       , D.decimalApprox = a3 }
-    where n1    = R.numerator   r1
-          den1  = R.denominator r1
-          n2    = R.numerator   r2
-          den2  = R.denominator r2
-          n3    = (n1 * den2) `qr` (n2 * den1)
-          a3    = a1 || a2
-          txt1  = D.encodeDecimal d1
-          txt2  = D.encodeDecimal d2
+decimalRem x y = do z <- decimalDiv x y
+                    r <- y `decimalMul` D.decimalFracPart z
+                    Right r
 
 
 -- ----------------------  Unary operator

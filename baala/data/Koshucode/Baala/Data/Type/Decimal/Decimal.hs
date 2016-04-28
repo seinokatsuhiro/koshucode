@@ -32,13 +32,8 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
 
     -- * Conversion
     decimal0, decimal1,
-    integralDecimal, realDecimal,
+    integralDecimal, intDecimal, realDecimal,
     decimalFractional,
-
-    -- * Chop
-    chopDigitsTrancate,
-    chopDigitsRound,
-    roundLastDigit,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -104,15 +99,18 @@ reduceDecimal (n, den) = Decimal (div n g %% div den g) where
 
 -- | The integral decimal 0, i.e., 'integralDecimal 0'.
 decimal0 :: Decimal
-decimal0 = integralDecimal (0 :: DecimalInteger)
+decimal0 = intDecimal 0
 
 -- | The integral decimal 1, i.e., 'integralDecimal 1'.
 decimal1 :: Decimal
-decimal1 = integralDecimal (1 :: DecimalInteger)
+decimal1 = intDecimal 1
 
 -- | Convert integral number to integral decimal number.
 integralDecimal :: (Integral n) => n -> Decimal
 integralDecimal = realDecimal 0
+
+intDecimal :: Int -> Decimal
+intDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
 realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
@@ -122,40 +120,4 @@ realDecimal p n = Decimal (toRational n) p False where
 decimalFractional :: (Fractional n) => Decimal -> n
 decimalFractional (Decimal { decimalRatio = r }) =
     fromRational $ toRational (R.numerator r %% R.denominator r)
-
-
--- ----------------------  Chop
-
--- | @chopDigitsTrancate@ /d/ /n/ returns a number
---   which does not have the tailing /d/ digits.
---   If /d/ is zero or negative, it returns just /n/.
-chopDigitsTrancate :: (Integral d, Integral n) => d -> n -> n
-chopDigitsTrancate d n = fst $ chopDigits d n
-
--- | @chopDigitsRound@ is similar to 'chopDigitsTrancate',
---   but rounds chopped digit.
-chopDigitsRound :: (Integral d, Integral n) => d -> n -> n
-chopDigitsRound d n =
-  case chopDigits d n of
-   (n', True)   -> n' + 1
-   (n', False)  -> n'
-
-chopDigits :: (Integral d, Integral n) => d -> n -> (n, Bool)
-chopDigits d n
-  | d <= 0     = (n, False)
-  | otherwise  = (sig * q, r >= half)
-  where
-    sig        = signum n
-    divisor    = 10 ^ d
-    half       = divisor `quot` 2
-    (q, r)     = abs n `quotRem` divisor
-
--- | Round the last (least significant) digit.
-roundLastDigit :: (Integral n) => n -> n
-roundLastDigit n = sig * n' where
-  sig = signum n
-  a   = abs n
-  n'  = case a `rem` 10 of
-         r | r >= 5     -> a - r + 10
-           | otherwise  -> a - r
 
