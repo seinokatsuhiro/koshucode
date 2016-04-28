@@ -6,6 +6,7 @@ module Koshucode.Baala.Data.Type.Message
     divideByZero,
     heteroDecimal,
     notDate,
+    tooLargeDigit,
     notNumber,
   ) where
 
@@ -25,6 +26,10 @@ notDate y m d = Left $ B.abortLines "Can't read as date"
                 [ "/year  " ++ show y
                 , "/month " ++ show m
                 , "/day   " ++ show d]
+
+-- | Too large digit
+tooLargeDigit :: String -> B.Ab a
+tooLargeDigit = Left . B.abortLine "Too large digit"
 
 -- | Can't read as number
 notNumber :: String -> B.Ab a
