@@ -6,7 +6,7 @@
 module Koshucode.Baala.Data.Type.Decimal.Arithmetic
   ( -- * Precision
     PrecisionSide (..),
-    PrecisionSelector,
+    PrecisionCombine,
 
     -- * Binary operator
     DecimalBinary,
@@ -39,7 +39,8 @@ data PrecisionSide
     | PrecisionStrict     -- ^ Check same precision
       deriving (Show, Ord, Eq)
 
-type PrecisionSelector = D.DecimalFracl -> D.DecimalFracl -> D.DecimalFracl
+-- | Combinate precisions.
+type PrecisionCombine = Bin D.DecimalFracl
 
 constLeft :: a -> b -> a
 constLeft = const
@@ -48,7 +49,7 @@ constRight :: a -> b -> b
 constRight _ y = y
 
 
--- ----------------------  Binary operator
+-- ----------------------  Type and Higher function
 
 -- | Binary operation for two decimals
 type DecimalBinary = BinAb D.Decimal
@@ -59,24 +60,39 @@ type Bin a = a -> a -> a
 -- | Type for abortable binary operators.
 type BinAb a = a -> a -> B.Ab a
 
+decimalBinMax :: Bin D.DecimalRatio -> DecimalBinary
+decimalBinMax = decimalBin max
+
+decimalBinPlus :: Bin D.DecimalRatio -> DecimalBinary
+decimalBinPlus = decimalBin (+)
+
+decimalBinLeft :: Bin D.DecimalRatio -> DecimalBinary
+decimalBinLeft = decimalBin constLeft
+
+decimalBinRight :: Bin D.DecimalRatio -> DecimalBinary
+decimalBinRight = decimalBin constRight
+
+decimalBin :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBinary
+decimalBin pre bin
+           D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
+           D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
+    = Right $ D.Decimal { D.decimalRatio  = bin r1 r2
+                        , D.decimalFracl  = pre p1 p2
+                        , D.decimalApprox = a1 || a2 }
+
+
+-- ----------------------  Binary operator
+
 -- | Addition: /x/ + /y/
 decimalAdd :: PrecisionSide -> DecimalBinary
-decimalAdd PrecisionHigh    = decimalAddBy max
-decimalAdd PrecisionLeft    = decimalAddBy constLeft
-decimalAdd PrecisionRight   = decimalAddBy constRight
+decimalAdd PrecisionHigh    = decimalBinMax   (+)
+decimalAdd PrecisionLeft    = decimalBinLeft  (+)
+decimalAdd PrecisionRight   = decimalBinRight (+)
 decimalAdd PrecisionStrict  = decimalAddStrict
-
-decimalAddBy :: PrecisionSelector -> DecimalBinary
-decimalAddBy sel
-             D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
-             D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
-    = Right $ D.Decimal { D.decimalRatio  = r1 + r2
-                        , D.decimalFracl  = sel p1 p2
-                        , D.decimalApprox = a1 || a2 }
 
 -- | Addition with 'PrecisionHigh'.
 decimalAddHigh :: DecimalBinary
-decimalAddHigh = decimalAddBy max
+decimalAddHigh = decimalBinMax (+)
 
 decimalAddStrict :: DecimalBinary
 decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
@@ -88,19 +104,15 @@ decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
 
 -- | Subtruction: /x/ - /y/
 decimalSub :: PrecisionSide -> DecimalBinary
-decimalSub pr d1 d2 = decimalAdd pr d1 $ decimalInvert d2
+decimalSub pr x y = decimalAdd pr x $ decimalInvert y
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: DecimalBinary
-decimalMul D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
-           D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
-    = Right $ D.Decimal { D.decimalRatio  = r1 * r2
-                        , D.decimalFracl  = max p1 p2
-                        , D.decimalApprox = a1 || a2 }
+decimalMul = decimalBinPlus (*)
 
 -- | Division: /x/ ÷ /y/
 decimalDiv :: DecimalBinary
-decimalDiv dec1 dec2 = decimalMul dec1 $ decimalRecip dec2
+decimalDiv = decimalBinPlus (/)
 
 -- | Quotient: integral part of /x/ ÷ /y/
 decimalQuo :: DecimalBinary
