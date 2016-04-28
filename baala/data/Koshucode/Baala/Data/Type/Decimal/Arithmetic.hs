@@ -6,30 +6,22 @@
 module Koshucode.Baala.Data.Type.Decimal.Arithmetic
   ( -- * Precision
     PrecisionSide (..),
-    PrecisionCombine,
 
     -- * Binary operator
-    DecimalBin, DecimalBinAb,
-    Bin, BinAb,
-    decimalAdd, decimalAddHigh, decimalAddSimple,
-    decimalSub, decimalSubSimple,
-    decimalMul, decimalMulSimple,
-    decimalDiv, decimalDivSimple,
-    decimalQuo,
-    decimalRem,
-
-    -- * Unary operator
-    decimalInvert,
-    decimalRecip,
-    decimalAbs,
+    decimalAdd, decimalAddHigh,
     decimalSum,
+    decimalSub,
+    decimalMul, decimalDiv,
+    decimalQuo, decimalRem,
   ) where
 
 import qualified Control.Monad                               as M
 import qualified Koshucode.Baala.Base                        as B
+import qualified Koshucode.Baala.Data.Type.Decimal.Binary    as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Coder     as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Instance  ()
 import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
 data PrecisionSide
@@ -38,9 +30,6 @@ data PrecisionSide
     | PrecisionRight      -- ^ Select right precision
     | PrecisionStrict     -- ^ Check same precision
       deriving (Show, Ord, Eq)
-
--- | Combinate precisions.
-type PrecisionCombine = Bin D.DecimalFracl
 
 constLeft :: a -> b -> a
 constLeft = const
@@ -51,58 +40,33 @@ constRight _ y = y
 
 -- ----------------------  Type and Higher function
 
-type DecimalBin = Bin D.Decimal
+decimalBinAbMax :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbMax = D.decimalBinAb max
 
--- | Binary operation for two decimals
-type DecimalBinAb = BinAb D.Decimal
+decimalBinAbPlus :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbPlus = D.decimalBinAb (+)
 
--- | Type for binary operators.
-type Bin a = a -> a -> a
+decimalBinAbLeft :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbLeft = D.decimalBinAb constLeft
 
--- | Type for abortable binary operators.
-type BinAb a = a -> a -> B.Ab a
-
-decimalBinAbMax :: Bin D.DecimalRatio -> DecimalBinAb
-decimalBinAbMax = decimalBinAb max
-
-decimalBinAbPlus :: Bin D.DecimalRatio -> DecimalBinAb
-decimalBinAbPlus = decimalBinAb (+)
-
-decimalBinAbLeft :: Bin D.DecimalRatio -> DecimalBinAb
-decimalBinAbLeft = decimalBinAb constLeft
-
-decimalBinAbRight :: Bin D.DecimalRatio -> DecimalBinAb
-decimalBinAbRight = decimalBinAb constRight
-
-decimalBinAb :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBinAb
-decimalBinAb pre bin x y = Right $ decimalBin pre bin x y
-
-decimalBin :: PrecisionCombine -> Bin D.DecimalRatio -> DecimalBin
-decimalBin pre bin
-      D.Decimal { D.decimalRatio = r1, D.decimalFracl = p1, D.decimalApprox = a1 }
-      D.Decimal { D.decimalRatio = r2, D.decimalFracl = p2, D.decimalApprox = a2 }
-    = D.Decimal { D.decimalRatio  = bin r1 r2
-                , D.decimalFracl  = pre p1 p2
-                , D.decimalApprox = a1 || a2 }
+decimalBinAbRight :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbRight = D.decimalBinAb constRight
 
 
 -- ----------------------  Binary operator
 
 -- | Addition: /x/ + /y/
-decimalAdd :: PrecisionSide -> DecimalBinAb
+decimalAdd :: PrecisionSide -> D.DecimalBinAb
 decimalAdd PrecisionHigh    = decimalBinAbMax   (+)
 decimalAdd PrecisionLeft    = decimalBinAbLeft  (+)
 decimalAdd PrecisionRight   = decimalBinAbRight (+)
 decimalAdd PrecisionStrict  = decimalAddStrict
 
 -- | Addition with 'PrecisionHigh'.
-decimalAddHigh :: DecimalBinAb
+decimalAddHigh :: D.DecimalBinAb
 decimalAddHigh = decimalBinAbMax (+)
 
-decimalAddSimple :: DecimalBin
-decimalAddSimple = decimalBin max (+)
-
-decimalAddStrict :: DecimalBinAb
+decimalAddStrict :: D.DecimalBinAb
 decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
                  d2@D.Decimal { D.decimalFracl = p2 }
     | p1 == p2   = decimalAddHigh d1 d2
@@ -110,54 +74,30 @@ decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
     where txt1   = D.encodeDecimal d1
           txt2   = D.encodeDecimal d2
 
--- | Subtruction: /x/ - /y/
-decimalSub :: PrecisionSide -> DecimalBinAb
-decimalSub pr x y = decimalAdd pr x $ decimalInvert y
+-- | Add all decimals.
+decimalSum :: [D.Decimal] -> B.Ab D.Decimal
+decimalSum = M.foldM decimalAddHigh D.decimal0
 
-decimalSubSimple :: DecimalBin
-decimalSubSimple = decimalBin max (-)
+-- | Subtruction: /x/ - /y/
+decimalSub :: PrecisionSide -> D.DecimalBinAb
+decimalSub pr x y = decimalAdd pr x $ negate y
 
 -- | Multiplication: /x/ × /y/
-decimalMul :: DecimalBinAb
+decimalMul :: D.DecimalBinAb
 decimalMul = decimalBinAbPlus (*)
 
-decimalMulSimple :: DecimalBin
-decimalMulSimple = decimalBin (+) (*)
-
 -- | Division: /x/ ÷ /y/
-decimalDiv :: DecimalBinAb
+decimalDiv :: D.DecimalBinAb
 decimalDiv = decimalBinAbPlus (/)
 
-decimalDivSimple :: DecimalBin
-decimalDivSimple = decimalBin (+) (/)
-
 -- | Quotient: integral part of /x/ ÷ /y/
-decimalQuo :: DecimalBinAb
+decimalQuo :: D.DecimalBinAb
 decimalQuo x y = do z <- decimalDiv x y
                     Right $ D.decimalIntPart z
 
 -- | Remainder.
-decimalRem :: DecimalBinAb
+decimalRem :: D.DecimalBinAb
 decimalRem x y = do z <- decimalDiv x y
                     r <- y `decimalMul` D.decimalFracPart z
                     Right r
-
-
--- ----------------------  Unary operator
-
--- | Invert sign of decimal
-decimalInvert :: B.Map D.Decimal
-decimalInvert = D.decimalRatioMap negate
-
--- | Exchange numerator and denominator
-decimalRecip :: B.Map D.Decimal
-decimalRecip = D.decimalRatioMap recip
-
--- | Absolute value
-decimalAbs :: B.Map D.Decimal
-decimalAbs = D.decimalRatioMap abs
-
--- | Add all decimals.
-decimalSum :: [D.Decimal] -> B.Ab D.Decimal
-decimalSum = M.foldM decimalAddHigh D.decimal0
 
