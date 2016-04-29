@@ -4,18 +4,15 @@
 -- | Arithmetics on decimals.
 
 module Koshucode.Baala.Data.Type.Decimal.BinaryAb
-  ( -- * Precision
-    PrecisionSide (..),
+  ( -- * Fracl
+    FraclSide (..),
 
     -- * Binary operator
-    decimalAdd, decimalAddHigh,
-    decimalSum,
-    decimalSub,
+    decimalAdd, decimalSum, decimalSub,
     decimalMul, decimalDiv,
     decimalQuo, decimalRem,
   ) where
 
-import qualified Control.Monad                               as M
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Binary    as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Coder     as D
@@ -24,11 +21,14 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Instance  ()
 import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
-data PrecisionSide
-    = PrecisionHigh       -- ^ Select high precision
-    | PrecisionLeft       -- ^ Select left precision
-    | PrecisionRight      -- ^ Select right precision
-    | PrecisionStrict     -- ^ Check same precision
+
+-- ----------------------  Fracl
+
+data FraclSide
+    = FraclLong       -- ^ Select longer fracl
+    | FraclLeft       -- ^ Select left fracl
+    | FraclRight      -- ^ Select right fracl
+    | FraclStrict     -- ^ Check same fracls
       deriving (Show, Ord, Eq)
 
 constLeft :: a -> b -> a
@@ -39,9 +39,6 @@ constRight _ y = y
 
 
 -- ----------------------  Type and Higher function
-
-decimalBinAbMax :: D.BinRatio -> D.BinAbDecimal
-decimalBinAbMax = D.decimalBinAb max
 
 decimalBinAbPlus :: D.BinRatio -> D.BinAbDecimal
 decimalBinAbPlus = D.decimalBinAb (+)
@@ -56,31 +53,31 @@ decimalBinAbRight = D.decimalBinAb constRight
 -- ----------------------  Binary operator
 
 -- | Addition: /x/ + /y/
-decimalAdd :: PrecisionSide -> D.BinAbDecimal
-decimalAdd PrecisionHigh    = decimalBinAbMax   (+)
-decimalAdd PrecisionLeft    = decimalBinAbLeft  (+)
-decimalAdd PrecisionRight   = decimalBinAbRight (+)
-decimalAdd PrecisionStrict  = decimalAddStrict
+decimalAdd :: FraclSide -> D.BinAbDecimal
+decimalAdd FraclLong    = decimalAddLong
+decimalAdd FraclLeft    = decimalBinAbLeft  (+)
+decimalAdd FraclRight   = decimalBinAbRight (+)
+decimalAdd FraclStrict  = decimalAddStrict
 
--- | Addition with 'PrecisionHigh'.
-decimalAddHigh :: D.BinAbDecimal
-decimalAddHigh = decimalBinAbMax (+)
+-- | Addition with 'FraclLong'.
+decimalAddLong :: D.BinAbDecimal
+decimalAddLong x y = Right $ x + y
 
 decimalAddStrict :: D.BinAbDecimal
-decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
-                 d2@D.Decimal { D.decimalFracl = p2 }
-    | p1 == p2   = decimalAddHigh d1 d2
+decimalAddStrict d1@D.Decimal { D.decimalFracl = f1 }
+                 d2@D.Decimal { D.decimalFracl = f2 }
+    | f1 == f2   = decimalAddLong d1 d2
     | otherwise  = Msg.heteroDecimal txt1 txt2
     where txt1   = D.encodeDecimal d1
           txt2   = D.encodeDecimal d2
 
 -- | Add all decimals.
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal
-decimalSum = M.foldM decimalAddHigh D.decimal0
+decimalSum = Right . foldr (+) D.decimal0
 
 -- | Subtruction: /x/ - /y/
-decimalSub :: PrecisionSide -> D.BinAbDecimal
-decimalSub pr x y = decimalAdd pr x $ negate y
+decimalSub :: FraclSide -> D.BinAbDecimal
+decimalSub fracl x y = decimalAdd fracl x (- y)
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: D.BinAbDecimal
@@ -92,12 +89,9 @@ decimalDiv = decimalBinAbPlus (/)
 
 -- | Quotient: integral part of /x/ ÷ /y/
 decimalQuo :: D.BinAbDecimal
-decimalQuo x y = do z <- decimalDiv x y
-                    Right $ D.decimalIntPart z
+decimalQuo x y = Right $ D.decimalIntPart $ x / y
 
--- | Remainder.
+-- | Remainder: /y/ × fractional part of /x/ ÷ /y/
 decimalRem :: D.BinAbDecimal
-decimalRem x y = do z <- decimalDiv x y
-                    r <- y `decimalMul` D.decimalFracPart z
-                    Right r
+decimalRem x y = Right $ y * D.decimalFracPart (x / y)
 

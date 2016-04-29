@@ -35,29 +35,29 @@ copsArith =
     [ D.CopCalc  (D.copPrefix "+")      copPlus1
     , D.CopCalc  (D.copPrefix "-")      copMinus1
 
-    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.PrecisionHigh
-    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.PrecisionLeft
-    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.PrecisionRight
-    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.PrecisionStrict
+    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FraclLong
+    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.FraclLeft
+    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.FraclRight
+    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.FraclStrict
 
-    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.PrecisionHigh
-    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.PrecisionLeft
-    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.PrecisionRight
-    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.PrecisionStrict
+    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FraclLong
+    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FraclLeft
+    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FraclRight
+    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FraclStrict
 
     , D.CopCalc  (D.copInfix  "*")      copTimes
     , D.CopCalc  (D.copInfix  "quo")    copQuo
     , D.CopCalc  (D.copInfix  "rem")    copRem
 
-    , D.CopCalc  (D.copNormal "+")    $ copPlus D.PrecisionHigh
-    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.PrecisionLeft
-    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.PrecisionRight
-    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.PrecisionStrict
+    , D.CopCalc  (D.copNormal "+")    $ copPlus D.FraclLong
+    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.FraclLeft
+    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.FraclRight
+    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.FraclStrict
 
-    , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.PrecisionHigh
-    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.PrecisionLeft
-    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.PrecisionRight
-    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.PrecisionStrict
+    , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.FraclLong
+    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.FraclLeft
+    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.FraclRight
+    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.FraclStrict
 
     , D.CopCalc  (D.copNormal "*")      copTimes
     , D.CopCalc  (D.copNormal "quo")    copQuo
@@ -75,14 +75,14 @@ getDecFrom c | D.isDec  c  = Right $ D.gDec c
              | D.isText c  = D.decodeDecimal $ D.gText c
              | otherwise   = Right D.decimal0
 
-copPlus :: (D.CText c, D.CDec c) => D.PrecisionSide -> D.CopCalc c
+copPlus :: (D.CText c, D.CDec c) => D.FraclSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
     loop [] = Right D.decimal0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       (D.decimalAdd pr) n' m'
 
-copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.PrecisionSide -> D.CopCalc c
+copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.FraclSide -> D.CopCalc c
 copPlus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd       (D.gClock xc) (D.gClock yc)
@@ -101,7 +101,7 @@ copTimes xs = fmap D.pDec $ loop xs where
                       m' <- loop m
                       D.decimalMul n' m'
 
-copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.PrecisionSide -> D.CopCalc c
+copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.FraclSide -> D.CopCalc c
 copMinus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalSub pr (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockSub      (D.gClock xc) (D.gClock yc)
