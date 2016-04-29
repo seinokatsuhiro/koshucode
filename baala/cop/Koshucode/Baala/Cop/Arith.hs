@@ -109,7 +109,7 @@ copMinus2 pr [Right xc, Right yc]
 copMinus2 _ _ = Msg.unexpAttr "-"
 
 copMinus1 :: (D.CDec c) => D.CopCalc c
-copMinus1 [Right x] | D.isDec x = D.putDec $ D.decimalInvert $ D.gDec x
+copMinus1 [Right x] | D.isDec x = D.putDec $ negate $ D.gDec x
 copMinus1 _ = Msg.unexpAttr "-"
 
 copQuo :: (D.CText c, D.CDec c) => D.CopCalc c
@@ -134,6 +134,6 @@ copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
 copAbs _ = Msg.unexpAttr "abs"
 
 copAbs1 :: (D.CDec c) => B.AbMap c
-copAbs1 c | D.isDec c = D.putDec $ D.decimalAbs $ D.gDec c
+copAbs1 c | D.isDec c = D.putDec $ abs $ D.gDec c
 copAbs1 _ = Msg.unexpAttr "abc"
 

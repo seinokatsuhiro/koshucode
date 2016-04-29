@@ -40,33 +40,33 @@ constRight _ y = y
 
 -- ----------------------  Type and Higher function
 
-decimalBinAbMax :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbMax :: D.BinRatio -> D.BinAbDecimal
 decimalBinAbMax = D.decimalBinAb max
 
-decimalBinAbPlus :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbPlus :: D.BinRatio -> D.BinAbDecimal
 decimalBinAbPlus = D.decimalBinAb (+)
 
-decimalBinAbLeft :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbLeft :: D.BinRatio -> D.BinAbDecimal
 decimalBinAbLeft = D.decimalBinAb constLeft
 
-decimalBinAbRight :: D.Bin D.DecimalRatio -> D.DecimalBinAb
+decimalBinAbRight :: D.BinRatio -> D.BinAbDecimal
 decimalBinAbRight = D.decimalBinAb constRight
 
 
 -- ----------------------  Binary operator
 
 -- | Addition: /x/ + /y/
-decimalAdd :: PrecisionSide -> D.DecimalBinAb
+decimalAdd :: PrecisionSide -> D.BinAbDecimal
 decimalAdd PrecisionHigh    = decimalBinAbMax   (+)
 decimalAdd PrecisionLeft    = decimalBinAbLeft  (+)
 decimalAdd PrecisionRight   = decimalBinAbRight (+)
 decimalAdd PrecisionStrict  = decimalAddStrict
 
 -- | Addition with 'PrecisionHigh'.
-decimalAddHigh :: D.DecimalBinAb
+decimalAddHigh :: D.BinAbDecimal
 decimalAddHigh = decimalBinAbMax (+)
 
-decimalAddStrict :: D.DecimalBinAb
+decimalAddStrict :: D.BinAbDecimal
 decimalAddStrict d1@D.Decimal { D.decimalFracl = p1 }
                  d2@D.Decimal { D.decimalFracl = p2 }
     | p1 == p2   = decimalAddHigh d1 d2
@@ -79,24 +79,24 @@ decimalSum :: [D.Decimal] -> B.Ab D.Decimal
 decimalSum = M.foldM decimalAddHigh D.decimal0
 
 -- | Subtruction: /x/ - /y/
-decimalSub :: PrecisionSide -> D.DecimalBinAb
+decimalSub :: PrecisionSide -> D.BinAbDecimal
 decimalSub pr x y = decimalAdd pr x $ negate y
 
 -- | Multiplication: /x/ × /y/
-decimalMul :: D.DecimalBinAb
+decimalMul :: D.BinAbDecimal
 decimalMul = decimalBinAbPlus (*)
 
 -- | Division: /x/ ÷ /y/
-decimalDiv :: D.DecimalBinAb
+decimalDiv :: D.BinAbDecimal
 decimalDiv = decimalBinAbPlus (/)
 
 -- | Quotient: integral part of /x/ ÷ /y/
-decimalQuo :: D.DecimalBinAb
+decimalQuo :: D.BinAbDecimal
 decimalQuo x y = do z <- decimalDiv x y
                     Right $ D.decimalIntPart z
 
 -- | Remainder.
-decimalRem :: D.DecimalBinAb
+decimalRem :: D.BinAbDecimal
 decimalRem x y = do z <- decimalDiv x y
                     r <- y `decimalMul` D.decimalFracPart z
                     Right r

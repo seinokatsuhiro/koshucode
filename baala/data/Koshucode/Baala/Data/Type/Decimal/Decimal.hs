@@ -96,11 +96,11 @@ decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 
 -- ----------------------  Constant
 
--- | The integral decimal 0, i.e., 'integralDecimal 0'.
+-- | The integral decimal 0, i.e., 'intDecimal 0'.
 decimal0 :: Decimal
 decimal0 = intDecimal 0
 
--- | The integral decimal 1, i.e., 'integralDecimal 1'.
+-- | The integral decimal 1, i.e., 'intDecimal 1'.
 decimal1 :: Decimal
 decimal1 = intDecimal 1
 
