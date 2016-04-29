@@ -32,8 +32,12 @@ import qualified Koshucode.Baala.Cop.Message as Msg
 
 copsArith :: (D.CContent c) => [D.Cop c]
 copsArith =
-    [ D.CopCalc  (D.copPrefix "+")      copPlus1
-    , D.CopCalc  (D.copPrefix "-")      copMinus1
+    [ D.CopCalc  (D.copPrefix "+")          copPlus1
+    , D.CopCalc  (D.copPrefix "-")          copMinus1
+
+    , D.CopCalc  (D.copNormal "abs")        copAbs
+    , D.CopCalc  (D.copNormal "int-part")   copIntPart
+    , D.CopCalc  (D.copNormal "frac-part")  copFracPart
 
     -- ----------------------  add and subtract
 
@@ -70,10 +74,6 @@ copsArith =
     , D.CopCalc  (D.copNormal "div")    copDiv
     , D.CopCalc  (D.copNormal "quo")    copQuo
     , D.CopCalc  (D.copNormal "rem")    copRem
-
-    -- ----------------------  others
-
-    , D.CopCalc  (D.copNormal "abs")    copAbs
     ]
 
 
@@ -86,6 +86,28 @@ getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
 getDecFrom c | D.isDec  c  = Right $ D.gDec c
              | D.isText c  = D.decodeDecimal $ D.gText c
              | otherwise   = Right 0
+
+getDec1 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab D.Decimal
+getDec1 arg =
+    do x' <- D.getRightArg1 arg
+       getDecFrom x'
+
+getDec2 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab (D.Decimal, D.Decimal)
+getDec2 arg =
+    do (x', y') <- D.getRightArg2 arg
+       x <- getDecFrom x'
+       y <- getDecFrom y'
+       Right (x, y)
+
+copIntPart :: (D.CText c, D.CDec c) => D.CopCalc c
+copIntPart arg =
+    do a <- getDec1 arg
+       D.putDec $ D.decimalIntPart a
+
+copFracPart :: (D.CText c, D.CDec c) => D.CopCalc c
+copFracPart arg =
+    do a <- getDec1 arg
+       D.putDec $ D.decimalFracPart a
 
 
 -- --------------------------------------------  Add and subtract
@@ -132,33 +154,25 @@ copMinus1 _ = Msg.unexpAttr "-"
 
 copRecip :: (D.CText c, D.CDec c) => D.CopCalc c
 copRecip arg =
-    do ac <- D.getRightArg1 arg
-       a <- getDecFrom ac
+    do a <- getDec1 arg
        D.putDec $ recip a
 
 copDiv :: (D.CText c, D.CDec c) => D.CopCalc c
 copDiv arg =
-    do (ac, bc) <- D.getRightArg2 arg
-       a <- getDecFrom ac
-       b <- getDecFrom bc
-       c <- D.decimalDiv a b
-       D.putDec c
+    do (a, b) <- getDec2 arg
+       D.putDec $ a / b
 
 copQuo :: (D.CText c, D.CDec c) => D.CopCalc c
 copQuo arg =
-    do (ac, bc) <- D.getRightArg2 arg
-       a <- getDecFrom ac
-       b <- getDecFrom bc
+    do (a, b) <- getDec2 arg
        c <- D.decimalQuo a b
        D.putDec c
 
 copRem :: (D.CText c, D.CDec c) => D.CopCalc c
 copRem arg =
-    do (ac, bc) <- D.getRightArg2 arg
-       a <- getDecFrom ac
-       b <- getDecFrom bc
+    do (a, b) <- getDec2 arg
        c <- D.decimalRem a b
-       D.putDec $ c
+       D.putDec c
 
 
 -- --------------------------------------------  Others
