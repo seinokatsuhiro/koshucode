@@ -36,6 +36,12 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     BinDecimal, BinAbDecimal,
     BinFracl, BinRatio,
     decimalBin, decimalBinAb,
+
+    -- * Conversion
+    integralDecimal,
+    realDecimal,
+    decimalFractional,
+    intFrac,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -66,20 +72,6 @@ data Decimal = Decimal
     , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
     , decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
     } deriving (Show)
-
-instance Eq Decimal where
-    (==) = decimalRatioEq
-
-instance Ord Decimal where
-    compare = decimalRatioCompare
-
--- | Test numerical equality of two decimal numbers.
-decimalRatioEq :: Decimal -> Decimal -> Bool
-decimalRatioEq x y = decimalRatio x == decimalRatio y
-
--- | Test numerical order of two decimal numbers.
-decimalRatioCompare :: Decimal -> Decimal -> Ordering
-decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
 -- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
@@ -131,6 +123,65 @@ decimalBin fracl bin
               , decimalApprox = a1 || a2 }
 
 -- | Abortable binary operation for two decimals.
-decimalBinAb :: BinFracl -> Bin DecimalRatio -> BinAbDecimal
+decimalBinAb :: BinFracl -> BinRatio -> BinAbDecimal
 decimalBinAb fracl bin x y = Right $ decimalBin fracl bin x y
+
+
+-- ----------------------  Conversion
+
+-- | Convert integral number to integral decimal number.
+integralDecimal :: (Integral n) => n -> Decimal
+integralDecimal = realDecimal 0
+
+-- | Convert real number to decimal number.
+realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
+realDecimal f n = Decimal { decimalRatio  = toRational n
+                          , decimalFracl  = f
+                          , decimalApprox = False }
+
+-- | Convert decimal number to fractional number.
+decimalFractional :: (Fractional n) => Decimal -> n
+decimalFractional = fromRational . decimalRatio
+
+
+-- ----------------------  Instance
+
+-- | Test numerical equality of two decimal numbers.
+decimalRatioEq :: Decimal -> Decimal -> Bool
+decimalRatioEq x y = decimalRatio x == decimalRatio y
+
+-- | Test numerical order of two decimal numbers.
+decimalRatioCompare :: Decimal -> Decimal -> Ordering
+decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
+
+intFrac :: (Integral n) => Decimal -> (n, Decimal)
+intFrac d = (i, dec f) where
+    (i, f) = properFraction $ decimalRatio d
+    dec r  = decimalRatioMap (const r) d
+
+instance Eq Decimal where
+    (==) = decimalRatioEq
+
+instance Ord Decimal where
+    compare = decimalRatioCompare
+
+instance Num Decimal where
+    (+)          = decimalBin max (+)
+    (-)          = decimalBin max (-)
+    (*)          = decimalBin (+) (*)
+    negate       = decimalRatioMap negate
+    abs          = decimalRatioMap abs
+    signum       = realDecimal 0 . signum . decimalRatio
+    fromInteger  = integralDecimal
+
+instance Real Decimal where
+    toRational = decimalRatio
+
+instance Fractional Decimal where
+    (/)           = decimalBin (+) (/)
+    recip         = decimalRatioMap recip
+    fromRational  = realDecimal 0
+
+instance RealFrac Decimal where
+    properFraction = intFrac
 

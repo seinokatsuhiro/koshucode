@@ -4,9 +4,8 @@
 -- | Decimal number.
 
 module Koshucode.Baala.Data.Type.Decimal.Fraction
-  ( decimalIntPart,
-    decimalFracPart,
-    decimalProperFraction, decimalProperFractionSimple,
+  ( decimalIntPart, decimalFracPart,
+    decimalIntFrac,
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
@@ -17,19 +16,14 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 
 -- | Integer part of decimals.
 decimalIntPart :: B.Map D.Decimal
-decimalIntPart = fst . decimalProperFraction
+decimalIntPart = fst . decimalIntFrac
 
 -- | Fractional part of decimals.
 decimalFracPart :: B.Map D.Decimal
-decimalFracPart = snd . decimalProperFraction
+decimalFracPart = snd . decimalIntFrac
 
-decimalProperFraction :: D.Decimal -> (D.Decimal, D.Decimal)
-decimalProperFraction d = (dec $ i D.%% 1, dec f) where
-    (i, f) = properFraction $ D.decimalRatio d
-    dec r  = D.decimalRatioMap (const r) d
-
-decimalProperFractionSimple :: (Integral n) => D.Decimal -> (n, D.Decimal)
-decimalProperFractionSimple d = (i, dec f) where
+decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
+decimalIntFrac d = (dec $ i D.%% 1, dec f) where
     (i, f) = properFraction $ D.decimalRatio d
     dec r  = D.decimalRatioMap (const r) d
 
