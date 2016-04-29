@@ -3,7 +3,7 @@
 
 -- | Arithmetics on decimals.
 
-module Koshucode.Baala.Data.Type.Decimal.Arithmetic
+module Koshucode.Baala.Data.Type.Decimal.BinaryAb
   ( -- * Precision
     PrecisionSide (..),
 

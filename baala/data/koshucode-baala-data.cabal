@@ -65,8 +65,8 @@ library
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.Decimal
-        Koshucode.Baala.Data.Type.Decimal.Arithmetic
         Koshucode.Baala.Data.Type.Decimal.Binary
+        Koshucode.Baala.Data.Type.Decimal.BinaryAb
         Koshucode.Baala.Data.Type.Decimal.Coder
         Koshucode.Baala.Data.Type.Decimal.Decimal
         Koshucode.Baala.Data.Type.Decimal.Fraction
