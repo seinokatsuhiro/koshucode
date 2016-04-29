@@ -22,32 +22,42 @@
 --     
 
 module Koshucode.Baala.Data.Type.Decimal.Decimal
-  ( -- * Type
-    (%%),
-    DecimalRatio, DecimalInteger, DecimalFracl, Decimal (..),
-    decimalRatioEq, decimalRatioCompare,
+  ( -- * Rational
+    DecimalInteger, DecimalRatio, (%%),
+    -- * Decimal
+    DecimalFracl, Decimal (..),
     isDecimalZero,
     decimalNum, decimalDenom,
     decimalFraclSet,
     decimalRatioMap,
+
+    -- * Binary
+    Bin, BinAb,
+    BinDecimal, BinAbDecimal,
+    BinFracl, BinRatio,
+    decimalBin, decimalBinAb,
   ) where
 
 import qualified Data.Ratio                        as R
 import qualified Koshucode.Baala.Base              as B
 
 
+-- ----------------------  Rational
 
--- ----------------------  Type
-
-(%%) :: DecimalInteger -> DecimalInteger -> DecimalRatio
-x %% y = x R.% y
-
-type DecimalRatio = R.Ratio DecimalInteger
-
+-- | Type for numerator or denominator for decimal numbers.
 type DecimalInteger = Integer
 
--- | Length of fractional part,
---   e.g., the length of the fractional part of 4.050 is 3.
+-- | Rational number of decimal type.
+type DecimalRatio = R.Ratio DecimalInteger
+
+-- | Make rational numbers.
+(%%) :: DecimalInteger -> DecimalInteger -> DecimalRatio
+n %% den = n R.% den
+
+
+-- ----------------------  Decimal
+
+-- | Length of fractional part.
 type DecimalFracl = Int
 
 -- | Decimal number.
@@ -89,4 +99,38 @@ decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
 decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
 decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
+
+
+-- --------------------------------------------  Binary
+
+-- | Type for binary operators.
+type Bin a = a -> a -> a
+
+-- | Type for abortable binary operators.
+type BinAb a = a -> a -> B.Ab a
+
+-- | Binary operation for two decimals.
+type BinDecimal = Bin Decimal
+
+-- | Abortable binary operation for two decimals.
+type BinAbDecimal = BinAb Decimal
+
+-- | Combinate fracl.
+type BinFracl = Bin DecimalFracl
+
+-- | Combinate rational number.
+type BinRatio = Bin DecimalRatio
+
+-- | Binary operation for two decimals.
+decimalBin :: BinFracl -> BinRatio -> BinDecimal
+decimalBin fracl bin
+      Decimal { decimalRatio = r1, decimalFracl = f1, decimalApprox = a1 }
+      Decimal { decimalRatio = r2, decimalFracl = f2, decimalApprox = a2 }
+    = Decimal { decimalFracl  = fracl f1 f2
+              , decimalRatio  = bin r1 r2
+              , decimalApprox = a1 || a2 }
+
+-- | Abortable binary operation for two decimals.
+decimalBinAb :: BinFracl -> Bin DecimalRatio -> BinAbDecimal
+decimalBinAb fracl bin x y = Right $ decimalBin fracl bin x y
 

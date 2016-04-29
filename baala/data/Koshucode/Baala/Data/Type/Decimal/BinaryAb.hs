@@ -14,7 +14,6 @@ module Koshucode.Baala.Data.Type.Decimal.BinaryAb
   ) where
 
 import qualified Koshucode.Baala.Base                        as B
-import qualified Koshucode.Baala.Data.Type.Decimal.Binary    as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Coder     as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
