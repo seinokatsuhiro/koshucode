@@ -30,10 +30,6 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     decimalNum, decimalDenom,
     decimalFraclSet,
     decimalRatioMap,
-
-    -- * Constant
-    decimal0, decimal1,
-    intDecimal,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -93,19 +89,4 @@ decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
 decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
 decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
-
--- ----------------------  Constant
-
--- | The integral decimal 0, i.e., 'intDecimal 0'.
-decimal0 :: Decimal
-decimal0 = intDecimal 0
-
--- | The integral decimal 1, i.e., 'intDecimal 1'.
-decimal1 :: Decimal
-decimal1 = intDecimal 1
-
-intDecimal :: Int -> Decimal
-intDecimal n = Decimal { decimalRatio  = fromIntegral n %% 1
-                       , decimalFracl  = 0
-                       , decimalApprox = False }
 

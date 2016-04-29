@@ -73,7 +73,7 @@ decimalAddStrict d1@D.Decimal { D.decimalFracl = f1 }
 
 -- | Add all decimals.
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal
-decimalSum = Right . foldr (+) D.decimal0
+decimalSum = Right . foldr (+) 0
 
 -- | Subtruction: /x/ - /y/
 decimalSub :: FraclSide -> D.BinAbDecimal

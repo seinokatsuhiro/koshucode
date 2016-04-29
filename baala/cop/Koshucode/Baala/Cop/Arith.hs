@@ -73,11 +73,11 @@ copDec x = Msg.notNumber (show x)
 getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
 getDecFrom c | D.isDec  c  = Right $ D.gDec c
              | D.isText c  = D.decodeDecimal $ D.gText c
-             | otherwise   = Right D.decimal0
+             | otherwise   = Right 0
 
 copPlus :: (D.CText c, D.CDec c) => D.FraclSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
-    loop [] = Right D.decimal0
+    loop [] = Right 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       (D.decimalAdd pr) n' m'
@@ -96,7 +96,7 @@ copPlus1 _ = Msg.unexpAttr "+"
 
 copTimes :: (D.CText c, D.CDec c) => D.CopCalc c
 copTimes xs = fmap D.pDec $ loop xs where
-    loop [] = Right D.decimal1
+    loop [] = Right 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       D.decimalMul n' m'
