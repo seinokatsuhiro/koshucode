@@ -35,35 +35,47 @@ copsArith =
     [ D.CopCalc  (D.copPrefix "+")      copPlus1
     , D.CopCalc  (D.copPrefix "-")      copMinus1
 
+    -- ----------------------  add and subtract
+
     , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FraclLong
     , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.FraclLeft
     , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.FraclRight
     , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.FraclStrict
-
-    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FraclLong
-    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FraclLeft
-    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FraclRight
-    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FraclStrict
-
-    , D.CopCalc  (D.copInfix  "*")      copTimes
-    , D.CopCalc  (D.copInfix  "quo")    copQuo
-    , D.CopCalc  (D.copInfix  "rem")    copRem
 
     , D.CopCalc  (D.copNormal "+")    $ copPlus D.FraclLong
     , D.CopCalc  (D.copNormal ".+")   $ copPlus D.FraclLeft
     , D.CopCalc  (D.copNormal "+.")   $ copPlus D.FraclRight
     , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.FraclStrict
 
+    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FraclLong
+    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FraclLeft
+    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FraclRight
+    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FraclStrict
+
     , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.FraclLong
     , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.FraclLeft
     , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.FraclRight
     , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.FraclStrict
 
-    , D.CopCalc  (D.copNormal "*")      copTimes
+    -- ----------------------  multiply and divide
+
+    , D.CopCalc  (D.copInfix  "*")      copMul
+    , D.CopCalc  (D.copNormal "*")      copMul
+
+    , D.CopCalc  (D.copInfix  "div")    copDiv
+    , D.CopCalc  (D.copInfix  "quo")    copQuo
+    , D.CopCalc  (D.copInfix  "rem")    copRem
+
+    , D.CopCalc  (D.copNormal "recip")  copRecip
+    , D.CopCalc  (D.copNormal "div")    copDiv
     , D.CopCalc  (D.copNormal "quo")    copQuo
     , D.CopCalc  (D.copNormal "rem")    copRem
+
+    -- ----------------------  others
+
     , D.CopCalc  (D.copNormal "abs")    copAbs
     ]
+
 
 copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab D.Decimal
 copDec (Right c) | D.isDec  c = Right $ D.gDec c
@@ -74,6 +86,9 @@ getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
 getDecFrom c | D.isDec  c  = Right $ D.gDec c
              | D.isText c  = D.decodeDecimal $ D.gText c
              | otherwise   = Right 0
+
+
+-- --------------------------------------------  Add and subtract
 
 copPlus :: (D.CText c, D.CDec c) => D.FraclSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
@@ -94,8 +109,11 @@ copPlus1 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
 copPlus1 [Right x] | D.isDec x = Right x
 copPlus1 _ = Msg.unexpAttr "+"
 
-copTimes :: (D.CText c, D.CDec c) => D.CopCalc c
-copTimes xs = fmap D.pDec $ loop xs where
+
+-- --------------------------------------------  Multiply and divide
+
+copMul :: (D.CText c, D.CDec c) => D.CopCalc c
+copMul xs = fmap D.pDec $ loop xs where
     loop [] = Right 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
@@ -112,6 +130,20 @@ copMinus1 :: (D.CDec c) => D.CopCalc c
 copMinus1 [Right x] | D.isDec x = D.putDec $ negate $ D.gDec x
 copMinus1 _ = Msg.unexpAttr "-"
 
+copRecip :: (D.CText c, D.CDec c) => D.CopCalc c
+copRecip arg =
+    do ac <- D.getRightArg1 arg
+       a <- getDecFrom ac
+       D.putDec $ recip a
+
+copDiv :: (D.CText c, D.CDec c) => D.CopCalc c
+copDiv arg =
+    do (ac, bc) <- D.getRightArg2 arg
+       a <- getDecFrom ac
+       b <- getDecFrom bc
+       c <- D.decimalDiv a b
+       D.putDec c
+
 copQuo :: (D.CText c, D.CDec c) => D.CopCalc c
 copQuo arg =
     do (ac, bc) <- D.getRightArg2 arg
@@ -127,6 +159,9 @@ copRem arg =
        b <- getDecFrom bc
        c <- D.decimalRem a b
        D.putDec $ c
+
+
+-- --------------------------------------------  Others
 
 copAbs :: (D.CList c, D.CDec c) => D.CopCalc c
 copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)

@@ -72,7 +72,7 @@ baalaInfix = htab where
         , 2 ! "minus"
 
         , 1 ! "*"
-        , 1 ! "/"
+        , 1 ! "div"
         , 1 ! "quo"
         , 1 ! "rem"
 
