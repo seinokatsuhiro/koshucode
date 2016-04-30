@@ -26,13 +26,18 @@ import qualified Data.List                           as List
 import qualified Koshucode.Baala.Base.Prelude.Import as B
 import qualified Koshucode.Baala.Base.Prelude.Class  as B
 
+
+-- --------------------------------------------  Type
+
 -- | Snipping elements using indicies.
 type Snip a = [Int] -> B.Map [a]
 
 -- | Snip for differenct type values.
 type Snip2 a b = (Snip a, Snip b)
 
+-- | Type for binary operators.
 type Bin a = a -> a -> a
+
 
 -- --------------------------------------------  Function
 

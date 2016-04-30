@@ -30,7 +30,6 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     decimalRatioMap,
 
     -- * Binary
-    Bin, BinAb,
     BinDecimal, BinAbDecimal,
     BinFracl, BinRatio,
     decimalBin, decimalBinAb,
@@ -78,23 +77,17 @@ decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 
 -- --------------------------------------------  Binary
 
--- | Type for binary operators.
-type Bin a = a -> a -> a
-
--- | Type for abortable binary operators.
-type BinAb a = a -> a -> B.Ab a
-
 -- | Binary operation for two decimals.
-type BinDecimal = Bin Decimal
+type BinDecimal = B.Bin Decimal
 
 -- | Abortable binary operation for two decimals.
-type BinAbDecimal = BinAb Decimal
+type BinAbDecimal = B.BinAb Decimal
 
 -- | Combinate fracl.
-type BinFracl = Bin DecimalFracl
+type BinFracl = B.Bin DecimalFracl
 
 -- | Combinate rational number.
-type BinRatio = Bin DecimalRatio
+type BinRatio = B.Bin DecimalRatio
 
 -- | Binary operation for two decimals.
 decimalBin :: BinFracl -> BinRatio -> BinDecimal

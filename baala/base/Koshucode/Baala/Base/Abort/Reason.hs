@@ -6,7 +6,7 @@
 module Koshucode.Baala.Base.Abort.Reason
   ( -- * Data type
     AbortReason (..),
-    Ab, AbMap, AbManyMap, AbPred, IOAb,
+    Ab, AbMap, AbManyMap, AbPred, IOAb, BinAb,
   
     -- * Constructor
     abortBecause,
@@ -34,6 +34,9 @@ type AbManyMap a = a -> Ab [a]
 type AbPred a = a -> Ab Bool
 
 type IOAb a = IO (Ab a)
+
+-- | Type for abortable binary operators.
+type BinAb a = a -> a -> Ab a
 
 -- | Construct abort reason with reason text.
 abortBecause :: String -> AbortReason
