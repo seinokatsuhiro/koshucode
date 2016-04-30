@@ -22,12 +22,10 @@
 --     
 
 module Koshucode.Baala.Data.Type.Decimal.Decimal
-  ( -- * Rational
-    DecimalInteger, DecimalRatio, (%%), (//.), (//),
-    -- * Decimal
+  ( -- * Decimal
+    DecimalInteger, DecimalRatio,
     DecimalFracl, Decimal (..),
     isDecimalZero,
-    decimalNum, decimalDenom,
     decimalFraclSet,
     decimalRatioMap,
 
@@ -41,36 +39,19 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     integralDecimal,
     realDecimal,
     decimalFractional,
-    intFrac,
   ) where
 
 import qualified Data.Ratio                        as R
 import qualified Koshucode.Baala.Base              as B
 
 
--- ----------------------  Rational
+-- --------------------------------------------  Decimal
 
 -- | Type for numerator or denominator for decimal numbers.
 type DecimalInteger = Integer
 
 -- | Rational number of decimal type.
 type DecimalRatio = R.Ratio DecimalInteger
-
--- | Make rational numbers.
-(%%) :: DecimalInteger -> DecimalInteger -> DecimalRatio
-n %% den = n R.% den
-
--- | Integer part and proper fraction part of ratio of two numbers,
---   i.e., x //. y == (integer, proper-fraction) of x %% y.
-(//.) :: DecimalInteger -> DecimalInteger -> (DecimalInteger, DecimalRatio)
-x //. y = (q, r %% y) where (q, r) = x // y
-
--- | Synonim of 'quotRem'.
-(//) :: (Integral n) => n -> n -> (n, n)
-(//) = quotRem
-
-
--- ----------------------  Decimal
 
 -- | Length of fractional part.
 type DecimalFracl = Int
@@ -85,14 +66,6 @@ data Decimal = Decimal
 -- | Test decimal is zero.
 isDecimalZero :: Decimal -> Bool
 isDecimalZero Decimal {..} = decimalRatio == 0
-
--- | Numerator part of decimal number.
-decimalNum :: Decimal -> DecimalInteger
-decimalNum = R.numerator . decimalRatio
-
--- | Denominator part of decimal number.
-decimalDenom :: Decimal -> DecimalInteger
-decimalDenom = R.denominator . decimalRatio
 
 -- | Change decimal fracl.
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
@@ -137,7 +110,7 @@ decimalBinAb :: BinFracl -> BinRatio -> BinAbDecimal
 decimalBinAb fracl bin x y = Right $ decimalBin fracl bin x y
 
 
--- ----------------------  Conversion
+-- --------------------------------------------  Conversion
 
 -- | Convert integral number to integral decimal number.
 integralDecimal :: (Integral n) => n -> Decimal
@@ -154,7 +127,7 @@ decimalFractional :: (Fractional n) => Decimal -> n
 decimalFractional = fromRational . decimalRatio
 
 
--- ----------------------  Instance
+-- --------------------------------------------  Instance
 
 -- | Test numerical equality of two decimal numbers.
 decimalRatioEq :: Decimal -> Decimal -> Bool
@@ -164,8 +137,8 @@ decimalRatioEq x y = decimalRatio x == decimalRatio y
 decimalRatioCompare :: Decimal -> Decimal -> Ordering
 decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
-intFrac :: (Integral n) => Decimal -> (n, Decimal)
-intFrac d = (i, dec f) where
+decimalIntFrac :: (Integral n) => Decimal -> (n, Decimal)
+decimalIntFrac d = (i, dec f) where
     (i, f) = properFraction $ decimalRatio d
     dec r  = decimalRatioMap (const r) d
 
@@ -193,5 +166,5 @@ instance Fractional Decimal where
     fromRational  = realDecimal 0
 
 instance RealFrac Decimal where
-    properFraction = intFrac
+    properFraction = decimalIntFrac
 

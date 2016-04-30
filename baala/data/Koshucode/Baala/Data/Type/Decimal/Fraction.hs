@@ -4,15 +4,24 @@
 -- | Decimal number.
 
 module Koshucode.Baala.Data.Type.Decimal.Fraction
-  ( decimalIntPart, decimalFracPart,
+  ( -- * Part of decimals
+    decimalIntPart, decimalFracPart,
     decimalIntFrac,
+    decimalNum, decimalDenom,
+
+    -- * Round decimals
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
   ) where
 
+import qualified Data.Ratio                                  as R
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
+
+
+-- --------------------------------------------  Part
 
 -- | Integer part of decimals.
 decimalIntPart :: B.Map D.Decimal
@@ -26,6 +35,17 @@ decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
 decimalIntFrac d = (dec $ i D.%% 1, dec f) where
     (i, f) = properFraction $ D.decimalRatio d
     dec r  = D.decimalRatioMap (const r) d
+
+-- | Numerator part of decimal number.
+decimalNum :: D.Decimal -> D.DecimalInteger
+decimalNum = R.numerator . D.decimalRatio
+
+-- | Denominator part of decimal number.
+decimalDenom :: D.Decimal -> D.DecimalInteger
+decimalDenom = R.denominator . D.decimalRatio
+
+
+-- --------------------------------------------  Round
 
 -- | @chopDigitsTrancate@ /d/ /n/ returns a number
 --   which does not have the tailing /d/ digits.

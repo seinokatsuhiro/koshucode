@@ -35,11 +35,12 @@ module Koshucode.Baala.Data.Type.Decimal.Coder
     encodeDecimalCompact,
   ) where
 
-import qualified Data.Char                                 as Ch
-import qualified Data.Ratio                                as R
-import qualified Koshucode.Baala.Base                      as B
-import qualified Koshucode.Baala.Data.Type.Decimal.Decimal as D
-import qualified Koshucode.Baala.Data.Type.Message         as Msg
+import qualified Data.Char                                   as Ch
+import qualified Data.Ratio                                  as R
+import qualified Koshucode.Baala.Base                        as B
+import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
+import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
 
 -- ----------------------  Decode
