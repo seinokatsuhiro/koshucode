@@ -10,6 +10,9 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
     decimalNum, decimalDenom,
 
     -- * Round decimals
+    decimalRound,
+    decimalRoundAt,
+    decimalRoundPer,
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
@@ -46,6 +49,27 @@ decimalDenom = R.denominator . D.decimalRatio
 
 
 -- --------------------------------------------  Round
+
+-- | Round decimal per self fractional length.
+decimalRound :: B.Map D.Decimal
+decimalRound d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    d { D.decimalFracl = l
+      , D.decimalRatio = D.ratioRoundAt l r }
+
+-- | Round decimal per fractional length.
+decimalRoundAt :: B.Bin D.Decimal
+decimalRoundAt D.Decimal { D.decimalRatio = l }
+             d@D.Decimal { D.decimalRatio = r } =
+    let l' = fst $ properFraction l
+    in d { D.decimalFracl = l'
+         , D.decimalRatio = D.ratioRoundAt l' r }
+
+-- | Round decimal per unit decimal.
+decimalRoundPer :: B.Bin D.Decimal
+decimalRoundPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+              d@D.Decimal { D.decimalRatio = r } =
+    d { D.decimalFracl = l
+      , D.decimalRatio = D.ratioRoundPer per r }
 
 -- | @chopDigitsTrancate@ /d/ /n/ returns a number
 --   which does not have the tailing /d/ digits.

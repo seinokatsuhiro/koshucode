@@ -39,6 +39,10 @@ copsArith =
     , D.CopCalc  (D.copNormal "int-part")   copIntPart
     , D.CopCalc  (D.copNormal "frac-part")  copFracPart
 
+    , D.CopCalc  (D.copNormal "round")      copRound
+    , D.CopCalc  (D.copNormal "round-at")   copRoundAt
+    , D.CopCalc  (D.copNormal "round-per")  copRoundPer
+
     -- ----------------------  add and subtract
 
     , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FraclLong
@@ -109,6 +113,30 @@ copFracPart arg =
     do a <- getDec1 arg
        D.putDec $ D.decimalFracPart a
 
+copAbs :: (D.CList c, D.CDec c) => D.CopCalc c
+copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
+                 | otherwise  = copAbs1 c
+copAbs _ = Msg.unexpAttr "abs"
+
+copAbs1 :: (D.CDec c) => B.AbMap c
+copAbs1 c | D.isDec c = D.putDec $ abs $ D.gDec c
+copAbs1 _ = Msg.unexpAttr "abc"
+
+copRound :: (D.CText c, D.CDec c) => D.CopCalc c
+copRound arg =
+    do dec <- getDec1 arg
+       D.putDec $ D.decimalRound dec
+
+copRoundAt :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundAt arg =
+    do (at, dec) <- getDec2 arg
+       D.putDec $ D.decimalRoundAt at dec
+
+copRoundPer :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundPer arg =
+    do (per, dec) <- getDec2 arg
+       D.putDec $ D.decimalRoundPer per dec
+
 
 -- --------------------------------------------  Add and subtract
 
@@ -173,16 +201,4 @@ copRem arg =
     do (a, b) <- getDec2 arg
        c <- D.decimalRem a b
        D.putDec c
-
-
--- --------------------------------------------  Others
-
-copAbs :: (D.CList c, D.CDec c) => D.CopCalc c
-copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
-                 | otherwise  = copAbs1 c
-copAbs _ = Msg.unexpAttr "abs"
-
-copAbs1 :: (D.CDec c) => B.AbMap c
-copAbs1 c | D.isDec c = D.putDec $ abs $ D.gDec c
-copAbs1 _ = Msg.unexpAttr "abc"
 
