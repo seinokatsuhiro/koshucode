@@ -10,9 +10,8 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
     decimalNum, decimalDenom,
 
     -- * Round decimals
-    decimalRound,
-    decimalRoundAt,
-    decimalRoundPer,
+    decimalRound, decimalRoundAt, decimalRoundPer,
+    decimalRoundEven, decimalRoundEvenAt, decimalRoundEvenPer,
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
@@ -53,23 +52,42 @@ decimalDenom = R.denominator . D.decimalRatio
 -- | Round decimal per self fractional length.
 decimalRound :: B.Map D.Decimal
 decimalRound d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    d { D.decimalFracl = l
-      , D.decimalRatio = D.ratioRoundAt l r }
+    roundDecimal d l $ D.ratioRoundAt l r
 
 -- | Round decimal per fractional length.
 decimalRoundAt :: B.Bin D.Decimal
 decimalRoundAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
-    in d { D.decimalFracl = l'
-         , D.decimalRatio = D.ratioRoundAt l' r }
+    in roundDecimal d l' $ D.ratioRoundAt l' r
 
 -- | Round decimal per unit decimal.
 decimalRoundPer :: B.Bin D.Decimal
 decimalRoundPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
-    d { D.decimalFracl = l
-      , D.decimalRatio = D.ratioRoundPer per r }
+    roundDecimal d l $ D.ratioRoundPer per r
+
+-- | Round decimal to even per self fractional length.
+decimalRoundEven :: B.Map D.Decimal
+decimalRoundEven d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    roundDecimal d l $ D.ratioRoundEvenAt l r
+
+-- | Round decimal to even per fractional length.
+decimalRoundEvenAt :: B.Bin D.Decimal
+decimalRoundEvenAt D.Decimal { D.decimalRatio = l }
+                 d@D.Decimal { D.decimalRatio = r } =
+    let l' = fst $ properFraction l
+    in roundDecimal d l' $ D.ratioRoundEvenAt l' r
+
+-- | Round decimal to even per unit decimal.
+decimalRoundEvenPer :: B.Bin D.Decimal
+decimalRoundEvenPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+                  d@D.Decimal { D.decimalRatio = r } =
+    roundDecimal d l $ D.ratioRoundEvenPer per r
+
+roundDecimal :: D.Decimal -> D.DecimalFracl -> D.DecimalRatio -> D.Decimal
+roundDecimal d l r = d { D.decimalFracl = l
+                       , D.decimalRatio = r }
 
 -- | @chopDigitsTrancate@ /d/ /n/ returns a number
 --   which does not have the tailing /d/ digits.

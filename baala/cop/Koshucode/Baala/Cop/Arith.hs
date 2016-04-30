@@ -39,9 +39,12 @@ copsArith =
     , D.CopCalc  (D.copNormal "int-part")   copIntPart
     , D.CopCalc  (D.copNormal "frac-part")  copFracPart
 
-    , D.CopCalc  (D.copNormal "round")      copRound
-    , D.CopCalc  (D.copNormal "round-at")   copRoundAt
-    , D.CopCalc  (D.copNormal "round-per")  copRoundPer
+    , D.CopCalc  (D.copNormal "round")           copRound
+    , D.CopCalc  (D.copNormal "round-at")        copRoundAt
+    , D.CopCalc  (D.copNormal "round-per")       copRoundPer
+    , D.CopCalc  (D.copNormal "round-even")      copRoundEven
+    , D.CopCalc  (D.copNormal "round-even-at")   copRoundEvenAt
+    , D.CopCalc  (D.copNormal "round-even-per")  copRoundEvenPer
 
     -- ----------------------  add and subtract
 
@@ -122,21 +125,29 @@ copAbs1 :: (D.CDec c) => B.AbMap c
 copAbs1 c | D.isDec c = D.putDec $ abs $ D.gDec c
 copAbs1 _ = Msg.unexpAttr "abc"
 
-copRound :: (D.CText c, D.CDec c) => D.CopCalc c
-copRound arg =
+copRound         :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundAt       :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundEven     :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundEvenAt   :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundEvenPer  :: (D.CText c, D.CDec c) => D.CopCalc c
+
+copRound         = round1 D.decimalRound
+copRoundAt       = round2 D.decimalRoundAt
+copRoundPer      = round2 D.decimalRoundPer
+copRoundEven     = round1 D.decimalRoundEven
+copRoundEvenAt   = round2 D.decimalRoundEvenAt
+copRoundEvenPer  = round2 D.decimalRoundEvenPer
+
+round1 :: (D.CText c, D.CDec c) => B.Map D.Decimal -> [B.Ab c] -> B.Ab c
+round1 f arg = 
     do dec <- getDec1 arg
-       D.putDec $ D.decimalRound dec
+       D.putDec $ f dec
 
-copRoundAt :: (D.CText c, D.CDec c) => D.CopCalc c
-copRoundAt arg =
-    do (at, dec) <- getDec2 arg
-       D.putDec $ D.decimalRoundAt at dec
-
-copRoundPer :: (D.CText c, D.CDec c) => D.CopCalc c
-copRoundPer arg =
+round2 :: (D.CText c, D.CDec c) => B.Bin D.Decimal -> [B.Ab c] -> B.Ab c
+round2 f arg = 
     do (per, dec) <- getDec2 arg
-       D.putDec $ D.decimalRoundPer per dec
-
+       D.putDec $ f per dec
 
 -- --------------------------------------------  Add and subtract
 
