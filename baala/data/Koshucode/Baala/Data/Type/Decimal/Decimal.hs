@@ -23,7 +23,7 @@
 
 module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Rational
-    DecimalInteger, DecimalRatio, (%%),
+    DecimalInteger, DecimalRatio, (%%), (//.), (//),
     -- * Decimal
     DecimalFracl, Decimal (..),
     isDecimalZero,
@@ -60,6 +60,15 @@ type DecimalRatio = R.Ratio DecimalInteger
 (%%) :: DecimalInteger -> DecimalInteger -> DecimalRatio
 n %% den = n R.% den
 
+-- | Integer part and proper fraction part of ratio of two numbers,
+--   i.e., x //. y == (integer, proper-fraction) of x %% y.
+(//.) :: DecimalInteger -> DecimalInteger -> (DecimalInteger, DecimalRatio)
+x //. y = (q, r %% y) where (q, r) = x // y
+
+-- | Synonim of 'quotRem'.
+(//) :: (Integral n) => n -> n -> (n, n)
+(//) = quotRem
+
 
 -- ----------------------  Decimal
 
@@ -89,6 +98,7 @@ decimalDenom = R.denominator . decimalRatio
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
 decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
 
+-- | Map function to rational number in decimal.
 decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
 decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 
