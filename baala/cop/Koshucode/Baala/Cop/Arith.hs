@@ -42,9 +42,14 @@ copsArith =
     , D.CopCalc  (D.copNormal "round")           copRound
     , D.CopCalc  (D.copNormal "round-at")        copRoundAt
     , D.CopCalc  (D.copNormal "round-per")       copRoundPer
+
     , D.CopCalc  (D.copNormal "round-even")      copRoundEven
     , D.CopCalc  (D.copNormal "round-even-at")   copRoundEvenAt
     , D.CopCalc  (D.copNormal "round-even-per")  copRoundEvenPer
+
+    , D.CopCalc  (D.copNormal "trunc")           copTrunc
+    , D.CopCalc  (D.copNormal "trunc-at")        copTruncAt
+    , D.CopCalc  (D.copNormal "trunc-per")       copTruncPer
 
     -- ----------------------  add and subtract
 
@@ -128,16 +133,26 @@ copAbs1 _ = Msg.unexpAttr "abc"
 copRound         :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundAt       :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+
 copRoundEven     :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundEvenAt   :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundEvenPer  :: (D.CText c, D.CDec c) => D.CopCalc c
 
+copTrunc         :: (D.CText c, D.CDec c) => D.CopCalc c
+copTruncAt       :: (D.CText c, D.CDec c) => D.CopCalc c
+copTruncPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+
 copRound         = round1 D.decimalRound
 copRoundAt       = round2 D.decimalRoundAt
 copRoundPer      = round2 D.decimalRoundPer
+
 copRoundEven     = round1 D.decimalRoundEven
 copRoundEvenAt   = round2 D.decimalRoundEvenAt
 copRoundEvenPer  = round2 D.decimalRoundEvenPer
+
+copTrunc         = round1 D.decimalTrunc
+copTruncAt       = round2 D.decimalTruncAt
+copTruncPer      = round2 D.decimalTruncPer
 
 round1 :: (D.CText c, D.CDec c) => B.Map D.Decimal -> [B.Ab c] -> B.Ab c
 round1 f arg = 

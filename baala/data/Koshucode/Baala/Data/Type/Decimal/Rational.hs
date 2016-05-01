@@ -7,9 +7,10 @@ module Koshucode.Baala.Data.Type.Decimal.Rational
     (%%), (//.), (//),
     ratioHalf, ratioFracl,
 
-    -- * Round
+    -- * Round and truncate
     ratioRoundAt, ratioRoundEvenAt,
     ratioRoundPer, ratioRoundEvenPer,
+    ratioTruncAt, ratioTruncPer,
   ) where
 
 import qualified Data.Ratio                     as R
@@ -40,37 +41,48 @@ ratioFracl :: (Integral i, Integral n) => i -> R.Ratio n
 ratioFracl l = 10 ^^ (- l)
 
 
--- --------------------------------------------  Round
+-- --------------------------------------------  Round and truncate
 
 -- let sh = show . fromRational
 -- let test l r = putStrLn $ sh (ratioRoundAt l r) ++ " | " ++ sh (ratioRoundEvenAt l r) ++ "  <-  " ++ sh r
+-- let test l r = putStrLn $ sh (ratioTruncAt l r) ++ "  <-  " ++ sh r
 -- test (0 :: Int)  `mapM_` ((%% 4) <$> [-8 .. 15])
 -- test (-2 :: Int) `mapM_` ((%% 1) <$> [-100, -50 .. 500])
 
+ratioRoundPerBy :: (Integral n) => (n -> B.Bin (R.Ratio n)) -> B.Bin (R.Ratio n)
+ratioRoundPerBy conv per r = signum r * conv int frac trunc where
+    (int, frac)  = properFraction (abs r / per)
+    trunc        = (int R.% 1) * per
+
 -- | Round rational number at decimal fractional length.
 ratioRoundAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioRoundAt l = ratioRoundPer $ ratioFracl l
+ratioRoundAt = ratioRoundPer . ratioFracl
 
 -- | Round-to-even rational number at decimal fractional length.
 ratioRoundEvenAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioRoundEvenAt l = ratioRoundEvenPer $ ratioFracl l
+ratioRoundEvenAt = ratioRoundEvenPer . ratioFracl
 
 -- | Round rational number per unit rational number.
 ratioRoundPer :: (Integral n) => B.Bin (R.Ratio n)
 ratioRoundPer per = ratioRoundPerBy conv per where
-    conv _ trunc f | f >= ratioHalf  = trunc + per
-                   | otherwise       = trunc
+    conv _ frac trunc | frac >= ratioHalf  = trunc + per
+                      | otherwise          = trunc
 
 -- | Round-to-even rational number per unit rational number.
 ratioRoundEvenPer :: (Integral n) => B.Bin (R.Ratio n)
 ratioRoundEvenPer per = ratioRoundPerBy conv per where
-    conv i trunc f = case f `compare` ratioHalf of
-                       GT -> trunc + per
-                       EQ -> trunc + (if even i then 0 else per)
-                       LT -> trunc
+    conv int frac trunc =
+        case frac `compare` ratioHalf of
+          GT -> trunc + per
+          EQ -> trunc + (if even int then 0 else per)
+          LT -> trunc
 
-ratioRoundPerBy :: (Integral n) => (n -> B.Bin (R.Ratio n)) -> B.Bin (R.Ratio n)
-ratioRoundPerBy conv per r = signum r * conv i trunc f where
-    (i, f)  = properFraction (abs r / per)
-    trunc   = (i R.% 1) * per
+-- | Truncate rational number at decimal fractional length.
+ratioTruncAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
+ratioTruncAt = ratioTruncPer . ratioFracl
+
+-- | Truncate rational number per unit rational number.
+ratioTruncPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioTruncPer = ratioRoundPerBy conv where
+    conv _ _ trunc = trunc
 
