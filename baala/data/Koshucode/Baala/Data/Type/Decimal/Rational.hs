@@ -11,6 +11,10 @@ module Koshucode.Baala.Data.Type.Decimal.Rational
     ratioRoundAt, ratioRoundEvenAt,
     ratioRoundPer, ratioRoundEvenPer,
     ratioTruncAt, ratioTruncPer,
+
+    -- * Floor and ceiling
+    ratioFloorAt, ratioFloorPer,
+    ratioCeilAt, ratioCeilPer,
   ) where
 
 import qualified Data.Ratio                     as R
@@ -85,4 +89,36 @@ ratioTruncAt = ratioTruncPer . ratioFracl
 ratioTruncPer :: (Integral n) => B.Bin (R.Ratio n)
 ratioTruncPer = ratioRoundPerBy conv where
     conv _ _ trunc = trunc
+
+
+-- --------------------------------------------  Floor and ceiling
+
+-- let sh = show . fromRational
+-- let test l r = putStrLn $ sh (ratioFloorAt l r) ++ "  |  " ++ sh (ratioCeilAt l r) ++ "  <-  " ++ sh r
+-- test (0 :: Int)  `mapM_` ((%% 4) <$> [-8 .. 15])
+
+ratioFloorPerBy :: (Integral n) => B.Bin (R.Ratio n) -> B.Bin (R.Ratio n)
+ratioFloorPerBy conv per r = conv frac trunc where
+    (int, frac)  = properFraction (r / per)
+    trunc        = (int R.% 1) * per
+
+-- | Floor rational number at decimal fractional length.
+ratioFloorAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
+ratioFloorAt = ratioFloorPer . ratioFracl
+
+-- | Floor rational number per unit rational number.
+ratioFloorPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioFloorPer per = ratioFloorPerBy conv per where
+    conv frac trunc | frac < 0   = trunc - per
+                    | otherwise  = trunc
+
+-- | Ceiling rational number at decimal fractional length.
+ratioCeilAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
+ratioCeilAt = ratioCeilPer . ratioFracl
+
+-- | Ceiling rational number per unit rational number.
+ratioCeilPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioCeilPer per = ratioFloorPerBy conv per where
+    conv frac trunc | frac > 0   = trunc + per
+                    | otherwise  = trunc
 

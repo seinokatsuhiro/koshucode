@@ -39,6 +39,8 @@ copsArith =
     , D.CopCalc  (D.copNormal "int-part")   copIntPart
     , D.CopCalc  (D.copNormal "frac-part")  copFracPart
 
+    -- ----------------------  fractional
+
     , D.CopCalc  (D.copNormal "round")           copRound
     , D.CopCalc  (D.copNormal "round-at")        copRoundAt
     , D.CopCalc  (D.copNormal "round-per")       copRoundPer
@@ -50,6 +52,14 @@ copsArith =
     , D.CopCalc  (D.copNormal "trunc")           copTrunc
     , D.CopCalc  (D.copNormal "trunc-at")        copTruncAt
     , D.CopCalc  (D.copNormal "trunc-per")       copTruncPer
+
+    , D.CopCalc  (D.copNormal "floor")           copFloor
+    , D.CopCalc  (D.copNormal "floor-at")        copFloorAt
+    , D.CopCalc  (D.copNormal "floor-per")       copFloorPer
+
+    , D.CopCalc  (D.copNormal "ceil")            copCeil
+    , D.CopCalc  (D.copNormal "ceil-at")         copCeilAt
+    , D.CopCalc  (D.copNormal "ceil-per")        copCeilPer
 
     -- ----------------------  add and subtract
 
@@ -142,6 +152,14 @@ copTrunc         :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncAt       :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncPer      :: (D.CText c, D.CDec c) => D.CopCalc c
 
+copFloor         :: (D.CText c, D.CDec c) => D.CopCalc c
+copFloorAt       :: (D.CText c, D.CDec c) => D.CopCalc c
+copFloorPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+
+copCeil          :: (D.CText c, D.CDec c) => D.CopCalc c
+copCeilAt        :: (D.CText c, D.CDec c) => D.CopCalc c
+copCeilPer       :: (D.CText c, D.CDec c) => D.CopCalc c
+
 copRound         = round1 D.decimalRound
 copRoundAt       = round2 D.decimalRoundAt
 copRoundPer      = round2 D.decimalRoundPer
@@ -153,6 +171,14 @@ copRoundEvenPer  = round2 D.decimalRoundEvenPer
 copTrunc         = round1 D.decimalTrunc
 copTruncAt       = round2 D.decimalTruncAt
 copTruncPer      = round2 D.decimalTruncPer
+
+copFloor         = round1 D.decimalFloor
+copFloorAt       = round2 D.decimalFloorAt
+copFloorPer      = round2 D.decimalFloorPer
+
+copCeil          = round1 D.decimalCeil
+copCeilAt        = round2 D.decimalCeilAt
+copCeilPer       = round2 D.decimalCeilPer
 
 round1 :: (D.CText c, D.CDec c) => B.Map D.Decimal -> [B.Ab c] -> B.Ab c
 round1 f arg = 

@@ -1,18 +1,27 @@
-{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Decimal number.
+-- | Decimal functions.
 
 module Koshucode.Baala.Data.Type.Decimal.Fraction
   ( -- * Part of decimals
+    -- ** Integer and fraction
     decimalIntPart, decimalFracPart,
     decimalIntFrac,
+    -- ** Numerator and denominator
     decimalNum, decimalDenom,
 
-    -- * Round decimals
+    -- * Conver to integer
+    -- ** Round
     decimalRound, decimalRoundAt, decimalRoundPer,
+    -- ** Round to even
     decimalRoundEven, decimalRoundEvenAt, decimalRoundEvenPer,
+    -- ** Truncate
     decimalTrunc, decimalTruncAt, decimalTruncPer,
+    -- ** Floor
+    decimalFloor, decimalFloorAt, decimalFloorPer,
+    -- ** Ceil
+    decimalCeil, decimalCeilAt, decimalCeilPer,
+    -- ** Other
     chopDigitsTrancate,
     chopDigitsRound,
     roundLastDigit,
@@ -26,6 +35,8 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
 
 -- --------------------------------------------  Part
 
+-- ----------------------  Integer and fraction
+
 -- | Integer part of decimals.
 decimalIntPart :: B.Map D.Decimal
 decimalIntPart = fst . decimalIntFrac
@@ -38,6 +49,8 @@ decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
 decimalIntFrac d = (dec $ i D.%% 1, dec f) where
     (i, f) = properFraction $ D.decimalRatio d
     dec r  = D.decimalRatioMap (const r) d
+
+-- ----------------------  Numerator and denominator
 
 -- | Numerator part of decimal number.
 decimalNum :: D.Decimal -> D.DecimalInteger
@@ -113,6 +126,48 @@ decimalTruncPer :: B.Bin D.Decimal
 decimalTruncPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncPer per r
+
+-- ----------------------  Floor
+
+-- | Floor decimal per fractional length.
+decimalFloorAt :: B.Bin D.Decimal
+decimalFloorAt D.Decimal { D.decimalRatio = l }
+             d@D.Decimal { D.decimalRatio = r } =
+    let l' = fst $ properFraction l
+    in updateDecimal d l' $ D.ratioFloorAt l' r
+
+-- | Floor decimal per self fractional length.
+decimalFloor :: B.Map D.Decimal
+decimalFloor d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioFloorAt l r
+
+-- | Floor decimal per unit decimal.
+decimalFloorPer :: B.Bin D.Decimal
+decimalFloorPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+              d@D.Decimal { D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioFloorPer per r
+
+-- ----------------------  Ceil
+
+-- | Ceiling decimal per fractional length.
+decimalCeilAt :: B.Bin D.Decimal
+decimalCeilAt D.Decimal { D.decimalRatio = l }
+             d@D.Decimal { D.decimalRatio = r } =
+    let l' = fst $ properFraction l
+    in updateDecimal d l' $ D.ratioCeilAt l' r
+
+-- | Ceiling decimal per self fractional length.
+decimalCeil :: B.Map D.Decimal
+decimalCeil d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioCeilAt l r
+
+-- | Ceiling decimal per unit decimal.
+decimalCeilPer :: B.Bin D.Decimal
+decimalCeilPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+              d@D.Decimal { D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioCeilPer per r
+
+-- ----------------------  Other
 
 -- | @chopDigitsTrancate@ /d/ /n/ returns a number
 --   which does not have the tailing /d/ digits.
