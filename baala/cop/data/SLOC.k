@@ -3,12 +3,12 @@
 about /package 'cop
 
 |-- DIR  /code 18   /comment 6    /dir "cop/Koshucode/Baala"
-|-- DIR  /code 852  /comment 533  /dir "cop/Koshucode/Baala/Cop"
+|-- DIR  /code 932  /comment 570  /dir "cop/Koshucode/Baala/Cop"
 
-|-- DIR-TOTAL  /code 870  /comment 539
+|-- DIR-TOTAL  /code 950  /comment 576
 
 |-- FILE  /code 18   /comment 6    /file "Cop.hs"         /dir "cop/Koshucode/Baala"
-|-- FILE  /code 94   /comment 45   /file "Arith.hs"       /dir "cop/Koshucode/Baala/Cop"
+|-- FILE  /code 174  /comment 82   /file "Arith.hs"       /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 63   /comment 19   /file "Bundle.hs"      /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 33   /comment 40   /file "Coxhand.hs"     /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 190  /comment 103  /file "List.hs"        /dir "cop/Koshucode/Baala/Cop"
@@ -21,4 +21,4 @@ about /package 'cop
 |-- FILE  /code 31   /comment 27   /file "Time.hs"        /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 56   /comment 29   /file "Type.hs"        /dir "cop/Koshucode/Baala/Cop"
 
-|-- FILE-TOTAL  /code 870  /comment 539
+|-- FILE-TOTAL  /code 950  /comment 576

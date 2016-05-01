@@ -6,12 +6,12 @@ about /package 'data
 |-- DIR  /code 46   /comment 17   /dir "data/Koshucode/Baala/Data"
 |-- DIR  /code 586  /comment 276  /dir "data/Koshucode/Baala/Data/Church"
 |-- DIR  /code 807  /comment 428  /dir "data/Koshucode/Baala/Data/Content"
-|-- DIR  /code 339  /comment 205  /dir "data/Koshucode/Baala/Data/Type"
-|-- DIR  /code 392  /comment 272  /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- DIR  /code 337  /comment 205  /dir "data/Koshucode/Baala/Data/Type"
+|-- DIR  /code 465  /comment 362  /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- DIR  /code 250  /comment 246  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- DIR  /code 439  /comment 235  /dir "data/Koshucode/Baala/Data/Type/Time"
 
-|-- DIR-TOTAL  /code 2868  /comment 1682
+|-- DIR-TOTAL  /code 2939  /comment 1772
 
 |-- FILE  /code 9    /comment 3    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 3    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -28,14 +28,13 @@ about /package 'data
 |-- FILE  /code 176  /comment 75   /file "Tree.hs"        /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE  /code 12   /comment 4    /file "Message.hs"     /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 14   /comment 5    /file "Type.hs"        /dir "data/Koshucode/Baala/Data"
-|-- FILE  /code 14   /comment 4    /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type"
-|-- FILE  /code 64   /comment 39   /file "Arithmetic.hs"  /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- FILE  /code 35   /comment 30   /file "Binary.hs"      /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- FILE  /code 114  /comment 78   /file "Coder.hs"       /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- FILE  /code 50   /comment 61   /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- FILE  /code 12   /comment 4    /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 54   /comment 41   /file "BinaryAb.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- FILE  /code 115  /comment 78   /file "Coder.hs"       /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- FILE  /code 79   /comment 84   /file "Decimal.hs"     /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- FILE  /code 39   /comment 9    /file "Decimal2.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- FILE  /code 45   /comment 23   /file "Fraction.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- FILE  /code 45   /comment 32   /file "Instance.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- FILE  /code 116  /comment 88   /file "Fraction.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
+|-- FILE  /code 62   /comment 62   /file "Rational.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- FILE  /code 34   /comment 12   /file "Interp.hs"      /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 117  /comment 73   /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 22   /comment 15   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Type"
@@ -49,4 +48,4 @@ about /package 'data
 |-- FILE  /code 183  /comment 108  /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 136  /comment 91   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Type"
 
-|-- FILE-TOTAL  /code 2868  /comment 1682
+|-- FILE-TOTAL  /code 2939  /comment 1772

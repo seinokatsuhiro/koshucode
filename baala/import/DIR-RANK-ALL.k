@@ -24,15 +24,15 @@
 |-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 10 | "Message" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Line" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Tree" | [ "Abort" | "Prelude" | "Text" ] ] [ 12 | "Clause" | [ "Prelude" | "Text" ] ] [ 12 | "Infix" | [ "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 3 | "Prelude" | [ ] ] [ 6 | "Text" | [ ] ] [ 9 | "Abort" | [ ] ] [ 11 | "Message" | [ ] ] [ 13 | "Syntax" | [ ] ] =}
 
+|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 15 | "Decimal" | [ "Base" ] ] [ 15 | "Rational" | [ "Base" ] ] [ 16 | "Coder" | [ "Base" ] ] [ 16 | "Fraction" | [ "Base" ] ] [ 17 | "BinaryAb" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Data.Type.Time"  /base-rank {= /rank /base /import-dir [ 15 | "Clock" | [ "Base" ] ] [ 16 | "Date" | [ "Base" ] ] [ 17 | "Time" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 15 | "AngleText" | [ "Base" ] ] [ 15 | "Message" | [ "Base" ] ] [ 16 | "Next" | [ "Base" ] ] [ 17 | "Short" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 15 | "Decimal" | [ "Base" ] ] [ 16 | "Binary" | [ "Base" ] ] [ 16 | "Coder" | [ "Base" ] ] [ 16 | "Fraction" | [ "Base" ] ] [ 17 | "Instance" | [ "Base" ] ] [ 18 | "Arithmetic" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 21  /dir "Koshucode.Baala.Syntax.Token"  /base-rank {= /rank /base /import-dir [ 15 | "Message" | [ "Base" ] ] [ 19 | "Token" | [ "Base" | "Symbol" ] ] [ 20 | "Bracket" | [ "Base" ] ] [ 20 | "TokenLine" | [ "Base" | "Symbol" ] ] [ 21 | "TokenClause" | [ "Base" ] ] [ 21 | "TokenTree" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 26  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 15 | "Para" | [ "Base" ] ] [ 23 | "Message" | [ "Base" | "Symbol" | "Token" ] ] [ 24 | "AttrPos" | [ "Base" | "Token" ] ] [ 25 | "Attr" | [ "Base" | "Token" ] ] [ 25 | "Slot" | [ "Base" | "Token" ] ] [ 26 | "AttrEd" | [ "Base" | "Token" ] ] [ 26 | "Parse" | [ "Base" ] ] =}
 
 |-- DIR-RANK  /dir-rank 27  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 18 | "Symbol" | [ ] ] [ 22 | "Token" | [ ] ] [ 24 | "Message" | [ ] ] [ 27 | "Attr" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 32  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 30 | "Head" | [ "Base" | "Syntax" ] ] [ 31 | "Rel" | [ "Base" | "Syntax" ] ] [ 32 | "Mono" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 33  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 15 | "Message" | [ "Base" ] ] [ 18 | "Time" | [ ] ] [ 19 | "Decimal" | [ ] ] [ 29 | "Interp" | [ "Base" | "Syntax" ] ] [ 29 | "Judge" | [ "Base" | "Syntax" ] ] [ 29 | "Type" | [ "Base" | "Syntax" ] ] [ 33 | "Rel" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 33  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 15 | "Message" | [ "Base" ] ] [ 18 | "Decimal" | [ ] ] [ 18 | "Time" | [ ] ] [ 29 | "Interp" | [ "Base" | "Syntax" ] ] [ 29 | "Judge" | [ "Base" | "Syntax" ] ] [ 29 | "Type" | [ "Base" | "Syntax" ] ] [ 33 | "Rel" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 36  /dir "Koshucode.Baala.Data.Content"  /base-rank {= /rank /base /import-dir [ 29 | "Message" | [ "Base" | "Syntax" ] ] [ 35 | "Class" | [ "Base" | "Syntax" | "Type" ] ] [ 35 | "Tree" | [ "Base" | "Syntax" | "Type" ] ] [ 36 | "BaalaC" | [ "Base" | "Syntax" | "Type" ] ] [ 36 | "Decode" | [ "Base" | "Syntax" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 38  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 29 | "Lexmap" | [ "Base" | "Syntax" ] ] [ 37 | "LexmapTrees" | [ "Base" | "Syntax" ] ] [ 37 | "Message" | [ "Base" | "Syntax" ] ] [ 38 | "Construct" | [ "Base" | "Syntax" ] ] =}
 
@@ -111,6 +111,14 @@ TABLE : DIR-RANK
                                                   11    "Message"        [ ]
                                                   13    "Syntax"         [ ]
                                                   
+  17        "Koshucode.Baala.Data.Type.Decimal"   /rank /base            /import-dir
+                                                  ----- ---------------- ----------------------------------------------------------------------------
+                                                  15    "Decimal"        [ "Base" ]
+                                                  15    "Rational"       [ "Base" ]
+                                                  16    "Coder"          [ "Base" ]
+                                                  16    "Fraction"       [ "Base" ]
+                                                  17    "BinaryAb"       [ "Base" ]
+                                                  
   17        "Koshucode.Baala.Data.Type.Time"      /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   15    "Clock"          [ "Base" ]
@@ -124,15 +132,6 @@ TABLE : DIR-RANK
                                                   15    "Message"        [ "Base" ]
                                                   16    "Next"           [ "Base" ]
                                                   17    "Short"          [ "Base" ]
-                                                  
-  18        "Koshucode.Baala.Data.Type.Decimal"   /rank /base            /import-dir
-                                                  ----- ---------------- ----------------------------------------------------------------------------
-                                                  15    "Decimal"        [ "Base" ]
-                                                  16    "Binary"         [ "Base" ]
-                                                  16    "Coder"          [ "Base" ]
-                                                  16    "Fraction"       [ "Base" ]
-                                                  17    "Instance"       [ "Base" ]
-                                                  18    "Arithmetic"     [ "Base" ]
                                                   
   21        "Koshucode.Baala.Syntax.Token"        /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
@@ -169,8 +168,8 @@ TABLE : DIR-RANK
   33        "Koshucode.Baala.Data.Type"           /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   15    "Message"        [ "Base" ]
+                                                  18    "Decimal"        [ ]
                                                   18    "Time"           [ ]
-                                                  19    "Decimal"        [ ]
                                                   29    "Interp"         [ "Base" | "Syntax" ]
                                                   29    "Judge"          [ "Base" | "Syntax" ]
                                                   29    "Type"           [ "Base" | "Syntax" ]

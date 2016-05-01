@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    144 judges
+**    138 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Base"
@@ -88,43 +88,36 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Message"              /import "Koshucode.Baala.Data.Content.Message"
 |-- IMPORT  /module "Koshucode.Baala.Data.Message"              /import "Koshucode.Baala.Data.Type.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Control.Monad"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Decimal.Binary"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Decimal.Coder"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Decimal.Fraction"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Decimal.Instance"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Arithmetic"  /import "Koshucode.Baala.Data.Type.Message"
-
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Binary"  /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Binary"  /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"  /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"  /import "Koshucode.Baala.Data.Type.Decimal.Coder"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"  /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"  /import "Koshucode.Baala.Data.Type.Decimal.Fraction"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"  /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Decimal.Rational"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Decimal"  /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Decimal"  /import "Koshucode.Baala.Base"
 
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Koshucode.Baala.Data.Type.Decimal.Rational"
 
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Instance"  /import "Data.Ratio"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Instance"  /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Instance"  /import "Koshucode.Baala.Data.Type.Decimal.Binary"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Instance"  /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Instance"  /import "Koshucode.Baala.Data.Type.Decimal.Fraction"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Rational"  /import "Data.Ratio"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Rational"  /import "Koshucode.Baala.Base"
 
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Arithmetic"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Binary"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.BinaryAb"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Coder"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Fraction"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Instance"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal"         /import "Koshucode.Baala.Data.Type.Decimal.Rational"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Interp"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Interp"          /import "Koshucode.Baala.Syntax"
