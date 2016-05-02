@@ -39,6 +39,7 @@ import qualified Data.Char                                   as Ch
 import qualified Data.Ratio                                  as R
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
+import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
 import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
@@ -174,10 +175,11 @@ encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
 encodeDecimalWith :: B.Map String -> D.Decimal -> String
-encodeDecimalWith sep D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    decimalSign r $ case ratioDigits sep l $ abs r of
-                      (int, frac) | l > 0      -> int ++ "." ++ frac
-                                  | otherwise  -> int
+encodeDecimalWith sep = encode . D.decimalRoundOut where
+    encode D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+        decimalSign r $ case ratioDigits sep l $ abs r of
+                          (int, frac) | l > 0      -> int ++ "." ++ frac
+                                      | otherwise  -> int
 
 decimalSign :: D.DecimalRatio -> B.Map String
 decimalSign r cs | r < 0      = '-' : cs
