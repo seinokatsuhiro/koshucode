@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.119.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.133.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,7 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Read resource.</p
+	  >Read resource.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -68,7 +68,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a href="#t:GlobalIO"
 	    >GlobalIO</a
-	    > a c = StateT (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    > a c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad-Trans-State-Lazy.html#t:StateT"
+	    >StateT</a
+	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
 	    > c) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -86,7 +88,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><a href="#v:gio"
 	    >gio</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > a -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
 	    >GlobalIO</a
@@ -94,7 +96,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><a href="#v:gioResource"
 	    >gioResource</a
-	    > ::  <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
+	    > :: <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
 	    >ResourceIO</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
@@ -140,7 +142,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a name="t:GlobalIO" class="def"
 	    >GlobalIO</a
-	    > a c = StateT (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    > a c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad-Trans-State-Lazy.html#t:StateT"
+	    >StateT</a
+	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
 	    > c) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -149,7 +153,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >I/O with global state.</p
+	    >I/O with global state.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -167,14 +171,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculation that returns abortable resource.</p
+	    >Calculation that returns abortable resource.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:gio" class="def"
 	    >gio</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > a -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
 	    >GlobalIO</a
@@ -186,7 +190,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:gioResource" class="def"
 	    >gioResource</a
-	    > ::  <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
+	    > :: <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
 	    >ResourceIO</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
@@ -217,7 +221,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Read resource from text.</p
+	    >Read resource from text.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -242,7 +246,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html
