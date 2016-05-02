@@ -15,6 +15,9 @@ module Koshucode.Baala.Data.Type.Decimal.Rational
     -- * Floor and ceiling
     ratioFloorAt, ratioFloorPer,
     ratioCeilAt, ratioCeilPer,
+
+    -- * Quotient and remainder
+    ratioQuo, ratioRem, ratioQuoRem,
   ) where
 
 import qualified Data.Ratio                     as R
@@ -121,4 +124,19 @@ ratioCeilPer :: (Integral n) => B.Bin (R.Ratio n)
 ratioCeilPer per = ratioFloorPerBy conv per where
     conv frac trunc | frac > 0   = trunc + per
                     | otherwise  = trunc
+
+-- --------------------------------------------  Quotient and remainder
+
+ratioQuo :: (Integral n) => B.Bin (R.Ratio n)
+ratioQuo x y = fst $ ratioQuoRem x y
+
+ratioRem :: (Integral n) => B.Bin (R.Ratio n)
+ratioRem x y = snd $ ratioQuoRem x y
+
+ratioQuoRem :: (Integral n) => R.Ratio n -> R.Ratio n -> (R.Ratio n, R.Ratio n)
+ratioQuoRem = ratioQuoRem'
+
+ratioQuoRem' :: (Num n, RealFrac r) => r -> r -> (n, r)
+ratioQuoRem' x y = (fromInteger i, y * f) where
+    (i, f) = properFraction (x / y)
 

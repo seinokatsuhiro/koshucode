@@ -52,6 +52,7 @@ copsArith =
     , D.CopCalc  (D.copNormal "trunc")           copTrunc
     , D.CopCalc  (D.copNormal "trunc-at")        copTruncAt
     , D.CopCalc  (D.copNormal "trunc-per")       copTruncPer
+    , D.CopCalc  (D.copNormal "trunc-error")     copTruncError
 
     , D.CopCalc  (D.copNormal "floor")           copFloor
     , D.CopCalc  (D.copNormal "floor-at")        copFloorAt
@@ -151,6 +152,7 @@ copRoundEvenPer  :: (D.CText c, D.CDec c) => D.CopCalc c
 copTrunc         :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncAt       :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+copTruncError    :: (D.CText c, D.CDec c) => D.CopCalc c
 
 copFloor         :: (D.CText c, D.CDec c) => D.CopCalc c
 copFloorAt       :: (D.CText c, D.CDec c) => D.CopCalc c
@@ -171,6 +173,7 @@ copRoundEvenPer  = round2 D.decimalRoundEvenPer
 copTrunc         = round1 D.decimalTrunc
 copTruncAt       = round2 D.decimalTruncAt
 copTruncPer      = round2 D.decimalTruncPer
+copTruncError    = round1 D.decimalTruncError
 
 copFloor         = round1 D.decimalFloor
 copFloorAt       = round2 D.decimalFloorAt

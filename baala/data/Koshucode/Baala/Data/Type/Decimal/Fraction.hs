@@ -17,6 +17,7 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
     decimalRoundEven, decimalRoundEvenAt, decimalRoundEvenPer,
     -- ** Truncate
     decimalTrunc, decimalTruncAt, decimalTruncPer,
+    decimalTruncError,
     -- ** Floor
     decimalFloor, decimalFloorAt, decimalFloorPer,
     -- ** Ceil
@@ -109,6 +110,11 @@ decimalRoundEvenPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- ----------------------  Truncate
 
+-- | Truncate decimal per self fractional length.
+decimalTrunc :: B.Map D.Decimal
+decimalTrunc d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioTruncAt l r
+
 -- | Truncate decimal per fractional length.
 decimalTruncAt :: B.Bin D.Decimal
 decimalTruncAt D.Decimal { D.decimalRatio = l }
@@ -116,18 +122,23 @@ decimalTruncAt D.Decimal { D.decimalRatio = l }
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioTruncAt l' r
 
--- | Truncate decimal per self fractional length.
-decimalTrunc :: B.Map D.Decimal
-decimalTrunc d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioTruncAt l r
-
 -- | Truncate decimal per unit decimal.
 decimalTruncPer :: B.Bin D.Decimal
 decimalTruncPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncPer per r
 
+-- | Truncation error of decimal.
+decimalTruncError :: B.Map D.Decimal
+decimalTruncError d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracl l)
+
 -- ----------------------  Floor
+
+-- | Floor decimal per self fractional length.
+decimalFloor :: B.Map D.Decimal
+decimalFloor d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioFloorAt l r
 
 -- | Floor decimal per fractional length.
 decimalFloorAt :: B.Bin D.Decimal
@@ -135,11 +146,6 @@ decimalFloorAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioFloorAt l' r
-
--- | Floor decimal per self fractional length.
-decimalFloor :: B.Map D.Decimal
-decimalFloor d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioFloorAt l r
 
 -- | Floor decimal per unit decimal.
 decimalFloorPer :: B.Bin D.Decimal
@@ -149,17 +155,17 @@ decimalFloorPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- ----------------------  Ceil
 
+-- | Ceiling decimal per self fractional length.
+decimalCeil :: B.Map D.Decimal
+decimalCeil d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioCeilAt l r
+
 -- | Ceiling decimal per fractional length.
 decimalCeilAt :: B.Bin D.Decimal
 decimalCeilAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioCeilAt l' r
-
--- | Ceiling decimal per self fractional length.
-decimalCeil :: B.Map D.Decimal
-decimalCeil d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    updateDecimal d l $ D.ratioCeilAt l r
 
 -- | Ceiling decimal per unit decimal.
 decimalCeilPer :: B.Bin D.Decimal
