@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.119.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.133.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,417 +51,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="caption"
 	>Koshucode.Baala.Data.Type.Rel</p
 	></div
-      ><div id="table-of-contents"
-      ><p class="caption"
-	>Contents</p
-	><ul
-	><li
-	  ><a href="#g:1"
-	    >Data type</a
-	    ></li
-	  ><li
-	  ><a href="#g:2"
-	    >Constant</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Converter</a
-	    ></li
-	  ></ul
-	></div
-      ><div id="description"
-      ><p class="caption"
-	>Description</p
-	><div class="doc"
-	><p
-	  >Relation type</p
-	  ></div
-	></div
-      ><div id="synopsis"
-      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
-	>Synopsis</p
-	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
-	><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    > <a href="#t:Rel"
-	    >Rel</a
-	    > c = <a href="#v:Rel"
-	    >Rel</a
-	    > {<ul class="subs"
-	    ><li
-	      ><a href="#v:relHead"
-		>relHead</a
-		> :: <a href="Koshucode-Baala-Data-Type-Head.html#t:Head"
-		>Head</a
-		></li
-	      ><li
-	      ><a href="#v:relBody"
-		>relBody</a
-		> :: <a href="Koshucode-Baala-Data-Type-Rel.html#t:Body"
-		>Body</a
-		> c</li
-	      ></ul
-	    >}</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Body"
-	    >Body</a
-	    > c = [[c]]</li
-	  ><li class="src short"
-	  ><a href="#v:relSort"
-	    >relSort</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c)</li
-	  ><li class="src short"
-	  ><a href="#v:reldum"
-	    >reldum</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:reldee"
-	    >reldee</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:reldau"
-	    >reldau</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="#t:SelectRel"
-	    >SelectRel</a
-	    > r <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:selectRel"
-		>selectRel</a
-		> ::  r c -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-		>JudgePat</a
-		> -&gt; [<a href="Koshucode-Baala-Data-Token-Term.html#t:TermName"
-		>TermName</a
-		>] -&gt; <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		>Rel</a
-		> c</li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:judgesFromRel"
-	    >judgesFromRel</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
-	    >JudgeOf</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-	    >JudgePat</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; [<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
-	    >Judge</a
-	    > c]</li
-	  ></ul
-	></div
       ><div id="interface"
-      ><h1 id="g:1"
-	>Data type</h1
+      ><h1
+	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    > <a name="t:Rel" class="def"
-	    >Rel</a
-	    > c <a href="src/Koshucode-Baala-Data-Type-Rel.html#Rel" class="link"
-	    >Source</a
+	  >module <a href="Koshucode-Baala-Data-Type-Rel-Head.html"
+	    >Koshucode.Baala.Data.Type.Rel.Head</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Relations on type <code
-	      >c</code
-	      >.
-   Relation is consist of heading and body.
-   Body is thoretically a set of tuples,
-   but implemented using list of list.</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:Rel" class="def"
-		  >Rel</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td colspan="2"
-		><div class="subs fields"
-		  ><p class="caption"
-		    >Fields</p
-		    ><dl
-		    ><dt class="src"
-		      ><a name="v:relHead" class="def"
-			>relHead</a
-			> :: <a href="Koshucode-Baala-Data-Type-Head.html#t:Head"
-			>Head</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Heading of relation</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:relBody" class="def"
-			>relBody</a
-			> :: <a href="Koshucode-Baala-Data-Type-Rel.html#t:Body"
-			>Body</a
-			> c</dt
-		      ><dd class="doc"
-		      ><p
-			>Body of relation</p
-			></dd
-		      ></dl
-		    ><div class="clear"
-		    ></div
-		    ></div
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Rel" class="caption collapser" onclick="toggleSection('i:Rel')"
-	    >Instances</p
-	    ><div id="section.i:Rel" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
-		    >Functor</a
-		    > <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		    >Rel</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		    >Rel</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		    >Rel</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		    >Rel</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-		    >Rel</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Body" class="def"
-	    >Body</a
-	    > c = [[c]] <a href="src/Koshucode-Baala-Data-Type-Rel.html#Body" class="link"
-	    >Source</a
+	  >module <a href="Koshucode-Baala-Data-Type-Rel-Mono.html"
+	    >Koshucode.Baala.Data.Type.Rel.Mono</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Body of relation, i.e., a list of tuples.
-   Tuple is a list of contents.</p
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relSort" class="def"
-	    >relSort</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c) <a href="src/Koshucode-Baala-Data-Type-Rel.html#relSort" class="link"
-	    >Source</a
+	  >module <a href="Koshucode-Baala-Data-Type-Rel-Rel.html"
+	    >Koshucode.Baala.Data.Type.Rel.Rel</a
 	    ></p
-	  ></div
-	><h1 id="g:2"
-	>Constant</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:reldum" class="def"
-	    >reldum</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c <a href="src/Koshucode-Baala-Data-Type-Rel.html#reldum" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >The nullary empty relation.
-   In other words, relational constant
-   that has no terms and no tuples.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:reldee" class="def"
-	    >reldee</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c <a href="src/Koshucode-Baala-Data-Type-Rel.html#reldee" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >The nullary full relation.
-   In other words, relational constant
-   that has no terms and the empty tuple.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:reldau" class="def"
-	    >reldau</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c <a href="src/Koshucode-Baala-Data-Type-Rel.html#reldau" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >The empty relation with all terms.
-   This is fake.</p
-	    ></div
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
-	    ></p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >B.doc (reldum :: Rel Bool)
-</code
-	      ></strong
-	    >{| |}
-</pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >B.doc (reldee :: Rel Bool)
-</code
-	      ></strong
-	    >{| [] |}
-</pre
-	  ></div
-	><h1 id="g:3"
-	>Converter</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    > <a name="t:SelectRel" class="def"
-	    >SelectRel</a
-	    > r <span class="keyword"
-	    >where</span
-	    > <a href="src/Koshucode-Baala-Data-Type-Rel.html#SelectRel" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:selectRel" class="def"
-	      >selectRel</a
-	      > ::  r c -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-	      >JudgePat</a
-	      > -&gt; [<a href="Koshucode-Baala-Data-Token-Term.html#t:TermName"
-	      >TermName</a
-	      >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	      >Rel</a
-	      > c <a href="src/Koshucode-Baala-Data-Type-Rel.html#selectRel" class="link"
-	      >Source</a
-	      ></p
-	    ><div class="doc"
-	    ><p
-	      >Convert judges to relation.</p
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:judgesFromRel" class="def"
-	    >judgesFromRel</a
-	    > ::  <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
-	    >JudgeOf</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-	    >JudgePat</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; [<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
-	    >Judge</a
-	    > c] <a href="src/Koshucode-Baala-Data-Type-Rel.html#judgesFromRel" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert relation to list of judges.</p
-	    ></div
 	  ></div
 	></div
       ></div
@@ -469,7 +78,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

@@ -1,0 +1,820 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Decimal.Fraction</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Decimal-Fraction.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.133.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Decimal.Fraction</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Part of decimals</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Integer and fraction</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Numerator and denominator</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Conver to integer</a
+	    ><ul
+	    ><li
+	      ><a href="#g:5"
+		>Round</a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Round to even</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>Truncate</a
+		></li
+	      ><li
+	      ><a href="#g:8"
+		>Round out</a
+		></li
+	      ><li
+	      ><a href="#g:9"
+		>Floor</a
+		></li
+	      ><li
+	      ><a href="#g:10"
+		>Ceil</a
+		></li
+	      ><li
+	      ><a href="#g:11"
+		>Other</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Decimal functions.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:decimalIntPart"
+	    >decimalIntPart</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalFracPart"
+	    >decimalFracPart</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalIntFrac"
+	    >decimalIntFrac</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; (<a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    >, <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:decimalNum"
+	    >decimalNum</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalDenom"
+	    >decimalDenom</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRound"
+	    >decimalRound</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundAt"
+	    >decimalRoundAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundPer"
+	    >decimalRoundPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundEven"
+	    >decimalRoundEven</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundEvenAt"
+	    >decimalRoundEvenAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundEvenPer"
+	    >decimalRoundEvenPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalTrunc"
+	    >decimalTrunc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalTruncAt"
+	    >decimalTruncAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalTruncPer"
+	    >decimalTruncPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalTruncError"
+	    >decimalTruncError</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundOut"
+	    >decimalRoundOut</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundOutAt"
+	    >decimalRoundOutAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRoundOutPer"
+	    >decimalRoundOutPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalFloor"
+	    >decimalFloor</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalFloorAt"
+	    >decimalFloorAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalFloorPer"
+	    >decimalFloorPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalCeil"
+	    >decimalCeil</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalCeilAt"
+	    >decimalCeilAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalCeilPer"
+	    >decimalCeilPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:chopDigitsTrancate"
+	    >chopDigitsTrancate</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; d -&gt; n -&gt; n</li
+	  ><li class="src short"
+	  ><a href="#v:chopDigitsRound"
+	    >chopDigitsRound</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; d -&gt; n -&gt; n</li
+	  ><li class="src short"
+	  ><a href="#v:roundLastDigit"
+	    >roundLastDigit</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Part of decimals</h1
+	><h2 id="g:2"
+	>Integer and fraction</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalIntPart" class="def"
+	    >decimalIntPart</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalIntPart" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Integer part of decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFracPart" class="def"
+	    >decimalFracPart</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalFracPart" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Fractional part of decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalIntFrac" class="def"
+	    >decimalIntFrac</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; (<a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    >, <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    >) <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalIntFrac" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:3"
+	>Numerator and denominator</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalNum" class="def"
+	    >decimalNum</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalNum" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Numerator part of decimal number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalDenom" class="def"
+	    >decimalDenom</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalDenom" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Denominator part of decimal number.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Conver to integer</h1
+	><h2 id="g:5"
+	>Round</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRound" class="def"
+	    >decimalRound</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRound" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundAt" class="def"
+	    >decimalRoundAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundPer" class="def"
+	    >decimalRoundPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal per unit decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:6"
+	>Round to even</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundEven" class="def"
+	    >decimalRoundEven</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundEven" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal to even per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundEvenAt" class="def"
+	    >decimalRoundEvenAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundEvenAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal to even per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundEvenPer" class="def"
+	    >decimalRoundEvenPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundEvenPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round decimal to even per unit decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:7"
+	>Truncate</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalTrunc" class="def"
+	    >decimalTrunc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalTrunc" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncate decimal per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalTruncAt" class="def"
+	    >decimalTruncAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalTruncAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncate decimal per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalTruncPer" class="def"
+	    >decimalTruncPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalTruncPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncate decimal per unit decimal.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalTruncError" class="def"
+	    >decimalTruncError</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalTruncError" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncation error of decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:8"
+	>Round out</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundOut" class="def"
+	    >decimalRoundOut</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundOut" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round out (toward infinity) decimal to even per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundOutAt" class="def"
+	    >decimalRoundOutAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundOutAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round out (toward infinity) decimal to even per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRoundOutPer" class="def"
+	    >decimalRoundOutPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalRoundOutPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round out (toward infinity) decimal to even per unit decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:9"
+	>Floor</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFloor" class="def"
+	    >decimalFloor</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalFloor" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Floor decimal per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFloorAt" class="def"
+	    >decimalFloorAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalFloorAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Floor decimal per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFloorPer" class="def"
+	    >decimalFloorPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalFloorPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Floor decimal per unit decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:10"
+	>Ceil</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalCeil" class="def"
+	    >decimalCeil</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalCeil" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ceiling decimal per self fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalCeilAt" class="def"
+	    >decimalCeilAt</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalCeilAt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ceiling decimal per fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalCeilPer" class="def"
+	    >decimalCeilPer</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#decimalCeilPer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ceiling decimal per unit decimal.</p
+	    ></div
+	  ></div
+	><h2 id="g:11"
+	>Other</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:chopDigitsTrancate" class="def"
+	    >chopDigitsTrancate</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; d -&gt; n -&gt; n <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#chopDigitsTrancate" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      >chopDigitsTrancate</code
+	      > <em
+	      >d</em
+	      > <em
+	      >n</em
+	      > returns a number
+   which does not have the tailing <em
+	      >d</em
+	      > digits.
+   If <em
+	      >d</em
+	      > is zero or negative, it returns just <em
+	      >n</em
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:chopDigitsRound" class="def"
+	    >chopDigitsRound</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > d, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; d -&gt; n -&gt; n <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#chopDigitsRound" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      >chopDigitsRound</code
+	      > is similar to <code
+	      ><a href="Koshucode-Baala-Data-Type-Decimal-Fraction.html#v:chopDigitsTrancate"
+		>chopDigitsTrancate</a
+		></code
+	      >,
+   but rounds chopped digit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:roundLastDigit" class="def"
+	    >roundLastDigit</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n <a href="src/Koshucode-Baala-Data-Type-Decimal-Fraction.html#roundLastDigit" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round the last (least significant) digit.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

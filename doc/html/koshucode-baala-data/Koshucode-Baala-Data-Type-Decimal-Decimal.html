@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Decimal.Decimal</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Decimal-Decimal.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.133.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Decimal.Decimal</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Decimal</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Binary</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Conversion</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Decimal number.</p
+	  ><p
+	  >A decimal number in Koshucode is internally represented
+   using a rational number (<code
+	    ><a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#v:decimalRatio"
+	      >decimalRatio</a
+	      ></code
+	    >)
+   with a length of fractional part (<code
+	    ><a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#v:decimalFracl"
+	      >decimalFracl</a
+	      ></code
+	    >) .
+   For example, the decimal number 11.250 correnponds to
+   the rational number 45/4 with the fraction length 3.</p
+	  ><dl
+	  ><dt
+	    >Decimal number</dt
+	    ><dd
+	    >Number represented using 10 digits and the decimal separator.</dd
+	    ><dt
+	    >Decimal separator</dt
+	    ><dd
+	    >Symbol between integer part and fractional part.</dd
+	    ><dt
+	    >Fractional part</dt
+	    ><dd
+	    >The right part of decimal numbers, e.g., 250 for 11.250.</dd
+	    ><dt
+	    >Integer part</dt
+	    ><dd
+	    >The left part of decimal numbers, e.g., 11 for 11.250.</dd
+	    ><dt
+	    >Integral decimal</dt
+	    ><dd
+	    >Decimal number without fractional part.</dd
+	    ></dl
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:DecimalInteger"
+	    >DecimalInteger</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Decimal"
+	    >Decimal</a
+	    > = <a href="#v:Decimal"
+	    >Decimal</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:decimalFracl"
+		>decimalFracl</a
+		> :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+		>DecimalFracl</a
+		></li
+	      ><li
+	      ><a href="#v:decimalRatio"
+		>decimalRatio</a
+		> :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+		>DecimalRatio</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:decimalFraclSet"
+	    >decimalFraclSet</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalRatioMap"
+	    >decimalRatioMap</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinDecimal"
+	    >BinDecimal</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinFracl"
+	    >BinFracl</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinRatio"
+	    >BinRatio</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalBin"
+	    >decimalBin</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinDecimal"
+	    >BinDecimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalBinAb"
+	    >decimalBinAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:integralDecimal"
+	    >integralDecimal</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:realDecimal"
+	    >realDecimal</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Real"
+	    >Real</a
+	    > n =&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalFractional"
+	    >decimalFractional</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Fractional"
+	    >Fractional</a
+	    > n =&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; n</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Decimal</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:DecimalInteger" class="def"
+	    >DecimalInteger</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#DecimalInteger" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for numerator or denominator for decimal numbers.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:DecimalRatio" class="def"
+	    >DecimalRatio</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#DecimalRatio" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Rational number of decimal type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:DecimalFracl" class="def"
+	    >DecimalFracl</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#DecimalFracl" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Length of fractional part.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Decimal" class="def"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#Decimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decimal number.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Decimal" class="def"
+		  >Decimal</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:decimalFracl" class="def"
+			>decimalFracl</a
+			> :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+			>DecimalFracl</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Length of the fractional part</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:decimalRatio" class="def"
+			>decimalRatio</a
+			> :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+			>DecimalRatio</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Rational number for the decimal number</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Decimal" class="caption collapser" onclick="toggleSection('i:Decimal')"
+	    >Instances</p
+	    ><div id="section.i:Decimal" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Enum"
+		      >Enum</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-139" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-133" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Fractional"
+		      >Fractional</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-159" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Num"
+		      >Num</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-147" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-136" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Real"
+		      >Real</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-156" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:RealFrac"
+		      >RealFrac</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-164" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+		      >Decimal</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#line-61" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFraclSet" class="def"
+	    >decimalFraclSet</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#decimalFraclSet" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Change decimal fracl.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalRatioMap" class="def"
+	    >decimalRatioMap</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#decimalRatioMap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map function to rational number in decimal.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Binary</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinDecimal" class="def"
+	    >BinDecimal</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#BinDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinAbDecimal" class="def"
+	    >BinAbDecimal</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#BinAbDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinFracl" class="def"
+	    >BinFracl</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#BinFracl" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Combinate fracl.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinRatio" class="def"
+	    >BinRatio</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#BinRatio" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Combinate rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalBin" class="def"
+	    >decimalBin</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinDecimal"
+	    >BinDecimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#decimalBin" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalBinAb" class="def"
+	    >decimalBinAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#decimalBinAb" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Conversion</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:integralDecimal" class="def"
+	    >integralDecimal</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#integralDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert integral number to integral decimal number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:realDecimal" class="def"
+	    >realDecimal</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Real"
+	    >Real</a
+	    > n =&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#realDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert real number to decimal number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalFractional" class="def"
+	    >decimalFractional</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Fractional"
+	    >Fractional</a
+	    > n =&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > -&gt; n <a href="src/Koshucode-Baala-Data-Type-Decimal-Decimal.html#decimalFractional" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert decimal number to fractional number.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

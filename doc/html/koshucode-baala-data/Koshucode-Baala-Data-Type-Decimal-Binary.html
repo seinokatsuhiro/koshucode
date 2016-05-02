@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Decimal.Binary</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Decimal-Binary.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.132.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Decimal.Binary</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Binary type.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Bin"
+	    >Bin</a
+	    > a = a -&gt; a -&gt; a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinAb"
+	    >BinAb</a
+	    > a = a -&gt; a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinDecimal"
+	    >BinDecimal</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinFracl"
+	    >BinFracl</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BinRatio"
+	    >BinRatio</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalBin"
+	    >decimalBin</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinDecimal"
+	    >BinDecimal</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:decimalBinAb"
+	    >decimalBinAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Bin" class="def"
+	    >Bin</a
+	    > a = a -&gt; a -&gt; a <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#Bin" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for binary operators.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinAb" class="def"
+	    >BinAb</a
+	    > a = a -&gt; a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#BinAb" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for abortable binary operators.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinDecimal" class="def"
+	    >BinDecimal</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#BinDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinAbDecimal" class="def"
+	    >BinAbDecimal</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:Decimal"
+	    >Decimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#BinAbDecimal" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinFracl" class="def"
+	    >BinFracl</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalFracl"
+	    >DecimalFracl</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#BinFracl" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Combinate fracl.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BinRatio" class="def"
+	    >BinRatio</a
+	    > = <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#BinRatio" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Combinate rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalBin" class="def"
+	    >decimalBin</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinRatio"
+	    >BinRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinDecimal"
+	    >BinDecimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#decimalBin" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Binary operation for two decimals.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decimalBinAb" class="def"
+	    >decimalBinAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinFracl"
+	    >BinFracl</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalRatio"
+	    >DecimalRatio</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Decimal-Binary.html#t:BinAbDecimal"
+	    >BinAbDecimal</a
+	    > <a href="src/Koshucode-Baala-Data-Type-Decimal-Binary.html#decimalBinAb" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable binary operation for two decimals.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
