@@ -49,22 +49,34 @@ copsArith =
     , D.CopCalc  (D.copNormal "round-even-at")   copRoundEvenAt
     , D.CopCalc  (D.copNormal "round-even-per")  copRoundEvenPer
 
-    , D.CopCalc  (D.copNormal "trunc")           copTrunc
-    , D.CopCalc  (D.copNormal "trunc-at")        copTruncAt
-    , D.CopCalc  (D.copNormal "trunc-per")       copTruncPer
-    , D.CopCalc  (D.copNormal "trunc-error")     copTruncError
+    , D.CopCalc  (D.copNormal "round-in")        copRoundIn
+    , D.CopCalc  (D.copNormal "round-in-at")     copRoundInAt
+    , D.CopCalc  (D.copNormal "round-in-per")    copRoundInPer
 
     , D.CopCalc  (D.copNormal "round-out")       copRoundOut
     , D.CopCalc  (D.copNormal "round-out-at")    copRoundOutAt
     , D.CopCalc  (D.copNormal "round-out-per")   copRoundOutPer
 
-    , D.CopCalc  (D.copNormal "floor")           copFloor
-    , D.CopCalc  (D.copNormal "floor-at")        copFloorAt
-    , D.CopCalc  (D.copNormal "floor-per")       copFloorPer
+    , D.CopCalc  (D.copNormal "round-down")      copRoundDown
+    , D.CopCalc  (D.copNormal "round-down-at")   copRoundDownAt
+    , D.CopCalc  (D.copNormal "round-down-per")  copRoundDownPer
 
-    , D.CopCalc  (D.copNormal "ceil")            copCeil
-    , D.CopCalc  (D.copNormal "ceil-at")         copCeilAt
-    , D.CopCalc  (D.copNormal "ceil-per")        copCeilPer
+    , D.CopCalc  (D.copNormal "round-up")        copRoundUp
+    , D.CopCalc  (D.copNormal "round-up-at")     copRoundUpAt
+    , D.CopCalc  (D.copNormal "round-up-per")    copRoundUpPer
+
+    , D.CopCalc  (D.copNormal "trunc")           copRoundIn
+    , D.CopCalc  (D.copNormal "trunc-at")        copRoundInAt
+    , D.CopCalc  (D.copNormal "trunc-per")       copRoundInPer
+    , D.CopCalc  (D.copNormal "trunc-error")     copTruncError
+
+    , D.CopCalc  (D.copNormal "floor")           copRoundDown
+    , D.CopCalc  (D.copNormal "floor-at")        copRoundDownAt
+    , D.CopCalc  (D.copNormal "floor-per")       copRoundDownPer
+
+    , D.CopCalc  (D.copNormal "ceil")            copRoundUp
+    , D.CopCalc  (D.copNormal "ceil-at")         copRoundUpAt
+    , D.CopCalc  (D.copNormal "ceil-per")        copRoundUpPer
 
     -- ----------------------  add and subtract
 
@@ -153,22 +165,22 @@ copRoundEven     :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundEvenAt   :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundEvenPer  :: (D.CText c, D.CDec c) => D.CopCalc c
 
-copTrunc         :: (D.CText c, D.CDec c) => D.CopCalc c
-copTruncAt       :: (D.CText c, D.CDec c) => D.CopCalc c
-copTruncPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundIn       :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundInAt     :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundInPer    :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncError    :: (D.CText c, D.CDec c) => D.CopCalc c
 
 copRoundOut      :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundOutAt    :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundOutPer   :: (D.CText c, D.CDec c) => D.CopCalc c
 
-copFloor         :: (D.CText c, D.CDec c) => D.CopCalc c
-copFloorAt       :: (D.CText c, D.CDec c) => D.CopCalc c
-copFloorPer      :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundDown     :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundDownAt   :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundDownPer  :: (D.CText c, D.CDec c) => D.CopCalc c
 
-copCeil          :: (D.CText c, D.CDec c) => D.CopCalc c
-copCeilAt        :: (D.CText c, D.CDec c) => D.CopCalc c
-copCeilPer       :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundUp       :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundUpAt     :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundUpPer    :: (D.CText c, D.CDec c) => D.CopCalc c
 
 copRound         = round1 D.decimalRound
 copRoundAt       = round2 D.decimalRoundAt
@@ -178,22 +190,22 @@ copRoundEven     = round1 D.decimalRoundEven
 copRoundEvenAt   = round2 D.decimalRoundEvenAt
 copRoundEvenPer  = round2 D.decimalRoundEvenPer
 
-copTrunc         = round1 D.decimalTrunc
-copTruncAt       = round2 D.decimalTruncAt
-copTruncPer      = round2 D.decimalTruncPer
+copRoundIn       = round1 D.decimalTrunc
+copRoundInAt     = round2 D.decimalTruncAt
+copRoundInPer    = round2 D.decimalTruncPer
 copTruncError    = round1 D.decimalTruncError
 
 copRoundOut      = round1 D.decimalRoundOut
 copRoundOutAt    = round2 D.decimalRoundOutAt
 copRoundOutPer   = round2 D.decimalRoundOutPer
 
-copFloor         = round1 D.decimalFloor
-copFloorAt       = round2 D.decimalFloorAt
-copFloorPer      = round2 D.decimalFloorPer
+copRoundDown     = round1 D.decimalFloor
+copRoundDownAt   = round2 D.decimalFloorAt
+copRoundDownPer  = round2 D.decimalFloorPer
 
-copCeil          = round1 D.decimalCeil
-copCeilAt        = round2 D.decimalCeilAt
-copCeilPer       = round2 D.decimalCeilPer
+copRoundUp       = round1 D.decimalCeil
+copRoundUpAt     = round2 D.decimalCeilAt
+copRoundUpPer    = round2 D.decimalCeilPer
 
 round1 :: (D.CText c, D.CDec c) => B.Map D.Decimal -> [B.Ab c] -> B.Ab c
 round1 f arg = 
