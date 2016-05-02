@@ -62,13 +62,13 @@ decodeOctal = decodeBase 8
 -- | Decode decimals.
 --
 -- >>> decodeDecimal "11"
--- Right (Decimal { ratio = 11 % 1, fracl = 0 })
+-- Right Decimal (0) 11
 --
 -- >>> decodeDecimal "-12 345.00"
--- Right (Decimal { ratio = -12345 % 1, fracl = 2 })
+-- Right Decimal (2) -12345
 --
 -- >>> decodeDecimal "11.250 +"
--- Right (Decimal { ratio = 45 % 4, fracl = 3 })
+-- Right Decimal (3) 11 + 1 % 4
 
 decodeDecimal :: DecodeAb D.Decimal
 decodeDecimal = decodeBase 10

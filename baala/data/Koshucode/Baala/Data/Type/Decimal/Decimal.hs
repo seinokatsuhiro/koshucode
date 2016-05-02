@@ -58,7 +58,14 @@ type DecimalFracle = Int
 data Decimal = Decimal 
     { decimalFracle  :: DecimalFracle  -- ^ Length of the fractional part
     , decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
-    } deriving (Show)
+    }
+
+instance Show Decimal where
+    show Decimal {..} = "Decimal (" ++ fracle ++ ") " ++ ratio
+        where fracle = show decimalFracle
+              ratio  = show i ++ showF
+              showF  = if f == 0 then "" else " + " ++ show f
+              (i, f) = properFraction decimalRatio :: (DecimalInteger, DecimalRatio)
 
 -- | Change decimal fracle.
 decimalFracleSet :: DecimalFracle -> B.AbMap Decimal
