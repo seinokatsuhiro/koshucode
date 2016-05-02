@@ -142,50 +142,66 @@ ord = fromIntegral. Ch.ord
 
 -- ----------------------  Encode
 
+separator :: B.Map String
+separator ""            = ""
+separator [c]           = [c]
+separator cs@(' ' : _)  = cs
+separator cs            = ' ' : cs
+
 -- | Encode decimals.
+--
+-- >>> encodeDecimal $ D.realDecimal 0 (12345 D.%% 10)
+-- "1 234"
+--
+-- >>> encodeDecimal $ D.realDecimal 2 (12345 D.%% 10)
+-- "1 234.50"
+--
+-- >>> encodeDecimal $ D.realDecimal (-2) (12345 D.%% 10)
+-- "1 2oo"
+
 encodeDecimal :: D.Decimal -> String
-encodeDecimal = encodeDecimalWith (' ' :)
+encodeDecimal = encodeDecimalWith separator
 
 -- | Encode decimals without spaces.
 encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
 encodeDecimalWith :: B.Map String -> D.Decimal -> String
-encodeDecimalWith g D.Decimal { D.decimalFracl = l, D.decimalRatio = r }
-    | n >= 0     =       digits
-    | otherwise  = '-' : digits
-    where n     = R.numerator   r
-          den   = R.denominator r
-          digits = decimalDigits g l (decimalShift l n `div` den)
+encodeDecimalWith sep D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    decimalSign r $ case ratioDigits sep l $ abs r of
+                      (int, frac) | l > 0      -> int ++ "." ++ frac
+                                  | otherwise  -> int
 
-decimalShift :: D.DecimalFracl -> B.Map D.DecimalInteger
-decimalShift l n = (10 ^ abs l) * (abs n)
+decimalSign :: D.DecimalRatio -> B.Map String
+decimalSign r cs | r < 0      = '-' : cs
+                 | otherwise  = cs
 
-decimalDigits :: B.Map String -> D.DecimalFracl -> D.DecimalInteger -> String
-decimalDigits g l
-    | l == 0    = zero . reverse . intPart l
-    | otherwise = zero . reverse . fracPart l
-    where
-    fracPart :: D.DecimalFracl -> D.DecimalInteger -> String
-    fracPart 0 n = '.' : intPart 0 n
-    fracPart p n = case quotDigit n of
-                    (n', d) -> d : fracPart (p - 1) n'
+ratioDigits :: (Integral n) => B.Map String -> D.DecimalFracl -> R.Ratio n -> (String, String)
+ratioDigits sep l r = case properFraction r of
+                        (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-    intPart :: D.DecimalFracl -> D.DecimalInteger -> String
-    intPart _ 0       = ""
-    intPart 3 n       = g $ intPart 0 n
-    intPart p n       = case quotDigit n of
-                          (n', d) -> d : intPart (p + 1) n'
+integerDigits :: B.Map String -> D.DecimalFracl -> Integer -> String
+integerDigits sep = loop 0 "" where
+    loop :: Int -> String -> D.DecimalFracl -> Integer -> String
+    loop n cs l i
+        | i == 0  = if null cs then "0" else cs
+        | n == 3  = loop 0 (sep cs) l i
+        | i > 0   = case i `quotRem` 10 of
+                      (q, r) -> loop (n + 1) (up l r : cs) (l + 1) q
+        | otherwise = cs
 
-    zero ""           = "0"
-    zero ds@('.' : _) = '0' : ds
-    zero ds           = ds
+    up l r | l < 0      = 'o'
+           | otherwise  = Ch.intToDigit (fromInteger r)
 
-quotDigit :: D.DecimalInteger -> (D.DecimalInteger, Char)
-quotDigit n = case quotRem n 10 of
-                (n', d) -> (n', Ch.chr $ fromInteger d + Ch.ord '0')
+fracDigits :: (Integral n) => B.Map String -> D.DecimalFracl -> R.Ratio n -> String
+fracDigits sep = loop (0 :: Int) where
+    loop n l 0 = fill n l
+    loop _ 0 _ = ""
+    loop 3 l r = sep $ loop 0 l r
+    loop n l r = case properFraction $ 10 * r of
+                   (i, r') -> Ch.intToDigit i : loop (n + 1) (l - 1) r'
 
--- map quotDigit [0..9]
--- map quotDigit [10..19]
--- map quotDigit [100..109]
+    fill 3 l              = sep $ fill 0 l
+    fill n l | l > 0      = '0' : fill (n + 1) (l - 1)
+             | otherwise  = ""
 
