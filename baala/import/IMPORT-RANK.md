@@ -614,7 +614,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    138 judges
+**    139 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Base"
@@ -705,12 +705,12 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Decimal.Decimal"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Decimal.Fraction"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Decimal.Rational"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Coder"   /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Decimal"  /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Decimal"  /import "Koshucode.Baala.Base"
-
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"  /import "Koshucode.Baala.Base"
@@ -1463,18 +1463,18 @@ Command `./import-rank.k ../base/data/IMPORT.k ../calculator/data/IMPORT.k ../co
 |-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Syntax.Symbol.Message"
 |-- IMPORT-RANK  /rank 15  /module "Koshucode.Baala.Syntax.Token.Message"
 
-|-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Type.Decimal.Coder"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Type.Decimal.Fraction"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Data.Type.Time.Date"
 |-- IMPORT-RANK  /rank 16  /module "Koshucode.Baala.Syntax.Symbol.Next"
-|-- IMPORT-RANK  /rank 17  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"
+|-- IMPORT-RANK  /rank 17  /module "Koshucode.Baala.Data.Type.Decimal.Coder"
+|-- IMPORT-RANK  /rank 17  /module "Koshucode.Baala.Data.Type.Time.Time"
 *** 50
 
-|-- IMPORT-RANK  /rank 17  /module "Koshucode.Baala.Data.Type.Time.Time"
 |-- IMPORT-RANK  /rank 17  /module "Koshucode.Baala.Syntax.Symbol.Short"
-|-- IMPORT-RANK  /rank 18  /module "Koshucode.Baala.Data.Type.Decimal"
+|-- IMPORT-RANK  /rank 18  /module "Koshucode.Baala.Data.Type.Decimal.BinaryAb"
 |-- IMPORT-RANK  /rank 18  /module "Koshucode.Baala.Data.Type.Time"
 |-- IMPORT-RANK  /rank 18  /module "Koshucode.Baala.Syntax.Symbol"
+|-- IMPORT-RANK  /rank 19  /module "Koshucode.Baala.Data.Type.Decimal"
 
 |-- IMPORT-RANK  /rank 19  /module "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT-RANK  /rank 20  /module "Koshucode.Baala.Syntax.Token.Bracket"
