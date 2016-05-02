@@ -65,11 +65,11 @@ treesToDigits = concatDigits B.<=< treesToTexts False
 
 concatDigits :: [String] -> B.Ab String
 concatDigits = first where
-    first ((c : cs) : xs) | c `elem` "+-0123456789" = loop [[c]] $ cs : xs
+    first ((c : cs) : xs) | c `elem` "+-0123456789o" = loop [[c]] $ cs : xs
     first _ = Msg.nothing
 
     loop ss [] = Right $ concat $ reverse ss
-    loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
+    loop ss (w : xs) | all (`elem` "0123456789.o") w = loop (w:ss) xs
     loop _ _ = Msg.nothing
 
 

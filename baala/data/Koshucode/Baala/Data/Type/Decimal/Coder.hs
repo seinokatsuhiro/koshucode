@@ -95,8 +95,16 @@ decodeBase base ccs = headPart id ccs where
             Just i           -> do n' <- up c i n
                                    intPart  sign n' cs
             Nothing | c == ' '  -> intPart  sign n cs
+                    | c == 'o'  -> ooPart   sign (-1) n cs
                     | c == '.'  -> fracPart sign n 0 cs
                     | otherwise -> tailPart sign (n, 0) (c:cs)
+
+    ooPart :: Sign -> D.DecimalFracl -> D.DecimalInteger-> DecodeAb D.Decimal
+    ooPart sign l n [] = decimal l (sign n)
+    ooPart sign l n (c:cs)
+        | c == ' '   = ooPart   sign l n cs
+        | c == 'o'   = ooPart   sign (l - 1) n cs
+        | otherwise  = tailPart sign (n, l) (c:cs)
 
     fracPart :: Sign -> D.DecimalInteger -> D.DecimalFracl -> DecodeAb D.Decimal
     fracPart sign n f [] = decimal f (sign n)
@@ -120,18 +128,17 @@ decodeBase base ccs = headPart id ccs where
     up c i n | i < base   = Right $ base * n + i
              | otherwise  = Msg.tooLargeDigit [c]
 
-    decimal f n = Right $ D.Decimal { D.decimalFracl  = f
-                                    , D.decimalRatio  = r f }
-        where r 0 = n D.%% 1
-              r 1 = n D.%% 10
-              r 2 = n D.%% 100
-              r _ = n D.%% (base ^ f)
+    decimal l n = Right $ D.Decimal { D.decimalFracl  = l
+                                    , D.decimalRatio  = r l }
+        where n'  = n D.%% 1
+              r 0 = n'
+              r _ = n' * D.ratioFracl l
 
 digitToInteger :: Char -> Maybe Integer
 digitToInteger c
     | between '0' '9'  = Just $ i - ord '0'
-    | between 'a' 'z'  = Just $ i - ord 'a' + 10
-    | between 'A' 'Z'  = Just $ i - ord 'A' + 10
+    | between 'a' 'f'  = Just $ i - ord 'a' + 10
+    | between 'A' 'F'  = Just $ i - ord 'A' + 10
     | otherwise        = Nothing
     where between a z = c >= a && c <= z
           i = ord c
