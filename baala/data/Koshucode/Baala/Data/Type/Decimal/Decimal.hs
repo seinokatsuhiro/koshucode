@@ -130,33 +130,44 @@ decimalRatioEq x y = decimalRatio x == decimalRatio y
 decimalRatioCompare :: Decimal -> Decimal -> Ordering
 decimalRatioCompare x y = decimalRatio x `compare` decimalRatio y
 
+-- | Decompose decimal into integer part and fraction part.
 decimalIntFrac :: (Integral n) => Decimal -> (n, Decimal)
 decimalIntFrac d = (i, dec f) where
     (i, f) = properFraction $ decimalRatio d
     dec r  = decimalRatioMap (const r) d
 
+-- Basic
+
 instance Eq Decimal where
-    (==) = decimalRatioEq
+    (==)           = decimalRatioEq
 
 instance Ord Decimal where
-    compare = decimalRatioCompare
+    compare        = decimalRatioCompare
+
+instance Enum Decimal where
+    toEnum         = fromIntegral
+    fromEnum       = fromInteger . truncate
+    succ d         = d + 1
+    pred d         = d - 1
+
+-- Numeric
 
 instance Num Decimal where
-    (+)          = decimalBin max (+)
-    (-)          = decimalBin max (-)
-    (*)          = decimalBin (+) (*)
-    negate       = decimalRatioMap negate
-    abs          = decimalRatioMap abs
-    signum       = realDecimal 0 . signum . decimalRatio
-    fromInteger  = integralDecimal
+    (+)            = decimalBin max (+)
+    (-)            = decimalBin max (-)
+    (*)            = decimalBin (+) (*)
+    negate         = decimalRatioMap negate
+    abs            = decimalRatioMap abs
+    signum         = realDecimal 0 . signum . decimalRatio
+    fromInteger    = realDecimal 0
 
 instance Real Decimal where
     toRational = decimalRatio
 
 instance Fractional Decimal where
-    (/)           = decimalBin (+) (/)
-    recip         = decimalRatioMap recip
-    fromRational  = realDecimal 0
+    (/)            = decimalBin (+) (/)
+    recip          = decimalRatioMap recip
+    fromRational   = realDecimal 0
 
 instance RealFrac Decimal where
     properFraction = decimalIntFrac
