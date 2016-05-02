@@ -44,6 +44,7 @@ Please see examples or elementary book.
 Documentations of software libraries at
 
 * [koshucode-baala-base]
+* [koshucode-baala-syntax]
 * [koshucode-baala-data]
 * [koshucode-baala-core]
 * [koshucode-baala-writer]
@@ -70,6 +71,7 @@ There are many bugs and potentials.
 [abc-of-koshucode]:           https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
 
 [koshucode-baala-base]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
+[koshucode-baala-syntax]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/
 [koshucode-baala-data]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/
 [koshucode-baala-core]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
 [koshucode-baala-writer]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/

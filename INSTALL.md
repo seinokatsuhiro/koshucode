@@ -76,17 +76,20 @@ related libraries and tools like Cabal.
 Install koshu command
 ---------------------------------
 
-There are eight Cabal packages.
+There are eleven Cabal packages.
 
  1. [`koshucode-baala-base`](baala/base/koshucode-baala-base.cabal)
- 2. [`koshucode-baala-data`](baala/data/koshucode-baala-data.cabal)
- 3. [`koshucode-baala-core`](baala/core/koshucode-baala-core.cabal)
- 4. [`koshucode-baala-writer`](baala/writer/koshucode-baala-writer.cabal)
- 5. [`koshucode-baala-operator`](baala/operator/koshucode-baala-operator.cabal)
- 6. [`koshucode-baala-content`](baala/content/koshucode-baala-content.cabal)
- 7. [`koshucode-baala-calculator`](baala/calculator/koshucode-baala-calculator.cabal)
+ 2. [`koshucode-baala-syntax`](baala/syntax/koshucode-baala-syntax.cabal)
+ 3. [`koshucode-baala-data`](baala/data/koshucode-baala-data.cabal)
+ 4. [`koshucode-baala-core`](baala/core/koshucode-baala-core.cabal)
+ 5. [`koshucode-baala-writer`](baala/writer/koshucode-baala-writer.cabal)
+ 6. [`koshucode-baala-rop-flat`](baala/rop-flat/koshucode-baala-rop-flat.cabal)
+ 7. [`koshucode-baala-rop-nested`](baala/rop-nested/koshucode-baala-rop-nested.cabal)
+ 8. [`koshucode-baala-rop-cox`](baala/rop-cox/koshucode-baala-rop-cox.cabal)
+ 9. [`koshucode-baala-cop`](baala/cop/koshucode-baala-cop.cabal)
+ 10. [`koshucode-baala-calculator`](baala/calculator/koshucode-baala-calculator.cabal)
      contains [`koshu.hs`](baala/calculator/koshu.hs)
- 8. [`koshucode-baala-toolkit`](baala/toolkit/koshucode-baala-toolkit.cabal)
+ 11. [`koshucode-baala-toolkit`](baala/toolkit/koshucode-baala-toolkit.cabal)
 
 To build and install the `koshu` command inside sandbox, you can use
 [`cabal-sandbox-install.sh`](baala/calculator/cabal-sandbox-install.sh).
