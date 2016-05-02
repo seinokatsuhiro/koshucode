@@ -18,6 +18,8 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
     -- ** Truncate
     decimalTrunc, decimalTruncAt, decimalTruncPer,
     decimalTruncError,
+    -- ** Round out
+    decimalRoundOut, decimalRoundOutAt, decimalRoundOutPer,
     -- ** Floor
     decimalFloor, decimalFloorAt, decimalFloorPer,
     -- ** Ceil
@@ -132,6 +134,26 @@ decimalTruncPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 decimalTruncError :: B.Map D.Decimal
 decimalTruncError d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
     updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracl l)
+
+-- ----------------------  Round out
+
+-- | Round out (toward infinity) decimal to even per self fractional length.
+decimalRoundOut :: B.Map D.Decimal
+decimalRoundOut d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioRoundOutAt l r
+
+-- | Round out (toward infinity) decimal to even per fractional length.
+decimalRoundOutAt :: B.Bin D.Decimal
+decimalRoundOutAt D.Decimal { D.decimalRatio = l }
+                 d@D.Decimal { D.decimalRatio = r } =
+    let l' = fst $ properFraction l
+    in updateDecimal d l' $ D.ratioRoundOutAt l' r
+
+-- | Round out (toward infinity) decimal to even per unit decimal.
+decimalRoundOutPer :: B.Bin D.Decimal
+decimalRoundOutPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+                  d@D.Decimal { D.decimalRatio = r } =
+    updateDecimal d l $ D.ratioRoundOutPer per r
 
 -- ----------------------  Floor
 

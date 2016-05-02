@@ -54,6 +54,10 @@ copsArith =
     , D.CopCalc  (D.copNormal "trunc-per")       copTruncPer
     , D.CopCalc  (D.copNormal "trunc-error")     copTruncError
 
+    , D.CopCalc  (D.copNormal "round-out")       copRoundOut
+    , D.CopCalc  (D.copNormal "round-out-at")    copRoundOutAt
+    , D.CopCalc  (D.copNormal "round-out-per")   copRoundOutPer
+
     , D.CopCalc  (D.copNormal "floor")           copFloor
     , D.CopCalc  (D.copNormal "floor-at")        copFloorAt
     , D.CopCalc  (D.copNormal "floor-per")       copFloorPer
@@ -154,6 +158,10 @@ copTruncAt       :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncPer      :: (D.CText c, D.CDec c) => D.CopCalc c
 copTruncError    :: (D.CText c, D.CDec c) => D.CopCalc c
 
+copRoundOut      :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundOutAt    :: (D.CText c, D.CDec c) => D.CopCalc c
+copRoundOutPer   :: (D.CText c, D.CDec c) => D.CopCalc c
+
 copFloor         :: (D.CText c, D.CDec c) => D.CopCalc c
 copFloorAt       :: (D.CText c, D.CDec c) => D.CopCalc c
 copFloorPer      :: (D.CText c, D.CDec c) => D.CopCalc c
@@ -174,6 +182,10 @@ copTrunc         = round1 D.decimalTrunc
 copTruncAt       = round2 D.decimalTruncAt
 copTruncPer      = round2 D.decimalTruncPer
 copTruncError    = round1 D.decimalTruncError
+
+copRoundOut      = round1 D.decimalRoundOut
+copRoundOutAt    = round2 D.decimalRoundOutAt
+copRoundOutPer   = round2 D.decimalRoundOutPer
 
 copFloor         = round1 D.decimalFloor
 copFloorAt       = round2 D.decimalFloorAt

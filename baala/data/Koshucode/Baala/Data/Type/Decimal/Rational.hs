@@ -11,6 +11,7 @@ module Koshucode.Baala.Data.Type.Decimal.Rational
     ratioRoundAt, ratioRoundEvenAt,
     ratioRoundPer, ratioRoundEvenPer,
     ratioTruncAt, ratioTruncPer,
+    ratioRoundOutAt, ratioRoundOutPer,
 
     -- * Floor and ceiling
     ratioFloorAt, ratioFloorPer,
@@ -92,6 +93,16 @@ ratioTruncAt = ratioTruncPer . ratioFracl
 ratioTruncPer :: (Integral n) => B.Bin (R.Ratio n)
 ratioTruncPer = ratioRoundPerBy conv where
     conv _ _ trunc = trunc
+
+-- | Round out (toward infinity) rational number at decimal fractional length.
+ratioRoundOutAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
+ratioRoundOutAt = ratioRoundOutPer . ratioFracl
+
+-- | Round out (toward infinity) rational number per unit rational number.
+ratioRoundOutPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioRoundOutPer per = ratioRoundPerBy conv per where
+    conv _ frac trunc | frac > 0  = trunc + per
+                      | otherwise = trunc
 
 
 -- --------------------------------------------  Floor and ceiling
