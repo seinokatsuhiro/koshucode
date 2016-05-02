@@ -4,8 +4,8 @@
 -- | Arithmetics on decimals.
 
 module Koshucode.Baala.Data.Type.Decimal.BinaryAb
-  ( -- * Fracl
-    FraclSide (..),
+  ( -- * Fracle
+    FracleSide (..),
 
     -- * Binary operator
     decimalAdd, decimalSum, decimalSub,
@@ -20,13 +20,13 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
 import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
 
--- ----------------------  Fracl
+-- ----------------------  Fracle
 
-data FraclSide
-    = FraclLong       -- ^ Select longer fracl
-    | FraclLeft       -- ^ Select left fracl
-    | FraclRight      -- ^ Select right fracl
-    | FraclStrict     -- ^ Check same fracls
+data FracleSide
+    = FracleLong       -- ^ Select longer fracle
+    | FracleLeft       -- ^ Select left fracle
+    | FracleRight      -- ^ Select right fracle
+    | FracleStrict     -- ^ Check same fracles
       deriving (Show, Ord, Eq)
 
 constLeft :: a -> b -> a
@@ -51,19 +51,19 @@ decimalBinAbRight = D.decimalBinAb constRight
 -- ----------------------  Binary operator
 
 -- | Addition: /x/ + /y/
-decimalAdd :: FraclSide -> D.BinAbDecimal
-decimalAdd FraclLong    = decimalAddLong
-decimalAdd FraclLeft    = decimalBinAbLeft  (+)
-decimalAdd FraclRight   = decimalBinAbRight (+)
-decimalAdd FraclStrict  = decimalAddStrict
+decimalAdd :: FracleSide -> D.BinAbDecimal
+decimalAdd FracleLong    = decimalAddLong
+decimalAdd FracleLeft    = decimalBinAbLeft  (+)
+decimalAdd FracleRight   = decimalBinAbRight (+)
+decimalAdd FracleStrict  = decimalAddStrict
 
--- | Addition with 'FraclLong'.
+-- | Addition with 'FracleLong'.
 decimalAddLong :: D.BinAbDecimal
 decimalAddLong x y = Right $ x + y
 
 decimalAddStrict :: D.BinAbDecimal
-decimalAddStrict d1@D.Decimal { D.decimalFracl = f1 }
-                 d2@D.Decimal { D.decimalFracl = f2 }
+decimalAddStrict d1@D.Decimal { D.decimalFracle = f1 }
+                 d2@D.Decimal { D.decimalFracle = f2 }
     | f1 == f2   = decimalAddLong d1 d2
     | otherwise  = Msg.heteroDecimal txt1 txt2
     where txt1   = D.encodeDecimal d1
@@ -74,8 +74,8 @@ decimalSum :: [D.Decimal] -> B.Ab D.Decimal
 decimalSum = Right . foldr (+) 0
 
 -- | Subtruction: /x/ - /y/
-decimalSub :: FraclSide -> D.BinAbDecimal
-decimalSub fracl x y = decimalAdd fracl x (- y)
+decimalSub :: FracleSide -> D.BinAbDecimal
+decimalSub f x y = decimalAdd f x (- y)
 
 -- | Multiplication: /x/ × /y/
 decimalMul :: D.BinAbDecimal

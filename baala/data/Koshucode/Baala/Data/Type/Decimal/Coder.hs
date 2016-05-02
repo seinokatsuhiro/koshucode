@@ -100,14 +100,14 @@ decodeBase base ccs = headPart id ccs where
                     | c == '.'  -> fracPart sign n 0 cs
                     | otherwise -> tailPart sign (n, 0) (c:cs)
 
-    ooPart :: Sign -> D.DecimalFracl -> D.DecimalInteger-> DecodeAb D.Decimal
+    ooPart :: Sign -> D.DecimalFracle -> D.DecimalInteger-> DecodeAb D.Decimal
     ooPart sign l n [] = decimal l (sign n)
     ooPart sign l n (c:cs)
         | c == ' '   = ooPart   sign l n cs
         | c == 'o'   = ooPart   sign (l - 1) n cs
         | otherwise  = tailPart sign (n, l) (c:cs)
 
-    fracPart :: Sign -> D.DecimalInteger -> D.DecimalFracl -> DecodeAb D.Decimal
+    fracPart :: Sign -> D.DecimalInteger -> D.DecimalFracle -> DecodeAb D.Decimal
     fracPart sign n f [] = decimal f (sign n)
     fracPart sign n f (c:cs)
         = case digitToInteger c of
@@ -116,7 +116,7 @@ decodeBase base ccs = headPart id ccs where
             Nothing | c == ' '  -> fracPart sign n f cs
                     | otherwise -> tailPart sign (n, f) (c:cs)
 
-    tailPart :: Sign -> (D.DecimalInteger, D.DecimalFracl) -> DecodeAb D.Decimal
+    tailPart :: Sign -> (D.DecimalInteger, D.DecimalFracle) -> DecodeAb D.Decimal
     tailPart sign (n, f) [] = decimal f (sign n)
     tailPart sign dec (c:cs) = case c of
         ' '  -> tailPart sign  dec cs
@@ -129,11 +129,11 @@ decodeBase base ccs = headPart id ccs where
     up c i n | i < base   = Right $ base * n + i
              | otherwise  = Msg.tooLargeDigit [c]
 
-    decimal l n = Right $ D.Decimal { D.decimalFracl  = l
+    decimal l n = Right $ D.Decimal { D.decimalFracle = l
                                     , D.decimalRatio  = r l }
         where n'  = n D.%% 1
               r 0 = n'
-              r _ = n' * D.ratioFracl l
+              r _ = n' * D.ratioFracle l
 
 digitToInteger :: Char -> Maybe Integer
 digitToInteger c
@@ -176,7 +176,7 @@ encodeDecimalCompact = encodeDecimalWith id
 
 encodeDecimalWith :: B.Map String -> D.Decimal -> String
 encodeDecimalWith sep = encode . D.decimalRoundOut where
-    encode D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+    encode D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
                           (int, frac) | l > 0      -> int ++ "." ++ frac
                                       | otherwise  -> int
@@ -185,13 +185,13 @@ decimalSign :: D.DecimalRatio -> B.Map String
 decimalSign r cs | r < 0      = '-' : cs
                  | otherwise  = cs
 
-ratioDigits :: (Integral n) => B.Map String -> D.DecimalFracl -> R.Ratio n -> (String, String)
+ratioDigits :: (Integral n) => B.Map String -> D.DecimalFracle -> R.Ratio n -> (String, String)
 ratioDigits sep l r = case properFraction r of
                         (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-integerDigits :: B.Map String -> D.DecimalFracl -> Integer -> String
+integerDigits :: B.Map String -> D.DecimalFracle -> Integer -> String
 integerDigits sep = loop 0 "" where
-    loop :: Int -> String -> D.DecimalFracl -> Integer -> String
+    loop :: Int -> String -> D.DecimalFracle -> Integer -> String
     loop n cs l i
         | i == 0  = if null cs then "0" else cs
         | n == 3  = loop 0 (sep cs) l i
@@ -202,7 +202,7 @@ integerDigits sep = loop 0 "" where
     up l r | l < 0      = 'o'
            | otherwise  = Ch.intToDigit (fromInteger r)
 
-fracDigits :: (Integral n) => B.Map String -> D.DecimalFracl -> R.Ratio n -> String
+fracDigits :: (Integral n) => B.Map String -> D.DecimalFracle -> R.Ratio n -> String
 fracDigits sep = loop (0 :: Int) where
     loop n l 0 = fill n l
     loop _ 0 _ = ""

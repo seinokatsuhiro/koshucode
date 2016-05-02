@@ -5,7 +5,7 @@
 --
 --   A decimal number in Koshucode is internally represented
 --   using a rational number ('decimalRatio')
---   with a length of fractional part ('decimalFracl') .
+--   with a length of fractional part ('decimalFracle') .
 --   For example, the decimal number 11.250 correnponds to
 --   the rational number 45/4 with the fraction length 3.
 --
@@ -24,13 +24,13 @@
 module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Decimal
     DecimalInteger, DecimalRatio,
-    DecimalFracl, Decimal (..),
-    decimalFraclSet,
+    DecimalFracle, Decimal (..),
+    decimalFracleSet,
     decimalRatioMap,
 
     -- * Binary
     BinDecimal, BinAbDecimal,
-    BinFracl, BinRatio,
+    BinFracle, BinRatio,
     decimalBin, decimalBinAb,
 
     -- * Conversion
@@ -52,17 +52,17 @@ type DecimalInteger = Integer
 type DecimalRatio = R.Ratio DecimalInteger
 
 -- | Length of fractional part.
-type DecimalFracl = Int
+type DecimalFracle = Int
 
 -- | Decimal number.
 data Decimal = Decimal 
-    { decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
+    { decimalFracle  :: DecimalFracle  -- ^ Length of the fractional part
     , decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
     } deriving (Show)
 
--- | Change decimal fracl.
-decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
-decimalFraclSet f d@Decimal {..} = Right $ d { decimalFracl = f }
+-- | Change decimal fracle.
+decimalFracleSet :: DecimalFracle -> B.AbMap Decimal
+decimalFracleSet f d@Decimal {..} = Right $ d { decimalFracle = f }
 
 -- | Map function to rational number in decimal.
 decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
@@ -77,23 +77,23 @@ type BinDecimal = B.Bin Decimal
 -- | Abortable binary operation for two decimals.
 type BinAbDecimal = B.BinAb Decimal
 
--- | Combinate fracl.
-type BinFracl = B.Bin DecimalFracl
+-- | Combinate fracle.
+type BinFracle = B.Bin DecimalFracle
 
 -- | Combinate rational number.
 type BinRatio = B.Bin DecimalRatio
 
 -- | Binary operation for two decimals.
-decimalBin :: BinFracl -> BinRatio -> BinDecimal
-decimalBin fracl bin
-      Decimal { decimalFracl = f1, decimalRatio = r1 }
-      Decimal { decimalFracl = f2, decimalRatio = r2 }
-    = Decimal { decimalFracl  = fracl f1 f2
+decimalBin :: BinFracle -> BinRatio -> BinDecimal
+decimalBin frac bin
+      Decimal { decimalFracle = f1, decimalRatio = r1 }
+      Decimal { decimalFracle = f2, decimalRatio = r2 }
+    = Decimal { decimalFracle = frac f1 f2
               , decimalRatio  = bin r1 r2 }
 
 -- | Abortable binary operation for two decimals.
-decimalBinAb :: BinFracl -> BinRatio -> BinAbDecimal
-decimalBinAb fracl bin x y = Right $ decimalBin fracl bin x y
+decimalBinAb :: BinFracle -> BinRatio -> BinAbDecimal
+decimalBinAb frac bin x y = Right $ decimalBin frac bin x y
 
 
 -- --------------------------------------------  Conversion
@@ -103,8 +103,8 @@ integralDecimal :: (Integral n) => n -> Decimal
 integralDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
-realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
-realDecimal f n = Decimal { decimalFracl  = f
+realDecimal :: (Real n) => DecimalFracle -> n -> Decimal
+realDecimal f n = Decimal { decimalFracle = f
                           , decimalRatio  = toRational n }
 
 -- | Convert decimal number to fractional number.

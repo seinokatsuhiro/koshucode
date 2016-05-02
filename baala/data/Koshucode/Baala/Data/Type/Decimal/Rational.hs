@@ -5,7 +5,7 @@
 module Koshucode.Baala.Data.Type.Decimal.Rational
   ( -- * Shorthand
     (%%), (//.), (//),
-    ratioHalf, ratioFracl,
+    ratioHalf, ratioFracle,
 
     -- * Round and truncate
     ratioRoundAt, ratioRoundEvenAt,
@@ -45,8 +45,8 @@ ratioHalf :: (Integral n) => R.Ratio n
 ratioHalf = 1 R.% 2
 
 -- | Unit rational number for decimal fractional length.
-ratioFracl :: (Integral i, Integral n) => i -> R.Ratio n
-ratioFracl l = 10 ^^ (- l)
+ratioFracle :: (Integral i, Integral n) => i -> R.Ratio n
+ratioFracle l = 10 ^^ (- l)
 
 
 -- --------------------------------------------  Round and truncate
@@ -64,11 +64,11 @@ ratioRoundPerBy conv per r = signum r * conv int frac trunc where
 
 -- | Round rational number at decimal fractional length.
 ratioRoundAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioRoundAt = ratioRoundPer . ratioFracl
+ratioRoundAt = ratioRoundPer . ratioFracle
 
 -- | Round-to-even rational number at decimal fractional length.
 ratioRoundEvenAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioRoundEvenAt = ratioRoundEvenPer . ratioFracl
+ratioRoundEvenAt = ratioRoundEvenPer . ratioFracle
 
 -- | Round rational number per unit rational number.
 ratioRoundPer :: (Integral n) => B.Bin (R.Ratio n)
@@ -87,7 +87,7 @@ ratioRoundEvenPer per = ratioRoundPerBy conv per where
 
 -- | Truncate rational number at decimal fractional length.
 ratioTruncAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioTruncAt = ratioTruncPer . ratioFracl
+ratioTruncAt = ratioTruncPer . ratioFracle
 
 -- | Truncate rational number per unit rational number.
 ratioTruncPer :: (Integral n) => B.Bin (R.Ratio n)
@@ -96,7 +96,7 @@ ratioTruncPer = ratioRoundPerBy conv where
 
 -- | Round out (toward infinity) rational number at decimal fractional length.
 ratioRoundOutAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioRoundOutAt = ratioRoundOutPer . ratioFracl
+ratioRoundOutAt = ratioRoundOutPer . ratioFracle
 
 -- | Round out (toward infinity) rational number per unit rational number.
 ratioRoundOutPer :: (Integral n) => B.Bin (R.Ratio n)
@@ -118,7 +118,7 @@ ratioFloorPerBy conv per r = conv frac trunc where
 
 -- | Floor rational number at decimal fractional length.
 ratioFloorAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioFloorAt = ratioFloorPer . ratioFracl
+ratioFloorAt = ratioFloorPer . ratioFracle
 
 -- | Floor rational number per unit rational number.
 ratioFloorPer :: (Integral n) => B.Bin (R.Ratio n)
@@ -128,7 +128,7 @@ ratioFloorPer per = ratioFloorPerBy conv per where
 
 -- | Ceiling rational number at decimal fractional length.
 ratioCeilAt :: (Integral l, Integral n) => l -> B.Map (R.Ratio n)
-ratioCeilAt = ratioCeilPer . ratioFracl
+ratioCeilAt = ratioCeilPer . ratioFracle
 
 -- | Ceiling rational number per unit rational number.
 ratioCeilPer :: (Integral n) => B.Bin (R.Ratio n)

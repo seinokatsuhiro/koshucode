@@ -80,25 +80,25 @@ copsArith =
 
     -- ----------------------  add and subtract
 
-    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FraclLong
-    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.FraclLeft
-    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.FraclRight
-    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.FraclStrict
+    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FracleLong
+    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.FracleLeft
+    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.FracleRight
+    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.FracleStrict
 
-    , D.CopCalc  (D.copNormal "+")    $ copPlus D.FraclLong
-    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.FraclLeft
-    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.FraclRight
-    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.FraclStrict
+    , D.CopCalc  (D.copNormal "+")    $ copPlus D.FracleLong
+    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.FracleLeft
+    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.FracleRight
+    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.FracleStrict
 
-    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FraclLong
-    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FraclLeft
-    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FraclRight
-    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FraclStrict
+    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FracleLong
+    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FracleLeft
+    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FracleRight
+    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FracleStrict
 
-    , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.FraclLong
-    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.FraclLeft
-    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.FraclRight
-    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.FraclStrict
+    , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.FracleLong
+    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.FracleLeft
+    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.FracleRight
+    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.FracleStrict
 
     -- ----------------------  multiply and divide
 
@@ -219,14 +219,14 @@ round2 f arg =
 
 -- --------------------------------------------  Add and subtract
 
-copPlus :: (D.CText c, D.CDec c) => D.FraclSide -> D.CopCalc c
+copPlus :: (D.CText c, D.CDec c) => D.FracleSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
     loop [] = Right 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       (D.decimalAdd pr) n' m'
 
-copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.FraclSide -> D.CopCalc c
+copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.FracleSide -> D.CopCalc c
 copPlus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd       (D.gClock xc) (D.gClock yc)
@@ -248,7 +248,7 @@ copMul xs = fmap D.pDec $ loop xs where
                       m' <- loop m
                       D.decimalMul n' m'
 
-copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.FraclSide -> D.CopCalc c
+copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.FracleSide -> D.CopCalc c
 copMinus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalSub pr (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockSub      (D.gClock xc) (D.gClock yc)

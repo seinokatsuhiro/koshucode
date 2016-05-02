@@ -66,15 +66,15 @@ decimalDenom = R.denominator . D.decimalRatio
 
 -- --------------------------------------------  Round
 
-updateDecimal :: D.Decimal -> D.DecimalFracl -> D.DecimalRatio -> D.Decimal
-updateDecimal d l r = d { D.decimalFracl = l
-                        , D.decimalRatio = r }
+updateDecimal :: D.Decimal -> D.DecimalFracle -> D.DecimalRatio -> D.Decimal
+updateDecimal d l r = d { D.decimalFracle = l
+                        , D.decimalRatio  = r }
 
 -- ----------------------  Round
 
 -- | Round decimal per self fractional length.
 decimalRound :: B.Map D.Decimal
-decimalRound d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalRound d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundAt l r
 
 -- | Round decimal per fractional length.
@@ -86,7 +86,7 @@ decimalRoundAt D.Decimal { D.decimalRatio = l }
 
 -- | Round decimal per unit decimal.
 decimalRoundPer :: B.Bin D.Decimal
-decimalRoundPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalRoundPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundPer per r
 
@@ -94,7 +94,7 @@ decimalRoundPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- | Round decimal to even per self fractional length.
 decimalRoundEven :: B.Map D.Decimal
-decimalRoundEven d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalRoundEven d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundEvenAt l r
 
 -- | Round decimal to even per fractional length.
@@ -106,7 +106,7 @@ decimalRoundEvenAt D.Decimal { D.decimalRatio = l }
 
 -- | Round decimal to even per unit decimal.
 decimalRoundEvenPer :: B.Bin D.Decimal
-decimalRoundEvenPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalRoundEvenPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
                   d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundEvenPer per r
 
@@ -114,7 +114,7 @@ decimalRoundEvenPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- | Truncate decimal per self fractional length.
 decimalTrunc :: B.Map D.Decimal
-decimalTrunc d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalTrunc d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncAt l r
 
 -- | Truncate decimal per fractional length.
@@ -126,20 +126,20 @@ decimalTruncAt D.Decimal { D.decimalRatio = l }
 
 -- | Truncate decimal per unit decimal.
 decimalTruncPer :: B.Bin D.Decimal
-decimalTruncPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalTruncPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncPer per r
 
 -- | Truncation error of decimal.
 decimalTruncError :: B.Map D.Decimal
-decimalTruncError d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
-    updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracl l)
+decimalTruncError d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
+    updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracle l)
 
 -- ----------------------  Round out
 
 -- | Round out (toward infinity) decimal to even per self fractional length.
 decimalRoundOut :: B.Map D.Decimal
-decimalRoundOut d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalRoundOut d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundOutAt l r
 
 -- | Round out (toward infinity) decimal to even per fractional length.
@@ -151,7 +151,7 @@ decimalRoundOutAt D.Decimal { D.decimalRatio = l }
 
 -- | Round out (toward infinity) decimal to even per unit decimal.
 decimalRoundOutPer :: B.Bin D.Decimal
-decimalRoundOutPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalRoundOutPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
                   d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundOutPer per r
 
@@ -159,7 +159,7 @@ decimalRoundOutPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- | Floor decimal per self fractional length.
 decimalFloor :: B.Map D.Decimal
-decimalFloor d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalFloor d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioFloorAt l r
 
 -- | Floor decimal per fractional length.
@@ -171,7 +171,7 @@ decimalFloorAt D.Decimal { D.decimalRatio = l }
 
 -- | Floor decimal per unit decimal.
 decimalFloorPer :: B.Bin D.Decimal
-decimalFloorPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalFloorPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioFloorPer per r
 
@@ -179,7 +179,7 @@ decimalFloorPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
 
 -- | Ceiling decimal per self fractional length.
 decimalCeil :: B.Map D.Decimal
-decimalCeil d@D.Decimal { D.decimalFracl = l, D.decimalRatio = r } =
+decimalCeil d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioCeilAt l r
 
 -- | Ceiling decimal per fractional length.
@@ -191,7 +191,7 @@ decimalCeilAt D.Decimal { D.decimalRatio = l }
 
 -- | Ceiling decimal per unit decimal.
 decimalCeilPer :: B.Bin D.Decimal
-decimalCeilPer D.Decimal { D.decimalFracl = l, D.decimalRatio = per }
+decimalCeilPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioCeilPer per r
 
