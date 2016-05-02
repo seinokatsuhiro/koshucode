@@ -1,0 +1,757 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Symbol.Next</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Symbol-Next.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Syntax-Symbol-Next.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.133.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Symbol.Next</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Next</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Symbol</a
+	    ><ul
+	    ><li
+	      ><a href="#g:3"
+		>Data type</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>Symbol test</a
+		></li
+	      ><li
+	      ><a href="#g:5"
+		>Char test</a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Next symbol</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Next character sequence.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:InputText"
+	    >InputText</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Next"
+	    >Next</a
+	    > a = <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AbNext"
+	    >AbNext</a
+	    > a = <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, a)</li
+	  ><li class="src short"
+	  ><a href="#v:nextSpace"
+	    >nextSpace</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Next"
+	    >Next</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nextQQ"
+	    >nextQQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Symbol"
+	    >Symbol</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:SymbolCommon"
+		>SymbolCommon</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:SymbolGeneral"
+		>SymbolGeneral</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:SymbolPlain"
+		>SymbolPlain</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:SymbolNumeric"
+		>SymbolNumeric</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:SymbolShort"
+		>SymbolShort</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:SymbolUnknown"
+		>SymbolUnknown</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isGeneralSymbol"
+	    >isGeneralSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isPlainSymbol"
+	    >isPlainSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isNumericSymbol"
+	    >isNumericSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isShortSymbol"
+	    >isShortSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isSymbolChar"
+	    >isSymbolChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isGeneralChar"
+	    >isGeneralChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isPlainChar"
+	    >isPlainChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isNumericChar"
+	    >isNumericChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nextSymbol"
+	    >nextSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Next"
+	    >Next</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nextSymbolPlain"
+	    >nextSymbolPlain</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Next</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:InputText" class="def"
+	    >InputText</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#InputText" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Input data type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Next" class="def"
+	    >Next</a
+	    > a = <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, a) <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#Next" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split next character sequence from input text.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AbNext" class="def"
+	    >AbNext</a
+	    > a = <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, a) <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#AbNext" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split next character sequence from input text.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nextSpace" class="def"
+	    >nextSpace</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Next"
+	    >Next</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#nextSpace" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get next spaces.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nextQQ" class="def"
+	    >nextQQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#nextQQ" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get next double-quoted text.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Symbol</h1
+	><h2 id="g:3"
+	>Data type</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Symbol" class="def"
+	    >Symbol</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#Symbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Symbol class.</p
+	    ><p
+	    >Relation between character classes and symbol classes.
+ The char class <code
+	      >number'</code
+	      > means Unicode number except for <code
+	      >0-9</code
+	      >.
+ <code
+	      >G</code
+	      > for general symbol, <code
+	      >P</code
+	      > for plain, <code
+	      >N</code
+	      > for numeric.</p
+	    ><pre
+	    >  Char class   Symbol class
+  ------------ -----------------
+  &quot;0-9&quot;        ( G ) ( P ) ( N )
+  &quot;-&quot;          ( G ) ( P ) ( N )
+  letter       ( G )   P
+  mark         ( G )   P
+  number'      ( G )   P
+  &quot;_?&quot;         ( G )   P
+  &quot;+&quot;          ( G )         N
+  &quot;*=&lt;&gt;~&quot;        G
+  &quot;.#&quot;                       N</pre
+	    ><p
+	    >Partial order of symbol classes.</p
+	    ><pre
+	    >                    ( GPN ) Common
+                   /      |
+          Plain ( GP )  ( GN ) Numeric
+               /  |    /  |
+  Short ( P.P )   |   /   |
+           :      |  /    |
+        General ( G )     |
+           :      :     ( N ) Numeric
+           :      :       :
+           ................ Unknown</pre
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SymbolCommon" class="def"
+		  >SymbolCommon</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >General-ordinary-numeric symbol</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SymbolGeneral" class="def"
+		  >SymbolGeneral</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >General symbol</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SymbolPlain" class="def"
+		  >SymbolPlain</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Plain symbol</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SymbolNumeric" class="def"
+		  >SymbolNumeric</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Numeric symbol</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SymbolShort" class="def"
+		  >SymbolShort</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Short symbol (Plain <code
+		    >&quot;.&quot;</code
+		    > Plain)</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:SymbolUnknown" class="def"
+		  >SymbolUnknown</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Unknown symbol</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Symbol" class="caption collapser" onclick="toggleSection('i:Symbol')"
+	    >Instances</p
+	    ><div id="section.i:Symbol" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+		      >Symbol</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#line-97" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+		      >Symbol</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#line-97" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+		      >Symbol</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#line-97" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>Symbol test</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isGeneralSymbol" class="def"
+	    >isGeneralSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isGeneralSymbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test symbol is general, in other words,
+   <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolCommon"
+		>SymbolCommon</a
+		></code
+	      >, <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolPlain"
+		>SymbolPlain</a
+		></code
+	      > or <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolGeneral"
+		>SymbolGeneral</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isPlainSymbol" class="def"
+	    >isPlainSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isPlainSymbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test symbol is plain, in other words,
+   <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolCommon"
+		>SymbolCommon</a
+		></code
+	      > or <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolPlain"
+		>SymbolPlain</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isNumericSymbol" class="def"
+	    >isNumericSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isNumericSymbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test symbol is numeric, in other words,
+   <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolCommon"
+		>SymbolCommon</a
+		></code
+	      > or <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolNumeric"
+		>SymbolNumeric</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isShortSymbol" class="def"
+	    >isShortSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isShortSymbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test symbol is <code
+	      ><a href="Koshucode-Baala-Syntax-Symbol-Next.html#v:SymbolShort"
+		>SymbolShort</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><h2 id="g:5"
+	>Char test</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSymbolChar" class="def"
+	    >isSymbolChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isSymbolChar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is a symbol component.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isGeneralChar" class="def"
+	    >isGeneralChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isGeneralChar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is a general-symbol component.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isPlainChar" class="def"
+	    >isPlainChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isPlainChar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is a plain-symbol component.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isNumericChar" class="def"
+	    >isNumericChar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#isNumericChar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is a numeric-symbol component.</p
+	    ></div
+	  ></div
+	><h2 id="g:6"
+	>Next symbol</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nextSymbol" class="def"
+	    >nextSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Next"
+	    >Next</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
+	    >Symbol</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#nextSymbol" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get next symbol.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nextSymbolPlain" class="def"
+	    >nextSymbolPlain</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:AbNext"
+	    >AbNext</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-Next.html#nextSymbolPlain" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

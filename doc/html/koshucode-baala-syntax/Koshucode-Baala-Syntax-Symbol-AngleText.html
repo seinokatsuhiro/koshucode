@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Symbol.AngleText</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Symbol-AngleText.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Syntax-Symbol-AngleText.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.133.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Symbol.AngleText</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Functions</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Examples</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Keyword table</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Text enclosed in angle brackets.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:angleQuote"
+	    >angleQuote</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:angleTexts"
+	    >angleTexts</a
+	    > :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h2 id="g:1"
+	>Functions</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:angleQuote" class="def"
+	    >angleQuote</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Syntax-Symbol-AngleText.html#angleQuote" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string into double-quoted and angle-quoted form.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:angleTexts" class="def"
+	    >angleTexts</a
+	    > :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)] <a href="src/Koshucode-Baala-Syntax-Symbol-AngleText.html#angleTexts" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Table of coresspondences of angle text and its replacement.</p
+	    ></div
+	  ></div
+	><h2 id="g:2"
+	>Examples</h2
+	><div class="doc"
+	><p
+	  >Simple word.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >putStrLn $ angleQuote &quot;aaa&quot;
+</code
+	      ></strong
+	    >&quot;aaa&quot;
+</pre
+	  ><p
+	  >Text contains line feed.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >putStrLn $ angleQuote &quot;aaa\nbbb&quot;
+</code
+	      ></strong
+	    >&quot;aaa&quot; #lf &quot;bbb&quot;
+</pre
+	  ><p
+	  >Lookup keyword table.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lookup &quot;lf&quot; angleTexts
+</code
+	      ></strong
+	    >Just &quot;\n&quot;
+</pre
+	  ></div
+	><h2 id="g:3"
+	>Keyword table</h2
+	><div class="doc"
+	><p
+	  >Some text literals are written
+  using the following angle text.</p
+	  ><dl
+	  ><dt
+	    ><code
+	      >&lt;cr&gt;</code
+	      ></dt
+	    ><dd
+	    >Carriage return</dd
+	    ><dt
+	    ><code
+	      >&lt;crlf&gt;</code
+	      ></dt
+	    ><dd
+	    >Carriage return and line feed</dd
+	    ><dt
+	    ><code
+	      >&lt;lf&gt;</code
+	      ></dt
+	    ><dd
+	    >Line feed</dd
+	    ><dt
+	    ><code
+	      >&lt;q&gt;</code
+	      ></dt
+	    ><dd
+	    >Single quote (<code
+	      >'</code
+	      >)</dd
+	    ><dt
+	    ><code
+	      >&lt;qq&gt;</code
+	      ></dt
+	    ><dd
+	    >Double quote (<code
+	      >&quot;</code
+	      >)</dd
+	    ><dt
+	    ><code
+	      >&lt;sp&gt;</code
+	      ></dt
+	    ><dd
+	    >Space</dd
+	    ><dt
+	    ><code
+	      >&lt;tab&gt;</code
+	      ></dt
+	    ><dd
+	    >Tab</dd
+	    ></dl
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

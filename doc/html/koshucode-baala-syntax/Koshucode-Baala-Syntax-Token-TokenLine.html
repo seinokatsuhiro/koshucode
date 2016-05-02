@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Token.TokenLine</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Token-TokenLine.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.133.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Token.TokenLine</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Library</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Document</a
+	    ><ul
+	    ><li
+	      ><a href="#g:3"
+		>Token type</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>Asterisks</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Examples</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Tokenizer of koshucode.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TokenLine"
+	    >TokenLine</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tokenLines"
+	    >tokenLines</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
+	    >CodePiece</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-TokenLine.html#t:TokenLine"
+	    >TokenLine</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:tokens"
+	    >tokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
+	    >CodePiece</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:toks"
+	    >toks</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isShortPrefix"
+	    >isShortPrefix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Library</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TokenLine" class="def"
+	    >TokenLine</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html#TokenLine" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Token list on a line.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenLines" class="def"
+	    >tokenLines</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
+	    >CodePiece</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-TokenLine.html#t:TokenLine"
+	    >TokenLine</a
+	    >] <a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html#tokenLines" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tokenize text.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokens" class="def"
+	    >tokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
+	    >CodePiece</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] <a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html#tokens" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split string into list of tokens.
+   Result token list does not contain newline characters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:toks" class="def"
+	    >toks</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] <a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html#toks" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abbreviated tokenizer.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isShortPrefix" class="def"
+	    >isShortPrefix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Syntax-Token-TokenLine.html#isShortPrefix" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Document</h1
+	><h2 id="g:3"
+	>Token type</h2
+	><div class="doc"
+	><dl
+	  ><dt
+	    >Bracket</dt
+	    ><dd
+	    >Open and closed brackets.
+              <code
+	      >(</code
+	      > <em
+	      >group</em
+	      > <code
+	      >)</code
+	      > ,
+              <code
+	      >{</code
+	      > <em
+	      >set</em
+	      > <code
+	      >}</code
+	      > ,
+              <code
+	      >[</code
+	      > <em
+	      >list</em
+	      > <code
+	      >]</code
+	      > ,
+              <code
+	      >{-</code
+	      > <em
+	      >tie</em
+	      > <code
+	      >-}</code
+	      > , and
+              <code
+	      >{=</code
+	      > <em
+	      >relation</em
+	      > <code
+	      >=}</code
+	      ></dd
+	    ><dt
+	    >TermName</dt
+	    ><dd
+	    >Words beginning with slash, e.g., <code
+	      >/aa</code
+	      >.
+              Term name like <code
+	      >/r/x</code
+	      > is used for nested relation,
+              that means term <code
+	      >/x</code
+	      > in the relation of term <code
+	      >/r</code
+	      >.</dd
+	    ><dt
+	    >Word</dt
+	    ><dd
+	    >Character sequence not including special characters,
+              e.g., <code
+	      >aa</code
+	      >, <code
+	      >r2d2</code
+	      >, <code
+	      >12.0</code
+	      >, etc.
+              Colon <code
+	      >:</code
+	      > is a one-letter word.
+              There are four types of quotations.
+              (1) non-quoted word like <code
+	      >aa</code
+	      >,
+              (2) single-quoted word like <code
+	      >'aa</code
+	      >,
+              (3) double-quoted word like <code
+	      >&quot;aa&quot;</code
+	      >,
+              (4) doubly single-quoted word like <code
+	      >'' all-letters-to-end-of-line</code
+	      >.</dd
+	    ><dt
+	    >Comment</dt
+	    ><dd
+	    >Texts from double asterisks (<code
+	      >**</code
+	      >) or shebang (<code
+	      >#!</code
+	      >)
+              to end of line are comments.
+              Quadruple asterisks (<code
+	      >****</code
+	      >) comments are
+              treated in <code
+	      ><a href="Koshucode-Baala-Core-Section-Clause.html#v:Clause"
+		>Clause</a
+		></code
+	      >.</dd
+	    ><dt
+	    >Space</dt
+	    ><dd
+	    ><em
+	      >space</em
+	      > , <code
+	      >\t</code
+	      > (tab)</dd
+	    ></dl
+	  ></div
+	><h2 id="g:4"
+	>Asterisks</h2
+	><div class="doc"
+	><p
+	  >There are three uses of asterisks (<code
+	    >*</code
+	    >) in koshucode,</p
+	  ><dl
+	  ><dt
+	    ><code
+	      >*</code
+	      ></dt
+	    ><dd
+	    >Single asterisk means multiplication,
+            e.g., <code
+	      >3 * 4</code
+	      > (three times four).</dd
+	    ><dt
+	    ><code
+	      >**</code
+	      ></dt
+	    ><dd
+	    >Double asterisk leads line comment.
+            Textx from <code
+	      >**</code
+	      > to end of line are ignored.</dd
+	    ><dt
+	    ><code
+	      >****</code
+	      ></dt
+	    ><dd
+	    >Quadruple asterisk (fourfold asterisk) leads caluse comment.
+            Texts from <code
+	      >****</code
+	      > to end of clause are ignored.
+            In other words, line staring with <code
+	      >****</code
+	      >
+            and following indented lines are ignored.</dd
+	    ></dl
+	  ><p
+	  >Triple asterisk <code
+	    >***</code
+	    > is double and rest of text.
+  Quintuple (fivefold) asterisk <code
+	    >*****</code
+	    > is quadruple and rest of text.</p
+	  ><p
+	  >Line comments like this:</p
+	  ><pre
+	  >** aaa bbbbb cc</pre
+	  ><p
+	  >Clause comments like this:</p
+	  ><pre
+	  >**** aaa bbb
+     ccccc dddddd
+     ee fffff</pre
+	  ><p
+	  >You can type <code
+	    >****</code
+	    > on top of a clause to hide it.</p
+	  ></div
+	><h1 id="g:5"
+	>Examples</h1
+	><div class="doc"
+	><p
+	  >Words and quotations.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
+</code
+	      ></strong
+	    >[ TText 1 0 &quot;aa&quot;, TText 2 1 &quot;bb&quot;, TText 3 1 &quot;&quot;, TText 4 2 &quot;cc&quot; ]
+</pre
+	  ><p
+	  >Judgement.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;|-- R  /a A0 /b 31&quot;
+</code
+	      ></strong
+	    >[ TText 1 0 &quot;|&quot;, TText 2 0 &quot;--&quot;, TSpace 3 1, TText 4 0 &quot;R&quot;
+, TSpace 5 2, TTerm 6 [&quot;/a&quot;], TSpace 7 1, TText 8 0 &quot;A0&quot;
+, TSpace 9 1, TTerm 10 [&quot;/b&quot;], TSpace 11 1, TText 12 0 &quot;31&quot; ]
+</pre
+	  ><p
+	  >Brackets.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;aa (bb x y (z))&quot;
+</code
+	      ></strong
+	    >[ TText 1 0 &quot;aa&quot;, TSpace 2 1
+, TOpen 3 &quot;(&quot;, TText 4 0 &quot;bb&quot;, TSpace 5 1
+   , TText 6 0 &quot;x&quot;, TSpace 7 1, TText 8 0 &quot;y&quot;, TSpace 9 1
+   , TOpen 10 &quot;(&quot;, TText 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot; ]
+</pre
+	  ><p
+	  >A comment.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;abc ** this is a comment\ndef\n&quot;
+</code
+	      ></strong
+	    >[ TText 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;
+, TText 4 0 &quot;def&quot;]
+</pre
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
