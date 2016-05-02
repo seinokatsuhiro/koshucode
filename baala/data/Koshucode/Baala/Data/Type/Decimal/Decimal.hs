@@ -25,7 +25,6 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
   ( -- * Decimal
     DecimalInteger, DecimalRatio,
     DecimalFracl, Decimal (..),
-    isDecimalZero,
     decimalFraclSet,
     decimalRatioMap,
 
@@ -57,14 +56,9 @@ type DecimalFracl = Int
 
 -- | Decimal number.
 data Decimal = Decimal 
-    { decimalApprox  :: Bool
-    , decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
+    { decimalFracl   :: DecimalFracl   -- ^ Length of the fractional part
     , decimalRatio   :: DecimalRatio   -- ^ Rational number for the decimal number
     } deriving (Show)
-
--- | Test decimal is zero.
-isDecimalZero :: Decimal -> Bool
-isDecimalZero Decimal {..} = decimalRatio == 0
 
 -- | Change decimal fracl.
 decimalFraclSet :: DecimalFracl -> B.AbMap Decimal
@@ -92,11 +86,10 @@ type BinRatio = B.Bin DecimalRatio
 -- | Binary operation for two decimals.
 decimalBin :: BinFracl -> BinRatio -> BinDecimal
 decimalBin fracl bin
-      Decimal { decimalRatio = r1, decimalFracl = f1, decimalApprox = a1 }
-      Decimal { decimalRatio = r2, decimalFracl = f2, decimalApprox = a2 }
+      Decimal { decimalFracl = f1, decimalRatio = r1 }
+      Decimal { decimalFracl = f2, decimalRatio = r2 }
     = Decimal { decimalFracl  = fracl f1 f2
-              , decimalRatio  = bin r1 r2
-              , decimalApprox = a1 || a2 }
+              , decimalRatio  = bin r1 r2 }
 
 -- | Abortable binary operation for two decimals.
 decimalBinAb :: BinFracl -> BinRatio -> BinAbDecimal
@@ -111,9 +104,8 @@ integralDecimal = realDecimal 0
 
 -- | Convert real number to decimal number.
 realDecimal :: (Real n) => DecimalFracl -> n -> Decimal
-realDecimal f n = Decimal { decimalRatio  = toRational n
-                          , decimalFracl  = f
-                          , decimalApprox = False }
+realDecimal f n = Decimal { decimalFracl  = f
+                          , decimalRatio  = toRational n }
 
 -- | Convert decimal number to fractional number.
 decimalFractional :: (Fractional n) => Decimal -> n
