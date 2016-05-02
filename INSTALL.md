@@ -139,13 +139,13 @@ and writes the following output data.
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank /base /import-dir [ 0 | 'Class | [ ] ] [ 0 | 'Import | [ ] ] [ 1 | 'Assoc | [ ] ] [ 1 | 'List | [ ] ] [ 1 | 'Pair | [ ] ] [ 1 | 'Snip | [ ] ] [ 2 | 'Order | [ ] ] |}
-|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank /base /import-dir [ 0 | 'Comment | [ ] ] [ 0 | 'Unicode | [ ] ] [ 4 | 'Http | [ 'Prelude ] ] [ 4 | 'IOPoint | [ 'Prelude ] ] [ 4 | 'TextTable | [ 'Prelude ] ] [ 4 | 'Utility | [ 'Prelude ] ] [ 4 | 'Write | [ 'Prelude ] ] [ 5 | 'CodePt | [ 'Prelude ] ] |}
-|-- DIR-RANK  /dir-rank 8  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank /base /import-dir [ 7 | 'Reason | [ 'Text ] ] [ 8 | 'Abortable | [ 'Prelude | 'Text ] ] [ 8 | 'Report | [ 'Prelude | 'Text ] ] |}
-|-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank /base /import-dir [ 0 | 'Line | [ ] ] [ 11 | 'Code | [ 'Abort | 'Prelude | 'Text ] ] [ 11 | 'Tree | [ 'Abort | 'Prelude | 'Text ] ] [ 12 | 'Infix | [ 'Prelude ] ] |}
-|-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Base  /base-rank {| /rank /base /import-dir [ 3 | 'Prelude | [ ] ] [ 6 | 'Text | [ ] ] [ 9 | 'Abort | [ ] ] [ 10 | 'Message | [ 'Abort | 'Prelude | 'Text ] ] [ 13 | 'Syntax | [ ] ] |}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Base.Prelude"  /base-rank {= /rank /base /import-dir [ 0 | "Class" | [ ] ] [ 0 | "Import" | [ ] ] [ 1 | "Assoc" | [ ] ] [ 1 | "List" | [ ] ] [ 1 | "Pair" | [ ] ] [ 1 | "Snip" | [ ] ] [ 2 | "Order" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Comment" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 4 | "IOPoint" | [ "Prelude" ] ] [ 4 | "TextTable" | [ "Prelude" ] ] [ 4 | "Utility" | [ "Prelude" ] ] [ 4 | "Write" | [ "Prelude" ] ] [ 5 | "CodePt" | [ "Prelude" ] ] [ 5 | "Http" | [ "Prelude" ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 7 | "Reason" | [ "Text" ] ] [ 8 | "Abortable" | [ "Prelude" | "Text" ] ] [ 8 | "Report" | [ "Prelude" | "Text" ] ] [ 10 | "Message" | [ "Abort" ] ] =}
+|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 10 | "Message" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Line" | [ "Abort" | "Prelude" | "Text" ] ] [ 11 | "Tree" | [ "Abort" | "Prelude" | "Text" ] ] [ 12 | "Clause" | [ "Prelude" | "Text" ] ] [ 12 | "Infix" | [ "Prelude" ] ] =}
+|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 3 | "Prelude" | [ ] ] [ 6 | "Text" | [ ] ] [ 9 | "Abort" | [ ] ] [ 11 | "Message" | [ ] ] [ 13 | "Syntax" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala  /base-rank {| /rank /base /import-dir [ 14 | 'Base | [ 'Abort | 'Prelude | 'Syntax | 'Text ] ] |}
+|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 14 | "Base" | [ "Abort" | "Prelude" | "Syntax" | "Text" ] ] =}
 
 *** 6 judges
 
@@ -153,54 +153,56 @@ and writes the following output data.
 
 TABLE : DIR-RANK
 
-  /dir-rank /dir                            /base-rank
-  --------- ------------------------------- ------------------------------------------------------------
-  2         'Koshucode.Baala.Base.Prelude   /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            0     'Class       [ ]
-                                            0     'Import      [ ]
-                                            1     'Assoc       [ ]
-                                            1     'List        [ ]
-                                            1     'Pair        [ ]
-                                            1     'Snip        [ ]
-                                            2     'Order       [ ]
-                                            
-  5         'Koshucode.Baala.Base.Text      /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            0     'Comment     [ ]
-                                            0     'Unicode     [ ]
-                                            4     'Http        [ 'Prelude ]
-                                            4     'IOPoint     [ 'Prelude ]
-                                            4     'TextTable   [ 'Prelude ]
-                                            4     'Utility     [ 'Prelude ]
-                                            4     'Write       [ 'Prelude ]
-                                            5     'CodePt      [ 'Prelude ]
-                                            
-  8         'Koshucode.Baala.Base.Abort     /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            7     'Reason      [ 'Text ]
-                                            8     'Abortable   [ 'Prelude | 'Text ]
-                                            8     'Report      [ 'Prelude | 'Text ]
-                                            
-  12        'Koshucode.Baala.Base.Syntax    /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            0     'Line        [ ]
-                                            11    'Code        [ 'Abort | 'Prelude | 'Text ]
-                                            11    'Tree        [ 'Abort | 'Prelude | 'Text ]
-                                            12    'Infix       [ 'Prelude ]
-                                            
-  13        'Koshucode.Baala.Base           /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            3     'Prelude     [ ]
-                                            6     'Text        [ ]
-                                            9     'Abort       [ ]
-                                            10    'Message     [ 'Abort | 'Prelude | 'Text ]
-                                            13    'Syntax      [ ]
-                                            
-  14        'Koshucode.Baala                /rank /base        /import-dir
-                                            ----- ------------ -----------------------------------------
-                                            14    'Base        [ 'Abort | 'Prelude | 'Syntax | 'Text ]
-                                            
+  /dir-rank /dir                             /base-rank
+  --------- -------------------------------- -----------------------------------------------------------------
+  2         "Koshucode.Baala.Base.Prelude"   /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             0     "Class"       [ ]
+                                             0     "Import"      [ ]
+                                             1     "Assoc"       [ ]
+                                             1     "List"        [ ]
+                                             1     "Pair"        [ ]
+                                             1     "Snip"        [ ]
+                                             2     "Order"       [ ]
+                                             
+  5         "Koshucode.Baala.Base.Text"      /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             0     "Comment"     [ ]
+                                             0     "Unicode"     [ ]
+                                             4     "IOPoint"     [ "Prelude" ]
+                                             4     "TextTable"   [ "Prelude" ]
+                                             4     "Utility"     [ "Prelude" ]
+                                             4     "Write"       [ "Prelude" ]
+                                             5     "CodePt"      [ "Prelude" ]
+                                             5     "Http"        [ "Prelude" ]
+                                             
+  10        "Koshucode.Baala.Base.Abort"     /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             7     "Reason"      [ "Text" ]
+                                             8     "Abortable"   [ "Prelude" | "Text" ]
+                                             8     "Report"      [ "Prelude" | "Text" ]
+                                             10    "Message"     [ "Abort" ]
+                                             
+  12        "Koshucode.Baala.Base.Syntax"    /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             10    "Message"     [ "Abort" | "Prelude" | "Text" ]
+                                             11    "Line"        [ "Abort" | "Prelude" | "Text" ]
+                                             11    "Tree"        [ "Abort" | "Prelude" | "Text" ]
+                                             12    "Clause"      [ "Prelude" | "Text" ]
+                                             12    "Infix"       [ "Prelude" ]
+                                             
+  13        "Koshucode.Baala.Base"           /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             3     "Prelude"     [ ]
+                                             6     "Text"        [ ]
+                                             9     "Abort"       [ ]
+                                             11    "Message"     [ ]
+                                             13    "Syntax"      [ ]
+                                             
+  14        "Koshucode.Baala"                /rank /base         /import-dir
+                                             ----- ------------- ---------------------------------------------
+                                             14    "Base"        [ "Abort" | "Prelude" | "Syntax" | "Text" ]
+                                             
 
 === rel
 
