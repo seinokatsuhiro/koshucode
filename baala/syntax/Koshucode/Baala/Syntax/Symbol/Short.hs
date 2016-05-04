@@ -17,8 +17,8 @@ module Koshucode.Baala.Syntax.Symbol.Short
 
 import qualified Data.List                                as L
 import qualified Koshucode.Baala.Base                     as B
-import qualified Koshucode.Baala.Syntax.Symbol.AngleText  as D
-import qualified Koshucode.Baala.Syntax.Symbol.Next       as D
+import qualified Koshucode.Baala.Syntax.Symbol.AngleText  as S
+import qualified Koshucode.Baala.Syntax.Symbol.Next       as S
 
 
 -- ----------------------  Data type
@@ -68,9 +68,9 @@ shortText = loop . reverse . B.sortWith len where
           _                   -> loop sh s
 
     text2 s   | isGeneralText s   = s
-              | otherwise         = D.angleQuote s
+              | otherwise         = S.angleQuote s
 
 -- | Test string is general sign.
 isGeneralText :: B.Pred String
-isGeneralText = all D.isGeneralChar
+isGeneralText = all S.isGeneralChar
 
