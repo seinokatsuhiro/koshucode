@@ -19,7 +19,7 @@ module Koshucode.Baala.Rop.Cox.Get
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax           as D
+import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Op
@@ -30,7 +30,7 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 -- | Get relmap attribute as single cox.
 getCox :: (D.CContent c) => Op.RopGet c (D.Cox c)
-getCox med = ropBuild med . D.ttreeGroup B.<=< Op.getTrees med
+getCox med = ropBuild med . S.ttreeGroup B.<=< Op.getTrees med
 
 getOptionCox :: (D.CContent c) => c -> Op.RopGet c (D.Cox c)
 getOptionCox c = Op.getOption (D.CoxLit [] c) getCox
@@ -46,10 +46,10 @@ getNamedCoxes med = ropNamedAlphas med B.<=< Op.getWordTrees med
 getTermCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
 getTermCoxes med = ropNamedAlphas med B.<=< Op.getTermTrees med
 
-ropBuild :: (D.CContent c) => C.Intmed c -> D.TTreeToAb (D.Cox c)
+ropBuild :: (D.CContent c) => C.Intmed c -> S.TTreeToAb (D.Cox c)
 ropBuild = C.coxBuildG . C.ropGlobal
 
-ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [D.NamedTree] -> B.Ab [D.NamedCox c]
+ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [S.NamedTree] -> B.Ab [D.NamedCox c]
 ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
 
 
@@ -66,31 +66,31 @@ getWhereBody u name =
     do xs <- Op.getTreesByColon u name
        getWhereClause u `mapM` xs
 
-getWhereClause :: (D.CContent c) => C.Intmed c -> [D.TTree] -> B.Ab (D.NamedCox c)
+getWhereClause :: (D.CContent c) => C.Intmed c -> [S.TTree] -> B.Ab (D.NamedCox c)
 getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
-       cox      <- ropBuild u $ D.ttreeGroup bo
+       cox      <- ropBuild u $ S.ttreeGroup bo
        let cp = B.codePtList $ head $ B.untrees trees
        case vs of
          [] -> Right (n, cox)
          _  -> Right (n, D.coxForm cp (Just n) vs cox)
 
-getWhereHead :: [D.TTree] -> B.Ab (String, [String])
+getWhereHead :: [S.TTree] -> B.Ab (String, [String])
 getWhereHead [] = Msg.adlib "getWhereHead"
 getWhereHead (n : vs) =
     do n'  <- getTextFromTree n
        vs' <- mapM getTextFromTree vs
        Right (n', vs')
 
-getTreesByEqual :: [D.TTree] -> B.Ab ([D.TTree], [D.TTree])
+getTreesByEqual :: [S.TTree] -> B.Ab ([S.TTree], [S.TTree])
 getTreesByEqual trees =
-    case D.divideTreesByEqual trees of
+    case S.divideTreesByEqual trees of
       [left, right] -> Right (left, right)
       _             -> Msg.adlib "getTreesByEqual"
 
-getTextFromTree :: D.TTree -> B.Ab String
-getTextFromTree (D.TextLeafRaw _ n)  = Right n
+getTextFromTree :: S.TTree -> B.Ab String
+getTextFromTree (S.TextLeafRaw _ n)  = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 
@@ -108,7 +108,7 @@ getContent med name =
 getContents :: (D.CContent c) => Op.RopGet c [c]
 getContents med name =
     do trees <- Op.getTrees med name
-       let trees2 = D.ttreeGroup `map` D.divideTreesByColon trees
+       let trees2 = S.ttreeGroup `map` S.divideTreesByColon trees
        calcTree med `mapM` trees2
 
 calcTree :: (D.CContent c) => C.Intmed c -> D.ContentCalc c

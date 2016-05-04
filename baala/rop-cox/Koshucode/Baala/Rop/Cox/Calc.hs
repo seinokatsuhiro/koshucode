@@ -28,7 +28,7 @@ module Koshucode.Baala.Rop.Cox.Calc
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Rop.Base        as Op
@@ -124,10 +124,10 @@ consFill med =
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapFill med (ns, cops, coxTo)
 
-relmapFill :: (D.CContent c) => C.Intmed c -> ([D.TermName], D.CopSet c, D.Cox c) -> C.Relmap c
+relmapFill :: (D.CContent c) => C.Intmed c -> ([S.TermName], D.CopSet c, D.Cox c) -> C.Relmap c
 relmapFill med = C.relmapFlow med . relkitFill
 
-relkitFill :: (D.CContent c) => ([D.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
+relkitFill :: (D.CContent c) => ([S.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
 relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
     ns1       =  D.headNames he1
@@ -239,10 +239,10 @@ consUnary med =
        cs <- Op.getContents med "-expr"
        Right $ relmapUnary med (n, cs)
 
-relmapUnary :: (D.CContent c) => C.Intmed c -> (D.TermName, [c]) -> C.Relmap c
+relmapUnary :: (D.CContent c) => C.Intmed c -> (S.TermName, [c]) -> C.Relmap c
 relmapUnary med = C.relmapFlow med . relkitUnary
 
-relkitUnary :: (D.CContent c) => (D.TermName, [c]) -> C.RelkitFlow c
+relkitUnary :: (D.CContent c) => (S.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
     he2    = D.headFrom [n]
     kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []

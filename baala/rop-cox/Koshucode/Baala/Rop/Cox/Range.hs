@@ -25,7 +25,7 @@ module Koshucode.Baala.Rop.Cox.Range
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Syntax        as D
+import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Rop.Base      as Op
@@ -54,7 +54,7 @@ ropsCoxRange = Op.ropList "cox-calc"
 --  
 --    > range /n -from 0 -to 9
 
-type RangeAttr c = (D.TermName, D.CopSet c, D.Cox c, D.Cox c)
+type RangeAttr c = (S.TermName, D.CopSet c, D.Cox c, D.Cox c)
 
 getRangeAttr :: (D.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
 getRangeAttr med =

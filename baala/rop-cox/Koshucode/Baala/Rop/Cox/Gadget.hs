@@ -18,7 +18,7 @@ module Koshucode.Baala.Rop.Cox.Gadget
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Syntax             as D
+import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Op
@@ -82,10 +82,10 @@ consGeoDatumJp med =
        let cops = C.globalCopset $ C.ropGlobal med
        Right $ relmapGeoDatumJp med (cops, (n,x,y), (lat,long))
 
-relmapGeoDatumJp :: (Ord c, D.CContent c) => C.Intmed c -> (D.CopSet c, D.Cox3 c, D.TermName2) -> C.Relmap c
+relmapGeoDatumJp :: (Ord c, D.CContent c) => C.Intmed c -> (D.CopSet c, D.Cox3 c, S.TermName2) -> C.Relmap c
 relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
 
-relkitGeoDatumJp :: (Ord c, D.CContent c) => (D.CopSet c, D.Cox3 c, D.TermName2) -> C.RelkitFlow c
+relkitGeoDatumJp :: (Ord c, D.CContent c) => (D.CopSet c, D.Cox3 c, S.TermName2) -> C.RelkitFlow c
 relkitGeoDatumJp _ Nothing = Right C.relkitNothing
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
     he2       = D.headAppend [lat, long] he1
@@ -120,10 +120,10 @@ consGeoDegree med =
        sec  <- Op.getTerm med "-sec"
        Right $ relmapGeoDegree med (real, deg, mnt, sec)
 
-relmapGeoDegree :: (Ord c, D.CContent c) => C.Intmed c -> D.TermName4 -> C.Relmap c
+relmapGeoDegree :: (Ord c, D.CContent c) => C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapGeoDegree med = C.relmapFlow med . relkitGeoDegree
 
-relkitGeoDegree :: (Ord c, D.CContent c) => D.TermName4 -> C.RelkitFlow c
+relkitGeoDegree :: (Ord c, D.CContent c) => S.TermName4 -> C.RelkitFlow c
 relkitGeoDegree _ Nothing = Right C.relkitNothing
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
     he2       = D.headCons real he1
@@ -186,16 +186,16 @@ consNumber med =
        from <- Op.getOption 0  Op.getInt         med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
-relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
+relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
 
-relkitNumber :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
+relkitNumber :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, D.CDec c)
-    => B.Ranking D.TermName c
-    -> (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
+    => B.Ranking S.TermName c
+    -> (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
@@ -219,17 +219,17 @@ consRank med =
        Right $ relmapRank med (n, ns, fromInteger from)
 
 relmapDenseRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
+   C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
-relkitDenseRank :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
+relkitDenseRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (D.TermName, [D.SignedTermName], Int) -> C.Relmap c
+   C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapGapRank med = C.relmapFlow med . relkitGapRank
 
-relkitGapRank :: (Ord c, D.CDec c) => (D.TermName, [D.SignedTermName], Int) -> C.RelkitFlow c
+relkitGapRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
 

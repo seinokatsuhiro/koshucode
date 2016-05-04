@@ -12,7 +12,7 @@ module Koshucode.Baala.Rop.Cox.Accessor
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Op
@@ -53,11 +53,11 @@ consClock med =
       fill hms = hms
 
 relmapClock :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, D.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))) -> C.Relmap c
+  C.Intmed c -> (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))) -> C.Relmap c
 relmapClock med = C.relmapFlow med . relkitClock
 
 relkitClock :: (D.CContent c)
-  => (D.CopSet c, D.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)))
+  => (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)))
   -> C.RelkitFlow c
 relkitClock _ Nothing = Right C.relkitNothing
 relkitClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = Right kit2 where
@@ -107,11 +107,11 @@ consClockGet med =
      Right $ relmapClockGet med (cops, clock, ns)
 
 relmapClockGet :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, D.Cox c, [Maybe D.TermName]) -> C.Relmap c
+  C.Intmed c -> (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.Relmap c
 relmapClockGet med = C.relmapFlow med . relkitClockGet
 
 relkitClockGet :: (D.CContent c) =>
-  (D.CopSet c, D.Cox c, [Maybe D.TermName]) -> C.RelkitFlow c
+  (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.RelkitFlow c
 relkitClockGet _ Nothing = Right C.relkitNothing
 relkitClockGet (cops, cox, ns) (Just he1) = Right kit2 where
       he2       = B.catMaybes ns `D.headAppend` he1
@@ -143,11 +143,11 @@ consClockAlter med =
        Right $ relmapClockAlter med (cops, clock, (day, hour, minute, sec))
 
 relmapClockAlter :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, D.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)) -> C.Relmap c
+  C.Intmed c -> (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)) -> C.Relmap c
 relmapClockAlter med = C.relmapFlow med . relkitClockAlter
 
 relkitClockAlter :: (D.CContent c)
-  => (D.CopSet c, D.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))
+  => (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))
   -> C.RelkitFlow c
 relkitClockAlter _ Nothing = Right C.relkitNothing
 relkitClockAlter (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 where
