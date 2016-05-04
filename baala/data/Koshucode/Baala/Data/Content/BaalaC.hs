@@ -8,7 +8,7 @@ module Koshucode.Baala.Data.Content.BaalaC
 
 import qualified Data.Set                              as Set
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as D
+import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Content.Class    as D
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
@@ -119,10 +119,10 @@ instance B.Write BaalaC where
         VEmpty       -> B.doc "()"
         VFull        -> B.doc "(#)"
         VInterp i    -> B.writeDocWith sh i
-        VType t      -> B.docWraps D.typeOpen D.typeClose $ B.writeDocWith    sh t
-        VList xs     -> B.docWraps D.listOpen D.listClose $ B.writeBar sh xs
-        VSet  xs     -> B.docWraps D.setOpen  D.setClose  $ B.writeBar sh xs
-        VTie  xs     -> B.docWraps D.tieOpen  D.tieClose  $ B.writeH   sh xs
+        VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
+        VList xs     -> B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
+        VSet  xs     -> B.docWraps S.setOpen  S.setClose  $ B.writeBar sh xs
+        VTie  xs     -> B.docWraps S.tieOpen  S.tieClose  $ B.writeH   sh xs
         VRel r       -> B.writeDocWith sh r
 
     writeHtmlWith sh c = case c of
@@ -135,7 +135,7 @@ quote (Just s)  _   = s
 
 qquote :: Maybe String -> String -> String
 qquote (Nothing) "" = "\"\""
-qquote (Nothing) s  = D.angleQuote s
+qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
 
 -- ----------------------  haskell data

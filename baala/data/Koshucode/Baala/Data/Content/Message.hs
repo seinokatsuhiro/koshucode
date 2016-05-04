@@ -20,10 +20,10 @@ module Koshucode.Baala.Data.Content.Message
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Syntax.Message  as Msg
 
-abLiteral :: D.TTreeTo (B.Map (B.Ab b))
+abLiteral :: S.TTreeTo (B.Map (B.Ab b))
 abLiteral = Msg.abortableTree "literal"
 
 -- | Nothing
@@ -41,9 +41,9 @@ quoteType :: String -> B.Ab a
 quoteType = Left . B.abortLine "Quoted type name"
 
 -- | Require flat name
-reqFlatName :: D.Token -> B.Ab a
+reqFlatName :: S.Token -> B.Ab a
 reqFlatName tok = Left $ B.abortLine "Require flat name" n where
-    n = D.tokenContent tok
+    n = S.tokenContent tok
 
 -- | Require tuple in list
 reqRelTuple :: B.Ab a

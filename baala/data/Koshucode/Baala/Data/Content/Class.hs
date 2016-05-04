@@ -43,7 +43,7 @@ module Koshucode.Baala.Data.Content.Class
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Data.Content.Message as Msg
 
@@ -244,13 +244,13 @@ gSetSort = B.sort . gSet
 -- | Tie of terms.
 class (CTypeOf c) => CTie c where
     isTie       ::           c -> Bool
-    gTie        ::           c -> [D.Term c]
-    pTie        ::  [D.Term c] -> c
+    gTie        ::           c -> [S.Term c]
+    pTie        ::  [S.Term c] -> c
 
-    getTie      ::      B.Ab c -> B.Ab [D.Term c]
+    getTie      ::      B.Ab c -> B.Ab [S.Term c]
     getTie      =       getAbAb isTie gTie
 
-    putTie      ::  [D.Term c] -> B.Ab c
+    putTie      ::  [S.Term c] -> B.Ab c
     putTie      =  Right . pTie
 
 -- | Relation of terms.

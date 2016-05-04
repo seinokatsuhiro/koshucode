@@ -18,7 +18,7 @@ module Koshucode.Baala.Data.Content.Tree
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as D
+import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Base.Message          as Msg
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 -- ----------------------  Token
 
-treesToTokens :: D.TTreesToAb [D.Token]
+treesToTokens :: S.TTreesToAb [S.Token]
 treesToTokens = mapM token where
     token (B.TreeL t) = Right t
     token _ = Msg.adlib "not token"
@@ -43,24 +43,24 @@ treesToTokens = mapM token where
 
 -- ----------------------  Text
 
-treesToTexts :: Bool -> D.TTreesToAb [String]
+treesToTexts :: Bool -> S.TTreesToAb [String]
 treesToTexts q = loop [] where
     loop ss [] = Right $ reverse ss
     loop ss (B.TreeL x : xs) = do s <- tokenToText q x
                                   loop (s : ss) xs
     loop _ _ = Msg.nothing
 
-treeToText :: Bool -> D.TTreeToAb String
+treeToText :: Bool -> S.TTreeToAb String
 treeToText q (B.TreeL tok) = tokenToText q tok
 treeToText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
-tokenToText :: Bool -> D.Token -> B.Ab String
-tokenToText True  (D.TText _ q w) | q > D.TextRaw  = Right w
-tokenToText False (D.TTextRaw _ w)                 = Right w
+tokenToText :: Bool -> S.Token -> B.Ab String
+tokenToText True  (S.TText _ q w) | q > S.TextRaw  = Right w
+tokenToText False (S.TTextRaw _ w)                 = Right w
 tokenToText _ _  =  Msg.nothing
 
-treesToDigits :: D.TTreesToAb String
+treesToDigits :: S.TTreesToAb String
 treesToDigits = concatDigits B.<=< treesToTexts False
 
 concatDigits :: [String] -> B.Ab String
@@ -75,8 +75,8 @@ concatDigits = first where
 
 -- ----------------------  Clock
 
-tokenClock :: D.Token -> B.Ab D.Clock
-tokenClock (D.TTextBar _ ('|' : w)) = textClock w
+tokenClock :: S.Token -> B.Ab D.Clock
+tokenClock (S.TTextBar _ ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
 textClock :: String -> B.Ab D.Clock
@@ -135,7 +135,7 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
-treesToTime :: D.TTreesToAb D.Time
+treesToTime :: S.TTreesToAb D.Time
 treesToTime = concatTime B.<=< treesToTexts False
 
 concatTime :: [String] -> B.Ab D.Time
@@ -208,13 +208,13 @@ concatTime = year where
 
 -- | Get flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
-treeToFlatTerm :: D.TTreeToAb D.TermName
-treeToFlatTerm (D.TermLeafName _ _ n)  = Right n
+treeToFlatTerm :: S.TTreeToAb S.TermName
+treeToFlatTerm (S.TermLeafName _ _ n)  = Right n
 treeToFlatTerm (B.TreeL t)             = Msg.reqFlatName t
 treeToFlatTerm _                       = Msg.reqTermName
 
 -- | Convert token trees into a list of named token trees.
-treesToTerms :: D.TTreesToAb [D.NamedTrees]
+treesToTerms :: S.TTreesToAb [S.NamedTrees]
 treesToTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -222,30 +222,30 @@ treesToTerms = name where
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
-    cont :: D.TTreesTo ([D.TTree], [D.TTree])
+    cont :: S.TTreesTo ([S.TTree], [S.TTree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
-    isTermLeaf (D.TermLeafName _ _ _) = True
-    isTermLeaf (D.TermLeafPath _ _)   = True
+    isTermLeaf (S.TermLeafName _ _ _) = True
+    isTermLeaf (S.TermLeafPath _ _)   = True
     isTermLeaf _                      = False
 
-treesToTerms1 :: D.TTreesToAb [D.NamedTree]
+treesToTerms1 :: S.TTreesToAb [S.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
-                      Right $ B.mapSndTo D.ttreeGroup xs'
+                      Right $ B.mapSndTo S.ttreeGroup xs'
 
 
 -- ----------------------  Interp
 
-treesToInterp :: D.TTreesToAb D.Interp
+treesToInterp :: S.TTreesToAb D.Interp
 treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
 
-treeToInterpWord :: D.TTreeToAb D.InterpWord
+treeToInterpWord :: S.TTreeToAb D.InterpWord
 treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeToInterpWord (B.TreeL x) =
     case x of
-      D.TText _ _ w    -> Right $ D.InterpText w
-      D.TTermN _ _ n   -> Right $ D.InterpTerm n
-      D.TTerm _ _ [n]  -> Right $ D.InterpTerm n
+      S.TText _ _ w    -> Right $ D.InterpText w
+      S.TTermN _ _ n   -> Right $ D.InterpTerm n
+      S.TTerm _ _ [n]  -> Right $ D.InterpTerm n
       _                -> Msg.nothing
