@@ -6,7 +6,7 @@ module Koshucode.Baala.Toolkit.Library.Element
   ) where
 
 import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Syntax  as D
+import qualified Koshucode.Baala.Syntax  as S
 import qualified Koshucode.Baala.Data    as D
 import qualified Koshucode.Baala.Core    as C
 
@@ -19,7 +19,7 @@ resourceElem :: (D.CContent c) => C.Resource c -> [D.Judge c]
 resourceElem res = map art js where
     art  = D.judgeCons ("point" -:- path)
     path = D.pText $ B.ioPointText $ B.codeName $ head $ C.resIncluded res
-    ass  = map D.shortBody $ C.resAssert res
+    ass  = map S.shortBody $ C.resAssert res
     js   = concat [ elemJudge       $ C.resJudge res
                   , elemAssert      $ ass
                   , elemNamedRelmap $ concatMap C.assLinks ass ]
