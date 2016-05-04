@@ -38,15 +38,15 @@ module Koshucode.Baala.Syntax.Token.TokenTree
 
 import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax.Token.Token      as D
-import qualified Koshucode.Baala.Syntax.Token.TokenLine  as D
-import qualified Koshucode.Baala.Syntax.Token.Bracket    as D
+import qualified Koshucode.Baala.Syntax.Token.Token      as S
+import qualified Koshucode.Baala.Syntax.Token.TokenLine  as S
+import qualified Koshucode.Baala.Syntax.Token.Bracket    as S
 
 
 -- ---------------------- Token tree
 
 -- | Tree of tokens.
-type TTree = B.CodeTree D.BracketType D.Token
+type TTree = B.CodeTree S.BracketType S.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TTree]
@@ -67,37 +67,37 @@ type TTreeToAb a  = TTree -> B.Ab a
 type TTreesToAb a = [TTree] -> B.Ab a
 
 -- local leaf
-pattern TermLeafLocal cp v e ps = B.TreeL (D.TLocal cp v e ps)
+pattern TermLeafLocal cp v e ps = B.TreeL (S.TLocal cp v e ps)
 
 -- term leaf
-pattern TermLeaf      cp q ws    = B.TreeL (D.TTerm   cp q ws)
-pattern TermLeafName  cp sign w  = B.TreeL (D.TTermN  cp sign w)
-pattern TermLeafPath  cp ws      = TermLeaf cp D.TermTypePath ws
+pattern TermLeaf      cp q ws    = B.TreeL (S.TTerm   cp q ws)
+pattern TermLeafName  cp sign w  = B.TreeL (S.TTermN  cp sign w)
+pattern TermLeafPath  cp ws      = TermLeaf cp S.TermTypePath ws
 
 -- | Text leaf.
-pattern TextLeaf form cp w  = B.TreeL (D.TText   cp form w)
--- | Text leaf of 'D.TextRaw'.
-pattern TextLeafRaw   cp w  = TextLeaf D.TextRaw cp w
+pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
+-- | Text leaf of 'S.TextRaw'.
+pattern TextLeafRaw   cp w  = TextLeaf S.TextRaw cp w
 -- | Text leaf beginning with single hyphen.
-pattern TextLeafAttr  cp w  = TextLeaf D.TextRaw cp ('-' : w)
+pattern TextLeafAttr  cp w  = TextLeaf S.TextRaw cp ('-' : w)
 -- | Text leaf beginning with double hyphens.
-pattern TextLeafAttr2 cp w  = TextLeaf D.TextRaw cp ('-' : '-' : w)
--- | Text leaf of 'D.TextQ'.
-pattern TextLeafQ     cp w  = TextLeaf D.TextQ   cp w
--- | Text leaf of 'D.TextQQ'.
-pattern TextLeafQQ    cp w  = TextLeaf D.TextQQ  cp w
--- | Text leaf of 'D.TextKey'.
-pattern TextLeafKey   cp w  = TextLeaf D.TextKey cp w
+pattern TextLeafAttr2 cp w  = TextLeaf S.TextRaw cp ('-' : '-' : w)
+-- | Text leaf of 'S.TextQ'.
+pattern TextLeafQ     cp w  = TextLeaf S.TextQ   cp w
+-- | Text leaf of 'S.TextQQ'.
+pattern TextLeafQQ    cp w  = TextLeaf S.TextQQ  cp w
+-- | Text leaf of 'S.TextKey'.
+pattern TextLeafKey   cp w  = TextLeaf S.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-ttrees :: [D.Token] -> B.Ab [TTree]
-ttrees = B.trees D.getBracketType B.BracketNone where
+ttrees :: [S.Token] -> B.Ab [TTree]
+ttrees = B.trees S.getBracketType B.BracketNone where
     --und = map (B.undouble (== BracketGroup))
 
 -- | Wrap trees in group.
 ttreeGroup :: TTreesTo TTree
-ttreeGroup = B.treeWrap D.BracketGroup
+ttreeGroup = B.treeWrap S.BracketGroup
 
 
 -- ----------------------  Divide trees
@@ -119,11 +119,11 @@ ttreeGroup = B.treeWrap D.BracketGroup
 --
 splitTokensBy
     :: B.Pred String   -- ^ Predicate
-    -> [D.Token]       -- ^ Tokens
-    -> Either [D.Token] ([D.Token], D.Token, [D.Token])
+    -> [S.Token]       -- ^ Tokens
+    -> Either [S.Token] ([S.Token], S.Token, [S.Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
 splitTokensBy p = B.splitBy p2 where
-    p2 (D.TTextRaw _ x)  = p x
+    p2 (S.TTextRaw _ x)  = p x
     p2 _ = False
 
 -- | Divide token trees by quoteless token of given string.
@@ -149,8 +149,8 @@ divideTreesByEqual = divideTreesBy "="
 
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
-tt s = do ts <- D.toks s
-          ttrees $ D.sweepToken ts
+tt s = do ts <- S.toks s
+          ttrees $ S.sweepToken ts
 
 -- | Parse string and group it.
 tt1 :: String -> B.Ab TTree

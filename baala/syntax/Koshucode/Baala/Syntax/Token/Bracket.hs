@@ -19,7 +19,7 @@ module Koshucode.Baala.Syntax.Token.Bracket
 
 import qualified Data.Generics                        as G
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax.Token.Token   as D
+import qualified Koshucode.Baala.Syntax.Token.Token   as S
 
 -- | Type of bracket.
 data BracketType
@@ -35,7 +35,7 @@ data BracketType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Bracket type of token.
-getBracketType :: B.GetBracketType BracketType D.Token
+getBracketType :: B.GetBracketType BracketType S.Token
 getBracketType = B.bracketTable
     [ o BracketGroup   groupOpen  groupClose
     , o BracketList    listOpen   listClose
@@ -45,8 +45,8 @@ getBracketType = B.bracketTable
     , o BracketInterp  interpOpen interpClose
     , o BracketType    typeOpen   typeClose
     , o BracketForm    "(|"       "|)"
-    , (BracketUnknown, D.isOpenToken, D.isCloseToken)
-    ] where o t a b = (t, D.isOpenTokenOf a, D.isCloseTokenOf b)
+    , (BracketUnknown, S.isOpenToken, S.isCloseToken)
+    ] where o t a b = (t, S.isOpenTokenOf a, S.isCloseTokenOf b)
 
 -- | Open group: @"("@
 groupOpen :: String

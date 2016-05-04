@@ -7,10 +7,10 @@ module Koshucode.Baala.Syntax.Token.TokenClause
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax.Token.Token     as D
-import qualified Koshucode.Baala.Syntax.Token.TokenLine as D
+import qualified Koshucode.Baala.Syntax.Token.Token     as S
+import qualified Koshucode.Baala.Syntax.Token.TokenLine as S
 
-type TokenClause = B.CodeClause D.Token
+type TokenClause = B.CodeClause S.Token
 
 instance B.Write TokenClause where
     writeDocWith = docTokenClause
@@ -27,22 +27,22 @@ docTokenClause sh (B.CodeClause ls toks) = d where
                                   , B.writeDocWith sh "elements" ]
 
 -- | Convert token lines into token clauses
-tokenClauses :: [D.TokenLine] -> [TokenClause]
+tokenClauses :: [S.TokenLine] -> [TokenClause]
 tokenClauses = map clause . split where
     clause ls = B.CodeClause ls $ tokens ls
 
-    tokens :: [D.TokenLine] -> [D.Token]
-    tokens = concatMap $ D.sweepToken . B.lineTokens
+    tokens :: [S.TokenLine] -> [S.Token]
+    tokens = concatMap $ S.sweepToken . B.lineTokens
 
-    split :: [D.TokenLine] -> [[D.TokenLine]]
+    split :: [S.TokenLine] -> [[S.TokenLine]]
     split = B.gather B.splitClause . map indent . B.omit blank
 
-    blank :: D.TokenLine -> Bool
-    blank = all D.isBlankToken . B.lineTokens
+    blank :: S.TokenLine -> Bool
+    blank = all S.isBlankToken . B.lineTokens
 
-    indent :: D.TokenLine -> (Int, D.TokenLine)
+    indent :: S.TokenLine -> (Int, S.TokenLine)
     indent = B.lineIndentPair tokenIndent
 
-tokenIndent :: D.Token -> Int
-tokenIndent (D.TSpace _ n) = n
+tokenIndent :: S.Token -> Int
+tokenIndent (S.TSpace _ n) = n
 tokenIndent _ = 0
