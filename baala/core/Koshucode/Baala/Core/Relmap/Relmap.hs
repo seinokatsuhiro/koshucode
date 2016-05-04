@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Syntax        as D
+import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Relkit   as C
@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Core.Relkit   as C
 data Relmap' h c
     = RelmapConst   C.Lexmap (D.Rel c)
                              -- ^ Constant relation
-    | RelmapSource  C.Lexmap D.JudgePat [D.TermName]
+    | RelmapSource  C.Lexmap D.JudgePat [S.TermName]
                              -- ^ Retrieve a relation from a dataset
 
     | RelmapCalc    C.Lexmap (C.RelkitConfl c) [Relmap' h c]
@@ -109,7 +109,7 @@ relmapId :: Relmap' h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = C.lexBase { C.lexToken = D.textToken "id" }
+lexId = C.lexBase { C.lexToken = S.textToken "id" }
 
 
 -- ----------------------  Selector

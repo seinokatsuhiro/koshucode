@@ -26,7 +26,7 @@ module Koshucode.Baala.Core.Relmap.Result
 import qualified GHC.IO.Encoding                   as IO
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 
 
@@ -50,7 +50,7 @@ data Result c = Result
 
 data InputPoint = InputPoint
     { inputPoint      :: B.IOPoint
-    , inputPointAbout :: [D.TTree]
+    , inputPointAbout :: [S.TTree]
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.
@@ -82,7 +82,7 @@ data ResultChunk c
 type ResultWriterChunk c = IO.Handle -> Result c -> B.ExitCode -> [ShortResultChunks c] -> IO B.ExitCode
 type ResultWriterJudge c = IO.Handle -> Result c -> B.ExitCode -> [D.Judge c] -> IO B.ExitCode
 
-type ShortResultChunks c = D.Short [ResultChunk c]
+type ShortResultChunks c = S.Short [ResultChunk c]
 
 resultChunkJudges :: ResultChunk c -> [D.Judge c]
 resultChunkJudges (ResultJudge js) = js
@@ -135,7 +135,7 @@ hPutResult h result
     where
       normal, violated :: [ShortResultChunks c]
       normal    = resultNormal result
-      violated  = D.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
+      violated  = S.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
 
       hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = B.notNull js
@@ -149,7 +149,7 @@ hPutAllChunks h result status sh =
          ResultWriterJudge _ w -> w h result status $ judges sh
     where
       judges :: [ShortResultChunks c] -> [D.Judge c]
-      judges = concatMap resultChunkJudges . concatMap D.shortBody
+      judges = concatMap resultChunkJudges . concatMap S.shortBody
 
 useUtf8 :: IO.Handle -> IO ()
 useUtf8 h = do B.setLocaleUtf8

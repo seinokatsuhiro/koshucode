@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Relmap.Option
 
 import qualified Data.Map.Strict                      as Map
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
@@ -24,7 +24,7 @@ type Option c = Map.Map String (OptionContent c)
 data OptionContent c
     = OptionBool Bool
     | OptionChar [Char] Char
-    | OptionTerms [D.TermName]
+    | OptionTerms [S.TermName]
       deriving (Show, Eq, Ord)
 
 option :: (D.CBool c, D.CText c) => Option c
@@ -42,32 +42,32 @@ optionBool name opt =
       _                   -> B.bug "unknown option"
 
 optionParse :: (Eq c, D.CBool c, D.CText c)
-  => D.ContentCalc c -> [D.Token] -> B.AbMap (Option c)
+  => D.ContentCalc c -> [S.Token] -> B.AbMap (Option c)
 optionParse calc toks opt =
     do assn <- optionAssn toks
        B.foldM (optionUpdate calc) opt assn
 
-type NamedT a = ((String, [D.TTree]), a)
+type NamedT a = ((String, [S.TTree]), a)
 
-optionAssn :: [D.Token] -> B.Ab [NamedT [D.TTree]]
+optionAssn :: [S.Token] -> B.Ab [NamedT [S.TTree]]
 optionAssn toks =
-    do trees <- D.ttrees toks
+    do trees <- S.ttrees toks
        case B.assocBy maybeName trees of
          ([], assoc) -> Right assoc
          _           -> Msg.adlib "extra input"
     where
-      maybeName pt@(D.TextLeafRaw _ n) = Just (n, [pt])
+      maybeName pt@(S.TextLeafRaw _ n) = Just (n, [pt])
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)
-   => D.ContentCalc c -> Option c -> NamedT [D.TTree] -> B.Ab (Option c)
+   => D.ContentCalc c -> Option c -> NamedT [S.TTree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
       case Map.lookup name opt of
         Just oc  -> Msg.abOption trees $ upd oc
         Nothing  -> Msg.adlib $ "unknown option: " ++ name
     where
-      abc = calc $ D.ttreeGroup trees
+      abc = calc $ S.ttreeGroup trees
 
       upd (OptionBool    _) = do bool <- D.getBool abc
                                  ins $ OptionBool bool
