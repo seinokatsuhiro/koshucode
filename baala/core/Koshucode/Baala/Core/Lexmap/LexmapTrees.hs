@@ -13,47 +13,47 @@ module Koshucode.Baala.Core.Lexmap.LexmapTrees
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Message         as Msg
 
 
 -- ----------------------  Type and constructor
 
 data LexmapTrees = LexmapTrees
-    { lexmapTrees   :: [D.TTree]
+    { lexmapTrees   :: [S.TTree]
     , lexmapPara    :: TTreePara
-    , lexmapAttrEd  :: D.AttrEd
+    , lexmapAttrEd  :: S.AttrEd
     } deriving (Show, Eq, Ord)
 
-clauseAttrType :: D.ParaType String
-clauseAttrType = D.paraType `D.paraMin` 0 `D.paraOpt` ["attr"]
+clauseAttrType :: S.ParaType String
+clauseAttrType = S.paraType `S.paraMin` 0 `S.paraOpt` ["attr"]
 
 consLexmapTrees :: TTreePara -> B.Ab LexmapTrees
 consLexmapTrees para =
-    do case D.paraUnmatch para clauseAttrType of
+    do case S.paraUnmatch para clauseAttrType of
          Nothing -> Right ()
          Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
-       attr <- D.paraGetOpt [] para "attr"
-       edit <- D.consAttrEd attr
-       let body = D.paraPos para
+       attr <- S.paraGetOpt [] para "attr"
+       edit <- S.consAttrEd attr
+       let body = S.paraPos para
        Right $ LexmapTrees body para edit
 
 
 -- ----------------------  Parameter of token trees
 
 -- | Token Tree parameter.
-type TTreePara = D.Para D.TTree
+type TTreePara = S.Para S.TTree
 
 -- | Make token tree parameter with single-hyphen names.
-ttreePara1 :: [D.Token] -> B.Ab TTreePara
-ttreePara1 = ttreeParaBy D.maybeSingleHyphen
+ttreePara1 :: [S.Token] -> B.Ab TTreePara
+ttreePara1 = ttreeParaBy S.maybeSingleHyphen
 
 -- | Make token tree parameter with double-hyphen names.
-ttreePara2 :: [D.Token] -> B.Ab TTreePara
-ttreePara2 = ttreeParaBy D.maybeDoubleHyphen
+ttreePara2 :: [S.Token] -> B.Ab TTreePara
+ttreePara2 = ttreeParaBy S.maybeDoubleHyphen
 
-ttreeParaBy :: D.TTreeTo (Maybe String) -> [D.Token] -> B.Ab TTreePara
+ttreeParaBy :: S.TTreeTo (Maybe String) -> [S.Token] -> B.Ab TTreePara
 ttreeParaBy f toks =
-    do trees <- D.ttrees toks
-       Right $ D.para f trees
+    do trees <- S.ttrees toks
+       Right $ S.para f trees
 

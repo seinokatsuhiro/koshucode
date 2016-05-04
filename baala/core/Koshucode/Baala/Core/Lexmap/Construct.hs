@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                     as B
-import qualified Koshucode.Baala.Syntax                   as D
+import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
 import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
 import qualified Koshucode.Baala.Data.Message             as Msg
@@ -39,14 +39,14 @@ type NNamed a = (NName, a)
 
 -- ----------------------  Constructor type
 
-type ConsLexmap = [D.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
+type ConsLexmap = [S.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
 
-type ConsLexmapBody = [D.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
+type ConsLexmapBody = [S.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
 
 type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 
 -- | Find attribute sorter of relmap operator.
-type FindSorter = C.RopName -> Maybe D.AttrSetSort
+type FindSorter = C.RopName -> Maybe S.AttrSetSort
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
@@ -67,28 +67,28 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
     lexmap eid sec trees = result where
-        result = Msg.abLexmap trees $ case D.divideTreesByBar trees of
+        result = Msg.abLexmap trees $ case S.divideTreesByBar trees of
                       []    -> Msg.bug "empty list"
                       [ts]  -> single ts
-                      tss   -> baseOf "append" $ map D.ttreeGroup tss
+                      tss   -> baseOf "append" $ map S.ttreeGroup tss
 
-        single (B.TreeL tok@(D.TTextRaw _ n)   : ts)
+        single (B.TreeL tok@(S.TTextRaw _ n)   : ts)
             = find tok n ts                       -- derived or base
-        single (B.TreeL tok@(D.TLocal _ _ _ _) : ts)
+        single (B.TreeL tok@(S.TLocal _ _ _ _) : ts)
             = local tok ts                        -- local relation "^/x" or "^x"
-        single [B.TreeB D.BracketGroup _ ts]
+        single [B.TreeB S.BracketGroup _ ts]
             = lexmap eid sec ts                   -- group "( ... )"
         single [B.TreeB _ _ _]
             = Msg.reqGroup                        -- unknown group
-        single (n@(D.TermLeafName _ _ _) : ts)
-            = baseOf "add" $ n : [D.ttreeGroup ts] -- "/N E" means "add /N ( E )"
+        single (n@(S.TermLeafName _ _ _) : ts)
+            = baseOf "add" $ n : [S.ttreeGroup ts] -- "/N E" means "add /N ( E )"
         single []
             = baseOf "id" []                      -- "| R | R" means "id | R | R"
         single _
             = Msg.unkRelmap "???"                 -- unknown relmap
         
         -- derived or base relmap operator
-        find :: D.Token -> String -> ConsLexmapBody
+        find :: S.Token -> String -> ConsLexmapBody
         find tok n ts = case findDeriv sec n of
                            [src] -> deriv tok src ts
                            []    -> base n tok ts
@@ -96,13 +96,13 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         -- -----------  local, derived, or base lexmap
 
-        local :: D.Token -> ConsLexmapBody
-        local tok [] = Right (cons C.LexmapLocal tok D.paraEmpty, [])
+        local :: S.Token -> ConsLexmapBody
+        local tok [] = Right (cons C.LexmapLocal tok S.paraEmpty, [])
         local _ _    = Msg.extraAttr
 
-        deriv :: D.Token -> LexmapClause -> ConsLexmapBody
+        deriv :: S.Token -> LexmapClause -> ConsLexmapBody
         deriv tok src ts =
-            do attr  <- D.attrSetSortNamed ts
+            do attr  <- S.attrSetSortNamed ts
                let lx = cons C.LexmapDerived tok attr
                tab   <- table lx src
                Right (lx, tab)
@@ -110,15 +110,15 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         table :: C.Lexmap -> LexmapClause -> B.Ab LexmapLinkTable
         table lx ((sec', _), C.LexmapTrees { C.lexmapTrees = form, C.lexmapAttrEd = edit }) =
             Msg.abSlot [lx] $ do
-              attr2       <- D.runAttrEd edit $ C.lexAttrTree lx
-              form2       <- D.substSlot gslot attr2 form
+              attr2       <- S.runAttrEd edit $ C.lexAttrTree lx
+              form2       <- S.substSlot gslot attr2 form
               (lx2, tab)  <- lexmap (eid + 1) sec' form2
               Right $ (lx, lx2) : tab
 
         baseOf :: C.RopName -> ConsLexmapBody
-        baseOf n = base n $ D.textToken n
+        baseOf n = base n $ S.textToken n
 
-        base :: C.RopName -> D.Token -> ConsLexmapBody
+        base :: C.RopName -> S.Token -> ConsLexmapBody
         base n tok ts =
             case findSorter n of
               Nothing     -> Msg.unkRelmap n
@@ -128,7 +128,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         -- -----------  construct lexmap except for submaps
 
-        cons :: C.LexmapType -> D.Token -> D.AttrSet -> C.Lexmap
+        cons :: C.LexmapType -> S.Token -> S.AttrSet -> C.Lexmap
         cons ty tok attr = check $ C.lexBase { C.lexType   = ty
                                              , C.lexToken  = tok
                                              , C.lexAttr   = attr }
@@ -148,9 +148,9 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         submap lx =
             let mark = B.mapToLeaf $ markLocal $ C.lexToken lx
                 attr = C.lexAttrTree lx
-            in case B.filterFst D.isAttrNameRelmap attr of
-                 [(D.AttrRelmapNormal _, ts)] -> submap2 lx ts
-                 [(D.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
+            in case B.filterFst S.isAttrNameRelmap attr of
+                 [(S.AttrRelmapNormal _, ts)] -> submap2 lx ts
+                 [(S.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
                  []                           -> Right (lx, [])  -- no submaps
                  _                            -> Msg.bug "submap"
 
@@ -160,8 +160,8 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
 
-        markLocal p (D.TLocal cp v eid' ps) | null ps || eid == eid'
-                       = D.TLocal cp v eid $ p : ps
+        markLocal p (S.TLocal cp v eid' ps) | null ps || eid == eid'
+                       = S.TLocal cp v eid $ p : ps
         markLocal _ loc = loc
 
 
