@@ -9,23 +9,23 @@ module Koshucode.Baala.Syntax.Attr.Slot
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax.Token           as D
-import qualified Koshucode.Baala.Syntax.Attr.AttrPos    as D
+import qualified Koshucode.Baala.Syntax.Token           as S
+import qualified Koshucode.Baala.Syntax.Attr.AttrPos    as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
-type GlobalSlot = D.NamedTrees
+type GlobalSlot = S.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [D.AttrTree] -> B.AbMap [D.TTree]
+substSlot :: [GlobalSlot] -> [S.AttrTree] -> B.AbMap [S.TTree]
 substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot] -> [D.AttrTree] -> D.TTree -> B.Ab [D.TTree]
+substTree :: [GlobalSlot] -> [S.AttrTree] -> S.TTree -> B.Ab [S.TTree]
 substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
-    loop (B.TreeL (D.TSlot _ n name))
-        | n == 0    = replace n name D.attrNameTrunk attr (`pos` name)
-        | n == 1    = replace n name (D.AttrNormal name) attr Right
+    loop (B.TreeL (S.TSlot _ n name))
+        | n == 0    = replace n name S.attrNameTrunk attr (`pos` name)
+        | n == 1    = replace n name (S.AttrNormal name) attr Right
         | n == 2    = replace n name name gslot Right
         | otherwise = Msg.noSlotName n name
     loop tk = Right [tk]
@@ -35,13 +35,13 @@ substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
           Just od -> f od
           Nothing -> Msg.noSlotName n name
 
-    pos :: [D.TTree] -> String -> B.Ab [D.TTree]
+    pos :: [S.TTree] -> String -> B.Ab [S.TTree]
     pos od "all" = Right od
     pos od n     = case B.readInt n of
                      Just i  -> Right . B.li1 =<< od `at` i
                      Nothing -> Msg.noSlotName 0 n
 
-    at = substIndex $ unwords . map D.tokenContent . B.untree
+    at = substIndex $ unwords . map S.tokenContent . B.untree
 
 substIndex :: (a -> String) -> [a] -> Int -> B.Ab a
 substIndex toString xxs n = loop xxs n where

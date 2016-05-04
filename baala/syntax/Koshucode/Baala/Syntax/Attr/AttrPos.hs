@@ -24,7 +24,7 @@ module Koshucode.Baala.Syntax.Attr.AttrPos
 
 import qualified Data.Generics                        as G
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax.Token         as D
+import qualified Koshucode.Baala.Syntax.Token         as S
 import qualified Koshucode.Baala.Syntax.Attr.Message  as Msg
 
 
@@ -89,10 +89,10 @@ attrNameTrunk = AttrNormal "@trunk"
 type AttrNamePos = AttrPos AttrName
 
 -- | Positional attribute sorter.
-type AttrSortTree = [D.TTree] -> B.Ab [AttrTree]
+type AttrSortTree = [S.TTree] -> B.Ab [AttrTree]
 
 -- | Attribute name and its contents.
-type AttrTree = (AttrName, [D.TTree])
+type AttrTree = (AttrName, [S.TTree])
 
 -- | Sort token trees by positional attributes.
 sortAttrTree :: AttrNamePos -> AttrSortTree

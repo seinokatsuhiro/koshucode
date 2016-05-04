@@ -26,34 +26,34 @@ module Koshucode.Baala.Syntax.Attr.Message
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax.Symbol           as D
-import qualified Koshucode.Baala.Syntax.Token            as D
+import qualified Koshucode.Baala.Syntax.Symbol           as S
+import qualified Koshucode.Baala.Syntax.Token            as S
 
 abAttr        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr        = B.abortable "attr"
 
-abAttrTrees   :: D.TTreesTo (B.Map (B.Ab b))
+abAttrTrees   :: S.TTreesTo (B.Map (B.Ab b))
 abAttrTrees   = abortableTrees "attr"
 
 abSlot        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot        = B.abortable "slot"
 
-abSlotTree    :: D.TTreeTo (B.Map (B.Ab b))
+abSlotTree    :: S.TTreeTo (B.Map (B.Ab b))
 abSlotTree    = abortableTree "slot"
 
--- | Same as 'abortable' except for using 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTree :: String -> D.TTreeTo (B.Map (B.Ab b))
+-- | Same as 'abortable' except for using 'S.TTree'
+--   instead of list of 'S.Token'.
+abortableTree :: String -> S.TTreeTo (B.Map (B.Ab b))
 abortableTree tag = B.abortable tag . B.untree
 
--- | Same as 'abortable' except for using list of 'D.TTree'
---   instead of list of 'D.Token'.
-abortableTrees :: String -> D.TTreesTo (B.Map (B.Ab b))
+-- | Same as 'abortable' except for using list of 'S.TTree'
+--   instead of list of 'S.Token'.
+abortableTrees :: String -> S.TTreesTo (B.Map (B.Ab b))
 abortableTrees tag = B.abortable tag . B.untrees
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> B.Ab a
-dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map D.showTermName ns)
+dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map S.showTermName ns)
 
 -- | Extra attribute
 extraAttr :: B.Ab a
