@@ -44,7 +44,7 @@ module Koshucode.Baala.Data.Type.Rel.Head
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data.Type.Type    as D
 
 
@@ -102,7 +102,7 @@ headOf :: D.Type -> Head
 headOf ty = Head { headType = ty }
 
 -- | Make head from term names.
-headFrom :: [D.TermName] -> Head
+headFrom :: [S.TermName] -> Head
 headFrom = headOf . D.typeFlatRel
 
 -- | Empty heading, i.e., no terms in heading.
@@ -143,7 +143,7 @@ isSuperhead :: Head -> Head -> Bool
 isSuperhead he1 he2 = isSubhead he2 he1
 
 -- | List of term names.
-headNames :: Head -> [D.TermName]
+headNames :: Head -> [S.TermName]
 headNames = D.typeRelTermNames . headType
 
 -- | Degree of relation, i.e., number of terms.
@@ -151,11 +151,11 @@ headDegree :: Head -> Int
 headDegree = D.typeRelDegree . headType
 
 -- | Index of a term.
-headIndex1 :: Head -> D.TermPath -> [Int]
+headIndex1 :: Head -> S.TermPath -> [Int]
 headIndex1 = D.typeRelIndex . headType
 
 -- | Select nested terms.
-headNested :: Head -> [(D.TermName, Head)]
+headNested :: Head -> [(S.TermName, Head)]
 headNested he = ts2 where
     ts2 = map h $ filter (D.isTypeRel . snd) $ D.typeTerms $ headType he
     h (n, t) = (n, headOf t)
@@ -178,18 +178,18 @@ headTypes _ = B.bug "headTypes"
 --
 
 -- | Add term name to head.
-headCons :: D.TermName -> B.Map Head
+headCons :: S.TermName -> B.Map Head
 headCons n1 = headOf . D.typeConsRel n1 . headType
 
 -- | Add term names to head.
-headAppend :: [D.TermName] -> B.Map Head
+headAppend :: [S.TermName] -> B.Map Head
 headAppend ns1 = headOf . D.typeAppendRel ns1 . headType
 
-headConsNest :: D.TermName -> Head -> B.Map Head
+headConsNest :: S.TermName -> Head -> B.Map Head
 headConsNest n1 Head { headType = t1 } Head { headType = t } =
     headOf $ D.typeConsNest n1 t1 t
 
-headNests :: [D.TermName] -> B.Map Head
+headNests :: [S.TermName] -> B.Map Head
 headNests ns1 Head { headType = t } =
     headOf $ D.TypeRel $ map nest ns1
         where nest n = (n, t)
@@ -212,7 +212,7 @@ headNests ns1 Head { headType = t } =
 headMap :: B.Map [D.NamedType] -> B.Map Head
 headMap = headMapBy D.typeRelMapTerms
 
-headMapName :: B.Map D.TermName -> B.Map Head
+headMapName :: B.Map S.TermName -> B.Map Head
 headMapName = headMapBy D.typeRelMapName
 
 headMapBy :: (a -> B.Map D.Type) -> a -> B.Map Head
@@ -240,10 +240,10 @@ data HeadLR c = HeadLR
     , headRShareIndex  :: [Int]         -- ^ Indicies of left-shared part
     , headDisjoint     :: Bool          -- ^ Whether shared part is empty
 
-    , headLSideNames   :: [D.TermName]  -- ^ Left-side term names
-    , headLShareNames  :: [D.TermName]  -- ^ Left-shared term names
-    , headRShareNames  :: [D.TermName]  -- ^ Right-shared term names
-    , headRSideNames   :: [D.TermName]  -- ^ Right-side term names
+    , headLSideNames   :: [S.TermName]  -- ^ Left-side term names
+    , headLShareNames  :: [S.TermName]  -- ^ Left-shared term names
+    , headRShareNames  :: [S.TermName]  -- ^ Right-shared term names
+    , headRSideNames   :: [S.TermName]  -- ^ Right-side term names
 
     , headLSide        :: [c] -> [c]    -- ^ Pick left-side part from left contents
     , headLShare       :: [c] -> [c]    -- ^ Pick left-shared part from left contents
@@ -257,7 +257,7 @@ data HeadLR c = HeadLR
     , headRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
     }
 
-headLR :: [D.TermName] -> [D.TermName] -> HeadLR a
+headLR :: [S.TermName] -> [S.TermName] -> HeadLR a
 headLR left right = headLRBody li ri left right where
     (li, ri) = sharedIndex left right
 
@@ -270,13 +270,13 @@ sharedIndex xs1 xs2 = (ind1, ind2) where
     ind2  = B.snipIndex sh xs2
     sh    = B.intersectionFilter xs2 xs1
 
-headLROrd :: [D.TermName] -> [D.TermName] -> HeadLR a
+headLROrd :: [S.TermName] -> [S.TermName] -> HeadLR a
 headLROrd left right = headLRBody li ri left right where
     (li, ri)  = (ind2 left, ind2 right)
     ind       = B.snipIndex left right
     ind2      = B.snipIndex $ B.snipFrom ind right
 
-headLRBody :: [Int] -> [Int] -> [D.TermName] -> [D.TermName] -> HeadLR a
+headLRBody :: [Int] -> [Int] -> [S.TermName] -> [S.TermName] -> HeadLR a
 headLRBody li ri left right = lr where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li

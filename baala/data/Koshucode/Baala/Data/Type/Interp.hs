@@ -7,16 +7,16 @@ module Koshucode.Baala.Data.Type.Interp
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 
 data Interp =
     Interp { interpWords :: [InterpWord]
-           , interpTerms :: [D.TermName]
+           , interpTerms :: [S.TermName]
            } deriving (Show, Eq, Ord)
 
 data InterpWord
     = InterpText String
-    | InterpTerm D.TermName
+    | InterpTerm S.TermName
     deriving (Show, Eq, Ord)
 
 instance B.Write Interp where
@@ -27,7 +27,7 @@ instance B.Write InterpWord where
 
 interpDoc :: B.Shortener -> Interp -> B.Doc
 interpDoc sh Interp { interpWords = xs } = doc where
-    doc    = B.doc D.interpOpen B.<+> xsDoc B.<+> B.doc D.interpClose
+    doc    = B.doc S.interpOpen B.<+> xsDoc B.<+> B.doc S.interpClose
     xsDoc  = B.doch $ map (B.writeDocWith sh) xs
 
 interpWordDoc :: B.Shortener -> InterpWord -> B.Doc
@@ -40,7 +40,7 @@ interp ws = intp where
     intp  = Interp { interpWords = ws
                    , interpTerms = terms }
 
-getTermName :: InterpWord -> Maybe D.TermName
+getTermName :: InterpWord -> Maybe S.TermName
 getTermName (InterpTerm n) = Just n
 getTermName _              = Nothing
 

@@ -21,7 +21,7 @@ import qualified Text.Blaze.XHtml5                    as H
 import           Text.Blaze.XHtml5                    ((!))
 import           Text.Blaze.XHtml5.Attributes         (class_)
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type.Rel.Head   as D
 import qualified Koshucode.Baala.Data.Type.Judge      as D
 
@@ -61,8 +61,8 @@ instance (B.Write c) => B.Write (Rel c) where
     writeDocWith sh (Rel he bo) =
         let he'  = B.writeDocWith sh he
             bo'  = B.writeH sh $ map d bo
-            d xs = B.docWraps D.listOpen D.listClose $ B.writeBar sh xs
-        in B.docWraps D.relOpen D.relClose $ he' B.<+> bo'
+            d xs = B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
+        in B.docWraps S.relOpen S.relClose $ he' B.<+> bo'
 
     writeHtmlWith sh (Rel he bo) =
         H.table ! class_ "relation" $ do
@@ -72,7 +72,7 @@ instance (B.Write c) => B.Write (Rel c) where
         where
           row cs = H.tr ! class_ "tuple" $ mapM_ col cs
           col c  = H.td $ B.writeHtmlWith sh c
-          term   = (H.span ! class_ "termname") . H.toHtml . D.showTermName
+          term   = (H.span ! class_ "termname") . H.toHtml . S.showTermName
 
 
 -- ----------------------  Sort contents
@@ -88,7 +88,7 @@ relSortHead (Rel he bo) = Rel he' bo' where
 relSortBody :: (Ord c) => B.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
-relBodyOrder :: (Ord c) => [D.SignedTermName] -> D.Head -> B.Map [[c]]
+relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> B.Map [[c]]
 relBodyOrder ns he = ed where
     ed    = B.sortByName ords $ D.headNames he
     ords  = map B.orderingCap ns
@@ -129,7 +129,7 @@ reldau = Rel B.mempty []
 
 class SelectRel r where
     -- | Convert judges to relation.
-    selectRel :: r c -> D.JudgePat -> [D.TermName] -> Rel c
+    selectRel :: r c -> D.JudgePat -> [S.TermName] -> Rel c
 
 -- | Convert relation to list of judges.
 judgesFromRel :: D.JudgeOf c -> D.JudgePat -> Rel c -> [D.Judge c]

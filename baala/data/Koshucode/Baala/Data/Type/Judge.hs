@@ -27,7 +27,7 @@ module Koshucode.Baala.Data.Type.Judge
 
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 
 
 -- ----------------------  Datatype
@@ -44,12 +44,12 @@ import qualified Koshucode.Baala.Syntax            as D
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      JudgePat [D.Term c]  -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        JudgePat [D.Term c]  -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   JudgePat [D.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
-    | JudgeChange      JudgePat [D.Term c] [D.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
-    | JudgeMultiChange JudgePat [D.Term c] [D.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     JudgePat [D.Term c]  -- ^ @|-v P \/x 10 \/y 20@
+    = JudgeAffirm      JudgePat [S.Term c]  -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        JudgePat [S.Term c]  -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   JudgePat [S.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
+    | JudgeChange      JudgePat [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
+    | JudgeMultiChange JudgePat [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
+    | JudgeViolate     JudgePat [S.Term c]  -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -84,7 +84,7 @@ judgePat (JudgeMultiChange p _ _)      = p
 judgePat (JudgeViolate     p _)        = p
 
 -- | Return term list of judgement.
-judgeTerms :: Judge c -> [D.Term c]
+judgeTerms :: Judge c -> [S.Term c]
 judgeTerms (JudgeAffirm      _ xs)     = xs
 judgeTerms (JudgeDeny        _ xs)     = xs
 judgeTerms (JudgeMultiDeny   _ xs)     = xs
@@ -92,7 +92,7 @@ judgeTerms (JudgeChange      _ xs _)   = xs
 judgeTerms (JudgeMultiChange _ xs _)   = xs
 judgeTerms (JudgeViolate     _ xs)     = xs
 
-judgeTermsMap :: ([D.Term a] -> [D.Term b]) -> Judge a -> Judge b
+judgeTermsMap :: ([S.Term a] -> [S.Term b]) -> Judge a -> Judge b
 judgeTermsMap f (JudgeAffirm      p xs)      = JudgeAffirm    p (f xs)
 judgeTermsMap f (JudgeDeny        p xs)      = JudgeDeny      p (f xs)
 judgeTermsMap f (JudgeMultiDeny   p xs)      = JudgeMultiDeny p (f xs)
@@ -101,7 +101,7 @@ judgeTermsMap f (JudgeMultiChange p xs xs')  = JudgeChange    p (f xs) (f xs')
 judgeTermsMap f (JudgeViolate     p xs)      = JudgeViolate   p (f xs)
 
 -- | Prepend a term into judgement.
-judgeCons :: D.Term c -> B.Map (Judge c)
+judgeCons :: S.Term c -> B.Map (Judge c)
 judgeCons x = judgeTermsMap (x :)
 
 -- | Sort terms in alphabetical order.
@@ -112,7 +112,7 @@ sortJudgeTerms = judgeTermsMap B.sort
 -- ----------------------  Logical quality
 
 -- | Construct judgement from its pattern and terms.
-type JudgeOf c = JudgePat -> [D.Term c] -> Judge c
+type JudgeOf c = JudgePat -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 affirm :: JudgeOf c
@@ -154,7 +154,7 @@ isViolative _                   = False
 writeDownJudge :: (B.Write c) => B.Shortener -> Judge c -> String
 writeDownJudge sh = judgeText . textualjudge sh
 
-writeDownTerms :: (B.Write c) => B.Shortener -> [D.Term c] -> String
+writeDownTerms :: (B.Write c) => B.Shortener -> [S.Term c] -> String
 writeDownTerms sh = concatMap term where
     term (n, c) = termText n $ B.writeStringWith sh c
 
@@ -173,13 +173,13 @@ judgeText jud =
     where
       line j p xs  = j ++ " " ++ p ++ termsText xs
 
-termText :: D.TermName -> String -> String
+termText :: S.TermName -> String -> String
 termText n c = "  /" ++ n ++ " " ++ c
 
-termTextPair :: (D.Term String) -> String
+termTextPair :: (S.Term String) -> String
 termTextPair (n, c) = termText n c
 
-termsText :: [D.Term String] -> String
+termsText :: [S.Term String] -> String
 termsText = concatMap termTextPair
 
 putJudge :: (B.Write c) => Judge c -> IO ()
