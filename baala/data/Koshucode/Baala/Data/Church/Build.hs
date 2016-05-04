@@ -9,7 +9,7 @@ module Koshucode.Baala.Data.Church.Build
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax                 as D
+import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data.Content           as D
 import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D
@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (D.CContent c)
-  => D.ContentCalc c -> D.CopSet c -> D.TTreeToAb (D.Cox c)
+  => D.ContentCalc c -> D.CopSet c -> S.TTreeToAb (D.Cox c)
 coxBuild calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
@@ -74,21 +74,21 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => D.ContentCalc c -> D.TTreeToAb (D.Cox c)
+construct :: forall c. (D.CContent c) => D.ContentCalc c -> S.TTreeToAb (D.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePtList $ B.front $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePt] -> D.TTreeToAb (D.Cox c)
-    cons cp tree@(B.TreeB D.BracketGroup _ subtrees)
+    cons :: [B.CodePt] -> S.TTreeToAb (D.Cox c)
+    cons cp tree@(B.TreeB S.BracketGroup _ subtrees)
          = case subtrees of
-             f@(D.TextLeaf q _ w) : xs
-                 | q == D.TextRaw && isName w -> fill cp f xs
+             f@(S.TextLeaf q _ w) : xs
+                 | q == S.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
              -- term with options (experimental)
-             (B.TreeL (D.TTermPath _ ns)) : _
+             (B.TreeL (S.TTermPath _ ns)) : _
                  -> Right $ D.CoxTerm cp ns []
 
              -- fill args in the blanks (application)
@@ -96,12 +96,12 @@ construct calc = expr where
              []     -> lit cp tree
 
     -- form with blanks (function)
-    cons cp (B.TreeB D.BracketForm _ [vars, b1]) =
+    cons cp (B.TreeB S.BracketForm _ [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
-           let vs = map D.tokenContent $ B.untree vars'
+           let vs = map S.tokenContent $ B.untree vars'
            Right $ D.CoxForm cp tag vs b2
-    cons _ (B.TreeB D.BracketForm _ trees) =
+    cons _ (B.TreeB S.BracketForm _ trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
@@ -109,12 +109,12 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
-        D.TTermN _ _ n             -> Right $ D.CoxTerm  cp [n] []
-        D.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
-        D.TName _ op               -> Right $ D.CoxBlank cp op
-        D.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ D.BlankNormal n
-        D.TText _ _ _              -> lit cp tree
-        D.TTermQ _ _               -> lit cp tree
+        S.TTermN _ _ n             -> Right $ D.CoxTerm  cp [n] []
+        S.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
+        S.TName _ op               -> Right $ D.CoxBlank cp op
+        S.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
+        S.TText _ _ _              -> lit cp tree
+        S.TTermQ _ _               -> lit cp tree
         _                          -> B.bug "core/leaf"
 
     fill cp f xs =
@@ -126,8 +126,8 @@ construct calc = expr where
     calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
                      | otherwise      = calc tree'
 
-    untag :: D.TTreeTo (D.CoxTag, D.TTree)
-    untag (B.TreeB l p (D.TextLeafQ _ tag : vars))
+    untag :: S.TTreeTo (D.CoxTag, S.TTree)
+    untag (B.TreeB l p (S.TextLeafQ _ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
@@ -143,61 +143,61 @@ isNameFirst c = case B.majorGeneralCategory c of
                   _                   ->  False
 
 -- convert from infix operator to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap D.TTree
+prefix :: [B.Named B.InfixHeight] -> B.AbMap S.TTree
 prefix htab tree =
     Msg.abCoxPrefix tree $
-     case B.infixToPrefix conv ht (B.TreeB D.BracketGroup Nothing) mapper tree of
+     case B.infixToPrefix conv ht (B.TreeB S.BracketGroup Nothing) mapper tree of
        Right tree3 -> Right $ undoubleGroup tree3
        Left  xs    -> Msg.ambInfixes $ map detail xs
     where
       conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
-      c :: (String -> D.BlankName) -> B.Map D.Token
-      c f (D.TTextRaw cp s) = D.TName cp $ f s
+      c :: (String -> S.BlankName) -> B.Map S.Token
+      c f (S.TTextRaw cp s) = S.TName cp $ f s
       c _ x = x
 
-      ht :: D.Token -> B.InfixHeight
+      ht :: S.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
-      wordText :: D.Token -> Maybe String
-      wordText (D.TTextRaw _ w) = Just w
+      wordText :: S.Token -> Maybe String
+      wordText (S.TTextRaw _ w) = Just w
       wordText _               = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
 
-      detailText tok dir n = D.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+      detailText tok dir n = S.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
-mapper :: B.InfixMapper D.BracketType D.Token
+mapper :: B.InfixMapper S.BracketType S.Token
 mapper f = loop where
-    loop (B.TreeB D.BracketGroup p xs) =
+    loop (B.TreeB S.BracketGroup p xs) =
         do xs' <- f xs
-           Right $ B.TreeB D.BracketGroup p xs'
-    loop (B.TreeB D.BracketForm p1 [vs, B.TreeB D.BracketGroup p2 body]) =
+           Right $ B.TreeB S.BracketGroup p xs'
+    loop (B.TreeB S.BracketForm p1 [vs, B.TreeB S.BracketGroup p2 body]) =
         do body' <- f body
-           Right $ B.TreeB D.BracketForm p1 [vs, undoubleGroup $ B.TreeB D.BracketGroup p2 body']
+           Right $ B.TreeB S.BracketForm p1 [vs, undoubleGroup $ B.TreeB S.BracketGroup p2 body']
     loop tree = Right tree
 
-undoubleGroup :: B.Map (B.CodeTree D.BracketType a)
-undoubleGroup = B.undouble (== D.BracketGroup)
+undoubleGroup :: B.Map (B.CodeTree S.BracketType a)
+undoubleGroup = B.undouble (== S.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: D.CopFind D.CopTree -> B.AbMap D.TTree
+convTree :: D.CopFind D.CopTree -> B.AbMap S.TTree
 convTree find = expand where
-    expand tree@(B.TreeB D.BracketGroup p subtrees) =
+    expand tree@(B.TreeB S.BracketGroup p subtrees) =
         case subtrees of
-          op@(D.TextLeafRaw _ name) : args
+          op@(S.TextLeafRaw _ name) : args
               -> Msg.abCoxSyntax tree $
-                 case find $ D.BlankNormal name of
+                 case find $ S.BlankNormal name of
                    Just f -> expand =<< f args
                    _      -> do args2 <- mapM expand args
-                                Right $ B.TreeB D.BracketGroup p (op : args2)
+                                Right $ B.TreeB S.BracketGroup p (op : args2)
           _ -> do sub2 <- mapM expand subtrees
-                  Right $ B.TreeB D.BracketGroup p sub2
+                  Right $ B.TreeB S.BracketGroup p sub2
 
-    expand (B.TreeB D.BracketForm p trees) =
-        case D.divideTreesByBar trees of
-          [vars, b1] -> do b2 <- expand $ D.ttreeGroup b1
-                           Right $ B.TreeB D.BracketForm p [D.ttreeGroup vars, b2]
+    expand (B.TreeB S.BracketForm p trees) =
+        case S.divideTreesByBar trees of
+          [vars, b1] -> do b2 <- expand $ S.ttreeGroup b1
+                           Right $ B.TreeB S.BracketForm p [S.ttreeGroup vars, b2]
           _ -> Msg.unkCox "abstruction"
 
     expand tree = Right tree

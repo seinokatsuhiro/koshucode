@@ -25,11 +25,11 @@ module Koshucode.Baala.Data.Church.Message
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as D
+import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Syntax.Message       as Msg
 
-abCoxBuild :: D.TTreeTo (B.Map (B.Ab b))
+abCoxBuild :: S.TTreeTo (B.Map (B.Ab b))
 abCoxBuild = Msg.abortableTree "cox-build"
 
 abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
@@ -44,13 +44,13 @@ abCoxIrrep = B.abortable "cox-irrep"
 abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxPosition = B.abortable "cox-position"
 
-abCoxPrefix :: D.TTreeTo (B.Map (B.Ab b))
+abCoxPrefix :: S.TTreeTo (B.Map (B.Ab b))
 abCoxPrefix = Msg.abortableTree "cox-prefix"
 
 abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxReduce = B.abortable "cox-reduce"
 
-abCoxSyntax :: D.TTreeTo (B.Map (B.Ab b))
+abCoxSyntax :: S.TTreeTo (B.Map (B.Ab b))
 abCoxSyntax = Msg.abortableTree "cox-syntax"
 
 -- | Ambiguous infix operators
@@ -84,7 +84,7 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: [D.TermName] -> D.Head -> B.Ab a
+unkTerm :: [S.TermName] -> D.Head -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
@@ -108,6 +108,6 @@ detailTermRel :: String -> [String] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
     indent = map ("  " ++)
-    ns'    = map D.showTermName ns
+    ns'    = map S.showTermName ns
     ns1    = B.linesFrom $ D.headExplain he1
 

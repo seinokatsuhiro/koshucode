@@ -14,7 +14,7 @@ module Koshucode.Baala.Data.Church.Run
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax                 as D
+import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data.Type              as D
 import qualified Koshucode.Baala.Data.Content           as D
 import qualified Koshucode.Baala.Data.Church.Build      as D
@@ -29,8 +29,8 @@ import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 data Beta c
     = BetaLit  [B.CodePt] c                     -- ^ Literal content
-    | BetaTerm [B.CodePt] [D.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePt] D.BlankName (D.CopCalc c) [B.Ab (Beta c)]  -- ^ Function application
+    | BetaTerm [B.CodePt] [S.TermName] [Int]    -- ^ Term reference, its name and position
+    | BetaCall [B.CodePt] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePtr (Beta c) where
     codePtList (BetaLit  cp _)      = cp
@@ -109,10 +109,10 @@ link copset deriv = li where
     find n    = lookup n fs B.<|> findCont n
     findCont  = D.copsetFindCalc copset
 
-    fs :: [(D.BlankName, D.Cox c)]
+    fs :: [(S.BlankName, D.Cox c)]
     fs = map (fmap li . normal) deriv
 
-    normal (n, cop) = (D.BlankNormal n, cop)
+    normal (n, cop) = (S.BlankNormal n, cop)
 
 -- put term positions for actural heading
 position :: D.Head -> D.Cox c -> B.Ab (D.Cox c)
@@ -122,7 +122,7 @@ position he = spos where
         let index = D.headIndex1 he ns
         in if all (>= 0) index
            then Right $ D.CoxTerm cp ns index
-           else Msg.unkTerm [D.showTermPath ns] he
+           else Msg.unkTerm [S.showTermPath ns] he
     pos (D.CoxFill cp  f xs)    = do f'  <- spos f
                                      xs' <- mapM spos xs
                                      Right $ D.CoxFill cp f' xs'
