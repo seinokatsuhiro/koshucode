@@ -8,7 +8,7 @@ module Koshucode.Baala.Writer.Koshu
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Syntax              as D
+import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
@@ -70,11 +70,11 @@ hPutFoot h status cnt = B.hPutLines h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 hPutShortChunk :: (B.Write c) => IO.Handle -> C.Result c -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
-hPutShortChunk h result cnt (D.Short _ def output) =
+hPutShortChunk h result cnt (S.Short _ def output) =
     do hPutShort h def
-       hPutChunks h result (D.shortText def) output cnt
+       hPutChunks h result (S.shortText def) output cnt
 
-hPutShort :: IO.Handle -> [D.ShortDef] -> IO ()
+hPutShort :: IO.Handle -> [S.ShortDef] -> IO ()
 hPutShort _ [] = return ()
 hPutShort h def =
     do B.hPutLines h $ "short" : map shortLine def

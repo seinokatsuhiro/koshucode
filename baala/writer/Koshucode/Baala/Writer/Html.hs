@@ -10,7 +10,7 @@ import qualified Text.Blaze.XHtml5                  as H
 import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
 import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Syntax             as D
+import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Core               as C
 
 resultHtmlIndented :: (B.Write c) => C.ResultWriter c
@@ -26,7 +26,7 @@ hPutHtml render h _ status sh =
 
 hPutRel :: (B.Write c) => IO.Handle -> (H.Html -> String) -> [C.ShortResultChunks c] -> IO ()
 hPutRel h render sh = mapM_ put chunks where
-    chunks = concatMap D.shortBody sh
+    chunks = concatMap S.shortBody sh
     put (C.ResultRel pat r) = IO.hPutStrLn h $ render $ html pat r
     put _                 = return ()
     html pat r = H.div ! class_ "named-relation" $ do

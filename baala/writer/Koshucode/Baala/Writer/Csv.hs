@@ -11,7 +11,7 @@ import qualified Data.Char                 as Char
 import qualified System.IO                 as IO
 import qualified Text.CSV                  as CSV
 import qualified Koshucode.Baala.Base      as B
-import qualified Koshucode.Baala.Syntax    as D
+import qualified Koshucode.Baala.Syntax    as S
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 
@@ -40,7 +40,7 @@ hPutXsvHeading delim text h _ status sh =
        IO.hPutStr h $ unlines csv
        return status
     where
-      chunks = concatMap D.shortBody sh
+      chunks = concatMap S.shortBody sh
 
       toCsv :: C.ResultChunk c -> [String]
       toCsv (C.ResultRel _ (D.Rel he bo)) =

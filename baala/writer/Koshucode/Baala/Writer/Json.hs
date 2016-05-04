@@ -19,7 +19,7 @@ import qualified Data.Aeson                        as A
 import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 
@@ -50,7 +50,7 @@ instance (A.ToJSON c) => A.ToJSON (D.Judge c) where
                  , "args"  .= termsToJSON xs ]
     toJSON _ = undefined
 
-termsToJSON :: (A.ToJSON c) => [D.Term c] -> A.Value
+termsToJSON :: (A.ToJSON c) => [S.Term c] -> A.Value
 termsToJSON xs = A.object $ map json xs where
     json (n, c) = (T.pack n, A.toJSON c)
 
