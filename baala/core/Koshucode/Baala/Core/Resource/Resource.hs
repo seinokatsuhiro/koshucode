@@ -28,7 +28,7 @@ module Koshucode.Baala.Core.Resource.Resource
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as D
+import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core.Assert    as C
 import qualified Koshucode.Baala.Core.Lexmap    as C
@@ -45,13 +45,13 @@ data Resource c = Resource
     , resOption     :: C.Option c          -- ^ Options
     , resImport     :: [Resource c]        -- ^ Importing resources
     , resExport     :: [String]            -- ^ Exporting names
-    , resSlot       :: [D.NamedTrees]      -- ^ Global slots
+    , resSlot       :: [S.NamedTrees]      -- ^ Global slots
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
     , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
     , resInputStack :: ([C.InputPoint], [C.InputPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
-    , resEcho       :: [[D.TokenLine]]     -- ^ Echo text
+    , resEcho       :: [[S.TokenLine]]     -- ^ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
@@ -103,7 +103,7 @@ resInputPoint Resource { resInputStack = (in1, in2, in3) }
       ip p = C.InputPoint p []
 
 resPattern :: Resource c -> [D.JudgePat]
-resPattern Resource { resAssert = ass } = map (C.assPattern . D.shortBody) ass
+resPattern Resource { resAssert = ass } = map (C.assPattern . S.shortBody) ass
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }

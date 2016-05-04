@@ -6,10 +6,10 @@ module Koshucode.Baala.Core.Resource.About
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 
-data About c = About [D.Term c] deriving (Show)
+data About c = About [S.Term c] deriving (Show)
 type AboutJudges c = (Maybe (About c), [D.Judge c])
 
 instance (B.Write c) => B.Write (About c) where

@@ -20,7 +20,7 @@ module Koshucode.Baala.Core.Resource.Clause
 import qualified Data.Generics                          as G
 import qualified Data.Char                              as Char
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax                 as D
+import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap            as C
 import qualified Koshucode.Baala.Data.Message           as Msg
@@ -35,22 +35,22 @@ data Clause =
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseHead = ClauseHead
-    { clauseSource  :: D.TokenClause
+    { clauseSource  :: S.TokenClause
     , clauseSecNo   :: C.SecNo
-    , clauseShort   :: [D.ShortDef]
-    , clauseAbout   :: [D.Token]
+    , clauseShort   :: [S.ShortDef]
+    , clauseAbout   :: [S.Token]
     } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CInput    [D.Token]                          -- ^ Input point
+    = CInput    [S.Token]                          -- ^ Input point
     | CExport   String                             -- ^ Exporting name
-    | CRelmap   String [D.Token]                   -- ^ Source of relmap
-    | CAssert   D.AssertType D.JudgePat [D.Token]  -- ^ Assertion
-    | CJudge    D.AssertType D.JudgePat [D.Token]  -- ^ Judge
-    | CSlot     String [D.Token]                   -- ^ Global slot
-    | COption   [D.Token]                          -- ^ Option settings
-    | COutput   [D.Token]                          -- ^ Output point
-    | CEcho     D.TokenClause                      -- ^ Echo text
+    | CRelmap   String [S.Token]                   -- ^ Source of relmap
+    | CAssert   D.AssertType D.JudgePat [S.Token]  -- ^ Assertion
+    | CJudge    D.AssertType D.JudgePat [S.Token]  -- ^ Judge
+    | CSlot     String [S.Token]                   -- ^ Global slot
+    | COption   [S.Token]                          -- ^ Option settings
+    | COutput   [S.Token]                          -- ^ Output point
+    | CEcho     S.TokenClause                      -- ^ Echo text
     | CLicense  String                             -- ^ License text
       deriving (Show, G.Data, G.Typeable)
 
@@ -100,27 +100,27 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [D.Token] -> C.SecNo -> [D.TokenLine] -> [B.Ab Clause]
-consClause add sec = loop h0 . D.tokenClauses where
+consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [B.Ab Clause]
+consClause add sec = loop h0 . S.tokenClauses where
     h0 = clauseHeadEmpty { clauseSecNo = sec }
 
     loop _ []     = []
     loop h (x:xs) = let (cs, h') = consClauseEach add $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-consClauseEach :: [D.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
+consClauseEach :: [S.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
 consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     original = B.clauseTokens src
 
     tokens | sh /= []   = lengthen `mapM` original
-           | otherwise  = case filter D.isShortToken original of
+           | otherwise  = case filter S.isShortToken original of
                             []        -> Right original
                             tok : _   -> Left tok
 
     result = case tokens of
                Right ts -> dispatch ts
-               Left tok@(D.TShort _ pre _)
+               Left tok@(S.TShort _ pre _)
                         -> (unk [tok] $ Msg.unresPrefix pre, h)
                Left tok -> (unk [tok] $ Msg.bug "short", h)
 
@@ -132,12 +132,12 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     -- clause dispatcher
 
-    dispatch (D.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
+    dispatch (S.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
                                     = normal    $ frege (lower k) xs
-    dispatch (D.TTextRaw _ name : D.TTextRaw _ is : body)
+    dispatch (S.TTextRaw _ name : S.TTextRaw _ is : body)
         | isDelim is                = normal    $ rmap name body
-    dispatch (D.TTextSect _ : _)    = newSec
-    dispatch (D.TTextRaw _ k : xs)
+    dispatch (S.TTextSect _ : _)    = newSec
+    dispatch (S.TTextRaw _ k : xs)
         | k == "input"              = normal    $ c1 $ CInput xs
         | k == "include"            = normal    $ c1 $ CInput xs
         | k == "export"             = normal    $ expt xs
@@ -147,9 +147,9 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
         | k == "output"             = normal    $ c1 $ COutput xs
         | k == "echo"               = normal    $ c1 $ CEcho src
         | k == "****"               = normal    []
-    dispatch (D.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
+    dispatch (S.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
     dispatch []                     = normal    []
-    dispatch [D.TTextLicense _ ln]  = normal    $ c1 $ CLicense $ B.trimRight ln
+    dispatch [S.TTextLicense _ ln]  = normal    $ c1 $ CLicense $ B.trimRight ln
     dispatch _                      = normal    $ unkAtStart []
 
     normal cs             = (cs, h)
@@ -188,14 +188,14 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     -- judgement and assertion, or source and sink
 
-    judge q (D.TText _ _ p : xs)  = c1 $ CJudge q p $ add ++ ab ++ xs
+    judge q (S.TText _ _ p : xs)  = c1 $ CJudge q p $ add ++ ab ++ xs
     judge _ ts                    = judgeError ts
 
     judgeError []                 = unkAtStart ["Give a judgement pattern"]
     judgeError ts                 = unkAt ts ["Use text in judgement pattern"]
 
-    assert q (D.TText _ _ p : xs) =
-        case D.splitTokensBy isDelim xs of
+    assert q (S.TText _ _ p : xs) =
+        case S.splitTokensBy isDelim xs of
           Right (_, _, expr)      -> a expr
           Left  expr              -> a expr
         where a expr              = c1 $ CAssert q p expr
@@ -203,9 +203,9 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     -- lengthen short signs
 
-    lengthen :: D.Token -> Either D.Token D.Token
-    lengthen t@(D.TShort n pre b) = case lookup pre sh of
-                                      Just l  -> Right $ D.TTextQQ n $ l ++ b
+    lengthen :: S.Token -> Either S.Token S.Token
+    lengthen t@(S.TShort n pre b) = case lookup pre sh of
+                                      Just l  -> Right $ S.TTextQQ n $ l ++ b
                                       Nothing -> Left t
     lengthen t = Right t
 
@@ -213,7 +213,7 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
                                       Just sh'  -> (sh', checkShort sh')
                                       Nothing   -> (sh, unkAtStart [])
 
-    checkShort :: [D.ShortDef] -> [B.Ab Clause]
+    checkShort :: [S.ShortDef] -> [B.Ab Clause]
     checkShort sh'
         | B.notNull prefix    = abort $ Msg.dupPrefix prefix
         | B.notNull replace   = abort $ Msg.dupReplacement replace
@@ -222,16 +222,16 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
         where (pre, rep)      = unzip sh'
               prefix          = B.duplicates pre
               replace         = B.duplicates rep
-              invalid         = B.omit D.isShortPrefix pre
+              invalid         = B.omit S.isShortPrefix pre
               abort msg       = unk original msg
 
     -- others
 
     rmap n xs                     = c1 $ CRelmap n xs
 
-    expt (D.TText _ _ n : D.TText _ _ ":" : xs)
+    expt (S.TText _ _ n : S.TText _ _ ":" : xs)
                                   = c0 (CExport n) : rmap n xs
-    expt [D.TText _ _ n]          = c1 $ CExport n
+    expt [S.TText _ _ n]          = c1 $ CExport n
     expt _                        = unkAtStart []
 
 
@@ -241,13 +241,13 @@ pairs (a:b:cs)  = do cs' <- pairs cs
 pairs []        = Just []
 pairs _         = Nothing
 
-wordPairs :: [D.Token] -> Maybe [(String, String)]
+wordPairs :: [S.Token] -> Maybe [(String, String)]
 wordPairs toks =
     do p <- pairs toks
        mapM wordPair p
     where
-      wordPair :: (D.Token, D.Token) -> Maybe (String, String)
-      wordPair (D.TText _ _ a, D.TText _ _ b) = Just (a, b)
+      wordPair :: (S.Token, S.Token) -> Maybe (String, String)
+      wordPair (S.TText _ _ a, S.TText _ _ b) = Just (a, b)
       wordPair _ = Nothing
 
 

@@ -14,7 +14,7 @@ import qualified System.Directory                        as Dir
 import qualified System.FilePath                         as Path
 import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax                  as D
+import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
@@ -70,7 +70,7 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
 
 -- | Read resource from certain source.
 readResourceOne :: forall c. (D.CContent c) =>
-    C.Resource c -> B.CodePiece -> [D.TTree] -> ResourceIO c
+    C.Resource c -> B.CodePiece -> [S.TTree] -> ResourceIO c
 readResourceOne res src add = dispatch $ B.codeName src where
     dispatch (B.IOPointFile cd path) =
         gio $ do let path' = putDir cd path
