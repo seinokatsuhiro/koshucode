@@ -17,13 +17,13 @@ module Koshucode.Baala.Core.Assert.Dataset
 import qualified Data.Map                     as Map
 import qualified Data.Maybe                   as Maybe
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core.Relkit  as C
 
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Map.Map D.JudgePat [[D.Term c]])
+data Dataset c = Dataset (Map.Map D.JudgePat [[S.Term c]])
 
 -- | Dataset that has no judges.
 datasetEmpty :: Dataset c
@@ -56,7 +56,7 @@ datasetSelect (Dataset m) sign ns = D.Rel h1 b1 where
       Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (D.CEmpty c) => [String] -> [D.Term c] -> [c]
+subarg :: (D.CEmpty c) => [String] -> [S.Term c] -> [c]
 subarg ns arg = map pick ns where
     pick n = Maybe.fromMaybe D.empty $ lookup n arg
 

@@ -12,25 +12,25 @@ module Koshucode.Baala.Core.Assert.RelTable
 import qualified Data.List                    as List
 import qualified Data.Map                     as Map
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 
 
 
 -- --------------------------------------------  Rel table
 
-relTable :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> String
+relTable :: (B.Write c, D.CRel c) => [S.ShortDef] -> D.Rel c -> String
 relTable sh = unlines . relTableLines sh
 
-relTableLines :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> [String]
+relTableLines :: (B.Write c, D.CRel c) => [S.ShortDef] -> D.Rel c -> [String]
 relTableLines sh r = render $ relCells 2 size [] text where
     text = relText sh r
     size = maxTermSize text
 
-relCells :: Int -> TermSize -> D.TermPath -> D.RelText -> [[B.Cell]]
+relCells :: Int -> TermSize -> S.TermPath -> D.RelText -> [[B.Cell]]
 relCells pad m path (D.Rel he bo) = table where
     table = let ns = D.headNames he
-                h  = map (text . D.showTermName) ns
+                h  = map (text . S.showTermName) ns
             in h : map rule h : map (tuple ns) bo
     tuple ns cs = map content $ zip ns cs
     content (n, c) = case c of
@@ -44,10 +44,10 @@ relCells pad m path (D.Rel he bo) = table where
     text   = B.textCell B.Front
     rule _ = B.textRuleCell '-'
 
-relText :: (B.Write c, D.CRel c) => [D.ShortDef] -> D.Rel c -> D.RelText
+relText :: (B.Write c, D.CRel c) => [S.ShortDef] -> D.Rel c -> D.RelText
 relText sh (D.Rel he bo) = D.Rel he $ map (map content) bo where
     content c | D.isRel c  = D.MonoNest $ relText sh $ D.gRel c
-              | otherwise  = D.MonoTerm $ B.writeStringWith (D.shortText sh) c
+              | otherwise  = D.MonoTerm $ B.writeStringWith (S.shortText sh) c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable
@@ -56,7 +56,7 @@ render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable
 
 -- --------------------------------------------  Term Map
 
-type TermMap a = Map.Map D.TermPath a
+type TermMap a = Map.Map S.TermPath a
 type TermSize = TermMap Int
 
 maxTermSize :: D.RelText -> TermSize
@@ -68,14 +68,14 @@ termMap gRel from f (D.Rel he bo) = accum [] ts bo Map.empty where
 
     ts = D.typeTerms $ D.headType he
 
-    accum :: D.TermPath -> [D.NamedType] -> [[c]] -> B.Map (TermMap a)
+    accum :: S.TermPath -> [D.NamedType] -> [[c]] -> B.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
 
-    column :: D.TermPath -> (D.NamedType, [c]) -> B.Map (TermMap a)
+    column :: S.TermPath -> (D.NamedType, [c]) -> B.Map (TermMap a)
     column path ((n, D.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
     column path ((n, _)            , cs2) m = foldr (add $ n : path) m cs2
 
-    add :: D.TermPath -> c -> B.Map (TermMap a)
+    add :: S.TermPath -> c -> B.Map (TermMap a)
     add path c m = Map.insertWith f path (from c) m
 
     bodies :: [c] -> [[c]]

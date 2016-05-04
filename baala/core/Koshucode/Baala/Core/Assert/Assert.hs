@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Assert.Assert
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as D
+import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relmap    as C
@@ -28,7 +28,7 @@ data Assert' h c = Assert
     { assSection   :: C.SecNo                -- ^ Section number
     , assType      :: D.AssertType           -- ^ Logical quality
     , assPattern   :: D.JudgePat             -- ^ Pattern of judgement
-    , assToken     :: [D.Token]              -- ^ Source token list
+    , assToken     :: [S.Token]              -- ^ Source token list
     , assPara      :: C.TTreePara
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
     , assLinks     :: C.RelmapLinkTable' h c
@@ -46,10 +46,10 @@ instance B.Write (Assert' h c) where
 -- ----------------------  Short assertion
 
 -- | Assertion with short signs.
-type ShortAssert' h c = D.Short (Assert' h c)
+type ShortAssert' h c = S.Short (Assert' h c)
 
 -- | Assertion list with short signs.
-type ShortAsserts' h c = D.Short [Assert' h c]
+type ShortAsserts' h c = S.Short [Assert' h c]
 
 -- | Select affirmative or denial assertions.
 assertNormal :: B.Map [ShortAssert' h c]
@@ -60,5 +60,5 @@ assertViolated :: B.Map [ShortAssert' h c]
 assertViolated = filter violated
 
 violated :: ShortAssert' h c -> Bool
-violated = (== D.AssertViolate) . assType . D.shortBody
+violated = (== D.AssertViolate) . assType . S.shortBody
 
