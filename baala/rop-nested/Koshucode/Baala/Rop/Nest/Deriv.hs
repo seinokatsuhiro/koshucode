@@ -21,7 +21,7 @@ module Koshucode.Baala.Rop.Nest.Deriv
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Rop.Base        as Op
@@ -44,7 +44,7 @@ consOppGroup med =
      n    <- Op.getTerm   med "-to"
      Right $ relmapOppGroup med n rmap
 
-relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> D.TermName -> B.Map (C.Relmap c)
+relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapOppGroup med n rmap = C.relmapCopy med n rmapGroup where
     rmapGroup  = rmap `B.mappend` Op.relmapGroup med n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n
@@ -57,7 +57,7 @@ consJoinUp med =
   do nest <- Op.getTerms med "-term"
      Right $ relmapJoinUp med nest
 
-relmapJoinUp :: (Ord c) => C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapJoinUp :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
     rmaps   = link `map` nest
     link n  = C.relmapLocalNest med n
@@ -81,7 +81,7 @@ consNest med =
      to       <- Op.getTerm    med "-to"
      Right $ relmapNest med (co, ns, to)
 
-relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [D.TermName], D.TermName) -> C.Relmap c
+relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
 relmapNest med (co, ns, to) = group `B.mappend` for where
     group  = relmapOppGroup med to key
     for    = Op.relmapFor med to nest
@@ -109,7 +109,7 @@ consUngroup med =
   do n <- Op.getTerm med "-term"
      Right $ relmapUngroup med n
 
-relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> D.TermName -> C.Relmap c
+relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
     ungroup = slice `B.mappend` cut
     slice   = Op.relmapSliceUp med meet

@@ -24,7 +24,7 @@ module Koshucode.Baala.Rop.Nest.Confl
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as D
+import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core           as C
 import qualified Koshucode.Baala.Rop.Base       as Op
@@ -62,14 +62,14 @@ consFor med =
        rmap <- Op.getRelmap med "-relmap"
        Right $ relmapFor med n rmap
 
-relmapFor :: (D.CRel c) => C.Intmed c -> D.TermName -> B.Map (C.Relmap c)
+relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n `B.mappend` rmap)
 
-relmapForInner :: (D.CRel c) => C.Intmed c -> D.TermName -> B.Map (C.Relmap c)
+relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitFor n
 
-relkitFor :: forall c. (D.CRel c) => D.TermName -> C.RelkitBinary c
+relkitFor :: forall c. (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     lr    = [n] `D.headLR` D.headNames he1
     side  = D.headRSide lr
@@ -102,10 +102,10 @@ consGroup med =
      n    <- Op.getTerm   med "-to"
      Right $ relmapGroup med n rmap
 
-relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> D.TermName -> B.Map (C.Relmap c)
+relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapGroup med = C.relmapBinary med . relkitGroup
 
-relkitGroup :: forall c. (Ord c, D.CRel c) => D.TermName -> C.RelkitBinary c
+relkitGroup :: forall c. (Ord c, D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitGroup n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     lr      = D.headNames he1 `D.headLR` D.headNames he2
     toMap2  = B.gatherToMap . map (D.headRAssoc lr)
@@ -145,11 +145,11 @@ consSlice med =
      rmap <- Op.getOptRelmap C.relmapId med "-relmap"
      Right $ relmapSlice med n rmap
 
-relmapSlice :: (D.CRel c) => C.Intmed c -> D.TermName -> B.Map (C.Relmap c)
+relmapSlice :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapSlice med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitSlice n
 
-relkitSlice :: (D.CRel c) => D.TermName -> C.RelkitBinary c
+relkitSlice :: (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitSlice n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = D.headConsNest n he2 he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
