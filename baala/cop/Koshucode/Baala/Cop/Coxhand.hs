@@ -12,7 +12,7 @@ module Koshucode.Baala.Cop.Coxhand
   ) where
 
 import qualified Koshucode.Baala.Base     as B
-import qualified Koshucode.Baala.Syntax   as D
+import qualified Koshucode.Baala.Syntax   as S
 import qualified Koshucode.Baala.Data     as D
 
 
@@ -41,7 +41,7 @@ f3 = f ["#1", "#2", "#3"]
 i :: String -> [D.Cox c] -> D.Cox c
 i = ix . b
 
-ib :: D.BlankName -> [D.Cox c] -> D.Cox c
+ib :: S.BlankName -> [D.Cox c] -> D.Cox c
 ib = ix . D.CoxBlank []
 
 -- | Fill blanks in the given form.
@@ -57,7 +57,7 @@ bin n x y = ib (D.copInfix n) [x, y]
 
 -- | Create a named blank in a form.
 b :: String -> D.Cox c
-b = D.CoxBlank [] . D.BlankNormal
+b = D.CoxBlank [] . S.BlankNormal
 
 -- | Shorthand for the first blank — @b \"\#1\"@
 b1 :: D.Cox c

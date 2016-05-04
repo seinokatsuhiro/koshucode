@@ -8,7 +8,7 @@ module Koshucode.Baala.Cop.Misc
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Coxhand     as H
 import qualified Koshucode.Baala.Cop.Message     as Msg
@@ -73,15 +73,15 @@ toInfix _ = Msg.adlib "require operand"
 
 -- ----------------------  if
 
-nameLeaf :: D.BlankName -> D.TTree
-nameLeaf = B.TreeL . D.TName B.codePtZero
+nameLeaf :: S.BlankName -> S.TTree
+nameLeaf = B.TreeL . S.TName B.codePtZero
 
-treeIf :: D.TTree -> D.TTree -> D.TTree -> D.TTree
-treeIf test con alt = D.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]
+treeIf :: S.TTree -> S.TTree -> S.TTree -> S.TTree
+treeIf test con alt = S.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]
 
-treeOrList :: [D.TTree] -> D.TTree
+treeOrList :: [S.TTree] -> S.TTree
 treeOrList [x] = x
-treeOrList xs = D.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
+treeOrList xs = S.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
 
 copFunIf  :: (D.CBool c, D.CEmpty c) => D.CopCalc c
 copFunIf arg =
@@ -98,35 +98,35 @@ copFunIf arg =
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
 copTreeIf :: D.CopTree
-copTreeIf trees = folding $ filter (/= []) $ D.divideTreesBy ":" trees where
-    folding :: [[D.TTree]] -> B.Ab D.TTree
-    folding []        = Right $ B.TreeL $ D.textToken "()"
+copTreeIf trees = folding $ filter (/= []) $ S.divideTreesBy ":" trees where
+    folding :: [[S.TTree]] -> B.Ab S.TTree
+    folding []        = Right $ B.TreeL $ S.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
-    fore :: [D.TTree] -> B.AbMap D.TTree
+    fore :: [S.TTree] -> B.AbMap S.TTree
     fore trees2 alt =
-        case D.divideTreesBy "->" trees2 of
+        case S.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
           [test, con] -> do test2 <- stairs ">>" "<<" test
-                            Right $ treeIf test2 (D.ttreeGroup con) alt
+                            Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
-    back :: [D.TTree] -> B.AbMap D.TTree
+    back :: [S.TTree] -> B.AbMap S.TTree
     back trees2 alt =
-        case D.divideTreesBy "<-" trees2 of
-          [alt2]      -> Right $ D.ttreeGroup alt2
+        case S.divideTreesBy "<-" trees2 of
+          [alt2]      -> Right $ S.ttreeGroup alt2
           [con, test] -> do test2 <- stairs "<<" ">>" test
-                            Right $ treeIf test2 (D.ttreeGroup con) alt
+                            Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
-    stairs :: String -> String -> [D.TTree] -> B.Ab D.TTree
+    stairs :: String -> String -> [S.TTree] -> B.Ab S.TTree
     stairs del del2 xs =
         do notInclude del2 xs
-           Right $ treeOrList $ map D.ttreeGroup $ D.divideTreesBy del xs
+           Right $ treeOrList $ map S.ttreeGroup $ S.divideTreesBy del xs
 
-    notInclude :: String -> [D.TTree] -> B.Ab ()
+    notInclude :: String -> [S.TTree] -> B.Ab ()
     notInclude del xs =
-        case D.divideTreesBy del xs of
+        case S.divideTreesBy del xs of
           [_] -> Right ()
           _   -> abortSyntax xs "Mixed arrows"
 

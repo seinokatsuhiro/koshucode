@@ -8,7 +8,7 @@ module Koshucode.Baala.Cop.Type
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Message     as Msg
 
@@ -63,8 +63,8 @@ toText c
     | D.isTime   c  = B.doc $ B.writeString c
     | D.isTerm   c  = B.doc $ '/' : D.gTerm c
 
-    | D.isList   c  = B.docWraps D.listOpen D.listClose $ B.writeBar B.nullShortener $ map toText $ D.gList c 
-    | D.isSet    c  = B.docWraps D.setOpen  D.setClose $ B.writeBar B.nullShortener $ map toText $ D.gSet c 
+    | D.isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map toText $ D.gList c 
+    | D.isSet    c  = B.docWraps S.setOpen  S.setClose $ B.writeBar B.nullShortener $ map toText $ D.gSet c 
     | D.isTie    c  = B.doc "<tie>"
     | D.isRel    c  = B.doc "<rel>"
     | D.isInterp c  = B.doc "<interp>"

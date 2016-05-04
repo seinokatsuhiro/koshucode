@@ -9,7 +9,7 @@ module Koshucode.Baala.Cop.Text
 
 import qualified Data.Char                       as Char
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as D
+import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Message     as Msg
 
@@ -192,23 +192,23 @@ wordList c
 -- ----------------------  general-symbol?
 
 copGeneralSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copGeneralSymbol = copTestSymbol D.isGeneralSymbol
+copGeneralSymbol = copTestSymbol S.isGeneralSymbol
 
 copPlainSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copPlainSymbol = copTestSymbol D.isPlainSymbol
+copPlainSymbol = copTestSymbol S.isPlainSymbol
 
 copNumericSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copNumericSymbol = copTestSymbol D.isNumericSymbol
+copNumericSymbol = copTestSymbol S.isNumericSymbol
 
 copShortSymbol :: forall c. (D.CContent c) => D.CopCalc c
-copShortSymbol = copTestSymbol D.isShortSymbol
+copShortSymbol = copTestSymbol S.isShortSymbol
 
-copTestSymbol :: forall c. (D.CContent c) => (D.Symbol -> Bool) -> D.CopCalc c
+copTestSymbol :: forall c. (D.CContent c) => (S.Symbol -> Bool) -> D.CopCalc c
 copTestSymbol test arg =
     do c <- D.getRightArg1 arg
        D.putBool $ case extractText c of
                      Nothing  -> False
-                     Just s   -> case D.nextSymbol s of
+                     Just s   -> case S.nextSymbol s of
                                    ("", sym) -> test sym
                                    _         -> False
 
