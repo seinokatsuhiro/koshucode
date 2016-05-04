@@ -10,7 +10,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 
 import qualified System.Console.GetOpt                   as G
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax                  as D
+import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
@@ -101,18 +101,18 @@ judgeClause clseq c = D.affirm "CLAUSE" args where
     args = [ ("clause"       , D.pInt clseq)
            , ("clause-type"  , D.pText $ C.clauseTypeText c)]
 
-judgeLine :: Int -> D.TokenLine -> C.JudgeC
+judgeLine :: Int -> S.TokenLine -> C.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
     args = [ ("line"         , D.pInt ln)
            , ("clause"       , D.pInt clseq) ]
 
-judgeToken :: Int -> D.Token -> C.JudgeC
+judgeToken :: Int -> S.Token -> C.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
     args = [ ("line"           , D.pInt ln)
            , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
-           , ("token-type"     , D.pText $ D.tokenTypeText tok)
-           , ("token-subtype"  , D.maybeEmpty D.pText $ D.tokenSubtypeText tok)
-           , ("cont"           , D.pText $ D.tokenContent  tok) ]
+           , ("token-type"     , D.pText $ S.tokenTypeText tok)
+           , ("token-subtype"  , D.maybeEmpty D.pText $ S.tokenSubtypeText tok)
+           , ("cont"           , D.pText $ S.tokenContent  tok) ]
 
 dumpFile :: Bool -> FilePath -> IO ()
 dumpFile omit path = dumpCode omit path =<< readFile path
@@ -122,7 +122,7 @@ dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
 
 dumpCode :: Bool -> FilePath -> String -> IO ()
 dumpCode omit path code = 
-    ab f $ D.tokenLines (B.CodePiece 0 $ B.IOPointFile "" path) code
+    ab f $ S.tokenLines (B.CodePiece 0 $ B.IOPointFile "" path) code
     where f ts = do let cs = C.consClause [] 0 ts
                     B.putLines $ B.texts $ dumpDesc path
                     dumpClause omit `mapM_` zip [1 ..] cs
@@ -144,15 +144,15 @@ dumpClause omit (clseq, Right c) =
     where
       comment line = "*** " ++ B.lineContent line
 
-dumpLine :: Int -> [D.TokenLine] -> IO ()
+dumpLine :: Int -> [S.TokenLine] -> IO ()
 dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
 
-dumpToken :: Bool -> D.TokenLine -> IO ()
+dumpToken :: Bool -> S.TokenLine -> IO ()
 dumpToken omit (B.CodeLine ln _ toks) =
     do putNewline
        putJudges $ map (judgeToken ln) toks'
     where
-      toks' | omit       = B.omit D.isBlankToken toks
+      toks' | omit       = B.omit S.isBlankToken toks
             | otherwise  = toks
 
 
@@ -181,9 +181,9 @@ judgeClauseType :: C.Clause -> C.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
     args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
 
-judgeTokenType :: D.Token -> C.JudgeC
+judgeTokenType :: S.Token -> C.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
-    args = [ ("token-type", D.pText $ D.tokenTypeText t) ]
+    args = [ ("token-type", D.pText $ S.tokenTypeText t) ]
 
 judgesClauseType :: [C.JudgeC]
 judgesClauseType = map j cs where
@@ -197,13 +197,13 @@ judgesClauseType = map j cs where
 judgesTokenType :: [C.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
-    cs  = [ D.TTextRaw  B.codePtZero ""
-          , D.TSlot     B.codePtZero 0 ""
-          , D.TTermPath B.codePtZero []
-          , D.TOpen     B.codePtZero ""
-          , D.TClose    B.codePtZero ""
-          , D.TSpace    B.codePtZero 0
-          , D.TComment  B.codePtZero ""
+    cs  = [ S.TTextRaw  B.codePtZero ""
+          , S.TSlot     B.codePtZero 0 ""
+          , S.TTermPath B.codePtZero []
+          , S.TOpen     B.codePtZero ""
+          , S.TClose    B.codePtZero ""
+          , S.TSpace    B.codePtZero 0
+          , S.TComment  B.codePtZero ""
           ]
 
 

@@ -15,7 +15,7 @@ import qualified Data.Text                as Tx
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax                  as D
+import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
@@ -125,14 +125,14 @@ readRdfGraph parser path =
     do rdf <- RDF.parseFile parser path
        return $ RDF.fromEither rdf
 
-writeJudges :: [D.ShortDef] -> [C.JudgeC] -> IO ()
+writeJudges :: [S.ShortDef] -> [C.JudgeC] -> IO ()
 writeJudges sh js =
     do putStrLn B.emacsModeComment
        putStrLn ""
        writeShort sh
-       print $ B.docv $ map (D.writeDownJudge $ D.shortText sh) js
+       print $ B.docv $ map (D.writeDownJudge $ S.shortText sh) js
 
-writeShort :: [D.ShortDef] -> IO ()
+writeShort :: [S.ShortDef] -> IO ()
 writeShort [] = return ()
 writeShort sh =
     do putStrLn "short"
