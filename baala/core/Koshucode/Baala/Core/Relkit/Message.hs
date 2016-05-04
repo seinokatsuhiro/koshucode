@@ -8,13 +8,13 @@ module Koshucode.Baala.Core.Relkit.Message
   ) where
 
 import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Syntax  as D
+import qualified Koshucode.Baala.Syntax  as S
 
 abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRun = B.abortable "run"
 
 -- | Unknown nested relation
-unkNestRel :: D.Token -> String -> [String] -> B.Ab a
+unkNestRel :: S.Token -> String -> [String] -> B.Ab a
 unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
-    where ref = "/" ++ n ++ " in " ++ D.tokenContent p
+    where ref = "/" ++ n ++ " in " ++ S.tokenContent p
 

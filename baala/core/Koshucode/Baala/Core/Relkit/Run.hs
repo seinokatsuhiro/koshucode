@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Relkit.Run
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Syntax                 as D
+import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit     as C
 import qualified Koshucode.Baala.Core.Relkit.Construct  as C
@@ -97,7 +97,7 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: D.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel :: S.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel p nest b cs =
           let cs2 = pickup cs `map` nest
           in relkitRun hook ((p, cs2) : rs) b [cs]

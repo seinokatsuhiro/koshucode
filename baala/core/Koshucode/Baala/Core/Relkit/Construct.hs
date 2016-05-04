@@ -23,7 +23,7 @@ module Koshucode.Baala.Core.Relkit.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Syntax              as D
+import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
@@ -58,18 +58,18 @@ instance B.Monoid (C.Relkit c) where
 relkitConst :: D.Rel c -> C.Relkit c
 relkitConst (D.Rel he bo) = relkitJust he $ C.RelkitConst bo
 
-relkitConstEmpty :: [D.TermName] -> C.Relkit c
+relkitConstEmpty :: [S.TermName] -> C.Relkit c
 relkitConstEmpty ns = relkitConstBody ns []
 
-relkitConstSingleton :: [D.TermName] -> [c] -> C.Relkit c
+relkitConstSingleton :: [S.TermName] -> [c] -> C.Relkit c
 relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
 
-relkitConstBody :: [D.TermName] -> [[c]] -> C.Relkit c
+relkitConstBody :: [S.TermName] -> [[c]] -> C.Relkit c
 relkitConstBody ns bo = kit where
     he  = D.headFrom ns
     kit = relkitJust he $ C.RelkitConst bo
 
-relkitSource :: D.JudgePat -> [D.TermName] -> C.Relkit c
+relkitSource :: D.JudgePat -> [S.TermName] -> C.Relkit c
 relkitSource p ns = relkitJust he kit where
     he  = D.headFrom ns
     kit = C.RelkitSource p ns
@@ -77,13 +77,13 @@ relkitSource p ns = relkitJust he kit where
 
 -- ----------------------  Relation reference
 
-relkitCopy :: D.Token -> String -> B.Map (C.Relkit c)
+relkitCopy :: S.Token -> String -> B.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
-relkitNest :: D.Token -> [(String, Int)] -> B.Map (C.Relkit c)
+relkitNest :: S.Token -> [(String, Int)] -> B.Map (C.Relkit c)
 relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 
-relkitNestVar :: D.Token -> String -> D.Head -> C.Relkit c
+relkitNestVar :: S.Token -> String -> D.Head -> C.Relkit c
 relkitNestVar p n he = relkitJust he $ C.RelkitNestVar p n
 
 
@@ -92,11 +92,11 @@ relkitNestVar p n he = relkitJust he $ C.RelkitNestVar p n
 
 type Local a = Lexical [B.Named a]
 
-type Lexical a = (D.Token, a)
+type Lexical a = (S.Token, a)
 
 localsLines :: [Local a] -> [String]
 localsLines xs = map desc $ a2keys xs where
-    desc (a, bs) = D.tokenContent a ++ " / " ++ unwords bs
+    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords bs
 
 a2keys :: [(a, [(b, c)])] -> [(a, [b])]
 a2keys = B.mapSndTo (map fst)

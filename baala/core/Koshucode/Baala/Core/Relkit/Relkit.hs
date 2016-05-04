@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core.Lexmap  as C
 
@@ -47,12 +47,12 @@ data RelkitCore c
     | RelkitConst        [[c]]
     | RelkitId
 
-    | RelkitSource       D.JudgePat [D.TermName]
+    | RelkitSource       D.JudgePat [S.TermName]
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
-    | RelkitCopy         D.Token C.RopName (RelkitBody c)
-    | RelkitNestVar      D.Token C.RopName
-    | RelkitNest         D.Token [(String, Int)] (RelkitBody c)
+    | RelkitCopy         S.Token C.RopName (RelkitBody c)
+    | RelkitNestVar      S.Token C.RopName
+    | RelkitNest         S.Token [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
