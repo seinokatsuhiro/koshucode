@@ -21,7 +21,7 @@ module Koshucode.Baala.Rop.Flat.Source
   ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Op
@@ -55,10 +55,10 @@ consEmpty med =
     do ns <- Op.getTerms med "-term"
        Right $ relmapEmpty med ns
 
-relmapEmpty :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapEmpty :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapEmpty med = C.relmapFlow med . relkitEmpty
 
-relkitEmpty :: [D.TermName] -> C.RelkitFlow c
+relkitEmpty :: [S.TermName] -> C.RelkitFlow c
 relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
     he2 = Just $ D.headFrom ns
 

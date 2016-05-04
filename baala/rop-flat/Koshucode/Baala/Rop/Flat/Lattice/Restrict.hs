@@ -20,7 +20,7 @@ module Koshucode.Baala.Rop.Flat.Lattice.Restrict
 
 import qualified Data.Set                              as Set
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as D
+import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Rop.Base              as Op
@@ -139,7 +139,7 @@ relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
        Right $ kitMeet `B.mappend` kitCut
 relkitCompose _ _ = Right C.relkitNothing
 
-sharedNames :: D.Head -> D.Head -> [D.TermName]
+sharedNames :: D.Head -> D.Head -> [S.TermName]
 sharedNames he1 he2 = shared where
     ns1     = D.headNames he1
     ns2     = D.headNames he2

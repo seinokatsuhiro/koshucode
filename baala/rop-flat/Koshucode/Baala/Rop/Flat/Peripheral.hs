@@ -30,11 +30,11 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     relmapToday, relkitToday,
   ) where
 
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Syntax        as D
-import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Rop.Base      as Op
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Syntax             as S
+import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Rop.Flat.Term      as Op
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
@@ -81,11 +81,11 @@ consMember med =
      Right $ relmapMember med (x, xs)
 
 relmapMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
-  => C.Intmed c -> D.TermName2 -> C.Relmap c
+  => C.Intmed c -> S.TermName2 -> C.Relmap c
 relmapMember med = C.relmapFlow med . relkitMember
 
 relkitMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
-  => D.TermName2 -> C.RelkitFlow c
+  => S.TermName2 -> C.RelkitFlow c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | [xi, xsi] B.+- []   = relkitMemberCheck  xi xsi he1'
@@ -101,7 +101,7 @@ relkitMemberCheck xi xsi he1' = Right kit2 where
                in xc `D.isMember` xsc
 
 relkitMemberExpand :: (Ord c, D.CSet c, D.CList c, D.CText c)
-  => D.TermName -> Int -> C.RelkitFlow c
+  => S.TermName -> Int -> C.RelkitFlow c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
     he2      = D.headCons x he1
@@ -125,22 +125,22 @@ consIndexElem med =
      Right $ relmapIndexElem med (i, x, xs)
 
 relmapIndexElem :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => C.Intmed c -> D.TermName3 -> C.Relmap c
+  => C.Intmed c -> S.TermName3 -> C.Relmap c
 relmapIndexElem med = C.relmapFlow med . relkitIndexElem
 
 relkitIndexElem :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => D.TermName3 -> C.RelkitFlow c
+  => S.TermName3 -> C.RelkitFlow c
 relkitIndexElem _ Nothing = Right C.relkitNothing
 relkitIndexElem (i, x, xs) he1'@(Just he1) = kit2 where
-    kit2 | D.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand i x xsi he1'
+    kit2 | S.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand i x xsi he1'
          | otherwise                 = Msg.unkTerm [i, x, xs] he1
     [ii, xi, xsi] = headIndex he1 [i, x, xs]
 
-headIndex :: D.Head -> [D.TermName] -> [Int]
+headIndex :: D.Head -> [S.TermName] -> [Int]
 headIndex he ns = ns `B.snipFull` D.headNames he
 
 relkitIndexElemExpand :: forall c. (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => D.TermName -> D.TermName -> Int -> C.RelkitFlow c
+  => S.TermName -> S.TermName -> Int -> C.RelkitFlow c
 relkitIndexElemExpand _ _ _ Nothing = Right C.relkitNothing
 relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
     he2      = D.headAppend [i, x] he1
@@ -172,14 +172,14 @@ consUncollect med =
      Right $ relmapUncollect med (coll, to)
 
 relmapUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
-  => C.Intmed c -> (D.TermName, [D.TermName]) -> C.Relmap c
+  => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUncollect med = C.relmapFlow med . relkitUncollect
 
 relkitUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
-  => (D.TermName, [D.TermName]) -> C.RelkitFlow c
+  => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUncollect _ Nothing = Right C.relkitNothing
 relkitUncollect (coll, to) (Just he1) = kit2 where
-    kit2 | D.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kit2 | S.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
          | otherwise            = Msg.unkTerm (coll : to) he1
 
     icoll    = headIndex he1 [coll]
@@ -222,10 +222,10 @@ consTie med =
      to <- Op.getTerm  med "-to"
      Right $ relmapTie med (ns, to)
 
-relmapTie :: (D.CTie c) => C.Intmed c -> ([D.TermName], D.TermName) -> C.Relmap c
+relmapTie :: (D.CTie c) => C.Intmed c -> ([S.TermName], S.TermName) -> C.Relmap c
 relmapTie med = C.relmapFlow med . relkitTie
 
-relkitTie :: (D.CTie c) => ([D.TermName], D.TermName) -> C.RelkitFlow c
+relkitTie :: (D.CTie c) => ([S.TermName], S.TermName) -> C.RelkitFlow c
 relkitTie _ Nothing = Right C.relkitNothing
 relkitTie (ns, to) (Just he1) = Right kit2 where
     pick      =  Op.picker he1 ns
@@ -245,10 +245,10 @@ consUntie med =
      ns   <- Op.getTerms med "-only"
      Right $ relmapUntie med (from, ns)
 
-relmapUntie :: (D.CTie c) => C.Intmed c -> (D.TermName, [D.TermName]) -> C.Relmap c
+relmapUntie :: (D.CTie c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUntie med = C.relmapFlow med . relkitUntie
 
-relkitUntie :: (D.CTie c) => (D.TermName, [D.TermName]) -> C.RelkitFlow c
+relkitUntie :: (D.CTie c) => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
     pick      =  Op.picker he1 [from]
@@ -258,7 +258,7 @@ relkitUntie (from, ns) (Just he1) = Right kit2 where
                     cs <- tiePick ns $ D.gTie tie
                     Right $ cs ++ cs1
 
-tiePick :: [D.TermName] -> [D.Term c] -> B.Ab [c]
+tiePick :: [S.TermName] -> [S.Term c] -> B.Ab [c]
 tiePick ns tie = mapM pick ns where
     pick n = case lookup n tie of
                Just c   ->  Right c
@@ -272,10 +272,10 @@ consTermName med =
   do n <- Op.getTerm med "-term"
      Right $ relmapTermName med n
 
-relmapTermName :: (D.CTerm c) => C.Intmed c -> D.TermName -> C.Relmap c
+relmapTermName :: (D.CTerm c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
-relkitTermName :: (D.CTerm c) => D.TermName -> C.RelkitFlow c
+relkitTermName :: (D.CTerm c) => S.TermName -> C.RelkitFlow c
 relkitTermName n Nothing    = Msg.noAttr n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = D.headFrom [n]
@@ -294,10 +294,10 @@ consToday med =
      let t = C.globalTime $ C.ropGlobal med
      Right $ relmapToday med (n, t)
 
-relmapToday :: (D.CTime c) => C.Intmed c -> (D.TermName, D.Time) -> C.Relmap c
+relmapToday :: (D.CTime c) => C.Intmed c -> (S.TermName, D.Time) -> C.Relmap c
 relmapToday med = C.relmapFlow med . relkitToday
 
-relkitToday :: (D.CTime c) => (D.TermName, D.Time) -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitToday :: (D.CTime c) => (S.TermName, D.Time) -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitToday _ Nothing = Right C.relkitNothing
 relkitToday (n, t) (Just he1) = Right kit2 where
     he2   = D.headCons n he1

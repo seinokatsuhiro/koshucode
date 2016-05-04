@@ -16,11 +16,11 @@ module Koshucode.Baala.Rop.Flat.Term
     consRename, relmapRename,
   ) where
 
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Syntax      as D
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Base    as Op
+import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Syntax           as S
+import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.Core             as C
+import qualified Koshucode.Baala.Rop.Base         as Op
 import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
@@ -58,10 +58,10 @@ consPick med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapPick med ns
 
-relmapPick :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapPick :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapPick med = C.relmapFlow med . relkitPick
 
-relkitPick :: [D.TermName] -> C.RelkitFlow c
+relkitPick :: [S.TermName] -> C.RelkitFlow c
 relkitPick = relkitProject (D.headRShare, D.headRShare)
 
 consCut :: C.RopCons c
@@ -69,10 +69,10 @@ consCut med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapCut med ns
 
-relmapCut :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapCut :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapCut med = C.relmapFlow med . relkitCut
 
-relkitCut :: [D.TermName] -> C.RelkitFlow c
+relkitCut :: [S.TermName] -> C.RelkitFlow c
 relkitCut = relkitProject (D.headRSide, D.headRSide)
 
 
@@ -108,7 +108,7 @@ relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
 relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
     relkitProject lrMap $ D.headNames he2
 
-relkitProject :: D.HeadLRMap2 D.NamedType c -> [D.TermName] -> C.RelkitFlow c
+relkitProject :: D.HeadLRMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
 relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
@@ -127,7 +127,7 @@ consRename med =
   do np <- Op.getTermPairs med "-term"
      Right $ relmapRename med np
 
-relmapRename :: C.Intmed c -> [D.TermName2] -> C.Relmap c
+relmapRename :: C.Intmed c -> [S.TermName2] -> C.Relmap c
 relmapRename med = C.relmapFlow med . relkitMove . unzip . map B.swap
 
 
@@ -139,10 +139,10 @@ consMove med =
      ns <- Op.getTerms med "-to"
      Right $ relmapMove med (ps, ns)
 
-relmapMove :: C.Intmed c -> ([D.TermName], [D.TermName]) -> C.Relmap c
+relmapMove :: C.Intmed c -> ([S.TermName], [S.TermName]) -> C.Relmap c
 relmapMove med = C.relmapFlow med . relkitMove
 
-relkitMove :: ([D.TermName], [D.TermName]) -> C.RelkitFlow c
+relkitMove :: ([S.TermName], [S.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
     | B.notSameLength ps ns = Msg.oddAttr

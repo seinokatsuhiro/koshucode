@@ -19,7 +19,7 @@ module Koshucode.Baala.Rop.Flat.Message
   ) where
 
 import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Syntax as D
+import qualified Koshucode.Baala.Syntax as S
 import qualified Koshucode.Baala.Data   as D
 import qualified Koshucode.Baala.Core   as C
 import Koshucode.Baala.Rop.Base.Message
@@ -28,7 +28,7 @@ import Koshucode.Baala.Rop.Base.Message
 -- ----------------------  Op package
 
 -- | check-term failed
-checkTerm :: String -> [D.TermName] -> D.Head -> B.Ab a
+checkTerm :: String -> [S.TermName] -> D.Head -> B.Ab a
 checkTerm label ns he =
     Left $ B.abortLines "check-term failed"
          $ detailTermRel label ns he
@@ -47,12 +47,12 @@ dumpRel :: (B.Write c, D.CRel c) => D.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
-dumpTrees :: [D.TTree] -> B.Ab a
+dumpTrees :: [S.TTree] -> B.Ab a
 dumpTrees trees = Left $ B.abortLines "Dump token trees"
-                   $ lines $ show $ D.ttDoc trees
+                   $ lines $ show $ S.ttDoc trees
 
 -- | Duplicate term name
-dupTerm :: [D.TermName] -> D.Head -> B.Ab a
+dupTerm :: [S.TermName] -> D.Head -> B.Ab a
 dupTerm ns he =
     Left $ B.abortLines "Duplicate term name"
          $ detailTermRel "Duplicated" ns he
@@ -78,7 +78,7 @@ reqInterp :: B.Ab a
 reqInterp = Left $ B.abortBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: [D.TermName] -> D.Head -> B.Ab a
+reqNewTerm :: [S.TermName] -> D.Head -> B.Ab a
 reqNewTerm ns he =
     Left $ B.abortLines "Require new term names"
          $ detailTermRel "Known" ns he

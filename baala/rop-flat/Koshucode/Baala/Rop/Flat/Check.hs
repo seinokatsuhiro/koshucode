@@ -6,7 +6,7 @@ module Koshucode.Baala.Rop.Flat.Check
 
 import qualified Data.Map                     as Map
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as D
+import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Op
@@ -46,21 +46,21 @@ consCheckTerm med =
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  med ns
        _ -> Msg.unexpAttr "require one of -just / -has / -but"
 
-relmapCheckTermJust :: C.Intmed c -> [D.TermName] -> C.Relmap c
-relmapCheckTermHas  :: C.Intmed c -> [D.TermName] -> C.Relmap c
-relmapCheckTermBut  :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapCheckTermJust :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapCheckTermHas  :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapCheckTermBut  :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapCheckTermJust med = C.relmapFlow med . relkitCheckTermJust
 relmapCheckTermHas  med = C.relmapFlow med . relkitCheckTermHas
 relmapCheckTermBut  med = C.relmapFlow med . relkitCheckTermBut
 
-relkitCheckTermJust :: [D.TermName] -> C.RelkitFlow c
-relkitCheckTermHas  :: [D.TermName] -> C.RelkitFlow c
-relkitCheckTermBut  :: [D.TermName] -> C.RelkitFlow c
+relkitCheckTermJust :: [S.TermName] -> C.RelkitFlow c
+relkitCheckTermHas  :: [S.TermName] -> C.RelkitFlow c
+relkitCheckTermBut  :: [S.TermName] -> C.RelkitFlow c
 relkitCheckTermJust = checkTerm "Just" (\ns he1 -> D.headFrom ns `D.headEquiv` he1)
 relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> D.headFrom ns `D.isSubhead` he1)
 relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` D.headNames he1)
 
-checkTerm :: String -> ([D.TermName] -> D.Head -> Bool) -> [D.TermName] -> C.RelkitFlow c
+checkTerm :: String -> ([S.TermName] -> D.Head -> Bool) -> [S.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
@@ -82,10 +82,10 @@ consDuplicate med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapDuplicate med ns
 
-relmapDuplicate :: (Ord c) => C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapDuplicate :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 
-relkitDuplicate :: (Ord c) => [D.TermName] -> C.RelkitFlow c
+relkitDuplicate :: (Ord c) => [S.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null unk   = Right kit2
@@ -112,7 +112,7 @@ consExclude med =
      m  <- Op.getRelmap med "-from"
      Right $ relmapExclude med (ns, m)
 
-relmapExclude :: (Ord c) => C.Intmed c -> ([D.TermName], C.Relmap c) -> C.Relmap c
+relmapExclude :: (Ord c) => C.Intmed c -> ([S.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
     excl = Op.relmapNone med (pick `B.mappend` meet)
     pick = Op.relmapPick med ns

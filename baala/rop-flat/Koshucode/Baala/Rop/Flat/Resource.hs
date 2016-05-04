@@ -11,7 +11,7 @@ module Koshucode.Baala.Rop.Flat.Resource
   ) where
 
 import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as D
+import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core           as C
 import qualified Koshucode.Baala.Rop.Base       as Op
@@ -45,12 +45,12 @@ consKoshuResRop med =
      Right $ relmapKoshuResRop med (sec, name)
 
 relmapKoshuResRop :: (D.CContent c)
-    => C.Intmed c -> (D.TermName, D.TermName)
+    => C.Intmed c -> (S.TermName, S.TermName)
     -> C.Relmap c
 relmapKoshuResRop med = C.relmapHook med . relkitKoshuResRop
 
 relkitKoshuResRop :: (D.CContent c)
-    => (D.TermName, D.TermName)
+    => (S.TermName, S.TermName)
     -> C.RelkitHook c
 relkitKoshuResRop (sec, name) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
@@ -68,18 +68,18 @@ consKoshuResSink med =
      Right $ relmapKoshuResSink med (sec, pat)
 
 relmapKoshuResSink :: (D.CContent c)
-    => C.Intmed c -> (D.TermName, D.TermName)
+    => C.Intmed c -> (S.TermName, S.TermName)
     -> C.Relmap c
 relmapKoshuResSink med = C.relmapHook med . relkitKoshuResSink
 
 relkitKoshuResSink :: (D.CContent c)
-    => (D.TermName, D.TermName)
+    => (S.TermName, S.TermName)
     -> C.RelkitHook c
 relkitKoshuResSink (sec, pat) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, pat]
     g a   = [D.pInt $ C.assSection a, D.pText $ C.assPattern a]
-    f     = g . D.shortBody
+    f     = g . S.shortBody
     bo2   = f `map` C.resAssert res
 
 
@@ -90,10 +90,10 @@ consKoshuResArticle med =
   do name <- Op.getTerm med "-name"
      Right $ relmapKoshuResArticle med name
 
-relmapKoshuResArticle :: (D.CContent c) => C.Intmed c -> D.TermName -> C.Relmap c
+relmapKoshuResArticle :: (D.CContent c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapKoshuResArticle med = C.relmapHook med . relkitKoshuResArticle
 
-relkitKoshuResArticle :: (D.CContent c) => D.TermName -> C.RelkitHook c
+relkitKoshuResArticle :: (D.CContent c) => S.TermName -> C.RelkitHook c
 relkitKoshuResArticle name res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [name]

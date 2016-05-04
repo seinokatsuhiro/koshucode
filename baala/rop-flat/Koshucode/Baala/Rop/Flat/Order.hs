@@ -13,7 +13,7 @@ module Koshucode.Baala.Rop.Flat.Order
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
@@ -38,7 +38,7 @@ consForward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapForward med ns
 
-relmapForward :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapForward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapForward med = C.relmapFlow med . relkitToward (D.headRForward, D.headRForward)
 
 consBackward :: C.RopCons c
@@ -46,10 +46,10 @@ consBackward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapBackward med ns
 
-relmapBackward :: C.Intmed c -> [D.TermName] -> C.Relmap c
+relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapBackward med = C.relmapFlow med . relkitToward (D.headRBackward, D.headRBackward)
 
-relkitToward :: D.HeadLRMap2 D.NamedType c -> [D.TermName] -> C.RelkitFlow c
+relkitToward :: D.HeadLRMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
@@ -85,10 +85,10 @@ consOrder med =
     do ns <- Op.getOption [] Op.getSignedTerms med "-term"
        Right $ relmapOrder med ns
 
-relmapOrder :: (Ord c) => C.Intmed c -> [D.SignedTermName] -> C.Relmap c
+relmapOrder :: (Ord c) => C.Intmed c -> [S.SignedTermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 
-relkitOrder :: (Ord c) => [D.SignedTermName] -> C.RelkitFlow c
+relkitOrder :: (Ord c) => [S.SignedTermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2

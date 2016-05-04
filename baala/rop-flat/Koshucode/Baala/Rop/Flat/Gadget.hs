@@ -27,7 +27,7 @@ module Koshucode.Baala.Rop.Flat.Gadget
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as D
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
@@ -69,10 +69,10 @@ consContents med =
     do n <- Op.getTerm med "-term"
        Right $ relmapContents med n
 
-relmapContents :: (Ord c) => C.Intmed c -> D.TermName -> C.Relmap c
+relmapContents :: (Ord c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapContents med = C.relmapFlow med . relkitContents
 
-relkitContents :: (Ord c) => D.TermName -> C.RelkitFlow c
+relkitContents :: (Ord c) => S.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = D.headFrom [n]
     kitf = map B.li1 . B.unique . concat
@@ -96,10 +96,10 @@ consPoScale scale med =
        (z,r) <- Op.getTerm2 med "-to"
        Right $ relmapPoScale scale med (x,y,z,r)
 
-relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> D.TermName4 -> C.Relmap c
+relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
-relkitPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> D.TermName4 -> C.RelkitFlow c
+relkitPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> S.TermName4 -> C.RelkitFlow c
 relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = D.headFrom [z,r]
@@ -124,10 +124,10 @@ consVisitDistance med =
          [step1, step2] -> Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
          _              -> Msg.adlib "Require two sets of terms"
 
-relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([D.TermName], [D.TermName], D.TermName, D.TermName) -> B.Map (C.Relmap c)
+relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([S.TermName], [S.TermName], S.TermName, S.TermName) -> B.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
-relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([D.TermName], [D.TermName], D.TermName, D.TermName) -> C.RelkitBinary c
+relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([S.TermName], [S.TermName], S.TermName, S.TermName) -> C.RelkitBinary c
 relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
     | unkStart /= []     = Msg.unkTerm unkStart he1
     | unkFrom  /= []     = Msg.unkTerm unkFrom  he2
@@ -233,10 +233,10 @@ consSize med =
   do n <- Op.getTerm med "-term"
      Right $ relmapSize med n
 
-relmapSize :: (D.CDec c) => C.Intmed c -> D.TermName -> C.Relmap c
+relmapSize :: (D.CDec c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapSize med n = C.relmapFlow med $ relkitSize n
 
-relkitSize :: (D.CDec c) => D.TermName -> C.RelkitFlow c
+relkitSize :: (D.CDec c) => S.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = D.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
