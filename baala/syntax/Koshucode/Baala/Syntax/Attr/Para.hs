@@ -3,9 +3,11 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Parameter type.
+
 module Koshucode.Baala.Syntax.Attr.Para
   ( -- * Parameter constructor
-    Para, ParaBody (..), ParaMap,
+    SimplePara, ParaBody (..), ParaMap, ParaName, paraHyphen,
     para, paraEmpty,
     paraNameList, paraNameAdd,
     paraPosName, paraMultipleNames, paraNameMapKeys,
@@ -23,7 +25,9 @@ module Koshucode.Baala.Syntax.Attr.Para
     paraSelect, paraMatch, paraUnmatch,
 
     -- * Getting parameter elements
+    -- ** Named parameter
     paraGet, paraGetOpt, paraGetList, paraGetSwitch,
+    -- ** Positional parameter
     paraGetPos, paraGetFst, paraGetSnd, paraGetTrd,
     paraGetRest, paraGetRRest,
   ) where
@@ -36,15 +40,17 @@ import qualified Koshucode.Baala.Base.Message  as Msg
 
 -- ----------------------  Parameter
 
-type Para a = ParaBody String a
+-- | String-named parameter.
+type SimplePara a = ParaBody String a
 
 data ParaBody n a
     = ParaBody
-      { paraAll   :: [a]
-      , paraPos   :: [a]
-      , paraName  :: ParaMap n a
+      { paraAll   :: [a]            -- ^ All parameter elements.
+      , paraPos   :: [a]            -- ^ Positional parameters.
+      , paraName  :: ParaMap n a    -- ^ Named parameters.
       } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
+-- | Mapping parameter name to its contents.
 type ParaMap n a = Map.Map n [[a]]
 
 instance (Ord n) => B.Monoid (ParaBody n a) where
@@ -54,8 +60,24 @@ instance (Ord n) => B.Monoid (ParaBody n a) where
                              , paraName  = paraName p1 `u` paraName p2 }
         where u = Map.unionWith (++)
 
+-- | Test and take parameter name.
+type ParaName n a = a -> Maybe n
+
+paraHyphen :: ParaName String String
+paraHyphen ('-' : n)  = Just n
+paraHyphen _          = Nothing
+
 -- | Parse list into parameter.
-para :: (Ord n) => (a -> Maybe n) -> [a] -> ParaBody n a
+--
+-- >>> para paraHyphen $ words "a b"
+-- ParaBody { paraAll = ["a","b"], paraPos = ["a","b"], paraName = fromList [] }
+--
+-- >>> para paraHyphen $ words "a b -x c d"
+-- ParaBody { paraAll = ["a","b","-x","c"]
+--          , paraPos = ["a","b"]
+--          , paraName = fromList [("x",[["c","d"]])] }
+
+para :: (Ord n) => ParaName n a -> [a] -> ParaBody n a
 para name xxs = pos xxs [] where
     make ps            = ParaBody xxs (reverse ps) Map.empty
     pos [] ps          = make ps
@@ -71,6 +93,7 @@ para name xxs = pos xxs [] where
                                        in val a2 n2 xs []
     add n vs = paraInsert n $ reverse vs
 
+-- | Empty parameter.
 paraEmpty :: ParaBody n a
 paraEmpty = ParaBody [] [] Map.empty
 

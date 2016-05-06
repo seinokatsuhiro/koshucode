@@ -42,7 +42,7 @@ consLexmapTrees para =
 -- ----------------------  Parameter of token trees
 
 -- | Token Tree parameter.
-type TTreePara = S.Para S.TTree
+type TTreePara = S.SimplePara S.TTree
 
 -- | Make token tree parameter with single-hyphen names.
 ttreePara1 :: [S.Token] -> B.Ab TTreePara
