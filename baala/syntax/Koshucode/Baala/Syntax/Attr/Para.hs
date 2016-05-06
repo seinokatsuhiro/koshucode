@@ -5,11 +5,16 @@
 
 module Koshucode.Baala.Syntax.Attr.Para
   ( -- * Parameter constructor
-    SimplePara, Para (..), ParaMap, ParaName, paraHyphen,
+    Para (..), ParaMap, ParaName,
     para, paraEmpty,
-    paraNameList, paraNameAdd,
-    paraPosName, paraMultipleNames, paraNameMapKeys,
-    paraLookupSingle,
+    paraNameList,
+    paraMultipleNames,
+    paraLookup, paraLookupSingle,
+    paraPosName,
+    paraNameAdd, paraNameMapKeys,
+
+    -- * Simple parameter
+    SimplePara, paraHyphen,
 
     -- * Getting parameter content
     -- ** Named parameter
@@ -26,9 +31,6 @@ import qualified Koshucode.Baala.Base.Message          as Msg
 
 
 -- ----------------------  Parameter
-
--- | String-named parameter.
-type SimplePara a = Para String a
 
 data Para n a
     = Para
@@ -50,10 +52,6 @@ instance (Ord n) => B.Monoid (Para n a) where
 -- | Test and take parameter name.
 type ParaName n a = a -> Maybe n
 
-paraHyphen :: ParaName String String
-paraHyphen ('-' : n)  = Just n
-paraHyphen _          = Nothing
-
 -- | Parse list into parameter.
 --
 -- >>> para paraHyphen $ words "a b"
@@ -61,8 +59,8 @@ paraHyphen _          = Nothing
 --
 -- >>> para paraHyphen $ words "a b -x c d"
 -- Para { paraAll = ["a","b","-x","c"]
---          , paraPos = ["a","b"]
---          , paraName = fromList [("x",[["c","d"]])] }
+--      , paraPos = ["a","b"]
+--      , paraName = fromList [("x",[["c","d"]])] }
 
 para :: (Ord n) => ParaName n a -> [a] -> Para n a
 para name xxs = pos xxs [] where
@@ -86,7 +84,33 @@ paraEmpty = Para [] [] Map.empty
 
 -- | Association list of named parameters.
 paraNameList :: Para n a -> [(n, [[a]])]
-paraNameList Para { paraName = m } = Map.assocs m
+paraNameList = Map.assocs . paraName
+
+-- | List of names which appear more than once.
+paraMultipleNames :: Para n a -> [n]
+paraMultipleNames = paraNamesOf (not . B.isSingleton)
+
+paraNamesOf :: ([[a]] -> Bool) -> Para n a -> [n]
+paraNamesOf f = Map.keys . Map.filter f . paraName
+
+-- | Lookup named parameter.
+paraLookup :: (Ord n) => n -> Para n a -> Maybe [[a]]
+paraLookup n = Map.lookup n . paraName
+
+-- | Lookup single-occurence parameter.
+paraLookupSingle :: (Ord n) => n -> Para n a -> Maybe [a]
+paraLookupSingle n p =
+    case paraLookup n p of
+      Just [vs]  -> Just vs
+      Just _     -> Nothing
+      Nothing    -> Nothing
+
+-- | Give names to positional parameters.
+paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
+paraPosName pn p =
+    do ns <- pn $ paraPos p
+       let m = Map.fromList $ map (B.mapSnd B.li1) ns
+       return $ p { paraName = paraName p `Map.union` m }
 
 -- | Add named parameter.
 paraNameAdd :: (Ord n) => n -> [a] -> B.Map (Para n a)
@@ -96,38 +120,35 @@ paraNameAdd n vs p@Para { paraName = m } =
 paraInsert :: (Ord n) => n -> [a] -> B.Map (ParaMap n a)
 paraInsert n a = Map.insertWith (++) n [a]
 
--- | List of names which appear more than once.
-paraMultipleNames :: Para n a -> [n]
-paraMultipleNames = paraNamesOf (not . B.isSingleton)
-
-paraNamesOf :: ([[a]] -> Bool) -> Para n a -> [n]
-paraNamesOf f Para { paraName = m } = Map.keys $ Map.filter f m
-
--- | Give names to positional parameters.
-paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
-paraPosName pn p =
-    do ns <- pn $ paraPos p
-       let m = Map.fromList $ map (B.mapSnd B.li1) ns
-       return $ p { paraName = paraName p `Map.union` m }
-
 -- | Map names of named parameters.
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
 paraNameMapKeys f p@Para { paraName = m } =
     p { paraName = Map.mapKeys f m }
 
-paraLookup :: (Ord n) => n -> Para n a -> Maybe [[a]]
-paraLookup n Para { paraName = m } = Map.lookup n m
 
-paraLookupSingle :: (Ord n) => n -> Para n a -> Maybe [a]
-paraLookupSingle n p =
-    case paraLookup n p of
-      Just [vs]  -> Just vs
-      Just _     -> Nothing
-      Nothing    -> Nothing
+-- --------------------------------------------  Simple
+
+-- | String-named parameter.
+type SimplePara a = Para String a
+
+-- | Parameter name is beginning with hyphen.
+--
+-- >>> paraHyphen "-foo"
+-- Just "foo"
+--
+-- >>> paraHyphen "bar"
+-- Nothing
+
+paraHyphen :: ParaName String String
+paraHyphen ('-' : n)  = Just n
+paraHyphen _          = Nothing
 
 
--- ----------------------  Getters
+-- --------------------------------------------  Getters
 
+-- ----------------------  Named
+
+-- | Named parageter.
 paraGet :: (Ord n) => Para n a -> n -> B.Ab [a]
 paraGet p n =
     case paraLookup n p of
@@ -135,53 +156,72 @@ paraGet p n =
       Just _     -> Msg.adlib "multiple-occurence parameter"
       Nothing    -> Msg.adlib "no named parameter"
 
+-- | Named parameter with default content.
 paraGetOpt :: (Ord n) => [a] -> Para n a -> n -> B.Ab [a]
-paraGetOpt opt p n =
-    case paraGet p n of
-      Right a  -> Right a
-      Left  _  -> Right opt
+paraGetOpt def p n =
+    case paraLookup n p of
+      Just [vs]  -> Right vs
+      Just _     -> Msg.adlib "multiple-occurence parameter"
+      Nothing    -> Right def
 
+-- | Multiple-occurence parameter.
 paraGetList :: (Ord n) => Para n a -> n -> B.Ab [[a]]
 paraGetList p n =
     case paraLookup n p of
       Just vss   -> Right vss
       Nothing    -> Msg.adlib "no named parameter"
 
+-- | Parameter as switch, just given or not.
 paraGetSwitch :: (Ord n) => Para n a -> n -> B.Ab Bool
 paraGetSwitch p n =
     case paraLookup n p of
       Just _     -> Right True
       Nothing    -> Right False
 
+-- ----------------------  Positional
+
+-- | Whole positional parameter list.
 paraGetPos :: Para n a -> B.Ab [a]
-paraGetPos = Right . paraPos
 
-paraGetFst, paraGetSnd, paraGetTrd :: Para n a -> B.Ab a
-paraGetFst  = listGetFst . paraPos
-paraGetSnd  = listGetSnd . paraPos
-paraGetTrd  = listGetTrd . paraPos
+-- | First positional parameter.
+paraGetFst :: Para n a -> B.Ab a
 
-paraGetRest, paraGetRRest :: Para n a -> B.Ab [a]
-paraGetRest   = listGetRest  . paraPos
-paraGetRRest  = listGetRRest . paraPos
+-- | Second positional parameter.
+paraGetSnd :: Para n a -> B.Ab a
 
-listGetFst :: [a] -> B.Ab a
-listGetFst (x:_)      = Right x
-listGetFst _          = Msg.adlib "no parameter at 0"
+-- | Third positional parameter.
+paraGetTrd :: Para n a -> B.Ab a
 
-listGetSnd :: [a] -> B.Ab a
-listGetSnd (_:x:_)    = Right x
-listGetSnd _          = Msg.adlib "no parameter at 1"
+-- | Positional parameter list but first element.
+paraGetRest :: Para n a -> B.Ab [a]
 
-listGetTrd :: [a] -> B.Ab a
-listGetTrd (_:_:x:_)  = Right x
-listGetTrd _          = Msg.adlib "no parameter at 2"
+-- | Positional parameter list but first and second element.
+paraGetRRest :: Para n a -> B.Ab [a]
 
-listGetRest :: [a] -> B.Ab [a]
-listGetRest (_:xs)    = Right xs
-listGetRest _         = Msg.adlib "no rest parameter"
+paraGetPos    = Right . paraPos
+paraGetFst    = listFst   . paraPos
+paraGetSnd    = listSnd   . paraPos
+paraGetTrd    = listTrd   . paraPos
+paraGetRest   = listRest  . paraPos
+paraGetRRest  = listRRest . paraPos
 
-listGetRRest :: [a] -> B.Ab [a]
-listGetRRest (_:_:xs) = Right xs
-listGetRRest _        = Msg.adlib "no rest parameter"
+listFst :: [a] -> B.Ab a
+listFst (x:_)      = Right x
+listFst _          = Msg.adlib "no first parameter"
+
+listSnd :: [a] -> B.Ab a
+listSnd (_:x:_)    = Right x
+listSnd _          = Msg.adlib "no second parameter"
+
+listTrd :: [a] -> B.Ab a
+listTrd (_:_:x:_)  = Right x
+listTrd _          = Msg.adlib "no third parameter"
+
+listRest :: [a] -> B.Ab [a]
+listRest (_:xs)    = Right xs
+listRest _         = Msg.adlib "no rest parameter"
+
+listRRest :: [a] -> B.Ab [a]
+listRRest (_:_:xs) = Right xs
+listRRest _        = Msg.adlib "no rest parameter"
 
