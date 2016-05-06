@@ -3,7 +3,7 @@
 
 -- | Parameter type.
 
-module Koshucode.Baala.Syntax.Attr.Para
+module Koshucode.Baala.Syntax.Para.Para
   ( -- * Parameter constructor
     Para (..), ParaMap, ParaName,
     para,

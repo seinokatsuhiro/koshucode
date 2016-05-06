@@ -18,9 +18,9 @@ module Koshucode.Baala.Syntax.Attr.Attr
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Syntax.Para           as S
 import qualified Koshucode.Baala.Syntax.Token          as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrPos   as S
-import qualified Koshucode.Baala.Syntax.Attr.Para      as S
 import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 
 

@@ -3,7 +3,7 @@
 
 -- | Parameter specification.
 
-module Koshucode.Baala.Syntax.Attr.ParaSpec
+module Koshucode.Baala.Syntax.Para.ParaSpec
   ( -- * Specification
     ParaSpec (..), ParaSpecPos (..), 
 
@@ -23,7 +23,7 @@ module Koshucode.Baala.Syntax.Attr.ParaSpec
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax.Attr.Para  as S
+import qualified Koshucode.Baala.Syntax.Para.Para  as S
 
 
 -- --------------------------------------------  Specification

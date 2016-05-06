@@ -51,10 +51,12 @@ library
         Koshucode.Baala.Syntax.Attr.AttrEd
         Koshucode.Baala.Syntax.Attr.AttrPos
         Koshucode.Baala.Syntax.Attr.Message
-        Koshucode.Baala.Syntax.Attr.Para
-        Koshucode.Baala.Syntax.Attr.ParaSpec
         Koshucode.Baala.Syntax.Attr.Parse
         Koshucode.Baala.Syntax.Attr.Slot
+
+        Koshucode.Baala.Syntax.Para
+        Koshucode.Baala.Syntax.Para.Para
+        Koshucode.Baala.Syntax.Para.ParaSpec
 
         Koshucode.Baala.Syntax.Symbol
         Koshucode.Baala.Syntax.Symbol.AngleText
