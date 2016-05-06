@@ -86,17 +86,18 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                 == 4.*
-       , blaze-html           == 0.*
-       , blaze-markup         == 0.*
-       , bytestring           == 0.*
-       , containers           == 0.5.*
-       , http-conduit         == 2.*
-       , http-types           == 0.*
-       , network-uri          == 2.*
-       , pretty               == 1.*
-       , syb                  == 0.*
-       , utf8-string          == 1.*
+         base                  == 4.*
+       , blaze-html            == 0.*
+       , blaze-markup          == 0.*
+       , bytestring            == 0.*
+       , containers            == 0.5.*
+       , data-default          == 0.*
+       , http-conduit          == 2.*
+       , http-types            == 0.*
+       , network-uri           == 2.*
+       , pretty                == 1.*
+       , syb                   == 0.*
+       , utf8-string           == 1.*
 
   ghc-options:         -Wall
 

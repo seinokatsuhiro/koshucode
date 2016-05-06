@@ -12,6 +12,9 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.guard,
     concatMapM,
   
+    -- * Data.Default
+    Data.Default.Default (..),
+
     -- * Data.List
     Data.List.intercalate,
     Data.List.intersect,
@@ -65,6 +68,7 @@ module Koshucode.Baala.Base.Prelude.Import
   ) where
 
 import qualified Control.Monad
+import qualified Data.Default
 import qualified Data.List
 import qualified Data.Map
 import qualified Data.Maybe
