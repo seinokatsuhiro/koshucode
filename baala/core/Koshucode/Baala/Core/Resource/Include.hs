@@ -133,8 +133,8 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     ps = [ (pJust1, just1)
          , (pStdin, stdin) ]
 
-    pJust1 = B.def `S.paraJust` 1 `S.paraOpt` ["about"]
-    pStdin = B.def `S.paraReq` ["stdin"]
+    pJust1 = S.paraSpec $ S.paraJust 1 . S.paraOpt ["about"]
+    pStdin = S.paraSpec $ S.paraReq ["stdin"]
 
     just1 :: C.TTreePara -> B.Ab C.InputPoint
     just1 p = do arg   <- S.paraGetFst p

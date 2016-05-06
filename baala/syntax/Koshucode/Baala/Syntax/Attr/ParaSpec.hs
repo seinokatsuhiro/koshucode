@@ -8,6 +8,7 @@ module Koshucode.Baala.Syntax.Attr.ParaSpec
     ParaSpec (..), ParaSpecPos (..), 
 
     -- * Construction
+    ParaSpecMap, paraSpec,
     -- ** Positional parameter
     paraMin, paraMax, paraJust, paraRange,
     -- ** Named parameter
@@ -52,7 +53,12 @@ instance B.Default (ParaSpec n) where
 
 -- --------------------------------------------  Construct
 
-paraCheck :: (Show n, Ord n) => B.Map (ParaSpec n)
+type ParaSpecMap n = B.Map (ParaSpec n)
+
+paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
+paraSpec edit = paraCheck $ edit B.def
+
+paraCheck :: (Show n, Ord n) => ParaSpecMap n
 paraCheck spec@(ParaSpec _ req opt mul)
     | null dup   = spec
     | otherwise  = B.bug $ "duplicate para names: " ++ show dup
@@ -62,34 +68,34 @@ paraCheck spec@(ParaSpec _ req opt mul)
 -- ----------------------  Positional
 
 -- | Lower bound of length of positional parameter.
-paraMin :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+paraMin :: Int -> ParaSpecMap n
 -- | Upper bound of length of positional parameter.
-paraMax :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+paraMax :: Int -> ParaSpecMap n
 -- | Fixed-length positional parameter.
-paraJust :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+paraJust :: Int -> ParaSpecMap n
 -- | Lower and upper bound of length of positional parameter.
-paraRange :: (Show n, Ord n) => ParaSpec n -> (Int, Int) -> ParaSpec n
+paraRange :: Int -> Int -> ParaSpecMap n
 
-paraMin   spec n      = paraPos spec $ ParaPosMin   n
-paraMax   spec n      = paraPos spec $ ParaPosRange 0 n
-paraJust  spec n      = paraPos spec $ ParaPosRange n n
-paraRange spec (m, n) = paraPos spec $ ParaPosRange m n
+paraMin   n   = paraPos $ ParaPosMin   n
+paraMax   n   = paraPos $ ParaPosRange 0 n
+paraJust  n   = paraPos $ ParaPosRange n n
+paraRange m n = paraPos $ ParaPosRange m n
 
-paraPos :: (Show n, Ord n) => ParaSpec n -> ParaSpecPos -> ParaSpec n
-paraPos spec pos = paraCheck $ spec { paraSpecPos = pos }
+paraPos :: ParaSpecPos -> ParaSpecMap n
+paraPos pos spec = spec { paraSpecPos = pos }
 
 -- ----------------------  Named
 
 -- | Required named parameter.
-paraReq :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+paraReq :: [n] -> ParaSpecMap n
 -- | Optional named parameter.
-paraOpt :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+paraOpt :: [n] -> ParaSpecMap n
 -- | Multiple-occurence parameter.
-paraMult :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+paraMult :: [n] -> ParaSpecMap n
 
-paraReq  spec ns  = paraCheck $ spec { paraSpecReq  = ns }
-paraOpt  spec ns  = paraCheck $ spec { paraSpecOpt  = ns }
-paraMult spec ns  = paraCheck $ spec { paraSpecMult = ns }
+paraReq  ns spec  = spec { paraSpecReq  = ns }
+paraOpt  ns spec  = spec { paraSpecOpt  = ns }
+paraMult ns spec  = spec { paraSpecMult = ns }
 
 
 -- --------------------------------------------  Unmatch
