@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Syntax.Attr.Slot
 
         Koshucode.Baala.Syntax.Para
+        Koshucode.Baala.Syntax.Para.Get
         Koshucode.Baala.Syntax.Para.Para
         Koshucode.Baala.Syntax.Para.ParaSpec
 

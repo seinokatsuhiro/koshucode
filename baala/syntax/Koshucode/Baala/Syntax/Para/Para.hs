@@ -15,19 +15,11 @@ module Koshucode.Baala.Syntax.Para.Para
 
     -- * Simple parameter
     SimplePara, paraHyphen,
-
-    -- * Getting parameter content
-    -- ** Named parameter
-    paraGet, paraGetOpt, paraGetList, paraGetSwitch,
-    -- ** Positional parameter
-    paraGetPos, paraGetFst, paraGetSnd, paraGetTrd,
-    paraGetRest, paraGetRRest,
   ) where
 
 import qualified Data.Generics                         as G
 import qualified Data.Map.Strict                       as Map
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Base.Message          as Msg
 
 
 -- ----------------------  Parameter
@@ -144,86 +136,4 @@ type SimplePara a = Para String a
 paraHyphen :: ParaName String String
 paraHyphen ('-' : n)  = Just n
 paraHyphen _          = Nothing
-
-
--- --------------------------------------------  Getters
-
--- ----------------------  Named
-
--- | Named parageter.
-paraGet :: (Ord n) => Para n a -> n -> B.Ab [a]
-paraGet p n =
-    case paraLookup n p of
-      Just [vs]  -> Right vs
-      Just _     -> Msg.adlib "multiple-occurence parameter"
-      Nothing    -> Msg.adlib "no named parameter"
-
--- | Named parameter with default content.
-paraGetOpt :: (Ord n) => [a] -> Para n a -> n -> B.Ab [a]
-paraGetOpt def p n =
-    case paraLookup n p of
-      Just [vs]  -> Right vs
-      Just _     -> Msg.adlib "multiple-occurence parameter"
-      Nothing    -> Right def
-
--- | Multiple-occurence parameter.
-paraGetList :: (Ord n) => Para n a -> n -> B.Ab [[a]]
-paraGetList p n =
-    case paraLookup n p of
-      Just vss   -> Right vss
-      Nothing    -> Msg.adlib "no named parameter"
-
--- | Parameter as switch, just given or not.
-paraGetSwitch :: (Ord n) => Para n a -> n -> B.Ab Bool
-paraGetSwitch p n =
-    case paraLookup n p of
-      Just _     -> Right True
-      Nothing    -> Right False
-
--- ----------------------  Positional
-
--- | Whole positional parameter list.
-paraGetPos :: Para n a -> B.Ab [a]
-
--- | First positional parameter.
-paraGetFst :: Para n a -> B.Ab a
-
--- | Second positional parameter.
-paraGetSnd :: Para n a -> B.Ab a
-
--- | Third positional parameter.
-paraGetTrd :: Para n a -> B.Ab a
-
--- | Positional parameter list but first element.
-paraGetRest :: Para n a -> B.Ab [a]
-
--- | Positional parameter list but first and second element.
-paraGetRRest :: Para n a -> B.Ab [a]
-
-paraGetPos    = Right . paraPos
-paraGetFst    = listFst   . paraPos
-paraGetSnd    = listSnd   . paraPos
-paraGetTrd    = listTrd   . paraPos
-paraGetRest   = listRest  . paraPos
-paraGetRRest  = listRRest . paraPos
-
-listFst :: [a] -> B.Ab a
-listFst (x:_)      = Right x
-listFst _          = Msg.adlib "no first parameter"
-
-listSnd :: [a] -> B.Ab a
-listSnd (_:x:_)    = Right x
-listSnd _          = Msg.adlib "no second parameter"
-
-listTrd :: [a] -> B.Ab a
-listTrd (_:_:x:_)  = Right x
-listTrd _          = Msg.adlib "no third parameter"
-
-listRest :: [a] -> B.Ab [a]
-listRest (_:xs)    = Right xs
-listRest _         = Msg.adlib "no rest parameter"
-
-listRRest :: [a] -> B.Ab [a]
-listRRest (_:_:xs) = Right xs
-listRRest _        = Msg.adlib "no rest parameter"
 
