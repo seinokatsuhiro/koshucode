@@ -75,7 +75,7 @@ attrClassify namesP namesN n = n2 where
 --
 --   >>> let a = attrLayout (S.AttrPos2 (S.AttrNormal "a") (S.AttrNormal "b")) [S.AttrNormal "x", S.AttrNormal "y"]
 --   >>> attrSetSort a =<< S.tt "a b -x /c 'd -y e"
---   Right (ParaBody {
+--   Right (Para {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
 --                  TreeL (TText CodePt {..} TextRaw "b"),
 --                  TreeL (TText CodePt {..} TextRaw "-x"),
@@ -96,7 +96,7 @@ attrClassify namesP namesN n = n2 where
 --     })
 
 -- | Attribute set.
-type AttrSet = S.ParaBody S.AttrName S.TTree
+type AttrSet = S.Para S.AttrName S.TTree
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
@@ -142,7 +142,7 @@ attrCheck namesP namesN attr =
       textAll = "@trunk" : t namesP ++ t namesN
       t       = map S.attrNameText
 
-attrList :: S.ParaBody n a -> [(n, [a])]
+attrList :: S.Para n a -> [(n, [a])]
 attrList = map (B.mapSnd concat) . S.paraNameList
 
 -- | Take out hyphened text (like @"-x"@) from token tree.

@@ -7,22 +7,24 @@
 
 module Koshucode.Baala.Syntax.Attr.Para
   ( -- * Parameter constructor
-    SimplePara, ParaBody (..), ParaMap, ParaName, paraHyphen,
+    SimplePara, Para (..), ParaMap, ParaName, paraHyphen,
     para, paraEmpty,
     paraNameList, paraNameAdd,
     paraPosName, paraMultipleNames, paraNameMapKeys,
     paraLookupSingle,
 
     -- * Types of parameters
+    -- ** Data type
     ParaType (..), ParaPosType (..), 
 
-    -- * Creating parameter types
+    -- ** Construct
     paraType, paraJust, paraMin, paraMax, paraRange,
     paraReq, paraOpt, paraMult,
 
     -- * Matching against parameters
     ParaUnmatch (..),
-    paraSelect, paraMatch, paraUnmatch,
+    paraMatch, paraUnmatch,
+    paraSelect, 
 
     -- * Getting parameter elements
     -- ** Named parameter
@@ -41,10 +43,10 @@ import qualified Koshucode.Baala.Base.Message  as Msg
 -- ----------------------  Parameter
 
 -- | String-named parameter.
-type SimplePara a = ParaBody String a
+type SimplePara a = Para String a
 
-data ParaBody n a
-    = ParaBody
+data Para n a
+    = Para
       { paraAll   :: [a]            -- ^ All parameter elements.
       , paraPos   :: [a]            -- ^ Positional parameters.
       , paraName  :: ParaMap n a    -- ^ Named parameters.
@@ -53,9 +55,9 @@ data ParaBody n a
 -- | Mapping parameter name to its contents.
 type ParaMap n a = Map.Map n [[a]]
 
-instance (Ord n) => B.Monoid (ParaBody n a) where
+instance (Ord n) => B.Monoid (Para n a) where
     mempty        = paraEmpty
-    mappend p1 p2 = ParaBody { paraAll   = paraAll  p1 ++  paraAll p2
+    mappend p1 p2 = Para { paraAll   = paraAll  p1 ++  paraAll p2
                              , paraPos   = paraPos  p1 ++  paraPos p2
                              , paraName  = paraName p1 `u` paraName p2 }
         where u = Map.unionWith (++)
@@ -70,16 +72,16 @@ paraHyphen _          = Nothing
 -- | Parse list into parameter.
 --
 -- >>> para paraHyphen $ words "a b"
--- ParaBody { paraAll = ["a","b"], paraPos = ["a","b"], paraName = fromList [] }
+-- Para { paraAll = ["a","b"], paraPos = ["a","b"], paraName = fromList [] }
 --
 -- >>> para paraHyphen $ words "a b -x c d"
--- ParaBody { paraAll = ["a","b","-x","c"]
+-- Para { paraAll = ["a","b","-x","c"]
 --          , paraPos = ["a","b"]
 --          , paraName = fromList [("x",[["c","d"]])] }
 
-para :: (Ord n) => ParaName n a -> [a] -> ParaBody n a
+para :: (Ord n) => ParaName n a -> [a] -> Para n a
 para name xxs = pos xxs [] where
-    make ps            = ParaBody xxs (reverse ps) Map.empty
+    make ps            = Para xxs (reverse ps) Map.empty
     pos [] ps          = make ps
     pos (x:xs) ps      = case name x of
                           Nothing  -> pos xs (x:ps)
@@ -94,44 +96,44 @@ para name xxs = pos xxs [] where
     add n vs = paraInsert n $ reverse vs
 
 -- | Empty parameter.
-paraEmpty :: ParaBody n a
-paraEmpty = ParaBody [] [] Map.empty
+paraEmpty :: Para n a
+paraEmpty = Para [] [] Map.empty
 
 -- | Association list of named parameters.
-paraNameList :: ParaBody n a -> [(n, [[a]])]
-paraNameList ParaBody { paraName = m } = Map.assocs m
+paraNameList :: Para n a -> [(n, [[a]])]
+paraNameList Para { paraName = m } = Map.assocs m
 
 -- | Add named parameter.
-paraNameAdd :: (Ord n) => n -> [a] -> B.Map (ParaBody n a)
-paraNameAdd n vs p@ParaBody { paraName = m } =
+paraNameAdd :: (Ord n) => n -> [a] -> B.Map (Para n a)
+paraNameAdd n vs p@Para { paraName = m } =
     p { paraName = paraInsert n vs m }
 
 paraInsert :: (Ord n) => n -> [a] -> B.Map (ParaMap n a)
 paraInsert n a = Map.insertWith (++) n [a]
 
 -- | List of names which appear more than once.
-paraMultipleNames :: ParaBody n a -> [n]
+paraMultipleNames :: Para n a -> [n]
 paraMultipleNames = paraNamesOf (not . B.isSingleton)
 
-paraNamesOf :: ([[a]] -> Bool) -> ParaBody n a -> [n]
-paraNamesOf f ParaBody { paraName = m } = Map.keys $ Map.filter f m
+paraNamesOf :: ([[a]] -> Bool) -> Para n a -> [n]
+paraNamesOf f Para { paraName = m } = Map.keys $ Map.filter f m
 
 -- | Give names to positional parameters.
-paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (ParaBody n a)
+paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
 paraPosName pn p =
     do ns <- pn $ paraPos p
        let m = Map.fromList $ map (B.mapSnd B.li1) ns
        return $ p { paraName = paraName p `Map.union` m }
 
 -- | Map names of named parameters.
-paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
-paraNameMapKeys f p@ParaBody { paraName = m } =
+paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
+paraNameMapKeys f p@Para { paraName = m } =
     p { paraName = Map.mapKeys f m }
 
-paraLookup :: (Ord n) => n -> ParaBody n a -> Maybe [[a]]
-paraLookup n ParaBody { paraName = m } = Map.lookup n m
+paraLookup :: (Ord n) => n -> Para n a -> Maybe [[a]]
+paraLookup n Para { paraName = m } = Map.lookup n m
 
-paraLookupSingle :: (Ord n) => n -> ParaBody n a -> Maybe [a]
+paraLookupSingle :: (Ord n) => n -> Para n a -> Maybe [a]
 paraLookupSingle n p =
     case paraLookup n p of
       Just [vs]  -> Just vs
@@ -144,12 +146,13 @@ paraLookupSingle n p =
 
 data ParaType n
     = ParaType
-      { paraTypePos    :: ParaPosType
-      , paraTypeReq    :: [n]
-      , paraTypeOpt    :: [n]
-      , paraTypeMult   :: [n]
+      { paraTypePos   :: ParaPosType   -- ^ Positional parameter type
+      , paraTypeReq   :: [n]           -- ^ Required parameter type
+      , paraTypeOpt   :: [n]           -- ^ Optional parameter type
+      , paraTypeMult  :: [n]
       } deriving (Show, Eq, Ord)
 
+-- | Positional parameter type.
 data ParaPosType
     = ParaPosJust  Int
     | ParaPosMin   Int
@@ -157,6 +160,7 @@ data ParaPosType
     | ParaPosRange Int Int
       deriving (Show, Eq, Ord)
 
+-- | Empty parameter type.
 paraType :: ParaType n
 paraType = ParaType (ParaPosJust 0) [] [] []
 
@@ -183,17 +187,20 @@ paraCheck ty@(ParaType _ req opt mul)
 
 -- ----------------------  Unmatch
 
+-- | Unmatch reason of real parameter and its specifition.
 data ParaUnmatch n
-    = ParaOutOfRange Int ParaPosType
-    | ParaUnknown  [n]
-    | ParaMissing  [n]
-    | ParaMultiple [n]
+    = ParaOutOfRange Int ParaPosType -- ^ Positional parameter is unmatched.
+    | ParaUnknown  [n]    -- ^ Unknown parameter is specified.
+    | ParaMissing  [n]    -- ^ Required parameter is missing.
+    | ParaMultiple [n]    -- ^ Parameter occurs more than once.
       deriving (Show, Eq, Ord)
 
-paraMatch :: (Eq n) => ParaBody n a -> ParaType n -> Bool
+-- | Test parameter satisfies specification.
+paraMatch :: (Eq n) => Para n a -> ParaType n -> Bool
 paraMatch p t = paraUnmatch p t == Nothing
 
-paraUnmatch :: forall n a. (Eq n) => ParaBody n a -> ParaType n -> Maybe (ParaUnmatch n)
+-- | Create unmatch reason when parameter does not satisfies specification.
+paraUnmatch :: forall n a. (Eq n) => Para n a -> ParaType n -> Maybe (ParaUnmatch n)
 paraUnmatch p (ParaType pos req opt mul)
     | upos /= Nothing   = upos
     | unknowns  /= []   = Just $ ParaUnknown  unknowns
@@ -219,7 +226,7 @@ paraPosUnmatch ps = match where
     match p                                       = Just $ ParaOutOfRange n p
     n = length ps
 
-paraSelect :: (Eq n) => b -> [(ParaBody n a -> b, ParaType n)] -> ParaBody n a -> b
+paraSelect :: (Eq n) => b -> [(Para n a -> b, ParaType n)] -> Para n a -> b
 paraSelect b ps p = loop ps where
     loop [] = b
     loop ((body, ty) : ps2)
@@ -229,40 +236,40 @@ paraSelect b ps p = loop ps where
 
 -- ----------------------  Getters
 
-paraGet :: (Ord n) => ParaBody n a -> n -> B.Ab [a]
+paraGet :: (Ord n) => Para n a -> n -> B.Ab [a]
 paraGet p n =
     case paraLookup n p of
       Just [vs]  -> Right vs
       Just _     -> Msg.adlib "multiple-occurence parameter"
       Nothing    -> Msg.adlib "no named parameter"
 
-paraGetOpt :: (Ord n) => [a] -> ParaBody n a -> n -> B.Ab [a]
+paraGetOpt :: (Ord n) => [a] -> Para n a -> n -> B.Ab [a]
 paraGetOpt opt p n =
     case paraGet p n of
       Right a  -> Right a
       Left  _  -> Right opt
 
-paraGetList :: (Ord n) => ParaBody n a -> n -> B.Ab [[a]]
+paraGetList :: (Ord n) => Para n a -> n -> B.Ab [[a]]
 paraGetList p n =
     case paraLookup n p of
       Just vss   -> Right vss
       Nothing    -> Msg.adlib "no named parameter"
 
-paraGetSwitch :: (Ord n) => ParaBody n a -> n -> B.Ab Bool
+paraGetSwitch :: (Ord n) => Para n a -> n -> B.Ab Bool
 paraGetSwitch p n =
     case paraLookup n p of
       Just _     -> Right True
       Nothing    -> Right False
 
-paraGetPos :: ParaBody n a -> B.Ab [a]
+paraGetPos :: Para n a -> B.Ab [a]
 paraGetPos = Right . paraPos
 
-paraGetFst, paraGetSnd, paraGetTrd :: ParaBody n a -> B.Ab a
+paraGetFst, paraGetSnd, paraGetTrd :: Para n a -> B.Ab a
 paraGetFst  = listGetFst . paraPos
 paraGetSnd  = listGetSnd . paraPos
 paraGetTrd  = listGetTrd . paraPos
 
-paraGetRest, paraGetRRest :: ParaBody n a -> B.Ab [a]
+paraGetRest, paraGetRRest :: Para n a -> B.Ab [a]
 paraGetRest   = listGetRest  . paraPos
 paraGetRRest  = listGetRRest . paraPos
 
