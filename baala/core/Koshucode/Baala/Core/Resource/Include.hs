@@ -130,8 +130,11 @@ calcContG = D.calcContent . C.globalCopset
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
 paraToIOPoint cd = S.paraSelect unmatch ps where
-    ps = [ (just1, S.paraType `S.paraJust` 1 `S.paraOpt` ["about"])
-         , (stdin, S.paraType `S.paraReq` ["stdin"]) ]
+    ps = [ (pJust1, just1)
+         , (pStdin, stdin) ]
+
+    pJust1 = S.paraSpec `S.paraJust` 1 `S.paraOpt` ["about"]
+    pStdin = S.paraSpec `S.paraReq` ["stdin"]
 
     just1 :: C.TTreePara -> B.Ab C.InputPoint
     just1 p = do arg   <- S.paraGetFst p

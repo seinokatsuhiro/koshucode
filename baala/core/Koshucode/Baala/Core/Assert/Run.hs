@@ -66,8 +66,8 @@ runRelmapViaRelkit hook links r (D.Rel he1 bo1) =
 
 -- ---------------------------------  Options
 
-optionType :: S.ParaType String
-optionType = S.paraType `S.paraMin` 0 `S.paraOpt`
+optionType :: S.ParaSpec String
+optionType = S.paraSpec `S.paraMin` 0 `S.paraOpt`
              [ "empty"     -- show empty filler
              , "forward"   -- move terms to front
              , "backward"  -- move terms to rear

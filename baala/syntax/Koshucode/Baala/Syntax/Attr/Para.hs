@@ -13,20 +13,20 @@ module Koshucode.Baala.Syntax.Attr.Para
     paraPosName, paraMultipleNames, paraNameMapKeys,
     paraLookupSingle,
 
-    -- * Types of parameters
+    -- * Specification of parameter
     -- ** Data type
-    ParaType (..), ParaPosType (..), 
+    ParaSpec (..), ParaSpecPos (..), 
 
     -- ** Construct
-    paraType, paraJust, paraMin, paraMax, paraRange,
+    paraSpec, paraJust, paraMin, paraMax, paraRange,
     paraReq, paraOpt, paraMult,
 
-    -- * Matching against parameters
+    -- * Matching against parameter
     ParaUnmatch (..),
     paraMatch, paraUnmatch,
     paraSelect, 
 
-    -- * Getting parameter elements
+    -- * Getting parameter content
     -- ** Named parameter
     paraGet, paraGetOpt, paraGetList, paraGetSwitch,
     -- ** Positional parameter
@@ -142,43 +142,44 @@ paraLookupSingle n p =
 
 
 
--- ----------------------  Parameter Type
+-- ----------------------  Parameter specification
 
-data ParaType n
-    = ParaType
-      { paraTypePos   :: ParaPosType   -- ^ Positional parameter type
-      , paraTypeReq   :: [n]           -- ^ Required parameter type
-      , paraTypeOpt   :: [n]           -- ^ Optional parameter type
-      , paraTypeMult  :: [n]
+-- | Parameter specification.
+data ParaSpec n
+    = ParaSpec
+      { paraSpecPos   :: ParaSpecPos   -- ^ Positional parameter specification
+      , paraSpecReq   :: [n]           -- ^ Required parameter specification
+      , paraSpecOpt   :: [n]           -- ^ Optional parameter specification
+      , paraSpecMult  :: [n]
       } deriving (Show, Eq, Ord)
 
--- | Positional parameter type.
-data ParaPosType
-    = ParaPosJust  Int
-    | ParaPosMin   Int
-    | ParaPosMax   Int
-    | ParaPosRange Int Int
+-- | Positional parameter specification.
+data ParaSpecPos
+    = ParaPosJust  Int      -- ^ Required length of positional parameter
+    | ParaPosMin   Int      -- ^ Lower bound of parameter length
+    | ParaPosMax   Int      -- ^ Upper bound of parameter length
+    | ParaPosRange Int Int  -- ^ Lower and upper bound of parameter length
       deriving (Show, Eq, Ord)
 
--- | Empty parameter type.
-paraType :: ParaType n
-paraType = ParaType (ParaPosJust 0) [] [] []
+-- | Empty parameter specification.
+paraSpec :: ParaSpec n
+paraSpec = ParaSpec (ParaPosJust 0) [] [] []
 
-paraJust, paraMin, paraMax :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
-paraJust  ty n = paraCheck $ ty { paraTypePos = ParaPosJust n }
-paraMin   ty n = paraCheck $ ty { paraTypePos = ParaPosMin  n }
-paraMax   ty n = paraCheck $ ty { paraTypePos = ParaPosMax  n }
+paraJust, paraMin, paraMax :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+paraJust  ty n  = paraCheck $ ty { paraSpecPos = ParaPosJust n }
+paraMin   ty n  = paraCheck $ ty { paraSpecPos = ParaPosMin  n }
+paraMax   ty n  = paraCheck $ ty { paraSpecPos = ParaPosMax  n }
 
-paraRange :: (Show n, Ord n) => ParaType n -> (Int, Int) -> ParaType n
-paraRange ty (m, n) = paraCheck $ ty { paraTypePos = ParaPosRange m n }
+paraRange :: (Show n, Ord n) => ParaSpec n -> (Int, Int) -> ParaSpec n
+paraRange ty (m, n) = paraCheck $ ty { paraSpecPos = ParaPosRange m n }
 
-paraReq, paraOpt, paraMult :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
-paraReq  ty ns = paraCheck $ ty { paraTypeReq = ns }
-paraOpt  ty ns = paraCheck $ ty { paraTypeOpt = ns }
-paraMult ty ns = paraCheck $ ty { paraTypeMult = ns }
+paraReq, paraOpt, paraMult :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+paraReq  ty ns  = paraCheck $ ty { paraSpecReq  = ns }
+paraOpt  ty ns  = paraCheck $ ty { paraSpecOpt  = ns }
+paraMult ty ns  = paraCheck $ ty { paraSpecMult = ns }
 
-paraCheck :: (Show n, Ord n) => B.Map (ParaType n)
-paraCheck ty@(ParaType _ req opt mul)
+paraCheck :: (Show n, Ord n) => B.Map (ParaSpec n)
+paraCheck ty@(ParaSpec _ req opt mul)
     | null dup   = ty
     | otherwise  = B.bug $ "duplicate para names: " ++ show dup
     where ns     = req ++ opt ++ mul
@@ -189,19 +190,19 @@ paraCheck ty@(ParaType _ req opt mul)
 
 -- | Unmatch reason of real parameter and its specifition.
 data ParaUnmatch n
-    = ParaOutOfRange Int ParaPosType -- ^ Positional parameter is unmatched.
+    = ParaOutOfRange Int ParaSpecPos -- ^ Positional parameter is unmatched.
     | ParaUnknown  [n]    -- ^ Unknown parameter is specified.
     | ParaMissing  [n]    -- ^ Required parameter is missing.
     | ParaMultiple [n]    -- ^ Parameter occurs more than once.
       deriving (Show, Eq, Ord)
 
 -- | Test parameter satisfies specification.
-paraMatch :: (Eq n) => Para n a -> ParaType n -> Bool
+paraMatch :: (Eq n) => Para n a -> ParaSpec n -> Bool
 paraMatch p t = paraUnmatch p t == Nothing
 
 -- | Create unmatch reason when parameter does not satisfies specification.
-paraUnmatch :: forall n a. (Eq n) => Para n a -> ParaType n -> Maybe (ParaUnmatch n)
-paraUnmatch p (ParaType pos req opt mul)
+paraUnmatch :: forall n a. (Eq n) => Para n a -> ParaSpec n -> Maybe (ParaUnmatch n)
+paraUnmatch p (ParaSpec pos req opt mul)
     | upos /= Nothing   = upos
     | unknowns  /= []   = Just $ ParaUnknown  unknowns
     | missings  /= []   = Just $ ParaMissing  missings
@@ -217,7 +218,7 @@ paraUnmatch p (ParaType pos req opt mul)
       missings          = req B.\\ ns
       multiples         = ns2 B.\\ mul
 
-paraPosUnmatch :: [a] -> ParaPosType -> Maybe (ParaUnmatch n)
+paraPosUnmatch :: [a] -> ParaSpecPos -> Maybe (ParaUnmatch n)
 paraPosUnmatch ps = match where
     match (ParaPosJust c)     | n == c            = Nothing
     match (ParaPosMin  a)     | n >= a            = Nothing
@@ -226,10 +227,10 @@ paraPosUnmatch ps = match where
     match p                                       = Just $ ParaOutOfRange n p
     n = length ps
 
-paraSelect :: (Eq n) => b -> [(Para n a -> b, ParaType n)] -> Para n a -> b
+paraSelect :: (Eq n) => b -> [(ParaSpec n, Para n a -> b)] -> Para n a -> b
 paraSelect b ps p = loop ps where
     loop [] = b
-    loop ((body, ty) : ps2)
+    loop ((ty, body) : ps2)
         | paraMatch p ty    = body p
         | otherwise         = loop ps2
 
