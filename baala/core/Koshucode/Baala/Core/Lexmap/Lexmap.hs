@@ -59,7 +59,7 @@ lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 lexBase :: Lexmap
 lexBase = Lexmap { lexType     = LexmapBase
                  , lexToken    = S.textToken ""
-                 , lexAttr     = S.paraEmpty
+                 , lexAttr     = B.def
                  , lexSubmap   = []
                  , lexMessage  = [] }
 

@@ -97,7 +97,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         -- -----------  local, derived, or base lexmap
 
         local :: S.Token -> ConsLexmapBody
-        local tok [] = Right (cons C.LexmapLocal tok S.paraEmpty, [])
+        local tok [] = Right (cons C.LexmapLocal tok B.def, [])
         local _ _    = Msg.extraAttr
 
         deriv :: S.Token -> LexmapClause -> ConsLexmapBody

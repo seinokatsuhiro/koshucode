@@ -26,7 +26,7 @@ data LexmapTrees = LexmapTrees
     } deriving (Show, Eq, Ord)
 
 clauseAttrType :: S.ParaSpec String
-clauseAttrType = S.paraSpec `S.paraMin` 0 `S.paraOpt` ["attr"]
+clauseAttrType = B.def `S.paraMin` 0 `S.paraOpt` ["attr"]
 
 consLexmapTrees :: TTreePara -> B.Ab LexmapTrees
 consLexmapTrees para =

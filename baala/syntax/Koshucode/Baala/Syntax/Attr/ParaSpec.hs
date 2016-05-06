@@ -6,8 +6,11 @@
 module Koshucode.Baala.Syntax.Attr.ParaSpec
   ( -- * Specification
     ParaSpec (..), ParaSpecPos (..), 
-    paraSpec,
+
+    -- * Construction
+    -- ** Positional parameter
     paraJust, paraMin, paraMax, paraRange,
+    -- ** Named parameter
     paraReq, paraOpt, paraMult,
 
     -- * Unmatch reason
@@ -26,10 +29,10 @@ import qualified Koshucode.Baala.Syntax.Attr.Para  as S
 -- | Parameter specification.
 data ParaSpec n
     = ParaSpec
-      { paraSpecPos   :: ParaSpecPos   -- ^ Positional parameter specification
-      , paraSpecReq   :: [n]           -- ^ Required parameter specification
-      , paraSpecOpt   :: [n]           -- ^ Optional parameter specification
-      , paraSpecMult  :: [n]
+      { paraSpecPos   :: ParaSpecPos   -- ^ Positional parameter
+      , paraSpecReq   :: [n]           -- ^ Required parameter
+      , paraSpecOpt   :: [n]           -- ^ Optional parameter
+      , paraSpecMult  :: [n]           -- ^ Multiple-occurence parameter
       } deriving (Show, Eq, Ord)
 
 -- | Positional parameter specification.
@@ -40,22 +43,15 @@ data ParaSpecPos
     | ParaPosRange Int Int  -- ^ Lower and upper bound of parameter length
       deriving (Show, Eq, Ord)
 
--- | Empty parameter specification.
-paraSpec :: ParaSpec n
-paraSpec = ParaSpec (ParaPosJust 0) [] [] []
+-- | No parameters
+instance B.Default (ParaSpec n) where
+    def = ParaSpec { paraSpecPos  = ParaPosJust 0
+                   , paraSpecReq  = []
+                   , paraSpecOpt  = []
+                   , paraSpecMult = [] }
 
-paraJust, paraMin, paraMax :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
-paraJust  ty n  = paraCheck $ ty { paraSpecPos = ParaPosJust n }
-paraMin   ty n  = paraCheck $ ty { paraSpecPos = ParaPosMin  n }
-paraMax   ty n  = paraCheck $ ty { paraSpecPos = ParaPosMax  n }
 
-paraRange :: (Show n, Ord n) => ParaSpec n -> (Int, Int) -> ParaSpec n
-paraRange ty (m, n) = paraCheck $ ty { paraSpecPos = ParaPosRange m n }
-
-paraReq, paraOpt, paraMult :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
-paraReq  ty ns  = paraCheck $ ty { paraSpecReq  = ns }
-paraOpt  ty ns  = paraCheck $ ty { paraSpecOpt  = ns }
-paraMult ty ns  = paraCheck $ ty { paraSpecMult = ns }
+-- --------------------------------------------  Construct
 
 paraCheck :: (Show n, Ord n) => B.Map (ParaSpec n)
 paraCheck ty@(ParaSpec _ req opt mul)
@@ -64,8 +60,37 @@ paraCheck ty@(ParaSpec _ req opt mul)
     where ns     = req ++ opt ++ mul
           dup    = B.duplicates ns
 
+-- ----------------------  Positional
 
--- ----------------------  Unmatch
+-- | Fixed-length positional parameter.
+paraJust :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+-- | Lower bound of length of positional parameter.
+paraMin :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+-- | Upper bound of length of positional parameter.
+paraMax :: (Show n, Ord n) => ParaSpec n -> Int -> ParaSpec n
+-- | Lower and upper bound of length of positional parameter.
+paraRange :: (Show n, Ord n) => ParaSpec n -> (Int, Int) -> ParaSpec n
+
+paraJust  ty n      = paraCheck $ ty { paraSpecPos = ParaPosJust n }
+paraMin   ty n      = paraCheck $ ty { paraSpecPos = ParaPosMin  n }
+paraMax   ty n      = paraCheck $ ty { paraSpecPos = ParaPosMax  n }
+paraRange ty (m, n) = paraCheck $ ty { paraSpecPos = ParaPosRange m n }
+
+-- ----------------------  Named
+
+-- | Required named parameter.
+paraReq :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+-- | Optional named parameter.
+paraOpt :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+-- | Multiple-occurence parameter.
+paraMult :: (Show n, Ord n) => ParaSpec n -> [n] -> ParaSpec n
+
+paraReq  ty ns  = paraCheck $ ty { paraSpecReq  = ns }
+paraOpt  ty ns  = paraCheck $ ty { paraSpecOpt  = ns }
+paraMult ty ns  = paraCheck $ ty { paraSpecMult = ns }
+
+
+-- --------------------------------------------  Unmatch
 
 -- | Unmatch reason of real parameter and its specifition.
 data ParaUnmatch n

@@ -6,7 +6,7 @@
 module Koshucode.Baala.Syntax.Attr.Para
   ( -- * Parameter constructor
     Para (..), ParaMap, ParaName,
-    para, paraEmpty,
+    para,
     paraNameList,
     paraMultipleNames,
     paraLookup, paraLookupSingle,
@@ -42,11 +42,17 @@ data Para n a
 -- | Mapping parameter name to its contents.
 type ParaMap n a = Map.Map n [[a]]
 
+-- | Empty parameter
+instance B.Default (Para n a) where
+    def = Para { paraAll = []
+               , paraPos = []
+               , paraName = Map.empty }
+
 instance (Ord n) => B.Monoid (Para n a) where
-    mempty        = paraEmpty
+    mempty        = B.def
     mappend p1 p2 = Para { paraAll   = paraAll  p1 ++  paraAll p2
-                             , paraPos   = paraPos  p1 ++  paraPos p2
-                             , paraName  = paraName p1 `u` paraName p2 }
+                         , paraPos   = paraPos  p1 ++  paraPos p2
+                         , paraName  = paraName p1 `u` paraName p2 }
         where u = Map.unionWith (++)
 
 -- | Test and take parameter name.
@@ -77,10 +83,6 @@ para name xxs = pos xxs [] where
                            Just n2  -> let a2 = add n vs a
                                        in val a2 n2 xs []
     add n vs = paraInsert n $ reverse vs
-
--- | Empty parameter.
-paraEmpty :: Para n a
-paraEmpty = Para [] [] Map.empty
 
 -- | Association list of named parameters.
 paraNameList :: Para n a -> [(n, [[a]])]
