@@ -1,6 +1,4 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parameter type.
@@ -13,11 +11,6 @@ module Koshucode.Baala.Syntax.Attr.Para
     paraPosName, paraMultipleNames, paraNameMapKeys,
     paraLookupSingle,
 
-    -- * Matching against parameter
-    ParaUnmatch (..),
-    paraMatch, paraUnmatch,
-    paraSelect, 
-
     -- * Getting parameter content
     -- ** Named parameter
     paraGet, paraGetOpt, paraGetList, paraGetSwitch,
@@ -29,7 +22,6 @@ module Koshucode.Baala.Syntax.Attr.Para
 import qualified Data.Generics                         as G
 import qualified Data.Map.Strict                       as Map
 import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax.Attr.ParaSpec  as S
 import qualified Koshucode.Baala.Base.Message          as Msg
 
 
@@ -132,56 +124,6 @@ paraLookupSingle n p =
       Just [vs]  -> Just vs
       Just _     -> Nothing
       Nothing    -> Nothing
-
-
-
--- ----------------------  Unmatch
-
--- | Unmatch reason of real parameter and its specifition.
-data ParaUnmatch n
-    = ParaOutOfRange Int S.ParaSpecPos -- ^ Positional parameter is unmatched.
-    | ParaUnknown  [n]    -- ^ Unknown parameter is specified.
-    | ParaMissing  [n]    -- ^ Required parameter is missing.
-    | ParaMultiple [n]    -- ^ Parameter occurs more than once.
-      deriving (Show, Eq, Ord)
-
--- | Test parameter satisfies specification.
-paraMatch :: (Eq n) => Para n a -> S.ParaSpec n -> Bool
-paraMatch p t = paraUnmatch p t == Nothing
-
--- | Create unmatch reason when parameter does not satisfies specification.
-paraUnmatch :: forall n a. (Eq n) => Para n a -> S.ParaSpec n -> Maybe (ParaUnmatch n)
-paraUnmatch p (S.ParaSpec pos req opt mul)
-    | upos /= Nothing   = upos
-    | unknowns  /= []   = Just $ ParaUnknown  unknowns
-    | missings  /= []   = Just $ ParaMissing  missings
-    | multiples /= []   = Just $ ParaMultiple multiples
-    | otherwise         = Nothing
-    where
-      upos              :: Maybe (ParaUnmatch n)
-      upos              = paraPosUnmatch (paraPos p) pos
-      ns                = Map.keys $ paraName p
-      ns2               = paraMultipleNames p
-      total             = req ++ opt ++ mul
-      unknowns          = ns  B.\\ total
-      missings          = req B.\\ ns
-      multiples         = ns2 B.\\ mul
-
-paraPosUnmatch :: [a] -> S.ParaSpecPos -> Maybe (ParaUnmatch n)
-paraPosUnmatch ps = match where
-    match (S.ParaPosJust c)     | n == c            = Nothing
-    match (S.ParaPosMin  a)     | n >= a            = Nothing
-    match (S.ParaPosMax  b)     | n <= b            = Nothing
-    match (S.ParaPosRange a b)  | n >= a && n <= b  = Nothing
-    match p                                         = Just $ ParaOutOfRange n p
-    n = length ps
-
-paraSelect :: (Eq n) => b -> [(S.ParaSpec n, Para n a -> b)] -> Para n a -> b
-paraSelect b ps p = loop ps where
-    loop [] = b
-    loop ((ty, body) : ps2)
-        | paraMatch p ty    = body p
-        | otherwise         = loop ps2
 
 
 -- ----------------------  Getters
