@@ -24,8 +24,9 @@ unkOption un = Left $ B.abortLines "Unknown option" detail where
                S.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
                S.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
 
-    expect (S.ParaPosJust n)     = "just "    ++ show n
-    expect (S.ParaPosMin  n)     = "minimum " ++ show n
-    expect (S.ParaPosMax  n)     = "maximum " ++ show n
-    expect (S.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n
+    expect (S.ParaPosMin n) = "minimum " ++ show n
+    expect (S.ParaPosRange m n)
+        | m == n      = "just " ++ show n
+        | m == 0      = "maximum " ++ show n
+        | otherwise   = "between " ++ show m ++ " and " ++ show n
 
