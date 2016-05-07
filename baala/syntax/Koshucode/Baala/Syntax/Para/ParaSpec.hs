@@ -19,7 +19,7 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     paraMin, paraMax, paraJust, paraRange,
     -- ** Named positional
     para0, para1, para2, para3,
-    paraItem, paraItemOpt,
+    paraItem, paraItemOpt, paraItemRest,
     -- ** Required / Optional
     paraReq, paraOpt,
     -- ** Multiple-occurence
@@ -45,15 +45,16 @@ data ParaSpec n
 
 -- | Positional parameter specification.
 data ParaSpecPos n
-    = ParaPosMin   Int      -- ^ Lower bound of parameter length
-    | ParaPosRange Int Int  -- ^ Lower and upper bound of parameter length
-    | ParaItem     [n]
-    | ParaItemOpt  [n] n
+    = ParaItem     [n]      -- ^ Named positional parameters
+    | ParaItemOpt  [n] n    -- ^ Named positional and optional parameters
+    | ParaItemRest [n] n    -- ^ Named positional and rest parameters
+    | ParaMin   Int         -- ^ Lower bound of parameter length
+    | ParaRange Int Int     -- ^ Lower and upper bound of parameter length
       deriving (Show, Eq, Ord)
 
 -- | No parameters
 instance B.Default (ParaSpec n) where
-    def = ParaSpec { paraSpecPos    = ParaPosRange 0 0
+    def = ParaSpec { paraSpecPos    = ParaRange 0 0
                    , paraSpecReq    = []
                    , paraSpecOpt    = []
                    , paraSpecFirst  = []
@@ -84,24 +85,29 @@ paraMatch spec p =
       Right p' -> paraMatchNamed spec $ paraReviseNamed spec p'
 
 paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
-paraMatchPos spec p = match pos ps where
-    match (ParaPosMin  a) _    | n >= a            = Right p
-    match (ParaPosRange a b) _ | n >= a && n <= b  = Right p
-    match (ParaItem ns) xs
-        | length ns == length xs      = Right $ paraAdd ns xs p
-    match (ParaItemOpt ns opt) xs
-        | length ns     == length xs  = Right $ paraAdd ns xs p
-        | length ns + 1 == length xs  = Right $ paraAdd (ns ++ [opt]) xs p
-    match _ _                         = Left $ ParaOutOfRange n pos
+paraMatchPos spec p = m pos where
+    m (ParaItem ns)       | l == length ns      = Right $ paraAdd ns ps p
+    m (ParaItemOpt ns n)  | l == length ns      = Right $ paraAdd ns ps p
+                          | l == length ns + 1  = Right $ paraAdd (ns ++ [n]) ps p
+    m (ParaItemRest ns n) | l >= length ns      = Right $ paraAddRest ns n ps p
+    m (ParaMin  a)        | l >= a              = Right p
+    m (ParaRange a b)     | l >= a && l <= b    = Right p
+    m _                                         = Left $ ParaOutOfRange l pos
 
     pos = paraSpecPos spec
     ps  = S.paraPos p
-    n   = length ps
+    l   = length ps
 
 paraAdd :: (Ord n) => [n] -> [a] -> S.Para n a -> S.Para n a
 paraAdd (n:ns) (x:xs) p = paraAdd ns xs $ S.paraNameAdd n [x] p
 paraAdd [] _ p = p
 paraAdd _ [] p = p
+
+paraAddRest :: (Ord n) => [n] -> n -> [a] -> S.Para n a -> S.Para n a
+paraAddRest nns rest xxs = loop nns xxs where
+    loop (n:ns) (x:xs) p = loop ns xs $ S.paraNameAdd n [x] p
+    loop [] xs p = S.paraNameAdd rest xs p
+    loop _ [] p = p
 
 paraReviseNamed :: (Ord n) => ParaSpec n -> S.Para n a -> S.Para n a
 paraReviseNamed ParaSpec {..} p = p3 where
@@ -186,10 +192,10 @@ paraJust :: Int -> ParaSpecMap n
 -- Left ParaOutOfRange ...
 paraRange :: Int -> Int -> ParaSpecMap n
 
-paraMin   n   = paraPos $ ParaPosMin   n
-paraMax   n   = paraPos $ ParaPosRange 0 n
-paraJust  n   = paraPos $ ParaPosRange n n
-paraRange m n = paraPos $ ParaPosRange m n
+paraMin   n   = paraPos $ ParaMin   n
+paraMax   n   = paraPos $ ParaRange 0 n
+paraJust  n   = paraPos $ ParaRange n n
+paraRange m n = paraPos $ ParaRange m n
 
 paraPos :: ParaSpecPos n -> ParaSpecMap n
 paraPos pos spec = spec { paraSpecPos = pos }
@@ -230,6 +236,17 @@ paraItem ns spec@ParaSpec {..} =
 paraItemOpt :: [n] -> n -> ParaSpecMap n
 paraItemOpt ns n spec@ParaSpec {..} =
     spec { paraSpecPos = ParaItemOpt ns n
+         , paraSpecReq = ns ++ paraSpecReq
+         , paraSpecOpt = n : paraSpecOpt }
+
+-- | Named arbitrary and one optional parameters.
+--
+-- >>> let s = paraSpec $ paraItemRest ["x", "y"] "z"
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c d"
+-- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c","d"]])] })
+paraItemRest :: [n] -> n -> ParaSpecMap n
+paraItemRest ns n spec@ParaSpec {..} =
+    spec { paraSpecPos = ParaItemRest ns n
          , paraSpecReq = ns ++ paraSpecReq
          , paraSpecOpt = n : paraSpecOpt }
 
