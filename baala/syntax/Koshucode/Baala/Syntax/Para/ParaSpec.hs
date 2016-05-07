@@ -9,16 +9,18 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     ParaSpec (..), ParaSpecPos (..),
     paraSpecNames,
 
-    -- * Construction
-    ParaSpecMap, paraSpec,
-    -- ** Positional parameter
-    paraMin, paraMax, paraJust, paraRange,
-    -- ** Named parameter
-    paraReq, paraOpt, paraFirst, paraLast, paraMulti,
-
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
     ParaTo, paraSelect, 
+
+    -- * Construction
+    ParaSpecMap, paraSpec,
+    -- ** Positional
+    paraMin, paraMax, paraJust, paraRange,
+    -- ** Required / Optional
+    paraReq, paraOpt,
+    -- ** Multiple-occurence
+    paraFirst, paraLast, paraMulti,
   ) where
 
 import qualified Koshucode.Baala.Base              as B
@@ -56,82 +58,6 @@ instance B.Default (ParaSpec n) where
 -- | List of named parameters.
 paraSpecNames :: ParaSpec n -> [n]
 paraSpecNames ParaSpec {..} = paraSpecReq ++ paraSpecOpt
-
-
--- --------------------------------------------  Construct
-
-type ParaSpecMap n = B.Map (ParaSpec n)
-
-paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
-paraSpec edit = paraCheck $ edit B.def
-
-paraCheck :: (Show n, Ord n) => ParaSpecMap n
-paraCheck spec@ParaSpec {..}
-    | null dup   = spec
-    | otherwise  = B.bug $ "duplicate para names: " ++ show dup
-    where dup    = B.duplicates $ paraSpecNames spec
-
--- ----------------------  Positional
-
--- | Lower bound of length of positional parameter.
-paraMin :: Int -> ParaSpecMap n
--- | Upper bound of length of positional parameter.
-paraMax :: Int -> ParaSpecMap n
--- | Fixed-length positional parameter.
-paraJust :: Int -> ParaSpecMap n
--- | Lower and upper bound of length of positional parameter.
-paraRange :: Int -> Int -> ParaSpecMap n
-
-paraMin   n   = paraPos $ ParaPosMin   n
-paraMax   n   = paraPos $ ParaPosRange 0 n
-paraJust  n   = paraPos $ ParaPosRange n n
-paraRange m n = paraPos $ ParaPosRange m n
-
-paraPos :: ParaSpecPos -> ParaSpecMap n
-paraPos pos spec = spec { paraSpecPos = pos }
-
--- ----------------------  Named
-
--- | Required named parameter.
---
--- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
--- >>> let s = paraSpec $ paraReq ["x"]
--- >>> paraMatch s p
--- Left (ParaUnknown ["y"])
-paraReq :: [n] -> ParaSpecMap n
-
--- | Optional named parameter.
---
--- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
--- >>> let s = paraSpec $ paraReq ["x"] . paraOpt ["y"]
--- >>> paraMatch s p
--- Right (Para { ..., paraName = fromList [("x", [["a"]]), ("y", [["b"]])] })
-paraOpt :: [n] -> ParaSpecMap n
-
--- | Allow multiple-occurence and use first parameter.
---
--- >>> let p = S.paraWords S.paraHyphen "-x a -x b"
--- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
--- >>> paraMatch s p
--- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
-paraFirst :: [n] -> ParaSpecMap n
-
--- | Allow multiple-occurence and use last parameter.
---
--- >>> let p = S.paraWords S.paraHyphen "-x a -x b"
--- >>> let s = paraSpec $ paraReq ["x"] . paraLast ["x"]
--- >>> paraMatch s p
--- Right (Para { ..., paraName = fromList [("x", [["b"]])] })
-paraLast :: [n] -> ParaSpecMap n
-
--- | Multiple-occurence parameter.
-paraMulti :: [n] -> ParaSpecMap n
-
-paraReq   ns spec  = spec { paraSpecReq   = ns }
-paraOpt   ns spec  = spec { paraSpecOpt   = ns }
-paraFirst ns spec  = spec { paraSpecFirst = ns }
-paraLast  ns spec  = spec { paraSpecLast  = ns }
-paraMulti ns spec  = spec { paraSpecMulti = ns }
 
 
 -- --------------------------------------------  Unmatch
@@ -190,4 +116,111 @@ paraSelect b ps p = loop ps where
         case paraMatch spec p of
           Right p' -> paraTo p'
           Left _   -> loop ps2
+
+
+-- --------------------------------------------  Construct
+
+type ParaSpecMap n = B.Map (ParaSpec n)
+
+paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
+paraSpec edit = paraCheck $ edit B.def
+
+paraCheck :: (Show n, Ord n) => ParaSpecMap n
+paraCheck spec@ParaSpec {..}
+    | null dup   = spec
+    | otherwise  = B.bug $ "duplicate para names: " ++ show dup
+    where dup    = B.duplicates $ paraSpecNames spec
+
+-- ----------------------  Positional
+
+-- | Lower bound of length of positional parameter.
+--
+-- >>> let s = paraSpec $ paraMin 1
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
+-- Right Para ...
+-- >>> paraMatch s $ S.paraWords S.paraHyphen ""
+-- Left ParaOutOfRange ...
+paraMin :: Int -> ParaSpecMap n
+
+-- | Upper bound of length of positional parameter.
+--
+-- >>> let s = paraSpec $ paraMax 1
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
+-- Right Para ...
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
+-- Left ParaOutOfRange ...
+paraMax :: Int -> ParaSpecMap n
+
+-- | Fixed-length positional parameter.
+--
+-- >>> let s = paraSpec $ paraJust 1
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
+-- Right Para ...
+-- >>> paraMatch s $ S.paraWords S.paraHyphen ""
+-- Left ParaOutOfRange ...
+paraJust :: Int -> ParaSpecMap n
+
+-- | Lower and upper bound of length of positional parameter.
+--
+-- >>> let s = paraSpec $ paraRange 1 2
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
+-- Right Para ...
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c"
+-- Left ParaOutOfRange ...
+paraRange :: Int -> Int -> ParaSpecMap n
+
+paraMin   n   = paraPos $ ParaPosMin   n
+paraMax   n   = paraPos $ ParaPosRange 0 n
+paraJust  n   = paraPos $ ParaPosRange n n
+paraRange m n = paraPos $ ParaPosRange m n
+
+paraPos :: ParaSpecPos -> ParaSpecMap n
+paraPos pos spec = spec { paraSpecPos = pos }
+
+-- ----------------------  Required/optional
+
+-- | Required named parameter.
+--
+-- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
+-- >>> let s = paraSpec $ paraReq ["x"]
+-- >>> paraMatch s p
+-- Left (ParaUnknown ["y"])
+paraReq :: [n] -> ParaSpecMap n
+
+-- | Optional named parameter.
+--
+-- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
+-- >>> let s = paraSpec $ paraReq ["x"] . paraOpt ["y"]
+-- >>> paraMatch s p
+-- Right (Para { ..., paraName = fromList [("x", [["a"]]), ("y", [["b"]])] })
+paraOpt :: [n] -> ParaSpecMap n
+
+-- ----------------------  Multiple-occurence
+
+-- | Allow multiple-occurence and use first parameter.
+--
+-- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+-- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
+paraFirst :: [n] -> ParaSpecMap n
+
+-- | Allow multiple-occurence and use last parameter.
+--
+-- >>> let s = paraSpec $ paraReq ["x"] . paraLast ["x"]
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+-- Right (Para { ..., paraName = fromList [("x", [["b","c"]])] })
+paraLast :: [n] -> ParaSpecMap n
+
+-- | Multiple-occurence parameter.
+--
+-- >>> let s = paraSpec $ paraReq ["x"] . paraMulti ["x"]
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+-- Right (Para { ..., paraName = fromList [("x", [["a"],["b","c"]])] })
+paraMulti :: [n] -> ParaSpecMap n
+
+paraReq   ns spec  = spec { paraSpecReq   = ns }
+paraOpt   ns spec  = spec { paraSpecOpt   = ns }
+paraFirst ns spec  = spec { paraSpecFirst = ns }
+paraLast  ns spec  = spec { paraSpecLast  = ns }
+paraMulti ns spec  = spec { paraSpecMulti = ns }
 
