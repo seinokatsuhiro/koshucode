@@ -45,11 +45,11 @@ data ParaSpec n
 
 -- | Positional parameter specification.
 data ParaSpecPos n
-    = ParaItem     [n]      -- ^ Named positional parameters
-    | ParaItemOpt  [n] n    -- ^ Named positional and optional parameters
-    | ParaItemRest [n] n    -- ^ Named positional and rest parameters
-    | ParaMin   Int         -- ^ Lower bound of parameter length
-    | ParaRange Int Int     -- ^ Lower and upper bound of parameter length
+    = ParaItem     Int [n]    -- ^ Named positional parameters
+    | ParaItemOpt  Int [n] n  -- ^ Named positional and optional parameters
+    | ParaItemRest Int [n] n  -- ^ Named positional and rest parameters
+    | ParaMin   Int           -- ^ Lower bound of parameter length
+    | ParaRange Int Int       -- ^ Lower and upper bound of parameter length
       deriving (Show, Eq, Ord)
 
 -- | No parameters
@@ -86,13 +86,13 @@ paraMatch spec p =
 
 paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatchPos spec p = m pos where
-    m (ParaItem ns)       | l == length ns      = Right $ paraAdd ns ps p
-    m (ParaItemOpt ns n)  | l == length ns      = Right $ paraAdd ns ps p
-                          | l == length ns + 1  = Right $ paraAdd (ns ++ [n]) ps p
-    m (ParaItemRest ns n) | l >= length ns      = Right $ paraAddRest ns n ps p
-    m (ParaMin  a)        | l >= a              = Right p
-    m (ParaRange a b)     | l >= a && l <= b    = Right p
-    m _                                         = Left $ ParaOutOfRange l pos
+    m (ParaItem a ns)       | l == a      = Right $ paraAdd ns ps p
+    m (ParaItemOpt a ns n)  | l == a      = Right $ paraAdd ns ps p
+                            | l == a + 1  = Right $ paraAdd (ns ++ [n]) ps p
+    m (ParaItemRest a ns n) | l >= a      = Right $ paraAddRest ns n ps p
+    m (ParaMin a)           | l >= a      = Right p
+    m (ParaRange a b) | l >= a && l <= b  = Right p
+    m _                                   = Left $ ParaOutOfRange l pos
 
     pos = paraSpecPos spec
     ps  = S.paraPos p
@@ -223,7 +223,7 @@ para3 a b c   = paraItem [a,b,c]
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]), ..., ("w",[["d"]])] })
 paraItem :: [n] -> ParaSpecMap n
 paraItem ns spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItem ns
+    spec { paraSpecPos = ParaItem (length ns) ns
          , paraSpecReq = ns ++ paraSpecReq }
 
 -- | Named arbitrary and one optional parameters.
@@ -235,7 +235,7 @@ paraItem ns spec@ParaSpec {..} =
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c"]])] })
 paraItemOpt :: [n] -> n -> ParaSpecMap n
 paraItemOpt ns n spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItemOpt ns n
+    spec { paraSpecPos = ParaItemOpt (length ns) ns n
          , paraSpecReq = ns ++ paraSpecReq
          , paraSpecOpt = n : paraSpecOpt }
 
@@ -246,7 +246,7 @@ paraItemOpt ns n spec@ParaSpec {..} =
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c","d"]])] })
 paraItemRest :: [n] -> n -> ParaSpecMap n
 paraItemRest ns n spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItemRest ns n
+    spec { paraSpecPos = ParaItemRest (length ns) ns n
          , paraSpecReq = ns ++ paraSpecReq
          , paraSpecOpt = n : paraSpecOpt }
 
