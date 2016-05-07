@@ -1,14 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.List
-  ( headOr,
-    front,
+  ( 
     tails,
     isSingleton,
     notNull,
     maybeEmpty,
     right,
-    -- $List
+
+    -- * Elements
+    headOr, takeFirst, takeLast,
   
     -- * Uniqueness
     duplicates, unique,
@@ -40,30 +41,10 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 -- ----------------------  List
 
--- $List
---
---   /Examples/
---
---   >>> front "abc"
---   "a"
---
---   >>> front ""
---   ""
+-- | Tails of list.
 --
 --   >>> tails "abc"
 --   ["abc", "bc", "c"]
---
-
-headOr :: a -> [a] -> a
-headOr x []       = x
-headOr _ (x : _)  = x
-
--- | Head or empty.
-front :: [a] -> [a]
-front [] = []
-front (x : _) = [x]
-
--- | Tails of list.
 tails :: [a] -> [[a]]
 tails = loop where
     loop [] = []
@@ -84,6 +65,33 @@ maybeEmpty m f = maybe [] f m
 right :: b -> B.Map (Either a b)
 right _ (Right x) = Right x
 right x (Left _)  = Right x
+
+
+-- ----------------------  Elements
+
+-- | @headOr@ /alt list/ returns the first element of /list/;
+--   if /list/ is empty, returns /alt/.
+headOr :: a -> [a] -> a
+headOr x []       = x
+headOr _ (x : _)  = x
+
+-- | Take first element; if empty list is given, returns empty list.
+--
+--   >>> takeFirst "abc"
+--   "a"
+--
+--   >>> takeFirst ""
+--   ""
+takeFirst :: [a] -> [a]
+takeFirst = take 1
+
+-- | Take last element; if empty list is given, returns empty list.
+--
+--   >>> takeLast "abc"
+--   "c"
+takeLast :: [a] -> [a]
+takeLast [] = []
+takeLast xs = [last xs]
 
 
 -- ----------------------  Uniqueness

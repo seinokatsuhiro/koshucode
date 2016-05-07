@@ -13,7 +13,7 @@ module Koshucode.Baala.Syntax.Para.Para
     paraLookup, paraLookupSingle,
     paraPosName,
     paraNameAdd, paraNameMapKeys,
-    paraTakeFirst,
+    paraTakeFirst, paraTakeLast,
 
     -- * Simple parameter
     SimplePara, paraHyphen,
@@ -125,14 +125,14 @@ paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
 paraNameMapKeys f p@Para { paraName = m } =
     p { paraName = Map.mapKeys f m }
 
+paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
+paraTakeFirst = paraAdjustName B.takeFirst
+
+paraTakeLast :: (Ord n) => n -> Para n a -> Para n a
+paraTakeLast = paraAdjustName B.takeLast
+
 paraAdjustName :: (Ord n) => ([[a]] -> [[a]]) -> n -> Para n a -> Para n a
 paraAdjustName f n p@Para {..} = p { paraName = Map.adjust f n paraName }
-
-paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
-paraTakeFirst = paraAdjustName takeFirst
-
-takeFirst :: [a] -> [a]
-takeFirst = take 1
 
 
 -- --------------------------------------------  Simple

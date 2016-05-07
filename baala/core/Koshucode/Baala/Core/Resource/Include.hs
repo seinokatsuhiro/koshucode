@@ -44,7 +44,7 @@ resIncludeBody :: forall c. (D.CContent c) =>
 resIncludeBody cd res abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
-           toks  = B.front $ B.clauseTokens $ C.clauseSource h
+           toks  = B.takeFirst $ B.clauseTokens $ C.clauseSource h
            call f = Msg.abClause toks $ do
                       res' <- f h toks b
                       Right $ res' { C.resLastSecNo = sec }

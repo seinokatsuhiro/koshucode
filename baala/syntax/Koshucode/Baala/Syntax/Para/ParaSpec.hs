@@ -14,7 +14,7 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     -- ** Positional parameter
     paraMin, paraMax, paraJust, paraRange,
     -- ** Named parameter
-    paraReq, paraOpt, paraFirst, paraMulti,
+    paraReq, paraOpt, paraFirst, paraLast, paraMulti,
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
@@ -34,6 +34,7 @@ data ParaSpec n
       , paraSpecReq    :: [n]           -- ^ Required parameter
       , paraSpecOpt    :: [n]           -- ^ Optional parameter
       , paraSpecFirst  :: [n]           -- ^ Allow multiple-occurence, use first parameter
+      , paraSpecLast   :: [n]           -- ^ Allow multiple-occurence, use last parameter
       , paraSpecMulti  :: [n]           -- ^ Allow multiple-occurence, use all parameters
       } deriving (Show, Eq, Ord)
 
@@ -49,6 +50,7 @@ instance B.Default (ParaSpec n) where
                    , paraSpecReq    = []
                    , paraSpecOpt    = []
                    , paraSpecFirst  = []
+                   , paraSpecLast   = []
                    , paraSpecMulti  = [] }
 
 -- | List of named parameters.
@@ -91,17 +93,44 @@ paraPos pos spec = spec { paraSpecPos = pos }
 -- ----------------------  Named
 
 -- | Required named parameter.
+--
+-- >>> let p = S.para S.paraHyphen $ words "-x a -y b"
+-- >>> let s = paraSpec $ paraReq ["x"]
+-- >>> paraMatch s p
+-- Left (ParaUnknown ["y"])
 paraReq :: [n] -> ParaSpecMap n
+
 -- | Optional named parameter.
+--
+-- >>> let p = S.para S.paraHyphen $ words "-x a -y b"
+-- >>> let s = paraSpec $ paraReq ["x"] . paraOpt ["y"]
+-- >>> paraMatch s p
+-- Right (Para { ..., paraName = fromList [("x", [["a"]]), ("y", [["b"]])] })
 paraOpt :: [n] -> ParaSpecMap n
+
 -- | Allow multiple-occurence and use first parameter.
+--
+-- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
+-- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
+-- >>> paraMatch s p
+-- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
 paraFirst :: [n] -> ParaSpecMap n
+
+-- | Allow multiple-occurence and use last parameter.
+--
+-- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
+-- >>> let s = paraSpec $ paraReq ["x"] . paraLast ["x"]
+-- >>> paraMatch s p
+-- Right (Para { ..., paraName = fromList [("x", [["b"]])] })
+paraLast :: [n] -> ParaSpecMap n
+
 -- | Multiple-occurence parameter.
 paraMulti :: [n] -> ParaSpecMap n
 
 paraReq   ns spec  = spec { paraSpecReq   = ns }
 paraOpt   ns spec  = spec { paraSpecOpt   = ns }
 paraFirst ns spec  = spec { paraSpecFirst = ns }
+paraLast  ns spec  = spec { paraSpecLast  = ns }
 paraMulti ns spec  = spec { paraSpecMulti = ns }
 
 
@@ -116,11 +145,6 @@ data ParaUnmatch n
       deriving (Show, Eq, Ord)
 
 -- | Test and revise parameter to satisfy specification.
---
--- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
--- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
--- >>> paraMatch s p
--- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
 
 paraMatch :: (Eq n, Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatch spec p =
@@ -137,8 +161,9 @@ paraMatchPos spec p = match pos where
     n   = length $ S.paraPos p
 
 paraReviseNamed :: (Ord n) => ParaSpec n -> S.Para n a -> S.Para n a
-paraReviseNamed ParaSpec {..} p =
-    foldr S.paraTakeFirst p paraSpecFirst
+paraReviseNamed ParaSpec {..} p = p3 where
+    p2 = foldr S.paraTakeFirst p paraSpecFirst
+    p3 = foldr S.paraTakeLast p2 paraSpecLast
 
 paraMatchNamed :: (Eq n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatchNamed spec@ParaSpec {..} p
