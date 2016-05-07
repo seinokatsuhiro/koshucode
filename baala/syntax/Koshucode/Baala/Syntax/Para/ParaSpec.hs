@@ -43,6 +43,15 @@ data ParaSpec n
       , paraSpecMulti  :: [n]           -- ^ Allow multiple-occurence, use all parameters
       } deriving (Show, Eq, Ord)
 
+-- | No parameters
+instance B.Default (ParaSpec n) where
+    def = ParaSpec { paraSpecPos    = ParaRange 0 0
+                   , paraSpecReq    = []
+                   , paraSpecOpt    = []
+                   , paraSpecFirst  = []
+                   , paraSpecLast   = []
+                   , paraSpecMulti  = [] }
+
 -- | Positional parameter specification.
 data ParaSpecPos n
     = ParaItem     Int [n]    -- ^ Named positional parameters
@@ -52,14 +61,12 @@ data ParaSpecPos n
     | ParaRange Int Int       -- ^ Lower and upper bound of parameter length
       deriving (Show, Eq, Ord)
 
--- | No parameters
-instance B.Default (ParaSpec n) where
-    def = ParaSpec { paraSpecPos    = ParaRange 0 0
-                   , paraSpecReq    = []
-                   , paraSpecOpt    = []
-                   , paraSpecFirst  = []
-                   , paraSpecLast   = []
-                   , paraSpecMulti  = [] }
+instance Functor ParaSpecPos where
+    fmap f (ParaItem     a ns)    = ParaItem     a (fmap f ns)
+    fmap f (ParaItemOpt  a ns n)  = ParaItemOpt  a (fmap f ns) (f n)
+    fmap f (ParaItemRest a ns n)  = ParaItemRest a (fmap f ns) (f n)
+    fmap _ (ParaMin a)            = ParaMin a
+    fmap _ (ParaRange a b)        = ParaRange a b
 
 -- | List of named parameters.
 paraSpecNames :: ParaSpec n -> [n]
@@ -75,6 +82,12 @@ data ParaUnmatch n
     | ParaMissing  [n]    -- ^ Required parameter is missing.
     | ParaMultiple [n]    -- ^ Parameter occurs more than once.
       deriving (Show, Eq, Ord)
+
+instance Functor ParaUnmatch where
+    fmap f (ParaOutOfRange a pos) = ParaOutOfRange a (fmap f pos)
+    fmap f (ParaUnknown  ns)      = ParaUnknown      (fmap f ns)
+    fmap f (ParaMissing  ns)      = ParaMissing      (fmap f ns)
+    fmap f (ParaMultiple ns)      = ParaMultiple     (fmap f ns)
 
 -- | Test and revise parameter to satisfy specification.
 
