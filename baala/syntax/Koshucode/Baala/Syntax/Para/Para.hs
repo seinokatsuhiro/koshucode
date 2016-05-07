@@ -16,7 +16,7 @@ module Koshucode.Baala.Syntax.Para.Para
     paraTakeFirst, paraTakeLast,
 
     -- * Simple parameter
-    SimplePara, paraHyphen,
+    SimplePara, paraWords, paraHyphen,
   ) where
 
 import qualified Data.Generics                         as G
@@ -140,6 +140,10 @@ paraAdjustName f n p@Para {..} = p { paraName = Map.adjust f n paraName }
 -- | String-named parameter.
 type SimplePara a = Para String a
 
+-- | Composition of word separation and parameter parsing.
+paraWords :: (Ord n) => ParaName n String -> String -> Para n String
+paraWords name = para name . words
+
 -- | Parameter name is beginning with hyphen.
 --
 -- >>> paraHyphen "-foo"
@@ -147,7 +151,6 @@ type SimplePara a = Para String a
 --
 -- >>> paraHyphen "bar"
 -- Nothing
-
 paraHyphen :: ParaName String String
 paraHyphen ('-' : n)  = Just n
 paraHyphen _          = Nothing

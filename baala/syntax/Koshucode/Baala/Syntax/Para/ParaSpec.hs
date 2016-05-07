@@ -94,7 +94,7 @@ paraPos pos spec = spec { paraSpecPos = pos }
 
 -- | Required named parameter.
 --
--- >>> let p = S.para S.paraHyphen $ words "-x a -y b"
+-- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
 -- >>> let s = paraSpec $ paraReq ["x"]
 -- >>> paraMatch s p
 -- Left (ParaUnknown ["y"])
@@ -102,7 +102,7 @@ paraReq :: [n] -> ParaSpecMap n
 
 -- | Optional named parameter.
 --
--- >>> let p = S.para S.paraHyphen $ words "-x a -y b"
+-- >>> let p = S.paraWords S.paraHyphen "-x a -y b"
 -- >>> let s = paraSpec $ paraReq ["x"] . paraOpt ["y"]
 -- >>> paraMatch s p
 -- Right (Para { ..., paraName = fromList [("x", [["a"]]), ("y", [["b"]])] })
@@ -110,7 +110,7 @@ paraOpt :: [n] -> ParaSpecMap n
 
 -- | Allow multiple-occurence and use first parameter.
 --
--- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
+-- >>> let p = S.paraWords S.paraHyphen "-x a -x b"
 -- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
 -- >>> paraMatch s p
 -- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
@@ -118,7 +118,7 @@ paraFirst :: [n] -> ParaSpecMap n
 
 -- | Allow multiple-occurence and use last parameter.
 --
--- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
+-- >>> let p = S.paraWords S.paraHyphen "-x a -x b"
 -- >>> let s = paraSpec $ paraReq ["x"] . paraLast ["x"]
 -- >>> paraMatch s p
 -- Right (Para { ..., paraName = fromList [("x", [["b"]])] })
