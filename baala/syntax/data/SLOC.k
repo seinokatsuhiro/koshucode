@@ -2,24 +2,28 @@
 
 about /package 'syntax
 
-|-- DIR  /code 8    /comment 4    /dir "syntax/Koshucode/Baala"
-|-- DIR  /code 44   /comment 18   /dir "syntax/Koshucode/Baala/Syntax"
-|-- DIR  /code 596  /comment 307  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- DIR  /code 10   /comment 4    /dir "syntax/Koshucode/Baala"
+|-- DIR  /code 50   /comment 22   /dir "syntax/Koshucode/Baala/Syntax"
+|-- DIR  /code 404  /comment 234  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- DIR  /code 253  /comment 227  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /code 272  /comment 258  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /code 716  /comment 475  /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- DIR-TOTAL  /code 1636  /comment 1062
+|-- DIR-TOTAL  /code 1705  /comment 1220
 
-|-- FILE  /code 8    /comment 4    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
-|-- FILE  /code 14   /comment 4    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
+|-- FILE  /code 10   /comment 4    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
+|-- FILE  /code 12   /comment 4    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /code 81   /comment 76   /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 93   /comment 37   /file "AttrEd.hs"      /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 81   /comment 48   /file "AttrPos.hs"     /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 71   /comment 36   /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- FILE  /code 192  /comment 73   /file "Para.hs"        /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 40   /comment 22   /file "Parse.hs"       /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 38   /comment 15   /file "Slot.hs"        /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /code 8    /comment 3    /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax"
+|-- FILE  /code 8    /comment 4    /file "Para.hs"        /dir "syntax/Koshucode/Baala/Syntax"
+|-- FILE  /code 58   /comment 39   /file "Get.hs"         /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- FILE  /code 89   /comment 68   /file "Para.hs"        /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- FILE  /code 106  /comment 120  /file "ParaSpec.hs"    /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /code 10   /comment 5    /file "Symbol.hs"      /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /code 52   /comment 72   /file "AngleText.hs"   /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- FILE  /code 10   /comment 8    /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax/Symbol"
@@ -34,4 +38,4 @@ about /package 'syntax
 |-- FILE  /code 264  /comment 217  /file "TokenLine.hs"   /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 84   /comment 93   /file "TokenTree.hs"   /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- FILE-TOTAL  /code 1636  /comment 1062
+|-- FILE-TOTAL  /code 1705  /comment 1220

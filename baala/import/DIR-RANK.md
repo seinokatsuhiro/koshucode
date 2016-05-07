@@ -74,7 +74,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    110 judges
+**    111 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -102,6 +102,7 @@ imp : source IMPORT /module /import
 
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Default"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Data.Maybe"
@@ -320,13 +321,13 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    84 judges
+**    91 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Para"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Attr.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Attr.Para"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Attr.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Data.Generics"
@@ -346,11 +347,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Message"       /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Message"       /import "Koshucode.Baala.Syntax.Token"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Para"          /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Para"          /import "Data.Map.Strict"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Para"          /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Para"          /import "Koshucode.Baala.Base.Message"
-
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Parse"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Parse"         /import "Koshucode.Baala.Syntax.Attr.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Parse"         /import "Koshucode.Baala.Syntax.Attr.AttrPos"
@@ -363,13 +359,27 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.AttrEd"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.Para"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.Parse"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr"               /import "Koshucode.Baala.Syntax.Attr.Slot"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Message"            /import "Koshucode.Baala.Syntax.Attr.Message"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Message"            /import "Koshucode.Baala.Syntax.Symbol.Message"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Message"            /import "Koshucode.Baala.Syntax.Token.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Get"           /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Get"           /import "Koshucode.Baala.Syntax.Para.Para"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Get"           /import "Koshucode.Baala.Base.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Para"          /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Para"          /import "Data.Map.Strict"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.Para"          /import "Koshucode.Baala.Base"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.ParaSpec"      /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para.ParaSpec"      /import "Koshucode.Baala.Syntax.Para.Para"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para"               /import "Koshucode.Baala.Syntax.Para.Get"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para"               /import "Koshucode.Baala.Syntax.Para.Para"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Para"               /import "Koshucode.Baala.Syntax.Para.ParaSpec"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.AngleText"   /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.AngleText"   /import "Koshucode.Baala.Base"
@@ -427,6 +437,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.TokenTree"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Para"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Token"
 
@@ -446,27 +457,34 @@ Command `./dir-rank.k ../syntax/data/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Syntax.Para"  /base-rank {= /rank /base /import-dir [ 1 | "Para" | [ ] ] [ 2 | "Get" | [ ] ] [ 2 | "ParaSpec" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 1 | "AngleText" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Next" | [ ] ] [ 3 | "Short" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Syntax.Token"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 5 | "Token" | [ "Symbol" ] ] [ 6 | "Bracket" | [ ] ] [ 6 | "TokenLine" | [ "Symbol" ] ] [ 7 | "TokenClause" | [ ] ] [ 7 | "TokenTree" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 1 | "Para" | [ ] ] [ 9 | "Message" | [ "Symbol" | "Token" ] ] [ 10 | "AttrPos" | [ "Token" ] ] [ 11 | "Attr" | [ "Token" ] ] [ 11 | "Slot" | [ "Token" ] ] [ 12 | "AttrEd" | [ "Token" ] ] [ 12 | "Parse" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 4 | "Symbol" | [ ] ] [ 8 | "Token" | [ ] ] [ 10 | "Message" | [ ] ] [ 13 | "Attr" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 9 | "Message" | [ "Symbol" | "Token" ] ] [ 10 | "AttrPos" | [ "Token" ] ] [ 11 | "Attr" | [ "Para" | "Token" ] ] [ 11 | "Slot" | [ "Token" ] ] [ 12 | "AttrEd" | [ "Token" ] ] [ 12 | "Parse" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 14 | "Syntax" | [ "Attr" | "Symbol" | "Token" ] ] =}
+|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 3 | "Para" | [ ] ] [ 4 | "Symbol" | [ ] ] [ 8 | "Token" | [ ] ] [ 10 | "Message" | [ ] ] [ 13 | "Attr" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 14 | "Syntax" | [ "Attr" | "Para" | "Symbol" | "Token" ] ] =}
 
-*** 6 judges
+*** 7 judges
 
 === note
 
 TABLE : DIR-RANK
 
   /dir-rank /dir                              /base-rank
-  --------- --------------------------------- -------------------------------------------------------
+  --------- --------------------------------- ----------------------------------------------------------------
   0         "Koshucode.Baala.Base"            /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
+                                              ----- --------------- ------------------------------------------
                                               0     "Message"       [ ]
                                               
+  2         "Koshucode.Baala.Syntax.Para"     /rank /base           /import-dir
+                                              ----- --------------- ------------------------------------------
+                                              1     "Para"          [ ]
+                                              2     "Get"           [ ]
+                                              2     "ParaSpec"      [ ]
+                                              
   3         "Koshucode.Baala.Syntax.Symbol"   /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
+                                              ----- --------------- ------------------------------------------
                                               0     "Term"          [ ]
                                               1     "AngleText"     [ ]
                                               1     "Message"       [ ]
@@ -474,7 +492,7 @@ TABLE : DIR-RANK
                                               3     "Short"         [ ]
                                               
   7         "Koshucode.Baala.Syntax.Token"    /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
+                                              ----- --------------- ------------------------------------------
                                               1     "Message"       [ ]
                                               5     "Token"         [ "Symbol" ]
                                               6     "Bracket"       [ ]
@@ -483,34 +501,34 @@ TABLE : DIR-RANK
                                               7     "TokenTree"     [ ]
                                               
   12        "Koshucode.Baala.Syntax.Attr"     /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
-                                              1     "Para"          [ ]
+                                              ----- --------------- ------------------------------------------
                                               9     "Message"       [ "Symbol" | "Token" ]
                                               10    "AttrPos"       [ "Token" ]
-                                              11    "Attr"          [ "Token" ]
+                                              11    "Attr"          [ "Para" | "Token" ]
                                               11    "Slot"          [ "Token" ]
                                               12    "AttrEd"        [ "Token" ]
                                               12    "Parse"         [ ]
                                               
   13        "Koshucode.Baala.Syntax"          /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
+                                              ----- --------------- ------------------------------------------
+                                              3     "Para"          [ ]
                                               4     "Symbol"        [ ]
                                               8     "Token"         [ ]
                                               10    "Message"       [ ]
                                               13    "Attr"          [ ]
                                               
   14        "Koshucode.Baala"                 /rank /base           /import-dir
-                                              ----- --------------- ---------------------------------
+                                              ----- --------------- ------------------------------------------
                                               0     "Base"          [ ]
-                                              14    "Syntax"        [ "Attr" | "Symbol" | "Token" ]
+                                              14    "Syntax"        [ "Attr" | "Para" | "Symbol" | "Token" ]
                                               
 
 === rel
 
 **
 **  SUMMARY
-**       6 judges on DIR-RANK
-**       6 judges in total
+**       7 judges on DIR-RANK
+**       7 judges in total
 **
 ```
 

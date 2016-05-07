@@ -4,19 +4,19 @@ about /package 'core
 
 |-- DIR  /code 13   /comment 72   /dir "core/Koshucode/Baala"
 |-- DIR  /code 73   /comment 103  /dir "core/Koshucode/Baala/Core"
-|-- DIR  /code 286  /comment 138  /dir "core/Koshucode/Baala/Core/Assert"
+|-- DIR  /code 287  /comment 138  /dir "core/Koshucode/Baala/Core/Assert"
 |-- DIR  /code 210  /comment 144  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 229  /comment 118  /dir "core/Koshucode/Baala/Core/Relkit"
 |-- DIR  /code 594  /comment 294  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /code 612  /comment 282  /dir "core/Koshucode/Baala/Core/Resource"
+|-- DIR  /code 614  /comment 283  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 2017  /comment 1151
+|-- DIR-TOTAL  /code 2020  /comment 1152
 
 |-- FILE  /code 13   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 34   /comment 30   /file "Assert.hs"      /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 37   /comment 25   /file "Dataset.hs"     /dir "core/Koshucode/Baala/Core/Assert"
-|-- FILE  /code 22   /comment 9    /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Assert"
+|-- FILE  /code 23   /comment 9    /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 54   /comment 29   /file "RelTable.hs"    /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 139  /comment 45   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 8    /comment 4    /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core"
@@ -42,10 +42,10 @@ about /package 'core
 |-- FILE  /code 15   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 11   /comment 6    /file "About.hs"       /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 171  /comment 114  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 117  /comment 51   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 119  /comment 52   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 35   /comment 21   /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 92   /comment 30   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 98   /comment 44   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 88   /comment 16   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 2017  /comment 1151
+|-- FILE-TOTAL  /code 2020  /comment 1152
