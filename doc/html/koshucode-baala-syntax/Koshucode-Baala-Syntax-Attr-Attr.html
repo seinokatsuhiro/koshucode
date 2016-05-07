@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.133.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.136.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -61,7 +61,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Attribute set</a
+	    >Attribute parameter</a
 	    ></li
 	  ></ul
 	></div
@@ -132,10 +132,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:AttrSet"
-	    >AttrSet</a
-	    > = <a href="Koshucode-Baala-Syntax-Attr-Para.html#t:ParaBody"
-	    >ParaBody</a
+	    > <a href="#t:AttrPara"
+	    >AttrPara</a
+	    > = <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-AttrPos.html#t:AttrName"
 	    >AttrName</a
 	    > <a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
@@ -144,28 +144,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:AttrSetSort"
-	    >AttrSetSort</a
+	    > <a href="#t:AttrParaSort"
+	    >AttrParaSort</a
 	    > = [<a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
 	    >TTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSet"
-	    >AttrSet</a
+	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
+	    >AttrPara</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:attrSetSort"
-	    >attrSetSort</a
+	  ><a href="#v:attrParaSort"
+	    >attrParaSort</a
 	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 	    >AttrLayout</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSetSort"
-	    >AttrSetSort</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSort"
+	    >AttrParaSort</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:attrSetSortNamed"
-	    >attrSetSortNamed</a
-	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSetSort"
-	    >AttrSetSort</a
+	  ><a href="#v:attrParaSortNamed"
+	    >attrParaSortNamed</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSort"
+	    >AttrParaSort</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:maybeSingleHyphen"
@@ -336,40 +336,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Attribute set</h1
+	>Attribute parameter</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:AttrSet" class="def"
-	    >AttrSet</a
-	    > = <a href="Koshucode-Baala-Syntax-Attr-Para.html#t:ParaBody"
-	    >ParaBody</a
+	    > <a name="t:AttrPara" class="def"
+	    >AttrPara</a
+	    > = <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-AttrPos.html#t:AttrName"
 	    >AttrName</a
 	    > <a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
 	    >TTree</a
-	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrSet" class="link"
+	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrPara" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Attribute set.</p
+	    >Attribute parameter.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:AttrSetSort" class="def"
-	    >AttrSetSort</a
+	    > <a name="t:AttrParaSort" class="def"
+	    >AttrParaSort</a
 	    > = [<a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
 	    >TTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSet"
-	    >AttrSet</a
-	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrSetSort" class="link"
+	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
+	    >AttrPara</a
+	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrParaSort" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -381,13 +381,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:attrSetSort" class="def"
-	    >attrSetSort</a
+	  ><a name="v:attrParaSort" class="def"
+	    >attrParaSort</a
 	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 	    >AttrLayout</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSetSort"
-	    >AttrSetSort</a
-	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#attrSetSort" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSort"
+	    >AttrParaSort</a
+	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#attrParaSort" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -397,11 +397,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:attrSetSortNamed" class="def"
-	    >attrSetSortNamed</a
-	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrSetSort"
-	    >AttrSetSort</a
-	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#attrSetSortNamed" class="link"
+	  ><a name="v:attrParaSortNamed" class="def"
+	    >attrParaSortNamed</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSort"
+	    >AttrParaSort</a
+	    > <a href="src/Koshucode-Baala-Syntax-Attr-Attr.html#attrParaSortNamed" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -461,17 +461,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let a = attrLayout (D.AttrPos2 (D.AttrNormal &quot;a&quot;) (D.AttrNormal &quot;b&quot;)) [D.AttrNormal &quot;x&quot;, D.AttrNormal &quot;y&quot;]
+	      >let a = attrLayout (S.AttrPos2 (S.AttrNormal &quot;a&quot;) (S.AttrNormal &quot;b&quot;)) [S.AttrNormal &quot;x&quot;, S.AttrNormal &quot;y&quot;]
 </code
 	      ></strong
 	    ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >attrSetSort a =&lt;&lt; D.tt &quot;a b -x /c 'd -y e&quot;
+	      >attrParaSort a =&lt;&lt; S.tt &quot;a b -x /c 'd -y e&quot;
 </code
 	      ></strong
-	    >Right (ParaBody {
+	    >Right (Para {
   paraAll  = [ TreeL (TText CodePt {..} TextRaw &quot;a&quot;),
                TreeL (TText CodePt {..} TextRaw &quot;b&quot;),
                TreeL (TText CodePt {..} TextRaw &quot;-x&quot;),
