@@ -46,7 +46,6 @@ attrDef :: String -> [S.AttrName] -> [S.AttrName] -> S.AttrLayout
 attrDef q ns = S.attrLayout $ attrPosDef q ns
 
 attrPosDef :: String -> [S.AttrName] -> S.AttrNamePos
-attrPosDef "E"  as         = S.AttrPosE as
 attrPosDef "0"  []         = S.AttrPos0
 attrPosDef "1"  [a]        = S.AttrPos1  a
 attrPosDef "2"  [a,b]      = S.AttrPos2  a b

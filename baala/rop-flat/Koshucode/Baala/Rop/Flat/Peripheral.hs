@@ -51,7 +51,7 @@ ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR   USAGE                      ATTRIBUTE
     [ Op.def consTie       "tie /P ... -to N"         "V -term | -to"
     , Op.def consIndexElem "index-elem /N /N /P"      "3 -index -elem -list"
-    , Op.def consMember    "member /N /N"             "E -1 -2"
+    , Op.def consMember    "member /N /N"             "2 -elem -set"
     , Op.def consRdf       "rdf P /S /O"              "1V -pattern -term"
     , Op.def consTermName  "term-name /N"             "1 -term"
     , Op.def consToday     "today /N"                 "1 -term"
@@ -76,8 +76,8 @@ ropsPeripheral = Op.ropList "peripheral"
 
 consMember :: (Ord c, D.CSet c, D.CList c, D.CText c) => C.RopCons c
 consMember med =
-  do x    <- Op.getTerm med "-1"
-     xs   <- Op.getTerm med "-2"
+  do x    <- Op.getTerm med "-elem"
+     xs   <- Op.getTerm med "-set"
      Right $ relmapMember med (x, xs)
 
 relmapMember :: (Ord c, D.CSet c, D.CList c, D.CText c)

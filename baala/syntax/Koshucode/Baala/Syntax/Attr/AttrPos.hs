@@ -37,7 +37,6 @@ data AttrPos a
     | AttrPos2 a a        -- ^ Two attributes
     | AttrPos3 a a a      -- ^ Three attributes
     | AttrPos4 a a a a    -- ^ Four attributes
-    | AttrPosE [a]        -- ^ Enumerated attributes
     | AttrPosV a          -- ^ Variable-length attributes
     | AttrPos1V a a       -- ^ Single-and-variable-length attributes
     | AttrPos1Q a a       -- ^ Single-and-optional attributes
@@ -51,7 +50,6 @@ attrPosNameList pos = case pos of
     AttrPos2  a b      -> [a,b]
     AttrPos3  a b c    -> [a,b,c]
     AttrPos4  a b c d  -> [a,b,c,d]
-    AttrPosE  as       -> as
     AttrPosV  a        -> [a]
     AttrPos1V a b      -> [a,b]
     AttrPos1Q a b      -> [a,b]
@@ -101,7 +99,6 @@ sortAttrTree (AttrPos1 a)       [v]        = Right [a#v]
 sortAttrTree (AttrPos2 a b)     [v,w]      = Right [a#v, b#w]
 sortAttrTree (AttrPos3 a b c)   [v,w,x]    = Right [a#v, b#w, c#x]
 sortAttrTree (AttrPos4 a b c d) [v,w,x,y]  = Right [a#v, b#w, c#x, d#y]
-sortAttrTree (AttrPosE _)       xs         = Right $ zip enumAttr $ map B.li1 xs
 sortAttrTree (AttrPosV a)       vv         = Right [a##vv]
 sortAttrTree (AttrPos1V a b)    (v:ww)     = Right [a#v, b##ww]
 sortAttrTree (AttrPos1Q a _)    [v]        = Right [a#v]
