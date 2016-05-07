@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -5,21 +6,21 @@
 
 module Koshucode.Baala.Syntax.Para.ParaSpec
   ( -- * Specification
-    ParaSpec (..), ParaSpecPos (..), 
+    ParaSpec (..), ParaSpecPos (..),
+    paraSpecNames,
 
     -- * Construction
     ParaSpecMap, paraSpec,
     -- ** Positional parameter
     paraMin, paraMax, paraJust, paraRange,
     -- ** Named parameter
-    paraReq, paraOpt, paraMult,
+    paraReq, paraOpt, paraFirst, paraMulti,
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
     ParaTo, paraSelect, 
   ) where
 
-import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax.Para.Para  as S
 
@@ -29,10 +30,11 @@ import qualified Koshucode.Baala.Syntax.Para.Para  as S
 -- | Parameter specification.
 data ParaSpec n
     = ParaSpec
-      { paraSpecPos   :: ParaSpecPos   -- ^ Positional parameter
-      , paraSpecReq   :: [n]           -- ^ Required parameter
-      , paraSpecOpt   :: [n]           -- ^ Optional parameter
-      , paraSpecMult  :: [n]           -- ^ Multiple-occurence parameter
+      { paraSpecPos    :: ParaSpecPos   -- ^ Positional parameter
+      , paraSpecReq    :: [n]           -- ^ Required parameter
+      , paraSpecOpt    :: [n]           -- ^ Optional parameter
+      , paraSpecFirst  :: [n]           -- ^ Allow multiple-occurence, use first parameter
+      , paraSpecMulti  :: [n]           -- ^ Allow multiple-occurence, use all parameters
       } deriving (Show, Eq, Ord)
 
 -- | Positional parameter specification.
@@ -43,10 +45,15 @@ data ParaSpecPos
 
 -- | No parameters
 instance B.Default (ParaSpec n) where
-    def = ParaSpec { paraSpecPos  = ParaPosRange 0 0
-                   , paraSpecReq  = []
-                   , paraSpecOpt  = []
-                   , paraSpecMult = [] }
+    def = ParaSpec { paraSpecPos    = ParaPosRange 0 0
+                   , paraSpecReq    = []
+                   , paraSpecOpt    = []
+                   , paraSpecFirst  = []
+                   , paraSpecMulti  = [] }
+
+-- | List of named parameters.
+paraSpecNames :: ParaSpec n -> [n]
+paraSpecNames ParaSpec {..} = paraSpecReq ++ paraSpecOpt
 
 
 -- --------------------------------------------  Construct
@@ -57,11 +64,10 @@ paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
 paraSpec edit = paraCheck $ edit B.def
 
 paraCheck :: (Show n, Ord n) => ParaSpecMap n
-paraCheck spec@(ParaSpec _ req opt mul)
+paraCheck spec@ParaSpec {..}
     | null dup   = spec
     | otherwise  = B.bug $ "duplicate para names: " ++ show dup
-    where ns     = req ++ opt ++ mul
-          dup    = B.duplicates ns
+    where dup    = B.duplicates $ paraSpecNames spec
 
 -- ----------------------  Positional
 
@@ -88,12 +94,15 @@ paraPos pos spec = spec { paraSpecPos = pos }
 paraReq :: [n] -> ParaSpecMap n
 -- | Optional named parameter.
 paraOpt :: [n] -> ParaSpecMap n
+-- | Allow multiple-occurence and use first parameter.
+paraFirst :: [n] -> ParaSpecMap n
 -- | Multiple-occurence parameter.
-paraMult :: [n] -> ParaSpecMap n
+paraMulti :: [n] -> ParaSpecMap n
 
-paraReq  ns spec  = spec { paraSpecReq  = ns }
-paraOpt  ns spec  = spec { paraSpecOpt  = ns }
-paraMult ns spec  = spec { paraSpecMult = ns }
+paraReq   ns spec  = spec { paraSpecReq   = ns }
+paraOpt   ns spec  = spec { paraSpecOpt   = ns }
+paraFirst ns spec  = spec { paraSpecFirst = ns }
+paraMulti ns spec  = spec { paraSpecMulti = ns }
 
 
 -- --------------------------------------------  Unmatch
@@ -107,11 +116,17 @@ data ParaUnmatch n
       deriving (Show, Eq, Ord)
 
 -- | Test and revise parameter to satisfy specification.
-paraMatch :: (Eq n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
+--
+-- >>> let p = S.para S.paraHyphen $ words "-x a -x b"
+-- >>> let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
+-- >>> paraMatch s p
+-- Right (Para { ..., paraName = fromList [("x", [["a"]])] })
+
+paraMatch :: (Eq n, Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatch spec p =
     case paraMatchPos spec p of
       Left u -> Left u
-      Right p' -> paraMatchNamed spec p'
+      Right p' -> paraMatchNamed spec $ paraReviseNamed spec p'
 
 paraMatchPos :: ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatchPos spec p = match pos where
@@ -121,25 +136,29 @@ paraMatchPos spec p = match pos where
     pos = paraSpecPos spec
     n   = length $ S.paraPos p
 
+paraReviseNamed :: (Ord n) => ParaSpec n -> S.Para n a -> S.Para n a
+paraReviseNamed ParaSpec {..} p =
+    foldr S.paraTakeFirst p paraSpecFirst
+
 paraMatchNamed :: (Eq n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
-paraMatchNamed (ParaSpec _ req opt mul) p
+paraMatchNamed spec@ParaSpec {..} p
     | unknowns  /= []  = Left $ ParaUnknown  unknowns
     | missings  /= []  = Left $ ParaMissing  missings
     | multiples /= []  = Left $ ParaMultiple multiples
     | otherwise        = Right p
     where
-      ns          = Map.keys $ S.paraName p
+      ns          = S.paraNames p
       ns2         = S.paraMultipleNames p
-      total       = req ++ opt ++ mul
-      unknowns    = ns  B.\\ total
-      missings    = req B.\\ ns
-      multiples   = ns2 B.\\ mul
+      total       = paraSpecNames spec
+      unknowns    = ns B.\\ total
+      missings    = paraSpecReq B.\\ ns
+      multiples   = ns2 B.\\ paraSpecMulti
 
 -- | Map parameter to some value.
 type ParaTo n a b = S.Para n a -> b
 
 -- | Select matched specification and apply 'ParaTo' function.
-paraSelect :: (Eq n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
+paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
 paraSelect b ps p = loop ps where
     loop [] = b
     loop ((spec, paraTo) : ps2) =

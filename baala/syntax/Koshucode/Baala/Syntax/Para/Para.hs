@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -8,10 +9,11 @@ module Koshucode.Baala.Syntax.Para.Para
     Para (..), ParaMap, ParaName,
     para,
     paraNameList,
-    paraMultipleNames,
+    paraNames, paraMultipleNames,
     paraLookup, paraLookupSingle,
     paraPosName,
     paraNameAdd, paraNameMapKeys,
+    paraTakeFirst,
 
     -- * Simple parameter
     SimplePara, paraHyphen,
@@ -80,6 +82,10 @@ para name xxs = pos xxs [] where
 paraNameList :: Para n a -> [(n, [[a]])]
 paraNameList = Map.assocs . paraName
 
+-- | List of parameter names.
+paraNames :: Para n a -> [n]
+paraNames = Map.keys . paraName
+
 -- | List of names which appear more than once.
 paraMultipleNames :: Para n a -> [n]
 paraMultipleNames = paraNamesOf (not . B.isSingleton)
@@ -118,6 +124,15 @@ paraInsert n a = Map.insertWith (++) n [a]
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
 paraNameMapKeys f p@Para { paraName = m } =
     p { paraName = Map.mapKeys f m }
+
+paraAdjustName :: (Ord n) => ([[a]] -> [[a]]) -> n -> Para n a -> Para n a
+paraAdjustName f n p@Para {..} = p { paraName = Map.adjust f n paraName }
+
+paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
+paraTakeFirst = paraAdjustName takeFirst
+
+takeFirst :: [a] -> [a]
+takeFirst = take 1
 
 
 -- --------------------------------------------  Simple
