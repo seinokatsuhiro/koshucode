@@ -30,13 +30,13 @@ clauseAttrType = S.paraSpec $ S.paraMin 0 . S.paraOpt ["attr"]
 
 consLexmapTrees :: TTreePara -> B.Ab LexmapTrees
 consLexmapTrees para =
-    do case S.paraMatch clauseAttrType para of
-         Right _ -> Right ()
-         Left u  -> Msg.adlib $ "unknown attribute: " ++ show u
-       attr <- S.paraGetOpt [] para "attr"
+    do para' <- case S.paraMatch clauseAttrType para of
+         Right p' -> Right p'
+         Left u   -> Msg.adlib $ "unknown attribute: " ++ show u
+       attr <- S.paraGetOpt [] para' "attr"
        edit <- S.consAttrEd attr
-       let body = S.paraPos para
-       Right $ LexmapTrees body para edit
+       let body = S.paraPos para'
+       Right $ LexmapTrees body para' edit
 
 
 -- ----------------------  Parameter of token trees

@@ -23,7 +23,7 @@ data Rop' h c = Rop
     , ropGroup    :: String           -- ^ Operator group
     , ropUsage    :: RopUsage         -- ^ Usage text of operator
     , ropAttr     :: S.AttrLayout     -- ^ Attribute of operator
-    , ropSorter   :: S.AttrSetSort    -- ^ Attribute sorter
+    , ropSorter   :: S.AttrParaSort   -- ^ Attribute sorter
     , ropCons     :: RopCons' h c     -- ^ Constructor of operator
     }
 

@@ -9,9 +9,9 @@ module Koshucode.Baala.Syntax.Attr.Attr
     AttrLayout (..),
     attrLayout,
   
-    -- * Attribute set
-    AttrSet, AttrSetSort,
-    attrSetSort, attrSetSortNamed,
+    -- * Attribute parameter
+    AttrPara, AttrParaSort,
+    attrParaSort, attrParaSortNamed,
     maybeSingleHyphen,
     maybeDoubleHyphen,
     -- $AttributeSorter
@@ -74,7 +74,7 @@ attrClassify namesP namesN n = n2 where
 --   are name of group.
 --
 --   >>> let a = attrLayout (S.AttrPos2 (S.AttrNormal "a") (S.AttrNormal "b")) [S.AttrNormal "x", S.AttrNormal "y"]
---   >>> attrSetSort a =<< S.tt "a b -x /c 'd -y e"
+--   >>> attrParaSort a =<< S.tt "a b -x /c 'd -y e"
 --   Right (Para {
 --     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
 --                  TreeL (TText CodePt {..} TextRaw "b"),
@@ -95,21 +95,21 @@ attrClassify namesP namesN n = n2 where
 --                           (AttrNormal "y", [[TreeL (TText CodePt {..} TextRaw "e")]]) ]
 --     })
 
--- | Attribute set.
-type AttrSet = S.Para S.AttrName S.TTree
+-- | Attribute parameter.
+type AttrPara = S.Para S.AttrName S.TTree
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSetSort = [S.TTree] -> B.Ab AttrSet
+type AttrParaSort = [S.TTree] -> B.Ab AttrPara
 
 -- | Sort attributes.
-attrSetSort :: AttrLayout -> AttrSetSort
-attrSetSort def = attrSetSortNamed B.>=> attrSetSortPos def
+attrParaSort :: AttrLayout -> AttrParaSort
+attrParaSort def = attrParaSortNamed B.>=> attrParaSortPos def
 
 -- | Sort named part of attribute.
-attrSetSortNamed :: AttrSetSort
-attrSetSortNamed trees =
+attrParaSortNamed :: AttrParaSort
+attrParaSortNamed trees =
     do let p   = S.para maybeSingleHyphen trees
            p2  = S.paraNameAdd "@trunk" (S.paraPos p) p
            dup = S.paraMultipleNames p2
@@ -117,8 +117,8 @@ attrSetSortNamed trees =
        Right $ S.paraNameMapKeys S.AttrNormal p2
 
 -- | Sort positional part of attribute.
-attrSetSortPos :: AttrLayout -> B.AbMap AttrSet
-attrSetSortPos (AttrLayout sorter classify _ pos named) p =
+attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
+attrParaSortPos (AttrLayout sorter classify _ pos named) p =
     do let noPos      = null $ S.paraPos p
            nameList   = map fst $ S.paraNameList p
            overlapped = pos `B.overlap` nameList

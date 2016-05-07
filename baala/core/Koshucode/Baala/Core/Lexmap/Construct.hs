@@ -46,7 +46,7 @@ type ConsLexmapBody = [S.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
 type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 
 -- | Find attribute sorter of relmap operator.
-type FindSorter = C.RopName -> Maybe S.AttrSetSort
+type FindSorter = C.RopName -> Maybe S.AttrParaSort
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
@@ -102,7 +102,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         deriv :: S.Token -> LexmapClause -> ConsLexmapBody
         deriv tok src ts =
-            do attr  <- S.attrSetSortNamed ts
+            do attr  <- S.attrParaSortNamed ts
                let lx = cons C.LexmapDerived tok attr
                tab   <- table lx src
                Right (lx, tab)
@@ -128,7 +128,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         -- -----------  construct lexmap except for submaps
 
-        cons :: C.LexmapType -> S.Token -> S.AttrSet -> C.Lexmap
+        cons :: C.LexmapType -> S.Token -> S.AttrPara -> C.Lexmap
         cons ty tok attr = check $ C.lexBase { C.lexType   = ty
                                              , C.lexToken  = tok
                                              , C.lexAttr   = attr }
