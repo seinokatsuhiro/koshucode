@@ -18,7 +18,8 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     -- ** Positional
     paraMin, paraMax, paraJust, paraRange,
     -- ** Named positional
-    para0, para1, para2, para3, paraN,
+    para0, para1, para2, para3,
+    paraItem, paraItemOpt,
     -- ** Required / Optional
     paraReq, paraOpt,
     -- ** Multiple-occurence
@@ -46,7 +47,8 @@ data ParaSpec n
 data ParaSpecPos n
     = ParaPosMin   Int      -- ^ Lower bound of parameter length
     | ParaPosRange Int Int  -- ^ Lower and upper bound of parameter length
-    | ParaPosN     [n]
+    | ParaItem     [n]
+    | ParaItemOpt  [n] n
       deriving (Show, Eq, Ord)
 
 -- | No parameters
@@ -85,8 +87,12 @@ paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S
 paraMatchPos spec p = match pos ps where
     match (ParaPosMin  a) _    | n >= a            = Right p
     match (ParaPosRange a b) _ | n >= a && n <= b  = Right p
-    match (ParaPosN ns) xs | length ns == length xs  = Right $ paraAdd ns xs p
-    match _ _                       = Left $ ParaOutOfRange n pos
+    match (ParaItem ns) xs
+        | length ns == length xs      = Right $ paraAdd ns xs p
+    match (ParaItemOpt ns opt) xs
+        | length ns     == length xs  = Right $ paraAdd ns xs p
+        | length ns + 1 == length xs  = Right $ paraAdd (ns ++ [opt]) xs p
+    match _ _                         = Left $ ParaOutOfRange n pos
 
     pos = paraSpecPos spec
     ps  = S.paraPos p
@@ -191,45 +197,41 @@ paraPos pos spec = spec { paraSpecPos = pos }
 -- ----------------------  Named positonal
 
 -- | No positional parameter.
---
--- >>> let s = paraSpec para0
--- >>> paraMatch s $ S.paraWords S.paraHyphen ""
--- Right (Para { ..., paraName = fromList [] })
 para0 :: ParaSpecMap n
-
 -- | Named one positional parameter.
---
--- >>> let s = paraSpec $ para1 "x"
--- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
--- Right Para ...
 para1 :: n -> ParaSpecMap n
-
 -- | Named two positional parameters.
---
--- >>> let s = paraSpec $ para2 "x" "y"
--- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
--- Right (Para { ..., paraName = fromList [("x",[["a"]]), ("y",[["b"]])] })
 para2 :: n -> n -> ParaSpecMap n
-
 -- | Named three positional parameters.
---
--- >>> let s = paraSpec $ para3 "x" "y" "z"
--- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c"
--- Right (Para { ..., paraName = fromList [("x",[["a"]]), ("y",[["b"]]), ("z",[["c"]])] })
 para3 :: n -> n -> n -> ParaSpecMap n
+
+para0         = paraItem []
+para1 a       = paraItem [a]
+para2 a b     = paraItem [a,b]
+para3 a b c   = paraItem [a,b,c]
 
 -- | Named arbitrary positional parameters.
 --
--- >>> let s = paraSpec $ paraN ["x", "y", "z", "w"]
+-- >>> let s = paraSpec $ paraItem ["x", "y", "z", "w"]
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c d"
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]), ..., ("w",[["d"]])] })
-paraN :: [n] -> ParaSpecMap n
+paraItem :: [n] -> ParaSpecMap n
+paraItem ns spec@ParaSpec {..} =
+    spec { paraSpecPos = ParaItem ns
+         , paraSpecReq = ns ++ paraSpecReq }
 
-para0         = paraN []
-para1 a       = paraN [a]
-para2 a b     = paraN [a,b]
-para3 a b c   = paraN [a,b,c]
-paraN ns spec = spec { paraSpecPos = ParaPosN ns, paraSpecReq = ns ++ paraSpecReq spec }
+-- | Named arbitrary and one optional parameters.
+--
+-- >>> let s = paraSpec $ paraItemOpt ["x", "y"] "z"
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
+-- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]])] })
+-- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c"
+-- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c"]])] })
+paraItemOpt :: [n] -> n -> ParaSpecMap n
+paraItemOpt ns n spec@ParaSpec {..} =
+    spec { paraSpecPos = ParaItemOpt ns n
+         , paraSpecReq = ns ++ paraSpecReq
+         , paraSpecOpt = n : paraSpecOpt }
 
 
 -- ----------------------  Required/optional
