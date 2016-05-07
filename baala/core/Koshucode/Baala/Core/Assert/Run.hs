@@ -82,9 +82,9 @@ optionProcess :: (Ord c, B.Write c, D.CRel c)
     -> C.Option c -> C.TTreePara
     -> D.Rel c -> B.Ab [C.ResultChunk c]
 optionProcess sh judgeOf pat option opt r1 =
-    do case S.paraUnmatch opt optionType of
-         Nothing  -> Right ()
-         Just un  -> Msg.unkOption un
+    do case S.paraMatch optionType opt of
+         Right _  -> Right ()
+         Left u   -> Msg.unkOption u
        showEmpty <- S.paraGetSwitch opt "empty"
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2

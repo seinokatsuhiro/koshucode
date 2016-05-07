@@ -30,9 +30,9 @@ clauseAttrType = S.paraSpec $ S.paraMin 0 . S.paraOpt ["attr"]
 
 consLexmapTrees :: TTreePara -> B.Ab LexmapTrees
 consLexmapTrees para =
-    do case S.paraUnmatch para clauseAttrType of
-         Nothing -> Right ()
-         Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
+    do case S.paraMatch clauseAttrType para of
+         Right _ -> Right ()
+         Left u  -> Msg.adlib $ "unknown attribute: " ++ show u
        attr <- S.paraGetOpt [] para "attr"
        edit <- S.consAttrEd attr
        let body = S.paraPos para
