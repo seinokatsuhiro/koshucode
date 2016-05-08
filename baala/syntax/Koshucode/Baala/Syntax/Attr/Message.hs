@@ -17,13 +17,6 @@ module Koshucode.Baala.Syntax.Attr.Message
     reqAttrName,
     unexpAttr',
     unexpAttr,
-    unexpAttr0,
-    unexpAttr1,
-    unexpAttr2,
-    unexpAttr3,
-    unexpAttr4,
-    unexpAttr1V,
-    unexpAttr1Q,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -85,27 +78,6 @@ reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
-
-unexpAttr0 :: B.Ab a
-unexpAttr0 = unexpAttr "Attributes not required"
-
-unexpAttr1 :: B.Ab a
-unexpAttr1 = unexpAttr "Require one attribute"
-
-unexpAttr2 :: B.Ab a
-unexpAttr2 = unexpAttr "Require two attributes"
-
-unexpAttr3 :: B.Ab a
-unexpAttr3 = unexpAttr "Require three attributes"
-
-unexpAttr4 :: B.Ab a
-unexpAttr4 = unexpAttr "Require four attributes"
-
-unexpAttr1V :: B.Ab a
-unexpAttr1V = unexpAttr "Require attributes"
-
-unexpAttr1Q :: B.Ab a
-unexpAttr1Q = unexpAttr "Require one or two attributes"
 
 -- | Unexpected attribute
 unexpAttr' :: S.ParaUnmatch String -> B.Ab a

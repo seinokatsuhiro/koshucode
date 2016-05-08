@@ -9,7 +9,9 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     -- ** ParaSpec
     ParaSpec (..), paraSpecNames,
     -- ** ParaSpecPos
-    ParaSpecPos (..), paraMinLength,
+    ParaSpecPos (..),
+    paraMinLength,
+    paraSpecPosNames,
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
@@ -85,6 +87,12 @@ paraMinLength (ParaItemOpt  a _ _)  = a
 paraMinLength (ParaItemRest a _ _)  = a
 paraMinLength (ParaMin      a)      = a
 paraMinLength (ParaRange    a _)    = a
+
+paraSpecPosNames :: ParaSpecPos n -> [n]
+paraSpecPosNames (ParaItem     _ ns)    = ns
+paraSpecPosNames (ParaItemOpt  _ ns n)  = n : ns
+paraSpecPosNames (ParaItemRest _ ns n)  = n : ns
+paraSpecPosNames _                      = []
 
 
 -- --------------------------------------------  Unmatch

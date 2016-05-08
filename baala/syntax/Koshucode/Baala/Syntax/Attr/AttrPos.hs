@@ -16,16 +16,11 @@ module Koshucode.Baala.Syntax.Attr.AttrPos
     attrNameTrunk,
 
     -- * Positional name
-    AttrNamePos,
     AttrTree,
-    AttrSortTree,
-    sortAttrTree,
   ) where
 
 import qualified Data.Generics                        as G
-import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax.Token         as S
-import qualified Koshucode.Baala.Syntax.Attr.Message  as Msg
 
 
 -- ----------------------  Positional attribute
@@ -87,41 +82,6 @@ attrNameTrunk = AttrNormal "@trunk"
 
 -- --------------------------------------------  Positional name
 
--- | Positional attribute
-type AttrNamePos = AttrPos AttrName
-
--- | Positional attribute sorter.
-type AttrSortTree = [S.TTree] -> B.Ab [AttrTree]
-
 -- | Attribute name and its contents.
 type AttrTree = (AttrName, [S.TTree])
 
--- | Sort token trees by positional attributes.
-sortAttrTree :: AttrNamePos -> AttrSortTree
-sortAttrTree (AttrPos0)         []         = Right []
-sortAttrTree (AttrPos1 a)       [v]        = Right [a#v]
-sortAttrTree (AttrPos2 a b)     [v,w]      = Right [a#v, b#w]
-sortAttrTree (AttrPos3 a b c)   [v,w,x]    = Right [a#v, b#w, c#x]
-sortAttrTree (AttrPos4 a b c d) [v,w,x,y]  = Right [a#v, b#w, c#x, d#y]
-sortAttrTree (AttrPosV a)       vv         = Right [a##vv]
-sortAttrTree (AttrPos1V a b)    (v:ww)     = Right [a#v, b##ww]
-sortAttrTree (AttrPos1Q a _)    [v]        = Right [a#v]
-sortAttrTree (AttrPos1Q a b)    [v,w]      = Right [a#v, b#w]
-
-sortAttrTree (AttrPos0)         _          = Msg.unexpAttr0
-sortAttrTree (AttrPos1 _)       _          = Msg.unexpAttr1
-sortAttrTree (AttrPos2 _ _)     _          = Msg.unexpAttr2
-sortAttrTree (AttrPos3 _ _ _)   _          = Msg.unexpAttr3
-sortAttrTree (AttrPos4 _ _ _ _) _          = Msg.unexpAttr4
-sortAttrTree (AttrPos1V _ _)    _          = Msg.unexpAttr1V
-sortAttrTree (AttrPos1Q _ _)    _          = Msg.unexpAttr1Q
-
-(#) :: a -> v -> (a, [v])
-a # v = (a ,[v])
-
-(##) :: a -> vv -> (a, vv)
-a ## vv = (a, vv)
-
--- isTermLeaf :: B.TTree -> Bool
--- isTermLeaf (B.TreeL token) = B.isTermToken token
--- isTermLeaf _               = False

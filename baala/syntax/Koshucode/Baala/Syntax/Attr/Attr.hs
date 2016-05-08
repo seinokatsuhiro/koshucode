@@ -28,29 +28,25 @@ import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 
 -- | Attribute layout.
 data AttrLayout = AttrLayout
-    { attrPosSorter   :: S.AttrSortTree     -- ^ Sorter for positional attributes
-                                            --   (derived from @attrPos@)
-    , attrParaSpec    :: S.ParaSpec S.AttrName
+    { attrParaSpec    :: S.ParaSpec S.AttrName  -- ^ Parameter specification
     , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
                                             --   (derived from @attrNamesP@ and @attrNamesN@)
-    , attrPos         :: S.AttrNamePos      -- ^ Positional attribute
     , attrNamesP      :: [S.AttrName]       -- ^ Names of positional attributes
-                                            --   (derived from @attrPos@)
+                                            --   (derived from @attrParaSpec@)
     , attrNamesN      :: [S.AttrName]       -- ^ Names of named attributes
     }
 
 instance Show AttrLayout where
     show AttrLayout {..} =
-        "AttrLayout { positional = " ++ show attrPos
+        "AttrLayout { positional = " ++ show attrParaSpec
                 ++ ", named = " ++ show attrNamesN ++ " }"
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: S.AttrNamePos -> S.ParaSpec S.AttrName -> [S.AttrName] -> AttrLayout
-attrLayout pos spec namesN = sorter where
-    sorter     = AttrLayout sorterP spec classify pos namesP namesN
-    sorterP    = S.sortAttrTree pos
-    namesP     = S.attrPosNameList pos
-    classify   = attrClassify namesP namesN
+attrLayout :: S.ParaSpec S.AttrName -> [S.AttrName] -> AttrLayout
+attrLayout spec nsN = sorter where
+    sorter    = AttrLayout spec classify nsP nsN
+    nsP       = S.paraSpecPosNames $ S.paraSpecPos spec
+    classify  = attrClassify nsP nsN
 
 attrClassify :: [S.AttrName] -> [S.AttrName] -> B.Map S.AttrName
 attrClassify namesP namesN n = n2 where
@@ -119,10 +115,10 @@ attrParaSortNamed trees =
 
 -- | Sort positional part of attribute.
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout _ spec classify _ pos named) p =
+attrParaSortPos (AttrLayout spec classify nsP nsN) p =
     do let noPos      = null $ S.paraPos p
            nameList   = map fst $ S.paraNameList p
-           overlapped = pos `B.overlap` nameList
+           overlapped = nsP `B.overlap` nameList
            p2         = S.paraNameMapKeys classify p
 
        p3 <- case noPos && overlapped of
@@ -131,7 +127,7 @@ attrParaSortPos (AttrLayout _ spec classify _ pos named) p =
                           Right p' -> Right p'
                           Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u
 
-       attrCheck pos named $ attrList p3
+       attrCheck nsP nsN $ attrList p3
        Right p3
 
 attrCheck :: [S.AttrName] -> [S.AttrName] -> [S.AttrTree] -> B.Ab ()
