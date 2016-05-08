@@ -45,8 +45,8 @@ instance Show AttrLayout where
 attrLayout :: S.ParaSpec S.AttrName -> AttrLayout
 attrLayout spec = AttrLayout spec classify nsP nsN where
     classify  = attrClassify spec
-    nsP       = S.paraSpecPosNames $ S.paraSpecPos spec
-    nsN       = S.paraSpecNamedNames spec
+    nsP       = S.paraSpecNamesP spec
+    nsN       = S.paraSpecNamesN spec
 
 attrClassify :: S.ParaSpec S.AttrName -> B.Map S.AttrName
 attrClassify spec n = n' where

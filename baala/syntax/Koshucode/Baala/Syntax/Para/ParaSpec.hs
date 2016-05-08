@@ -9,11 +9,10 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     -- ** ParaSpec
     ParaSpec (..),
     paraSpecNames,
-    paraSpecNamedNames,
+    paraSpecNamesP, paraSpecNamesN,
     -- ** ParaSpecPos
     ParaSpecPos (..),
     paraMinLength,
-    paraSpecPosNames,
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
@@ -44,30 +43,37 @@ import qualified Koshucode.Baala.Syntax.Para.Para  as S
 data ParaSpec n
     = ParaSpec
       { paraSpecPos    :: ParaSpecPos n -- ^ Positional parameter
-      , paraSpecReq    :: [n]           -- ^ Required parameter
-      , paraSpecOpt    :: [n]           -- ^ Optional parameter
-      , paraSpecFirst  :: [n]           -- ^ Allow multiple-occurence, use first parameter
-      , paraSpecLast   :: [n]           -- ^ Allow multiple-occurence, use last parameter
-      , paraSpecMulti  :: [n]           -- ^ Allow multiple-occurence, use all parameters
+      , paraSpecReqP   :: [n]  -- ^ Positional required parameters
+      , paraSpecOptP   :: [n]  -- ^ Positional optional parameters
+      , paraSpecReqN   :: [n]  -- ^ Explicitly-named required parameters
+      , paraSpecOptN   :: [n]  -- ^ Explicitly-named optional parameters
+      , paraSpecFirst  :: [n]  -- ^ Allow multiple-occurence, use first parameters
+      , paraSpecLast   :: [n]  -- ^ Allow multiple-occurence, use last parameters
+      , paraSpecMulti  :: [n]  -- ^ Allow multiple-occurence, use all parameters
       } deriving (Show, Eq, Ord)
 
 -- | No parameters
 instance B.Default (ParaSpec n) where
-    def = ParaSpec { paraSpecPos    = ParaRange 0 0
-                   , paraSpecReq    = []
-                   , paraSpecOpt    = []
-                   , paraSpecFirst  = []
-                   , paraSpecLast   = []
-                   , paraSpecMulti  = [] }
+    def = ParaSpec { paraSpecPos     = ParaRange 0 0
+                   , paraSpecReqP    = []
+                   , paraSpecOptP    = []
+                   , paraSpecReqN    = []
+                   , paraSpecOptN    = []
+                   , paraSpecFirst   = []
+                   , paraSpecLast    = []
+                   , paraSpecMulti   = [] }
 
--- | List of named parameters.
-paraSpecNames :: (Eq n) => ParaSpec n -> [n]
-paraSpecNames spec = paraSpecNamedNames spec
-                  ++ paraSpecPosNames (paraSpecPos spec)
+-- | Name list of all parameters.
+paraSpecNames :: ParaSpec n -> [n]
+paraSpecNames spec = paraSpecNamesP spec ++ paraSpecNamesN spec
 
-paraSpecNamedNames :: (Eq n) => ParaSpec n -> [n]
-paraSpecNamedNames ParaSpec {..} =
-    (paraSpecReq ++ paraSpecOpt) B.\\ paraSpecPosNames paraSpecPos
+-- | Name list of positional parameters.
+paraSpecNamesP :: ParaSpec n -> [n]
+paraSpecNamesP ParaSpec {..} = paraSpecReqP ++ paraSpecOptP
+
+-- | Name list of explicitly-named parameters.
+paraSpecNamesN :: ParaSpec n -> [n]
+paraSpecNamesN ParaSpec {..} = paraSpecReqN ++ paraSpecOptN
 
 -- ----------------------  ParaSpecPos
 
@@ -95,12 +101,6 @@ paraMinLength (ParaItemRest a _ _)  = a
 paraMinLength (ParaMin      a)      = a
 paraMinLength (ParaRange    a _)    = a
 
-paraSpecPosNames :: ParaSpecPos n -> [n]
-paraSpecPosNames (ParaItem     _ ns)    = ns
-paraSpecPosNames (ParaItemOpt  _ ns n)  = n : ns
-paraSpecPosNames (ParaItemRest _ ns n)  = n : ns
-paraSpecPosNames _                      = []
-
 
 -- --------------------------------------------  Unmatch
 
@@ -123,7 +123,7 @@ instance Functor ParaUnmatch where
 paraMatch :: (Eq n, Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
 paraMatch spec p =
     case paraMatchPos spec p of
-      Left u -> Left u
+      Left u   -> Left u
       Right p' -> paraMatchNamed spec $ paraReviseNamed spec p'
 
 paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
@@ -167,7 +167,7 @@ paraMatchNamed spec@ParaSpec {..} p
       ns2         = S.paraMultipleNames p
       total       = paraSpecNames spec
       unknowns    = ns B.\\ total
-      missings    = paraSpecReq B.\\ ns
+      missings    = paraSpecReqN B.\\ ns
       multiples   = ns2 B.\\ paraSpecMulti
 
 -- | Map parameter to some value.
@@ -265,8 +265,8 @@ para3 a b c   = paraItem [a,b,c]
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]), ..., ("w",[["d"]])] })
 paraItem :: [n] -> ParaSpecMap n
 paraItem ns spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItem (length ns) ns
-         , paraSpecReq = ns ++ paraSpecReq }
+    spec { paraSpecPos  = ParaItem (length ns) ns
+         , paraSpecReqP = ns ++ paraSpecReqP }
 
 -- | Named arbitrary and one optional parameters.
 --
@@ -277,9 +277,9 @@ paraItem ns spec@ParaSpec {..} =
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c"]])] })
 paraItemOpt :: [n] -> n -> ParaSpecMap n
 paraItemOpt ns n spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItemOpt (length ns) ns n
-         , paraSpecReq = ns ++ paraSpecReq
-         , paraSpecOpt = n : paraSpecOpt }
+    spec { paraSpecPos    = ParaItemOpt (length ns) ns n
+         , paraSpecReqP = ns ++ paraSpecReqP
+         , paraSpecOptP = n : paraSpecOptP }
 
 -- | Named arbitrary and one optional parameters.
 --
@@ -288,9 +288,9 @@ paraItemOpt ns n spec@ParaSpec {..} =
 -- Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c","d"]])] })
 paraItemRest :: [n] -> n -> ParaSpecMap n
 paraItemRest ns n spec@ParaSpec {..} =
-    spec { paraSpecPos = ParaItemRest (length ns) ns n
-         , paraSpecReq = ns ++ paraSpecReq
-         , paraSpecOpt = n : paraSpecOpt }
+    spec { paraSpecPos    = ParaItemRest (length ns) ns n
+         , paraSpecReqP = ns ++ paraSpecReqP
+         , paraSpecOptP = n : paraSpecOptP }
 
 
 -- ----------------------  Required/optional
@@ -334,9 +334,9 @@ paraLast :: [n] -> ParaSpecMap n
 -- Right (Para { ..., paraName = fromList [("x", [["a"],["b","c"]])] })
 paraMulti :: [n] -> ParaSpecMap n
 
-paraReq   ns spec  = spec { paraSpecReq   = ns }
-paraOpt   ns spec  = spec { paraSpecOpt   = ns }
-paraFirst ns spec  = spec { paraSpecFirst = ns }
-paraLast  ns spec  = spec { paraSpecLast  = ns }
-paraMulti ns spec  = spec { paraSpecMulti = ns }
+paraReq   ns spec  = spec { paraSpecReqN   = ns }
+paraOpt   ns spec  = spec { paraSpecOptN   = ns }
+paraFirst ns spec  = spec { paraSpecFirst  = ns }
+paraLast  ns spec  = spec { paraSpecLast   = ns }
+paraMulti ns spec  = spec { paraSpecMulti  = ns }
 
