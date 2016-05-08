@@ -6,8 +6,10 @@
 
 module Koshucode.Baala.Syntax.Para.ParaSpec
   ( -- * Specification
-    ParaSpec (..), ParaSpecPos (..),
-    paraSpecNames,
+    -- ** ParaSpec
+    ParaSpec (..), paraSpecNames,
+    -- ** ParaSpecPos
+    ParaSpecPos (..), paraMinLength,
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
@@ -32,6 +34,8 @@ import qualified Koshucode.Baala.Syntax.Para.Para  as S
 
 -- --------------------------------------------  Specification
 
+-- ----------------------  ParaSpec
+
 -- | Parameter specification.
 data ParaSpec n
     = ParaSpec
@@ -52,6 +56,12 @@ instance B.Default (ParaSpec n) where
                    , paraSpecLast   = []
                    , paraSpecMulti  = [] }
 
+-- | List of named parameters.
+paraSpecNames :: ParaSpec n -> [n]
+paraSpecNames ParaSpec {..} = paraSpecReq ++ paraSpecOpt
+
+-- ----------------------  ParaSpecPos
+
 -- | Positional parameter specification.
 data ParaSpecPos n
     = ParaItem     Int [n]    -- ^ Named positional parameters
@@ -68,9 +78,13 @@ instance Functor ParaSpecPos where
     fmap _ (ParaMin a)            = ParaMin a
     fmap _ (ParaRange a b)        = ParaRange a b
 
--- | List of named parameters.
-paraSpecNames :: ParaSpec n -> [n]
-paraSpecNames ParaSpec {..} = paraSpecReq ++ paraSpecOpt
+-- | Minimal length of positional parameters.
+paraMinLength :: ParaSpecPos n -> Int
+paraMinLength (ParaItem     a _)    = a
+paraMinLength (ParaItemOpt  a _ _)  = a
+paraMinLength (ParaItemRest a _ _)  = a
+paraMinLength (ParaMin      a)      = a
+paraMinLength (ParaRange    a _)    = a
 
 
 -- --------------------------------------------  Unmatch
