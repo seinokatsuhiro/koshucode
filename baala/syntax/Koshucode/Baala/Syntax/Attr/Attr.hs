@@ -108,8 +108,6 @@ attrParaSortNamed :: AttrParaSort
 attrParaSortNamed trees =
     do let p   = S.para maybeSingleHyphen trees
            p2  = S.paraNameAdd "@trunk" (S.paraPos p) p
-           dup = S.paraMultipleNames p2
-       B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ S.paraNameMapKeys S.AttrNormal p2
 
 -- | Sort positional part of attribute.
