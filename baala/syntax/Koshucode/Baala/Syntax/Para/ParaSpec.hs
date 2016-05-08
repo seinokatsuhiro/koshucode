@@ -7,7 +7,9 @@
 module Koshucode.Baala.Syntax.Para.ParaSpec
   ( -- * Specification
     -- ** ParaSpec
-    ParaSpec (..), paraSpecNames,
+    ParaSpec (..),
+    paraSpecNames,
+    paraSpecNamedNames,
     -- ** ParaSpecPos
     ParaSpecPos (..),
     paraMinLength,
@@ -59,8 +61,13 @@ instance B.Default (ParaSpec n) where
                    , paraSpecMulti  = [] }
 
 -- | List of named parameters.
-paraSpecNames :: ParaSpec n -> [n]
-paraSpecNames ParaSpec {..} = paraSpecReq ++ paraSpecOpt
+paraSpecNames :: (Eq n) => ParaSpec n -> [n]
+paraSpecNames spec = paraSpecNamedNames spec
+                  ++ paraSpecPosNames (paraSpecPos spec)
+
+paraSpecNamedNames :: (Eq n) => ParaSpec n -> [n]
+paraSpecNamedNames ParaSpec {..} =
+    (paraSpecReq ++ paraSpecOpt) B.\\ paraSpecPosNames paraSpecPos
 
 -- ----------------------  ParaSpecPos
 

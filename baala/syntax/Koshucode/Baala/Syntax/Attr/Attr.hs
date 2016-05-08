@@ -42,24 +42,23 @@ instance Show AttrLayout where
                 ++ ", named = " ++ show attrNamesN ++ " }"
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: S.ParaSpec S.AttrName -> [S.AttrName] -> AttrLayout
-attrLayout spec nsN = sorter where
-    sorter    = AttrLayout spec classify nsP nsN
+attrLayout :: S.ParaSpec S.AttrName -> AttrLayout
+attrLayout spec = AttrLayout spec classify nsP nsN where
+    classify  = attrClassify spec
     nsP       = S.paraSpecPosNames $ S.paraSpecPos spec
-    classify  = attrClassify nsP nsN
+    nsN       = S.paraSpecNamedNames spec
 
-attrClassify :: [S.AttrName] -> [S.AttrName] -> B.Map S.AttrName
-attrClassify namesP namesN n = n2 where
-    n2 :: S.AttrName
-    n2 = let nam = S.attrNameText n
-         in case lookup nam pairs of
-              Just k  -> k
-              Nothing -> n
+attrClassify :: S.ParaSpec S.AttrName -> B.Map S.AttrName
+attrClassify spec n = n' where
+    n' :: S.AttrName
+    n' = case lookup (S.attrNameText n) pairs of
+           Just k  -> k
+           Nothing -> n
 
     pairs    :: [B.Named S.AttrName]
     pairs    = map pair alls
     pair k   = (S.attrNameText k, k)
-    alls     = S.attrNameTrunk : namesP ++ namesN
+    alls     = S.attrNameTrunk : S.paraSpecNames spec
 
 
 -- ----------------------  Attribute sorter

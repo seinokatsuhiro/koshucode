@@ -44,10 +44,10 @@ attrLocal n        | l == '/'    = S.AttrRelmapLocal i    -- "-xxx/^"
                          i = init n
 
 attrDef :: String -> [S.AttrName] -> [S.AttrName] -> S.AttrLayout
-attrDef q ns branch = S.attrLayout spec branch where
-    spec = S.paraSpec $ attrPosSpec q ns
+attrDef q nsP nsN = S.attrLayout spec where
+    spec = S.paraSpec $ attrPosSpec q nsP
            . S.paraReq [S.attrNameTrunk]
-           . S.paraOpt branch
+           . S.paraOpt nsN
 
 attrPosSpec :: String -> [S.AttrName] -> S.ParaSpecMap S.AttrName
 attrPosSpec "0"  []            = S.para0
