@@ -30,6 +30,7 @@ import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 data AttrLayout = AttrLayout
     { attrPosSorter   :: S.AttrSortTree     -- ^ Sorter for positional attributes
                                             --   (derived from @attrPos@)
+    , attrParaSpec    :: S.ParaSpec S.AttrName
     , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
                                             --   (derived from @attrNamesP@ and @attrNamesN@)
     , attrPos         :: S.AttrNamePos      -- ^ Positional attribute
@@ -44,9 +45,9 @@ instance Show AttrLayout where
                 ++ ", named = " ++ show attrNamesN ++ " }"
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: S.AttrNamePos -> [S.AttrName] -> AttrLayout
-attrLayout pos namesN = sorter where
-    sorter     = AttrLayout sorterP classify pos namesP namesN
+attrLayout :: S.AttrNamePos -> S.ParaSpec S.AttrName -> [S.AttrName] -> AttrLayout
+attrLayout pos spec namesN = sorter where
+    sorter     = AttrLayout sorterP spec classify pos namesP namesN
     sorterP    = S.sortAttrTree pos
     namesP     = S.attrPosNameList pos
     classify   = attrClassify namesP namesN
@@ -118,19 +119,19 @@ attrParaSortNamed trees =
 
 -- | Sort positional part of attribute.
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout sorter classify _ pos named) p =
+attrParaSortPos (AttrLayout _ spec classify _ pos named) p =
     do let noPos      = null $ S.paraPos p
            nameList   = map fst $ S.paraNameList p
            overlapped = pos `B.overlap` nameList
+           p2         = S.paraNameMapKeys classify p
 
-       p2            <- case noPos && overlapped of
-                          True  -> Right p
-                          False -> S.paraPosName sorter p
+       p3 <- case noPos && overlapped of
+               True  -> Right p
+               False -> case S.paraMatch spec p2 of
+                          Right p' -> Right p'
+                          Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u
 
-       let p3         = S.paraNameMapKeys classify p2
-           attr       = attrList p3
-
-       attrCheck pos named attr
+       attrCheck pos named $ attrList p3
        Right p3
 
 attrCheck :: [S.AttrName] -> [S.AttrName] -> [S.AttrTree] -> B.Ab ()

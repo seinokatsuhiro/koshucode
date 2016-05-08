@@ -15,6 +15,7 @@ module Koshucode.Baala.Syntax.Attr.Message
     noSlotIndex,
     reqAttr,
     reqAttrName,
+    unexpAttr',
     unexpAttr,
     unexpAttr0,
     unexpAttr1,
@@ -26,6 +27,7 @@ module Koshucode.Baala.Syntax.Attr.Message
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax.Para             as S
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Token            as S
 
@@ -104,4 +106,19 @@ unexpAttr1V = unexpAttr "Require attributes"
 
 unexpAttr1Q :: B.Ab a
 unexpAttr1Q = unexpAttr "Require one or two attributes"
+
+-- | Unexpected attribute
+unexpAttr' :: S.ParaUnmatch String -> B.Ab a
+unexpAttr' un = Left $ B.abortLines "Unexpected attribute" detail where
+    detail = case un of
+               S.ParaOutOfRange _ p  -> [require $ S.paraMinLength p]
+               S.ParaUnknown  ns     -> ["Unknown "  ++ unwords ns]
+               S.ParaMissing  ns     -> ["Missing "  ++ unwords ns]
+               S.ParaMultiple ns     -> ["Repeated " ++ unwords ns]
+
+    require 0 = "Attributes not required"
+    require 1 = "Require one attribute"
+    require 2 = "Require two attributes"
+    require 3 = "Require three attributes"
+    require n = "Require " ++ show n ++ " attributes"
 

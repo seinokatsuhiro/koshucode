@@ -12,7 +12,7 @@ module Koshucode.Baala.Syntax.Attr.AttrPos
     -- * Attribute name
     AttrName (..),
     isAttrNameRelmap,
-    attrNameText,
+    attrNameText, attrNameCode,
     attrNameTrunk,
 
     -- * Positional name
@@ -76,6 +76,10 @@ attrNameText (AttrNormal       n)  = n
 attrNameText (AttrRelmapNormal n)  = n
 attrNameText (AttrRelmapLocal  n)  = n
 
+-- | Attribute string with hyphen.
+attrNameCode :: AttrName -> String
+attrNameCode = ('-':) . attrNameText
+
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName
 attrNameTrunk = AttrNormal "@trunk"
@@ -117,9 +121,6 @@ a # v = (a ,[v])
 
 (##) :: a -> vv -> (a, vv)
 a ## vv = (a, vv)
-
-enumAttr :: [AttrName]
-enumAttr = map (AttrNormal . show) [1 :: Int ..]
 
 -- isTermLeaf :: B.TTree -> Bool
 -- isTermLeaf (B.TreeL token) = B.isTermToken token
