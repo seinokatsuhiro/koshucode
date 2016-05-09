@@ -51,7 +51,8 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 -- No positional and one named @-c@ attribute.
 --
 -- >>> parseAttrLayout "0 . -c"
--- AttrLayout (ParaSpec { paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })
+-- AttrLayout (ParaSpec { paraSpecReqN = [AttrNormal "c"]
+--                      , paraSpecOptN = [AttrNormal "@trunk"], ... })
 --
 -- Two positional @-a@ @-b@ and one named @-c@ attributes.
 --
@@ -60,12 +61,16 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --                      , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
 --                      , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })
 
-parseAttrLayout :: String -> S.AttrLayout
-parseAttrLayout s = lay where
-    n = map attrName
-    lay = case map words $ B.divideBy (== '.') s of
-            [q : pos]         -> attrLayout q (n pos) []
-            [q : pos, named]  -> attrLayout q (n pos) (n named)
+parseAttrLayout :: String -> (Maybe String, S.AttrLayout)
+parseAttrLayout = nameLay where
+    name = map attrName
+    nameLay s = case B.divideBy (== ':') s of
+                  [n, s']  -> (Just n, lay s')
+                  [s']     -> (Nothing, lay s')
+                  _        -> attrBug s
+    lay s = case map words $ B.divideBy (== '.') s of
+            [q : pos]         -> attrLayout q (name pos) []
+            [q : pos, named]  -> attrLayout q (name pos) (name named)
             _                 -> attrBug s
 
 type BoolName = (Bool, S.AttrName)
