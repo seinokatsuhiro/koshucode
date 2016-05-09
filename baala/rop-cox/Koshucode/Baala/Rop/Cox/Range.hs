@@ -36,13 +36,13 @@ import qualified Koshucode.Baala.Rop.Cox.Get   as Op
 ropsCoxRange :: (D.CContent c) => [C.Rop c]
 ropsCoxRange = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                             ATTRIBUTE
-    [ Op.def  consRange         "range /N -from E -to E"          "1 -term . -from -to"
-    , Op.def  consRangeYear     "range-year /N -from /P to /P"    "1 -term . -from -to"
-    , Op.def  consRangeMonth    "range-month /N -from /P to /P"   "1 -term . -from -to"
-    , Op.def  consRangeDay      "range-day /N -from /P to /P"     "1 -term . -from -to"
-    , Op.def  consRangeHour     "range-hour /N -from /P to /P"    "1 -term . -from -to"
-    , Op.def  consRangeMinute   "range-minute /N -from /P to /P"  "1 -term . -from -to"
-    , Op.def  consRangeSecond   "range-second /N -from /P to /P"  "1 -term . -from -to"
+    [ Op.def  consRange         "range /N -from E -to E"          "-term . -from -to"
+    , Op.def  consRangeYear     "range-year /N -from /P to /P"    "-term . -from -to"
+    , Op.def  consRangeMonth    "range-month /N -from /P to /P"   "-term . -from -to"
+    , Op.def  consRangeDay      "range-day /N -from /P to /P"     "-term . -from -to"
+    , Op.def  consRangeHour     "range-hour /N -from /P to /P"    "-term . -from -to"
+    , Op.def  consRangeMinute   "range-minute /N -from /P to /P"  "-term . -from -to"
+    , Op.def  consRangeSecond   "range-second /N -from /P to /P"  "-term . -from -to"
     ]
 
 

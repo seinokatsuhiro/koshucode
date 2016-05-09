@@ -28,8 +28,8 @@ import qualified Koshucode.Baala.Rop.Cox.Get  as Op
 ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
 ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
     --        CONSTRUCTOR USAGE                ATTRIBUTE
-    [ Op.def  consBoth    "both R [-fill E]"   "1 -relmap/ . -fill?"
-    , Op.def  consMaybe   "maybe R [-fill E]"  "1 -relmap/ . -fill?"
+    [ Op.def  consBoth    "both R [-fill E]"   "-relmap/ . -fill?"
+    , Op.def  consMaybe   "maybe R [-fill E]"  "-relmap/ . -fill?"
     ]
 
 

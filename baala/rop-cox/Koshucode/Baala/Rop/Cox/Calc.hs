@@ -44,14 +44,14 @@ import qualified Koshucode.Baala.Rop.Cox.Message as Msg
 ropsCoxCalc :: (D.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
-    [ Op.def  consAdd           "add /N E ..."                 "* -cox . -where?"
-    , Op.def  consFill          "fill /P ... -with E"          "* -term . -with"
-    , Op.def  consReplace       "replace /P ... -by F"         "* -term . -by"
-    , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 . -from -to"
-    , Op.def  consSplit         "split /N E ..."               "* -cox . -where?"
-    , Op.def  consSubst         "subst /N E ..."               "* -cox . -where?"
-    , Op.def  consUnary         "unary /N E ..."               "1* -term -expr"
-    , Op.def  consDumpCox       "dump-cox E"                   "* -cox"
+    [ Op.def  consAdd           "add /N E ..."                 "-cox* . -where?"
+    , Op.def  consFill          "fill /P ... -with E"          "-term* . -with"
+    , Op.def  consReplace       "replace /P ... -by F"         "-term* . -by"
+    , Op.def  consReplaceAll    "replace-all -from E -to E"    ". -from -to"
+    , Op.def  consSplit         "split /N E ..."               "-cox* . -where?"
+    , Op.def  consSubst         "subst /N E ..."               "-cox* . -where?"
+    , Op.def  consUnary         "unary /N E ..."               "-term -expr*"
+    , Op.def  consDumpCox       "dump-cox E"                   "-cox*"
     ]
 
 
