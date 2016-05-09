@@ -77,7 +77,7 @@ attrName = hyph where
     hyph n          = attrBug n
 
     opt n     | l == '?'    = name True  i
-              | otherwise   = name True  n
+              | otherwise   = name False n
               where (l, i)  = lastInit n
 
     name o n  | l == '^'    = local o i

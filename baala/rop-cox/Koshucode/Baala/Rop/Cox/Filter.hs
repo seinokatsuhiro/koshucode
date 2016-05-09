@@ -35,8 +35,8 @@ ropsCoxFilter :: (D.CContent c) => [C.Rop c]
 ropsCoxFilter = Op.ropList "cox-filter"
     --        CONSTRUCTOR         USAGE         ATTRIBUTE
     [ Op.def  consContain         "contain E"   "1 -expr"
-    , Op.def  (consFilter True)   "keep E"      "* -in . -where"
-    , Op.def  (consFilter False)  "omit E"      "* -in . -where"
+    , Op.def  (consFilter True)   "keep E"      "* -in . -where?"
+    , Op.def  (consFilter False)  "omit E"      "* -in . -where?"
     , Op.def  consOmitAll         "omit-all"    "0"
     ]
 
