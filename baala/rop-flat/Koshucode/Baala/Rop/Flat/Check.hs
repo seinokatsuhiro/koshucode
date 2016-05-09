@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 ropsCheck :: (D.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
     [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
-                                                      "0 . -just? -has? -but?"
+                            "0 . -just | 0 . -has | 0 . -but"
     , Op.def consDump       "dump"                    "0"
     , Op.def consDuplicate  "duplicate /N ..."        "* -term"
     , Op.def consExclude    "exclude /N ... -from R"  "* -term . -from/"
@@ -44,7 +44,7 @@ consCheckTerm med =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust med ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  med ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  med ns
-       _ -> Msg.unexpAttr "require one of -just / -has / -but"
+       _ -> B.bug "check-term"
 
 relmapCheckTermJust :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapCheckTermHas  :: C.Intmed c -> [S.TermName] -> C.Relmap c

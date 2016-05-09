@@ -16,7 +16,7 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
-    ParaTo, paraSelect, 
+    ParaTo, paraSelect,
 
     -- * Construction
     ParaSpecMap, paraSpec,
@@ -175,12 +175,12 @@ type ParaTo n a b = S.Para n a -> b
 
 -- | Select matched specification and apply 'ParaTo' function.
 paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
-paraSelect b ps p = loop ps where
+paraSelect b specs p = loop specs where
     loop [] = b
-    loop ((spec, paraTo) : ps2) =
+    loop ((spec, paraTo) : specs2) =
         case paraMatch spec p of
           Right p' -> paraTo p'
-          Left _   -> loop ps2
+          Left _   -> loop specs2
 
 
 -- --------------------------------------------  Construct

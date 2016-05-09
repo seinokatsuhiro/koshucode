@@ -83,14 +83,15 @@ attrParaSortNamed trees =
 
 -- | Sort positional part of attribute.
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout [(_, branch)]) p = attrParaSortBranch branch p
-attrParaSortPos (AttrLayout _) p = Right p
+attrParaSortPos (AttrLayout branches) p = loop [] branches where
+    loop us [] = Msg.unexpAttrMulti $ map (fmap S.attrNameCode) $ reverse us
+    loop us ((_, b) : bs) =
+        case branch b of
+          Right p' -> Right p'
+          Left u   -> loop (u:us) bs
 
-attrParaSortBranch :: AttrBranch -> B.AbMap AttrPara
-attrParaSortBranch (AttrBranch spec classify) p =
-    case S.paraMatch spec $ S.paraNameMapKeys classify p of
-      Right p' -> Right p'
-      Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u
+    branch (AttrBranch spec classify) =
+        S.paraMatch spec $ S.paraNameMapKeys classify p
 
 byHyphen :: S.TTreeTo (Maybe S.AttrName)
 byHyphen = fmap S.AttrNormal . maybeSingleHyphen
