@@ -4,7 +4,8 @@
 -- | Slot substitution.
 
 module Koshucode.Baala.Syntax.Attr.Slot
-  ( GlobalSlot,
+  ( AttrTree,
+    GlobalSlot,
     substSlot,
   ) where
 
@@ -13,13 +14,16 @@ import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrPos    as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
+-- | Attribute name and its contents.
+type AttrTree = (S.AttrName, [S.TTree])
+
 type GlobalSlot = S.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [S.AttrTree] -> B.AbMap [S.TTree]
+substSlot :: [GlobalSlot] -> [AttrTree] -> B.AbMap [S.TTree]
 substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
 
-substTree :: [GlobalSlot] -> [S.AttrTree] -> S.TTree -> B.Ab [S.TTree]
+substTree :: [GlobalSlot] -> [AttrTree] -> S.TTree -> B.Ab [S.TTree]
 substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
