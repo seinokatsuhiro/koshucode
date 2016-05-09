@@ -3,21 +3,21 @@
 about /package 'rop-flat
 
 |-- DIR  /code 38   /comment 12   /dir "rop-flat/Koshucode/Baala/Rop"
-|-- DIR  /code 225  /comment 165  /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- DIR  /code 1246  /comment 752  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- DIR  /code 232  /comment 168  /dir "rop-flat/Koshucode/Baala/Rop/Base"
+|-- DIR  /code 1245  /comment 752  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- DIR  /code 184  /comment 174  /dir "rop-flat/Koshucode/Baala/Rop/Flat/Lattice"
 
-|-- DIR-TOTAL  /code 1693  /comment 1103
+|-- DIR-TOTAL  /code 1699  /comment 1106
 
 |-- FILE  /code 10   /comment 6    /file "Base.hs"        /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /code 18   /comment 12   /file "Define.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- FILE  /code 126  /comment 76   /file "Get.hs"         /dir "rop-flat/Koshucode/Baala/Rop/Base"
+|-- FILE  /code 133  /comment 79   /file "Get.hs"         /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 11   /comment 9    /file "Message.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 22   /comment 39   /file "Rop.hs"         /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 48   /comment 29   /file "Term.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 28   /comment 6    /file "Flat.hs"        /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /code 30   /comment 5    /file "Bundle.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
-|-- FILE  /code 83   /comment 49   /file "Check.hs"       /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /code 82   /comment 49   /file "Check.hs"       /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 94   /comment 48   /file "Control.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 184  /comment 103  /file "Gadget.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 8    /comment 26   /file "Lattice.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
@@ -34,4 +34,4 @@ about /package 'rop-flat
 |-- FILE  /code 103  /comment 66   /file "Term.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 76   /comment 53   /file "TermGadget.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 
-|-- FILE-TOTAL  /code 1693  /comment 1103
+|-- FILE-TOTAL  /code 1699  /comment 1106

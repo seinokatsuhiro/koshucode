@@ -52,8 +52,8 @@
 |-- DIR  /package 'rop-cox  /code 18  /comment 6  /dir "rop-cox/Koshucode/Baala/Rop"
 |-- DIR  /package 'rop-cox  /code 909  /comment 452  /dir "rop-cox/Koshucode/Baala/Rop/Cox"
 |-- DIR  /package 'rop-flat  /code 38  /comment 12  /dir "rop-flat/Koshucode/Baala/Rop"
-|-- DIR  /package 'rop-flat  /code 225  /comment 165  /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- DIR  /package 'rop-flat  /code 1 246  /comment 752  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- DIR  /package 'rop-flat  /code 232  /comment 168  /dir "rop-flat/Koshucode/Baala/Rop/Base"
+|-- DIR  /package 'rop-flat  /code 1 245  /comment 752  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 
 |-- DIR  /package 'rop-flat  /code 184  /comment 174  /dir "rop-flat/Koshucode/Baala/Rop/Flat/Lattice"
 |-- DIR  /package 'rop-nested  /code 10  /comment 6  /dir "rop-nested/Koshucode/Baala/Rop"
@@ -61,8 +61,8 @@
 |-- DIR  /package 'syntax  /code 10  /comment 4  /dir "syntax/Koshucode/Baala"
 |-- DIR  /package 'syntax  /code 50  /comment 22  /dir "syntax/Koshucode/Baala/Syntax"
 
-|-- DIR  /package 'syntax  /code 326  /comment 233  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- DIR  /package 'syntax  /code 322  /comment 274  /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- DIR  /package 'syntax  /code 350  /comment 233  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- DIR  /package 'syntax  /code 325  /comment 274  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /package 'syntax  /code 272  /comment 258  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /package 'syntax  /code 716  /comment 475  /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- DIR  /package 'toolkit  /code 126  /comment 74  /dir "toolkit/Koshucode/Baala/Toolkit/Library"
@@ -80,9 +80,9 @@
 |-- DIR-TOTAL  /package 'data  /code 2 953  /comment 1 800
 
 |-- DIR-TOTAL  /package 'rop-cox  /code 927  /comment 458
-|-- DIR-TOTAL  /package 'rop-flat  /code 1 693  /comment 1 103
+|-- DIR-TOTAL  /package 'rop-flat  /code 1 699  /comment 1 106
 |-- DIR-TOTAL  /package 'rop-nested  /code 267  /comment 253
-|-- DIR-TOTAL  /package 'syntax  /code 1 696  /comment 1 266
+|-- DIR-TOTAL  /package 'syntax  /code 1 723  /comment 1 266
 |-- DIR-TOTAL  /package 'toolkit  /code 483  /comment 220
 
 |-- DIR-TOTAL  /package 'writer  /code 352  /comment 108
@@ -252,14 +252,14 @@
 
 |-- FILE  /package 'rop-flat  /code 10  /comment 6  /file "Base.hs"  /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /package 'rop-flat  /code 18  /comment 12  /file "Define.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- FILE  /package 'rop-flat  /code 126  /comment 76  /file "Get.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
+|-- FILE  /package 'rop-flat  /code 133  /comment 79  /file "Get.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /package 'rop-flat  /code 11  /comment 9  /file "Message.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /package 'rop-flat  /code 22  /comment 39  /file "Rop.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
 
 |-- FILE  /package 'rop-flat  /code 48  /comment 29  /file "Term.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /package 'rop-flat  /code 28  /comment 6  /file "Flat.hs"  /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /package 'rop-flat  /code 30  /comment 5  /file "Bundle.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
-|-- FILE  /package 'rop-flat  /code 83  /comment 49  /file "Check.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /package 'rop-flat  /code 82  /comment 49  /file "Check.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /package 'rop-flat  /code 94  /comment 48  /file "Control.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 
 |-- FILE  /package 'rop-flat  /code 184  /comment 103  /file "Gadget.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
@@ -289,18 +289,18 @@
 
 |-- FILE  /package 'syntax  /code 10  /comment 4  /file "Syntax.hs"  /dir "syntax/Koshucode/Baala"
 |-- FILE  /package 'syntax  /code 12  /comment 4  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax"
-|-- FILE  /package 'syntax  /code 53  /comment 72  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 64  /comment 46  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 93  /comment 37  /file "AttrEd.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 24  /comment 17  /file "AttrName.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 
-|-- FILE  /package 'syntax  /code 64  /comment 32  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- FILE  /package 'syntax  /code 52  /comment 58  /file "Parse.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 68  /comment 32  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 61  /comment 84  /file "Parse.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 40  /comment 17  /file "Slot.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 8  /comment 3  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /package 'syntax  /code 8  /comment 4  /file "Para.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 
 |-- FILE  /package 'syntax  /code 58  /comment 39  /file "Get.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
-|-- FILE  /package 'syntax  /code 89  /comment 68  /file "Para.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- FILE  /package 'syntax  /code 92  /comment 68  /file "Para.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /package 'syntax  /code 175  /comment 167  /file "ParaSpec.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /package 'syntax  /code 10  /comment 5  /file "Symbol.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /package 'syntax  /code 52  /comment 72  /file "AngleText.hs"  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
@@ -343,9 +343,9 @@
 |-- FILE-TOTAL  /package 'data  /code 2 953  /comment 1 800
 
 |-- FILE-TOTAL  /package 'rop-cox  /code 927  /comment 458
-|-- FILE-TOTAL  /package 'rop-flat  /code 1 693  /comment 1 103
+|-- FILE-TOTAL  /package 'rop-flat  /code 1 699  /comment 1 106
 |-- FILE-TOTAL  /package 'rop-nested  /code 267  /comment 253
-|-- FILE-TOTAL  /package 'syntax  /code 1 696  /comment 1 266
+|-- FILE-TOTAL  /package 'syntax  /code 1 723  /comment 1 266
 |-- FILE-TOTAL  /package 'toolkit  /code 483  /comment 220
 
 |-- FILE-TOTAL  /package 'writer  /code 352  /comment 108
