@@ -24,13 +24,18 @@
 --
 --   [Named]
 --
---    * __Attr ...__    — Named attributes
+--    * __Attr ...__           — Named attributes
 --
 --   [Attr]
 --
---    * __@-@Word__     — Normal attribute
---    * __@-@Word@/@__  — Relmap attribute
---    * __@-@Word@/^@__ — Local relmap attribute
+--    * __@-@Word Opt__        — Normal attribute
+--    * __@-@Word@/@ Opt__     — Relmap attribute
+--    * __@-@Word@/^@ Opt__    — Local relmap attribute
+--
+--   [Opt]
+--
+--    * __@?@__                — Optional attribute
+--    * __Empty__              — Required attribute
 
 module Koshucode.Baala.Syntax.Attr.Parse
   ( parseAttrLayout,
@@ -64,18 +69,26 @@ parseAttrLayout s = lay where
             _                 -> attrBug s
 
 attrName :: String -> S.AttrName
-attrName ('-' : n) | l == '^'    = attrLocal i
-                   | l == '/'    = S.AttrRelmapNormal i  -- "-xxx/"
-                   | otherwise   = S.AttrNormal       n  -- "-xxx"
-                   where l = last n
-                         i = init n
-attrName n = attrBug n
+attrName = hyph where
 
-attrLocal :: String -> S.AttrName
-attrLocal n | l == '/'    = S.AttrRelmapLocal i    -- "-xxx/^"
-            | otherwise   = S.AttrNormal      n    -- "-xxx^"
-            where l = last n
-                  i = init n
+    hyph ('-' : n)  = opt n
+    hyph n          = attrBug n
+
+    opt n    | l == '?'    = name True  i
+             | otherwise   = name False n
+             where l = last n
+                   i = init n
+
+    name _ n | l == '^'    = local i
+             | l == '/'    = S.AttrRelmapNormal i  -- "-xxx/"
+             | otherwise   = S.AttrNormal       n  -- "-xxx"
+             where l = last n
+                   i = init n
+
+    local n  | l == '/'    = S.AttrRelmapLocal i    -- "-xxx/^"
+             | otherwise   = S.AttrNormal      n    -- "-xxx^"
+             where l = last n
+                   i = init n
 
 attrLayout :: String -> [S.AttrName] -> [S.AttrName] -> S.AttrLayout
 attrLayout q nsP nsN = S.attrLayout $ attrSpec q nsP nsN
