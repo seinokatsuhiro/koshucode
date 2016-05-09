@@ -49,12 +49,16 @@
 
 module Koshucode.Baala.Syntax.Attr.Parse
   ( parseAttrLayout,
+    parseAttrSpec,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax.Para          as S
 import qualified Koshucode.Baala.Syntax.Attr.Attr     as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
+
+
+-- ----------------------  AttrName-based
 
 -- | Parse attribute layout.
 --
@@ -74,31 +78,41 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --               , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
 
 parseAttrLayout :: String -> S.AttrLayout
-parseAttrLayout = alt where
-    alt s     = S.AttrLayout $ map nameLay $ B.divideBy (== '|') s
+parseAttrLayout = S.AttrLayout . map (fmap branch) . parseAttrSpec
 
-    nameLay s = case B.divideBy (== ':') s of
-                  [n, s']  -> (Just $ B.trimBoth n, lay s')
-                  [s']     -> (Nothing, lay s')
-                  _        -> attrBug s
+branch :: S.ParaSpec String -> S.AttrBranch
+branch = S.attrBranch . fmap attrName
 
-    lay s     = case map words $ B.divideBy (== '.') s of
-                  [q : pos]         -> branch q (name pos) []
-                  [q : pos, named]  -> branch q (name pos) (name named)
-                  _                 -> attrBug s
-
-    name = map attrName
-
-type BoolName = (Bool, S.AttrName)
-
-attrName :: String -> BoolName
-attrName = fmap toAttrName . attrString
-
-toAttrName :: String -> S.AttrName
-toAttrName = name . reverse where
+attrName :: String -> S.AttrName
+attrName = name . reverse where
     name ('^' : '/' : n) = S.AttrRelmapLocal  $ reverse n
     name ('/' : n)       = S.AttrRelmapNormal $ reverse n
     name n               = S.AttrNormal       $ reverse n
+
+
+-- ----------------------  String-based
+
+parseAttrSpec :: String -> [(Maybe String, S.ParaSpec String)]
+parseAttrSpec = multi where
+    divide c  = B.divideBy (== c)
+    multi     = map single . divide '|'
+
+    single s  = case divide ':' s of
+                  [n, l]   -> (Just $ B.trimBoth n, layout l)
+                  [l]      -> (Nothing, layout l)
+                  _        -> attrBug s
+
+    layout l  = case map words $ divide '.' l of
+                  [q : ps]      -> attrSpec q ps []
+                  [q : ps, ns]  -> attrSpec q ps ns
+                  _             -> attrBug l
+
+attrSpec :: String -> [String] -> [String] -> S.ParaSpec String
+attrSpec q nsP nsN = S.paraSpec $ pos . req . opt where
+    pos  = attrSpecPos q $ map snd $ map attrString nsP
+    req  = S.paraReq $ ns False
+    opt  = S.paraOpt $ "@trunk" : ns True
+    ns b = map snd $ filter (\n -> fst n == b) $ fmap attrString nsN
 
 attrString :: String -> (Bool, String)
 attrString = hyph where
@@ -112,17 +126,7 @@ attrString = hyph where
 lastInit :: [a] -> (a, [a])
 lastInit n = (last n, init n)
 
-branch :: String -> [BoolName] -> [BoolName] -> S.AttrBranch
-branch q nsP nsN = S.attrBranch $ attrSpec q nsP nsN
-
-attrSpec :: String -> [BoolName] -> [BoolName] -> S.AttrParaSpec
-attrSpec q nsP nsN = S.paraSpec $ pos . req . opt where
-    pos  = attrSpecPos q $ map snd nsP
-    req  = S.paraReq $ ns False
-    opt  = S.paraOpt $ S.attrNameTrunk : ns True
-    ns b = map snd $ filter (\n -> fst n == b) nsN
-
-attrSpecPos :: String -> [S.AttrName] -> S.ParaSpecMap S.AttrName
+attrSpecPos :: String -> [String] -> S.ParaSpecMap String
 attrSpecPos "0"  ns     = attrSpecPosN 0 ns
 attrSpecPos "1"  ns     = attrSpecPosN 1 ns
 attrSpecPos "2"  ns     = attrSpecPosN 2 ns
@@ -133,12 +137,12 @@ attrSpecPos "?"  [a]    = S.paraItemOpt  [] a
 attrSpecPos "1?" [a,b]  = S.paraItemOpt  [a] b
 attrSpecPos "*"  [a]    = S.paraItemRest [] a
 attrSpecPos "1*" [a,b]  = S.paraItemRest [a] b
-attrSpecPos _ xs        = attrBug $ unwords $ map S.attrNameText xs
+attrSpecPos _ ns        = attrBug $ unwords ns
 
-attrSpecPosN :: Int -> [S.AttrName] -> S.ParaSpecMap S.AttrName
+attrSpecPosN :: Int -> [String] -> S.ParaSpecMap String
 attrSpecPosN l ns
     | length ns == l  = S.paraItem ns
-    | otherwise       = attrBug $ unwords $ map S.attrNameText ns
+    | otherwise       = attrBug $ unwords ns
 
 attrBug :: String -> a
 attrBug x = B.bug $ "malformed attribute: " ++ x
