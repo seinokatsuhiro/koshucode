@@ -68,35 +68,38 @@ parseAttrLayout s = lay where
             [q : pos, named]  -> attrLayout q (n pos) (n named)
             _                 -> attrBug s
 
-attrName :: String -> S.AttrName
+type BoolName = (Bool, S.AttrName)
+
+attrName :: String -> BoolName
 attrName = hyph where
 
     hyph ('-' : n)  = opt n
     hyph n          = attrBug n
 
-    opt n    | l == '?'    = name True  i
-             | otherwise   = name False n
-             where l = last n
-                   i = init n
+    opt n     | l == '?'    = name True  i
+              | otherwise   = name True  n
+              where (l, i)  = lastInit n
 
-    name _ n | l == '^'    = local i
-             | l == '/'    = S.AttrRelmapNormal i  -- "-xxx/"
-             | otherwise   = S.AttrNormal       n  -- "-xxx"
-             where l = last n
-                   i = init n
+    name o n  | l == '^'    = local o i
+              | l == '/'    = (o, S.AttrRelmapNormal i)  -- "-xxx/"
+              | otherwise   = (o, S.AttrNormal       n)  -- "-xxx"
+              where (l, i)  = lastInit n
 
-    local n  | l == '/'    = S.AttrRelmapLocal i    -- "-xxx/^"
-             | otherwise   = S.AttrNormal      n    -- "-xxx^"
-             where l = last n
-                   i = init n
+    local o n | l == '/'    = (o, S.AttrRelmapLocal i)    -- "-xxx/^"
+              | otherwise   = (o, S.AttrNormal      n)    -- "-xxx^"
+              where (l, i)  = lastInit n
 
-attrLayout :: String -> [S.AttrName] -> [S.AttrName] -> S.AttrLayout
+    lastInit n = (last n, init n)
+
+attrLayout :: String -> [BoolName] -> [BoolName] -> S.AttrLayout
 attrLayout q nsP nsN = S.attrLayout $ attrSpec q nsP nsN
 
-attrSpec :: String -> [S.AttrName] -> [S.AttrName] -> S.AttrParaSpec
-attrSpec q nsP nsN = S.paraSpec $ pos . opt where
-    pos = attrSpecPos q nsP
-    opt = S.paraOpt $ S.attrNameTrunk : nsN
+attrSpec :: String -> [BoolName] -> [BoolName] -> S.AttrParaSpec
+attrSpec q nsP nsN = S.paraSpec $ pos . req . opt where
+    pos  = attrSpecPos q $ map snd nsP
+    req  = S.paraReq $ ns False
+    opt  = S.paraOpt $ S.attrNameTrunk : ns True
+    ns b = map snd $ filter (\n -> fst n == b) nsN
 
 attrSpecPos :: String -> [S.AttrName] -> S.ParaSpecMap S.AttrName
 attrSpecPos "0"  ns     = attrSpecPosN 0 ns
