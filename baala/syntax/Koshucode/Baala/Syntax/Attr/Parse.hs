@@ -1,13 +1,23 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parser for attribute layout.
---   Syntax for layout is defined as the following __Layout__.
+--   Syntax for layout is defined as the following __MultiLayout__.
 --   See 'parseAttrLayout' document for some examples.
+--
+--   [MultiLayout]
+--
+--    * __NamedLayout__                      — Single layout
+--    * __NamedLayout @|@ MultiLayout__ ...  — Multiple layout
+--
+--   [NamedLayout]
+--
+--    * __Layout__                       — Layout without name
+--    * __Word @:@ Layout__              — Layout with name
 --
 --   [Layout]
 --
---    * __Positional__           — Positional attributes
---    * __Positional @.@ Named__ — Positional and named attributes
+--    * __Positional__                   — Positional attributes
+--    * __Positional @.@ Named__         — Positional and named attributes
 --
 --   [Positional]
 --
