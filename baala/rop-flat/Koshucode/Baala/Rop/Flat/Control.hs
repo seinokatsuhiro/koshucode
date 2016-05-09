@@ -29,12 +29,12 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 ropsControl :: (D.CContent c) => [C.Rop c]
 ropsControl = Op.ropList "control"
     --        CONSTRUCTOR   USAGE          ATTRIBUTE
-    [ Op.def  consEqual     "equal"        "1 -relmap/"
-    , Op.def  consFix       "fix R"        "1 -relmap/"
-    , Op.def  consFixJoin   "fix-join R"   "1 -relmap/"
-    , Op.def  consIf        "if R ..."     "* -relmap/"
-    , Op.def  consUnless    "unless R R"   "* -relmap/"
-    , Op.def  consWhen      "when R R"     "* -relmap/"
+    [ Op.def  consEqual     "equal"        "-relmap/"
+    , Op.def  consFix       "fix R"        "-relmap/"
+    , Op.def  consFixJoin   "fix-join R"   "-relmap/"
+    , Op.def  consIf        "if R ..."     "-relmap/*"
+    , Op.def  consUnless    "unless R R"   "-relmap/*"
+    , Op.def  consWhen      "when R R"     "-relmap/*"
     ]
 
 

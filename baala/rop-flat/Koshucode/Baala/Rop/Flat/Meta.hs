@@ -42,15 +42,15 @@ import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
 ropsMeta :: (D.CContent c) => [C.Rop c]
 ropsMeta = Op.ropList "meta"
     --        CONSTRUCTOR        USAGE                       ATTRIBUTE
-    [ Op.def  consKoshuAngleText "koshu-angle-text /N [/N]" "1? -name -text"
-    , Op.def  consKoshuCop       "koshu-cop /N"              "* -name"
+    [ Op.def  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text?"
+    , Op.def  consKoshuCop       "koshu-cop /N"              "-name*"
     , Op.def  consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
-                                                             "1 -name . -height? -dir?"
+                                                             "-name . -height? -dir?"
     , Op.def  consKoshuSource    "koshu-source /N [-name /N][-type /N]"
-                                                             "1 -number . -name? -type?"
-    , Op.def  consKoshuRop       "koshu-rop /N /N"           "* -name . -group? -usage?"
-    , Op.def  consKoshuProxy     "koshu-proxy /N /N"         "2 -proto -uri"
-    , Op.def  consKoshuVersion   "koshu-version /N"          "* -term . -version"
+                                                             "-number . -name? -type?"
+    , Op.def  consKoshuRop       "koshu-rop /N /N"           "-name* . -group? -usage?"
+    , Op.def  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
+    , Op.def  consKoshuVersion   "koshu-version /N"          "-term* . -version"
     ]
 
 

@@ -41,12 +41,12 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Op.ropList "term"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def   consCut            "cut /P ..."               "* -term"
-    , Op.def   consCutTerm        "cut-term /R"              "1 -relmap/"
-    , Op.def   consPick           "pick /P ..."              "* -term"
-    , Op.def   consPickTerm       "pick-term /R"             "1 -relmap/"
-    , Op.def   consRename         "rename /N /P ..."         "* -term"
-    , Op.def   consMove           "move /P ... -to /N ..."   "* -from . -to"
+    [ Op.def   consCut            "cut /P ..."               "-term*"
+    , Op.def   consCutTerm        "cut-term /R"              "-relmap/"
+    , Op.def   consPick           "pick /P ..."              "-term*"
+    , Op.def   consPickTerm       "pick-term /R"             "-relmap/"
+    , Op.def   consRename         "rename /N /P ..."         "-term*"
+    , Op.def   consMove           "move /P ... -to /N ..."   "-from* . -to"
     ]
 
 

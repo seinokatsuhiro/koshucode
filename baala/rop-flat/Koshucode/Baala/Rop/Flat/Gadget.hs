@@ -52,13 +52,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 ropsGadget :: (D.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --        CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def  consContents      "contents /N"              "* -term"
-    , Op.def  consDumpTree      "dump-tree X"              "* -tree"
-    , Op.def  consEqlize        "eqlize"                   "0"
-    , Op.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "2 -x -y . -to"
-    , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "2 -x -y . -to"
-    , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "1 -relmap/ . -step -to -distance"
-    , Op.def  consSize          "size /N"                  "1 -term"
+    [ Op.def  consContents      "contents /N"              "-term*"
+    , Op.def  consDumpTree      "dump-tree X"              "-tree*"
+    , Op.def  consEqlize        "eqlize"                   ""
+    , Op.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "-x -y . -to"
+    , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "-x -y . -to"
+    , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "-relmap/ . -step -to -distance"
+    , Op.def  consSize          "size /N"                  "-term"
     ]
 
 

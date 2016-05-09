@@ -40,11 +40,11 @@ import qualified Koshucode.Baala.Rop.Base     as Op
 ropsSource :: (D.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
     --        CONSTRUCTOR     USAGE               ATTRIBUTE
-    [ Op.def  consDee         "dee"               "0"
-    , Op.def  consDum         "dum"               "0"
-    , Op.def  consEmpty       "empty /N ..."      "* -term"
-    , Op.def  consSource      "source P /N ..."   "1* -pattern -term"
-    , Op.def  consSourceTerm  "source-term P R"   "2 -pattern -relmap/"
+    [ Op.def  consDee         "dee"               ""
+    , Op.def  consDum         "dum"               ""
+    , Op.def  consEmpty       "empty /N ..."      "-term*"
+    , Op.def  consSource      "source P /N ..."   "-pattern -term*"
+    , Op.def  consSourceTerm  "source-term P R"   "-pattern -relmap/"
     ]
 
 
