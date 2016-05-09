@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = Op.ropList "builtin"
     --       CONSTRUCTOR  USAGE            ATTRIBUTE
-    [ Op.def consAppend   "append R ..."   "V -relmap/"
+    [ Op.def consAppend   "append R ..."   "* -relmap/"
     , Op.def consId       "id"             "0"
     ]
 

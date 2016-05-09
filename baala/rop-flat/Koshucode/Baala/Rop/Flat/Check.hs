@@ -28,8 +28,8 @@ ropsCheck = Op.ropList "check"
     [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
                                                       "0 . -just -has -but"
     , Op.def consDump       "dump"                    "0"
-    , Op.def consDuplicate  "duplicate /N ..."        "V -term"
-    , Op.def consExclude    "exclude /N ... -from R"  "V -term . -from/"
+    , Op.def consDuplicate  "duplicate /N ..."        "* -term"
+    , Op.def consExclude    "exclude /N ... -from R"  "* -term . -from/"
     ]
 
 

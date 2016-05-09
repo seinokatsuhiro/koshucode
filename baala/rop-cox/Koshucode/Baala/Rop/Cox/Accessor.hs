@@ -27,7 +27,7 @@ ropsCoxAccessor = Op.ropList "cox-accessor"
     [ Op.def consClock       "clock /N -PROP E ..."
                              "1 -clock . -times -day -hour -min -sec"
     , Op.def consClockGet    "clock-get E -PROP /N ..."
-                             "V -clock . -sign -day -hour -min -sec"
+                             "* -clock . -sign -day -hour -min -sec"
     , Op.def consClockAlter  "clock-alter /P -PROP E ..."
                              "1 -clock . -sign -day -hour -min -sec "
     ]

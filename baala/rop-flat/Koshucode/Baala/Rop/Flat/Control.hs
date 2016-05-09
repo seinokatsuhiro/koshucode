@@ -32,9 +32,9 @@ ropsControl = Op.ropList "control"
     [ Op.def  consEqual     "equal"        "1 -relmap/"
     , Op.def  consFix       "fix R"        "1 -relmap/"
     , Op.def  consFixJoin   "fix-join R"   "1 -relmap/"
-    , Op.def  consIf        "if R ..."     "V -relmap/"
-    , Op.def  consUnless    "unless R R"   "V -relmap/"
-    , Op.def  consWhen      "when R R"     "V -relmap/"
+    , Op.def  consIf        "if R ..."     "* -relmap/"
+    , Op.def  consUnless    "unless R R"   "* -relmap/"
+    , Op.def  consWhen      "when R R"     "* -relmap/"
     ]
 
 

@@ -42,8 +42,8 @@ ropsSource = Op.ropList "source"
     --        CONSTRUCTOR     USAGE               ATTRIBUTE
     [ Op.def  consDee         "dee"               "0"
     , Op.def  consDum         "dum"               "0"
-    , Op.def  consEmpty       "empty /N ..."      "V -term"
-    , Op.def  consSource      "source P /N ..."   "1V -pattern -term"
+    , Op.def  consEmpty       "empty /N ..."      "* -term"
+    , Op.def  consSource      "source P /N ..."   "1* -pattern -term"
     , Op.def  consSourceTerm  "source-term P R"   "2 -pattern -relmap/"
     ]
 

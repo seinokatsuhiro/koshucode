@@ -95,9 +95,7 @@ attrSpecPos "5"  ns     = attrSpecPosN 5 ns
 attrSpecPos "?"  [a]    = S.paraItemOpt  [] a
 attrSpecPos "1?" [a,b]  = S.paraItemOpt  [a] b
 attrSpecPos "*"  [a]    = S.paraItemRest [] a
-attrSpecPos "V"  [a]    = S.paraItemRest [] a
 attrSpecPos "1*" [a,b]  = S.paraItemRest [a] b
-attrSpecPos "1V" [a,b]  = S.paraItemRest [a] b
 attrSpecPos _ xs        = attrBug $ unwords $ map S.attrNameText xs
 
 attrSpecPosN :: Int -> [S.AttrName] -> S.ParaSpecMap S.AttrName

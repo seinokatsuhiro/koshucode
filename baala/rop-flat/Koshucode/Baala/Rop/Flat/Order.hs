@@ -24,10 +24,10 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 ropsOrder :: (Ord c) => [C.Rop c]
 ropsOrder = Op.ropList "order"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def   consBackward       "backward /P ..."          "V -term"
-    , Op.def   consForward        "forward /P ..."           "V -term"
+    [ Op.def   consBackward       "backward /P ..."          "* -term"
+    , Op.def   consForward        "forward /P ..."           "* -term"
     , Op.def   consLexical        "lexical"                  "0"
-    , Op.def   consOrder          "order /P ..."             "V -term"
+    , Op.def   consOrder          "order /P ..."             "* -term"
     ]
 
 

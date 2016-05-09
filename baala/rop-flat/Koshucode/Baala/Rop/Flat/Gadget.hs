@@ -52,8 +52,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 ropsGadget :: (D.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --        CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def  consContents      "contents /N"              "V -term"
-    , Op.def  consDumpTree      "dump-tree X"              "V -tree"
+    [ Op.def  consContents      "contents /N"              "* -term"
+    , Op.def  consDumpTree      "dump-tree X"              "* -tree"
     , Op.def  consEqlize        "eqlize"                   "0"
     , Op.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "2 -x -y . -to"
     , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "2 -x -y . -to"

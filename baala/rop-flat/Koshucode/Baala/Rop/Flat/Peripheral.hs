@@ -49,10 +49,10 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR   USAGE                      ATTRIBUTE
-    [ Op.def consTie       "tie /P ... -to N"         "V -term . -to"
+    [ Op.def consTie       "tie /P ... -to N"         "* -term . -to"
     , Op.def consIndexElem "index-elem /N /N /P"      "3 -index -elem -list"
     , Op.def consMember    "member /N /N"             "2 -elem -set"
-    , Op.def consRdf       "rdf P /S /O"              "1V -pattern -term"
+    , Op.def consRdf       "rdf P /S /O"              "1* -pattern -term"
     , Op.def consTermName  "term-name /N"             "1 -term"
     , Op.def consToday     "today /N"                 "1 -term"
     , Op.def consUntie     "untie /P -only /P ..."    "1 -from . -only"
