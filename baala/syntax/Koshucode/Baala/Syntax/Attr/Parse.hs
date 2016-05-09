@@ -92,25 +92,25 @@ parseAttrLayout = alt where
 type BoolName = (Bool, S.AttrName)
 
 attrName :: String -> BoolName
-attrName = hyph where
+attrName = fmap toAttrName . attrString
 
+toAttrName :: String -> S.AttrName
+toAttrName = name . reverse where
+    name ('^' : '/' : n) = S.AttrRelmapLocal  $ reverse n
+    name ('/' : n)       = S.AttrRelmapNormal $ reverse n
+    name n               = S.AttrNormal       $ reverse n
+
+attrString :: String -> (Bool, String)
+attrString = hyph where
     hyph ('-' : n)  = opt n
     hyph n          = attrBug n
 
-    opt n     | l == '?'    = name True  i
-              | otherwise   = name False n
-              where (l, i)  = lastInit n
+    opt n  | l == '?'    = (True,  i)
+           | otherwise   = (False, n)
+           where (l, i)  = lastInit n
 
-    name o n  | l == '^'    = local o i
-              | l == '/'    = (o, S.AttrRelmapNormal i)  -- "-xxx/"
-              | otherwise   = (o, S.AttrNormal       n)  -- "-xxx"
-              where (l, i)  = lastInit n
-
-    local o n | l == '/'    = (o, S.AttrRelmapLocal i)    -- "-xxx/^"
-              | otherwise   = (o, S.AttrNormal      n)    -- "-xxx^"
-              where (l, i)  = lastInit n
-
-    lastInit n = (last n, init n)
+lastInit :: [a] -> (a, [a])
+lastInit n = (last n, init n)
 
 branch :: String -> [BoolName] -> [BoolName] -> S.AttrBranch
 branch q nsP nsN = S.attrBranch $ attrSpec q nsP nsN
