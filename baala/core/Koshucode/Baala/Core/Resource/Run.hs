@@ -89,7 +89,7 @@ relmapCons :: (C.GetGlobal h) => h c -> (C.ConsLexmap, C.ConsRelmap' h c)
 relmapCons hook = (consL, consR) where
     consL         = C.consLexmap findSorter
     consR         = C.consRelmap findRop hook
-    findSorter n  = C.ropSorter `fmap` findRop n
+    findSorter n  = C.ropParaze `fmap` findRop n
     findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
 
 findRelmap :: [C.LexmapClause] -> C.FindDeriv

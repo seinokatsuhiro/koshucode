@@ -9,11 +9,11 @@ module Koshucode.Baala.Syntax.Attr.Attr
     AttrParaSpec,
     AttrLayout (..),
     AttrBranch (..),
-    attrLayout, attrBranch,
+    attrBranch,
   
     -- * Attribute parameter
-    AttrPara, AttrParaSort,
-    attrParaSort, attrParaSortNamed,
+    AttrPara, AttrParaze,
+    attrPara, attrParaBy,
     maybeSingleHyphen,
     maybeDoubleHyphen,
   ) where
@@ -34,6 +34,7 @@ type AttrParaSpec = S.ParaSpec S.AttrName
 data AttrLayout = AttrLayout [(Maybe String, AttrBranch)]
                   deriving (Show)
 
+-- | Single layout.
 data AttrBranch = AttrBranch
     { attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
     , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
@@ -42,10 +43,7 @@ data AttrBranch = AttrBranch
 instance Show AttrBranch where
     show AttrBranch {..} = "AttrBranch (" ++ show attrParaSpec ++ ")"
 
-attrLayout :: AttrParaSpec -> AttrLayout
-attrLayout spec = AttrLayout [(Nothing, attrBranch spec)]
-
--- | Construct attribute layout from positional and named attributes.
+-- | Construct attribute branch.
 attrBranch :: AttrParaSpec -> AttrBranch
 attrBranch spec = AttrBranch spec $ attrClassify spec
 
@@ -66,24 +64,22 @@ attrClassify spec n = n' where
 -- | Attribute parameter.
 type AttrPara = S.Para S.AttrName S.TTree
 
--- | Sorter for attribute of relmap operator.
---   Sorters docompose attribute trees,
---   and give a name to subattribute.
-type AttrParaSort = [S.TTree] -> B.Ab AttrPara
+-- | Parameterizer for attribute of relmap operator.
+type AttrParaze = [S.TTree] -> B.Ab AttrPara
 
--- | Sort attributes.
-attrParaSort :: AttrLayout -> AttrParaSort
-attrParaSort lay = attrParaSortNamed B.>=> attrParaSortPos lay
+-- | Parameterize named attributes.
+attrPara :: AttrParaze
+attrPara trees =
+    let p = S.para byHyphen trees
+    in Right $ S.paraNameAdd S.attrNameTrunk (S.paraPos p) p
 
--- | Sort named part of attribute.
-attrParaSortNamed :: AttrParaSort
-attrParaSortNamed trees =
-    do let p = S.para byHyphen trees
-       Right $ S.paraNameAdd S.attrNameTrunk (S.paraPos p) p
+-- | Parameterize attributes by its layout.
+attrParaBy :: AttrLayout -> AttrParaze
+attrParaBy lay = attrPara B.>=> attrMatch lay
 
--- | Sort positional part of attribute.
-attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout branches) p = loop [] branches where
+-- | Match parameter with its layout.
+attrMatch :: AttrLayout -> B.AbMap AttrPara
+attrMatch (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ map (fmap S.attrNameCode) $ reverse us
     loop us ((tag, b) : bs) =
         case branch b of
@@ -94,6 +90,9 @@ attrParaSortPos (AttrLayout branches) p = loop [] branches where
 
     branch (AttrBranch spec classify) =
         S.paraMatch spec $ S.paraNameMapKeys classify p
+
+
+-- ----------------------  Name
 
 byHyphen :: S.TTreeTo (Maybe S.AttrName)
 byHyphen = fmap S.AttrNormal . maybeSingleHyphen
