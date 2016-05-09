@@ -63,6 +63,17 @@ instance B.Default (ParaSpec n) where
                    , paraSpecLast    = []
                    , paraSpecMulti   = [] }
 
+instance Functor ParaSpec where
+    fmap f spec@ParaSpec {..} =
+        spec { paraSpecPos   = fmap f paraSpecPos
+             , paraSpecReqP  = fmap f paraSpecReqP
+             , paraSpecOptP  = fmap f paraSpecOptP
+             , paraSpecReqN  = fmap f paraSpecReqN
+             , paraSpecOptN  = fmap f paraSpecOptN
+             , paraSpecFirst = fmap f paraSpecFirst
+             , paraSpecLast  = fmap f paraSpecLast
+             , paraSpecMulti = fmap f paraSpecMulti }
+
 -- | Name list of all parameters.
 paraSpecNames :: ParaSpec n -> [n]
 paraSpecNames spec = paraSpecNamesP spec ++ paraSpecNamesN spec
