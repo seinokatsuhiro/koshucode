@@ -3,7 +3,7 @@
 
 -- | Attribute name.
 
-module Koshucode.Baala.Syntax.Attr.AttrPos
+module Koshucode.Baala.Syntax.Attr.AttrName
   ( AttrName (..),
     isAttrNameRelmap,
     attrNameText, attrNameCode,

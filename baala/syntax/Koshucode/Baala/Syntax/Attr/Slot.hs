@@ -11,7 +11,7 @@ module Koshucode.Baala.Syntax.Attr.Slot
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Token           as S
-import qualified Koshucode.Baala.Syntax.Attr.AttrPos    as S
+import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
 -- | Attribute name and its contents.

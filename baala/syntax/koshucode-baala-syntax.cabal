@@ -49,7 +49,7 @@ library
         Koshucode.Baala.Syntax.Attr
         Koshucode.Baala.Syntax.Attr.Attr
         Koshucode.Baala.Syntax.Attr.AttrEd
-        Koshucode.Baala.Syntax.Attr.AttrPos
+        Koshucode.Baala.Syntax.Attr.AttrName
         Koshucode.Baala.Syntax.Attr.Message
         Koshucode.Baala.Syntax.Attr.Parse
         Koshucode.Baala.Syntax.Attr.Slot

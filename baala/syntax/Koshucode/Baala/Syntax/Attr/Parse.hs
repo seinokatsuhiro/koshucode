@@ -38,7 +38,7 @@ module Koshucode.Baala.Syntax.Attr.Parse
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax.Para          as S
 import qualified Koshucode.Baala.Syntax.Attr.Attr     as S
-import qualified Koshucode.Baala.Syntax.Attr.AttrPos  as S
+import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 
 -- | Parse attribute layout.
 --
