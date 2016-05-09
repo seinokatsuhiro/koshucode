@@ -44,12 +44,12 @@ import qualified Koshucode.Baala.Rop.Cox.Message as Msg
 ropsCoxCalc :: (D.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
-    [ Op.def  consAdd           "add /N E ..."                 "V -cox | -where"
-    , Op.def  consFill          "fill /P ... -with E"          "V -term | -with"
-    , Op.def  consReplace       "replace /P ... -by F"         "V -term | -by"
-    , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 | -from -to"
-    , Op.def  consSplit         "split /N E ..."               "V -cox | -where"
-    , Op.def  consSubst         "subst /N E ..."               "V -cox | -where"
+    [ Op.def  consAdd           "add /N E ..."                 "V -cox . -where"
+    , Op.def  consFill          "fill /P ... -with E"          "V -term . -with"
+    , Op.def  consReplace       "replace /P ... -by F"         "V -term . -by"
+    , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 . -from -to"
+    , Op.def  consSplit         "split /N E ..."               "V -cox . -where"
+    , Op.def  consSubst         "subst /N E ..."               "V -cox . -where"
     , Op.def  consUnary         "unary /N E ..."               "1V -term -expr"
     , Op.def  consDumpCox       "dump-cox E"                   "V -cox"
     ]

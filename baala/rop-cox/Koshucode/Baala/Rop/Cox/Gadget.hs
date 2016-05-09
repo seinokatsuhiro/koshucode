@@ -32,11 +32,11 @@ ropsCoxGadget :: (D.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --       CONSTRUCTOR    USAGE                            ATTRIBUTE
     [ Op.def consConst      "const R"                        "1 -lit"
-    , Op.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "3 -n -x -y | -to"
+    , Op.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "3 -n -x -y . -to"
     , Op.def consGeoDegree  "geo-degree /N /P /P /P"         "4 -real -deg -min -sec"
-    , Op.def consInterp     "interp E"                       "1 -interp | -x"
-    , Op.def consNumber     "number /N -order /N ..."        "1 -term | -order -from"
-    , Op.def consRank       "rank /N -order /N ..."          "1 -term | -order -from -dense"
+    , Op.def consInterp     "interp E"                       "1 -interp . -x"
+    , Op.def consNumber     "number /N -order /N ..."        "1 -term . -order -from"
+    , Op.def consRank       "rank /N -order /N ..."          "1 -term . -order -from -dense"
     , Op.def consRepeat     "repeat N R"                     "2 -count -relmap/"
     ]
 

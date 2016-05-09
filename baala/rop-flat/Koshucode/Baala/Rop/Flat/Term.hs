@@ -46,7 +46,7 @@ ropsTerm = Op.ropList "term"  -- GROUP
     , Op.def   consPick           "pick /P ..."              "V -term"
     , Op.def   consPickTerm       "pick-term /R"             "1 -relmap/"
     , Op.def   consRename         "rename /N /P ..."         "V -term"
-    , Op.def   consMove           "move /P ... -to /N ..."   "V -from | -to"
+    , Op.def   consMove           "move /P ... -to /N ..."   "V -from . -to"
     ]
 
 

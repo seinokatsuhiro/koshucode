@@ -7,7 +7,7 @@
 --   [Layout]
 --
 --    * __Positional__           — Positional attributes
---    * __Positional @|@ Named__ — Positional and named attributes
+--    * __Positional @.@ Named__ — Positional and named attributes
 --
 --   [Positional]
 --
@@ -45,12 +45,12 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --
 -- No positional and one named @-c@ attribute.
 --
--- >>> parseAttrLayout "0 | -c"
+-- >>> parseAttrLayout "0 . -c"
 -- AttrLayout (ParaSpec { paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })
 --
 -- Two positional @-a@ @-b@ and one named @-c@ attributes.
 --
--- >>> parseAttrLayout "2 -a -b/ | -c"
+-- >>> parseAttrLayout "2 -a -b/ . -c"
 -- AttrLayout (ParaSpec { paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
 --                      , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
 --                      , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })
@@ -58,7 +58,7 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 parseAttrLayout :: String -> S.AttrLayout
 parseAttrLayout s = lay where
     n = map attrName
-    lay = case map words $ B.divideBy (== '|') s of
+    lay = case map words $ B.divideBy (== '.') s of
             [q : pos]         -> attrLayout q (n pos) []
             [q : pos, named]  -> attrLayout q (n pos) (n named)
             _                 -> attrBug s
