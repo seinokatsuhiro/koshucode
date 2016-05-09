@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.136.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.138.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,6 +66,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
+	    > <a href="#t:AttrTree"
+	    >AttrTree</a
+	    > = (<a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >])</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
 	    > <a href="#t:GlobalSlot"
 	    >GlobalSlot</a
 	    > = <a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:NamedTrees"
@@ -76,7 +86,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >substSlot</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:GlobalSlot"
 	    >GlobalSlot</a
-	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Attr-AttrPos.html#t:AttrTree"
+	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
@@ -88,6 +98,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
       ><div id="interface"
       ><h1
 	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AttrTree" class="def"
+	    >AttrTree</a
+	    > = (<a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >]) <a href="src/Koshucode-Baala-Syntax-Attr-Slot.html#AttrTree" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Attribute name and its contents.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -106,7 +134,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >substSlot</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:GlobalSlot"
 	    >GlobalSlot</a
-	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Attr-AttrPos.html#t:AttrTree"
+	    >] -&gt; [<a href="Koshucode-Baala-Syntax-Attr-Slot.html#t:AttrTree"
 	    >AttrTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a

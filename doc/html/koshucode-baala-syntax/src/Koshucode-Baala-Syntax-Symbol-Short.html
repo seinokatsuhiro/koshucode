@@ -26,8 +26,8 @@
 <a name="line-17"></a>
 <a name="line-18"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span>                                <span class='hs-keyword'>as</span> <span class='hs-conid'>L</span>
 <a name="line-19"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                     <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-20"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>AngleText</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
-<a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Next</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
+<a name="line-20"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>AngleText</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
+<a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Next</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
 <a name="line-22"></a>
 <a name="line-23"></a>
 <a name="line-24"></a><span class='hs-comment'>-- ----------------------  Data type</span>
@@ -77,11 +77,11 @@
 <a name="line-68"></a>          <span class='hs-keyword'>_</span>                   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>sh</span> <span class='hs-varid'>s</span>
 <a name="line-69"></a>
 <a name="line-70"></a>    <span class='hs-varid'>text2</span> <span class='hs-varid'>s</span>   <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isGeneralText</span> <span class='hs-varid'>s</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
-<a name="line-71"></a>              <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>angleQuote</span> <span class='hs-varid'>s</span>
+<a name="line-71"></a>              <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>         <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>angleQuote</span> <span class='hs-varid'>s</span>
 <a name="line-72"></a>
 <a name="line-73"></a><a name="isGeneralText"></a><span class='hs-comment'>-- | Test string is general sign.</span>
 <a name="line-74"></a><span class='hs-definition'>isGeneralText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Pred</span> <span class='hs-conid'>String</span>
-<a name="line-75"></a><span class='hs-definition'>isGeneralText</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>isGeneralChar</span>
+<a name="line-75"></a><span class='hs-definition'>isGeneralText</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>isGeneralChar</span>
 <a name="line-76"></a>
 </pre></body>
 </html>

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.136.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.138.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,7 +56,197 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Description</p
 	><div class="doc"
 	><p
-	  >Parser for attribute sorter.</p
+	  >Parser for attribute layout.
+   Syntax for layout is defined as the following <strong
+	    >Multiple</strong
+	    >.
+   See <code
+	    ><a href="Koshucode-Baala-Syntax-Attr-Parse.html#v:parseAttrLayout"
+	      >parseAttrLayout</a
+	      ></code
+	    > document for some examples.</p
+	  ><dl
+	  ><dt
+	    >Multiple</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      >Single</strong
+	      >                       &#8212; Single layout</li
+	    ><li
+	    ><strong
+	      >Single <code
+		>|</code
+		> Multiple</strong
+	      > ...      &#8212; Multiple layout</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Single</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      >Layout</strong
+	      >                       &#8212; Layout without tag</li
+	    ><li
+	    ><strong
+	      >Word <code
+		>:</code
+		> Layout</strong
+	      >              &#8212; Layout with tag</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Layout</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      >Positional</strong
+	      >                   &#8212; Positional attributes</li
+	    ><li
+	    ><strong
+	      >Positional <code
+		>.</code
+		> Named</strong
+	      >         &#8212; Positional and named attributes</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Positional</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      ><code
+		>0</code
+		></strong
+	      >                          &#8212; No positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>1</code
+		> Attr</strong
+	      >                     &#8212; One positional attribute</li
+	    ><li
+	    ><strong
+	      ><code
+		>2</code
+		> Attr Attr</strong
+	      >                &#8212; Two positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>3</code
+		> Attr Attr Attr</strong
+	      >           &#8212; Three positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>4</code
+		> Attr Attr Attr Attr</strong
+	      >      &#8212; Four positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>5</code
+		> Attr Attr Attr Attr Attr</strong
+	      > &#8212; Five positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>?</code
+		> Attr</strong
+	      >                     &#8212; Optional positional attribute</li
+	    ><li
+	    ><strong
+	      ><code
+		>1?</code
+		> Attr Attr</strong
+	      >               &#8212; One and optional positional attributes</li
+	    ><li
+	    ><strong
+	      ><code
+		>*</code
+		> Attr</strong
+	      >                     &#8212; Rest positional attribute</li
+	    ><li
+	    ><strong
+	      ><code
+		>1*</code
+		> Attr Attr</strong
+	      >               &#8212; One and rest positional attributes</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Named</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      >Attr ...</strong
+	      >           &#8212; Named attributes</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Attr</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      ><code
+		>-</code
+		>Word Opt</strong
+	      >        &#8212; Normal attribute</li
+	    ><li
+	    ><strong
+	      ><code
+		>-</code
+		>Word<code
+		>/</code
+		> Opt</strong
+	      >     &#8212; Relmap attribute</li
+	    ><li
+	    ><strong
+	      ><code
+		>-</code
+		>Word<code
+		>/^</code
+		> Opt</strong
+	      >    &#8212; Local relmap attribute</li
+	    ></ul
+	  ><dl
+	  ><dt
+	    >Opt</dt
+	    ><dd
+	    ></dd
+	    ></dl
+	  ><ul
+	  ><li
+	    ><strong
+	      ><code
+		>?</code
+		></strong
+	      >                &#8212; Optional attribute</li
+	    ><li
+	    ><strong
+	      >Empty</strong
+	      >              &#8212; Required attribute</li
+	    ></ul
 	  ></div
 	></div
       ><div id="synopsis"
@@ -89,28 +279,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Parse attribute sorter string.</p
+	    >Parse attribute layout.</p
+	    ><p
+	    >No positional and one named <code
+	      >-c</code
+	      > attribute.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>parseAttrLayout &quot;0 | -c&quot;
+		>parseAttrLayout &quot;0 . -c&quot;
 </code
 		></strong
-	      >AttrLayout { positional = AttrPos0,
-                  named = [AttrNormal &quot;c&quot;] }
+	      >[ (Nothing, AttrLayout (ParaSpec {
+               paraSpecReqN = [AttrNormal &quot;c&quot;]
+             , paraSpecOptN = [AttrNormal &quot;@trunk&quot;], ... })) ]
 </pre
+	    ><p
+	    >Two positional <code
+	      >-a</code
+	      > <code
+	      >-b</code
+	      > and one named <code
+	      >-c</code
+	      > attributes.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>parseAttrLayout &quot;2 -a -b | -c&quot;
+		>parseAttrLayout &quot;2 -a -b/ . -c&quot;
 </code
 		></strong
-	      >AttrLayout { positional = AttrPos2 (AttrNormal &quot;a&quot;) (AttrNormal &quot;b&quot;),
-                  named = [AttrNormal &quot;c&quot;] }
+	      >[ (Nothing, AttrLayout (ParaSpec {
+               paraSpecPos  = ParaItem 2 [AttrNormal &quot;a&quot;, AttrRelmapNormal &quot;b&quot;]
+              , paraSpecReqP = [AttrNormal &quot;a&quot;, AttrRelmapNormal &quot;b&quot;]
+              , paraSpecOptN = [AttrNormal &quot;@trunk&quot;, AttrNormal &quot;c&quot;], ... })) ]
 </pre
 	    ></div
 	  ></div

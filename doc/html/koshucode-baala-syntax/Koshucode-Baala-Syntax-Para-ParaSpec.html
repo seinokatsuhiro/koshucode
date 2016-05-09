@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.136.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.138.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,29 +58,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><li
 	  ><a href="#g:1"
 	    >Specification</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>ParaSpec</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>ParaSpecPos</a
+		></li
+	      ></ul
 	    ></li
 	  ><li
-	  ><a href="#g:2"
+	  ><a href="#g:4"
 	    >Unmatch reason</a
 	    ></li
 	  ><li
-	  ><a href="#g:3"
+	  ><a href="#g:5"
 	    >Construction</a
 	    ><ul
 	    ><li
-	      ><a href="#g:4"
+	      ><a href="#g:6"
 		>Positional</a
 		></li
 	      ><li
-	      ><a href="#g:5"
+	      ><a href="#g:7"
 		>Named positional</a
 		></li
 	      ><li
-	      ><a href="#g:6"
+	      ><a href="#g:8"
 		>Required / Optional</a
 		></li
 	      ><li
-	      ><a href="#g:7"
+	      ><a href="#g:9"
 		>Multiple-occurence</a
 		></li
 	      ></ul
@@ -114,12 +124,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>ParaSpecPos</a
 		> n</li
 	      ><li
-	      ><a href="#v:paraSpecReq"
-		>paraSpecReq</a
+	      ><a href="#v:paraSpecReqP"
+		>paraSpecReqP</a
 		> :: [n]</li
 	      ><li
-	      ><a href="#v:paraSpecOpt"
-		>paraSpecOpt</a
+	      ><a href="#v:paraSpecOptP"
+		>paraSpecOptP</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecReqN"
+		>paraSpecReqN</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecOptN"
+		>paraSpecOptN</a
 		> :: [n]</li
 	      ><li
 	      ><a href="#v:paraSpecFirst"
@@ -135,6 +153,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		> :: [n]</li
 	      ></ul
 	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNames"
+	    >paraSpecNames</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNamesP"
+	    >paraSpecNamesP</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNamesN"
+	    >paraSpecNamesN</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -176,11 +212,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:paraSpecNames"
-	    >paraSpecNames</a
-	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
-	    >ParaSpec</a
-	    > n -&gt; [n]</li
+	  ><a href="#v:paraMinLength"
+	    >paraMinLength</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+	    >ParaSpecPos</a
+	    > n -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -382,6 +420,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
       ><div id="interface"
       ><h1 id="g:1"
 	>Specification</h1
+	><h2 id="g:2"
+	>ParaSpec</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -424,20 +464,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 			>Positional parameter</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:paraSpecReq" class="def"
-			>paraSpecReq</a
+		      ><a name="v:paraSpecReqP" class="def"
+			>paraSpecReqP</a
 			> :: [n]</dt
 		      ><dd class="doc"
 		      ><p
-			>Required parameter</p
+			>Positional required parameters</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:paraSpecOpt" class="def"
-			>paraSpecOpt</a
+		      ><a name="v:paraSpecOptP" class="def"
+			>paraSpecOptP</a
 			> :: [n]</dt
 		      ><dd class="doc"
 		      ><p
-			>Optional parameter</p
+			>Positional optional parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecReqN" class="def"
+			>paraSpecReqN</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Explicitly-named required parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecOptN" class="def"
+			>paraSpecOptN</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Explicitly-named optional parameters</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:paraSpecFirst" class="def"
@@ -445,7 +501,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 			> :: [n]</dt
 		      ><dd class="doc"
 		      ><p
-			>Allow multiple-occurence, use first parameter</p
+			>Allow multiple-occurence, use first parameters</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:paraSpecLast" class="def"
@@ -453,7 +509,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 			> :: [n]</dt
 		      ><dd class="doc"
 		      ><p
-			>Allow multiple-occurence, use last parameter</p
+			>Allow multiple-occurence, use last parameters</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:paraSpecMulti" class="def"
@@ -486,7 +542,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
 		      >ParaSpec</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-44" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -502,7 +558,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
 		      >ParaSpec</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-44" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -518,7 +574,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
 		      >ParaSpec</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-44" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -544,6 +600,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ></div
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNames" class="def"
+	    >paraSpecNames</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNames" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of all parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNamesP" class="def"
+	    >paraSpecNamesP</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNamesP" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of positional parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNamesN" class="def"
+	    >paraSpecNamesN</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNamesN" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of explicitly-named parameters.</p
+	    ></div
+	  ></div
+	><h2 id="g:3"
+	>ParaSpecPos</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -633,6 +733,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		      >ParaSpecPos</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-89" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		      >Eq</a
 		      > n =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
@@ -640,7 +754,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
 		      >ParaSpecPos</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-87" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -656,7 +770,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
 		      >ParaSpecPos</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-87" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -672,7 +786,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
 		      >ParaSpecPos</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-87" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -684,19 +798,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:paraSpecNames" class="def"
-	    >paraSpecNames</a
-	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
-	    >ParaSpec</a
-	    > n -&gt; [n] <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNames" class="link"
+	  ><a name="v:paraMinLength" class="def"
+	    >paraMinLength</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+	    >ParaSpecPos</a
+	    > n -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMinLength" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >List of named parameters.</p
+	    >Minimal length of positional parameters.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
+	><h1 id="g:4"
 	>Unmatch reason</h1
 	><div class="top"
 	><p class="src"
@@ -769,6 +885,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+		      >ParaUnmatch</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-115" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		      >Eq</a
 		      > n =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
@@ -776,7 +906,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
 		      >ParaUnmatch</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-77" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-113" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -792,7 +922,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
 		      >ParaUnmatch</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-77" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-113" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -808,7 +938,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
 		      >ParaUnmatch</a
 		      > n)</span
-		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-77" class="link"
+		    > <a href="src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-113" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -886,7 +1016,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      > function.</p
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:5"
 	>Construction</h1
 	><div class="top"
 	><p class="src"
@@ -918,7 +1048,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ></div
-	><h2 id="g:4"
+	><h2 id="g:6"
 	>Positional</h2
 	><div class="top"
 	><p class="src"
@@ -1086,7 +1216,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 </pre
 	    ></div
 	  ></div
-	><h2 id="g:5"
+	><h2 id="g:7"
 	>Named positional</h2
 	><div class="top"
 	><p class="src"
@@ -1245,7 +1375,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 </pre
 	    ></div
 	  ></div
-	><h2 id="g:6"
+	><h2 id="g:8"
 	>Required / Optional</h2
 	><div class="top"
 	><p class="src"
@@ -1323,7 +1453,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 </pre
 	    ></div
 	  ></div
-	><h2 id="g:7"
+	><h2 id="g:9"
 	>Multiple-occurence</h2
 	><div class="top"
 	><p class="src"

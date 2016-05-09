@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.133.0.0
+@version 0.138.0.0
 
 module Koshucode.Baala.Syntax.Symbol.Term
 
@@ -47,85 +47,412 @@ angleQuote :: Map String
 -- | Table of coresspondences of angle text and its replacement.
 angleTexts :: [(String, String)]
 
-module Koshucode.Baala.Syntax.Attr.Para
-type Para a = ParaBody String a
-data ParaBody n a
-ParaBody :: [a] -> [a] -> ParaMap n a -> ParaBody n a
-[paraAll] :: ParaBody n a -> [a]
-[paraPos] :: ParaBody n a -> [a]
-[paraName] :: ParaBody n a -> ParaMap n a
+
+-- | Parameter type.
+module Koshucode.Baala.Syntax.Para.Para
+data Para n a
+Para :: [String] -> [a] -> [a] -> ParaMap n a -> Para n a
+
+-- | Parameter tags.
+[paraTags] :: Para n a -> [String]
+
+-- | All parameter elements.
+[paraAll] :: Para n a -> [a]
+
+-- | Positional parameters.
+[paraPos] :: Para n a -> [a]
+
+-- | Named parameters.
+[paraName] :: Para n a -> ParaMap n a
+
+-- | Mapping parameter name to its contents.
 type ParaMap n a = Map n [[a]]
 
+-- | Test and take parameter name.
+type ParaName n a = a -> Maybe n
+
 -- | Parse list into parameter.
-para :: (Ord n) => (a -> Maybe n) -> [a] -> ParaBody n a
-paraEmpty :: ParaBody n a
+--   
+--   <pre>
+--   &gt;&gt;&gt; para paraHyphen $ words "a b"
+--   Para { paraAll = ["a","b"], paraPos = ["a","b"], paraName = fromList [] }
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; para paraHyphen $ words "a b -x c d"
+--   Para { paraAll = ["a","b","-x","c"]
+--        , paraPos = ["a","b"]
+--        , paraName = fromList [("x",[["c","d"]])] }
+--   </pre>
+para :: (Ord n) => ParaName n a -> [a] -> Para n a
 
 -- | Association list of named parameters.
-paraNameList :: ParaBody n a -> [(n, [[a]])]
+paraNameList :: Para n a -> [(n, [[a]])]
 
--- | Add named parameter.
-paraNameAdd :: (Ord n) => n -> [a] -> Map (ParaBody n a)
-
--- | Give names to positional parameters.
-paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (ParaBody n a)
+-- | List of parameter names.
+paraNames :: Para n a -> [n]
 
 -- | List of names which appear more than once.
-paraMultipleNames :: ParaBody n a -> [n]
+paraMultipleNames :: Para n a -> [n]
+
+-- | Lookup named parameter.
+paraLookup :: (Ord n) => n -> Para n a -> Maybe [[a]]
+
+-- | Lookup single-occurence parameter.
+paraLookupSingle :: (Ord n) => n -> Para n a -> Maybe [a]
+
+-- | Give names to positional parameters.
+paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
+
+-- | Add named parameter.
+paraNameAdd :: (Ord n) => n -> [a] -> Map (Para n a)
 
 -- | Map names of named parameters.
-paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
-paraLookupSingle :: (Ord n) => n -> ParaBody n a -> Maybe [a]
-data ParaType n
-ParaType :: ParaPosType -> [n] -> [n] -> [n] -> ParaType n
-[paraTypePos] :: ParaType n -> ParaPosType
-[paraTypeReq] :: ParaType n -> [n]
-[paraTypeOpt] :: ParaType n -> [n]
-[paraTypeMult] :: ParaType n -> [n]
-data ParaPosType
-ParaPosJust :: Int -> ParaPosType
-ParaPosMin :: Int -> ParaPosType
-ParaPosMax :: Int -> ParaPosType
-ParaPosRange :: Int -> Int -> ParaPosType
-paraType :: ParaType n
-paraJust :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
-paraMin :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
-paraMax :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
-paraRange :: (Show n, Ord n) => ParaType n -> (Int, Int) -> ParaType n
-paraReq :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
-paraOpt :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
-paraMult :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
+paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
+paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
+paraTakeLast :: (Ord n) => n -> Para n a -> Para n a
+
+-- | String-named parameter.
+type SimplePara a = Para String a
+
+-- | Composition of word separation and parameter parsing.
+paraWords :: (Ord n) => ParaName n String -> String -> Para n String
+
+-- | Parameter name is beginning with hyphen.
+--   
+--   <pre>
+--   &gt;&gt;&gt; paraHyphen "-foo"
+--   Just "foo"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; paraHyphen "bar"
+--   Nothing
+--   </pre>
+paraHyphen :: ParaName String String
+instance (Data.Data.Data n, Data.Data.Data a, GHC.Classes.Ord n) => Data.Data.Data (Koshucode.Baala.Syntax.Para.Para.Para n a)
+instance (GHC.Classes.Ord n, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Syntax.Para.Para.Para n a)
+instance (GHC.Classes.Eq n, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Syntax.Para.Para.Para n a)
+instance (GHC.Show.Show n, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Syntax.Para.Para.Para n a)
+instance Data.Default.Class.Default (Koshucode.Baala.Syntax.Para.Para.Para n a)
+instance GHC.Classes.Ord n => GHC.Base.Monoid (Koshucode.Baala.Syntax.Para.Para.Para n a)
+
+
+-- | Parameter specification.
+module Koshucode.Baala.Syntax.Para.ParaSpec
+
+-- | Parameter specification.
+data ParaSpec n
+ParaSpec :: ParaSpecPos n -> [n] -> [n] -> [n] -> [n] -> [n] -> [n] -> [n] -> ParaSpec n
+
+-- | Positional parameter
+[paraSpecPos] :: ParaSpec n -> ParaSpecPos n
+
+-- | Positional required parameters
+[paraSpecReqP] :: ParaSpec n -> [n]
+
+-- | Positional optional parameters
+[paraSpecOptP] :: ParaSpec n -> [n]
+
+-- | Explicitly-named required parameters
+[paraSpecReqN] :: ParaSpec n -> [n]
+
+-- | Explicitly-named optional parameters
+[paraSpecOptN] :: ParaSpec n -> [n]
+
+-- | Allow multiple-occurence, use first parameters
+[paraSpecFirst] :: ParaSpec n -> [n]
+
+-- | Allow multiple-occurence, use last parameters
+[paraSpecLast] :: ParaSpec n -> [n]
+
+-- | Allow multiple-occurence, use all parameters
+[paraSpecMulti] :: ParaSpec n -> [n]
+
+-- | Name list of all parameters.
+paraSpecNames :: ParaSpec n -> [n]
+
+-- | Name list of positional parameters.
+paraSpecNamesP :: ParaSpec n -> [n]
+
+-- | Name list of explicitly-named parameters.
+paraSpecNamesN :: ParaSpec n -> [n]
+
+-- | Positional parameter specification.
+data ParaSpecPos n
+
+-- | Named positional parameters
+ParaItem :: Int -> [n] -> ParaSpecPos n
+
+-- | Named positional and optional parameters
+ParaItemOpt :: Int -> [n] -> n -> ParaSpecPos n
+
+-- | Named positional and rest parameters
+ParaItemRest :: Int -> [n] -> n -> ParaSpecPos n
+
+-- | Lower bound of parameter length
+ParaMin :: Int -> ParaSpecPos n
+
+-- | Lower and upper bound of parameter length
+ParaRange :: Int -> Int -> ParaSpecPos n
+
+-- | Minimal length of positional parameters.
+paraMinLength :: ParaSpecPos n -> Int
+
+-- | Unmatch reason of real parameter and its specifition.
 data ParaUnmatch n
-ParaOutOfRange :: Int -> ParaPosType -> ParaUnmatch n
+
+-- | Positional parameter is unmatched.
+ParaOutOfRange :: Int -> (ParaSpecPos n) -> ParaUnmatch n
+
+-- | Unknown parameter is specified.
 ParaUnknown :: [n] -> ParaUnmatch n
+
+-- | Required parameter is missing.
 ParaMissing :: [n] -> ParaUnmatch n
+
+-- | Parameter occurs more than once.
 ParaMultiple :: [n] -> ParaUnmatch n
-paraSelect :: (Eq n) => b -> [(ParaBody n a -> b, ParaType n)] -> ParaBody n a -> b
-paraMatch :: (Eq n) => ParaBody n a -> ParaType n -> Bool
-paraUnmatch :: (Eq n) => ParaBody n a -> ParaType n -> Maybe (ParaUnmatch n)
-paraGet :: (Ord n) => ParaBody n a -> n -> Ab [a]
-paraGetOpt :: (Ord n) => [a] -> ParaBody n a -> n -> Ab [a]
-paraGetList :: (Ord n) => ParaBody n a -> n -> Ab [[a]]
-paraGetSwitch :: (Ord n) => ParaBody n a -> n -> Ab Bool
-paraGetPos :: ParaBody n a -> Ab [a]
-paraGetFst :: ParaBody n a -> Ab a
-paraGetSnd :: ParaBody n a -> Ab a
-paraGetTrd :: ParaBody n a -> Ab a
-paraGetRest :: ParaBody n a -> Ab [a]
-paraGetRRest :: ParaBody n a -> Ab [a]
-instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Attr.Para.ParaUnmatch n)
-instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Attr.Para.ParaUnmatch n)
-instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Attr.Para.ParaUnmatch n)
-instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Attr.Para.ParaType n)
-instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Attr.Para.ParaType n)
-instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Attr.Para.ParaType n)
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.Para.ParaPosType
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.Para.ParaPosType
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Para.ParaPosType
-instance (Data.Data.Data n, Data.Data.Data a, GHC.Classes.Ord n) => Data.Data.Data (Koshucode.Baala.Syntax.Attr.Para.ParaBody n a)
-instance (GHC.Classes.Ord n, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Syntax.Attr.Para.ParaBody n a)
-instance (GHC.Classes.Eq n, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Syntax.Attr.Para.ParaBody n a)
-instance (GHC.Show.Show n, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Syntax.Attr.Para.ParaBody n a)
-instance GHC.Classes.Ord n => GHC.Base.Monoid (Koshucode.Baala.Syntax.Attr.Para.ParaBody n a)
+
+-- | Test and revise parameter to satisfy specification.
+paraMatch :: (Eq n, Ord n) => ParaSpec n -> Para n a -> Either (ParaUnmatch n) (Para n a)
+
+-- | Map parameter to some value.
+type ParaTo n a b = Para n a -> b
+
+-- | Select matched specification and apply <a>ParaTo</a> function.
+paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
+type ParaSpecMap n = Map (ParaSpec n)
+paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
+
+-- | Lower bound of length of positional parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraMin 1
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b"
+--   Right Para ...
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen ""
+--   Left ParaOutOfRange ...
+--   </pre>
+paraMin :: Int -> ParaSpecMap n
+
+-- | Upper bound of length of positional parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraMax 1
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a"
+--   Right Para ...
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b"
+--   Left ParaOutOfRange ...
+--   </pre>
+paraMax :: Int -> ParaSpecMap n
+
+-- | Fixed-length positional parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraJust 1
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a"
+--   Right Para ...
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen ""
+--   Left ParaOutOfRange ...
+--   </pre>
+paraJust :: Int -> ParaSpecMap n
+
+-- | Lower and upper bound of length of positional parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraRange 1 2
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a"
+--   Right Para ...
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c"
+--   Left ParaOutOfRange ...
+--   </pre>
+paraRange :: Int -> Int -> ParaSpecMap n
+
+-- | No positional parameter.
+para0 :: ParaSpecMap n
+
+-- | Named one positional parameter.
+para1 :: n -> ParaSpecMap n
+
+-- | Named two positional parameters.
+para2 :: n -> n -> ParaSpecMap n
+
+-- | Named three positional parameters.
+para3 :: n -> n -> n -> ParaSpecMap n
+
+-- | Named arbitrary positional parameters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraItem ["x", "y", "z", "w"]
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c d"
+--   Right (Para { ..., paraName = fromList [("x",[["a"]]), ..., ("w",[["d"]])] })
+--   </pre>
+paraItem :: [n] -> ParaSpecMap n
+
+-- | Named arbitrary and one optional parameters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraItemOpt ["x", "y"] "z"
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b"
+--   Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]])] })
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c"
+--   Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c"]])] })
+--   </pre>
+paraItemOpt :: [n] -> n -> ParaSpecMap n
+
+-- | Named arbitrary and one optional parameters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraItemRest ["x", "y"] "z"
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c d"
+--   Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c","d"]])] })
+--   </pre>
+paraItemRest :: [n] -> n -> ParaSpecMap n
+
+-- | Required named parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let p = S.paraWords S.paraHyphen "-x a -y b"
+--   
+--   &gt;&gt;&gt; let s = paraSpec $ paraReq ["x"]
+--   
+--   &gt;&gt;&gt; paraMatch s p
+--   Left (ParaUnknown ["y"])
+--   </pre>
+paraReq :: [n] -> ParaSpecMap n
+
+-- | Optional named parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let p = S.paraWords S.paraHyphen "-x a -y b"
+--   
+--   &gt;&gt;&gt; let s = paraSpec $ paraReq ["x"] . paraOpt ["y"]
+--   
+--   &gt;&gt;&gt; paraMatch s p
+--   Right (Para { ..., paraName = fromList [("x", [["a"]]), ("y", [["b"]])] })
+--   </pre>
+paraOpt :: [n] -> ParaSpecMap n
+
+-- | Allow multiple-occurence and use first parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraReq ["x"] . paraFirst ["x"]
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+--   Right (Para { ..., paraName = fromList [("x", [["a"]])] })
+--   </pre>
+paraFirst :: [n] -> ParaSpecMap n
+
+-- | Allow multiple-occurence and use last parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraReq ["x"] . paraLast ["x"]
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+--   Right (Para { ..., paraName = fromList [("x", [["b","c"]])] })
+--   </pre>
+paraLast :: [n] -> ParaSpecMap n
+
+-- | Multiple-occurence parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let s = paraSpec $ paraReq ["x"] . paraMulti ["x"]
+--   
+--   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "-x a -x b c"
+--   Right (Para { ..., paraName = fromList [("x", [["a"],["b","c"]])] })
+--   </pre>
+paraMulti :: [n] -> ParaSpecMap n
+instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch n)
+instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch n)
+instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch n)
+instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec n)
+instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec n)
+instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec n)
+instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos n)
+instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos n)
+instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos n)
+instance Data.Default.Class.Default (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec n)
+instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos
+instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch
+
+
+-- | Getters for parameter.
+module Koshucode.Baala.Syntax.Para.Get
+
+-- | Named parageter.
+paraGet :: (Ord n) => Para n a -> n -> Ab [a]
+
+-- | Named parameter with default content.
+paraGetOpt :: (Ord n) => [a] -> Para n a -> n -> Ab [a]
+
+-- | Multiple-occurence parameter.
+paraGetList :: (Ord n) => Para n a -> n -> Ab [[a]]
+
+-- | S.Parameter as switch, just given or not.
+paraGetSwitch :: (Ord n) => Para n a -> n -> Ab Bool
+
+-- | Whole positional parameter list.
+paraGetPos :: Para n a -> Ab [a]
+
+-- | First positional parameter.
+paraGetFst :: Para n a -> Ab a
+
+-- | Second positional parameter.
+paraGetSnd :: Para n a -> Ab a
+
+-- | Third positional parameter.
+paraGetTrd :: Para n a -> Ab a
+
+-- | Positional parameter list but first element.
+paraGetRest :: Para n a -> Ab [a]
+
+-- | Positional parameter list but first and second element.
+paraGetRRest :: Para n a -> Ab [a]
+
+
+-- | Attribute name.
+module Koshucode.Baala.Syntax.Attr.AttrName
+
+-- | Attribute name of relmap.
+data AttrName
+
+-- | Normal attribute
+AttrNormal :: String -> AttrName
+
+-- | Attribute for submap
+AttrRelmapNormal :: String -> AttrName
+
+-- | Attribute for submap with local relation references
+AttrRelmapLocal :: String -> AttrName
+
+-- | Test attribute name is for subrelmap.
+isAttrNameRelmap :: AttrName -> Bool
+
+-- | String part of attribute names.
+attrNameText :: AttrName -> String
+
+-- | Attribute string with hyphen.
+attrNameCode :: AttrName -> String
+
+-- | Constant for attribute name <tt>@trunk</tt>.
+attrNameTrunk :: AttrName
+instance Data.Data.Data Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 
 module Koshucode.Baala.Syntax.Token.Message
 abToken :: (CodePtr cp) => [cp] -> Map (Ab b)
@@ -621,6 +948,8 @@ ttDoc :: TTreesTo Doc
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Syntax.Token
 
+module Koshucode.Baala.Syntax.Para
+
 module Koshucode.Baala.Syntax.Attr.Message
 abAttr :: (CodePtr cp) => [cp] -> Map (Ab b)
 abAttrTrees :: TTreesTo (Map (Ab b))
@@ -655,162 +984,18 @@ reqAttrName :: String -> Ab a
 
 -- | Unexpected attribute
 unexpAttr :: String -> Ab a
-unexpAttr0 :: Ab a
-unexpAttr1 :: Ab a
-unexpAttr2 :: Ab a
-unexpAttr3 :: Ab a
-unexpAttr4 :: Ab a
-unexpAttr1V :: Ab a
-unexpAttr1Q :: Ab a
+
+-- | Unmatch any patterns
+unexpAttrMulti :: [ParaUnmatch String] -> Ab a
 
 module Koshucode.Baala.Syntax.Message
 
 
--- | Positional attributes.
-module Koshucode.Baala.Syntax.Attr.AttrPos
-
--- | Positional attribute.
-data AttrPos a
-
--- | No attributes
-AttrPos0 :: AttrPos a
-
--- | Single attribute
-AttrPos1 :: a -> AttrPos a
-
--- | Two attributes
-AttrPos2 :: a -> a -> AttrPos a
-
--- | Three attributes
-AttrPos3 :: a -> a -> a -> AttrPos a
-
--- | Four attributes
-AttrPos4 :: a -> a -> a -> a -> AttrPos a
-
--- | Enumerated attributes
-AttrPosE :: [a] -> AttrPos a
-
--- | Variable-length attributes
-AttrPosV :: a -> AttrPos a
-
--- | Single-and-variable-length attributes
-AttrPos1V :: a -> a -> AttrPos a
-
--- | Single-and-optional attributes
-AttrPos1Q :: a -> a -> AttrPos a
-
--- | Name list of positional attributes.
-attrPosNameList :: AttrPos a -> [a]
-
--- | Attribute name of relmap.
-data AttrName
-
--- | Normal attribute
-AttrNormal :: String -> AttrName
-
--- | Attribute for submap
-AttrRelmapNormal :: String -> AttrName
-
--- | Attribute for submap with local relation references
-AttrRelmapLocal :: String -> AttrName
-
--- | Test attribute name is for subrelmap.
-isAttrNameRelmap :: AttrName -> Bool
-
--- | String part of attribute names.
-attrNameText :: AttrName -> String
-
--- | Constant for attribute name <tt>@trunk</tt>.
-attrNameTrunk :: AttrName
-
--- | Positional attribute
-type AttrNamePos = AttrPos AttrName
+-- | Slot substitution.
+module Koshucode.Baala.Syntax.Attr.Slot
 
 -- | Attribute name and its contents.
 type AttrTree = (AttrName, [TTree])
-
--- | Positional attribute sorter.
-type AttrSortTree = [TTree] -> Ab [AttrTree]
-
--- | Sort token trees by positional attributes.
-sortAttrTree :: AttrNamePos -> AttrSortTree
-instance Data.Data.Data Koshucode.Baala.Syntax.Attr.AttrPos.AttrName
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrPos.AttrName
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrPos.AttrName
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrPos.AttrName
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Attr.AttrPos.AttrPos a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Attr.AttrPos.AttrPos a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Attr.AttrPos.AttrPos a)
-
-
--- | Attributes of relmap operator.
-module Koshucode.Baala.Syntax.Attr.Attr
-
--- | Attribute layout.
-data AttrLayout
-AttrLayout :: AttrSortTree -> Map AttrName -> AttrNamePos -> [AttrName] -> [AttrName] -> AttrLayout
-
--- | Sorter for positional attributes (derived from <tt>attrPos</tt>)
-[attrPosSorter] :: AttrLayout -> AttrSortTree
-
--- | Attribute classifier (derived from <tt>attrNamesP</tt> and
---   <tt>attrNamesN</tt>)
-[attrClassifier] :: AttrLayout -> Map AttrName
-
--- | Positional attribute
-[attrPos] :: AttrLayout -> AttrNamePos
-
--- | Names of positional attributes (derived from <tt>attrPos</tt>)
-[attrNamesP] :: AttrLayout -> [AttrName]
-
--- | Names of named attributes
-[attrNamesN] :: AttrLayout -> [AttrName]
-
--- | Construct attribute layout from positional and named attributes.
-attrLayout :: AttrNamePos -> [AttrName] -> AttrLayout
-
--- | Attribute set.
-type AttrSet = ParaBody AttrName TTree
-
--- | Sorter for attribute of relmap operator. Sorters docompose attribute
---   trees, and give a name to subattribute.
-type AttrSetSort = [TTree] -> Ab AttrSet
-
--- | Sort attributes.
-attrSetSort :: AttrLayout -> AttrSetSort
-
--- | Sort named part of attribute.
-attrSetSortNamed :: AttrSetSort
-
--- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
-maybeSingleHyphen :: TTreeTo (Maybe String)
-
--- | Take out double-hyphened text (like <tt>"--xyz"</tt>) from token tree.
-maybeDoubleHyphen :: TTreeTo (Maybe String)
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
-
-
--- | Parser for attribute sorter.
-module Koshucode.Baala.Syntax.Attr.Parse
-
--- | Parse attribute sorter string.
---   
---   <pre>
---   &gt;&gt;&gt; parseAttrLayout "0 | -c"
---   AttrLayout { positional = AttrPos0,
---                     named = [AttrNormal "c"] }
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; parseAttrLayout "2 -a -b | -c"
---   AttrLayout { positional = AttrPos2 (AttrNormal "a") (AttrNormal "b"),
---                     named = [AttrNormal "c"] }
---   </pre>
-parseAttrLayout :: String -> AttrLayout
-
-
--- | Slot substitution.
-module Koshucode.Baala.Syntax.Attr.Slot
 type GlobalSlot = NamedTrees
 
 -- | Substitute slots by global and attribute slots.
@@ -856,6 +1041,156 @@ instance Data.Data.Data Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
+
+
+-- | Attributes of relmap operator.
+module Koshucode.Baala.Syntax.Attr.Attr
+
+-- | Parameter specification for attribute name.
+type AttrParaSpec = ParaSpec AttrName
+
+-- | Attribute layout.
+data AttrLayout
+AttrLayout :: [(Maybe String, AttrBranch)] -> AttrLayout
+data AttrBranch
+AttrBranch :: AttrParaSpec -> Map AttrName -> AttrBranch
+
+-- | Parameter specification
+[attrParaSpec] :: AttrBranch -> AttrParaSpec
+
+-- | Attribute classifier
+[attrClassifier] :: AttrBranch -> Map AttrName
+attrLayout :: AttrParaSpec -> AttrLayout
+
+-- | Construct attribute layout from positional and named attributes.
+attrBranch :: AttrParaSpec -> AttrBranch
+
+-- | Attribute parameter.
+type AttrPara = Para AttrName TTree
+
+-- | Sorter for attribute of relmap operator. Sorters docompose attribute
+--   trees, and give a name to subattribute.
+type AttrParaSort = [TTree] -> Ab AttrPara
+
+-- | Sort attributes.
+attrParaSort :: AttrLayout -> AttrParaSort
+
+-- | Sort named part of attribute.
+attrParaSortNamed :: AttrParaSort
+
+-- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
+maybeSingleHyphen :: TTreeTo (Maybe String)
+
+-- | Take out double-hyphened text (like <tt>"--xyz"</tt>) from token tree.
+maybeDoubleHyphen :: TTreeTo (Maybe String)
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
+
+
+-- | Parser for attribute layout. Syntax for layout is defined as the
+--   following <b>Multiple</b>. See <a>parseAttrLayout</a> document for
+--   some examples.
+--   
+--   <ul>
+--   <li><i>Multiple</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b>Single</b> — Single layout</li>
+--   <li><b>Single <tt>|</tt> Multiple</b> ... — Multiple layout</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Single</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b>Layout</b> — Layout without tag</li>
+--   <li><b>Word <tt>:</tt> Layout</b> — Layout with tag</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Layout</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b>Positional</b> — Positional attributes</li>
+--   <li><b>Positional <tt>.</tt> Named</b> — Positional and named
+--   attributes</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Positional</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b><tt>0</tt></b> — No positional attributes</li>
+--   <li><b><tt>1</tt> Attr</b> — One positional attribute</li>
+--   <li><b><tt>2</tt> Attr Attr</b> — Two positional attributes</li>
+--   <li><b><tt>3</tt> Attr Attr Attr</b> — Three positional
+--   attributes</li>
+--   <li><b><tt>4</tt> Attr Attr Attr Attr</b> — Four positional
+--   attributes</li>
+--   <li><b><tt>5</tt> Attr Attr Attr Attr Attr</b> — Five positional
+--   attributes</li>
+--   <li><b><tt>?</tt> Attr</b> — Optional positional attribute</li>
+--   <li><b><tt>1?</tt> Attr Attr</b> — One and optional positional
+--   attributes</li>
+--   <li><b><tt>*</tt> Attr</b> — Rest positional attribute</li>
+--   <li><b><tt>1*</tt> Attr Attr</b> — One and rest positional
+--   attributes</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Named</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b>Attr ...</b> — Named attributes</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Attr</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b><tt>-</tt>Word Opt</b> — Normal attribute</li>
+--   <li><b><tt>-</tt>Word<tt>/</tt> Opt</b> — Relmap attribute</li>
+--   <li><b><tt>-</tt>Word<tt>/^</tt> Opt</b> — Local relmap attribute</li>
+--   </ul>
+--   
+--   <ul>
+--   <li><i>Opt</i></li>
+--   </ul>
+--   
+--   <ul>
+--   <li><b><tt>?</tt></b> — Optional attribute</li>
+--   <li><b>Empty</b> — Required attribute</li>
+--   </ul>
+module Koshucode.Baala.Syntax.Attr.Parse
+
+-- | Parse attribute layout.
+--   
+--   No positional and one named <tt>-c</tt> attribute.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseAttrLayout "0 . -c"
+--   [ (Nothing, AttrLayout (ParaSpec {
+--                  paraSpecReqN = [AttrNormal "c"]
+--                , paraSpecOptN = [AttrNormal "@trunk"], ... })) ]
+--   </pre>
+--   
+--   Two positional <tt>-a</tt> <tt>-b</tt> and one named <tt>-c</tt>
+--   attributes.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseAttrLayout "2 -a -b/ . -c"
+--   [ (Nothing, AttrLayout (ParaSpec {
+--                  paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
+--                 , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
+--                 , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
+--   </pre>
+parseAttrLayout :: String -> AttrLayout
 
 module Koshucode.Baala.Syntax.Attr
 
