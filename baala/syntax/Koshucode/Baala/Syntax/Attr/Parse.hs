@@ -17,9 +17,10 @@
 --    * __@3@ Attr Attr Attr__           — Three positional attributes
 --    * __@4@ Attr Attr Attr Attr__      — Four positional attributes
 --    * __@5@ Attr Attr Attr Attr Attr__ — Five positional attributes
+--    * __@?@ Attr__                     — Optional positional attribute
 --    * __@1?@ Attr Attr__               — One and optional positional attributes
---    * __@*@ Attr__                     — Variable-length positional attributes
---    * __@1*@ Attr Attr__               — One and variable-length positional attributes
+--    * __@*@ Attr__                     — Rest positional attribute
+--    * __@1*@ Attr Attr__               — One and rest positional attributes
 --
 --   [Named]
 --
@@ -91,8 +92,11 @@ attrSpecPos "2"  ns     = attrSpecPosN 2 ns
 attrSpecPos "3"  ns     = attrSpecPosN 3 ns
 attrSpecPos "4"  ns     = attrSpecPosN 4 ns
 attrSpecPos "5"  ns     = attrSpecPosN 5 ns
+attrSpecPos "?"  [a]    = S.paraItemOpt  [] a
 attrSpecPos "1?" [a,b]  = S.paraItemOpt  [a] b
+attrSpecPos "*"  [a]    = S.paraItemRest [] a
 attrSpecPos "V"  [a]    = S.paraItemRest [] a
+attrSpecPos "1*" [a,b]  = S.paraItemRest [a] b
 attrSpecPos "1V" [a,b]  = S.paraItemRest [a] b
 attrSpecPos _ xs        = attrBug $ unwords $ map S.attrNameText xs
 
