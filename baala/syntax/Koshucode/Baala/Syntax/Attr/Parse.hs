@@ -51,27 +51,33 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 -- No positional and one named @-c@ attribute.
 --
 -- >>> parseAttrLayout "0 . -c"
--- AttrLayout (ParaSpec { paraSpecReqN = [AttrNormal "c"]
---                      , paraSpecOptN = [AttrNormal "@trunk"], ... })
+-- [ (Nothing, AttrLayout (ParaSpec {
+--                paraSpecReqN = [AttrNormal "c"]
+--              , paraSpecOptN = [AttrNormal "@trunk"], ... })) ]
 --
 -- Two positional @-a@ @-b@ and one named @-c@ attributes.
 --
 -- >>> parseAttrLayout "2 -a -b/ . -c"
--- AttrLayout (ParaSpec { paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
---                      , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
---                      , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })
+-- [ (Nothing, AttrLayout (ParaSpec {
+--                paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
+--               , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
+--               , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
 
-parseAttrLayout :: String -> (Maybe String, S.AttrLayout)
-parseAttrLayout = nameLay where
-    name = map attrName
+parseAttrLayout :: String -> [(Maybe String, S.AttrLayout)]
+parseAttrLayout = alt where
+    alt s     = map nameLay $ B.divideBy (== '|') s
+
     nameLay s = case B.divideBy (== ':') s of
-                  [n, s']  -> (Just n, lay s')
+                  [n, s']  -> (Just $ B.trimBoth n, lay s')
                   [s']     -> (Nothing, lay s')
                   _        -> attrBug s
-    lay s = case map words $ B.divideBy (== '.') s of
-            [q : pos]         -> attrLayout q (name pos) []
-            [q : pos, named]  -> attrLayout q (name pos) (name named)
-            _                 -> attrBug s
+
+    lay s     = case map words $ B.divideBy (== '.') s of
+                  [q : pos]         -> attrLayout q (name pos) []
+                  [q : pos, named]  -> attrLayout q (name pos) (name named)
+                  _                 -> attrBug s
+
+    name = map attrName
 
 type BoolName = (Bool, S.AttrName)
 
