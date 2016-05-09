@@ -6,6 +6,7 @@
 
 module Koshucode.Baala.Syntax.Attr.Attr
   ( -- * Attribute layout
+    AttrParaSpec,
     AttrLayout (..),
     attrLayout,
   
@@ -26,39 +27,32 @@ import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 
 -- ----------------------  Attribute layout
 
+-- | Parameter specification for attribute name.
+type AttrParaSpec = S.ParaSpec S.AttrName
+
 -- | Attribute layout.
 data AttrLayout = AttrLayout
-    { attrParaSpec    :: S.ParaSpec S.AttrName  -- ^ Parameter specification
+    { attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
     , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
-                                            --   (derived from @attrNamesP@ and @attrNamesN@)
-    , attrNamesP      :: [S.AttrName]       -- ^ Names of positional attributes
-                                            --   (derived from @attrParaSpec@)
-    , attrNamesN      :: [S.AttrName]       -- ^ Names of named attributes
     }
 
 instance Show AttrLayout where
-    show AttrLayout {..} =
-        "AttrLayout { positional = " ++ show attrParaSpec
-                ++ ", named = " ++ show attrNamesN ++ " }"
+    show AttrLayout {..} = "AttrLayout (" ++ show attrParaSpec ++ ")"
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: S.ParaSpec S.AttrName -> AttrLayout
-attrLayout spec = AttrLayout spec classify nsP nsN where
-    classify  = attrClassify spec
-    nsP       = S.paraSpecNamesP spec
-    nsN       = S.paraSpecNamesN spec
+attrLayout :: AttrParaSpec -> AttrLayout
+attrLayout spec = AttrLayout spec $ attrClassify spec
 
-attrClassify :: S.ParaSpec S.AttrName -> B.Map S.AttrName
+-- | Set type of attribute name.
+attrClassify :: AttrParaSpec -> B.Map S.AttrName
 attrClassify spec n = n' where
-    n' :: S.AttrName
     n' = case lookup (S.attrNameText n) pairs of
            Just k  -> k
            Nothing -> n
 
-    pairs    :: [B.Named S.AttrName]
-    pairs    = map pair alls
-    pair k   = (S.attrNameText k, k)
-    alls     = S.attrNameTrunk : S.paraSpecNames spec
+    pairs   :: [(String, S.AttrName)]
+    pairs   = map pair $ S.paraSpecNames spec
+    pair k  = (S.attrNameText k, k)
 
 
 -- ----------------------  Attribute sorter
@@ -101,43 +95,23 @@ type AttrParaSort = [S.TTree] -> B.Ab AttrPara
 
 -- | Sort attributes.
 attrParaSort :: AttrLayout -> AttrParaSort
-attrParaSort def = attrParaSortNamed B.>=> attrParaSortPos def
+attrParaSort lay = attrParaSortNamed B.>=> attrParaSortPos lay
 
 -- | Sort named part of attribute.
 attrParaSortNamed :: AttrParaSort
 attrParaSortNamed trees =
-    do let p   = S.para maybeSingleHyphen trees
-           p2  = S.paraNameAdd "@trunk" (S.paraPos p) p
-       Right $ S.paraNameMapKeys S.AttrNormal p2
+    do let p = S.para byHyphen trees
+       Right $ S.paraNameAdd S.attrNameTrunk (S.paraPos p) p
 
 -- | Sort positional part of attribute.
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout spec classify nsP nsN) p =
-    do let noPos      = null $ S.paraPos p
-           nameList   = map fst $ S.paraNameList p
-           overlapped = nsP `B.overlap` nameList
-           p2         = S.paraNameMapKeys classify p
+attrParaSortPos (AttrLayout spec classify) p =
+    case S.paraMatch spec $ S.paraNameMapKeys classify p of
+      Right p' -> Right p'
+      Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u
 
-       p3 <- case noPos && overlapped of
-               True  -> Right p
-               False -> case S.paraMatch spec p2 of
-                          Right p' -> Right p'
-                          Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u
-
-       attrCheck nsP nsN $ attrList p3
-       Right p3
-
-attrCheck :: [S.AttrName] -> [S.AttrName] -> [S.AttrTree] -> B.Ab ()
-attrCheck namesP namesN attr =
-    case t (map fst attr) B.\\ textAll of
-      []    -> Right ()
-      u : _ -> Msg.unexpAttr $ "Unknown " ++ ('-' : u)
-    where
-      textAll = "@trunk" : t namesP ++ t namesN
-      t       = map S.attrNameText
-
-attrList :: S.Para n a -> [(n, [a])]
-attrList = map (B.mapSnd concat) . S.paraNameList
+byHyphen :: S.TTreeTo (Maybe S.AttrName)
+byHyphen = fmap S.AttrNormal . maybeSingleHyphen
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
 maybeSingleHyphen :: S.TTreeTo (Maybe String)
