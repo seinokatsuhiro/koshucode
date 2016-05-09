@@ -6,37 +6,34 @@
 --
 --   [Multiple]
 --
---    * __Single__                       — Single layout
---    * __Single @|@ Multiple__ ...      — Multiple layout
+--    * __Single__                    — Single layout
+--    * __Single @|@ Multiple__ ...   — Multiple layout
 --
 --   [Single]
 --
---    * __Layout__                       — Layout without tag
---    * __Word @:@ Layout__              — Layout with tag
+--    * __Layout__                    — Layout without tag
+--    * __Word @:@ Layout__           — Layout with tag
 --
 --   [Layout]
 --
---    * __Positional__                   — Positional attributes
---    * __Positional @.@ Named__         — Positional and named attributes
+--    * __Positional__                — Positional attributes
+--    * __Positional @.@ Named__      — Positional and named attributes
 --
 --   [Positional]
 --
---    * __@0@__                          — No positional attributes
---    * __@1@ Attr__                     — One positional attribute
---    * __@2@ Attr Attr__                — Two positional attributes
---    * __@3@ Attr Attr Attr__           — Three positional attributes
---    * __@4@ Attr Attr Attr Attr__      — Four positional attributes
---    * __@5@ Attr Attr Attr Attr Attr__ — Five positional attributes
---    * __@?@ Attr__                     — Optional positional attribute
---    * __@1?@ Attr Attr__               — One and optional positional attributes
---    * __@*@ Attr__                     — Rest positional attribute
---    * __@1*@ Attr Attr__               — One and rest positional attributes
+--    * __PosAttr ...__               — Positional attributes
 --
 --   [Named]
 --
---    * __Attr ...__           — Named attributes
+--    * __NamedAttr ...__             — Named attributes
 --
---   [Attr]
+--   [PosAttr]
+--
+--    * __Word__               — Required attribute
+--    * __Word@?@__            — Optional attribute
+--    * __Word@*@__            — Rest attribute
+--
+--   [NamedAttr]
 --
 --    * __@-@Word Opt__        — Normal attribute
 --    * __@-@Word@/@ Opt__     — Relmap attribute
@@ -103,13 +100,13 @@ parseAttrSpec = multi where
                   _        -> attrBug s
 
     layout l  = case map words $ divide '.' l of
-                  [q : ps]      -> attrSpec q ps []
-                  [q : ps, ns]  -> attrSpec q ps ns
-                  _             -> attrBug l
+                  [ps]      -> attrSpec ps []
+                  [ps, ns]  -> attrSpec ps ns
+                  _         -> attrBug l
 
-attrSpec :: String -> [String] -> [String] -> S.ParaSpec String
-attrSpec q nsP nsN = S.paraSpec $ pos . req . opt where
-    pos  = attrSpecPos q $ map snd $ map attrString nsP
+attrSpec :: [String] -> [String] -> S.ParaSpec String
+attrSpec nsP nsN = S.paraSpec $ pos . req . opt where
+    pos  = attrSpecPos nsP
     req  = S.paraReq $ ns False
     opt  = S.paraOpt $ "@trunk" : ns True
     ns b = map snd $ filter (\n -> fst n == b) $ fmap attrString nsN
@@ -121,23 +118,16 @@ attrString = hyph where
 
     opt n  | l == '?'    = (True,  i)
            | otherwise   = (False, n)
-           where (l, i)  = lastInit n
+           where (i, l)  = initLast n
 
-lastInit :: [a] -> (a, [a])
-lastInit n = (last n, init n)
-
-attrSpecPos :: String -> [String] -> S.ParaSpecMap String
-attrSpecPos "0"  ns     = attrSpecPosN 0 ns
-attrSpecPos "1"  ns     = attrSpecPosN 1 ns
-attrSpecPos "2"  ns     = attrSpecPosN 2 ns
-attrSpecPos "3"  ns     = attrSpecPosN 3 ns
-attrSpecPos "4"  ns     = attrSpecPosN 4 ns
-attrSpecPos "5"  ns     = attrSpecPosN 5 ns
-attrSpecPos "?"  [a]    = S.paraItemOpt  [] a
-attrSpecPos "1?" [a,b]  = S.paraItemOpt  [a] b
-attrSpecPos "*"  [a]    = S.paraItemRest [] a
-attrSpecPos "1*" [a,b]  = S.paraItemRest [a] b
-attrSpecPos _ ns        = attrBug $ unwords ns
+attrSpecPos :: [String] -> S.ParaSpecMap String
+attrSpecPos ns =
+    case ror . unhyphen <$> ns of
+      rs | all isReq rs  -> attrSpecPosN (length rs) (unror <$> rs)
+      rs -> case initLast rs of
+              (i, Opt r)  | all isReq i -> S.paraItemOpt  (unror <$> i) r
+              (i, Rest r) | all isReq i -> S.paraItemRest (unror <$> i) r
+              _                         -> attrBug $ unwords ns
 
 attrSpecPosN :: Int -> [String] -> S.ParaSpecMap String
 attrSpecPosN l ns
@@ -146,4 +136,32 @@ attrSpecPosN l ns
 
 attrBug :: String -> a
 attrBug x = B.bug $ "malformed attribute: " ++ x
+
+
+-- ----------------------  ROR
+
+data Ror = Req String | Opt String | Rest String
+           deriving (Show, Eq, Ord)
+
+isReq :: Ror -> Bool
+isReq (Req _) = True
+isReq _       = False
+
+ror :: String -> Ror
+ror n = case initLast n of
+          (n', '?') -> Opt  n'
+          (n', '*') -> Rest n'
+          _         -> Req  n
+
+unhyphen :: String -> String
+unhyphen ('-' : n) = n
+unhyphen n         = attrBug n
+
+unror :: Ror -> String
+unror (Req  n) = n
+unror (Opt  n) = n
+unror (Rest n) = n
+
+initLast :: [a] -> ([a], a)
+initLast n = (init n, last n)
 
