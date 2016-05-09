@@ -26,5 +26,5 @@ ropList group = map rop where
 
 -- | Make definition of relmap operator.
 def :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
-def cons usage attr = (cons, usage, snd $ head $ S.parseAttrLayout attr)
+def cons usage attr = (cons, usage, S.parseAttrLayout attr)
 

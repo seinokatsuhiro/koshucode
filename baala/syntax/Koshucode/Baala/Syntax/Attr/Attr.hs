@@ -8,14 +8,14 @@ module Koshucode.Baala.Syntax.Attr.Attr
   ( -- * Attribute layout
     AttrParaSpec,
     AttrLayout (..),
-    attrLayout,
+    AttrBranch (..),
+    attrLayout, attrBranch,
   
     -- * Attribute parameter
     AttrPara, AttrParaSort,
     attrParaSort, attrParaSortNamed,
     maybeSingleHyphen,
     maybeDoubleHyphen,
-    -- $AttributeSorter
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -31,17 +31,23 @@ import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 type AttrParaSpec = S.ParaSpec S.AttrName
 
 -- | Attribute layout.
-data AttrLayout = AttrLayout
+data AttrLayout = AttrLayout [(Maybe String, AttrBranch)]
+                  deriving (Show)
+
+data AttrBranch = AttrBranch
     { attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
     , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
     }
 
-instance Show AttrLayout where
-    show AttrLayout {..} = "AttrLayout (" ++ show attrParaSpec ++ ")"
+instance Show AttrBranch where
+    show AttrBranch {..} = "AttrBranch (" ++ show attrParaSpec ++ ")"
+
+attrLayout :: AttrParaSpec -> AttrLayout
+attrLayout spec = AttrLayout [(Nothing, attrBranch spec)]
 
 -- | Construct attribute layout from positional and named attributes.
-attrLayout :: AttrParaSpec -> AttrLayout
-attrLayout spec = AttrLayout spec $ attrClassify spec
+attrBranch :: AttrParaSpec -> AttrBranch
+attrBranch spec = AttrBranch spec $ attrClassify spec
 
 -- | Set type of attribute name.
 attrClassify :: AttrParaSpec -> B.Map S.AttrName
@@ -56,34 +62,6 @@ attrClassify spec n = n' where
 
 
 -- ----------------------  Attribute sorter
-
--- $AttributeSorter
---
---   Split attribute into named group.
---   Non quoted words beginning with hyphen, e.g., @-x@,
---   are name of group.
---
---   >>> let a = attrLayout (S.AttrPos2 (S.AttrNormal "a") (S.AttrNormal "b")) [S.AttrNormal "x", S.AttrNormal "y"]
---   >>> attrParaSort a =<< S.tt "a b -x /c 'd -y e"
---   Right (Para {
---     paraAll  = [ TreeL (TText CodePt {..} TextRaw "a"),
---                  TreeL (TText CodePt {..} TextRaw "b"),
---                  TreeL (TText CodePt {..} TextRaw "-x"),
---                  TreeL (TTermN CodePt {..} "c"),
---                  TreeL (TText CodePt {..} TextQ "d"),
---                  TreeL (TText CodePt {..} TextRaw "-y"),
---                  TreeL (TText CodePt {..} TextRaw "e") ],
---     paraPos  = [ TreeL (TText CodePt {..} TextRaw "a"),
---                  TreeL (TText CodePt {..} TextRaw "b") ],
---     paraName = fromList [ (AttrNormal "@trunk",
---                                            [[TreeL (TText CodePt {..} TextRaw "a"),
---                                              TreeL (TText CodePt {..} TextRaw "b")]]),
---                           (AttrNormal "a", [[TreeL (TText CodePt {..} TextRaw "a")]]),
---                           (AttrNormal "b", [[TreeL (TText CodePt {..} TextRaw "b")]]),
---                           (AttrNormal "x", [[TreeL (TTermN CodePt {..} "c"),
---                                              TreeL (TText CodePt {..} TextQ "d")]]),
---                           (AttrNormal "y", [[TreeL (TText CodePt {..} TextRaw "e")]]) ]
---     })
 
 -- | Attribute parameter.
 type AttrPara = S.Para S.AttrName S.TTree
@@ -105,7 +83,11 @@ attrParaSortNamed trees =
 
 -- | Sort positional part of attribute.
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
-attrParaSortPos (AttrLayout spec classify) p =
+attrParaSortPos (AttrLayout [(_, branch)]) p = attrParaSortBranch branch p
+attrParaSortPos (AttrLayout _) p = Right p
+
+attrParaSortBranch :: AttrBranch -> B.AbMap AttrPara
+attrParaSortBranch (AttrBranch spec classify) p =
     case S.paraMatch spec $ S.paraNameMapKeys classify p of
       Right p' -> Right p'
       Left u -> Msg.unexpAttr' $ fmap S.attrNameCode u

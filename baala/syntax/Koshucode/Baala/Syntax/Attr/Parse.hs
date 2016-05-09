@@ -63,9 +63,9 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --               , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
 --               , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
 
-parseAttrLayout :: String -> [(Maybe String, S.AttrLayout)]
+parseAttrLayout :: String -> S.AttrLayout
 parseAttrLayout = alt where
-    alt s     = map nameLay $ B.divideBy (== '|') s
+    alt s     = S.AttrLayout $ map nameLay $ B.divideBy (== '|') s
 
     nameLay s = case B.divideBy (== ':') s of
                   [n, s']  -> (Just $ B.trimBoth n, lay s')
@@ -73,8 +73,8 @@ parseAttrLayout = alt where
                   _        -> attrBug s
 
     lay s     = case map words $ B.divideBy (== '.') s of
-                  [q : pos]         -> attrLayout q (name pos) []
-                  [q : pos, named]  -> attrLayout q (name pos) (name named)
+                  [q : pos]         -> branch q (name pos) []
+                  [q : pos, named]  -> branch q (name pos) (name named)
                   _                 -> attrBug s
 
     name = map attrName
@@ -102,8 +102,8 @@ attrName = hyph where
 
     lastInit n = (last n, init n)
 
-attrLayout :: String -> [BoolName] -> [BoolName] -> S.AttrLayout
-attrLayout q nsP nsN = S.attrLayout $ attrSpec q nsP nsN
+branch :: String -> [BoolName] -> [BoolName] -> S.AttrBranch
+branch q nsP nsN = S.attrBranch $ attrSpec q nsP nsN
 
 attrSpec :: String -> [BoolName] -> [BoolName] -> S.AttrParaSpec
 attrSpec q nsP nsN = S.paraSpec $ pos . req . opt where
