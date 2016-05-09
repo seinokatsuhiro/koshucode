@@ -32,7 +32,7 @@
 
 |-- DIR  /package 'core  /code 13  /comment 72  /dir "core/Koshucode/Baala"
 |-- DIR  /package 'core  /code 73  /comment 103  /dir "core/Koshucode/Baala/Core"
-|-- DIR  /package 'core  /code 287  /comment 138  /dir "core/Koshucode/Baala/Core/Assert"
+|-- DIR  /package 'core  /code 290  /comment 138  /dir "core/Koshucode/Baala/Core/Assert"
 |-- DIR  /package 'core  /code 210  /comment 144  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /package 'core  /code 229  /comment 118  /dir "core/Koshucode/Baala/Core/Relkit"
 
@@ -61,8 +61,8 @@
 |-- DIR  /package 'syntax  /code 10  /comment 4  /dir "syntax/Koshucode/Baala"
 |-- DIR  /package 'syntax  /code 50  /comment 22  /dir "syntax/Koshucode/Baala/Syntax"
 
-|-- DIR  /package 'syntax  /code 404  /comment 234  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- DIR  /package 'syntax  /code 253  /comment 227  /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- DIR  /package 'syntax  /code 326  /comment 233  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- DIR  /package 'syntax  /code 322  /comment 274  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /package 'syntax  /code 272  /comment 258  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /package 'syntax  /code 716  /comment 475  /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- DIR  /package 'toolkit  /code 126  /comment 74  /dir "toolkit/Koshucode/Baala/Toolkit/Library"
@@ -76,13 +76,13 @@
 |-- DIR-TOTAL  /package 'base  /code 1 682  /comment 1 218
 |-- DIR-TOTAL  /package 'calculator  /code 458  /comment 307
 |-- DIR-TOTAL  /package 'cop  /code 971  /comment 582
-|-- DIR-TOTAL  /package 'core  /code 2 020  /comment 1 152
+|-- DIR-TOTAL  /package 'core  /code 2 023  /comment 1 152
 |-- DIR-TOTAL  /package 'data  /code 2 953  /comment 1 800
 
 |-- DIR-TOTAL  /package 'rop-cox  /code 927  /comment 458
 |-- DIR-TOTAL  /package 'rop-flat  /code 1 693  /comment 1 103
 |-- DIR-TOTAL  /package 'rop-nested  /code 267  /comment 253
-|-- DIR-TOTAL  /package 'syntax  /code 1 705  /comment 1 220
+|-- DIR-TOTAL  /package 'syntax  /code 1 696  /comment 1 266
 |-- DIR-TOTAL  /package 'toolkit  /code 483  /comment 220
 
 |-- DIR-TOTAL  /package 'writer  /code 352  /comment 108
@@ -157,7 +157,7 @@
 |-- FILE  /package 'core  /code 34  /comment 30  /file "Assert.hs"  /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /package 'core  /code 37  /comment 25  /file "Dataset.hs"  /dir "core/Koshucode/Baala/Core/Assert"
 
-|-- FILE  /package 'core  /code 23  /comment 9  /file "Message.hs"  /dir "core/Koshucode/Baala/Core/Assert"
+|-- FILE  /package 'core  /code 26  /comment 9  /file "Message.hs"  /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /package 'core  /code 54  /comment 29  /file "RelTable.hs"  /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /package 'core  /code 139  /comment 45  /file "Run.hs"  /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /package 'core  /code 8  /comment 4  /file "Lexmap.hs"  /dir "core/Koshucode/Baala/Core"
@@ -289,19 +289,19 @@
 
 |-- FILE  /package 'syntax  /code 10  /comment 4  /file "Syntax.hs"  /dir "syntax/Koshucode/Baala"
 |-- FILE  /package 'syntax  /code 12  /comment 4  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax"
-|-- FILE  /package 'syntax  /code 81  /comment 76  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 53  /comment 72  /file "Attr.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 93  /comment 37  /file "AttrEd.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- FILE  /package 'syntax  /code 81  /comment 48  /file "AttrPos.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 24  /comment 17  /file "AttrName.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 
-|-- FILE  /package 'syntax  /code 71  /comment 36  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- FILE  /package 'syntax  /code 40  /comment 22  /file "Parse.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- FILE  /package 'syntax  /code 38  /comment 15  /file "Slot.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 64  /comment 32  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 52  /comment 58  /file "Parse.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
+|-- FILE  /package 'syntax  /code 40  /comment 17  /file "Slot.hs"  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- FILE  /package 'syntax  /code 8  /comment 3  /file "Message.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /package 'syntax  /code 8  /comment 4  /file "Para.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 
 |-- FILE  /package 'syntax  /code 58  /comment 39  /file "Get.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /package 'syntax  /code 89  /comment 68  /file "Para.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
-|-- FILE  /package 'syntax  /code 106  /comment 120  /file "ParaSpec.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- FILE  /package 'syntax  /code 175  /comment 167  /file "ParaSpec.hs"  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /package 'syntax  /code 10  /comment 5  /file "Symbol.hs"  /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /package 'syntax  /code 52  /comment 72  /file "AngleText.hs"  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 *** 175
@@ -339,13 +339,13 @@
 |-- FILE-TOTAL  /package 'base  /code 1 682  /comment 1 218
 |-- FILE-TOTAL  /package 'calculator  /code 458  /comment 307
 |-- FILE-TOTAL  /package 'cop  /code 971  /comment 582
-|-- FILE-TOTAL  /package 'core  /code 2 020  /comment 1 152
+|-- FILE-TOTAL  /package 'core  /code 2 023  /comment 1 152
 |-- FILE-TOTAL  /package 'data  /code 2 953  /comment 1 800
 
 |-- FILE-TOTAL  /package 'rop-cox  /code 927  /comment 458
 |-- FILE-TOTAL  /package 'rop-flat  /code 1 693  /comment 1 103
 |-- FILE-TOTAL  /package 'rop-nested  /code 267  /comment 253
-|-- FILE-TOTAL  /package 'syntax  /code 1 705  /comment 1 220
+|-- FILE-TOTAL  /package 'syntax  /code 1 696  /comment 1 266
 |-- FILE-TOTAL  /package 'toolkit  /code 483  /comment 220
 
 |-- FILE-TOTAL  /package 'writer  /code 352  /comment 108
