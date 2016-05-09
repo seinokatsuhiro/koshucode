@@ -2,7 +2,7 @@
 
 -- | Parser for attribute layout.
 --   Syntax for layout is defined as the following __Multiple__.
---   See 'parseAttrLayout' document for some examples.
+--   See 'parseAttrSpec' document for some examples.
 --
 --   [Multiple]
 --
@@ -41,8 +41,8 @@
 --
 --   [Opt]
 --
---    * __@?@__                — Optional attribute
 --    * __Empty__              — Required attribute
+--    * __@?@__                — Optional attribute
 
 module Koshucode.Baala.Syntax.Attr.Parse
   ( parseAttrLayout,
@@ -58,21 +58,6 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 -- ----------------------  AttrName-based
 
 -- | Parse attribute layout.
---
--- No positional and one named @-c@ attribute.
---
--- >>> parseAttrLayout "0 . -c"
--- [ (Nothing, AttrLayout (ParaSpec {
---                paraSpecReqN = [AttrNormal "c"]
---              , paraSpecOptN = [AttrNormal "@trunk"], ... })) ]
---
--- Two positional @-a@ @-b@ and one named @-c@ attributes.
---
--- >>> parseAttrLayout "2 -a -b/ . -c"
--- [ (Nothing, AttrLayout (ParaSpec {
---                paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
---               , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
---               , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
 
 parseAttrLayout :: String -> S.AttrLayout
 parseAttrLayout = S.AttrLayout . map (fmap branch) . parseAttrSpec
@@ -88,6 +73,27 @@ attrName = name . reverse where
 
 
 -- ----------------------  String-based
+
+-- | Parse parameter layout.
+--
+-- No positional and one named required @-c@ attribute.
+--
+-- >>> parseAttrSpec ". -c"
+-- [(Nothing, ParaSpec { paraSpecReqN = ["c"], ... })]
+--
+-- Positional required @-a@, rest @-b@, and one named @-c@ attributes.
+--
+-- >>> parseAttrSpec "-a -b* . -c"
+-- [(Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 ["a"] "b"
+--                     , paraSpecReqP = ["a"]
+--                     , paraSpecOptP = ["b"]
+--                     , paraSpecReqN = ["c"], ... })]
+--
+-- Set of named layouts.
+--
+-- >>> parseAttrSpec "a : -a | ab : -a -b"
+-- [ (Just "a",  ParaSpec { paraSpecPos = ParaItem 1 ["a"], paraSpecReqP = ["a"], ... })
+-- , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["a","b"], paraSpecReqP = ["a","b"], ... })]
 
 parseAttrSpec :: String -> [(Maybe String, S.ParaSpec String)]
 parseAttrSpec = multi where
