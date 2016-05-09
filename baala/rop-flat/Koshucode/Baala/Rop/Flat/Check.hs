@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 ropsCheck :: (D.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
     [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
-                            "0 . -just | 0 . -has | 0 . -but"
+                            "just : 0 . -just | has : 0 . -has | but : 0 . -but"
     , Op.def consDump       "dump"                    "0"
     , Op.def consDuplicate  "duplicate /N ..."        "* -term"
     , Op.def consExclude    "exclude /N ... -from R"  "* -term . -from/"
@@ -37,14 +37,13 @@ ropsCheck = Op.ropList "check"
 
 consCheckTerm :: C.RopCons c
 consCheckTerm med =
-  do optJust <- Op.getMaybe Op.getTerms med "-just"
-     optHas  <- Op.getMaybe Op.getTerms med "-has"
-     optBut  <- Op.getMaybe Op.getTerms med "-but"
-     case (optJust, optHas, optBut) of
-       (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust med ns
-       (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  med ns
-       (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  med ns
-       _ -> B.bug "check-term"
+  case Op.getTag med of
+    tag | tag "just" -> call relmapCheckTermJust "-just"
+        | tag "has"  -> call relmapCheckTermHas  "-has"
+        | tag "but"  -> call relmapCheckTermBut  "-but"
+        | otherwise  -> B.bug "check-term"
+    where call f a = do ns <- Op.getTerms med a
+                        Right $ f med ns
 
 relmapCheckTermJust :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapCheckTermHas  :: C.Intmed c -> [S.TermName] -> C.Relmap c

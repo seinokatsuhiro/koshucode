@@ -85,10 +85,12 @@ attrParaSortNamed trees =
 attrParaSortPos :: AttrLayout -> B.AbMap AttrPara
 attrParaSortPos (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ map (fmap S.attrNameCode) $ reverse us
-    loop us ((_, b) : bs) =
+    loop us ((tag, b) : bs) =
         case branch b of
-          Right p' -> Right p'
           Left u   -> loop (u:us) bs
+          Right p' -> case tag of
+                        Nothing -> Right p'
+                        Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
 
     branch (AttrBranch spec classify) =
         S.paraMatch spec $ S.paraNameMapKeys classify p

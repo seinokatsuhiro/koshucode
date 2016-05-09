@@ -8,6 +8,7 @@ module Koshucode.Baala.Rop.Base.Get
     RopGet,
   
     -- * Basic
+    getTag, getTags,
     getOption, getMaybe,
     getSwitch, getWord,
   
@@ -46,7 +47,7 @@ lookupTree    = lookupAttr S.AttrNormal
 lookupRelmap  = lookupAttr S.AttrRelmapNormal `B.mappend` lookupAttr S.AttrRelmapLocal
 
 lookupAttr :: (String -> S.AttrName) -> String -> C.Intmed c -> Maybe [S.TTree]
-lookupAttr c ('-' : name) = S.paraLookupSingle (c name) . C.lexAttr . C.medLexmap
+lookupAttr c ('-' : name) = S.paraLookupSingle (c name) . getPara
 lookupAttr _ _ = B.bug "lookupAttr"
 
 getAbortable :: ([S.TTree] -> B.Ab b) -> RopGet c b
@@ -63,6 +64,15 @@ getAbortableOption y f med name =
 
 
 -- ----------------------  Basic
+
+getPara :: C.Intmed c -> S.AttrPara
+getPara = C.lexAttr . C.medLexmap
+
+getTag :: C.Intmed c -> String -> Bool
+getTag med = (`elem` getTags med)
+
+getTags :: C.Intmed c -> [String]
+getTags = S.paraTags . getPara
 
 getOption :: a -> RopGet c a -> RopGet c a
 getOption y get med name =

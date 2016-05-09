@@ -28,7 +28,8 @@ import qualified Koshucode.Baala.Base                  as B
 
 data Para n a
     = Para
-      { paraAll   :: [a]            -- ^ All parameter elements.
+      { paraTags  :: [String]       -- ^ Parameter tags.
+      , paraAll   :: [a]            -- ^ All parameter elements.
       , paraPos   :: [a]            -- ^ Positional parameters.
       , paraName  :: ParaMap n a    -- ^ Named parameters.
       } deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -38,13 +39,15 @@ type ParaMap n a = Map.Map n [[a]]
 
 -- | Empty parameter
 instance B.Default (Para n a) where
-    def = Para { paraAll = []
-               , paraPos = []
+    def = Para { paraTags = []
+               , paraAll  = []
+               , paraPos  = []
                , paraName = Map.empty }
 
 instance (Ord n) => B.Monoid (Para n a) where
     mempty        = B.def
-    mappend p1 p2 = Para { paraAll   = paraAll  p1 ++  paraAll p2
+    mappend p1 p2 = Para { paraTags  = paraTags p1 ++  paraTags p2
+                         , paraAll   = paraAll  p1 ++  paraAll p2
                          , paraPos   = paraPos  p1 ++  paraPos p2
                          , paraName  = paraName p1 `u` paraName p2 }
         where u = Map.unionWith (++)
@@ -64,7 +67,7 @@ type ParaName n a = a -> Maybe n
 
 para :: (Ord n) => ParaName n a -> [a] -> Para n a
 para name xxs = pos xxs [] where
-    make ps            = Para xxs (reverse ps) Map.empty
+    make ps            = B.def { paraAll = xxs, paraPos = reverse ps }
     pos [] ps          = make ps
     pos (x:xs) ps      = case name x of
                           Nothing  -> pos xs (x:ps)
