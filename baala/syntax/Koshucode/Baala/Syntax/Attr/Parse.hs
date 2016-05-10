@@ -128,17 +128,11 @@ paraString n
 
 paraSpecPos :: [String] -> S.ParaSpecMap String
 paraSpecPos ns =
-    case ror <$> ns of
-      rs | all isReq rs  -> paraSpecPosN (length rs) (unror <$> rs)
-      rs -> case initLast rs of
-              (i, Opt r)  | all isReq i -> S.paraItemOpt  (unror <$> i) r
-              (i, Rest r) | all isReq i -> S.paraItemRest (unror <$> i) r
-              _                         -> paraBug "neither ?/*" $ unwords ns
-
-paraSpecPosN :: Int -> [String] -> S.ParaSpecMap String
-paraSpecPosN l ns
-    | length ns == l  = S.paraItem ns
-    | otherwise       = paraBug "unmatch length" $ unwords ns
+    case span isReq $ ror <$> ns of
+      (rs, [])                -> S.paraItem (unror <$> rs)
+      (rs, [Rest x])          -> S.paraItemRest (unror <$> rs) x
+      (rs, xs) | all isOpt xs -> S.paraItemOpt  (unror <$> rs) (unror <$> xs)
+               | otherwise    -> paraBug "req/opt/rest" $ unwords ns
 
 paraBug :: String -> String -> a
 paraBug label x = B.bug $ "malformed layout (" ++ label ++ "): " ++ x
@@ -163,6 +157,10 @@ unror (Rest n) = n
 isReq :: Ror -> Bool
 isReq (Req _) = True
 isReq _       = False
+
+isOpt :: Ror -> Bool
+isOpt (Opt _) = True
+isOpt _       = False
 
 initLast :: [a] -> ([a], a)
 initLast n = (init n, last n)
