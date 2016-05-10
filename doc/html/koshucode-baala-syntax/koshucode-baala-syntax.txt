@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.138.0.0
+@version 0.139.0.0
 
 module Koshucode.Baala.Syntax.Symbol.Term
 
@@ -185,7 +185,7 @@ data ParaSpecPos n
 ParaItem :: Int -> [n] -> ParaSpecPos n
 
 -- | Named positional and optional parameters
-ParaItemOpt :: Int -> [n] -> n -> ParaSpecPos n
+ParaItemOpt :: Int -> [n] -> [n] -> ParaSpecPos n
 
 -- | Named positional and rest parameters
 ParaItemRest :: Int -> [n] -> n -> ParaSpecPos n
@@ -302,7 +302,7 @@ paraItem :: [n] -> ParaSpecMap n
 -- | Named arbitrary and one optional parameters.
 --   
 --   <pre>
---   &gt;&gt;&gt; let s = paraSpec $ paraItemOpt ["x", "y"] "z"
+--   &gt;&gt;&gt; let s = paraSpec $ paraItemOpt ["x", "y"] ["z"]
 --   
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b"
 --   Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]])] })
@@ -310,7 +310,7 @@ paraItem :: [n] -> ParaSpecMap n
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c"
 --   Right (Para { ..., paraName = fromList [("x",[["a"]]),("y",[["b"]]),("z",[["c"]])] })
 --   </pre>
-paraItemOpt :: [n] -> n -> ParaSpecMap n
+paraItemOpt :: [n] -> [n] -> ParaSpecMap n
 
 -- | Named arbitrary and one optional parameters.
 --   
@@ -385,6 +385,7 @@ instance GHC.Classes.Ord n => GHC.Classes.Ord (Koshucode.Baala.Syntax.Para.ParaS
 instance GHC.Classes.Eq n => GHC.Classes.Eq (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos n)
 instance GHC.Show.Show n => GHC.Show.Show (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos n)
 instance Data.Default.Class.Default (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec n)
+instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch
 
@@ -1052,6 +1053,8 @@ type AttrParaSpec = ParaSpec AttrName
 -- | Attribute layout.
 data AttrLayout
 AttrLayout :: [(Maybe String, AttrBranch)] -> AttrLayout
+
+-- | Single layout.
 data AttrBranch
 AttrBranch :: AttrParaSpec -> Map AttrName -> AttrBranch
 
@@ -1060,23 +1063,21 @@ AttrBranch :: AttrParaSpec -> Map AttrName -> AttrBranch
 
 -- | Attribute classifier
 [attrClassifier] :: AttrBranch -> Map AttrName
-attrLayout :: AttrParaSpec -> AttrLayout
 
--- | Construct attribute layout from positional and named attributes.
+-- | Construct attribute branch.
 attrBranch :: AttrParaSpec -> AttrBranch
 
 -- | Attribute parameter.
 type AttrPara = Para AttrName TTree
 
--- | Sorter for attribute of relmap operator. Sorters docompose attribute
---   trees, and give a name to subattribute.
-type AttrParaSort = [TTree] -> Ab AttrPara
+-- | Parameterizer for attribute of relmap operator.
+type AttrParaze = [TTree] -> Ab AttrPara
 
--- | Sort attributes.
-attrParaSort :: AttrLayout -> AttrParaSort
+-- | Parameterize named attributes.
+attrPara :: AttrParaze
 
--- | Sort named part of attribute.
-attrParaSortNamed :: AttrParaSort
+-- | Parameterize attributes by its layout.
+attrParaBy :: AttrLayout -> AttrParaze
 
 -- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
 maybeSingleHyphen :: TTreeTo (Maybe String)
@@ -1087,9 +1088,47 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 
 
--- | Parser for attribute layout. Syntax for layout is defined as the
---   following <b>Multiple</b>. See <a>parseAttrLayout</a> document for
---   some examples.
+-- | Parser for attribute layout.
+module Koshucode.Baala.Syntax.Attr.Parse
+
+-- | Parse relmap attribute layout.
+--   
+--   <ul>
+--   <li><b><tt>-</tt>Word</b> — Normal attribute</li>
+--   <li><b><tt>-</tt>Word<tt>/</tt></b> — Relmap attribute</li>
+--   <li><b><tt>-</tt>Word<tt>/^</tt></b> — Local relmap attribute</li>
+--   </ul>
+parseAttrLayout :: String -> AttrLayout
+
+-- | Parse parameter layout.
+--   
+--   No positional and one named required <tt>c</tt> attribute.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseParaSpec ". c"
+--   [(Nothing, ParaSpec { paraSpecReqN = ["c"], ... })]
+--   </pre>
+--   
+--   Positional required <tt>a</tt>, rest <tt>b</tt>, and one named
+--   <tt>c</tt> attributes.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseParaSpec "a b* . c"
+--   [(Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 ["a"] "b"
+--                       , paraSpecReqP = ["a"]
+--                       , paraSpecOptP = ["b"]
+--                       , paraSpecReqN = ["c"], ... })]
+--   </pre>
+--   
+--   Set of named layouts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseParaSpec "a : a | ab : a b"
+--   [ (Just "a",  ParaSpec { paraSpecPos = ParaItem 1 ["a"], paraSpecReqP = ["a"], ... })
+--   , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["a","b"], paraSpecReqP = ["a","b"], ... })]
+--   </pre>
+--   
+--   Syntax for parameter layout.
 --   
 --   <ul>
 --   <li><i>Multiple</i></li>
@@ -1114,9 +1153,9 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 --   </ul>
 --   
 --   <ul>
---   <li><b>Positional</b> — Positional attributes</li>
+--   <li><b>Positional</b> — Positional parameters</li>
 --   <li><b>Positional <tt>.</tt> Named</b> — Positional and named
---   attributes</li>
+--   parameters</li>
 --   </ul>
 --   
 --   <ul>
@@ -1124,21 +1163,11 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 --   </ul>
 --   
 --   <ul>
---   <li><b><tt>0</tt></b> — No positional attributes</li>
---   <li><b><tt>1</tt> Attr</b> — One positional attribute</li>
---   <li><b><tt>2</tt> Attr Attr</b> — Two positional attributes</li>
---   <li><b><tt>3</tt> Attr Attr Attr</b> — Three positional
---   attributes</li>
---   <li><b><tt>4</tt> Attr Attr Attr Attr</b> — Four positional
---   attributes</li>
---   <li><b><tt>5</tt> Attr Attr Attr Attr Attr</b> — Five positional
---   attributes</li>
---   <li><b><tt>?</tt> Attr</b> — Optional positional attribute</li>
---   <li><b><tt>1?</tt> Attr Attr</b> — One and optional positional
---   attributes</li>
---   <li><b><tt>*</tt> Attr</b> — Rest positional attribute</li>
---   <li><b><tt>1*</tt> Attr Attr</b> — One and rest positional
---   attributes</li>
+--   <li><b>Word ...</b> — Positional required parameters</li>
+--   <li><b>Word ... Word<tt>?</tt> ...</b> — Positional required and
+--   optional parameters</li>
+--   <li><b>Word ... Word<tt>*</tt></b> — Positional required and rest
+--   parameters</li>
 --   </ul>
 --   
 --   <ul>
@@ -1146,17 +1175,15 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 --   </ul>
 --   
 --   <ul>
---   <li><b>Attr ...</b> — Named attributes</li>
+--   <li><b>Name ...</b> — Named parameters</li>
 --   </ul>
 --   
 --   <ul>
---   <li><i>Attr</i></li>
+--   <li><i>Name</i></li>
 --   </ul>
 --   
 --   <ul>
---   <li><b><tt>-</tt>Word Opt</b> — Normal attribute</li>
---   <li><b><tt>-</tt>Word<tt>/</tt> Opt</b> — Relmap attribute</li>
---   <li><b><tt>-</tt>Word<tt>/^</tt> Opt</b> — Local relmap attribute</li>
+--   <li><b>Word Opt</b> — Named parameter</li>
 --   </ul>
 --   
 --   <ul>
@@ -1164,33 +1191,13 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 --   </ul>
 --   
 --   <ul>
---   <li><b><tt>?</tt></b> — Optional attribute</li>
---   <li><b>Empty</b> — Required attribute</li>
+--   <li><b>Empty</b> — Required parameter</li>
+--   <li><b><tt>?</tt></b> — Optional parameter</li>
 --   </ul>
-module Koshucode.Baala.Syntax.Attr.Parse
-
--- | Parse attribute layout.
---   
---   No positional and one named <tt>-c</tt> attribute.
---   
---   <pre>
---   &gt;&gt;&gt; parseAttrLayout "0 . -c"
---   [ (Nothing, AttrLayout (ParaSpec {
---                  paraSpecReqN = [AttrNormal "c"]
---                , paraSpecOptN = [AttrNormal "@trunk"], ... })) ]
---   </pre>
---   
---   Two positional <tt>-a</tt> <tt>-b</tt> and one named <tt>-c</tt>
---   attributes.
---   
---   <pre>
---   &gt;&gt;&gt; parseAttrLayout "2 -a -b/ . -c"
---   [ (Nothing, AttrLayout (ParaSpec {
---                  paraSpecPos  = ParaItem 2 [AttrNormal "a", AttrRelmapNormal "b"]
---                 , paraSpecReqP = [AttrNormal "a", AttrRelmapNormal "b"]
---                 , paraSpecOptN = [AttrNormal "@trunk", AttrNormal "c"], ... })) ]
---   </pre>
-parseAttrLayout :: String -> AttrLayout
+parseParaSpec :: String -> [(Maybe String, ParaSpec String)]
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.Parse.Ror
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.Parse.Ror
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Parse.Ror
 
 module Koshucode.Baala.Syntax.Attr
 

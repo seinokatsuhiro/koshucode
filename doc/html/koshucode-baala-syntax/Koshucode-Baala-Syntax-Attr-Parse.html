@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.138.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.139.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,197 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Description</p
 	><div class="doc"
 	><p
-	  >Parser for attribute layout.
-   Syntax for layout is defined as the following <strong
-	    >Multiple</strong
-	    >.
-   See <code
-	    ><a href="Koshucode-Baala-Syntax-Attr-Parse.html#v:parseAttrLayout"
-	      >parseAttrLayout</a
-	      ></code
-	    > document for some examples.</p
-	  ><dl
-	  ><dt
-	    >Multiple</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      >Single</strong
-	      >                       &#8212; Single layout</li
-	    ><li
-	    ><strong
-	      >Single <code
-		>|</code
-		> Multiple</strong
-	      > ...      &#8212; Multiple layout</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Single</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      >Layout</strong
-	      >                       &#8212; Layout without tag</li
-	    ><li
-	    ><strong
-	      >Word <code
-		>:</code
-		> Layout</strong
-	      >              &#8212; Layout with tag</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Layout</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      >Positional</strong
-	      >                   &#8212; Positional attributes</li
-	    ><li
-	    ><strong
-	      >Positional <code
-		>.</code
-		> Named</strong
-	      >         &#8212; Positional and named attributes</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Positional</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      ><code
-		>0</code
-		></strong
-	      >                          &#8212; No positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>1</code
-		> Attr</strong
-	      >                     &#8212; One positional attribute</li
-	    ><li
-	    ><strong
-	      ><code
-		>2</code
-		> Attr Attr</strong
-	      >                &#8212; Two positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>3</code
-		> Attr Attr Attr</strong
-	      >           &#8212; Three positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>4</code
-		> Attr Attr Attr Attr</strong
-	      >      &#8212; Four positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>5</code
-		> Attr Attr Attr Attr Attr</strong
-	      > &#8212; Five positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>?</code
-		> Attr</strong
-	      >                     &#8212; Optional positional attribute</li
-	    ><li
-	    ><strong
-	      ><code
-		>1?</code
-		> Attr Attr</strong
-	      >               &#8212; One and optional positional attributes</li
-	    ><li
-	    ><strong
-	      ><code
-		>*</code
-		> Attr</strong
-	      >                     &#8212; Rest positional attribute</li
-	    ><li
-	    ><strong
-	      ><code
-		>1*</code
-		> Attr Attr</strong
-	      >               &#8212; One and rest positional attributes</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Named</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      >Attr ...</strong
-	      >           &#8212; Named attributes</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Attr</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      ><code
-		>-</code
-		>Word Opt</strong
-	      >        &#8212; Normal attribute</li
-	    ><li
-	    ><strong
-	      ><code
-		>-</code
-		>Word<code
-		>/</code
-		> Opt</strong
-	      >     &#8212; Relmap attribute</li
-	    ><li
-	    ><strong
-	      ><code
-		>-</code
-		>Word<code
-		>/^</code
-		> Opt</strong
-	      >    &#8212; Local relmap attribute</li
-	    ></ul
-	  ><dl
-	  ><dt
-	    >Opt</dt
-	    ><dd
-	    ></dd
-	    ></dl
-	  ><ul
-	  ><li
-	    ><strong
-	      ><code
-		>?</code
-		></strong
-	      >                &#8212; Optional attribute</li
-	    ><li
-	    ><strong
-	      >Empty</strong
-	      >              &#8212; Required attribute</li
-	    ></ul
+	  >Parser for attribute layout.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -261,6 +71,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 	    >AttrLayout</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:parseParaSpec"
+	    >parseParaSpec</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -279,44 +103,223 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Parse attribute layout.</p
+	    >Parse relmap attribute layout.</p
+	    ><ul
+	    ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word</strong
+		>        &#8212; Normal attribute</li
+	      ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word<code
+		  >/</code
+		  ></strong
+		>     &#8212; Relmap attribute</li
+	      ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word<code
+		  >/^</code
+		  ></strong
+		>    &#8212; Local relmap attribute</li
+	      ></ul
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseParaSpec" class="def"
+	    >parseParaSpec</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)] <a href="src/Koshucode-Baala-Syntax-Attr-Parse.html#parseParaSpec" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse parameter layout.</p
 	    ><p
-	    >No positional and one named <code
-	      >-c</code
+	    >No positional and one named required <code
+	      >c</code
 	      > attribute.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>parseAttrLayout &quot;0 . -c&quot;
+		>parseParaSpec &quot;. c&quot;
 </code
 		></strong
-	      >[ (Nothing, AttrLayout (ParaSpec {
-               paraSpecReqN = [AttrNormal &quot;c&quot;]
-             , paraSpecOptN = [AttrNormal &quot;@trunk&quot;], ... })) ]
+	      >[(Nothing, ParaSpec { paraSpecReqN = [&quot;c&quot;], ... })]
 </pre
 	    ><p
-	    >Two positional <code
-	      >-a</code
-	      > <code
-	      >-b</code
-	      > and one named <code
-	      >-c</code
+	    >Positional required <code
+	      >a</code
+	      >, rest <code
+	      >b</code
+	      >, and one named <code
+	      >c</code
 	      > attributes.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>parseAttrLayout &quot;2 -a -b/ . -c&quot;
+		>parseParaSpec &quot;a b* . c&quot;
 </code
 		></strong
-	      >[ (Nothing, AttrLayout (ParaSpec {
-               paraSpecPos  = ParaItem 2 [AttrNormal &quot;a&quot;, AttrRelmapNormal &quot;b&quot;]
-              , paraSpecReqP = [AttrNormal &quot;a&quot;, AttrRelmapNormal &quot;b&quot;]
-              , paraSpecOptN = [AttrNormal &quot;@trunk&quot;, AttrNormal &quot;c&quot;], ... })) ]
+	      >[(Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 [&quot;a&quot;] &quot;b&quot;
+                    , paraSpecReqP = [&quot;a&quot;]
+                    , paraSpecOptP = [&quot;b&quot;]
+                    , paraSpecReqN = [&quot;c&quot;], ... })]
 </pre
+	    ><p
+	    >Set of named layouts.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>parseParaSpec &quot;a : a | ab : a b&quot;
+</code
+		></strong
+	      >[ (Just &quot;a&quot;,  ParaSpec { paraSpecPos = ParaItem 1 [&quot;a&quot;], paraSpecReqP = [&quot;a&quot;], ... })
+, (Just &quot;ab&quot;, ParaSpec { paraSpecPos = ParaItem 2 [&quot;a&quot;,&quot;b&quot;], paraSpecReqP = [&quot;a&quot;,&quot;b&quot;], ... })]
+</pre
+	    ><p
+	    >Syntax for parameter layout.</p
+	    ><dl
+	    ><dt
+	      >Multiple</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Single</strong
+		>                    &#8212; Single layout</li
+	      ><li
+	      ><strong
+		>Single <code
+		  >|</code
+		  > Multiple</strong
+		> ...   &#8212; Multiple layout</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Single</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Layout</strong
+		>                    &#8212; Layout without tag</li
+	      ><li
+	      ><strong
+		>Word <code
+		  >:</code
+		  > Layout</strong
+		>           &#8212; Layout with tag</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Layout</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Positional</strong
+		>                &#8212; Positional parameters</li
+	      ><li
+	      ><strong
+		>Positional <code
+		  >.</code
+		  > Named</strong
+		>      &#8212; Positional and named parameters</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Positional</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Word ...</strong
+		>                  &#8212; Positional required parameters</li
+	      ><li
+	      ><strong
+		>Word ... Word<code
+		  >?</code
+		  > ...</strong
+		>      &#8212; Positional required and optional parameters</li
+	      ><li
+	      ><strong
+		>Word ... Word<code
+		  >*</code
+		  ></strong
+		>          &#8212; Positional required and rest parameters</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Named</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Name ...</strong
+		>                  &#8212; Named parameters</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Name</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Word Opt</strong
+		>                  &#8212; Named parameter</li
+	      ></ul
+	    ><dl
+	    ><dt
+	      >Opt</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ><ul
+	    ><li
+	      ><strong
+		>Empty</strong
+		>                     &#8212; Required parameter</li
+	      ><li
+	      ><strong
+		><code
+		  >?</code
+		  ></strong
+		>                       &#8212; Optional parameter</li
+	      ></ul
 	    ></div
 	  ></div
 	></div
