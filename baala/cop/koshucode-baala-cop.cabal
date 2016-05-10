@@ -7,7 +7,7 @@ name:                koshucode-baala-cop
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.138.0.0
+version:             0.139.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Term-content operators in Koshucode
@@ -66,9 +66,9 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                      == 4.*
-       , koshucode-baala-base      == 0.138.*
-       , koshucode-baala-syntax    == 0.138.*
-       , koshucode-baala-data      == 0.138.*
-       , koshucode-baala-rop-flat  == 0.138.*
+       , koshucode-baala-base      == 0.139.*
+       , koshucode-baala-syntax    == 0.139.*
+       , koshucode-baala-data      == 0.139.*
+       , koshucode-baala-rop-flat  == 0.139.*
 
 
