@@ -47,8 +47,8 @@ hPutJudgesCount h result writer = loop where
     put judge (c, tab) = do putGutter c
                             writer judge
                             let c'  = c + 1
-                                pat = D.judgePat judge
-                            return (c', Map.alter inc pat tab)
+                                cls = D.judgeClass judge
+                            return (c', Map.alter inc cls tab)
 
     putGutter c   = M.when (mod5 c && c > 0) $
                       do M.when (mod25 c) $ progress c
@@ -69,9 +69,9 @@ hPutJudgesCount h result writer = loop where
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter
-type JudgeCount = (Int, Map.Map D.JudgePat Int)
+type JudgeCount = (Int, Map.Map D.JudgeClass Int)
 
-judgeCount :: [D.JudgePat] -> JudgeCount
+judgeCount :: [D.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])

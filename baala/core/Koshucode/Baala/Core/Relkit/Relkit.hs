@@ -47,7 +47,7 @@ data RelkitCore c
     | RelkitConst        [[c]]
     | RelkitId
 
-    | RelkitSource       D.JudgePat [S.TermName]
+    | RelkitSource       D.JudgeClass [S.TermName]
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
@@ -81,7 +81,7 @@ type RelkitKey    = (Maybe D.Head, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- | Relation selector
-type RelSelect c = D.JudgePat -> [String] -> D.Rel c
+type RelSelect c = D.JudgeClass -> [String] -> D.Rel c
 
 -- | Mapping for body of relation.
 type BodyMap c = B.AbMap [[c]]

@@ -44,7 +44,7 @@ data Result c = Result
     , resultLicense    :: [[String]]
     , resultViolated   :: [ShortResultChunks c]
     , resultNormal     :: [ShortResultChunks c]
-    , resultPattern    :: [D.JudgePat]
+    , resultPattern    :: [D.JudgeClass]
     } deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
@@ -73,7 +73,7 @@ instance (Show c, B.Write c) => B.Default (Result c) where
 -- | Chunk of judgements.
 data ResultChunk c
     = ResultJudge  [D.Judge c]
-    | ResultRel    D.JudgePat (D.Rel c)
+    | ResultRel    D.JudgeClass (D.Rel c)
     | ResultNote   [String]
       deriving (Show, Eq, Ord)
 

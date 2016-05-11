@@ -26,7 +26,7 @@ resourceElem res = map art js where
 
 elemJudge :: (D.CContent c) => B.Map [D.Judge c]
 elemJudge = B.unique . concatMap f where
-    f j = map (term $ D.judgePat j) (D.judgeTerms j)
+    f j = map (term $ D.judgeClass j) (D.judgeTerms j)
     term p (n, c) = D.affirm "KOSHU-JUDGE-TERM"
                     [ "pat"     -:- D.pText p
                     , "name"    -:- D.pText n

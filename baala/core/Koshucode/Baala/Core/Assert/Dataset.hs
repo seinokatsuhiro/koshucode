@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Relkit  as C
 
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Map.Map D.JudgePat [[S.Term c]])
+data Dataset c = Dataset (Map.Map D.JudgeClass [[S.Term c]])
 
 -- | Dataset that has no judges.
 instance B.Default (Dataset c) where

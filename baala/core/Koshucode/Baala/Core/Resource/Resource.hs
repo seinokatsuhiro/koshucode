@@ -102,7 +102,7 @@ resInputPoint Resource { resInputStack = (in1, in2, in3) }
     = in1 ++ in2 ++ map (ip . B.codeName) in3 where
       ip p = C.InputPoint p []
 
-resPattern :: Resource c -> [D.JudgePat]
+resPattern :: Resource c -> [D.JudgeClass]
 resPattern Resource { resAssert = ass } = map (C.assPattern . S.shortBody) ass
 
 addMessage :: String -> B.Map (Resource c)

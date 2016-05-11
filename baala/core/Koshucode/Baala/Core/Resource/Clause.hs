@@ -44,8 +44,8 @@ data ClauseBody
     = CInput    [S.Token]                          -- ^ Input point
     | CExport   String                             -- ^ Exporting name
     | CRelmap   String [S.Token]                   -- ^ Source of relmap
-    | CAssert   D.AssertType D.JudgePat [S.Token]  -- ^ Assertion
-    | CJudge    D.AssertType D.JudgePat [S.Token]  -- ^ Judge
+    | CAssert   D.AssertType D.JudgeClass [S.Token]  -- ^ Assertion
+    | CJudge    D.AssertType D.JudgeClass [S.Token]  -- ^ Judge
     | CSlot     String [S.Token]                   -- ^ Global slot
     | COption   [S.Token]                          -- ^ Option settings
     | COutput   [S.Token]                          -- ^ Output point

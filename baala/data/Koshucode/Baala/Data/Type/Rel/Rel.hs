@@ -129,10 +129,10 @@ reldau = Rel B.mempty []
 
 class SelectRel r where
     -- | Convert judges to relation.
-    selectRel :: r c -> D.JudgePat -> [S.TermName] -> Rel c
+    selectRel :: r c -> D.JudgeClass -> [S.TermName] -> Rel c
 
 -- | Convert relation to list of judges.
-judgesFromRel :: D.JudgeOf c -> D.JudgePat -> Rel c -> [D.Judge c]
+judgesFromRel :: D.JudgeOf c -> D.JudgeClass -> Rel c -> [D.Judge c]
 judgesFromRel judgeOf pat (Rel he bo) = map judge bo where
     judge = judgeOf pat . zip names
     names = D.headNames he

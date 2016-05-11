@@ -138,7 +138,7 @@ consTie cons = mapM p B.<=< D.treesToTerms1 where
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgePat -> S.TTreesToAb (D.Judge c)
+treesToJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> S.TTreesToAb (D.Judge c)
 treesToJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
 
 

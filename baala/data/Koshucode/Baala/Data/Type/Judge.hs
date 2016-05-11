@@ -6,8 +6,8 @@
 module Koshucode.Baala.Data.Type.Judge
   (
     -- * Datatype
-    Judge (..), JudgePat,
-    judgePat, judgeTerms,
+    Judge (..), JudgeClass,
+    judgeClass, judgeTerms,
     judgeTermsMap,
     judgeCons,
     sortJudgeTerms, 
@@ -35,21 +35,21 @@ import qualified Koshucode.Baala.Syntax            as S
 -- | Judgement on type 'c'.
 --
 --   Judgement (or judge for short) is divided into three parts:
---   logical quality, name of pattern, and argument.
+--   logical quality, name of class, and argument.
 --   Boolean values 'True' or 'False' of logical quality
 --   corresponds to affirmed or denied judge.
---   A name of judgement pattern represents
---   certain sentence pattern that gives intepretation of data.
---   Sentence pattern has placeholders filled by
+--   A name of judgement class represents
+--   certain sentence class that gives intepretation of data.
+--   Sentence class has placeholders filled by
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      JudgePat [S.Term c]  -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        JudgePat [S.Term c]  -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   JudgePat [S.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
-    | JudgeChange      JudgePat [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
-    | JudgeMultiChange JudgePat [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     JudgePat [S.Term c]  -- ^ @|-v P \/x 10 \/y 20@
+    = JudgeAffirm      JudgeClass [S.Term c]  -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        JudgeClass [S.Term c]  -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   JudgeClass [S.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
+    | JudgeChange      JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
+    | JudgeMultiChange JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
+    | JudgeViolate     JudgeClass [S.Term c]  -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -60,8 +60,8 @@ instance (Ord c) => Ord (Judge c) where
     compare j1 j2 =
         let j1'  = sortJudgeTerms j1
             j2'  = sortJudgeTerms j2
-            p1   = judgePat j1'
-            p2   = judgePat j2'
+            p1   = judgeClass j1'
+            p2   = judgeClass j2'
             xs1  = judgeTerms j1'
             xs2  = judgeTerms j2'
         in compare p1 p2 `B.mappend` compare xs1 xs2
@@ -71,17 +71,17 @@ instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, v) = (n, f v)
 
--- | Name of judgement pattern, in other words, name of propositional function.
-type JudgePat = String
+-- | Name of judgement class, in other words, name of propositional function.
+type JudgeClass = String
 
--- | Return pattern of judgement.
-judgePat :: Judge c -> JudgePat
-judgePat (JudgeAffirm      p _)        = p
-judgePat (JudgeDeny        p _)        = p
-judgePat (JudgeMultiDeny   p _)        = p
-judgePat (JudgeChange      p _ _)      = p
-judgePat (JudgeMultiChange p _ _)      = p
-judgePat (JudgeViolate     p _)        = p
+-- | Return class of judgement.
+judgeClass :: Judge c -> JudgeClass
+judgeClass (JudgeAffirm      c _)        = c
+judgeClass (JudgeDeny        c _)        = c
+judgeClass (JudgeMultiDeny   c _)        = c
+judgeClass (JudgeChange      c _ _)      = c
+judgeClass (JudgeMultiChange c _ _)      = c
+judgeClass (JudgeViolate     c _)        = c
 
 -- | Return term list of judgement.
 judgeTerms :: Judge c -> [S.Term c]
@@ -93,12 +93,12 @@ judgeTerms (JudgeMultiChange _ xs _)   = xs
 judgeTerms (JudgeViolate     _ xs)     = xs
 
 judgeTermsMap :: ([S.Term a] -> [S.Term b]) -> Judge a -> Judge b
-judgeTermsMap f (JudgeAffirm      p xs)      = JudgeAffirm    p (f xs)
-judgeTermsMap f (JudgeDeny        p xs)      = JudgeDeny      p (f xs)
-judgeTermsMap f (JudgeMultiDeny   p xs)      = JudgeMultiDeny p (f xs)
-judgeTermsMap f (JudgeChange      p xs xs')  = JudgeChange    p (f xs) (f xs')
-judgeTermsMap f (JudgeMultiChange p xs xs')  = JudgeChange    p (f xs) (f xs')
-judgeTermsMap f (JudgeViolate     p xs)      = JudgeViolate   p (f xs)
+judgeTermsMap f (JudgeAffirm      c xs)      = JudgeAffirm    c (f xs)
+judgeTermsMap f (JudgeDeny        c xs)      = JudgeDeny      c (f xs)
+judgeTermsMap f (JudgeMultiDeny   c xs)      = JudgeMultiDeny c (f xs)
+judgeTermsMap f (JudgeChange      c xs xs')  = JudgeChange    c (f xs) (f xs')
+judgeTermsMap f (JudgeMultiChange c xs xs')  = JudgeChange    c (f xs) (f xs')
+judgeTermsMap f (JudgeViolate     c xs)      = JudgeViolate   c (f xs)
 
 -- | Prepend a term into judgement.
 judgeCons :: S.Term c -> B.Map (Judge c)
@@ -111,8 +111,8 @@ sortJudgeTerms = judgeTermsMap B.sort
 
 -- ----------------------  Logical quality
 
--- | Construct judgement from its pattern and terms.
-type JudgeOf c = JudgePat -> [S.Term c] -> Judge c
+-- | Construct judgement from its class and terms.
+type JudgeOf c = JudgeClass -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 affirm :: JudgeOf c
@@ -164,12 +164,12 @@ textualjudge sh = (B.writeStringWith sh `fmap`)
 judgeText :: Judge String -> String
 judgeText jud =
     case jud of
-      JudgeAffirm      p xs     -> line "|--"  p xs
-      JudgeDeny        p xs     -> line "|-X"  p xs
-      JudgeMultiDeny   p xs     -> line "|-XX" p xs
-      JudgeChange      p xs _   -> line "|-C"  p xs
-      JudgeMultiChange p xs _   -> line "|-CC" p xs
-      JudgeViolate     p xs     -> line "|-V"  p xs
+      JudgeAffirm      c xs     -> line "|--"  c xs
+      JudgeDeny        c xs     -> line "|-X"  c xs
+      JudgeMultiDeny   c xs     -> line "|-XX" c xs
+      JudgeChange      c xs _   -> line "|-C"  c xs
+      JudgeMultiChange c xs _   -> line "|-CC" c xs
+      JudgeViolate     c xs     -> line "|-V"  c xs
     where
       line j p xs  = j ++ " " ++ p ++ termsText xs
 
