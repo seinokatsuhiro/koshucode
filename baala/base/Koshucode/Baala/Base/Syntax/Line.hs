@@ -8,8 +8,9 @@ module Koshucode.Baala.Base.Syntax.Line
     LineNumber,
     NumberedLine,
     linesCrlfNumbered,
-    linesCrlf,
-    linesFrom,
+    linesCrlf, linesFrom,
+    linesCrlfBzNumbered,
+    linesCrlfBz, linesCrlfBzString,
 
     -- * CodeLine
     CodeLine (..),
@@ -23,6 +24,8 @@ module Koshucode.Baala.Base.Syntax.Line
     codeChange,
   ) where
 
+import qualified Data.ByteString.Lazy                 as Bz
+import qualified Data.ByteString.Lazy.Char8           as Bc
 import qualified Data.Generics                        as G
 import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Base.Abort           as B
@@ -46,16 +49,42 @@ linesCrlfNumbered = zip [1..] . linesCrlf
 --   The result strings do not contain
 --   carriage returns (@\\r@)
 --   and line feeds (@\\n@).
+--
+--   >>> linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
+--   ["aaa","bbb","ccc","","ddd"]
 linesCrlf :: String -> [String]
 linesCrlf "" = []
 linesCrlf s = ln : next s2 where
-    (ln, s2) = break (`elem` "\r\n") s
+    (ln, s2) = break (`elem` ("\r\n" :: String)) s
     next ('\r' : s3) = next s3
     next ('\n' : s3) = linesCrlf s3
     next s3          = linesCrlf s3
 
 linesFrom :: (Show a) => a -> [String]
 linesFrom = lines . show
+
+linesCrlfBzNumbered :: Bz.ByteString -> [NumberedLine]
+linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
+
+linesCrlfBzString :: Bz.ByteString -> [String]
+linesCrlfBzString = map Bc.unpack . linesCrlfBz
+
+linesCrlfBz :: Bz.ByteString -> [Bz.ByteString]
+linesCrlfBz bz
+    | Bz.null bz  = []
+    | otherwise   = case Bz.break crlf bz of
+                      (ln, bz') -> ln : linesCrlfBz (strip bz')
+    where
+      crlf n = (n == lf) || (n == cr)
+      lf = 10 -- '\n'
+      cr = 13 -- '\r'
+
+      strip bz2 = case Bz.uncons bz2 of
+                    Nothing -> bz2
+                    Just (c , bz2')
+                        | c == cr   -> strip bz2'
+                        | c == lf   -> bz2'
+                        | otherwise -> bz2
 
 
 -- ----------------------  CodeLine
