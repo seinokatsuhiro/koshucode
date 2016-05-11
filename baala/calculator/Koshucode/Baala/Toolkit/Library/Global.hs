@@ -7,6 +7,7 @@ module Koshucode.Baala.Toolkit.Library.Global
     baalaRops,
   ) where
 
+import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 import qualified Koshucode.Baala.Rop.Flat  as Rop
@@ -18,7 +19,7 @@ import qualified Koshucode.Baala.Cop       as Cop
 baalaGlobal :: (D.CContent c) => C.Global c
 baalaGlobal = global where
     global    = C.global { C.globalOpset     = C.opsetFill opset }
-    opset     = C.opset  { C.opsetRopList    = baalaRops
+    opset     = B.def    { C.opsetRopList    = baalaRops
                          , C.opsetCop        = copset }
     copset    = D.copset { D.copsetCopList   = Cop.baalaCops
                          , D.copsetInfixList = Cop.baalaInfix }

@@ -22,7 +22,7 @@ module Koshucode.Baala.Core.Relmap.Global
 
     -- * Operator set
     OpSet' (..),
-    opset, opsetFill,
+    opsetFill,
 
     -- * Feature
     Feature (..),
@@ -107,7 +107,7 @@ global' :: (D.CBool c, D.CText c) => h c -> Global' h c
 global' h = Global
     { globalSynopsis     = "koshu"
     , globalVersion      = Ver.Version [] []
-    , globalOpset        = opset
+    , globalOpset        = B.def
     , globalFeature      = B.def
     , globalProgram      = ""
     , globalArgs         = []
@@ -130,9 +130,10 @@ data OpSet' h c = OpSet
     }
 
 -- | Empty operator set.
-opset :: OpSet' h c
-opset = OpSet [] find D.copset where
-    find _ = Nothing
+instance B.Default (OpSet' h c) where
+    def = OpSet { opsetRopList = []
+                , opsetFindRop = const Nothing
+                , opsetCop     = D.copset }
 
 opsetFill :: B.Map (OpSet' h c)
 opsetFill ops = ops2 where
