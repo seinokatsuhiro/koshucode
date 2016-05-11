@@ -8,7 +8,6 @@ module Koshucode.Baala.Core.Relmap.Result
   ( -- * Result
     Result (..),
     InputPoint (..),
-    resultEmpty,
 
     -- * Chunk
     ResultChunk (..),
@@ -54,20 +53,19 @@ data InputPoint = InputPoint
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.
-resultEmpty :: (Show c, B.Write c) => Result c
-resultEmpty =
-    Result { resultWriter     = resultDump
-           , resultPrintHead  = True
-           , resultPrintFoot  = True
-           , resultGutter     = 5
-           , resultMeasure    = 25
-           , resultInput      = []
-           , resultOutput     = B.IOPointStdout
-           , resultEcho       = []
-           , resultLicense    = []
-           , resultViolated   = []
-           , resultNormal     = []
-           , resultPattern    = [] }
+instance (Show c, B.Write c) => B.Default (Result c) where
+    def = Result { resultWriter     = resultDump
+                 , resultPrintHead  = True
+                 , resultPrintFoot  = True
+                 , resultGutter     = 5
+                 , resultMeasure    = 25
+                 , resultInput      = []
+                 , resultOutput     = B.IOPointStdout
+                 , resultEcho       = []
+                 , resultLicense    = []
+                 , resultViolated   = []
+                 , resultNormal     = []
+                 , resultPattern    = [] }
 
 
 -- ----------------------  Chunk

@@ -25,7 +25,7 @@ putJudges js =
 
 -- | `B.stdout` version of `hPutJudgesWith`.
 putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
-putJudgesWith = hPutJudgesWith B.stdout C.resultEmpty
+putJudgesWith = hPutJudgesWith B.stdout B.def
 
 -- | Print list of judges.
 hPutJudgesWith :: (B.Write c) => C.ResultWriterJudge c
