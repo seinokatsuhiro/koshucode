@@ -69,6 +69,7 @@ library
         Koshucode.Baala.Syntax.Token
         Koshucode.Baala.Syntax.Token.Bracket
         Koshucode.Baala.Syntax.Token.Message
+        Koshucode.Baala.Syntax.Token.Parse
         Koshucode.Baala.Syntax.Token.Token
         Koshucode.Baala.Syntax.Token.TokenClause
         Koshucode.Baala.Syntax.Token.TokenLine
