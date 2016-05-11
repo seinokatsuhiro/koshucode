@@ -99,7 +99,6 @@ library
        , filepath                == 1.*
        , syb                     == 0.*
        , mtl                     == 2.*
-       , utf8-string             == 1.*
        , koshucode-baala-base    == 0.139.*
        , koshucode-baala-syntax  == 0.139.*
        , koshucode-baala-data    == 0.139.*

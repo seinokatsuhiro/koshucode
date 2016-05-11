@@ -42,7 +42,7 @@ import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 data Param c = Param
     { paramElement       :: Bool
     , paramWriter        :: C.ResultWriter c
-    , paramLiner         :: [String]
+    , paramLiner         :: [B.Bz]
     , paramPretty        :: Bool
     , paramRun           :: Bool
     , paramShowEncoding  :: Bool
@@ -66,7 +66,7 @@ initParam (Right (opts, args)) =
        let day = T.localDay $ T.zonedTimeToLocalTime time
        return $ Param { paramElement       = getFlag "element"
                       , paramWriter        = writer
-                      , paramLiner         = liner
+                      , paramLiner         = map B.stringBz liner
                       , paramPretty        = getFlag "pretty"
                       , paramRun           = getFlag "run"
                       , paramShowEncoding  = getFlag "show-encoding"

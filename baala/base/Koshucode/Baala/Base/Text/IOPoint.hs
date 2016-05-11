@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -23,7 +24,7 @@ import qualified Koshucode.Baala.Base.Prelude as B
 data IOPoint
     = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
     | IOPointUri    String                  -- ^ Universal resource identifier
-    | IOPointText   (Maybe String) String   -- ^ Code itself
+    | IOPointText   (Maybe String) B.Bz     -- ^ Code itself
     | IOPointCustom String B.Bz             -- ^ Custom I/O
     | IOPointStdin                          -- ^ Sandard input
     | IOPointStdout                         -- ^ Sandard output
@@ -58,7 +59,7 @@ ioPointFrom context path
     | otherwise                     = IOPointFile context path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [String] -> FilePath -> [FilePath] -> [IOPoint]
+ioPointList :: Bool -> [B.Bz] -> FilePath -> [FilePath] -> [IOPoint]
 ioPointList stdin texts context paths =
     B.consIf stdin IOPointStdin $
          IOPointText Nothing `map` texts ++
@@ -93,6 +94,6 @@ codeEmpty :: CodePiece
 codeEmpty = codeTextOf ""
 
 -- | Create text code.
-codeTextOf :: String -> CodePiece
+codeTextOf :: B.Bz -> CodePiece
 codeTextOf = CodePiece 0 . IOPointText Nothing
 

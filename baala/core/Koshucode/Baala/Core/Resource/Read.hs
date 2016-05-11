@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Resource.Read
 
 import qualified Control.Monad.State                     as M
 import qualified Data.ByteString.Lazy                    as Bz
-import qualified Data.ByteString.Lazy.UTF8               as Bu
 import qualified System.Directory                        as Dir
 import qualified System.FilePath                         as Path
 import qualified Koshucode.Baala.Base                    as B
@@ -90,7 +89,7 @@ readResourceOne res src add = dispatch $ B.codeName src where
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.IOPointText _ text)   = gio $ includeString text
+    dispatch (B.IOPointText   _ code) = gio $ include code
     dispatch (B.IOPointCustom _ code) = gio $ include code
     dispatch (B.IOPointStdin)         = gio $ include =<< Bz.getContents
     dispatch (B.IOPointStdout)        = B.bug "readResourceOne"
@@ -103,9 +102,6 @@ readResourceOne res src add = dispatch $ B.codeName src where
     include :: B.Bz -> IO (C.AbResource c)
     include = includeUnder ""
 
-    includeString :: String -> IO (C.AbResource c)
-    includeString = includeUnder "" . Bu.fromString
-
     includeUnder :: FilePath -> B.Bz -> IO (C.AbResource c)
     includeUnder cd = return . C.resInclude add' cd res src
 
@@ -113,7 +109,8 @@ readResourceOne res src add = dispatch $ B.codeName src where
 
 -- | Read resource from text.
 readResourceText :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude [] "" res (B.codeTextOf code) $ Bu.fromString code
+readResourceText res code = C.resInclude [] "" res (B.codeTextOf code') code' where
+    code' = B.stringBz code
 
 readSources :: forall c. (D.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =

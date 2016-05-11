@@ -50,7 +50,7 @@ tokens res cs = do ls <- tokenLines res cs
 
 -- | Abbreviated tokenizer.
 toks :: S.InputText -> B.Ab [S.Token]
-toks s = tokens (B.codeTextOf s) s
+toks s = tokens (B.codeTextOf $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.CodePiece -> S.InputText -> B.Ab [TokenLine]

@@ -14,6 +14,8 @@ module Koshucode.Baala.Base.Prelude.Import
   
     -- * Data.ByteString.Lazy
     Bz,
+    -- * Data.ByteString.Lazy.UTF8
+    stringBz,
 
     -- * Data.Default
     Data.Default.Default (..),
@@ -72,6 +74,7 @@ module Koshucode.Baala.Base.Prelude.Import
 
 import qualified Control.Monad
 import qualified Data.ByteString.Lazy
+import qualified Data.ByteString.Lazy.UTF8
 import qualified Data.Default
 import qualified Data.List
 import qualified Data.Map
@@ -92,7 +95,12 @@ concatMapM f = return . concat Control.Monad.<=< mapM f
 
 -- ----------------------  Data
 
+-- | Lazy bytestring.
 type Bz = Data.ByteString.Lazy.ByteString
+
+-- | Convert string into lazy bytestring.
+stringBz :: String -> Bz
+stringBz = Data.ByteString.Lazy.UTF8.fromString
 
 -- | Test two list has no elements in common.
 disjoint :: (Eq a) => [a] -> [a] -> Bool
