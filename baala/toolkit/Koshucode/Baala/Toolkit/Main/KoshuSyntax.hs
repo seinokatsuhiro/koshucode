@@ -187,7 +187,7 @@ judgeTokenType t = D.affirm "TOKEN-TYPE" args where
 
 judgesClauseType :: [C.JudgeC]
 judgesClauseType = map j cs where
-    j x = judgeClauseType $ C.Clause C.clauseHeadEmpty x
+    j x = judgeClauseType $ C.Clause B.def x
     cs  = [ C.CRelmap "" []
           , C.CAssert D.AssertAffirm "" []
           , C.CJudge  D.AssertAffirm "" []

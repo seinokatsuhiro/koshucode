@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Resource.Clause
     ClauseBody (..),
   
     -- * Functions
-    clauseHeadEmpty,
     clauseTypeText,
     consClause,
   ) where
@@ -61,8 +60,8 @@ instance B.CodePtr ClauseHead where
     codePtList = B.codePtList . clauseSource
 
 -- | The empty clause heading.
-clauseHeadEmpty :: ClauseHead
-clauseHeadEmpty = ClauseHead B.codeClauseEmpty 0 [] []
+instance B.Default ClauseHead where
+    def = ClauseHead B.codeClauseEmpty 0 [] []
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
@@ -102,11 +101,11 @@ clauseTypeText (Clause _ body) =
 -- | First step of constructing 'Resource'.
 consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [B.Ab Clause]
 consClause add sec = loop h0 . S.tokenClauses where
-    h0 = clauseHeadEmpty { clauseSecNo = sec }
+    h0 = B.def { clauseSecNo = sec }
 
     loop _ []     = []
     loop h (x:xs) = let (cs, h') = consClauseEach add $ h { clauseSource = x }
-                       in cs ++ loop h' xs
+                    in cs ++ loop h' xs
 
 consClauseEach :: [S.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
 consClauseEach add h@(ClauseHead src sec sh ab) = result where
