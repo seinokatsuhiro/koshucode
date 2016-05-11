@@ -10,7 +10,6 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     RopName,
 
     -- * Functions
-    lexBase,
     lexName,
     lexAddMessage,
     lexMessageList,
@@ -48,20 +47,20 @@ instance B.Write Lexmap where
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexToken
 
+-- | Empty base lexmap.
+instance B.Default Lexmap where
+    def = Lexmap { lexType     = LexmapBase
+                 , lexToken    = S.textToken ""
+                 , lexAttr     = B.def
+                 , lexSubmap   = []
+                 , lexMessage  = [] }
+
 -- | Name of relmap operator.
 type RopName = String
 
 -- | Attribute of relmap operation.
 lexAttrTree :: Lexmap -> [S.AttrTree]
 lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
-
--- | Empty base lexmap.
-lexBase :: Lexmap
-lexBase = Lexmap { lexType     = LexmapBase
-                 , lexToken    = S.textToken ""
-                 , lexAttr     = B.def
-                 , lexSubmap   = []
-                 , lexMessage  = [] }
 
 -- | Name of relmap operator
 lexName :: Lexmap -> RopName

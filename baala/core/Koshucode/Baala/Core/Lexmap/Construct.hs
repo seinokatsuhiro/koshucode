@@ -129,9 +129,9 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         -- -----------  construct lexmap except for submaps
 
         cons :: C.LexmapType -> S.Token -> S.AttrPara -> C.Lexmap
-        cons ty tok attr = check $ C.lexBase { C.lexType   = ty
-                                             , C.lexToken  = tok
-                                             , C.lexAttr   = attr }
+        cons ty tok attr = check $ B.def { C.lexType   = ty
+                                         , C.lexToken  = tok
+                                         , C.lexAttr   = attr }
 
         check :: B.Map C.Lexmap
         check lx | C.lexType lx == C.LexmapDerived
