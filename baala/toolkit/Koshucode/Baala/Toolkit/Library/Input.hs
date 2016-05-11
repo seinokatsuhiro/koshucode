@@ -11,6 +11,7 @@ module Koshucode.Baala.Toolkit.Library.Input
     readJudge,
   ) where
 
+import qualified Koshucode.Baala.Base  as B
 import qualified Koshucode.Baala.Core  as C
 
 data Input = Stdin | File FilePath
@@ -28,9 +29,8 @@ readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
 readJudge :: String -> [C.JudgeC]
-readJudge src =
-    let root = C.resEmpty :: C.ResourceC
-    in case C.readResourceText root src of
-         Right sec  -> C.resJudge sec
-         Left _     -> []
+readJudge code =
+    case C.readResourceText B.def code of
+      Right res  -> C.resJudge res
+      Left _     -> []
 

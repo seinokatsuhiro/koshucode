@@ -12,7 +12,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resEmpty, resIncluded, resInput, resInputPoint, resPattern,
+    resIncluded, resInput, resInputPoint, resPattern,
     addMessage, addMessages,
 
     -- * Hook
@@ -68,12 +68,9 @@ instance D.SelectRel Resource where
 instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
 
--- | Abort or resource.
-type AbResource c = B.Ab (Resource c)
-
 -- | Resource that has no contents.
-resEmpty :: (D.CContent c) => Resource c
-resEmpty = Resource
+instance (D.CContent c) => B.Default (Resource c) where
+    def = Resource
            { resGlobal     = global
            , resOption     = C.option
            , resImport     = []
@@ -90,6 +87,9 @@ resEmpty = Resource
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> D.reldee
            }
+
+-- | Abort or resource.
+type AbResource c = B.Ab (Resource c)
 
 resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInputStack = (_, _, done) } = done
@@ -127,7 +127,7 @@ type ShortAssert     c = C.ShortAssert'     Resource c
 type ShortAsserts    c = C.ShortAsserts'    Resource c
 
 global :: (D.CContent c) => Global c
-global = C.global' resEmpty
+global = C.global' B.def
 
 
 -- ----------------------  Concrete type

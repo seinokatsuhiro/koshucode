@@ -56,7 +56,7 @@ koshuFilter g withRes =
            where
              has   = (`elem` opts)
              ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
-             root  = C.resEmpty { C.resGlobal = g2 }
+             root  = B.def { C.resGlobal = g2 }
              src   = B.ioPointList (has OptStdin) [] "" paths
              g2    = C.globalFill g
                        { C.globalProgram   = prog

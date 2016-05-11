@@ -162,7 +162,7 @@ koshuMainParam g p
 
       -- global parameter
       rslt  = (C.globalResult g) { C.resultWriter = paramWriter p }
-      root  = C.resEmpty { C.resGlobal = g2 }
+      root  = B.def { C.resGlobal = g2 }
       g2    = C.globalFill g
               { C.globalProgram   = paramProg p
               , C.globalArgs      = paramArgs p
