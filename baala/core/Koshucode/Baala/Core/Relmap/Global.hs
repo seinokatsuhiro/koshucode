@@ -23,6 +23,9 @@ module Koshucode.Baala.Core.Relmap.Global
     -- * Operator set
     OpSet' (..),
     opset, opsetFill,
+
+    -- * Feature
+    Feature (..),
   ) where
 
 import qualified Data.Version                        as Ver
@@ -53,6 +56,7 @@ data Global' h c = Global
       { globalSynopsis     :: String                -- ^ One-line description of calculator
       , globalVersion      :: Ver.Version           -- ^ Version of calculator
       , globalOpset        :: OpSet' h c            -- ^ Set of operators
+      , globalFeature      :: Feature               -- ^ Features
       , globalProgram      :: String                -- ^ Name of invoked program
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
@@ -104,6 +108,7 @@ global' h = Global
     { globalSynopsis     = "koshu"
     , globalVersion      = Ver.Version [] []
     , globalOpset        = opset
+    , globalFeature      = B.def
     , globalProgram      = ""
     , globalArgs         = []
     , globalProxy        = []
@@ -140,3 +145,18 @@ opsetFill ops = ops2 where
 
 opsetRopsAdd :: [C.Rop' h c] -> B.Map (OpSet' h c)
 opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
+
+
+-- ----------------------  Feature
+
+-- | Enable or disable featrues.
+data Feature = Feature {
+      featInputClause    :: Bool    -- ^ Enable @input@ clause
+    , featOutputClause   :: Bool    -- ^ Enable @output@ clause
+    } deriving (Show, Eq, Ord)
+
+instance B.Default Feature where
+    def = Feature { featInputClause  = True
+                  , featOutputClause = True
+                  }
+

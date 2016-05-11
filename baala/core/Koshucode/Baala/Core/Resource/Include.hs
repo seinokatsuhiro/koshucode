@@ -19,6 +19,7 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Clause    as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Data.Message            as Msg
+import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 
@@ -53,14 +54,18 @@ resIncludeBody cd res abcl =
          C.CAssert  _ _ _  -> call assert
          C.CRelmap  _ _    -> call relmap
          C.CSlot    _ _    -> call slot
-         C.CInput   _      -> call input
-         C.COutput  _      -> call output
+         C.CInput   _      -> feat (call input)  C.featInputClause  Msg.disabledInputClause  
+         C.COutput  _      -> feat (call output) C.featOutputClause Msg.disabledOutputClause
          C.COption  _      -> call option
          C.CEcho    _      -> call echo
          C.CLicense _      -> call license
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
+
+      feature = C.globalFeature $ C.resGlobal res
+      feat e f msg | f feature = e
+                   | otherwise = msg
 
       judge :: Include c
       judge _ _ (C.CJudge q p toks) =

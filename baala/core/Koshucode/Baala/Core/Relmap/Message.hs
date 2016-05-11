@@ -7,6 +7,8 @@ module Koshucode.Baala.Core.Relmap.Message
     abSpecialize,
     -- * Message
     unkNestVar,
+    disabledInputClause,
+    disabledOutputClause,
   ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -44,4 +46,15 @@ tokenAtPoint tok = unwords ws where
     cp    = B.codePt tok
     line  = show $ B.codePtLineNo   cp
     col   = show $ B.codePtColumnNo cp
+
+-- | Disabled feature: input clause
+disabledInputClause :: B.Ab b
+disabledInputClause = disabledFeature "input clause"
+
+-- | Disabled feature: output clause
+disabledOutputClause :: B.Ab b
+disabledOutputClause = disabledFeature "output clause"
+
+disabledFeature :: String -> B.Ab b
+disabledFeature = Left . B.abortLine "Disabled feature"
 
