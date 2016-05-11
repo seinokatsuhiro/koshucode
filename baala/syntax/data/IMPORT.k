@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    90 judges
+**    95 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Base"
@@ -92,6 +92,13 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Message"      /import "Koshucode.Baala.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Text.PrettyPrint"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Koshucode.Baala.Syntax.Token.Token"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Koshucode.Baala.Syntax.Token.TokenLine"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Koshucode.Baala.Syntax.Token.Bracket"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Parse"        /import "Koshucode.Baala.Syntax.Token.TokenTree"
+
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Token"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Token"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Token"        /import "Koshucode.Baala.Syntax.Symbol"
@@ -109,13 +116,12 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenLine"    /import "Koshucode.Baala.Syntax.Symbol.Message"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenLine"    /import "Koshucode.Baala.Syntax.Token.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenTree"    /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenTree"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenTree"    /import "Koshucode.Baala.Syntax.Token.Token"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenTree"    /import "Koshucode.Baala.Syntax.Token.TokenLine"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.TokenTree"    /import "Koshucode.Baala.Syntax.Token.Bracket"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.Bracket"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.Parse"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.TokenClause"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token"              /import "Koshucode.Baala.Syntax.Token.TokenLine"
