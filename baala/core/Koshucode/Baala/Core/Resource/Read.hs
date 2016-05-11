@@ -87,11 +87,11 @@ readResourceOne res src add = dispatch $ B.codeName src where
            let proxy = C.globalProxy g
            abcode <- gio $ B.uriContent proxy url
            gio $ case abcode of
-             Right code       -> includeString code
+             Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
     dispatch (B.IOPointText _ text)   = gio $ includeString text
-    dispatch (B.IOPointCustom _ text) = gio $ includeString text
+    dispatch (B.IOPointCustom _ code) = gio $ include code
     dispatch (B.IOPointStdin)         = gio $ include =<< Bz.getContents
     dispatch (B.IOPointStdout)        = B.bug "readResourceOne"
 

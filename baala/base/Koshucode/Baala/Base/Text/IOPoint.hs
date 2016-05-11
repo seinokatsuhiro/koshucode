@@ -24,7 +24,7 @@ data IOPoint
     = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
     | IOPointUri    String                  -- ^ Universal resource identifier
     | IOPointText   (Maybe String) String   -- ^ Code itself
-    | IOPointCustom String String           -- ^ Custom I/O
+    | IOPointCustom String B.Bz             -- ^ Custom I/O
     | IOPointStdin                          -- ^ Sandard input
     | IOPointStdout                         -- ^ Sandard output
       deriving (Show, Eq, Ord, G.Data, G.Typeable)

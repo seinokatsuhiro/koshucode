@@ -7,8 +7,7 @@ module Koshucode.Baala.Base.Text.Http
     httpExceptionSummary,
   ) where
 
-import qualified Data.ByteString.Char8              as Byte
-import qualified Data.ByteString.Lazy.UTF8          as UTF
+import qualified Data.ByteString.Char8              as Bc
 import qualified Control.Exception                  as Ex
 import qualified Network.HTTP.Conduit               as H
 import qualified Network.HTTP.Types.Status          as H
@@ -21,13 +20,13 @@ type UriText = String
 -- | Pair of protocol name and proxy URI.
 type HttpProxy = (String, Maybe UriText)
 
-uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
+uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) B.Bz)
 uriContent proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
          man <- H.newManager H.tlsManagerSettings
          res <- H.httpLbs req man
-         return $ Right $ UTF.toString $ H.responseBody res
+         return $ Right $ H.responseBody res
 
 requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
 requestFromURI proxies uriText =
@@ -42,7 +41,7 @@ requestFromURI proxies uriText =
           proxy'    <- proxy
           uri       <- URI.parseURI proxy'
           auth      <- URI.uriAuthority uri
-          let host'  = Byte.pack $ URI.uriRegName auth
+          let host'  = Bc.pack $ URI.uriRegName auth
               port   = uriPortNumber $ URI.uriPort auth
           Just $ H.addProxy host' port req
 
@@ -59,15 +58,15 @@ selectProxy proxies uri =
        proxy <- lookup scheme proxies
        proxy
 
-catchHttpException :: B.Map (IO (Either (Int, String) String))
+catchHttpException :: B.Map (IO (Either (Int, String) B.Bz))
 catchHttpException = ( `Ex.catch` handler ) where
     handler (H.StatusCodeException (H.Status code msg) _ _)
-        = return $ Left (code, Byte.unpack msg)
+        = return $ Left (code, Bc.unpack msg)
     handler e = return $ Left (0, httpExceptionSummary e)
 
 httpExceptionSummary :: H.HttpException -> String
 httpExceptionSummary e = case e of
-    H.StatusCodeException (H.Status _ m) _ _  -> Byte.unpack m
+    H.StatusCodeException (H.Status _ m) _ _  -> Bc.unpack m
     H.InvalidUrlException _ _                 -> "Invalid URL"
     H.TooManyRedirects    _                   -> "Too many redirects"
     H.UnparseableRedirect _                   -> "Unparseable redirect"
