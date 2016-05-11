@@ -24,7 +24,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
     -- * Concrete type
     AboutC, AboutJudgesC, GlobalC, JudgeC,
-    ResourceC, ResultC, ResultWriterC,
+    RelC, ResourceC, ResultC, ResultWriterC,
   ) where
 
 import qualified Koshucode.Baala.Base           as B
@@ -136,6 +136,7 @@ type AboutC            = C.About        D.BaalaC
 type AboutJudgesC      = C.AboutJudges  D.BaalaC
 type GlobalC           = Global         D.BaalaC
 type JudgeC            = D.Judge        D.BaalaC
+type RelC              = D.Rel          D.BaalaC
 type ResourceC         = Resource       D.BaalaC
 type ResultC           = C.Result       D.BaalaC
 type ResultWriterC     = C.ResultWriter D.BaalaC
