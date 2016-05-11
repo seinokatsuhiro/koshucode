@@ -19,13 +19,13 @@ module Koshucode.Baala.Base.Syntax.Line
 
     -- * CodeRoll
     CodeRoll (..), WordTable,
-    codeRollUp,
+    codeRollUp, codeRollUpBz,
     codeUpdate, codeUpdateWords,
     codeChange,
   ) where
 
 import qualified Data.ByteString.Lazy                 as Bz
-import qualified Data.ByteString.Lazy.Char8           as Bc
+import qualified Data.ByteString.Lazy.UTF8            as Bu
 import qualified Data.Generics                        as G
 import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Base.Abort           as B
@@ -67,7 +67,7 @@ linesCrlfBzNumbered :: Bz.ByteString -> [NumberedLine]
 linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
 
 linesCrlfBzString :: Bz.ByteString -> [String]
-linesCrlfBzString = map Bc.unpack . linesCrlfBz
+linesCrlfBzString = map Bu.toString . linesCrlfBz
 
 linesCrlfBz :: Bz.ByteString -> [Bz.ByteString]
 linesCrlfBz bz
@@ -134,7 +134,13 @@ data CodeRoll a =
 --      and put tokens together in 'CodeLine'.
 --
 codeRollUp :: B.AbMap (CodeRoll a) -> B.CodePiece -> String -> B.Ab [CodeLine a]
-codeRollUp f res = loop (CodeRoll f cp "" [] Map.empty) . linesCrlfNumbered where
+codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
+
+codeRollUpBz :: B.AbMap (CodeRoll a) -> B.CodePiece -> Bz.ByteString -> B.Ab [CodeLine a]
+codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
+
+codeRollUpLines :: B.AbMap (CodeRoll a) -> B.CodePiece -> [NumberedLine] -> B.Ab [CodeLine a]
+codeRollUpLines f res = loop (CodeRoll f cp "" [] Map.empty) where
     cp    = B.codePtZero { B.codePtSource = res }
 
     loop _ [] = Right []

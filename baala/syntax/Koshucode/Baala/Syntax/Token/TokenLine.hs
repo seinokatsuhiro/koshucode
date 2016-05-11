@@ -8,7 +8,7 @@ module Koshucode.Baala.Syntax.Token.TokenLine
   (
     -- * Library
     TokenLine,
-    tokenLines,
+    tokenLines, tokenLinesBz,
     tokens, toks,
     isShortPrefix,
   
@@ -55,6 +55,9 @@ toks s = tokens (B.codeTextOf s) s
 -- | Tokenize text.
 tokenLines :: B.CodePiece -> S.InputText -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
+
+tokenLinesBz :: B.CodePiece -> B.Bz -> B.Ab [TokenLine]
+tokenLinesBz = B.codeRollUpBz relation
 
 -- Line begins with the equal sign is treated as section delimter.
 start :: (S.InputText -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll

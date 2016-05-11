@@ -93,11 +93,13 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                    == 4.*
+       , bytestring              == 0.*
        , containers              == 0.5.*
        , directory               == 1.2.*
        , filepath                == 1.*
        , syb                     == 0.*
        , mtl                     == 2.*
+       , utf8-string             == 1.*
        , koshucode-baala-base    == 0.139.*
        , koshucode-baala-syntax  == 0.139.*
        , koshucode-baala-data    == 0.139.*

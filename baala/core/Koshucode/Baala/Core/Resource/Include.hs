@@ -30,10 +30,10 @@ resInclude :: forall c. (D.CContent c)
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.CodePiece      -- ^ Source name
-    -> String           -- ^ Source code
+    -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude add cd res src code =
-    do ls <- S.tokenLines src code
+    do ls <- S.tokenLinesBz src code
        let sec  = C.resLastSecNo res + 1
            cs   = C.consClause add sec ls
        res2 <- B.foldM (resIncludeBody cd) res $ reverse cs

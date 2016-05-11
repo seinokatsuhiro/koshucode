@@ -10,9 +10,11 @@ module Koshucode.Baala.Core.Resource.Read
     readSources,
   ) where
 
+import qualified Control.Monad.State                     as M
+import qualified Data.ByteString.Lazy                    as Bz
+import qualified Data.ByteString.Lazy.UTF8               as Bu
 import qualified System.Directory                        as Dir
 import qualified System.FilePath                         as Path
-import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -77,7 +79,7 @@ readResourceOne res src add = dispatch $ B.codeName src where
                      cd'   = putDir cd $ Path.dropFileName path
                  exist <- Dir.doesFileExist path'
                  case exist of
-                   True   -> includeUnder cd' =<< readFile path'
+                   True   -> includeUnder cd' =<< Bz.readFile path'
                    False  -> return $ Msg.noFile cd path
 
     dispatch (B.IOPointUri url) =
@@ -85,12 +87,12 @@ readResourceOne res src add = dispatch $ B.codeName src where
            let proxy = C.globalProxy g
            abcode <- gio $ B.uriContent proxy url
            gio $ case abcode of
-             Right code       -> include code
+             Right code       -> includeString code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.IOPointText _ text)   = gio $ include text
-    dispatch (B.IOPointCustom _ text) = gio $ include text
-    dispatch (B.IOPointStdin)         = gio $ include =<< getContents
+    dispatch (B.IOPointText _ text)   = gio $ includeString text
+    dispatch (B.IOPointCustom _ text) = gio $ includeString text
+    dispatch (B.IOPointStdin)         = gio $ include =<< Bz.getContents
     dispatch (B.IOPointStdout)        = B.bug "readResourceOne"
 
     putDir dir path  = cutDot dir ++ cutDot path
@@ -98,17 +100,20 @@ readResourceOne res src add = dispatch $ B.codeName src where
     cutDot ('.' : '/' : path) = cutDot path
     cutDot path               = path
 
-    include :: FilePath -> IO (C.AbResource c)
+    include :: B.Bz -> IO (C.AbResource c)
     include = includeUnder ""
 
-    includeUnder :: FilePath -> FilePath -> IO (C.AbResource c)
+    includeString :: String -> IO (C.AbResource c)
+    includeString = includeUnder "" . Bu.fromString
+
+    includeUnder :: FilePath -> B.Bz -> IO (C.AbResource c)
     includeUnder cd = return . C.resInclude add' cd res src
 
     add' = concatMap B.untree add
 
 -- | Read resource from text.
 readResourceText :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude [] "" res (B.codeTextOf code) code
+readResourceText res code = C.resInclude [] "" res (B.codeTextOf code) $ Bu.fromString code
 
 readSources :: forall c. (D.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =
