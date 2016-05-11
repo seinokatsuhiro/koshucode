@@ -8,7 +8,6 @@
 
 module Koshucode.Baala.Core.Assert.Dataset
   ( Dataset,
-    datasetEmpty,
     dataset,
     datasetAdd,
     datasetSelect,
@@ -26,12 +25,12 @@ import qualified Koshucode.Baala.Core.Relkit  as C
 data Dataset c = Dataset (Map.Map D.JudgePat [[S.Term c]])
 
 -- | Dataset that has no judges.
-datasetEmpty :: Dataset c
-datasetEmpty = Dataset Map.empty
+instance B.Default (Dataset c) where
+    def = Dataset Map.empty
 
 -- | Gather judges into a dataset.
 dataset :: [D.Judge c] -> Dataset c
-dataset js = datasetAdd js datasetEmpty
+dataset js = datasetAdd js B.def
 
 -- | Add judges to dataset.
 datasetAdd :: [D.Judge c] -> Dataset c -> Dataset c
