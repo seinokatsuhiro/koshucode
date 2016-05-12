@@ -61,7 +61,6 @@ resIncludeBody cd res abcl =
          C.CLicense _      -> call license
     where
       f << y  = y : f res
-      f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
 
       feature = C.globalFeature $ C.resGlobal res
       feat e f msg | f feature = e
@@ -102,7 +101,7 @@ resIncludeBody cd res abcl =
       input :: Include c
       input _ _ (C.CInput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ res { C.resInputStack = C.resInputStack <: io }
+             checkIOPoint $ C.resStackTodo io res
 
       output :: Include c
       output _ _ (C.COutput toks) =

@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
@@ -14,6 +15,9 @@ module Koshucode.Baala.Core.Resource.Resource
     Resource (..), AbResource,
     resIncluded, resInput, resInputPoint, resClass,
     addMessage, addMessages,
+
+    -- * Input stack
+    InputStack, resStackMap, resStackTodo, resStackDone,
 
     -- * Hook
     Assert, ConsRelmap, Global,
@@ -49,13 +53,13 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
     , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
-    , resInputStack :: ([C.InputPoint], [C.InputPoint], [B.CodePiece])  -- ^ Input points
+    , resInputStack :: InputStack          -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
     , resEcho       :: [[S.TokenLine]]     -- ^ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
-    , resSelect     :: C.RelSelect c
+    , resSelect     :: C.RelSelect c       -- ^ Relation selector
     }
 
 instance Show (Resource c) where
@@ -91,25 +95,54 @@ instance (D.CContent c) => B.Default (Resource c) where
 -- | Abort or resource.
 type AbResource c = B.Ab (Resource c)
 
+-- | Included sources, i.e., done-part of input stack.
 resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInputStack = (_, _, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
+-- | All input points.
 resInputPoint :: Resource c -> [C.InputPoint]
-resInputPoint Resource { resInputStack = (in1, in2, in3) }
-    = in1 ++ in2 ++ map (ip . B.codeName) in3 where
-      ip p = C.InputPoint p []
+resInputPoint Resource { resInputStack = (todo, ready, done) } = ps where
+    ps = todo ++ ready ++ map (ip . B.codeName) done
+    ip p = C.InputPoint p []
 
+-- | List of all judgement classes.
 resClass :: Resource c -> [D.JudgeClass]
-resClass Resource { resAssert = ass } = map (C.assClass . S.shortBody) ass
+resClass Resource {..} = map (C.assClass . S.shortBody) resAssert
 
+-- | Add single message.
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }
 
+-- | Add messages.
 addMessages :: [String] -> B.Map (Resource c)
 addMessages msg res = res { resMessage = msg ++ resMessage res }
+
+
+-- ----------------------  Input stack
+
+-- | Stack for input code: /todo/, /ready/ and /done/.
+type InputStack = ([C.InputPoint], [C.InputPoint], [B.CodePiece])
+
+-- | Map to input stack.
+resStackMap :: B.Map InputStack -> B.Map (Resource c)
+resStackMap f res@Resource {..} = res { resInputStack = f resInputStack }
+
+-- | Add input to todo-part of input stack.
+resStackTodo :: C.InputPoint -> B.Map (Resource c)
+resStackTodo t = resStackMap $ inputStackTodo t where
+
+-- | Add input to done-part of input stack.
+resStackDone :: B.CodePiece -> B.Map (Resource c)
+resStackDone d = resStackMap $ inputStackDone d
+
+inputStackTodo :: C.InputPoint -> B.Map InputStack
+inputStackTodo t (todo, ready, done) = (t:todo, ready, done)
+
+inputStackDone :: B.CodePiece -> B.Map InputStack
+inputStackDone d (todo, ready, done) = (todo, ready, d:done)
 
 
 -- ----------------------  Hook
