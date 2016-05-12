@@ -23,7 +23,7 @@ hPutKoshu h result status sh =
        hPutLicense h result
        hPutEcho h result
        -- body
-       let cnt = W.judgeCount $ C.resultPattern result
+       let cnt = W.judgeCount $ C.resultClass result
        cnt' <- M.foldM (hPutShortChunk h result) cnt sh
        -- foot
        B.when (C.resultPrintFoot result) $ hPutFoot h status cnt'

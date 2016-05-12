@@ -12,7 +12,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resIncluded, resInput, resInputPoint, resPattern,
+    resIncluded, resInput, resInputPoint, resClass,
     addMessage, addMessages,
 
     -- * Hook
@@ -102,8 +102,8 @@ resInputPoint Resource { resInputStack = (in1, in2, in3) }
     = in1 ++ in2 ++ map (ip . B.codeName) in3 where
       ip p = C.InputPoint p []
 
-resPattern :: Resource c -> [D.JudgeClass]
-resPattern Resource { resAssert = ass } = map (C.assPattern . S.shortBody) ass
+resClass :: Resource c -> [D.JudgeClass]
+resClass Resource { resAssert = ass } = map (C.assClass . S.shortBody) ass
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }

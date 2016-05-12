@@ -43,7 +43,7 @@ runResourceBody rslt res@C.Resource { C.resAssert  = ass
                , C.resultLicense   = group license
                , C.resultViolated  = S.shortTrim js1
                , C.resultNormal    = msgChunk : S.shortTrim js2
-               , C.resultPattern   = C.resPattern res }
+               , C.resultClass     = C.resClass res }
     where
       run :: [C.ShortAssert c] -> B.Ab [C.ShortResultChunks c]
       run = let opt = C.resOption res

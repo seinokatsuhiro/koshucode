@@ -78,7 +78,7 @@ relkitKoshuResSink :: (D.CContent c)
 relkitKoshuResSink (sec, pat) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, pat]
-    g a   = [D.pInt $ C.assSection a, D.pText $ C.assPattern a]
+    g a   = [D.pInt $ C.assSection a, D.pText $ C.assClass a]
     f     = g . S.shortBody
     bo2   = f `map` C.resAssert res
 
