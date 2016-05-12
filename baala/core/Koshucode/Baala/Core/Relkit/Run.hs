@@ -18,12 +18,12 @@ import qualified Koshucode.Baala.Core.Relkit.Construct  as C
 import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
 import qualified Koshucode.Baala.Core.Relkit.Message    as Msg
 
-relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
+relkitLink :: forall c. (Ord c) => C.RelkitTable c -> B.Map (C.Relkit c)
 relkitLink kits = linkKit where
     linkKit :: B.Map (C.Relkit c)
     linkKit (C.Relkit hi ho bo) = C.Relkit hi ho $ link bo
 
-    kitsRec :: [C.RelkitDef c]
+    kitsRec :: C.RelkitTable c
     kitsRec = linkKit `B.mapSndTo` kits
 
     link :: B.Map (C.RelkitBody c)

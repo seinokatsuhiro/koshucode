@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Specialize generic relmaps to specific relmaps
+-- | Specialize generic relmaps to specialized relmaps
 
 module Koshucode.Baala.Core.Relmap.Specialize
   ( relmapSpecialize, 
@@ -17,18 +17,25 @@ import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
 import qualified Koshucode.Baala.Core.Lexmap.Message  as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
+-- | Table for referencing relmap of 'C.RelmapLink'.
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 
+-- | Specializes generic relmap to specialized relmap,
+--   i.e., 'C.Relmap' to 'C.Relkit'.
+--   Specialized relmaps have fixed input/output headings.
+--   In constrast, generic relmaps do not.
+--   Specialized relmaps are also called relkits.
+--   This function returns relkit and extended table of relkits.
 relmapSpecialize :: forall h. forall c.
-    h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
-    -> Maybe D.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+    h c -> RelmapLinkTable' h c -> C.RelkitTable c
+    -> Maybe D.Head -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
     spec :: [((S.Token, S.Local String), D.Head)]  -- name of local relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
-         -> [C.RelkitDef c]      -- list of known specialized relkits
+         -> C.RelkitTable c      -- list of known specialized relkits
          -> Maybe D.Head         -- input head feeding into generic relmap
          -> C.Relmap' h c        -- generic relmap to specialize
-         -> B.Ab ([C.RelkitDef c], C.Relkit c)
+         -> B.Ab (C.RelkitTable c, C.Relkit c)
     spec local keys kdef he1 rmap = s where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
@@ -83,7 +90,7 @@ relmapSpecialize hook links = spec [] [] where
                     n   = C.lexName   lx
                     ps  = S.tokenParents tok
 
-        post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
+        post :: C.Lexmap -> B.Map (B.Ab (C.RelkitTable c, C.Relkit c))
         post lx result =
             Msg.abSpecialize [lx] $ do
                (kdef2, kit) <- result
@@ -96,14 +103,14 @@ relmapSpecialize hook links = spec [] [] where
         find _ = Nothing
 
         -- specialize subrelmaps to subrelkits
-        list :: [C.RelkitDef c] -> [C.Relmap' h c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
+        list :: C.RelkitTable c -> [C.Relmap' h c] -> B.Ab (C.RelkitTable c, [C.Relkit c])
         list kdef1 [] = Right (kdef1, [])
         list kdef1 (rmap1 : rmaps) =
             do (kdef2, kit)  <- spec local keys kdef1 he1 rmap1
                (kdef3, kits) <- list kdef2 rmaps
                Right (kdef3, kit : kits)
 
-        link :: String -> C.Relmap' h c -> C.RelkitKey -> B.Ab ([C.RelkitDef c], C.Relkit c)
+        link :: String -> C.Relmap' h c -> C.RelkitKey -> B.Ab (C.RelkitTable c, C.Relkit c)
         link n rmap1 key1
             | key1 `elem` keys = Right (kdef, cyclic)
             | otherwise = case lookup key1 kdef of

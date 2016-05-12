@@ -5,10 +5,10 @@
 module Koshucode.Baala.Core.Relkit.Relkit
   ( 
     -- * Datatype for Relkit
-    Relkit (..), RelkitCore (..),
+    Relkit (..), RelkitBody, RelkitCore (..),
   
     -- * Derived types
-    RelkitBody, RelkitKey, RelkitDef,
+    RelkitTable, RelkitKey,
     BodyMap, RelSelect,
 
     -- * Calculation type
@@ -26,11 +26,14 @@ import qualified Koshucode.Baala.Core.Lexmap  as C
 
 -- | Specialized relmap.
 data Relkit c = Relkit
-    { relkitInput  :: Maybe D.Head
-    , relkitOutput :: Maybe D.Head
-    , relkitBody   :: RelkitBody c
+    { relkitInput  :: Maybe D.Head     -- ^ Input heading
+    , relkitOutput :: Maybe D.Head     -- ^ Output heading
+    , relkitBody   :: RelkitBody c     -- ^ Calculation function
     }
 
+type RelkitBody c = B.Sourced (RelkitCore c)
+
+-- | Calculation of relation-to-relation mapping.
 data RelkitCore c
     = RelkitFull         Bool (                B.Map     [[c]] )
     | RelkitOneToMany    Bool (                B.ManyMap [c]   )
@@ -76,9 +79,11 @@ instance Show (RelkitCore c) where
     show (RelkitNestVar     _ n)   = "RelkitNestVar " ++ n
     show (RelkitNest      _ _ _)   = "RelkitNest "
 
-type RelkitBody c = B.Sourced (RelkitCore c)
-type RelkitKey    = (Maybe D.Head, [C.Lexmap])
-type RelkitDef c  = (RelkitKey, Relkit c)
+-- | Relkit search table.
+type RelkitTable c = [(RelkitKey, Relkit c)]
+
+-- | Search key of relkit.
+type RelkitKey = (Maybe D.Head, [C.Lexmap])
 
 -- | Relation selector
 type RelSelect c = D.JudgeClass -> [String] -> D.Rel c
