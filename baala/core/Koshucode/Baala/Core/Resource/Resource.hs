@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wall #-}
 
 -- | Internal representation of relational data resource.
 --   Data resource bundles data themselves and calculation stuffs.
@@ -25,20 +25,15 @@ module Koshucode.Baala.Core.Resource.Resource
     Rop, RopCons, Intmed,
     ShortAssert, ShortAsserts,
     global,
-
-    -- * Concrete type
-    AboutC, AboutJudgesC, GlobalC, JudgeC,
-    RelC, ResourceC, ResultC, ResultWriterC,
   ) where
 
-import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
-import qualified Koshucode.Baala.Core.Assert    as C
-import qualified Koshucode.Baala.Core.Lexmap    as C
-import qualified Koshucode.Baala.Core.Relkit    as C
-import qualified Koshucode.Baala.Core.Relmap    as C
-import qualified Koshucode.Baala.Core.Resource.About     as C
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Syntax               as S
+import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Core.Assert          as C
+import qualified Koshucode.Baala.Core.Lexmap          as C
+import qualified Koshucode.Baala.Core.Relkit          as C
+import qualified Koshucode.Baala.Core.Relmap          as C
 
 
 -- ----------------------  Data type
@@ -161,16 +156,4 @@ type ShortAsserts    c = C.ShortAsserts'    Resource c
 
 global :: (D.CContent c) => Global c
 global = C.global' B.def
-
-
--- ----------------------  Concrete type
-
-type AboutC            = C.About        D.BaalaC
-type AboutJudgesC      = C.AboutJudges  D.BaalaC
-type GlobalC           = Global         D.BaalaC
-type JudgeC            = D.Judge        D.BaalaC
-type RelC              = D.Rel          D.BaalaC
-type ResourceC         = Resource       D.BaalaC
-type ResultC           = C.Result       D.BaalaC
-type ResultWriterC     = C.ResultWriter D.BaalaC
 
