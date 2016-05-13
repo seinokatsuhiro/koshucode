@@ -116,7 +116,7 @@ readCode res src add = dispatch $ B.codeName src where
     dispatch (B.IOPointText   _ code) = gio $ include code
     dispatch (B.IOPointCustom _ code) = gio $ include code
     dispatch (B.IOPointStdin)         = gio $ include =<< Bz.getContents
-    dispatch (B.IOPointStdout)        = B.bug "read resource"
+    dispatch _                        = B.bug "read resource"
 
     putDir dir path  = cutDot dir ++ cutDot path
 

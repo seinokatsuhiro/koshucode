@@ -5,7 +5,10 @@
 -- | I/O point: file, standard input, direct text, etc.
 
 module Koshucode.Baala.Base.Text.IOPoint
-  ( -- * I/O Point
+  ( -- * Named handle
+    NamedHandle (..),
+
+    -- * I/O point
     IOPoint (..),
     ioPointType, ioPointText,
     ioPointFrom, ioPointList,
@@ -15,8 +18,27 @@ module Koshucode.Baala.Base.Text.IOPoint
     codeEmpty, codeTextOf,
   ) where
 
-import qualified Data.Generics                as G
-import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Data.Generics                 as G
+import qualified System.IO                     as IO
+import qualified Koshucode.Baala.Base.Prelude  as B
+
+
+-- ----------------------  Named handle
+
+-- | Named I/O handle.
+data NamedHandle = NamedHandle
+    { handleName :: String       -- ^ Name of handle
+    , handle     :: IO.Handle    -- ^ I/O handle
+    } deriving (G.Data, G.Typeable)
+
+instance Show NamedHandle where
+    show = handleName
+
+instance Eq NamedHandle where
+    h1 == h2 = handleName h1 == handleName h2
+
+instance Ord NamedHandle where
+    h1 `compare` h2 = handleName h1 `compare` handleName h2
 
 
 -- ----------------------  IOPoint
@@ -28,6 +50,7 @@ data IOPoint
     | IOPointCustom String B.Bz             -- ^ Custom I/O
     | IOPointStdin                          -- ^ Sandard input
     | IOPointStdout                         -- ^ Sandard output
+    | IOPointOutput NamedHandle             -- ^ Output handler
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
@@ -39,6 +62,7 @@ ioPointType (IOPointText _ _)   = "text"
 ioPointType (IOPointCustom _ _) = "custom"
 ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
+ioPointType (IOPointOutput _)   = "output"
 
 -- | Name of I/O point.
 ioPointText :: IOPoint -> String
@@ -49,6 +73,7 @@ ioPointText (IOPointText (Nothing) _)    = "<text>"
 ioPointText (IOPointCustom name _)       = name
 ioPointText (IOPointStdin)               = "<stdin>"
 ioPointText (IOPointStdout)              = "<stdout>"
+ioPointText (IOPointOutput h)            = handleName h
 
 -- | Create I/O point.
 ioPointFrom :: FilePath -> FilePath -> IOPoint

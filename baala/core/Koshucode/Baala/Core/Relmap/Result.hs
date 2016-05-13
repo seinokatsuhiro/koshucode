@@ -119,6 +119,7 @@ putResult :: (B.Write c) => Result c -> IO B.ExitCode
 putResult result =
     case resultOutput result of
       B.IOPointStdout      -> hPutResult B.stdout result
+      B.IOPointOutput h    -> hPutResult (B.handle h) result
       B.IOPointFile _ path -> do h <- IO.openFile path IO.WriteMode
                                  n <- hPutResult h result
                                  IO.hClose h
