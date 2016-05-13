@@ -19,8 +19,9 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
-import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Include   as C
+import qualified Koshucode.Baala.Core.Resource.Queue     as C
+import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 
@@ -66,30 +67,30 @@ readResource src =
 
 readResourceLimit :: forall c. (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
 readResourceLimit limit root src =
-    readQueue limit $ root { C.resInputQueue = ([], ready, []) }
+    readQueue limit $ root { C.resInputQueue = (C.qFrom ready, []) }
     where ready = map input $ reverse src
           input pt = C.InputPoint pt []
 
 -- | Read input at most given limit on the queue.
 readQueue :: (D.CContent c) => Int -> C.Resource c -> ResourceIO c
-readQueue limit res@C.Resource { C.resInputQueue = queue }
+readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
     | limit <= 0  = return $ Right res
-    | otherwise   = proc queue
+    | otherwise   = proc $ C.deq q
     where
-      proc ([], [], _)      = return $ Right res
-      proc (todo, [], done) = readQueue limit $ res { C.resInputQueue = ([], reverse todo, done) }
-      proc (todo, src : ready, done)
-          | B.CodePiece 0 srcPt `elem` done = readQueue limit pop  -- skip
+      proc (Nothing, _) = return $ Right res
+      proc (Just src, q')
+          | B.CodePiece 0 srcPt `elem` done = readQueue limit' pop  -- skip
           | otherwise                       = readOne
           where
+            limit'   = limit - 1
             srcPt    = C.inputPoint src
             srcAbout = C.inputPointAbout src
-            pop      = res { C.resInputQueue = (todo, ready, done) }
+            pop      = res { C.resInputQueue = (q', done) }
             readOne  = do n <- nextSourceCount
                           let src' = B.CodePiece n srcPt
                           abres' <- readCode pop src' srcAbout
                           case abres' of
-                            Right res' -> readQueue (limit - 1) $ C.resQueueDone src' res'
+                            Right res' -> readQueue limit' $ C.resQueueDone src' res'
                             left       -> return left
 
 -- | Read resource from certain source.

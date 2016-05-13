@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Resource.Resource
     addMessage, addMessages,
 
     -- * Input queue
-    InputQueue, resQueueMap, resQueueTodo, resQueueDone,
+    InputQueue, resQueueTodo, resQueueDone,
 
     -- * Hook
     Assert, ConsRelmap, Global,
@@ -34,6 +34,7 @@ import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
+import qualified Koshucode.Baala.Core.Resource.Queue  as C
 
 
 -- ----------------------  Data type
@@ -58,8 +59,8 @@ data Resource c = Resource
     }
 
 instance Show (Resource c) where
-    show Resource { resInputQueue = art }
-        = "Resources " ++ show art
+    show Resource { resInputQueue = q }
+        = "Resources " ++ show q
 
 instance D.SelectRel Resource where
     selectRel Resource { resSelect = sel } = sel
@@ -78,7 +79,7 @@ instance (D.CContent c) => B.Default (Resource c) where
            , resLexmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resInputQueue = ([], [], [])
+           , resInputQueue = (B.def, [])
            , resOutput     = B.IOPointStdout
            , resEcho       = []
            , resLicense    = []
@@ -92,15 +93,15 @@ type AbResource c = B.Ab (Resource c)
 
 -- | Included sources, i.e., done-part of input queue.
 resIncluded :: Resource c -> [B.CodePiece]
-resIncluded Resource { resInputQueue = (_, _, done) } = done
+resIncluded Resource { resInputQueue = (_, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
 -- | All input points.
 resInputPoint :: Resource c -> [C.InputPoint]
-resInputPoint Resource { resInputQueue = (todo, ready, done) } = ps where
-    ps = todo ++ ready ++ map (ip . B.codeName) done
+resInputPoint Resource { resInputQueue = (q, done) } = ps where
+    ps = C.qTo q ++ map (ip . B.codeName) done
     ip p = C.InputPoint p []
 
 -- | List of all judgement classes.
@@ -119,7 +120,7 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = ([C.InputPoint], [C.InputPoint], [B.CodePiece])
+type InputQueue = (C.Queue C.InputPoint, [B.CodePiece])
 
 -- | Map to input queue.
 resQueueMap :: B.Map InputQueue -> B.Map (Resource c)
@@ -127,17 +128,13 @@ resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 
 -- | Add input to todo-part of input queue.
 resQueueTodo :: C.InputPoint -> B.Map (Resource c)
-resQueueTodo t = resQueueMap $ inputQueueTodo t where
+resQueueTodo t = resQueueMap todo where
+    todo (q, done) = (C.enq t q, done)
 
 -- | Add input to done-part of input queue.
 resQueueDone :: B.CodePiece -> B.Map (Resource c)
-resQueueDone d = resQueueMap $ inputQueueDone d
-
-inputQueueTodo :: C.InputPoint -> B.Map InputQueue
-inputQueueTodo t (todo, ready, done) = (t:todo, ready, done)
-
-inputQueueDone :: B.CodePiece -> B.Map InputQueue
-inputQueueDone d (todo, ready, done) = (todo, ready, d:done)
+resQueueDone d = resQueueMap push where
+    push (q, done) = (q, d:done)
 
 
 -- ----------------------  Hook
