@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -11,6 +12,7 @@ module Koshucode.Baala.Base.Syntax.Line
     linesCrlf, linesFrom,
     linesCrlfBzNumbered,
     linesCrlfBz, linesCrlfBzString,
+    dropBom,
 
     -- * CodeLine
     CodeLine (..),
@@ -63,28 +65,39 @@ linesCrlf s = ln : next s2 where
 linesFrom :: (Show a) => a -> [String]
 linesFrom = lines . show
 
-linesCrlfBzNumbered :: Bz.ByteString -> [NumberedLine]
+linesCrlfBzNumbered :: B.Bz -> [NumberedLine]
 linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
 
-linesCrlfBzString :: Bz.ByteString -> [String]
+linesCrlfBzString :: B.Bz -> [String]
 linesCrlfBzString = map Bu.toString . linesCrlfBz
 
-linesCrlfBz :: Bz.ByteString -> [Bz.ByteString]
-linesCrlfBz bz
-    | Bz.null bz  = []
-    | otherwise   = case Bz.break crlf bz of
-                      (ln, bz') -> ln : linesCrlfBz (strip bz')
-    where
-      crlf n = (n == lf) || (n == cr)
-      lf = 10 -- '\n'
-      cr = 13 -- '\r'
+linesCrlfBz :: B.Bz -> [B.Bz]
+linesCrlfBz = linesCrlfBzRaw . dropBom
 
-      strip bz2 = case Bz.uncons bz2 of
-                    Nothing -> bz2
-                    Just (c , bz2')
-                        | c == cr   -> strip bz2'
-                        | c == lf   -> bz2'
-                        | otherwise -> bz2
+linesCrlfBzRaw :: B.Bz -> [B.Bz]
+linesCrlfBzRaw = loop where
+    loop bz
+        | Bz.null bz  = []
+        | otherwise   = case Bz.break crlf bz of
+                          (ln, bz') -> ln : loop (strip bz')
+                          
+    crlf n = (n == lf) || (n == cr)
+    lf = 10 -- '\n'
+    cr = 13 -- '\r'
+
+    strip bz2 = case Bz.uncons bz2 of
+                  Nothing -> bz2
+                  Just (c , bz2')
+                      | c == cr   -> strip bz2'
+                      | c == lf   -> bz2'
+                      | otherwise -> bz2
+
+-- | Remove UTF-8 BOM (EF BB BF) from lazy ByteString.
+dropBom :: B.Bz -> B.Bz
+dropBom bz =
+  case Bz.splitAt 3 bz of
+    (bom, body) | "\xEF\xBB\xBF" `Bz.isPrefixOf` bom -> body
+                | otherwise                          -> bz
 
 
 -- ----------------------  CodeLine
@@ -136,7 +149,7 @@ data CodeRoll a =
 codeRollUp :: B.AbMap (CodeRoll a) -> B.CodePiece -> String -> B.Ab [CodeLine a]
 codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
 
-codeRollUpBz :: B.AbMap (CodeRoll a) -> B.CodePiece -> Bz.ByteString -> B.Ab [CodeLine a]
+codeRollUpBz :: B.AbMap (CodeRoll a) -> B.CodePiece -> B.Bz -> B.Ab [CodeLine a]
 codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
 codeRollUpLines :: B.AbMap (CodeRoll a) -> B.CodePiece -> [NumberedLine] -> B.Ab [CodeLine a]
