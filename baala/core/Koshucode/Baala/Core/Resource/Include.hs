@@ -101,7 +101,7 @@ resIncludeBody cd res abcl =
       input :: Include c
       input _ _ (C.CInput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ C.resStackTodo io res
+             checkIOPoint $ C.resQueueTodo io res
 
       output :: Include c
       output _ _ (C.COutput toks) =

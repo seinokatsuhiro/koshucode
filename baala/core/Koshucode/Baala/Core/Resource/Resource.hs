@@ -16,8 +16,8 @@ module Koshucode.Baala.Core.Resource.Resource
     resIncluded, resInput, resInputPoint, resClass,
     addMessage, addMessages,
 
-    -- * Input stack
-    InputStack, resStackMap, resStackTodo, resStackDone,
+    -- * Input queue
+    InputQueue, resQueueMap, resQueueTodo, resQueueDone,
 
     -- * Hook
     Assert, ConsRelmap, Global,
@@ -48,7 +48,7 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
     , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
-    , resInputStack :: InputStack          -- ^ Input points
+    , resInputQueue :: InputQueue          -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
     , resEcho       :: [[S.TokenLine]]     -- ^ Echo text
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
@@ -58,7 +58,7 @@ data Resource c = Resource
     }
 
 instance Show (Resource c) where
-    show Resource { resInputStack = art }
+    show Resource { resInputQueue = art }
         = "Resources " ++ show art
 
 instance D.SelectRel Resource where
@@ -78,7 +78,7 @@ instance (D.CContent c) => B.Default (Resource c) where
            , resLexmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resInputStack = ([], [], [])
+           , resInputQueue = ([], [], [])
            , resOutput     = B.IOPointStdout
            , resEcho       = []
            , resLicense    = []
@@ -90,16 +90,16 @@ instance (D.CContent c) => B.Default (Resource c) where
 -- | Abort or resource.
 type AbResource c = B.Ab (Resource c)
 
--- | Included sources, i.e., done-part of input stack.
+-- | Included sources, i.e., done-part of input queue.
 resIncluded :: Resource c -> [B.CodePiece]
-resIncluded Resource { resInputStack = (_, _, done) } = done
+resIncluded Resource { resInputQueue = (_, _, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
 -- | All input points.
 resInputPoint :: Resource c -> [C.InputPoint]
-resInputPoint Resource { resInputStack = (todo, ready, done) } = ps where
+resInputPoint Resource { resInputQueue = (todo, ready, done) } = ps where
     ps = todo ++ ready ++ map (ip . B.codeName) done
     ip p = C.InputPoint p []
 
@@ -116,28 +116,28 @@ addMessages :: [String] -> B.Map (Resource c)
 addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 
--- ----------------------  Input stack
+-- ----------------------  Input queue
 
--- | Stack for input code: /todo/, /ready/ and /done/.
-type InputStack = ([C.InputPoint], [C.InputPoint], [B.CodePiece])
+-- | Queue for input code: /todo/, /ready/ and /done/.
+type InputQueue = ([C.InputPoint], [C.InputPoint], [B.CodePiece])
 
--- | Map to input stack.
-resStackMap :: B.Map InputStack -> B.Map (Resource c)
-resStackMap f res@Resource {..} = res { resInputStack = f resInputStack }
+-- | Map to input queue.
+resQueueMap :: B.Map InputQueue -> B.Map (Resource c)
+resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 
--- | Add input to todo-part of input stack.
-resStackTodo :: C.InputPoint -> B.Map (Resource c)
-resStackTodo t = resStackMap $ inputStackTodo t where
+-- | Add input to todo-part of input queue.
+resQueueTodo :: C.InputPoint -> B.Map (Resource c)
+resQueueTodo t = resQueueMap $ inputQueueTodo t where
 
--- | Add input to done-part of input stack.
-resStackDone :: B.CodePiece -> B.Map (Resource c)
-resStackDone d = resStackMap $ inputStackDone d
+-- | Add input to done-part of input queue.
+resQueueDone :: B.CodePiece -> B.Map (Resource c)
+resQueueDone d = resQueueMap $ inputQueueDone d
 
-inputStackTodo :: C.InputPoint -> B.Map InputStack
-inputStackTodo t (todo, ready, done) = (t:todo, ready, done)
+inputQueueTodo :: C.InputPoint -> B.Map InputQueue
+inputQueueTodo t (todo, ready, done) = (t:todo, ready, done)
 
-inputStackDone :: B.CodePiece -> B.Map InputStack
-inputStackDone d (todo, ready, done) = (todo, ready, d:done)
+inputQueueDone :: B.CodePiece -> B.Map InputQueue
+inputQueueDone d (todo, ready, done) = (todo, ready, d:done)
 
 
 -- ----------------------  Hook

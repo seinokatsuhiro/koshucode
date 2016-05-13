@@ -66,30 +66,30 @@ readResource src =
 
 readResourceLimit :: forall c. (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
 readResourceLimit limit root src =
-    readStack limit $ root { C.resInputStack = ([], ready, []) }
+    readQueue limit $ root { C.resInputQueue = ([], ready, []) }
     where ready = map input $ reverse src
           input pt = C.InputPoint pt []
 
--- | Read input at most given limit on the stack.
-readStack :: (D.CContent c) => Int -> C.Resource c -> ResourceIO c
-readStack limit res@C.Resource { C.resInputStack = stack }
+-- | Read input at most given limit on the queue.
+readQueue :: (D.CContent c) => Int -> C.Resource c -> ResourceIO c
+readQueue limit res@C.Resource { C.resInputQueue = queue }
     | limit <= 0  = return $ Right res
-    | otherwise   = proc stack
+    | otherwise   = proc queue
     where
       proc ([], [], _)      = return $ Right res
-      proc (todo, [], done) = readStack limit $ res { C.resInputStack = ([], reverse todo, done) }
+      proc (todo, [], done) = readQueue limit $ res { C.resInputQueue = ([], reverse todo, done) }
       proc (todo, src : ready, done)
-          | B.CodePiece 0 srcPt `elem` done = readStack limit pop  -- skip
+          | B.CodePiece 0 srcPt `elem` done = readQueue limit pop  -- skip
           | otherwise                       = readOne
           where
             srcPt    = C.inputPoint src
             srcAbout = C.inputPointAbout src
-            pop      = res { C.resInputStack = (todo, ready, done) }
+            pop      = res { C.resInputQueue = (todo, ready, done) }
             readOne  = do n <- nextSourceCount
                           let src' = B.CodePiece n srcPt
                           abres' <- readCode pop src' srcAbout
                           case abres' of
-                            Right res' -> readStack (limit - 1) $ C.resStackDone src' res'
+                            Right res' -> readQueue (limit - 1) $ C.resQueueDone src' res'
                             left       -> return left
 
 -- | Read resource from certain source.
