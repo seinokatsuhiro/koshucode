@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Resource.Read
   ( GlobalIO, ResourceIO,
     gio, gioResource,
     readResource,
+    readResourceSingle,
     readResourceText,
   ) where
 
@@ -50,33 +51,46 @@ readResourceText :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
 readResourceText res code = C.resInclude [] "" res (B.codeTextOf code') code' where
     code' = B.stringBz code
 
+-- | Read data resource from single input point.
+readResourceSingle :: forall c. (D.CContent c) => B.IOPoint -> ResourceIO c
+readResourceSingle src =
+    do root <- getRootResoruce
+       readResourceLimit 1 root [src]
+
 -- | Read relational resource.
 readResource :: forall c. (D.CContent c) => [B.IOPoint] -> ResourceIO c
 readResource src =
-    do res <- getRootResoruce
-       readStack $ res { C.resInputStack = ([], ready, []) }
-    where
-      ready = map input $ reverse src
-      input pt = C.InputPoint pt []
+    do root <- getRootResoruce
+       let limit = C.globalSourceLimit $ C.getGlobal root
+       readResourceLimit limit root src
 
--- | Read all on the input stack.
-readStack :: (D.CContent c) => C.Resource c -> ResourceIO c
-readStack res@C.Resource { C.resInputStack = stack } =
-    case stack of
-      ([], [], _)      -> return $ Right res
-      (todo, [], done) -> readStack $ res { C.resInputStack = ([], reverse todo, done) }
-      (todo, src : ready, done)
-        | B.CodePiece 0 srcPt `elem` done
-                         -> readStack pop  -- skip
-        | otherwise      -> do n <- nextSourceCount
-                               let src' = B.CodePiece n srcPt
-                               abres' <- readCode pop src' srcAbout
-                               case abres' of
-                                 Right res' -> readStack $ C.resStackDone src' res'
-                                 left       -> return left
-        where srcPt      = C.inputPoint src
-              srcAbout   = C.inputPointAbout src
-              pop        = res { C.resInputStack = (todo, ready, done) }
+readResourceLimit :: forall c. (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
+readResourceLimit limit root src =
+    readStack limit $ root { C.resInputStack = ([], ready, []) }
+    where ready = map input $ reverse src
+          input pt = C.InputPoint pt []
+
+-- | Read input at most given limit on the stack.
+readStack :: (D.CContent c) => Int -> C.Resource c -> ResourceIO c
+readStack limit res@C.Resource { C.resInputStack = stack }
+    | limit <= 0  = return $ Right res
+    | otherwise   = proc stack
+    where
+      proc ([], [], _)      = return $ Right res
+      proc (todo, [], done) = readStack limit $ res { C.resInputStack = ([], reverse todo, done) }
+      proc (todo, src : ready, done)
+          | B.CodePiece 0 srcPt `elem` done = readStack limit pop  -- skip
+          | otherwise                       = readOne
+          where
+            srcPt    = C.inputPoint src
+            srcAbout = C.inputPointAbout src
+            pop      = res { C.resInputStack = (todo, ready, done) }
+            readOne  = do n <- nextSourceCount
+                          let src' = B.CodePiece n srcPt
+                          abres' <- readCode pop src' srcAbout
+                          case abres' of
+                            Right res' -> readStack (limit - 1) $ C.resStackDone src' res'
+                            left       -> return left
 
 -- | Read resource from certain source.
 readCode :: forall c. (D.CContent c) =>

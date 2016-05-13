@@ -63,6 +63,7 @@ data Global' h c = Global
       , globalTime         :: D.Time                -- ^ Invocation time
       , globalResult       :: C.Result c            -- ^ Result template
       , globalOption       :: C.Option c            -- ^ Options
+      , globalSourceLimit  :: Int                   -- ^ Limit number of including sources
       , globalSourceCount  :: Int                   -- ^ Sequential number for sources
       , globalSources      :: [B.CodePiece]         -- ^ Included sources
       , globalHook         :: h c                   -- ^ Usually, data resource is used as hook
@@ -115,6 +116,7 @@ global' h = Global
     , globalTime         = D.timeFromMjd 0
     , globalResult       = B.def
     , globalOption       = C.option
+    , globalSourceLimit  = 1000
     , globalSourceCount  = 0
     , globalSources      = []
     , globalHook         = h }
