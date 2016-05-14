@@ -74,7 +74,7 @@ toInfix _ = Msg.adlib "require operand"
 -- ----------------------  if
 
 nameLeaf :: S.BlankName -> S.TTree
-nameLeaf = B.TreeL . S.TName B.codePtZero
+nameLeaf = B.TreeL . S.TName B.def
 
 treeIf :: S.TTree -> S.TTree -> S.TTree -> S.TTree
 treeIf test con alt = S.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]

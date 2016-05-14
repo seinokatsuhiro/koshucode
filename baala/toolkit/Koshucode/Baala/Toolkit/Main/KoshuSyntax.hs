@@ -197,13 +197,13 @@ judgesClauseType = map j cs where
 judgesTokenType :: [C.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
-    cs  = [ S.TTextRaw  B.codePtZero ""
-          , S.TSlot     B.codePtZero 0 ""
-          , S.TTermPath B.codePtZero []
-          , S.TOpen     B.codePtZero ""
-          , S.TClose    B.codePtZero ""
-          , S.TSpace    B.codePtZero 0
-          , S.TComment  B.codePtZero ""
+    cs  = [ S.TTextRaw  B.def ""
+          , S.TSlot     B.def 0 ""
+          , S.TTermPath B.def []
+          , S.TOpen     B.def ""
+          , S.TClose    B.def ""
+          , S.TSpace    B.def 0
+          , S.TComment  B.def ""
           ]
 
 

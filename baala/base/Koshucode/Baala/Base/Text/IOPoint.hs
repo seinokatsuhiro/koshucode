@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Text.IOPoint
 
     -- * Code information
     CodePiece (..),
-    codeEmpty, codeTextOf,
+    codeTextOf,
   ) where
 
 import qualified Data.Generics                 as G
@@ -94,10 +94,10 @@ ioPointList stdin texts context paths =
 -- ----------------------  CodePiece
 
 -- | A piece of code.
-data CodePiece
-    = CodePiece { codeNumber :: Int
-                , codeName   :: IOPoint }
-      deriving (Show, G.Data, G.Typeable)
+data CodePiece = CodePiece
+    { codeNumber :: Int        -- ^ Sequential number
+    , codeName   :: IOPoint    -- ^ I/O point
+    } deriving (Show, G.Data, G.Typeable)
 
 instance Eq CodePiece where
     x == y
@@ -105,7 +105,6 @@ instance Eq CodePiece where
       | otherwise           = xn == yn
       where xn = codeNumber x
             yn = codeNumber y
-                          
 
 instance Ord CodePiece where
     x `compare` y
@@ -115,8 +114,8 @@ instance Ord CodePiece where
             yn = codeNumber y
 
 -- | Empty code.
-codeEmpty :: CodePiece
-codeEmpty = codeTextOf ""
+instance B.Default CodePiece where
+    def = codeTextOf ""
 
 -- | Create text code.
 codeTextOf :: B.Bz -> CodePiece

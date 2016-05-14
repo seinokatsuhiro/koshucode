@@ -100,10 +100,10 @@ instance B.Write Token where
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
 
 textToken :: String -> Token
-textToken = TText B.codePtZero TextRaw
+textToken = TText B.def TextRaw
 
 nameToken :: String -> Token
-nameToken = TName B.codePtZero . BlankNormal
+nameToken = TName B.def . BlankNormal
 
 instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
@@ -216,7 +216,7 @@ blankNameTypeText n =
 
 -- $Selector
 --
---   >>> let tok = TTerm B.codePtZero 0 ["r", "x"] in tokenContent tok
+--   >>> let tok = TTerm B.def 0 ["r", "x"] in tokenContent tok
 --   "/r/x"
 --
 --   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenSubtypeText tok)
@@ -307,10 +307,10 @@ tokenParents _                 = []
 
 -- $Predicate
 --
---   >>> let tok = TOpen B.codePtZero "(" in isOpenTokenOf "(" tok
+--   >>> let tok = TOpen B.def "(" in isOpenTokenOf "(" tok
 --   True
 --
---   >>> let tok = TOpen B.codePtZero "{" in isOpenTokenOf "(" tok
+--   >>> let tok = TOpen B.def "{" in isOpenTokenOf "(" tok
 --   False
 
 -- | Test the token is blank, i.e., comment or space.

@@ -4,7 +4,6 @@
 module Koshucode.Baala.Base.Text.CodePt
   ( -- * Code point
     CodePt (..),
-    codePtZero,
     codePtColumnNo,
     codePtDisplay,
   
@@ -32,15 +31,15 @@ data CodePt = CodePt
 instance Ord CodePt where
     compare = codePtCompare
 
+-- | Empty code point, i.e., empty content and zero line number.
+instance B.Default CodePt where
+    def = CodePt B.def 0 "" ""
+
 codePtCompare :: CodePt -> CodePt -> Ordering
 codePtCompare p1 p2 = line `B.mappend` column where
     line   = codePtLineNo p1 `compare` codePtLineNo p2
     column = size p2 `compare` size p1
     size   = length . codePtText
-
--- | Empty code point, i.e., empty content and zero line number.
-codePtZero :: CodePt
-codePtZero = CodePt B.codeEmpty 0 "" ""
 
 -- | Column number at which code starts.
 codePtColumnNo :: CodePt -> Int
@@ -69,7 +68,7 @@ class CodePtr a where
     codePtList :: a -> [CodePt]
 
     codePt :: a ->  CodePt
-    codePt p = B.headOr codePtZero $ codePtList p
+    codePt p = B.headOr B.def $ codePtList p
 
 instance CodePtr CodePt where
     codePtList cp  = [cp]

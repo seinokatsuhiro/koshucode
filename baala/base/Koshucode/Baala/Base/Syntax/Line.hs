@@ -154,7 +154,7 @@ codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
 codeRollUpLines :: B.AbMap (CodeRoll a) -> B.CodePiece -> [NumberedLine] -> B.Ab [CodeLine a]
 codeRollUpLines f res = loop (CodeRoll f cp "" [] Map.empty) where
-    cp    = B.codePtZero { B.codePtSource = res }
+    cp    = B.def { B.codePtSource = res }
 
     loop _ [] = Right []
     loop r ((num, line) : ls) =
