@@ -101,7 +101,7 @@ resInput = map C.inputPoint . resInputPoint
 -- | All input points.
 resInputPoint :: Resource c -> [C.InputPoint]
 resInputPoint Resource { resInputQueue = (q, done) } = ps where
-    ps = C.qTo q ++ map (ip . B.codeName) done
+    ps = C.qTo q ++ map (ip . B.nioPoint) done
     ip p = C.InputPoint p []
 
 -- | List of all judgement classes.

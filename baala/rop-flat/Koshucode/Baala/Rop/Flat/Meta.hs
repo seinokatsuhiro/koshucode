@@ -222,9 +222,9 @@ relkitKoshuSource (num, ty, name) h _ = Right kit2 where
     kit2       = C.relkitConstBody ns $ map assn code
     assn c     = B.catMaybes [codeNo c, codeType c, codeText c]
 
-    codeNo     = Just         . D.pInt  . B.codeNumber
-    codeType   = maybeAs ty   . D.pText . B.ioPointType . B.codeName
-    codeText   = maybeAs name . D.pText . B.ioPointText . B.codeName
+    codeNo     = Just         . D.pInt  . B.nioNumber
+    codeType   = maybeAs ty   . D.pText . B.ioPointType . B.nioPoint
+    codeText   = maybeAs name . D.pText . B.ioPointText . B.nioPoint
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c

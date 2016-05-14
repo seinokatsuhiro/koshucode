@@ -50,7 +50,7 @@ tokens res cs = do ls <- tokenLines res cs
 
 -- | Abbreviated tokenizer.
 toks :: S.InputText -> B.Ab [S.Token]
-toks s = tokens (B.codeTextOf $ B.stringBz s) s
+toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> B.Ab [TokenLine]
@@ -347,7 +347,7 @@ scanTerm q sign cp wtab = word [] where
                              term (w : ns) cs'
     word _ _            = Msg.expOrdSym
 
-    nterm ns w cs'      = let n  = B.codeNumber $ B.codePtSource cp
+    nterm ns w cs'      = let n  = B.nioNumber $ B.codePtSource cp
                               w' = show n ++ ('=' : w)
                           in term (w' : ns) cs'
 

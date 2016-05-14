@@ -18,7 +18,7 @@ infixr 0 -:-
 resourceElem :: (D.CContent c) => C.Resource c -> [D.Judge c]
 resourceElem res = map art js where
     art  = D.judgeCons ("point" -:- path)
-    path = D.pText $ B.ioPointText $ B.codeName $ head $ C.resIncluded res
+    path = D.pText $ B.ioPointText $ B.nioPoint $ head $ C.resIncluded res
     ass  = map S.shortBody $ C.resAssert res
     js   = concat [ elemJudge       $ C.resJudge res
                   , elemAssert      $ ass

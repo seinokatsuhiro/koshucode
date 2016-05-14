@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Text.IOPoint
 
     -- * Numbered I/O point
     NIOPoint (..),
-    codeTextOf,
+    nioFrom,
   ) where
 
 import qualified Data.Generics                 as G
@@ -95,30 +95,30 @@ ioPointList stdin texts context paths =
 
 -- | Numbered I/O point.
 data NIOPoint = NIOPoint
-    { codeNumber :: Int        -- ^ Sequential number
+    { nioNumber  :: Int        -- ^ Sequential number
                                --   (0 for unnumbered, > 0 for numbered)
-    , codeName   :: IOPoint    -- ^ I/O point
+    , nioPoint   :: IOPoint    -- ^ I/O point
     } deriving (Show, G.Data, G.Typeable)
 
 instance Eq NIOPoint where
     x == y
-      | xn == 0 && yn == 0  = codeName x == codeName y
+      | xn == 0 && yn == 0  = nioPoint x == nioPoint y
       | otherwise           = xn == yn
-      where xn = codeNumber x
-            yn = codeNumber y
+      where xn = nioNumber x
+            yn = nioNumber y
 
 instance Ord NIOPoint where
     x `compare` y
-      | xn == 0 && yn == 0  = codeName x `compare` codeName y
+      | xn == 0 && yn == 0  = nioPoint x `compare` nioPoint y
       | otherwise           = xn `compare` yn
-      where xn = codeNumber x
-            yn = codeNumber y
+      where xn = nioNumber x
+            yn = nioNumber y
 
 -- | Zero-numbered empty input point.
 instance B.Default NIOPoint where
-    def = codeTextOf ""
+    def = nioFrom ""
 
 -- | Create input point for given lazy bytestring.
-codeTextOf :: B.Bz -> NIOPoint
-codeTextOf = NIOPoint 0 . IOPointText Nothing
+nioFrom :: B.Bz -> NIOPoint
+nioFrom = NIOPoint 0 . IOPointText Nothing
 
