@@ -61,19 +61,19 @@ readResourceText res code = C.resInclude [] "" res nio code' where
     code' = B.stringBz code
 
 -- | Read data resource from single input point.
-readResourceSingle :: forall c. (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
+readResourceSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
 readResourceSingle g src = gio g single where
     single = do root <- getRoot
                 readResourceLimit 1 root [src]
 
 -- | Read data resource from multiple input points.
-readResource :: forall c. (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
+readResource :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
 readResource g src = gio g proc where
     proc = do root <- getRoot
               let limit = C.globalSourceLimit $ C.getGlobal root
               readResourceLimit limit root src
 
-readResourceLimit :: forall c. (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
+readResourceLimit :: (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
 readResourceLimit limit root src =
     readQueue limit $ root { C.resInputQueue = (C.qFrom ready, []) }
     where ready = map input $ reverse src
