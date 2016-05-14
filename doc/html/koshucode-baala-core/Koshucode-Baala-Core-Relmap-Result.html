@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.133.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.141.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -156,10 +156,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>ShortResultChunks</a
 		> c]</li
 	      ><li
-	      ><a href="#v:resultPattern"
-		>resultPattern</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-		>JudgePat</a
+	      ><a href="#v:resultClass"
+		>resultClass</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
 		>]</li
 	      ></ul
 	    >}</li
@@ -186,16 +186,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:resultEmpty"
-	    >resultEmpty</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-	    >Show</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
-	    >Write</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
-	    >Result</a
-	    > c</li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:ResultChunk"
@@ -210,8 +200,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      >| <a href="#v:ResultRel"
 		>ResultRel</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-		>JudgePat</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
 		> (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		>Rel</a
 		> c)</li
@@ -470,10 +460,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
 		      ><dt class="src"
-		      ><a name="v:resultPattern" class="def"
-			>resultPattern</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-			>JudgePat</a
+		      ><a name="v:resultClass" class="def"
+			>resultClass</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+			>JudgeClass</a
 			>]</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
@@ -500,7 +490,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
 		      >Result</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-49" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-48" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -516,7 +506,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
 		      >Result</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-49" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-48" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -532,11 +522,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
 		      >Result</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-49" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-48" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
+		      >Result</a
+		      > c)</span
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-56" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Empty result.</p
+		    ></td
 		  ></tr
 		></table
 	      ></div
@@ -606,7 +616,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Result.html#t:InputPoint"
 		      >InputPoint</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-54" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -620,7 +630,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Result.html#t:InputPoint"
 		      >InputPoint</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-54" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -634,7 +644,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Result.html#t:InputPoint"
 		      >InputPoint</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-54" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-53" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -642,24 +652,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></tr
 		></table
 	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:resultEmpty" class="def"
-	    >resultEmpty</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-	    >Show</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
-	    >Write</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Result.html#t:Result"
-	    >Result</a
-	    > c <a href="src/Koshucode-Baala-Core-Relmap-Result.html#resultEmpty" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Empty result.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -695,8 +687,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		><a name="v:ResultRel" class="def"
 		  >ResultRel</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgePat"
-		  >JudgePat</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
 		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		  >Rel</a
 		  > c)</td
@@ -730,7 +722,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultChunk"
 		      >ResultChunk</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-80" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-78" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -746,7 +738,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultChunk"
 		      >ResultChunk</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-80" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-78" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -762,7 +754,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultChunk"
 		      >ResultChunk</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-80" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-78" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -908,7 +900,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
 		      >ResultWriter</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-112" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-110" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -922,7 +914,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
 		      >ResultWriter</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-109" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-107" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -936,7 +928,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
 		      >ResultWriter</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-105" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-103" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -950,7 +942,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Result.html#t:ResultWriter"
 		      >ResultWriter</a
 		      > c)</span
-		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-115" class="link"
+		    > <a href="src/Koshucode-Baala-Core-Relmap-Result.html#line-113" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

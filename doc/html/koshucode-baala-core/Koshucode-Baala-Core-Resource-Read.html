@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.133.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.141.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,12 +51,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="caption"
 	>Koshucode.Baala.Core.Resource.Read</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >I/O with global</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Read resource</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Read resource.</p
+	  >Read data resource.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -76,31 +90,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >IO</a
 	    > a</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:ResourceIO"
-	    >ResourceIO</a
-	    > c = <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
-	    >GlobalIO</a
+	  ><a href="#v:readResource"
+	    >readResource</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+	    >IOPoint</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
 	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
-	    > c) c</li
-	  ><li class="src short"
-	  ><a href="#v:gio"
-	    >gio</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > a -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
-	    >GlobalIO</a
-	    > a c</li
-	  ><li class="src short"
-	  ><a href="#v:gioResource"
-	    >gioResource</a
-	    > :: <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
-	    >ResourceIO</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:readResourceSingle"
+	    >readResourceSingle</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+	    >IOPoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
@@ -119,23 +133,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
 	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:readSources"
-	    >readSources</a
-	    > :: <span class="keyword"
-	    >forall</span
-	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-	    >IOPoint</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
-	    >ResourceIO</a
-	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>I/O with global</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -156,53 +158,55 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >I/O with global state.</p
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Read resource</h1
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:ResourceIO" class="def"
-	    >ResourceIO</a
-	    > c = <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
-	    >GlobalIO</a
-	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
-	    >AbResource</a
-	    > c) c <a href="src/Koshucode-Baala-Core-Resource-Read.html#ResourceIO" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Calculation that returns abortable resource.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:gio" class="def"
-	    >gio</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > a -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:GlobalIO"
-	    >GlobalIO</a
-	    > a c <a href="src/Koshucode-Baala-Core-Resource-Read.html#gio" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:gioResource" class="def"
-	    >gioResource</a
-	    > :: <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
-	    >ResourceIO</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	  ><a name="v:readResource" class="def"
+	    >readResource</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+	    >IOPoint</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
 	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c) <a href="src/Koshucode-Baala-Core-Resource-Read.html#gioResource" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Resource-Read.html#readResource" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read data resource from multiple input points.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readResourceSingle" class="def"
+	    >readResourceSingle</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+	    >IOPoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
+	    >AbResource</a
+	    > c, <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    >Global</a
+	    > c) <a href="src/Koshucode-Baala-Core-Resource-Read.html#readResourceSingle" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read data resource from single input point.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -221,24 +225,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Read resource from text.</p
+	    >Read data resource from text.</p
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:readSources" class="def"
-	    >readSources</a
-	    > :: <span class="keyword"
-	    >forall</span
-	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-	    >IOPoint</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Resource-Read.html#t:ResourceIO"
-	    >ResourceIO</a
-	    > c <a href="src/Koshucode-Baala-Core-Resource-Read.html#readSources" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	></div
       ></div
