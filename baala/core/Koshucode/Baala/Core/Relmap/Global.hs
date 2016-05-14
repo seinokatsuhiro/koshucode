@@ -53,20 +53,20 @@ ropCopset = globalCopset . ropGlobal
 
 -- | Global parameters
 data Global' h c = Global
-      { globalSynopsis     :: String                -- ^ One-line description of calculator
-      , globalVersion      :: Ver.Version           -- ^ Version of calculator
-      , globalOpset        :: OpSet' h c            -- ^ Set of operators
-      , globalFeature      :: Feature               -- ^ Features
-      , globalProgram      :: String                -- ^ Name of invoked program
-      , globalArgs         :: [String]              -- ^ Command line arguments
-      , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
-      , globalTime         :: D.Time                -- ^ Invocation time
-      , globalResult       :: C.Result c            -- ^ Result template
-      , globalOption       :: C.Option c            -- ^ Options
-      , globalSourceLimit  :: Int                   -- ^ Limit number of including sources
-      , globalSourceCount  :: Int                   -- ^ Sequential number for sources
-      , globalSources      :: [B.CodePiece]         -- ^ Included sources
-      , globalHook         :: h c                   -- ^ Usually, data resource is used as hook
+      { globalSynopsis     :: String            -- ^ One-line description of calculator
+      , globalVersion      :: Ver.Version       -- ^ Version of calculator
+      , globalOpset        :: OpSet' h c        -- ^ Set of operators
+      , globalFeature      :: Feature           -- ^ Features
+      , globalProgram      :: String            -- ^ Name of invoked program
+      , globalArgs         :: [String]          -- ^ Command line arguments
+      , globalProxy        :: [B.HttpProxy]     -- ^ Proxy setting from environment variables
+      , globalTime         :: D.Time            -- ^ Invocation time
+      , globalResult       :: C.Result c        -- ^ Result template
+      , globalOption       :: C.Option c        -- ^ Options
+      , globalSourceLimit  :: Int               -- ^ Limit number of including sources
+      , globalSourceCount  :: Int               -- ^ Sequential number for sources
+      , globalSources      :: [B.NIOPoint]      -- ^ Included sources
+      , globalHook         :: h c               -- ^ Usually, data resource is used as hook
       }
 
 instance Show (Global' h c) where

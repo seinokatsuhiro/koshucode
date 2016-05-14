@@ -44,7 +44,7 @@ type TokenRoll = B.CodeRoll S.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.CodePiece -> S.InputText -> B.Ab [S.Token]
+tokens :: B.NIOPoint -> S.InputText -> B.Ab [S.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
 
@@ -53,10 +53,10 @@ toks :: S.InputText -> B.Ab [S.Token]
 toks s = tokens (B.codeTextOf $ B.stringBz s) s
 
 -- | Tokenize text.
-tokenLines :: B.CodePiece -> S.InputText -> B.Ab [TokenLine]
+tokenLines :: B.NIOPoint -> S.InputText -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
-tokenLinesBz :: B.CodePiece -> B.Bz -> B.Ab [TokenLine]
+tokenLinesBz :: B.NIOPoint -> B.Bz -> B.Ab [TokenLine]
 tokenLinesBz = B.codeRollUpBz relation
 
 -- Line begins with the equal sign is treated as section delimter.

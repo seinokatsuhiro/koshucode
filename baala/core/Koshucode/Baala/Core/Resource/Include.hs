@@ -30,7 +30,7 @@ resInclude :: forall c. (D.CContent c)
     => [S.Token]        -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
-    -> B.CodePiece      -- ^ Source name
+    -> B.NIOPoint       -- ^ Source name
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude add cd res src code =

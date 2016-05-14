@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Base.Text.IOPoint  as B
 -- ----------------------  CodePt
 
 data CodePt = CodePt
-      { codePtSource     :: B.CodePiece    -- ^ Source of code
+      { codePtSource     :: B.NIOPoint  -- ^ Source of code
       , codePtLineNo     :: Int         -- ^ Line number
       , codePtLineText   :: String      -- ^ Line content
       , codePtText       :: String      -- ^ Text at which begins token

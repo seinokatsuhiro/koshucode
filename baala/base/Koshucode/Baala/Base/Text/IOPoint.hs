@@ -13,8 +13,8 @@ module Koshucode.Baala.Base.Text.IOPoint
     ioPointType, ioPointText,
     ioPointFrom, ioPointList,
 
-    -- * Code information
-    CodePiece (..),
+    -- * Numbered I/O point
+    NIOPoint (..),
     codeTextOf,
   ) where
 
@@ -91,33 +91,34 @@ ioPointList stdin texts context paths =
          ioPointFrom context `map` paths
 
 
--- ----------------------  CodePiece
+-- ----------------------  NIOPoint
 
--- | A piece of code.
-data CodePiece = CodePiece
+-- | Numbered I/O point.
+data NIOPoint = NIOPoint
     { codeNumber :: Int        -- ^ Sequential number
+                               --   (0 for unnumbered, > 0 for numbered)
     , codeName   :: IOPoint    -- ^ I/O point
     } deriving (Show, G.Data, G.Typeable)
 
-instance Eq CodePiece where
+instance Eq NIOPoint where
     x == y
       | xn == 0 && yn == 0  = codeName x == codeName y
       | otherwise           = xn == yn
       where xn = codeNumber x
             yn = codeNumber y
 
-instance Ord CodePiece where
+instance Ord NIOPoint where
     x `compare` y
       | xn == 0 && yn == 0  = codeName x `compare` codeName y
       | otherwise           = xn `compare` yn
       where xn = codeNumber x
             yn = codeNumber y
 
--- | Empty code.
-instance B.Default CodePiece where
+-- | Zero-numbered empty input point.
+instance B.Default NIOPoint where
     def = codeTextOf ""
 
--- | Create text code.
-codeTextOf :: B.Bz -> CodePiece
-codeTextOf = CodePiece 0 . IOPointText Nothing
+-- | Create input point for given lazy bytestring.
+codeTextOf :: B.Bz -> NIOPoint
+codeTextOf = NIOPoint 0 . IOPointText Nothing
 

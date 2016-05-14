@@ -146,13 +146,13 @@ data CodeRoll a =
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
 --
-codeRollUp :: B.AbMap (CodeRoll a) -> B.CodePiece -> String -> B.Ab [CodeLine a]
+codeRollUp :: B.AbMap (CodeRoll a) -> B.NIOPoint -> String -> B.Ab [CodeLine a]
 codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
 
-codeRollUpBz :: B.AbMap (CodeRoll a) -> B.CodePiece -> B.Bz -> B.Ab [CodeLine a]
+codeRollUpBz :: B.AbMap (CodeRoll a) -> B.NIOPoint -> B.Bz -> B.Ab [CodeLine a]
 codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
-codeRollUpLines :: B.AbMap (CodeRoll a) -> B.CodePiece -> [NumberedLine] -> B.Ab [CodeLine a]
+codeRollUpLines :: B.AbMap (CodeRoll a) -> B.NIOPoint -> [NumberedLine] -> B.Ab [CodeLine a]
 codeRollUpLines f res = loop (CodeRoll f cp "" [] Map.empty) where
     cp    = B.def { B.codePtSource = res }
 

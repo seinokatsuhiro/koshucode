@@ -92,7 +92,7 @@ instance (D.CContent c) => B.Default (Resource c) where
 type AbResource c = B.Ab (Resource c)
 
 -- | Included sources, i.e., done-part of input queue.
-resIncluded :: Resource c -> [B.CodePiece]
+resIncluded :: Resource c -> [B.NIOPoint]
 resIncluded Resource { resInputQueue = (_, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
@@ -120,7 +120,7 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = (C.Queue C.InputPoint, [B.CodePiece])
+type InputQueue = (C.Queue C.InputPoint, [B.NIOPoint])
 
 -- | Map to input queue.
 resQueueMap :: B.Map InputQueue -> B.Map (Resource c)
@@ -132,7 +132,7 @@ resQueueTodo t = resQueueMap todo where
     todo (q, done) = (C.enq t q, done)
 
 -- | Add input to done-part of input queue.
-resQueueDone :: B.CodePiece -> B.Map (Resource c)
+resQueueDone :: B.NIOPoint -> B.Map (Resource c)
 resQueueDone d = resQueueMap push where
     push (q, done) = (q, d:done)
 
