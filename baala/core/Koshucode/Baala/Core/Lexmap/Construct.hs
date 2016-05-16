@@ -9,12 +9,11 @@ module Koshucode.Baala.Core.Lexmap.Construct
 
     -- * Constructor types
     ConsLexmap, FindDeriv, LexmapClause,
+    -- ** Local types
+    RopParaze, ConsLexmapBody, LexmapLinkTable,
 
     -- * Types with section number
     SecNo, NName, NNamed,
-
-    -- * Local types
-    FindSorter, ConsLexmapBody, LexmapLinkTable,
   ) where
 
 import qualified Koshucode.Baala.Base                     as B
@@ -39,14 +38,8 @@ type NNamed a = (NName, a)
 
 -- ----------------------  Constructor type
 
+-- | Construct lexmap.
 type ConsLexmap = [S.GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
-
-type ConsLexmapBody = [S.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
-
-type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
-
--- | Find attribute sorter of relmap operator.
-type FindSorter = C.RopName -> Maybe S.AttrParaze
 
 -- | Find derived relmap operator.
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
@@ -54,16 +47,25 @@ type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 -- | Source of relmap: its name, replacement, and attribute editor.
 type LexmapClause = NNamed C.LexmapTrees
 
+-- ----------------------  Local type
+
+-- | Find parameterizer for relmap operator.
+type RopParaze = C.RopName -> Maybe S.AttrParaze
+
+-- | Construct lexmap from token trees.
+type ConsLexmapBody = [S.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
+
+-- | Lexmap and linked lexmap.
+type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
+
 
 -- ----------------------  Constructor
 
 -- | First step of constructing relmap,
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: FindSorter -> ConsLexmap
-consLexmap findSorter gslot findDeriv = lexmap 0 where
-
-    lexmap1 eid sec tree = lexmap eid sec [tree]
+consLexmap :: RopParaze -> ConsLexmap
+consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
     lexmap eid sec trees = result where
@@ -120,24 +122,24 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         base :: C.RopName -> S.Token -> ConsLexmapBody
         base n tok ts =
-            case findSorter n of
-              Nothing     -> Msg.unkRelmap n
-              Just sorter -> do attr <- sorter ts
-                                let lx = cons C.LexmapBase tok attr
-                                submap lx
+            case paraze n of
+              Nothing  -> Msg.unkRelmap n
+              Just ze  -> do para <- ze ts
+                             let lx = cons C.LexmapBase tok para
+                             submap lx
 
-        -- -----------  construct lexmap except for submaps
+        -- -----------  construct lexmap except for its submaps
 
         cons :: C.LexmapType -> S.Token -> S.AttrPara -> C.Lexmap
-        cons ty tok attr = check $ B.def { C.lexType   = ty
+        cons ty tok para = check $ B.def { C.lexType   = ty
                                          , C.lexToken  = tok
-                                         , C.lexAttr   = attr }
+                                         , C.lexAttr   = para }
 
         check :: B.Map C.Lexmap
         check lx | C.lexType lx == C.LexmapDerived
                      = let n    = C.lexName lx
                            msg  = "Same name as base relmap operator '" ++ n ++ "'"
-                       in case findSorter n of
+                       in case paraze n of
                             Just _  -> C.lexAddMessage msg lx
                             Nothing -> lx
         check lx = lx
@@ -154,11 +156,14 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                  []                           -> Right (lx, [])  -- no submaps
                  _                            -> Msg.bug "submap"
 
+        submap2 :: C.Lexmap -> ConsLexmapBody
         submap2 lx ts =
-            do subs <- lexmap1 eid sec `mapM` ts
+            do subs <- lexmap1 `mapM` ts
                let (sublx, tabs) = unzip subs
-                   lx2           = lx { C.lexSubmap = sublx }
-               Right (lx2, concat tabs)
+                   lx'           = lx { C.lexSubmap = sublx }
+               Right (lx', concat tabs)
+
+        lexmap1 tree = lexmap eid sec [tree]
 
         markLocal p (S.TLocal cp v eid' ps) | null ps || eid == eid'
                        = S.TLocal cp v eid $ p : ps
