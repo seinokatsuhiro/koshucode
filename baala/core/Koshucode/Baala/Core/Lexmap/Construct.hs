@@ -148,26 +148,31 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         submap :: C.Lexmap -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap lx =
-            let mark = B.mapToLeaf $ markLocal $ C.lexToken lx
+            let mark = markLocalToken $ C.lexToken lx
                 attr = C.lexAttrTree lx
-            in case B.filterFst S.isAttrNameRelmap attr of
-                 [(S.AttrRelmapNormal _, ts)] -> submap2 lx ts
-                 [(S.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
-                 []                           -> Right (lx, [])  -- no submaps
-                 _                            -> Msg.bug "submap"
+            in case markLocalRelmap mark <$> B.filterFst S.isAttrNameRelmap attr of
+                 []     -> Right (lx, [])  -- no submaps
+                 [loc]  -> submap2 lx loc
+                 _      -> Msg.bug "submap"
 
-        submap2 :: C.Lexmap -> ConsLexmapBody
-        submap2 lx ts =
-            do subs <- lexmap1 `mapM` ts
+        submap2 :: C.Lexmap -> (S.AttrName, [S.TTree]) -> B.Ab (C.Lexmap, LexmapLinkTable)
+        submap2 lx attr =
+            do subs <- lexmap1 `mapM` snd attr
                let (sublx, tabs) = unzip subs
                    lx'           = lx { C.lexSubmap = sublx }
                Right (lx', concat tabs)
 
         lexmap1 tree = lexmap eid sec [tree]
 
-        markLocal p (S.TLocal cp v eid' ps) | null ps || eid == eid'
-                       = S.TLocal cp v eid $ p : ps
-        markLocal _ loc = loc
+        -- Cons up parent token.
+        markLocalToken :: S.Token -> B.Map S.Token
+        markLocalToken p (S.TLocal cp v eid' ps) | null ps || eid == eid'
+                        = S.TLocal cp v eid $ p : ps
+        markLocalToken _ loc = loc
+
+        markLocalRelmap :: B.Map S.Token -> B.Map (S.AttrName, [S.TTree])
+        markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.mapToLeaf mark <$> ts)
+        markLocalRelmap _ (n, ts) = (n, ts)
 
 
 -- ----------------------
