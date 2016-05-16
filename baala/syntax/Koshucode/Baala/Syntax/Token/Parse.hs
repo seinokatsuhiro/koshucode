@@ -7,7 +7,8 @@ module Koshucode.Baala.Syntax.Token.Parse
     ttrees, ttreeGroup,
 
     -- * Divide trees
-    splitTokensBy, divideTreesBy,
+    splitTokensBy, splitTreesBy,
+    divideTreesBy,
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
   
     -- * Abbreviation
@@ -67,11 +68,17 @@ splitTokensBy p = B.splitBy p2 where
     p2 (S.TTextRaw _ x)  = p x
     p2 _ = False
 
+sameText :: String -> S.TTree -> Bool
+sameText w1 (S.TextLeafRaw _ w2) = w1 == w2
+sameText _ _ = False
+
+-- | Split token trees by quoteless token of given string.
+splitTreesBy :: String -> [S.TTree] -> Either [S.TTree] ([S.TTree], S.TTree, [S.TTree])
+splitTreesBy = B.splitBy . sameText
+
 -- | Divide token trees by quoteless token of given string.
 divideTreesBy :: String -> S.TTreesTo [[S.TTree]]
-divideTreesBy w1 = B.divideBy p where
-    p (S.TextLeafRaw _ w2)  = w1 == w2
-    p _                     = False
+divideTreesBy = B.divideBy . sameText
 
 -- | Divide token trees by vertical bar @\"|\"@.
 divideTreesByBar :: S.TTreesTo [[S.TTree]]
