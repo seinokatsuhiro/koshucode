@@ -27,15 +27,20 @@ import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = Op.ropList "builtin"
     --       CONSTRUCTOR  USAGE            ATTRIBUTE
-    [ Op.def consAppend   "append R ..."   "-relmap/*"
+    [ Op.def consAppend   "append R R"     "-left/ -right/"
     , Op.def consId       "id"             ""
     ]
 
 
 -- ----------------------  append
 
+--consConcat :: C.RopCons c
+--consConcat = Right . foldl B.mappend B.mempty . C.medSubmap
+
 consAppend :: C.RopCons c
-consAppend = Right . foldl B.mappend B.mempty . C.medSubmap
+consAppend = app . C.medSubmap where
+    app [a,b] = Right $ B.mappend a b
+    app _     = Msg.appendAttr
 
 
 -- ----------------------  id

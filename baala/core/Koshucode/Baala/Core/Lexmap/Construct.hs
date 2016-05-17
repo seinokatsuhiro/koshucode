@@ -69,11 +69,12 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
     lexmap eid sec trees = result where
-        result = Msg.abLexmap trees $ case S.divideTreesByBar trees of
-                      []    -> Msg.bug "empty list"
-                      [ts]  -> single ts
-                      tss   -> baseOf "append" $ map S.ttreeGroup tss
+        result = Msg.abLexmap trees $ case S.splitTreesBy "|" trees of
+                   Left ts -> single ts
+                   Right (ts, _, rest) ->
+                       baseOf "append" [S.ttreeGroup ts, S.ttreeGroup rest]
 
+        single :: ConsLexmapBody
         single (B.TreeL tok@(S.TTextRaw _ n)   : ts)
             = find tok n ts                       -- derived or base
         single (B.TreeL tok@(S.TLocal _ _ _ _) : ts)
@@ -88,7 +89,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
             = baseOf "id" []                      -- "| R | R" means "id | R | R"
         single _
             = Msg.unkRelmap "???"                 -- unknown relmap
-        
+
         -- derived or base relmap operator
         find :: S.Token -> String -> ConsLexmapBody
         find tok n ts = case findDeriv sec n of
@@ -152,19 +153,18 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                 attr = C.lexAttrTree lx
             in case markLocalRelmap mark <$> B.filterFst S.isAttrNameRelmap attr of
                  []     -> Right (lx, [])  -- no submaps
-                 [loc]  -> submap2 lx loc
-                 _      -> Msg.bug "submap"
+                 locs   -> submap2 lx locs
 
-        submap2 :: C.Lexmap -> (S.AttrName, [S.TTree]) -> B.Ab (C.Lexmap, LexmapLinkTable)
+        submap2 :: C.Lexmap -> [(S.AttrName, [S.TTree])] -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap2 lx attr =
-            do subs <- lexmap1 `mapM` snd attr
+            do subs <- lexmap1 `mapM` attr
                let (sublx, tabs) = unzip subs
                    lx'           = lx { C.lexSubmap = sublx }
                Right (lx', concat tabs)
 
-        lexmap1 tree = lexmap eid sec [tree]
+        lexmap1 (_, ts) = lexmap eid sec ts
 
-        -- Cons up parent token.
+        -- Cons up parent token when no parent or same eid.
         markLocalToken :: S.Token -> B.Map S.Token
         markLocalToken p (S.TLocal cp v eid' ps) | null ps || eid == eid'
                         = S.TLocal cp v eid $ p : ps
