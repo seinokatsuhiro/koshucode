@@ -23,13 +23,14 @@ module Koshucode.Baala.Rop.Nest.Confl
     consSliceUp, relmapSliceUp, relkitSliceUp,
   ) where
 
-import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
-import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Rop.Base       as Op
-import qualified Koshucode.Baala.Rop.Nest.Flow  as Op
-
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Op
+import qualified Koshucode.Baala.Rop.Flat          as Op
+import qualified Koshucode.Baala.Rop.Nest.Flow     as Op
+import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- ----------------------  copy
@@ -100,17 +101,21 @@ consGroup :: (Ord c, D.CRel c) => C.RopCons c
 consGroup med =
   do rmap <- Op.getRelmap med "-relmap"
      n    <- Op.getTerm   med "-to"
-     Right $ relmapGroup med n rmap
+     sh   <- Op.getMaybe Op.getTerms med "-share"
+     Right $ relmapGroup med sh n rmap
 
-relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
-relmapGroup med = C.relmapBinary med . relkitGroup
+relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
+relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 
-relkitGroup :: forall c. (Ord c, D.CRel c) => S.TermName -> C.RelkitBinary c
-relkitGroup n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitGroup :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> S.TermName -> C.RelkitBinary c
+relkitGroup sh n (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr      = D.headNames he1 `D.headLR` D.headNames he2
     toMap2  = B.gatherToMap . map (D.headRAssoc lr)
     he3     = D.headConsNest n he2 he1
-    kit3    = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3    = case Op.unmatchShare sh lr of
+                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+                Just (e, a) -> Msg.unmatchShare e a
+
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2  <- bmap2 bo1
@@ -122,7 +127,7 @@ relkitGroup n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
             b2sub   = B.fromMaybe [] b2maybe
         in D.pRel (D.Rel he2 b2sub) : cs1
 
-relkitGroup _ _ _ = Right C.relkitNothing
+relkitGroup _ _ _ _ = Right C.relkitNothing
 
 
 

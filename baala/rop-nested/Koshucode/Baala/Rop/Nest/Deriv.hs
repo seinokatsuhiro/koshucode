@@ -42,11 +42,12 @@ consOppGroup :: (Ord c, D.CRel c) => C.RopCons c
 consOppGroup med =
   do rmap <- Op.getRelmap med "-relmap"
      n    <- Op.getTerm   med "-to"
-     Right $ relmapOppGroup med n rmap
+     sh   <- Op.getMaybe Op.getTerms med "-share"
+     Right $ relmapOppGroup med sh n rmap
 
-relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
-relmapOppGroup med n rmap = C.relmapCopy med n rmapGroup where
-    rmapGroup  = rmap `B.mappend` Op.relmapGroup med n rmapLocal
+relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
+relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
+    rmapGroup  = rmap `B.mappend` Op.relmapGroup med sh n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n
 
 
@@ -83,7 +84,7 @@ consNest med =
 
 relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
 relmapNest med (co, ns, to) = group `B.mappend` for where
-    group  = relmapOppGroup med to key
+    group  = relmapOppGroup med Nothing to key
     for    = Op.relmapFor med to nest
     key    = if co then pick else cut
     nest   = if co then cut  else pick

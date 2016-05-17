@@ -56,20 +56,23 @@ import qualified Koshucode.Baala.Rop.Nest.Flow      as Op
 
 ropsNest :: (D.CContent c) => [C.Rop c]
 ropsNest = Op.ropList "nest"
-    --        CONSTRUCTOR       USAGE                           ATTRIBUTE
-    [ Op.def  Op.consChunk      "chunk /T ... [-order /P ...]"  "-term* . -order"
-    , Op.def  Op.consCopy       "copy N R"                      "-var -relmap/^"
-    , Op.def  Op.consDown       "down /N"                       "-term"
-    , Op.def  Op.consFor        "for /N R"                      "-term -relmap/^"
-    , Op.def  Op.consGroup      "group R -to /N "               "-relmap/ . -to"
-    , Op.def  Op.consJoinUp     "join-up /P ..."                "-term*"
-    , Op.def  Op.consNest       "nest [~] /P ... -to /N"        "-term* . -to"
-    , Op.def  Op.consOppGroup   "opp-group R -to /N"            "-relmap/ . -to"
-    , Op.def  Op.consPickGroup  "pick-group /P ... -to /N"      "-term* . -to"
-    , Op.def  Op.consPickGroup  "hier /P ... -to /N"            "-term* . -to"
-    , Op.def  Op.consSlice      "slice /N [R]"                  "-term -relmap/^?"
-    , Op.def  Op.consSliceUp    "slice-up R"                    "-relmap/^"
-    , Op.def  Op.consUngroup    "ungroup /P"                    "-term"
-    , Op.def  Op.consUp         "up /N"                         "-term"
+    --        CONSTRUCTOR       USAGE                       ATTRIBUTE
+    [ Op.def  Op.consChunk      "chunk /T ... [-order /P ...]"
+                                                            "-term* . -order"
+    , Op.def  Op.consCopy       "copy N R"                  "-var -relmap/^"
+    , Op.def  Op.consDown       "down /N"                   "-term"
+    , Op.def  Op.consFor        "for /N R"                  "-term -relmap/^"
+    , Op.def  Op.consGroup      "group R -to /N [-share /P ...]"
+                                                            "-relmap/ . -to -share?"
+    , Op.def  Op.consJoinUp     "join-up /P ..."            "-term*"
+    , Op.def  Op.consNest       "nest [~] /P ... -to /N"    "-term* . -to"
+    , Op.def  Op.consOppGroup   "opp-group R -to /N [-share /P ...]"
+                                                            "-relmap/ . -to -share?"
+    , Op.def  Op.consPickGroup  "pick-group /P ... -to /N"  "-term* . -to"
+    , Op.def  Op.consPickGroup  "hier /P ... -to /N"        "-term* . -to"
+    , Op.def  Op.consSlice      "slice /N [R]"              "-term -relmap/^?"
+    , Op.def  Op.consSliceUp    "slice-up R"                "-relmap/^"
+    , Op.def  Op.consUngroup    "ungroup /P"                "-term"
+    , Op.def  Op.consUp         "up /N"                     "-term"
     ]
 
