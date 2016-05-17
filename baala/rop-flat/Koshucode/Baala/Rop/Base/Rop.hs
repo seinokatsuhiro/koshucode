@@ -40,7 +40,7 @@ ropsBuiltin = Op.ropList "builtin"
 consAppend :: C.RopCons c
 consAppend = app . map snd . C.medSubmap where
     app [a,b] = Right $ B.mappend a b
-    app _     = Msg.appendAttr
+    app _     = Msg.reqRelmap 2
 
 
 -- ----------------------  id

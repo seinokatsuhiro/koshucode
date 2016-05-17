@@ -2,7 +2,7 @@
 
 module Koshucode.Baala.Rop.Base.Message
   ( module Koshucode.Baala.Core.Message,
-    appendAttr,
+    reqRelmap,
     noAttr,
     notImpl,
   ) where
@@ -10,9 +10,11 @@ module Koshucode.Baala.Rop.Base.Message
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Message
 
--- | append requires two relmaps
-appendAttr :: B.Ab a
-appendAttr = Left $ B.abortBecause "'append' requires two relmaps"
+-- | Require /N/ relmaps
+reqRelmap :: Int -> B.Ab a
+reqRelmap 0 = Left $ B.abortBecause "Require no relmaps"
+reqRelmap 1 = Left $ B.abortBecause "Require one relmap"
+reqRelmap n = Left $ B.abortBecause $ "Require " ++ show n ++ " relmap"
 
 -- | Attribute not found
 noAttr :: String -> B.Ab a

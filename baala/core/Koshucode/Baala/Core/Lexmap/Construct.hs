@@ -164,7 +164,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         namedLexmap (n, ts) =
             do (lx, tab) <- lexmap eid sec ts
-               Right ((n, lx), tab)
+               Right ((S.attrNameCode n, lx), tab)
 
         -- Cons up parent token when no parent or same eid.
         markLocalToken :: S.Token -> B.Map S.Token

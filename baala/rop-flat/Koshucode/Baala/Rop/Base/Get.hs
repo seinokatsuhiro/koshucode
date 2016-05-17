@@ -42,9 +42,8 @@ type RopGet c a
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-lookupTree, lookupRelmap :: String -> C.Intmed c -> Maybe [S.TTree]
-lookupTree    = lookupAttr S.AttrNormal
-lookupRelmap  = lookupAttr S.AttrRelmapNormal `B.mappend` lookupAttr S.AttrRelmapLocal
+lookupTree :: String -> C.Intmed c -> Maybe [S.TTree]
+lookupTree = lookupAttr S.AttrNormal
 
 lookupAttr :: (String -> S.AttrName) -> String -> C.Intmed c -> Maybe [S.TTree]
 lookupAttr c ('-' : name) = S.paraLookupSingle (c name) . getPara
@@ -151,18 +150,9 @@ getTreesByColon med name =
 --   >   Right $ relmapMeet med m
 getRelmap :: C.Intmed c -> String -> B.Ab (C.Relmap c)
 getRelmap med name =
-    do ms    <- getRelmaps med
-       trees <- getRelmapRaw med name
-       Msg.abAttrTrees trees $ case ms of
-         [m] -> Right m
-         _   -> Msg.unexpAttr "Require one relmap"
-
-getRelmapRaw :: RopGet c [S.TTree]
-getRelmapRaw med name =
-    case lookupRelmap name med of
-      Just trees -> Right trees
-      Nothing    -> Msg.noAttr name
-
+    case lookup name $ C.medSubmap med of
+      Nothing -> Msg.reqRelmap 1
+      Just m  -> Right m
 
 -- | Get relmaps from operator use.
 getRelmaps :: C.Intmed c -> B.Ab [C.Relmap c]
