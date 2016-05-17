@@ -113,6 +113,6 @@ relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
     ungroup = slice `B.mappend` cut
     slice   = Op.relmapSliceUp med meet
-    meet    = Op.relmapMeet med $ C.relmapLocalNest med n
+    meet    = Op.relmapMeet med Nothing $ C.relmapLocalNest med n
     cut     = Op.relmapCut  med [n]
 

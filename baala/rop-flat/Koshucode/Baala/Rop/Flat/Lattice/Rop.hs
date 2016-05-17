@@ -28,8 +28,8 @@ ropsLattice :: (Ord c) => [C.Rop c]
 ropsLattice = Op.ropList "lattice"  -- GROUP
     --         CONSTRUCTOR      USAGE          ATTRIBUTE
     [ Op.def  Op.consCompose   "compose R"    "-relmap/"
-    , Op.def  Op.consJoin      "join R"       "-relmap/"
-    , Op.def  Op.consMeet      "meet R"       "-relmap/"
+    , Op.def  Op.consJoin      "join R"       "-relmap/ . -share?"
+    , Op.def  Op.consMeet      "meet R"       "-relmap/ . -share?"
     , Op.def  Op.consNone      "none R"       "-relmap/"
     , Op.def  Op.consNoneMeet  "none-meet R"  "-relmap/"
     , Op.def  Op.consSome      "some R"       "-relmap/"

@@ -16,6 +16,7 @@ module Koshucode.Baala.Rop.Flat.Message
     reqNewTerm,
     reqUnaryFn,
     unexpTermName,
+    unmatchShare,
   ) where
 
 import qualified Koshucode.Baala.Base   as B
@@ -93,3 +94,10 @@ unexpTermName = Left $ B.abortBecause "Unexpected term names"
 
 showHead :: D.Head -> String
 showHead = unwords . D.headNames
+
+unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a
+unmatchShare e a =
+    Left $ B.abortLines "Unmatch shared terms"
+         $ expectActual (ts e) (ts a)
+    where ts xs = unwords $ S.showTermName <$> xs
+

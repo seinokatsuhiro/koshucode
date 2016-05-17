@@ -28,9 +28,11 @@ module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
   ) where
 
 import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Syntax      as S
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Rop.Base    as Op
+import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
 
 
 
@@ -39,21 +41,25 @@ import qualified Koshucode.Baala.Rop.Base    as Op
 consMeet :: (Ord c) => C.RopCons c
 consMeet med =
   do rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapMeet med rmap
+     sh   <- Op.getMaybe Op.getTerms med "-share"
+     Right $ relmapMeet med sh rmap
 
 -- | Meet two relations.
 relmapMeet :: (Ord c)
     => C.Intmed c     -- ^ Source infomation
+    -> Maybe [S.TermName]
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet med = C.relmapBinary med relkitMeet
+relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 
 -- | Meet two relations.
-relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
-relkitMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitMeet :: forall c. (Ord c) => Maybe [S.TermName] -> C.RelkitBinary c
+relkitMeet sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
     he3    = he2 `B.mappend` he1
-    kit3   = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3   = case unmatchShare sh lr of
+               Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+               Just (e, a) -> Msg.unmatchShare e a
 
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
@@ -68,13 +74,22 @@ relkitMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
-relkitMeet _ _ = Right C.relkitNothing
+relkitMeet _ _ _ = Right C.relkitNothing
 
 cartesian :: [[c]] -> [[c]] -> [[c]]
 cartesian bo1 bo2 =
     do cs1 <- bo1
        cs2 <- bo2
        return $ cs2 ++ cs1
+
+unmatchShare :: Maybe [S.TermName] -> D.HeadLR c -> Maybe ([S.TermName], [S.TermName])
+unmatchShare (Nothing) _ = Nothing
+unmatchShare (Just sh) lr =
+    let e = B.setList sh
+        a = B.setList (D.headLShareNames lr ++ D.headRShareNames lr)
+    in if e == a
+       then Nothing
+       else Just (e, a)
 
 
 -- ----------------------  join

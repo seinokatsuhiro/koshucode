@@ -115,7 +115,7 @@ relkitSub kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
     | D.isSuperhead he1 he2 = kit
     | otherwise = Right $ C.relkitJust he1 $ C.RelkitConst []
     where
-      kit = do kit3 <- Op.relkitMeet kit2 he1'
+      kit = do kit3 <- Op.relkitMeet Nothing kit2 he1'
                kit4 <- relkitSome kit3 he1'
                Right kit4
 relkitSub _ _ = Right C.relkitNothing
@@ -134,7 +134,7 @@ relmapCompose med = C.relmapBinary med relkitCompose
 
 relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
 relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
-    do kitMeet <- Op.relkitMeet kit2 (Just he1)
+    do kitMeet <- Op.relkitMeet Nothing kit2 (Just he1)
        kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
        Right $ kitMeet `B.mappend` kitCut
 relkitCompose _ _ = Right C.relkitNothing
