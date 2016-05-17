@@ -33,8 +33,8 @@ ropsControl = Op.ropList "control"
     , Op.def  consFix       "fix R"        "-relmap/"
     , Op.def  consFixJoin   "fix-join R"   "-relmap/"
     , Op.def  consIf        "if T A B"     "-test/ -then/ -else/"
-    , Op.def  consUnless    "unless R R"   "-relmap/*"
-    , Op.def  consWhen      "when R R"     "-relmap/*"
+    , Op.def  consUnless    "unless T B"   "-test/ -else/"
+    , Op.def  consWhen      "when T A"     "-test/ -then/"
     ]
 
 
@@ -88,13 +88,15 @@ isNothing2 a b = isNothing a && isNothing b
 
 consWhen :: (Ord c) => C.RopCons c
 consWhen med =
-  do [rmapT, rmapA] <- Op.getRelmaps med
-     Right $ relmapIf med (rmapT, rmapA, C.relmapId)
+  do rt <- Op.getRelmap med "-test"
+     ra <- Op.getRelmap med "-then"
+     Right $ relmapIf med (rt, ra, C.relmapId)
 
 consUnless :: (Ord c) => C.RopCons c
 consUnless med =
-  do [rmapT, rmapB] <- Op.getRelmaps med
-     Right $ relmapIf med (rmapT, C.relmapId, rmapB)
+  do rt <- Op.getRelmap med "-test"
+     rb <- Op.getRelmap med "-else"
+     Right $ relmapIf med (rt, C.relmapId, rb)
 
 
 

@@ -18,7 +18,7 @@ module Koshucode.Baala.Rop.Base.Get
     getTreesByColon,
   
     -- * Relmap
-    getRelmap, getRelmaps, getOptRelmap,
+    getRelmap, getOptRelmap,
   
     -- * Term
     getTerm, getTerm2, getTermOpt,
@@ -146,17 +146,13 @@ getTreesByColon med name =
 --
 --   > consMeet :: (Ord c) => RopCons c
 --   > consMeet med = do
---   >   m <- getRelmap med
+--   >   m <- getRelmap med "-relmap"
 --   >   Right $ relmapMeet med m
 getRelmap :: C.Intmed c -> String -> B.Ab (C.Relmap c)
 getRelmap med name =
     case lookup name $ C.medSubmap med of
       Nothing -> Msg.reqRelmap 1
       Just m  -> Right m
-
--- | Get relmaps from operator use.
-getRelmaps :: C.Intmed c -> B.Ab [C.Relmap c]
-getRelmaps = Right . map snd . C.medSubmap
 
 getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
 getOptRelmap rmap0 med = B.right rmap0 . getRelmap med
