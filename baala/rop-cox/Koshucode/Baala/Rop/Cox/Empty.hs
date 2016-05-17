@@ -28,8 +28,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 -- 
 ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
 ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
-    --        CONSTRUCTOR USAGE                ATTRIBUTE
-    [ Op.def  consBoth    "both R [-fill E]"   "-relmap/ . -fill?"
+    --        CONSTRUCTOR USAGE                              ATTRIBUTE
+    [ Op.def  consBoth    "both R [-share /P ... -fill E]"   "-relmap/ . -share? -fill?"
     , Op.def  consMaybe   "maybe R [-share /P ... -fill E]"  "-relmap/ . -share? -fill?"
     ]
 
@@ -40,18 +40,20 @@ consBoth :: (D.CContent c) => C.RopCons c
 consBoth med =
     do rmap <- Op.getRelmap med "-relmap"
        fill <- Op.getFiller med "-fill"
-       Right $ relmapBoth med fill rmap
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapBoth med sh fill rmap
 
-relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
-relmapBoth med fill rmap = C.relmapCopy med "i" rmapBoth where
-    rmapBoth = rmapL `B.mappend` Op.relmapJoin med Nothing rmapR
-    rmapR    = rmap  `B.mappend` relmapMaybe med Nothing fill rmapIn
-    rmapL    = relmapMaybe med Nothing fill rmap
+relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapBoth med sh fill rmap = C.relmapCopy med "i" rmapBoth where
+    rmapBoth = rmapL `B.mappend` Op.relmapJoin med sh rmapR
+    rmapR    = rmap  `B.mappend` relmapMaybe med sh fill rmapIn
+    rmapL    = relmapMaybe med sh fill rmap
     rmapIn   = C.relmapLocalSymbol med "i"
 
 
 -- ----------------------  maybe
 
+-- | Construct maybe relmap.
 consMaybe :: (D.CContent c) => C.RopCons c
 consMaybe med =
     do rmap <- Op.getRelmap med "-relmap"
@@ -59,9 +61,11 @@ consMaybe med =
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapMaybe med sh fill rmap
 
+-- | Maybe relmap.
 relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
 relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 
+-- | Calculate maybe relmap.
 relkitMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
 relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr   = D.headNames he1 `D.headLR` D.headNames he2
