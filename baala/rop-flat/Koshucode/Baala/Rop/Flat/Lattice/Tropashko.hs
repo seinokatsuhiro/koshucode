@@ -25,6 +25,10 @@ module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
     relmapJoin,
     relmapJoinList,
     relkitJoin,
+
+    -- * Check shared terms
+    SharedTerms,
+    unmatchShare,
   ) where
 
 import qualified Koshucode.Baala.Base        as B
@@ -35,9 +39,9 @@ import qualified Koshucode.Baala.Rop.Base    as Op
 import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
 
 
-
 -- ----------------------  meet
 
+-- | Construct relmap to meet relation.
 consMeet :: (Ord c) => C.RopCons c
 consMeet med =
   do rmap <- Op.getRelmap med "-relmap"
@@ -47,7 +51,7 @@ consMeet med =
 -- | Meet two relations.
 relmapMeet :: (Ord c)
     => C.Intmed c          -- ^ Source infomation
-    -> Maybe [S.TermName]  -- ^ Shared terms
+    -> SharedTerms         -- ^ Shared terms
     -> C.Relmap c          -- ^ Subrelmap of meet operator
     -> C.Relmap c          -- ^ Relmap of meet operator
 relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
@@ -82,18 +86,10 @@ cartesian bo1 bo2 =
        cs2 <- bo2
        return $ cs2 ++ cs1
 
-unmatchShare :: Maybe [S.TermName] -> D.HeadLR c -> Maybe ([S.TermName], [S.TermName])
-unmatchShare (Nothing) _ = Nothing
-unmatchShare (Just sh) lr =
-    let e = B.setList sh
-        a = B.setList (D.headLShareNames lr ++ D.headRShareNames lr)
-    in if e == a
-       then Nothing
-       else Just (e, a)
-
 
 -- ----------------------  join
 
+-- | Construct relmap to join relation.
 consJoin :: (Ord c) => C.RopCons c
 consJoin med =
     do rmap <- Op.getRelmap med "-relmap"
@@ -104,7 +100,7 @@ consJoin med =
 relmapJoin
     :: (Ord c)
     => C.Intmed c          -- ^ Source infomation
-    -> Maybe [S.TermName]  -- ^ Shared terms
+    -> SharedTerms         -- ^ Shared terms
     -> C.Relmap c          -- ^ Subrelmap of join operator
     -> C.Relmap c          -- ^ Relmap of join operator
 relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
@@ -135,6 +131,20 @@ relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
 relkitJoin _ _ _ = Right C.relkitNothing
 
 
+-- ----------------------  Check shared terms
+
+-- | Shared terms for composing check.
+type SharedTerms = Maybe [S.TermName]
+
+-- | Calculate unmatch shared terms.
+unmatchShare :: SharedTerms -> D.HeadLR c -> Maybe ([S.TermName], [S.TermName])
+unmatchShare (Nothing) _ = Nothing
+unmatchShare (Just sh) lr =
+    let e = B.setList sh
+        a = B.setList $ D.headRShareNames lr
+    in if e == a
+       then Nothing
+       else Just (e, a)
 
 
 -- ------------------------------------------------------------------

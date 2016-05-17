@@ -124,20 +124,24 @@ relkitSub _ _ = Right C.relkitNothing
 
 -- ----------------------  compose
 
+-- | Construct relmap for relational composition.
 consCompose :: (Ord c) => C.RopCons c
 consCompose med =
     do rmap <- Op.getRelmap med "-relmap"
-       Right $ relmapCompose med rmap
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapCompose med sh rmap
 
-relmapCompose :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapCompose med = C.relmapBinary med relkitCompose
+-- | Relational composition.
+relmapCompose :: (Ord c) => C.Intmed c -> Op.SharedTerms -> B.Map (C.Relmap c)
+relmapCompose med sh = C.relmapBinary med $ relkitCompose sh
 
-relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
-relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
-    do kitMeet <- Op.relkitMeet Nothing kit2 (Just he1)
+-- | Calculate relational composition.
+relkitCompose :: forall c. (Ord c) => Op.SharedTerms -> C.RelkitBinary c
+relkitCompose sh kit2@(C.Relkit _ (Just he2) _) (Just he1) =
+    do kitMeet <- Op.relkitMeet sh kit2 (Just he1)
        kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
        Right $ kitMeet `B.mappend` kitCut
-relkitCompose _ _ = Right C.relkitNothing
+relkitCompose _ _ _ = Right C.relkitNothing
 
 sharedNames :: D.Head -> D.Head -> [S.TermName]
 sharedNames he1 he2 = shared where
