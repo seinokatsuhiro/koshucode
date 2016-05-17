@@ -32,7 +32,7 @@ ropsControl = Op.ropList "control"
     [ Op.def  consEqual     "equal"        "-relmap/"
     , Op.def  consFix       "fix R"        "-relmap/"
     , Op.def  consFixJoin   "fix-join R"   "-relmap/"
-    , Op.def  consIf        "if R ..."     "-relmap/*"
+    , Op.def  consIf        "if T A B"     "-test/ -then/ -else/"
     , Op.def  consUnless    "unless R R"   "-relmap/*"
     , Op.def  consWhen      "when R R"     "-relmap/*"
     ]
@@ -45,11 +45,15 @@ ropsControl = Op.ropList "control"
 
 consIf :: (Ord c) => C.RopCons c
 consIf med =
-  do rmaps <- Op.getRelmaps med
-     Right $ relmapIf med rmaps
+  do mt <- Op.getRelmap med "-test"
+     ma <- Op.getRelmap med "-then"
+     mb <- Op.getRelmap med "-else"
+     Right $ relmapIf med (mt, ma, mb)
 
-relmapIf :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
-relmapIf med = C.relmapConfl med relkitIf
+type Relmap3 c = (C.Relmap c, C.Relmap c, C.Relmap c)
+
+relmapIf :: (Ord c) => C.Intmed c -> Relmap3 c -> C.Relmap c
+relmapIf med (mt, ma, mb) = C.relmapConfl med relkitIf [mt, ma, mb]
 
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB) kitbB] _
@@ -85,12 +89,12 @@ isNothing2 a b = isNothing a && isNothing b
 consWhen :: (Ord c) => C.RopCons c
 consWhen med =
   do [rmapT, rmapA] <- Op.getRelmaps med
-     Right $ relmapIf med [rmapT, rmapA, C.relmapId]
+     Right $ relmapIf med (rmapT, rmapA, C.relmapId)
 
 consUnless :: (Ord c) => C.RopCons c
 consUnless med =
   do [rmapT, rmapB] <- Op.getRelmaps med
-     Right $ relmapIf med [rmapT, C.relmapId, rmapB]
+     Right $ relmapIf med (rmapT, C.relmapId, rmapB)
 
 
 
