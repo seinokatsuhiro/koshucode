@@ -9,12 +9,13 @@ module Koshucode.Baala.Rop.Cox.Empty
     consMaybe, relmapMaybe, relkitMaybe,
   ) where
 
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Data         as D
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Op
-import qualified Koshucode.Baala.Rop.Flat     as Op
-import qualified Koshucode.Baala.Rop.Cox.Get  as Op
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Op
+import qualified Koshucode.Baala.Rop.Flat          as Op
+import qualified Koshucode.Baala.Rop.Cox.Get       as Op
+import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Relmap operators that handles empties.
@@ -29,7 +30,7 @@ ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
 ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
     --        CONSTRUCTOR USAGE                ATTRIBUTE
     [ Op.def  consBoth    "both R [-fill E]"   "-relmap/ . -fill?"
-    , Op.def  consMaybe   "maybe R [-fill E]"  "-relmap/ . -fill?"
+    , Op.def  consMaybe   "maybe R [-share /P ... -fill E]"  "-relmap/ . -share? -fill?"
     ]
 
 
@@ -44,8 +45,8 @@ consBoth med =
 relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapBoth med fill rmap = C.relmapCopy med "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin med Nothing rmapR
-    rmapR    = rmap  `B.mappend` relmapMaybe med fill rmapIn
-    rmapL    = relmapMaybe med fill rmap
+    rmapR    = rmap  `B.mappend` relmapMaybe med Nothing fill rmapIn
+    rmapL    = relmapMaybe med Nothing fill rmap
     rmapIn   = C.relmapLocalSymbol med "i"
 
 
@@ -55,16 +56,20 @@ consMaybe :: (D.CContent c) => C.RopCons c
 consMaybe med =
     do rmap <- Op.getRelmap med "-relmap"
        fill <- Op.getFiller med "-fill"
-       Right $ relmapMaybe med fill rmap
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapMaybe med sh fill rmap
 
-relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
-relmapMaybe med = C.relmapBinary med . relkitMaybe
+relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 
-relkitMaybe :: forall c. (Ord c, D.CRel c) => c -> C.RelkitBinary c
-relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
+relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr   = D.headNames he1 `D.headLR` D.headNames he2
     he3  = he2 `B.mappend` he1
-    kit3 = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3 = case Op.unmatchShare sh lr of
+             Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+             Just (e, a) -> Msg.unmatchShare e a
+
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
@@ -78,7 +83,7 @@ relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> [fills ++ cs1]
 
-relkitMaybe _ _ _ = Right C.relkitNothing
+relkitMaybe _ _ _ _ = Right C.relkitNothing
 
 selectFiller :: (D.CRel c) => c -> D.Type -> c
 selectFiller _ t@(D.TypeRel _) = D.pRel $ D.Rel (D.Head t) []
