@@ -157,12 +157,14 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
         submap2 :: C.Lexmap -> [(S.AttrName, [S.TTree])] -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap2 lx attr =
-            do subs <- lexmap1 `mapM` attr
+            do subs <- namedLexmap `mapM` attr
                let (sublx, tabs) = unzip subs
                    lx'           = lx { C.lexSubmap = sublx }
                Right (lx', concat tabs)
 
-        lexmap1 (_, ts) = lexmap eid sec ts
+        namedLexmap (n, ts) =
+            do (lx, tab) <- lexmap eid sec ts
+               Right ((n, lx), tab)
 
         -- Cons up parent token when no parent or same eid.
         markLocalToken :: S.Token -> B.Map S.Token

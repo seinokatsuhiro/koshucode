@@ -27,7 +27,7 @@ data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
     , lexToken     :: S.Token       -- ^ Token of operator
     , lexAttr      :: S.AttrPara    -- ^ Attribute of relmap operation
-    , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
+    , lexSubmap    :: [(S.AttrName, Lexmap)]   -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
