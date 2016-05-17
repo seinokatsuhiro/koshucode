@@ -50,7 +50,7 @@ type RopCons' h c = Intmed' h c -> B.Ab (C.Relmap' h c)
 data Intmed' h c = Intmed
     { medHook     :: h c
     , medLexmap   :: C.Lexmap         -- ^ Syntactic data of operator use
-    , medSubmap   :: [C.Relmap' h c]  -- ^ Subrelmaps
+    , medSubmap   :: [(S.AttrName, C.Relmap' h c)]  -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.CodePtr (Intmed' h c) where

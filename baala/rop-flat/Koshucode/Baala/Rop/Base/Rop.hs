@@ -38,7 +38,7 @@ ropsBuiltin = Op.ropList "builtin"
 --consConcat = Right . foldl B.mappend B.mempty . C.medSubmap
 
 consAppend :: C.RopCons c
-consAppend = app . C.medSubmap where
+consAppend = app . map snd . C.medSubmap where
     app [a,b] = Right $ B.mappend a b
     app _     = Msg.appendAttr
 

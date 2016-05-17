@@ -166,7 +166,7 @@ getRelmapRaw med name =
 
 -- | Get relmaps from operator use.
 getRelmaps :: C.Intmed c -> B.Ab [C.Relmap c]
-getRelmaps = Right . C.medSubmap
+getRelmaps = Right . map snd . C.medSubmap
 
 getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
 getOptRelmap rmap0 med = B.right rmap0 . getRelmap med

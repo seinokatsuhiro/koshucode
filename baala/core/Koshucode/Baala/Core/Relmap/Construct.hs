@@ -128,9 +128,11 @@ consRelmap findRop hook = relmap where
         | link      = Right $ C.RelmapLink lx
         | otherwise = Msg.abRelmap [lx] $ case findRop name of
                         Nothing  -> Msg.bug "missing operator"
-                        Just rop -> do sub <- relmap `mapM` map snd (C.lexSubmap lx)
+                        Just rop -> do sub <- namedRelmap `mapM` C.lexSubmap lx
                                        C.ropCons rop $ C.Intmed hook lx sub
         where link = C.lexType lx /= C.LexmapBase
               name = C.lexName lx
 
+    namedRelmap (n, lx) = do rmap <- relmap lx
+                             Right (n, rmap)
 
