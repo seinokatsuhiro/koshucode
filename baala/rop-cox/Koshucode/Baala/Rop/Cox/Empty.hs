@@ -43,7 +43,7 @@ consBoth med =
 
 relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapBoth med fill rmap = C.relmapCopy med "i" rmapBoth where
-    rmapBoth = rmapL `B.mappend` Op.relmapJoin med rmapR
+    rmapBoth = rmapL `B.mappend` Op.relmapJoin med Nothing rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe med fill rmapIn
     rmapL    = relmapMaybe med fill rmap
     rmapIn   = C.relmapLocalSymbol med "i"

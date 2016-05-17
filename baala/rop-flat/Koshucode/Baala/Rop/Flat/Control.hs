@@ -110,7 +110,7 @@ consFix med =
 consFixJoin :: (Ord c) => C.RopCons c
 consFixJoin med =
   do rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapFix med (Op.relmapJoin med rmap)
+     Right $ relmapFix med (Op.relmapJoin med Nothing rmap)
 
 relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapFix med = C.relmapBinary med relkitFix

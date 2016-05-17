@@ -46,10 +46,10 @@ consMeet med =
 
 -- | Meet two relations.
 relmapMeet :: (Ord c)
-    => C.Intmed c     -- ^ Source infomation
-    -> Maybe [S.TermName]
-    -> C.Relmap c     -- ^ Subrelmap of meet operator
-    -> C.Relmap c     -- ^ Relmap of meet operator
+    => C.Intmed c          -- ^ Source infomation
+    -> Maybe [S.TermName]  -- ^ Shared terms
+    -> C.Relmap c          -- ^ Subrelmap of meet operator
+    -> C.Relmap c          -- ^ Relmap of meet operator
 relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 
 -- | Meet two relations.
@@ -97,28 +97,34 @@ unmatchShare (Just sh) lr =
 consJoin :: (Ord c) => C.RopCons c
 consJoin med =
     do rmap <- Op.getRelmap med "-relmap"
-       Right $ relmapJoin med rmap
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapJoin med sh rmap
 
 -- | Join two relations.
 relmapJoin
     :: (Ord c)
-    => C.Intmed c     -- ^ Source infomation
-    -> C.Relmap c     -- ^ Subrelmap of join operator
-    -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin med = C.relmapBinary med relkitJoin
+    => C.Intmed c          -- ^ Source infomation
+    -> Maybe [S.TermName]  -- ^ Shared terms
+    -> C.Relmap c          -- ^ Subrelmap of join operator
+    -> C.Relmap c          -- ^ Relmap of join operator
+relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
 
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
 relmapJoinList med [] = C.relmapConst med D.reldau
 relmapJoinList _ [rmap] = rmap
 relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
-    rmaps' = relmapJoin med $ relmapJoinList med rmaps
+    rmaps' = relmapJoin med Nothing $ relmapJoinList med rmaps
 
 -- | Join two relations.
-relkitJoin :: C.RelkitBinary c
-relkitJoin (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitJoin :: Maybe [S.TermName] -> C.RelkitBinary c
+relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
     he3    = D.headLShare lr `D.headMap` he1
-    kit3   = C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
+    kit3   = case unmatchShare sh lr of
+               Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
+               Just (e, a) -> Msg.unmatchShare e a
+
+    kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
                left    = map $ D.headLShare lr
@@ -126,7 +132,7 @@ relkitJoin (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
            bo2 <- bmap2 bo1
            Right $ left bo1 ++ right bo2
 
-relkitJoin _ _ = Right C.relkitNothing
+relkitJoin _ _ _ = Right C.relkitNothing
 
 
 
