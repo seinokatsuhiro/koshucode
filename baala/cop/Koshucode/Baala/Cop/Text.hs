@@ -29,6 +29,14 @@ copsText =
     , D.CopCalc  (D.copNormal "numeric-symbol?")  copNumericSymbol
     , D.CopCalc  (D.copNormal "plain-symbol?")    copPlainSymbol
     , D.CopCalc  (D.copNormal "short-symbol?")    copShortSymbol
+
+    , D.CopCalc  (D.copNormal "trim-begin")       copTrimBegin
+    , D.CopCalc  (D.copNormal "trim-end")         copTrimEnd
+    , D.CopCalc  (D.copNormal "trim-both")        copTrimBoth
+    , D.CopCalc  (D.copNormal "trim-text-begin")  copTrimTextBegin
+    , D.CopCalc  (D.copNormal "trim-text-end")    copTrimTextEnd
+    , D.CopCalc  (D.copNormal "trim-text-both")   copTrimTextBoth
+
     , D.CopCalc  (D.copNormal "unwords")          copUnwords
     , D.CopCalc  (D.copNormal "unwords-by")       copUnwordsBy
     , D.CopCalc  (D.copNormal "words")            copWords
@@ -187,6 +195,50 @@ wordList c
     | D.isText c  = [D.gText c]
     | D.isDec c   = [D.encodeDecimal $ D.gDec c]
     | otherwise   = []
+
+
+-- ----------------------  trim
+
+copTrimBegin :: (D.CContent c) => D.CopCalc c
+copTrimBegin = copTrimBy B.trimLeft
+
+copTrimEnd :: (D.CContent c) => D.CopCalc c
+copTrimEnd = copTrimBy B.trimRight
+
+copTrimBoth :: (D.CContent c) => D.CopCalc c
+copTrimBoth = copTrimBy B.trimBoth
+
+copTrimBy :: (D.CContent c) => B.Map String -> D.CopCalc c
+copTrimBy f arg =
+    do text <- D.getRightArg1 arg
+       case D.isText text of
+         True  -> D.putText $ f (D.gText text)
+         False -> typeUnmatch arg
+
+copTrimTextBegin :: (D.CContent c) => D.CopCalc c
+copTrimTextBegin = copTrimTextBy trimTextBegin
+
+copTrimTextEnd :: (D.CContent c) => D.CopCalc c
+copTrimTextEnd = copTrimTextBy trimTextEnd
+
+copTrimTextBoth :: (D.CContent c) => D.CopCalc c
+copTrimTextBoth = copTrimTextBy trimTextBoth
+
+copTrimTextBy :: (D.CContent c) => B.Bin String -> D.CopCalc c
+copTrimTextBy f arg =
+    do (trim, text) <- D.getRightArg2 arg
+       case D.isText trim && D.isText text of
+         True  -> D.putText $ f (D.gText trim) (D.gText text)
+         False -> typeUnmatch arg
+
+trimTextBegin :: (Eq a) => B.Bin [a]
+trimTextBegin s = dropWhile (`elem` s)
+
+trimTextEnd :: (Eq a) => B.Bin [a]
+trimTextEnd s = reverse . trimTextBegin s . reverse
+
+trimTextBoth :: (Eq a) => B.Bin [a]
+trimTextBoth s = trimTextEnd s . trimTextBegin s
 
 
 -- ----------------------  general-symbol?
