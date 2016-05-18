@@ -56,9 +56,9 @@
 |-- DIR-RANK  /dir-rank 66  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 15 | "PoScale" | [ "Base" ] ] [ 58 | "Message" | [ "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Gadget" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Meta" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Order" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Resource" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Source" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 61 | "Term" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Peripheral" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "TermGadget" | [ "Base" | "Core" | "Data" ] ] [ 64 | "Lattice" | [ ] ] [ 65 | "Check" | [ "Base" | "Base" | "Core" | "Data" | "Lattice" | "Syntax" ] ] [ 65 | "Control" | [ "Base" | "Base" | "Core" | "Data" | "Lattice" ] ] [ 66 | "Bundle" | [ "Base" | "Core" | "Data" | "Lattice" ] ] =}
 
 |-- DIR-RANK  /dir-rank 69  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [ ] ] [ 59 | "Message" | [ ] ] [ 61 | "Get" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Accessor" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Calc" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Filter" | [ "Base" | "Base" | "Core" | "Data" ] ] [ 62 | "Gadget" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Range" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 68 | "Empty" | [ "Base" | "Base" | "Core" | "Data" | "Flat" ] ] [ 69 | "Bundle" | [ "Core" | "Data" ] ] =}
-|-- DIR-RANK  /dir-rank 69  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 59 | "Message" | [ "Base" | "Data" | "Syntax" ] ] [ 61 | "Flow" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 62 | "Confl" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 68 | "Deriv" | [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ] ] [ 69 | "Rop" | [ "Base" | "Core" | "Data" ] ] =}
-|-- DIR-RANK  /dir-rank 70  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 60 | "Base" | [ ] ] [ 67 | "Flat" | [ "Lattice" ] ] [ 70 | "Cox" | [ ] ] [ 70 | "Nest" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 71  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" | [ ] ] [ 0 | "Version" | [ ] ] [ 42 | "RDF" | [ "Data" ] ] [ 58 | "Element" | [ "Base" | "Core" | "Data" | "Syntax" ] ] [ 58 | "Exit" | [ "Base" | "Core" | "Data" ] ] [ 58 | "Input" | [ "Base" | "Core" ] ] [ 61 | "Change" | [ "Base" | "Core" | "Data" | "Writer" ] ] [ 61 | "Run" | [ "Base" | "Core" | "Data" | "Writer" ] ] [ 71 | "Global" | [ "Base" | "Cop" | "Core" | "Cox" | "Data" | "Flat" | "Nest" ] ] =}
+|-- DIR-RANK  /dir-rank 70  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 59 | "Message" | [ "Base" | "Data" | "Syntax" ] ] [ 61 | "Flow" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 68 | "Confl" | [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ] ] [ 69 | "Deriv" | [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ] ] [ 70 | "Rop" | [ "Base" | "Core" | "Data" ] ] =}
+|-- DIR-RANK  /dir-rank 71  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 60 | "Base" | [ ] ] [ 67 | "Flat" | [ "Lattice" ] ] [ 70 | "Cox" | [ ] ] [ 71 | "Nest" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 72  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" | [ ] ] [ 0 | "Version" | [ ] ] [ 42 | "RDF" | [ "Data" ] ] [ 58 | "Element" | [ "Base" | "Core" | "Data" | "Syntax" ] ] [ 58 | "Exit" | [ "Base" | "Core" | "Data" ] ] [ 58 | "Input" | [ "Base" | "Core" ] ] [ 61 | "Change" | [ "Base" | "Core" | "Data" | "Writer" ] ] [ 61 | "Run" | [ "Base" | "Core" | "Data" | "Writer" ] ] [ 72 | "Global" | [ "Base" | "Cop" | "Core" | "Cox" | "Data" | "Flat" | "Nest" ] ] =}
 
 *** 34 judges
 
@@ -344,22 +344,22 @@ TABLE : DIR-RANK
                                                   68    "Empty"          [ "Base" | "Base" | "Core" | "Data" | "Flat" ]
                                                   69    "Bundle"         [ "Core" | "Data" ]
                                                   
-  69        "Koshucode.Baala.Rop.Nest"            /rank /base            /import-dir
+  70        "Koshucode.Baala.Rop.Nest"            /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   59    "Message"        [ "Base" | "Data" | "Syntax" ]
                                                   61    "Flow"           [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
-                                                  62    "Confl"          [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
-                                                  68    "Deriv"          [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ]
-                                                  69    "Rop"            [ "Base" | "Core" | "Data" ]
+                                                  68    "Confl"          [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ]
+                                                  69    "Deriv"          [ "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ]
+                                                  70    "Rop"            [ "Base" | "Core" | "Data" ]
                                                   
-  70        "Koshucode.Baala.Rop"                 /rank /base            /import-dir
+  71        "Koshucode.Baala.Rop"                 /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   60    "Base"           [ ]
                                                   67    "Flat"           [ "Lattice" ]
                                                   70    "Cox"            [ ]
-                                                  70    "Nest"           [ ]
+                                                  71    "Nest"           [ ]
                                                   
-  71        "Koshucode.Baala.Toolkit.Library"     /rank /base            /import-dir
+  72        "Koshucode.Baala.Toolkit.Library"     /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   0     "SimpleOption"   [ ]
                                                   0     "Version"        [ ]
@@ -369,7 +369,7 @@ TABLE : DIR-RANK
                                                   58    "Input"          [ "Base" | "Core" ]
                                                   61    "Change"         [ "Base" | "Core" | "Data" | "Writer" ]
                                                   61    "Run"            [ "Base" | "Core" | "Data" | "Writer" ]
-                                                  71    "Global"         [ "Base" | "Cop" | "Core" | "Cox" | "Data" | "Flat" | "Nest" ]
+                                                  72    "Global"         [ "Base" | "Cop" | "Core" | "Cox" | "Data" | "Flat" | "Nest" ]
                                                   
 
 === rel
