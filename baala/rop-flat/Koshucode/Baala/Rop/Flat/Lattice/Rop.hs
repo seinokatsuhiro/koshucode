@@ -26,14 +26,14 @@ import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
 --
 ropsLattice :: (Ord c) => [C.Rop c]
 ropsLattice = Op.ropList "lattice"  -- GROUP
-    --         CONSTRUCTOR      USAGE          ATTRIBUTE
-    [ Op.def  Op.consCompose   "compose R [-share /P ...]"  "-relmap/ . -share?"
-    , Op.def  Op.consJoin      "join R [-share /P ...]"     "-relmap/ . -share?"
-    , Op.def  Op.consMeet      "meet R [-share /P ...]"     "-relmap/ . -share?"
-    , Op.def  Op.consNone      "none R"       "-relmap/"
-    , Op.def  Op.consNoneMeet  "none-meet R"  "-relmap/"
-    , Op.def  Op.consSome      "some R"       "-relmap/"
-    , Op.def  Op.consSomeMeet  "some-meet R"  "-relmap/"
-    , Op.def  Op.consSub       "sub R"        "-relmap/"
+    --       CONSTRUCTOR      USAGE                          ATTRIBUTE
+    [ Op.def Op.consCompose   "compose R [-share /P ...]"    "-relmap/ . -share?"
+    , Op.def Op.consJoin      "join R [-share /P ...]"       "-relmap/ . -share?"
+    , Op.def Op.consMeet      "meet R [-share /P ...]"       "-relmap/ . -share?"
+    , Op.def Op.consNone      "none R"                       "-relmap/"
+    , Op.def Op.consNoneMeet  "none-meet R [-share /P ...]"  "-relmap/ . -share?"
+    , Op.def Op.consSome      "some R"                       "-relmap/"
+    , Op.def Op.consSomeMeet  "some-meet R [-share /P ...]"  "-relmap/ . -share?"
+    , Op.def Op.consSub       "sub R"                        "-relmap/"
     ]
 

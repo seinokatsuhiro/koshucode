@@ -18,15 +18,15 @@ module Koshucode.Baala.Rop.Flat.Lattice.Restrict
     consCompose, relmapCompose, relkitCompose,
   ) where
 
-import qualified Data.Set                              as Set
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data                  as D
-import qualified Koshucode.Baala.Core                  as C
-import qualified Koshucode.Baala.Rop.Base              as Op
+import qualified Data.Set                                   as Set
+import qualified Koshucode.Baala.Base                       as B
+import qualified Koshucode.Baala.Syntax                     as S
+import qualified Koshucode.Baala.Data                       as D
+import qualified Koshucode.Baala.Core                       as C
+import qualified Koshucode.Baala.Rop.Base                   as Op
 import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
 import qualified Koshucode.Baala.Rop.Flat.Term              as Op
-
+import qualified Koshucode.Baala.Rop.Flat.Message           as Msg
 
 
 -- ----------------------  some
@@ -68,24 +68,28 @@ relkitNone = relkitSemi True
 
 consSomeMeet :: (Ord c) => C.RopCons c
 consSomeMeet med =
-  do rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapSomeMeet med rmap
+    do rmap <- Op.getRelmap med "-relmap"
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapSomeMeet med sh rmap
 
-relmapSomeMeet :: (Ord c) => C.Intmed c -> C.Relmap c -> C.Relmap c
-relmapSomeMeet med = C.relmapBinary med $ relkitFilterMeet True
+relmapSomeMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
+relmapSomeMeet med sh = C.relmapBinary med $ relkitFilterMeet True sh
 
 consNoneMeet :: (Ord c) => C.RopCons c
 consNoneMeet med =
-  do rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapNoneMeet med rmap
+    do rmap <- Op.getRelmap med "-relmap"
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapNoneMeet med sh rmap
 
-relmapNoneMeet :: (Ord c) => C.Intmed c -> C.Relmap c -> C.Relmap c
-relmapNoneMeet med = C.relmapBinary med $ relkitFilterMeet False
+relmapNoneMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
+relmapNoneMeet med sh = C.relmapBinary med $ relkitFilterMeet False sh
 
-relkitFilterMeet :: forall c. (Ord c) => Bool -> C.RelkitBinary c
-relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitFilterMeet :: forall c. (Ord c) => Bool -> Op.SharedTerms -> C.RelkitBinary c
+relkitFilterMeet which sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
-    kit3   = C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3   = case Op.unmatchShare sh lr of
+               Nothing     -> Right $ C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
+               Just (e, a) -> Msg.unmatchShare e a
 
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
@@ -96,8 +100,7 @@ relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 whe
     toSet = Set.fromList . map (D.headRShare lr)
     test b2set cs1 = D.headLShare lr cs1 `Set.member` b2set == which
 
-relkitFilterMeet _ _ _ = Right C.relkitNothing
-
+relkitFilterMeet _ _ _ _ = Right C.relkitNothing
 
 
 -- ----------------------  sub
