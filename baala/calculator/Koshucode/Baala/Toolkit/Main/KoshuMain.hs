@@ -40,7 +40,8 @@ import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 -- ----------------------  Parameter
 
 data Param c = Param
-    { paramElement       :: Bool
+    { paramAutoOutput    :: Bool
+    , paramElement       :: Bool
     , paramWriter        :: C.ResultWriter c
     , paramLiner         :: [B.Bz]
     , paramPretty        :: Bool
@@ -64,7 +65,8 @@ initParam (Right (opts, args)) =
        proxy  <- L.getProxies
        time   <- T.getZonedTime
        let day = T.localDay $ T.zonedTimeToLocalTime time
-       return $ Param { paramElement       = getFlag "element"
+       return $ Param { paramAutoOutput    = getFlag "auto-output"
+                      , paramElement       = getFlag "element"
                       , paramWriter        = writer
                       , paramLiner         = map B.stringBz liner
                       , paramPretty        = getFlag "pretty"
@@ -128,6 +130,7 @@ options =
     , Opt.version
     , Opt.flag "i" ["stdin"]                   "Read from stdin"
     , Opt.req  "x" ["assert-x"] "EXPR"         "|== X : add /x ( EXPR )"
+    , Opt.flag ""  ["auto-output"]             "Automatic output when no assertions"
     , Opt.flag ""  ["element"]                 "Analize input code"
     , Opt.flag ""  ["html-indented", "html"]   "HTML output with indent"
     , Opt.flag ""  ["html-compact"]            "HTML output without indent"
@@ -163,8 +166,10 @@ koshuMainParam g p
       -- global parameter
       rslt  = (C.globalResult g) { C.resultWriter = paramWriter p }
       root  = B.def { C.resGlobal = g2 }
+      feat  = C.globalFeature g
       g2    = C.globalFill g
-              { C.globalProgram   = paramProg p
+              { C.globalFeature   = feat { C.featAutoOutput = paramAutoOutput p }
+              , C.globalProgram   = paramProg p
               , C.globalArgs      = paramArgs p
               , C.globalProxy     = paramProxy p
               , C.globalTime      = D.timeYmd $ paramDay p

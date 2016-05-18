@@ -8,6 +8,8 @@ module Koshucode.Baala.Core.Resource.Run
     relmapCons,
   ) where
 
+import qualified Data.Map.Strict                         as Map
+import qualified Data.Set                                as Set
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -19,7 +21,7 @@ import qualified Koshucode.Baala.Core.Assert.Message     as Msg
 
 runResource :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
 runResource res =
-    do res' <- assembleRelmap res
+    do res' <- assembleRelmap $ autoOutputResource res
        let rslt = C.globalResult $ C.resGlobal res'
            js   = C.resJudge res'
        case filter D.isViolative js of
@@ -72,6 +74,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
       (consLexmap, consRelmap) = relmapCons res
 
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
+      assemble ass@C.Assert { C.assRelmap = Just _ } = Right (ass, [])
       assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
             trees      <- S.substSlot slots [] $ S.paraPos $ C.assPara ass
@@ -102,3 +105,33 @@ findRelmap ds sec name =
     where
       isSameName ((_, n), _)  = (n == name)
       isSameSec  ((s, _), _)  = (s == sec)
+
+
+-- ---------------------- Automatic output
+
+autoOutputResource :: (Ord c) => B.Map (C.Resource c)
+autoOutputResource res@C.Resource { C.resJudge  = js
+                                  , C.resAssert = ass }
+    | null ass && (C.featAutoOutput $ C.resFeature res)
+                 = res { C.resAssert = a <$> judgeClassAndTerms js }
+    | otherwise  = res
+    where a (c, ts) = S.Short [] [] $ C.Assert
+            { C.assSection = 0
+            , C.assType    = D.AssertAffirm
+            , C.assClass   = c
+            , C.assToken   = []
+            , C.assPara    = B.def
+            , C.assRelmap  = Just $ C.RelmapSource B.def c ts
+            , C.assLinks   = [] }
+
+judgeClassAndTerms :: (Ord c) => [D.Judge c] -> [(D.JudgeClass, [S.TermName])]
+judgeClassAndTerms = list . foldr f Map.empty where
+    list m = fmap Set.toAscList <$> Map.toList m
+
+    f j = let c  = D.judgeClass j
+              ts = D.judgeTerms j
+          in Map.alter (alt $ Set.fromList $ map fst ts) c
+
+    alt set (Nothing)    = Just $ set
+    alt set (Just set')  = Just $ Set.union set set'
+

@@ -156,10 +156,12 @@ opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 data Feature = Feature {
       featInputClause    :: Bool    -- ^ Enable @input@ clause
     , featOutputClause   :: Bool    -- ^ Enable @output@ clause
+    , featAutoOutput     :: Bool    -- ^ Automatic output when no assertions.
     } deriving (Show, Eq, Ord)
 
 instance B.Default Feature where
     def = Feature { featInputClause  = True
                   , featOutputClause = True
+                  , featAutoOutput   = False
                   }
 
