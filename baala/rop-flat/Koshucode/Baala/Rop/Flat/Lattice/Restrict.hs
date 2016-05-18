@@ -31,14 +31,17 @@ import qualified Koshucode.Baala.Rop.Flat.Message           as Msg
 
 -- ----------------------  some
 
+-- | Construct relmap of existential filter.
 consSome :: (Ord c) => C.RopCons c
 consSome med = 
     do rmap <- Op.getRelmap med "-relmap"
        Right $ relmapSome med rmap
 
+-- | Relmap of existential filter.
 relmapSome :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSome med = C.relmapBinary med relkitSome
 
+-- | Calculate existential filter.
 relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
@@ -51,14 +54,17 @@ relkitSemi isEmpty (C.Relkit _ _ kitb2) he1 =
 
 -- ----------------------  none
 
+-- | Construct relmap of non-existential filter.
 consNone :: (Ord c) => C.RopCons c
 consNone med =
     do rmap <- Op.getRelmap med "-relmap"
        Right $ relmapNone med rmap
 
+-- | Relmap of non-existential filter.
 relmapNone :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapNone med = C.relmapBinary med relkitNone
 
+-- | Calculate non-existential filter.
 relkitNone :: (Ord c) => C.RelkitBinary c
 relkitNone = relkitSemi True
 
@@ -66,21 +72,29 @@ relkitNone = relkitSemi True
 
 -- ----------------------  some-meet & none-meet
 
+-- | Construct some-and-meet relmap.
 consSomeMeet :: (Ord c) => C.RopCons c
 consSomeMeet med =
     do rmap <- Op.getRelmap med "-relmap"
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapSomeMeet med sh rmap
 
+-- | Some-and-meet relmap.
+--
+--   @some-meet R == some ( meet R )@
 relmapSomeMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
 relmapSomeMeet med sh = C.relmapBinary med $ relkitFilterMeet True sh
 
+-- | Construct none-and-meet relmap.
 consNoneMeet :: (Ord c) => C.RopCons c
 consNoneMeet med =
     do rmap <- Op.getRelmap med "-relmap"
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapNoneMeet med sh rmap
 
+-- | None-and-meet relmap.
+--
+--   @ none-meet R == none ( meet R ) @
 relmapNoneMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
 relmapNoneMeet med sh = C.relmapBinary med $ relkitFilterMeet False sh
 

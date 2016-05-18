@@ -31,12 +31,12 @@ module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
     unmatchShare,
   ) where
 
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Syntax      as S
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Base    as Op
-import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Syntax             as S
+import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Rop.Base           as Op
+import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
 -- ----------------------  meet
@@ -57,7 +57,7 @@ relmapMeet :: (Ord c)
 relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 
 -- | Meet two relations.
-relkitMeet :: forall c. (Ord c) => Maybe [S.TermName] -> C.RelkitBinary c
+relkitMeet :: forall c. (Ord c) => SharedTerms -> C.RelkitBinary c
 relkitMeet sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
     he3    = he2 `B.mappend` he1
@@ -105,6 +105,7 @@ relmapJoin
     -> C.Relmap c          -- ^ Relmap of join operator
 relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
 
+-- | Join multiple relations.
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
 relmapJoinList med [] = C.relmapConst med D.reldau
 relmapJoinList _ [rmap] = rmap
@@ -112,7 +113,7 @@ relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
     rmaps' = relmapJoin med Nothing $ relmapJoinList med rmaps
 
 -- | Join two relations.
-relkitJoin :: Maybe [S.TermName] -> C.RelkitBinary c
+relkitJoin :: SharedTerms -> C.RelkitBinary c
 relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
     he3    = D.headLShare lr `D.headMap` he1
