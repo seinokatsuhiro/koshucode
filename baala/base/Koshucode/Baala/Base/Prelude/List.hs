@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Prelude.List
 
     -- * Elements
     headOr, takeFirst, takeLast,
+    takeOdd, takeEven,
   
     -- * Uniqueness
     duplicates, unique,
@@ -93,6 +94,24 @@ takeFirst = take 1
 takeLast :: [a] -> [a]
 takeLast [] = []
 takeLast xs = [last xs]
+
+-- | Take elements at odd positions, i.e., first, third, ...
+--
+--   >>> takeOdd "abcdeft"
+--   "acet"
+takeOdd :: [a] -> [a]
+takeOdd []  = []
+takeOdd [x] = [x]
+takeOdd (x : _ : xs) = x : takeOdd xs
+
+-- | Take elements at even positions. i.e., second, fourth, ...
+--
+--   >>> takeEven "abcdeft"
+--   "bdf"
+takeEven :: [a] -> [a]
+takeEven []  = []
+takeEven [_] = []
+takeEven (_ : x : xs) = x : takeEven xs
 
 
 -- ----------------------  Uniqueness
