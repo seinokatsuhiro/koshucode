@@ -13,7 +13,8 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resIncluded, resInput, resInputPoint, resClass,
+    resIncluded, resInput, resInputPoint,
+    resClass, resFeature,
     addMessage, addMessages,
 
     -- * Input queue
@@ -107,6 +108,10 @@ resInputPoint Resource { resInputQueue = (q, done) } = ps where
 -- | List of all judgement classes.
 resClass :: Resource c -> [D.JudgeClass]
 resClass Resource {..} = map (C.assClass . S.shortBody) resAssert
+
+-- | Get feature from resource.
+resFeature :: Resource c -> C.Feature
+resFeature res = C.globalFeature $ resGlobal res
 
 -- | Add single message.
 addMessage :: String -> B.Map (Resource c)

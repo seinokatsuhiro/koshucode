@@ -62,7 +62,7 @@ resIncludeBody cd res abcl =
     where
       f << y  = y : f res
 
-      feature = C.globalFeature $ C.resGlobal res
+      feature = C.resFeature res
       feat e f msg | f feature = e
                    | otherwise = msg
 
