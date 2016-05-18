@@ -34,6 +34,6 @@ ropsLattice = Op.ropList "lattice"  -- GROUP
     , Op.def Op.consNoneMeet  "none-meet R [-share /P ...]"  "-relmap/ . -share?"
     , Op.def Op.consSome      "some R"                       "-relmap/"
     , Op.def Op.consSomeMeet  "some-meet R [-share /P ...]"  "-relmap/ . -share?"
-    , Op.def Op.consSub       "sub R"                        "-relmap/"
+    , Op.def Op.consSub       "sub R [-share /P ...]"        "-relmap/ . -share?"
     ]
 

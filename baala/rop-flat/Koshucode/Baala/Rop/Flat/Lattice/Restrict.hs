@@ -119,23 +119,29 @@ relkitFilterMeet _ _ _ _ = Right C.relkitNothing
 
 -- ----------------------  sub
 
+-- | Construct relmap for subrelation filter.
 consSub :: (Ord c) => C.RopCons c
 consSub med =
     do rmap <- Op.getRelmap med "-relmap"
-       Right $ relmapSub med rmap
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapSub med sh rmap
 
-relmapSub :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapSub med = C.relmapBinary med relkitSub
+-- | Relmap for subrelation filter.
+relmapSub :: (Ord c) => C.Intmed c -> Op.SharedTerms -> B.Map (C.Relmap c)
+relmapSub med sh = C.relmapBinary med $ relkitSub sh
 
-relkitSub :: (Ord c) => C.RelkitBinary c
-relkitSub kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
-    | D.isSuperhead he1 he2 = kit
-    | otherwise = Right $ C.relkitJust he1 $ C.RelkitConst []
+-- | Calculate subrelation filter.
+relkitSub :: (Ord c) => Op.SharedTerms -> C.RelkitBinary c
+relkitSub sh kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
+    | he1 `D.isSuperhead` he2 = kit
+    | otherwise = case Op.unmatchShare sh lr of
+                    Nothing     -> Right $ C.relkitJust he1 $ C.RelkitConst []
+                    Just (e, a) -> Msg.unmatchShare e a
     where
-      kit = do kit3 <- Op.relkitMeet Nothing kit2 he1'
-               kit4 <- relkitSome kit3 he1'
-               Right kit4
-relkitSub _ _ = Right C.relkitNothing
+      lr  = D.headNames he1 `D.headLR` D.headNames he2
+      kit = relkitFilterMeet True sh kit2 he1'
+
+relkitSub _ _ _ = Right C.relkitNothing
 
 
 
