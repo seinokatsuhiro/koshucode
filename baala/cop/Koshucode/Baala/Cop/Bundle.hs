@@ -32,6 +32,7 @@ baalaCops = concat [ Cop.copsArith
 -- | Height table.
 baalaInfix :: [B.Named B.InfixHeight]
 baalaInfix = htab where
+    h # name = (name, Left h)
     h ! name = (name, Right h)
 
     htab =
@@ -39,7 +40,7 @@ baalaInfix = htab where
         , 9 ! "when"
         , 9 ! "unless"
         , 9 ! "is"
-        , 9 ! "of"
+        , 9 # "of"
         , 9 ! "to"
 
         , 8 ! "or"
