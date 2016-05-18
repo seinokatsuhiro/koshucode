@@ -68,6 +68,8 @@ copsList =
     , D.CopCalc  (D.copNormal "sort")           copSort
     , D.CopCalc  (D.copNormal "take")           copTake
     , D.CopCalc  (D.copNormal "take-tail")      copTakeTail
+    , D.CopCalc  (D.copNormal "take-odd")     $ copTakeOddEven (B.takeOdd,  B.takeOdd)
+    , D.CopCalc  (D.copNormal "take-even")    $ copTakeOddEven (B.takeEven, B.takeEven)
     , D.CopCalc  (D.copNormal "term-set")       copTermSet
     , D.CopCalc  (D.copNormal "total")          copTotal
     ]
@@ -152,6 +154,23 @@ copReverse = op where
     op xs = typeUnmatch xs
 
 
+-- ----------------------  take-odd & take-even
+
+copTakeOddEven :: (D.CContent c) => (String -> String, [c] -> [c]) -> D.CopCalc c
+copTakeOddEven fg arg = D.getRightArg1 arg >>= collMap fg
+
+collMap :: (D.CContent c) => (String -> String, [c] -> [c]) -> c -> B.Ab c
+collMap (f, g) xs
+    | D.isText  xs  = gpMap D.gpText    f xs
+    | D.isList  xs  = gpMap D.gpList    g xs
+    | D.isSet   xs  = gpMap D.gpSetSort g xs
+    | D.isEmpty xs  = Right D.empty
+    | otherwise     = typeUnmatch [Right xs]
+
+gpMap :: D.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
+gpMap (get, put) f = Right . put . f . get
+
+
 -- ----------------------  take & drop
 
 type TakeDrop a   = Int -> [a] -> [a]
@@ -164,32 +183,25 @@ copDrop :: (D.CContent c) => D.CopCalc c
 copDrop = copTakeOrDrop (drop, drop)
 
 copTakeTail :: (D.CContent c) => D.CopCalc c
-copTakeTail = copTakeOrDrop (take', take') where
-    take' n = B.reverseMap $ take n
+copTakeTail = copTakeOrDrop (takeTail, takeTail)
 
 copDropTail :: (D.CContent c) => D.CopCalc c
-copDropTail = copTakeOrDrop (drop', drop') where
-    drop' n = B.reverseMap $ drop n
+copDropTail = copTakeOrDrop (dropTail, dropTail)
+
+takeTail :: Int -> [a] -> [a]
+takeTail = B.reverseMap . take
+
+dropTail :: Int -> [a] -> [a]
+dropTail = B.reverseMap . drop
 
 copTakeOrDrop :: (D.CContent c) => TakeDrop2 c -> D.CopCalc c
-copTakeOrDrop fg arg =
+copTakeOrDrop (f, g) arg =
     do (n', xs') <- D.getRightArg2 arg
        if D.isDec n'
-          then takeOrDropDispatch fg arg (int n') xs'
+          then collMap (f $ int n', g $ int n') xs'
           else typeUnmatch arg
     where
       int = fromInteger . D.decimalNum . D.gDec
-
-takeOrDropDispatch :: (D.CContent c) => TakeDrop2 c -> [B.Ab c] -> Int -> c -> B.Ab c
-takeOrDropDispatch (f, g) arg n xs'
-    | D.isText  xs'  = gpMap D.gpText    (f n) xs'
-    | D.isList  xs'  = gpMap D.gpList    (g n) xs'
-    | D.isSet   xs'  = gpMap D.gpSetSort (g n) xs'
-    | D.isEmpty xs'  = Right D.empty
-    | otherwise      = typeUnmatch arg
-
-gpMap :: D.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
-gpMap (get, put) f = Right . put . f . get
 
 
 -- ----------------------  drop-take
