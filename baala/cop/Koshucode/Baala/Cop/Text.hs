@@ -37,6 +37,12 @@ copsText =
     , D.CopCalc  (D.copNormal "trim-text-end")    copTrimTextEnd
     , D.CopCalc  (D.copNormal "trim-text-both")   copTrimTextBoth
 
+    , D.CopCalc  (D.copNormal "divide-text-begin") $ copDivideTextBy divideBegin
+    , D.CopCalc  (D.copNormal "divide-text-first") $ copDivideTextBy divideFirst
+    , D.CopCalc  (D.copNormal "divide-text-last")  $ copDivideTextBy divideLast
+    , D.CopCalc  (D.copNormal "divide-text-end")   $ copDivideTextBy divideEnd
+    , D.CopCalc  (D.copNormal "divide-text-all")   $ copDivideTextBy divideAll
+
     , D.CopCalc  (D.copNormal "unwords")          copUnwords
     , D.CopCalc  (D.copNormal "unwords-by")       copUnwordsBy
     , D.CopCalc  (D.copNormal "words")            copWords
@@ -239,6 +245,90 @@ trimTextEnd s = reverse . trimTextBegin s . reverse
 
 trimTextBoth :: (Eq a) => B.Bin [a]
 trimTextBoth s = trimTextEnd s . trimTextBegin s
+
+
+-- ----------------------  divide-text
+
+type Divider a = (a -> Bool) -> [a] -> [[a]]
+
+copDivideTextBy :: (D.CContent c) => Divider Char -> D.CopCalc c
+copDivideTextBy f arg =
+    do (divide, text) <- D.getRightArg2 arg
+       case D.isText divide && D.isText text of
+         True  -> D.putList $ D.pText <$> f (`elem` D.gText divide) (D.gText text)
+         False -> typeUnmatch arg
+
+-- | Divide list about beginning of list.
+--   This function returns two-element list: [match, right].
+--
+--   >>> divideBegin (== '1') "11-22-33-44-55"
+--   ["11","-22-33-44-55"]
+--
+--   >>> divideBegin (== '-') "11-22-33-44-55"
+--   ["","11-22-33-44-55"]
+
+divideBegin :: Divider a
+divideBegin p x =
+    let (match, right) = span p x
+    in [match, right]
+
+-- | Divide list at matching first.
+--   This function returns three-element list: [left, match, right].
+--
+--   >>> divideFirst (== '-') "11-22-33-44-55"
+--   ["11","-","22-33-44-55"]
+--
+--   >>> divideFirst (== '-') "-"
+--   ["","-",""]
+--
+--   >>> divideFirst (== '-') ""
+--   ["","",""]
+
+divideFirst :: Divider a
+divideFirst p x =
+    let (left, y)      = break p x
+        (match, right) = span  p y
+    in [left, match, right]
+
+-- | Divide list at matching last.
+--   This function returns three-element list: [left, match, right].
+--
+--   >>> divideLast (== '-') "11-22-33-44-55"
+--   ["11-22-33-44","-","55"]
+
+divideLast :: Divider a
+divideLast p x = reverse $ reverse <$> (divideFirst p $ reverse x)
+
+-- | Divide list about end of list.
+--   This function returns two-element list: [left, match].
+--
+--   >>> divideEnd (== '5') "11-22-33-44-55"
+--   ["11-22-33-44-","55"]
+
+divideEnd :: Divider a
+divideEnd p x = reverse $ reverse <$> (divideBegin p $ reverse x)
+
+-- | Divide list at all matching positions.
+--   This function returns odd-element list:
+--   [left, match, mid, match, ..., match, right].
+--   Matching sublists are in odd position.
+--
+--   >>> divideAll (== '-') "11-22-33-44-55"
+--   ["11","-","22","-","33","-","44","-","55"]
+--
+--   >>> divideAll (== '-') "-"
+--   ["","-",""]
+--
+--   >>> divideAll (== '-') ""
+--   [""]
+
+divideAll :: Divider a
+divideAll p x =
+    case divideFirst p x of
+      [left, [], []]       -> [left]
+      [left, match, []]    -> [left, match, []]
+      [left, match, right] -> left : match : divideAll p right
+      _                    -> error "unexpected value from divideFirst"
 
 
 -- ----------------------  general-symbol?
