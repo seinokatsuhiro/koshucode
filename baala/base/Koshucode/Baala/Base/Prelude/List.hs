@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Prelude.List
     -- * Elements
     headOr, takeFirst, takeLast,
     takeOdd, takeEven,
+    takeFill, takeTailFill,
   
     -- * Uniqueness
     duplicates, unique,
@@ -99,6 +100,7 @@ takeLast xs = [last xs]
 --
 --   >>> takeOdd "abcdeft"
 --   "acet"
+
 takeOdd :: [a] -> [a]
 takeOdd []  = []
 takeOdd [x] = [x]
@@ -108,10 +110,36 @@ takeOdd (x : _ : xs) = x : takeOdd xs
 --
 --   >>> takeEven "abcdeft"
 --   "bdf"
+
 takeEven :: [a] -> [a]
 takeEven []  = []
 takeEven [_] = []
 takeEven (_ : x : xs) = x : takeEven xs
+
+-- | Take /N/ elements with filler.
+--
+--   >>> takeFill 0 3 [0 .. 8]
+--  [0,1,2]
+--
+--   >>> takeFill 0 5 [6 .. 8]
+--  [6,7,8,0,0]
+
+takeFill :: a -> Int -> [a] -> [a]
+takeFill fill = loop where
+    loop 0 _       = []
+    loop n []      = fill : loop (n - 1) []
+    loop n (x:xs)  =    x : loop (n - 1) xs
+
+-- | Take tail-side /N/ elements with filler.
+--
+--   >>> takeTailFill 0 3 [0 .. 8]
+--  [6,7,8]
+--
+--   >>> takeTailFill 0 5 [6 .. 8]
+--  [0,0,6,7,8]
+
+takeTailFill :: a -> Int -> [a] -> [a]
+takeTailFill fill n = reverseMap $ takeFill fill n
 
 
 -- ----------------------  Uniqueness
