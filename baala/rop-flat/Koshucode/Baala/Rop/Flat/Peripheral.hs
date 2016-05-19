@@ -13,7 +13,8 @@ module Koshucode.Baala.Rop.Flat.Peripheral
 
     -- * elem-begin
     consElemBegin, relmapElemBegin,
-
+    -- * elem-end
+    consElemEnd, relmapElemEnd,
     -- * uncollect
     consUncollect, relmapUncollect, relkitUncollect,
 
@@ -53,6 +54,7 @@ ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR   USAGE                      ATTRIBUTE
     [ Op.def consElemBegin "elem-begin /P -to /N ..." "-coll . -to"
+    , Op.def consElemEnd   "elem-end /P -to /N ..."   "-coll . -to"
     , Op.def consIndexElem "index-elem /N /N /P"      "-index -elem -list"
     , Op.def consMember    "member /N /N"             "-elem -set"
     , Op.def consRdf       "rdf P /S /O"              " -pattern -term*"
@@ -174,19 +176,32 @@ relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
 -- | Extract elements from collection.
 --
 --   >>> elem-begin /list -to /a /b /c
+
 consElemBegin :: (Ord c, D.CContent c) => C.RopCons c
 consElemBegin med =
   do coll <- Op.getTerm  med "-coll"
      to   <- Op.getTerms med "-to"
      Right $ relmapElemBegin med (coll, to)
 
-relmapElemBegin :: (Ord c, D.CContent c)
-  => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
-relmapElemBegin med = C.relmapFlow med . relkitElemBegin
+relmapElemBegin :: (Ord c, D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
+relmapElemBegin med = C.relmapFlow med . relkitElemBy B.takeFill
 
-relkitElemBegin :: (Ord c, D.CContent c) => (S.TermName, [S.TermName]) -> C.RelkitFlow c
-relkitElemBegin _ Nothing = Right C.relkitNothing
-relkitElemBegin (coll, to) (Just he1) = kit2 where
+-- | Extract end-side elements from collection.
+--
+--   >>> elem-end /list -to /a /b /c
+
+consElemEnd :: (Ord c, D.CContent c) => C.RopCons c
+consElemEnd med =
+  do coll <- Op.getTerm  med "-coll"
+     to   <- Op.getTerms med "-to"
+     Right $ relmapElemEnd med (coll, to)
+
+relmapElemEnd :: (Ord c, D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
+relmapElemEnd med = C.relmapFlow med . relkitElemBy B.takeTailFill
+
+relkitElemBy :: (Ord c, D.CContent c) => (c -> Int -> [c] -> [c]) -> (S.TermName, [S.TermName]) -> C.RelkitFlow c
+relkitElemBy _ _ Nothing = Right C.relkitNothing
+relkitElemBy f (coll, to) (Just he1) = kit2 where
     kit2 | S.termsPN [colli] toi = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
          | otherwise = Msg.unkTerm [coll] he1
 
@@ -194,15 +209,10 @@ relkitElemBegin (coll, to) (Just he1) = kit2 where
     toi      = headIndex he1 to
     he2      = D.headAppend to he1
     kitf2 cs = let [collc] = [colli] `B.snipFrom` cs
-               in takeContents (length to) (list collc) ++ cs
+               in f D.empty (length to) (list collc) ++ cs
     list c | D.isSet  c   = D.gSetSort c
            | D.isList c   = D.gList c
            | otherwise    = []
-
-takeContents :: (D.CEmpty c) => Int -> [c] -> [c]
-takeContents 0 _      = []
-takeContents n []     = D.empty : takeContents (n - 1) []
-takeContents n (c:cs) =       c : takeContents (n - 1) cs
 
 
 -- ----------------------  uncollect
