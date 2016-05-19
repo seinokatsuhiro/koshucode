@@ -57,6 +57,7 @@ library
         Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check
         Koshucode.Baala.Rop.Flat.Control
+        Koshucode.Baala.Rop.Flat.Elem
         Koshucode.Baala.Rop.Flat.Gadget
 
         Koshucode.Baala.Rop.Flat.Lattice

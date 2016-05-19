@@ -9,6 +9,7 @@ import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Rop.Base             as Rop
 import qualified Koshucode.Baala.Rop.Flat.Check       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Control     as Rop
+import qualified Koshucode.Baala.Rop.Flat.Elem        as Rop
 import qualified Koshucode.Baala.Rop.Flat.Lattice     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Gadget      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Meta        as Rop
@@ -24,6 +25,7 @@ ropsFlat = Rop.ropsMeta
         ++ Rop.ropsResource
         ++ Rop.ropsCheck
         ++ Rop.ropsPeripheral
+        ++ Rop.ropsElem
         ++ Rop.ropsControl
         ++ Rop.ropsGadget
         ++ Rop.ropsOrder
