@@ -8,7 +8,7 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     consMember, relmapMember, relkitMember,
     -- $member
   
-    -- * index-elem
+    -- * ix-elem & iz-elem
     consIndexElem, relmapIndexElem, relkitIndexElem,
 
     -- * elem-begin
@@ -52,17 +52,18 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- 
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
-    --       CONSTRUCTOR   USAGE                      ATTRIBUTE
-    [ Op.def consElemBegin "elem-begin /P -to /N ..." "-coll . -to"
-    , Op.def consElemEnd   "elem-end /P -to /N ..."   "-coll . -to"
-    , Op.def consIndexElem "index-elem /N /N /P"      "-index -elem -list"
-    , Op.def consMember    "member /N /N"             "-elem -set"
-    , Op.def consRdf       "rdf P /S /O"              " -pattern -term*"
-    , Op.def consTermName  "term-name /N"             "-term"
-    , Op.def consTie       "tie /P ... -to N"         "-term* . -to"
-    , Op.def consToday     "today /N"                 "-term"
-    , Op.def consUntie     "untie /P -only /P ..."    "-from . -only"
-    , Op.def consUncollect "uncollect /P -to /N ..."  "-coll . -to"
+    --       CONSTRUCTOR       USAGE                      ATTRIBUTE
+    [ Op.def consElemBegin     "elem-begin /P -to /N ..." "-coll . -to"
+    , Op.def consElemEnd       "elem-end /P -to /N ..."   "-coll . -to"
+    , Op.def (consIndexElem 1) "ix-elem /P -to /N /N"     "-coll . -to"
+    , Op.def (consIndexElem 0) "iz-elem /P -to /N /N"     "-coll . -to"
+    , Op.def consMember        "member /N /N"             "-elem -set"
+    , Op.def consRdf           "rdf P /S /O"              " -pattern -term*"
+    , Op.def consTermName      "term-name /N"             "-term"
+    , Op.def consTie           "tie /P ... -to N"         "-term* . -to"
+    , Op.def consToday         "today /N"                 "-term"
+    , Op.def consUntie         "untie /P -only /P ..."    "-from . -only"
+    , Op.def consUncollect     "uncollect /P -to /N ..."  "-coll . -to"
     ]
 
 -- ----------------------  member
@@ -125,32 +126,33 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
 -- ----------------------  index-elem
 
 -- | Expand index and element from collection.
-consIndexElem :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c) => C.RopCons c
-consIndexElem med =
-  do i   <- Op.getTerm med "-index"
-     x   <- Op.getTerm med "-elem"
-     xs  <- Op.getTerm med "-list"
-     Right $ relmapIndexElem med (i, x, xs)
+--
+--   >>> ix-elem /list -to /i /elem
+--   >>> iz-elem /list -to /i /elem
 
-relmapIndexElem :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => C.Intmed c -> S.TermName3 -> C.Relmap c
-relmapIndexElem med = C.relmapFlow med . relkitIndexElem
+consIndexElem :: (Ord c, D.CContent c) => Int -> C.RopCons c
+consIndexElem from med =
+  do xs     <- Op.getTerm  med "-coll"
+     (i, x) <- Op.getTerm2 med "-to"
+     Right $ relmapIndexElem from med (i, x, xs)
 
-relkitIndexElem :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => S.TermName3 -> C.RelkitFlow c
-relkitIndexElem _ Nothing = Right C.relkitNothing
-relkitIndexElem (i, x, xs) he1'@(Just he1) = kit2 where
-    kit2 | S.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand i x xsi he1'
+relmapIndexElem :: (Ord c, D.CContent c) => Int -> C.Intmed c -> S.TermName3 -> C.Relmap c
+relmapIndexElem from med = C.relmapFlow med . relkitIndexElem from
+
+relkitIndexElem :: (Ord c, D.CContent c) => Int -> S.TermName3 -> C.RelkitFlow c
+relkitIndexElem _ _ Nothing = Right C.relkitNothing
+relkitIndexElem from (i, x, xs) he1'@(Just he1) = kit2 where
+    kit2 | S.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand from i x xsi he1'
          | otherwise                 = Msg.unkTerm [i, x, xs] he1
     [ii, xi, xsi] = headIndex he1 [i, x, xs]
 
 headIndex :: D.Head -> [S.TermName] -> [Int]
 headIndex he ns = ns `B.snipFull` D.headNames he
 
-relkitIndexElemExpand :: forall c. (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c)
-  => S.TermName -> S.TermName -> Int -> C.RelkitFlow c
-relkitIndexElemExpand _ _ _ Nothing = Right C.relkitNothing
-relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
+relkitIndexElemExpand :: forall c. (Ord c, D.CContent c)
+  => Int -> S.TermName -> S.TermName -> Int -> C.RelkitFlow c
+relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
+relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = D.headAppend [i, x] he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
     kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
@@ -165,7 +167,7 @@ relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
     indexElem cs = map (cons cs) . index
 
     index :: [c] -> [(c, c)]
-    index = zip $ map D.pInt [1 ..]
+    index = zip $ map D.pInt [from ..]
 
     cons :: [c] -> (c, c) -> [c]
     cons cs (ic, xc) = ic : xc : cs
