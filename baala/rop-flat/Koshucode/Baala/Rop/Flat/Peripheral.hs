@@ -53,7 +53,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def consElemBegin     "elem-begin /P -to /N ..." "-coll . -to"
+    [ Op.def consElem          "elem /P -to /N"           "-coll . -to"
+    , Op.def consElemBegin     "elem-begin /P -to /N ..." "-coll . -to"
     , Op.def consElemEnd       "elem-end /P -to /N ..."   "-coll . -to"
     , Op.def (consIndexElem 1) "ix-elem /P -to /N /N"     "-coll . -to"
     , Op.def (consIndexElem 0) "iz-elem /P -to /N /N"     "-coll . -to"
@@ -80,6 +81,16 @@ ropsPeripheral = Op.ropList "peripheral"
 --  - Input relation has @\/xs@ and not @\/x@,
 --    add term @\/x@ as member of @\/xs@.
 --
+
+-- | Expand elements from collection.
+--
+--   >>> elem /list -to /x
+
+consElem :: (Ord c, D.CSet c, D.CList c, D.CText c) => C.RopCons c
+consElem med =
+  do xs   <- Op.getTerm med "-coll"
+     x    <- Op.getTerm med "-to"
+     Right $ relmapMember med (x, xs)
 
 -- | Expand elements from collection.
 consMember :: (Ord c, D.CSet c, D.CList c, D.CText c) => C.RopCons c
