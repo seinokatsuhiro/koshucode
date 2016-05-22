@@ -171,13 +171,7 @@ copWordsBy arg =
        case D.isText ws && D.isText sep of
          False -> typeUnmatch arg
          True  -> let isSep = (`elem` D.gText sep)
-                  in D.putList $ map D.pText $ wordsBy isSep $ D.gText ws
-
-wordsBy :: B.Pred Char -> String -> [String]
-wordsBy p s = case dropWhile p s of
-                "" -> []
-                s' -> let (w, s'') = break p s'
-                      in w : wordsBy p s''
+                  in D.putList $ map D.pText $ B.wordsBy isSep $ D.gText ws
 
 
 -- ----------------------  unwords unwords-by

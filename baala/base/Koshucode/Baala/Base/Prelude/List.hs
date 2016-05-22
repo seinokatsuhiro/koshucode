@@ -34,7 +34,7 @@ module Koshucode.Baala.Base.Prelude.List
     chunks,
     splitBy,
     divide, divideBy,
-    -- $Divide
+    wordsBy,
   ) where
 
 import qualified Data.List as List
@@ -273,22 +273,6 @@ reverseMap f = reverse . f . reverse
 
 -- ----------------------  Divide
 
--- $Divide
---
---   /Examples/
---
---   >>> splitBy (== '|') "b c"
---   Left "b c"
---
---   >>> splitBy (== '|') "a | b | c"
---   Right ("a ", '|', " b | c")
---
---   >>> divide '|' "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]
---
---   >>> divideBy (== '|') "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]
-
 chunks :: Int -> [a] -> [[a]]
 chunks n = loop where
     loop xs = case splitAt n xs of
@@ -299,6 +283,13 @@ chunks n = loop where
 --   If list contains an element that satisfies the predicate,
 --   @(/before-list/, /the-element/, /after-list/)@ is returned.
 --   Otherwise, original list is returned.
+--
+--   >>> splitBy (== '|') "b c"
+--   Left "b c"
+--
+--   >>> splitBy (== '|') "a | b | c"
+--   Right ("a ", '|', " b | c")
+
 splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
 splitBy p xs =
     case break p xs of
@@ -306,13 +297,32 @@ splitBy p xs =
       _          -> Left xs
 
 -- | Divide list.
+--
+--   >>> divide '|' "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
+
 divide :: (Eq a) => a -> [a] -> [[a]]
 divide dv = divideBy (== dv)
 
 -- | Divide list.
+--
+--   >>> divideBy (== '|') "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
+
 divideBy :: (a -> Bool) -> [a] -> [[a]]
 divideBy p = loop where
     loop xs = case break p xs of
                 (x, _ : xs2) -> x : loop xs2
                 (x, [])      -> [x]
 
+-- | Divide string into words.
+--
+--   >>> wordsBy (== '|') "a|bb||ccc|"
+--   ["a","bb","ccc"]
+
+wordsBy :: (a -> Bool) -> [a] -> [[a]]
+wordsBy p = loop where
+    loop s = case dropWhile p s of
+               [] -> []
+               s1 -> let (w, s2) = break p s1
+                     in w : loop s2
