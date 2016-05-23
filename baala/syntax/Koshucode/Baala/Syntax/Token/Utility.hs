@@ -66,7 +66,6 @@ untoken = dispatch where
           S.TextQQ             -> "\"" ++ s ++ "\""
           S.TextKey            -> s
           S.TextBar            -> s
-          S.TextName           -> s
           S.TextLicense        -> s
 
 -- | Get detail type string of token.

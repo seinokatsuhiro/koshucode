@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -12,7 +11,6 @@ module Koshucode.Baala.Syntax.Token.Pattern
     pattern TTextQQ,
     pattern TTextKey,
     pattern TTextBar,
-    pattern TTextName,
     pattern TTextLicense,
     pattern TTextSect,
 
@@ -54,8 +52,7 @@ pattern TTextKey cp w = S.TText cp S.TextKey  w
 --   >>> S.TTextBar B.def "a"   -- |a|
 pattern TTextBar cp w = S.TText cp S.TextBar  w
 
-pattern TTextName cp w = S.TText cp S.TextName w
-
+-- | License text token.
 pattern TTextLicense cp w = S.TText cp S.TextLicense w
 
 pattern TTextSect cp = TTextRaw cp "==="

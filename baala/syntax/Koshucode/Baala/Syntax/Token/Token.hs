@@ -130,7 +130,6 @@ data TextForm
     | TextQQ       -- ^ Double-quoted text
     | TextKey      -- ^ Keyword literal
     | TextBar      -- ^ Text enclosed in bars
-    | TextName     -- ^ Text used as name
     | TextLicense  -- ^ Text in license section
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -142,7 +141,6 @@ instance SubtypeString TextForm where
     subtypeString TextQQ       = "qq"
     subtypeString TextKey      = "key"
     subtypeString TextBar      = "bar"
-    subtypeString TextName     = "name"
     subtypeString TextLicense  = "license"
 
 
