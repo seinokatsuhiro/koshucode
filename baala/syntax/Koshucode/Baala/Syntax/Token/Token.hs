@@ -41,21 +41,33 @@ class SubtypeString a where
 
 -- | There are eleven types of tokens.
 data Token
-    = TText     B.CodePt TextForm String      -- ^ Text.
-    | TSlot     B.CodePt Int String           -- ^ Slot name.
-                                              --   'Int' represents slot level, i.e.,
-                                              --   0 for local positional slots,
-                                              --   1 for local named slots,
-                                              --   2 for global slots.
-    | TShort    B.CodePt String String        -- ^ Prefixed shorten text.
-    | TTermN    B.CodePt Ordering S.TermName  -- ^ Term name.
-    | TTerm     B.CodePt TermType S.TermPath  -- ^ Term path.
-    | TLocal    B.CodePt (Local String) Int [Token]  -- ^ Local name.
-    | TOpen     B.CodePt String               -- ^ Opening bracket.
-    | TClose    B.CodePt String               -- ^ Closing bracket.
-    | TSpace    B.CodePt Int                  -- ^ /N/ space characters.
-    | TComment  B.CodePt String               -- ^ Comment.
-    | TName     B.CodePt BlankName            -- ^ Blank name.
+    = TText     B.CodePt TextForm String
+                -- ^ 1) Text.
+    | TSlot     B.CodePt Int String
+                -- ^ 2) Slot name.
+                --      'Int' represents slot level, i.e.,
+                --      0 for local positional slots,
+                --      1 for local named slots,
+                --      2 for global slots
+                --      —  @\@@/name/
+    | TShort    B.CodePt String String
+                -- ^ 3) Prefixed shorten text — /short/@.@/proper/
+    | TTermN    B.CodePt Ordering S.TermName
+                -- ^ 4) Term name —  @\/@/name/
+    | TTerm     B.CodePt TermType S.TermPath
+                -- ^ 5) Term path — @\/@/name/@\/@/name/
+    | TLocal    B.CodePt (Local String) Int [Token]
+                -- ^ 6) Local name — @^\/@/name/
+    | TOpen     B.CodePt String
+                -- ^ 7) Opening bracket — @(@, @{@, etc
+    | TClose    B.CodePt String
+                -- ^ 8) Closing bracket — @}@, @)@, etc
+    | TSpace    B.CodePt Int
+                -- ^ 9) /N/ space characters.
+    | TComment  B.CodePt String
+                -- ^ 10) Comment — @**@/text/
+    | TName     B.CodePt BlankName
+                -- ^ 11) Blank name. (This is used in building content expression)
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | @\"text\"@, @\"open\"@, ...
@@ -126,10 +138,10 @@ nameToken = TName B.def . BlankNormal
 data TextForm
     = TextUnk      -- ^ Unknown keyword
     | TextRaw      -- ^ Naked text
-    | TextQ        -- ^ Single-quoted text
-    | TextQQ       -- ^ Double-quoted text
-    | TextKey      -- ^ Keyword literal
-    | TextBar      -- ^ Text enclosed in bars
+    | TextQ        -- ^ Single-quoted text — @\'@/code/
+    | TextQQ       -- ^ Double-quoted text — @\"@/text/@\"@
+    | TextKey      -- ^ Keyword literal — @<@/keyword/@>@
+    | TextBar      -- ^ Text enclosed in bars — @|@/text/@|@
     | TextLicense  -- ^ Text in license section
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
