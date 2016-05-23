@@ -3,7 +3,7 @@
 
 -- | Tree of tokens
 
-module Koshucode.Baala.Syntax.Token.TokenTree
+module Koshucode.Baala.Syntax.TTree.TokenTree
   ( -- * Type
     -- ** Tree
     TTree, NamedTree, NamedTrees,
@@ -29,7 +29,7 @@ module Koshucode.Baala.Syntax.Token.TokenTree
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token.Token      as S
-import qualified Koshucode.Baala.Syntax.Token.Bracket    as S
+import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 
 
 -- --------------------------------------------  Token tree

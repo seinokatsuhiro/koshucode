@@ -2,7 +2,7 @@
 
 -- | Parser for token tree.
 
-module Koshucode.Baala.Syntax.Token.Parse
+module Koshucode.Baala.Syntax.TTree.Parse
   ( -- * Parser
     ttrees, ttreeGroup,
 
@@ -19,8 +19,8 @@ import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token.Token      as S
 import qualified Koshucode.Baala.Syntax.Token.TokenLine  as S
-import qualified Koshucode.Baala.Syntax.Token.Bracket    as S
-import qualified Koshucode.Baala.Syntax.Token.TokenTree  as S
+import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
+import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 
 
 -- --------------------------------------------  Parser

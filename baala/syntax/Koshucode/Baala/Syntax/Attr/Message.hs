@@ -22,7 +22,7 @@ module Koshucode.Baala.Syntax.Attr.Message
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Para             as S
 import qualified Koshucode.Baala.Syntax.Symbol           as S
-import qualified Koshucode.Baala.Syntax.Token            as S
+import qualified Koshucode.Baala.Syntax.TTree            as S
 
 abAttr        :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr        = B.abortable "attr"

@@ -10,6 +10,7 @@ module Koshucode.Baala.Syntax.Attr.Slot
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Syntax.TTree           as S
 import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg

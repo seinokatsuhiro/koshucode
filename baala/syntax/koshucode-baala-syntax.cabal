@@ -66,14 +66,16 @@ library
         Koshucode.Baala.Syntax.Symbol.Short
         Koshucode.Baala.Syntax.Symbol.Term
 
+        Koshucode.Baala.Syntax.TTree
+        Koshucode.Baala.Syntax.TTree.Bracket
+        Koshucode.Baala.Syntax.TTree.Parse
+        Koshucode.Baala.Syntax.TTree.TokenTree
+
         Koshucode.Baala.Syntax.Token
-        Koshucode.Baala.Syntax.Token.Bracket
         Koshucode.Baala.Syntax.Token.Message
-        Koshucode.Baala.Syntax.Token.Parse
         Koshucode.Baala.Syntax.Token.Token
         Koshucode.Baala.Syntax.Token.TokenClause
         Koshucode.Baala.Syntax.Token.TokenLine
-        Koshucode.Baala.Syntax.Token.TokenTree
 
   -- Modules included in this library but not exported.
   --other-modules:       
