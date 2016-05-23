@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Rop.Flat.Term    as Op
 ropsTermGadget :: (Ord c) => [C.Rop c]
 ropsTermGadget = Op.ropList "term"  -- GROUP
     --        CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def  consPrefix         "prefix /P /N ..."         "-prefix -term*"
+    [ Op.def  consPrefix         "prefix /N -to /P ..."     "pos : -prefix -term* | to : -prefix . -to"
     , Op.def  consPrefixChange   "prefix-change /P /Q"      "-new -old"
     , Op.def  consUnprefix       "unprefix /P"              "-prefix"
     , Op.def  consWipe           "wipe"                     ""
@@ -47,9 +47,10 @@ ropsTermGadget = Op.ropList "term"  -- GROUP
 
 consPrefix :: C.RopCons c
 consPrefix med =
-    do pre <- Op.getTerm  med "-prefix"
-       ns  <- Op.getTerms med "-term"
-       Right $ relmapPrefix med pre ns
+    do let tag = Op.getTag med "to"
+       pre <- Op.getTerm  med "-prefix"
+       to  <- Op.getTerms med $ if tag then "-to" else "-term"
+       Right $ relmapPrefix med pre to
 
 relmapPrefix :: C.Intmed c -> String -> [String] -> C.Relmap c
 relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
