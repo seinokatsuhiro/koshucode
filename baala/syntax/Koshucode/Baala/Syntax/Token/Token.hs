@@ -8,18 +8,13 @@ module Koshucode.Baala.Syntax.Token.Token
   (
     -- * Token
     Token (..),
-    BlankName (..),
-    blankNameTypeText,
     textToken,
     nameToken,
 
-    -- * Local
-    Local (..),
-    unlocal,
-  
     -- * TextForm
     TextForm (..),
     textFormTypeText,
+    -- ** Pattern
     pattern TTextUnk,
     pattern TTextRaw,
     pattern TTextQ,
@@ -30,10 +25,19 @@ module Koshucode.Baala.Syntax.Token.Token
     pattern TTextLicense,
     pattern TTextSect,
 
+    -- * BlankName
+    BlankName (..),
+    blankNameTypeText,
+
     -- * TermType
     TermType (..),
+    -- ** Pattern
     pattern TTermPath,
     pattern TTermQ,
+
+    -- * Local
+    Local (..),
+    unlocal,
   ) where
 
 import qualified Data.Generics                    as G
@@ -88,12 +92,6 @@ instance B.Write Token where
         lineCol cp             = (show $ B.codePtLineNo cp)
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
 
-textToken :: String -> Token
-textToken = TText B.def TextRaw
-
-nameToken :: String -> Token
-nameToken = TName B.def . BlankNormal
-
 instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
     codePtList (TName    cp _)      = [cp]
@@ -107,17 +105,13 @@ instance B.CodePtr Token where
     codePtList (TSpace   cp _)      = [cp]
     codePtList (TComment cp _)      = [cp]
 
+-- | Create raw text token.
+textToken :: String -> Token
+textToken = TText B.def TextRaw
 
--- ----------------------  Local
-
-data Local a
-    = LocalSymbol a
-    | LocalNest a
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-unlocal :: Local a -> a
-unlocal (LocalNest   a) = a
-unlocal (LocalSymbol a) = a
+-- | Create normal name token.
+nameToken :: String -> Token
+nameToken = TName B.def . BlankNormal
 
 
 -- ----------------------  TextForm
@@ -133,16 +127,6 @@ data TextForm
     | TextLicense  -- ^ Text ins license section
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-pattern TTextUnk  cp w     = TText cp TextUnk  w
-pattern TTextRaw  cp w     = TText cp TextRaw  w
-pattern TTextQ    cp w     = TText cp TextQ    w
-pattern TTextQQ   cp w     = TText cp TextQQ   w
-pattern TTextKey  cp w     = TText cp TextKey  w
-pattern TTextBar  cp w     = TText cp TextBar  w
-pattern TTextName cp w     = TText cp TextName w
-pattern TTextLicense cp w  = TText cp TextLicense w
-pattern TTextSect cp       = TTextRaw cp "==="
-
 textFormTypeText :: TextForm -> String
 textFormTypeText form =
     case form of
@@ -154,6 +138,16 @@ textFormTypeText form =
       TextBar      -> "bar"
       TextName     -> "name"
       TextLicense  -> "license"
+
+pattern TTextUnk  cp w     = TText cp TextUnk  w
+pattern TTextRaw  cp w     = TText cp TextRaw  w
+pattern TTextQ    cp w     = TText cp TextQ    w
+pattern TTextQQ   cp w     = TText cp TextQQ   w
+pattern TTextKey  cp w     = TText cp TextKey  w
+pattern TTextBar  cp w     = TText cp TextBar  w
+pattern TTextName cp w     = TText cp TextName w
+pattern TTextLicense cp w  = TText cp TextLicense w
+pattern TTextSect cp       = TTextRaw cp "==="
 
 
 -- ----------------------  Term type
@@ -191,6 +185,7 @@ instance B.Write BlankName where
     writeDocWith sh (BlankInfix    n)   = B.writeDocWith sh n B.<+> B.doc "(infix)"
     writeDocWith sh (BlankPostfix  n)   = B.writeDocWith sh n B.<+> B.doc "(postfix)"
 
+-- | Type name of 'BlankName'.
 blankNameTypeText :: BlankName -> String
 blankNameTypeText n =
     case n of
@@ -200,3 +195,14 @@ blankNameTypeText n =
       BlankInfix    _   -> "infix"
       BlankPostfix  _   -> "postfix"
 
+
+-- ----------------------  Local
+
+data Local a
+    = LocalSymbol a
+    | LocalNest a
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+unlocal :: Local a -> a
+unlocal (LocalNest   a) = a
+unlocal (LocalSymbol a) = a
