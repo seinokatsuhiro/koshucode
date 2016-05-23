@@ -12,20 +12,20 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Token
     Token (..),
     textToken,
-    nameToken,
 
-    -- * TextForm
+    -- * Detail type
+    -- ** Text
     TextForm (..),
 
-    -- * BlankName
-    BlankName (..),
-
-    -- * TermType
+    -- ** Term
     TermType (..),
 
-    -- * Local
+    -- ** Local
     Local (..),
     unlocal,
+
+    -- ** Blank
+    BlankName (..),
   ) where
 
 import qualified Data.Generics                    as G
@@ -37,7 +37,7 @@ class SubtypeString a where
     subtypeString :: a -> String
 
 
--- ----------------------  Token type
+-- --------------------------------------------  Token type
 
 -- | There are eleven types of tokens.
 data Token
@@ -128,12 +128,10 @@ instance B.Write Token where
 textToken :: String -> Token
 textToken = TText B.def TextRaw
 
--- | Create normal name token.
-nameToken :: String -> Token
-nameToken = TName B.def . BlankNormal
 
+-- --------------------------------------------  Detail type
 
--- ----------------------  TextForm
+-- ----------------------  Text
 
 data TextForm
     = TextUnk      -- ^ Unknown keyword
@@ -156,7 +154,7 @@ instance SubtypeString TextForm where
     subtypeString TextLicense  = "license"
 
 
--- ----------------------  Term type
+-- ----------------------  Term
 
 data TermType
     = TermTypePath               -- ^ Normal term path
@@ -164,7 +162,19 @@ data TermType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 
--- ----------------------  Blank name
+-- ----------------------  Local
+
+data Local a
+    = LocalSymbol a
+    | LocalNest a
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+unlocal :: Local a -> a
+unlocal (LocalNest   a) = a
+unlocal (LocalSymbol a) = a
+
+
+-- ----------------------  Blank
 
 data BlankName
     = BlankNormal   String
@@ -195,15 +205,3 @@ instance B.Write BlankName where
     writeDocWith sh (BlankPrefix   n)   = B.writeDocWith sh n B.<+> B.doc "(prefix)"
     writeDocWith sh (BlankInfix    n)   = B.writeDocWith sh n B.<+> B.doc "(infix)"
     writeDocWith sh (BlankPostfix  n)   = B.writeDocWith sh n B.<+> B.doc "(postfix)"
-
-
--- ----------------------  Local
-
-data Local a
-    = LocalSymbol a
-    | LocalNest a
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-unlocal :: Local a -> a
-unlocal (LocalNest   a) = a
-unlocal (LocalSymbol a) = a
