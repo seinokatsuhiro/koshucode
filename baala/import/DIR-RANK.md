@@ -1340,7 +1340,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    143 judges
+**    150 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Syntax"
@@ -1376,6 +1376,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Check"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Control"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Elem"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Gadget"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Rop.Flat.Meta"
@@ -1402,6 +1403,13 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Control"          /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Control"          /import "Koshucode.Baala.Rop.Flat.Lattice"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Control"          /import "Koshucode.Baala.Rop.Flat.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Rop.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Elem"             /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Base"
@@ -1529,7 +1537,7 @@ Command `./dir-rank.k ../rop-flat/data/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 1 | "Define" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Rop" | [ ] ] [ 2 | "Term" | [ ] ] [ 3 | "Get" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Rop.Flat.Lattice"  /base-rank {= /rank /base /import-dir [ 5 | "Tropashko" | [ "Base" ] ] [ 6 | "Restrict" | [ "Base" ] ] [ 7 | "Rop" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ] ] [ 2 | "Message" | [ ] ] [ 5 | "Gadget" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5 | "Order" | [ "Base" ] ] [ 5 | "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [ 6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [ ] ] [ 9 | "Check" | [ "Base" | "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" | "Lattice" ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ] ] [ 2 | "Message" | [ ] ] [ 5 | "Elem" | [ "Base" ] ] [ 5 | "Gadget" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5 | "Order" | [ "Base" ] ] [ 5 | "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [ 6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [ ] ] [ 9 | "Check" | [ "Base" | "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" | "Lattice" ] ] =}
 
 |-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 4 | "Base" | [ ] ] [ 11 | "Flat" | [ "Lattice" ] ] =}
 
@@ -1570,6 +1578,7 @@ TABLE : DIR-RANK
                                                  ----- -------------- ------------------------
                                                  1     "PoScale"      [ ]
                                                  2     "Message"      [ ]
+                                                 5     "Elem"         [ "Base" ]
                                                  5     "Gadget"       [ "Base" ]
                                                  5     "Meta"         [ "Base" ]
                                                  5     "Order"        [ "Base" ]

@@ -4,10 +4,10 @@ about /package 'rop-flat
 
 |-- DIR  /code 38   /comment 12   /dir "rop-flat/Koshucode/Baala/Rop"
 |-- DIR  /code 229  /comment 168  /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- DIR  /code 1256  /comment 755  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- DIR  /code 1305  /comment 786  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- DIR  /code 214  /comment 203  /dir "rop-flat/Koshucode/Baala/Rop/Flat/Lattice"
 
-|-- DIR-TOTAL  /code 1737  /comment 1138
+|-- DIR-TOTAL  /code 1786  /comment 1169
 
 |-- FILE  /code 10   /comment 6    /file "Base.hs"        /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /code 18   /comment 12   /file "Define.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Base"
@@ -16,9 +16,10 @@ about /package 'rop-flat
 |-- FILE  /code 24   /comment 42   /file "Rop.hs"         /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 48   /comment 29   /file "Term.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Base"
 |-- FILE  /code 28   /comment 6    /file "Flat.hs"        /dir "rop-flat/Koshucode/Baala/Rop"
-|-- FILE  /code 30   /comment 5    /file "Bundle.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /code 32   /comment 5    /file "Bundle.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 82   /comment 49   /file "Check.hs"       /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 99   /comment 49   /file "Control.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /code 155  /comment 84   /file "Elem.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 184  /comment 103  /file "Gadget.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 8    /comment 26   /file "Lattice.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 102  /comment 72   /file "Restrict.hs"    /dir "rop-flat/Koshucode/Baala/Rop/Flat/Lattice"
@@ -27,11 +28,11 @@ about /package 'rop-flat
 |-- FILE  /code 66   /comment 37   /file "Message.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 173  /comment 84   /file "Meta.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 64   /comment 32   /file "Order.hs"       /dir "rop-flat/Koshucode/Baala/Rop/Flat"
-|-- FILE  /code 199  /comment 107  /file "Peripheral.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /code 91   /comment 54   /file "Peripheral.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 56   /comment 35   /file "PoScale.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 66   /comment 36   /file "Resource.hs"    /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 50   /comment 73   /file "Source.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 103  /comment 66   /file "Term.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 76   /comment 53   /file "TermGadget.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 
-|-- FILE-TOTAL  /code 1737  /comment 1138
+|-- FILE-TOTAL  /code 1786  /comment 1169
