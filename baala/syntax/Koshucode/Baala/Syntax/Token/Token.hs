@@ -71,6 +71,20 @@ data Token
     | TComment  B.CodePt String               -- ^ Comment.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
+-- | @\"text\"@, @\"open\"@, ...
+instance SubtypeString Token where
+     subtypeString (TText     _ _ _  ) = "text"
+     subtypeString (TName     _ _    ) = "name"
+     subtypeString (TShort    _ _ _  ) = "short"
+     subtypeString (TTermN    _ _ _  ) = "term"
+     subtypeString (TTerm     _ _ _  ) = "term"
+     subtypeString (TLocal    _ _ _ _) = "local"
+     subtypeString (TSlot     _ _ _  ) = "slot"
+     subtypeString (TOpen     _ _    ) = "open"
+     subtypeString (TClose    _ _    ) = "close"
+     subtypeString (TSpace    _ _    ) = "space"
+     subtypeString (TComment  _ _    ) = "comment"
+
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
     name (TSlot      _ _ s)  = s

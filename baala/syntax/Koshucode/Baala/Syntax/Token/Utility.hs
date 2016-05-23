@@ -7,9 +7,8 @@
 module Koshucode.Baala.Syntax.Token.Utility
   ( -- * Selectors
     tokenContent, untoken,
-    tokenTypeText, tokenSubtypeText,
+    tokenDetailTypeString,
     tokenParents,
-    -- $Selector
   
     -- * Predicates
     isBlankToken, sweepToken,
@@ -25,15 +24,11 @@ import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
 -- ----------------------  Selector
 
--- $Selector
---
---   >>> let tok = TTerm B.def 0 ["r", "x"] in tokenContent tok
---   "/r/x"
---
---   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenSubtypeText tok)
---   ("text", Just "raw")
-
 -- | Get the content of token.
+--
+--   >>> let tok = S.TTermPath B.def ["r", "x"] in tokenContent tok
+--   "/r/x"
+
 tokenContent :: S.Token -> String
 tokenContent tok =
     case tok of
@@ -72,24 +67,13 @@ untoken tok =
       S.TSpace    _ n      -> replicate n ' '
       S.TComment  _ s      -> s
 
--- | Text of token type, e.g., @\"text\"@, @\"open\"@.
-tokenTypeText :: S.Token -> String
-tokenTypeText tok =
-    case tok of
-      S.TText     _ _ _    -> "text"
-      S.TName     _ _      -> "name"
-      S.TShort    _ _ _    -> "short"
-      S.TTermN    _ _ _    -> "term"
-      S.TTerm     _ _ _    -> "term"
-      S.TLocal    _ _ _ _  -> "local"
-      S.TSlot     _ _ _    -> "slot"
-      S.TOpen     _ _      -> "open"
-      S.TClose    _ _      -> "close"
-      S.TSpace    _ _      -> "space"
-      S.TComment  _ _      -> "comment"
+-- | Get detail type string of token.
+--
+--   >>> let tok = S.textToken "flower" in (S.subtypeString tok, tokenDetailTypeString tok)
+--   ("text", Just "raw")
 
-tokenSubtypeText :: S.Token -> Maybe String
-tokenSubtypeText tok =
+tokenDetailTypeString :: S.Token -> Maybe String
+tokenDetailTypeString tok =
     case tok of
       S.TText     _ f _    -> Just $ S.subtypeString f
       S.TName     _ b      -> Just $ S.subtypeString b
