@@ -17,8 +17,7 @@ module Koshucode.Baala.Syntax.TTree.Parse
 
 import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax.Token.Token      as S
-import qualified Koshucode.Baala.Syntax.Token.TokenLine  as S
+import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 

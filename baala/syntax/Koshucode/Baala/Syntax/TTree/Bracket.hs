@@ -17,9 +17,9 @@ module Koshucode.Baala.Syntax.TTree.Bracket
     typeOpen,   typeClose,
   ) where
 
-import qualified Data.Generics                        as G
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax.Token.Token   as S
+import qualified Data.Generics                         as G
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Syntax.Token          as S
 
 -- | Type of bracket.
 data BracketType
