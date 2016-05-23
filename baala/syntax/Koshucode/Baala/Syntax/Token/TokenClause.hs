@@ -9,6 +9,7 @@ module Koshucode.Baala.Syntax.Token.TokenClause
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
 import qualified Koshucode.Baala.Syntax.Token.TokenLine as S
+import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 
 type TokenClause = B.CodeClause S.Token
 

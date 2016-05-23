@@ -9,6 +9,7 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Token
     Token (..),
     BlankName (..),
+    blankNameTypeText,
     textToken,
     nameToken,
 
@@ -18,6 +19,7 @@ module Koshucode.Baala.Syntax.Token.Token
   
     -- * TextForm
     TextForm (..),
+    textFormTypeText,
     pattern TTextUnk,
     pattern TTextRaw,
     pattern TTextQ,
@@ -32,19 +34,6 @@ module Koshucode.Baala.Syntax.Token.Token
     TermType (..),
     pattern TTermPath,
     pattern TTermQ,
-
-    -- * Selectors
-    tokenContent, untoken,
-    tokenTypeText, tokenSubtypeText,
-    tokenParents,
-    -- $Selector
-  
-    -- * Predicates
-    isBlankToken, sweepToken,
-    isShortToken, isTermToken,
-    isOpenToken, isCloseToken,
-    isOpenTokenOf, isCloseTokenOf,
-    -- $Predicate
   ) where
 
 import qualified Data.Generics                    as G
@@ -210,143 +199,4 @@ blankNameTypeText n =
       BlankPrefix   _   -> "prefix"
       BlankInfix    _   -> "infix"
       BlankPostfix  _   -> "postfix"
-
-
--- ----------------------  Selector
-
--- $Selector
---
---   >>> let tok = TTerm B.def 0 ["r", "x"] in tokenContent tok
---   "/r/x"
---
---   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenSubtypeText tok)
---   ("text", Just "raw")
-
--- | Get the content of token.
-tokenContent :: Token -> String
-tokenContent tok =
-    case tok of
-      TText     _ _ s    -> s
-      TName     _ op     -> B.name op
-      TShort    _ a b    -> a ++ "." ++ b
-      TTermN    _ _ n    -> '/' : n
-      TTerm     _ _ ns   -> concatMap ('/' :) ns
-      TLocal    _ n _ _  -> unlocal n
-      TSlot     _ _ s    -> s
-      TOpen     _ s      -> s
-      TClose    _ s      -> s
-      TSpace    _ n      -> replicate n ' '
-      TComment  _ s      -> s
-
-untoken :: Token -> String
-untoken tok =
-    case tok of
-      TText     _ q s    -> case q of
-                              TextUnk     -> s
-                              TextRaw     -> s
-                              TextQ       -> "'" ++ s
-                              TextQQ      -> "\"" ++ s ++ "\""
-                              TextKey     -> s
-                              TextBar     -> s
-                              TextName    -> s
-                              TextLicense -> s
-      TName     _ op     -> B.name op
-      TShort    _ a b    -> a ++ "." ++ b
-      TTermN    _ _ n    -> '/' : n
-      TTerm     _ _ ns   -> concatMap ('/' :) ns
-      TLocal    _ n _ _  -> unlocal n
-      TSlot     _ _ s    -> s
-      TOpen     _ s      -> s
-      TClose    _ s      -> s
-      TSpace    _ n      -> replicate n ' '
-      TComment  _ s      -> s
-
--- | Text of token type, e.g., @\"text\"@, @\"open\"@.
-tokenTypeText :: Token -> String
-tokenTypeText tok =
-    case tok of
-      TText     _ _ _    -> "text"
-      TName     _ _      -> "name"
-      TShort    _ _ _    -> "short"
-      TTermN    _ _ _    -> "term"
-      TTerm     _ _ _    -> "term"
-      TLocal    _ _ _ _  -> "local"
-      TSlot     _ _ _    -> "slot"
-      TOpen     _ _      -> "open"
-      TClose    _ _      -> "close"
-      TSpace    _ _      -> "space"
-      TComment  _ _      -> "comment"
-
-tokenSubtypeText :: Token -> Maybe String
-tokenSubtypeText tok =
-    case tok of
-      TText     _ f _    -> Just $ textFormTypeText f
-      TName     _ b      -> Just $ blankNameTypeText b
-      TShort    _ _ _    -> Nothing
-      TTermN    _ _ _    -> Nothing
-      TTerm     _ _ _    -> Nothing
-      TLocal    _ _ _ _  -> Nothing
-      TSlot     _ n _    -> Just $ slotTypeText n
-      TOpen     _ _      -> Nothing
-      TClose    _ _      -> Nothing
-      TSpace    _ _      -> Nothing
-      TComment  _ _      -> Nothing
-
-slotTypeText :: Int -> String
-slotTypeText 0   = "positional"
-slotTypeText 1   = "named"
-slotTypeText 2   = "global"
-slotTypeText _   = "unknown"
-
-tokenParents :: Token -> [Token]
-tokenParents (TLocal _ _ _ ps) = ps
-tokenParents _                 = []
-
-
--- ----------------------  Predicate
-
--- $Predicate
---
---   >>> let tok = TOpen B.def "(" in isOpenTokenOf "(" tok
---   True
---
---   >>> let tok = TOpen B.def "{" in isOpenTokenOf "(" tok
---   False
-
--- | Test the token is blank, i.e., comment or space.
-isBlankToken :: B.Pred Token
-isBlankToken (TSpace _ _)       = True
-isBlankToken (TComment _ _)     = True
-isBlankToken _                  = False
-
--- | Remove blank tokens.
-sweepToken :: B.Map [Token]
-sweepToken = B.omit isBlankToken
-
-isShortToken :: B.Pred Token
-isShortToken (TShort _ _ _)     = True
-isShortToken _                  = False
-
-isTermToken :: B.Pred Token
-isTermToken (TTermN _ _ _)      = True
-isTermToken (TTerm _ _ _)       = True
-isTermToken _                   = False
-
-isOpenToken :: B.Pred Token
-isOpenToken (TOpen _ _)         = True
-isOpenToken _                   = False
-
-isCloseToken :: B.Pred Token
-isCloseToken (TClose _ _)       = True
-isCloseToken _                  = False
-
--- | Check token is a 'TOpen' of the specific bracket.
-isOpenTokenOf :: String -> B.Pred Token
-isOpenTokenOf p1 (TOpen _ p2)   = p1 == p2
-isOpenTokenOf _ _               = False
-
--- | Check token is a 'TClose' of the specific bracket.
-isCloseTokenOf :: String -> B.Pred Token
-isCloseTokenOf p1 (TClose _ p2) = p1 == p2
-isCloseTokenOf _ _              = False
 

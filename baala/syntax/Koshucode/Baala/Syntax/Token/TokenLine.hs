@@ -29,6 +29,7 @@ import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
+import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
