@@ -87,7 +87,7 @@ relkitUnprefix pre (Just he1) = Right kit2 where
 unprefixName :: String -> String -> String
 unprefixName pre n =
     case List.stripPrefix pre n of
-      Just ('-' : n2) -> '/' : n2
+      Just ('-' : n2) -> n2
       _ -> n
 
 
