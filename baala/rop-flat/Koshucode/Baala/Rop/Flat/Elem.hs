@@ -11,6 +11,9 @@ module Koshucode.Baala.Rop.Flat.Elem
     -- * ix-elem & iz-elem
     consIndexElem, relmapIndexElem, relkitIndexElem,
 
+    -- * unroll
+    consUnroll, relmapUnroll,
+
     -- * elem-begin
     consElemBegin, relmapElemBegin,
     -- * elem-end
@@ -29,14 +32,15 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Implementation of relational operators.
 ropsElem :: (D.CContent c) => [C.Rop c]
 ropsElem = Op.ropList "elem"
-    --       CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def consElem          "elem /P -to /N"           "-coll . -to"
-    , Op.def consElemBegin     "elem-begin /P -to /N ..." "-coll . -to"
-    , Op.def consElemEnd       "elem-end /P -to /N ..."   "-coll . -to"
-    , Op.def (consIndexElem 1) "ix-elem /P -to /N /N"     "-coll . -to"
-    , Op.def (consIndexElem 0) "iz-elem /P -to /N /N"     "-coll . -to"
-    , Op.def consMember        "member /N /N"             "-elem -set"
-    , Op.def consUncollect     "uncollect /P -to /N ..."  "-coll . -to"
+    --       CONSTRUCTOR       USAGE                        ATTRIBUTE
+    [ Op.def consElem          "elem /P -to /N"             "-coll . -to"
+    , Op.def consElemBegin     "elem-begin /P -to /N ..."   "-coll . -to"
+    , Op.def consElemEnd       "elem-end /P -to /N ..."     "-coll . -to"
+    , Op.def (consIndexElem 1) "ix-elem /P -to /N /N"       "-coll . -to"
+    , Op.def (consIndexElem 0) "iz-elem /P -to /N /N"       "-coll . -to"
+    , Op.def consMember        "member /N /N"               "-elem -set"
+    , Op.def consUncollect     "uncollect /P -to /N ..."    "-coll . -to"
+    , Op.def consUnroll        "unroll /N /N -from /P ..."  "-term -content . -from"
     ]
 
 -- ----------------------  member
@@ -154,6 +158,35 @@ relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
 
     cons :: [c] -> (c, c) -> [c]
     cons cs (ic, xc) = ic : xc : cs
+
+
+-- ----------------------  unroll
+
+-- | Unroll (expand) terms to tuples.
+--
+--   >>> unroll /term /content -from /1 /2 /3 /4
+
+consUnroll :: (D.CTerm c) => C.RopCons c
+consUnroll med =
+  do t   <- Op.getTerm  med "-term"
+     c   <- Op.getTerm  med "-content"
+     xs  <- Op.getTerms med "-from"
+     Right $ relmapUnroll med (t, c, xs)
+
+relmapUnroll :: (D.CTerm c) => C.Intmed c -> (S.TermName, S.TermName, [S.TermName]) -> C.Relmap c
+relmapUnroll med = C.relmapFlow med . relkitUnroll
+
+relkitUnroll :: (D.CTerm c) =>  (S.TermName, S.TermName, [S.TermName]) -> C.RelkitFlow c
+relkitUnroll _ Nothing = Right C.relkitNothing
+relkitUnroll (t, c, from) (Just he1) = kit2 where
+    kit2 | S.termsPN fromi [ti, ci]  = Right $ C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+         | otherwise                 = Msg.unkTerm (t : c : from) he1
+    [ti, ci] = headIndex he1 [t, c]
+    fromi    = headIndex he1 from
+    he2      = D.headAppend [t, c] $ D.headMap (B.snipOff fromi) he1
+    kitf2 cs = let (fromc, cs') = fromi `B.snipBoth` cs
+                   cons (term, cont) = D.pTerm term : cont : cs'
+               in cons <$> zip from fromc
 
 
 -- ----------------------  elem-begin
