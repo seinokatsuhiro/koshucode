@@ -7,9 +7,12 @@ module Koshucode.Baala.Rop.Cox.Empty
     consBoth, relmapBoth,
     -- * maybe
     consMaybe, relmapMaybe, relkitMaybe,
+    -- * compose-maybe
+    consComposeMaybe, relmapComposeMaybe,
   ) where
 
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
@@ -30,6 +33,8 @@ ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
 ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
     --        CONSTRUCTOR USAGE                              ATTRIBUTE
     [ Op.def  consBoth    "both R [-share /P ... -fill E]"   "-relmap/ . -share? -fill?"
+    , Op.def  consComposeMaybe  "compose-maybe R [-share /P ... -fill E]"
+                                                             "-relmap/ . -share? -fill?"
     , Op.def  consMaybe   "maybe R [-share /P ... -fill E]"  "-relmap/ . -share? -fill?"
     ]
 
@@ -92,3 +97,36 @@ relkitMaybe _ _ _ _ = Right C.relkitNothing
 selectFiller :: (D.CRel c) => c -> D.Type -> c
 selectFiller _ t@(D.TypeRel _) = D.pRel $ D.Rel (D.Head t) []
 selectFiller fill _ = fill
+
+
+-- ----------------------  compose-maybe
+
+-- | Construct relmap for relational composition.
+--
+--   >>> a | compose-maybe b
+
+consComposeMaybe :: (D.CContent c) => C.RopCons c
+consComposeMaybe med =
+    do rmap <- Op.getRelmap med "-relmap"
+       fill <- Op.getFiller med "-fill"
+       sh   <- Op.getMaybe Op.getTerms med "-share"
+       Right $ relmapComposeMaybe med sh fill rmap
+
+-- | Relational composition.
+relmapComposeMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapComposeMaybe med sh fill = C.relmapBinary med $ relkitComposeMaybe sh fill
+
+-- | Calculate relational composition.
+relkitComposeMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
+relkitComposeMaybe sh fill kit2@(C.Relkit _ (Just he2) _) (Just he1) =
+    do kitMaybe <- relkitMaybe sh fill kit2 (Just he1)
+       kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMaybe)
+       Right $ kitMaybe `B.mappend` kitCut
+relkitComposeMaybe _ _ _ _ = Right C.relkitNothing
+
+sharedNames :: D.Head -> D.Head -> [S.TermName]
+sharedNames he1 he2 = shared where
+    ns1     = D.headNames he1
+    ns2     = D.headNames he2
+    lr      = D.headLR ns1 ns2
+    shared  = D.headRShare lr ns2
