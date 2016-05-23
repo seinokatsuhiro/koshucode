@@ -69,7 +69,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
     lexmap eid sec trees = result where
-        result = Msg.abLexmap trees $ case S.splitTreesBy "|" trees of
+        result = Msg.abLexmap trees $ case S.splitTreesBy (== "|") trees of
                    Left ts -> single ts
                    Right (ts, _, rest) ->
                        baseOf "append" [S.ttreeGroup ts, S.ttreeGroup rest]

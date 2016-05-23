@@ -93,27 +93,27 @@ splitTokensBy p = B.splitBy p2 where
     p2 (S.TTextRaw _ x)  = p x
     p2 _ = False
 
-sameText :: String -> S.TTree -> Bool
-sameText w1 (S.TextLeafRaw _ w2) = w1 == w2
-sameText _ _ = False
+raw :: B.Pred String -> S.TTree -> Bool
+raw p (S.TextLeafRaw _ w) = p w
+raw _ _ = False
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: String -> B.Split S.TTree
-splitTreesBy = B.splitBy . sameText
+splitTreesBy :: B.Pred String -> B.Split S.TTree
+splitTreesBy = B.splitBy . raw
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: String -> S.TTreesTo [[S.TTree]]
-divideTreesBy = B.divideBy . sameText
+divideTreesBy :: B.Pred String -> S.TTreesTo [[S.TTree]]
+divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.
 divideTreesByBar :: S.TTreesTo [[S.TTree]]
-divideTreesByBar = divideTreesBy "|"
+divideTreesByBar = divideTreesBy (== "|")
 
 -- | Divide token trees by colon @\":\"@.
 divideTreesByColon :: S.TTreesTo [[S.TTree]]
-divideTreesByColon = divideTreesBy ":"
+divideTreesByColon = divideTreesBy (== ":")
 
 -- | Divide token trees by equal sign @\"=\"@.
 divideTreesByEqual :: S.TTreesTo [[S.TTree]]
-divideTreesByEqual = divideTreesBy "="
+divideTreesByEqual = divideTreesBy (== "=")
 

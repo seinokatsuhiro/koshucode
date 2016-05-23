@@ -98,14 +98,14 @@ copFunIf arg =
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
 copTreeIf :: D.CopTree
-copTreeIf trees = folding $ filter (/= []) $ S.divideTreesBy ":" trees where
+copTreeIf trees = folding $ filter (/= []) $ S.divideTreesByColon trees where
     folding :: [[S.TTree]] -> B.Ab S.TTree
     folding []        = Right $ B.TreeL $ S.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
     fore :: [S.TTree] -> B.AbMap S.TTree
     fore trees2 alt =
-        case S.divideTreesBy "->" trees2 of
+        case S.divideTreesBy (== "->") trees2 of
           [_]         -> back trees2 alt
           [test, con] -> do test2 <- stairs ">>" "<<" test
                             Right $ treeIf test2 (S.ttreeGroup con) alt
@@ -113,7 +113,7 @@ copTreeIf trees = folding $ filter (/= []) $ S.divideTreesBy ":" trees where
 
     back :: [S.TTree] -> B.AbMap S.TTree
     back trees2 alt =
-        case S.divideTreesBy "<-" trees2 of
+        case S.divideTreesBy (== "<-") trees2 of
           [alt2]      -> Right $ S.ttreeGroup alt2
           [con, test] -> do test2 <- stairs "<<" ">>" test
                             Right $ treeIf test2 (S.ttreeGroup con) alt
@@ -122,11 +122,11 @@ copTreeIf trees = folding $ filter (/= []) $ S.divideTreesBy ":" trees where
     stairs :: String -> String -> [S.TTree] -> B.Ab S.TTree
     stairs del del2 xs =
         do notInclude del2 xs
-           Right $ treeOrList $ map S.ttreeGroup $ S.divideTreesBy del xs
+           Right $ treeOrList $ map S.ttreeGroup $ S.divideTreesBy (== del) xs
 
     notInclude :: String -> [S.TTree] -> B.Ab ()
     notInclude del xs =
-        case S.divideTreesBy del xs of
+        case S.divideTreesBy (== del) xs of
           [_] -> Right ()
           _   -> abortSyntax xs "Mixed arrows"
 
