@@ -12,7 +12,6 @@ module Koshucode.Baala.Rop.Cox.Empty
   ) where
 
 import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
@@ -114,19 +113,6 @@ consComposeMaybe med =
 
 -- | Relational composition.
 relmapComposeMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
-relmapComposeMaybe med sh fill = C.relmapBinary med $ relkitComposeMaybe sh fill
+relmapComposeMaybe med sh fill = C.relmapBinary med $ Op.relkitCompose m sh where
+    m sh2 = relkitMaybe sh2 fill
 
--- | Calculate relational composition.
-relkitComposeMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
-relkitComposeMaybe sh fill kit2@(C.Relkit _ (Just he2) _) (Just he1) =
-    do kitMaybe <- relkitMaybe sh fill kit2 (Just he1)
-       kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMaybe)
-       Right $ kitMaybe `B.mappend` kitCut
-relkitComposeMaybe _ _ _ _ = Right C.relkitNothing
-
-sharedNames :: D.Head -> D.Head -> [S.TermName]
-sharedNames he1 he2 = shared where
-    ns1     = D.headNames he1
-    ns2     = D.headNames he2
-    lr      = D.headLR ns1 ns2
-    shared  = D.headRShare lr ns2
