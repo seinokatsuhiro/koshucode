@@ -6,6 +6,9 @@
 
 module Koshucode.Baala.Syntax.Token.Token
   (
+    -- * Subtype string
+    SubtypeString (..),
+
     -- * Token
     Token (..),
     textToken,
@@ -13,7 +16,6 @@ module Koshucode.Baala.Syntax.Token.Token
 
     -- * TextForm
     TextForm (..),
-    textFormTypeText,
     -- ** Pattern
     pattern TTextUnk,
     pattern TTextRaw,
@@ -27,7 +29,6 @@ module Koshucode.Baala.Syntax.Token.Token
 
     -- * BlankName
     BlankName (..),
-    blankNameTypeText,
 
     -- * TermType
     TermType (..),
@@ -43,6 +44,10 @@ module Koshucode.Baala.Syntax.Token.Token
 import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax.Symbol    as S
+
+
+class SubtypeString a where
+    subtypeString :: a -> String
 
 
 -- ----------------------  Token type
@@ -75,6 +80,19 @@ instance B.Name Token where
     name (TComment     _ s)  = s
     name x = error $ "unknown name: " ++ show x
 
+instance B.CodePtr Token where
+    codePtList (TText    cp _ _)    = [cp]
+    codePtList (TName    cp _)      = [cp]
+    codePtList (TShort   cp _ _)    = [cp]
+    codePtList (TTermN   cp _ _)    = [cp]
+    codePtList (TTerm    cp _ _)    = [cp]
+    codePtList (TLocal   cp _ _ _)  = [cp]
+    codePtList (TSlot    cp _ _)    = [cp]
+    codePtList (TOpen    cp _)      = [cp]
+    codePtList (TClose   cp _)      = [cp]
+    codePtList (TSpace   cp _)      = [cp]
+    codePtList (TComment cp _)      = [cp]
+
 instance B.Write Token where
     writeDocWith sh = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
@@ -91,19 +109,6 @@ instance B.Write Token where
         pretty k cp xs         = B.writeH sh $ lineCol cp : k : xs
         lineCol cp             = (show $ B.codePtLineNo cp)
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
-
-instance B.CodePtr Token where
-    codePtList (TText    cp _ _)    = [cp]
-    codePtList (TName    cp _)      = [cp]
-    codePtList (TShort   cp _ _)    = [cp]
-    codePtList (TTermN   cp _ _)    = [cp]
-    codePtList (TTerm    cp _ _)    = [cp]
-    codePtList (TLocal   cp _ _ _)  = [cp]
-    codePtList (TSlot    cp _ _)    = [cp]
-    codePtList (TOpen    cp _)      = [cp]
-    codePtList (TClose   cp _)      = [cp]
-    codePtList (TSpace   cp _)      = [cp]
-    codePtList (TComment cp _)      = [cp]
 
 -- | Create raw text token.
 textToken :: String -> Token
@@ -124,20 +129,19 @@ data TextForm
     | TextKey      -- ^ Keyword literal
     | TextBar      -- ^ Text enclosed in bars
     | TextName     -- ^ Text used as name
-    | TextLicense  -- ^ Text ins license section
+    | TextLicense  -- ^ Text in license section
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-textFormTypeText :: TextForm -> String
-textFormTypeText form =
-    case form of
-      TextUnk      -> "unknown"
-      TextRaw      -> "raw"
-      TextQ        -> "q"
-      TextQQ       -> "qq"
-      TextKey      -> "key"
-      TextBar      -> "bar"
-      TextName     -> "name"
-      TextLicense  -> "license"
+-- | @\"raw\"@, @\"q\"@, ...
+instance SubtypeString TextForm where
+    subtypeString TextUnk      = "unknown"
+    subtypeString TextRaw      = "raw"
+    subtypeString TextQ        = "q"
+    subtypeString TextQQ       = "qq"
+    subtypeString TextKey      = "key"
+    subtypeString TextBar      = "bar"
+    subtypeString TextName     = "name"
+    subtypeString TextLicense  = "license"
 
 pattern TTextUnk  cp w     = TText cp TextUnk  w
 pattern TTextRaw  cp w     = TText cp TextRaw  w
@@ -178,22 +182,20 @@ instance B.Name BlankName where
     name (BlankInfix    n)   = n
     name (BlankPostfix  n)   = n
 
+-- | @\"normal\"@, @\"internal\"@, ...
+instance SubtypeString BlankName where
+    subtypeString (BlankNormal   _) = "normal"
+    subtypeString (BlankInternal _) = "internal"
+    subtypeString (BlankPrefix   _) = "prefix"
+    subtypeString (BlankInfix    _) = "infix"
+    subtypeString (BlankPostfix  _) = "postfix"
+
 instance B.Write BlankName where
     writeDocWith sh (BlankNormal   n)   = B.writeDocWith sh n
     writeDocWith sh (BlankInternal n)   = B.writeDocWith sh n
     writeDocWith sh (BlankPrefix   n)   = B.writeDocWith sh n B.<+> B.doc "(prefix)"
     writeDocWith sh (BlankInfix    n)   = B.writeDocWith sh n B.<+> B.doc "(infix)"
     writeDocWith sh (BlankPostfix  n)   = B.writeDocWith sh n B.<+> B.doc "(postfix)"
-
--- | Type name of 'BlankName'.
-blankNameTypeText :: BlankName -> String
-blankNameTypeText n =
-    case n of
-      BlankNormal   _   -> "normal"
-      BlankInternal _   -> "internal"
-      BlankPrefix   _   -> "prefix"
-      BlankInfix    _   -> "infix"
-      BlankPostfix  _   -> "postfix"
 
 
 -- ----------------------  Local

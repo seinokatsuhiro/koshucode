@@ -91,8 +91,8 @@ tokenTypeText tok =
 tokenSubtypeText :: S.Token -> Maybe String
 tokenSubtypeText tok =
     case tok of
-      S.TText     _ f _    -> Just $ S.textFormTypeText f
-      S.TName     _ b      -> Just $ S.blankNameTypeText b
+      S.TText     _ f _    -> Just $ S.subtypeString f
+      S.TName     _ b      -> Just $ S.subtypeString b
       S.TShort    _ _ _    -> Nothing
       S.TTermN    _ _ _    -> Nothing
       S.TTerm     _ _ _    -> Nothing
