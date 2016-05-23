@@ -31,6 +31,7 @@ module Koshucode.Baala.Base.Prelude.List
     reverseMap,
   
     -- * Divide
+    Split,
     chunks,
     splitBy,
     divide, divideBy,
@@ -273,6 +274,10 @@ reverseMap f = reverse . f . reverse
 
 -- ----------------------  Divide
 
+-- | Split list into before-part, split-element and after-part (@Right@),
+--   or original list if not splittable (@Left@).
+type Split a = [a] -> Either [a] ([a], a, [a])
+
 chunks :: Int -> [a] -> [[a]]
 chunks n = loop where
     loop xs = case splitAt n xs of
@@ -280,9 +285,6 @@ chunks n = loop where
                 (taked, xs2) -> taked : loop xs2
 
 -- | Split list by predicate.
---   If list contains an element that satisfies the predicate,
---   @(/before-list/, /the-element/, /after-list/)@ is returned.
---   Otherwise, original list is returned.
 --
 --   >>> splitBy (== '|') "b c"
 --   Left "b c"
@@ -290,7 +292,7 @@ chunks n = loop where
 --   >>> splitBy (== '|') "a | b | c"
 --   Right ("a ", '|', " b | c")
 
-splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
+splitBy :: (a -> Bool) -> Split a
 splitBy p xs =
     case break p xs of
       (a, x : b) -> Right (a, x, b)
