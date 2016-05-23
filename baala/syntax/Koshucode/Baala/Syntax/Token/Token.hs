@@ -126,7 +126,7 @@ instance B.Write Token where
 
 -- | Create raw text token.
 textToken :: String -> Token
-textToken = TText B.def TextRaw
+textToken = TTextRaw B.def
 
 -- | Create normal name token.
 nameToken :: String -> Token
@@ -157,15 +157,39 @@ instance SubtypeString TextForm where
     subtypeString TextName     = "name"
     subtypeString TextLicense  = "license"
 
-pattern TTextUnk  cp w     = TText cp TextUnk  w
-pattern TTextRaw  cp w     = TText cp TextRaw  w
-pattern TTextQ    cp w     = TText cp TextQ    w
-pattern TTextQQ   cp w     = TText cp TextQQ   w
-pattern TTextKey  cp w     = TText cp TextKey  w
-pattern TTextBar  cp w     = TText cp TextBar  w
-pattern TTextName cp w     = TText cp TextName w
-pattern TTextLicense cp w  = TText cp TextLicense w
-pattern TTextSect cp       = TTextRaw cp "==="
+-- | Unknown text token.
+pattern TTextUnk cp w = TText cp TextUnk  w
+
+-- | Raw text token.
+--
+--   >>> TTextRaw B.def "a"   -- a
+pattern TTextRaw cp w = TText cp TextRaw  w
+
+-- | Quoted text token.
+--
+--   >>> TTextQ B.def "a"   -- 'a
+pattern TTextQ cp w = TText cp TextQ    w
+
+-- | Dobule-quoted text token.
+--
+--   >>> TTextQQ B.def "a"   -- "a"
+pattern TTextQQ cp w = TText cp TextQQ   w
+
+-- | Keyword token.
+--
+--   >>> TTextKey B.def "a"   -- <a>
+pattern TTextKey cp w = TText cp TextKey  w
+
+-- | Bar-enclosed token.
+--
+--   >>> TTextBar B.def "a"   -- |a|
+pattern TTextBar cp w = TText cp TextBar  w
+
+pattern TTextName cp w = TText cp TextName w
+
+pattern TTextLicense cp w = TText cp TextLicense w
+
+pattern TTextSect cp = TTextRaw cp "==="
 
 
 -- ----------------------  Term type
@@ -175,8 +199,15 @@ data TermType
     | TermTypeQuoted             -- ^ Quoted term name
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-pattern TTermPath cp ws       = TTerm cp TermTypePath   ws
-pattern TTermQ    cp ws       = TTerm cp TermTypeQuoted ws
+-- | Term path token.
+--
+--   >>> TTermPath B.def ["a", "b"]   -- /a/b
+pattern TTermPath cp ws = TTerm cp TermTypePath ws
+
+-- | Quoted term path token.
+--
+--   >>> TTermQ B.def ["a"]   -- '/a
+pattern TTermQ cp ws = TTerm cp TermTypeQuoted ws
 
 
 -- ----------------------  Blank name
