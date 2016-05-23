@@ -32,7 +32,6 @@ tokenContent :: S.Token -> String
 tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
-      S.TName     _ op     -> B.name op
       S.TShort    _ a b    -> a ++ "." ++ b
       S.TTermN    _ _ n    -> '/' : n
       S.TTerm     _ _ ns   -> concatMap ('/' :) ns
@@ -42,13 +41,13 @@ tokenContent tok =
       S.TClose    _ s      -> s
       S.TSpace    _ n      -> replicate n ' '
       S.TComment  _ s      -> s
+      S.TName     _ op     -> B.name op
 
 untoken :: S.Token -> String
 untoken = dispatch where
     dispatch tok =
         case tok of
           S.TText     _ q s    -> text q s
-          S.TName     _ op     -> B.name op
           S.TShort    _ a b    -> a ++ "." ++ b
           S.TTermN    _ _ n    -> '/' : n
           S.TTerm     _ _ ns   -> concatMap ('/' :) ns
@@ -58,6 +57,7 @@ untoken = dispatch where
           S.TClose    _ s      -> s
           S.TSpace    _ n      -> replicate n ' '
           S.TComment  _ s      -> s
+          S.TName     _ op     -> B.name op
     text q s =
         case q of
           S.TextUnk            -> s
@@ -78,7 +78,6 @@ tokenDetailTypeString :: S.Token -> Maybe String
 tokenDetailTypeString tok =
     case tok of
       S.TText     _ f _    -> Just $ S.subtypeString f
-      S.TName     _ b      -> Just $ S.subtypeString b
       S.TShort    _ _ _    -> Nothing
       S.TTermN    _ _ _    -> Nothing
       S.TTerm     _ _ _    -> Nothing
@@ -88,6 +87,7 @@ tokenDetailTypeString tok =
       S.TClose    _ _      -> Nothing
       S.TSpace    _ _      -> Nothing
       S.TComment  _ _      -> Nothing
+      S.TName     _ b      -> Just $ S.subtypeString b
 
 slotTypeText :: Int -> String
 slotTypeText 0   = "positional"

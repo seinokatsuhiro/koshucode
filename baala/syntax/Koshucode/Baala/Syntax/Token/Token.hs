@@ -39,10 +39,9 @@ class SubtypeString a where
 
 -- ----------------------  Token type
 
--- | There are nine types of tokens.
+-- | There are eleven types of tokens.
 data Token
     = TText     B.CodePt TextForm String      -- ^ Text.
-    | TName     B.CodePt BlankName            -- ^ Blank name.
     | TSlot     B.CodePt Int String           -- ^ Slot name.
                                               --   'Int' represents slot level, i.e.,
                                               --   0 for local positional slots,
@@ -56,12 +55,12 @@ data Token
     | TClose    B.CodePt String               -- ^ Closing bracket.
     | TSpace    B.CodePt Int                  -- ^ /N/ space characters.
     | TComment  B.CodePt String               -- ^ Comment.
+    | TName     B.CodePt BlankName            -- ^ Blank name.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | @\"text\"@, @\"open\"@, ...
 instance SubtypeString Token where
      subtypeString (TText     _ _ _  ) = "text"
-     subtypeString (TName     _ _    ) = "name"
      subtypeString (TShort    _ _ _  ) = "short"
      subtypeString (TTermN    _ _ _  ) = "term"
      subtypeString (TTerm     _ _ _  ) = "term"
@@ -71,6 +70,7 @@ instance SubtypeString Token where
      subtypeString (TClose    _ _    ) = "close"
      subtypeString (TSpace    _ _    ) = "space"
      subtypeString (TComment  _ _    ) = "comment"
+     subtypeString (TName     _ _    ) = "name"
 
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
@@ -83,7 +83,6 @@ instance B.Name Token where
 
 instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
-    codePtList (TName    cp _)      = [cp]
     codePtList (TShort   cp _ _)    = [cp]
     codePtList (TTermN   cp _ _)    = [cp]
     codePtList (TTerm    cp _ _)    = [cp]
@@ -93,11 +92,11 @@ instance B.CodePtr Token where
     codePtList (TClose   cp _)      = [cp]
     codePtList (TSpace   cp _)      = [cp]
     codePtList (TComment cp _)      = [cp]
+    codePtList (TName    cp _)      = [cp]
 
 instance B.Write Token where
     writeDocWith sh = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
-        d (TName      cp w)      = pretty "TName"    cp [show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
         d (TTermN     cp _ n)    = pretty "TTermN"   cp [show n]
         d (TTerm      cp q ns)   = pretty "TTerm"    cp [show q, show ns]
@@ -107,6 +106,8 @@ instance B.Write Token where
         d (TClose     cp p)      = pretty "TClose"   cp [show p]
         d (TSpace     cp c)      = pretty "TSpace"   cp [show c]
         d (TComment   cp s)      = pretty "TComment" cp [show s]
+        d (TName      cp w)      = pretty "TName"    cp [show w]
+
         pretty k cp xs         = B.writeH sh $ lineCol cp : k : xs
         lineCol cp             = (show $ B.codePtLineNo cp)
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
