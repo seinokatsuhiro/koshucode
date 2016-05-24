@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.139.0.0
+@version 0.145.0.0
 
 module Koshucode.Baala.Syntax.Symbol.Term
 
@@ -615,55 +615,49 @@ module Koshucode.Baala.Syntax.Symbol
 
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Syntax.Token.Token
+class SubtypeString a
+subtypeString :: SubtypeString a => a -> String
 
--- | There are nine types of tokens.
+-- | There are eleven types of tokens.
 data Token
 
--- | Text.
+-- | 1) Text.
 TText :: CodePt -> TextForm -> String -> Token
 
--- | Blank name.
-TName :: CodePt -> BlankName -> Token
-
--- | Slot name. <a>Int</a> represents slot level, i.e., 0 for local
---   positional slots, 1 for local named slots, 2 for global slots.
+-- | 2) Slot name. <a>Int</a> represents slot level, i.e., 0 for local
+--   positional slots, 1 for local named slots, 2 for global slots —
+--   <tt>@</tt><i>name</i>
 TSlot :: CodePt -> Int -> String -> Token
 
--- | Prefixed shorten text.
+-- | 3) Prefixed shorten text — <i>short</i><tt>.</tt><i>proper</i>
 TShort :: CodePt -> String -> String -> Token
 
--- | Term name.
+-- | 4) Term name — <tt>/</tt><i>name</i>
 TTermN :: CodePt -> Ordering -> TermName -> Token
 
--- | Term path.
+-- | 5) Term path — <tt>/</tt><i>name</i><tt>/</tt><i>name</i>
 TTerm :: CodePt -> TermType -> TermPath -> Token
 
--- | Local name.
+-- | 6) Local name — <tt>^/</tt><i>name</i>
 TLocal :: CodePt -> (Local String) -> Int -> [Token] -> Token
 
--- | Opening bracket.
+-- | 7) Opening bracket — <tt>(</tt>, <tt>{</tt>, etc
 TOpen :: CodePt -> String -> Token
 
--- | Closing bracket.
+-- | 8) Closing bracket — <tt>}</tt>, <tt>)</tt>, etc
 TClose :: CodePt -> String -> Token
 
--- | <i>N</i> space characters.
+-- | 9) <i>N</i> space characters.
 TSpace :: CodePt -> Int -> Token
 
--- | Comment.
+-- | 10) Comment — <tt>**</tt><i>text</i>
 TComment :: CodePt -> String -> Token
-data BlankName
-BlankNormal :: String -> BlankName
-BlankInternal :: String -> BlankName
-BlankPrefix :: String -> BlankName
-BlankInfix :: String -> BlankName
-BlankPostfix :: String -> BlankName
+
+-- | 11) Blank name. (This is used in building content expression)
+TName :: CodePt -> BlankName -> Token
+
+-- | Create raw text token.
 textToken :: String -> Token
-nameToken :: String -> Token
-data Local a
-LocalSymbol :: a -> Local a
-LocalNest :: a -> Local a
-unlocal :: Local a -> a
 data TextForm
 
 -- | Unknown keyword
@@ -672,22 +666,19 @@ TextUnk :: TextForm
 -- | Naked text
 TextRaw :: TextForm
 
--- | Single-quoted text
+-- | Single-quoted text — <tt>'</tt><i>code</i>
 TextQ :: TextForm
 
--- | Double-quoted text
+-- | Double-quoted text — <tt>"</tt><i>text</i><tt>"</tt>
 TextQQ :: TextForm
 
--- | Keyword literal
+-- | Keyword literal — <tt>&lt;</tt><i>keyword</i><tt>&gt;</tt>
 TextKey :: TextForm
 
--- | Text enclosed in bars
+-- | Text enclosed in bars — <tt>|</tt><i>text</i><tt>|</tt>
 TextBar :: TextForm
 
--- | Text used as name
-TextName :: TextForm
-
--- | Text ins license section
+-- | Text in license section
 TextLicense :: TextForm
 data TermType
 
@@ -696,31 +687,16 @@ TermTypePath :: TermType
 
 -- | Quoted term name
 TermTypeQuoted :: TermType
-
--- | Get the content of token.
-tokenContent :: Token -> String
-untoken :: Token -> String
-
--- | Text of token type, e.g., <tt>"text"</tt>, <tt>"open"</tt>.
-tokenTypeText :: Token -> String
-tokenSubtypeText :: Token -> Maybe String
-tokenParents :: Token -> [Token]
-
--- | Test the token is blank, i.e., comment or space.
-isBlankToken :: Pred Token
-
--- | Remove blank tokens.
-sweepToken :: Map [Token]
-isShortToken :: Pred Token
-isTermToken :: Pred Token
-isOpenToken :: Pred Token
-isCloseToken :: Pred Token
-
--- | Check token is a <a>TOpen</a> of the specific bracket.
-isOpenTokenOf :: String -> Pred Token
-
--- | Check token is a <a>TClose</a> of the specific bracket.
-isCloseTokenOf :: String -> Pred Token
+data Local a
+LocalSymbol :: a -> Local a
+LocalNest :: a -> Local a
+unlocal :: Local a -> a
+data BlankName
+BlankNormal :: String -> BlankName
+BlankInternal :: String -> BlankName
+BlankPrefix :: String -> BlankName
+BlankInfix :: String -> BlankName
+BlankPostfix :: String -> BlankName
 instance Data.Data.Data Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.Token
@@ -729,6 +705,10 @@ instance Data.Data.Data Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.BlankName
+instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Syntax.Token.Token.Local a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.Local a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.Local a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.Local a)
 instance Data.Data.Data Koshucode.Baala.Syntax.Token.Token.TermType
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TermType
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TermType
@@ -737,19 +717,154 @@ instance Data.Data.Data Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
-instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Syntax.Token.Token.Local a)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.Local a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.Local a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.Local a)
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.Text.Write.Write Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Text.CodePt.CodePtr Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Base.Text.Write.Write Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.BlankName
 instance Koshucode.Baala.Base.Text.Write.Write Koshucode.Baala.Syntax.Token.Token.BlankName
 
 
+-- | Token pattern.
+module Koshucode.Baala.Syntax.Token.Pattern
+
+-- | Unknown text token.
+
+-- | Raw text token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.TTextRaw B.def "a"   -- a
+--   </pre>
+
+-- | Quoted text token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.TTextQ B.def "a"   -- 'a
+--   </pre>
+
+-- | Dobule-quoted text token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.TTextQQ B.def "a"   -- "a"
+--   </pre>
+
+-- | Keyword token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.TTextKey B.def "a"   -- &lt;a&gt;
+--   </pre>
+
+-- | Bar-enclosed token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.TTextBar B.def "a"   -- |a|
+--   </pre>
+
+-- | License text token.
+
+-- | Term path token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; TTermPath B.def ["a", "b"]   -- /a/b
+--   </pre>
+
+-- | Quoted term path token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; TTermQ B.def ["a"]   -- '/a
+--   </pre>
+
+
+-- | Token utilities.
+module Koshucode.Baala.Syntax.Token.Utility
+
+-- | Get the content of token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = S.TTermPath B.def ["r", "x"] in tokenContent tok
+--   "/r/x"
+--   </pre>
+tokenContent :: Token -> String
+untoken :: Token -> String
+
+-- | Get detail type string of token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = S.textToken "flower" in (S.subtypeString tok, tokenDetailTypeString tok)
+--   ("text", Just "raw")
+--   </pre>
+tokenDetailTypeString :: Token -> Maybe String
+tokenParents :: Token -> [Token]
+
+-- | Test token is blank, i.e., comment or space.
+isBlankToken :: Pred Token
+
+-- | Remove blank tokens.
+sweepToken :: Map [Token]
+
+-- | Test token is short-type token.
+isShortToken :: Pred Token
+
+-- | Test token is term-type token.
+isTermToken :: Pred Token
+
+-- | Test token is open-type token.
+isOpenToken :: Pred Token
+
+-- | Test token is close-type token.
+isCloseToken :: Pred Token
+
+-- | Test token is a open-type of the specific bracket.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = S.TOpen B.def "(" in isOpenTokenOf "(" tok
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
+--   False
+--   </pre>
+isOpenTokenOf :: String -> Pred Token
+
+-- | Test token is a close-type of the specific bracket.
+isCloseTokenOf :: String -> Pred Token
+
+
+-- | Tokenizer of koshucode.
+module Koshucode.Baala.Syntax.Token.TokenLine
+
+-- | Token list on a line.
+type TokenLine = CodeLine Token
+
+-- | Tokenize text.
+tokenLines :: NIOPoint -> InputText -> Ab [TokenLine]
+tokenLinesBz :: NIOPoint -> Bz -> Ab [TokenLine]
+
+-- | Split string into list of tokens. Result token list does not contain
+--   newline characters.
+tokens :: NIOPoint -> InputText -> Ab [Token]
+
+-- | Abbreviated tokenizer.
+toks :: InputText -> Ab [Token]
+isShortPrefix :: Pred String
+
+module Koshucode.Baala.Syntax.Token.TokenClause
+type TokenClause = CodeClause Token
+
+-- | Convert token lines into token clauses
+tokenClauses :: [TokenLine] -> [TokenClause]
+instance Koshucode.Baala.Base.Text.Write.Write Koshucode.Baala.Syntax.Token.TokenClause.TokenClause
+
+
+-- | Token and tokenizer.
+module Koshucode.Baala.Syntax.Token
+
+
 -- | Bracket type.
-module Koshucode.Baala.Syntax.Token.Bracket
+module Koshucode.Baala.Syntax.TTree.Bracket
 
 -- | Type of bracket.
 data BracketType
@@ -826,39 +941,14 @@ typeOpen :: String
 
 -- | Close type: <tt>"-]"</tt>
 typeClose :: String
-instance Data.Data.Data Koshucode.Baala.Syntax.Token.Bracket.BracketType
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Bracket.BracketType
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Bracket.BracketType
-instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Bracket.BracketType
-
-
--- | Tokenizer of koshucode.
-module Koshucode.Baala.Syntax.Token.TokenLine
-
--- | Token list on a line.
-type TokenLine = CodeLine Token
-
--- | Tokenize text.
-tokenLines :: CodePiece -> InputText -> Ab [TokenLine]
-
--- | Split string into list of tokens. Result token list does not contain
---   newline characters.
-tokens :: CodePiece -> InputText -> Ab [Token]
-
--- | Abbreviated tokenizer.
-toks :: InputText -> Ab [Token]
-isShortPrefix :: Pred String
-
-module Koshucode.Baala.Syntax.Token.TokenClause
-type TokenClause = CodeClause Token
-
--- | Convert token lines into token clauses
-tokenClauses :: [TokenLine] -> [TokenClause]
-instance Koshucode.Baala.Base.Text.Write.Write Koshucode.Baala.Syntax.Token.TokenClause.TokenClause
+instance Data.Data.Data Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+instance GHC.Show.Show Koshucode.Baala.Syntax.TTree.Bracket.BracketType
 
 
 -- | Tree of tokens
-module Koshucode.Baala.Syntax.Token.TokenTree
+module Koshucode.Baala.Syntax.TTree.TokenTree
 
 -- | Tree of tokens.
 type TTree = CodeTree BracketType Token
@@ -881,13 +971,6 @@ type TTreeToAb a = TTree -> Ab a
 -- | Convert list of token tree to sometning, abortable.
 type TTreesToAb a = [TTree] -> Ab a
 
--- | Parse tokens with brackets into trees. Blank tokens and comments are
---   excluded.
-ttrees :: [Token] -> Ab [TTree]
-
--- | Wrap trees in group.
-ttreeGroup :: TTreesTo TTree
-
 -- | Text leaf.
 
 -- | Text leaf of <a>TextRaw</a>.
@@ -902,38 +985,18 @@ ttreeGroup :: TTreesTo TTree
 
 -- | Text leaf of <a>TextKey</a>.
 
--- | Split token list by unquoted word. If token list contains the word,
---   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
---   returned. If does not contains the word, original token list is
---   returned.
---   
---   <pre>
---   &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "b c"
---   Left [ TText 1 0 "b", TSpace 2 1, TText 3 0 "c" ]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "a | b | c"
---   Right ( [ TText 1 0 "a", TSpace 2 1 ]
---           , TText 3 0 "|"
---           , [ TSpace 4 1, TText 5 0 "b", TSpace 6 1
---             , TText 7 0 "|", TSpace 8 1, TText 9 0 "c" ] )
---   </pre>
-splitTokensBy :: Pred String -> [Token] -> Either [Token] ([Token], Token, [Token])
 
--- | Divide token trees by quoteless token of given string.
-divideTreesBy :: String -> TTreesTo [[TTree]]
+-- | Parser for token tree.
+module Koshucode.Baala.Syntax.TTree.Parse
 
--- | Divide token trees by vertical bar <tt>"|"</tt>.
-divideTreesByBar :: TTreesTo [[TTree]]
+-- | Parse tokens with brackets into trees. Blank tokens and comments are
+--   excluded.
+ttrees :: [Token] -> Ab [TTree]
 
--- | Divide token trees by colon <tt>":"</tt>.
-divideTreesByColon :: TTreesTo [[TTree]]
+-- | Wrap trees in group.
+ttreeGroup :: TTreesTo TTree
 
--- | Divide token trees by equal sign <tt>"="</tt>.
-divideTreesByEqual :: TTreesTo [[TTree]]
-
--- | Convert text to token trees.
+-- | Convert string to token trees.
 tt :: String -> Ab [TTree]
 
 -- | Parse string and group it.
@@ -945,9 +1008,51 @@ ttPrint :: String -> IO ()
 -- | Get <a>Doc</a> value of token trees for pretty printing.
 ttDoc :: TTreesTo Doc
 
+-- | Split token list by unquoted word. If token list contains the word,
+--   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
+--   returned. If does not contains the word, original token list is
+--   returned.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let Right t = S.toks "b c"
+--   
+--   &gt;&gt;&gt; splitTokensBy (== "|") t
+--   Left [ TText  CodePt {..} TextRaw "b"
+--        , TSpace CodePt {..} 1
+--        , TText  CodePt {..} TextRaw "c" ]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; let Right t = S.toks "a | b | c"
+--   
+--   &gt;&gt;&gt; splitTokensBy (== "|") t
+--   Right ( [ TText CodePt {..} TextRaw "a", TSpace CodePt {..} 1]
+--         , TText CodePt {..} TextRaw "|"
+--         , [ TText  CodePt {..} TextRaw "b"
+--           , TSpace CodePt {..} 1
+--           , TText  CodePt {..} TextRaw "|"
+--           , TText  CodePt {..} TextRaw "c" ] )
+--   </pre>
+splitTokensBy :: Pred String -> Split Token
 
--- | Tokens in Koshucode.
-module Koshucode.Baala.Syntax.Token
+-- | Split token trees by quoteless token of given string.
+splitTreesBy :: Pred String -> Split TTree
+
+-- | Divide token trees by quoteless token of given string.
+divideTreesBy :: Pred String -> TTreesTo [[TTree]]
+
+-- | Divide token trees by vertical bar <tt>"|"</tt>.
+divideTreesByBar :: TTreesTo [[TTree]]
+
+-- | Divide token trees by colon <tt>":"</tt>.
+divideTreesByColon :: TTreesTo [[TTree]]
+
+-- | Divide token trees by equal sign <tt>"="</tt>.
+divideTreesByEqual :: TTreesTo [[TTree]]
+
+
+-- | Token trees.
+module Koshucode.Baala.Syntax.TTree
 
 module Koshucode.Baala.Syntax.Para
 
