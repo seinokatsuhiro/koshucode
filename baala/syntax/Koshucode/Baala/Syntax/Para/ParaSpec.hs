@@ -16,7 +16,7 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
 
     -- * Unmatch reason
     ParaUnmatch (..), paraMatch, 
-    ParaTo, paraSelect,
+    ParaTo, paraSelect, paraChoose,
 
     -- * Construction
     ParaSpecMap, paraSpec,
@@ -193,6 +193,16 @@ paraSelect b specs p = loop specs where
         case paraMatch spec p of
           Right p' -> paraTo p'
           Left _   -> loop specs2
+
+paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)] -> S.Para n a -> Either [ParaUnmatch n] (S.Para n a)
+paraChoose specs p = loop [] specs where
+    loop us [] = Left $ reverse us
+    loop us ((tag, spec) : rest) =
+        case paraMatch spec p of
+          Left u    -> loop (u:us) rest
+          Right p'  -> case tag of
+                         Nothing -> Right p'
+                         Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
 
 
 -- --------------------------------------------  Construct
