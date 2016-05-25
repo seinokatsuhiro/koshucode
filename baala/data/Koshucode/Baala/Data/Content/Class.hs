@@ -36,6 +36,7 @@ module Koshucode.Baala.Data.Content.Class
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
+    contString,
 
     -- * Get & Put
     CGetPut,
@@ -300,14 +301,17 @@ class (CTypeOf c) => CType c where
 
 -- ----------------------  Utility
 
+-- | Test membership between element and collection contents.
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
 isMember x xs | isList xs = x `elem` gList xs
 isMember _ _ = False
 
+-- | Apply function to internal value of content.
 contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
 contAp get put f = put . f . get
 
+-- | Map function to internal value of content.
 contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
 contMap get put f = contAp get put $ map f
 
@@ -317,19 +321,48 @@ contApTextToText = contAp gText putText
 contMapTextToList :: (CList c, CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap gText putList
 
+-- | Convert content to string value.
+contString :: (CContent c) => c -> String
+contString = show . contDoc
+
+-- | Convert content to pretty print doc.
+contDoc :: (CContent c) => c -> B.Doc
+contDoc c
+    | isText   c  = B.doc $ gText c
+    | isDec    c  = B.doc $ D.encodeDecimalCompact $ gDec c
+    | isBool   c  = B.writeDoc $ gBool c
+    | isEmpty  c  = B.doc ""
+    | isClock  c  = B.doc $ show $ D.writeClockBody $ gClock c
+    | isTime   c  = B.doc $ B.writeString c
+    | isTerm   c  = B.doc $ '/' : gTerm c
+
+    | isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map contDoc $ gList c 
+    | isSet    c  = B.docWraps S.setOpen  S.setClose  $ B.writeBar B.nullShortener $ map contDoc $ gSet c 
+    | isTie    c  = B.doc "<tie>"
+    | isRel    c  = B.doc "<rel>"
+    | isInterp c  = B.doc "<interp>"
+    | isType   c  = B.doc "<type>"
+    | otherwise   = B.doc "<?>"
+
 
 -- ----------------------  Get & Put
 
+-- | Pair of get and put.
 type CGetPut a c = (c -> a, a -> c)
 
+-- | 'gText' and 'pText'.
 gpText :: (CText c) => CGetPut [Char] c
 gpText = (gText, pText)
 
+-- | 'gList' and 'pList'.
 gpList :: (CList c) => CGetPut [c] c
 gpList = (gList, pList)
 
+-- | 'gSet' and 'pSet'.
 gpSet :: (CSet c) => CGetPut [c] c
 gpSet = (gSet, pSet)
 
+-- | 'gSetSort' and 'pSet'.
 gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
 gpSetSort = (gSetSort, pSet)
+

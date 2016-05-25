@@ -8,7 +8,6 @@ module Koshucode.Baala.Cop.Type
   ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Message     as Msg
 
@@ -50,26 +49,8 @@ copToDec = op where
 
 copToText :: (D.CContent c) => D.CopCalc c
 copToText = op where
-    op [Right c] = Right $ D.pText $ show $ toText c
+    op [Right c] = Right $ D.pText $ D.contString c
     op xs = typeUnmatch xs
-
-toText :: (D.CContent c) => c -> B.Doc
-toText c
-    | D.isText   c  = B.doc $ D.gText c
-    | D.isDec    c  = B.doc $ D.encodeDecimalCompact $ D.gDec c
-    | D.isBool   c  = B.writeDoc $ D.gBool c
-    | D.isEmpty  c  = B.doc ""
-    | D.isClock  c  = B.doc $ show $ D.writeClockBody $ D.gClock c
-    | D.isTime   c  = B.doc $ B.writeString c
-    | D.isTerm   c  = B.doc $ '/' : D.gTerm c
-
-    | D.isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map toText $ D.gList c 
-    | D.isSet    c  = B.docWraps S.setOpen  S.setClose $ B.writeBar B.nullShortener $ map toText $ D.gSet c 
-    | D.isTie    c  = B.doc "<tie>"
-    | D.isRel    c  = B.doc "<rel>"
-    | D.isInterp c  = B.doc "<interp>"
-    | D.isType   c  = B.doc "<type>"
-    | otherwise     = B.doc "<?>"
 
 copToList :: (D.CContent c) => D.CopCalc c
 copToList = op where
