@@ -92,13 +92,13 @@ copFunIf arg =
          True  -> conC
          False -> altC
 
---  if TEST -> CON : ALT 
+--  if TEST -> CON | ALT 
 --  if TEST -> CON
---  if TEST -> CON : TEST -> CON : TEST -> CON
---  if : TEST -> CON : TEST -> CON : TEST -> CON
+--  if TEST -> CON | TEST -> CON | TEST -> CON
+--  if | TEST -> CON | TEST -> CON | TEST -> CON
 
 copTreeIf :: D.CopTree
-copTreeIf trees = folding $ filter (/= []) $ S.divideTreesByColon trees where
+copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) trees where
     folding :: [[S.TTree]] -> B.Ab S.TTree
     folding []        = Right $ B.TreeL $ S.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
