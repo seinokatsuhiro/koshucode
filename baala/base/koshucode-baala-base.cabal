@@ -63,6 +63,7 @@ library
         Koshucode.Baala.Base.Prelude.Order
         Koshucode.Baala.Base.Prelude.Pair
         Koshucode.Baala.Base.Prelude.Snip
+        Koshucode.Baala.Base.Prelude.Split
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Clause
