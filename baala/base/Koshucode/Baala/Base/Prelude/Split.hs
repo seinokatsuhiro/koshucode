@@ -9,10 +9,13 @@ module Koshucode.Baala.Base.Prelude.Split
     Split3', SplitList3',
     Split3, SplitList3,
 
-    -- * Function
-    chunks,
-    dropSub, dropSubBy,
+    -- * Split
+    dropSubBy, dropSub,
+    splitSubBy, splitSub,
     splitBy,
+
+    -- * Divide
+    chunks,
     divide, divideBy, wordsBy,
   ) where
 
@@ -42,13 +45,13 @@ type Split3 t a = t a -> Maybe (t a, t a, t a)
 type SplitList3 a = Split3 [] a
 
 
--- --------------------------------------------  Function
+-- --------------------------------------------  Split
 
-chunks :: Int -> [a] -> [[a]]
-chunks n = loop where
-    loop xs = case splitAt n xs of
-                ([], _)      -> []
-                (taked, xs2) -> taked : loop xs2
+-- | Drop sublist.
+dropSubBy :: SplitList2 a -> [a] -> Maybe [a]
+dropSubBy p s = case p s of
+                  Just (_, b) -> Just b
+                  Nothing     -> Nothing
 
 -- | Drop prefix part from a list.
 --   This function is similar to 'Data.List.stripPrefix'.
@@ -68,11 +71,28 @@ dropSub sub = dropSubBy p where
     p xs | take n xs == sub  = Just (sub, drop n xs)
          | otherwise         = Nothing
 
--- | Drop sublist.
-dropSubBy :: SplitList2 a -> [a] -> Maybe [a]
-dropSubBy p s = case p s of
-                  Just (_, b) -> Just b
-                  Nothing     -> Nothing
+-- | Split list by given predicate.
+splitSubBy :: SplitList2 a -> SplitList3 a
+splitSubBy p = loop [] where
+    loop _ [] = Nothing
+    loop before xxs@(x : xs) =
+        case p xxs of
+          Nothing            -> loop (x : before) xs
+          Just (mid, after)  -> Just (reverse before, mid, after)
+
+-- | Split list by given sublist.
+--
+--   >>> splitSub "def" "abcdefghi"
+--   Just ("abc","def","ghi")
+--
+--   >>> splitSub "" "abcdefghi"
+--  Just ("","","abcdefghi")
+
+splitSub :: (Eq a) => [a] -> SplitList3 a
+splitSub sub = splitSubBy p where
+    n = length sub
+    p xs | take n xs == sub  = Just (sub, drop n xs)
+         | otherwise         = Nothing
 
 -- | Split list by predicate.
 --
@@ -87,6 +107,20 @@ splitBy p xs =
     case break p xs of
       (a, x : b) -> Right (a, x, b)
       _          -> Left xs
+
+
+-- --------------------------------------------  Divide
+
+-- | Divide list into sublists of given length.
+--
+--   >>> chunks 2 "abcdefg"
+--   ["ab","cd","ef","g"]
+
+chunks :: Int -> [a] -> [[a]]
+chunks n = loop where
+    loop xs = case splitAt n xs of
+                ([], _)      -> []
+                (taked, xs2) -> taked : loop xs2
 
 -- | Divide list.
 --
@@ -118,4 +152,3 @@ wordsBy p = loop where
                [] -> []
                s1 -> let (w, s2) = break p s1
                      in w : loop s2
-
