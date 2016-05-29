@@ -11,10 +11,11 @@ module Koshucode.Baala.Base.Prelude.Split
 
     -- * Function
     chunks,
+    dropSub, dropSubBy,
     splitBy,
-    divide, divideBy,
-    wordsBy,
+    divide, divideBy, wordsBy,
   ) where
+
 
 -- --------------------------------------------  Type
 
@@ -48,6 +49,30 @@ chunks n = loop where
     loop xs = case splitAt n xs of
                 ([], _)      -> []
                 (taked, xs2) -> taked : loop xs2
+
+-- | Drop prefix part from a list.
+--   This function is similar to 'Data.List.stripPrefix'.
+--
+--   >>> dropSub "abc" "abcdefghi"
+--   Just "defghi"
+--
+--   >>> dropSub "" "abcdefghi"
+--   Just "abcdefghi"
+--
+--   >>> dropSub "xyz" "abcdefghi"
+--   Nothing
+
+dropSub :: (Eq a) => [a] -> [a] -> Maybe [a]
+dropSub sub = dropSubBy p where
+    n = length sub
+    p xs | take n xs == sub  = Just (sub, drop n xs)
+         | otherwise         = Nothing
+
+-- | Drop sublist.
+dropSubBy :: SplitList2 a -> [a] -> Maybe [a]
+dropSubBy p s = case p s of
+                  Just (_, b) -> Just b
+                  Nothing     -> Nothing
 
 -- | Split list by predicate.
 --
@@ -93,3 +118,4 @@ wordsBy p = loop where
                [] -> []
                s1 -> let (w, s2) = break p s1
                      in w : loop s2
+
