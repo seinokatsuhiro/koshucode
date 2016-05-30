@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Prelude.Split
   ( -- * Type
     Split,
+    Split1, SplitList1,
     Split2, SplitList2,
     Split3', SplitList3',
     Split3, SplitList3,
@@ -25,6 +26,12 @@ module Koshucode.Baala.Base.Prelude.Split
 -- | Split list into before-part, split-element and after-part (@Right@),
 --   or original list if not splittable (@Left@).
 type Split a = [a] -> Either [a] ([a], a, [a])
+
+-- | Split elements into subelements.
+type Split1 t a = t a -> Maybe (t a)
+
+-- | Split list into sublist.
+type SplitList1 a = Split1 [] a
 
 -- | Split elements into two subelements.
 type Split2 t a = t a -> Maybe (t a, t a)
@@ -48,7 +55,7 @@ type SplitList3 a = Split3 [] a
 -- --------------------------------------------  Split
 
 -- | Drop sublist.
-dropSubBy :: SplitList2 a -> [a] -> Maybe [a]
+dropSubBy :: SplitList2 a -> SplitList1 a
 dropSubBy p s = case p s of
                   Just (_, b) -> Just b
                   Nothing     -> Nothing
@@ -65,7 +72,7 @@ dropSubBy p s = case p s of
 --   >>> dropSub "xyz" "abcdefghi"
 --   Nothing
 
-dropSub :: (Eq a) => [a] -> [a] -> Maybe [a]
+dropSub :: (Eq a) => [a] -> SplitList1 a
 dropSub sub = dropSubBy p where
     n = length sub
     p xs | take n xs == sub  = Just (sub, drop n xs)
