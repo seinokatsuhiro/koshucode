@@ -5,13 +5,13 @@ about /package 'data
 |-- DIR  /code 9    /comment 3    /dir "data/Koshucode/Baala"
 |-- DIR  /code 46   /comment 17   /dir "data/Koshucode/Baala/Data"
 |-- DIR  /code 586  /comment 276  /dir "data/Koshucode/Baala/Data/Church"
-|-- DIR  /code 807  /comment 428  /dir "data/Koshucode/Baala/Data/Content"
+|-- DIR  /code 826  /comment 442  /dir "data/Koshucode/Baala/Data/Content"
 |-- DIR  /code 337  /comment 205  /dir "data/Koshucode/Baala/Data/Type"
 |-- DIR  /code 479  /comment 390  /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- DIR  /code 250  /comment 246  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- DIR  /code 439  /comment 235  /dir "data/Koshucode/Baala/Data/Type/Time"
 
-|-- DIR-TOTAL  /code 2953  /comment 1800
+|-- DIR-TOTAL  /code 2972  /comment 1814
 
 |-- FILE  /code 9    /comment 3    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 3    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -22,7 +22,7 @@ about /package 'data
 |-- FILE  /code 163  /comment 51   /file "Run.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 10   /comment 5    /file "Content.hs"     /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 204  /comment 43   /file "BaalaC.hs"      /dir "data/Koshucode/Baala/Data/Content"
-|-- FILE  /code 211  /comment 124  /file "Class.hs"       /dir "data/Koshucode/Baala/Data/Content"
+|-- FILE  /code 230  /comment 138  /file "Class.hs"       /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE  /code 165  /comment 158  /file "Decode.hs"      /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE  /code 51   /comment 28   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Content"
 |-- FILE  /code 176  /comment 75   /file "Tree.hs"        /dir "data/Koshucode/Baala/Data/Content"
@@ -47,4 +47,4 @@ about /package 'data
 |-- FILE  /code 183  /comment 108  /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 136  /comment 91   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Type"
 
-|-- FILE-TOTAL  /code 2953  /comment 1800
+|-- FILE-TOTAL  /code 2972  /comment 1814

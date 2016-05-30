@@ -5,12 +5,12 @@ about /package 'syntax
 |-- DIR  /code 12   /comment 4    /dir "syntax/Koshucode/Baala"
 |-- DIR  /code 58   /comment 28   /dir "syntax/Koshucode/Baala/Syntax"
 |-- DIR  /code 361  /comment 245  /dir "syntax/Koshucode/Baala/Syntax/Attr"
-|-- DIR  /code 336  /comment 275  /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- DIR  /code 345  /comment 276  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /code 272  /comment 258  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /code 157  /comment 144  /dir "syntax/Koshucode/Baala/Syntax/TTree"
 |-- DIR  /code 572  /comment 419  /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- DIR-TOTAL  /code 1768  /comment 1373
+|-- DIR-TOTAL  /code 1777  /comment 1374
 
 |-- FILE  /code 12   /comment 4    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
 |-- FILE  /code 12   /comment 4    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
@@ -24,7 +24,7 @@ about /package 'syntax
 |-- FILE  /code 8    /comment 4    /file "Para.hs"        /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /code 58   /comment 39   /file "Get.hs"         /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /code 92   /comment 68   /file "Para.hs"        /dir "syntax/Koshucode/Baala/Syntax/Para"
-|-- FILE  /code 186  /comment 168  /file "ParaSpec.hs"    /dir "syntax/Koshucode/Baala/Syntax/Para"
+|-- FILE  /code 195  /comment 169  /file "ParaSpec.hs"    /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- FILE  /code 10   /comment 5    /file "Symbol.hs"      /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /code 52   /comment 72   /file "AngleText.hs"   /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- FILE  /code 10   /comment 8    /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax/Symbol"
@@ -43,4 +43,4 @@ about /package 'syntax
 |-- FILE  /code 268  /comment 218  /file "TokenLine.hs"   /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 97   /comment 54   /file "Utility.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- FILE-TOTAL  /code 1768  /comment 1373
+|-- FILE-TOTAL  /code 1777  /comment 1374
