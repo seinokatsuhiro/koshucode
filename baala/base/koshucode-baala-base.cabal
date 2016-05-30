@@ -7,7 +7,7 @@ name:                koshucode-baala-base
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.145.0.0
+version:             0.146.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A notational system for relational model
@@ -58,6 +58,7 @@ library
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Class
+        Koshucode.Baala.Base.Prelude.Dots
         Koshucode.Baala.Base.Prelude.Import
         Koshucode.Baala.Base.Prelude.List
         Koshucode.Baala.Base.Prelude.Order

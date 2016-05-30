@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Prelude
   ( module Koshucode.Baala.Base.Prelude.Assoc,
     module Koshucode.Baala.Base.Prelude.Class,
+    module Koshucode.Baala.Base.Prelude.Dots,
     module Koshucode.Baala.Base.Prelude.Import,
     module Koshucode.Baala.Base.Prelude.List,
     module Koshucode.Baala.Base.Prelude.Order,
@@ -13,6 +14,7 @@ module Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Base.Prelude.Assoc
 import Koshucode.Baala.Base.Prelude.Class
+import Koshucode.Baala.Base.Prelude.Dots
 import Koshucode.Baala.Base.Prelude.Import
 import Koshucode.Baala.Base.Prelude.List
 import Koshucode.Baala.Base.Prelude.Order
