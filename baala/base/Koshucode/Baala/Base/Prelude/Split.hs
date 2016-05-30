@@ -4,10 +4,9 @@
 
 module Koshucode.Baala.Base.Prelude.Split
   ( -- * Type
-    Split,
     Split1, SplitList1,
     Split2, SplitList2,
-    Split3', SplitList3',
+    Split3e, SplitList3e,
     Split3, SplitList3,
 
     -- * Split
@@ -23,10 +22,6 @@ module Koshucode.Baala.Base.Prelude.Split
 
 -- --------------------------------------------  Type
 
--- | Split list into before-part, split-element and after-part (@Right@),
---   or original list if not splittable (@Left@).
-type Split a = [a] -> Either [a] ([a], a, [a])
-
 -- | Split elements into subelements.
 type Split1 t a = t a -> Maybe (t a)
 
@@ -40,10 +35,14 @@ type Split2 t a = t a -> Maybe (t a, t a)
 type SplitList2 a = Split2 [] a
 
 -- | Split elements into before-elem-after parts.
-type Split3' t a = t a -> Maybe (t a, a, t a)
+type Split3e t a = t a -> Maybe (t a, a, t a)
 
 -- | Split list into before-elem-after parts.
-type SplitList3' a = Split3' [] a
+type SplitList3e a = Split3e [] a
+
+-- | Split list into before-part, split-element and after-part (@Right@),
+--   or original list if not splittable (@Left@).
+type Split3eEither a = [a] -> Either [a] ([a], a, [a])
 
 -- | Split elements into three subelements.
 type Split3 t a = t a -> Maybe (t a, t a, t a)
@@ -109,11 +108,11 @@ splitSub sub = splitSubBy p where
 --   >>> splitBy (== '|') "a | b | c"
 --   Right ("a ", '|', " b | c")
 
-splitBy :: (a -> Bool) -> Split a
+splitBy :: (a -> Bool) -> SplitList3e a
 splitBy p xs =
     case break p xs of
-      (a, x : b) -> Right (a, x, b)
-      _          -> Left xs
+      (a, x : b) -> Just (a, x, b)
+      _          -> Nothing
 
 
 -- --------------------------------------------  Divide

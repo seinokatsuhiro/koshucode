@@ -195,8 +195,8 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     assert q (S.TText _ _ p : xs) =
         case S.splitTokensBy isDelim xs of
-          Right (_, _, expr)      -> a expr
-          Left  expr              -> a expr
+          Just (_, _, expr)      -> a expr
+          Nothing                -> a xs
         where a expr              = c1 $ CAssert q p expr
     assert _ ts                   = judgeError ts
 
