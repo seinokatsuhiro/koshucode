@@ -11,7 +11,7 @@ module Koshucode.Baala.Data.Content.Class
     CFull (..),
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
-    -- ** Number
+    -- ** Decimal
     CDec (..), pInt, pInteger, pDecFromInt, pDecFromInteger,
     -- ** Clock and time
     CClock (..),
@@ -32,15 +32,15 @@ module Koshucode.Baala.Data.Content.Class
     -- ** Type
     CType (..),
 
+    -- * Get & Put
+    CGetPut,
+    gpText, gpList, gpSet, gpSetSort,
+
     -- * Utility
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
     contString,
-
-    -- * Get & Put
-    CGetPut,
-    gpText, gpList, gpSet, gpSetSort,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -299,6 +299,28 @@ class (CTypeOf c) => CType c where
     putType     =       Right . pType
 
 
+-- ----------------------  Get & Put
+
+-- | Pair of get and put.
+type CGetPut a c = (c -> a, a -> c)
+
+-- | 'gText' and 'pText'.
+gpText :: (CText c) => CGetPut [Char] c
+gpText = (gText, pText)
+
+-- | 'gList' and 'pList'.
+gpList :: (CList c) => CGetPut [c] c
+gpList = (gList, pList)
+
+-- | 'gSet' and 'pSet'.
+gpSet :: (CSet c) => CGetPut [c] c
+gpSet = (gSet, pSet)
+
+-- | 'gSetSort' and 'pSet'.
+gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
+gpSetSort = (gSetSort, pSet)
+
+
 -- ----------------------  Utility
 
 -- | Test membership between element and collection contents.
@@ -328,41 +350,23 @@ contString = show . contDoc
 -- | Convert content to pretty print doc.
 contDoc :: (CContent c) => c -> B.Doc
 contDoc c
-    | isText   c  = B.doc $ gText c
-    | isDec    c  = B.doc $ D.encodeDecimalCompact $ gDec c
-    | isBool   c  = B.writeDoc $ gBool c
     | isEmpty  c  = B.doc ""
+    | isBool   c  = B.writeDoc $ gBool c
+
+    | isDec    c  = B.doc $ D.encodeDecimalCompact $ gDec c
     | isClock  c  = B.doc $ show $ D.writeClockBody $ gClock c
     | isTime   c  = B.doc $ B.writeString c
+
+    | isCode   c  = B.doc $ gCode c
+    | isText   c  = B.doc $ gText c
     | isTerm   c  = B.doc $ '/' : gTerm c
 
     | isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map contDoc $ gList c 
     | isSet    c  = B.docWraps S.setOpen  S.setClose  $ B.writeBar B.nullShortener $ map contDoc $ gSet c 
+
     | isTie    c  = B.doc "<tie>"
     | isRel    c  = B.doc "<rel>"
     | isInterp c  = B.doc "<interp>"
     | isType   c  = B.doc "<type>"
     | otherwise   = B.doc "<?>"
-
-
--- ----------------------  Get & Put
-
--- | Pair of get and put.
-type CGetPut a c = (c -> a, a -> c)
-
--- | 'gText' and 'pText'.
-gpText :: (CText c) => CGetPut [Char] c
-gpText = (gText, pText)
-
--- | 'gList' and 'pList'.
-gpList :: (CList c) => CGetPut [c] c
-gpList = (gList, pList)
-
--- | 'gSet' and 'pSet'.
-gpSet :: (CSet c) => CGetPut [c] c
-gpSet = (gSet, pSet)
-
--- | 'gSetSort' and 'pSet'.
-gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
-gpSetSort = (gSetSort, pSet)
 
