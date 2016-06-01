@@ -70,7 +70,7 @@ instance A.ToJSON D.BaalaC where
         D.VTime t      -> unimplemented t
         D.VBool b      -> A.toJSON b
         D.VEmpty       -> jsonNull
-        D.VFull        -> jsonNull
+        D.VEnd         -> jsonNull
         D.VInterp i    -> unimplemented i
         D.VType t      -> unimplemented t
         D.VList xs     -> A.toJSON xs

@@ -6,9 +6,9 @@ module Koshucode.Baala.Data.Content.Class
     CTypeOf (..),
   
     -- * Simple contents
-    -- ** Empty and full
+    -- ** Empty and End
     CEmpty (..), maybeEmpty, omitEmpty,
-    CFull (..),
+    CEnd (..),
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
     -- ** Decimal
@@ -53,7 +53,7 @@ import qualified Koshucode.Baala.Data.Content.Message as Msg
 -- ----------------------  Generic content
 
 class (Ord c, B.Write c, CTypeOf c,
-       CEmpty c, CFull c,
+       CEmpty c, CEnd c,
        CBool c, CCode c, CText c, CClock c, CTime c,
        CTerm c, CDec c, CType c, CInterp c,
        CList c, CSet c, CTie c, CRel c) =>
@@ -89,9 +89,9 @@ omitEmpty :: (CEmpty c) => B.Map [(a, c)]
 omitEmpty = B.omit (isEmpty . snd)
 
 -- | The maximum content.
-class (CTypeOf c) => CFull c where
-    isFull      ::          c -> Bool
-    full        ::          c
+class (CTypeOf c) => CEnd c where
+    isEnd       ::          c -> Bool
+    end         ::          c
 
 -- | True or false, affirmed or denied.
 class (CTypeOf c) => CBool c where

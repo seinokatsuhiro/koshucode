@@ -152,7 +152,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     r' = start dispatch cp r
 
     dispatch ('(' : c : ')' : cs)
-        | c `elem` "+-=#"        = u cs         $ S.TTextRaw cp ['(', c, ')']
+        | c `elem` "+-/=#"       = u cs         $ S.TTextRaw cp ['(', c, ')']
     dispatch (a : b : cs)
         | a == '{' && b == '|'   = int cs       $ S.TOpen    cp [a,b]
         | isOpen a && isGrip b   = u cs         $ S.TOpen    cp [a,b]

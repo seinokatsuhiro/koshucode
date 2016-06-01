@@ -26,7 +26,7 @@ data BaalaC
     | VClock   D.Clock            -- ^ Clock type
     | VTime    D.Time             -- ^ Time type
     | VEmpty                      -- ^ Sign of no ordinary type
-    | VFull                       -- ^ The maximum content
+    | VEnd                        -- ^ The end of everything
     | VInterp  D.Interp           -- ^ Interpretation type
     | VType    D.Type             -- ^ Type for type
     | VList    [BaalaC]           -- ^ List type (objective collection)
@@ -48,7 +48,7 @@ instance Ord BaalaC where
     compare (VClock   x) (VClock   y)  = compare x y
     compare (VTime    x) (VTime    y)  = compare x y
     compare (VEmpty    ) (VEmpty    )  = EQ
-    compare (VFull     ) (VFull     )  = EQ
+    compare (VEnd      ) (VEnd      )  = EQ
     compare (VInterp  x) (VInterp  y)  = compare x y
     compare (VType    x) (VType    y)  = compare x y
     compare (VList    x) (VList    y)  = compare x y
@@ -73,7 +73,7 @@ typeOrder c
     | D.isRel      c = 14
     | D.isInterp   c = 15
     | D.isType     c = 17
-    | D.isFull     c = 18
+    | D.isEnd      c = 18
     | otherwise      = error "unknown content"
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
@@ -88,7 +88,7 @@ instance D.CTypeOf BaalaC where
     typeOf (VClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
     typeOf (VTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
     typeOf (VEmpty    )  = D.TypeEmpty
-    typeOf (VFull     )  = D.TypeFull
+    typeOf (VEnd      )  = D.TypeEnd
     typeOf (VInterp  _)  = D.TypeInterp
     typeOf (VType    _)  = D.TypeType
     typeOf (VList   cs)  = D.TypeList $ typeSum cs
@@ -117,7 +117,7 @@ instance B.Write BaalaC where
         VTime t      -> B.doc t
         VBool b      -> B.doc b
         VEmpty       -> B.doc "()"
-        VFull        -> B.doc "(#)"
+        VEnd         -> B.doc "(/)"
         VInterp i    -> B.writeDocWith sh i
         VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
         VList xs     -> B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
@@ -198,10 +198,10 @@ instance D.CEmpty BaalaC where
     isEmpty VEmpty           = True
     isEmpty _                = False
 
-instance D.CFull BaalaC where
-    full                     = VFull
-    isFull VFull             = True
-    isFull _                 = False
+instance D.CEnd BaalaC where
+    end                      = VEnd
+    isEnd VEnd               = True
+    isEnd _                  = False
 
 instance D.CTerm BaalaC where
     pTerm                    = VTerm
