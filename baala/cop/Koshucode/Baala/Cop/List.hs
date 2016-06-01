@@ -88,12 +88,12 @@ copTotal = op where
 
 copMin :: (D.CContent c) => D.CopCalc c
 copMin = op where
-    op [Right c] | D.isList c = Right $ minimum (D.gList c)
+    op [Right c] | D.isList c = Right $ D.contMinimum $ D.gList c
     op xs = typeUnmatch xs
 
 copMax :: (D.CContent c) => D.CopCalc c
 copMax = op where
-    op [Right c] | D.isList c = Right $ maximum (D.gList c)
+    op [Right c] | D.isList c = Right $ D.contMaximum $ D.gList c
     op xs = typeUnmatch xs
 
 copLength :: (D.CContent c) => D.CopCalc c

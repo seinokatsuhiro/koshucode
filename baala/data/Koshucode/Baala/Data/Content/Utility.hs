@@ -15,6 +15,7 @@ module Koshucode.Baala.Data.Content.Utility
     contApTextToText,
     contMapTextToList,
     contString,
+    contMinimum, contMaximum,
     pTermSet, pTextSet, pTextList,
   ) where
 
@@ -137,6 +138,24 @@ contDoc c
     | D.isInterp c  = B.doc "<interp>"
     | D.isType   c  = B.doc "<type>"
     | otherwise   = B.doc "<?>"
+
+-- | Minimum content of contents list.
+contMinimum :: (Ord c, D.CEnd c) => [c] -> c
+contMinimum = minimumEmpty D.end
+
+-- | Maximum content of contents list.
+contMaximum :: (Ord c, D.CEmpty c) => [c] -> c
+contMaximum = maximumEmpty D.empty
+
+minimumEmpty :: (Ord a) => a -> [a] -> a
+minimumEmpty = caseEmpty minimum
+
+maximumEmpty :: (Ord a) => a -> [a] -> a
+maximumEmpty = caseEmpty maximum
+
+caseEmpty :: (Ord a) => ([a] -> b) -> b -> [a] -> b
+caseEmpty _ x [] = x
+caseEmpty f _ xs = f xs
 
 pTermSet :: (D.CTerm c, D.CSet c) => [String] -> c
 pTermSet = D.pSet . map D.pTerm
