@@ -57,6 +57,7 @@ library
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Assoc
+        Koshucode.Baala.Base.Prelude.Case
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Dots
         Koshucode.Baala.Base.Prelude.Import

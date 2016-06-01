@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Prelude
   ( module Koshucode.Baala.Base.Prelude.Assoc,
+    module Koshucode.Baala.Base.Prelude.Case,
     module Koshucode.Baala.Base.Prelude.Class,
     module Koshucode.Baala.Base.Prelude.Dots,
     module Koshucode.Baala.Base.Prelude.Import,
@@ -13,6 +14,7 @@ module Koshucode.Baala.Base.Prelude
   ) where
 
 import Koshucode.Baala.Base.Prelude.Assoc
+import Koshucode.Baala.Base.Prelude.Case
 import Koshucode.Baala.Base.Prelude.Class
 import Koshucode.Baala.Base.Prelude.Dots
 import Koshucode.Baala.Base.Prelude.Import

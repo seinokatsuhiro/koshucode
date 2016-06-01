@@ -141,21 +141,11 @@ contDoc c
 
 -- | Minimum content of contents list.
 contMinimum :: (Ord c, D.CEnd c) => [c] -> c
-contMinimum = minimumEmpty D.end
+contMinimum = B.minimumNull D.end
 
 -- | Maximum content of contents list.
 contMaximum :: (Ord c, D.CEmpty c) => [c] -> c
-contMaximum = maximumEmpty D.empty
-
-minimumEmpty :: (Ord a) => a -> [a] -> a
-minimumEmpty = caseEmpty minimum
-
-maximumEmpty :: (Ord a) => a -> [a] -> a
-maximumEmpty = caseEmpty maximum
-
-caseEmpty :: (Ord a) => ([a] -> b) -> b -> [a] -> b
-caseEmpty _ x [] = x
-caseEmpty f _ xs = f xs
+contMaximum = B.maximumNull D.empty
 
 pTermSet :: (D.CTerm c, D.CSet c) => [String] -> c
 pTermSet = D.pSet . map D.pTerm
