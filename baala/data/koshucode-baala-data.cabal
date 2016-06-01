@@ -62,6 +62,7 @@ library
         Koshucode.Baala.Data.Content.Decode
         Koshucode.Baala.Data.Content.Message
         Koshucode.Baala.Data.Content.Tree
+        Koshucode.Baala.Data.Content.Utility
 
         Koshucode.Baala.Data.Type
         Koshucode.Baala.Data.Type.Decimal

@@ -11,6 +11,7 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Content.Class    as D
+import qualified Koshucode.Baala.Data.Content.Utility  as D
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
 
@@ -40,41 +41,25 @@ instance Eq BaalaC where
     x /= y  = compare x y /= EQ
 
 instance Ord BaalaC where
+    -- simple
     compare (VBool    x) (VBool    y)  = compare x y
-    compare (VText    x) (VText    y)  = compare x y
-    compare (VCode    x) (VCode    y)  = compare x y
-    compare (VTerm    x) (VTerm    y)  = compare x y
     compare (VDec     x) (VDec     y)  = compare x y
     compare (VClock   x) (VClock   y)  = compare x y
     compare (VTime    x) (VTime    y)  = compare x y
-    compare (VEmpty    ) (VEmpty    )  = EQ
-    compare (VEnd      ) (VEnd      )  = EQ
-    compare (VInterp  x) (VInterp  y)  = compare x y
-    compare (VType    x) (VType    y)  = compare x y
+    compare (VCode    x) (VCode    y)  = compare x y
+    compare (VTerm    x) (VTerm    y)  = compare x y
+    compare (VText    x) (VText    y)  = compare x y
+
+    -- complex
     compare (VList    x) (VList    y)  = compare x y
     compare (VSet     x) (VSet     y)  = compareAsSet x y
     compare (VTie     x) (VTie     y)  = compareAsSet x y
     compare (VRel     x) (VRel     y)  = compare x y
-    compare x y                        = typeOrder x `compare` typeOrder y
+    compare (VInterp  x) (VInterp  y)  = compare x y
+    compare (VType    x) (VType    y)  = compare x y
 
-typeOrder :: (D.CContent c) => c -> Int
-typeOrder c
-    | D.isEmpty    c = 1
-    | D.isBool     c = 2
-    | D.isDec      c = 3
-    | D.isClock    c = 4
-    | D.isTime     c = 5
-    | D.isCode     c = 6
-    | D.isTerm     c = 7
-    | D.isText     c = 9
-    | D.isList     c = 11
-    | D.isSet      c = 12
-    | D.isTie      c = 13
-    | D.isRel      c = 14
-    | D.isInterp   c = 15
-    | D.isType     c = 17
-    | D.isEnd      c = 18
-    | otherwise      = error "unknown content"
+    -- others
+    compare x y  = D.typeOrder x `compare` D.typeOrder y
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)

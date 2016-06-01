@@ -1,14 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Data.Content.Class
-  ( -- * Generic content
-    CContent (..),
+  ( -- * Type
     CTypeOf (..),
   
-    -- * Simple contents
-    -- ** Empty and End
+    -- * Empty and End
     CEmpty (..), maybeEmpty, omitEmpty,
     CEnd (..),
+
+    -- * Simple contents
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
     -- ** Decimal
@@ -27,20 +27,10 @@ module Koshucode.Baala.Data.Content.Class
     CSet (..), gSetSort,
     -- ** Relational
     CTie (..),
-    CRel (..), isMember, dee, dum,
+    CRel (..), dee, dum,
     CInterp (..),
     -- ** Type
     CType (..),
-
-    -- * Get & Put
-    CGetPut,
-    gpText, gpList, gpSet, gpSetSort,
-
-    -- * Utility
-    contAp, contMap,
-    contApTextToText,
-    contMapTextToList,
-    contString,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -49,20 +39,7 @@ import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Data.Content.Message as Msg
 
 
-
--- ----------------------  Generic content
-
-class (Ord c, B.Write c, CTypeOf c,
-       CEmpty c, CEnd c,
-       CBool c, CCode c, CText c, CClock c, CTime c,
-       CTerm c, CDec c, CType c, CInterp c,
-       CList c, CSet c, CTie c, CRel c) =>
-    CContent c where
-
-    appendContent :: c -> c -> B.Ab c
-
-    joinContent :: [c] -> B.Ab c
-    joinContent = B.foldM appendContent empty
+-- --------------------------------------------  Type
 
 class (Show c, B.Write c) => CTypeOf c where
     typeOf :: c -> D.Type
@@ -74,9 +51,11 @@ getAbAb is get (Right x)
     | otherwise = Msg.unmatchType $ show $ B.doc $ typeOf x
 
 
--- ----------------------  Simple contents
+-- --------------------------------------------  Empty and End
 
--- | Types that can be empty.
+-- ----------------------  Empty
+
+-- | Empty: the minimum content.
 class (CTypeOf c) => CEmpty c where
     isEmpty     ::          c -> Bool
     empty       ::          c
@@ -88,10 +67,17 @@ maybeEmpty _ (Nothing)  = empty
 omitEmpty :: (CEmpty c) => B.Map [(a, c)]
 omitEmpty = B.omit (isEmpty . snd)
 
--- | The maximum content.
+-- ----------------------  End
+
+-- | End of everything: the maximum content.
 class (CTypeOf c) => CEnd c where
     isEnd       ::          c -> Bool
     end         ::          c
+
+
+-- --------------------------------------------  Simple contents
+
+-- ----------------------  Bool
 
 -- | True or false, affirmed or denied.
 class (CTypeOf c) => CBool c where
@@ -114,6 +100,8 @@ putTrue  = putBool True
 
 putFalse :: (CBool c) => B.Ab c
 putFalse = putBool False
+
+-- ----------------------  Dec
 
 -- | Decimal number.
 class (CTypeOf c) => CDec c where
@@ -139,6 +127,8 @@ pDecFromInt = pInt
 pDecFromInteger :: (CDec c) => Integer -> c
 pDecFromInteger = pInteger
 
+-- ----------------------  Clock
+
 -- | Distance between two points in timeline.
 class (CTypeOf c) => CClock c where
     isClock      ::           c -> Bool
@@ -150,6 +140,8 @@ class (CTypeOf c) => CClock c where
 
     putClock     ::     D.Clock -> B.Ab c
     putClock     =      Right . pClock
+
+-- ----------------------  Time
 
 -- | Point in timeline.
 class (CTypeOf c) => CTime c where
@@ -163,6 +155,8 @@ class (CTypeOf c) => CTime c where
     putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
 
+-- ----------------------  Code
+
 -- | Code.
 class (CTypeOf c) => CCode c where
     isCode       ::           c -> Bool
@@ -174,6 +168,8 @@ class (CTypeOf c) => CCode c where
 
     putCode      ::      String -> B.Ab c
     putCode      =       Right . pCode
+
+-- ----------------------  Term
 
 -- | Term name.
 class (CTypeOf c) => CTerm c where
@@ -189,6 +185,8 @@ class (CTypeOf c) => CTerm c where
 
 pTermSet :: (CTerm c, CSet c) => [String] -> c
 pTermSet = pSet . map pTerm
+
+-- ----------------------  Text
 
 -- | Double-quoted text content.
 class (CTypeOf c) => CText c where
@@ -213,7 +211,9 @@ pTextList :: (CText c, CList c) => [String] -> c
 pTextList = pList . map pText
 
 
--- ----------------------  Complex contents
+-- --------------------------------------------  Complex contents
+
+-- ----------------------  List
 
 -- | List of contents.
 class (CTypeOf c) => CList c where
@@ -226,6 +226,8 @@ class (CTypeOf c) => CList c where
 
     putList     ::     [c] -> B.Ab c
     putList     =    Right . pList
+
+-- ----------------------  Set
 
 -- | Set of contents.
 class (CTypeOf c) => CSet c where
@@ -242,6 +244,8 @@ class (CTypeOf c) => CSet c where
 gSetSort :: (Ord c, CSet c) => c -> [c]
 gSetSort = B.sort . gSet
 
+-- ----------------------  Tie
+
 -- | Tie of terms.
 class (CTypeOf c) => CTie c where
     isTie       ::           c -> Bool
@@ -253,6 +257,8 @@ class (CTypeOf c) => CTie c where
 
     putTie      ::  [S.Term c] -> B.Ab c
     putTie      =  Right . pTie
+
+-- ----------------------  Rel
 
 -- | Relation of terms.
 class (CTypeOf c) => CRel c where
@@ -274,6 +280,8 @@ dee = pRel D.reldee
 dum :: (CRel c) => c
 dum = pRel D.reldum
 
+-- ----------------------  Interp
+
 -- | Data intepretation.
 class (CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
@@ -286,6 +294,8 @@ class (CTypeOf c) => CInterp c where
     putInterp   ::    D.Interp -> B.Ab c
     putInterp   =     Right . pInterp
 
+-- ----------------------  Type
+
 -- | Type of content.
 class (CTypeOf c) => CType c where
     isType      ::           c -> Bool
@@ -297,76 +307,4 @@ class (CTypeOf c) => CType c where
 
     putType     ::      D.Type -> B.Ab c
     putType     =       Right . pType
-
-
--- ----------------------  Get & Put
-
--- | Pair of get and put.
-type CGetPut a c = (c -> a, a -> c)
-
--- | 'gText' and 'pText'.
-gpText :: (CText c) => CGetPut [Char] c
-gpText = (gText, pText)
-
--- | 'gList' and 'pList'.
-gpList :: (CList c) => CGetPut [c] c
-gpList = (gList, pList)
-
--- | 'gSet' and 'pSet'.
-gpSet :: (CSet c) => CGetPut [c] c
-gpSet = (gSet, pSet)
-
--- | 'gSetSort' and 'pSet'.
-gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
-gpSetSort = (gSetSort, pSet)
-
-
--- ----------------------  Utility
-
--- | Test membership between element and collection contents.
-isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
-isMember x xs | isSet xs  = x `elem` gSet xs
-isMember x xs | isList xs = x `elem` gList xs
-isMember _ _ = False
-
--- | Apply function to internal value of content.
-contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
-contAp get put f = put . f . get
-
--- | Map function to internal value of content.
-contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
-contMap get put f = contAp get put $ map f
-
-contApTextToText :: (CText c) => B.Map String -> B.AbMap c
-contApTextToText = contAp gText putText
-
-contMapTextToList :: (CList c, CText c) => (Char -> c) -> B.AbMap c
-contMapTextToList = contMap gText putList
-
--- | Convert content to string value.
-contString :: (CContent c) => c -> String
-contString = show . contDoc
-
--- | Convert content to pretty print doc.
-contDoc :: (CContent c) => c -> B.Doc
-contDoc c
-    | isEmpty  c  = B.doc ""
-    | isBool   c  = B.writeDoc $ gBool c
-
-    | isDec    c  = B.doc $ D.encodeDecimalCompact $ gDec c
-    | isClock  c  = B.doc $ show $ D.writeClockBody $ gClock c
-    | isTime   c  = B.doc $ B.writeString c
-
-    | isCode   c  = B.doc $ gCode c
-    | isText   c  = B.doc $ gText c
-    | isTerm   c  = B.doc $ '/' : gTerm c
-
-    | isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map contDoc $ gList c 
-    | isSet    c  = B.docWraps S.setOpen  S.setClose  $ B.writeBar B.nullShortener $ map contDoc $ gSet c 
-
-    | isTie    c  = B.doc "<tie>"
-    | isRel    c  = B.doc "<rel>"
-    | isInterp c  = B.doc "<interp>"
-    | isType   c  = B.doc "<type>"
-    | otherwise   = B.doc "<?>"
 
