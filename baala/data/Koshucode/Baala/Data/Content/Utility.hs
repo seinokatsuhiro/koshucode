@@ -15,12 +15,15 @@ module Koshucode.Baala.Data.Content.Utility
     contApTextToText,
     contMapTextToList,
     contString,
+    pTermSet, pTextSet, pTextList,
   ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax               as S
-import qualified Koshucode.Baala.Data.Type            as D
-import qualified Koshucode.Baala.Data.Content.Class   as D
+import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Syntax                   as S
+import qualified Koshucode.Baala.Data.Type                as D
+import qualified Koshucode.Baala.Data.Content.Singleton   as D
+import qualified Koshucode.Baala.Data.Content.Complex     as D
+import qualified Koshucode.Baala.Data.Content.Simple      as D
 
 
 -- ----------------------  Generic content
@@ -134,4 +137,13 @@ contDoc c
     | D.isInterp c  = B.doc "<interp>"
     | D.isType   c  = B.doc "<type>"
     | otherwise   = B.doc "<?>"
+
+pTermSet :: (D.CTerm c, D.CSet c) => [String] -> c
+pTermSet = D.pSet . map D.pTerm
+
+pTextSet :: (D.CText c, D.CSet c) => [String] -> c
+pTextSet = D.pSet . map D.pText
+
+pTextList :: (D.CText c, D.CList c) => [String] -> c
+pTextList = D.pList . map D.pText
 

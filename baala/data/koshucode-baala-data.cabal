@@ -58,9 +58,11 @@ library
 
         Koshucode.Baala.Data.Content
         Koshucode.Baala.Data.Content.BaalaC
-        Koshucode.Baala.Data.Content.Class
+        Koshucode.Baala.Data.Content.Complex
         Koshucode.Baala.Data.Content.Decode
         Koshucode.Baala.Data.Content.Message
+        Koshucode.Baala.Data.Content.Simple
+        Koshucode.Baala.Data.Content.Singleton
         Koshucode.Baala.Data.Content.Tree
         Koshucode.Baala.Data.Content.Utility
 
