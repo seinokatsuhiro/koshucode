@@ -68,7 +68,7 @@ class CodePtr a where
     codePtList :: a -> [CodePt]
 
     codePt :: a ->  CodePt
-    codePt p = B.headOr B.def $ codePtList p
+    codePt p = B.headNull B.def $ codePtList p
 
 instance CodePtr CodePt where
     codePtList cp  = [cp]

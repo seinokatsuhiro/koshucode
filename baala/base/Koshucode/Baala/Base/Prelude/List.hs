@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.List
-  ( 
+  ( -- * List
     tails,
     isSingleton,
     notNull,
     maybeEmpty,
     right,
 
-    -- * Elements
-    headOr, takeFirst, takeLast,
+    -- * Take
+    takeFirst, takeLast,
     takeOdd, takeEven,
     takeFill, takeTailFill,
   
@@ -64,13 +64,7 @@ right _ (Right x) = Right x
 right x (Left _)  = Right x
 
 
--- ----------------------  Elements
-
--- | @headOr@ /alt list/ returns the first element of /list/;
---   if /list/ is empty, returns /alt/.
-headOr :: a -> [a] -> a
-headOr x []       = x
-headOr _ (x : _)  = x
+-- ----------------------  Take
 
 -- | Take first element; if empty list is given, returns empty list.
 --

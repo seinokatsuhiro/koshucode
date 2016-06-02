@@ -158,7 +158,7 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     -- error messages
 
-    unk ts msg     = let cp = B.codePtList $ B.headOr (head original) ts
+    unk ts msg     = let cp = B.codePtList $ B.headNull (head original) ts
                      in [Msg.abClause cp msg]
     unkAt ts xs    = unk ts $ Msg.unkClause xs
     unkAtStart     = unkAt original
