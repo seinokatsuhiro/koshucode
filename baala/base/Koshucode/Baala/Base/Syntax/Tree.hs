@@ -19,6 +19,7 @@ module Koshucode.Baala.Base.Syntax.Tree
 
 import qualified Data.Generics                         as G
 import qualified Koshucode.Baala.Base.Abort            as B
+import qualified Koshucode.Baala.Base.List             as B
 import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Text             as B
 import qualified Koshucode.Baala.Base.Syntax.Message   as Msg

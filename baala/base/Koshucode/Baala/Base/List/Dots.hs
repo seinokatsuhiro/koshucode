@@ -3,14 +3,14 @@
 
 -- | Dots pattern.
 
-module Koshucode.Baala.Base.Prelude.Dots
+module Koshucode.Baala.Base.List.Dots
   ( dotsStrings,
     undotsStrings,
     takeDots,
   ) where
 
 import qualified Data.Char                           as Char
-import qualified Koshucode.Baala.Base.Prelude.Split  as B
+import qualified Koshucode.Baala.Base.List.Split     as B
 
 trimLeft :: String -> String
 trimLeft = dropWhile Char.isSpace

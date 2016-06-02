@@ -22,9 +22,10 @@ module Koshucode.Baala.Base.Text.TextTable
     renderTable,
   ) where
 
-import qualified Data.Char as C
-import qualified Data.List as L
-import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Data.Char                      as C
+import qualified Data.List                      as L
+import qualified Koshucode.Baala.Base.List      as B
+import qualified Koshucode.Baala.Base.Prelude   as B
 
 
 -- ---------------------------------  Position

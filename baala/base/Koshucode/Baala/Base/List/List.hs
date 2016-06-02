@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Prelude.List
+module Koshucode.Baala.Base.List.List
   ( -- * List
     tails,
     isSingleton,
@@ -31,9 +31,9 @@ module Koshucode.Baala.Base.Prelude.List
     reverseMap,
   ) where
 
-import qualified Data.List as List
-import qualified Data.Set  as Set
-import qualified Koshucode.Baala.Base.Prelude.Class as B
+import qualified Data.List                      as List
+import qualified Data.Set                       as Set
+import qualified Koshucode.Baala.Base.Prelude   as B
 
 
 -- ----------------------  List

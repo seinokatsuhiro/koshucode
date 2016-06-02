@@ -34,6 +34,7 @@ import qualified Text.Blaze.Html.Renderer.String  as HC
 import qualified Text.Blaze.XHtml5                as H
 import qualified Text.Blaze.XHtml5.Attributes     as H (class_)
 import qualified Text.PrettyPrint                 as D
+import qualified Koshucode.Baala.Base.List        as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 
 

@@ -55,17 +55,19 @@ library
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
 
+        Koshucode.Baala.Base.List
+        Koshucode.Baala.Base.List.Assoc
+        Koshucode.Baala.Base.List.Dots
+        Koshucode.Baala.Base.List.List
+        Koshucode.Baala.Base.List.Order
+        Koshucode.Baala.Base.List.Snip
+        Koshucode.Baala.Base.List.Split
+
         Koshucode.Baala.Base.Prelude
-        Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Case
         Koshucode.Baala.Base.Prelude.Class
-        Koshucode.Baala.Base.Prelude.Dots
         Koshucode.Baala.Base.Prelude.Import
-        Koshucode.Baala.Base.Prelude.List
-        Koshucode.Baala.Base.Prelude.Order
         Koshucode.Baala.Base.Prelude.Pair
-        Koshucode.Baala.Base.Prelude.Snip
-        Koshucode.Baala.Base.Prelude.Split
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Clause

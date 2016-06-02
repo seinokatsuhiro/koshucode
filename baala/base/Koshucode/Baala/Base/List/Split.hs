@@ -2,7 +2,7 @@
 
 -- | Split lists.
 
-module Koshucode.Baala.Base.Prelude.Split
+module Koshucode.Baala.Base.List.Split
   ( -- * Type
     Split1, SplitList1,
     Split2, SplitList2,
@@ -39,10 +39,6 @@ type Split3e t a = t a -> Maybe (t a, a, t a)
 
 -- | Split list into before-elem-after parts.
 type SplitList3e a = Split3e [] a
-
--- | Split list into before-part, split-element and after-part (@Right@),
---   or original list if not splittable (@Left@).
-type Split3eEither a = [a] -> Either [a] ([a], a, [a])
 
 -- | Split elements into three subelements.
 type Split3 t a = t a -> Maybe (t a, t a, t a)

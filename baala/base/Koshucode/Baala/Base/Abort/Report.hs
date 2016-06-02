@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Abort.Report
   ) where
 
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
+import qualified Koshucode.Baala.Base.List          as B
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
 

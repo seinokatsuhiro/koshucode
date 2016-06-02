@@ -2,7 +2,7 @@
 
 -- | Snipping elements.
 
-module Koshucode.Baala.Base.Prelude.Snip
+module Koshucode.Baala.Base.List.Snip
   ( -- * Type
     Snip, Snip2, Bin,
   
@@ -23,8 +23,7 @@ module Koshucode.Baala.Base.Prelude.Snip
   ) where
 
 import qualified Data.List                           as List
-import qualified Koshucode.Baala.Base.Prelude.Import as B
-import qualified Koshucode.Baala.Base.Prelude.Class  as B
+import qualified Koshucode.Baala.Base.Prelude        as B
 
 
 -- --------------------------------------------  Type

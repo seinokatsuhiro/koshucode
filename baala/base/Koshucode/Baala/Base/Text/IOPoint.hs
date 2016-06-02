@@ -20,6 +20,7 @@ module Koshucode.Baala.Base.Text.IOPoint
 
 import qualified Data.Generics                 as G
 import qualified System.IO                     as IO
+import qualified Koshucode.Baala.Base.List     as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 
 

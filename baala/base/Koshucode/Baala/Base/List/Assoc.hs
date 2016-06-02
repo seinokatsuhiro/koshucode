@@ -2,7 +2,7 @@
 
 -- | Utilities for association lists.
 
-module Koshucode.Baala.Base.Prelude.Assoc
+module Koshucode.Baala.Base.List.Assoc
   ( -- * Association list
     Lookup,
     assocBy,
@@ -34,9 +34,9 @@ module Koshucode.Baala.Base.Prelude.Assoc
     gatherToMap, gatherToMapSwap, gatherToAssoc,
   ) where
 
-import qualified Data.Map   as Map
-import qualified Data.Maybe as Maybe
-import qualified Koshucode.Baala.Base.Prelude.Class as B
+import qualified Data.Map                       as Map
+import qualified Data.Maybe                     as Maybe
+import qualified Koshucode.Baala.Base.Prelude   as B
 
 
 

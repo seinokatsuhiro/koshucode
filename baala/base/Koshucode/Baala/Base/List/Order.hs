@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Prelude.Order
+module Koshucode.Baala.Base.List.Order
   ( -- * Data type
     OrderCap (..),
     orderingCap,
@@ -16,10 +16,8 @@ module Koshucode.Baala.Base.Prelude.Order
     gapRankFrom,
   ) where
 
-import qualified Koshucode.Baala.Base.Prelude.Class   as B
-import qualified Koshucode.Baala.Base.Prelude.Import  as B
-import qualified Koshucode.Baala.Base.Prelude.Snip    as B
-import qualified Koshucode.Baala.Base.Prelude.Pair    as B
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.List.Snip    as B
 
 
 data OrderCap a
