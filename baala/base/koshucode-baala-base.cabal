@@ -81,6 +81,8 @@ library
         Koshucode.Baala.Base.Text.CodePt
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.Http
+        Koshucode.Baala.Base.Text.LineBreak
+        Koshucode.Baala.Base.Text.MixText
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
         Koshucode.Baala.Base.Text.Utility
@@ -102,6 +104,7 @@ library
        , network-uri           == 2.*
        , pretty                == 1.*
        , syb                   == 0.*
+       , text                  == 1.*
        , utf8-string           == 1.*
 
   ghc-options:         -Wall

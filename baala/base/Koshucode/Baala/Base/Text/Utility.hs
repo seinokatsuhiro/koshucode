@@ -4,7 +4,9 @@ module Koshucode.Baala.Base.Text.Utility
   ( -- * Trim
     trimLeft, trimRight, trimBoth,
     -- * Padding
-    padRight, padLeft, stringWidth,
+    padRight, padRightWith,
+    padLeft, padLeftWith,
+    stringWidth,
     -- * Put
     putShow, putShowLn,
     putLines, hPutLines, hPutEmptyLine,
@@ -43,7 +45,10 @@ trimBoth = trimRight . trimLeft
 --   >>> padRight 10 "abc"
 --   "abc       "
 padRight :: Int -> B.Map String
-padRight n s = s ++ replicate rest ' ' where
+padRight = padRightWith ' '
+
+padRightWith :: Char -> Int -> B.Map String
+padRightWith p n s = s ++ replicate rest p where
     rest = max 0 (n - stringWidth s)
 
 -- | Add spaces to left.
@@ -51,7 +56,10 @@ padRight n s = s ++ replicate rest ' ' where
 --   >>> padLeft 10 "abc"
 --   "       abc"
 padLeft :: Int -> B.Map String
-padLeft n s = replicate rest ' ' ++ s where
+padLeft = padLeftWith ' '
+
+padLeftWith :: Char -> Int -> B.Map String
+padLeftWith p n s = replicate rest p ++ s where
     rest = max 0 (n - stringWidth s)
 
 stringWidth :: String -> Int
