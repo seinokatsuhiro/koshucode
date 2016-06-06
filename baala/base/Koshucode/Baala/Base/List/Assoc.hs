@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.List.Assoc
     assocCut1,
     assocRename1,
     assocRehead,
-    -- $TupleLike
+    assocCompose, assocMeet,
   
     -- * Once/more list
     OnceMore (..),
@@ -117,28 +117,10 @@ assocFinder xs k = Map.lookup k $ Map.fromList xs
 
 -- ----------------------  Tuple-like operator
 
--- $TupleLike
---
---  /Examples/
---
---  Pick up entries from assoc list.
---
---    >>> assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
---    [("a",1), ("c",3)]
---
---  Cut off entries from assoc list.
---
---    >>> assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
---    [("b",2)]
---    >>> assocCut1 "b" [("a",1), ("b",2), ("c",3)]
---    [("a",1), ("c",3)]
---
---  Change key of assoc list.
---
---    >>> assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
---    [("x",1), ("b",2), ("c",3)]
-
 -- | Pick up associations that have given keys.
+--
+--   >>> assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
 assocPick :: (Eq k) => [k] -> B.Map [(k, a)]
 assocPick xs = loop where
     loop [] = []
@@ -147,6 +129,12 @@ assocPick xs = loop where
         | otherwise     =      loop kvs
 
 -- | Cut off associations that have given keys.
+--
+--   >>> assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("b",2)]
+--
+--   >>> assocCut1 "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
 assocCut :: (Eq k) => [k] -> B.Map [(k, a)]
 assocCut ks xs = foldr assocCut1 xs ks
 
@@ -157,6 +145,10 @@ assocCut1 k1 = loop where
         | k1 == k2   =  xs
         | otherwise  =  x : loop xs
 
+-- | Change key of assoc list.
+--
+--   >>> assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
+--   [("x",1), ("b",2), ("c",3)]
 assocRename1 :: (Eq k) => k -> k -> B.Map [(k, a)]
 assocRename1 new old = map r where
     r (k, x) | k == old  = (new, x)
@@ -167,6 +159,26 @@ assocRehead new = map rehead where
     rehead (k1,v) = case lookup k1 new of
                       Nothing -> (k1,v)
                       Just k2 -> (k2,v)
+
+-- | Compose two assocs.
+--
+--   >>> assocCompose [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","P"), ("A","Q"), ("B","S")]
+assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
+assocCompose ab bc =
+    [ (a, c) | (a, b)  <- ab
+             , (b', c) <- bc
+             , b == b' ]
+
+-- | Meet two assocs.
+--
+--   >>> assocMeet [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
+assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
+assocMeet ab bc =
+    [ (a, b, c) | (a, b)  <- ab
+                , (b', c) <- bc
+                , b == b' ]
 
 
 -- ----------------------  Once/more list
