@@ -21,7 +21,7 @@ module Koshucode.Baala.Base.Text.MixText
     mixOct, mixDec, mixHex, mixSign,
     mixDecZero, mixNumZero,
     -- ** Other
-    mixShow,
+    mixShow, mixNewline,
 
     -- * To text
     -- ** Mix
@@ -61,6 +61,7 @@ data MixText
     | MixTz       Tz.Text
     | MixString   String
     | MixSpace    Int
+    | MixNewline
     | MixEmpty
 
 instance Show MixText where
@@ -188,6 +189,9 @@ mixSign n = case compare n 0 of
 mixShow :: (Show a) => a -> MixText
 mixShow = mixString . show
 
+mixNewline :: MixText
+mixNewline = MixNewline
+
 
 -- --------------------------------------------  Concatenate
 
@@ -200,7 +204,7 @@ hPutMix h lb = B.hPutBuilder h . mixToBuilder lb
 mixToBuilder :: B.LineBreak -> MixText -> B.Builder
 mixToBuilder lb mx =
     case mixBuild lb mx (BW mempty 0) of
-      (b, 0, _) -> b
+      --(b, 0, _) -> b
       (b, _, _) -> b <> newlineBuilder lb
 
 mixToBz :: B.LineBreak -> MixText -> Bz.ByteString
@@ -232,6 +236,8 @@ mixListToBuilder lb = foldr f mempty where
 -- Builder, width of the builder, and next spaces.
 type Bld = (B.Builder, Int, Int)
 
+type Break = Bld -> Int -> B.Builder -> Bld
+
 -- Builder and width without next spaces.
 pattern BW b w = (b, w, -1)
 
@@ -239,18 +245,20 @@ bsSpaces :: Int -> Bs.ByteString
 bsSpaces n = Bs.replicate n 32
 
 mixBuild :: B.LineBreak -> MixText -> Bld -> Bld
-mixBuild lb mx p = mixBreakable (brk $ B.breakWidth lb) p mx where
+mixBuild lb mx p = mixBreak (brk $ B.breakWidth lb) newline p mx where
     brk (Nothing) (b,_,s) _  b2  = BW (b <> space s <> b2) 0
     brk (Just wd) (b,w,s) w2 b2
         | w + s + w2 > wd        = BW (b <> nl <> ind <> b2) (indw + w2)
         | otherwise              = BW (b <> space s   <> b2) (w + s + w2)
 
+    newline (b,_,_) n b2         = BW (b <> nl <> b2) n
+
     nl           = continueBuilder lb
     (ind, indw)  = indentBuilder   lb
     space        = B.byteString . bsSpaces
 
-mixBreakable :: (Bld -> Int -> B.Builder -> Bld) -> Bld -> MixText -> Bld
-mixBreakable brk = (<<) where
+mixBreak :: Break -> Break -> Bld -> MixText -> Bld
+mixBreak brk newline = (<<) where
     bld << MixAppend x y   = bld << x << y
     bld << MixBs b         = cat bld (bsWidth b)       $ B.byteString b
     bld << MixBz b         = cat bld (bzWidth b)       $ B.lazyByteString b
@@ -258,10 +266,10 @@ mixBreakable brk = (<<) where
     bld << MixTz t         = cat bld (tzWidth t)       $ Tz.encodeUtf8Builder t
     bld << MixString s     = cat bld (B.stringWidth s) $ B.stringUtf8 s
     bld << MixSpace s'     = space bld s'
+    bld << MixNewline      = newline bld 0 mempty
     bld << MixEmpty        = bld
 
     space (b, w, s) s'     = (b, w, max s s')
-
     cat (BW b w) w2 b2     = BW (b <> b2) (w + w2)
     cat bld      w2 b2     = brk bld w2 b2
 
