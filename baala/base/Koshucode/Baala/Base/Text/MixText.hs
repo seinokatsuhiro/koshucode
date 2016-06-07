@@ -21,7 +21,7 @@ module Koshucode.Baala.Base.Text.MixText
     mixOct, mixDec, mixHex, mixSign,
     mixDecZero, mixNumZero,
     -- ** Other
-    mixShow, mixNewline,
+    mixShow, mixHard, mixSoft,
 
     -- * To text
     -- ** Mix
@@ -61,7 +61,7 @@ data MixText
     | MixTz       Tz.Text
     | MixString   String
     | MixSpace    Int
-    | MixNewline
+    | MixNewline  Bool
     | MixEmpty
 
 instance Show MixText where
@@ -189,8 +189,11 @@ mixSign n = case compare n 0 of
 mixShow :: (Show a) => a -> MixText
 mixShow = mixString . show
 
-mixNewline :: MixText
-mixNewline = MixNewline
+mixSoft :: MixText
+mixSoft = MixNewline False
+
+mixHard :: MixText
+mixHard = MixNewline True
 
 
 -- --------------------------------------------  Concatenate
@@ -266,12 +269,17 @@ mixBreak brk newline = (<<) where
     bld << MixTz t         = cat bld (tzWidth t)       $ Tz.encodeUtf8Builder t
     bld << MixString s     = cat bld (B.stringWidth s) $ B.stringUtf8 s
     bld << MixSpace s'     = space bld s'
-    bld << MixNewline      = newline bld 0 mempty
+    bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
 
-    space (b, w, s) s'     = (b, w, max s s')
     cat (BW b w) w2 b2     = BW (b <> b2) (w + w2)
     cat bld      w2 b2     = brk bld w2 b2
+
+    space (b, w, s) s'     = (b, w, max s s')
+
+    nl False bld@(_, 0, _) = bld
+    nl False bld           = newline bld 0 mempty
+    nl True  bld           = newline bld 0 mempty
 
 -- ----------------------  Width
 
