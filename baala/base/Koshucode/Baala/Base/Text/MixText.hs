@@ -24,15 +24,15 @@ module Koshucode.Baala.Base.Text.MixText
     mixShow, mixHard, mixSoft,
 
     -- * To text
-    -- ** Mix
-    putMix, hPutMix,
+    -- ** ByteString
     mixToBuilder,
     mixToBz,
     mixToString,
 
-    -- ** Mix list
-    putMixList, hPutMixList,
-    mixListToBuilder,
+    -- ** Mix I/O
+    putMix, putMixLn,
+    hPutMix, hPutMixLn,
+    putMixLines, hPutMixLines,
   ) where
 
 import Data.Monoid ((<>))
@@ -198,15 +198,9 @@ mixHard = MixNewline True
 
 -- --------------------------------------------  Concatenate
 
-putMix :: B.LineBreak -> MixText -> IO ()
-putMix = hPutMix IO.stdout
-
-hPutMix :: IO.Handle -> B.LineBreak -> MixText -> IO ()
-hPutMix h lb = B.hPutBuilder h . mixToBuilder lb
-
 mixToBuilder :: B.LineBreak -> MixText -> B.Builder
 mixToBuilder lb mx =
-    case mixBuild lb (mx <> mixHard) (Bw mempty 0) of
+    case mixBuild lb mx (Bw mempty 0) of
       (b, _, _) -> b
 
 mixToBz :: B.LineBreak -> MixText -> Bz.ByteString
@@ -221,17 +215,25 @@ mixToString lb = Bu.toString . mixToBz lb
 mixToStringDef :: MixText -> String
 mixToStringDef = mixToString B.nolb
 
--- ----------------------  Mix list
+-- ----------------------  Put
 
-putMixList :: B.LineBreak -> [MixText] -> IO ()
-putMixList = hPutMixList IO.stdout
+putMix :: B.LineBreak -> MixText -> IO ()
+putMix = hPutMix IO.stdout
 
-hPutMixList :: IO.Handle -> B.LineBreak -> [MixText] -> IO ()
-hPutMixList h lb = B.hPutBuilder h . mixListToBuilder lb
+putMixLn :: B.LineBreak -> MixText -> IO ()
+putMixLn = hPutMixLn IO.stdout
 
-mixListToBuilder :: B.LineBreak -> [MixText] -> B.Builder
-mixListToBuilder lb = foldr f mempty where
-    f mx b = mixToBuilder lb mx <> b
+hPutMix :: IO.Handle -> B.LineBreak -> MixText -> IO ()
+hPutMix h lb = B.hPutBuilder h . mixToBuilder lb
+
+hPutMixLn :: IO.Handle -> B.LineBreak -> MixText -> IO ()
+hPutMixLn h lb mx = B.hPutBuilder h $ mixToBuilder lb $ mx <> mixHard
+
+putMixLines :: B.LineBreak -> [MixText] -> IO ()
+putMixLines = hPutMixLines IO.stdout
+
+hPutMixLines :: IO.Handle -> B.LineBreak -> [MixText] -> IO ()
+hPutMixLines h lb = mapM_ (hPutMixLn h lb)
 
 -- ----------------------  Build
 
