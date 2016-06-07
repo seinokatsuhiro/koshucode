@@ -21,7 +21,7 @@ module Koshucode.Baala.Base.Text.MixText
     mixOct, mixDec, mixHex, mixSign,
     mixDecZero, mixNumZero,
     -- ** Other
-    mixShow, mixHard, mixSoft,
+    mixShow, mixEmpty, mixHard, mixSoft,
 
     -- * To text
     -- ** ByteString
@@ -188,6 +188,9 @@ mixSign n = case compare n 0 of
 
 mixShow :: (Show a) => a -> MixText
 mixShow = mixString . show
+
+mixEmpty :: MixText
+mixEmpty = MixEmpty
 
 mixSoft :: MixText
 mixSoft = MixNewline False
