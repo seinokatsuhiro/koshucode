@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,15 +57,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Code point</a
+	    >Code point</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Code pointer</a
+	    >Code pointer</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Sourced</a
+	    >Sourced</a
 	    ></li
 	  ></ul
 	></div
@@ -84,8 +84,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><li
 	      ><a href="#v:codePtSource"
 		>codePtSource</a
-		> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		>CodePiece</a
+		> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		>NIOPoint</a
 		></li
 	      ><li
 	      ><a href="#v:codePtLineNo"
@@ -107,12 +107,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></li
 	      ></ul
 	    >}</li
-	  ><li class="src short"
-	  ><a href="#v:codePtZero"
-	    >codePtZero</a
-	    > :: <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-	    >CodePt</a
-	    ></li
 	  ><li class="src short"
 	  ><a href="#v:codePtColumnNo"
 	    >codePtColumnNo</a
@@ -179,7 +173,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Code point</h1
+	>Code point</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -210,12 +204,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    ><dt class="src"
 		      ><a name="v:codePtSource" class="def"
 			>codePtSource</a
-			> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-			>CodePiece</a
+			> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+			>NIOPoint</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Source of code</p
+			>Source of code</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:codePtLineNo" class="def"
@@ -225,7 +219,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Line number</p
+			>Line number</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:codePtLineText" class="def"
@@ -235,7 +229,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Line content</p
+			>Line content</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:codePtText" class="def"
@@ -245,7 +239,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Text at which begins token</p
+			>Text at which begins token</p
 			></dd
 		      ></dl
 		    ><div class="clear"
@@ -261,81 +255,93 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:CodePt" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-29" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-29" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-31" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-29" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-35" class="link"
+		    >Source</a
 		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><p
+		    >Empty code point, i.e., empty content and zero line number.</p
+		    ></td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > * <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-73" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		></table
 	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codePtZero" class="def"
-	    >codePtZero</a
-	    > :: <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-	    >CodePt</a
-	    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#codePtZero" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Empty code point, i.e., empty content and zero line number.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -351,7 +357,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Column number at which code starts.</p
+	    >Column number at which code starts.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -371,7 +377,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Code pointer</h1
+	>Code pointer</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -417,46 +423,62 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:CodePtr" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
-		    >CodePt</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-73" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-88" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
-		    >CodeLine</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > (<a href="Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
+		      >CodeLine</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-115" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Clause.html#t:CodeClause"
-		    >CodeClause</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > (<a href="Koshucode-Baala-Base-Syntax-Clause.html#t:CodeClause"
+		      >CodeClause</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-32" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -465,7 +487,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Sourced</h1
+	>Sourced</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -521,79 +543,93 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:Sourced" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
-		    >Functor</a
-		    > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-85" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-83" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-83" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-83" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-83" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
-		    >CodePtr</a
-		    > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
-		    > a)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > (* -&gt; *) <a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
-		    >Sourced</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
+		      >CodePtr</a
+		      > (<a href="Koshucode-Baala-Base-Text-CodePt.html#t:Sourced"
+		      >Sourced</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-CodePt.html#line-88" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -608,7 +644,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Inferred</td
+	    >None</td
 	    ></tr
 	  ><tr
 	  ><th
@@ -57,43 +57,55 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Control.Monad</a
+	    >Control.Monad</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Data.List</a
+	    >Data.ByteString.Lazy</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data.Map</a
+	    >Data.ByteString.Lazy.UTF8</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Data.Maybe</a
+	    >Data.Default</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Data.Monoid</a
+	    >Data.List</a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Data.Tuple</a
+	    >Data.Map</a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
-	    >GHC.IO.Encoding</a
+	    >Data.Maybe</a
 	    ></li
 	  ><li
 	  ><a href="#g:8"
-	    >System.Exit</a
+	    >Data.Monoid</a
 	    ></li
 	  ><li
 	  ><a href="#g:9"
-	    >System.IO</a
+	    >Data.Tuple</a
 	    ></li
 	  ><li
 	  ><a href="#g:10"
-	    >Text.PrettyPrint</a
+	    >GHC.IO.Encoding</a
+	    ></li
+	  ><li
+	  ><a href="#g:11"
+	    >System.Exit</a
+	    ></li
+	  ><li
+	  ><a href="#g:12"
+	    >System.IO</a
+	    ></li
+	  ><li
+	  ><a href="#g:13"
+	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
 	></div
@@ -116,9 +128,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:sequence"
 	    >sequence</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t =&gt; <span class="keyword"
+	    >forall</span
+	    > m a. <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; [m a] -&gt; m [a]</li
+	    > m =&gt; t (m a) -&gt; m (t a)</li
 	  ><li class="src short"
 	  ><a href="#v:filterM"
 	    >filterM</a
@@ -130,33 +146,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:foldM"
 	    >foldM</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Foldable.html#t:Foldable"
+	    >Foldable</a
+	    > t, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; (a -&gt; b -&gt; m a) -&gt; a -&gt; [b] -&gt; m a</li
+	    > m) =&gt; (b -&gt; a -&gt; m b) -&gt; b -&gt; t a -&gt; m b</li
 	  ><li class="src short"
 	  ><a href="#v:when"
 	    >when</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m () -&gt; m ()</li
+	    > -&gt; f () -&gt; f ()</li
 	  ><li class="src short"
 	  ><a href="#v:unless"
 	    >unless</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m () -&gt; m ()</li
+	    > -&gt; f () -&gt; f ()</li
 	  ><li class="src short"
 	  ><a href="#v:guard"
 	    >guard</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:MonadPlus"
-	    >MonadPlus</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Alternative"
+	    >Alternative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m ()</li
+	    > -&gt; f ()</li
 	  ><li class="src short"
 	  ><a href="#v:concatMapM"
 	    >concatMapM</a
@@ -164,9 +182,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Monad</a
 	    > m =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Bz"
+	    >Bz</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
+	    >ByteString</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringBz"
+	    >stringBz</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:Default"
+	    >Default</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:def"
+		>def</a
+		> :: a</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:intercalate"
 	    >intercalate</a
-	    > ::  [a] -&gt; [[a]] -&gt; [a]</li
+	    > :: [a] -&gt; [[a]] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:intersect"
 	    >intersect</a
@@ -206,7 +254,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:transpose"
 	    >transpose</a
-	    > ::  [[a]] -&gt; [[a]]</li
+	    > :: [[a]] -&gt; [[a]]</li
 	  ><li class="src short"
 	  ><a href="#v:-92--92-"
 	    >(\\)</a
@@ -242,25 +290,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:catMaybes"
 	    >catMaybes</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:mapMaybe"
 	    >mapMaybe</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > b) -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:fromJust"
 	    >fromJust</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; a</li
 	  ><li class="src short"
 	  ><a href="#v:fromMaybe"
 	    >fromMaybe</a
-	    > ::  a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; a</li
 	  ><li class="src short"
@@ -306,7 +354,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:swap"
 	    >swap</a
-	    > ::  (a, b) -&gt; (b, a)</li
+	    > :: (a, b) -&gt; (b, a)</li
 	  ><li class="src short"
 	  ><a href="#v:setLocaleUtf8"
 	    >setLocaleUtf8</a
@@ -334,7 +382,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:exitWith"
 	    >exitWith</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
 	    >ExitCode</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -429,7 +477,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Control.Monad</h1
+	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:-60--61--60-" class="def"
@@ -472,13 +520,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:sequence" class="def"
 	    >sequence</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t =&gt; <span class="keyword"
+	    >forall</span
+	    > m a. <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; [m a] -&gt; m [a]</p
+	    > m =&gt; t (m a) -&gt; m (t a)</p
 	  ><div class="doc"
 	  ><p
-	    >Evaluate each action in the sequence from left to right,
- and collect the results.</p
+	    >Evaluate each monadic action in the structure from left to
+ right, and collect the results. For a version that ignores the
+ results see <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Foldable.html#v:sequence_"
+		>sequence_</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -493,9 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><div class="doc"
 	  ><p
 	    >This generalizes the list-based <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:filter"
-		>filter</a
-		></code
+	      >filter</code
 	      > function.</p
 	    ></div
 	  ></div
@@ -503,9 +558,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:foldM" class="def"
 	    >foldM</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Foldable.html#t:Foldable"
+	    >Foldable</a
+	    > t, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; (a -&gt; b -&gt; m a) -&gt; a -&gt; [b] -&gt; m a</p
+	    > m) =&gt; (b -&gt; a -&gt; m b) -&gt; b -&gt; t a -&gt; m b</p
 	  ><div class="doc"
 	  ><p
 	    >The <code
@@ -513,9 +570,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>foldM</a
 		></code
 	      > function is analogous to <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:foldl"
-		>foldl</a
-		></code
+	      >foldl</code
 	      >, except that its result is
 encapsulated in a monad. Note that <code
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:foldM"
@@ -533,7 +588,7 @@ function' are not commutative.</p
 	    ><pre
 	    >      foldM f a1 [x1, x2, ..., xm]</pre
 	    ><p
-	    >==  </p
+	    >==</p
 	    ><pre
 	    >      do
         a2 &lt;- f a1 x1
@@ -542,44 +597,58 @@ function' are not commutative.</p
         f am xm</pre
 	    ><p
 	    >If right-to-left evaluation is required, the input list should be reversed.</p
+	    ><p
+	    >Note: <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:foldM"
+		>foldM</a
+		></code
+	      > is the same as <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Foldable.html#v:foldlM"
+		>foldlM</a
+		></code
+	      ></p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:when" class="def"
 	    >when</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m () -&gt; m ()</p
+	    > -&gt; f () -&gt; f ()</p
 	  ><div class="doc"
 	  ><p
-	    >Conditional execution of monadic expressions. For example, </p
+	    >Conditional execution of <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Applicative"
+		>Applicative</a
+		></code
+	      > expressions. For example,</p
 	    ><pre
-	    >      when debug (putStr &quot;Debugging\n&quot;)</pre
+	    >when debug (putStrLn &quot;Debugging&quot;)</pre
 	    ><p
 	    >will output the string <code
-	      >Debugging\n</code
+	      >Debugging</code
 	      > if the Boolean value <code
 	      >debug</code
-	      > is <code
+	      >
+ is <code
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
 		>True</a
 		></code
-	      >,
-and otherwise do nothing.</p
+	      >, and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:unless" class="def"
 	    >unless</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Applicative"
+	    >Applicative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m () -&gt; m ()</p
+	    > -&gt; f () -&gt; f ()</p
 	  ><div class="doc"
 	  ><p
 	    >The reverse of <code
@@ -593,11 +662,11 @@ and otherwise do nothing.</p
 	><p class="src"
 	  ><a name="v:guard" class="def"
 	    >guard</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:MonadPlus"
-	    >MonadPlus</a
-	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Alternative"
+	    >Alternative</a
+	    > f =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; m ()</p
+	    > -&gt; f ()</p
 	  ><div class="doc"
 	  ><p
 	    ><code
@@ -608,8 +677,8 @@ and otherwise do nothing.</p
 		> b</code
 	      > is <code
 	      ><code
-		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#v:return"
-		  >return</a
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#v:pure"
+		  >pure</a
 		  ></code
 		> ()</code
 	      > if <code
@@ -620,8 +689,8 @@ and otherwise do nothing.</p
 		></code
 	      >,
  and <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#v:mzero"
-		>mzero</a
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#v:empty"
+		>empty</a
 		></code
 	      > if <code
 	      >b</code
@@ -643,12 +712,140 @@ and otherwise do nothing.</p
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Data.List</h1
+	>Data.ByteString.Lazy</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Bz" class="def"
+	    >Bz</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
+	    >ByteString</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#Bz" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lazy bytestring.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Data.ByteString.Lazy.UTF8</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringBz" class="def"
+	    >stringBz</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#stringBz" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string into lazy bytestring.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Data.Default</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:Default" class="def"
+	    >Default</a
+	    > a <span class="keyword"
+	    >where</span
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:def" class="def"
+	      >def</a
+	      > :: a</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Default" class="caption collapser" onclick="toggleSection('i:Default')"
+	    >Instances</p
+	    ><div id="section.i:Default" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+		      >LineBreak</a
+		      ></span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > CookieJar</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      >MixText</a
+		      ></span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Empty mix text.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Zero-numbered empty input point.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
+		      >CodePt</a
+		      ></span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Empty code point, i.e., empty content and zero line number.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:5"
+	>Data.List</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:intercalate" class="def"
 	    >intercalate</a
-	    > ::  [a] -&gt; [[a]] -&gt; [a]</p
+	    > :: [a] -&gt; [[a]] -&gt; [a]</p
 	  ><div class="doc"
 	  ><p
 	    ><code
@@ -659,11 +856,11 @@ and otherwise do nothing.</p
 	      >xs xss</code
 	      > is equivalent to <code
 	      >(<code
-		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:concat"
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:concat"
 		  >concat</a
 		  ></code
 		> (<code
-		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersperse"
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:intersperse"
 		  >intersperse</a
 		  ></code
 		> xs xss))</code
@@ -699,7 +896,7 @@ and otherwise do nothing.</p
 	    >[1,2,2,3,4] `intersect` [6,4,4,2] == [2,2,4]</pre
 	    ><p
 	    >It is a special case of <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersectBy"
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:intersectBy"
 		>intersectBy</a
 		></code
 	      >, which allows the programmer to
@@ -778,9 +975,9 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
 		>True</a
 		></code
-	      >
- iff the first list is a suffix of the second.
- Both lists must be finite.</p
+	      > iff
+ the first list is a suffix of the second. The second list must be
+ finite.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -798,7 +995,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		></code
 	      > function implements a stable sorting algorithm.
  It is a special case of <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:sortBy"
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:sortBy"
 		>sortBy</a
 		></code
 	      >, which allows the programmer to supply
@@ -809,7 +1006,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	><p class="src"
 	  ><a name="v:transpose" class="def"
 	    >transpose</a
-	    > ::  [[a]] -&gt; [[a]]</p
+	    > :: [[a]] -&gt; [[a]]</p
 	  ><div class="doc"
 	  ><p
 	    >The <code
@@ -820,6 +1017,10 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  For example,</p
 	    ><pre
 	    >transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]</pre
+	    ><p
+	    >If some of the rows are shorter than the following rows, their elements are skipped:</p
+	    ><pre
+	    >transpose [[10,11],[20],[],[30,31,32]] == [[10,20,30],[11,31],[32]]</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -858,7 +1059,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >(xs ++ ys) \\ xs == ys.</pre
 	    ><p
 	    >It is a special case of <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:deleteFirstsBy"
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:deleteFirstsBy"
 		>deleteFirstsBy</a
 		></code
 	      >, which allows the programmer
@@ -878,7 +1079,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test two list has no elements in common.</p
+	    >Test two list has no elements in common.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -894,11 +1095,11 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test two list has some common elements.</p
+	    >Test two list has some common elements.</p
 	    ></div
 	  ></div
-	><h1 id="g:3"
-	>Data.Map</h1
+	><h1 id="g:6"
+	>Data.Map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:lookupMap" class="def"
@@ -920,16 +1121,16 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		></code
 	      > in <code
 	      >Data.Map</code
-	      > module.</p
+	      > module.</p
 	    ></div
 	  ></div
-	><h1 id="g:4"
-	>Data.Maybe</h1
+	><h1 id="g:7"
+	>Data.Maybe</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:catMaybes" class="def"
 	    >catMaybes</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [a]</p
 	  ><div class="doc"
@@ -947,14 +1148,75 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Just"
 		>Just</a
 		></code
-	      > values. </p
+	      > values.</p
+	    ><h4 id="control.ch:catMaybes0" class="caption collapser" onclick="toggleSection('ch:catMaybes0')"
+	    >Examples</h4
+	    ><div id="section.ch:catMaybes0" class="hide"
+	    ><p
+	      >Basic usage:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >catMaybes [Just 1, Nothing, Just 3]
+</code
+		  ></strong
+		>[1,3]
+</pre
+	      ><p
+	      >When constructing a list of <code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		  >Maybe</a
+		  ></code
+		> values, <code
+		><a href="Koshucode-Baala-Base-Prelude-Import.html#v:catMaybes"
+		  >catMaybes</a
+		  ></code
+		> can be used
+ to return all of the &quot;success&quot; results (if the list is the result
+ of a <code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:map"
+		  >map</a
+		  ></code
+		>, then <code
+		><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mapMaybe"
+		  >mapMaybe</a
+		  ></code
+		> would be more appropriate):</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >import Text.Read ( readMaybe )
+</code
+		  ></strong
+		><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >[readMaybe x :: Maybe Int | x &lt;- [&quot;1&quot;, &quot;Foo&quot;, &quot;3&quot;] ]
+</code
+		  ></strong
+		>[Just 1,Nothing,Just 3]
+<code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >catMaybes $ [readMaybe x :: Maybe Int | x &lt;- [&quot;1&quot;, &quot;Foo&quot;, &quot;3&quot;] ]
+</code
+		  ></strong
+		>[1,3]
+</pre
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:mapMaybe" class="def"
 	    >mapMaybe</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > b) -&gt; [a] -&gt; [b]</p
 	  ><div class="doc"
@@ -964,7 +1226,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		>mapMaybe</a
 		></code
 	      > function is a version of <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:map"
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:map"
 		>map</a
 		></code
 	      > which can throw
@@ -980,7 +1242,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		>Nothing</a
 		></code
 	      >, no element
- is added on to the result list.  If it just <code
+ is added on to the result list.  If it is <code
 	      ><code
 		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Just"
 		  >Just</a
@@ -990,13 +1252,84 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      >b</code
 	      > is
  included in the result list.</p
+	    ><h4 id="control.ch:mapMaybe0" class="caption collapser" onclick="toggleSection('ch:mapMaybe0')"
+	    >Examples</h4
+	    ><div id="section.ch:mapMaybe0" class="hide"
+	    ><p
+	      >Using <code
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mapMaybe"
+		    >mapMaybe</a
+		    ></code
+		  > f x</code
+		> is a shortcut for <code
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:catMaybes"
+		    >catMaybes</a
+		    ></code
+		  > $ <code
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:map"
+		    >map</a
+		    ></code
+		  > f x</code
+		>
+ in most cases:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >import Text.Read ( readMaybe )
+</code
+		  ></strong
+		><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >let readMaybeInt = readMaybe :: String -&gt; Maybe Int
+</code
+		  ></strong
+		><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >mapMaybe readMaybeInt [&quot;1&quot;, &quot;Foo&quot;, &quot;3&quot;]
+</code
+		  ></strong
+		>[1,3]
+<code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >catMaybes $ map readMaybeInt [&quot;1&quot;, &quot;Foo&quot;, &quot;3&quot;]
+</code
+		  ></strong
+		>[1,3]
+</pre
+	      ><p
+	      >If we map the <code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Just"
+		  >Just</a
+		  ></code
+		> constructor, the entire list should be returned:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >mapMaybe Just [1,2,3]
+</code
+		  ></strong
+		>[1,2,3]
+</pre
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:fromJust" class="def"
 	    >fromJust</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; a</p
 	  ><div class="doc"
@@ -1015,13 +1348,49 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		>Nothing</a
 		></code
 	      >.</p
+	    ><h4 id="control.ch:fromJust0" class="caption collapser" onclick="toggleSection('ch:fromJust0')"
+	    >Examples</h4
+	    ><div id="section.ch:fromJust0" class="hide"
+	    ><p
+	      >Basic usage:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >fromJust (Just 1)
+</code
+		  ></strong
+		>1
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >2 * (fromJust (Just 10))
+</code
+		  ></strong
+		>20
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >2 * (fromJust Nothing)
+</code
+		  ></strong
+		>*** Exception: Maybe.fromJust: Nothing
+</pre
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:fromMaybe" class="def"
 	    >fromMaybe</a
-	    > ::  a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; a</p
 	  ><div class="doc"
@@ -1049,10 +1418,68 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		>Maybe</a
 		></code
 	      >.</p
+	    ><h4 id="control.ch:fromMaybe0" class="caption collapser" onclick="toggleSection('ch:fromMaybe0')"
+	    >Examples</h4
+	    ><div id="section.ch:fromMaybe0" class="hide"
+	    ><p
+	      >Basic usage:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >fromMaybe &quot;&quot; (Just &quot;Hello, World!&quot;)
+</code
+		  ></strong
+		>&quot;Hello, World!&quot;
+</pre
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >fromMaybe &quot;&quot; Nothing
+</code
+		  ></strong
+		>&quot;&quot;
+</pre
+	      ><p
+	      >Read an integer from a string using <code
+		>readMaybe</code
+		>. If we fail to
+ parse an integer, we want to return <code
+		>0</code
+		> by default:</p
+	      ><pre class="screen"
+	      ><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >import Text.Read ( readMaybe )
+</code
+		  ></strong
+		><code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >fromMaybe 0 (readMaybe &quot;5&quot;)
+</code
+		  ></strong
+		>5
+<code class="prompt"
+		>&gt;&gt;&gt; </code
+		><strong class="userinput"
+		><code
+		  >fromMaybe 0 (readMaybe &quot;&quot;)
+</code
+		  ></strong
+		>0
+</pre
+	      ></div
 	    ></div
 	  ></div
-	><h1 id="g:5"
-	>Data.Monoid</h1
+	><h1 id="g:8"
+	>Data.Monoid</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1082,7 +1509,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ><li
 	      ><pre
 		>mconcat = <code
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:foldr"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-OldList.html#v:foldr"
 		    >foldr</a
 		    ></code
 		  > mappend mempty</pre
@@ -1091,16 +1518,6 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ><p
 	    >The method names refer to the monoid of lists under concatenation,
  but there are many other instances.</p
-	    ><p
-	    >Minimal complete definition: <code
-	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mempty"
-		>mempty</a
-		></code
-	      > and <code
-	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mappend"
-		>mappend</a
-		></code
-	      >.</p
 	    ><p
 	    >Some types can be viewed as a monoid in more than one way,
  e.g. both addition and multiplication on numbers.
@@ -1112,13 +1529,9 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		>Monoid</a
 		></code
 	      >, e.g. <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Sum"
-		>Sum</a
-		></code
+	      >Sum</code
 	      > and <code
-	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Product"
-		>Product</a
-		></code
+	      >Product</code
 	      >.</p
 	    ></div
 	  ><div class="subs minimal"
@@ -1176,220 +1589,298 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ><div id="section.i:Monoid" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ordering"
-		    >Ordering</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ordering"
+		      >Ordering</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > ()</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:All"
-		    >All</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > ()</span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Any"
-		    >Any</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:All"
+		      >All</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
-		    >ByteString</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Any"
+		      >Any</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
-		    >ByteString</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
+		      >ByteString</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
+		      >ByteString</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > RequestBody</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Builder.html#t:Builder"
+		      >Builder</a
+		      ></span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > CookieJar</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-IntSet.html#t:IntSet"
+		      >IntSet</a
+		      ></span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > Text</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > CertificateStore</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > RequestBody</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > Text</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > CookieJar</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > AttributeValue</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      >MixText</a
+		      ></span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Monoid like string.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > AttributeValue</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > Attribute</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > Attribute</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > ChoiceString</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > ChoiceString</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > [a]</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > [a]</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Dual"
-		    >Dual</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (Max a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Endo"
-		    >Endo</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (Min a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Num"
-		    >Num</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Sum"
-		    >Sum</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Dual"
+		      >Dual</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Num"
-		    >Num</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Product"
-		    >Product</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Endo"
+		      >Endo</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:First"
-		    >First</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Num"
+		      >Num</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Sum"
+		      >Sum</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Last"
-		    >Last</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Num"
+		      >Num</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Product"
+		      >Product</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-		    >Maybe</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:First"
+		      >First</a
+		      > a)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Last"
+		      >Last</a
+		      > a)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		      >Maybe</a
+		      > a)</span
+		    ></td
 		  ><td class="doc"
 		  ><p
 		    >Lift a semigroup into <code
@@ -1431,140 +1922,196 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 		    ></td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Set.html#t:Set"
-		    >Set</a
-		    > a)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (MarkupM a)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > b =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (a -&gt; b)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > b) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (a, b)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Const"
-		    >Const</a
-		    > a b)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Proxy.html#t:Proxy"
-		    >Proxy</a
-		    > * s)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > k =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
-		    >Map</a
-		    > k v)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > (* -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Exts.html#t:Constraint"
-		    >Constraint</a
-		    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-IntMap-Strict.html#t:IntMap"
+		      >IntMap</a
+		      > a)</span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > c) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (a, b, c)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Set.html#t:Set"
+		      >Set</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > c, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > d) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (a, b, c, d)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Sequence.html#t:Seq"
+		      >Seq</a
+		      > a)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > c, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > d, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > e) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > (a, b, c, d, e)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (DList a)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (MarkupM a)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > b =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (a -&gt; b)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > b) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (a, b)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Const"
+		      >Const</a
+		      > a b)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Proxy.html#t:Proxy"
+		      >Proxy</a
+		      > k s)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > k =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
+		      >Map</a
+		      > k v)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > c) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (a, b, c)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Alternative"
+		      >Alternative</a
+		      > f =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Alt"
+		      >Alt</a
+		      > * f a)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > c, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > d) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (a, b, c, d)</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >(<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > a, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > b, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > c, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > d, <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > e) =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > (a, b, c, d, e)</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1619,20 +2166,20 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	      ></p
 	    ></div
 	  ></div
-	><h1 id="g:6"
-	>Data.Tuple</h1
+	><h1 id="g:9"
+	>Data.Tuple</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:swap" class="def"
 	    >swap</a
-	    > ::  (a, b) -&gt; (b, a)</p
+	    > :: (a, b) -&gt; (b, a)</p
 	  ><div class="doc"
 	  ><p
 	    >Swap the components of a pair.</p
 	    ></div
 	  ></div
-	><h1 id="g:7"
-	>GHC.IO.Encoding</h1
+	><h1 id="g:10"
+	>GHC.IO.Encoding</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:setLocaleUtf8" class="def"
@@ -1643,8 +2190,8 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:8"
-	>System.Exit</h1
+	><h1 id="g:11"
+	>System.Exit</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1693,61 +2240,61 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ><div id="section.i:ExitCode" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		      >ExitCode</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		      >ExitCode</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Read.html#t:Read"
-		    >Read</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Read.html#t:Read"
+		      >Read</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		      >ExitCode</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		      >ExitCode</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception-Base.html#t:Exception"
-		    >Exception</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > * <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
-		    >ExitCode</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Exception-Base.html#t:Exception"
+		      >Exception</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+		      >ExitCode</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -1760,7 +2307,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	><p class="src"
 	  ><a name="v:exitWith" class="def"
 	    >exitWith</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:ExitCode"
 	    >ExitCode</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -1786,14 +2333,22 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
  program's caller.</p
 	    ><p
 	    >On program termination, the standard <code
-	      >Handle</code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+		>Handle</a
+		></code
 	      >s <code
-	      >stdout</code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:stdout"
+		>stdout</a
+		></code
 	      > and
  <code
-	      >stderr</code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle-FD.html#v:stderr"
+		>stderr</a
+		></code
 	      > are flushed automatically; any other buffered <code
-	      >Handle</code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+		>Handle</a
+		></code
 	      >s
  need to be flushed manually, otherwise the buffered data will be
  discarded.</p
@@ -1888,8 +2443,8 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:9"
-	>System.IO</h1
+	><h1 id="g:12"
+	>System.IO</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:stdout" class="def"
@@ -1902,8 +2457,8 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    >A handle managing output to the Haskell program's standard output channel.</p
 	    ></div
 	  ></div
-	><h1 id="g:10"
-	>Text.PrettyPrint</h1
+	><h1 id="g:13"
+	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1923,41 +2478,265 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
 	    ><div id="section.i:Doc" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:IsString"
-		    >IsString</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
-		    >Monoid</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:IsString"
+		      >IsString</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Generic"
+		      >Generic</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		      >Monoid</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-DeepSeq.html#t:NFData"
+		      >NFData</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-69" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><span class="keyword"
+		      >type</span
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rep"
+		      >Rep</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:D1"
+		      >D1</a
+		      > D1Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_0Doc <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:U1"
+		      >U1</a
+		      >) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_1Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)))) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_2Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:TextDetails"
+		      >TextDetails</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		      >Int</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >))))) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_3Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		      >Int</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)))))) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_4Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)))) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_5Doc <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:U1"
+		      >U1</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-43-:"
+		      >(:+:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_6Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		      >Bool</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >))))) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:C1"
+		      >C1</a
+		      > C1_7Doc (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t::-42-:"
+		      >(:*:)</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		      >Bool</a
+		      >)) (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:S1"
+		      >S1</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:NoSelector"
+		      >NoSelector</a
+		      > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Generics.html#t:Rec0"
+		      >Rec0</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      >))))))))</span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -2279,7 +3058,7 @@ isInfixOf &quot;Ial&quot; &quot;I really like Haskell.&quot; == False</pre
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

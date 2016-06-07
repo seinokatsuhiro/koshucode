@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,19 +57,53 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >I/O Point</a
+	    >Named handle</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Code information</a
+	    >I/O point</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Numbered I/O point</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >I/O point: file, standard input, direct text, etc.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:NamedHandle"
+	    >NamedHandle</a
+	    > = <a href="#v:NamedHandle"
+	    >NamedHandle</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:handleName"
+		>handleName</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:handle"
+		>handle</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+		>Handle</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:IOPoint"
@@ -96,8 +130,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>Maybe</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		>Bz</a
+		></li
+	      ><li
+	      >| <a href="#v:IOPointCustom"
+		>IOPointCustom</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
+		> <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		>Bz</a
 		></li
 	      ><li
 	      >| <a href="#v:IOPointStdin"
@@ -106,6 +148,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><li
 	      >| <a href="#v:IOPointStdout"
 		>IOPointStdout</a
+		></li
+	      ><li
+	      >| <a href="#v:IOPointOutput"
+		>IOPointOutput</a
+		> <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		>NamedHandle</a
 		></li
 	      ></ul
 	    ></li
@@ -140,8 +188,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >ioPointList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
@@ -152,44 +200,164 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    > <a href="#t:CodePiece"
-	    >CodePiece</a
-	    > = <a href="#v:CodePiece"
-	    >CodePiece</a
+	    > <a href="#t:NIOPoint"
+	    >NIOPoint</a
+	    > = <a href="#v:NIOPoint"
+	    >NIOPoint</a
 	    > {<ul class="subs"
 	    ><li
-	      ><a href="#v:codeNumber"
-		>codeNumber</a
+	      ><a href="#v:nioNumber"
+		>nioNumber</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		></li
 	      ><li
-	      ><a href="#v:codeName"
-		>codeName</a
+	      ><a href="#v:nioPoint"
+		>nioPoint</a
 		> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
 		>IOPoint</a
 		></li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:codeEmpty"
-	    >codeEmpty</a
-	    > :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-	    >CodePiece</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:codeTextOf"
-	    >codeTextOf</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-	    >CodePiece</a
+	  ><a href="#v:nioFrom"
+	    >nioFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>I/O Point</h1
+	>Named handle</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:NamedHandle" class="def"
+	    >NamedHandle</a
+	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#NamedHandle" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named I/O handle.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:NamedHandle" class="def"
+		  >NamedHandle</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:handleName" class="def"
+			>handleName</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Name of handle</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:handle" class="def"
+			>handle</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+			>Handle</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>I/O handle</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:NamedHandle" class="caption collapser" onclick="toggleSection('i:NamedHandle')"
+	    >Instances</p
+	    ><div id="section.i:NamedHandle" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		      >NamedHandle</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-38" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		      >NamedHandle</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-33" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		      >NamedHandle</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-41" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		      >NamedHandle</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-35" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>I/O point</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -214,7 +382,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Context directory and target path</p
+		  >Context directory and target path</p
 		  ></td
 		></tr
 	      ><tr
@@ -226,7 +394,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Universal resource identifier</p
+		  >Universal resource identifier</p
 		  ></td
 		></tr
 	      ><tr
@@ -237,12 +405,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  >Maybe</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
-		  >) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		  >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		  >Bz</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Code itself</p
+		  >Code itself</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:IOPointCustom" class="def"
+		  >IOPointCustom</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		  >Bz</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Custom I/O</p
 		  ></td
 		></tr
 	      ><tr
@@ -252,7 +434,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Sandard input</p
+		  >Sandard input</p
 		  ></td
 		></tr
 	      ><tr
@@ -262,7 +444,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Sandard output</p
+		  >Sandard output</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:IOPointOutput" class="def"
+		  >IOPointOutput</a
+		  > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NamedHandle"
+		  >NamedHandle</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Output handler</p
 		  ></td
 		></tr
 	      ></table
@@ -273,51 +467,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:IOPoint" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-		    >IOPoint</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+		      >IOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-55" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-		    >IOPoint</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+		      >IOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-55" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-		    >IOPoint</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+		      >IOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-55" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-		    >IOPoint</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > * <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
-		    >IOPoint</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
+		      >IOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-55" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -350,7 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >&quot;stdin&quot;</code
 	      >, or <code
 	      >&quot;stdout&quot;</code
-	      >.</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -364,6 +564,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#ioPointText" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of I/O point.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -378,6 +582,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#ioPointFrom" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create I/O point.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -385,8 +593,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >ioPointList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
@@ -398,28 +606,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create I/O points from using stdin, texts itself, filenames, and urls.</p
+	    >Create I/O points from using stdin, texts itself, filenames, and urls.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Code information</h1
+	><h1 id="g:3"
+	>Numbered I/O point</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    > <a name="t:CodePiece" class="def"
-	    >CodePiece</a
-	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#CodePiece" class="link"
+	    > <a name="t:NIOPoint" class="def"
+	    >NIOPoint</a
+	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#NIOPoint" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Numbered I/O point.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:CodePiece" class="def"
-		  >CodePiece</a
+		><a name="v:NIOPoint" class="def"
+		  >NIOPoint</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -431,21 +643,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:codeNumber" class="def"
-			>codeNumber</a
+		      ><a name="v:nioNumber" class="def"
+			>nioNumber</a
 			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 			>Int</a
 			></dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
+		      ><dd class="doc"
+		      ><p
+			>Sequential number
+   (0 for unnumbered, &gt; 0 for numbered)</p
+			></dd
 		      ><dt class="src"
-		      ><a name="v:codeName" class="def"
-			>codeName</a
+		      ><a name="v:nioPoint" class="def"
+			>nioPoint</a
 			> :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:IOPoint"
 			>IOPoint</a
 			></dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
+		      ><dd class="doc"
+		      ><p
+			>I/O point</p
+			></dd
 		      ></dl
 		    ><div class="clear"
 		    ></div
@@ -455,59 +672,81 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:CodePiece" class="caption collapser" onclick="toggleSection('i:CodePiece')"
+	  ><p id="control.i:NIOPoint" class="caption collapser" onclick="toggleSection('i:NIOPoint')"
 	    >Instances</p
-	    ><div id="section.i:CodePiece" class="show"
+	    ><div id="section.i:NIOPoint" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		    >CodePiece</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-104" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		    >CodePiece</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		      >Data</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-102" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		    >CodePiece</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-111" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		    >CodePiece</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-102" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > * <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-		    >CodePiece</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+		      >NIOPoint</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#line-119" class="link"
+		    >Source</a
 		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><p
+		    >Zero-numbered empty input point.</p
+		    ></td
 		  ></tr
 		></table
 	      ></div
@@ -515,32 +754,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:codeEmpty" class="def"
-	    >codeEmpty</a
-	    > :: <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-	    >CodePiece</a
-	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#codeEmpty" class="link"
+	  ><a name="v:nioFrom" class="def"
+	    >nioFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#nioFrom" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Empty code.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codeTextOf" class="def"
-	    >codeTextOf</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-IOPoint.html#t:CodePiece"
-	    >CodePiece</a
-	    > <a href="src/Koshucode-Baala-Base-Text-IOPoint.html#codeTextOf" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Create text code.</p
+	    >Create input point for given lazy bytestring.</p
 	    ></div
 	  ></div
 	></div
@@ -549,7 +774,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

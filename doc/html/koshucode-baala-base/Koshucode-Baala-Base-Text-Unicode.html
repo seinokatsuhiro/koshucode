@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Inferred</td
+	    >Safe</td
 	    ></tr
 	  ><tr
 	  ><th
@@ -51,6 +51,104 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="caption"
 	>Koshucode.Baala.Base.Text.Unicode</p
 	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Unicode general categories.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:UnicodeLetter"
+		>UnicodeLetter</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodeMark"
+		>UnicodeMark</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodeNumber"
+		>UnicodeNumber</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodePunctuation"
+		>UnicodePunctuation</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodeSymbol"
+		>UnicodeSymbol</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodeSeperator"
+		>UnicodeSeperator</a
+		></li
+	      ><li
+	      >| <a href="#v:UnicodeOther"
+		>UnicodeOther</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:majorGeneralCategory"
+	    >majorGeneralCategory</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:toMajorGeneralCategory"
+	    >toMajorGeneralCategory</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:generalCategoryName"
+	    >generalCategoryName</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:generalCategoryLetter"
+	    >generalCategoryLetter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:generalCategoryMajorLetter"
+	    >generalCategoryMajorLetter</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:generalCategoryMinorLetter"
+	    >generalCategoryMinorLetter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
       ><h1
 	>Documentation</h1
@@ -58,11 +156,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    > <a name="t:GeneralCategoryGroup" class="def"
-	    >GeneralCategoryGroup</a
-	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#GeneralCategoryGroup" class="link"
+	    > <a name="t:MajorGeneralCategory" class="def"
+	    >MajorGeneralCategory</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#MajorGeneralCategory" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Major category of the Unicode general categories.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -74,7 +176,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Lu Ll Lt Lm Lo</p
+		  >Lu Ll Lt Lm Lo</p
 		  ></td
 		></tr
 	      ><tr
@@ -84,7 +186,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Mn Mc Me</p
+		  >Mn Mc Me</p
 		  ></td
 		></tr
 	      ><tr
@@ -94,7 +196,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Nd Nl No</p
+		  >Nd Nl No</p
 		  ></td
 		></tr
 	      ><tr
@@ -104,7 +206,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Pc Pd Ps Pe Pi Pf Po</p
+		  >Pc Pd Ps Pe Pi Pf Po</p
 		  ></td
 		></tr
 	      ><tr
@@ -114,7 +216,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Sm Sc Sk So</p
+		  >Sm Sc Sk So</p
 		  ></td
 		></tr
 	      ><tr
@@ -124,7 +226,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Zs Zl Zp</p
+		  >Zs Zl Zp</p
 		  ></td
 		></tr
 	      ><tr
@@ -134,52 +236,68 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Cc Cf Cs Co Cn</p
+		  >Cc Cf Cs Co Cn</p
 		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:GeneralCategoryGroup" class="caption collapser" onclick="toggleSection('i:GeneralCategoryGroup')"
+	  ><p id="control.i:MajorGeneralCategory" class="caption collapser" onclick="toggleSection('i:MajorGeneralCategory')"
 	    >Instances</p
-	    ><div id="section.i:GeneralCategoryGroup" class="show"
+	    ><div id="section.i:MajorGeneralCategory" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Bounded"
-		    >Bounded</a
-		    > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-		    >GeneralCategoryGroup</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Bounded"
+		      >Bounded</a
+		      > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+		      >MajorGeneralCategory</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#line-26" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-		    >GeneralCategoryGroup</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+		      >MajorGeneralCategory</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#line-26" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-		    >GeneralCategoryGroup</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+		      >MajorGeneralCategory</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#line-26" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-		    >GeneralCategoryGroup</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+		      >MajorGeneralCategory</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#line-26" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -190,39 +308,134 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:generalCategoryLetter" class="def"
-	    >generalCategoryLetter</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-	    >GeneralCategoryGroup</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	  ><a name="v:majorGeneralCategory" class="def"
+	    >majorGeneralCategory</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
 	    >Char</a
-	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryLetter" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#majorGeneralCategory" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Major general category of character.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:toMajorGeneralCategory" class="def"
+	    >toMajorGeneralCategory</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#toMajorGeneralCategory" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert general category to major category.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:generalCategoryName" class="def"
 	    >generalCategoryName</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-	    >GeneralCategoryGroup</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryName" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of general category.
+   This function returns one of <code
+	      >letter</code
+	      >, <code
+	      >mark</code
+	      >,
+   <code
+	      >number</code
+	      >, <code
+	      >punct</code
+	      >, <code
+	      >symbol</code
+	      >, <code
+	      >sep</code
+	      >, or <code
+	      >other</code
+	      >.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:generalCategoryGroup" class="def"
-	    >generalCategoryGroup</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-	    >Char</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-Unicode.html#t:GeneralCategoryGroup"
-	    >GeneralCategoryGroup</a
-	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryGroup" class="link"
+	  ><a name="v:generalCategoryLetter" class="def"
+	    >generalCategoryLetter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryLetter" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Major-minor category symbols like <code
+	      >Lu</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:generalCategoryMajorLetter" class="def"
+	    >generalCategoryMajorLetter</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Unicode.html#t:MajorGeneralCategory"
+	    >MajorGeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryMajorLetter" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >One-letter representation of general category.
+   This function returns one of <code
+	      >L</code
+	      > (letter),
+   <code
+	      >M</code
+	      > (mark), <code
+	      >N</code
+	      > (number), <code
+	      >P</code
+	      > (punctuation),
+   <code
+	      >S</code
+	      > (symbol), <code
+	      >Z</code
+	      > (seperator), or <code
+	      >C</code
+	      > (other).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:generalCategoryMinorLetter" class="def"
+	    >generalCategoryMinorLetter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Unicode.html#generalCategoryMinorLetter" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >One-letter representation of minor general category.</p
+	    ></div
 	  ></div
 	></div
       ></div
@@ -230,7 +443,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

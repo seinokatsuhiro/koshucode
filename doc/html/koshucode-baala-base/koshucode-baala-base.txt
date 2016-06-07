@@ -8,38 +8,79 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.123.0.0
+@version 0.147.0.0
 
+
+-- | Unicode general categories.
 module Koshucode.Baala.Base.Text.Unicode
-data GeneralCategoryGroup
+
+-- | Major category of the Unicode general categories.
+data MajorGeneralCategory
 
 -- | Lu Ll Lt Lm Lo
-UnicodeLetter :: GeneralCategoryGroup
+UnicodeLetter :: MajorGeneralCategory
 
 -- | Mn Mc Me
-UnicodeMark :: GeneralCategoryGroup
+UnicodeMark :: MajorGeneralCategory
 
 -- | Nd Nl No
-UnicodeNumber :: GeneralCategoryGroup
+UnicodeNumber :: MajorGeneralCategory
 
 -- | Pc Pd Ps Pe Pi Pf Po
-UnicodePunctuation :: GeneralCategoryGroup
+UnicodePunctuation :: MajorGeneralCategory
 
 -- | Sm Sc Sk So
-UnicodeSymbol :: GeneralCategoryGroup
+UnicodeSymbol :: MajorGeneralCategory
 
 -- | Zs Zl Zp
-UnicodeSeperator :: GeneralCategoryGroup
+UnicodeSeperator :: MajorGeneralCategory
 
 -- | Cc Cf Cs Co Cn
-UnicodeOther :: GeneralCategoryGroup
-generalCategoryLetter :: GeneralCategoryGroup -> Char
-generalCategoryName :: GeneralCategoryGroup -> String
-generalCategoryGroup :: Char -> GeneralCategoryGroup
-instance Show GeneralCategoryGroup
-instance Eq GeneralCategoryGroup
-instance Ord GeneralCategoryGroup
-instance Bounded GeneralCategoryGroup
+UnicodeOther :: MajorGeneralCategory
+
+-- | Major general category of character.
+majorGeneralCategory :: Char -> MajorGeneralCategory
+
+-- | Convert general category to major category.
+toMajorGeneralCategory :: GeneralCategory -> MajorGeneralCategory
+
+-- | Name of general category. This function returns one of
+--   <tt>letter</tt>, <tt>mark</tt>, <tt>number</tt>, <tt>punct</tt>,
+--   <tt>symbol</tt>, <tt>sep</tt>, or <tt>other</tt>.
+generalCategoryName :: MajorGeneralCategory -> String
+
+-- | Major-minor category symbols like <tt>Lu</tt>.
+generalCategoryLetter :: GeneralCategory -> String
+
+-- | One-letter representation of general category. This function returns
+--   one of <tt>L</tt> (letter), <tt>M</tt> (mark), <tt>N</tt> (number),
+--   <tt>P</tt> (punctuation), <tt>S</tt> (symbol), <tt>Z</tt> (seperator),
+--   or <tt>C</tt> (other).
+generalCategoryMajorLetter :: MajorGeneralCategory -> Char
+
+-- | One-letter representation of minor general category.
+generalCategoryMinorLetter :: GeneralCategory -> Char
+instance GHC.Enum.Bounded Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
+instance GHC.Show.Show Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
+
+module Koshucode.Baala.Base.Text.LineBreak
+data LineBreak
+LineBreak :: Maybe Int -> String -> String -> String -> LineBreak
+[breakWidth] :: LineBreak -> Maybe Int
+[breakContinue] :: LineBreak -> String
+[breakNewline] :: LineBreak -> String
+[breakIndent] :: LineBreak -> String
+nolb :: LineBreak
+lf804 :: LineBreak
+crlf804 :: LineBreak
+lf802 :: LineBreak
+crlf802 :: LineBreak
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.LineBreak.LineBreak
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.LineBreak.LineBreak
+instance GHC.Show.Show Koshucode.Baala.Base.Text.LineBreak.LineBreak
+instance Data.Default.Class.Default Koshucode.Baala.Base.Text.LineBreak.LineBreak
 
 module Koshucode.Baala.Base.Text.Comment
 
@@ -67,14 +108,14 @@ emacsModeComment :: String
 commentLine :: String -> String
 putCommentLines :: [String] -> IO ()
 hPutCommentLines :: Handle -> [String] -> IO ()
-instance Show CommentSec
-instance Eq CommentSec
-instance Ord CommentSec
-instance Show CommentDoc
-instance Eq CommentDoc
-instance Ord CommentDoc
-instance Texts CommentSec
-instance Texts CommentDoc
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Comment.CommentDoc
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Comment.CommentDoc
+instance GHC.Show.Show Koshucode.Baala.Base.Text.Comment.CommentDoc
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Comment.CommentSec
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Comment.CommentSec
+instance GHC.Show.Show Koshucode.Baala.Base.Text.Comment.CommentSec
+instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentDoc
+instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentSec
 
 module Koshucode.Baala.Base.Prelude.Import
 
@@ -85,14 +126,15 @@ module Koshucode.Baala.Base.Prelude.Import
 -- | Left-to-right Kleisli composition of monads.
 (>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
 
--- | Evaluate each action in the sequence from left to right, and collect
---   the results.
-sequence :: Monad m => [m a] -> m [a]
+-- | Evaluate each monadic action in the structure from left to right, and
+--   collect the results. For a version that ignores the results see
+--   <a>sequence_</a>.
+sequence :: Traversable t => forall (m :: * -> *) a. Monad m => t (m a) -> m (t a)
 
--- | This generalizes the list-based <a>filter</a> function.
+-- | This generalizes the list-based <tt>filter</tt> function.
 filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 
--- | The <a>foldM</a> function is analogous to <a>foldl</a>, except that
+-- | The <a>foldM</a> function is analogous to <tt>foldl</tt>, except that
 --   its result is encapsulated in a monad. Note that <a>foldM</a> works
 --   from left-to-right over the list arguments. This could be an issue
 --   where <tt>(<a>&gt;&gt;</a>)</tt> and the `folded function' are not
@@ -114,25 +156,35 @@ filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 --   
 --   If right-to-left evaluation is required, the input list should be
 --   reversed.
-foldM :: Monad m => (a -> b -> m a) -> a -> [b] -> m a
+--   
+--   Note: <a>foldM</a> is the same as <a>foldlM</a>
+foldM :: (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
 
--- | Conditional execution of monadic expressions. For example,
+-- | Conditional execution of <a>Applicative</a> expressions. For example,
 --   
 --   <pre>
---   when debug (putStr "Debugging\n")
+--   when debug (putStrLn "Debugging")
 --   </pre>
 --   
---   will output the string <tt>Debugging\n</tt> if the Boolean value
+--   will output the string <tt>Debugging</tt> if the Boolean value
 --   <tt>debug</tt> is <a>True</a>, and otherwise do nothing.
-when :: Monad m => Bool -> m () -> m ()
+when :: Applicative f => Bool -> f () -> f ()
 
 -- | The reverse of <a>when</a>.
-unless :: Monad m => Bool -> m () -> m ()
+unless :: Applicative f => Bool -> f () -> f ()
 
--- | <tt><a>guard</a> b</tt> is <tt><a>return</a> ()</tt> if <tt>b</tt> is
---   <a>True</a>, and <a>mzero</a> if <tt>b</tt> is <a>False</a>.
-guard :: MonadPlus m => Bool -> m ()
-concatMapM :: Monad m => (a -> m [b]) -> [a] -> m [b]
+-- | <tt><a>guard</a> b</tt> is <tt><a>pure</a> ()</tt> if <tt>b</tt> is
+--   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
+guard :: Alternative f => Bool -> f ()
+concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+
+-- | Lazy bytestring.
+type Bz = ByteString
+
+-- | Convert string into lazy bytestring.
+stringBz :: String -> Bz
+class Default a
+def :: Default a => a
 
 -- | <a>intercalate</a> <tt>xs xss</tt> is equivalent to <tt>(<a>concat</a>
 --   (<a>intersperse</a> xs xss))</tt>. It inserts the list <tt>xs</tt> in
@@ -175,7 +227,7 @@ isPrefixOf :: Eq a => [a] -> [a] -> Bool
 isInfixOf :: Eq a => [a] -> [a] -> Bool
 
 -- | The <a>isSuffixOf</a> function takes two lists and returns <a>True</a>
---   iff the first list is a suffix of the second. Both lists must be
+--   iff the first list is a suffix of the second. The second list must be
 --   finite.
 isSuffixOf :: Eq a => [a] -> [a] -> Bool
 
@@ -189,6 +241,13 @@ sort :: Ord a => [a] -> [a]
 --   
 --   <pre>
 --   transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]
+--   </pre>
+--   
+--   If some of the rows are shorter than the following rows, their
+--   elements are skipped:
+--   
+--   <pre>
+--   transpose [[10,11],[20],[],[30,31,32]] == [[10,20,30],[11,31],[32]]
 --   </pre>
 transpose :: [[a]] -> [[a]]
 
@@ -206,33 +265,128 @@ transpose :: [[a]] -> [[a]]
 (\\) :: Eq a => [a] -> [a] -> [a]
 
 -- | Test two list has no elements in common.
-disjoint :: Eq a => [a] -> [a] -> Bool
+disjoint :: (Eq a) => [a] -> [a] -> Bool
 
 -- | Test two list has some common elements.
-overlap :: Eq a => [a] -> [a] -> Bool
+overlap :: (Eq a) => [a] -> [a] -> Bool
 
 -- | Same as <a>lookup</a> in <tt>Data.Map</tt> module.
-lookupMap :: Ord k => k -> Map k a -> Maybe a
+lookupMap :: (Ord k) => k -> Map k a -> Maybe a
 
 -- | The <a>catMaybes</a> function takes a list of <a>Maybe</a>s and
 --   returns a list of all the <a>Just</a> values.
+--   
+--   <h4><b>Examples</b></h4>
+--   
+--   Basic usage:
+--   
+--   <pre>
+--   &gt;&gt;&gt; catMaybes [Just 1, Nothing, Just 3]
+--   [1,3]
+--   </pre>
+--   
+--   When constructing a list of <a>Maybe</a> values, <a>catMaybes</a> can
+--   be used to return all of the "success" results (if the list is the
+--   result of a <a>map</a>, then <a>mapMaybe</a> would be more
+--   appropriate):
+--   
+--   <pre>
+--   &gt;&gt;&gt; import Text.Read ( readMaybe )
+--   
+--   &gt;&gt;&gt; [readMaybe x :: Maybe Int | x &lt;- ["1", "Foo", "3"] ]
+--   [Just 1,Nothing,Just 3]
+--   
+--   &gt;&gt;&gt; catMaybes $ [readMaybe x :: Maybe Int | x &lt;- ["1", "Foo", "3"] ]
+--   [1,3]
+--   </pre>
 catMaybes :: [Maybe a] -> [a]
 
 -- | The <a>mapMaybe</a> function is a version of <a>map</a> which can
 --   throw out elements. In particular, the functional argument returns
 --   something of type <tt><a>Maybe</a> b</tt>. If this is <a>Nothing</a>,
---   no element is added on to the result list. If it just <tt><a>Just</a>
+--   no element is added on to the result list. If it is <tt><a>Just</a>
 --   b</tt>, then <tt>b</tt> is included in the result list.
+--   
+--   <h4><b>Examples</b></h4>
+--   
+--   Using <tt><a>mapMaybe</a> f x</tt> is a shortcut for
+--   <tt><a>catMaybes</a> $ <a>map</a> f x</tt> in most cases:
+--   
+--   <pre>
+--   &gt;&gt;&gt; import Text.Read ( readMaybe )
+--   
+--   &gt;&gt;&gt; let readMaybeInt = readMaybe :: String -&gt; Maybe Int
+--   
+--   &gt;&gt;&gt; mapMaybe readMaybeInt ["1", "Foo", "3"]
+--   [1,3]
+--   
+--   &gt;&gt;&gt; catMaybes $ map readMaybeInt ["1", "Foo", "3"]
+--   [1,3]
+--   </pre>
+--   
+--   If we map the <a>Just</a> constructor, the entire list should be
+--   returned:
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapMaybe Just [1,2,3]
+--   [1,2,3]
+--   </pre>
 mapMaybe :: (a -> Maybe b) -> [a] -> [b]
 
 -- | The <a>fromJust</a> function extracts the element out of a <a>Just</a>
 --   and throws an error if its argument is <a>Nothing</a>.
+--   
+--   <h4><b>Examples</b></h4>
+--   
+--   Basic usage:
+--   
+--   <pre>
+--   &gt;&gt;&gt; fromJust (Just 1)
+--   1
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; 2 * (fromJust (Just 10))
+--   20
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; 2 * (fromJust Nothing)
+--   *** Exception: Maybe.fromJust: Nothing
+--   </pre>
 fromJust :: Maybe a -> a
 
 -- | The <a>fromMaybe</a> function takes a default value and and
 --   <a>Maybe</a> value. If the <a>Maybe</a> is <a>Nothing</a>, it returns
 --   the default values; otherwise, it returns the value contained in the
 --   <a>Maybe</a>.
+--   
+--   <h4><b>Examples</b></h4>
+--   
+--   Basic usage:
+--   
+--   <pre>
+--   &gt;&gt;&gt; fromMaybe "" (Just "Hello, World!")
+--   "Hello, World!"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; fromMaybe "" Nothing
+--   ""
+--   </pre>
+--   
+--   Read an integer from a string using <tt>readMaybe</tt>. If we fail to
+--   parse an integer, we want to return <tt>0</tt> by default:
+--   
+--   <pre>
+--   &gt;&gt;&gt; import Text.Read ( readMaybe )
+--   
+--   &gt;&gt;&gt; fromMaybe 0 (readMaybe "5")
+--   5
+--   
+--   &gt;&gt;&gt; fromMaybe 0 (readMaybe "")
+--   0
+--   </pre>
 fromMaybe :: a -> Maybe a -> a
 
 -- | The class of monoids (types with an associative binary operation that
@@ -248,15 +402,22 @@ fromMaybe :: a -> Maybe a -> a
 --   The method names refer to the monoid of lists under concatenation, but
 --   there are many other instances.
 --   
---   Minimal complete definition: <a>mempty</a> and <a>mappend</a>.
---   
 --   Some types can be viewed as a monoid in more than one way, e.g. both
 --   addition and multiplication on numbers. In such cases we often define
 --   <tt>newtype</tt>s and make those instances of <a>Monoid</a>, e.g.
---   <a>Sum</a> and <a>Product</a>.
+--   <tt>Sum</tt> and <tt>Product</tt>.
 class Monoid a
+
+-- | Identity of <a>mappend</a>
 mempty :: Monoid a => a
+
+-- | An associative operation
 mappend :: Monoid a => a -> a -> a
+
+-- | Fold a list using the monoid. For most types, the default definition
+--   for <a>mconcat</a> will be used, but the function is included in the
+--   class definition so that an optimized version can be provided for
+--   specific types.
 mconcat :: Monoid a => [a] -> a
 
 -- | An associative operation
@@ -290,9 +451,9 @@ ExitFailure :: Int -> ExitCode
 --   <tt>code</tt>. Normally this terminates the program, returning
 --   <tt>code</tt> to the program's caller.
 --   
---   On program termination, the standard <tt>Handle</tt>s <tt>stdout</tt>
---   and <tt>stderr</tt> are flushed automatically; any other buffered
---   <tt>Handle</tt>s need to be flushed manually, otherwise the buffered
+--   On program termination, the standard <a>Handle</a>s <a>stdout</a> and
+--   <a>stderr</a> are flushed automatically; any other buffered
+--   <a>Handle</a>s need to be flushed manually, otherwise the buffered
 --   data will be discarded.
 --   
 --   A program that fails in any other way is treated as if it had called
@@ -395,7 +556,7 @@ names :: Name a => [a] -> [String]
 
 -- | Entry in association list.
 type Named a = (String, a)
-named :: Name a => a -> Named a
+named :: (Name a) => a -> Named a
 type Map a = a -> a
 type ManyMap a = a -> [a]
 type Pred a = a -> Bool
@@ -406,19 +567,364 @@ type Index = Int
 type Collect a = [a] -> a
 class Choose m
 (<|>) :: Choose m => m a -> m a -> m a
-instance Show a => Show (YesNo a)
-instance Eq a => Eq (YesNo a)
-instance Ord a => Ord (YesNo a)
-instance Choose (Either a)
-instance Choose Maybe
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Prelude.Class.YesNo a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Prelude.Class.YesNo a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Prelude.Class.YesNo a)
+instance Koshucode.Baala.Base.Prelude.Class.Choose GHC.Base.Maybe
+instance Koshucode.Baala.Base.Prelude.Class.Choose (Data.Either.Either a)
 
-module Koshucode.Baala.Base.Prelude.List
-headOr :: a -> [a] -> a
+module Koshucode.Baala.Base.Prelude.Pair
+mapFst :: (a -> c) -> (a, b) -> (c, b)
+mapSnd :: (b -> c) -> (a, b) -> (a, c)
+consFst :: a -> Map ([a], b)
+consSnd :: b -> Map (a, [b])
+mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
+mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m (a, c)
+right2 :: (Either a b, Either a c) -> Either a (b, c)
+right3 :: (Either a b, Either a c, Either a d) -> Either a (b, c, d)
+right4 :: (Either a b, Either a c, Either a d, Either a e) -> Either a (b, c, d, e)
+sequenceFst :: (Monad m) => [(m a, b)] -> m [(a, b)]
+sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 
--- | Head or empty.
-front :: [a] -> [a]
+
+-- | Case-error versions of functions.
+module Koshucode.Baala.Base.Prelude.Case
+
+-- | Apply function unless null list.
+caseNull :: (Foldable t) => (t a -> b) -> b -> t a -> b
+
+-- | Case-null version of <a>head</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headNull 0 [20, 70, 80] :: Int
+--   20
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; headNull 0 [] :: Int
+--   0
+--   </pre>
+headNull :: a -> [a] -> a
+
+-- | Case-null version of <a>tail</a>.
+tailNull :: [a] -> [a] -> [a]
+
+-- | Case-null version of <a>minimum</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; minimumNull 100 [20, 70, 80] :: Int
+--   20
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; minimumNull 100 [] :: Int
+--   100
+--   </pre>
+minimumNull :: (Ord a) => a -> [a] -> a
+
+-- | Case-null version of <a>maximum</a>.
+maximumNull :: (Ord a) => a -> [a] -> a
+
+-- | Apply function unless 0.
+caseZero :: (Eq a, Num a) => (a -> b) -> b -> a -> b
+
+-- | Case-zero version of <a>quot</a>.
+quotZero :: (Integral a) => a -> a -> a -> a
+
+-- | Case-zero version of <a>rem</a>.
+remZero :: (Integral a) => a -> a -> a -> a
+
+-- | Case-zero version of <a>div</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divZero 0 10 2 :: Int
+--   5
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; divZero 0 10 0 :: Int
+--   0
+--   </pre>
+divZero :: (Integral a) => a -> a -> a -> a
+
+-- | Case-zero version of <a>mod</a>.
+modZero :: (Integral a) => a -> a -> a -> a
+
+-- | Case-zero version of <a>quotRem</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; quotRemZero (0,0) 20 6 :: (Int, Int)
+--   (3,2)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; quotRemZero (0,0) 20 0 :: (Int, Int)
+--   (0,0)
+--   </pre>
+quotRemZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
+
+-- | Case-zero version of <a>divMod</a>.
+divModZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
+
+
+-- | Split lists.
+module Koshucode.Baala.Base.List.Split
+
+-- | Split elements into subelements.
+type Split1 t a = t a -> Maybe (t a)
+
+-- | Split list into sublist.
+type SplitList1 a = Split1 [] a
+
+-- | Split elements into two subelements.
+type Split2 t a = t a -> Maybe (t a, t a)
+
+-- | Split list into two sublists.
+type SplitList2 a = Split2 [] a
+
+-- | Split elements into before-elem-after parts.
+type Split3e t a = t a -> Maybe (t a, a, t a)
+
+-- | Split list into before-elem-after parts.
+type SplitList3e a = Split3e [] a
+
+-- | Split elements into three subelements.
+type Split3 t a = t a -> Maybe (t a, t a, t a)
+
+-- | Split list into three sublists.
+type SplitList3 a = Split3 [] a
+
+-- | Drop sublist.
+dropSubBy :: SplitList2 a -> SplitList1 a
+
+-- | Drop prefix part from a list. This function is similar to
+--   <a>stripPrefix</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dropSub "abc" "abcdefghi"
+--   Just "defghi"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dropSub "" "abcdefghi"
+--   Just "abcdefghi"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dropSub "xyz" "abcdefghi"
+--   Nothing
+--   </pre>
+dropSub :: (Eq a) => [a] -> SplitList1 a
+
+-- | Split list by given predicate.
+splitSubBy :: SplitList2 a -> SplitList3 a
+
+-- | Split list by given sublist.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitSub "def" "abcdefghi"
+--   Just ("abc","def","ghi")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitSub "" "abcdefghi"
+--     Just ("","","abcdefghi")
+--   </pre>
+splitSub :: (Eq a) => [a] -> SplitList3 a
+
+-- | Split list by predicate.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitBy (== '|') "b c"
+--   Left "b c"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitBy (== '|') "a | b | c"
+--   Right ("a ", '|', " b | c")
+--   </pre>
+splitBy :: (a -> Bool) -> SplitList3e a
+
+-- | Divide list into sublists of given length.
+--   
+--   <pre>
+--   &gt;&gt;&gt; chunks 2 "abcdefg"
+--   ["ab","cd","ef","g"]
+--   </pre>
+chunks :: Int -> [a] -> [[a]]
+
+-- | Divide list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divide '|' "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
+--   </pre>
+divide :: (Eq a) => a -> [a] -> [[a]]
+
+-- | Divide list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divideBy (== '|') "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
+--   </pre>
+divideBy :: (a -> Bool) -> [a] -> [[a]]
+
+-- | Divide string into words.
+--   
+--   <pre>
+--   &gt;&gt;&gt; wordsBy (== '|') "a|bb||ccc|"
+--   ["a","bb","ccc"]
+--   </pre>
+wordsBy :: (a -> Bool) -> [a] -> [[a]]
+
+
+-- | Dots pattern.
+module Koshucode.Baala.Base.List.Dots
+
+-- | Divide dots-pattern string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dotsStrings "abc ... xyz"
+--   ["abc","...","xyz"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dotsStrings "a ... h ... ... v ..."
+--   ["a","...","h","...","v","..."]
+--   </pre>
+dotsStrings :: String -> [String]
+
+-- | Concatenate dots-pattern strings, inserting one space between dots and
+--   word.
+--   
+--   <pre>
+--   &gt;&gt;&gt; undotsStrings ["abc", "...", "xyz"]
+--   "abc ... xyz"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; undotsStrings ["a", "...", "h", "...", "...", "v", "..."]
+--   "a ... h ... v ..."
+--   </pre>
+undotsStrings :: [String] -> String
+
+-- | Take dots-parts from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefghijklmnopqrstuvwxyz"
+--   Just ["bcdefg","ijklmnopqrstu","wxyz"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefg"
+--   Nothing
+--   </pre>
+takeDots :: [String] -> String -> Maybe [String]
+
+module Koshucode.Baala.Base.Prelude
+
+
+-- | Utilities for association lists.
+module Koshucode.Baala.Base.List.Assoc
+type Lookup a = String -> Maybe a
+
+-- | Construct assoc list by splitting base list.
+assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
+
+-- | Check which given key is there in assoc list.
+assocExist :: (Eq k) => k -> [(k, a)] -> Bool
+namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
+lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
+
+-- | Lookup assoc list that keys are truth-valued functions.
+lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
+
+-- | Pick up associations that have given keys.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
+--   </pre>
+assocPick :: (Eq k) => [k] -> Map [(k, a)]
+
+-- | Cut off associations that have given keys.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("b",2)]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCut1 "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
+--   </pre>
+assocCut :: (Eq k) => [k] -> Map [(k, a)]
+assocCut1 :: (Eq k) => k -> Map [(k, a)]
+
+-- | Change key of assoc list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
+--   [("x",1), ("b",2), ("c",3)]
+--   </pre>
+assocRename1 :: (Eq k) => k -> k -> Map [(k, a)]
+assocRehead :: (Eq k) => [(k, k)] -> [(k, v)] -> [(k, v)]
+
+-- | Compose two assocs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCompose [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","P"), ("A","Q"), ("B","S")]
+--   </pre>
+assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
+
+-- | Meet two assocs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocMeet [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
+--   </pre>
+assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
+data OnceMore a
+Once :: a -> OnceMore a
+More :: [a] -> OnceMore a
+
+-- | Convert general assoc list into once/more assoc list.
+assocGather :: (Eq k) => [(k, a)] -> [(k, OnceMore a)]
+
+-- | Push key and value into once/more assoc list.
+assocPush :: (Eq k) => k -> a -> Map [(k, OnceMore a)]
+
+-- | Extract once part from once/more assoc list.
+assocOnce :: [(k, OnceMore a)] -> [(k, a)]
+
+-- | Extract more part from once/more assoc list.
+assocMore :: [(k, OnceMore a)] -> [(k, [a])]
+type Gather a b = a -> (b, a)
+
+-- | Gather what is gotten by splitter.
+gather :: Gather [a] b -> [a] -> [b]
+gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
+
+-- | Gather (<i>k</i>, <i>v</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
+gatherToMap :: (Ord k) => [(k, v)] -> Map k [v]
+
+-- | Gather (<i>v</i>, <i>k</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
+gatherToMapSwap :: (Ord k) => [(v, k)] -> Map k [v]
+gatherToAssoc :: (Ord k) => [(k, v)] -> [(k, [v])]
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+
+module Koshucode.Baala.Base.List.List
 
 -- | Tails of list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tails "abc"
+--   ["abc", "bc", "c"]
+--   </pre>
 tails :: [a] -> [[a]]
 
 -- | Test list has single element.
@@ -429,15 +935,86 @@ notNull :: [a] -> Bool
 maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 right :: b -> Map (Either a b)
 
+-- | Take first element; if empty list is given, returns empty list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeFirst "abc"
+--   "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeFirst ""
+--   ""
+--   </pre>
+takeFirst :: [a] -> [a]
+
+-- | Take last element; if empty list is given, returns empty list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeLast "abc"
+--   "c"
+--   </pre>
+takeLast :: [a] -> [a]
+
+-- | Take elements at odd positions, i.e., first, third, ...
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeOdd "abcdeft"
+--   "acet"
+--   </pre>
+takeOdd :: [a] -> [a]
+
+-- | Take elements at even positions. i.e., second, fourth, ...
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeEven "abcdeft"
+--   "bdf"
+--   </pre>
+takeEven :: [a] -> [a]
+
+-- | Take <i>N</i> elements with filler.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeFill 0 3 [0 .. 8]
+--     [0,1,2]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeFill 0 5 [6 .. 8]
+--     [6,7,8,0,0]
+--   </pre>
+takeFill :: a -> Int -> [a] -> [a]
+
+-- | Take tail-side <i>N</i> elements with filler.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeTailFill 0 3 [0 .. 8]
+--     [6,7,8]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeTailFill 0 5 [6 .. 8]
+--     [0,0,6,7,8]
+--   </pre>
+takeTailFill :: a -> Int -> [a] -> [a]
+
 -- | Keep duplicate elements.
-duplicates :: Ord a => [a] -> [a]
+duplicates :: (Ord a) => [a] -> [a]
 
 -- | Remove duplicate elements.
-unique :: Ord a => [a] -> [a]
+unique :: (Ord a) => [a] -> [a]
 
 -- | Union list to base list.
-unionUp :: Eq a => [a] -> [a] -> [a]
-intersectionFilter :: Ord a => [a] -> [a] -> [a]
+unionUp :: (Eq a) => [a] -> [a] -> [a]
+intersectionFilter :: (Ord a) => [a] -> [a] -> [a]
+
+-- | Convert to set-like list, in other words, remove duplicate elements
+--   and sort list.
+setList :: (Ord a) => [a] -> [a]
+
+-- | Set-like equality, in other words, duplication and ordering are
+--   ignored.
+setEq :: (Ord a) => [a] -> [a] -> Bool
 
 -- | Make singleton list.
 li1 :: a -> [a]
@@ -445,7 +1022,7 @@ li2 :: a -> a -> [a]
 li3 :: a -> a -> a -> [a]
 consIf :: Bool -> a -> [a] -> [a]
 type RangeBy a = a -> a -> [a]
-rangeBy :: Ord a => Map a -> RangeBy a
+rangeBy :: (Ord a) => Map a -> RangeBy a
 zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
 zipMaybe2 :: [Maybe a] -> [b] -> [b]
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
@@ -456,48 +1033,24 @@ filterFst :: (a -> Bool) -> Map [(a, b)]
 squeeze :: (a -> Bool) -> Map [a]
 squeezeEmptyLines :: Map [String]
 reverseMap :: Map [a] -> Map [a]
-chunks :: Int -> [a] -> [[a]]
-
--- | Split list by predicate. If list contains an element that satisfies
---   the predicate, <tt>(<i>before-list</i>, <i>the-element</i>,
---   <i>after-list</i>)</tt> is returned. Otherwise, original list is
---   returned.
-splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
-
--- | Divide list.
-divide :: Eq a => a -> [a] -> [[a]]
-
--- | Divide list.
-divideBy :: (a -> Bool) -> [a] -> [[a]]
-
-module Koshucode.Baala.Base.Prelude.Pair
-mapFst :: (a -> c) -> (a, b) -> (c, b)
-mapSnd :: (b -> c) -> (a, b) -> (a, c)
-consFst :: a -> Map ([a], b)
-consSnd :: b -> Map (a, [b])
-mapFstTo :: Functor m => (a -> c) -> m (a, b) -> m (c, b)
-mapSndTo :: Functor m => (b -> c) -> m (a, b) -> m (a, c)
-right2 :: (Either a b, Either a c) -> Either a (b, c)
-right3 :: (Either a b, Either a c, Either a d) -> Either a (b, c, d)
-right4 :: (Either a b, Either a c, Either a d, Either a e) -> Either a (b, c, d, e)
-sequenceFst :: Monad m => [(m a, b)] -> m [(a, b)]
-sequenceSnd :: Monad m => [(a, m b)] -> m [(a, b)]
 
 
 -- | Snipping elements.
-module Koshucode.Baala.Base.Prelude.Snip
+module Koshucode.Baala.Base.List.Snip
 
 -- | Snipping elements using indicies.
 type Snip a = [Int] -> Map [a]
 
 -- | Snip for differenct type values.
 type Snip2 a b = (Snip a, Snip b)
+
+-- | Type for binary operators.
 type Bin a = a -> a -> a
-snipFull :: Eq a => [a] -> [a] -> [Int]
+snipFull :: (Eq a) => [a] -> [a] -> [Int]
 
 -- | Indices of shared elements.
-snipIndex :: Eq a => [a] -> [a] -> [Int]
-snipPair :: Ord a => [a] -> [a] -> ([Int], [Int])
+snipIndex :: (Eq a) => [a] -> [a] -> [Int]
+snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 
 -- | Pair of picking-up and cutting-off elements.
 snipBoth :: [Int] -> [a] -> ([a], [a])
@@ -517,14 +1070,14 @@ snipForward2 :: Snip2 a b
 snipBackward2 :: Snip2 a b
 
 -- | Take left-side elements.
-snipLeft :: Eq a => Bin [a]
+snipLeft :: (Eq a) => Bin [a]
 
 -- | Take shared elements.
-snipShare :: Eq a => Bin [a]
+snipShare :: (Eq a) => Bin [a]
 
 -- | Take right-side elements.
-snipRight :: Eq a => Bin [a]
-snipOrder :: Eq a => [a] -> [a] -> Map [c]
+snipRight :: (Eq a) => Bin [a]
+snipOrder :: (Eq a) => [a] -> [a] -> Map [c]
 
 -- | Check lengths of two lists are same.
 sameLength :: [a] -> [b] -> Bool
@@ -534,197 +1087,46 @@ notSameLength :: [a] -> [b] -> Bool
 --   second are negative.
 (+-) :: [Int] -> [Int] -> Bool
 
-module Koshucode.Baala.Base.Prelude.Order
+module Koshucode.Baala.Base.List.Order
 data OrderCap a
+
+-- | Ascending order
 Asc :: a -> OrderCap a
+
+-- | Descending order
 Desc :: a -> OrderCap a
-type Ranking n a = Int -> [OrderCap n] -> [n] -> [[a]] -> ([Int], [[a]])
+
+-- | Select order cap for ordering value. <a>GT</a> and <a>EQ</a> mean
+--   <a>Asc</a>, <a>LT</a> means <a>Desc</a>.
+orderingCap :: (Ordering, a) -> OrderCap a
+
+-- | Sort by capped name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sortByName (words "a b c") [Asc "b"] [[1,3,3], [1,2,3], [1,1,3 :: Int]]
+--   [[1,1,3], [1,2,3], [1,3,3]]
+--   </pre>
 sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> Map [[a]]
-sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
-sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
+sortWith :: (Ord a, Ord b) => (a -> b) -> Map [a]
+type Ranking n a = Int -> [OrderCap n] -> [n] -> [[a]] -> ([Int], [[a]])
+
+-- | Sort and numbering like 1234.
 sortByNameNumbering :: (Ord a, Eq n) => Ranking n a
+
+-- | Sort and rank like 1223.
+sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
+
+-- | Sort and rank like 1224.
+sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
+
+-- | 1223 ranking start with given number.
 denseRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
+
+-- | 1224 ranking start with given number.
 gapRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
-sortWith :: (Ord a, Ord b) => (a -> b) -> [a] -> [a]
-instance Show a => Show (OrderCap a)
-instance Eq a => Eq (OrderCap a)
-instance Ord a => Ord (OrderCap a)
-
-
--- | Utilities for association lists.
-module Koshucode.Baala.Base.Prelude.Assoc
-type Lookup a = String -> Maybe a
-
--- | Construct assoc list by splitting base list.
-assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
-
--- | Check which given key is there in assoc list.
-assocExist :: Eq k => k -> [(k, a)] -> Bool
-namedMapM :: Monad m => (b -> m c) -> (a, b) -> m (a, c)
-lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
-
--- | Lookup assoc list that keys are truth-valued functions.
-lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
-assocFinder :: Ord k => [(k, v)] -> k -> Maybe v
-
--- | Pick up associations that have given keys.
-assocPick :: Eq k => [k] -> Map [(k, a)]
-
--- | Cut off associations that have given keys.
-assocCut :: Eq k => [k] -> Map [(k, a)]
-assocCut1 :: Eq k => k -> Map [(k, a)]
-assocRename1 :: Eq k => k -> k -> Map [(k, a)]
-assocRehead :: Eq k => [(k, k)] -> [(k, v)] -> [(k, v)]
-data OnceMore a
-Once :: a -> OnceMore a
-More :: [a] -> OnceMore a
-
--- | Convert general assoc list into once/more assoc list.
-assocGather :: Eq k => [(k, a)] -> [(k, OnceMore a)]
-
--- | Push key and value into once/more assoc list.
-assocPush :: Eq k => k -> a -> Map [(k, OnceMore a)]
-
--- | Extract once part from once/more assoc list.
-assocOnce :: [(k, OnceMore a)] -> [(k, a)]
-
--- | Extract more part from once/more assoc list.
-assocMore :: [(k, OnceMore a)] -> [(k, [a])]
-type Gather a b = a -> (b, a)
-
--- | Gather what is gotten by splitter.
-gather :: Gather [a] b -> [a] -> [b]
-gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
-
--- | Gather (<i>key</i>, <i>value</i>) to <tt>Map</tt> <i>key</i>
---   [<i>value</i>].
-gatherToMap :: Ord k => [(k, v)] -> Map k [v]
-gatherToAssoc :: Ord k => [(k, v)] -> [(k, [v])]
-instance Show a => Show (OnceMore a)
-instance Eq a => Eq (OnceMore a)
-instance Ord a => Ord (OnceMore a)
-
-module Koshucode.Baala.Base.Prelude
-
-module Koshucode.Baala.Base.Text.IOPoint
-data IOPoint
-
--- | Context directory and target path
-IOPointFile :: FilePath -> FilePath -> IOPoint
-
--- | Universal resource identifier
-IOPointUri :: String -> IOPoint
-
--- | Code itself
-IOPointText :: (Maybe String) -> String -> IOPoint
-
--- | Sandard input
-IOPointStdin :: IOPoint
-
--- | Sandard output
-IOPointStdout :: IOPoint
-
--- | Name of I/O point, i.e., <tt>"file"</tt>, <tt>"url"</tt>,
---   <tt>"text"</tt>, <tt>"stdin"</tt>, or <tt>"stdout"</tt>.
-ioPointType :: IOPoint -> String
-ioPointText :: IOPoint -> String
-ioPointFrom :: FilePath -> FilePath -> IOPoint
-
--- | Create I/O points from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [String] -> FilePath -> [FilePath] -> [IOPoint]
-data CodePiece
-CodePiece :: Int -> IOPoint -> CodePiece
-codeNumber :: CodePiece -> Int
-codeName :: CodePiece -> IOPoint
-
--- | Empty code.
-codeEmpty :: CodePiece
-
--- | Create text code.
-codeTextOf :: String -> CodePiece
-instance Typeable IOPoint
-instance Typeable CodePiece
-instance Show IOPoint
-instance Eq IOPoint
-instance Ord IOPoint
-instance Data IOPoint
-instance Show CodePiece
-instance Data CodePiece
-instance Ord CodePiece
-instance Eq CodePiece
-
-module Koshucode.Baala.Base.Text.CodePt
-data CodePt
-CodePt :: CodePiece -> Int -> String -> String -> CodePt
-
--- | Source of code
-codePtSource :: CodePt -> CodePiece
-
--- | Line number
-codePtLineNo :: CodePt -> Int
-
--- | Line content
-codePtLineText :: CodePt -> String
-
--- | Text at which begins token
-codePtText :: CodePt -> String
-
--- | Empty code point, i.e., empty content and zero line number.
-codePtZero :: CodePt
-
--- | Column number at which code starts.
-codePtColumnNo :: CodePt -> Int
-codePtDisplay :: (String, CodePt) -> [(String, String)]
-class CodePtr a where codePt p = headOr codePtZero $ codePtList p
-codePtList :: CodePtr a => a -> [CodePt]
-codePt :: CodePtr a => a -> CodePt
-data Sourced a
-Sourced :: [CodePt] -> a -> Sourced a
-source :: Sourced a -> [CodePt]
-unsourced :: Sourced a -> a
-instance Typeable CodePt
-instance Typeable Sourced
-instance Show CodePt
-instance Eq CodePt
-instance Data CodePt
-instance Show a => Show (Sourced a)
-instance Eq a => Eq (Sourced a)
-instance Ord a => Ord (Sourced a)
-instance Data a => Data (Sourced a)
-instance CodePtr (Sourced a)
-instance Functor Sourced
-instance CodePtr CodePt
-instance Ord CodePt
-
-
--- | Text table
-module Koshucode.Baala.Base.Text.TextTable
-data Position
-Front :: Position
-Middle :: Position
-Rear :: Position
-textPos :: String -> [Position]
-data Cell
-Cell :: [String] -> Int -> Int -> Position -> Char -> Cell
-cellText :: Cell -> [String]
-cellWidth :: Cell -> Int
-cellHeight :: Cell -> Int
-cellPos :: Cell -> Position
-cellPad :: Cell -> Char
-textTable :: [Position] -> [[String]] -> [[Cell]]
-textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
-textCell :: Position -> String -> Cell
-textRuleCell :: Char -> Cell
-textBlockCell :: Position -> [String] -> Cell
-textBlockCellPlus :: Int -> Position -> [String] -> Cell
-alignTable :: [[Cell]] -> [[Cell]]
-renderTable :: String -> [[Cell]] -> [String]
-instance Show Position
-instance Eq Position
-instance Ord Position
-instance Show Cell
-instance Eq Cell
-instance Ord Cell
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Order.OrderCap a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Order.OrderCap a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Order.OrderCap a)
 
 module Koshucode.Baala.Base.Text.Utility
 trimLeft :: Map String
@@ -738,6 +1140,7 @@ trimBoth :: Map String
 --   "abc       "
 --   </pre>
 padRight :: Int -> Map String
+padRightWith :: Char -> Int -> Map String
 
 -- | Add spaces to left.
 --   
@@ -746,9 +1149,10 @@ padRight :: Int -> Map String
 --   "       abc"
 --   </pre>
 padLeft :: Int -> Map String
+padLeftWith :: Char -> Int -> Map String
 stringWidth :: String -> Int
-putShow :: Show a => a -> IO ()
-putShowLn :: Show a => a -> IO ()
+putShow :: (Show a) => a -> IO ()
+putShowLn :: (Show a) => a -> IO ()
 putLines :: [String] -> IO ()
 hPutLines :: Handle -> [String] -> IO ()
 hPutEmptyLine :: Handle -> IO ()
@@ -760,22 +1164,337 @@ type UriText = String
 
 -- | Pair of protocol name and proxy URI.
 type HttpProxy = (String, Maybe UriText)
-uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
+uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
 httpExceptionSummary :: HttpException -> String
+
+
+-- | Mix text.
+module Koshucode.Baala.Base.Text.MixText
+
+-- | Text mixable string, text, and bytestring.
+data MixText
+class Mix a
+mix :: Mix a => a -> MixText
+
+-- | Create mix text from strict bytestring.
+mixBs :: ByteString -> MixText
+
+-- | Create mix text from lazy bytestring.
+mixBz :: ByteString -> MixText
+
+-- | Create mix text from strict text.
+mixTx :: Text -> MixText
+
+-- | Create mix text from lazy text.
+mixTz :: Text -> MixText
+
+-- | Create mix text from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
+--   MixText "abcdef"
+--   </pre>
+mixString :: String -> MixText
+
+-- | Create mix text from char.
+mixChar :: Char -> MixText
+
+-- | Put mix text to left edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
+--   MixText "abc......."
+--   </pre>
+mixLeft :: Char -> Int -> MixText -> MixText
+
+-- | Put mix text to right edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
+--   MixText ".......abc"
+--   </pre>
+mixRight :: Char -> Int -> MixText -> MixText
+
+-- | Create mix text of given-length spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
+--   MixText "|    |"
+--   </pre>
+mixSpace :: Int -> MixText
+
+-- | Empty space.
+mix0 :: MixText
+
+-- | One space.
+mix1 :: MixText
+
+-- | Two-length spaces.
+mix2 :: MixText
+
+-- | Three-length spaces.
+mix3 :: MixText
+
+-- | Four-length spaces.
+mix4 :: MixText
+
+-- | Mix text of octal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixOct (12 :: Int)
+--   MixText "14"
+--   </pre>
+mixOct :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDec (12 :: Int)
+--   MixText "12"
+--   </pre>
+mixDec :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of hexadecimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixHex (12 :: Int)
+--   MixText "c"
+--   </pre>
+mixHex :: (Integral n, Show n) => n -> MixText
+mixSign :: (Num n, Ord n) => n -> MixText
+
+-- | Zero-padding decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
+--   MixText "000123"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
+--   MixText "-00123"
+--   </pre>
+mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
+mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
+mixShow :: (Show a) => a -> MixText
+
+-- | Empty mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixEmpty
+--   MixText ""
+--   </pre>
+mixEmpty :: MixText
+
+-- | Soft line break, i.e., suppress at the beginning of line.
+mixSoft :: MixText
+
+-- | Hard line break, i.e., suppress only after auto line break.
+mixHard :: MixText
+
+-- | Convert mix text to lazy bytestring builder.
+mixToBuilder :: LineBreak -> MixText -> Builder
+
+-- | Convert mix text to lazy bytestring.
+mixToBz :: LineBreak -> MixText -> ByteString
+
+-- | Convert mix text to string.
+mixToString :: LineBreak -> MixText -> String
+
+-- | Print mix text to the standard output.
+putMix :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text and newline to the standard output.
+putMixLn :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text to the given output handler.
+hPutMix :: Handle -> LineBreak -> MixText -> IO ()
+
+-- | Print mix text and newline to the given output handler.
+hPutMixLn :: Handle -> LineBreak -> MixText -> IO ()
+
+-- | Print mix text lines to the standard output.
+putMixLines :: LineBreak -> [MixText] -> IO ()
+
+-- | Print mix text lines to the given output handler.
+hPutMixLines :: Handle -> LineBreak -> [MixText] -> IO ()
+instance GHC.Show.Show Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.MixText.MixText
+instance Data.Default.Class.Default Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Base.Monoid Koshucode.Baala.Base.Text.MixText.MixText
+instance Koshucode.Baala.Base.Text.MixText.Mix Data.ByteString.Internal.ByteString
+instance Koshucode.Baala.Base.Text.MixText.Mix Data.ByteString.Lazy.Internal.ByteString
+instance Koshucode.Baala.Base.Text.MixText.Mix Data.Text.Internal.Text
+instance Koshucode.Baala.Base.Text.MixText.Mix Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Base.String
+instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Types.Char
+instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Types.Int
+instance Koshucode.Baala.Base.Text.MixText.Mix [Koshucode.Baala.Base.Text.MixText.MixText]
+instance Koshucode.Baala.Base.Text.MixText.Mix ()
+
+module Koshucode.Baala.Base.List
+
+
+-- | I/O point: file, standard input, direct text, etc.
+module Koshucode.Baala.Base.Text.IOPoint
+
+-- | Named I/O handle.
+data NamedHandle
+NamedHandle :: String -> Handle -> NamedHandle
+
+-- | Name of handle
+[handleName] :: NamedHandle -> String
+
+-- | I/O handle
+[handle] :: NamedHandle -> Handle
+data IOPoint
+
+-- | Context directory and target path
+IOPointFile :: FilePath -> FilePath -> IOPoint
+
+-- | Universal resource identifier
+IOPointUri :: String -> IOPoint
+
+-- | Code itself
+IOPointText :: (Maybe String) -> Bz -> IOPoint
+
+-- | Custom I/O
+IOPointCustom :: String -> Bz -> IOPoint
+
+-- | Sandard input
+IOPointStdin :: IOPoint
+
+-- | Sandard output
+IOPointStdout :: IOPoint
+
+-- | Output handler
+IOPointOutput :: NamedHandle -> IOPoint
+
+-- | Name of I/O point, i.e., <tt>"file"</tt>, <tt>"url"</tt>,
+--   <tt>"text"</tt>, <tt>"stdin"</tt>, or <tt>"stdout"</tt>.
+ioPointType :: IOPoint -> String
+
+-- | Name of I/O point.
+ioPointText :: IOPoint -> String
+
+-- | Create I/O point.
+ioPointFrom :: FilePath -> FilePath -> IOPoint
+
+-- | Create I/O points from using stdin, texts itself, filenames, and urls.
+ioPointList :: Bool -> [Bz] -> FilePath -> [FilePath] -> [IOPoint]
+
+-- | Numbered I/O point.
+data NIOPoint
+NIOPoint :: Int -> IOPoint -> NIOPoint
+
+-- | Sequential number (0 for unnumbered, &gt; 0 for numbered)
+[nioNumber] :: NIOPoint -> Int
+
+-- | I/O point
+[nioPoint] :: NIOPoint -> IOPoint
+
+-- | Create input point for given lazy bytestring.
+nioFrom :: Bz -> NIOPoint
+instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.IOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.IOPoint
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.IOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.IOPoint
+instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.NamedHandle
+instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.NamedHandle
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.NamedHandle
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.NamedHandle
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+instance Data.Default.Class.Default Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+
+module Koshucode.Baala.Base.Text.CodePt
+data CodePt
+CodePt :: NIOPoint -> Int -> String -> String -> CodePt
+
+-- | Source of code
+[codePtSource] :: CodePt -> NIOPoint
+
+-- | Line number
+[codePtLineNo] :: CodePt -> Int
+
+-- | Line content
+[codePtLineText] :: CodePt -> String
+
+-- | Text at which begins token
+[codePtText] :: CodePt -> String
+
+-- | Column number at which code starts.
+codePtColumnNo :: CodePt -> Int
+codePtDisplay :: (String, CodePt) -> [(String, String)]
+class CodePtr a where codePt p = headNull def $ codePtList p
+codePtList :: CodePtr a => a -> [CodePt]
+codePt :: CodePtr a => a -> CodePt
+data Sourced a
+Sourced :: [CodePt] -> a -> Sourced a
+[source] :: Sourced a -> [CodePt]
+[unsourced] :: Sourced a -> a
+instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+instance Data.Data.Data Koshucode.Baala.Base.Text.CodePt.CodePt
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.CodePt.CodePt
+instance GHC.Show.Show Koshucode.Baala.Base.Text.CodePt.CodePt
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.CodePt.CodePt
+instance Data.Default.Class.Default Koshucode.Baala.Base.Text.CodePt.CodePt
+instance Koshucode.Baala.Base.Text.CodePt.CodePtr Koshucode.Baala.Base.Text.CodePt.CodePt
+instance GHC.Base.Functor Koshucode.Baala.Base.Text.CodePt.Sourced
+instance Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+
+
+-- | Text table
+module Koshucode.Baala.Base.Text.TextTable
+data Position
+Front :: Position
+Middle :: Position
+Rear :: Position
+textPos :: String -> [Position]
+data Cell
+Cell :: [String] -> Int -> Int -> Position -> Char -> Cell
+[cellText] :: Cell -> [String]
+[cellWidth] :: Cell -> Int
+[cellHeight] :: Cell -> Int
+[cellPos] :: Cell -> Position
+[cellPad] :: Cell -> Char
+textTable :: [Position] -> [[String]] -> [[Cell]]
+textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
+textCell :: Position -> String -> Cell
+textRuleCell :: Char -> Cell
+textBlockCell :: Position -> [String] -> Cell
+textBlockCellPlus :: Int -> Position -> [String] -> Cell
+alignTable :: [[Cell]] -> [[Cell]]
+renderTable :: String -> [[Cell]] -> [String]
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Position
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Position
+instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Position
 
 module Koshucode.Baala.Base.Text.Write
 
--- | Mapping from string to string.
-type StringMap = Map String
+-- | Convert string to short sign.
+type Shortener = String -> Maybe String
 
--- | Writer with string mapping.
+-- | Shortener which does not shorten strings.
+nullShortener :: Shortener
+
+-- | Writer with shortener.
 class Write a where writeStringWith sh a = show $ writeDocWith sh a writeHtmlWith sh a = toHtml $ writeStringWith sh a
-writeDocWith :: Write a => StringMap -> a -> Doc
-writeStringWith :: Write a => StringMap -> a -> String
-writeHtmlWith :: Write a => StringMap -> a -> Html
-writeDoc :: Write a => a -> Doc
-writeString :: Write a => a -> String
-writeHtml :: Write a => a -> Html
+writeDocWith :: Write a => Shortener -> a -> Doc
+writeStringWith :: Write a => Shortener -> a -> String
+writeHtmlWith :: Write a => Shortener -> a -> Html
+writeDoc :: (Write a) => a -> Doc
+writeString :: (Write a) => a -> String
+writeHtml :: (Write a) => a -> Html
 class ToMarkup a
 toMarkup :: ToMarkup a => a -> Markup
 toMarkup :: ToMarkup a => a -> Markup
@@ -786,27 +1505,27 @@ span :: Html -> Html
 span_ :: AttributeValue -> Map Html
 renderHtmlIndented :: Html -> String
 renderHtmlCompact :: Html -> String
-writeH :: Write a => StringMap -> [a] -> Doc
-writeV :: Write a => StringMap -> [a] -> Doc
-writeColon :: Write a => StringMap -> [a] -> Doc
-writeBar :: Write a => StringMap -> [a] -> Doc
-writeSep :: Write a => String -> StringMap -> [a] -> Doc
-writeSepsWith :: Write a => (a -> Doc) -> String -> [a] -> [Doc]
+writeH :: (Write a) => Shortener -> [a] -> Doc
+writeV :: (Write a) => Shortener -> [a] -> Doc
+writeColon :: (Write a) => Shortener -> [a] -> Doc
+writeBar :: (Write a) => Shortener -> [a] -> Doc
+writeSep :: (Write a) => String -> Shortener -> [a] -> Doc
+writeSepsWith :: (Write a) => (a -> Doc) -> String -> [a] -> [Doc]
 writeTerm :: (a -> Doc) -> Named a -> Doc
 writeTerms :: (a -> Doc) -> [Named a] -> Doc
-doc :: Write a => a -> Doc
-doch :: Write a => [a] -> Doc
-docv :: Write a => [a] -> Doc
-docWrap :: Write a => String -> String -> a -> Doc
-docWraps :: Write a => String -> String -> a -> Doc
+doc :: (Write a) => a -> Doc
+doch :: (Write a) => [a] -> Doc
+docv :: (Write a) => [a] -> Doc
+docWrap :: (Write a) => String -> String -> a -> Doc
+docWraps :: (Write a) => String -> String -> a -> Doc
 doc02 :: Int -> Doc
 docConcat :: String -> Bin Doc
-instance Write a => Write (Named a)
-instance Write Bool
-instance Write String
-instance Write Integer
-instance Write Int
-instance Write Doc
+instance Koshucode.Baala.Base.Text.Write.Write Text.PrettyPrint.HughesPJ.Doc
+instance Koshucode.Baala.Base.Text.Write.Write GHC.Types.Int
+instance Koshucode.Baala.Base.Text.Write.Write GHC.Integer.Type.Integer
+instance Koshucode.Baala.Base.Text.Write.Write GHC.Base.String
+instance Koshucode.Baala.Base.Text.Write.Write GHC.Types.Bool
+instance Koshucode.Baala.Base.Text.Write.Write a => Koshucode.Baala.Base.Text.Write.Write (Koshucode.Baala.Base.Prelude.Class.Named a)
 
 module Koshucode.Baala.Base.Text
 
@@ -817,16 +1536,16 @@ data AbortReason
 AbortReason :: String -> [String] -> [String] -> [(String, CodePt)] -> AbortReason
 
 -- | Reason in one line
-abortReason :: AbortReason -> String
+[abortReason] :: AbortReason -> String
 
 -- | Detailed description
-abortDetail :: AbortReason -> [String]
+[abortDetail] :: AbortReason -> [String]
 
 -- | Additional notes for long description
-abortNote :: AbortReason -> [String]
+[abortNote] :: AbortReason -> [String]
 
 -- | Tag and aborting point
-abortPoint :: AbortReason -> [(String, CodePt)]
+[abortPoint] :: AbortReason -> [(String, CodePt)]
 
 -- | Abortable result, i.e., either of right result or abort reason.
 type Ab a = Either AbortReason a
@@ -836,6 +1555,9 @@ type AbMap a = a -> Ab a
 type AbManyMap a = a -> Ab [a]
 type AbPred a = a -> Ab Bool
 type IOAb a = IO (Ab a)
+
+-- | Type for abortable binary operators.
+type BinAb a = a -> a -> Ab a
 
 -- | Construct abort reason with reason text.
 abortBecause :: String -> AbortReason
@@ -848,17 +1570,17 @@ abortLines :: String -> [String] -> AbortReason
 
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
-instance Show AbortReason
-instance Eq AbortReason
-instance Ord AbortReason
-instance ToMarkup AbortReason
+instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.Reason.AbortReason
+instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
+instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
+instance Text.Blaze.ToMarkup Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
 -- | Abortable process
 module Koshucode.Baala.Base.Abort.Abortable
 
 -- | Push source information when process is aborted.
-abortable :: CodePtr p => String -> [p] -> Map (Ab b)
+abortable :: (CodePtr p) => String -> [p] -> Map (Ab b)
 abortableSourced :: String -> (a -> Ab b) -> Sourced a -> Ab (Sourced b)
 
 
@@ -896,7 +1618,7 @@ bug :: String -> Ab a
 unsupported :: String -> Ab a
 
 module Koshucode.Baala.Base.Syntax.Message
-abCode :: CodePtr cp => [cp] -> Map (Ab b)
+abCode :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Extra close bracket
 extraCloseBracket :: Ab a
@@ -921,30 +1643,41 @@ linesCrlfNumbered :: String -> [NumberedLine]
 
 -- | Split string into lines. The result strings do not contain carriage
 --   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
+--   
+--   <pre>
+--   &gt;&gt;&gt; linesCrlf "aaa\nbbb\r\nccc\n\nddd\n"
+--   ["aaa","bbb","ccc","","ddd"]
+--   </pre>
 linesCrlf :: String -> [String]
-linesFrom :: Show a => a -> [String]
+linesFrom :: (Show a) => a -> [String]
+linesCrlfBzNumbered :: Bz -> [NumberedLine]
+linesCrlfBz :: Bz -> [Bz]
+linesCrlfBzString :: Bz -> [String]
+
+-- | Remove UTF-8 BOM (EF BB BF) from lazy ByteString.
+dropBom :: Bz -> Bz
 
 -- | Tokens in line.
 data CodeLine a
 CodeLine :: LineNumber -> String -> [a] -> CodeLine a
 
 -- | Line number, from 1.
-lineNumber :: CodeLine a -> LineNumber
+[lineNumber] :: CodeLine a -> LineNumber
 
 -- | Line content without newline.
-lineContent :: CodeLine a -> String
+[lineContent] :: CodeLine a -> String
 
 -- | Tokens in the line.
-lineTokens :: CodeLine a -> [a]
+[lineTokens] :: CodeLine a -> [a]
 type IndentSize = Int
 lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
 data CodeRoll a
 CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> WordTable -> CodeRoll a
-codeMap :: CodeRoll a -> AbMap (CodeRoll a)
-codeInputPt :: CodeRoll a -> CodePt
-codeInput :: CodeRoll a -> String
-codeOutput :: CodeRoll a -> [a]
-codeWords :: CodeRoll a -> WordTable
+[codeMap] :: CodeRoll a -> AbMap (CodeRoll a)
+[codeInputPt] :: CodeRoll a -> CodePt
+[codeInput] :: CodeRoll a -> String
+[codeOutput] :: CodeRoll a -> [a]
+[codeWords] :: CodeRoll a -> WordTable
 type WordTable = Map String String
 
 -- | Split source text into <a>CodeLine</a> list.
@@ -958,7 +1691,8 @@ type WordTable = Map String String
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
 --   </ol>
-codeRollUp :: AbMap (CodeRoll a) -> CodePiece -> String -> Ab [CodeLine a]
+codeRollUp :: AbMap (CodeRoll a) -> NIOPoint -> String -> Ab [CodeLine a]
+codeRollUpBz :: AbMap (CodeRoll a) -> NIOPoint -> Bz -> Ab [CodeLine a]
 
 -- | Update <a>codeInput</a> and push result element to <a>codeOutput</a>.
 codeUpdate :: String -> a -> Map (CodeRoll a)
@@ -966,13 +1700,12 @@ codeUpdateWords :: WordTable -> String -> a -> Map (CodeRoll a)
 
 -- | Change mapper of code roll.
 codeChange :: AbMap (CodeRoll a) -> Map (CodeRoll a)
-instance Typeable CodeLine
-instance Show a => Show (CodeLine a)
-instance Eq a => Eq (CodeLine a)
-instance Ord a => Ord (CodeLine a)
-instance Data a => Data (CodeLine a)
-instance CodePtr a => CodePtr (CodeLine a)
-instance Write (CodeLine a)
+instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance Koshucode.Baala.Base.Text.Write.Write (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance Koshucode.Baala.Base.Text.CodePt.CodePtr a => Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -986,18 +1719,17 @@ data CodeClause a
 CodeClause :: [CodeLine a] -> [a] -> CodeClause a
 
 -- | Source lines of clause
-clauseLines :: CodeClause a -> [CodeLine a]
+[clauseLines] :: CodeClause a -> [CodeLine a]
 
 -- | Source tokens of clause
-clauseTokens :: CodeClause a -> [a]
+[clauseTokens] :: CodeClause a -> [a]
 
 -- | Clause with no tokens.
 codeClauseEmpty :: CodeClause a
 splitClause :: Gather [(IndentSize, a)] [a]
-instance Typeable CodeClause
-instance Show a => Show (CodeClause a)
-instance Data a => Data (CodeClause a)
-instance CodePtr a => CodePtr (CodeClause a)
+instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
+instance Koshucode.Baala.Base.Text.CodePt.CodePtr a => Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
 
 module Koshucode.Baala.Base.Syntax.Tree
 
@@ -1066,18 +1798,16 @@ type GetBracketType p a = a -> Bracket p
 --   &gt;&gt;&gt; map pt "ab(cd[ef])g"
 --   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --   </pre>
-bracketTable :: Eq a => [(p, Pred a, Pred a)] -> GetBracketType p a
-instance Typeable CodeTree
-instance Typeable Bracket
-instance (Show p, Show a) => Show (CodeTree p a)
-instance (Eq p, Eq a) => Eq (CodeTree p a)
-instance (Ord p, Ord a) => Ord (CodeTree p a)
-instance (Data p, Data a) => Data (CodeTree p a)
-instance Show p => Show (Bracket p)
-instance Eq p => Eq (Bracket p)
-instance Ord p => Ord (Bracket p)
-instance Data p => Data (Bracket p)
-instance Functor (CodeTree p)
+bracketTable :: (Eq a) => [(p, Pred a, Pred a)] -> GetBracketType p a
+instance Data.Data.Data p => Data.Data.Data (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
+instance GHC.Classes.Ord p => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
+instance GHC.Classes.Eq p => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
+instance GHC.Show.Show p => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
+instance (Data.Data.Data p, Data.Data.Data a) => Data.Data.Data (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
+instance (GHC.Classes.Ord p, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
+instance (GHC.Classes.Eq p, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
+instance (GHC.Show.Show p, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
+instance GHC.Base.Functor (Koshucode.Baala.Base.Syntax.Tree.CodeTree p)
 
 
 -- | Convert infixed-operator trees into prefixed-operator trees.
@@ -1103,7 +1833,7 @@ module Koshucode.Baala.Base.Syntax.Infix
 type InfixHeight = Either Int Int
 
 -- | Make the height function from a height table of operators.
-infixHeight :: Ord b => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
+infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
 
 -- | Split branches in a given tree at infixed binary operators.
 infixToPrefix :: (Map a, Map a, Map a) -> (a -> InfixHeight) -> Collect (InfixTree p a) -> InfixMapper p a -> InfixAbMap a (CodeTree p a)

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.146.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Inferred</td
+	    >Safe</td
 	    ></tr
 	  ><tr
 	  ><th
@@ -57,19 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Uniqueness</a
+	    >List</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Construct</a
+	    >Take</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Map</a
+	    >Uniqueness</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Divide</a
+	    >Construct</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Map</a
 	    ></li
 	  ></ul
 	></div
@@ -78,43 +82,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:headOr"
-	    >headOr</a
-	    > ::  a -&gt; [a] -&gt; a</li
-	  ><li class="src short"
-	  ><a href="#v:front"
-	    >front</a
-	    > ::  [a] -&gt; [a]</li
-	  ><li class="src short"
 	  ><a href="#v:tails"
 	    >tails</a
-	    > ::  [a] -&gt; [[a]]</li
+	    > :: [a] -&gt; [[a]]</li
 	  ><li class="src short"
 	  ><a href="#v:isSingleton"
 	    >isSingleton</a
-	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:notNull"
 	    >notNull</a
-	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:maybeEmpty"
 	    >maybeEmpty</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; (a -&gt; [b]) -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:right"
 	    >right</a
-	    > ::  b -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: b -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 	    >Either</a
 	    > a b)</li
+	  ><li class="src short"
+	  ><a href="#v:takeFirst"
+	    >takeFirst</a
+	    > :: [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeLast"
+	    >takeLast</a
+	    > :: [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeOdd"
+	    >takeOdd</a
+	    > :: [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeEven"
+	    >takeEven</a
+	    > :: [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeFill"
+	    >takeFill</a
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:takeTailFill"
+	    >takeTailFill</a
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:duplicates"
 	    >duplicates</a
@@ -140,21 +164,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
 	  ><li class="src short"
+	  ><a href="#v:setList"
+	    >setList</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:setEq"
+	    >setEq</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:li1"
 	    >li1</a
-	    > ::  a -&gt; [a]</li
+	    > :: a -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:li2"
 	    >li2</a
-	    > ::  a -&gt; a -&gt; [a]</li
+	    > :: a -&gt; a -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:li3"
 	    >li3</a
-	    > ::  a -&gt; a -&gt; a -&gt; [a]</li
+	    > :: a -&gt; a -&gt; a -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:consIf"
 	    >consIf</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > -&gt; a -&gt; [a] -&gt; [a]</li
 	  ><li class="src short"
@@ -176,27 +214,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:zipMaybe"
 	    >zipMaybe</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [b] -&gt; [(a, b)]</li
 	  ><li class="src short"
 	  ><a href="#v:zipMaybe2"
 	    >zipMaybe2</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [b] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:map2"
 	    >map2</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
 	    >Functor</a
-	    > f, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    > f, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
 	    >Functor</a
 	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b)</li
 	  ><li class="src short"
 	  ><a href="#v:mapAt"
 	    >mapAt</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -206,11 +244,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:mapWithLast"
 	    >mapWithLast</a
-	    > ::  (a -&gt; b) -&gt; (a -&gt; b) -&gt; [a] -&gt; [b]</li
+	    > :: (a -&gt; b) -&gt; (a -&gt; b) -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:omit"
 	    >omit</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -218,7 +256,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:filterFst"
 	    >filterFst</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -226,7 +264,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:squeeze"
 	    >squeeze</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -242,107 +280,71 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><a href="#v:reverseMap"
 	    >reverseMap</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [a]</li
-	  ><li class="src short"
-	  ><a href="#v:chunks"
-	    >chunks</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; [a] -&gt; [[a]]</li
-	  ><li class="src short"
-	  ><a href="#v:splitBy"
-	    >splitBy</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >) -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > [a] ([a], a, [a])</li
-	  ><li class="src short"
-	  ><a href="#v:divide"
-	    >divide</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; a -&gt; [a] -&gt; [[a]]</li
-	  ><li class="src short"
-	  ><a href="#v:divideBy"
-	    >divideBy</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >) -&gt; [a] -&gt; [[a]]</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:headOr" class="def"
-	    >headOr</a
-	    > ::  a -&gt; [a] -&gt; a <a href="src/Koshucode-Baala-Base-Prelude-List.html#headOr" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:front" class="def"
-	    >front</a
-	    > ::  [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#front" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Head or empty.</p
-	    ></div
-	  ></div
+      ><h1 id="g:1"
+	>List</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tails" class="def"
 	    >tails</a
-	    > ::  [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-List.html#tails" class="link"
+	    > :: [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-List.html#tails" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Tails of list.</p
+	    >Tails of list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tails &quot;abc&quot;
+</code
+		></strong
+	      >[&quot;abc&quot;, &quot;bc&quot;, &quot;c&quot;]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:isSingleton" class="def"
 	    >isSingleton</a
-	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > <a href="src/Koshucode-Baala-Base-Prelude-List.html#isSingleton" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test list has single element.</p
+	    >Test list has single element.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:notNull" class="def"
 	    >notNull</a
-	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > <a href="src/Koshucode-Baala-Base-Prelude-List.html#notNull" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test list is not empty.</p
+	    >Test list is not empty.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:maybeEmpty" class="def"
 	    >maybeEmpty</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a -&gt; (a -&gt; [b]) -&gt; [b] <a href="src/Koshucode-Baala-Base-Prelude-List.html#maybeEmpty" class="link"
 	    >Source</a
@@ -352,7 +354,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:right" class="def"
 	    >right</a
-	    > ::  b -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: b -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 	    >Either</a
@@ -360,44 +362,180 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Source</a
 	    ></p
 	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
-	    ></p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >front &quot;abc&quot;
+	><h1 id="g:2"
+	>Take</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeFirst" class="def"
+	    >takeFirst</a
+	    > :: [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeFirst" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take first element; if empty list is given, returns empty list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeFirst &quot;abc&quot;
 </code
-	      ></strong
-	    >&quot;a&quot;
+		></strong
+	      >&quot;a&quot;
 </pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >front &quot;&quot;
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeFirst &quot;&quot;
 </code
-	      ></strong
-	    >&quot;&quot;
+		></strong
+	      >&quot;&quot;
 </pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >tails &quot;abc&quot;
-</code
-	      ></strong
-	    >[&quot;abc&quot;, &quot;bc&quot;, &quot;c&quot;]
-</pre
+	    ></div
 	  ></div
-	><h1 id="g:1"
-	>Uniqueness</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeLast" class="def"
+	    >takeLast</a
+	    > :: [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeLast" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take last element; if empty list is given, returns empty list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeLast &quot;abc&quot;
+</code
+		></strong
+	      >&quot;c&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeOdd" class="def"
+	    >takeOdd</a
+	    > :: [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeOdd" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take elements at odd positions, i.e., first, third, ...</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeOdd &quot;abcdeft&quot;
+</code
+		></strong
+	      >&quot;acet&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeEven" class="def"
+	    >takeEven</a
+	    > :: [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeEven" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take elements at even positions. i.e., second, fourth, ...</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeEven &quot;abcdeft&quot;
+</code
+		></strong
+	      >&quot;bdf&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeFill" class="def"
+	    >takeFill</a
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeFill" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take <em
+	      >N</em
+	      > elements with filler.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeFill 0 3 [0 .. 8]
+</code
+		></strong
+	      >  [0,1,2]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeFill 0 5 [6 .. 8]
+</code
+		></strong
+	      >  [6,7,8,0,0]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:takeTailFill" class="def"
+	    >takeTailFill</a
+	    > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#takeTailFill" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take tail-side <em
+	      >N</em
+	      > elements with filler.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeTailFill 0 3 [0 .. 8]
+</code
+		></strong
+	      >  [6,7,8]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>takeTailFill 0 5 [6 .. 8]
+</code
+		></strong
+	      >  [0,0,6,7,8]
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Uniqueness</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:duplicates" class="def"
@@ -409,7 +547,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Keep duplicate elements.</p
+	    >Keep duplicate elements.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -423,7 +561,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Remove duplicate elements.</p
+	    >Remove duplicate elements.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -437,7 +575,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Union list to base list.</p
+	    >Union list to base list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -450,11 +588,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Source</a
 	    ></p
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:setList" class="def"
+	    >setList</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#setList" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to set-like list, in other words,
+   remove duplicate elements and sort list.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:setEq" class="def"
+	    >setEq</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-List.html#setEq" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set-like equality, in other words, 
+   duplication and ordering are ignored.</p
+	    ></div
+	  ></div
 	><div class="doc"
 	><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -496,25 +666,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >&quot;cdeab&quot;
 </pre
 	  ></div
-	><h1 id="g:2"
-	>Construct</h1
+	><h1 id="g:4"
+	>Construct</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:li1" class="def"
 	    >li1</a
-	    > ::  a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li1" class="link"
+	    > :: a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li1" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make singleton list.</p
+	    >Make singleton list.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:li2" class="def"
 	    >li2</a
-	    > ::  a -&gt; a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li2" class="link"
+	    > :: a -&gt; a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -522,7 +692,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:li3" class="def"
 	    >li3</a
-	    > ::  a -&gt; a -&gt; a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li3" class="link"
+	    > :: a -&gt; a -&gt; a -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#li3" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -530,7 +700,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:consIf" class="def"
 	    >consIf</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > -&gt; a -&gt; [a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Prelude-List.html#consIf" class="link"
 	    >Source</a
@@ -564,7 +734,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:zipMaybe" class="def"
 	    >zipMaybe</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [b] -&gt; [(a, b)] <a href="src/Koshucode-Baala-Base-Prelude-List.html#zipMaybe" class="link"
 	    >Source</a
@@ -574,21 +744,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:zipMaybe2" class="def"
 	    >zipMaybe2</a
-	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [b] -&gt; [b] <a href="src/Koshucode-Baala-Base-Prelude-List.html#zipMaybe2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:3"
-	>Map</h1
+	><h1 id="g:5"
+	>Map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:map2" class="def"
 	    >map2</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
 	    >Functor</a
-	    > f, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    > f, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Functor.html#t:Functor"
 	    >Functor</a
 	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b) <a href="src/Koshucode-Baala-Base-Prelude-List.html#map2" class="link"
 	    >Source</a
@@ -598,7 +768,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:mapAt" class="def"
 	    >mapAt</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -612,7 +782,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:mapWithLast" class="def"
 	    >mapWithLast</a
-	    > ::  (a -&gt; b) -&gt; (a -&gt; b) -&gt; [a] -&gt; [b] <a href="src/Koshucode-Baala-Base-Prelude-List.html#mapWithLast" class="link"
+	    > :: (a -&gt; b) -&gt; (a -&gt; b) -&gt; [a] -&gt; [b] <a href="src/Koshucode-Baala-Base-Prelude-List.html#mapWithLast" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -620,7 +790,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:omit" class="def"
 	    >omit</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -632,7 +802,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:filterFst" class="def"
 	    >filterFst</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -644,7 +814,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:squeeze" class="def"
 	    >squeeze</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -668,7 +838,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:reverseMap" class="def"
 	    >reverseMap</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -676,126 +846,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:4"
-	>Divide</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:chunks" class="def"
-	    >chunks</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-List.html#chunks" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:splitBy" class="def"
-	    >splitBy</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >) -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > [a] ([a], a, [a]) <a href="src/Koshucode-Baala-Base-Prelude-List.html#splitBy" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Split list by predicate.
-   If list contains an element that satisfies the predicate,
-   <code
-	      >(<em
-		>before-list</em
-		>, <em
-		>the-element</em
-		>, <em
-		>after-list</em
-		>)</code
-	      > is returned.
-   Otherwise, original list is returned.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:divide" class="def"
-	    >divide</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; a -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-List.html#divide" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Divide list.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:divideBy" class="def"
-	    >divideBy</a
-	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >) -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-List.html#divideBy" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Divide list.</p
-	    ></div
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
-	    ></p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >splitBy (== '|') &quot;b c&quot;
-</code
-	      ></strong
-	    >Left &quot;b c&quot;
-</pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >splitBy (== '|') &quot;a | b | c&quot;
-</code
-	      ></strong
-	    >Right (&quot;a &quot;, '|', &quot; b | c&quot;)
-</pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >divide '|' &quot;a|bb||ccc|&quot;
-</code
-	      ></strong
-	    >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
-</pre
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >divideBy (== '|') &quot;a|bb||ccc|&quot;
-</code
-	      ></strong
-	    >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
-</pre
-	  ></div
 	></div
       ></div
     ><div id="footer"
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

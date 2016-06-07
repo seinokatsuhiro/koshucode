@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.123.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,19 +57,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Class</a
+	    >Class</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Html</a
+	    >Html</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Derivative</a
+	    >Derivative</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Simple writer</a
+	    >Simple writer</a
 	    ></li
 	  ></ul
 	></div
@@ -80,12 +80,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:StringMap"
-	    >StringMap</a
-	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
+	    > <a href="#t:Shortener"
+	    >Shortener</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nullShortener"
+	    >nullShortener</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -98,24 +106,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><li
 	      ><a href="#v:writeDocWith"
 		>writeDocWith</a
-		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-		>StringMap</a
+		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+		>Shortener</a
 		> -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 		>Doc</a
 		></li
 	      ><li
 	      ><a href="#v:writeStringWith"
 		>writeStringWith</a
-		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-		>StringMap</a
+		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+		>Shortener</a
 		> -&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		></li
 	      ><li
 	      ><a href="#v:writeHtmlWith"
 		>writeHtmlWith</a
-		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-		>StringMap</a
+		> :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+		>Shortener</a
 		> -&gt; a -&gt; Html</li
 	      ></ul
 	    ></li
@@ -204,8 +212,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeH</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
@@ -214,8 +222,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeV</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
@@ -224,8 +232,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeColon</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
@@ -234,8 +242,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeBar</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
@@ -246,8 +254,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Write</a
 	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
@@ -266,7 +274,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:writeTerm"
 	    >writeTerm</a
-	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    > :: (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
@@ -276,7 +284,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:writeTerms"
 	    >writeTerms</a
-	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    > :: (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    >) -&gt; [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
@@ -344,7 +352,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >docConcat</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    > -&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
 	    >Bin</a
 	    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
@@ -353,23 +361,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Class</h1
+	>Class</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:StringMap" class="def"
-	    >StringMap</a
-	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
+	    > <a name="t:Shortener" class="def"
+	    >Shortener</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#StringMap" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#Shortener" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Mapping from string to string.</p
+	    >Convert string to short sign.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nullShortener" class="def"
+	    >nullShortener</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
+	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#nullShortener" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Shortener which does not shorten strings.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -385,7 +409,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Writer with string mapping.</p
+	    >Writer with shortener.</p
 	    ></div
 	  ><div class="subs minimal"
 	  ><p class="caption"
@@ -401,8 +425,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><p class="src"
 	    ><a name="v:writeDocWith" class="def"
 	      >writeDocWith</a
-	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	      >StringMap</a
+	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	      >Shortener</a
 	      > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	      >Doc</a
 	      > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeDocWith" class="link"
@@ -411,8 +435,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><p class="src"
 	    ><a name="v:writeStringWith" class="def"
 	      >writeStringWith</a
-	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	      >StringMap</a
+	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	      >Shortener</a
 	      > -&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	      >String</a
 	      > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeStringWith" class="link"
@@ -421,8 +445,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><p class="src"
 	    ><a name="v:writeHtmlWith" class="def"
 	      >writeHtmlWith</a
-	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	      >StringMap</a
+	      > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	      >Shortener</a
 	      > -&gt; a -&gt; Html <a href="src/Koshucode-Baala-Base-Text-Write.html#writeHtmlWith" class="link"
 	      >Source</a
 	      ></p
@@ -433,74 +457,102 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:Write" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		    >Bool</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		      >Bool</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-81" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		    >Int</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		      >Int</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-72" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
-		    >Integer</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
+		      >Integer</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-75" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		    >String</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-78" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
-		    >Doc</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+		      >Doc</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-69" class="link"
+		    >Source</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-		    >Named</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		      >Named</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-85" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
-		    >CodeLine</a
-		    > a)</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		      >Write</a
+		      > (<a href="Koshucode-Baala-Base-Syntax-Line.html#t:CodeLine"
+		      >CodeLine</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-Text-Write.html#line-112" class="link"
+		    >Source</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -543,7 +595,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Html</h1
+	>Html</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -567,164 +619,198 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><div id="section.i:ToMarkup" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		    >Bool</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		      >Bool</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-		    >Char</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+		      >Char</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Double"
-		    >Double</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Double"
+		      >Double</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Float"
-		    >Float</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Float"
+		      >Float</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		    >Int</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		      >Int</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int32"
-		    >Int32</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int32"
+		      >Int32</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int64"
-		    >Int64</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int64"
+		      >Int64</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
-		    >Integer</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
+		      >Integer</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word"
-		    >Word</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word"
+		      >Word</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word32"
-		    >Word32</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word32"
+		      >Word32</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word64"
-		    >Word64</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Word.html#t:Word64"
+		      >Word64</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		    >String</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		      >String</a
+		      ></span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > Text</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > Text</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > Markup</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-		    >AbortReason</a
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > Text</span
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
-		    >ToMarkup</a
-		    > [Markup]</td
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > Text</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > Markup</span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+		      >AbortReason</a
+		      ></span
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Text-Write.html#t:ToMarkup"
+		      >ToMarkup</a
+		      > [Markup]</span
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -801,15 +887,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ></div
 	><h1 id="g:3"
-	>Derivative</h1
+	>Derivative</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:writeH" class="def"
 	    >writeH</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeH" class="link"
@@ -822,8 +908,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeV</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeV" class="link"
@@ -836,8 +922,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeColon</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeColon" class="link"
@@ -850,8 +936,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >writeBar</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 	    >Write</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeBar" class="link"
@@ -866,8 +952,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Write</a
 	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
-	    >StringMap</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Shortener"
+	    >Shortener</a
 	    > -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    > <a href="src/Koshucode-Baala-Base-Text-Write.html#writeSep" class="link"
@@ -894,7 +980,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:writeTerm" class="def"
 	    >writeTerm</a
-	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    > :: (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
@@ -908,7 +994,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:writeTerms" class="def"
 	    >writeTerms</a
-	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    > :: (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    >) -&gt; [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
@@ -922,9 +1008,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><p
-	  >Colon-seperated document.</p
+	  >Colon-seperated document.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -936,7 +1022,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >&lt;1&gt; : &lt;0&gt;
 </pre
 	  ><p
-	  >List of terms.</p
+	  >List of terms.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -949,7 +1035,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </pre
 	  ></div
 	><h1 id="g:4"
-	>Simple writer</h1
+	>Simple writer</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:doc" class="def"
@@ -1036,7 +1122,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >docConcat</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    > -&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
 	    >Bin</a
 	    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
@@ -1051,13 +1137,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >doc</code
 	    > is equivalent for <code
 	    >write id</code
-	    >.</p
+	    >.</p
 	  ><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><p
-	  >Wrap in open and close brackets.</p
+	  >Wrap in open and close brackets.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -1069,7 +1155,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >[abc]
 </pre
 	  ><p
-	  >Put spaces between content and brackets.</p
+	  >Put spaces between content and brackets.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -1087,7 +1173,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

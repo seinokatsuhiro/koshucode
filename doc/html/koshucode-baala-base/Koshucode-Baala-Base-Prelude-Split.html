@@ -1,0 +1,610 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Prelude.Split</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Prelude-Split.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-Prelude-Split.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.146.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Prelude.Split</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Split</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Divide</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Split lists.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Split1"
+	    >Split1</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SplitList1"
+	    >SplitList1</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split1"
+	    >Split1</a
+	    > [] a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Split2"
+	    >Split2</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, t a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SplitList2"
+	    >SplitList2</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split2"
+	    >Split2</a
+	    > [] a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Split3e"
+	    >Split3e</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, a, t a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SplitList3e"
+	    >SplitList3e</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split3e"
+	    >Split3e</a
+	    > [] a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Split3"
+	    >Split3</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, t a, t a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SplitList3"
+	    >SplitList3</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split3"
+	    >Split3</a
+	    > [] a</li
+	  ><li class="src short"
+	  ><a href="#v:dropSubBy"
+	    >dropSubBy</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList2"
+	    >SplitList2</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList1"
+	    >SplitList1</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:dropSub"
+	    >dropSub</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList1"
+	    >SplitList1</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:splitSubBy"
+	    >splitSubBy</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList2"
+	    >SplitList2</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3"
+	    >SplitList3</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:splitSub"
+	    >splitSub</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3"
+	    >SplitList3</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:splitBy"
+	    >splitBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3e"
+	    >SplitList3e</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:chunks"
+	    >chunks</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [[a]]</li
+	  ><li class="src short"
+	  ><a href="#v:divide"
+	    >divide</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; a -&gt; [a] -&gt; [[a]]</li
+	  ><li class="src short"
+	  ><a href="#v:divideBy"
+	    >divideBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]]</li
+	  ><li class="src short"
+	  ><a href="#v:wordsBy"
+	    >wordsBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Split1" class="def"
+	    >Split1</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a) <a href="src/Koshucode-Baala-Base-Prelude-Split.html#Split1" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split elements into subelements.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SplitList1" class="def"
+	    >SplitList1</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split1"
+	    >Split1</a
+	    > [] a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#SplitList1" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list into sublist.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Split2" class="def"
+	    >Split2</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, t a) <a href="src/Koshucode-Baala-Base-Prelude-Split.html#Split2" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split elements into two subelements.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SplitList2" class="def"
+	    >SplitList2</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split2"
+	    >Split2</a
+	    > [] a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#SplitList2" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list into two sublists.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Split3e" class="def"
+	    >Split3e</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, a, t a) <a href="src/Koshucode-Baala-Base-Prelude-Split.html#Split3e" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split elements into before-elem-after parts.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SplitList3e" class="def"
+	    >SplitList3e</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split3e"
+	    >Split3e</a
+	    > [] a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#SplitList3e" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list into before-elem-after parts.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Split3" class="def"
+	    >Split3</a
+	    > t a = t a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (t a, t a, t a) <a href="src/Koshucode-Baala-Base-Prelude-Split.html#Split3" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split elements into three subelements.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SplitList3" class="def"
+	    >SplitList3</a
+	    > a = <a href="Koshucode-Baala-Base-Prelude-Split.html#t:Split3"
+	    >Split3</a
+	    > [] a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#SplitList3" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list into three sublists.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Split</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dropSubBy" class="def"
+	    >dropSubBy</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList2"
+	    >SplitList2</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList1"
+	    >SplitList1</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#dropSubBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Drop sublist.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dropSub" class="def"
+	    >dropSub</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList1"
+	    >SplitList1</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#dropSub" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Drop prefix part from a list.
+   This function is similar to <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:stripPrefix"
+		>stripPrefix</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dropSub &quot;abc&quot; &quot;abcdefghi&quot;
+</code
+		></strong
+	      >Just &quot;defghi&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dropSub &quot;&quot; &quot;abcdefghi&quot;
+</code
+		></strong
+	      >Just &quot;abcdefghi&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dropSub &quot;xyz&quot; &quot;abcdefghi&quot;
+</code
+		></strong
+	      >Nothing
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:splitSubBy" class="def"
+	    >splitSubBy</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList2"
+	    >SplitList2</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3"
+	    >SplitList3</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#splitSubBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list by given predicate.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:splitSub" class="def"
+	    >splitSub</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3"
+	    >SplitList3</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#splitSub" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list by given sublist.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitSub &quot;def&quot; &quot;abcdefghi&quot;
+</code
+		></strong
+	      >Just (&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitSub &quot;&quot; &quot;abcdefghi&quot;
+</code
+		></strong
+	      >  Just (&quot;&quot;,&quot;&quot;,&quot;abcdefghi&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:splitBy" class="def"
+	    >splitBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Split.html#t:SplitList3e"
+	    >SplitList3e</a
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Split.html#splitBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split list by predicate.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitBy (== '|') &quot;b c&quot;
+</code
+		></strong
+	      >Left &quot;b c&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitBy (== '|') &quot;a | b | c&quot;
+</code
+		></strong
+	      >Right (&quot;a &quot;, '|', &quot; b | c&quot;)
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Divide</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:chunks" class="def"
+	    >chunks</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-Split.html#chunks" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide list into sublists of given length.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>chunks 2 &quot;abcdefg&quot;
+</code
+		></strong
+	      >[&quot;ab&quot;,&quot;cd&quot;,&quot;ef&quot;,&quot;g&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divide" class="def"
+	    >divide</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; a -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-Split.html#divide" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>divide '|' &quot;a|bb||ccc|&quot;
+</code
+		></strong
+	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideBy" class="def"
+	    >divideBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-Split.html#divideBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>divideBy (== '|') &quot;a|bb||ccc|&quot;
+</code
+		></strong
+	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:wordsBy" class="def"
+	    >wordsBy</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]] <a href="src/Koshucode-Baala-Base-Prelude-Split.html#wordsBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide string into words.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>wordsBy (== '|') &quot;a|bb||ccc|&quot;
+</code
+		></strong
+	      >[&quot;a&quot;,&quot;bb&quot;,&quot;ccc&quot;]
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
