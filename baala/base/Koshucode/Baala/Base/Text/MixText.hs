@@ -206,9 +206,8 @@ hPutMix h lb = B.hPutBuilder h . mixToBuilder lb
 
 mixToBuilder :: B.LineBreak -> MixText -> B.Builder
 mixToBuilder lb mx =
-    case mixBuild lb mx (BW mempty 0) of
-      --(b, 0, _) -> b
-      (b, _, _) -> b <> newlineBuilder lb
+    case mixBuild lb (mx <> mixHard) (Bw mempty 0) of
+      (b, _, _) -> b
 
 mixToBz :: B.LineBreak -> MixText -> Bz.ByteString
 mixToBz lb = B.toLazyByteString . mixToBuilder lb
@@ -239,29 +238,37 @@ mixListToBuilder lb = foldr f mempty where
 -- Builder, width of the builder, and next spaces.
 type Bld = (B.Builder, Int, Int)
 
-type Break = Bld -> Int -> B.Builder -> Bld
+-- Auto break function.
+type Auto = Bld -> Int -> B.Builder -> Bld
+
+-- Hard break function.
+type Hard = Bld -> Bld
 
 -- Builder and width without next spaces.
-pattern BW b w = (b, w, -1)
+pattern Bw b w = (b, w, -1)
+
+-- After autobreak.
+pattern Br b w = (b, w, -2)
 
 bsSpaces :: Int -> Bs.ByteString
 bsSpaces n = Bs.replicate n 32
 
 mixBuild :: B.LineBreak -> MixText -> Bld -> Bld
-mixBuild lb mx p = mixBreak (brk $ B.breakWidth lb) newline p mx where
-    brk (Nothing) (b,_,s) _  b2  = BW (b <> space s <> b2) 0
-    brk (Just wd) (b,w,s) w2 b2
-        | w + s + w2 > wd        = BW (b <> nl <> ind <> b2) (indw + w2)
-        | otherwise              = BW (b <> space s   <> b2) (w + s + w2)
+mixBuild lb mx p = mixBreak (auto $ B.breakWidth lb) hard p mx where
+    auto (Nothing) (b,_,s) _  b2  = Bw (b <> space s <> b2) 0
+    auto (Just wd) (b,w,s) w2 b2
+        | w + s + w2 > wd         = Br (b <> nl <> ind <> b2) (indw + w2)
+        | otherwise               = Bw (b <> space s   <> b2) (w + s + w2)
 
-    newline (b,_,_) n b2         = BW (b <> nl <> b2) n
+    hard (Br b 0)                 = Bw (b) 0
+    hard (b, _, _)                = Bw (b <> nl) 0
 
     nl           = continueBuilder lb
     (ind, indw)  = indentBuilder   lb
     space        = B.byteString . bsSpaces
 
-mixBreak :: Break -> Break -> Bld -> MixText -> Bld
-mixBreak brk newline = (<<) where
+mixBreak :: Auto -> Hard -> Bld -> MixText -> Bld
+mixBreak auto hard = (<<) where
     bld << MixAppend x y   = bld << x << y
     bld << MixBs b         = cat bld (bsWidth b)       $ B.byteString b
     bld << MixBz b         = cat bld (bzWidth b)       $ B.lazyByteString b
@@ -272,14 +279,15 @@ mixBreak brk newline = (<<) where
     bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
 
-    cat (BW b w) w2 b2     = BW (b <> b2) (w + w2)
-    cat bld      w2 b2     = brk bld w2 b2
+    cat bld@(b, w, s) w2 b2
+        | s < 0            = Bw (b <> b2) (w + w2)
+        | otherwise        = auto bld w2 b2
 
     space (b, w, s) s'     = (b, w, max s s')
 
     nl False bld@(_, 0, _) = bld
-    nl False bld           = newline bld 0 mempty
-    nl True  bld           = newline bld 0 mempty
+    nl False bld           = hard bld
+    nl True  bld           = hard bld
 
 -- ----------------------  Width
 
@@ -297,9 +305,6 @@ tzWidth = fromInteger . toInteger . Tz.length
 
 
 -- --------------------------------------------  LineBreak
-
-newlineBuilder :: B.LineBreak -> B.Builder
-newlineBuilder B.LineBreak { B.breakNewline = nl } = B.stringUtf8 nl
 
 continueBuilder :: B.LineBreak -> B.Builder
 continueBuilder B.LineBreak { B.breakContinue = nl } = B.stringUtf8 nl
