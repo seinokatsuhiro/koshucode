@@ -296,7 +296,7 @@ mixToString :: B.LineBreak -> MixText -> String
 mixToString lb = Bu.toString . mixToBz lb
 
 mixToStringDef :: MixText -> String
-mixToStringDef = mixToString B.nolb
+mixToStringDef = mixToString Def.def
 
 -- ----------------------  Put
 
