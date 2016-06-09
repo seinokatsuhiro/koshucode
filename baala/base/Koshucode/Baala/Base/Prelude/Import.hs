@@ -12,6 +12,8 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.guard,
     concatMapM,
   
+    -- * Data.ByteString
+    Bs,
     -- * Data.ByteString.Lazy
     Bz,
     -- * Data.ByteString.Lazy.UTF8
@@ -73,6 +75,7 @@ module Koshucode.Baala.Base.Prelude.Import
   ) where
 
 import qualified Control.Monad
+import qualified Data.ByteString
 import qualified Data.ByteString.Lazy
 import qualified Data.ByteString.Lazy.UTF8
 import qualified Data.Default
@@ -94,6 +97,9 @@ concatMapM f = return . concat Control.Monad.<=< mapM f
 
 
 -- ----------------------  Data
+
+-- | Strict bytestring.
+type Bs = Data.ByteString.ByteString
 
 -- | Lazy bytestring.
 type Bz = Data.ByteString.Lazy.ByteString
