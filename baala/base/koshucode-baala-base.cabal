@@ -63,6 +63,9 @@ library
         Koshucode.Baala.Base.List.Snip
         Koshucode.Baala.Base.List.Split
 
+        Koshucode.Baala.Base.IO
+        Koshucode.Baala.Base.IO.BzFile
+
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Case
         Koshucode.Baala.Base.Prelude.Class
