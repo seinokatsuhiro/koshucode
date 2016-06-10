@@ -54,11 +54,11 @@ nextSourceCount =
 
 -- | Read data resource from lazy bytestring.
 readResourceBz :: (D.CContent c) => C.Resource c -> B.Bz -> C.AbResource c
-readResourceBz res code = C.resInclude [] "" res (B.nioFrom code) code
+readResourceBz base code = C.resInclude [] "" base (B.nioFrom code) code
 
 -- | Read data resource from text.
 readResourceString :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceString res code = readResourceBz res $ B.stringBz code
+readResourceString base code = readResourceBz base $ B.stringBz code
 
 -- | Read data resource from single input point.
 readResourceSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)

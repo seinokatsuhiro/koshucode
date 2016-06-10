@@ -6,8 +6,6 @@
 
 module Koshucode.Baala.Core.Resource.Include
   ( resInclude, coxBuildG,
-    -- * Process
-    -- $Process
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -30,25 +28,25 @@ resInclude :: forall c. (D.CContent c)
     => [S.Token]        -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
-    -> B.NIOPoint       -- ^ Source name
+    -> B.NIOPoint       -- ^ Input point
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude add cd res src code =
-    do ls <- S.tokenLinesBz src code
-       let sec  = C.resLastSecNo res + 1
+resInclude add cd base nio code =
+    do ls <- S.tokenLinesBz nio code
+       let sec  = C.resLastSecNo base + 1
            cs   = C.consClause add sec ls
-       res2 <- B.foldM (resIncludeBody cd) res $ reverse cs
-       Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
+       res <- B.foldM (resIncludeBody cd) base $ reverse cs
+       Right res { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res }
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> B.Ab C.Clause -> C.AbResource c
-resIncludeBody cd res abcl =
+resIncludeBody cd base abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
            toks  = B.takeFirst $ B.clauseTokens $ C.clauseSource h
            call f = Msg.abClause toks $ do
-                      res' <- f h toks b
-                      Right $ res' { C.resLastSecNo = sec }
+                      res <- f h toks b
+                      Right $ res { C.resLastSecNo = sec }
        case b of
          C.CJudge   _ _ _  -> call judge
          C.CAssert  _ _ _  -> call assert
@@ -60,9 +58,9 @@ resIncludeBody cd res abcl =
          C.CEcho    _      -> call echo
          C.CLicense _      -> call license
     where
-      f << y  = y : f res
+      f << y  = y : f base
 
-      feature = C.resFeature res
+      feature = C.resFeature base
       feat e f msg | f feature = e
                    | otherwise = msg
 
@@ -70,10 +68,10 @@ resIncludeBody cd res abcl =
       judge _ _ (C.CJudge q p toks) =
           do trees <- S.ttrees toks
              js    <- D.treesToJudge calc q p trees
-             Right $ res { C.resJudge = C.resJudge << js }
+             Right $ base { C.resJudge = C.resJudge << js }
 
       calc :: D.ContentCalc c
-      calc = calcContG $ C.resGlobal res
+      calc = calcContG $ C.resGlobal base
 
       assert :: Include c
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh }
@@ -81,50 +79,50 @@ resIncludeBody cd res abcl =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ pat src optPara Nothing []
                  ass'  = S.Short (B.codePtList $ head src) sh ass
-             Right $ res { C.resAssert = C.resAssert << ass' }
+             Right $ base { C.resAssert = C.resAssert << ass' }
 
       relmap :: Include c
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
           do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
-             Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
+             Right $ base { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot :: Include c
       slot _ _ (C.CSlot n toks) =
           do trees <- S.ttrees toks
-             Right res { C.resSlot = C.resSlot << (n, trees) }
+             Right base { C.resSlot = C.resSlot << (n, trees) }
 
       option :: Include c
       option _ _ (C.COption toks) =
-          do opt <- C.optionParse calc toks (C.resOption res)
-             Right $ res { C.resOption = opt }
+          do opt <- C.optionParse calc toks (C.resOption base)
+             Right $ base { C.resOption = opt }
 
       input :: Include c
       input _ _ (C.CInput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ C.resQueueTodo io res
+             checkIOPoint $ C.resQueueTodo io base
 
       output :: Include c
       output _ _ (C.COutput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ res { C.resOutput = C.inputPoint io }
+             checkIOPoint $ base { C.resOutput = C.inputPoint io }
 
       ioPoint :: [S.Token] -> B.Ab C.InputPoint
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
-      checkIOPoint res' = let ins = C.resInput  res'
-                              out = C.resOutput res'
-                          in if out `elem` ins
-                             then Msg.sameIOPoints out
-                             else Right res'
+      checkIOPoint res = let ins = C.resInput  res
+                             out = C.resOutput res
+                         in if out `elem` ins
+                            then Msg.sameIOPoints out
+                            else Right res
 
       echo :: Include c
       echo _ _ (C.CEcho clause) =
-          Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
+          Right $ base { C.resEcho = C.resEcho << B.clauseLines clause }
 
       license :: Include c
       license h _ (C.CLicense line) =
-          Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
+          Right $ base { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 coxBuildG :: (D.CContent c) => C.Global c -> S.TTreeToAb (D.Cox c)
 coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
@@ -154,22 +152,4 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
                    _  -> Msg.adlib "input no args"
 
     unmatch = Msg.adlib "input unknown"
-
-
--- ----------------------
--- $Process
---  
---  Resource is constructed using following steps.
---  
---  1. Get string from something.
---  
---  2. Split string into lines.
---  
---  3. Split line-breaked strings into tokens.
---
---  4. Collect tokens for clauses.
---
---  5. Classify tokens.
---
---  6. Construct resource from list of clauses.
 
