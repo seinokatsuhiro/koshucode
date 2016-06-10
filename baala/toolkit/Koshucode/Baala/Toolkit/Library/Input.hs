@@ -30,7 +30,7 @@ readInputs = mapM readInput
 
 readJudge :: String -> [C.JudgeC]
 readJudge code =
-    case C.readResourceString B.def code of
+    case C.resReadString B.def code of
       Right res  -> C.resJudge res
       Left _     -> []
 

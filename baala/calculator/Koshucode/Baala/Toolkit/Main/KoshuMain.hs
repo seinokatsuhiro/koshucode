@@ -178,7 +178,7 @@ koshuMainParam g p
 
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
-    do (abres, _) <- C.readResource g ns
+    do (abres, _) <- C.resRead g ns
        res2 <- abio abres
        res3 <- abio $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"

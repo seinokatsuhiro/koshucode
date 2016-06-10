@@ -78,7 +78,7 @@ hRunFiles
     -> [B.IOPoint]               -- ^ Names of source codes
     -> IO Int
 hRunFiles h g withRes ns =
-    do (abRes, _) <- C.readResource g ns
+    do (abRes, _) <- C.resRead g ns
        C.useUtf8 h
        case abRes of
          Left  a   -> C.globalAbort g a

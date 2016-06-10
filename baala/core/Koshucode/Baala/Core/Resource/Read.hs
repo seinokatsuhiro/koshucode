@@ -5,10 +5,10 @@
 
 module Koshucode.Baala.Core.Resource.Read
   ( -- * Read resource
-    readResource,
-    readResourceSingle,
-    readResourceBz,
-    readResourceString,
+    resRead,
+    resReadSingle,
+    resReadBz,
+    resReadString,
   ) where
 
 import qualified Control.Monad.State                     as M
@@ -53,28 +53,28 @@ nextSourceCount =
 -- --------------------------------------------  Read resource
 
 -- | Read data resource from lazy bytestring.
-readResourceBz :: (D.CContent c) => C.Resource c -> B.Bz -> C.AbResource c
-readResourceBz base code = C.resInclude [] "" base (B.nioFrom code) code
+resReadBz :: (D.CContent c) => C.Resource c -> B.Bz -> C.AbResource c
+resReadBz base code = C.resInclude [] "" base (B.nioFrom code) code
 
 -- | Read data resource from text.
-readResourceString :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceString base code = readResourceBz base $ B.stringBz code
+resReadString :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
+resReadString base code = resReadBz base $ B.stringBz code
 
 -- | Read data resource from single input point.
-readResourceSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
-readResourceSingle g src = gio g single where
+resReadSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
+resReadSingle g src = gio g single where
     single = do root <- getRoot
-                readResourceLimit 1 root [src]
+                resReadLimit 1 root [src]
 
 -- | Read data resource from multiple input points.
-readResource :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
-readResource g src = gio g proc where
+resRead :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
+resRead g src = gio g proc where
     proc = do root <- getRoot
               let limit = C.globalSourceLimit $ C.getGlobal root
-              readResourceLimit limit root src
+              resReadLimit limit root src
 
-readResourceLimit :: (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
-readResourceLimit limit root src =
+resReadLimit :: (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
+resReadLimit limit root src =
     readQueue limit $ root { C.resInputQueue = (C.qFrom ready, []) }
     where ready = map input $ reverse src
           input pt = C.InputPoint pt []
