@@ -4,13 +4,11 @@
 -- | Read data resource.
 
 module Koshucode.Baala.Core.Resource.Read
-  ( -- * I/O with global
-    GlobalIO,
-
-    -- * Read resource
+  ( -- * Read resource
     readResource,
     readResourceSingle,
-    readResourceText,
+    readResourceBz,
+    readResourceString,
   ) where
 
 import qualified Control.Monad.State                     as M
@@ -54,11 +52,13 @@ nextSourceCount =
 
 -- --------------------------------------------  Read resource
 
+-- | Read data resource from lazy bytestring.
+readResourceBz :: (D.CContent c) => C.Resource c -> B.Bz -> C.AbResource c
+readResourceBz res code = C.resInclude [] "" res (B.nioFrom code) code
+
 -- | Read data resource from text.
-readResourceText :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude [] "" res nio code' where
-    nio   = B.nioFrom code'
-    code' = B.stringBz code
+readResourceString :: (D.CContent c) => C.Resource c -> String -> C.AbResource c
+readResourceString res code = readResourceBz res $ B.stringBz code
 
 -- | Read data resource from single input point.
 readResourceSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
