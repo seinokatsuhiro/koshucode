@@ -23,7 +23,7 @@ runFiles g ns =
     do (abRes, _) <- C.resRead g ns
        case abRes of
          Left a    -> C.globalAbort g a
-         Right res -> case C.runResource res of
+         Right res -> case C.resRun res of
                         Left a   -> C.globalAbort g a
                         Right r  -> C.putResult r
 

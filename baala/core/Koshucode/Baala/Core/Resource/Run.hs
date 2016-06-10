@@ -3,7 +3,7 @@
 
 -- | Run resource.
 module Koshucode.Baala.Core.Resource.Run
-  ( runResource,
+  ( resRun,
     assembleRelmap,
     relmapCons,
   ) where
@@ -19,23 +19,23 @@ import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Assert.Message     as Msg
 
-runResource :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
-runResource res =
+resRun :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
+resRun res =
     do res' <- assembleRelmap $ autoOutputResource res
        let rslt = C.globalResult $ C.resGlobal res'
            js   = C.resJudge res'
        case filter D.isViolative js of
-         []  -> runResourceBody rslt res'
+         []  -> resRunBody rslt res'
          jsV -> Right rslt
                   { C.resultOutput   = C.resOutput res
                   , C.resultViolated = [S.Short [] [] [C.ResultJudge jsV]] }
 
-runResourceBody :: forall c. (Ord c, B.Write c, D.CRel c, D.CEmpty c) =>
+resRunBody :: forall c. (Ord c, B.Write c, D.CRel c, D.CEmpty c) =>
     C.Result c -> C.Resource c -> B.Ab (C.Result c)
-runResourceBody rslt res@C.Resource { C.resAssert  = ass
-                                    , C.resEcho    = echo
-                                    , C.resLicense = license
-                                    , C.resMessage = msg } =
+resRunBody rslt res@C.Resource { C.resAssert  = ass
+                               , C.resEcho    = echo
+                               , C.resLicense = license
+                               , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        Right rslt
