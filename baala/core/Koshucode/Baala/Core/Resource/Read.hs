@@ -20,7 +20,6 @@ import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Include   as C
-import qualified Koshucode.Baala.Core.Resource.Queue     as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
@@ -77,7 +76,7 @@ resRead g src = globalIO proc g where
 
 resReadLimit :: (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
 resReadLimit limit root src =
-    readQueue limit $ root { C.resInputQueue = (C.qFrom ready, []) }
+    readQueue limit $ root { C.resInputQueue = (B.qFrom ready, []) }
     where ready = map input $ reverse src
           input pt = C.InputPoint pt []
 
@@ -85,7 +84,7 @@ resReadLimit limit root src =
 readQueue :: (D.CContent c) => Int -> C.Resource c -> ResourceIO c
 readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
     | limit <= 0  = return $ Right res
-    | otherwise   = proc $ C.deq q
+    | otherwise   = proc $ B.deq q
     where
       proc (Nothing, _) = return $ Right res
       proc (Just src, q')

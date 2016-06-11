@@ -35,7 +35,6 @@ import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
-import qualified Koshucode.Baala.Core.Resource.Queue  as C
 
 
 -- ----------------------  Data type
@@ -102,7 +101,7 @@ resInput = map C.inputPoint . resInputPoint
 -- | All input points.
 resInputPoint :: Resource c -> [C.InputPoint]
 resInputPoint Resource { resInputQueue = (q, done) } = ps where
-    ps = C.qTo q ++ map (ip . B.nioPoint) done
+    ps = B.qTo q ++ map (ip . B.nioPoint) done
     ip p = C.InputPoint p []
 
 -- | List of all judgement classes.
@@ -125,7 +124,7 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 -- ----------------------  Input queue
 
 -- | Queue for input code: /todo/, /ready/ and /done/.
-type InputQueue = (C.Queue C.InputPoint, [B.NIOPoint])
+type InputQueue = (B.Queue C.InputPoint, [B.NIOPoint])
 
 -- | Map to input queue.
 resQueueMap :: B.Map InputQueue -> B.Map (Resource c)
@@ -134,7 +133,7 @@ resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 -- | Add input to todo-part of input queue.
 resQueueTodo :: C.InputPoint -> B.Map (Resource c)
 resQueueTodo t = resQueueMap todo where
-    todo (q, done) = (C.enq t q, done)
+    todo (q, done) = (B.enq t q, done)
 
 -- | Add input to done-part of input queue.
 resQueueDone :: B.NIOPoint -> B.Map (Resource c)

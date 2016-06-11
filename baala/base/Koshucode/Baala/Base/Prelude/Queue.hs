@@ -2,7 +2,7 @@
 
 -- | Queue.
 
-module Koshucode.Baala.Core.Resource.Queue
+module Koshucode.Baala.Base.Prelude.Queue
   ( -- * Data type
     Queue,
 
@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Resource.Queue
     enq, enqs, deq,
   ) where
 
-import qualified Koshucode.Baala.Base   as B
+import qualified Koshucode.Baala.Base.Prelude.Import   as B
 
 
 -- --------------------------------------------  Data type

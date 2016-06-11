@@ -83,7 +83,6 @@ library
         Koshucode.Baala.Core.Resource.Concrete
         Koshucode.Baala.Core.Resource.Include
         Koshucode.Baala.Core.Resource.Message
-        Koshucode.Baala.Core.Resource.Queue
         Koshucode.Baala.Core.Resource.Read
         Koshucode.Baala.Core.Resource.Run
         Koshucode.Baala.Core.Resource.Resource
