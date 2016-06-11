@@ -34,12 +34,16 @@ type GlobalIO a c = M.StateT (C.Global c) IO a
 type ResourceIO c = GlobalIO (C.AbResource c) c
 
 -- | Run state monad with global state.
-gio :: C.Global c -> GlobalIO a c -> IO (a, C.Global c)
-gio g a = M.runStateT a g
+globalIO :: (C.Resource c -> GlobalIO a c) -> C.Global c -> IO (a, C.Global c)
+globalIO f g =
+    let g' = setGlobal g
+    in M.runStateT (f $ C.globalHook g') g'
 
--- | Get root resource.
-getRoot :: GlobalIO (C.Resource c) c
-getRoot = return . C.globalHook =<< M.get
+-- | Set global data to root resource.
+setGlobal :: B.Map (C.Global c)
+setGlobal g =
+    let root = C.globalHook g
+    in  g { C.globalHook = root { C.resGlobal = g }}
 
 -- | Get and update 'C.globalSourceCount'.
 nextSourceCount :: GlobalIO Int c
@@ -62,16 +66,14 @@ resReadString base code = resReadBz base $ B.stringBz code
 
 -- | Read data resource from single input point.
 resReadSingle :: (D.CContent c) => C.Global c -> B.IOPoint -> IO (C.AbResource c, C.Global c)
-resReadSingle g src = gio g single where
-    single = do root <- getRoot
-                resReadLimit 1 root [src]
+resReadSingle g src = globalIO single g where
+    single root = resReadLimit 1 root [src]
 
 -- | Read data resource from multiple input points.
 resRead :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO (C.AbResource c, C.Global c)
-resRead g src = gio g proc where
-    proc = do root <- getRoot
-              let limit = C.globalSourceLimit $ C.getGlobal root
-              resReadLimit limit root src
+resRead g src = globalIO proc g where
+    proc root = do let limit = C.globalSourceLimit g
+                   resReadLimit limit root src
 
 resReadLimit :: (D.CContent c) => Int -> C.Resource c -> [B.IOPoint] -> ResourceIO c
 resReadLimit limit root src =

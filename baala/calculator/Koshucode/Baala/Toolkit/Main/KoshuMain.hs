@@ -164,17 +164,15 @@ koshuMainParam g p
       src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
 
       -- global parameter
-      rslt  = (C.globalResult g) { C.resultWriter = paramWriter p }
-      root  = B.def { C.resGlobal = g2 }
+      rslt  = C.globalResult g
       feat  = C.globalFeature g
       g2    = C.globalFill g
               { C.globalFeature   = feat { C.featAutoOutput = paramAutoOutput p }
+              , C.globalResult    = rslt { C.resultWriter = paramWriter p }
               , C.globalProgram   = paramProg p
               , C.globalArgs      = paramArgs p
               , C.globalProxy     = paramProxy p
-              , C.globalTime      = D.timeYmd $ paramDay p
-              , C.globalResult    = rslt
-              , C.globalHook      = root }
+              , C.globalTime      = D.timeYmd $ paramDay p }
 
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
