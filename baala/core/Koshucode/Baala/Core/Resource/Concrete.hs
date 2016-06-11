@@ -3,20 +3,39 @@
 -- | Concrete content type.
 
 module Koshucode.Baala.Core.Resource.Concrete
-  ( AboutC, AboutJudgesC, GlobalC, JudgeC,
+  ( -- * About
+    About (..), AboutJudges,
+
+    -- * Concrete type
+    AboutC, AboutJudgesC, GlobalC, JudgeC,
     RelC, ResourceC, ResultC, ResultWriterC,
   ) where
 
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
-import qualified Koshucode.Baala.Core.Resource.About     as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 
+
+-- --------------------------------------------  About
+
+-- | @about@ clause.
+data About c = About [S.Term c] deriving (Show)
+
+type AboutJudges c = (Maybe (About c), [D.Judge c])
+
+instance (B.Write c) => B.Write (About c) where
+    writeDocWith sh (About xs) = B.doc "about" B.<> B.doc (D.writeDownTerms sh xs)
+
+
+-- --------------------------------------------  Concrete type
+
 -- | @About@ for concrete baala content.
-type AboutC = C.About D.BaalaC
+type AboutC = About D.BaalaC
 
 -- | @AboutJudges@ for concrete baala content.
-type AboutJudgesC = C.AboutJudges D.BaalaC
+type AboutJudgesC = AboutJudges D.BaalaC
 
 -- | @Global@ for concrete baala content.
 type GlobalC = C.Global D.BaalaC

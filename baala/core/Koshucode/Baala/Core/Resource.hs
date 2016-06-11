@@ -5,7 +5,6 @@
 
 module Koshucode.Baala.Core.Resource
   ( -- * Modules
-    module Koshucode.Baala.Core.Resource.About,
     module Koshucode.Baala.Core.Resource.Clause,
     module Koshucode.Baala.Core.Resource.Concrete,
     module Koshucode.Baala.Core.Resource.Include,
@@ -17,7 +16,6 @@ module Koshucode.Baala.Core.Resource
     -- $DataDependency
   ) where
 
-import Koshucode.Baala.Core.Resource.About
 import Koshucode.Baala.Core.Resource.Clause
 import Koshucode.Baala.Core.Resource.Concrete
 import Koshucode.Baala.Core.Resource.Include
