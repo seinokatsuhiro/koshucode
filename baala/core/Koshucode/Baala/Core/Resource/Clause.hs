@@ -35,24 +35,24 @@ data Clause = Clause
 
 -- | Common part of clause.
 data ClauseHead = ClauseHead
-    { clauseSource  :: S.TokenClause    -- ^ Source code of the clause.
-    , clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
+    { clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
     , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
     , clauseAbout   :: [S.Token]        -- ^ About setting.
+    , clauseSource  :: S.TokenClause    -- ^ Source code of the clause.
     } deriving (Show, G.Data, G.Typeable)
 
 -- | Proper part of clause.
 data ClauseBody
-    = CInput    [S.Token]                          -- ^ Input point
-    | CExport   String                             -- ^ Exporting name
-    | CRelmap   String [S.Token]                   -- ^ Source of relmap
+    = CInput    [S.Token]                            -- ^ Input point
+    | CExport   String                               -- ^ Exporting name
+    | CRelmap   String [S.Token]                     -- ^ Source of relmap
     | CAssert   D.AssertType D.JudgeClass [S.Token]  -- ^ Assertion
     | CJudge    D.AssertType D.JudgeClass [S.Token]  -- ^ Judge
-    | CSlot     String [S.Token]                   -- ^ Global slot
-    | COption   [S.Token]                          -- ^ Option settings
-    | COutput   [S.Token]                          -- ^ Output point
-    | CEcho     S.TokenClause                      -- ^ Echo text
-    | CLicense  String                             -- ^ License text
+    | CSlot     String [S.Token]                     -- ^ Global slot
+    | COption   [S.Token]                            -- ^ Option settings
+    | COutput   [S.Token]                            -- ^ Output point
+    | CEcho     S.TokenClause                        -- ^ Echo text
+    | CLicense  String                               -- ^ License text
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -63,7 +63,10 @@ instance B.CodePtr ClauseHead where
 
 -- | The empty clause heading.
 instance B.Default ClauseHead where
-    def = ClauseHead B.codeClauseEmpty 0 [] []
+    def = ClauseHead { clauseSecNo  = 0
+                     , clauseShort  = []
+                     , clauseAbout  = []
+                     , clauseSource = B.codeClauseEmpty }
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
@@ -102,15 +105,15 @@ clauseTypeText (Clause _ body) =
 
 -- | First step of constructing 'Resource'.
 consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [B.Ab Clause]
-consClause add sec = loop h0 . S.tokenClauses where
+consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 
     loop _ []     = []
-    loop h (x:xs) = let (cs, h') = consClauseEach add $ h { clauseSource = x }
+    loop h (x:xs) = let (cs, h') = consClauseEach resAbout $ h { clauseSource = x }
                     in cs ++ loop h' xs
 
 consClauseEach :: [S.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
-consClauseEach add h@(ClauseHead src sec sh ab) = result where
+consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
 
     original = B.clauseTokens src
 
@@ -156,7 +159,7 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
     normal cs             = (cs, h)
     newSec                = ([], h { clauseSecNo = sec + 1 })
     newShort (sh', cs)    = (cs, h { clauseShort = sh' })
-    newAbout ab'          = ([], h { clauseAbout = ab' })
+    newAbout about'       = ([], h { clauseAbout = about' })
 
     -- error messages
 
@@ -189,11 +192,14 @@ consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     -- judgement and assertion, or source and sink
 
-    judge q (S.TText _ _ p : xs)  = c1 $ CJudge q p $ add ++ ab ++ xs
+    judge q (S.TText _ _ p : xs)  = c1 $ CJudge q p $ addAbout xs
     judge _ ts                    = judgeError ts
 
     judgeError []                 = unkAtStart ["Give a judgement pattern"]
     judgeError ts                 = unkAt ts ["Use text in judgement pattern"]
+
+    addAbout xs | null resAbout && null about  = xs
+                | otherwise                    = resAbout ++ about ++ xs
 
     assert q (S.TText _ _ p : xs) =
         case S.splitTokensBy isDelim xs of
