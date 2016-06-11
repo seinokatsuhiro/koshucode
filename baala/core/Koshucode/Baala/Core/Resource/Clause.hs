@@ -53,6 +53,7 @@ data ClauseBody
     | COutput   [S.Token]                            -- ^ Output point
     | CEcho     S.TokenClause                        -- ^ Echo text
     | CLicense  String                               -- ^ License text
+    | CBodies   [ClauseBody]                         -- ^ Multiple bodies
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -82,6 +83,7 @@ clauseTypeText (Clause _ body) =
       COutput   _       -> "output"
       CEcho     _       -> "echo"
       CLicense  _       -> "license"
+      CBodies   _       -> "bodies"
 
 
 
@@ -109,10 +111,12 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 
     loop _ []     = []
-    loop h (x:xs) = let (cs, h') = consClauseEach resAbout $ h { clauseSource = x }
-                    in cs ++ loop h' xs
+    loop h (x:xs) = case consClauseEach resAbout $ h { clauseSource = x } of
+                      (Right (Clause h1 (CBodies bs)), h2) ->
+                          ((Right . Clause h1) <$> bs) ++ loop h2 xs
+                      (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
+consClauseEach :: [S.Token] -> ClauseHead -> (B.Ab Clause, ClauseHead)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
 
     original = B.clauseTokens src
@@ -128,11 +132,9 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
                         -> (unk [tok] $ Msg.unresPrefix pre, h)
                Left tok -> (unk [tok] $ Msg.bug "short", h)
 
-    c0             = Right . Clause h
-    c1             = B.li1 . c0
-
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
+    empty          = CBodies []
 
     -- clause dispatcher
 
@@ -142,29 +144,32 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
         | isDelim is                = normal    $ rmap name body
     dispatch (S.TTextSect _ : _)    = newSec
     dispatch (S.TTextRaw _ k : xs)
-        | k == "input"              = normal    $ c1 $ CInput xs
-        | k == "include"            = normal    $ c1 $ CInput xs
+        | k == "input"              = normalR   $ CInput xs
+        | k == "include"            = normalR   $ CInput xs
         | k == "export"             = normal    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs
-        | k == "option"             = normal    $ c1 $ COption xs
-        | k == "output"             = normal    $ c1 $ COutput xs
-        | k == "echo"               = normal    $ c1 $ CEcho src
-        | k == "****"               = normal    []
-    dispatch (S.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
-    dispatch []                     = normal    []
-    dispatch [S.TTextLicense _ ln]  = normal    $ c1 $ CLicense $ B.trimRight ln
+        | k == "option"             = normalR   $ COption xs
+        | k == "output"             = normalR   $ COutput xs
+        | k == "echo"               = normalR   $ CEcho src
+        | k == "****"               = normalR   $ empty
+    dispatch (S.TSlot _ 2 n : xs)   = normalR   $ CSlot n xs
+    dispatch []                     = normalR   $ empty
+    dispatch [S.TTextLicense _ ln]  = normalR   $ CLicense $ B.trimRight ln
     dispatch _                      = normal    $ unkAtStart []
 
-    normal cs             = (cs, h)
-    newSec                = ([], h { clauseSecNo = sec + 1 })
-    newShort (sh', cs)    = (cs, h { clauseShort = sh' })
-    newAbout about'       = ([], h { clauseAbout = about' })
+    normal (Right b)      = (Right $ Clause h b, h)
+    normal (Left a)       = (Left a, h)
+
+    normalR b             = (Right $ Clause h b, h)
+    newSec                = (Right $ Clause h empty, h { clauseSecNo = sec + 1 })
+    newShort (sh', c)     = (c, h { clauseShort = sh' })
+    newAbout about'       = (Right $ Clause h empty, h { clauseAbout = about' })
 
     -- error messages
 
     unk ts msg     = let cp = B.codePtList $ B.headNull (head original) ts
-                     in [Msg.abClause cp msg]
+                     in Msg.abClause cp msg
     unkAt ts xs    = unk ts $ Msg.unkClause xs
     unkAtStart     = unkAt original
     unkEEA e f a   = unkAtStart $ Msg.expect2Actual e f a
@@ -192,7 +197,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
 
     -- judgement and assertion, or source and sink
 
-    judge q (S.TText _ _ p : xs)  = c1 $ CJudge q p $ addAbout xs
+    judge q (S.TText _ _ p : xs)  = Right $ CJudge q p $ addAbout xs
     judge _ ts                    = judgeError ts
 
     judgeError []                 = unkAtStart ["Give a judgement pattern"]
@@ -205,7 +210,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
-        where a expr              = c1 $ CAssert q p expr
+        where a expr              = Right $ CAssert q p expr
     assert _ ts                   = judgeError ts
 
     -- lengthen short signs
@@ -220,12 +225,12 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
                                       Just sh'  -> (sh', checkShort sh')
                                       Nothing   -> (sh, unkAtStart [])
 
-    checkShort :: [S.ShortDef] -> [B.Ab Clause]
+    checkShort :: [S.ShortDef] -> B.Ab Clause
     checkShort sh'
         | B.notNull prefix    = abort $ Msg.dupPrefix prefix
         | B.notNull replace   = abort $ Msg.dupReplacement replace
         | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
-        | otherwise           = []
+        | otherwise           = Right $ Clause h empty
         where (pre, rep)      = unzip sh'
               prefix          = B.duplicates pre
               replace         = B.duplicates rep
@@ -234,11 +239,12 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
 
     -- others
 
-    rmap n xs                     = c1 $ CRelmap n xs
+    rmap n xs                     = Right $ CRelmap n xs
 
     expt (S.TText _ _ n : S.TText _ _ ":" : xs)
-                                  = c0 (CExport n) : rmap n xs
-    expt [S.TText _ _ n]          = c1 $ CExport n
+                                  = do r <- rmap n xs
+                                       Right $ CBodies [CExport n, r]
+    expt [S.TText _ _ n]          = Right $ CExport n
     expt _                        = unkAtStart []
 
 
