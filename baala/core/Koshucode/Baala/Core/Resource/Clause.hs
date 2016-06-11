@@ -2,11 +2,10 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Intermidiate structure between 'String' and 'Resource'.
+-- | Line-like token-level structure of source code.
 
 module Koshucode.Baala.Core.Resource.Clause
   ( -- * Data type
-    -- $Documentation
     Clause (..),
     ClauseHead (..),
     ClauseBody (..),
@@ -28,18 +27,21 @@ import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 
 -- ----------------------  Data type
 
-data Clause =
-    Clause { clauseHead    :: ClauseHead
-           , clauseBody    :: ClauseBody
-           } deriving (Show, G.Data, G.Typeable)
-
-data ClauseHead = ClauseHead
-    { clauseSource  :: S.TokenClause
-    , clauseSecNo   :: C.SecNo
-    , clauseShort   :: [S.ShortDef]
-    , clauseAbout   :: [S.Token]
+-- | Line-like structure of source code.
+data Clause = Clause
+    { clauseHead    :: ClauseHead   -- ^ Common part of the clause.
+    , clauseBody    :: ClauseBody   -- ^ Proper part of the clause.
     } deriving (Show, G.Data, G.Typeable)
 
+-- | Common part of clause.
+data ClauseHead = ClauseHead
+    { clauseSource  :: S.TokenClause    -- ^ Source code of the clause.
+    , clauseSecNo   :: C.SecNo          -- ^ Section number of the clause.
+    , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
+    , clauseAbout   :: [S.Token]        -- ^ About setting.
+    } deriving (Show, G.Data, G.Typeable)
+
+-- | Proper part of clause.
 data ClauseBody
     = CInput    [S.Token]                          -- ^ Input point
     | CExport   String                             -- ^ Exporting name
@@ -248,37 +250,4 @@ wordPairs toks =
       wordPair :: (S.Token, S.Token) -> Maybe (String, String)
       wordPair (S.TText _ _ a, S.TText _ _ b) = Just (a, b)
       wordPair _ = Nothing
-
-
-
--- ----------------------
--- $Documentation
---
---  There are eight types of 'Clause'.
---  Textual representation of 'Resource' is a list of clauses.
---  'consClause' constructs clause list from resource text.
---
---  [@short@ prefix full ...]
---    Clause for declarations of short signs
---
---  [@|--@ pattern \/name content ...]
---    Affirmative judgement clause
---
---  [@|-X@ pattern \/name content ...]
---    Denial judgement clause
---
---  [name @:@ relmap]
---    Relmap clause
---
---  [@|==@ pattern @:@ relmap]
---    Affirmative assertion clause
---
---  [@|=X@ pattern @:@ relmap]
---    Denial assertion clause
---
---  [@|=V@ pattern @:@ relmap]
---    Violated assertion clause
---
---  [@****@ blah blah blah ...]
---    Comment clause
 

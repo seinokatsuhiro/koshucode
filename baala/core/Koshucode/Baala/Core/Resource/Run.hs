@@ -19,6 +19,7 @@ import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Assert.Message     as Msg
 
+-- | Run resource.
 resRun :: (D.CContent c) => C.Resource c -> B.Ab (C.Result c)
 resRun res =
     do res' <- assembleRelmap $ autoOutputResource res
@@ -60,6 +61,7 @@ resRunBody rslt res@C.Resource { C.resAssert  = ass
       group :: [(C.SecNo, String)] -> [[String]]
       group = B.unique . map (reverse . snd) . B.gatherToAssoc
 
+-- | Assemble relmap of assert clause.
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
 assembleRelmap res@C.Resource { C.resSlot    = slots
                               , C.resLexmap  = derives
