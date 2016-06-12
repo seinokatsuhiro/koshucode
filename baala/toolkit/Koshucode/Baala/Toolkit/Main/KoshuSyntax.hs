@@ -128,11 +128,11 @@ dumpCode omit path code =
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline
 
-dumpClause :: Bool -> (Int, B.Ab C.Clause) -> IO ()
-dumpClause _ (_, Left a) =
+dumpClause :: Bool -> (Int, C.Clause) -> IO ()
+dumpClause _ (_, C.Clause _ (C.CUnknown (Left a))) =
     do putNewline
        B.abortPrint [] a
-dumpClause omit (clseq, Right c) =
+dumpClause omit (clseq, c) =
     do let src = C.clauseSource $ C.clauseHead c
            ls  = B.clauseLines src
        putNewline

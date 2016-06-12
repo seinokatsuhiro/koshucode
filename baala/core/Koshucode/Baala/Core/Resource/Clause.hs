@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -15,7 +14,6 @@ module Koshucode.Baala.Core.Resource.Clause
     consClause,
   ) where
 
-import qualified Data.Generics                          as G
 import qualified Data.Char                              as Char
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
@@ -31,7 +29,7 @@ import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 data Clause = Clause
     { clauseHead    :: ClauseHead   -- ^ Common part of the clause.
     , clauseBody    :: ClauseBody   -- ^ Proper part of the clause.
-    } deriving (Show, G.Data, G.Typeable)
+    } deriving (Show)
 
 -- | Common part of clause.
 data ClauseHead = ClauseHead
@@ -39,7 +37,7 @@ data ClauseHead = ClauseHead
     , clauseShort   :: [S.ShortDef]     -- ^ Short setting.
     , clauseAbout   :: [S.Token]        -- ^ About setting.
     , clauseSource  :: S.TokenClause    -- ^ Source code of the clause.
-    } deriving (Show, G.Data, G.Typeable)
+    } deriving (Show)
 
 -- | Proper part of clause.
 data ClauseBody
@@ -54,7 +52,8 @@ data ClauseBody
     | CEcho     S.TokenClause                        -- ^ Echo text
     | CLicense  String                               -- ^ License text
     | CBodies   [ClauseBody]                         -- ^ Multiple bodies
-      deriving (Show, G.Data, G.Typeable)
+    | CUnknown  (B.Ab ())                            -- ^ Unknown clause
+      deriving (Show)
 
 instance B.CodePtr Clause where
     codePtList = B.codePtList . clauseHead
@@ -84,6 +83,7 @@ clauseTypeText (Clause _ body) =
       CEcho     _       -> "echo"
       CLicense  _       -> "license"
       CBodies   _       -> "bodies"
+      CUnknown  _       -> "unknown"
 
 
 
@@ -106,37 +106,38 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [B.Ab Clause]
+consClause :: [S.Token] -> C.SecNo -> [S.TokenLine] -> [Clause]
 consClause resAbout sec = loop h0 . S.tokenClauses where
     h0 = B.def { clauseSecNo = sec }
 
     loop _ []     = []
     loop h (x:xs) = case consClauseEach resAbout $ h { clauseSource = x } of
-                      (Right (Clause h1 (CBodies bs)), h2) ->
-                          ((Right . Clause h1) <$> bs) ++ loop h2 xs
+                      (Clause h1 (CBodies bs), h2) ->
+                          (Clause h1 <$> bs) ++ loop h2 xs
                       (c, h2)  -> c : loop h2 xs
 
-consClauseEach :: [S.Token] -> ClauseHead -> (B.Ab Clause, ClauseHead)
-consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
+consClauseEach :: [S.Token] -> ClauseHead -> (Clause, ClauseHead)
+consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
+
+    -- ----------------------  Utility
+
+    rslt = case tokens of
+             Right ts -> dispatch ts
+             Left tok@(S.TShort _ pre _)
+                      -> (Clause h $ CUnknown $ unk [tok] $ Msg.unresPrefix pre, h)
+             Left tok -> (Clause h $ CUnknown $ unk [tok] $ Msg.bug "short", h)
 
     original = B.clauseTokens src
-
     tokens | sh /= []   = lengthen `mapM` original
            | otherwise  = case filter S.isShortToken original of
                             []        -> Right original
                             tok : _   -> Left tok
 
-    result = case tokens of
-               Right ts -> dispatch ts
-               Left tok@(S.TShort _ pre _)
-                        -> (unk [tok] $ Msg.unresPrefix pre, h)
-               Left tok -> (unk [tok] $ Msg.bug "short", h)
-
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
     empty          = CBodies []
 
-    -- clause dispatcher
+    -- ----------------------  Clause dispatcher
 
     dispatch (S.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
                                     = normal    $ frege (lower k) xs
@@ -144,38 +145,38 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
         | isDelim is                = normal    $ rmap name body
     dispatch (S.TTextSect _ : _)    = newSec
     dispatch (S.TTextRaw _ k : xs)
-        | k == "input"              = normalR   $ CInput xs
-        | k == "include"            = normalR   $ CInput xs
+        | k == "input"              = right     $ CInput xs
+        | k == "include"            = right     $ CInput xs
         | k == "export"             = normal    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs
-        | k == "option"             = normalR   $ COption xs
-        | k == "output"             = normalR   $ COutput xs
-        | k == "echo"               = normalR   $ CEcho src
-        | k == "****"               = normalR   $ empty
-    dispatch (S.TSlot _ 2 n : xs)   = normalR   $ CSlot n xs
-    dispatch []                     = normalR   $ empty
-    dispatch [S.TTextLicense _ ln]  = normalR   $ CLicense $ B.trimRight ln
+        | k == "option"             = right     $ COption xs
+        | k == "output"             = right     $ COutput xs
+        | k == "echo"               = right     $ CEcho src
+        | k == "****"               = right     $ empty
+    dispatch (S.TSlot _ 2 n : xs)   = right     $ CSlot n xs
+    dispatch []                     = right     $ empty
+    dispatch [S.TTextLicense _ ln]  = right     $ CLicense $ B.trimRight ln
     dispatch _                      = normal    $ unkAtStart []
 
-    normal (Right b)      = (Right $ Clause h b, h)
-    normal (Left a)       = (Left a, h)
+    -- Return form
+    right b               = (Clause h b, h)
+    normal (Right b)      = (Clause h b, h)
+    normal (Left a)       = (Clause h $ CUnknown $ Left a, h)
+    newSec                = (Clause h empty, h { clauseSecNo = sec + 1 })
+    newShort (sh', b)     = (Clause h b,     h { clauseShort = sh' })
+    newAbout about'       = (Clause h empty, h { clauseAbout = about' })
 
-    normalR b             = (Right $ Clause h b, h)
-    newSec                = (Right $ Clause h empty, h { clauseSecNo = sec + 1 })
-    newShort (sh', c)     = (c, h { clauseShort = sh' })
-    newAbout about'       = (Right $ Clause h empty, h { clauseAbout = about' })
-
-    -- error messages
-
+    -- Error messages
     unk ts msg     = let cp = B.codePtList $ B.headNull (head original) ts
                      in Msg.abClause cp msg
     unkAt ts xs    = unk ts $ Msg.unkClause xs
     unkAtStart     = unkAt original
     unkEEA e f a   = unkAtStart $ Msg.expect2Actual e f a
 
-    -- Frege's content lines, or logical qualities
+    -- ----------------------  Judgement or assertion
 
+    -- Frege's content lines, or logical qualities
     frege "--"     = judge D.AssertAffirm
     frege "-x"     = judge D.AssertDeny
     frege "-xx"    = judge D.AssertMultiDeny
@@ -195,8 +196,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
                              "  or |=x, |=xx, |=c, |=cc, |=v"
                              ("|" ++ s)
 
-    -- judgement and assertion, or source and sink
-
+    -- Judgement
     judge q (S.TText _ _ p : xs)  = Right $ CJudge q p $ addAbout xs
     judge _ ts                    = judgeError ts
 
@@ -206,6 +206,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
     addAbout xs | null resAbout && null about  = xs
                 | otherwise                    = resAbout ++ about ++ xs
 
+    -- Assertion
     assert q (S.TText _ _ p : xs) =
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
@@ -213,7 +214,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
         where a expr              = Right $ CAssert q p expr
     assert _ ts                   = judgeError ts
 
-    -- lengthen short signs
+    -- ----------------------  Short signs
 
     lengthen :: S.Token -> Either S.Token S.Token
     lengthen t@(S.TShort n pre b) = case lookup pre sh of
@@ -223,19 +224,19 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = result where
 
     short xs                      = case wordPairs xs of
                                       Just sh'  -> (sh', checkShort sh')
-                                      Nothing   -> (sh, unkAtStart [])
+                                      Nothing   -> (sh, CUnknown $ unkAtStart [])
 
-    checkShort :: [S.ShortDef] -> B.Ab Clause
+    checkShort :: [S.ShortDef] -> ClauseBody
     checkShort sh'
         | B.notNull prefix    = abort $ Msg.dupPrefix prefix
         | B.notNull replace   = abort $ Msg.dupReplacement replace
         | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
-        | otherwise           = Right $ Clause h empty
+        | otherwise           = empty
         where (pre, rep)      = unzip sh'
               prefix          = B.duplicates pre
               replace         = B.duplicates rep
               invalid         = B.omit S.isShortPrefix pre
-              abort msg       = unk original msg
+              abort msg       = CUnknown $ unk original msg
 
     -- others
 

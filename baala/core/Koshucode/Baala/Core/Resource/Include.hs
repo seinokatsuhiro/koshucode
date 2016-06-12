@@ -39,15 +39,16 @@ resInclude add cd base nio code =
        Right res { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res }
 
 resIncludeBody :: forall c. (D.CContent c) =>
-    FilePath -> C.Resource c -> B.Ab C.Clause -> C.AbResource c
-resIncludeBody cd base abcl =
-    do C.Clause h b <- abcl
-       let sec   = C.clauseSecNo h
-           toks  = B.takeFirst $ B.clauseTokens $ C.clauseSource h
-           call f = Msg.abClause toks $ do
-                      res <- f h toks b
-                      Right $ res { C.resLastSecNo = sec }
-       case b of
+    FilePath -> C.Resource c -> C.Clause -> C.AbResource c
+resIncludeBody _ _ (C.Clause _ (C.CUnknown (Left ab))) = Left ab
+resIncludeBody cd base cl =
+    let C.Clause h b = cl
+        sec    = C.clauseSecNo h
+        toks   = B.takeFirst $ B.clauseTokens $ C.clauseSource h
+        call f = Msg.abClause toks $ do
+                   res <- f h toks b
+                   Right $ res { C.resLastSecNo = sec }
+    in case b of
          C.CJudge   _ _ _  -> call judge
          C.CAssert  _ _ _  -> call assert
          C.CRelmap  _ _    -> call relmap
