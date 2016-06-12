@@ -33,19 +33,35 @@ resInclude resAbout cd base nio code =
     do ls <- S.tokenLinesBz nio code
        let sec  = C.resLastSecNo base + 1
            cs   = C.consClause resAbout sec ls
-           cs'  = reverse cs
-           sec' | null cs'  = sec
-                | otherwise = C.clauseSecNo $ C.clauseHead $ head cs'
-       res <- B.foldM (resIncludeBody cd) base cs'
+       (js, cs2) <- createJudges base cs
+       let cs2' = reverse cs2
+           sec' | null cs   = sec
+                | otherwise = C.clauseSecNo $ C.clauseHead $ last cs
+       res <- B.foldM (resIncludeBody cd) base cs2'
        Right res { C.resLastSecNo = sec'
-                 , C.resSelect    = C.datasetSelect $ C.dataset $ C.resJudge res }
+                 , C.resJudge     = js
+                 , C.resSelect    = C.datasetSelect $ C.dataset js }
+
+createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab ([D.Judge c], [C.Clause])
+createJudges res = loop where
+    calc = calcContG $ C.resGlobal res
+
+    loop ((C.Clause h (C.CJudge q cl toks)) : cs) =
+        Msg.abClause (B.takeFirst $ B.clauseTokens $ C.clauseSource h) $ do
+           trees <- S.ttrees toks
+           judge <- D.treesToJudge calc q cl trees
+           (js, cs') <- loop cs
+           Right (judge : js, cs')
+
+    loop (c : cs) = do (js, cs') <- loop cs
+                       Right (js, c : cs')
+    loop []       = Right (C.resJudge res, [])
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c
 resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
     case b of
-      C.CJudge   q p toks     -> ab $ judge q p toks
-      C.CAssert  typ cl toks  -> ab $ assert typ cl toks
+      C.CAssert  q cl toks    -> ab $ assert q cl toks
       C.CRelmap  n toks       -> ab $ relmap n toks
       C.CSlot    n toks       -> ab $ slot n toks
       C.CInput   toks         -> feat (ab $ input toks)  C.featInputClause  Msg.disabledInputClause  
@@ -74,11 +90,6 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       f << y  = y : f res
 
       -- ----------------------  Clause
-
-      judge q p toks =
-          do trees <- S.ttrees toks
-             js    <- D.treesToJudge calc q p trees
-             Right $ res { C.resJudge = C.resJudge << js }
 
       assert typ cl toks =
           do optPara <- C.ttreePara2 toks
