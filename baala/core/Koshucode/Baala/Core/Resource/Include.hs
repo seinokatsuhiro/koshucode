@@ -42,7 +42,7 @@ resInclude resAbout cd base nio code =
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c
-resIncludeBody cd base (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
+resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
     case b of
       C.CJudge   q p toks     -> ab $ judge q p toks
       C.CAssert  typ cl toks  -> ab $ assert typ cl toks
@@ -64,63 +64,63 @@ resIncludeBody cd base (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSh
 
       ab = Msg.abClause src
 
-      feature = C.resFeature base
+      feature = C.resFeature res
       feat e f msg | f feature = e
                    | otherwise = msg
 
       calc :: D.ContentCalc c
-      calc = calcContG $ C.resGlobal base
+      calc = calcContG $ C.resGlobal res
 
-      f << y  = y : f base
+      f << y  = y : f res
 
       -- ----------------------  Clause
 
       judge q p toks =
           do trees <- S.ttrees toks
              js    <- D.treesToJudge calc q p trees
-             Right $ base { C.resJudge = C.resJudge << js }
+             Right $ res { C.resJudge = C.resJudge << js }
 
       assert typ cl toks =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ cl src optPara Nothing []
                  ass'  = S.Short (B.codePtList $ head src) sh ass
-             Right $ base { C.resAssert = C.resAssert << ass' }
+             Right $ res { C.resAssert = C.resAssert << ass' }
 
       relmap n toks =
           do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
-             Right $ base { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
+             Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot n toks =
           do trees <- S.ttrees toks
-             Right base { C.resSlot = C.resSlot << (n, trees) }
+             Right res { C.resSlot = C.resSlot << (n, trees) }
 
       option toks =
-          do opt <- C.optionParse calc toks (C.resOption base)
-             Right $ base { C.resOption = opt }
+          do opt <- C.optionParse calc toks $ C.resOption res
+             Right $ res { C.resOption = opt }
 
       input toks =
           do io <- ioPoint toks
-             checkIOPoint $ C.resQueueTodo io base
+             checkIOPoint $ C.resQueueTodo io res
 
       output toks =
           do io <- ioPoint toks
-             checkIOPoint $ base { C.resOutput = C.inputPoint io }
+             checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
       ioPoint :: [S.Token] -> B.Ab C.InputPoint
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
-      checkIOPoint res = let ins = C.resInput  res
-                             out = C.resOutput res
+      checkIOPoint res' = let ins = C.resInput  res'
+                              out = C.resOutput res'
                          in if out `elem` ins
                             then Msg.sameIOPoints out
-                            else Right res
+                            else Right res'
 
       echo clause =
-          Right $ base { C.resEcho = C.resEcho << B.clauseLines clause }
+          Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
 
       license line =
-          Right $ base { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
+          Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 coxBuildG :: (D.CContent c) => C.Global c -> S.TTreeToAb (D.Cox c)
 coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
