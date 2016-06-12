@@ -71,7 +71,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                 let asserts2  = fmap fst `map` result
                     msg       = fmap snd `map` result
                     msg2      = concat $ map S.shortBody msg
-                Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
+                Right $ C.resMessagesAdd msg2 $ res { C.resAssert = asserts2 }
 
       (consLexmap, consRelmap) = relmapCons res
 

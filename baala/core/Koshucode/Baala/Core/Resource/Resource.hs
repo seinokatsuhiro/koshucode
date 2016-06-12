@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Resource.Resource
     Resource (..), AbResource,
     resIncluded, resInput, resInputPoint,
     resClass, resFeature,
-    addMessage, addMessages,
+    resMessagesAdd,
 
     -- * Input queue
     InputQueue, resQueueTodo, resQueueDone,
@@ -95,6 +95,7 @@ type AbResource c = B.Ab (Resource c)
 resIncluded :: Resource c -> [B.NIOPoint]
 resIncluded Resource { resInputQueue = (_, done) } = done
 
+-- | 'B.IOPoint' of all inputs.
 resInput :: Resource c -> [B.IOPoint]
 resInput = map C.inputPoint . resInputPoint
 
@@ -112,13 +113,9 @@ resClass Resource {..} = map (C.assClass . S.shortBody) resAssert
 resFeature :: Resource c -> C.Feature
 resFeature res = C.globalFeature $ resGlobal res
 
--- | Add single message.
-addMessage :: String -> B.Map (Resource c)
-addMessage msg res = res { resMessage = msg : resMessage res }
-
 -- | Add messages.
-addMessages :: [String] -> B.Map (Resource c)
-addMessages msg res = res { resMessage = msg ++ resMessage res }
+resMessagesAdd :: [String] -> B.Map (Resource c)
+resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 
 
 -- ----------------------  Input queue
