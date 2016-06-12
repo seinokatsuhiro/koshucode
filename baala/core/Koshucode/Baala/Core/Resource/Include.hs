@@ -35,8 +35,12 @@ resInclude resAbout cd base nio code =
     do ls <- S.tokenLinesBz nio code
        let sec  = C.resLastSecNo base + 1
            cs   = C.consClause resAbout sec ls
-       res <- B.foldM (resIncludeBody cd) base $ reverse cs
-       Right res { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res }
+           cs'  = reverse cs
+           sec' | null cs'  = sec
+                | otherwise = C.clauseSecNo $ C.clauseHead $ head cs'
+       res <- B.foldM (resIncludeBody cd) base cs'
+       Right res { C.resLastSecNo = sec'
+                 , C.resSelect    = C.datasetSelect $ C.dataset $ C.resJudge res }
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c
@@ -60,15 +64,13 @@ resIncludeBody cd base (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSh
       src :: [S.Token]
       src = B.takeFirst $ B.clauseTokens $ C.clauseSource h
 
-      call f = Msg.abClause src $ do
-                 res <- f b
-                 Right $ res { C.resLastSecNo = sec }
-
-      f << y  = y : f base
+      call f = Msg.abClause src $ f b
 
       feature = C.resFeature base
       feat e f msg | f feature = e
                    | otherwise = msg
+
+      f << y  = y : f base
 
       -- ----------------------  Include
 
