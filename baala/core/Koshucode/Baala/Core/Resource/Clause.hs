@@ -55,18 +55,15 @@ data ClauseBody
     | CUnknown  (B.Ab ())                            -- ^ Unknown clause
       deriving (Show)
 
-instance B.CodePtr Clause where
-    codePtList = B.codePtList . clauseHead
-
-instance B.CodePtr ClauseHead where
-    codePtList = B.codePtList . clauseSource
-
 -- | The empty clause heading.
 instance B.Default ClauseHead where
     def = ClauseHead { clauseSecNo  = 0
                      , clauseShort  = []
                      , clauseAbout  = []
                      , clauseSource = B.codeClauseEmpty }
+
+instance B.CodePtr ClauseHead where
+    codePtList = B.codePtList . clauseSource
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
@@ -84,7 +81,6 @@ clauseTypeText (Clause _ body) =
       CLicense  _       -> "license"
       CBodies   _       -> "bodies"
       CUnknown  _       -> "unknown"
-
 
 
 -- ----------------------  Construction

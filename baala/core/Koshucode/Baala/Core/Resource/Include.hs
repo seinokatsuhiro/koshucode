@@ -47,7 +47,7 @@ createJudges res = loop where
     calc = calcContG $ C.resGlobal res
 
     loop ((C.Clause h (C.CJudge q cl toks)) : cs) =
-        Msg.abClause (B.takeFirst $ B.clauseTokens $ C.clauseSource h) $ do
+        Msg.abClause [h] $ do
            trees <- S.ttrees toks
            judge <- D.treesToJudge calc q cl trees
            (js, cs') <- loop cs
@@ -78,7 +78,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       src :: [S.Token]
       src = B.takeFirst $ B.clauseTokens $ C.clauseSource h
 
-      ab = Msg.abClause src
+      ab = Msg.abClause [h]
 
       feature = C.resFeature res
       feat e f msg | f feature = e
