@@ -31,33 +31,32 @@ resInclude :: forall c. (D.CContent c)
     -> B.NIOPoint       -- ^ Input point
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude add cd base nio code =
+resInclude resAbout cd base nio code =
     do ls <- S.tokenLinesBz nio code
        let sec  = C.resLastSecNo base + 1
-           cs   = C.consClause add sec ls
+           cs   = C.consClause resAbout sec ls
        res <- B.foldM (resIncludeBody cd) base $ reverse cs
        Right res { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res }
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c
-resIncludeBody _ _ (C.Clause _ (C.CUnknown (Left ab))) = Left ab
-resIncludeBody cd base cl =
-    let C.Clause h b = cl
-        sec    = C.clauseSecNo h
+resIncludeBody cd base (C.Clause h b) =
+    let sec    = C.clauseSecNo h
         toks   = B.takeFirst $ B.clauseTokens $ C.clauseSource h
         call f = Msg.abClause toks $ do
                    res <- f h toks b
                    Right $ res { C.resLastSecNo = sec }
     in case b of
-         C.CJudge   _ _ _  -> call judge
-         C.CAssert  _ _ _  -> call assert
-         C.CRelmap  _ _    -> call relmap
-         C.CSlot    _ _    -> call slot
-         C.CInput   _      -> feat (call input)  C.featInputClause  Msg.disabledInputClause  
-         C.COutput  _      -> feat (call output) C.featOutputClause Msg.disabledOutputClause
-         C.COption  _      -> call option
-         C.CEcho    _      -> call echo
-         C.CLicense _      -> call license
+         C.CJudge   _ _ _    -> call judge
+         C.CAssert  _ _ _    -> call assert
+         C.CRelmap  _ _      -> call relmap
+         C.CSlot    _ _      -> call slot
+         C.CInput   _        -> feat (call input)  C.featInputClause  Msg.disabledInputClause  
+         C.COutput  _        -> feat (call output) C.featOutputClause Msg.disabledOutputClause
+         C.COption  _        -> call option
+         C.CEcho    _        -> call echo
+         C.CLicense _        -> call license
+         C.CUnknown (Left a) -> Left a
     where
       f << y  = y : f base
 
@@ -122,7 +121,7 @@ resIncludeBody cd base cl =
           Right $ base { C.resEcho = C.resEcho << B.clauseLines clause }
 
       license :: Include c
-      license h _ (C.CLicense line) =
+      license _ _ (C.CLicense line) =
           Right $ base { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 coxBuildG :: (D.CContent c) => C.Global c -> S.TTreeToAb (D.Cox c)
