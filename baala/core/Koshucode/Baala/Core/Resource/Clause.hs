@@ -124,45 +124,50 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     rslt = case tokens of
              Right ts -> dispatch ts
              Left tok@(S.TShort _ pre _)
-                      -> (Clause h $ CUnknown $ unk [tok] $ Msg.unresPrefix pre, h)
-             Left tok -> (Clause h $ CUnknown $ unk [tok] $ Msg.bug "short", h)
+                      -> (unkClause $ unk [tok] $ Msg.unresPrefix pre, h)
+             Left tok -> (unkClause $ unk [tok] $ Msg.bug "short", h)
 
     original = B.clauseTokens src
-    tokens | sh /= []   = lengthen `mapM` original
-           | otherwise  = case filter S.isShortToken original of
-                            []        -> Right original
-                            tok : _   -> Left tok
+    tokens | B.notNull sh = lengthen `mapM` original
+           | otherwise    = case filter S.isShortToken original of
+                              []       -> Right original
+                              tok : _  -> Left tok
+
+    lengthen :: S.Token -> Either S.Token S.Token
+    lengthen t@(S.TShort n pre b) = case lookup pre sh of
+                                      Just l  -> Right $ S.TTextQQ n $ l ++ b
+                                      Nothing -> Left t
+    lengthen t = Right t
 
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
     empty          = CBodies []
+    unkClause a    = Clause h $ CUnknown a
 
     -- ----------------------  Clause dispatcher
 
     dispatch (S.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
-                                    = normal    $ frege (lower k) xs
+                                    = clause    $ frege (lower k) xs
     dispatch (S.TTextRaw _ name : S.TTextRaw _ is : body)
-        | isDelim is                = normal    $ rmap name body
+        | isDelim is                = clause    $ CRelmap name body
     dispatch (S.TTextSect _ : _)    = newSec
     dispatch (S.TTextRaw _ k : xs)
-        | k == "input"              = right     $ CInput xs
-        | k == "include"            = right     $ CInput xs
-        | k == "export"             = normal    $ expt xs
+        | k == "input"              = clause    $ CInput xs
+        | k == "include"            = clause    $ CInput xs
+        | k == "export"             = clause    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs
-        | k == "option"             = right     $ COption xs
-        | k == "output"             = right     $ COutput xs
-        | k == "echo"               = right     $ CEcho src
-        | k == "****"               = right     $ empty
-    dispatch (S.TSlot _ 2 n : xs)   = right     $ CSlot n xs
-    dispatch []                     = right     $ empty
-    dispatch [S.TTextLicense _ ln]  = right     $ CLicense $ B.trimRight ln
-    dispatch _                      = normal    $ unkAtStart []
+        | k == "option"             = clause    $ COption xs
+        | k == "output"             = clause    $ COutput xs
+        | k == "echo"               = clause    $ CEcho src
+        | k == "****"               = clause    $ empty
+    dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
+    dispatch []                     = clause    $ empty
+    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ B.trimRight ln
+    dispatch _                      = clause    $ CUnknown $ unkAtStart []
 
     -- Return form
-    right b               = (Clause h b, h)
-    normal (Right b)      = (Clause h b, h)
-    normal (Left a)       = (Clause h $ CUnknown $ Left a, h)
+    clause b              = (Clause h b, h)
     newSec                = (Clause h empty, h { clauseSecNo = sec + 1 })
     newShort (sh', b)     = (Clause h b,     h { clauseShort = sh' })
     newAbout about'       = (Clause h empty, h { clauseAbout = about' })
@@ -191,14 +196,14 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     frege "=cc"    = assert D.AssertMultiChange
     frege "=v"     = assert D.AssertViolate
 
-    frege s        = const $ unkEEA
+    frege s        = const $ CUnknown $ unkEEA
                              "|--, |-x, |-xx, |-c, |-cc, |-v,"
                              "  or |=x, |=xx, |=c, |=cc, |=v"
                              ("|" ++ s)
 
     -- Judgement
-    judge q (S.TText _ _ p : xs)  = Right $ CJudge q p $ addAbout xs
-    judge _ ts                    = judgeError ts
+    judge q (S.TText _ _ p : xs)  = CJudge q p $ addAbout xs
+    judge _ ts                    = CUnknown $ judgeError ts
 
     judgeError []                 = unkAtStart ["Give a judgement pattern"]
     judgeError ts                 = unkAt ts ["Use text in judgement pattern"]
@@ -211,23 +216,17 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
-        where a expr              = Right $ CAssert q p expr
-    assert _ ts                   = judgeError ts
+        where a expr              = CAssert q p expr
+    assert _ ts                   = CUnknown $ judgeError ts
 
     -- ----------------------  Short signs
 
-    lengthen :: S.Token -> Either S.Token S.Token
-    lengthen t@(S.TShort n pre b) = case lookup pre sh of
-                                      Just l  -> Right $ S.TTextQQ n $ l ++ b
-                                      Nothing -> Left t
-    lengthen t = Right t
+    short xs  = case wordPairs xs of
+                  Just sh'  -> (sh', shortCheck sh')
+                  Nothing   -> (sh, CUnknown $ unkAtStart [])
 
-    short xs                      = case wordPairs xs of
-                                      Just sh'  -> (sh', checkShort sh')
-                                      Nothing   -> (sh, CUnknown $ unkAtStart [])
-
-    checkShort :: [S.ShortDef] -> ClauseBody
-    checkShort sh'
+    shortCheck :: [S.ShortDef] -> ClauseBody
+    shortCheck sh'
         | B.notNull prefix    = abort $ Msg.dupPrefix prefix
         | B.notNull replace   = abort $ Msg.dupReplacement replace
         | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
@@ -238,15 +237,11 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
               invalid         = B.omit S.isShortPrefix pre
               abort msg       = CUnknown $ unk original msg
 
-    -- others
-
-    rmap n xs                     = Right $ CRelmap n xs
-
+    -- Others
     expt (S.TText _ _ n : S.TText _ _ ":" : xs)
-                                  = do r <- rmap n xs
-                                       Right $ CBodies [CExport n, r]
-    expt [S.TText _ _ n]          = Right $ CExport n
-    expt _                        = unkAtStart []
+                                  = CBodies [CExport n, CRelmap n xs]
+    expt [S.TText _ _ n]          = CExport n
+    expt _                        = CUnknown $ unkAtStart []
 
 
 pairs :: [a] -> Maybe [(a, a)]
