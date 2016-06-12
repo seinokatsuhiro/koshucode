@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
 
 
-type Include c = C.ClauseHead -> [S.Token] -> C.ClauseBody -> B.Ab (C.Resource c)
+type Include c = C.ClauseBody -> B.Ab (C.Resource c)
 
 -- | Include source code into resource.
 resInclude :: forall c. (D.CContent c)
@@ -40,32 +40,40 @@ resInclude resAbout cd base nio code =
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c
-resIncludeBody cd base (C.Clause h b) =
-    let sec    = C.clauseSecNo h
-        toks   = B.takeFirst $ B.clauseTokens $ C.clauseSource h
-        call f = Msg.abClause toks $ do
-                   res <- f h toks b
-                   Right $ res { C.resLastSecNo = sec }
-    in case b of
-         C.CJudge   _ _ _    -> call judge
-         C.CAssert  _ _ _    -> call assert
-         C.CRelmap  _ _      -> call relmap
-         C.CSlot    _ _      -> call slot
-         C.CInput   _        -> feat (call input)  C.featInputClause  Msg.disabledInputClause  
-         C.COutput  _        -> feat (call output) C.featOutputClause Msg.disabledOutputClause
-         C.COption  _        -> call option
-         C.CEcho    _        -> call echo
-         C.CLicense _        -> call license
-         C.CUnknown (Left a) -> Left a
+resIncludeBody cd base (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseShort = sh } b) =
+    case b of
+      C.CJudge   _ _ _    -> call judge
+      C.CAssert  _ _ _    -> call assert
+      C.CRelmap  _ _      -> call relmap
+      C.CSlot    _ _      -> call slot
+      C.CInput   _        -> feat (call input)  C.featInputClause  Msg.disabledInputClause  
+      C.COutput  _        -> feat (call output) C.featOutputClause Msg.disabledOutputClause
+      C.COption  _        -> call option
+      C.CEcho    _        -> call echo
+      C.CLicense _        -> call license
+      C.CUnknown (Left a) -> Left a
+      _                   -> B.bug "resIncludeBody"
     where
+
+      -- ----------------------  Utility
+
+      src :: [S.Token]
+      src = B.takeFirst $ B.clauseTokens $ C.clauseSource h
+
+      call f = Msg.abClause src $ do
+                 res <- f b
+                 Right $ res { C.resLastSecNo = sec }
+
       f << y  = y : f base
 
       feature = C.resFeature base
       feat e f msg | f feature = e
                    | otherwise = msg
 
+      -- ----------------------  Include
+
       judge :: Include c
-      judge _ _ (C.CJudge q p toks) =
+      judge (C.CJudge q p toks) =
           do trees <- S.ttrees toks
              js    <- D.treesToJudge calc q p trees
              Right $ base { C.resJudge = C.resJudge << js }
@@ -74,35 +82,34 @@ resIncludeBody cd base (C.Clause h b) =
       calc = calcContG $ C.resGlobal base
 
       assert :: Include c
-      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh }
-                          src (C.CAssert typ pat toks) =
+      assert (C.CAssert typ pat toks) =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ pat src optPara Nothing []
                  ass'  = S.Short (B.codePtList $ head src) sh ass
              Right $ base { C.resAssert = C.resAssert << ass' }
 
       relmap :: Include c
-      relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
+      relmap (C.CRelmap n toks) =
           do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
              Right $ base { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot :: Include c
-      slot _ _ (C.CSlot n toks) =
+      slot (C.CSlot n toks) =
           do trees <- S.ttrees toks
              Right base { C.resSlot = C.resSlot << (n, trees) }
 
       option :: Include c
-      option _ _ (C.COption toks) =
+      option (C.COption toks) =
           do opt <- C.optionParse calc toks (C.resOption base)
              Right $ base { C.resOption = opt }
 
       input :: Include c
-      input _ _ (C.CInput toks) =
+      input (C.CInput toks) =
           do io <- ioPoint toks
              checkIOPoint $ C.resQueueTodo io base
 
       output :: Include c
-      output _ _ (C.COutput toks) =
+      output (C.COutput toks) =
           do io <- ioPoint toks
              checkIOPoint $ base { C.resOutput = C.inputPoint io }
 
@@ -117,11 +124,11 @@ resIncludeBody cd base (C.Clause h b) =
                             else Right res
 
       echo :: Include c
-      echo _ _ (C.CEcho clause) =
+      echo (C.CEcho clause) =
           Right $ base { C.resEcho = C.resEcho << B.clauseLines clause }
 
       license :: Include c
-      license _ _ (C.CLicense line) =
+      license (C.CLicense line) =
           Right $ base { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 coxBuildG :: (D.CContent c) => C.Global c -> S.TTreeToAb (D.Cox c)
