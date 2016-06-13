@@ -15,18 +15,18 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 -- | File path and content in lazy bytestring.
 --   The function 'readBzFile' creates:
 --
---   * 'BzFile' with 'Just'-content and 'Nothing'-exception on success,
---   * 'BzFile' with 'Nothing'-content and 'Just'-exception on failure.
+--   * 'BzFile' with content and 'Nothing'-exception on success,
+--   * 'BzFile' with empty content and 'Just'-exception on failure.
 
 data BzFile = BzFile
     { bzFilePath       :: FilePath               -- ^ Path of file.
-    , bzFileContent    :: Maybe B.Bz             -- ^ File content as lazy bytestring.
+    , bzFileContent    :: B.Bz                   -- ^ File content as lazy bytestring.
     , bzFileException  :: Maybe E.SomeException  -- ^ Exception when reading file.
     } deriving (Show)
 
 bzFileOf :: FilePath -> BzFile
 bzFileOf path = BzFile { bzFilePath      = path
-                       , bzFileContent   = Nothing
+                       , bzFileContent   = Bz.empty
                        , bzFileException = Nothing }
 
 -- | Read file from given path.
@@ -35,7 +35,7 @@ readBzFile path =
     do content <- tryReadFile path
        let base = bzFileOf path
            file = case content of
-                    Right bz -> base { bzFileContent   = Just bz }
+                    Right bz -> base { bzFileContent   = bz }
                     Left e   -> base { bzFileException = Just e }
        return file
 
