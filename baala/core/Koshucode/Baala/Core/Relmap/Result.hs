@@ -19,7 +19,6 @@ module Koshucode.Baala.Core.Relmap.Result
     -- * Writer
     ResultWriter (..),
     putResult, hPutResult,
-    useUtf8,
   ) where
 
 import qualified GHC.IO.Encoding                   as IO
@@ -142,15 +141,11 @@ hPutResult h result
 
 hPutAllChunks :: (B.Write c) => ResultWriterChunk c
 hPutAllChunks h result status sh =
-    do useUtf8 h
+    do B.useUtf8 h
        case resultWriter result of
          ResultWriterChunk _ w -> w h result status sh
          ResultWriterJudge _ w -> w h result status $ judges sh
     where
       judges :: [ShortResultChunks c] -> [D.Judge c]
       judges = concatMap resultChunkJudges . concatMap S.shortBody
-
-useUtf8 :: IO.Handle -> IO ()
-useUtf8 h = do B.setLocaleUtf8
-               IO.hSetEncoding h IO.utf8
 

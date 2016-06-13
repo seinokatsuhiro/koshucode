@@ -13,7 +13,6 @@ import System.Console.GetOpt
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Toolkit.Library.Input   as L
 import qualified Koshucode.Baala.Toolkit.Library.Change  as L
-import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as V
 
 
@@ -69,7 +68,7 @@ header = unlines
 
 {-| The main function for @koshu-change@ command. -}
 koshuChangeMain :: IO B.ExitCode
-koshuChangeMain = koshuChangeMain' =<< L.prelude
+koshuChangeMain = koshuChangeMain' =<< B.progAndArgs
 
 koshuChangeMain' :: (String, [String]) -> IO B.ExitCode
 koshuChangeMain' (_, argv) =
@@ -83,12 +82,12 @@ koshuChangeMain' (_, argv) =
           where has = (`elem` opts)
 
       (opts, _, [])
-          | has OptHelp         -> L.putSuccess usage
-          | has OptVersion      -> L.putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
+          | has OptHelp         -> B.putSuccess usage
+          | has OptVersion      -> B.putSuccess $ version ++ "\n"
+          | has OptShowEncoding -> B.putSuccess =<< B.currentEncodings
           where has = (`elem` opts)
 
-      (_, _, errs) -> L.putFailure $ concat errs ++ usage
+      (_, _, errs) -> B.putFailure $ concat errs ++ usage
 
     where
       run opts left right
@@ -96,7 +95,7 @@ koshuChangeMain' (_, argv) =
           | has OptTo      = right `L.minusInput`  left
           | has OptMinus   = left  `L.minusInput`  right
           | has OptUpdate  = left  `L.updateInput` right
-          | otherwise      = L.putFailure usage
+          | otherwise      = B.putFailure usage
           where has = (`elem` opts)
 
 

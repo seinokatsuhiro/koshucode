@@ -15,7 +15,6 @@ import qualified Koshucode.Baala.Data   as D
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
 import qualified Koshucode.Baala.Toolkit.Library.Element       as L
-import qualified Koshucode.Baala.Toolkit.Library.Exit          as L
 import qualified Koshucode.Baala.Toolkit.Library.Run           as L
 import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
@@ -59,11 +58,11 @@ data Param c = Param
     } deriving (Show)
 
 initParam :: (Show c, D.CContent c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
-initParam (Left errs) = L.putFailure $ concat errs
+initParam (Left errs) = B.putFailure $ concat errs
 initParam (Right (opts, args)) =
-    do (prog, _) <- L.prelude
-       proxy  <- L.getProxies
-       time   <- T.getZonedTime
+    do (prog, _) <- B.progAndArgs
+       proxy     <- L.getProxies
+       time      <- T.getZonedTime
        let day = T.localDay $ T.zonedTimeToLocalTime time
        return $ Param { paramAutoOutput    = getFlag "auto-output"
                       , paramElement       = getFlag "element"
@@ -154,9 +153,9 @@ koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 
 koshuMainParam :: (D.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
-    | paramHelp p          = L.putSuccess $ Opt.helpMessage help options
-    | paramVersion p       = L.putSuccess $ ver ++ "\n"
-    | paramShowEncoding p  = L.putSuccess =<< L.currentEncodings
+    | paramHelp p          = B.putSuccess $ Opt.helpMessage help options
+    | paramVersion p       = B.putSuccess $ ver ++ "\n"
+    | paramShowEncoding p  = B.putSuccess =<< B.currentEncodings
     | paramElement p       = putElems   g2 src
     | otherwise            = L.runFiles g2 src
     where
@@ -200,7 +199,7 @@ putElems g ns =
 --                    md <- C.readSection root (B.CodeText text)
 --                    prettyPrint md
 --                    return 0
---       _      -> L.putSuccess usage
+--       _      -> B.putSuccess usage
 --     where prettyPrint md' =
 --               case md' of
 --                 Left a   -> B.abort [] a

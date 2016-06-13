@@ -13,7 +13,6 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
-import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
 
@@ -60,23 +59,23 @@ usageDesc = unlines
 
 -- | The main function for @koshu-syntax@ command.
 koshuSyntaxMain :: IO ()
-koshuSyntaxMain = koshuSyntaxMain' =<< L.prelude
+koshuSyntaxMain = koshuSyntaxMain' =<< B.progAndArgs
 
 koshuSyntaxMain' :: (String, [String]) -> IO ()
 koshuSyntaxMain' (_, argv) =
     case G.getOpt G.Permute koshuSyntaxOptions argv of
       (opts, files, [])
-          | has OptHelp          -> L.putSuccess usage
-          | has OptVersion       -> L.putSuccess $ version ++ "\n"
+          | has OptHelp          -> B.putSuccess usage
+          | has OptVersion       -> B.putSuccess $ version ++ "\n"
           | has OptDict          -> dumpDict
-          | has OptEncoding      -> L.putSuccess =<< L.currentEncodings
+          | has OptEncoding      -> B.putSuccess =<< B.currentEncodings
           | has OptStdin         -> dumpStdin omit
           | length files == 1    -> dumpFile omit $ head files
-          | otherwise            -> L.putFailure usage
+          | otherwise            -> B.putFailure usage
           where has     = (`elem` opts)
                 omit    = has OptOmitBlank
 
-      (_, _, errs)    -> L.putFailure $ concat errs
+      (_, _, errs)    -> B.putFailure $ concat errs
 
 
 -- ----------------------  Dump

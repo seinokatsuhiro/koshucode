@@ -65,6 +65,7 @@ library
 
         Koshucode.Baala.Base.IO
         Koshucode.Baala.Base.IO.BzFile
+        Koshucode.Baala.Base.IO.Exit
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Case

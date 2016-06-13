@@ -13,7 +13,6 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Toolkit.Library.Run   as L
-import qualified Koshucode.Baala.Toolkit.Library.Exit  as L
 
 data Option
     = OptHelp
@@ -44,14 +43,14 @@ header = unlines
 
 koshuFilter :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO Int
 koshuFilter g withRes =
-  do (prog, argv) <- L.prelude
+  do (prog, argv) <- B.progAndArgs
      proxy        <- L.getProxies
      time         <- T.getZonedTime
      let day       = T.localDay $ T.zonedTimeToLocalTime time
      case G.getOpt G.Permute options argv of
        (opts, paths, [])
-           | has OptHelp     -> L.putSuccess usage
-           | has OptVersion  -> L.putSuccess $ ver ++ "\n"
+           | has OptHelp     -> B.putSuccess usage
+           | has OptVersion  -> B.putSuccess $ ver ++ "\n"
            | otherwise       -> runFiles g2 withRes src
            where
              has   = (`elem` opts)
@@ -65,7 +64,7 @@ koshuFilter g withRes =
                        , C.globalTime      = D.timeYmd day
                        , C.globalHook      = root }
 
-       (_, _, errs) -> L.putFailure $ concat errs
+       (_, _, errs) -> B.putFailure $ concat errs
 
 runFiles :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
 runFiles = hRunFiles B.stdout
@@ -79,7 +78,7 @@ hRunFiles
     -> IO Int
 hRunFiles h g withRes ns =
     do (abRes, _) <- C.resRead g ns
-       C.useUtf8 h
+       B.useUtf8 h
        case abRes of
          Left  a   -> C.globalAbort g a
          Right res -> withRes res

@@ -18,7 +18,6 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
-import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.RDF     as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
@@ -28,7 +27,7 @@ import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
 koshuRdfMain :: IO ()
 koshuRdfMain = do
-  (opts, files) <- parseCommand =<< L.prelude
+  (opts, files) <- parseCommand =<< B.progAndArgs
   checkOptions opts
   mapM_ (convert opts) files
 
@@ -54,9 +53,9 @@ options =
 
 checkOptions :: [Option] -> IO ()
 checkOptions opts | more opts [OptTurtle, OptXml] =
-  L.putFailure "choose one of -n -t -x"
+  B.putFailure "choose one of -n -t -x"
 checkOptions opts | more opts [Opt2, Opt3] =
-  L.putFailure "choose one of -2 -3"
+  B.putFailure "choose one of -2 -3"
 checkOptions _ = return ()
 
 more :: (Eq a) => [a] -> [a] -> Bool
@@ -71,13 +70,13 @@ parseCommand :: (String, [String]) -> IO ([Option], [String])
 parseCommand (prog, argv) =
     case getOpt Permute options argv of
       (opts, _, [])
-          | has OptHelp    -> L.putSuccess usage
-          | has OptVersion -> L.putSuccess version
+          | has OptHelp    -> B.putSuccess usage
+          | has OptVersion -> B.putSuccess version
           where has = (`elem` opts)
                 version = "koshu-rdf-" ++ L.versionString
       (opts, [], [])       -> return (opts, ["-"])
       (opts, files, [])    -> return (opts, files)
-      (_, _, errs)         -> L.putFailure $ concat errs
+      (_, _, errs)         -> B.putFailure $ concat errs
     where
       usage  = usageInfo header options
       header = unlines
