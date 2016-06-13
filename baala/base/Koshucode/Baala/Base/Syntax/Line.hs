@@ -31,6 +31,7 @@ import qualified Data.ByteString.Lazy.UTF8            as Bu
 import qualified Data.Generics                        as G
 import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Base.Abort           as B
+import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Syntax.Message  as Msg

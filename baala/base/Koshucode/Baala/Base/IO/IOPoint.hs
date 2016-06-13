@@ -4,7 +4,7 @@
 
 -- | I/O point: file, standard input, direct text, etc.
 
-module Koshucode.Baala.Base.Text.IOPoint
+module Koshucode.Baala.Base.IO.IOPoint
   ( -- * Named handle
     NamedHandle (..),
 

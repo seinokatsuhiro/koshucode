@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Text.CodePt
+module Koshucode.Baala.Base.IO.CodePt
   ( -- * Code point
     CodePt (..),
     codePtColumnNo,
@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Text.CodePt
 
 import qualified Data.Generics                      as G
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Text.IOPoint  as B
+import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 
 -- ----------------------  CodePt

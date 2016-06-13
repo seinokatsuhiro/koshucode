@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Syntax.Message
 
 import qualified Koshucode.Baala.Base.Abort          as B
 import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text           as B
+import qualified Koshucode.Baala.Base.IO             as B
 
 abCode :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCode = B.abortable "code"

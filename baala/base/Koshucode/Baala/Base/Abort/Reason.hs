@@ -14,6 +14,7 @@ module Koshucode.Baala.Base.Abort.Reason
     abortPage,
   ) where
 
+import qualified Koshucode.Baala.Base.IO    as B
 import qualified Koshucode.Baala.Base.Text  as B
 
 data AbortReason = AbortReason

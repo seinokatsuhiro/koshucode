@@ -7,8 +7,8 @@ module Koshucode.Baala.Base.Abort.Abortable
     abortableSourced,
   ) where
 
+import qualified Koshucode.Baala.Base.IO             as B
 import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Abort.Reason   as B
 
 
