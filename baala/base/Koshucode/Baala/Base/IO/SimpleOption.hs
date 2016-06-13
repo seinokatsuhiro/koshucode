@@ -3,7 +3,7 @@
 -- | Simple functions for parsing command-line options.
 --   This module is based on "System.Console.GetOpt".
 
-module Koshucode.Baala.Toolkit.Library.SimpleOption
+module Koshucode.Baala.Base.IO.SimpleOption
  ( -- * Data type
    ShortOption, LongOption,
    SimpleOption,

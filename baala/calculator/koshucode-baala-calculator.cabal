@@ -70,7 +70,6 @@ library
         Koshucode.Baala.Toolkit.Library.Element
         Koshucode.Baala.Toolkit.Library.Global
         Koshucode.Baala.Toolkit.Library.Run
-        Koshucode.Baala.Toolkit.Library.SimpleOption
         Koshucode.Baala.Toolkit.Library.Version
 
         Koshucode.Baala.Toolkit.Main.KoshuMain

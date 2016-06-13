@@ -14,9 +14,9 @@ import qualified Koshucode.Baala.Base   as B
 import qualified Koshucode.Baala.Data   as D
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
+import qualified Koshucode.Baala.Base.IO.SimpleOption          as Opt
 import qualified Koshucode.Baala.Toolkit.Library.Element       as L
 import qualified Koshucode.Baala.Toolkit.Library.Run           as L
-import qualified Koshucode.Baala.Toolkit.Library.SimpleOption  as Opt
 
 
 -- Flow
