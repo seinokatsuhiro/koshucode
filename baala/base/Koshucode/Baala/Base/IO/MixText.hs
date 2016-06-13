@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.IO.MixText
     MixText,
 
     -- * Constructor
-    Mix (..),
     -- ** Text
     mixBs, mixBz,
     mixTx, mixTz,
@@ -89,45 +88,6 @@ instance Monoid MixText where
 
 
 -- --------------------------------------------  Constructor
-
-class Mix a where
-    mix :: a -> MixText
-
--- | Create mix text from strict bytestring.
-instance Mix Bs.ByteString where
-    mix = mixBs
-
--- | Create mix text from lazy bytestring.
-instance Mix Bz.ByteString where
-    mix = mixBz
-
--- | Create mix text from strict text.
-instance Mix Tx.Text where
-    mix = mixTx
-
--- | Create mix text from lazy text.
-instance Mix Tz.Text where
-    mix = mixTz
-
--- | Create mix text from string.
-instance Mix String where
-    mix = mixString
-
--- | Create mix text from char.
-instance Mix Char where
-    mix = mixChar
-
--- | Create mix text of given-length spaces.
-instance Mix Int where
-    mix = mixSpace
-
--- | Concatenate mix text.
-instance Mix [MixText] where
-    mix = mconcat
-
--- | Create empty mix text.
-instance Mix () where
-    mix _ = MixEmpty
 
 -- ----------------------  Text
 
