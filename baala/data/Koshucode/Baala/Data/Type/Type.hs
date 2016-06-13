@@ -52,6 +52,9 @@ data Type
 
 type NamedType = B.Named Type
 
+instance B.MixEncode Type where
+    mixEncode = B.mixShow . writeType
+
 instance B.Write Type where
     writeDocWith _ = writeType
 

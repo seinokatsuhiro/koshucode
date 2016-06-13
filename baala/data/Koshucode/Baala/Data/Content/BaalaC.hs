@@ -94,6 +94,29 @@ instance D.CContent BaalaC where
     appendContent (VText x) (VText y)  = Right . VText $ x ++ y
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
+instance B.MixShortEncode BaalaC where
+    mixShortEncode sh c =
+        case c of
+          VCode  s   -> B.mixString $ quote  (sh s) s
+          VText  s   -> B.mixString $ qquote (sh s) s
+          VTerm  s   -> B.mixString $ "'/" ++ s
+          VDec   n   -> B.mixString $ D.encodeDecimal n
+          VClock t   -> B.mixEncode t
+          VTime  t   -> B.mixEncode t
+          VBool  b   -> B.mixEncode b
+          VEmpty     -> B.mixString "()"
+          VEnd       -> B.mixString "(/)"
+          VInterp i  -> B.mixShortEncode sh i
+          VType t    -> B.mixEncode t
+          VList cs   -> B.mixBracketS S.listOpen S.listClose $ mixBar cs
+          VSet  cs   -> B.mixBracketS S.setOpen  S.setClose  $ mixBar cs
+          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ terms ts
+          VRel  r    -> B.mixShortEncode sh r
+        where
+          mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
+          terms ts    = B.mixJoin B.mix2 $ map term ts
+          term (n,c2) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c2
+
 instance B.Write BaalaC where
     writeDocWith sh c = case c of
         VCode s      -> B.doc $ quote  (sh s) s

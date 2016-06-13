@@ -19,6 +19,9 @@ data InterpWord
     | InterpTerm S.TermName
     deriving (Show, Eq, Ord)
 
+instance B.MixShortEncode Interp where
+    mixShortEncode sh = B.mixShow . interpDoc sh
+
 instance B.Write Interp where
     writeDocWith = interpDoc
 

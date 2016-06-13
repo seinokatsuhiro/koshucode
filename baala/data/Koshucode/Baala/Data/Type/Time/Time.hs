@@ -83,6 +83,9 @@ timeMapDate _ (TimeYm    d)      = TimeYm    d
 
 -- ----------------------  Write
 
+instance B.MixEncode Time where
+    mixEncode c = B.mixShow $ writeTime c
+
 instance B.Write Time where
     writeDocWith _ = writeTime
 

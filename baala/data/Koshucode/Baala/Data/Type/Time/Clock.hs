@@ -128,6 +128,9 @@ clockAlter d' h' m' s' clock =
 
 -- ----------------------  Writer
 
+instance B.MixEncode Clock where
+    mixEncode c = B.mixShow $ writeClock c
+
 instance B.Write Clock where
     writeDocWith _ = writeClock
 

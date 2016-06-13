@@ -62,6 +62,9 @@ instance B.Monoid Head where
         where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2
               a _ _ = D.TypeAny
 
+instance B.MixEncode Head where
+    mixEncode = B.mixShow . D.typeTermDoc . headType
+
 instance B.Write Head where
     writeDocWith _ = D.typeTermDoc . headType
 

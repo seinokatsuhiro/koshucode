@@ -57,6 +57,14 @@ instance Functor Rel where
     fmap f (Rel he bo) = let bo' = fmap f `fmap` bo
                          in Rel he bo'
 
+instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
+    mixShortEncode sh (Rel he bo) =
+        let he'  = B.mixEncode he
+            bo'  = B.mixJoin1 $ map d bo
+            d xs = B.mixBracketS S.listOpen S.listClose $ mixBar xs
+        in B.mixBracketS S.relOpen S.relClose (he' `B.mixSep` bo')
+        where mixBar cs = B.mixJoinBar $ map (B.mixShortEncode sh) cs
+
 instance (B.Write c) => B.Write (Rel c) where
     writeDocWith sh (Rel he bo) =
         let he'  = B.writeDocWith sh he
