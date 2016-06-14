@@ -106,12 +106,13 @@ instance B.MixShortEncode BaalaC where
           VBool  b   -> B.mixEncode b
           VEmpty     -> B.mixString "()"
           VEnd       -> B.mixString "(/)"
-          VInterp i  -> B.mixShortEncode sh i
-          VType t    -> B.mixEncode t
+
           VList cs   -> B.mixBracketS S.listOpen S.listClose $ mixBar cs
           VSet  cs   -> B.mixBracketS S.setOpen  S.setClose  $ mixBar cs
-          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.mixTerms sh ts
+          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.mixTerms1 sh ts
           VRel  r    -> B.mixShortEncode sh r
+          VInterp i  -> B.mixShortEncode sh i
+          VType t    -> B.mixBracketS S.typeOpen S.typeClose $ B.mixEncode t
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
@@ -126,12 +127,13 @@ instance B.Write BaalaC where
         VBool b      -> B.doc b
         VEmpty       -> B.doc "()"
         VEnd         -> B.doc "(/)"
-        VInterp i    -> B.writeDocWith sh i
-        VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
+
         VList xs     -> B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
         VSet  xs     -> B.docWraps S.setOpen  S.setClose  $ B.writeBar sh xs
         VTie  xs     -> B.docWraps S.tieOpen  S.tieClose  $ B.writeH   sh xs
         VRel r       -> B.writeDocWith sh r
+        VInterp i    -> B.writeDocWith sh i
+        VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
 
     writeHtmlWith sh c = case c of
         VRel r       -> B.writeHtmlWith sh r

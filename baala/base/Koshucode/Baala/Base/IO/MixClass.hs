@@ -105,8 +105,9 @@ mixBracketS open close = mixBracket (mix open <> B.mix1) (B.mix1 <> mix close)
 -- | Concatenate mix texts with delimiter.
 mixJoin :: (Mix m) => m -> [B.MixText] -> B.MixText
 mixJoin delim = loop where
-    loop (x:xs) = x <> mix delim <> loop xs
-    loop []     = B.mixEmpty
+    loop (x : xs) | null xs   = x
+                  | otherwise = x <> mix delim <> loop xs
+    loop []                   = B.mixEmpty
 
 -- | Concatenate mix texts with delimiter and space.
 mixJoinS :: (Mix m) => m -> [B.MixText] -> B.MixText

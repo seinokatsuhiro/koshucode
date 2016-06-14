@@ -63,7 +63,7 @@ instance B.Monoid Head where
               a _ _ = D.TypeAny
 
 instance B.MixEncode Head where
-    mixEncode = B.mixShow . D.typeTermDoc . headType
+    mixEncode = D.typeTermMix . headType
 
 instance B.Write Head where
     writeDocWith _ = D.typeTermDoc . headType

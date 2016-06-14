@@ -13,7 +13,7 @@ module Koshucode.Baala.Data.Type.Type
     typeRelDegree,
     typeRelIndex,
     typeRelIndexList,
-    typeTermDoc,
+    typeTermDoc, typeTermMix,
     typeTerms,
     isTypeRel,
     typeRelMapTerms, typeRelMapTerm, typeRelMapName,
@@ -166,6 +166,11 @@ typeTermDoc :: Type -> B.Doc
 typeTermDoc (TypeRel ts) = B.doch $ map name ts where
     name (n, _) = B.doc $ S.showTermName n
 typeTermDoc _ = B.docEmpty
+
+typeTermMix :: Type -> B.MixText
+typeTermMix (TypeRel ts) = B.mixJoin1 $ map name ts where
+    name (n, _) = B.mix $ S.showTermName n
+typeTermMix _ = B.mixEmpty
 
 typeTerms :: Type -> [NamedType]
 typeTerms (TypeRel ts) = ts

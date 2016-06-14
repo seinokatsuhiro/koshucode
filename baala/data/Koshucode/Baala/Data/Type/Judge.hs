@@ -19,7 +19,7 @@ module Koshucode.Baala.Data.Type.Judge
     isAffirmative, isDenial, isViolative,
 
     -- * Writer
-    mixTerms,
+    mixTerms1, mixTerms2,
     writeDownJudge, writeDownTerms,
     textualjudge, judgeText,
     termText, termsText,
@@ -162,10 +162,16 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
           JudgeMultiChange c xs _  -> judge "|-CC" c xs
           JudgeViolate     c xs    -> judge "|-V"  c xs
         where
-          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms sh xs
+          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
 
-mixTerms :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
-mixTerms sh ts = B.mixJoin B.mix2 $ map term ts where
+mixTerms1 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
+mixTerms1 = mixTerms B.mix1
+
+mixTerms2 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
+mixTerms2 = mixTerms B.mix2
+
+mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shortener -> [(String, c)] -> B.MixText
+mixTerms sep sh ts = B.mixJoin sep $ map term ts where
     term (n,c) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c
 
 writeDownJudge :: (B.Write c) => B.Shortener -> Judge c -> String
