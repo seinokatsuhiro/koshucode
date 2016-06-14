@@ -31,7 +31,7 @@ resRun res =
                   { C.resultOutput   = C.resOutput res
                   , C.resultViolated = [S.Short [] [] [C.ResultJudge jsV]] }
 
-resRunBody :: forall c. (Ord c, B.Write c, D.CRel c, D.CEmpty c) =>
+resRunBody :: forall c. (Ord c, D.CRel c, D.CEmpty c) =>
     C.Result c -> C.Resource c -> B.Ab (C.Result c)
 resRunBody rslt res@C.Resource { C.resAssert  = ass
                                , C.resEcho    = echo

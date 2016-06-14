@@ -120,10 +120,10 @@ relmapExclude med (ns, m) = excl where
 
 -- ----------------------  dump
 
-consDump :: (B.Write c, D.CRel c) => C.RopCons c
+consDump :: (D.CRel c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 
-relkitDump :: (B.Write c, D.CRel c) => C.RelkitFlow c
+relkitDump :: (D.CRel c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []

@@ -136,14 +136,14 @@ position he = spos where
 type RunCox  c = D.Cox c -> B.Ab c
 type RunList c = [c]     -> B.Ab c
 
-coxRunCox :: (B.Write c, D.CRel c, D.CList c) =>
+coxRunCox :: (D.CRel c, D.CList c) =>
     D.CopSet c -> D.Head -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
-coxRunPure :: (B.Write c, D.CRel c, D.CList c) => D.CopSet c -> RunCox c
+coxRunPure :: (D.CRel c, D.CList c) => D.CopSet c -> RunCox c
 coxRunPure cops cox = coxRunList cops B.mempty cox []
 
-coxRunList :: (B.Write c, D.CRel c, D.CList c) =>
+coxRunList :: (D.CRel c, D.CList c) =>
     D.CopSet c -> D.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
@@ -153,7 +153,7 @@ calcContent cops = calc where
 
 -- | Calculate content expression.
 coxRun
-  :: forall c. (D.CRel c, D.CList c, B.Write c)
+  :: forall c. (D.CRel c, D.CList c)
   => [c]           -- ^ Tuple in body of relation
   -> Beta c        -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
@@ -181,7 +181,7 @@ coxRun args = run 0 where
     rel ps (D.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
-(!!!) :: (B.Write a) =>[a] -> Int -> a
+(!!!) :: (B.Write a) => [a] -> Int -> a
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs

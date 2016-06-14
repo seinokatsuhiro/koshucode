@@ -113,7 +113,7 @@ instance B.Name (ResultWriter c) where
     name (ResultWriterJudge n _) = n
 
 -- | `B.stdout` version of `hPutResult`.
-putResult :: (B.Write c) => Result c -> IO B.ExitCode
+putResult :: Result c -> IO B.ExitCode
 putResult result =
     case resultOutput result of
       B.IOPointStdout      -> hPutResult B.stdout result
@@ -125,7 +125,7 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: forall c. (B.Write c) => IO.Handle -> Result c -> IO B.ExitCode
+hPutResult :: forall c. IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result
     | null violated  = hPutAllChunks h result (B.exitCode 0) normal
     | otherwise      = hPutAllChunks h result (B.exitCode 1) violated
@@ -138,7 +138,7 @@ hPutResult h result
       hasJudge (ResultJudge js)  = B.notNull js
       hasJudge _                 = False
 
-hPutAllChunks :: (B.Write c) => ResultWriterChunk c
+hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
     do B.useUtf8 h
        case resultWriter result of

@@ -29,7 +29,7 @@ putJudgesWith :: (Show c, B.Write c, B.MixShortEncode c) => B.ExitCode -> [D.Jud
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
 -- | Print list of judges.
-hPutJudgesWith :: (B.Write c, B.MixShortEncode c) => C.ResultWriterJudge c
+hPutJudgesWith :: (B.MixShortEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixIdEncode js $ judgeCountMix []
        B.hPutMix (B.crlf4 120) h mx

@@ -27,13 +27,13 @@ hPutCsv h _ status js =
       toCSV (D.JudgeAffirm p xs) = p : map snd xs
       toCSV _ = []
 
-resultCsvHeading :: (D.CContent c, B.Write c) => C.ResultWriter c
+resultCsvHeading :: (D.CContent c) => C.ResultWriter c
 resultCsvHeading = C.ResultWriterChunk "csv-heading" $ hPutXsvHeading "," enquote
 
-resultTsvHeading :: (D.CContent c, B.Write c) => C.ResultWriter c
+resultTsvHeading :: (D.CContent c) => C.ResultWriter c
 resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsvHeading "\t" toSpace
 
-hPutXsvHeading :: forall c. (D.CContent c, B.Write c)
+hPutXsvHeading :: forall c. (D.CContent c)
     => String -> B.Map String -> C.ResultWriterChunk c
 hPutXsvHeading delim text h _ status sh =
     do let csv = concatMap toCsv chunks
@@ -52,7 +52,7 @@ hPutXsvHeading delim text h _ status sh =
 
       comma = B.intercalate delim
 
-csvContent :: (D.CContent c, B.Write c) => B.Map String -> c -> String
+csvContent :: (D.CContent c) => B.Map String -> c -> String
 csvContent text c
     | D.isText   c  = text $ D.gText c
     | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
