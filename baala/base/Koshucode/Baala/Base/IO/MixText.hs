@@ -270,27 +270,27 @@ mixToStringDef = mixToString Def.def
 
 -- | Print mix text to the standard output.
 putMix :: B.LineBreak -> MixText -> IO ()
-putMix = hPutMix IO.stdout
+putMix lb = hPutMix lb IO.stdout
 
 -- | Print mix text and newline to the standard output.
 putMixLn :: B.LineBreak -> MixText -> IO ()
-putMixLn = hPutMixLn IO.stdout
+putMixLn lb = hPutMixLn lb IO.stdout
 
 -- | Print mix text to the given output handler.
-hPutMix :: IO.Handle -> B.LineBreak -> MixText -> IO ()
-hPutMix h lb = B.hPutBuilder h . mixToBuilder lb
+hPutMix :: B.LineBreak -> IO.Handle -> MixText -> IO ()
+hPutMix lb h = B.hPutBuilder h . mixToBuilder lb
 
 -- | Print mix text and newline to the given output handler.
-hPutMixLn :: IO.Handle -> B.LineBreak -> MixText -> IO ()
-hPutMixLn h lb mx = B.hPutBuilder h $ mixToBuilder lb $ mx <> mixHard
+hPutMixLn :: B.LineBreak -> IO.Handle -> MixText -> IO ()
+hPutMixLn lb h mx = B.hPutBuilder h $ mixToBuilder lb $ mx <> mixHard
 
 -- | Print mix text lines to the standard output.
 putMixLines :: B.LineBreak -> [MixText] -> IO ()
-putMixLines = hPutMixLines IO.stdout
+putMixLines lb = hPutMixLines lb IO.stdout
 
 -- | Print mix text lines to the given output handler.
-hPutMixLines :: IO.Handle -> B.LineBreak -> [MixText] -> IO ()
-hPutMixLines h lb = mapM_ (hPutMixLn h lb)
+hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
+hPutMixLines lb h = mapM_ $ hPutMixLn lb h
 
 -- ----------------------  Build
 
