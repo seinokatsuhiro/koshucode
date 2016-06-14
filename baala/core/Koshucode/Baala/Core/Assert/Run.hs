@@ -23,14 +23,14 @@ import qualified Koshucode.Baala.Core.Assert.Message   as Msg
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, D.CRel c, D.CEmpty c, D.SelectRel h, C.GetGlobal h)
+runAssertJudges :: (Ord c, D.CContent c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (C.ShortResultChunks c)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { S.shortBody = chunks }
 
 -- | Calculate assertion list.
-runAssertDataset :: forall h. forall c. (Ord c, D.CRel c, D.CEmpty c, D.SelectRel h, C.GetGlobal h)
+runAssertDataset :: forall h. forall c. (Ord c, D.CContent c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [C.ResultChunk c]
 runAssertDataset hook option (S.Short _ sh ass) =
     Right . concat =<< mapM each ass
@@ -77,7 +77,7 @@ optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
              , "table"     -- output relation in tabular format
              ]
 
-optionProcess :: (Ord c, D.CRel c)
+optionProcess :: (Ord c, D.CRel c, B.MixShortEncode c)
     => [S.ShortDef] -> (Bool -> D.JudgeOf c) -> D.JudgeClass
     -> C.Option c -> C.TTreePara
     -> D.Rel c -> B.Ab [C.ResultChunk c]
@@ -110,7 +110,7 @@ optionRelmapAssert opt r1 =
                              Right args -> f args r2
                              Left _     -> Right r2
 
-optionComment :: (D.CRel c) =>
+optionComment :: (D.CRel c, B.MixShortEncode c) =>
     [S.ShortDef] -> D.JudgeClass -> C.TTreePara -> D.Rel c -> B.Ab [String]
 optionComment sh p opt r =
     do optTable <- S.paraGetSwitch opt "table"

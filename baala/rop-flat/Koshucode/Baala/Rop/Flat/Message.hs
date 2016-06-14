@@ -44,7 +44,7 @@ dumpCox cox = Left $ B.abortLines "Dump content expression"
                    $ lines $ show cox
 
 -- | Dump relation
-dumpRel :: (B.Write c, D.CRel c) => D.Rel c -> B.Ab a
+dumpRel :: (D.CRel c, B.MixShortEncode c) => D.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees

@@ -219,7 +219,7 @@ round2 f arg =
 
 -- --------------------------------------------  Add and subtract
 
-copPlus :: (D.CText c, D.CDec c) => D.FracleSide -> D.CopCalc c
+copPlus :: (Show c, D.CText c, D.CDec c) => D.FracleSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
     loop [] = Right 0
     loop (n : m) = do n' <- copDec n
@@ -241,7 +241,7 @@ copPlus1 _ = Msg.unexpAttr "+"
 
 -- --------------------------------------------  Multiply and divide
 
-copMul :: (D.CText c, D.CDec c) => D.CopCalc c
+copMul :: (Show c, D.CText c, D.CDec c) => D.CopCalc c
 copMul xs = fmap D.pDec $ loop xs where
     loop [] = Right 1
     loop (n : m) = do n' <- copDec n

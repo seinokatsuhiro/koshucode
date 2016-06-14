@@ -31,7 +31,7 @@ import qualified Koshucode.Baala.Data.Content.Simple      as D
 
 -- ----------------------  Generic content
 
-class (Ord c, B.MixShortEncode c, D.CTypeOf c,
+class (Ord c, Show c, B.Write c, B.MixShortEncode c, D.CTypeOf c,
        D.CEmpty c, D.CEnd c,
        D.CBool c, D.CCode c, D.CText c, D.CClock c, D.CTime c,
        D.CTerm c, D.CDec c, D.CType c, D.CInterp c,

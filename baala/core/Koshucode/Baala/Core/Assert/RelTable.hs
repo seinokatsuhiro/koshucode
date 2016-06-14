@@ -19,10 +19,10 @@ import qualified Koshucode.Baala.Data         as D
 
 -- --------------------------------------------  Rel table
 
-relTable :: (D.CRel c) => [S.ShortDef] -> D.Rel c -> String
+relTable :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> String
 relTable sh = unlines . relTableLines sh
 
-relTableLines :: (D.CRel c) => [S.ShortDef] -> D.Rel c -> [String]
+relTableLines :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> [String]
 relTableLines sh r = render $ relCells 2 size [] text where
     text = relText sh r
     size = maxTermSize text
@@ -44,10 +44,10 @@ relCells pad m path (D.Rel he bo) = table where
     text   = B.textCell B.Front
     rule _ = B.textRuleCell '-'
 
-relText :: (D.CRel c) => [S.ShortDef] -> D.Rel c -> D.RelText
+relText :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> D.RelText
 relText sh (D.Rel he bo) = D.Rel he $ map (map content) bo where
     content c | D.isRel c  = D.MonoNest $ relText sh $ D.gRel c
-              | otherwise  = D.MonoTerm $ B.writeStringWith (S.shortText sh) c
+              | otherwise  = D.MonoTerm $ B.mixToString B.noBreak $ B.mixShortEncode (S.shortText sh) c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable

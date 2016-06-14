@@ -19,22 +19,23 @@ import qualified Koshucode.Baala.Data.Content.Message as Msg
 
 -- --------------------------------------------  Type
 
-class (Show c, B.Write c) => CTypeOf c where
+class CTypeOf c where
     typeOf :: c -> D.Type
 
 getAbAb :: (CTypeOf c) => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
-getAbAb _ _ (Left reason) =  Left reason
-getAbAb is get (Right x)
-    | is x = Right $ get x
-    | otherwise = Msg.unmatchType $ show $ B.doc $ typeOf x
+getAbAb _ _    (Left a) = Left a
+getAbAb is get (Right c)
+    | is c      = Right $ get c
+    | otherwise = let s = B.mixToString B.noBreak $ B.mixEncode $ typeOf c
+                  in Msg.unmatchType s
 
 
 -- --------------------------------------------  Empty and End
 
 -- | Empty: the minimum content.
 class (CTypeOf c) => CEmpty c where
-    isEmpty     ::          c -> Bool
-    empty       ::          c
+    isEmpty     :: c -> Bool
+    empty       :: c
 
 maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 maybeEmpty f (Just a)   = f a
@@ -45,6 +46,6 @@ omitEmpty = B.omit (isEmpty . snd)
 
 -- | End of everything: the maximum content.
 class (CTypeOf c) => CEnd c where
-    isEnd       ::          c -> Bool
-    end         ::          c
+    isEnd       :: c -> Bool
+    end         :: c
 

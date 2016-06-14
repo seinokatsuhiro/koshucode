@@ -51,7 +51,7 @@ data InputPoint = InputPoint
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.
-instance (Show c, B.Write c) => B.Default (Result c) where
+instance (Show c) => B.Default (Result c) where
     def = Result { resultWriter     = resultDump
                  , resultPrintHead  = True
                  , resultPrintFoot  = True

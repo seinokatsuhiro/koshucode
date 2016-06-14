@@ -104,7 +104,7 @@ globalAbort :: Global' h c -> B.AbortReason -> IO a
 globalAbort = B.abort . globalCommandLine
 
 -- | Empty global parameters.
-global' :: (D.CBool c, D.CText c) => h c -> Global' h c
+global' :: (Show c, D.CBool c, D.CText c) => h c -> Global' h c
 global' h = Global
     { globalSynopsis     = "koshu"
     , globalVersion      = Ver.Version [] []
