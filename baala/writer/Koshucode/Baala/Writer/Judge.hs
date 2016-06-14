@@ -3,14 +3,15 @@
 
 module Koshucode.Baala.Writer.Judge
   ( -- * Writer
-    putJudges, putJudgesWith, hPutJudgesWith, hPutJudgesCount,
+    putJudges, putJudgesWith, hPutJudgesWith,
+    judgesCountMix,
     -- * Counter
-    JudgeCount, judgeCount, judgeSummary,
+    JudgeCount, JudgeCountMix,
+    judgeCount, judgeCountMix, judgeSummary,
   ) where
 
-import qualified Control.Monad                       as M
+import Data.Monoid ((<>))
 import qualified Data.Map                            as Map
-import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
@@ -18,61 +19,68 @@ import qualified Koshucode.Baala.Core                as C
 
 -- ----------------------  Writer
 
-putJudges :: (Show c, B.Write c) => [D.Judge c] -> IO ()
+putJudges :: (Show c, B.Write c, B.MixShortEncode c) => [D.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (B.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Show c, B.Write c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
+putJudgesWith :: (Show c, B.Write c, B.MixShortEncode c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
 -- | Print list of judges.
-hPutJudgesWith :: (B.Write c) => C.ResultWriterJudge c
+hPutJudgesWith :: (B.Write c, B.MixShortEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
-    do cnt <- hPutJudgesCount h result (D.hPutJudge h) js $ judgeCount []
-       B.hPutLines h $ judgeSummary status cnt
+    do let (mx, cnt, tab) = judgesCountMix result B.mixIdEncode js $ judgeCountMix []
+       B.hPutMix (B.crlf4 120) h mx
+       B.hPutLines h $ judgeSummary status (cnt, tab)
        return status
 
-hPutJudgesCount :: forall c.
-    IO.Handle -> C.Result c -> (D.Judge c -> IO ()) -> [D.Judge c] -> JudgeCount -> IO JudgeCount
-hPutJudgesCount h result writer = loop where
-    loop (j : js) cnt  = loop js =<< put j cnt
-    loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h
-                            total c
-                            B.hPutEmptyLine h
-                            return cnt
+judgesCountMix :: forall c.
+    C.Result c -> (D.Judge c -> B.MixText) -> [D.Judge c] -> B.Map JudgeCountMix
+judgesCountMix result writer = loop where
+    loop (j : js) cnt  = loop js $ put j cnt
+    loop [] (mx, c, tab) =
+        let mx' = (B.mixHard `when` (c > 0)) <> total c <> B.mixHard
+        in (mx <> mx', c, tab)
 
-    put :: D.Judge c -> JudgeCount -> IO JudgeCount
-    put judge (c, tab) = do putGutter c
-                            writer judge
-                            let c'  = c + 1
-                                cls = D.judgeClass judge
-                            return (c', Map.alter inc cls tab)
+    put :: D.Judge c -> B.Map JudgeCountMix
+    put judge (mx, c, tab) =
+        let c'   = c + 1
+            cls  = D.judgeClass judge
+            mx'  = gutterMix c <> writer judge <> B.mixHard
+            tab' = Map.alter inc cls tab
+        in (mx <> mx', c', tab')
 
-    putGutter c   = M.when (mod5 c && c > 0) $
-                      do M.when (mod25 c) $ progress c
-                         B.hPutEmptyLine h
+    gutterMix c | mod5 c && c > 0  = (progress c `when` mod25 c) <> B.mixHard
+                | otherwise        = B.mixEmpty
 
     mod25 n       = n `mod` measure == 0
     mod5  n       = n `mod` gutter  == 0
     gutter        = C.resultGutter  result
     measure       = C.resultMeasure result
 
-    total    n    = IO.hPutStrLn h $ "*** " ++ count n
-    progress n    = IO.hPutStrLn h $ "*** " ++ show n
+    total    n    = B.mixString "*** " <> B.mixString (count n) <> B.mixHard
+    progress n    = B.mixString "*** " <> B.mixShow n <> B.mixHard
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
 
+when :: (Monoid a) => a -> Bool -> a
+when a True  = a
+when _ False = mempty
 
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter
 type JudgeCount = (Int, Map.Map D.JudgeClass Int)
+type JudgeCountMix = (B.MixText, Int, Map.Map D.JudgeClass Int)
 
 judgeCount :: [D.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
+
+judgeCountMix :: [D.JudgeClass] -> JudgeCountMix
+judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 judgeSummary :: B.ExitCode -> JudgeCount -> [String]

@@ -87,11 +87,13 @@ hPutShort h def =
 
 hPutChunks :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shortener -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks h result sh = loop where
-    writer = B.hPutMixLn (B.crlf4 120) h . B.mixShortEncode sh
+    writer = B.mixShortEncode sh
 
     loop [] cnt                            = return cnt
-    loop (C.ResultJudge js : xs) (_, tab)  = do cnt' <- W.hPutJudgesCount h result writer js (0, tab)
-                                                loop xs cnt'
+    loop (C.ResultJudge js : xs) (_, tab)  =
+        case W.judgesCountMix result writer js (B.mixEmpty, 0, tab) of
+          (mx, cnt', tab') -> do B.hPutMix (B.crlf4 120) h mx
+                                 loop xs (cnt', tab')
     loop (C.ResultNote [] : xs) cnt        = loop xs cnt
     loop (C.ResultNote ls : xs) cnt        = do hPutNote h ls
                                                 loop xs cnt
