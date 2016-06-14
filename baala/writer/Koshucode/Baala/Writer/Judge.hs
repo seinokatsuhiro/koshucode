@@ -34,7 +34,7 @@ hPutJudgesWith h result status js =
        B.hPutLines h $ judgeSummary status cnt
        return status
 
-hPutJudgesCount :: forall c. (B.Write c) =>
+hPutJudgesCount :: forall c.
     IO.Handle -> C.Result c -> (D.Judge c -> IO ()) -> [D.Judge c] -> JudgeCount -> IO JudgeCount
 hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt

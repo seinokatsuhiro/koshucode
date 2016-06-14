@@ -12,10 +12,10 @@ import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 
-resultKoshu :: (B.Write c, B.MixShortEncode c) => C.ResultWriter c
+resultKoshu :: (B.MixShortEncode c) => C.ResultWriter c
 resultKoshu = C.ResultWriterChunk "koshu" hPutKoshu
 
-hPutKoshu :: (B.Write c, B.MixShortEncode c) => C.ResultWriterChunk c
+hPutKoshu :: (B.MixShortEncode c) => C.ResultWriterChunk c
 hPutKoshu h result status sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
@@ -68,7 +68,7 @@ hPutFoot h status cnt = B.hPutLines h $ W.judgeSummary status cnt
 
 -- ----------------------  Chunk
 
-hPutShortChunk :: (B.Write c, B.MixShortEncode c) => IO.Handle -> C.Result c -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
+hPutShortChunk :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
 hPutShortChunk h result cnt (S.Short _ def output) =
     do hPutShort h def
        hPutChunks h result (S.shortText def) output cnt
@@ -85,7 +85,7 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
-hPutChunks :: (B.Write c, B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shortener -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
+hPutChunks :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shortener -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks h result sh = loop where
     writer = B.hPutMixLn (B.crlf4 120) h . B.mixShortEncode sh
 
