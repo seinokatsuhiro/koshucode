@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.IO.MixClass
     Mix (..),
     MixEncode (..),
     MixShortEncode (..),
+    mixIdEncode,
 
     -- * Mix utility
     mixBracket, mixBracketS,
@@ -85,6 +86,10 @@ instance MixEncode Bool where
 -- | Encode with shortener.
 class MixShortEncode a where
     mixShortEncode :: B.Shortener -> a -> B.MixText
+
+-- | 'mixShortEncode' with no shortener.
+mixIdEncode :: (MixShortEncode a) => a -> B.MixText
+mixIdEncode = mixShortEncode B.nullShortener
 
 
 -- ----------------------  Utility

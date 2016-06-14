@@ -110,12 +110,10 @@ instance B.MixShortEncode BaalaC where
           VType t    -> B.mixEncode t
           VList cs   -> B.mixBracketS S.listOpen S.listClose $ mixBar cs
           VSet  cs   -> B.mixBracketS S.setOpen  S.setClose  $ mixBar cs
-          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ terms ts
+          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.mixTerms sh ts
           VRel  r    -> B.mixShortEncode sh r
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
-          terms ts    = B.mixJoin B.mix2 $ map term ts
-          term (n,c2) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c2
 
 instance B.Write BaalaC where
     writeDocWith sh c = case c of

@@ -17,7 +17,7 @@ module Koshucode.Baala.Base.IO.MixText
     -- ** Padding
     mixLeft, mixRight,
     -- ** Space
-    mixSpace, mixSep,
+    mixSpace, mixSep, mixSep2,
     mix0, mix1, mix2, mix3, mix4,
     -- ** Number
     mixOct, mixDec, mixHex, mixSign,
@@ -149,6 +149,9 @@ mixSpace = MixSpace
 -- | Infix mix space.
 mixSep :: MixText -> MixText -> MixText
 mixSep l r = l <> mix1 <> r
+
+mixSep2 :: MixText -> MixText -> MixText
+mixSep2 l r = l <> mix2 <> r
 
 -- | Empty space.
 mix0 :: MixText
