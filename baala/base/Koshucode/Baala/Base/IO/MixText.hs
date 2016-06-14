@@ -50,6 +50,7 @@ import qualified Data.Text.Lazy                       as Tz
 import qualified Data.Text.Lazy.Encoding              as Tz
 import qualified System.IO                            as IO
 import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base.IO.LineBreak    as B
 
 
 -- --------------------------------------------  MixText

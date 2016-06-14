@@ -68,6 +68,7 @@ library
         Koshucode.Baala.Base.IO.CodePt
         Koshucode.Baala.Base.IO.Exit
         Koshucode.Baala.Base.IO.IOPoint
+        Koshucode.Baala.Base.IO.LineBreak
         Koshucode.Baala.Base.IO.MixClass
         Koshucode.Baala.Base.IO.MixText
         Koshucode.Baala.Base.IO.SimpleOption
@@ -89,7 +90,6 @@ library
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.Http
-        Koshucode.Baala.Base.Text.LineBreak
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
         Koshucode.Baala.Base.Text.Utility
