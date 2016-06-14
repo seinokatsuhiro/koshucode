@@ -107,8 +107,8 @@ instance B.MixShortEncode BaalaC where
           VEmpty     -> B.mixString "()"
           VEnd       -> B.mixString "(/)"
 
-          VList cs   -> B.mixBracketS S.listOpen S.listClose $ mixBar cs
-          VSet  cs   -> B.mixBracketS S.setOpen  S.setClose  $ mixBar cs
+          VList cs   -> D.mixBracketList $ mixBar cs
+          VSet  cs   -> D.mixBracketSet  $ mixBar cs
           VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.mixTerms1 sh ts
           VRel  r    -> B.mixShortEncode sh r
           VInterp i  -> B.mixShortEncode sh i

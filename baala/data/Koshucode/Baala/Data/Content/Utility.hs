@@ -15,6 +15,8 @@ module Koshucode.Baala.Data.Content.Utility
     contApTextToText,
     contMapTextToList,
     contString,
+    mixBracketList,
+    mixBracketSet,
     contMinimum, contMaximum,
     pTermSet, pTextSet, pTextList,
   ) where
@@ -114,30 +116,34 @@ contMapTextToList = contMap D.gText D.putList
 
 -- | Convert content to string value.
 contString :: (CContent c) => c -> String
-contString = show . contDoc
+contString = B.mixToString B.noBreak . contStringMix
 
 -- | Convert content to pretty print doc.
-contDoc :: (CContent c) => c -> B.Doc
-contDoc c
-    | D.isEmpty  c  = B.doc ""
-    | D.isBool   c  = B.writeDoc $ D.gBool c
+contStringMix :: (CContent c) => c -> B.MixText
+contStringMix c
+    | D.isCode   c  = B.mixString $ D.gCode c
+    | D.isText   c  = B.mixString $ D.gText c
+    | D.isTerm   c  = B.mixString $ '/' : D.gTerm c
+    | D.isDec    c  = B.mixString $ D.encodeDecimalCompact $ D.gDec c
+    | D.isClock  c  = B.mixEncode $ D.gClock c
+    | D.isTime   c  = B.mixEncode $ D.gTime c
+    | D.isBool   c  = B.mixEncode $ D.gBool c
+    | D.isEmpty  c  = B.mixEmpty
+    | D.isEnd    c  = B.mixString "(/)"
 
-    | D.isDec    c  = B.doc $ D.encodeDecimalCompact $ D.gDec c
-    | D.isClock  c  = B.doc $ show $ D.writeClockBody $ D.gClock c
-    | D.isTime   c  = B.doc $ B.writeString c
+    | D.isList   c  = mixBracketList $ B.mixJoinBar $ map contStringMix $ D.gList c
+    | D.isSet    c  = mixBracketSet  $ B.mixJoinBar $ map contStringMix $ D.gSet c 
+    | D.isTie    c  = B.mixString "<tie>"
+    | D.isRel    c  = B.mixString "<rel>"
+    | D.isInterp c  = B.mixString "<interp>"
+    | D.isType   c  = B.mixString "<type>"
+    | otherwise     = B.mixString "<?>"
 
-    | D.isCode   c  = B.doc $ D.gCode c
-    | D.isText   c  = B.doc $ D.gText c
-    | D.isTerm   c  = B.doc $ '/' : D.gTerm c
+mixBracketList :: B.MixText -> B.MixText
+mixBracketList = B.mixBracketS S.listOpen S.listClose
 
-    | D.isList   c  = B.docWraps S.listOpen S.listClose $ B.writeBar B.nullShortener $ map contDoc $ D.gList c 
-    | D.isSet    c  = B.docWraps S.setOpen  S.setClose  $ B.writeBar B.nullShortener $ map contDoc $ D.gSet c 
-
-    | D.isTie    c  = B.doc "<tie>"
-    | D.isRel    c  = B.doc "<rel>"
-    | D.isInterp c  = B.doc "<interp>"
-    | D.isType   c  = B.doc "<type>"
-    | otherwise   = B.doc "<?>"
+mixBracketSet :: B.MixText -> B.MixText
+mixBracketSet = B.mixBracketS S.setOpen S.setClose
 
 -- | Minimum content of contents list.
 contMinimum :: (Ord c, D.CEnd c) => [c] -> c
