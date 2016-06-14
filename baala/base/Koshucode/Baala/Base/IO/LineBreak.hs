@@ -11,8 +11,8 @@ module Koshucode.Baala.Base.IO.LineBreak
     noBreak, lfBreak, crlfBreak,
 
     -- * Limited line width
-    lf804, crlf804,
-    lf802, crlf802,
+    lf2, lf4, lf8,
+    crlf2, crlf4, crlf8,
   ) where
 
 import qualified Data.Default as Def
@@ -62,26 +62,30 @@ crlfBreak = unlimited crlfString
 
 -- ----------------------  Limited line width
 
-limited :: Int -> Int -> String -> LineBreak
-limited wd ind nl =
+limited :: String -> Int -> Int -> LineBreak
+limited nl ind wd =
     LineBreak { breakWidth     = Just wd
               , breakNewline   = nl
               , breakContinue  = nl
               , breakIndent    = replicate ind ' ' }
 
--- | Line break by LF with 80 column and 2 spaces indent.
-lf802 :: LineBreak
-lf802 = limited 80 2 lfString
+-- | Line break by LF with 2 spaces indent and given-length column.
+lf2 :: Int -> LineBreak
+-- | Line break by LF with 4 spaces indent and given-length column.
+lf4 :: Int -> LineBreak
+-- | Line break by LF with 8 spaces indent and given-length column.
+lf8 :: Int -> LineBreak
 
--- | Line break by CRLF with 80 column and 2 spaces indent.
-crlf802 :: LineBreak
-crlf802 = limited 80 2 crlfString
+-- | Line break by CRLF with 2 spaces indent and given-length column.
+crlf2 :: Int -> LineBreak
+-- | Line break by CRLF with 4 spaces indent and given-length column.
+crlf4 :: Int -> LineBreak
+-- | Line break by CRLF with 8 spaces indent and given-length column.
+crlf8 :: Int -> LineBreak
 
--- | Line break by LF with 80 column and 4 spaces indent.
-lf804 :: LineBreak
-lf804 = limited 80 4 lfString
-
--- | Line break by CRLF with 80 column and 4 spaces indent.
-crlf804 :: LineBreak
-crlf804 = limited 80 4 crlfString
-
+lf2    = limited lfString 2
+lf4    = limited lfString 4
+lf8    = limited lfString 8
+crlf2  = limited crlfString 2
+crlf4  = limited crlfString 4
+crlf8  = limited crlfString 8
