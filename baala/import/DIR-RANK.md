@@ -74,21 +74,23 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    148 judges
+**    170 judges
 **
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Abort.Reason"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Message"        /import "Koshucode.Baala.Base.Abort"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Base.Text"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Abort.Reason"
+|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.Abort.Reason"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort"                /import "Koshucode.Baala.Base.Abort.Abortable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort"                /import "Koshucode.Baala.Base.Abort.Reason"
@@ -98,7 +100,58 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.IO.BzFile"            /import "Koshucode.Baala.Base.Prelude"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.CodePt"            /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.CodePt"            /import "Koshucode.Baala.Base.Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.CodePt"            /import "Koshucode.Baala.Base.IO.IOPoint"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Exit"              /import "GHC.IO.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Exit"              /import "System.Environment"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Exit"              /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.Exit"              /import "Koshucode.Baala.Base.Prelude"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.IOPoint"           /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.IOPoint"           /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.IOPoint"           /import "Koshucode.Baala.Base.List"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.IOPoint"           /import "Koshucode.Baala.Base.Prelude"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.LineBreak"         /import "Data.Default"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Data.ByteString"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Koshucode.Baala.Base.IO.MixText"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixClass"          /import "Koshucode.Baala.Base.Text"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Numeric"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.ByteString"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.ByteString.Builder"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.ByteString.Lazy.UTF8"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Default"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Text.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Data.Text.Lazy.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.MixText"           /import "Koshucode.Baala.Base.IO.LineBreak"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.SimpleOption"      /import "Data.Maybe"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.SimpleOption"      /import "Data.Version"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.SimpleOption"      /import "System.Console.GetOpt"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO.SimpleOption"      /import "System.Environment"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.BzFile"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.CodePt"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.Exit"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.IOPoint"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.LineBreak"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.MixClass"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.MixText"
+|-- IMPORT  /module "Koshucode.Baala.Base.IO"                   /import "Koshucode.Baala.Base.IO.SimpleOption"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Assoc"           /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Assoc"           /import "Data.Maybe"
@@ -156,9 +209,9 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude"              /import "Koshucode.Baala.Base.Prelude.Queue"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Clause"        /import "Koshucode.Baala.Base.Syntax.Line"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Infix"         /import "Data.Map"
@@ -170,29 +223,26 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Abort"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Syntax.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.IO"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.Abort"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.Syntax.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Infix"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Line"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Tree"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.IOPoint"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
@@ -203,28 +253,6 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.URI"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Koshucode.Baala.Base.Text.Utility"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "Koshucode.Baala.Base.List"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "Koshucode.Baala.Base.Prelude"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.LineBreak"       /import "Data.Default"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Monoid"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Numeric"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Builder"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy.UTF8"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Default"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Koshucode.Baala.Base.Text.LineBreak"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Koshucode.Baala.Base.Text.Utility"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.List"
@@ -247,18 +275,15 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.Prelude"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.IOPoint"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodePt"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Http"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.LineBreak"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixText"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Unicode"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Utility"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Write"
 
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Abort"
+|-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Syntax"
@@ -279,15 +304,31 @@ Command `./dir-rank.k ../base/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Base.Prelude"  /base-rank {= /rank /base /import-dir [ 0 | "Case" | [ ] ] [ 0 | "Class" | [ ] ] [ 0 | "Import" | [ ] ] [ 1 | "Pair" | [ ] ] [ 1 | "Queue" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 3 | "BzFile" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Base.List"  /base-rank {= /rank /base /import-dir [ 0 | "Split" | [ ] ] [ 1 | "Dots" | [ ] ] [ 3 | "Assoc" | [ "Prelude" ] ] [ 3 | "List" | [ "Prelude" ] ] [ 3 | "Snip" | [ "Prelude" ] ] [ 4 | "Order" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Comment" | [ ] ] [ 0 | "LineBreak" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 3 | "Utility" | [ "Prelude" ] ] [ 4 | "Http" | [ "Prelude" ] ] [ 4 | "MixText" | [ ] ] [ 6 | "IOPoint" | [ "List" | "Prelude" ] ] [ 6 | "TextTable" | [ "List" | "Prelude" ] ] [ 6 | "Write" | [ "List" | "Prelude" ] ] [ 7 | "CodePt" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 9 | "Reason" | [ "Text" ] ] [ 10 | "Abortable" | [ "Prelude" | "Text" ] ] [ 10 | "Report" | [ "List" | "Prelude" | "Text" ] ] [ 12 | "Message" | [ "Abort" ] ] =}
+|-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Base.Prelude"  /base-rank {= /rank /base /import-dir [ 0 | "Case" | [ ]
+    ] [ 0 | "Class" | [ ] ] [ 0 | "Import" | [ ] ] [ 1 | "Pair" | [ ] ] [ 1 | "Queue" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Base.List"  /base-rank {= /rank /base /import-dir [ 0 | "Split" | [ ] ]
+    [ 1 | "Dots" | [ ] ] [ 3 | "Assoc" | [ "Prelude" ] ] [ 3 | "List" | [ "Prelude" ] ] [ 3 | "Snip" | [ "Prelude" ] ] [
+    4 | "Order" | [ "Prelude" ] ] =}
+|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Comment" | [ ]
+    ] [ 0 | "Unicode" | [ ] ] [ 3 | "Utility" | [ "Prelude" ] ] [ 4 | "Http" | [ "Prelude" ] ] [ 6 | "TextTable" | [
+    "List" | "Prelude" ] ] [ 6 | "Write" | [ "List" | "Prelude" ] ] =}
+|-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 0 | "LineBreak" | [ ]
+    ] [ 0 | "SimpleOption" | [ ] ] [ 3 | "BzFile" | [ "Prelude" ] ] [ 3 | "Exit" | [ "Prelude" ] ] [ 6 | "IOPoint" | [
+    "List" | "Prelude" ] ] [ 7 | "CodePt" | [ "Prelude" ] ] [ 8 | "MixText" | [ "Text" ] ] [ 9 | "MixClass" | [ "Text" ]
+    ] =}
+|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 11 | "Reason" | [
+    "IO" | "Text" ] ] [ 12 | "Abortable" | [ "IO" | "Prelude" ] ] [ 12 | "Report" | [ "IO" | "List" | "Prelude" | "Text"
+    ] ] [ 14 | "Message" | [ "Abort" ] ] =}
 
-|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 12 | "Message" | [ "Abort" | "Prelude" | "Text" ] ] [ 13 | "Line" | [ "Abort" | "Prelude" | "Text" ] ] [ 13 | "Tree" | [ "Abort" | "List" | "Prelude" | "Text" ] ] [ 14 | "Clause" | [ "List" | "Prelude" | "Text" ] ] [ 14 | "Infix" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 2 | "Prelude" | [ ] ] [ 4 | "IO" | [ ] ] [ 5 | "List" | [ ] ] [ 8 | "Text" | [ ] ] [ 11 | "Abort" | [ ] ] [ 13 | "Message" | [ ] ] [ 15 | "Syntax" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 16 | "Base" | [ "Abort" | "List" | "Prelude" | "Syntax" | "Text" ] ] =}
+|-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 14 | "Message" |
+    [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Line" | [ "Abort" | "IO" | "Prelude" | "Text" ] ] [ 15 | "Tree" | [ "Abort"
+    | "IO" | "List" | "Prelude" ] ] [ 16 | "Clause" | [ "IO" | "List" | "Prelude" ] ] [ 16 | "Infix" | [ "Prelude" ] ]
+    =}
+|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 2 | "Prelude" | [ ] ] [
+    5 | "List" | [ ] ] [ 7 | "Text" | [ ] ] [ 10 | "IO" | [ ] ] [ 13 | "Abort" | [ ] ] [ 15 | "Message" | [ ] ] [ 17 |
+    "Syntax" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 18 | "Base" | [ "Abort" |
+    "IO" | "List" | "Prelude" | "Syntax" | "Text" ] ] =}
 
 *** 8 judges
 
@@ -296,69 +337,72 @@ Command `./dir-rank.k ../base/data/IMPORT.k` produces:
 TABLE : DIR-RANK
 
   /dir-rank /dir                             /base-rank
-  --------- -------------------------------- --------------------------------------------------------------------------
-  1         "Koshucode.Baala.Base.Prelude"   /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             0     "Case"        [ ]
-                                             0     "Class"       [ ]
-                                             0     "Import"      [ ]
-                                             1     "Pair"        [ ]
-                                             1     "Queue"       [ ]
+  --------- -------------------------------- ------------------------------------------------------------------------------------
+  1         "Koshucode.Baala.Base.Prelude"   /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             0     "Case"           [ ]
+                                             0     "Class"          [ ]
+                                             0     "Import"         [ ]
+                                             1     "Pair"           [ ]
+                                             1     "Queue"          [ ]
                                              
-  3         "Koshucode.Baala.Base.IO"        /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             3     "BzFile"      [ "Prelude" ]
+  4         "Koshucode.Baala.Base.List"      /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             0     "Split"          [ ]
+                                             1     "Dots"           [ ]
+                                             3     "Assoc"          [ "Prelude" ]
+                                             3     "List"           [ "Prelude" ]
+                                             3     "Snip"           [ "Prelude" ]
+                                             4     "Order"          [ "Prelude" ]
                                              
-  4         "Koshucode.Baala.Base.List"      /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             0     "Split"       [ ]
-                                             1     "Dots"        [ ]
-                                             3     "Assoc"       [ "Prelude" ]
-                                             3     "List"        [ "Prelude" ]
-                                             3     "Snip"        [ "Prelude" ]
-                                             4     "Order"       [ "Prelude" ]
+  6         "Koshucode.Baala.Base.Text"      /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             0     "Comment"        [ ]
+                                             0     "Unicode"        [ ]
+                                             3     "Utility"        [ "Prelude" ]
+                                             4     "Http"           [ "Prelude" ]
+                                             6     "TextTable"      [ "List" | "Prelude" ]
+                                             6     "Write"          [ "List" | "Prelude" ]
                                              
-  7         "Koshucode.Baala.Base.Text"      /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             0     "Comment"     [ ]
-                                             0     "LineBreak"   [ ]
-                                             0     "Unicode"     [ ]
-                                             3     "Utility"     [ "Prelude" ]
-                                             4     "Http"        [ "Prelude" ]
-                                             4     "MixText"     [ ]
-                                             6     "IOPoint"     [ "List" | "Prelude" ]
-                                             6     "TextTable"   [ "List" | "Prelude" ]
-                                             6     "Write"       [ "List" | "Prelude" ]
-                                             7     "CodePt"      [ "Prelude" ]
+  9         "Koshucode.Baala.Base.IO"        /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             0     "LineBreak"      [ ]
+                                             0     "SimpleOption"   [ ]
+                                             3     "BzFile"         [ "Prelude" ]
+                                             3     "Exit"           [ "Prelude" ]
+                                             6     "IOPoint"        [ "List" | "Prelude" ]
+                                             7     "CodePt"         [ "Prelude" ]
+                                             8     "MixText"        [ "Text" ]
+                                             9     "MixClass"       [ "Text" ]
                                              
-  12        "Koshucode.Baala.Base.Abort"     /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             9     "Reason"      [ "Text" ]
-                                             10    "Abortable"   [ "Prelude" | "Text" ]
-                                             10    "Report"      [ "List" | "Prelude" | "Text" ]
-                                             12    "Message"     [ "Abort" ]
+  14        "Koshucode.Baala.Base.Abort"     /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             11    "Reason"         [ "IO" | "Text" ]
+                                             12    "Abortable"      [ "IO" | "Prelude" ]
+                                             12    "Report"         [ "IO" | "List" | "Prelude" | "Text" ]
+                                             14    "Message"        [ "Abort" ]
                                              
-  14        "Koshucode.Baala.Base.Syntax"    /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             12    "Message"     [ "Abort" | "Prelude" | "Text" ]
-                                             13    "Line"        [ "Abort" | "Prelude" | "Text" ]
-                                             13    "Tree"        [ "Abort" | "List" | "Prelude" | "Text" ]
-                                             14    "Clause"      [ "List" | "Prelude" | "Text" ]
-                                             14    "Infix"       [ "Prelude" ]
+  16        "Koshucode.Baala.Base.Syntax"    /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             14    "Message"        [ "Abort" | "IO" | "Prelude" ]
+                                             15    "Line"           [ "Abort" | "IO" | "Prelude" | "Text" ]
+                                             15    "Tree"           [ "Abort" | "IO" | "List" | "Prelude" ]
+                                             16    "Clause"         [ "IO" | "List" | "Prelude" ]
+                                             16    "Infix"          [ "Prelude" ]
                                              
-  15        "Koshucode.Baala.Base"           /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             2     "Prelude"     [ ]
-                                             4     "IO"          [ ]
-                                             5     "List"        [ ]
-                                             8     "Text"        [ ]
-                                             11    "Abort"       [ ]
-                                             13    "Message"     [ ]
-                                             15    "Syntax"      [ ]
+  17        "Koshucode.Baala.Base"           /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             2     "Prelude"        [ ]
+                                             5     "List"           [ ]
+                                             7     "Text"           [ ]
+                                             10    "IO"             [ ]
+                                             13    "Abort"          [ ]
+                                             15    "Message"        [ ]
+                                             17    "Syntax"         [ ]
                                              
-  16        "Koshucode.Baala"                /rank /base         /import-dir
-                                             ----- ------------- ------------------------------------------------------
-                                             16    "Base"        [ "Abort" | "List" | "Prelude" | "Syntax" | "Text" ]
+  18        "Koshucode.Baala"                /rank /base            /import-dir
+                                             ----- ---------------- -------------------------------------------------------------
+                                             18    "Base"           [ "Abort" | "IO" | "List" | "Prelude" | "Syntax" | "Text" ]
                                              
 
 === rel
@@ -538,14 +582,23 @@ Command `./dir-rank.k ../syntax/data/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Syntax.Para"  /base-rank {= /rank /base /import-dir [ 1 | "Para" | [ ] ] [ 2 | "Get" | [ ] ] [ 2 | "ParaSpec" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [ ] ] [ 1 | "AngleText" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Next" | [ ] ] [ 3 | "Short" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 8  /dir "Koshucode.Baala.Syntax.Token"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 5 | "Token" | [ "Symbol" ] ] [ 6 | "Pattern" | [ ] ] [ 6 | "Utility" | [ ] ] [ 7 | "TokenLine" | [ "Symbol" ] ] [ 8 | "TokenClause" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Syntax.TTree"  /base-rank {= /rank /base /import-dir [ 10 | "Bracket" | [ "Token" ] ] [ 11 | "TokenTree" | [ "Token" ] ] [ 12 | "Parse" | [ "Token" ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Syntax.Para"  /base-rank {= /rank /base /import-dir [ 1 | "Para" | [ ]
+    ] [ 2 | "Get" | [ ] ] [ 2 | "ParaSpec" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [
+    ] ] [ 1 | "AngleText" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Next" | [ ] ] [ 3 | "Short" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 8  /dir "Koshucode.Baala.Syntax.Token"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+    [ ] ] [ 5 | "Token" | [ "Symbol" ] ] [ 6 | "Pattern" | [ ] ] [ 6 | "Utility" | [ ] ] [ 7 | "TokenLine" | [ "Symbol"
+    ] ] [ 8 | "TokenClause" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Syntax.TTree"  /base-rank {= /rank /base /import-dir [ 10 | "Bracket"
+    | [ "Token" ] ] [ 11 | "TokenTree" | [ "Token" ] ] [ 12 | "Parse" | [ "Token" ] ] =}
 
-|-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" | [ ] ] [ 14 | "Message" | [ "Para" | "Symbol" | "TTree" ] ] [ 15 | "Attr" | [ "Para" | "TTree" ] ] [ 15 | "Slot" | [ "TTree" | "Token" ] ] [ 16 | "AttrEd" | [ "TTree" | "Token" ] ] [ 16 | "Parse" | [ "Para" ] ] =}
-|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 3 | "Para" | [ ] ] [ 4 | "Symbol" | [ ] ] [ 9 | "Token" | [ ] ] [ 13 | "TTree" | [ ] ] [ 15 | "Message" | [ ] ] [ 17 | "Attr" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 18 | "Syntax" | [ "Attr" | "Para" | "Symbol" | "TTree" | "Token" ] ] =}
+|-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
+    [ ] ] [ 14 | "Message" | [ "Para" | "Symbol" | "TTree" ] ] [ 15 | "Attr" | [ "Para" | "TTree" ] ] [ 15 | "Slot" | [
+    "TTree" | "Token" ] ] [ 16 | "AttrEd" | [ "TTree" | "Token" ] ] [ 16 | "Parse" | [ "Para" ] ] =}
+|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 3 | "Para" | [ ] ] [
+    4 | "Symbol" | [ ] ] [ 9 | "Token" | [ ] ] [ 13 | "TTree" | [ ] ] [ 15 | "Message" | [ ] ] [ 17 | "Attr" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 18 |
+    "Syntax" | [ "Attr" | "Para" | "Symbol" | "TTree" | "Token" ] ] =}
 
 *** 8 judges
 
@@ -850,16 +903,29 @@ Command `./dir-rank.k ../data/data/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Data.Type.Time"  /base-rank {= /rank /base /import-dir [ 1 | "Clock" | [ ] ] [ 2 | "Date" | [ ] ] [ 3 | "Time" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 1 | "Decimal" | [ ] ] [ 1 | "Rational" | [ ] ] [ 2 | "Fraction" | [ ] ] [ 3 | "Coder" | [ ] ] [ 4 | "BinaryAb" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 2 | "Head" | [ ] ] [ 3 | "Rel" | [ ] ] [ 4 | "Mono" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ]
+    =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Data.Type.Time"  /base-rank {= /rank /base /import-dir [ 1 | "Clock" |
+    [ ] ] [ 2 | "Date" | [ ] ] [ 3 | "Time" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 1 |
+    "Decimal" | [ ] ] [ 1 | "Rational" | [ ] ] [ 2 | "Fraction" | [ ] ] [ 3 | "Coder" | [ ] ] [ 4 | "BinaryAb" | [ ] ]
+    =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 2 | "Head" | [
+    ] ] [ 3 | "Rel" | [ ] ] [ 4 | "Mono" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Interp" | [ ] ] [ 1 | "Judge" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Type" | [ ] ] [ 4 | "Time" | [ ] ] [ 5 | "Decimal" | [ ] ] [ 5 | "Rel" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Data.Content"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 7 | "Singleton" | [ "Type" ] ] [ 7 | "Tree" | [ "Type" ] ] [ 8 | "Complex" | [ "Type" ] ] [ 8 | "Simple" | [ "Type" ] ] [ 9 | "Utility" | [ "Type" ] ] [ 10 | "BaalaC" | [ "Type" ] ] [ 10 | "Decode" | [ "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 7 | "Message" | [ "Type" ] ] [ 8 | "Cox" | [ ] ] [ 9 | "Cop" | [ ] ] [ 12 | "Build" | [ "Content" ] ] [ 13 | "Run" | [ "Content" | "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 6 | "Type" | [ "Decimal" | "Rel" | "Time" ] ] [ 8 | "Message" | [ ] ] [ 11 | "Content" | [ ] ] [ 14 | "Church" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 15 | "Data" | [ "Church" | "Content" | "Type" ] ] =}
+|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Interp" | [ ]
+    ] [ 1 | "Judge" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Type" | [ ] ] [ 4 | "Time" | [ ] ] [ 5 | "Decimal" | [ ] ] [
+    5 | "Rel" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Data.Content"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+    [ ] ] [ 7 | "Singleton" | [ "Type" ] ] [ 7 | "Tree" | [ "Type" ] ] [ 8 | "Complex" | [ "Type" ] ] [ 8 | "Simple" | [
+    "Type" ] ] [ 9 | "Utility" | [ "Type" ] ] [ 10 | "BaalaC" | [ "Type" ] ] [ 10 | "Decode" | [ "Type" ] ] =}
+|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 7 | "Message" |
+    [ "Type" ] ] [ 8 | "Cox" | [ ] ] [ 9 | "Cop" | [ ] ] [ 12 | "Build" | [ "Content" ] ] [ 13 | "Run" | [ "Content" |
+    "Type" ] ] =}
+|-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 6 | "Type" | [
+    "Decimal" | "Rel" | "Time" ] ] [ 8 | "Message" | [ ] ] [ 11 | "Content" | [ ] ] [ 14 | "Church" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Syntax" | [ ] ] [ 15 | "Data" | [ "Church" | "Content" | "Type" ] ] =}
 
 *** 10 judges
 
@@ -963,7 +1029,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    194 judges
+**    193 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -1095,7 +1161,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Core.Relkit"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "GHC.IO.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Syntax"
@@ -1212,14 +1277,28 @@ Command `./dir-rank.k ../core/data/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 1 | "Lexmap" | [ ] ] [ 1 | "LexmapTrees" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Construct" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Core.Relkit"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 4 | "Relkit" | [ "Lexmap" ] ] [ 5 | "Construct" | [ ] ] [ 6 | "Run" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Core.Relmap"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 8 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 9 | "Rop" | [ "Lexmap" ] ] [ 9 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 10 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 10 | "Global" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Core.Lexmap"  /base-rank {= /rank /base /import-dir [ 1 | "Lexmap" | [
+    ] ] [ 1 | "LexmapTrees" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Construct" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Core.Relkit"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [
+    ] ] [ 4 | "Relkit" | [ "Lexmap" ] ] [ 5 | "Construct" | [ ] ] [ 6 | "Run" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Core.Relmap"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+    [ ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 8 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 9 | "Rop" | [
+    "Lexmap" ] ] [ 9 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 10 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 10 |
+    "Global" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 1 | "RelTable" | [ ] ] [ 8 | "Dataset" | [ "Relkit" ] ] [ 12 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 13 | "Run" | [ "Lexmap" | "Relkit" | "Relmap" ] ] =}
-|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 4 | "Clause" | [ "Lexmap" ] ] [ 15 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 16 | "Concrete" | [ "Relmap" ] ] [ 16 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 16 | "Run" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 17 | "Read" | [ "Relmap" ] ] =}
-|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 2 | "Message" | [ ] ] [ 3 | "Lexmap" | [ ] ] [ 7 | "Relkit" | [ ] ] [ 11 | "Relmap" | [ ] ] [ 14 | "Assert" | [ ] ] [ 18 | "Resource" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 19 | "Core" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] =}
+|-- DIR-RANK  /dir-rank 13  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+    [ ] ] [ 1 | "RelTable" | [ ] ] [ 8 | "Dataset" | [ "Relkit" ] ] [ 12 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 13 |
+    "Run" | [ "Lexmap" | "Relkit" | "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message"
+    | [ ] ] [ 4 | "Clause" | [ "Lexmap" ] ] [ 15 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 16 |
+    "Concrete" | [ "Relmap" ] ] [ 16 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 16 | "Run" | [ "Assert" |
+    "Lexmap" | "Relmap" ] ] [ 17 | "Read" | [ "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 2 | "Message" | [ ] ] [
+    3 | "Lexmap" | [ ] ] [ 7 | "Relkit" | [ ] ] [ 11 | "Relmap" | [ ] ] [ 14 | "Assert" | [ ] ] [ 18 | "Resource" | [ ]
+    ] =}
+|-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 19 | "Core" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ]
+    =}
 
 *** 9 judges
 
@@ -1320,7 +1399,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    40 judges
+**    39 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Data.Char"
@@ -1359,7 +1438,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Writer.Judge"
 
@@ -1384,8 +1462,10 @@ Command `./dir-rank.k ../writer/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Writer"  /base-rank {= /rank /base /import-dir [ 1 | "Csv" | [ ] ] [ 1 | "Html" | [ ] ] [ 1 | "Json" | [ ] ] [ 1 | "Judge" | [ ] ] [ 2 | "Koshu" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 3 | "Writer" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Writer"  /base-rank {= /rank /base /import-dir [ 1 | "Csv" | [ ] ] [ 1
+    | "Html" | [ ] ] [ 1 | "Json" | [ ] ] [ 1 | "Judge" | [ ] ] [ 2 | "Koshu" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 3 | "Writer" | [ ] ] =}
 
 *** 2 judges
 
@@ -1628,13 +1708,21 @@ Command `./dir-rank.k ../rop-flat/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 1 | "Define" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Rop" | [ ] ] [ 2 | "Term" | [ ] ] [ 3 | "Get" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Rop.Flat.Lattice"  /base-rank {= /rank /base /import-dir [ 5 | "Tropashko" | [ "Base" ] ] [ 6 | "Restrict" | [ "Base" ] ] [ 7 | "Rop" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ] ] [ 2 | "Message" | [ ] ] [ 5 | "Elem" | [ "Base" ] ] [ 5 | "Gadget" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5 | "Order" | [ "Base" ] ] [ 5 | "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [ 6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [ ] ] [ 9 | "Check" | [ "Base" | "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" | "Lattice" ] ] =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 1 | "Define" | [ ] ]
+    [ 1 | "Message" | [ ] ] [ 2 | "Rop" | [ ] ] [ 2 | "Term" | [ ] ] [ 3 | "Get" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Rop.Flat.Lattice"  /base-rank {= /rank /base /import-dir [ 5 |
+    "Tropashko" | [ "Base" ] ] [ 6 | "Restrict" | [ "Base" ] ] [ 7 | "Rop" | [ "Base" ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ]
+    ] [ 2 | "Message" | [ ] ] [ 5 | "Elem" | [ "Base" ] ] [ 5 | "Gadget" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5
+    | "Order" | [ "Base" ] ] [ 5 | "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [
+    6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [ ] ] [ 9 | "Check" | [ "Base" |
+    "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" | "Lattice" ] ] =}
 
-|-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 4 | "Base" | [ ] ] [ 11 | "Flat" | [ "Lattice" ] ] =}
+|-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 4 | "Base" | [ ] ] [ 11
+    | "Flat" | [ "Lattice" ] ] =}
 
 *** 6 judges
 
@@ -1775,10 +1863,14 @@ Command `./dir-rank.k ../rop-nested/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ] ] [ 2 | "Flow" | [ ] ] [ 3 | "Confl" | [ ] ] [ 4 | "Deriv" | [ ] ] [ 5 | "Rop" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Flat" | [ ] ] [ 6 | "Nest" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ]
+    ] =}
+|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ]
+    ] [ 2 | "Flow" | [ ] ] [ 3 | "Confl" | [ ] ] [ 4 | "Deriv" | [ ] ] [ 5 | "Rop" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Flat" | [ ] ] [ 6 | "Nest" | [ ] ] =}
 
 *** 4 judges
 
@@ -1934,10 +2026,15 @@ Command `./dir-rank.k ../rop-cox/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [ ] ] [ 1 | "Message" | [ ] ] [ 2 | "Get" | [ ] ] [ 3 | "Accessor" | [ ] ] [ 3 | "Calc" | [ ] ] [ 3 | "Empty" | [ ] ] [ 3 | "Filter" | [ ] ] [ 3 | "Gadget" | [ ] ] [ 3 | "Range" | [ ] ] [ 4 | "Bundle" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Flat" | [ ] ] [ 5 | "Cox" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ]
+    ] =}
+|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
+    ] ] [ 1 | "Message" | [ ] ] [ 2 | "Get" | [ ] ] [ 3 | "Accessor" | [ ] ] [ 3 | "Calc" | [ ] ] [ 3 | "Empty" | [ ] ]
+    [ 3 | "Filter" | [ ] ] [ 3 | "Gadget" | [ ] ] [ 3 | "Range" | [ ] ] [ 4 | "Bundle" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Flat" | [ ] ] [ 5 | "Cox" | [ ] ] =}
 
 *** 4 judges
 
@@ -2001,20 +2098,13 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    45 judges
+**    33 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Core"
-
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "GHC.IO.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.Environment"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Core"
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Global"    /import "Koshucode.Baala.Data"
@@ -2030,11 +2120,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Writer"
 
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.SimpleOption"  /import "Data.Maybe"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.SimpleOption"  /import "Data.Version"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.SimpleOption"  /import "System.Console.GetOpt"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.SimpleOption"  /import "System.Environment"
-
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Version"   /import "Data.Version"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Version"   /import "Paths_koshucode_baala_calculator"
 
@@ -2045,17 +2130,15 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"  /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"  /import "Koshucode.Baala.Toolkit.Library.Run"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"  /import "Koshucode.Baala.Toolkit.Library.Exit"
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Data.Time"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Writer"
+|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Base.IO.SimpleOption"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Element"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Run"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.SimpleOption"
 
 ```
 
@@ -2072,12 +2155,18 @@ Command `./dir-rank.k ../calculator/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Cop" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 0 | "Writer" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Cox" | [ ] ] [ 0 | "Flat" | [ ] ] [ 0 | "Nest" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" | [ ] ] [ 1 | "Element" | [ ] ] [ 1 | "Exit" | [ ] ] [ 1 | "Global" | [ ] ] [ 1 | "Run" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 2 | "KoshuFilter" | [ ] ] [ 2 | "KoshuMain" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Cop" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 0 | "Writer" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" |
+    [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Cox" | [ ] ] [ 0 |
+    "Flat" | [ ] ] [ 0 | "Nest" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 1 | "Element"
+    | [ ] ] [ 1 | "Global" | [ ] ] [ 1 | "Run" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 2 |
+    "KoshuFilter" | [ ] ] [ 2 | "KoshuMain" | [ ] ] =}
 
-*** 4 judges
+*** 5 judges
 
 === note
 
@@ -2094,6 +2183,10 @@ TABLE : DIR-RANK
                                                 0     "Syntax"         [ ]
                                                 0     "Writer"         [ ]
                                                 
+  0         "Koshucode.Baala.Base.IO"           /rank /base            /import-dir
+                                                ----- ---------------- -----------
+                                                0     "SimpleOption"   [ ]
+                                                
   0         "Koshucode.Baala.Rop"               /rank /base            /import-dir
                                                 ----- ---------------- -----------
                                                 0     "Cox"            [ ]
@@ -2102,9 +2195,7 @@ TABLE : DIR-RANK
                                                 
   1         "Koshucode.Baala.Toolkit.Library"   /rank /base            /import-dir
                                                 ----- ---------------- -----------
-                                                0     "SimpleOption"   [ ]
                                                 1     "Element"        [ ]
-                                                1     "Exit"           [ ]
                                                 1     "Global"         [ ]
                                                 1     "Run"            [ ]
                                                 
@@ -2118,8 +2209,8 @@ TABLE : DIR-RANK
 
 **
 **  SUMMARY
-**       4 judges on DIR-RANK
-**       4 judges in total
+**       5 judges on DIR-RANK
+**       5 judges in total
 **
 ```
 
@@ -2137,7 +2228,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    36 judges
+**    33 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Change"    /import "Data.Set"
@@ -2158,7 +2249,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"  /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"  /import "Koshucode.Baala.Toolkit.Library.Input"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"  /import "Koshucode.Baala.Toolkit.Library.Change"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"  /import "Koshucode.Baala.Toolkit.Library.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"  /import "Koshucode.Baala.Toolkit.Library.Version"
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Data.List"
@@ -2170,7 +2260,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Toolkit.Library.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Toolkit.Library.RDF"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"     /import "Koshucode.Baala.Toolkit.Library.Version"
 
@@ -2179,7 +2268,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"  /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"  /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"  /import "Koshucode.Baala.Toolkit.Library.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"  /import "Koshucode.Baala.Toolkit.Library.Version"
 
 ```
@@ -2197,9 +2285,12 @@ Command `./dir-rank.k ../toolkit/data/IMPORT.k` produces:
 **    <stdout>
 **
 
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 | "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 0 | "Writer" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 | "Exit" | [ ] ] [ 0 | "Version" | [ ] ] [ 1 | "Input" | [ ] ] [ 1 | "RDF" | [ ] ] [ 2 | "Change" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 1 | "KoshuSyntax" | [ ] ] [ 2 | "KoshuRdf" | [ ] ] [ 3 | "KoshuChange" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 0 | "Writer" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 | "Version"
+    | [ ] ] [ 1 | "Input" | [ ] ] [ 1 | "RDF" | [ ] ] [ 2 | "Change" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 1 |
+    "KoshuSyntax" | [ ] ] [ 2 | "KoshuRdf" | [ ] ] [ 3 | "KoshuChange" | [ ] ] =}
 
 *** 3 judges
 
@@ -2219,7 +2310,6 @@ TABLE : DIR-RANK
                                                 
   2         "Koshucode.Baala.Toolkit.Library"   /rank /base           /import-dir
                                                 ----- --------------- -----------
-                                                0     "Exit"          [ ]
                                                 0     "Version"       [ ]
                                                 1     "Input"         [ ]
                                                 1     "RDF"           [ ]
