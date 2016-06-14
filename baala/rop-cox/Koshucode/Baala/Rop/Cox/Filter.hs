@@ -15,7 +15,6 @@ module Koshucode.Baala.Rop.Cox.Filter
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Op
@@ -49,12 +48,10 @@ consFilter b med =
        coxIn  <- Op.getCox med "-in"
        Right $ relmapFilter med (b, cops, coxIn)
 
-relmapFilter :: (D.CList c, D.CRel c, D.CBool c, B.Write c)
-  => C.Intmed c -> (Bool, D.CopSet c, D.Cox c) -> C.Relmap c
+relmapFilter :: (D.CContent c) => C.Intmed c -> (Bool, D.CopSet c, D.Cox c) -> C.Relmap c
 relmapFilter med = C.relmapFlow med . relkitFilter
 
-relkitFilter :: (D.CList c, D.CRel c, D.CBool c, B.Write c)
-  => (Bool, D.CopSet c, D.Cox c) -> C.RelkitFlow c
+relkitFilter :: (D.CContent c) => (Bool, D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, cops, body) (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitAbPred p

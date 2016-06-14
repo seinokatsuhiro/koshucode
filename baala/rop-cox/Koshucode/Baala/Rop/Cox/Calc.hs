@@ -63,12 +63,10 @@ consAdd med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapAdd med (cops, cox)
 
-relmapAdd :: (D.CList c, D.CRel c, B.Write c)
-  => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapAdd :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapAdd med = C.relmapFlow med . relkitAdd
 
-relkitAdd :: (D.CList c, D.CRel c, B.Write c)
-  => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
     | null ind  = Right kit2
@@ -91,12 +89,10 @@ consSubst med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapSubst med (cops, cox)
 
-relmapSubst :: (D.CList c, D.CRel c, B.Write c)
-  => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapSubst :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapSubst med = C.relmapFlow med . relkitSubst
 
-relkitSubst :: (D.CList c, D.CRel c, B.Write c)
-  => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
     | B.sameLength ns ind = Right kit2
@@ -191,12 +187,10 @@ consSplit med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapSplit med (cops, cox)
 
-relmapSplit :: (D.CList c, D.CRel c, B.Write c, D.CBool c)
-  => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapSplit :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapSplit med = C.relmapFlow med . relkitSplit
 
-relkitSplit :: forall c. (D.CList c, D.CRel c, B.Write c, D.CBool c)
-  => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
     | null ind  = Right kit2

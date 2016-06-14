@@ -136,15 +136,13 @@ position he = spos where
 type RunCox  c = D.Cox c -> B.Ab c
 type RunList c = [c]     -> B.Ab c
 
-coxRunCox :: (D.CRel c, D.CList c) =>
-    D.CopSet c -> D.Head -> [c] -> RunCox c
+coxRunCox :: (D.CContent c) => D.CopSet c -> D.Head -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
-coxRunPure :: (D.CRel c, D.CList c) => D.CopSet c -> RunCox c
+coxRunPure :: (D.CContent c) => D.CopSet c -> RunCox c
 coxRunPure cops cox = coxRunList cops B.mempty cox []
 
-coxRunList :: (D.CRel c, D.CList c) =>
-    D.CopSet c -> D.Head -> D.Cox c -> RunList c
+coxRunList :: (D.CContent c) => D.CopSet c -> D.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 calcContent :: (D.CContent c) => D.CopSet c -> D.ContentCalc c
@@ -153,7 +151,7 @@ calcContent cops = calc where
 
 -- | Calculate content expression.
 coxRun
-  :: forall c. (D.CRel c, D.CList c)
+  :: forall c. (D.CContent c)
   => [c]           -- ^ Tuple in body of relation
   -> Beta c        -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
@@ -163,10 +161,10 @@ coxRun args = run 0 where
     run lv cox =
         let run' = run $ lv + 1
         in Msg.abCoxCalc [cox] $ case cox of
-             BetaLit  _ c       ->  Right c
-             BetaTerm _ _ [p]   ->  Right $ args !!! p
-             BetaTerm _ _ ps    ->  term ps args
-             BetaCall _ _ f xs  ->  f . map run' =<< sequence xs
+             BetaLit  _ c       -> Right c
+             BetaTerm _ _ [p]   -> Right $ args !!! p
+             BetaTerm _ _ ps    -> term ps args
+             BetaCall _ _ f xs  -> f . map run' =<< sequence xs
 
     term :: [Int] -> [c] -> B.Ab c
     term []       _ = Msg.adlib "empty term"
@@ -181,12 +179,13 @@ coxRun args = run 0 where
     rel ps (D.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
-(!!!) :: (B.Write a) => [a] -> Int -> a
+(!!!) :: (B.MixShortEncode c) => [c] -> Int -> c
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs
-    loop _ _        = error $ show (B.doch list)
+    loop _ _        = error $ (unwords $ map string list)
                               ++ " !!! " ++ show index
+    string = B.mixToString B.noBreak . B.mixIdEncode
 
 
 -- --------------------------------------------  getArgN

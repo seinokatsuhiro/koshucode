@@ -33,7 +33,6 @@ import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Syntax.Message  as Msg
 
 
@@ -109,9 +108,6 @@ data CodeLine a = CodeLine
     , lineContent :: String        -- ^ Line content without newline.
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-instance B.Write (CodeLine a) where
-    writeDocWith sh (CodeLine _ line _) = B.writeDocWith sh line
 
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
     codePtList (CodeLine _ _ ts) = B.codePtList $ head ts
