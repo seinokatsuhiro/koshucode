@@ -19,6 +19,7 @@ module Koshucode.Baala.Data.Type.Judge
     isAffirmative, isDenial, isViolative,
 
     -- * Encode
+    termNameToMix,
     termsToMix1, termsToMix2,
     judgeToString, judgeToStringShort,
     putJudge, hPutJudge,
@@ -162,6 +163,10 @@ isViolative _                   = False
 
 -- ----------------------  Encode
 
+-- | Encode term name.
+termNameToMix :: S.TermName -> B.MixText
+termNameToMix n = B.mixString ('/' : n)
+
 -- | Encode term list with one-space separator.
 termsToMix1 :: (B.MixShortEncode c) => B.Shorten -> [S.Term c] -> B.MixText
 termsToMix1 = termsToMix B.mix1
@@ -173,9 +178,6 @@ termsToMix2 = termsToMix B.mix2
 termsToMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [S.Term c] -> B.MixText
 termsToMix sep sh ts = B.mixJoin sep $ map term ts where
     term (n, c) = termNameToMix n `B.mixSep` B.mixShortEncode sh c
-
-termNameToMix :: S.TermName -> B.MixText
-termNameToMix n = B.mixString ('/' : n)
 
 -- | Encode judgement with short setting.
 judgeToStringShort :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String

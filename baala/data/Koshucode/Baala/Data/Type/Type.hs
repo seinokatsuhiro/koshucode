@@ -1,27 +1,39 @@
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Data.Type.Type
-  ( Type (..),
+  ( -- * Type
+    Type (..),
     NamedType,
     typeExplain,
+    typeTermDoc, typeTermMix,
+
+    -- * Utility
+    -- ** Construct
     typeFlatRel,
     typeConsRel,
     typeConsNest,
     typeAppendRel,
+
+    -- ** Select
     typeRelTermNames,
     typeRelDegree,
-    typeRelIndex,
-    typeRelIndexList,
-    typeTermDoc, typeTermMix,
     typeTerms,
     isTypeRel,
-    typeRelMapTerms, typeRelMapTerm, typeRelMapName,
+    typeRelIndex,
+    --typeRelIndexList,
+
+    -- ** Modify
+    typeRelMapTerms,
+    typeRelMapTerm,
+    typeRelMapName,
+
     -- $Types
   ) where
 
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Syntax        as S
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data.Type.Judge   as D
 
 -- | Type for types.
 data Type
@@ -53,44 +65,48 @@ data Type
 type NamedType = B.Named Type
 
 instance B.MixEncode Type where
-    mixEncode = B.mixShow . writeType
+    mixEncode = typeToMix
 
-instance B.Write Type where
-    writeDocWith _ = writeType
+typeToMix :: Type -> B.MixText
+typeToMix = wf where
+    wf = w False    -- no parens
+    wt = w True     -- with parens
 
-writeType :: Type -> B.Doc
-writeType = wf where
-    wt = w True
-    wf = w False
+    w _ TypeAny                = B.mixString "any"
+    w _ TypeEmpty              = B.mixString "empty"
+    w _ TypeEnd                = B.mixString "end"
+    w _ TypeBool               = B.mixString "boolean"
+    w _ TypeText               = B.mixString "text"
+    w _ TypeCode               = B.mixString "code"
+    w _ TypeDec                = B.mixString "decimal"
+    w _ (TypeClock (Nothing))  = B.mixString "clock"
+    w _ (TypeClock (Just p))   = B.mixString "clock" `B.mixSep` B.mixString p
+    w _ (TypeTime (Nothing))   = B.mixString "time"
+    w _ (TypeTime (Just p))    = B.mixString "time"  `B.mixSep` B.mixString p
+    w _ TypeBin                = B.mixString "binary"
+    w _ TypeTerm               = B.mixString "term"
+    w _ TypeType               = B.mixString "type"
+    w _ TypeInterp             = B.mixString "interp"
 
-    w _ TypeAny                = B.doc "any"
-    w _ TypeEmpty              = B.doc "empty"
-    w _ TypeEnd                = B.doc "end"
-    w _ TypeBool               = B.doc "boolean"
-    w _ TypeText               = B.doc "text"
-    w _ TypeCode               = B.doc "code"
-    w _ TypeDec                = B.doc "decimal"
-    w _ (TypeClock (Nothing))  = B.doc "clock"
-    w _ (TypeClock (Just p))   = B.doc "clock" B.<+> B.doc p
-    w _ (TypeTime (Nothing))   = B.doc "time"
-    w _ (TypeTime (Just p))    = B.doc "time" B.<+> B.doc p
-    w _ TypeBin                = B.doc "binary"
-    w _ TypeTerm               = B.doc "term"
-    w _ TypeType               = B.doc "type"
-    w _ TypeInterp             = B.doc "interp"
+    w _ (TypeList    t)        = B.mixString "list" `B.mixSep` wt t
+    w _ (TypeSet     t)        = B.mixString "set"  `B.mixSep` wt t
+    w _ (TypeTag tag t)        = B.mixString "tag"  `B.mixSep` B.mixString tag
+                                                    `mappend`  B.mixString ":"
+                                                    `B.mixSep` wt t
 
-    w _ (TypeList    t)        = B.doc "list"  B.<+> wt t
-    w _ (TypeSet     t)        = B.doc "set"   B.<+> wt t
-    w _ (TypeTag tag t)        = B.doc "tag"   B.<+> B.doc (tag ++ ":") B.<+> wt t
+    w q (TypeTie    ts)        = wrap q (B.mixString "tie" `B.mixSep` termTypes ts)
+    w q (TypeRel    ts)        = wrap q (B.mixString "rel" `B.mixSep` termTypes ts)
+    w _ (TypeTuple  ts)        = B.mixString "tuple" `B.mixSep` (B.mixJoin1 $ map wt ts)
+    w q (TypeSum ts)           = wrap q (B.mixJoinBar $ map wf ts)
 
-    w q (TypeTie    ts)        = wrap q $ B.doc "tie"  B.<+> B.writeTerms wt ts
-    w q (TypeRel    ts)        = wrap q $ B.doc "rel"  B.<+> B.writeTerms wt ts
+    wrap :: Bool -> B.MixText -> B.MixText
+    wrap False xs              = xs
+    wrap True  xs              = B.mixBracketS "(" ")" xs
 
-    w _ (TypeTuple  ts)        = B.doc "tuple" B.<+> B.doch (map wt ts)
-    w q (TypeSum ts)           = wrap q $ B.doch $ B.writeSepsWith wf "|" ts
+    termTypes = B.mixJoin1 . map termType
 
-    wrap False x               = x
-    wrap True  x               = B.docWraps "(" ")" x
+    termType :: NamedType -> B.MixText
+    termType (n, t) = D.termNameToMix n `B.mixSep` wt t
 
 -- | Print type as tree.
 typeExplain :: Type -> B.Doc
@@ -103,40 +119,73 @@ typeExplain ty =
       TypeRel     ts  -> B.doc "rel"    B.<+> vmap term ts
       TypeTuple   ts  -> B.doc "tuple"  B.<+> vmap (item ":") ts
       TypeSum     ts  -> B.doc "sum"    B.<+> vmap (item "|") ts
-      _               -> writeType ty
+      _               -> B.doc $ B.mixToFlatString $ B.mixEncode ty
     where
       term (n,t)  =  B.doc ('/' : n) B.<+> typeExplain t
       item i t    =  B.doc i B.<+> typeExplain t
       vmap f      =  B.docv . map f
 
+typeTermDoc :: Type -> B.Doc
+typeTermDoc (TypeRel ts) = B.doch $ map name ts where
+    name (n, _) = B.doc $ S.showTermName n
+typeTermDoc _ = B.docEmpty
 
--- ----------------------  Relation utilities
+-- | Encode term types.
+typeTermMix :: Type -> B.MixText
+typeTermMix (TypeRel ts) = B.mixJoin1 $ map name ts where
+    name (n, _) = B.mix $ S.showTermName n
+typeTermMix _ = B.mixEmpty
 
+
+-- --------------------------------------------  Relation utilities
+
+-- ----------------------  Construct
+
+-- | Create relation type from term names.
 typeFlatRel :: [S.TermName] -> Type
 typeFlatRel ns = TypeRel $ map term ns where
     term n = (n, TypeAny)
 
+-- | Add term name to relation type.
 typeConsRel :: S.TermName -> B.Map Type
-typeConsRel n (TypeRel ts) = TypeRel $ (n, TypeAny) : ts
-typeConsRel _ t = t
+typeConsRel n = typeConsNest n TypeAny
 
+-- | Add term name and type to relation type.
 typeConsNest :: S.TermName -> Type -> B.Map Type
 typeConsNest n t (TypeRel ts) = TypeRel $ (n, t) : ts
 typeConsNest _ _ t = t
 
+-- | Add term names to relation type.
 typeAppendRel :: [S.TermName] -> B.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
 typeAppendRel _ t = t
 
+-- ----------------------  Select
+
+-- | Get term names from relation type.
 typeRelTermNames :: Type -> [S.TermName]
 typeRelTermNames (TypeRel ts) = map fst ts
 typeRelTermNames _ = []
 
+-- | Get degree of relation type.
 typeRelDegree :: Type -> Int
 typeRelDegree (TypeRel ts) = length ts
 typeRelDegree _ = 0
 
--- | Term index
+-- | Get named type from relation type or tie type.
+typeTerms :: Type -> [NamedType]
+typeTerms (TypeRel ts) = ts
+typeTerms (TypeTie ts) = ts
+typeTerms _            = []
+
+-- | Test type is relational.
+isTypeRel :: Type -> Bool
+isTypeRel (TypeRel _)  = True
+isTypeRel _            = False
+
+-- ----------------------  Index
+
+-- | Calculate term index.
 --
 --   >>> typeRelIndex (typeFlatRel ["a", "b", "c"]) ["b"]
 --   [1]
@@ -159,37 +208,24 @@ typeRelIndex (TypeRel ts) p = loop ts p 0 where
         | otherwise = loop ts2 nns (i + 1)
 typeRelIndex _ _ = []
 
-typeRelIndexList :: Type -> [S.TermPath] -> [[Int]]
-typeRelIndexList = map . typeRelIndex
+-- typeRelIndexList :: Type -> [S.TermPath] -> [[Int]]
+-- typeRelIndexList = map . typeRelIndex
 
-typeTermDoc :: Type -> B.Doc
-typeTermDoc (TypeRel ts) = B.doch $ map name ts where
-    name (n, _) = B.doc $ S.showTermName n
-typeTermDoc _ = B.docEmpty
+-- ----------------------  Modify
 
-typeTermMix :: Type -> B.MixText
-typeTermMix (TypeRel ts) = B.mixJoin1 $ map name ts where
-    name (n, _) = B.mix $ S.showTermName n
-typeTermMix _ = B.mixEmpty
-
-typeTerms :: Type -> [NamedType]
-typeTerms (TypeRel ts) = ts
-typeTerms (TypeTie ts) = ts
-typeTerms _            = []
-
-isTypeRel :: Type -> Bool
-isTypeRel (TypeRel _)  = True
-isTypeRel _            = False
-
+-- | Modify terms of relation type.
 typeRelMapTerms :: B.Map [NamedType] -> B.Map Type
 typeRelMapTerms f (TypeRel ts) = TypeRel $ f ts
 typeRelMapTerms _ t = t
 
+-- | Modify term of relation type.
 typeRelMapTerm :: B.Map NamedType -> B.Map Type
 typeRelMapTerm f t = typeRelMapTerms (map f) t
 
+-- | Modify term name of relation type.
 typeRelMapName :: B.Map S.TermName -> B.Map Type
 typeRelMapName = typeRelMapTerm . B.mapFst
+
 
 
 -- ------------------------------------------------------------------
