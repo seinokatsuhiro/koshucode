@@ -14,6 +14,7 @@ module Koshucode.Baala.Data.Content.Utility
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
+    judgeContString,
     contString,
     mixBracketList,
     mixBracketSet,
@@ -113,6 +114,9 @@ contApTextToText = contAp D.gText D.putText
 
 contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap D.gText D.putList
+
+judgeContString :: (CContent c) => D.Judge c -> D.Judge String
+judgeContString = (contString <$>)
 
 -- | Convert content to string value.
 contString :: (CContent c) => c -> String

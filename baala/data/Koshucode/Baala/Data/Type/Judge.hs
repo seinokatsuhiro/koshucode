@@ -18,11 +18,9 @@ module Koshucode.Baala.Data.Type.Judge
     affirmJudge, denyJudge,
     isAffirmative, isDenial, isViolative,
 
-    -- * Writer
+    -- * Encode
     mixTerms1, mixTerms2,
-    writeDownJudge, writeDownTerms,
-    textualjudge, judgeText,
-    termText, termsText,
+    judgeToShortString,
     putJudge, hPutJudge,
   ) where
 
@@ -150,7 +148,7 @@ isViolative (JudgeViolate _ _)  = True
 isViolative _                   = False
 
 
--- ----------------------  Writer
+-- ----------------------  Encode
 
 instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
     mixShortEncode sh j =
@@ -164,9 +162,11 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
         where
           judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
 
+-- | Encode term list with one-space separator.
 mixTerms1 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
 mixTerms1 = mixTerms B.mix1
 
+-- | Encode term list with two-spaces separator.
 mixTerms2 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
 mixTerms2 = mixTerms B.mix2
 
@@ -174,40 +174,13 @@ mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shortener -> [(String, c)] ->
 mixTerms sep sh ts = B.mixJoin sep $ map term ts where
     term (n,c) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c
 
-writeDownJudge :: (B.Write c) => B.Shortener -> Judge c -> String
-writeDownJudge sh = judgeText . textualjudge sh
+-- | Encode judgement.
+judgeToShortString :: (B.MixShortEncode c) => B.Shortener -> Judge c -> String
+judgeToShortString sh = B.mixToString B.noBreak . B.mixShortEncode sh
 
-writeDownTerms :: (B.Write c) => B.Shortener -> [S.Term c] -> String
-writeDownTerms sh = concatMap term where
-    term (n, c) = termText n $ B.writeStringWith sh c
-
-textualjudge :: (B.Write c) => B.Shortener -> Judge c -> Judge String
-textualjudge sh = (B.writeStringWith sh `fmap`)
-
-judgeText :: Judge String -> String
-judgeText jud =
-    case jud of
-      JudgeAffirm      c xs     -> line "|--"  c xs
-      JudgeDeny        c xs     -> line "|-X"  c xs
-      JudgeMultiDeny   c xs     -> line "|-XX" c xs
-      JudgeChange      c xs _   -> line "|-C"  c xs
-      JudgeMultiChange c xs _   -> line "|-CC" c xs
-      JudgeViolate     c xs     -> line "|-V"  c xs
-    where
-      line j p xs  = j ++ " " ++ p ++ termsText xs
-
-termText :: S.TermName -> String -> String
-termText n c = "  /" ++ n ++ " " ++ c
-
-termTextPair :: (S.Term String) -> String
-termTextPair (n, c) = termText n c
-
-termsText :: [S.Term String] -> String
-termsText = concatMap termTextPair
-
-putJudge :: (B.Write c) => Judge c -> IO ()
+putJudge :: (B.MixShortEncode c) => Judge c -> IO ()
 putJudge = hPutJudge B.stdout
 
-hPutJudge :: (B.Write c) => IO.Handle -> Judge c -> IO ()
-hPutJudge h = IO.hPutStrLn h . writeDownJudge B.nullShortener
+hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
+hPutJudge h = IO.hPutStrLn h . judgeToShortString B.nullShortener
 

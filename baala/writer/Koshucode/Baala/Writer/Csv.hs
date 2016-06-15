@@ -15,17 +15,17 @@ import qualified Koshucode.Baala.Syntax    as S
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 
-resultCsv :: (B.Write c) => C.ResultWriter c
+resultCsv :: (D.CContent c) => C.ResultWriter c
 resultCsv = C.ResultWriterJudge "csv" hPutCsv
 
-hPutCsv :: (B.Write c) => C.ResultWriterJudge c
+hPutCsv :: (D.CContent c) => C.ResultWriterJudge c
 hPutCsv h _ status js =
-    do let csvLines = map (toCSV . D.textualjudge B.nullShortener) js
+    do let csvLines = map (csvLine . D.judgeContString) js
        IO.hPutStrLn h $ CSV.printCSV csvLines
        return status
     where
-      toCSV (D.JudgeAffirm p xs) = p : map snd xs
-      toCSV _ = []
+      csvLine (D.JudgeAffirm _ xs) = map snd xs
+      csvLine _ = []
 
 resultCsvHeading :: (D.CContent c) => C.ResultWriter c
 resultCsvHeading = C.ResultWriterChunk "csv-heading" $ hPutXsvHeading "," enquote
