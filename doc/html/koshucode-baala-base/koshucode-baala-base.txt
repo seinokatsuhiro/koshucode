@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.147.0.0
+@version 0.150.0.0
 
 
 -- | Unicode general categories.
@@ -64,23 +64,6 @@ instance GHC.Enum.Bounded Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
 instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
 instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
 instance GHC.Show.Show Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
-
-module Koshucode.Baala.Base.Text.LineBreak
-data LineBreak
-LineBreak :: Maybe Int -> String -> String -> String -> LineBreak
-[breakWidth] :: LineBreak -> Maybe Int
-[breakContinue] :: LineBreak -> String
-[breakNewline] :: LineBreak -> String
-[breakIndent] :: LineBreak -> String
-nolb :: LineBreak
-lf804 :: LineBreak
-crlf804 :: LineBreak
-lf802 :: LineBreak
-crlf802 :: LineBreak
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance GHC.Show.Show Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.LineBreak.LineBreak
 
 module Koshucode.Baala.Base.Text.Comment
 
@@ -177,6 +160,9 @@ unless :: Applicative f => Bool -> f () -> f ()
 --   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
 guard :: Alternative f => Bool -> f ()
 concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+
+-- | Strict bytestring.
+type Bs = ByteString
 
 -- | Lazy bytestring.
 type Bz = ByteString
@@ -546,6 +532,58 @@ docHang :: Doc -> Int -> Doc -> Doc
 docZero :: String -> Doc
 
 
+-- | Queue.
+module Koshucode.Baala.Base.Prelude.Queue
+
+-- | First-in first-out list.
+data Queue a
+
+-- | Create queue from list.
+qFrom :: [a] -> Queue a
+
+-- | Convert queue to list.
+qTo :: Queue a -> [a]
+
+-- | Test queue is empty.
+qNull :: Queue a -> Bool
+
+-- | Number of elements in queue.
+qLength :: Queue a -> Int
+
+-- | Enqueue element.
+--   
+--   <pre>
+--   &gt;&gt;&gt; enq 2 $ enq 1 (B.def :: Queue Int)
+--   Queue [1,2]
+--   </pre>
+enq :: a -> Queue a -> Queue a
+
+-- | Enqueue multiple elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; enqs [1,2,3] (B.def :: Queue Int)
+--   Queue [1,2,3]
+--   </pre>
+enqs :: [a] -> Queue a -> Queue a
+
+-- | Dequeue.
+--   
+--   <pre>
+--   &gt;&gt;&gt; deq $ enq 2 $ enq 1 (B.def :: Queue Int)
+--   (Just 1, Queue [2])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; deq (B.def :: Queue Int)
+--   (Nothing, Queue [])
+--   </pre>
+deq :: Queue a -> (Maybe a, Queue a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Prelude.Queue.Queue a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Prelude.Queue.Queue a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Prelude.Queue.Queue a)
+instance Data.Default.Class.Default (Koshucode.Baala.Base.Prelude.Queue.Queue a)
+
+
 -- | General utilities
 module Koshucode.Baala.Base.Prelude.Class
 
@@ -665,6 +703,132 @@ quotRemZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
 
 -- | Case-zero version of <a>divMod</a>.
 divModZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
+
+
+-- | Simple functions for parsing command-line options. This module is
+--   based on <a>System.Console.GetOpt</a>.
+module Koshucode.Baala.Base.IO.SimpleOption
+
+-- | Single letter options, like <tt>h</tt> of <tt>-h</tt>.
+type ShortOption = Char
+
+-- | Long name options, like <tt>help</tt> of <tt>--help</tt>.
+type LongOption = String
+
+-- | Simple option.
+type SimpleOption = SimpleOption' LongOption
+
+-- | Option list of simple option descriptions.
+type SimpleOptions = [SimpleOptionDescr]
+type SimpleOptionDescr = OptDescr SimpleOption
+data SimpleOption' a
+
+-- | Describe option for flag (switch) type.
+flag :: [ShortOption] -> [LongOption] -> String -> SimpleOptionDescr
+
+-- | Describe option with optional one parameter.
+opt :: [ShortOption] -> [LongOption] -> String -> String -> SimpleOptionDescr
+
+-- | Describe option with required one parameter.
+req :: [ShortOption] -> [LongOption] -> String -> String -> SimpleOptionDescr
+
+-- | Get flag of flag-type option.
+getFlag :: [SimpleOption] -> LongOption -> Bool
+
+-- | Get parameter list of opt-type option.
+getOpt :: [SimpleOption] -> LongOption -> [String]
+
+-- | Get parameter list of req-type option.
+getReq :: [SimpleOption] -> LongOption -> [String]
+
+-- | Predefined <tt>-h</tt> or <tt>--help</tt> option.
+help :: SimpleOptionDescr
+
+-- | Predefined <tt>-V</tt> or <tt>--version</tt> option.
+version :: SimpleOptionDescr
+
+-- | Print help message.
+printHelp :: [String] -> SimpleOptions -> IO ()
+helpMessage :: [String] -> SimpleOptions -> String
+
+-- | Provides one possible concrete representation for <a>Version</a>. For
+--   a version with <a>versionBranch</a> <tt>= [1,2,3]</tt> and
+--   <a>versionTags</a> <tt>= ["tag1","tag2"]</tt>, the output will be
+--   <tt>1.2.3-tag1-tag2</tt>.
+showVersion :: Version -> String
+
+-- | Result of parsing command-line parameters, consist of (1) error
+--   message or (2) options and non-option parameters.
+type ParseResult' opt = Either [String] ([opt], [String])
+
+-- | String-type parse result.
+type ParseResult = ParseResult' SimpleOption
+
+-- | Parse parameters.
+parse :: SimpleOptions -> [String] -> ParseResult
+
+-- | Parse command-line parameters.
+parseCommand :: SimpleOptions -> IO ParseResult
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
+
+
+-- | Line break setting for mix text.
+module Koshucode.Baala.Base.IO.LineBreak
+
+-- | Line break setting.
+data LineBreak
+LineBreak :: Maybe Int -> String -> String -> String -> LineBreak
+
+-- | Max width of line.
+[breakWidth] :: LineBreak -> Maybe Int
+
+-- | Newline string.
+[breakNewline] :: LineBreak -> String
+
+-- | Newline string for breaking long line.
+[breakContinue] :: LineBreak -> String
+
+-- | Indent string for breaking long line.
+[breakIndent] :: LineBreak -> String
+
+-- | LF: <tt>"\n"</tt>
+lfString :: String
+
+-- | CRLF: <tt>"\r\n"</tt>
+crlfString :: String
+
+-- | No line break.
+noBreak :: LineBreak
+
+-- | LF line break.
+lfBreak :: LineBreak
+
+-- | CRLF line break.
+crlfBreak :: LineBreak
+
+-- | Line break by LF with 2 spaces indent and given-length column.
+lf2 :: Int -> LineBreak
+
+-- | Line break by LF with 4 spaces indent and given-length column.
+lf4 :: Int -> LineBreak
+
+-- | Line break by LF with 8 spaces indent and given-length column.
+lf8 :: Int -> LineBreak
+
+-- | Line break by CRLF with 2 spaces indent and given-length column.
+crlf2 :: Int -> LineBreak
+
+-- | Line break by CRLF with 4 spaces indent and given-length column.
+crlf4 :: Int -> LineBreak
+
+-- | Line break by CRLF with 8 spaces indent and given-length column.
+crlf8 :: Int -> LineBreak
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.LineBreak.LineBreak
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.LineBreak.LineBreak
+instance GHC.Show.Show Koshucode.Baala.Base.IO.LineBreak.LineBreak
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.LineBreak.LineBreak
 
 
 -- | Split lists.
@@ -1128,6 +1292,59 @@ instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Order.Ord
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Order.OrderCap a)
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Order.OrderCap a)
 
+
+-- | File path and content in lazy bytestring.
+module Koshucode.Baala.Base.IO.BzFile
+
+-- | File path and content in lazy bytestring. The function
+--   <a>readBzFile</a> creates:
+--   
+--   <ul>
+--   <li><a>BzFile</a> with content and <a>Nothing</a>-exception on
+--   success,</li>
+--   <li><a>BzFile</a> with empty content and <a>Just</a>-exception on
+--   failure.</li>
+--   </ul>
+data BzFile
+BzFile :: FilePath -> Bz -> Maybe SomeException -> BzFile
+
+-- | Path of file.
+[bzFilePath] :: BzFile -> FilePath
+
+-- | File content as lazy bytestring.
+[bzFileContent] :: BzFile -> Bz
+
+-- | Exception when reading file.
+[bzFileException] :: BzFile -> Maybe SomeException
+
+-- | Read file from given path.
+readBzFile :: FilePath -> IO BzFile
+
+-- | Read file content as lazy bytestring.
+tryReadFile :: (Exception e) => FilePath -> IO (Either e Bz)
+instance GHC.Show.Show Koshucode.Baala.Base.IO.BzFile.BzFile
+
+
+-- | Exit process.
+module Koshucode.Baala.Base.IO.Exit
+
+-- | Program name and command-line arguments. This function removes carrige
+--   returns from the arguments.
+progAndArgs :: IO (String, [String])
+useUtf8 :: Handle -> IO ()
+
+-- | Encoding judgement string.
+currentEncodings :: IO String
+
+-- | Exit process.
+exit :: Int -> IO a
+
+-- | Print message and exit on 0.
+putSuccess :: String -> IO a
+
+-- | Print error message and exit on 1.
+putFailure :: String -> IO a
+
 module Koshucode.Baala.Base.Text.Utility
 trimLeft :: Map String
 trimRight :: Map String
@@ -1167,177 +1384,11 @@ type HttpProxy = (String, Maybe UriText)
 uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
 httpExceptionSummary :: HttpException -> String
 
-
--- | Mix text.
-module Koshucode.Baala.Base.Text.MixText
-
--- | Text mixable string, text, and bytestring.
-data MixText
-class Mix a
-mix :: Mix a => a -> MixText
-
--- | Create mix text from strict bytestring.
-mixBs :: ByteString -> MixText
-
--- | Create mix text from lazy bytestring.
-mixBz :: ByteString -> MixText
-
--- | Create mix text from strict text.
-mixTx :: Text -> MixText
-
--- | Create mix text from lazy text.
-mixTz :: Text -> MixText
-
--- | Create mix text from string.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
---   MixText "abcdef"
---   </pre>
-mixString :: String -> MixText
-
--- | Create mix text from char.
-mixChar :: Char -> MixText
-
--- | Put mix text to left edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
---   MixText "abc......."
---   </pre>
-mixLeft :: Char -> Int -> MixText -> MixText
-
--- | Put mix text to right edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
---   MixText ".......abc"
---   </pre>
-mixRight :: Char -> Int -> MixText -> MixText
-
--- | Create mix text of given-length spaces.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
---   MixText "|    |"
---   </pre>
-mixSpace :: Int -> MixText
-
--- | Empty space.
-mix0 :: MixText
-
--- | One space.
-mix1 :: MixText
-
--- | Two-length spaces.
-mix2 :: MixText
-
--- | Three-length spaces.
-mix3 :: MixText
-
--- | Four-length spaces.
-mix4 :: MixText
-
--- | Mix text of octal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixOct (12 :: Int)
---   MixText "14"
---   </pre>
-mixOct :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDec (12 :: Int)
---   MixText "12"
---   </pre>
-mixDec :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of hexadecimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixHex (12 :: Int)
---   MixText "c"
---   </pre>
-mixHex :: (Integral n, Show n) => n -> MixText
-mixSign :: (Num n, Ord n) => n -> MixText
-
--- | Zero-padding decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
---   MixText "000123"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
---   MixText "-00123"
---   </pre>
-mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
-mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
-mixShow :: (Show a) => a -> MixText
-
--- | Empty mix text.
---   
---   <pre>
---   &gt;&gt;&gt; mixEmpty
---   MixText ""
---   </pre>
-mixEmpty :: MixText
-
--- | Soft line break, i.e., suppress at the beginning of line.
-mixSoft :: MixText
-
--- | Hard line break, i.e., suppress only after auto line break.
-mixHard :: MixText
-
--- | Convert mix text to lazy bytestring builder.
-mixToBuilder :: LineBreak -> MixText -> Builder
-
--- | Convert mix text to lazy bytestring.
-mixToBz :: LineBreak -> MixText -> ByteString
-
--- | Convert mix text to string.
-mixToString :: LineBreak -> MixText -> String
-
--- | Print mix text to the standard output.
-putMix :: LineBreak -> MixText -> IO ()
-
--- | Print mix text and newline to the standard output.
-putMixLn :: LineBreak -> MixText -> IO ()
-
--- | Print mix text to the given output handler.
-hPutMix :: Handle -> LineBreak -> MixText -> IO ()
-
--- | Print mix text and newline to the given output handler.
-hPutMixLn :: Handle -> LineBreak -> MixText -> IO ()
-
--- | Print mix text lines to the standard output.
-putMixLines :: LineBreak -> [MixText] -> IO ()
-
--- | Print mix text lines to the given output handler.
-hPutMixLines :: Handle -> LineBreak -> [MixText] -> IO ()
-instance GHC.Show.Show Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.MixText.MixText
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Base.Monoid Koshucode.Baala.Base.Text.MixText.MixText
-instance Koshucode.Baala.Base.Text.MixText.Mix Data.ByteString.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixText.Mix Data.ByteString.Lazy.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixText.Mix Data.Text.Internal.Text
-instance Koshucode.Baala.Base.Text.MixText.Mix Data.Text.Internal.Lazy.Text
-instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Base.String
-instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Types.Char
-instance Koshucode.Baala.Base.Text.MixText.Mix GHC.Types.Int
-instance Koshucode.Baala.Base.Text.MixText.Mix [Koshucode.Baala.Base.Text.MixText.MixText]
-instance Koshucode.Baala.Base.Text.MixText.Mix ()
-
 module Koshucode.Baala.Base.List
 
 
 -- | I/O point: file, standard input, direct text, etc.
-module Koshucode.Baala.Base.Text.IOPoint
+module Koshucode.Baala.Base.IO.IOPoint
 
 -- | Named I/O handle.
 data NamedHandle
@@ -1396,21 +1447,21 @@ NIOPoint :: Int -> IOPoint -> NIOPoint
 
 -- | Create input point for given lazy bytestring.
 nioFrom :: Bz -> NIOPoint
-instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.NIOPoint
-instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.NIOPoint
-instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.IOPoint
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.IOPoint
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.IOPoint
-instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.IOPoint
-instance Data.Data.Data Koshucode.Baala.Base.Text.IOPoint.NamedHandle
-instance GHC.Show.Show Koshucode.Baala.Base.Text.IOPoint.NamedHandle
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.NamedHandle
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.NamedHandle
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.IOPoint.NIOPoint
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.IOPoint.NIOPoint
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.IOPoint.NIOPoint
+instance Data.Data.Data Koshucode.Baala.Base.IO.IOPoint.NIOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NIOPoint
+instance Data.Data.Data Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.IOPoint
+instance Data.Data.Data Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NamedHandle
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NIOPoint
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NIOPoint
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 
-module Koshucode.Baala.Base.Text.CodePt
+module Koshucode.Baala.Base.IO.CodePt
 data CodePt
 CodePt :: NIOPoint -> Int -> String -> String -> CodePt
 
@@ -1436,18 +1487,18 @@ data Sourced a
 Sourced :: [CodePt] -> a -> Sourced a
 [source] :: Sourced a -> [CodePt]
 [unsourced] :: Sourced a -> a
-instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Text.CodePt.Sourced a)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Text.CodePt.Sourced a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Text.CodePt.Sourced a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Text.CodePt.Sourced a)
-instance Data.Data.Data Koshucode.Baala.Base.Text.CodePt.CodePt
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.CodePt.CodePt
-instance GHC.Show.Show Koshucode.Baala.Base.Text.CodePt.CodePt
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.CodePt.CodePt
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.CodePt.CodePt
-instance Koshucode.Baala.Base.Text.CodePt.CodePtr Koshucode.Baala.Base.Text.CodePt.CodePt
-instance GHC.Base.Functor Koshucode.Baala.Base.Text.CodePt.Sourced
-instance Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Text.CodePt.Sourced a)
+instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.IO.CodePt.Sourced a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.IO.CodePt.Sourced a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.IO.CodePt.Sourced a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.IO.CodePt.Sourced a)
+instance Data.Data.Data Koshucode.Baala.Base.IO.CodePt.CodePt
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.CodePt.CodePt
+instance GHC.Show.Show Koshucode.Baala.Base.IO.CodePt.CodePt
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.CodePt.CodePt
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.CodePt.CodePt
+instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Base.IO.CodePt.CodePt
+instance GHC.Base.Functor Koshucode.Baala.Base.IO.CodePt.Sourced
+instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.IO.CodePt.Sourced a)
 
 
 -- | Text table
@@ -1482,18 +1533,17 @@ instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Position
 module Koshucode.Baala.Base.Text.Write
 
 -- | Convert string to short sign.
-type Shortener = String -> Maybe String
+type Shorten = String -> Maybe String
 
--- | Shortener which does not shorten strings.
-nullShortener :: Shortener
+-- | Shorten which does not shorten strings.
+noShorten :: Shorten
 
 -- | Writer with shortener.
 class Write a where writeStringWith sh a = show $ writeDocWith sh a writeHtmlWith sh a = toHtml $ writeStringWith sh a
-writeDocWith :: Write a => Shortener -> a -> Doc
-writeStringWith :: Write a => Shortener -> a -> String
-writeHtmlWith :: Write a => Shortener -> a -> Html
+writeDocWith :: Write a => Shorten -> a -> Doc
+writeStringWith :: Write a => Shorten -> a -> String
+writeHtmlWith :: Write a => Shorten -> a -> Html
 writeDoc :: (Write a) => a -> Doc
-writeString :: (Write a) => a -> String
 writeHtml :: (Write a) => a -> Html
 class ToMarkup a
 toMarkup :: ToMarkup a => a -> Markup
@@ -1505,13 +1555,10 @@ span :: Html -> Html
 span_ :: AttributeValue -> Map Html
 renderHtmlIndented :: Html -> String
 renderHtmlCompact :: Html -> String
-writeH :: (Write a) => Shortener -> [a] -> Doc
-writeV :: (Write a) => Shortener -> [a] -> Doc
-writeColon :: (Write a) => Shortener -> [a] -> Doc
-writeBar :: (Write a) => Shortener -> [a] -> Doc
-writeSep :: (Write a) => String -> Shortener -> [a] -> Doc
+writeH :: (Write a) => Shorten -> [a] -> Doc
+writeV :: (Write a) => Shorten -> [a] -> Doc
+writeBar :: (Write a) => Shorten -> [a] -> Doc
 writeSepsWith :: (Write a) => (a -> Doc) -> String -> [a] -> [Doc]
-writeTerm :: (a -> Doc) -> Named a -> Doc
 writeTerms :: (a -> Doc) -> [Named a] -> Doc
 doc :: (Write a) => a -> Doc
 doch :: (Write a) => [a] -> Doc
@@ -1528,6 +1575,221 @@ instance Koshucode.Baala.Base.Text.Write.Write GHC.Types.Bool
 instance Koshucode.Baala.Base.Text.Write.Write a => Koshucode.Baala.Base.Text.Write.Write (Koshucode.Baala.Base.Prelude.Class.Named a)
 
 module Koshucode.Baala.Base.Text
+
+
+-- | Mix text.
+module Koshucode.Baala.Base.IO.MixText
+
+-- | Text mixable string, text, and bytestring.
+data MixText
+
+-- | Create mix text from strict bytestring.
+mixBs :: ByteString -> MixText
+
+-- | Create mix text from lazy bytestring.
+mixBz :: ByteString -> MixText
+
+-- | Create mix text from strict text.
+mixTx :: Text -> MixText
+
+-- | Create mix text from lazy text.
+mixTz :: Text -> MixText
+
+-- | Create mix text from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
+--   MixText "abcdef"
+--   </pre>
+mixString :: String -> MixText
+
+-- | Create mix text from char.
+mixChar :: Char -> MixText
+
+-- | Put mix text to left edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
+--   MixText "abc......."
+--   </pre>
+mixLeft :: Char -> Int -> MixText -> MixText
+
+-- | Put mix text to right edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
+--   MixText ".......abc"
+--   </pre>
+mixRight :: Char -> Int -> MixText -> MixText
+
+-- | Create mix text of given-length spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
+--   MixText "|    |"
+--   </pre>
+mixSpace :: Int -> MixText
+
+-- | Infix mix space.
+mixSep :: MixText -> MixText -> MixText
+mixSep2 :: MixText -> MixText -> MixText
+
+-- | Empty space.
+mix0 :: MixText
+
+-- | One space.
+mix1 :: MixText
+
+-- | Two-length spaces.
+mix2 :: MixText
+
+-- | Three-length spaces.
+mix3 :: MixText
+
+-- | Four-length spaces.
+mix4 :: MixText
+
+-- | Mix text of octal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixOct (12 :: Int)
+--   MixText "14"
+--   </pre>
+mixOct :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDec (12 :: Int)
+--   MixText "12"
+--   </pre>
+mixDec :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of hexadecimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixHex (12 :: Int)
+--   MixText "c"
+--   </pre>
+mixHex :: (Integral n, Show n) => n -> MixText
+mixSign :: (Num n, Ord n) => n -> MixText
+
+-- | Zero-padding decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
+--   MixText "000123"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
+--   MixText "-00123"
+--   </pre>
+mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
+mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
+
+-- | Append line break.
+mixLine :: MixText -> MixText
+
+-- | Soft line break, i.e., suppress at the beginning of line.
+mixSoft :: MixText
+
+-- | Hard line break, i.e., suppress only after auto line break.
+mixHard :: MixText
+mixShow :: (Show a) => a -> MixText
+
+-- | Empty mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixEmpty
+--   MixText ""
+--   </pre>
+mixEmpty :: MixText
+
+-- | Convert mix text to lazy bytestring builder.
+mixToBuilder :: LineBreak -> MixText -> Builder
+
+-- | Convert mix text to lazy bytestring.
+mixToBz :: LineBreak -> MixText -> ByteString
+
+-- | Convert mix text to string.
+mixToString :: LineBreak -> MixText -> String
+
+-- | Convert mix text to string without line breaks.
+mixToFlatString :: MixText -> String
+
+-- | Print mix text to the standard output.
+putMix :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text and newline to the standard output.
+putMixLn :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text to the given output handler.
+hPutMix :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text and newline to the given output handler.
+hPutMixLn :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text lines to the standard output.
+putMixLines :: LineBreak -> [MixText] -> IO ()
+
+-- | Print mix text lines to the given output handler.
+hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
+instance GHC.Show.Show Koshucode.Baala.Base.IO.MixText.MixText
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.MixText.MixText
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.MixText.MixText
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.MixText.MixText
+instance GHC.Base.Monoid Koshucode.Baala.Base.IO.MixText.MixText
+
+
+-- | Class for constructing mix text.
+module Koshucode.Baala.Base.IO.MixClass
+
+-- | Construct mix text.
+class Mix a
+mix :: Mix a => a -> MixText
+
+-- | Encode via mix text.
+class MixEncode a
+mixEncode :: MixEncode a => a -> MixText
+
+-- | Encode with shortener.
+class MixShortEncode a
+mixShortEncode :: MixShortEncode a => Shorten -> a -> MixText
+
+-- | <a>mixShortEncode</a> with no shortener.
+mixIdEncode :: (MixShortEncode a) => a -> MixText
+
+-- | Enclose mix text with open and close bracket.
+mixBracket :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Enclose mix text with bracket and space.
+mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Concatenate mix texts with delimiter.
+mixJoin :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Concatenate mix texts with delimiter and space.
+mixJoinS :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Join with one space.
+mixJoin1 :: [MixText] -> MixText
+
+-- | Join with vertical bar.
+mixJoinBar :: [MixText] -> MixText
+instance Koshucode.Baala.Base.IO.MixClass.Mix Koshucode.Baala.Base.IO.MixText.MixText
+instance Koshucode.Baala.Base.IO.MixClass.Mix Data.ByteString.Internal.ByteString
+instance Koshucode.Baala.Base.IO.MixClass.Mix Data.ByteString.Lazy.Internal.ByteString
+instance Koshucode.Baala.Base.IO.MixClass.Mix Data.Text.Internal.Text
+instance Koshucode.Baala.Base.IO.MixClass.Mix Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Base.IO.MixClass.Mix GHC.Base.String
+instance Koshucode.Baala.Base.IO.MixClass.Mix GHC.Types.Char
+instance Koshucode.Baala.Base.IO.MixClass.Mix GHC.Types.Int
+instance Koshucode.Baala.Base.IO.MixClass.Mix [Koshucode.Baala.Base.IO.MixText.MixText]
+instance Koshucode.Baala.Base.IO.MixClass.Mix ()
+instance Koshucode.Baala.Base.IO.MixClass.MixEncode GHC.Types.Bool
+
+module Koshucode.Baala.Base.IO
 
 
 -- | Abort reasons.
@@ -1704,8 +1966,7 @@ instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Syntax.Line.Co
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
-instance Koshucode.Baala.Base.Text.Write.Write (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
-instance Koshucode.Baala.Base.Text.CodePt.CodePtr a => Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance Koshucode.Baala.Base.IO.CodePt.CodePtr a => Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -1729,7 +1990,7 @@ codeClauseEmpty :: CodeClause a
 splitClause :: Gather [(IndentSize, a)] [a]
 instance Data.Data.Data a => Data.Data.Data (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
-instance Koshucode.Baala.Base.Text.CodePt.CodePtr a => Koshucode.Baala.Base.Text.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
+instance Koshucode.Baala.Base.IO.CodePt.CodePtr a => Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
 
 module Koshucode.Baala.Base.Syntax.Tree
 

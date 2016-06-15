@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Base.Text.MixText</title
+    >Koshucode.Baala.Base.IO.MixText</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Text-MixText.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-IO-MixText.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Base-Text-MixText.html"
+	><a href="src/Koshucode-Baala-Base-IO-MixText.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.147.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.150.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -49,7 +49,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Base.Text.MixText</p
+	>Koshucode.Baala.Base.IO.MixText</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -81,20 +81,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></li
 	      ><li
 	      ><a href="#g:7"
+		>Newline</a
+		></li
+	      ><li
+	      ><a href="#g:8"
 		>Other</a
 		></li
 	      ></ul
 	    ></li
 	  ><li
-	  ><a href="#g:8"
+	  ><a href="#g:9"
 	    >Convert</a
 	    ><ul
 	    ><li
-	      ><a href="#g:9"
+	      ><a href="#g:10"
 		>ByteString</a
 		></li
 	      ><li
-	      ><a href="#g:10"
+	      ><a href="#g:11"
 		>Mix I/O</a
 		></li
 	      ></ul
@@ -120,27 +124,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="#t:Mix"
-	    >Mix</a
-	    > a <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:mix"
-		>mix</a
-		> :: a -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-		>MixText</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
 	  ><a href="#v:mixBs"
 	    >mixBs</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
 	    >ByteString</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -148,19 +136,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixBz</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
 	    >ByteString</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mixTx"
 	    >mixTx</a
-	    > :: Text -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: Text -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mixTz"
 	    >mixTz</a
-	    > :: Text -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: Text -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -168,7 +156,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixString</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -176,7 +164,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixChar</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
 	    >Char</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -186,9 +174,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -198,9 +186,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -208,37 +196,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixSpace</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixSep"
+	    >mixSep</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixSep2"
+	    >mixSep2</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mix0"
 	    >mix0</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mix1"
 	    >mix1</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mix2"
 	    >mix2</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mix3"
 	    >mix3</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mix4"
 	    >mix4</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -248,7 +256,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -258,7 +266,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -268,7 +276,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -278,7 +286,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Num</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -290,7 +298,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Show</a
 	    > n) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -300,11 +308,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; (n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; (n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixLine"
+	    >mixLine</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixSoft"
+	    >mixSoft</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixHard"
+	    >mixHard</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
@@ -312,33 +340,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixShow</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mixEmpty"
 	    >mixEmpty</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-	    >MixText</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:mixSoft"
-	    >mixSoft</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-	    >MixText</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:mixHard"
-	    >mixHard</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mixToBuilder"
 	    >mixToBuilder</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Builder.html#t:Builder"
 	    >Builder</a
@@ -346,9 +362,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:mixToBz"
 	    >mixToBz</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
 	    >ByteString</a
@@ -356,9 +372,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:mixToString"
 	    >mixToString</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mixToFlatString"
+	    >mixToFlatString</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -366,9 +390,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:putMix"
 	    >putMix</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -376,9 +400,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:putMixLn"
 	    >putMixLn</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -386,11 +410,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:hPutMix"
 	    >hPutMix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -398,11 +422,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:hPutMixLn"
 	    >hPutMixLn</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -410,9 +434,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:putMixLines"
 	    >putMixLines</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -420,11 +444,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:hPutMixLines"
 	    >hPutMixLines</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -440,7 +464,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >data</span
 	    > <a name="t:MixText" class="def"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#MixText" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#MixText" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -457,10 +481,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		      >Eq</a
-		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-75" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#line-78" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -473,10 +497,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		      >Ord</a
-		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-79" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#line-82" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -489,10 +513,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><span class="inst-left"
 		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		      >Show</a
-		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-71" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#line-74" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -505,10 +529,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		      >Monoid</a
-		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-87" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#line-90" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -521,10 +545,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-83" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#line-86" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -535,12 +559,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
+		    ><a href="Koshucode-Baala-Base-IO-MixClass.html#t:Mix"
 		      >Mix</a
-		      > [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+		      > <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+		      >MixText</a
+		      ></span
+		    > <a href="src/Koshucode-Baala-Base-IO-MixClass.html#line-35" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Mix text itself.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-MixClass.html#t:Mix"
+		      >Mix</a
+		      > [<a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 		      >MixText</a
 		      >]</span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-126" class="link"
+		    > <a href="src/Koshucode-Baala-Base-IO-MixClass.html#line-67" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -554,176 +594,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><h1 id="g:2"
 	>Constructor</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    > <a name="t:Mix" class="def"
-	    >Mix</a
-	    > a <span class="keyword"
-	    >where</span
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#Mix" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:mix" class="def"
-	      >mix</a
-	      > :: a -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-	      >MixText</a
-	      > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix" class="link"
-	      >Source</a
-	      ></p
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Mix" class="caption collapser" onclick="toggleSection('i:Mix')"
-	    >Instances</p
-	    ><div id="section.i:Mix" class="show"
-	    ><table
-	      ><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-		      >Char</a
-		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-118" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from char.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		      >Int</a
-		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-122" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text of given-length spaces.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		      >String</a
-		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-114" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from string.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > ()</span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-130" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create empty mix text.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
-		      >ByteString</a
-		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-98" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from strict bytestring.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
-		      >ByteString</a
-		      ></span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-102" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from lazy bytestring.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > Text</span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-106" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from strict text.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > Text</span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-110" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Create mix text from lazy text.</p
-		    ></td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Base-Text-MixText.html#t:Mix"
-		      >Mix</a
-		      > [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-		      >MixText</a
-		      >]</span
-		    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#line-126" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc"
-		  ><p
-		    >Concatenate mix text.</p
-		    ></td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
 	><h2 id="g:3"
 	>Text</h2
 	><div class="top"
@@ -732,9 +602,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixBs</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
 	    >ByteString</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixBs" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixBs" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -748,9 +618,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixBz</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
 	    >ByteString</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixBz" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixBz" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -762,9 +632,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mixTx" class="def"
 	    >mixTx</a
-	    > :: Text -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: Text -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixTx" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixTx" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -776,9 +646,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mixTz" class="def"
 	    >mixTz</a
-	    > :: Text -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: Text -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixTz" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixTz" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -792,9 +662,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixString</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixString" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixString" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -818,9 +688,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixChar</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
 	    >Char</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixChar" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixChar" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -838,11 +708,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixLeft" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixLeft" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -868,11 +738,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixRight" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixRight" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -898,9 +768,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixSpace</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixSpace" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixSpace" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -920,11 +790,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:mixSep" class="def"
+	    >mixSep</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixSep" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Infix mix space.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mixSep2" class="def"
+	    >mixSep2</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixSep2" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:mix0" class="def"
 	    >mix0</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix0" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mix0" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -936,9 +838,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mix1" class="def"
 	    >mix1</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix1" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mix1" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -950,9 +852,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mix2" class="def"
 	    >mix2</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix2" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mix2" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -964,9 +866,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mix3" class="def"
 	    >mix3</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix3" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mix3" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -978,9 +880,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mix4" class="def"
 	    >mix4</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mix4" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mix4" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -998,9 +900,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixOct" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixOct" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1026,9 +928,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixDec" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixDec" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1054,9 +956,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixHex" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixHex" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1082,9 +984,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Num</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixSign" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixSign" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1098,9 +1000,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Show</a
 	    > n) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixDecZero" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixDecZero" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1136,17 +1038,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Integral</a
 	    > n, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > n) =&gt; (n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > n) =&gt; (n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; n -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixNumZero" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixNumZero" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h2 id="g:7"
+	>Newline</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mixLine" class="def"
+	    >mixLine</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixLine" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Append line break.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mixSoft" class="def"
+	    >mixSoft</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixSoft" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Soft line break, i.e., suppress at the beginning of line.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mixHard" class="def"
+	    >mixHard</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixHard" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Hard line break, i.e., suppress only after auto line break.</p
+	    ></div
+	  ></div
+	><h2 id="g:8"
 	>Other</h2
 	><div class="top"
 	><p class="src"
@@ -1154,9 +1102,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >mixShow</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixShow" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixShow" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1164,9 +1112,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mixEmpty" class="def"
 	    >mixEmpty</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixEmpty" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixEmpty" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1184,49 +1132,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </pre
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:mixSoft" class="def"
-	    >mixSoft</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixSoft" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Soft line break, i.e., suppress at the beginning of line.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:mixHard" class="def"
-	    >mixHard</a
-	    > :: <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
-	    >MixText</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixHard" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Hard line break, i.e., suppress only after auto line break.</p
-	    ></div
-	  ></div
-	><h1 id="g:8"
+	><h1 id="g:9"
 	>Convert</h1
-	><h2 id="g:9"
+	><h2 id="g:10"
 	>ByteString</h2
 	><div class="top"
 	><p class="src"
 	  ><a name="v:mixToBuilder" class="def"
 	    >mixToBuilder</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Builder.html#t:Builder"
 	    >Builder</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixToBuilder" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixToBuilder" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1238,13 +1158,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mixToBz" class="def"
 	    >mixToBz</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
 	    >ByteString</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixToBz" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixToBz" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1256,13 +1176,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:mixToString" class="def"
 	    >mixToString</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > <a href="src/Koshucode-Baala-Base-Text-MixText.html#mixToString" class="link"
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixToString" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1270,19 +1190,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Convert mix text to string.</p
 	    ></div
 	  ></div
-	><h2 id="g:10"
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mixToFlatString" class="def"
+	    >mixToFlatString</a
+	    > :: <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-IO-MixText.html#mixToFlatString" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert mix text to string without line breaks.</p
+	    ></div
+	  ></div
+	><h2 id="g:11"
 	>Mix I/O</h2
 	><div class="top"
 	><p class="src"
 	  ><a name="v:putMix" class="def"
 	    >putMix</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#putMix" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#putMix" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1294,13 +1230,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:putMixLn" class="def"
 	    >putMixLn</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#putMixLn" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#putMixLn" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1312,15 +1248,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:hPutMix" class="def"
 	    >hPutMix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#hPutMix" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#hPutMix" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1332,15 +1268,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:hPutMixLn" class="def"
 	    >hPutMixLn</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#hPutMixLn" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#hPutMixLn" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1352,13 +1288,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:putMixLines" class="def"
 	    >putMixLines</a
-	    > :: <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#putMixLines" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#putMixLines" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1370,15 +1306,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:hPutMixLines" class="def"
 	    >hPutMixLines</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-LineBreak.html#t:LineBreak"
+	    > :: <a href="Koshucode-Baala-Base-IO-LineBreak.html#t:LineBreak"
 	    >LineBreak</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-MixText.html#t:MixText"
 	    >MixText</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a href="src/Koshucode-Baala-Base-Text-MixText.html#hPutMixLines" class="link"
+	    > () <a href="src/Koshucode-Baala-Base-IO-MixText.html#hPutMixLines" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

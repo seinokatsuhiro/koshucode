@@ -1,0 +1,763 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.IO.SimpleOption</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-IO-SimpleOption.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-IO-SimpleOption.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.150.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.IO.SimpleOption</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Data type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Option type</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Predefined option</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Parsing</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Simple functions for parsing command-line options.
+   This module is based on <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-Console-GetOpt.html"
+	    >System.Console.GetOpt</a
+	    >.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ShortOption"
+	    >ShortOption</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:LongOption"
+	    >LongOption</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SimpleOption"
+	    >SimpleOption</a
+	    > = <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption-39-"
+	    >SimpleOption'</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > = [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    >]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-Console-GetOpt.html#t:OptDescr"
+	    >OptDescr</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:SimpleOption-39-"
+	    >SimpleOption'</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:flag"
+	    >flag</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:opt"
+	    >opt</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:req"
+	    >req</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:getFlag"
+	    >getFlag</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:getOpt"
+	    >getOpt</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:getReq"
+	    >getReq</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:help"
+	    >help</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:version"
+	    >version</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:printHelp"
+	    >printHelp</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:helpMessage"
+	    >helpMessage</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:showVersion"
+	    >showVersion</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#t:Version"
+	    >Version</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ParseResult-39-"
+	    >ParseResult'</a
+	    > opt = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] ([opt], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >])</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ParseResult"
+	    >ParseResult</a
+	    > = <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult-39-"
+	    >ParseResult'</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:parse"
+	    >parse</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult"
+	    >ParseResult</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:parseCommand"
+	    >parseCommand</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult"
+	    >ParseResult</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Data type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ShortOption" class="def"
+	    >ShortOption</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#ShortOption" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Single letter options, like <code
+	      >h</code
+	      > of <code
+	      >-h</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:LongOption" class="def"
+	    >LongOption</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#LongOption" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Long name options, like <code
+	      >help</code
+	      > of <code
+	      >--help</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SimpleOption" class="def"
+	    >SimpleOption</a
+	    > = <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption-39-"
+	    >SimpleOption'</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#SimpleOption" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Simple option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SimpleOptions" class="def"
+	    >SimpleOptions</a
+	    > = [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    >] <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#SimpleOptions" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option list of simple option descriptions.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SimpleOptionDescr" class="def"
+	    >SimpleOptionDescr</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-Console-GetOpt.html#t:OptDescr"
+	    >OptDescr</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#SimpleOptionDescr" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:SimpleOption-39-" class="def"
+	    >SimpleOption'</a
+	    > a <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#SimpleOption%27" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs instances"
+	  ><p id="control.i:SimpleOption-39-" class="caption collapser" onclick="toggleSection('i:SimpleOption-39-')"
+	    >Instances</p
+	    ><div id="section.i:SimpleOption-39-" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption-39-"
+		      >SimpleOption'</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#line-54" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption-39-"
+		      >SimpleOption'</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#line-54" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption-39-"
+		      >SimpleOption'</a
+		      > a)</span
+		    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#line-54" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Option type</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:flag" class="def"
+	    >flag</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#flag" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Describe option for flag (switch) type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:opt" class="def"
+	    >opt</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#opt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Describe option with optional one parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:req" class="def"
+	    >req</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ShortOption"
+	    >ShortOption</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#req" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Describe option with required one parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getFlag" class="def"
+	    >getFlag</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#getFlag" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get flag of flag-type option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getOpt" class="def"
+	    >getOpt</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#getOpt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get parameter list of opt-type option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getReq" class="def"
+	    >getReq</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:LongOption"
+	    >LongOption</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#getReq" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get parameter list of req-type option.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Predefined option</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:help" class="def"
+	    >help</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#help" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Predefined <code
+	      >-h</code
+	      > or <code
+	      >--help</code
+	      > option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:version" class="def"
+	    >version</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptionDescr"
+	    >SimpleOptionDescr</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#version" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Predefined <code
+	      >-V</code
+	      > or <code
+	      >--version</code
+	      > option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:printHelp" class="def"
+	    >printHelp</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#printHelp" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print help message.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:helpMessage" class="def"
+	    >helpMessage</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#helpMessage" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:showVersion" class="def"
+	    >showVersion</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#t:Version"
+	    >Version</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Provides one possible concrete representation for <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#t:Version"
+		>Version</a
+		></code
+	      >.  For
+ a version with <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#v:versionBranch"
+		>versionBranch</a
+		></code
+	      > <code
+	      >= [1,2,3]</code
+	      > and <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#v:versionTags"
+		>versionTags</a
+		></code
+	      >
+ <code
+	      >= [&quot;tag1&quot;,&quot;tag2&quot;]</code
+	      >, the output will be <code
+	      >1.2.3-tag1-tag2</code
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Parsing</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ParseResult-39-" class="def"
+	    >ParseResult'</a
+	    > opt = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] ([opt], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]) <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#ParseResult%27" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Result of parsing command-line parameters, consist of
+   (1) error message or (2) options and non-option parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ParseResult" class="def"
+	    >ParseResult</a
+	    > = <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult-39-"
+	    >ParseResult'</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOption"
+	    >SimpleOption</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#ParseResult" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String-type parse result.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parse" class="def"
+	    >parse</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult"
+	    >ParseResult</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#parse" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseCommand" class="def"
+	    >parseCommand</a
+	    > :: <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:SimpleOptions"
+	    >SimpleOptions</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Base-IO-SimpleOption.html#t:ParseResult"
+	    >ParseResult</a
+	    > <a href="src/Koshucode-Baala-Base-IO-SimpleOption.html#parseCommand" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse command-line parameters.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
