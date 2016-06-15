@@ -19,7 +19,7 @@ module Koshucode.Baala.Data.Type.Judge
     isAffirmative, isDenial, isViolative,
 
     -- * Encode
-    mixTerms1, mixTerms2,
+    termsToMix1, termsToMix2,
     judgeToString, judgeToStringShort,
     putJudge, hPutJudge,
   ) where
@@ -80,7 +80,7 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
           JudgeMultiChange c xs _  -> judge "|-CC" c xs
           JudgeViolate     c xs    -> judge "|-V"  c xs
         where
-          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
+          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` termsToMix2 sh xs
 
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
@@ -163,16 +163,19 @@ isViolative _                   = False
 -- ----------------------  Encode
 
 -- | Encode term list with one-space separator.
-mixTerms1 :: (B.MixShortEncode c) => B.Shorten -> [(String, c)] -> B.MixText
-mixTerms1 = mixTerms B.mix1
+termsToMix1 :: (B.MixShortEncode c) => B.Shorten -> [S.Term c] -> B.MixText
+termsToMix1 = termsToMix B.mix1
 
 -- | Encode term list with two-spaces separator.
-mixTerms2 :: (B.MixShortEncode c) => B.Shorten -> [(String, c)] -> B.MixText
-mixTerms2 = mixTerms B.mix2
+termsToMix2 :: (B.MixShortEncode c) => B.Shorten -> [S.Term c] -> B.MixText
+termsToMix2 = termsToMix B.mix2
 
-mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [(String, c)] -> B.MixText
-mixTerms sep sh ts = B.mixJoin sep $ map term ts where
-    term (n,c) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c
+termsToMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [S.Term c] -> B.MixText
+termsToMix sep sh ts = B.mixJoin sep $ map term ts where
+    term (n, c) = termNameToMix n `B.mixSep` B.mixShortEncode sh c
+
+termNameToMix :: S.TermName -> B.MixText
+termNameToMix n = B.mixString ('/' : n)
 
 -- | Encode judgement with short setting.
 judgeToStringShort :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String

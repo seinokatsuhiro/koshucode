@@ -109,7 +109,7 @@ instance B.MixShortEncode BaalaC where
 
           VList cs   -> D.mixBracketList $ mixBar cs
           VSet  cs   -> D.mixBracketSet  $ mixBar cs
-          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.mixTerms1 sh ts
+          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.termsToMix1 sh ts
           VRel  r    -> B.mixShortEncode sh r
           VInterp i  -> B.mixShortEncode sh i
           VType t    -> B.mixBracketS S.typeOpen S.typeClose $ B.mixEncode t
