@@ -70,17 +70,17 @@ There are many bugs and potentials.
 [dictionary]:                 http://shop.oreilly.com/product/9780596527983.do
 [abc-of-koshucode]:           https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
 
-[koshucode-baala-base]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
-[koshucode-baala-syntax]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/
-[koshucode-baala-data]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/
-[koshucode-baala-core]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
-[koshucode-baala-writer]:     http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/
-[koshucode-baala-rop-flat]:   http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/
-[koshucode-baala-rop-nested]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-nested/
-[koshucode-baala-rop-cox]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-cox/
-[koshucode-baala-cop]:        http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-cop/
-[koshucode-baala-calculator]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
-[koshucode-baala-toolkit]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
+[koshucode-baala-base]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
+[koshucode-baala-syntax]:     https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/
+[koshucode-baala-data]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/
+[koshucode-baala-core]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
+[koshucode-baala-writer]:     https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/
+[koshucode-baala-rop-flat]:   https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/
+[koshucode-baala-rop-nested]: https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-nested/
+[koshucode-baala-rop-cox]:    https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-cox/
+[koshucode-baala-cop]:        https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-cop/
+[koshucode-baala-calculator]: https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
+[koshucode-baala-toolkit]:    https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
 
 [DIR-RANK-ALL]:               baala/import/DIR-RANK-ALL.k
 [dir-rank]:                   baala/import/dir-rank.k
