@@ -39,7 +39,7 @@ resultTsvHeading :: (D.CContent c) => C.ResultWriter c
 resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsv tabHeadSetting
 
 hPutXsv :: forall c. (D.CContent c) => XsvSetting -> C.ResultWriterChunk c
-hPutXsv XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ status sh =
+hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ status sh =
     do let csv = concatMap toCsv chunks
        IO.hPutStr h $ unlines csv
        return status
@@ -54,48 +54,54 @@ hPutXsv XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ stat
       join = B.intercalate sep
 
       line :: [c] -> String
-      line = join . map (csvContent quote)
+      line = join . map (csvContent setting)
 
       appendHead he xs
           | isHead    = join (map quote $ D.headNames he) : xs
           | otherwise = xs
 
-csvContent :: (D.CContent c) => B.Map String -> c -> String
-csvContent quote c
+csvContent :: (D.CContent c) => XsvSetting -> c -> String
+csvContent setting@XsvSetting { xsvQuote = quote } c
+    | D.isCode   c  = quote $ D.gCode c
     | D.isText   c  = quote $ D.gText c
+    | D.isTerm   c  = quote $ '/' : D.gTerm c
     | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
-    | D.isEmpty  c  = ""
-    | D.isBool   c  = if D.gBool c then "true" else "false"
     | D.isClock  c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gClock c
     | D.isTime   c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gTime c
-    | D.isTerm   c  = quote $ '/' : D.gTerm c
+    | D.isBool   c  = boolToString $ D.gBool c
 
-    | D.isList   c  = "<list>"
-    | D.isSet    c  = "<set>"
-    | D.isTie    c  = "<tie>"
-    | D.isRel    c  = "<rel>"
-    | D.isInterp c  = "<interp>"
-    | D.isType   c  = "<type>"
-    | otherwise     = "<?>"
+    | D.isList   c  = csvSubContents setting $ D.gList c
+    | D.isSet    c  = csvSubContents setting $ D.gSet c 
+    | otherwise     = D.contString c
 
+csvSubContents :: (D.CContent c) => XsvSetting -> [c] -> String
+csvSubContents setting@XsvSetting { xsvSubSep = sub } cs =
+    B.intercalate sub $ csvContent setting <$> cs
+
+boolToString :: Bool -> String
+boolToString True  = "true"
+boolToString False = "false"
 
 -- --------------------------------------------  Setting
 
 data XsvSetting = XsvSetting
-    { xsvHead   :: Bool
-    , xsvSep    :: String
+    { xsvHead     :: Bool
+    , xsvSep      :: String
+    , xsvSubSep   :: String
     , xsvQuote  :: String -> String
     }
 
 csvSetting :: XsvSetting
-csvSetting = XsvSetting { xsvHead  = False
-                        , xsvSep   = ","
-                        , xsvQuote = enquote }
+csvSetting = XsvSetting { xsvHead    = False
+                        , xsvSep     = ","
+                        , xsvSubSep  = "|"
+                        , xsvQuote   = enquote }
 
 tabSetting :: XsvSetting
-tabSetting = XsvSetting { xsvHead  = False
-                        , xsvSep   = "\t"
-                        , xsvQuote = toSpace }
+tabSetting = XsvSetting { xsvHead    = False
+                        , xsvSep     = "\t"
+                        , xsvSubSep  = "|"
+                        , xsvQuote  = toSpace }
 
 csvHeadSetting :: XsvSetting
 csvHeadSetting = csvSetting { xsvHead = True }
