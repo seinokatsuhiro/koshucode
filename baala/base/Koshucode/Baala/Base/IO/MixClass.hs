@@ -85,11 +85,11 @@ instance MixEncode Bool where
 
 -- | Encode with shortener.
 class MixShortEncode a where
-    mixShortEncode :: B.Shortener -> a -> B.MixText
+    mixShortEncode :: B.Shorten -> a -> B.MixText
 
 -- | 'mixShortEncode' with no shortener.
 mixIdEncode :: (MixShortEncode a) => a -> B.MixText
-mixIdEncode = mixShortEncode B.nullShortener
+mixIdEncode = mixShortEncode B.nullShorten
 
 
 -- ----------------------  Utility

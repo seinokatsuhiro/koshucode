@@ -85,7 +85,7 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
-hPutChunks :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shortener -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
+hPutChunks :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shorten -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks h result sh = loop where
     writer = B.mixShortEncode sh
 

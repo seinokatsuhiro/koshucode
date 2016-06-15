@@ -85,7 +85,7 @@ instance B.Write (Relmap' h c) where
     writeDocWith sh (RelmapLink   lx)      = B.writeDocWith sh lx
     writeDocWith sh (RelmapAppend r1 r2)   = B.docHang (B.writeDocWith sh r1) 2 (docRelmapAppend sh r2)
 
-docRelmapAppend :: B.Shortener -> Relmap' h c -> B.Doc
+docRelmapAppend :: B.Shorten -> Relmap' h c -> B.Doc
 docRelmapAppend sh = B.writeV sh . map pipe . relmapAppendList where
     pipe m = B.writeDocWith sh "|" B.<+> B.writeDocWith sh m
 

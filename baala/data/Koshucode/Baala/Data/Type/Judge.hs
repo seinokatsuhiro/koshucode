@@ -163,24 +163,24 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
           judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
 
 -- | Encode term list with one-space separator.
-mixTerms1 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
+mixTerms1 :: (B.MixShortEncode c) => B.Shorten -> [(String, c)] -> B.MixText
 mixTerms1 = mixTerms B.mix1
 
 -- | Encode term list with two-spaces separator.
-mixTerms2 :: (B.MixShortEncode c) => B.Shortener -> [(String, c)] -> B.MixText
+mixTerms2 :: (B.MixShortEncode c) => B.Shorten -> [(String, c)] -> B.MixText
 mixTerms2 = mixTerms B.mix2
 
-mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shortener -> [(String, c)] -> B.MixText
+mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [(String, c)] -> B.MixText
 mixTerms sep sh ts = B.mixJoin sep $ map term ts where
     term (n,c) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c
 
 -- | Encode judgement.
-judgeToShortString :: (B.MixShortEncode c) => B.Shortener -> Judge c -> String
+judgeToShortString :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String
 judgeToShortString sh = B.mixToString B.noBreak . B.mixShortEncode sh
 
 putJudge :: (B.MixShortEncode c) => Judge c -> IO ()
 putJudge = hPutJudge B.stdout
 
 hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
-hPutJudge h = IO.hPutStrLn h . judgeToShortString B.nullShortener
+hPutJudge h = IO.hPutStrLn h . judgeToShortString B.nullShorten
 

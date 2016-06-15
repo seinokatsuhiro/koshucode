@@ -3,7 +3,7 @@
 
 module Koshucode.Baala.Base.Text.Write
   ( -- * Class
-    Shortener, nullShortener,
+    Shorten, nullShorten,
     Write (..),
     writeDoc, writeString, writeHtml,
 
@@ -41,30 +41,30 @@ import qualified Koshucode.Baala.Base.Prelude     as B
 -- ----------------------  Data type
 
 -- | Convert string to short sign.
-type Shortener = String -> Maybe String
+type Shorten = String -> Maybe String
 
--- | Shortener which does not shorten strings.
-nullShortener :: Shortener
-nullShortener _ = Nothing
+-- | Shorten which does not shorten strings.
+nullShorten :: Shorten
+nullShorten _ = Nothing
 
 -- | Writer with shortener.
 class Write a where
-    writeDocWith :: Shortener -> a -> B.Doc
+    writeDocWith :: Shorten -> a -> B.Doc
 
-    writeStringWith :: Shortener -> a -> String
+    writeStringWith :: Shorten -> a -> String
     writeStringWith sh a = show $ writeDocWith sh a
 
-    writeHtmlWith :: Shortener -> a -> H.Html
+    writeHtmlWith :: Shorten -> a -> H.Html
     writeHtmlWith sh a = H.toHtml $ writeStringWith sh a
 
 writeDoc :: (Write a) => a -> B.Doc
-writeDoc = writeDocWith nullShortener
+writeDoc = writeDocWith nullShorten
 
 writeString :: (Write a) => a -> String
-writeString = writeStringWith nullShortener
+writeString = writeStringWith nullShorten
 
 writeHtml :: (Write a) => a -> H.Html
-writeHtml = writeHtmlWith nullShortener
+writeHtml = writeHtmlWith nullShorten
 
 instance Write B.Doc where
     writeDocWith _ x = x
@@ -117,22 +117,22 @@ renderHtmlCompact  = HC.renderHtml
 --     >>> writeTerms doc [("x", False), ("y", True)]
 --     /x <0> /y <1>
 
-writeH :: (Write a) => Shortener -> [a] -> B.Doc
+writeH :: (Write a) => Shorten -> [a] -> B.Doc
 writeH sh = D.hsep . map (writeDocWith sh)
 
-writeV :: (Write a) => Shortener -> [a] -> B.Doc
+writeV :: (Write a) => Shorten -> [a] -> B.Doc
 writeV sh = D.vcat . map (writeDocWith sh)
 
-writeColon :: (Write a) => Shortener -> [a] -> B.Doc
+writeColon :: (Write a) => Shorten -> [a] -> B.Doc
 writeColon sh = writeSep ":" sh
 
-writeBar :: (Write a) => Shortener -> [a] -> B.Doc
+writeBar :: (Write a) => Shorten -> [a] -> B.Doc
 writeBar sh = writeSep "|" sh
 
-writeSep :: (Write a) => String -> Shortener -> [a] -> B.Doc
+writeSep :: (Write a) => String -> Shorten -> [a] -> B.Doc
 writeSep sep sh = D.hsep . writeSeps sep sh
 
-writeSeps :: (Write a) => String -> Shortener -> [a] -> [B.Doc]
+writeSeps :: (Write a) => String -> Shorten -> [a] -> [B.Doc]
 writeSeps sep sh = writeSepsWith (writeDocWith sh) sep
 
 writeSepsWith :: (Write a) => (a -> B.Doc) -> String -> [a] -> [B.Doc]
@@ -166,13 +166,13 @@ writeTerms w = doch . (writeTerm w `map`)
 --     [ abc ]
 
 doc :: (Write a) => a -> B.Doc
-doc = writeDocWith nullShortener
+doc = writeDocWith nullShorten
 
 docv :: (Write a) => [a] -> B.Doc
-docv = writeV nullShortener
+docv = writeV nullShorten
 
 doch :: (Write a) => [a] -> B.Doc
-doch = writeH nullShortener
+doch = writeH nullShorten
 
 docWrap :: (Write a) => String -> String -> a -> B.Doc
 docWrap = docWrapBody (B.<>)

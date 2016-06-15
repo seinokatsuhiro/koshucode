@@ -31,5 +31,5 @@ hPutRel h render sh = mapM_ put chunks where
     put _                 = return ()
     html pat r = H.div ! class_ "named-relation" $ do
                    H.p ! class_ "name" $ H.toHtml pat
-                   B.writeHtmlWith B.nullShortener r
+                   B.writeHtmlWith B.nullShorten r
 

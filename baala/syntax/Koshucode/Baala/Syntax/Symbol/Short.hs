@@ -11,7 +11,7 @@ module Koshucode.Baala.Syntax.Symbol.Short
     shortTrim, shortM, shortListM,
     shortGroup,
   
-    -- * Shortener
+    -- * Shorten
     shortText,
   ) where
 
@@ -54,10 +54,10 @@ shortGroup (Short cp1 sh1 a : xs) =
       xs'                                -> Short cp1 sh1 [a] : xs'
 
 
--- ----------------------  Shortener
+-- ----------------------  Shorten
 
 -- | String shortener.
-shortText :: [ShortDef] -> B.Shortener
+shortText :: [ShortDef] -> B.Shorten
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
 

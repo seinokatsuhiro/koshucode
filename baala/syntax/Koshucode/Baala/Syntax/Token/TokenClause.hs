@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 
 type TokenClause = B.CodeClause S.Token
 
--- docTokenClause :: B.Shortener -> TokenClause -> B.Doc
+-- docTokenClause :: B.Shorten -> TokenClause -> B.Doc
 -- docTokenClause sh (B.CodeClause ls toks) = d where
 --     d      = B.docHang k 2 $ B.docv [dls, dtoks]
 --     k      = B.writeDocWith sh "TokenClause"
