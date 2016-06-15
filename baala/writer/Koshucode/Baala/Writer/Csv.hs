@@ -9,33 +9,37 @@ module Koshucode.Baala.Writer.Csv
 
 import qualified Data.Char                 as Char
 import qualified System.IO                 as IO
-import qualified Text.CSV                  as CSV
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 
+
+-- --------------------------------------------  Writer
+
+-- | Comman-separated-values output without heading.
 resultCsv :: (D.CContent c) => C.ResultWriter c
-resultCsv = C.ResultWriterJudge "csv" hPutCsv
+resultCsv = C.ResultWriterChunk "csv" $ hPutXsv csvSetting
 
-hPutCsv :: (D.CContent c) => C.ResultWriterJudge c
-hPutCsv h _ status js =
-    do let csvLines = map (csvLine . D.judgeContString) js
-       IO.hPutStrLn h $ CSV.printCSV csvLines
-       return status
-    where
-      csvLine (D.JudgeAffirm _ xs) = map snd xs
-      csvLine _ = []
+-- hPutCsv :: (D.CContent c) => C.ResultWriterJudge c
+-- hPutCsv h _ status js =
+--     do let csvLines = map (csvLine . D.judgeContString) js
+--        IO.hPutStrLn h $ CSV.printCSV csvLines
+--        return status
+--     where
+--       csvLine (D.JudgeAffirm _ xs) = map snd xs
+--       csvLine _ = []
 
+-- | Comman-separated-values output with heading.
 resultCsvHeading :: (D.CContent c) => C.ResultWriter c
-resultCsvHeading = C.ResultWriterChunk "csv-heading" $ hPutXsvHeading "," enquote
+resultCsvHeading = C.ResultWriterChunk "csv-heading" $ hPutXsv csvHeadSetting
 
+-- | Tab-separated-values output with heading.
 resultTsvHeading :: (D.CContent c) => C.ResultWriter c
-resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsvHeading "\t" toSpace
+resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsv tabHeadSetting
 
-hPutXsvHeading :: forall c. (D.CContent c)
-    => String -> B.Map String -> C.ResultWriterChunk c
-hPutXsvHeading delim text h _ status sh =
+hPutXsv :: forall c. (D.CContent c) => XsvSetting -> C.ResultWriterChunk c
+hPutXsv XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ status sh =
     do let csv = concatMap toCsv chunks
        IO.hPutStr h $ unlines csv
        return status
@@ -43,24 +47,28 @@ hPutXsvHeading delim text h _ status sh =
       chunks = concatMap S.shortBody sh
 
       toCsv :: C.ResultChunk c -> [String]
-      toCsv (C.ResultRel _ (D.Rel he bo)) =
-          comma (map text $ D.headNames he) : map line bo
+      toCsv (C.ResultRel _ (D.Rel he bo)) = appendHead he $ map line bo
       toCsv _ = []
 
-      line :: [c] -> String
-      line cs = comma $ map (csvContent text) cs
+      join :: [String] -> String
+      join = B.intercalate sep
 
-      comma = B.intercalate delim
+      line :: [c] -> String
+      line = join . map (csvContent quote)
+
+      appendHead he xs
+          | isHead    = join (map quote $ D.headNames he) : xs
+          | otherwise = xs
 
 csvContent :: (D.CContent c) => B.Map String -> c -> String
-csvContent text c
-    | D.isText   c  = text $ D.gText c
+csvContent quote c
+    | D.isText   c  = quote $ D.gText c
     | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
     | D.isEmpty  c  = ""
     | D.isBool   c  = if D.gBool c then "true" else "false"
-    | D.isClock  c  = text $ show $ D.writeClockBody $ D.gClock c
-    | D.isTime   c  = text $ B.writeString c
-    | D.isTerm   c  = text $ '/' : D.gTerm c
+    | D.isClock  c  = quote $ show $ D.writeClockBody $ D.gClock c
+    | D.isTime   c  = quote $ B.writeString c
+    | D.isTerm   c  = quote $ '/' : D.gTerm c
 
     | D.isList   c  = "<list>"
     | D.isSet    c  = "<set>"
@@ -69,6 +77,31 @@ csvContent text c
     | D.isInterp c  = "<interp>"
     | D.isType   c  = "<type>"
     | otherwise     = "<?>"
+
+
+-- --------------------------------------------  Setting
+
+data XsvSetting = XsvSetting
+    { xsvHead   :: Bool
+    , xsvSep    :: String
+    , xsvQuote  :: String -> String
+    }
+
+csvSetting :: XsvSetting
+csvSetting = XsvSetting { xsvHead  = False
+                        , xsvSep   = ","
+                        , xsvQuote = enquote }
+
+tabSetting :: XsvSetting
+tabSetting = XsvSetting { xsvHead  = False
+                        , xsvSep   = "\t"
+                        , xsvQuote = toSpace }
+
+csvHeadSetting :: XsvSetting
+csvHeadSetting = csvSetting { xsvHead = True }
+
+tabHeadSetting :: XsvSetting
+tabHeadSetting = tabSetting { xsvHead = True }
 
 enquote :: B.Map String
 enquote str = '"' : q str where

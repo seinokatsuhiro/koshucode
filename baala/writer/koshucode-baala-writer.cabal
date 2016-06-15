@@ -63,7 +63,6 @@ library
        , blaze-html              == 0.*
        , bytestring              == 0.*
        , containers              == 0.5.*
-       , csv                     == 0.*
        , text                    == 1.*
        , koshucode-baala-base    == 0.149.*
        , koshucode-baala-syntax  == 0.149.*
