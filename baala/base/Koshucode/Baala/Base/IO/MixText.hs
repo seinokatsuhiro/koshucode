@@ -22,8 +22,10 @@ module Koshucode.Baala.Base.IO.MixText
     -- ** Number
     mixOct, mixDec, mixHex, mixSign,
     mixDecZero, mixNumZero,
+    -- ** Newline
+    mixLine, mixSoft, mixHard,
     -- ** Other
-    mixShow, mixEmpty, mixSoft, mixHard,
+    mixShow, mixEmpty,
 
     -- * Convert
     -- ** ByteString
@@ -222,6 +224,20 @@ mixSign n = case compare n 0 of
               LT -> mixChar '-'
               EQ -> mixChar ' '
 
+-- ----------------------  Newline
+
+-- | Append line break.
+mixLine :: MixText -> MixText
+mixLine = (<> mixHard)
+
+-- | Soft line break, i.e., suppress at the beginning of line.
+mixSoft :: MixText
+mixSoft = MixNewline False
+
+-- | Hard line break, i.e., suppress only after auto line break.
+mixHard :: MixText
+mixHard = MixNewline True
+
 -- ----------------------  Others
 
 mixShow :: (Show a) => a -> MixText
@@ -234,14 +250,6 @@ mixShow = mixString . show
 
 mixEmpty :: MixText
 mixEmpty = MixEmpty
-
--- | Soft line break, i.e., suppress at the beginning of line.
-mixSoft :: MixText
-mixSoft = MixNewline False
-
--- | Hard line break, i.e., suppress only after auto line break.
-mixHard :: MixText
-mixHard = MixNewline True
 
 
 -- --------------------------------------------  Concatenate
@@ -282,7 +290,7 @@ hPutMix lb h = B.hPutBuilder h . mixToBuilder lb
 
 -- | Print mix text and newline to the given output handler.
 hPutMixLn :: B.LineBreak -> IO.Handle -> MixText -> IO ()
-hPutMixLn lb h mx = B.hPutBuilder h $ mixToBuilder lb $ mx <> mixHard
+hPutMixLn lb h mx = B.hPutBuilder h $ mixToBuilder lb $ mixLine mx
 
 -- | Print mix text lines to the standard output.
 putMixLines :: B.LineBreak -> [MixText] -> IO ()

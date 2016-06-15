@@ -41,18 +41,18 @@ judgesCountMix :: forall c.
 judgesCountMix result writer = loop where
     loop (j : js) cnt  = loop js $ put j cnt
     loop [] (mx, c, tab) =
-        let mx' = (B.mixHard `when` (c > 0)) <> total c <> B.mixHard
+        let mx' = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
         in (mx <> mx', c, tab)
 
     put :: D.Judge c -> B.Map JudgeCountMix
     put judge (mx, c, tab) =
         let c'   = c + 1
             cls  = D.judgeClass judge
-            mx'  = gutterMix c <> writer judge <> B.mixHard
+            mx'  = gutterMix c <> B.mixLine (writer judge)
             tab' = Map.alter inc cls tab
         in (mx <> mx', c', tab')
 
-    gutterMix c | mod5 c && c > 0  = (progress c `when` mod25 c) <> B.mixHard
+    gutterMix c | mod5 c && c > 0  = B.mixLine (progress c `when` mod25 c)
                 | otherwise        = B.mixEmpty
 
     mod25 n       = n `mod` measure == 0
@@ -60,8 +60,8 @@ judgesCountMix result writer = loop where
     gutter        = C.resultGutter  result
     measure       = C.resultMeasure result
 
-    total    n    = B.mixString "*** " <> B.mixString (count n) <> B.mixHard
-    progress n    = B.mixString "*** " <> B.mixShow n <> B.mixHard
+    total    n    = B.mixLine (B.mixString "*** " <> B.mixString (count n))
+    progress n    = B.mixLine (B.mixString "*** " <> B.mixShow n)
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
