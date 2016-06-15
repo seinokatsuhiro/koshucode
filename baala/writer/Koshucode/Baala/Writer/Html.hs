@@ -2,7 +2,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Writer.Html
-  ( resultHtmlIndented, resultHtmlCompact,
+  ( resultHtmlIndented,
+    resultHtmlCompact,
+    contToHtml,
   ) where
 
 import qualified System.IO                          as IO
@@ -36,6 +38,7 @@ hPutRel h render sh = mapM_ put chunks where
                   H.p ! class_ "name" $ H.toHtml cl
                   contToHtml B.noShorten $ D.pRel r
 
+-- | Encode term content in HTML.
 contToHtml :: (D.CContent c) => B.Shorten -> c -> H.Html
 contToHtml sh = content where
     content c
