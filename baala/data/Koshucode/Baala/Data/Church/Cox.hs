@@ -76,9 +76,9 @@ coxToDoc sh = d (0 :: Int) . coxFold where
     d n e  = case e of
         CoxLit    _ c          -> wr "lit" B.<+> encode c
         CoxTerm   _ ns _       -> wr $ concatMap ('/' :) ns
-        CoxCalc   _ op _       -> wr "calc" B.<+> wr op
+        CoxCalc   _ op _       -> wr "calc" B.<+> blankNameToDoc op
         CoxLocal  _ v i        -> wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
-        CoxBlank  _ v          -> wr "global" B.<+> wr v
+        CoxBlank  _ v          -> wr "global" B.<+> blankNameToDoc v
         CoxFill   _ f xs       -> let f'  = wr ">>" B.<+> d' f
                                       xs' = B.nest 3 $ wrV $ map arg xs
                                   in f' B.$$ xs'
@@ -91,6 +91,13 @@ coxToDoc sh = d (0 :: Int) . coxFold where
         form (Nothing)  vs      = form2 vs
         form (Just tag) vs      = form2 $ ("'" ++ tag) : vs
         form2 vs e2             = B.docWraps "(|" "|)" $ wrH vs B.<+> wr "|" B.<+> e2
+
+blankNameToDoc :: S.BlankName -> B.Doc
+blankNameToDoc (S.BlankNormal   n) = B.writeDoc n
+blankNameToDoc (S.BlankInternal n) = B.writeDoc n
+blankNameToDoc (S.BlankPrefix   n) = B.writeDoc n B.<+> B.doc "(prefix)"
+blankNameToDoc (S.BlankInfix    n) = B.writeDoc n B.<+> B.doc "(infix)"
+blankNameToDoc (S.BlankPostfix  n) = B.writeDoc n B.<+> B.doc "(postfix)"
 
 coxLit :: c -> Cox c
 coxLit = CoxLit []

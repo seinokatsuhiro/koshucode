@@ -116,25 +116,6 @@ instance B.MixShortEncode BaalaC where
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
-instance B.Write BaalaC where
-    writeDocWith sh c = case c of
-        VCode s      -> B.doc $ quote  (sh s) s
-        VText s      -> B.doc $ qquote (sh s) s
-        VTerm s      -> B.doc $ "'/" ++ s
-        VDec  n      -> B.doc $ D.encodeDecimal n
-        VClock t     -> B.doc t
-        VTime t      -> B.doc t
-        VBool b      -> B.doc b
-        VEmpty       -> B.doc "()"
-        VEnd         -> B.doc "(/)"
-
-        VList xs     -> B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
-        VSet  xs     -> B.docWraps S.setOpen  S.setClose  $ B.writeBar sh xs
-        VTie  xs     -> B.docWraps S.tieOpen  S.tieClose  $ B.writeH   sh xs
-        VRel r       -> B.writeDocWith sh r
-        VInterp i    -> B.writeDocWith sh i
-        VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
-
 quote :: Maybe String -> String -> String
 quote (Nothing) s   = "'" ++ s
 quote (Just s)  _   = s

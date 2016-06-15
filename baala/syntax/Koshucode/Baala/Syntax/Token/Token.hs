@@ -199,9 +199,3 @@ instance SubtypeString BlankName where
     subtypeString (BlankInfix    _) = "infix"
     subtypeString (BlankPostfix  _) = "postfix"
 
-instance B.Write BlankName where
-    writeDocWith sh (BlankNormal   n)   = B.writeDocWith sh n
-    writeDocWith sh (BlankInternal n)   = B.writeDocWith sh n
-    writeDocWith sh (BlankPrefix   n)   = B.writeDocWith sh n B.<+> B.doc "(prefix)"
-    writeDocWith sh (BlankInfix    n)   = B.writeDocWith sh n B.<+> B.doc "(infix)"
-    writeDocWith sh (BlankPostfix  n)   = B.writeDocWith sh n B.<+> B.doc "(postfix)"

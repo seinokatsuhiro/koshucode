@@ -37,13 +37,6 @@ data LexmapType
     | LexmapLocal        -- ^ Local relation reference
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-instance B.Write Lexmap where
-    writeDocWith sh lx@Lexmap { lexAttr = para } =
-        case S.paraAll para of
-          [] -> B.writeH sh [op, "..."]
-          xs -> B.writeH sh [op, show xs]
-        where op = lexName lx
-
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexToken
 

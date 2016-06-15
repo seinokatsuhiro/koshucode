@@ -62,6 +62,12 @@ showRelmap r = sh r where
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
 
+instance Ord (Relmap' h c) where
+    r1 `compare` r2  = relmapLexmaps r1 `compare` relmapLexmaps r2
+
+instance Eq (Relmap' h c) where
+    r1 == r2         = compare r1 r2 == EQ
+
 instance B.Monoid (Relmap' h c) where
     mempty  = relmapId
     mappend = RelmapAppend
@@ -73,36 +79,8 @@ instance B.Name (Relmap' h c) where
     name (RelmapCalc   lx _ _)      = C.lexName lx
     name _ = undefined
 
-instance B.Write (Relmap' h c) where
-    writeDocWith sh (RelmapConst  lx _)    = B.writeDocWith sh lx
-    writeDocWith sh (RelmapSource lx _ _)  = B.writeDocWith sh lx
-
-    writeDocWith sh (RelmapCalc   lx _ _)  = B.writeDocWith sh lx -- hang (text $ name m) 2 (writeh (map write ms))
-    writeDocWith sh (RelmapHook   lx _)    = B.writeDocWith sh lx -- hang (text $ name m) 2 (writeh (map write ms))
-
-    writeDocWith sh (RelmapCopy   _ _ r1)  = B.writeDocWith sh r1
-    writeDocWith sh (RelmapNest   _ r1)    = B.writeDocWith sh r1
-    writeDocWith sh (RelmapLink   lx)      = B.writeDocWith sh lx
-    writeDocWith sh (RelmapAppend r1 r2)   = B.docHang (B.writeDocWith sh r1) 2 (docRelmapAppend sh r2)
-
-docRelmapAppend :: B.Shorten -> Relmap' h c -> B.Doc
-docRelmapAppend sh = B.writeV sh . map pipe . relmapAppendList where
-    pipe m = B.writeDocWith sh "|" B.<+> B.writeDocWith sh m
-
--- | Expand 'RelmapAppend' to list of 'Relmap'
-relmapAppendList :: Relmap' h c -> [Relmap' h c]
-relmapAppendList = expand where
-    expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
-    expand r = [r]
-
 instance B.CodePtr (Relmap' h c) where
     codePtList = concatMap B.codePtList . relmapLexmaps
-
-instance Ord (Relmap' h c) where
-    r1 `compare` r2  = relmapLexmaps r1 `compare` relmapLexmaps r2
-
-instance Eq (Relmap' h c) where
-    r1 == r2         = compare r1 r2 == EQ
 
 -- | Identity relmap.
 relmapId :: Relmap' h c

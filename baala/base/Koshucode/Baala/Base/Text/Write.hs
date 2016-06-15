@@ -9,7 +9,6 @@ module Koshucode.Baala.Base.Text.Write
 
     -- * Derivative
     writeH, writeV,
-    writeBar,
     writeSepsWith,
     writeTerms,
 
@@ -54,13 +53,6 @@ instance Write Integer where
 instance Write String where
     writeDocWith _ = D.text
 
-instance Write Bool where
-    writeDocWith _ True  = D.text "(+)"
-    writeDocWith _ False = D.text "(-)"
-
-instance (Write a) => Write (B.Named a) where
-    writeDocWith sh = writeTerm $ writeDocWith sh
-
 
 -- ----------------------  Derivative
 
@@ -69,15 +61,6 @@ writeH sh = D.hsep . map (writeDocWith sh)
 
 writeV :: (Write a) => Shorten -> [a] -> B.Doc
 writeV sh = D.vcat . map (writeDocWith sh)
-
-writeBar :: (Write a) => Shorten -> [a] -> B.Doc
-writeBar sh = writeSep "|" sh
-
-writeSep :: (Write a) => String -> Shorten -> [a] -> B.Doc
-writeSep sep sh = D.hsep . writeSeps sep sh
-
-writeSeps :: (Write a) => String -> Shorten -> [a] -> [B.Doc]
-writeSeps sep sh = writeSepsWith (writeDocWith sh) sep
 
 writeSepsWith :: (Write a) => (a -> B.Doc) -> String -> [a] -> [B.Doc]
 writeSepsWith w sep = L.intersperse (D.text sep) . map w

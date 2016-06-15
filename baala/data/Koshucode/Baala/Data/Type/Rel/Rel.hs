@@ -62,13 +62,6 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
         in B.mixBracketS S.relOpen S.relClose (he' `B.mixSep` bo')
         where mixBar cs = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
-instance (B.Write c) => B.Write (Rel c) where
-    writeDocWith sh (Rel he bo) =
-        let he'  = B.writeDocWith sh he
-            bo'  = B.writeH sh $ map d bo
-            d xs = B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
-        in B.docWraps S.relOpen S.relClose $ he' B.<+> bo'
-
 
 -- ----------------------  Sort contents
 
