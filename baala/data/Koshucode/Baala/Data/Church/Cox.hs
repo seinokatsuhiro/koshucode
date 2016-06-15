@@ -60,23 +60,21 @@ instance B.CodePtr (Cox c) where
     codePtList (CoxForm   cp _ _ _)   = cp
     codePtList (CoxWith   cp _ _)     = cp
 
-instance (B.Write c) => Show (Cox c) where
-    show = show . B.doc
+instance (B.MixShortEncode c) => Show (Cox c) where
+    show = show . coxToDoc B.noShorten
 
-instance (B.Write c) => B.Write (Cox c) where
-    writeDocWith = docCox
-
-docCox :: (B.Write c) => B.Shorten -> Cox c -> B.Doc
-docCox sh = d (0 :: Int) . coxFold where
-    wr           :: forall c. (B.Write c) => c -> B.Doc
-    wrH, wrV     :: forall c. (B.Write c) => [c] -> B.Doc
-    wr           = B.writeDocWith  sh
-    wrH          = B.writeH sh
-    wrV          = B.writeV sh
+coxToDoc :: (B.MixShortEncode c) => B.Shorten -> Cox c -> B.Doc
+coxToDoc sh = d (0 :: Int) . coxFold where
+    wr         :: forall c. (B.Write c) => c -> B.Doc
+    wrH, wrV   :: forall c. (B.Write c) => [c] -> B.Doc
+    wr         = B.writeDocWith sh
+    wrH        = B.writeH sh
+    wrV        = B.writeV sh
+    encode     = wr . B.mixToString B.noBreak . B.mixShortEncode sh
 
     d 10 _ = wr "..."
     d n e  = case e of
-        CoxLit    _ c          -> wr "lit" B.<+> wr c
+        CoxLit    _ c          -> wr "lit" B.<+> encode c
         CoxTerm   _ ns _       -> wr $ concatMap ('/' :) ns
         CoxCalc   _ op _       -> wr "calc" B.<+> wr op
         CoxLocal  _ v i        -> wr "local" B.<+> wr v B.<> wr "/" B.<> wr i

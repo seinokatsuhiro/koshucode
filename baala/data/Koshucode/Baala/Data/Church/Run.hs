@@ -38,7 +38,7 @@ instance B.CodePtr (Beta c) where
     codePtList (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
-beta :: (B.Write c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
+beta :: (B.MixShortEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = D.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
@@ -49,7 +49,7 @@ beta copset he cox =
       pos = position he
 
 -- beta reduction, i.e., process CoxBlank and CoxForm1.
-reduce :: forall c. (B.Write c) => D.Cox c -> B.Ab (Beta c)
+reduce :: forall c. (B.MixShortEncode c) => D.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     red :: [D.NamedCox c] -> D.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
