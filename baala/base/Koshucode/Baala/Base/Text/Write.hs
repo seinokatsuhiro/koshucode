@@ -5,7 +5,7 @@ module Koshucode.Baala.Base.Text.Write
   ( -- * Class
     Shorten, noShorten,
     Write (..),
-    writeDoc, writeString, writeHtml,
+    writeDoc, writeHtml,
 
     -- * Html
     H.ToMarkup, H.toMarkup, H.toHtml,
@@ -15,10 +15,9 @@ module Koshucode.Baala.Base.Text.Write
 
     -- * Derivative
     writeH, writeV,
-    writeColon, writeBar, writeSep,
+    writeBar,
     writeSepsWith,
-    writeTerm, writeTerms,
-    -- $Derivative
+    writeTerms,
 
     -- * Simple writer
     doc, doch, docv,
@@ -60,9 +59,6 @@ class Write a where
 writeDoc :: (Write a) => a -> B.Doc
 writeDoc = writeDocWith noShorten
 
-writeString :: (Write a) => a -> String
-writeString = writeStringWith noShorten
-
 writeHtml :: (Write a) => a -> H.Html
 writeHtml = writeHtmlWith noShorten
 
@@ -102,20 +98,6 @@ renderHtmlCompact  = HC.renderHtml
 
 
 -- ----------------------  Derivative
-
--- $Derivative
---
---   /Examples/
---
---   Colon-seperated document.
---
---     >>> writeColon id [True, False]
---     <1> : <0>
---
---   List of terms.
---
---     >>> writeTerms doc [("x", False), ("y", True)]
---     /x <0> /y <1>
 
 writeH :: (Write a) => Shorten -> [a] -> B.Doc
 writeH sh = D.hsep . map (writeDocWith sh)
