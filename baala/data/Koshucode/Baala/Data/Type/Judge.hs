@@ -182,5 +182,5 @@ putJudge :: (B.MixShortEncode c) => Judge c -> IO ()
 putJudge = hPutJudge B.stdout
 
 hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
-hPutJudge h = IO.hPutStrLn h . judgeToShortString B.nullShorten
+hPutJudge h = IO.hPutStrLn h . judgeToShortString B.noShorten
 

@@ -89,7 +89,7 @@ class MixShortEncode a where
 
 -- | 'mixShortEncode' with no shortener.
 mixIdEncode :: (MixShortEncode a) => a -> B.MixText
-mixIdEncode = mixShortEncode B.nullShorten
+mixIdEncode = mixShortEncode B.noShorten
 
 
 -- ----------------------  Utility

@@ -3,7 +3,7 @@
 
 module Koshucode.Baala.Base.Text.Write
   ( -- * Class
-    Shorten, nullShorten,
+    Shorten, noShorten,
     Write (..),
     writeDoc, writeString, writeHtml,
 
@@ -44,8 +44,8 @@ import qualified Koshucode.Baala.Base.Prelude     as B
 type Shorten = String -> Maybe String
 
 -- | Shorten which does not shorten strings.
-nullShorten :: Shorten
-nullShorten _ = Nothing
+noShorten :: Shorten
+noShorten _ = Nothing
 
 -- | Writer with shortener.
 class Write a where
@@ -58,13 +58,13 @@ class Write a where
     writeHtmlWith sh a = H.toHtml $ writeStringWith sh a
 
 writeDoc :: (Write a) => a -> B.Doc
-writeDoc = writeDocWith nullShorten
+writeDoc = writeDocWith noShorten
 
 writeString :: (Write a) => a -> String
-writeString = writeStringWith nullShorten
+writeString = writeStringWith noShorten
 
 writeHtml :: (Write a) => a -> H.Html
-writeHtml = writeHtmlWith nullShorten
+writeHtml = writeHtmlWith noShorten
 
 instance Write B.Doc where
     writeDocWith _ x = x
@@ -166,13 +166,13 @@ writeTerms w = doch . (writeTerm w `map`)
 --     [ abc ]
 
 doc :: (Write a) => a -> B.Doc
-doc = writeDocWith nullShorten
+doc = writeDocWith noShorten
 
 docv :: (Write a) => [a] -> B.Doc
-docv = writeV nullShorten
+docv = writeV noShorten
 
 doch :: (Write a) => [a] -> B.Doc
-doch = writeH nullShorten
+doch = writeH noShorten
 
 docWrap :: (Write a) => String -> String -> a -> B.Doc
 docWrap = docWrapBody (B.<>)
