@@ -7,11 +7,6 @@ module Koshucode.Baala.Base.Text.Write
     Write (..),
     writeDoc,
 
-    -- * Html
-    H.ToMarkup, H.toMarkup,
-    H.div, div_,
-    H.span, span_,
-
     -- * Derivative
     writeH, writeV,
     writeBar,
@@ -26,9 +21,6 @@ module Koshucode.Baala.Base.Text.Write
   ) where
 
 import qualified Data.List                        as L
-import qualified Text.Blaze                       as H
-import qualified Text.Blaze.XHtml5                as H
-import qualified Text.Blaze.XHtml5.Attributes     as H (class_)
 import qualified Text.PrettyPrint                 as D
 import qualified Koshucode.Baala.Base.List        as B
 import qualified Koshucode.Baala.Base.Prelude     as B
@@ -46,9 +38,6 @@ noShorten _ = Nothing
 -- | Writer with shortener.
 class Write a where
     writeDocWith :: Shorten -> a -> B.Doc
-
-    writeStringWith :: Shorten -> a -> String
-    writeStringWith sh a = show $ writeDocWith sh a
 
 writeDoc :: (Write a) => a -> B.Doc
 writeDoc = writeDocWith noShorten
@@ -71,15 +60,6 @@ instance Write Bool where
 
 instance (Write a) => Write (B.Named a) where
     writeDocWith sh = writeTerm $ writeDocWith sh
-
-
--- ----------------------  Html
-
-div_ :: H.AttributeValue -> B.Map H.Html
-div_ c = H.div H.! H.class_ c
-
-span_ :: H.AttributeValue -> B.Map H.Html
-span_ c = H.span H.! H.class_ c
 
 
 -- ----------------------  Derivative
