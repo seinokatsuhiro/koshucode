@@ -135,10 +135,6 @@ instance B.Write BaalaC where
         VInterp i    -> B.writeDocWith sh i
         VType t      -> B.docWraps S.typeOpen S.typeClose $ B.writeDocWith    sh t
 
-    writeHtmlWith sh c = case c of
-        VRel r       -> B.writeHtmlWith sh r
-        _            -> B.toHtml $ B.writeStringWith sh c
-
 quote :: Maybe String -> String -> String
 quote (Nothing) s   = "'" ++ s
 quote (Just s)  _   = s
@@ -147,6 +143,7 @@ qquote :: Maybe String -> String -> String
 qquote (Nothing) "" = "\"\""
 qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
+
 
 -- ----------------------  haskell data
 
@@ -198,7 +195,6 @@ instance D.CList BaalaC where
     gList _                  = []
     isList (VList _)         = True
     isList _                 = False
-
 
 
 -- ----------------------  koshu data

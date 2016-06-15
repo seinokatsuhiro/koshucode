@@ -9,16 +9,18 @@ import qualified System.IO                          as IO
 import qualified Text.Blaze.XHtml5                  as H
 import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
+import qualified Text.Blaze.Html.Renderer.Pretty    as Hi
+import qualified Text.Blaze.Html.Renderer.String    as Hc
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Core               as C
 
 resultHtmlIndented :: (D.CContent c) => C.ResultWriter c
-resultHtmlIndented = C.ResultWriterChunk "html-indented" (hPutHtml B.renderHtmlIndented)
+resultHtmlIndented = C.ResultWriterChunk "html-indented" (hPutHtml Hi.renderHtml)
 
 resultHtmlCompact :: (D.CContent c) => C.ResultWriter c
-resultHtmlCompact  = C.ResultWriterChunk "html-compact"  (hPutHtml B.renderHtmlCompact)
+resultHtmlCompact  = C.ResultWriterChunk "html-compact"  (hPutHtml Hc.renderHtml)
 
 hPutHtml :: (D.CContent c) => (H.Html -> String) -> C.ResultWriterChunk c
 hPutHtml render h _ status sh =
@@ -38,7 +40,7 @@ contToHtml :: (D.CContent c) => B.Shorten -> c -> H.Html
 contToHtml sh = content where
     content c
         | D.isRel c = rel $ D.gRel c
-        | otherwise = B.toHtml $ B.mixToFlatString $ B.mixShortEncode sh c
+        | otherwise = H.toHtml $ B.mixToFlatString $ B.mixShortEncode sh c
 
     rel (D.Rel he bo) =
         H.table ! class_ "relation" $ do

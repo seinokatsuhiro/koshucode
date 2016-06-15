@@ -17,9 +17,6 @@ module Koshucode.Baala.Data.Type.Rel.Rel
     judgesFromRel,
   ) where
 
-import qualified Text.Blaze.XHtml5                    as H
-import           Text.Blaze.XHtml5                    ((!))
-import           Text.Blaze.XHtml5.Attributes         (class_)
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type.Rel.Head   as D
@@ -71,16 +68,6 @@ instance (B.Write c) => B.Write (Rel c) where
             bo'  = B.writeH sh $ map d bo
             d xs = B.docWraps S.listOpen S.listClose $ B.writeBar sh xs
         in B.docWraps S.relOpen S.relClose $ he' B.<+> bo'
-
-    writeHtmlWith sh (Rel he bo) =
-        H.table ! class_ "relation" $ do
-          let terms = term `map` D.headNames he
-          H.tr ! class_ "heading" $ mapM_ H.td terms
-          mapM_ row bo
-        where
-          row cs = H.tr ! class_ "tuple" $ mapM_ col cs
-          col c  = H.td $ B.writeHtmlWith sh c
-          term   = (H.span ! class_ "termname") . H.toHtml . S.showTermName
 
 
 -- ----------------------  Sort contents

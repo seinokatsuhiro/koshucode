@@ -5,13 +5,12 @@ module Koshucode.Baala.Base.Text.Write
   ( -- * Class
     Shorten, noShorten,
     Write (..),
-    writeDoc, writeHtml,
+    writeDoc,
 
     -- * Html
-    H.ToMarkup, H.toMarkup, H.toHtml,
-    H.div, div_, H.span, span_,
-    renderHtmlIndented,
-    renderHtmlCompact,
+    H.ToMarkup, H.toMarkup,
+    H.div, div_,
+    H.span, span_,
 
     -- * Derivative
     writeH, writeV,
@@ -28,8 +27,6 @@ module Koshucode.Baala.Base.Text.Write
 
 import qualified Data.List                        as L
 import qualified Text.Blaze                       as H
-import qualified Text.Blaze.Html.Renderer.Pretty  as HI
-import qualified Text.Blaze.Html.Renderer.String  as HC
 import qualified Text.Blaze.XHtml5                as H
 import qualified Text.Blaze.XHtml5.Attributes     as H (class_)
 import qualified Text.PrettyPrint                 as D
@@ -53,14 +50,8 @@ class Write a where
     writeStringWith :: Shorten -> a -> String
     writeStringWith sh a = show $ writeDocWith sh a
 
-    writeHtmlWith :: Shorten -> a -> H.Html
-    writeHtmlWith sh a = H.toHtml $ writeStringWith sh a
-
 writeDoc :: (Write a) => a -> B.Doc
 writeDoc = writeDocWith noShorten
-
-writeHtml :: (Write a) => a -> H.Html
-writeHtml = writeHtmlWith noShorten
 
 instance Write B.Doc where
     writeDocWith _ x = x
@@ -90,12 +81,6 @@ div_ c = H.div H.! H.class_ c
 span_ :: H.AttributeValue -> B.Map H.Html
 span_ c = H.span H.! H.class_ c
 
-renderHtmlIndented :: H.Html -> String
-renderHtmlIndented = HI.renderHtml
-
-renderHtmlCompact :: H.Html -> String
-renderHtmlCompact  = HC.renderHtml
-
 
 -- ----------------------  Derivative
 
@@ -104,9 +89,6 @@ writeH sh = D.hsep . map (writeDocWith sh)
 
 writeV :: (Write a) => Shorten -> [a] -> B.Doc
 writeV sh = D.vcat . map (writeDocWith sh)
-
-writeColon :: (Write a) => Shorten -> [a] -> B.Doc
-writeColon sh = writeSep ":" sh
 
 writeBar :: (Write a) => Shorten -> [a] -> B.Doc
 writeBar sh = writeSep "|" sh
