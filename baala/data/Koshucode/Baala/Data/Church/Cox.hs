@@ -70,7 +70,7 @@ coxToDoc sh = d (0 :: Int) . coxFold where
     wr         = B.writeDocWith sh
     wrH        = B.writeH sh
     wrV        = B.writeV sh
-    encode     = wr . B.mixToString B.noBreak . B.mixShortEncode sh
+    encode     = wr . B.mixToFlatString . B.mixShortEncode sh
 
     d 10 _ = wr "..."
     d n e  = case e of

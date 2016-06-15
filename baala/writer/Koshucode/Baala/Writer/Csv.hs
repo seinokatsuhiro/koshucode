@@ -66,8 +66,8 @@ csvContent quote c
     | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
     | D.isEmpty  c  = ""
     | D.isBool   c  = if D.gBool c then "true" else "false"
-    | D.isClock  c  = quote $ show $ D.writeClockBody $ D.gClock c
-    | D.isTime   c  = quote $ B.writeString c
+    | D.isClock  c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gClock c
+    | D.isTime   c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gTime c
     | D.isTerm   c  = quote $ '/' : D.gTerm c
 
     | D.isList   c  = "<list>"

@@ -120,7 +120,7 @@ judgeContString = (contString <$>)
 
 -- | Convert content to string value.
 contString :: (CContent c) => c -> String
-contString = B.mixToString B.noBreak . contStringMix
+contString = B.mixToFlatString. contStringMix
 
 -- | Convert content to pretty print doc.
 contStringMix :: (CContent c) => c -> B.MixText

@@ -26,7 +26,7 @@ getAbAb :: (CTypeOf c) => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _    (Left a) = Left a
 getAbAb is get (Right c)
     | is c      = Right $ get c
-    | otherwise = let s = B.mixToString B.noBreak $ B.mixEncode $ typeOf c
+    | otherwise = let s = B.mixToFlatString $ B.mixEncode $ typeOf c
                   in Msg.unmatchType s
 
 

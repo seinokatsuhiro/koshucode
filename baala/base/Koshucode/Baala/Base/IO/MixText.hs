@@ -32,6 +32,7 @@ module Koshucode.Baala.Base.IO.MixText
     mixToBuilder,
     mixToBz,
     mixToString,
+    mixToFlatString,
 
     -- ** Mix I/O
     putMix, putMixLn,
@@ -270,6 +271,10 @@ mixToBzDef = mixToBz Def.def
 -- | Convert mix text to string.
 mixToString :: B.LineBreak -> MixText -> String
 mixToString lb = Bu.toString . mixToBz lb
+
+-- | Convert mix text to string without line breaks.
+mixToFlatString :: MixText -> String
+mixToFlatString = mixToString B.noBreak
 
 mixToStringDef :: MixText -> String
 mixToStringDef = mixToString Def.def

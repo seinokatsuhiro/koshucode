@@ -185,7 +185,7 @@ list !!! index = loop index list where
     loop i (_ : xs) = loop (i - 1) xs
     loop _ _        = error $ (unwords $ map string list)
                               ++ " !!! " ++ show index
-    string = B.mixToString B.noBreak . B.mixIdEncode
+    string = B.mixToFlatString . B.mixIdEncode
 
 
 -- --------------------------------------------  getArgN

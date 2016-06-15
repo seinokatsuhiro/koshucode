@@ -179,7 +179,7 @@ termNameToMix n = B.mixString ('/' : n)
 
 -- | Encode judgement with short setting.
 judgeToStringShort :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String
-judgeToStringShort sh = B.mixToString B.noBreak . B.mixShortEncode sh
+judgeToStringShort sh = B.mixToFlatString . B.mixShortEncode sh
 
 -- | Encode judgement.
 judgeToString :: (B.MixShortEncode c) => Judge c -> String
