@@ -47,15 +47,15 @@ unlimited nl =
               , breakContinue  = nl
               , breakIndent    = "" }
 
--- | No line break.
+-- | Line break by single space.
 noBreak :: LineBreak
-noBreak = unlimited ""
+noBreak = unlimited " "
 
--- | LF line break.
+-- | Line break by LF.
 lfBreak :: LineBreak
 lfBreak = unlimited lfString
 
--- | CRLF line break.
+-- | Line break by CRLF.
 crlfBreak :: LineBreak
 crlfBreak = unlimited crlfString
 
