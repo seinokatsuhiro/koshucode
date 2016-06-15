@@ -65,9 +65,6 @@ instance B.Monoid Head where
 instance B.MixEncode Head where
     mixEncode = D.typeTermMix . headType
 
-instance B.Write Head where
-    writeDocWith _ = D.typeTermDoc . headType
-
 headExplain :: Head -> B.Doc
 headExplain = D.typeExplain . headType
 
