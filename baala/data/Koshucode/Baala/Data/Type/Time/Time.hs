@@ -84,40 +84,34 @@ timeMapDate _ (TimeYm    d)      = TimeYm    d
 -- ----------------------  Write
 
 instance B.MixEncode Time where
-    mixEncode c = B.mixShow $ writeTime c
+    mixEncode = timeToMix
 
-instance B.Write Time where
-    writeDocWith _ = writeTime
-
-writeTime :: Time -> B.Doc
-writeTime time =
+timeToMix :: Time -> B.MixText
+timeToMix time =
     case time of
-      TimeYmdcz d c z  -> dcz d c z B.<+> szone z
+      TimeYmdcz d c z  -> dcz d c z `B.mixSep` szone z
       TimeYmdc  d c    -> dc d c
-      TimeYmd   d      -> B.writeDocWith B.noShorten d
+      TimeYmd   d      -> B.mixEncode d
       TimeYw    day    -> yw $ T.toWeekDate  day
       TimeYm    day    -> ym $ T.toGregorian day
     where
-      dcz               :: D.Date -> D.Clock -> D.Sec -> B.Doc
+      dcz               :: D.Date -> D.Clock -> D.Sec -> B.MixText
       dcz d c z         = let c'  = D.clockAddSec z c
                               day = D.clockDayCount c'
                           in dc (day `D.dateAdd` d) (D.clockCutDay c')
 
-      dc                :: D.Date -> D.Clock -> B.Doc
-      dc d c            = B.writeDocWith B.noShorten d B.<+> D.writeClockBody c
+      dc                :: D.Date -> D.Clock -> B.MixText
+      dc d c            = B.mixEncode d `B.mixSep` D.clockBodyToMix c
 
       zone z            = hm $ D.dhmsFromSec z
       szone z           = case z `compare` 0 of
-                            EQ -> B.doc "UTC"
-                            LT -> B.doc "-" B.<> zone z
-                            GT -> B.doc "+" B.<> zone z
+                            EQ -> B.mixString "UTC"
+                            LT -> B.mixString "-" `mappend` zone z
+                            GT -> B.mixString "+" `mappend` zone z
 
-      hm (_, h, m, _)   = B.doc02 h `co`  B.doc02 m
-      yw (y, w, _)      = B.doc y   `hyw` B.doc w
-      ym (y, m, _)      = B.doc y   `hy`  B.doc02 m
-      co                = B.docConcat ":"
-      hy                = B.docConcat "-"
-      hyw               = B.docConcat "-#"
+      hm (_, h, m, _)   = B.mixJoin ":"  [D.mix02 h, D.mix02 m]
+      yw (y, w, _)      = B.mixJoin "-#" [B.mixDec y, B.mixDec w]
+      ym (y, m, _)      = B.mixJoin "-"  [B.mixDec y, D.mix02 m]
 
 
 -- ----------------------  Construct

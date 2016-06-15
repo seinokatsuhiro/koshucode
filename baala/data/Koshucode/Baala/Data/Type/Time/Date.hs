@@ -11,6 +11,7 @@ module Koshucode.Baala.Data.Type.Time.Date
     -- * Utility
     dateDay, dateMapDay, dateAdd,
     monthly, weekly, yearly,
+    mix02,
   ) where
 
 import qualified Data.Time.Calendar                as T
@@ -42,24 +43,27 @@ type YmdTuple = (Year, Month, Day)
 
 -- ----------------------  Write
 
-instance B.Write Date where
-    writeDocWith _ = writeDate
+instance B.MixEncode Date where
+    mixEncode = dateToMix
 
-writeDate :: Date -> B.Doc
-writeDate date =
+dateToMix :: Date -> B.MixText
+dateToMix date =
     case date of
       Monthly d   -> dateMonth $ T.toGregorian    d
       Weekly  d   -> dateWeek  $ T.toWeekDate     d
       Yearly  d   -> dateYear  $ T.toOrdinalDate  d
     where
-      dateMonth (y, m, d)  = B.doc y `hy`   B.doc02 m `hy` B.doc02 d
-      dateWeek  (y, w, d)  = B.doc y `hyw`  B.doc w   `hy` B.doc d
-      dateYear  (y, d)     = B.doc y `hyww` B.doc d
+      dateMonth (y, m, d)  = B.mixDec y `hyMix`   mix02 m `hyMix` mix02 d
+      dateWeek  (y, w, d)  = B.mixDec y `hywMix`  B.mixDec w   `hyMix` B.mixDec d
+      dateYear  (y, d)     = B.mixDec y `hywwMix` B.mixDec d
 
-hy, hyw, hyww :: B.Bin B.Doc
-hy    = B.docConcat "-"
-hyw   = B.docConcat "-#"
-hyww  = B.docConcat "-##"
+mix02 :: Int -> B.MixText
+mix02 = B.mixDecZero 2
+
+hyMix, hywMix, hywwMix :: B.Bin B.MixText
+hyMix    l r = l `mappend` B.mixString "-"   `mappend` r
+hywMix   l r = l `mappend` B.mixString "-#"  `mappend` r
+hywwMix  l r = l `mappend` B.mixString "-##" `mappend` r
 
 
 -- ----------------------  Construction

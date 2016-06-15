@@ -4,7 +4,7 @@ module Koshucode.Baala.Data.Type.Time.Clock
   ( -- * Data type
     Clock (..), DayCount, Hour, Min, Sec,
     AbBin,
-    writeClock, writeClockBody,
+    clockBodyToMix,
 
     -- * Accessor
     clockFromDhms, clockFromDhm, clockFromDh, clockFromD,
@@ -23,8 +23,9 @@ module Koshucode.Baala.Data.Type.Time.Clock
     clockRangeBy, clockStep,
   ) where
 
-import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Base.Message       as Msg
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Data.Type.Time.Date     as D
+import qualified Koshucode.Baala.Base.Message            as Msg
 
 
 -- ----------------------  Data type
@@ -129,53 +130,50 @@ clockAlter d' h' m' s' clock =
 -- ----------------------  Writer
 
 instance B.MixEncode Clock where
-    mixEncode c = B.mixShow $ writeClock c
+    mixEncode = clockToMix
 
-instance B.Write Clock where
-    writeDocWith _ = writeClock
+clockToMix :: Clock -> B.MixText
+clockToMix = B.mixBracket "|" "|" . clockBodyToMix
 
-writeClock :: Clock -> B.Doc
-writeClock = B.docWrap "|" "|" . writeClockBody
+clockBodyToMix :: Clock -> B.MixText
+clockBodyToMix c = body $ clockPos c where
+    sign = signToMix $ clockSign c
+    body (ClockDhms day sec)  = sign $ daySecToMix dhmsToMix day sec
+    body (ClockDhm  day sec)  = sign $ daySecToMix dhmToMix  day sec
+    body (ClockDh   day sec)  = sign $ daySecToMix dhToMix   day sec
+    body (ClockD    day)      = sign $ dayToMix day
 
-writeClockBody :: Clock -> B.Doc
-writeClockBody c = body $ clockPos c where
-    sign = signDoc $ clockSign c
-    body (ClockDhms day sec)  = sign $ clockDoc dhmsDoc day sec
-    body (ClockDhm  day sec)  = sign $ clockDoc dhmDoc  day sec
-    body (ClockDh   day sec)  = sign $ clockDoc dhDoc   day sec
-    body (ClockD    day)      = sign $ dayDoc day
+signToMix :: Int -> B.Map B.MixText
+signToMix (-1) m = B.mixString "-" `mappend` m
+signToMix _    m = m
 
-signDoc :: Int -> B.Map B.Doc
-signDoc (-1) doc = B.doc "-" B.<> doc
-signDoc _    doc = doc
-
-clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Sec -> B.Doc
-clockDoc secDoc day sec =
-    let (d, doc) = secDoc sec
+daySecToMix :: (Sec -> (DayCount, B.MixText)) -> DayCount -> Sec -> B.MixText
+daySecToMix secMix day sec =
+    let (d, mx) = secMix sec
     in case day + d of
-         0  -> doc
-         d2 -> dayDoc d2 B.<> doc
+         0  -> mx
+         d2 -> dayToMix d2 `mappend` mx
 
-colon :: B.Bin B.Doc
-colon = B.docConcat ":"
+mixColon :: B.Bin B.MixText
+mixColon l r = l `mappend` B.mixString ":" `mappend` r
 
-dhmsDoc :: Sec -> (DayCount, B.Doc)
-dhmsDoc sec = (d, hms) where
-    hms            = B.doc02 h `colon` B.doc02 m `colon` B.doc02 s
+dhmsToMix :: Sec -> (DayCount, B.MixText)
+dhmsToMix sec = (d, hms) where
+    hms            = D.mix02 h `mixColon` D.mix02 m `mixColon` D.mix02 s
     (d, h, m, s)   = dhmsFromSec $ abs sec
 
-dhmDoc :: Sec -> (DayCount, B.Doc)
-dhmDoc sec = (d, hm) where
-    hm             = B.doc02 h `colon` B.doc02 m
+dhmToMix :: Sec -> (DayCount, B.MixText)
+dhmToMix sec = (d, hm) where
+    hm             = D.mix02 h `mixColon` D.mix02 m
     (d, h, m, _)   = dhmsFromSec sec
 
-dhDoc :: Sec -> (DayCount, B.Doc)
-dhDoc sec = (d, hm) where
-    hm             = B.doc02 h
+dhToMix :: Sec -> (DayCount, B.MixText)
+dhToMix sec = (d, hm) where
+    hm             = D.mix02 h
     (d, h, _, _)   = dhmsFromSec sec
 
-dayDoc :: DayCount -> B.Doc
-dayDoc d = B.doc d B.<> B.doc "'"
+dayToMix :: DayCount -> B.MixText
+dayToMix d = B.mixDec d `mappend` B.mixString "'"
 
 
 -- ----------------------  Map
