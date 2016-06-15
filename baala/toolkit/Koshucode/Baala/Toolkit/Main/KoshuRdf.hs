@@ -129,7 +129,7 @@ writeJudges sh js =
     do putStrLn B.emacsModeComment
        putStrLn ""
        writeShort sh
-       print $ B.docv $ map (D.judgeToShortString $ S.shortText sh) js
+       print $ B.docv $ map (D.judgeToStringShort $ S.shortText sh) js
 
 writeShort :: [S.ShortDef] -> IO ()
 writeShort [] = return ()

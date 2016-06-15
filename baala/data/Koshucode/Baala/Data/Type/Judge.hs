@@ -20,7 +20,7 @@ module Koshucode.Baala.Data.Type.Judge
 
     -- * Encode
     mixTerms1, mixTerms2,
-    judgeToShortString,
+    judgeToString, judgeToStringShort,
     putJudge, hPutJudge,
   ) where
 
@@ -43,12 +43,12 @@ import qualified Koshucode.Baala.Syntax            as S
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      JudgeClass [S.Term c]  -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        JudgeClass [S.Term c]  -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   JudgeClass [S.Term c]  -- ^ @|-xx P \/x 10 \/y 20@
+    = JudgeAffirm      JudgeClass [S.Term c]             -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        JudgeClass [S.Term c]             -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   JudgeClass [S.Term c]             -- ^ @|-xx P \/x 10 \/y 20@
     | JudgeChange      JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
     | JudgeMultiChange JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     JudgeClass [S.Term c]  -- ^ @|-v P \/x 10 \/y 20@
+    | JudgeViolate     JudgeClass [S.Term c]             -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -69,6 +69,18 @@ instance (Ord c) => Ord (Judge c) where
 instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, v) = (n, f v)
+
+instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
+    mixShortEncode sh j =
+        case j of
+          JudgeAffirm      c xs    -> judge "|--"  c xs
+          JudgeDeny        c xs    -> judge "|-X"  c xs
+          JudgeMultiDeny   c xs    -> judge "|-XX" c xs
+          JudgeChange      c xs _  -> judge "|-C"  c xs
+          JudgeMultiChange c xs _  -> judge "|-CC" c xs
+          JudgeViolate     c xs    -> judge "|-V"  c xs
+        where
+          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
 
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
@@ -150,18 +162,6 @@ isViolative _                   = False
 
 -- ----------------------  Encode
 
-instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
-    mixShortEncode sh j =
-        case j of
-          JudgeAffirm      c xs    -> judge "|--"  c xs
-          JudgeDeny        c xs    -> judge "|-X"  c xs
-          JudgeMultiDeny   c xs    -> judge "|-XX" c xs
-          JudgeChange      c xs _  -> judge "|-C"  c xs
-          JudgeMultiChange c xs _  -> judge "|-CC" c xs
-          JudgeViolate     c xs    -> judge "|-V"  c xs
-        where
-          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` mixTerms2 sh xs
-
 -- | Encode term list with one-space separator.
 mixTerms1 :: (B.MixShortEncode c) => B.Shorten -> [(String, c)] -> B.MixText
 mixTerms1 = mixTerms B.mix1
@@ -174,13 +174,20 @@ mixTerms :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [(String, c)] -> B
 mixTerms sep sh ts = B.mixJoin sep $ map term ts where
     term (n,c) = B.mixString ('/' : n) `B.mixSep` B.mixShortEncode sh c
 
+-- | Encode judgement with short setting.
+judgeToStringShort :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String
+judgeToStringShort sh = B.mixToString B.noBreak . B.mixShortEncode sh
+
 -- | Encode judgement.
-judgeToShortString :: (B.MixShortEncode c) => B.Shorten -> Judge c -> String
-judgeToShortString sh = B.mixToString B.noBreak . B.mixShortEncode sh
+judgeToString :: (B.MixShortEncode c) => Judge c -> String
+judgeToString = judgeToStringShort B.noShorten
 
 putJudge :: (B.MixShortEncode c) => Judge c -> IO ()
 putJudge = hPutJudge B.stdout
 
 hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
-hPutJudge h = IO.hPutStrLn h . judgeToShortString B.noShorten
+hPutJudge h = hPutJudgeShort h B.noShorten
+
+hPutJudgeShort :: (B.MixShortEncode c) => IO.Handle -> B.Shorten -> Judge c -> IO ()
+hPutJudgeShort h sh = B.hPutMix B.crlfBreak h . B.mixShortEncode sh
 
