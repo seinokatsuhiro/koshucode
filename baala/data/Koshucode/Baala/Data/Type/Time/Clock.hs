@@ -155,7 +155,7 @@ daySecToMix secMix day sec =
          d2 -> dayToMix d2 `mappend` mx
 
 mixColon :: B.Bin B.MixText
-mixColon l r = l `mappend` B.mixString ":" `mappend` r
+mixColon = B.mixInfix ":"
 
 dhmsToMix :: Sec -> (DayCount, B.MixText)
 dhmsToMix sec = (d, hms) where

@@ -14,6 +14,7 @@ module Koshucode.Baala.Base.IO.MixClass
     mixBracket, mixBracketS,
     mixJoin, mixJoinS,
     mixJoin1, mixJoinBar,
+    mixInfix,
   ) where
 
 import Data.Monoid ((<>))
@@ -120,4 +121,7 @@ mixJoin1 = mixJoin B.mix1
 -- | Join with vertical bar.
 mixJoinBar :: [B.MixText] -> B.MixText
 mixJoinBar = mixJoinS "|"
+
+mixInfix :: (Mix m) => m -> B.MixText -> B.MixText -> B.MixText
+mixInfix inf l r = l <> mix inf <> r
 

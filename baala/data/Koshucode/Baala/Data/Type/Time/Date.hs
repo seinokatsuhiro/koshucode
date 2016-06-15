@@ -61,9 +61,9 @@ mix02 :: Int -> B.MixText
 mix02 = B.mixDecZero 2
 
 hyMix, hywMix, hywwMix :: B.Bin B.MixText
-hyMix    l r = l `mappend` B.mixString "-"   `mappend` r
-hywMix   l r = l `mappend` B.mixString "-#"  `mappend` r
-hywwMix  l r = l `mappend` B.mixString "-##" `mappend` r
+hyMix    = B.mixInfix "-"
+hywMix   = B.mixInfix "-#"
+hywwMix  = B.mixInfix "-##"
 
 
 -- ----------------------  Construction
@@ -106,15 +106,15 @@ dateMapDay f (Yearly  day)  = Yearly  $ f day
 dateAdd :: (Integral n) => n -> B.Map Date
 dateAdd d = dateMapDay $ T.addDays (fromIntegral d)
 
--- ^ Convert into monthly date.
+-- | Convert into monthly date.
 monthly :: B.Map Date
 monthly = Monthly . dateDay
 
--- ^ Convert into weekly date.
+-- | Convert into weekly date.
 weekly :: B.Map Date
 weekly  = Weekly . dateDay
 
--- ^ Convert into yearly date.
+-- | Convert into yearly date.
 yearly :: B.Map Date
 yearly  = Yearly . dateDay
 
