@@ -74,7 +74,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    170 judges
+**    169 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
@@ -225,7 +225,6 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Syntax.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Abort"
@@ -321,9 +320,8 @@ Command `./dir-rank.k ../base/data/IMPORT.k` produces:
     ] ] [ 14 | "Message" | [ "Abort" ] ] =}
 
 |-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 14 | "Message" |
-    [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Line" | [ "Abort" | "IO" | "Prelude" | "Text" ] ] [ 15 | "Tree" | [ "Abort"
-    | "IO" | "List" | "Prelude" ] ] [ 16 | "Clause" | [ "IO" | "List" | "Prelude" ] ] [ 16 | "Infix" | [ "Prelude" ] ]
-    =}
+    [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Line" | [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Tree" | [ "Abort" | "IO" |
+    "List" | "Prelude" ] ] [ 16 | "Clause" | [ "IO" | "List" | "Prelude" ] ] [ 16 | "Infix" | [ "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 2 | "Prelude" | [ ] ] [
     5 | "List" | [ ] ] [ 7 | "Text" | [ ] ] [ 10 | "IO" | [ ] ] [ 13 | "Abort" | [ ] ] [ 15 | "Message" | [ ] ] [ 17 |
     "Syntax" | [ ] ] =}
@@ -385,7 +383,7 @@ TABLE : DIR-RANK
   16        "Koshucode.Baala.Base.Syntax"    /rank /base            /import-dir
                                              ----- ---------------- -------------------------------------------------------------
                                              14    "Message"        [ "Abort" | "IO" | "Prelude" ]
-                                             15    "Line"           [ "Abort" | "IO" | "Prelude" | "Text" ]
+                                             15    "Line"           [ "Abort" | "IO" | "Prelude" ]
                                              15    "Tree"           [ "Abort" | "IO" | "List" | "Prelude" ]
                                              16    "Clause"         [ "IO" | "List" | "Prelude" ]
                                              16    "Infix"          [ "Prelude" ]
@@ -1029,7 +1027,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    193 judges
+**    192 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -1196,7 +1194,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Data.Message"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Resource.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Core.Relmap"
@@ -1399,12 +1396,11 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    39 judges
+**    37 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Text.CSV"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Data"
@@ -1427,9 +1423,8 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Core"
 
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Core"
@@ -1929,7 +1924,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    68 judges
+**    67 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Base"
@@ -1966,7 +1961,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base"

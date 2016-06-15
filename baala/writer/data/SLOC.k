@@ -3,15 +3,15 @@
 about /package 'writer
 
 |-- DIR  /code 12   /comment 3    /dir "writer/Koshucode/Baala"
-|-- DIR  /code 339  /comment 105  /dir "writer/Koshucode/Baala/Writer"
+|-- DIR  /code 358  /comment 129  /dir "writer/Koshucode/Baala/Writer"
 
-|-- DIR-TOTAL  /code 351  /comment 108
+|-- DIR-TOTAL  /code 370  /comment 132
 
 |-- FILE  /code 12   /comment 3    /file "Writer.hs"      /dir "writer/Koshucode/Baala"
-|-- FILE  /code 67   /comment 17   /file "Csv.hs"         /dir "writer/Koshucode/Baala/Writer"
+|-- FILE  /code 77   /comment 40   /file "Csv.hs"         /dir "writer/Koshucode/Baala/Writer"
 |-- FILE  /code 26   /comment 9    /file "Html.hs"        /dir "writer/Koshucode/Baala/Writer"
 |-- FILE  /code 94   /comment 25   /file "Json.hs"        /dir "writer/Koshucode/Baala/Writer"
-|-- FILE  /code 66   /comment 32   /file "Judge.hs"       /dir "writer/Koshucode/Baala/Writer"
-|-- FILE  /code 86   /comment 22   /file "Koshu.hs"       /dir "writer/Koshucode/Baala/Writer"
+|-- FILE  /code 73   /comment 33   /file "Judge.hs"       /dir "writer/Koshucode/Baala/Writer"
+|-- FILE  /code 88   /comment 22   /file "Koshu.hs"       /dir "writer/Koshucode/Baala/Writer"
 
-|-- FILE-TOTAL  /code 351  /comment 108
+|-- FILE-TOTAL  /code 370  /comment 132

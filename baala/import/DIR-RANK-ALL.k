@@ -35,9 +35,8 @@
     ] ] [ 14 | "Message" | [ "Abort" ] ] =}
 
 |-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Base.Syntax"  /base-rank {= /rank /base /import-dir [ 14 | "Message" |
-    [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Line" | [ "Abort" | "IO" | "Prelude" | "Text" ] ] [ 15 | "Tree" | [ "Abort"
-    | "IO" | "List" | "Prelude" ] ] [ 16 | "Clause" | [ "IO" | "List" | "Prelude" ] ] [ 16 | "Infix" | [ "Prelude" ] ]
-    =}
+    [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Line" | [ "Abort" | "IO" | "Prelude" ] ] [ 15 | "Tree" | [ "Abort" | "IO" |
+    "List" | "Prelude" ] ] [ 16 | "Clause" | [ "IO" | "List" | "Prelude" ] ] [ 16 | "Infix" | [ "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Base"  /base-rank {= /rank /base /import-dir [ 2 | "Prelude" | [ ] ] [
     5 | "List" | [ ] ] [ 7 | "Text" | [ ] ] [ 10 | "IO" | [ ] ] [ 13 | "Abort" | [ ] ] [ 15 | "Message" | [ ] ] [ 17 |
     "Syntax" | [ ] ] =}
@@ -98,9 +97,9 @@
     "Base" | "Data" | "Lexmap" | "Relkit" | "Relmap" | "Syntax" ] ] =}
 |-- DIR-RANK  /dir-rank 65  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 19 | "Message"
     | [ "Base" ] ] [ 52 | "Clause" | [ "Base" | "Data" | "Lexmap" | "Syntax" ] ] [ 63 | "Resource" | [ "Assert" | "Base"
-    | "Data" | "Lexmap" | "Relkit" | "Relmap" | "Syntax" ] ] [ 64 | "Concrete" | [ "Base" | "Data" | "Relmap" | "Syntax"
-    ] ] [ 64 | "Include" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" ] ] [ 64 | "Run" | [ "Assert" |
-    "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" ] ] [ 65 | "Read" | [ "Base" | "Data" | "Relmap" | "Syntax" ] ] =}
+    | "Data" | "Lexmap" | "Relkit" | "Relmap" | "Syntax" ] ] [ 64 | "Concrete" | [ "Data" | "Relmap" | "Syntax" ] ] [ 64
+    | "Include" | [ "Assert" | "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" ] ] [ 64 | "Run" | [ "Assert" | "Base" |
+    "Data" | "Lexmap" | "Relmap" | "Syntax" ] ] [ 65 | "Read" | [ "Base" | "Data" | "Relmap" | "Syntax" ] ] =}
 *** 25
 
 |-- DIR-RANK  /dir-rank 66  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 47 | "Lexmap" | [ ] ] [
@@ -141,9 +140,9 @@
 |-- DIR-RANK  /dir-rank 79  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
     ] ] [ 69 | "Message" | [ ] ] [ 71 | "Get" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 72 | "Accessor" | [
     "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 72 | "Calc" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ]
-    [ 72 | "Filter" | [ "Base" | "Base" | "Core" | "Data" ] ] [ 72 | "Gadget" | [ "Base" | "Base" | "Core" | "Data" |
-    "Syntax" ] ] [ 72 | "Range" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 78 | "Empty" | [ "Base" | "Base"
-    | "Core" | "Data" | "Flat" ] ] [ 79 | "Bundle" | [ "Core" | "Data" ] ] =}
+    [ 72 | "Filter" | [ "Base" | "Core" | "Data" ] ] [ 72 | "Gadget" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
+    ] [ 72 | "Range" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 78 | "Empty" | [ "Base" | "Base" | "Core" |
+    "Data" | "Flat" ] ] [ 79 | "Bundle" | [ "Core" | "Data" ] ] =}
 |-- DIR-RANK  /dir-rank 80  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 69 | "Message" | [
     "Base" | "Data" | "Syntax" ] ] [ 71 | "Flow" | [ "Base" | "Base" | "Core" | "Data" | "Syntax" ] ] [ 78 | "Confl" | [
     "Base" | "Base" | "Core" | "Data" | "Flat" | "Syntax" ] ] [ 79 | "Deriv" | [ "Base" | "Base" | "Core" | "Data" |
@@ -212,7 +211,7 @@ TABLE : DIR-RANK
   16        "Koshucode.Baala.Base.Syntax"         /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   14    "Message"        [ "Abort" | "IO" | "Prelude" ]
-                                                  15    "Line"           [ "Abort" | "IO" | "Prelude" | "Text" ]
+                                                  15    "Line"           [ "Abort" | "IO" | "Prelude" ]
                                                   15    "Tree"           [ "Abort" | "IO" | "List" | "Prelude" ]
                                                   16    "Clause"         [ "IO" | "List" | "Prelude" ]
                                                   16    "Infix"          [ "Prelude" ]
@@ -368,7 +367,7 @@ TABLE : DIR-RANK
                                                   19    "Message"        [ "Base" ]
                                                   52    "Clause"         [ "Base" | "Data" | "Lexmap" | "Syntax" ]
                                                   63    "Resource"       [ "Assert" | "Base" | "Data" | "Lexmap" | "Relkit" | "Relmap" | "Syntax" ]
-                                                  64    "Concrete"       [ "Base" | "Data" | "Relmap" | "Syntax" ]
+                                                  64    "Concrete"       [ "Data" | "Relmap" | "Syntax" ]
                                                   64    "Include"        [ "Assert" | "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" ]
                                                   64    "Run"            [ "Assert" | "Base" | "Data" | "Lexmap" | "Relmap" | "Syntax" ]
                                                   65    "Read"           [ "Base" | "Data" | "Relmap" | "Syntax" ]
@@ -461,7 +460,7 @@ TABLE : DIR-RANK
                                                   71    "Get"            [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
                                                   72    "Accessor"       [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
                                                   72    "Calc"           [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
-                                                  72    "Filter"         [ "Base" | "Base" | "Core" | "Data" ]
+                                                  72    "Filter"         [ "Base" | "Core" | "Data" ]
                                                   72    "Gadget"         [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
                                                   72    "Range"          [ "Base" | "Base" | "Core" | "Data" | "Syntax" ]
                                                   78    "Empty"          [ "Base" | "Base" | "Core" | "Data" | "Flat" ]

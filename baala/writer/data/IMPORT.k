@@ -7,12 +7,11 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    39 judges
+**    37 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Text.CSV"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Data"
@@ -35,9 +34,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Core"
 
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Core"
