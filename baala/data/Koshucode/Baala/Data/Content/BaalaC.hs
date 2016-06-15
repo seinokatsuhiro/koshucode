@@ -111,7 +111,7 @@ instance B.MixShortEncode BaalaC where
           VSet  cs   -> D.mixBracketSet  $ mixBar cs
           VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.termsToMix1 sh ts
           VRel  r    -> B.mixShortEncode sh r
-          VInterp i  -> B.mixShortEncode sh i
+          VInterp i  -> B.mixEncode i
           VType t    -> B.mixBracketS S.typeOpen S.typeClose $ B.mixEncode t
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs

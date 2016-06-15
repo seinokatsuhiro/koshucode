@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Type for data interpretation.
+
 module Koshucode.Baala.Data.Type.Interp
   ( Interp (..),
     InterpWord (..),
@@ -8,38 +10,31 @@ module Koshucode.Baala.Data.Type.Interp
 
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data.Type.Judge   as D
 
-data Interp =
-    Interp { interpWords :: [InterpWord]
-           , interpTerms :: [S.TermName]
-           } deriving (Show, Eq, Ord)
+-- | Data interpretation.
+data Interp = Interp
+    { interpWords :: [InterpWord]  -- ^ Sentence which interpret data.
+    , interpTerms :: [S.TermName]  -- ^ Terms in sentence.
+    } deriving (Show, Eq, Ord)
 
 data InterpWord
     = InterpText String
     | InterpTerm S.TermName
     deriving (Show, Eq, Ord)
 
-instance B.MixShortEncode Interp where
-    mixShortEncode sh = B.mixShow . interpDoc sh
+instance B.MixEncode Interp where
+    mixEncode Interp { interpWords = xs } =
+        B.mixBracketS S.interpOpen S.interpClose
+             $ B.mixJoin B.mix1 $ map B.mixEncode xs
 
-instance B.Write Interp where
-    writeDocWith = interpDoc
-
-instance B.Write InterpWord where
-    writeDocWith = interpWordDoc
-
-interpDoc :: B.Shorten -> Interp -> B.Doc
-interpDoc sh Interp { interpWords = xs } = doc where
-    doc    = B.doc S.interpOpen B.<+> xsDoc B.<+> B.doc S.interpClose
-    xsDoc  = B.doch $ map (B.writeDocWith sh) xs
-
-interpWordDoc :: B.Shorten -> InterpWord -> B.Doc
-interpWordDoc _ (InterpText w) = B.doc w
-interpWordDoc _ (InterpTerm n) = B.doc $ '/' : n
+instance B.MixEncode InterpWord where
+    mixEncode (InterpText w) = B.mixString w
+    mixEncode (InterpTerm n) = D.termNameToMix n
 
 interp :: [InterpWord] -> Interp
 interp ws = intp where
-    terms = B.unique $ B.catMaybes $ map getTermName ws
+    terms = B.unique $ B.mapMaybe getTermName ws
     intp  = Interp { interpWords = ws
                    , interpTerms = terms }
 
