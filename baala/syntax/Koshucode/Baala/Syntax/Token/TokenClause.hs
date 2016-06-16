@@ -13,17 +13,6 @@ import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 
 type TokenClause = B.CodeClause S.Token
 
--- docTokenClause :: B.Shorten -> TokenClause -> B.Doc
--- docTokenClause sh (B.CodeClause ls toks) = d where
---     d      = B.docHang k 2 $ B.docv [dls, dtoks]
---     k      = B.writeDocWith sh "TokenClause"
---     dtoks  = labeled toks "[Token]"
---     dls    = labeled ls   "[TokenLine]"
---     labeled xs name = B.docHang (label xs name) 2 $ B.docv xs
---     label   xs name = B.writeH sh [ B.writeDocWith sh name
---                                   , B.writeDocWith sh $ length xs
---                                   , B.writeDocWith sh "elements" ]
-
 -- | Convert token lines into token clauses
 tokenClauses :: [S.TokenLine] -> [TokenClause]
 tokenClauses = map clause . split where

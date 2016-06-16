@@ -6,7 +6,7 @@ module Koshucode.Baala.Data.Type.Type
     Type (..),
     NamedType,
     typeExplain,
-    typeTermDoc, typeTermMix,
+    typeTermMix,
 
     -- * Utility
     -- ** Construct
@@ -124,11 +124,6 @@ typeExplain ty =
       term (n,t)  =  B.doc ('/' : n) B.<+> typeExplain t
       item i t    =  B.doc i B.<+> typeExplain t
       vmap f      =  B.docv . map f
-
-typeTermDoc :: Type -> B.Doc
-typeTermDoc (TypeRel ts) = B.doch $ map name ts where
-    name (n, _) = B.doc $ S.showTermName n
-typeTermDoc _ = B.docEmpty
 
 -- | Encode term types.
 typeTermMix :: Type -> B.MixText

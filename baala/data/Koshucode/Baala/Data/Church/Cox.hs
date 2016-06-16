@@ -65,39 +65,34 @@ instance (B.MixShortEncode c) => Show (Cox c) where
 
 coxToDoc :: (B.MixShortEncode c) => B.Shorten -> Cox c -> B.Doc
 coxToDoc sh = d (0 :: Int) . coxFold where
-    wr         :: forall c. (B.Write c) => c -> B.Doc
-    wrH, wrV   :: forall c. (B.Write c) => [c] -> B.Doc
-    wr         = B.writeDocWith sh
-    wrH        = B.writeH sh
-    wrV        = B.writeV sh
-    encode     = wr . B.mixToFlatString . B.mixShortEncode sh
+    encode = B.doc . B.mixToFlatString . B.mixShortEncode sh
 
-    d 10 _ = wr "..."
+    d 10 _ = B.doc "..."
     d n e  = case e of
-        CoxLit    _ c          -> wr "lit" B.<+> encode c
-        CoxTerm   _ ns _       -> wr $ concatMap ('/' :) ns
-        CoxCalc   _ op _       -> wr "calc" B.<+> blankNameToDoc op
-        CoxLocal  _ v i        -> wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
-        CoxBlank  _ v          -> wr "global" B.<+> blankNameToDoc v
-        CoxFill   _ f xs       -> let f'  = wr ">>" B.<+> d' f
-                                      xs' = B.nest 3 $ wrV $ map arg xs
+        CoxLit    _ c          -> B.doc "lit" B.<+> encode c
+        CoxTerm   _ ns _       -> B.doc $ concatMap ('/' :) ns
+        CoxCalc   _ op _       -> B.doc "calc" B.<+> blankNameToDoc op
+        CoxLocal  _ v i        -> B.doc "local" B.<+> B.doc v B.<> B.doc "/" B.<> B.doc i
+        CoxBlank  _ v          -> B.doc "global" B.<+> blankNameToDoc v
+        CoxFill   _ f xs       -> let f'  = B.doc ">>" B.<+> d' f
+                                      xs' = B.nest 3 $ B.docv $ map arg xs
                                   in f' B.$$ xs'
         CoxForm1  _ tag v  e2  -> form tag [v] $ d' e2
         CoxForm   _ tag vs e2  -> form tag vs  $ d' e2
         CoxWith   _ _ e2       -> d' e2
       where
         d'                      = d $ n + 1
-        arg                     = (wr "-" B.<+>) . d'
+        arg                     = (B.doc "-" B.<+>) . d'
         form (Nothing)  vs      = form2 vs
         form (Just tag) vs      = form2 $ ("'" ++ tag) : vs
-        form2 vs e2             = B.docWraps "(|" "|)" $ wrH vs B.<+> wr "|" B.<+> e2
+        form2 vs e2             = B.docWraps "(|" "|)" $ B.doch vs B.<+> B.doc "|" B.<+> e2
 
 blankNameToDoc :: S.BlankName -> B.Doc
-blankNameToDoc (S.BlankNormal   n) = B.writeDoc n
-blankNameToDoc (S.BlankInternal n) = B.writeDoc n
-blankNameToDoc (S.BlankPrefix   n) = B.writeDoc n B.<+> B.doc "(prefix)"
-blankNameToDoc (S.BlankInfix    n) = B.writeDoc n B.<+> B.doc "(infix)"
-blankNameToDoc (S.BlankPostfix  n) = B.writeDoc n B.<+> B.doc "(postfix)"
+blankNameToDoc (S.BlankNormal   n) = B.doc n
+blankNameToDoc (S.BlankInternal n) = B.doc n
+blankNameToDoc (S.BlankPrefix   n) = B.doc n B.<+> B.doc "(prefix)"
+blankNameToDoc (S.BlankInfix    n) = B.doc n B.<+> B.doc "(infix)"
+blankNameToDoc (S.BlankPostfix  n) = B.doc n B.<+> B.doc "(postfix)"
 
 coxLit :: c -> Cox c
 coxLit = CoxLit []
