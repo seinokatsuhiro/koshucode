@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.IO.MixClass
     MixEncode (..),
     MixShortEncode (..),
     mixIdEncode,
+    Shorten, noShorten,
 
     -- * Mix utility
     mixBracket, mixBracketS,
@@ -23,7 +24,6 @@ import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.Text                            as Tx
 import qualified Data.Text.Lazy                       as Tz
 import qualified Koshucode.Baala.Base.IO.MixText      as B
-import qualified Koshucode.Baala.Base.Text            as B
 
 
 -- ----------------------  Construct
@@ -86,11 +86,18 @@ instance MixEncode Bool where
 
 -- | Encode with shortener.
 class MixShortEncode a where
-    mixShortEncode :: B.Shorten -> a -> B.MixText
+    mixShortEncode :: Shorten -> a -> B.MixText
 
 -- | 'mixShortEncode' with no shortener.
 mixIdEncode :: (MixShortEncode a) => a -> B.MixText
-mixIdEncode = mixShortEncode B.noShorten
+mixIdEncode = mixShortEncode noShorten
+
+-- | Convert string to short sign.
+type Shorten = String -> Maybe String
+
+-- | Shorten which does not shorten strings.
+noShorten :: Shorten
+noShorten _ = Nothing
 
 
 -- ----------------------  Utility

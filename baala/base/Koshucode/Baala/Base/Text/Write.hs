@@ -2,11 +2,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Write
-  ( -- * Class
-    Shorten, noShorten,
-    Write (..),
-
-    -- * Simple writer
+  ( Write (..),
     doc, doch, docv,
     docWraps,
   ) where
@@ -14,52 +10,30 @@ module Koshucode.Baala.Base.Text.Write
 import qualified Text.PrettyPrint                 as D
 import qualified Koshucode.Baala.Base.Prelude     as B
 
-
--- ----------------------  Data type
-
--- | Convert string to short sign.
-type Shorten = String -> Maybe String
-
--- | Shorten which does not shorten strings.
-noShorten :: Shorten
-noShorten _ = Nothing
-
 -- | Writer with shortener.
 class Write a where
-    writeDocWith :: Shorten -> a -> B.Doc
+    writeDocWith :: a -> B.Doc
 
 instance Write B.Doc where
-    writeDocWith _ x = x
+    writeDocWith x = x
 
 instance Write Int where
-    writeDocWith _ = D.int
+    writeDocWith = D.int
 
 instance Write Integer where
-    writeDocWith _ = D.integer
+    writeDocWith = D.integer
 
 instance Write String where
-    writeDocWith _ = D.text
-
-
--- ----------------------  Derivative
-
-writeH :: (Write a) => Shorten -> [a] -> B.Doc
-writeH sh = D.hsep . map (writeDocWith sh)
-
-writeV :: (Write a) => Shorten -> [a] -> B.Doc
-writeV sh = D.vcat . map (writeDocWith sh)
-
-
--- ----------------------  Simple writer
+    writeDocWith = D.text
 
 doc :: (Write a) => a -> B.Doc
-doc = writeDocWith noShorten
+doc = writeDocWith
 
 docv :: (Write a) => [a] -> B.Doc
-docv = writeV noShorten
+docv = D.vcat . map writeDocWith
 
 doch :: (Write a) => [a] -> B.Doc
-doch = writeH noShorten
+doch = D.hsep . map writeDocWith
 
 docWraps :: (Write a) => String -> String -> a -> B.Doc
 docWraps = docWrapBody (B.<+>)
