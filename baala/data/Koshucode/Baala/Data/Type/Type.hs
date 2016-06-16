@@ -72,31 +72,30 @@ typeToMix = wf where
     wf = w False    -- no parens
     wt = w True     -- with parens
 
-    w _ TypeAny                = B.mixString "any"
-    w _ TypeEmpty              = B.mixString "empty"
-    w _ TypeEnd                = B.mixString "end"
-    w _ TypeBool               = B.mixString "boolean"
-    w _ TypeText               = B.mixString "text"
-    w _ TypeCode               = B.mixString "code"
-    w _ TypeDec                = B.mixString "decimal"
-    w _ (TypeClock (Nothing))  = B.mixString "clock"
-    w _ (TypeClock (Just p))   = B.mixString "clock" `B.mixSep` B.mixString p
-    w _ (TypeTime (Nothing))   = B.mixString "time"
-    w _ (TypeTime (Just p))    = B.mixString "time"  `B.mixSep` B.mixString p
-    w _ TypeBin                = B.mixString "binary"
-    w _ TypeTerm               = B.mixString "term"
-    w _ TypeType               = B.mixString "type"
-    w _ TypeInterp             = B.mixString "interp"
+    w _ TypeAny                = B.mix "any"
+    w _ TypeEmpty              = B.mix "empty"
+    w _ TypeEnd                = B.mix "end"
+    w _ TypeBool               = B.mix "boolean"
+    w _ TypeText               = B.mix "text"
+    w _ TypeCode               = B.mix "code"
+    w _ TypeDec                = B.mix "decimal"
+    w _ (TypeClock (Nothing))  = B.mix "clock"
+    w _ (TypeClock (Just p))   = B.mix "clock" `B.mixSep` B.mix p
+    w _ (TypeTime (Nothing))   = B.mix "time"
+    w _ (TypeTime (Just p))    = B.mix "time"  `B.mixSep` B.mix p
+    w _ TypeBin                = B.mix "binary"
+    w _ TypeTerm               = B.mix "term"
+    w _ TypeType               = B.mix "type"
+    w _ TypeInterp             = B.mix "interp"
 
-    w _ (TypeList    t)        = B.mixString "list" `B.mixSep` wt t
-    w _ (TypeSet     t)        = B.mixString "set"  `B.mixSep` wt t
-    w _ (TypeTag tag t)        = B.mixString "tag"  `B.mixSep` B.mixString tag
-                                                    `mappend`  B.mixString ":"
-                                                    `B.mixSep` wt t
+    w _ (TypeList    t)        = B.mix "list" `B.mixSep` wt t
+    w _ (TypeSet     t)        = B.mix "set"  `B.mixSep` wt t
+    w _ (TypeTag tag t)        = B.mix "tag"  `B.mixSep` (B.mix tag B.<> B.mix ":")
+                                              `B.mixSep` wt t
 
-    w q (TypeTie    ts)        = wrap q (B.mixString "tie" `B.mixSep` termTypes ts)
-    w q (TypeRel    ts)        = wrap q (B.mixString "rel" `B.mixSep` termTypes ts)
-    w _ (TypeTuple  ts)        = B.mixString "tuple" `B.mixSep` (B.mixJoin1 $ map wt ts)
+    w q (TypeTie    ts)        = wrap q (B.mix "tie" `B.mixSep` termTypes ts)
+    w q (TypeRel    ts)        = wrap q (B.mix "rel" `B.mixSep` termTypes ts)
+    w _ (TypeTuple  ts)        = B.mix "tuple" `B.mixSep` (B.mixJoin1 $ map wt ts)
     w q (TypeSum ts)           = wrap q (B.mixJoinBar $ map wf ts)
 
     wrap :: Bool -> B.MixText -> B.MixText

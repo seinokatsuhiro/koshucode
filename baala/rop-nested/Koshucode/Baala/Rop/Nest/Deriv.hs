@@ -47,7 +47,7 @@ consOppGroup med =
 
 relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
 relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
-    rmapGroup  = rmap `B.mappend` Op.relmapGroup med sh n rmapLocal
+    rmapGroup  = rmap B.<> Op.relmapGroup med sh n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n
 
 
@@ -83,7 +83,7 @@ consNest med =
      Right $ relmapNest med (co, ns, to)
 
 relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
-relmapNest med (co, ns, to) = group `B.mappend` for where
+relmapNest med (co, ns, to) = group B.<> for where
     group  = relmapOppGroup med Nothing to key
     for    = Op.relmapFor med to nest
     key    = if co then pick else cut
@@ -112,7 +112,7 @@ consUngroup med =
 
 relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
-    ungroup = slice `B.mappend` cut
+    ungroup = slice B.<> cut
     slice   = Op.relmapSliceUp med meet
     meet    = Op.relmapMeet med Nothing $ C.relmapLocalNest med n
     cut     = Op.relmapCut  med [n]

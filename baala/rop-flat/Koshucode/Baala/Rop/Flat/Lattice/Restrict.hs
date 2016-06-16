@@ -163,7 +163,7 @@ relkitCompose :: forall c. (Ord c) => (Op.SharedTerms -> C.RelkitBinary c) -> Op
 relkitCompose m sh kit2@(C.Relkit _ (Just he2) _) (Just he1) =
     do kitMeet <- m sh kit2 (Just he1)
        kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
-       Right $ kitMeet `B.mappend` kitCut
+       Right (kitMeet B.<> kitCut)
 relkitCompose _ _ _ _ = Right C.relkitNothing
 
 sharedNames :: D.Head -> D.Head -> [S.TermName]

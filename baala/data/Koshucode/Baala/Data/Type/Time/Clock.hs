@@ -144,7 +144,7 @@ clockBodyToMix c = body $ clockPos c where
     body (ClockD    day)      = sign $ dayToMix day
 
 signToMix :: Int -> B.Map B.MixText
-signToMix (-1) m = B.mixString "-" `mappend` m
+signToMix (-1) m = B.mixString "-" B.<> m
 signToMix _    m = m
 
 daySecToMix :: (Sec -> (DayCount, B.MixText)) -> DayCount -> Sec -> B.MixText
@@ -152,7 +152,7 @@ daySecToMix secMix day sec =
     let (d, mx) = secMix sec
     in case day + d of
          0  -> mx
-         d2 -> dayToMix d2 `mappend` mx
+         d2 -> dayToMix d2 B.<> mx
 
 mixColon :: B.Bin B.MixText
 mixColon = B.mixInfix ":"
@@ -173,7 +173,7 @@ dhToMix sec = (d, hm) where
     (d, h, _, _)   = dhmsFromSec sec
 
 dayToMix :: DayCount -> B.MixText
-dayToMix d = B.mixDec d `mappend` B.mixString "'"
+dayToMix d = B.mixDec d B.<> B.mixString "'"
 
 
 -- ----------------------  Map

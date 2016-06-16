@@ -113,9 +113,9 @@ consExclude med =
 
 relmapExclude :: (Ord c) => C.Intmed c -> ([S.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
-    excl = Op.relmapNone med (pick `B.mappend` meet)
+    excl = Op.relmapNone med (pick B.<> meet)
     pick = Op.relmapPick med ns
-    meet = Op.relmapMeet med Nothing (m `B.mappend` pick)
+    meet = Op.relmapMeet med Nothing (m B.<> pick)
 
 
 -- ----------------------  dump

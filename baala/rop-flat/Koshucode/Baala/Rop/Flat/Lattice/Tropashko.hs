@@ -60,7 +60,7 @@ relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 relkitMeet :: forall c. (Ord c) => SharedTerms -> C.RelkitBinary c
 relkitMeet sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.headNames he1 `D.headLR` D.headNames he2
-    he3    = he2 `B.mappend` he1
+    he3    = he2 B.<> he1
     kit3   = case unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -109,7 +109,7 @@ relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
 relmapJoinList med [] = C.relmapConst med D.reldau
 relmapJoinList _ [rmap] = rmap
-relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
+relmapJoinList med (rmap : rmaps) = rmap B.<> rmaps' where
     rmaps' = relmapJoin med Nothing $ relmapJoinList med rmaps
 
 -- | Join two relations.

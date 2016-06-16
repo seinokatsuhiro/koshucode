@@ -46,7 +46,7 @@ consRdf :: C.RopCons c
 consRdf med =
     do sign  <- Op.getWord  med "-pattern"
        [s,o] <- Op.getTerms med "-term"
-       Right $ C.relmapSource med sign ["/s", "/o"] `B.mappend`
+       Right $ C.relmapSource med sign ["/s", "/o"] B.<>
                Op.relmapRename med [(s,"/s"), (o,"/o")]
 
 

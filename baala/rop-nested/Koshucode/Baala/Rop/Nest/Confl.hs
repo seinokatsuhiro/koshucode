@@ -64,7 +64,7 @@ consFor med =
        Right $ relmapFor med n rmap
 
 relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
-relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n `B.mappend` rmap)
+relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n B.<> rmap)
 
 relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where

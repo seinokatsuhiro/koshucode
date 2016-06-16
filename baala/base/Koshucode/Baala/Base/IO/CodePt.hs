@@ -36,7 +36,7 @@ instance B.Default CodePt where
     def = CodePt B.def 0 "" ""
 
 codePtCompare :: CodePt -> CodePt -> Ordering
-codePtCompare p1 p2 = line `B.mappend` column where
+codePtCompare p1 p2 = line B.<> column where
     line   = codePtLineNo p1 `compare` codePtLineNo p2
     column = size p2 `compare` size p1
     size   = length . codePtText

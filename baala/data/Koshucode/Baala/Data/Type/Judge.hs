@@ -64,7 +64,7 @@ instance (Ord c) => Ord (Judge c) where
             p2   = judgeClass j2'
             xs1  = judgeTerms j1'
             xs2  = judgeTerms j2'
-        in compare p1 p2 `B.mappend` compare xs1 xs2
+        in compare p1 p2 B.<> compare xs1 xs2
 
 -- Apply function to each values
 instance Functor Judge where
