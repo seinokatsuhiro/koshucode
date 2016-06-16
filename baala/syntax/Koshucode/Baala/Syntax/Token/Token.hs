@@ -107,7 +107,7 @@ instance B.CodePtr Token where
     codePtList (TName    cp _)      = [cp]
 
 instance B.ToDoc Token where
-    toDoc = d where
+    doc = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
         d (TTermN     cp _ n)    = pretty "TTermN"   cp [show n]
