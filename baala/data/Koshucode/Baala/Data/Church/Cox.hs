@@ -69,10 +69,10 @@ coxToDoc sh = d (0 :: Int) . coxFold where
 
     d 10 _ = B.doc "..."
     d n e  = case e of
-        CoxLit    _ c          -> B.doc "lit" B.<+> encode c
+        CoxLit    _ c          -> B.doc "lit"    B.<+> encode c
         CoxTerm   _ ns _       -> B.doc $ concatMap ('/' :) ns
-        CoxCalc   _ op _       -> B.doc "calc" B.<+> blankNameToDoc op
-        CoxLocal  _ v i        -> B.doc "local" B.<+> B.doc v B.<> B.doc "/" B.<> B.doc i
+        CoxCalc   _ op _       -> B.doc "calc"   B.<+> blankNameToDoc op
+        CoxLocal  _ v i        -> B.doc "local"  B.<+> (B.doc v B.<> B.doc "/" B.<> B.doc i)
         CoxBlank  _ v          -> B.doc "global" B.<+> blankNameToDoc v
         CoxFill   _ f xs       -> let f'  = B.doc ">>" B.<+> d' f
                                       xs' = B.nest 3 $ B.docv $ map arg xs

@@ -48,6 +48,7 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.Monoid.mappend,
     Data.Monoid.mconcat,
     Data.Monoid.mempty,
+    (Data.Monoid.<>),
   
     -- * Data.Tuple
     Data.Tuple.swap,
@@ -65,7 +66,6 @@ module Koshucode.Baala.Base.Prelude.Import
   
     -- * Text.PrettyPrint
     Text.PrettyPrint.Doc,
-    (Text.PrettyPrint.<>),
     (Text.PrettyPrint.<+>),
     (Text.PrettyPrint.$$),
     Text.PrettyPrint.nest,
