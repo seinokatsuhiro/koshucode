@@ -4,24 +4,24 @@ about /package 'core
 
 |-- DIR  /code 13   /comment 72   /dir "core/Koshucode/Baala"
 |-- DIR  /code 73   /comment 103  /dir "core/Koshucode/Baala/Core"
-|-- DIR  /code 289  /comment 138  /dir "core/Koshucode/Baala/Core/Assert"
-|-- DIR  /code 215  /comment 150  /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- DIR  /code 285  /comment 137  /dir "core/Koshucode/Baala/Core/Assert"
+|-- DIR  /code 209  /comment 149  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 229  /comment 123  /dir "core/Koshucode/Baala/Core/Relkit"
-|-- DIR  /code 614  /comment 314  /dir "core/Koshucode/Baala/Core/Relmap"
+|-- DIR  /code 598  /comment 308  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- DIR  /code 668  /comment 303  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 2101  /comment 1203
+|-- DIR-TOTAL  /code 2075  /comment 1195
 
 |-- FILE  /code 13   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
-|-- FILE  /code 34   /comment 30   /file "Assert.hs"      /dir "core/Koshucode/Baala/Core/Assert"
+|-- FILE  /code 30   /comment 29   /file "Assert.hs"      /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 36   /comment 25   /file "Dataset.hs"     /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 26   /comment 9    /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 54   /comment 29   /file "RelTable.hs"    /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 139  /comment 45   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Assert"
 |-- FILE  /code 8    /comment 4    /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 110  /comment 87   /file "Construct.hs"   /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- FILE  /code 52   /comment 26   /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- FILE  /code 46   /comment 25   /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- FILE  /code 34   /comment 25   /file "LexmapTrees.hs"  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- FILE  /code 19   /comment 12   /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- FILE  /code 16   /comment 4    /file "Message.hs"     /dir "core/Koshucode/Baala/Core"
@@ -35,7 +35,7 @@ about /package 'core
 |-- FILE  /code 115  /comment 52   /file "Global.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 44   /comment 16   /file "Message.hs"     /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 64   /comment 20   /file "Option.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
-|-- FILE  /code 94   /comment 52   /file "Relmap.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /code 78   /comment 46   /file "Relmap.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 106  /comment 44   /file "Result.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 32   /comment 26   /file "Rop.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 98   /comment 27   /file "Specialize.hs"  /dir "core/Koshucode/Baala/Core/Relmap"
@@ -48,4 +48,4 @@ about /package 'core
 |-- FILE  /code 99   /comment 58   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 113  /comment 26   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 2101  /comment 1203
+|-- FILE-TOTAL  /code 2075  /comment 1195
