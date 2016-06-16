@@ -140,7 +140,7 @@ coxRunCox :: (D.CContent c) => D.CopSet c -> D.Head -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
 coxRunPure :: (D.CContent c) => D.CopSet c -> RunCox c
-coxRunPure cops cox = coxRunList cops B.mempty cox []
+coxRunPure cops cox = coxRunList cops mempty cox []
 
 coxRunList :: (D.CContent c) => D.CopSet c -> D.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox

@@ -44,9 +44,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.Maybe.fromMaybe,
   
     -- * Data.Monoid
-    Data.Monoid.Monoid,
-    Data.Monoid.mconcat,
-    Data.Monoid.mempty,
     (Data.Monoid.<>),
   
     -- * Data.Tuple

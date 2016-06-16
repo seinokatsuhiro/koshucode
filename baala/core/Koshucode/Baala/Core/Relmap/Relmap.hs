@@ -68,7 +68,7 @@ instance Ord (Relmap' h c) where
 instance Eq (Relmap' h c) where
     r1 == r2         = compare r1 r2 == EQ
 
-instance B.Monoid (Relmap' h c) where
+instance Monoid (Relmap' h c) where
     mempty  = relmapId
     mappend = RelmapAppend
 

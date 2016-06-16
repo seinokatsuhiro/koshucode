@@ -44,7 +44,7 @@ instance B.Default (Para n a) where
                , paraPos  = []
                , paraName = Map.empty }
 
-instance (Ord n) => B.Monoid (Para n a) where
+instance (Ord n) => Monoid (Para n a) where
     mempty        = B.def
     mappend p1 p2 = Para { paraTags  = paraTags p1 ++  paraTags p2
                          , paraAll   = paraAll  p1 ++  paraAll p2

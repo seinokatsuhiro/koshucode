@@ -47,7 +47,7 @@ relkitSetSource :: (B.CodePtr a) => a -> B.Map (C.Relkit c)
 relkitSetSource src (C.Relkit hi ho (B.Sourced _ core)) =
     C.Relkit hi ho $ B.Sourced (B.codePtList src) core
 
-instance B.Monoid (C.Relkit c) where
+instance Monoid (C.Relkit c) where
     mempty = relkitConst D.reldee
     mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
         relkit ho2 $ C.RelkitAppend bo1 bo2

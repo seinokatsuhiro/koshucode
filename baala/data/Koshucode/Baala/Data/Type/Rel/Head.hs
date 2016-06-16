@@ -56,7 +56,7 @@ data Head =
     Head { headType :: D.Type
          } deriving (Show, Eq, Ord)
 
-instance B.Monoid Head where
+instance Monoid Head where
     mempty = headEmpty
     mappend he1 he2 = headOf $ headType he1 `a` headType he2
         where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2

@@ -99,18 +99,18 @@ relBodyOrder ns he = ed where
 --   In other words, relational constant
 --   that has no terms and no tuples.
 reldum :: Rel c
-reldum = Rel B.mempty []
+reldum = Rel mempty []
 
 -- | The nullary full relation.
 --   In other words, relational constant
 --   that has no terms and the empty tuple.
 reldee :: Rel c
-reldee = Rel B.mempty [[]]
+reldee = Rel mempty [[]]
 
 -- | The empty relation with all terms.
 --   This is fake.
 reldau :: Rel c
-reldau = Rel B.mempty []
+reldau = Rel mempty []
 
 
 -- ----------------------  Converter
