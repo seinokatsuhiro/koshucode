@@ -89,7 +89,6 @@ library
 
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
-        Koshucode.Baala.Base.Text.Html
         Koshucode.Baala.Base.Text.Http
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.ToDoc
@@ -102,8 +101,6 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                  == 4.*
-       , blaze-html            == 0.*
-       , blaze-markup          == 0.*
        , bytestring            == 0.*
        , containers            == 0.5.*
        , data-default          == 0.*
