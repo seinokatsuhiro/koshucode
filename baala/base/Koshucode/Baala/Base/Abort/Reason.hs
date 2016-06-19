@@ -15,7 +15,6 @@ module Koshucode.Baala.Base.Abort.Reason
   ) where
 
 import qualified Koshucode.Baala.Base.IO    as B
-import qualified Koshucode.Baala.Base.Text  as B
 
 data AbortReason = AbortReason
     { abortReason :: String                -- ^ Reason in one line
@@ -55,33 +54,3 @@ abortLines r d = AbortReason r d [] []
 abortPage :: String -> [String] -> AbortReason
 abortPage  r n = AbortReason r [] n []
 
---  HTML
---
---    Aborted
---
---    {main reason}
---      {detailed reason}
---      {detailed reason}
---
---    {line #} {col #} {filename}
---      {line text}
---    {line #} {col #} {filename}
---      {line text}
-
-instance B.ToMarkup AbortReason where
-    toMarkup a =
-        B.div_ "abort" $ do
-          B.div_ "abort-title"   $ text "Aborted"
-          B.div_ "abort-reason"  $ text $ abortReason a
-          B.div_ "abort-detail"  $ mapM_ detail  $ abortDetail a
-          B.div_ "abort-source"  $ mapM_ code $ abortPoint a
-        where
-          text n         = B.toMarkup (n :: String)
-          detail x       = B.div $ B.toMarkup x
-          code (ctx, p)  = point p ctx >> line p
-          line p         = B.div_ "abort-line" $ text $ B.codePtText p
-          source k n c   = B.span_ k $ text n >> (B.toMarkup c)
-          point p ctx    = B.div_ "abort-point" $ do
-                                  source "abort-point-line"    "Line "    $ B.codePtLineNo p
-                                  source "abort-point-column"  "Column "  $ B.codePtColumnNo p
-                                  source "abort-point-context" "Context " ctx

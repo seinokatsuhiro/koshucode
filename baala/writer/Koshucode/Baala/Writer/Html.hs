@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
+
+-- | HTML output.
 
 module Koshucode.Baala.Writer.Html
   ( resultHtmlIndented,
@@ -18,9 +20,11 @@ import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Core               as C
 
+-- | HTML output in indent format.
 resultHtmlIndented :: (D.CContent c) => C.ResultWriter c
 resultHtmlIndented = C.ResultWriterChunk "html-indented" (hPutHtml Hi.renderHtml)
 
+-- | HTML output in linear format.
 resultHtmlCompact :: (D.CContent c) => C.ResultWriter c
 resultHtmlCompact  = C.ResultWriterChunk "html-compact"  (hPutHtml Hc.renderHtml)
 
@@ -35,7 +39,7 @@ hPutRel h render sh = mapM_ put chunks where
     put (C.ResultRel cl r) = IO.hPutStrLn h $ render $ html cl r
     put _                  = return ()
     html cl r = H.div ! class_ "named-relation" $ do
-                  H.p ! class_ "name" $ H.toHtml cl
+                  H.p ! class_ "name" $ H.toMarkup cl
                   contToHtml B.noShorten $ D.pRel r
 
 -- | Encode term content in HTML.
@@ -43,7 +47,7 @@ contToHtml :: (D.CContent c) => B.Shorten -> c -> H.Html
 contToHtml sh = content where
     content c
         | D.isRel c = rel $ D.gRel c
-        | otherwise = H.toHtml $ B.mixToFlatString $ B.mixShortEncode sh c
+        | otherwise = H.toMarkup $ B.mixToFlatString $ B.mixShortEncode sh c
 
     rel (D.Rel he bo) =
         H.table ! class_ "relation" $ do
@@ -53,5 +57,45 @@ contToHtml sh = content where
 
     row cs = H.tr ! class_ "tuple" $ mapM_ col cs
     col c  = H.td $ contToHtml sh c
-    term   = (H.span ! class_ "termname") . H.toHtml . S.showTermName
+    term   = (H.span ! class_ "termname") . H.toMarkup . S.showTermName
+
+--  HTML
+--
+--    Aborted
+--
+--    {main reason}
+--      {detailed reason}
+--      {detailed reason}
+--
+--    {line #} {col #} {filename}
+--      {line text}
+--    {line #} {col #} {filename}
+--      {line text}
+
+-- | Encode abort reason in HTML.
+instance H.ToMarkup B.AbortReason where
+    toMarkup a =
+        div_ "abort" $ do
+          div_ "abort-title"   $ text "Aborted"
+          div_ "abort-reason"  $ text $ B.abortReason a
+          div_ "abort-detail"  $ mapM_ detail  $ B.abortDetail a
+          div_ "abort-source"  $ mapM_ code $ B.abortPoint a
+        where
+          text n         = H.toMarkup (n :: String)
+          detail x       = H.div $ H.toMarkup x
+          code (ctx, p)  = point p ctx >> line p
+          line p         = div_ "abort-line" $ text $ B.codePtText p
+          source k n c   = span_ k $ text n >> (H.toMarkup c)
+          point p ctx    = div_ "abort-point" $ do
+                                  source "abort-point-line"    "Line "    $ B.codePtLineNo p
+                                  source "abort-point-column"  "Column "  $ B.codePtColumnNo p
+                                  source "abort-point-context" "Context " ctx
+
+-- | 'H.div' with class name.
+div_ :: H.AttributeValue -> B.Map H.Html
+div_ c = H.div H.! class_ c
+
+-- | 'H.span' with class name.
+span_ :: H.AttributeValue -> B.Map H.Html
+span_ c = H.span H.! class_ c
 
