@@ -194,5 +194,5 @@ hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
 hPutJudge h = hPutJudgeShort h B.noShorten
 
 hPutJudgeShort :: (B.MixShortEncode c) => IO.Handle -> B.Shorten -> Judge c -> IO ()
-hPutJudgeShort h sh = B.hPutMix B.crlfBreak h . B.mixShortEncode sh
+hPutJudgeShort h sh = B.hPutMixLn B.crlfBreak h . B.mixShortEncode sh
 
