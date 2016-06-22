@@ -3,7 +3,7 @@
 
 -- | Class for constructing mix text.
 
-module Koshucode.Baala.Base.IO.MixClass
+module Koshucode.Baala.Base.Text.MixClass
   ( -- * Class
     Mix (..),
     MixEncode (..),
@@ -23,7 +23,7 @@ import qualified Data.ByteString                      as Bs
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.Text                            as Tx
 import qualified Data.Text.Lazy                       as Tz
-import qualified Koshucode.Baala.Base.IO.MixText      as B
+import qualified Koshucode.Baala.Base.Text.MixText    as B
 
 
 -- ----------------------  Construct

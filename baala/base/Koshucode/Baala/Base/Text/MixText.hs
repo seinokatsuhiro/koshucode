@@ -5,7 +5,7 @@
 
 -- | Mix text.
 
-module Koshucode.Baala.Base.IO.MixText
+module Koshucode.Baala.Base.Text.MixText
   ( -- * Type
     MixText,
 
@@ -54,8 +54,8 @@ import qualified Data.Text.Encoding                   as Tx
 import qualified Data.Text.Lazy                       as Tz
 import qualified Data.Text.Lazy.Encoding              as Tz
 import qualified System.IO                            as IO
-import qualified Koshucode.Baala.Base.Text            as B
-import qualified Koshucode.Baala.Base.IO.LineBreak    as B
+import qualified Koshucode.Baala.Base.Text.Utility    as B
+import qualified Koshucode.Baala.Base.Text.LineBreak  as B
 
 
 -- --------------------------------------------  MixText
