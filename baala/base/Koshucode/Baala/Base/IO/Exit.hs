@@ -35,7 +35,7 @@ deleteCr = map (filter notCrChar) . filter notCrString where
 -- | Set I/O handle for Koshucode output.
 hSetKoshuOutput :: IO.Handle -> IO ()
 hSetKoshuOutput h =
-    do B.setLocaleUtf8
+    do Enc.setLocaleEncoding Enc.utf8_bom
        IO.hSetNewlineMode h koshuNewlineMode
        IO.hSetEncoding h IO.utf8
 
