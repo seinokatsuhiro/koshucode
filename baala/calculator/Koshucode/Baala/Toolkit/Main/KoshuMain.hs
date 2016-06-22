@@ -154,8 +154,8 @@ koshuMain g = Opt.parseCommand options >>= initParam >>= koshuMainParam g
 koshuMainParam :: (D.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
     | paramHelp p          = B.putSuccess $ Opt.helpMessage help options
-    | paramVersion p       = B.putSuccess $ ver ++ "\n"
-    | paramShowEncoding p  = B.putSuccess =<< B.currentEncodings
+    | paramVersion p       = B.putSuccessLn ver
+    | paramShowEncoding p  = B.putSuccessLn =<< B.currentEncodings
     | paramElement p       = putElems   g2 src
     | otherwise            = L.runFiles g2 src
     where

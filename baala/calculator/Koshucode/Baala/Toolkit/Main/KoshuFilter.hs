@@ -50,7 +50,7 @@ koshuFilter g withRes =
      case G.getOpt G.Permute options argv of
        (opts, paths, [])
            | has OptHelp     -> B.putSuccess usage
-           | has OptVersion  -> B.putSuccess $ ver ++ "\n"
+           | has OptVersion  -> B.putSuccessLn ver
            | otherwise       -> runFiles g2 withRes src
            where
              has   = (`elem` opts)

@@ -66,9 +66,9 @@ koshuSyntaxMain' (_, argv) =
     case G.getOpt G.Permute koshuSyntaxOptions argv of
       (opts, files, [])
           | has OptHelp          -> B.putSuccess usage
-          | has OptVersion       -> B.putSuccess $ version ++ "\n"
+          | has OptVersion       -> B.putSuccessLn version
           | has OptDict          -> dumpDict
-          | has OptEncoding      -> B.putSuccess =<< B.currentEncodings
+          | has OptEncoding      -> B.putSuccessLn =<< B.currentEncodings
           | has OptStdin         -> dumpStdin omit
           | length files == 1    -> dumpFile omit $ head files
           | otherwise            -> B.putFailure usage

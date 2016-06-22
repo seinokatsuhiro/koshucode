@@ -83,8 +83,8 @@ koshuChangeMain' (_, argv) =
 
       (opts, _, [])
           | has OptHelp         -> B.putSuccess usage
-          | has OptVersion      -> B.putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> B.putSuccess =<< B.currentEncodings
+          | has OptVersion      -> B.putSuccessLn version
+          | has OptShowEncoding -> B.putSuccessLn =<< B.currentEncodings
           where has = (`elem` opts)
 
       (_, _, errs) -> B.putFailure $ concat errs ++ usage

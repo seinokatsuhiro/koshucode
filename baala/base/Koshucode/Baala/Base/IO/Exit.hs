@@ -6,7 +6,9 @@ module Koshucode.Baala.Base.IO.Exit
   ( progAndArgs,
     hSetKoshuOutput,
     currentEncodings,
-    exit, putSuccess, putFailure,
+    exit,
+    putSuccess, putSuccessLn,
+    putFailure, putFailureLn,
   ) where
 
 import qualified GHC.IO.Encoding               as Enc
@@ -59,13 +61,21 @@ exit = B.exitWith . B.exitCode
 
 -- | Print message and exit on 0.
 putSuccess :: String -> IO a
-putSuccess msg =
-    do putStr msg
-       B.exitWith B.ExitSuccess
+putSuccess msg = success $ putStr msg
+
+putSuccessLn :: String -> IO a
+putSuccessLn msg = success $ putStrLn msg
 
 -- | Print error message and exit on 1.
 putFailure :: String -> IO a
-putFailure msg =
-    do IO.hPutStr IO.stderr msg
-       B.exitWith $ B.ExitFailure 1
+putFailure msg = failure $ IO.hPutStr IO.stderr msg
+
+putFailureLn :: String -> IO a
+putFailureLn msg = failure $ IO.hPutStrLn IO.stderr msg
+
+success :: IO () -> IO a
+success body = body >> B.exitWith B.ExitSuccess
+
+failure :: IO () -> IO a
+failure body = body >> B.exitWith (B.ExitFailure 1)
 
