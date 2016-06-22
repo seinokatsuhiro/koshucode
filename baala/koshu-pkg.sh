@@ -38,7 +38,7 @@ pkg_dirs () {
 }
 
 pkg_dirs_rev () {
-    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data base
+    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data syntax base
 }
 
 pkg_cabal () {
