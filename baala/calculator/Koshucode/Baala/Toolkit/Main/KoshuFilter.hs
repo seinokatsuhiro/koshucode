@@ -78,7 +78,7 @@ hRunFiles
     -> IO Int
 hRunFiles h g withRes ns =
     do (abRes, _) <- C.resRead g ns
-       B.useUtf8 h
+       B.hSetKoshuOutput h
        case abRes of
          Left  a   -> C.globalAbort g a
          Right res -> withRes res

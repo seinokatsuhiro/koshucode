@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Base.IO.Exit
   ( progAndArgs,
-    useUtf8, currentEncodings,
+    hSetKoshuOutput,
+    currentEncodings,
     exit, putSuccess, putFailure,
   ) where
 
@@ -18,7 +19,7 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 --   This function removes carrige returns from the arguments.
 progAndArgs :: IO (String, [String])
 progAndArgs =
-    do useUtf8 B.stdout
+    do hSetKoshuOutput B.stdout
        prog <- Sys.getProgName
        args <- Sys.getArgs
        return (prog, deleteCr args)
@@ -29,9 +30,17 @@ deleteCr = map (filter notCrChar) . filter notCrString where
     notCrChar   = (/= '\r')
     notCrString = (/= "\r")
 
-useUtf8 :: IO.Handle -> IO ()
-useUtf8 h = do B.setLocaleUtf8
-               IO.hSetEncoding h IO.utf8
+-- | Set I/O handle for Koshucode output.
+hSetKoshuOutput :: IO.Handle -> IO ()
+hSetKoshuOutput h =
+    do B.setLocaleUtf8
+       IO.hSetNewlineMode h koshuNewlineMode
+       IO.hSetEncoding h IO.utf8
+
+-- | CRLF input and CRLF output.
+koshuNewlineMode :: IO.NewlineMode
+koshuNewlineMode = IO.universalNewlineMode { IO.inputNL  = IO.CRLF
+                                           , IO.outputNL = IO.CRLF }
 
 -- | Encoding judgement string.
 currentEncodings :: IO String

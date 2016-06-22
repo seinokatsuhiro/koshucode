@@ -140,7 +140,7 @@ hPutResult h result
 
 hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
-    do B.useUtf8 h
+    do B.hSetKoshuOutput h
        case resultWriter result of
          ResultWriterChunk _ w -> w h result status sh
          ResultWriterJudge _ w -> w h result status $ judges sh
