@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Text.Http
+-- | Retrieve via HTTP.
+module Koshucode.Baala.Base.IO.Http
   ( UriText, HttpProxy,
     uriContent,
     httpExceptionSummary,
@@ -15,11 +16,13 @@ import qualified Network.URI                        as URI
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text.Utility  as B
 
+-- | URI.
 type UriText = String
 
 -- | Pair of protocol name and proxy URI.
 type HttpProxy = (String, Maybe UriText)
 
+-- | Get HTTP content as lazy bytestring.
 uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) B.Bz)
 uriContent proxies uriText =
     do req <- requestFromURI proxies uriText
@@ -64,6 +67,7 @@ catchHttpException = ( `Ex.catch` handler ) where
         = return $ Left (code, Bc.unpack msg)
     handler e = return $ Left (0, httpExceptionSummary e)
 
+-- | Text message of HTTP exception.
 httpExceptionSummary :: H.HttpException -> String
 httpExceptionSummary e = case e of
     H.StatusCodeException (H.Status _ m) _ _  -> Bc.unpack m

@@ -67,6 +67,7 @@ library
         Koshucode.Baala.Base.IO.BzFile
         Koshucode.Baala.Base.IO.CodePt
         Koshucode.Baala.Base.IO.Exit
+        Koshucode.Baala.Base.IO.Http
         Koshucode.Baala.Base.IO.IOPoint
         Koshucode.Baala.Base.IO.LineBreak
         Koshucode.Baala.Base.IO.MixClass
@@ -89,7 +90,6 @@ library
 
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
-        Koshucode.Baala.Base.Text.Http
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.ToDoc
         Koshucode.Baala.Base.Text.Unicode
