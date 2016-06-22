@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-calculator-0.118.0.0: A portable relational calculator</p
+      >koshucode-baala-calculator-0.151.0.0: A portable relational calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,7 +57,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >koshu.hs</a
+	    >koshu.hs</a
 	    ></li
 	  ></ul
 	></div
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Description</p
 	><div class="doc"
 	><p
-	  >A portable relational calculator.</p
+	  >A portable relational calculator.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -76,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><li class="src short"
 	  ><a href="#v:koshuMain"
 	    >koshuMain</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
 	    >CContent</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/Koshucode-Baala-Writer-Json.html#t:ToJSON"
 	    >ToJSON</a
@@ -96,7 +96,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><p class="src"
 	  ><a name="v:koshuMain" class="def"
 	    >koshuMain</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
 	    >CContent</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/Koshucode-Baala-Writer-Json.html#t:ToJSON"
 	    >ToJSON</a
@@ -115,15 +115,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	      >koshu</code
 	      > command.
    See <code
-	      ><a href="Koshucode-Baala-Op-Vanilla-Relmap-Implement.html#v:vanillaRops"
-		>vanillaRops</a
+	      ><a href="Koshucode-Baala-Op-Global.html#v:baalaRops"
+		>baalaRops</a
 		></code
 	      >
-   for default argument.</p
+   for default argument.</p
 	    ></div
 	  ></div
 	><h1 id="g:1"
-	>koshu.hs</h1
+	>koshu.hs</h1
 	><div class="doc"
 	><p
 	  ><code
@@ -132,13 +132,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    ><a href="Koshucode-Baala-Toolkit-Main-KoshuMain.html#v:koshuMain"
 	      >koshuMain</a
 	      ></code
-	    >.</p
+	    >.</p
 	  ><pre
-	  >import Koshucode.Baala.Toolkit.Main.KoshuMain
-import Koshucode.Baala.Op.Vanilla
+	  >import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Core                     as C
+import qualified Koshucode.Baala.Type.Vanilla             as Type
+import qualified Koshucode.Baala.Op.Global                as Op
+import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
+import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
 
 main :: IO ()
-main = koshuMain vanillaRops</pre
+main = B.exitWith =&lt;&lt; Main.koshuMain koshuGlobal
+
+koshuGlobal :: Type.GlobalC
+koshuGlobal = Op.baalaGlobal
+              { C.globalSynopsis  = &quot;The Koshucode Baala Implementation&quot;
+              , C.globalVersion   = Main.version }</pre
 	  ></div
 	></div
       ></div
@@ -146,7 +155,7 @@ main = koshuMain vanillaRops</pre
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html
