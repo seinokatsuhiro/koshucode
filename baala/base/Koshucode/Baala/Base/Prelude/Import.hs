@@ -52,7 +52,6 @@ module Koshucode.Baala.Base.Prelude.Import
     -- * System.Exit
     System.Exit.ExitCode (..),
     System.Exit.exitWith,
-    exitCode,
 
     -- * System.IO
     System.IO.stdout,
@@ -77,7 +76,6 @@ import qualified Data.Map
 import qualified Data.Maybe
 import qualified Data.Monoid
 import qualified Data.Tuple
-import qualified GHC.IO.Encoding
 import qualified System.IO
 import qualified System.Exit
 import qualified Text.PrettyPrint
@@ -112,13 +110,6 @@ overlap a b = not $ disjoint a b
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
 lookupMap = Data.Map.lookup
-
-
--- ----------------------  System
-
-exitCode :: Int -> System.Exit.ExitCode
-exitCode 0 = System.Exit.ExitSuccess
-exitCode n = System.Exit.ExitFailure n
 
 
 -- ----------------------  Text

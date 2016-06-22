@@ -6,13 +6,14 @@ module Koshucode.Baala.Base.IO.Exit
   ( progAndArgs,
     hSetKoshuOutput,
     currentEncodings,
-    exit,
+    exit, exitCode,
     putSuccess, putSuccessLn,
     putFailure, putFailureLn,
   ) where
 
 import qualified GHC.IO.Encoding               as Enc
 import qualified System.Environment            as Sys
+import qualified System.Exit                   as Exit
 import qualified System.IO                     as IO
 import qualified Koshucode.Baala.Base.Prelude  as B
 
@@ -57,7 +58,11 @@ currentEncodings =
 
 -- | Exit process.
 exit :: Int -> IO a
-exit = B.exitWith . B.exitCode
+exit = B.exitWith . exitCode
+
+exitCode :: Int -> Exit.ExitCode
+exitCode 0 = Exit.ExitSuccess
+exitCode n = Exit.ExitFailure n
 
 -- | Print message and exit on 0.
 putSuccess :: String -> IO a
