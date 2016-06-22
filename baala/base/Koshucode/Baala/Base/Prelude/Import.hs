@@ -31,8 +31,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.List.sort,
     Data.List.transpose,
     (Data.List.\\),
-    disjoint,
-    overlap,
   
     -- * Data.Map
     lookupMap,
@@ -98,14 +96,6 @@ type Bz = Data.ByteString.Lazy.ByteString
 -- | Convert string into lazy bytestring.
 stringBz :: String -> Bz
 stringBz = Data.ByteString.Lazy.UTF8.fromString
-
--- | Test two list has no elements in common.
-disjoint :: (Eq a) => [a] -> [a] -> Bool
-disjoint a b = null (a `Data.List.intersect` b)
-
--- | Test two list has some common elements.
-overlap :: (Eq a) => [a] -> [a] -> Bool
-overlap a b = not $ disjoint a b
 
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a

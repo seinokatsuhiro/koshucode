@@ -60,6 +60,7 @@ library
         Koshucode.Baala.Base.List.Dots
         Koshucode.Baala.Base.List.List
         Koshucode.Baala.Base.List.Order
+        Koshucode.Baala.Base.List.Set
         Koshucode.Baala.Base.List.Snip
         Koshucode.Baala.Base.List.Split
 
