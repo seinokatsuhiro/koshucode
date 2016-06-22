@@ -38,9 +38,11 @@ module Koshucode.Baala.Base.IO.MixText
     putMix, putMixLn,
     hPutMix, hPutMixLn,
     putMixLines, hPutMixLines,
+    writeMix,
   ) where
 
 import Data.Monoid ((<>))
+import qualified Control.Exception                    as E
 import qualified Numeric                              as N
 import qualified Data.ByteString                      as Bs
 import qualified Data.ByteString.Builder              as B
@@ -304,6 +306,12 @@ putMixLines lb = hPutMixLines lb IO.stdout
 -- | Print mix text lines to the given output handler.
 hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
 hPutMixLines lb h = mapM_ $ hPutMixLn lb h
+
+-- | Write mix text to a file.
+writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()
+writeMix lb path mx = E.bracket open IO.hClose body where
+    open   = IO.openBinaryFile path IO.WriteMode
+    body h = hPutMix lb h mx
 
 -- ----------------------  Build
 
