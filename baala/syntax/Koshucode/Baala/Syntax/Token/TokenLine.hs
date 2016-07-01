@@ -132,6 +132,17 @@ textLicense r cs = Right $ B.codeUpdate "" tok r where
 
 -- ----------------------  Relational section
 
+uncons3 :: a -> (Int -> a -> a -> a -> [a] -> [a] -> [a] -> b) -> [a] -> b
+uncons3 z f = first where
+    first (a:bs)            = second a bs
+    first []                = f 0 z z z [] [] []
+
+    second a bs@(b:cs)      = third a b bs cs
+    second a []             = f 1 a z z [] [] []
+
+    third a b bs cs@(c:ds)  = f 3 a b c bs cs ds
+    third a b bs []         = f 2 a b z bs [] []
+
 -- | Split a next token from source text.
 relation :: B.AbMap TokenRoll
 relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
@@ -145,39 +156,39 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     sign '+'       = GT
     sign  _        = LT
 
-    xs =^ pre      = pre `B.isPrefixOf` xs
-
     -- ----------------------  dispatch
 
-    r' = start dispatch cp r
+    r' = start (uncons3 '\0' dispatch) cp r
 
-    dispatch ('(' : c : ')' : cs)
-        | c `elem` "+-/=#"       = u cs         $ S.TTextRaw cp ['(', c, ')']
-    dispatch (a : b : cs)
-        | a == '{' && b == '|'   = int cs       $ S.TOpen    cp [a,b]
-        | isOpen a && isGrip b   = u cs         $ S.TOpen    cp [a,b]
-        | isGrip a && isClose b  = u cs         $ S.TClose   cp [a,b]
-        | (a == '+' || a == '-') && b == '/'
-                                 = vw           $ scanTermSign (sign a) cp wtab cs
-        | a == '\'' && b == '/'  = vw           $ scanTermQ             cp wtab cs
-    dispatch ccs@(c : cs)
-        | c == '*'            = aster cs [c]
-        | c == '<'            = angle cs [c]
-        | c == '@'            = at    cs 1
-        | c == '|'            = bar   cs [c]
-        | c == '^'            = hat   cs
-        | ccs =^ "#!"         = up              $ S.TComment   cp cs
-        | ccs =^ "-*-"        = up              $ S.TComment   cp cs
-        | isOpen c            = u cs            $ S.TOpen      cp [c]
-        | isClose c           = u cs            $ S.TClose     cp [c]
-        | isSingle c          = u cs            $ S.TTextRaw   cp [c]
-        | isTerm c            = vw              $ scanTermPath cp wtab cs
-        | isQQ c              = v               $ scanQQ       cp cs
-        | isQ c               = vw              $ scanQ        cp wtab cs
-        | isSymbol c          = vw              $ scanSymbol   cp wtab ccs
-        | isSpace c           = v               $ scanSpace   cp cs
-        | otherwise           = Msg.forbiddenInput $ S.angleQuote [c]
-    dispatch ""               = Right r
+    dispatch n a b c bs cs ds
+        | isSpace a              = v               $ scanSpace    cp bs
+        | isTerm a               = vw              $ scanTermPath cp wtab bs
+        | isPM a && isTerm b     = vw              $ scanTermSign (sign a) cp wtab cs
+        | isQQ a                 = v               $ scanQQ       cp bs
+        | isQ a && isTerm b      = vw              $ scanTermQ    cp wtab cs
+        | isQ a                  = vw              $ scanQ        cp wtab bs
+
+        | a == '(' && c == ')' && b `elem` "+-/=#"
+                                 = u ds            $ S.TTextRaw   cp [a,b,c]
+        | a == '{' && b == '|'   = int cs          $ S.TOpen      cp [a,b]
+        | isOpen a && isGrip b   = u cs            $ S.TOpen      cp [a,b]
+        | isGrip a && isClose b  = u cs            $ S.TClose     cp [a,b]
+        | isOpen a               = u bs            $ S.TOpen      cp [a]
+        | isClose a              = u bs            $ S.TClose     cp [a]
+
+        | a == '*'               = aster bs [a]
+        | a == '<'               = angle bs [a]
+        | a == '@'               = at    bs 1
+        | a == '|'               = bar   bs [a]
+        | a == '^'               = hat   bs
+        | a == '#' && b == '!'   = up              $ S.TComment   cp bs
+        | a == '-' && b == '*' && c == '-'
+                                 = up              $ S.TComment   cp bs
+
+        | isSingle a             = u bs            $ S.TTextRaw   cp [a]
+        | isSymbol a             = vw              $ scanSymbol   cp wtab $ a : bs
+        | n == 0                 = Right r
+        | otherwise              = Msg.forbiddenInput $ S.angleQuote [a]
 
     -- ----------------------  begin with "@"
 
@@ -365,7 +376,7 @@ scanTerm q sign cp wtab = word [] where
 -- ----------------------  Char category
 
 -- Punctuations
-isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm :: B.Pred Char
+isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isPM :: B.Pred Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
@@ -374,6 +385,7 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isQQ       = (    ==  '"'      )  -- Punctuation
 isTerm     = (    ==  '/'      )  -- Punctuation
+isPM a     = (a == '+' || a == '-')
 
 isSymbol, isSpace, isShort :: B.Pred Char
 isSymbol   = S.isSymbolChar
