@@ -20,15 +20,6 @@ import qualified Koshucode.Baala.Core      as C
 resultCsv :: (D.CContent c) => C.ResultWriter c
 resultCsv = C.ResultWriterChunk "csv" $ hPutXsv csvSetting
 
--- hPutCsv :: (D.CContent c) => C.ResultWriterJudge c
--- hPutCsv h _ status js =
---     do let csvLines = map (csvLine . D.judgeContString) js
---        IO.hPutStrLn h $ CSV.printCSV csvLines
---        return status
---     where
---       csvLine (D.JudgeAffirm _ xs) = map snd xs
---       csvLine _ = []
-
 -- | Comman-separated-values output with heading.
 resultCsvHeading :: (D.CContent c) => C.ResultWriter c
 resultCsvHeading = C.ResultWriterChunk "csv-heading" $ hPutXsv csvHeadSetting
