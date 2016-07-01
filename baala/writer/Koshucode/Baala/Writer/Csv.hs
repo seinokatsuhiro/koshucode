@@ -8,7 +8,6 @@ module Koshucode.Baala.Writer.Csv
   ) where
 
 import qualified Data.Char                 as Char
-import qualified System.IO                 as IO
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 import qualified Koshucode.Baala.Data      as D
@@ -41,7 +40,7 @@ resultTsvHeading = C.ResultWriterChunk "tab-heading" $ hPutXsv tabHeadSetting
 hPutXsv :: forall c. (D.CContent c) => XsvSetting -> C.ResultWriterChunk c
 hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } h _ status sh =
     do let csv = concatMap toCsv chunks
-       IO.hPutStr h $ unlines csv
+       B.hPutMixLines B.crlfBreak h $ map B.mix csv
        return status
     where
       chunks = concatMap S.shortBody sh
