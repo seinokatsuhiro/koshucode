@@ -32,7 +32,7 @@ putJudgesWith = hPutJudgesWith B.stdout B.def
 hPutJudgesWith :: (B.MixShortEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixIdEncode js $ judgeCountMix []
-       B.hPutMix (B.crlf4 120) h mx
+       B.hPutMix D.judgeBreak h mx
        B.hPutLines h $ judgeSummary status (cnt, tab)
        return status
 

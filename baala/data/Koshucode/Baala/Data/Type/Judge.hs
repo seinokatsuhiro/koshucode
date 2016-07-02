@@ -19,6 +19,7 @@ module Koshucode.Baala.Data.Type.Judge
     isAffirmative, isDenial, isViolative,
 
     -- * Encode
+    judgeBreak,
     termNameToMix,
     termsToMix1, termsToMix2,
     judgeToString, judgeToStringShort,
@@ -162,6 +163,11 @@ isViolative _                   = False
 
 
 -- ----------------------  Encode
+
+-- | Conventional line-break setting for judges:
+--   4-spaces indent and 120-columns line.
+judgeBreak :: B.LineBreak
+judgeBreak = B.crlf4 120
 
 -- | Encode term name.
 termNameToMix :: S.TermName -> B.MixText

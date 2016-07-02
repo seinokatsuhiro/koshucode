@@ -8,6 +8,7 @@ module Koshucode.Baala.Writer.Koshu
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
@@ -92,7 +93,7 @@ hPutChunks h result sh = loop where
     loop [] cnt                            = return cnt
     loop (C.ResultJudge js : xs) (_, tab)  =
         case W.judgesCountMix result writer js (B.mixEmpty, 0, tab) of
-          (mx, cnt', tab') -> do B.hPutMix (B.crlf4 120) h mx
+          (mx, cnt', tab') -> do B.hPutMix D.judgeBreak h mx
                                  loop xs (cnt', tab')
     loop (C.ResultNote [] : xs) cnt        = loop xs cnt
     loop (C.ResultNote ls : xs) cnt        = do hPutNote h ls
