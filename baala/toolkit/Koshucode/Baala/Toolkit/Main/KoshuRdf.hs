@@ -129,7 +129,8 @@ writeJudges sh js =
     do putStrLn B.emacsModeComment
        putStrLn ""
        writeShort sh
-       print $ B.docv $ map (D.judgeToStringShort $ S.shortText sh) js
+       let mixes = B.mixShortEncode (S.shortText sh) <$> js
+       B.putMixLines D.judgeBreak mixes
 
 writeShort :: [S.ShortDef] -> IO ()
 writeShort [] = return ()
