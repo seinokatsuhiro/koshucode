@@ -22,10 +22,8 @@ module Koshucode.Baala.Data.Type.Judge
     judgeBreak,
     termNameToMix,
     termsToMix1, termsToMix2,
-    putJudge, hPutJudge,
   ) where
 
-import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 
@@ -183,13 +181,4 @@ termsToMix2 = termsToMix B.mix2
 termsToMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [S.Term c] -> B.MixText
 termsToMix sep sh ts = B.mixJoin sep $ map term ts where
     term (n, c) = termNameToMix n `B.mixSep` B.mixShortEncode sh c
-
-putJudge :: (B.MixShortEncode c) => Judge c -> IO ()
-putJudge = hPutJudge B.stdout
-
-hPutJudge :: (B.MixShortEncode c) => IO.Handle -> Judge c -> IO ()
-hPutJudge h = hPutJudgeShort h B.noShorten
-
-hPutJudgeShort :: (B.MixShortEncode c) => IO.Handle -> B.Shorten -> Judge c -> IO ()
-hPutJudgeShort h sh = B.hPutMixLn B.crlfBreak h . B.mixShortEncode sh
 
