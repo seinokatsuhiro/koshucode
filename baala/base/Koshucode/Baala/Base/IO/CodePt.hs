@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.IO.CodePt
@@ -14,7 +13,6 @@ module Koshucode.Baala.Base.IO.CodePt
     Sourced (..),
   ) where
 
-import qualified Data.Generics                      as G
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
@@ -26,7 +24,7 @@ data CodePt = CodePt
       , codePtLineNo     :: Int         -- ^ Line number
       , codePtLineText   :: String      -- ^ Line content
       , codePtText       :: String      -- ^ Text at which begins token
-      } deriving (Show, Eq, G.Data, G.Typeable)
+      } deriving (Show, Eq)
 
 instance Ord CodePt where
     compare = codePtCompare
@@ -80,7 +78,7 @@ instance CodePtr CodePt where
 data Sourced a =
     Sourced { source    :: [CodePt]
             , unsourced :: a
-            } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+            } deriving (Show, Eq, Ord)
 
 instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x

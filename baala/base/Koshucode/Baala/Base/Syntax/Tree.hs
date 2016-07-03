@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -17,7 +16,6 @@ module Koshucode.Baala.Base.Syntax.Tree
     bracketTable
   ) where
 
-import qualified Data.Generics                         as G
 import qualified Koshucode.Baala.Base.Abort            as B
 import qualified Koshucode.Baala.Base.IO               as B
 import qualified Koshucode.Baala.Base.List             as B
@@ -32,7 +30,7 @@ import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
 data CodeTree p a
     = TreeL a                                -- ^ Terminal of tree.
     | TreeB p (Maybe (a, a)) [CodeTree p a]  -- ^ Bracket-type and subtrees.
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 instance Functor (CodeTree p) where
     fmap f (TreeL x)       = TreeL (f x)
@@ -123,7 +121,7 @@ data Bracket p
     = BracketNone       -- ^ None bracket
     | BracketOpen  p    -- ^ Open bracket
     | BracketClose p    -- ^ Close bracket
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 isNotBracket :: B.Pred (Bracket p)
 isNotBracket (BracketNone)       = True

@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text lines delimited by carriage returns or line feeds.
@@ -28,7 +27,6 @@ module Koshucode.Baala.Base.Syntax.Line
 
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.ByteString.Lazy.UTF8            as Bu
-import qualified Data.Generics                        as G
 import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
@@ -107,7 +105,7 @@ data CodeLine a = CodeLine
     { lineNumber  :: LineNumber    -- ^ Line number, from 1.
     , lineContent :: String        -- ^ Line content without newline.
     , lineTokens  :: [a]           -- ^ Tokens in the line.
-    } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+    } deriving (Show, Eq, Ord)
 
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
     codePtList (CodeLine _ _ ts) = B.codePtList $ head ts

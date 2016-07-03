@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -28,7 +27,6 @@ module Koshucode.Baala.Syntax.Token.Token
     BlankName (..),
   ) where
 
-import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax.Symbol    as S
 
@@ -70,7 +68,7 @@ data Token
                 -- ^ 11) Blank name. (This is used in building content expression)
     | TUnknown  B.CodePt String
                 -- ^ 12) Unknown token.
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 -- | @\"text\"@, @\"open\"@, ...
 instance SubtypeString Token where
@@ -146,7 +144,7 @@ data TextForm
     | TextKey      -- ^ Keyword literal — @<@/keyword/@>@
     | TextBar      -- ^ Text enclosed in bars — @|@/text/@|@
     | TextLicense  -- ^ Text in license section
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 -- | @\"raw\"@, @\"q\"@, ...
 instance SubtypeString TextForm where
@@ -164,7 +162,7 @@ instance SubtypeString TextForm where
 data TermType
     = TermTypePath               -- ^ Normal term path
     | TermTypeQuoted             -- ^ Quoted term name
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Local
@@ -172,7 +170,7 @@ data TermType
 data Local a
     = LocalSymbol a
     | LocalNest a
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 unlocal :: Local a -> a
 unlocal (LocalNest   a) = a
@@ -187,7 +185,7 @@ data BlankName
     | BlankPrefix   String
     | BlankInfix    String
     | BlankPostfix  String
-    deriving (Show, Eq, Ord, G.Data, G.Typeable)
+    deriving (Show, Eq, Ord)
 
 instance B.Name BlankName where
     name (BlankNormal   n)   = n

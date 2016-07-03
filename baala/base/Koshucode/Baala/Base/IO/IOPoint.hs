@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | I/O point: file, standard input, direct text, etc.
@@ -18,7 +17,6 @@ module Koshucode.Baala.Base.IO.IOPoint
     nioFrom,
   ) where
 
-import qualified Data.Generics                 as G
 import qualified System.IO                     as IO
 import qualified Koshucode.Baala.Base.List     as B
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -30,7 +28,7 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 data NamedHandle = NamedHandle
     { handleName :: String       -- ^ Name of handle
     , handle     :: IO.Handle    -- ^ I/O handle
-    } deriving (G.Data, G.Typeable)
+    }
 
 instance Show NamedHandle where
     show = handleName
@@ -52,7 +50,7 @@ data IOPoint
     | IOPointStdin                          -- ^ Sandard input
     | IOPointStdout                         -- ^ Sandard output
     | IOPointOutput NamedHandle             -- ^ Output handler
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
@@ -99,7 +97,7 @@ data NIOPoint = NIOPoint
     { nioNumber  :: Int        -- ^ Sequential number
                                --   (0 for unnumbered, > 0 for numbered)
     , nioPoint   :: IOPoint    -- ^ I/O point
-    } deriving (Show, G.Data, G.Typeable)
+    } deriving (Show)
 
 instance Eq NIOPoint where
     x == y

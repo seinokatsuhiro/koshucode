@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
@@ -25,7 +24,6 @@ module Koshucode.Baala.Data.Content.Decode
     -- $CompoundData
   ) where
 
-import qualified Data.Generics                         as G
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
@@ -188,7 +186,7 @@ data AssertType
     | AssertChange       -- ^ @|=c@ /pattern/ @:@ /relmap/
     | AssertMultiChange  -- ^ @|=cc@ /pattern/ @:@ /relmap/
     | AssertViolate      -- ^ @|=v@ /pattern/ @:@ /relmap/
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 assertSymbol :: AssertType -> String
 assertSymbol AssertAffirm       = "|=="

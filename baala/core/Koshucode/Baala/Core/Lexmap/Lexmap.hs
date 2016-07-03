@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Lexical relmap.
@@ -16,7 +15,6 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     lexAttrTree,
   ) where
 
-import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 
@@ -29,13 +27,13 @@ data Lexmap = Lexmap
     , lexAttr      :: S.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [(String, Lexmap)]   -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
-    } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+    } deriving (Show, Eq, Ord)
 
 data LexmapType
     = LexmapBase         -- ^ Built-in relmap
     | LexmapDerived      -- ^ User-defined relmap
     | LexmapLocal        -- ^ Local relation reference
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexToken

@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | This module provides a container for tokens.
@@ -14,7 +13,6 @@ module Koshucode.Baala.Base.Syntax.Clause
     splitClause,
   ) where
 
-import qualified Data.Generics                        as G
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.List            as B
 import qualified Koshucode.Baala.Base.Prelude         as B
@@ -27,7 +25,7 @@ import qualified Koshucode.Baala.Base.Syntax.Line     as B
 data CodeClause a = CodeClause
     { clauseLines     :: [B.CodeLine a]  -- ^ Source lines of clause
     , clauseTokens    :: [a]             -- ^ Source tokens of clause
-    } deriving (Show, G.Data, G.Typeable)
+    } deriving (Show)
 
 instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
     codePtList (CodeClause _ ts) = B.codePtList $ head ts

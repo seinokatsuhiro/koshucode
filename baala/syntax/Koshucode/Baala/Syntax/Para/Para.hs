@@ -1,5 +1,4 @@
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parameter type.
@@ -19,7 +18,6 @@ module Koshucode.Baala.Syntax.Para.Para
     SimplePara, paraWords, paraHyphen,
   ) where
 
-import qualified Data.Generics                         as G
 import qualified Data.Map.Strict                       as Map
 import qualified Koshucode.Baala.Base                  as B
 
@@ -32,7 +30,7 @@ data Para n a
       , paraAll   :: [a]            -- ^ All parameter elements.
       , paraPos   :: [a]            -- ^ Positional parameters.
       , paraName  :: ParaMap n a    -- ^ Named parameters.
-      } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      } deriving (Show, Eq, Ord)
 
 -- | Mapping parameter name to its contents.
 type ParaMap n a = Map.Map n [[a]]

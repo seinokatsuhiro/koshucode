@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attribute editor.
@@ -9,7 +7,6 @@ module Koshucode.Baala.Syntax.Attr.AttrEd
     consAttrEd, runAttrEd,
   ) where
 
-import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.TTree           as S
@@ -33,7 +30,7 @@ data AttrEdBody
     | AttrEdTerm    String [S.TTree]       -- ^ Make term name
     | AttrEdNest    String [S.TTree]       -- ^ Nested relation reference
     | AttrEdAppend  [AttrEd]               -- ^ Append editors
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Cons and run

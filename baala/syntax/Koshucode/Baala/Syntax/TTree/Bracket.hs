@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Bracket type.
@@ -17,7 +16,6 @@ module Koshucode.Baala.Syntax.TTree.Bracket
     typeOpen,   typeClose,
   ) where
 
-import qualified Data.Generics                         as G
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax.Token          as S
 
@@ -32,7 +30,7 @@ data BracketType
     | BracketType     -- ^ Square-single brackets for type: @[- ... -]@
     | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
     | BracketUnknown  -- ^ Unknown bracket
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, Eq, Ord)
 
 -- | Bracket type of token.
 getBracketType :: B.GetBracketType BracketType S.Token
