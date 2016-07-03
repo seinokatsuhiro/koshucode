@@ -46,6 +46,8 @@ type TokenRoll = B.CodeRoll S.Token
 -- | Read single token.
 type TokenRollMap = B.Map TokenRoll
 
+type ChangeSection = String -> Maybe TokenRollMap
+
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
 tokens :: B.NIOPoint -> S.InputText -> [S.Token]
@@ -57,20 +59,20 @@ toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
-tokenLines = B.codeRollUp sectionRel
+tokenLines = B.codeRollUp $ sectionRel changeSection
 
 tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
-tokenLinesBz = B.codeRollUpBz sectionRel
+tokenLinesBz = B.codeRollUpBz $ sectionRel changeSection
 
 -- Line begins with the equal sign is treated as section delimter.
-start :: (S.InputText -> TokenRoll) -> TokenRollMap
-start f r@B.CodeRoll { B.codeMap    = prev
-                     , B.codeInput  = cs0
-                     , B.codeOutput = out } = st out cs0 where
-    st [] ('=' : _) = B.codeChange (section changeSection prev) r
+start :: ChangeSection -> (S.InputText -> TokenRoll) -> TokenRollMap
+start change f r@B.CodeRoll { B.codeMap    = prev
+                            , B.codeInput  = cs0
+                            , B.codeOutput = out } = st out cs0 where
+    st [] ('=' : _) = B.codeChange (section change prev) r
     st _ cs         = f cs
 
-section :: (String -> Maybe TokenRollMap) -> TokenRollMap -> TokenRollMap
+section :: ChangeSection -> TokenRollMap -> TokenRollMap
 section change prev r@B.CodeRoll { B.codeInputPt  = cp
                                  , B.codeInput    = cs0
                                  , B.codeWords    = ws
@@ -95,17 +97,19 @@ section change prev r@B.CodeRoll { B.codeInputPt  = cp
           Nothing -> sectionUnexp ts r
     dispatch ts    = sectionUnexp ts r
 
-changeSection :: String -> Maybe TokenRollMap
-changeSection "rel"      = Just $ B.codeChange sectionRel
-changeSection "note"     = Just $ B.codeChange sectionNote
-changeSection "end"      = Just $ B.codeChange sectionEnd
-changeSection "license"  = Just $ B.codeChange sectionLicense
-changeSection "local"    = Just $ sectionUnsupported "local section"
-changeSection "attr"     = Just $ sectionUnsupported "attr section"
-changeSection "text"     = Just $ sectionUnsupported "text section"
-changeSection "doc"      = Just $ sectionUnsupported "doc section"
-changeSection "data"     = Just $ sectionUnsupported "data section"
-changeSection _          = Nothing
+changeSection :: ChangeSection
+changeSection name =
+    case name of
+      "rel"      -> Just $ B.codeChange $ sectionRel changeSection
+      "note"     -> Just $ B.codeChange $ sectionNote changeSection
+      "end"      -> Just $ B.codeChange sectionEnd
+      "license"  -> Just $ B.codeChange $ sectionLicense changeSection
+      "local"    -> Just $ sectionUnsupported "local section"
+      "attr"     -> Just $ sectionUnsupported "attr section"
+      "text"     -> Just $ sectionUnsupported "text section"
+      "doc"      -> Just $ sectionUnsupported "doc section"
+      "data"     -> Just $ sectionUnsupported "data section"
+      _          -> Nothing
 
 sectionUnsupported :: String -> TokenRollMap
 sectionUnsupported msg r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
@@ -127,11 +131,11 @@ sectionEnd :: TokenRollMap
 sectionEnd r@B.CodeRoll { B.codeInput = cs } = comment cs r
 
 -- Tokenizer for note section.
-sectionNote :: TokenRollMap
-sectionNote r = start (`comment` r) r
+sectionNote :: ChangeSection -> TokenRollMap
+sectionNote change r = start change (`comment` r) r
 
-sectionLicense :: TokenRollMap
-sectionLicense r = start (`textLicense` r) r
+sectionLicense :: ChangeSection -> TokenRollMap
+sectionLicense change r = start change (`textLicense` r) r
 
 comment :: S.InputText -> TokenRollMap
 comment "" r = r
@@ -160,21 +164,21 @@ uncons3 z f = first where
     third a b bs []         = f 2 a b z bs [] []
 
 -- | Split a next token from source text.
-sectionRel :: TokenRollMap
-sectionRel r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
+sectionRel :: ChangeSection -> TokenRollMap
+sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
     v              = scan r
     vw             = scanW r
     up             = u ""
     u   cs tok     = B.codeUpdate cs tok r
-    int cs tok     = B.codeChange interp $ B.codeUpdate cs tok r
+    int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok r
 
     sign '+'       = GT
     sign  _        = LT
 
     -- ----------------------  dispatch
 
-    r' = start (uncons3 '\0' dispatch) r
+    r' = start change (uncons3 '\0' dispatch) r
 
     dispatch n a b c bs cs ds
         | isSpace a              = v               $ scanSpace    cp bs
@@ -279,13 +283,14 @@ charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
-interp :: TokenRollMap
-interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int r where
+interp :: ChangeSection -> TokenRollMap
+interp change r@B.CodeRoll { B.codeInputPt = cp
+                           , B.codeWords = wtab } = start change int r where
 
     v           = scan r
     vw          = scanW r
     u   cs tok  = B.codeUpdate cs tok r
-    gen cs tok  = B.codeChange sectionRel $ B.codeUpdate cs tok r
+    gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok r
 
     int ""                           = r
     int (c:cs)    | isSpace c        = v         $ scanSpace    cp cs
