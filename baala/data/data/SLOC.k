@@ -6,12 +6,12 @@ about /package 'data
 |-- DIR  /code 52   /comment 17   /dir "data/Koshucode/Baala/Data"
 |-- DIR  /code 585  /comment 276  /dir "data/Koshucode/Baala/Data/Church"
 |-- DIR  /code 872  /comment 508  /dir "data/Koshucode/Baala/Data/Content"
-|-- DIR  /code 341  /comment 245  /dir "data/Koshucode/Baala/Data/Type"
+|-- DIR  /code 331  /comment 241  /dir "data/Koshucode/Baala/Data/Type"
 |-- DIR  /code 479  /comment 390  /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- DIR  /code 239  /comment 245  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- DIR  /code 440  /comment 236  /dir "data/Koshucode/Baala/Data/Type/Time"
 
-|-- DIR-TOTAL  /code 3017  /comment 1920
+|-- DIR-TOTAL  /code 3007  /comment 1916
 
 |-- FILE  /code 9    /comment 3    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 3    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -38,7 +38,7 @@ about /package 'data
 |-- FILE  /code 133  /comment 99   /file "Fraction.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- FILE  /code 79   /comment 74   /file "Rational.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- FILE  /code 31   /comment 13   /file "Interp.hs"      /dir "data/Koshucode/Baala/Data/Type"
-|-- FILE  /code 119  /comment 79   /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 109  /comment 75   /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 22   /comment 15   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 8    /comment 5    /file "Rel.hs"         /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 150  /comment 155  /file "Head.hs"        /dir "data/Koshucode/Baala/Data/Type/Rel"
@@ -50,4 +50,4 @@ about /package 'data
 |-- FILE  /code 180  /comment 108  /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 141  /comment 124  /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Type"
 
-|-- FILE-TOTAL  /code 3017  /comment 1920
+|-- FILE-TOTAL  /code 3007  /comment 1916

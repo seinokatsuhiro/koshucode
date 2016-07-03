@@ -7,7 +7,7 @@ name:                koshucode-baala-toolkit
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.152.0.0
+version:             0.153.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Toolkit for Koshucode
@@ -52,14 +52,14 @@ executable koshu-change
   build-depends:
          base                       == 4.*
        , containers                 == 0.5.*
-       , koshucode-baala-base       == 0.152.*
-       , koshucode-baala-syntax     == 0.152.*
-       , koshucode-baala-data       == 0.152.*
-       , koshucode-baala-core       == 0.152.*
-       , koshucode-baala-rop-flat   == 0.152.*
-       , koshucode-baala-rop-cox    == 0.152.*
-       , koshucode-baala-writer     == 0.152.*
-       , koshucode-baala-calculator == 0.152.*
+       , koshucode-baala-base       == 0.153.*
+       , koshucode-baala-syntax     == 0.153.*
+       , koshucode-baala-data       == 0.153.*
+       , koshucode-baala-core       == 0.153.*
+       , koshucode-baala-rop-flat   == 0.153.*
+       , koshucode-baala-rop-cox    == 0.153.*
+       , koshucode-baala-writer     == 0.153.*
+       , koshucode-baala-calculator == 0.153.*
 
 executable koshu-rdf
   main-is:
@@ -71,13 +71,13 @@ executable koshu-rdf
        , containers                 == 0.5.*
        , rdf4h                      == 1.*
        , text                       == 1.*
-       , koshucode-baala-base       == 0.152.*
-       , koshucode-baala-syntax     == 0.152.*
-       , koshucode-baala-data       == 0.152.*
-       , koshucode-baala-core       == 0.152.*
-       , koshucode-baala-rop-flat   == 0.152.*
-       , koshucode-baala-rop-cox    == 0.152.*
-       , koshucode-baala-calculator == 0.152.*
+       , koshucode-baala-base       == 0.153.*
+       , koshucode-baala-syntax     == 0.153.*
+       , koshucode-baala-data       == 0.153.*
+       , koshucode-baala-core       == 0.153.*
+       , koshucode-baala-rop-flat   == 0.153.*
+       , koshucode-baala-rop-cox    == 0.153.*
+       , koshucode-baala-calculator == 0.153.*
 
 executable koshu-syntax
   main-is:
@@ -86,13 +86,13 @@ executable koshu-syntax
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
          base                       == 4.*
-       , koshucode-baala-base       == 0.152.*
-       , koshucode-baala-syntax     == 0.152.*
-       , koshucode-baala-data       == 0.152.*
-       , koshucode-baala-core       == 0.152.*
-       , koshucode-baala-rop-flat   == 0.152.*
-       , koshucode-baala-rop-cox    == 0.152.*
-       , koshucode-baala-calculator == 0.152.*
+       , koshucode-baala-base       == 0.153.*
+       , koshucode-baala-syntax     == 0.153.*
+       , koshucode-baala-data       == 0.153.*
+       , koshucode-baala-core       == 0.153.*
+       , koshucode-baala-rop-flat   == 0.153.*
+       , koshucode-baala-rop-cox    == 0.153.*
+       , koshucode-baala-calculator == 0.153.*
 
 
 library
@@ -115,12 +115,12 @@ library
        , directory                  == 1.2.*
        , rdf4h                      == 1.*
        , text                       == 1.*
-       , koshucode-baala-base       == 0.152.*
-       , koshucode-baala-syntax     == 0.152.*
-       , koshucode-baala-data       == 0.152.*
-       , koshucode-baala-core       == 0.152.*
-       , koshucode-baala-rop-flat   == 0.152.*
-       , koshucode-baala-rop-cox    == 0.152.*
-       , koshucode-baala-writer     == 0.152.*
-       , koshucode-baala-calculator == 0.152.*
+       , koshucode-baala-base       == 0.153.*
+       , koshucode-baala-syntax     == 0.153.*
+       , koshucode-baala-data       == 0.153.*
+       , koshucode-baala-core       == 0.153.*
+       , koshucode-baala-rop-flat   == 0.153.*
+       , koshucode-baala-rop-cox    == 0.153.*
+       , koshucode-baala-writer     == 0.153.*
+       , koshucode-baala-calculator == 0.153.*
 
