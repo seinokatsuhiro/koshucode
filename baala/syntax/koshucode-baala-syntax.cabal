@@ -74,6 +74,7 @@ library
         Koshucode.Baala.Syntax.Token
         Koshucode.Baala.Syntax.Token.Message
         Koshucode.Baala.Syntax.Token.Pattern
+        Koshucode.Baala.Syntax.Token.Rel
         Koshucode.Baala.Syntax.Token.Section
         Koshucode.Baala.Syntax.Token.Token
         Koshucode.Baala.Syntax.Token.TokenClause

@@ -18,7 +18,6 @@ module Koshucode.Baala.Syntax.Token.Section
     symbolToken,
     isSymbol,
     isSpace,
-    isShort,
   ) where
 
 import qualified Data.Map                               as Map
@@ -147,7 +146,7 @@ symbolToken k w cp wtab cs =
          Nothing -> let wtab' = Map.insert w w wtab
                     in (wtab', cs, k cp w)
 
-isSymbol, isSpace, isShort :: B.Pred Char
+isSymbol, isSpace :: B.Pred Char
 isSymbol   = S.isSymbolChar
 isSpace    = Ch.isSpace
-isShort    = Ch.isAlpha
+
