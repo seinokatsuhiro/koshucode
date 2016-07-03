@@ -69,6 +69,13 @@ start f cp r@B.CodeRoll { B.codeMap    = prev
     st [] ('=' : _) = Right $ B.codeChange (section prev) r
     st _ cs         = Msg.abToken [cp] $ f cs
 
+start' :: (S.InputText -> TokenRoll) -> B.CodePt -> TokenRoll -> TokenRoll
+start' f _ r@B.CodeRoll { B.codeMap    = prev
+                         , B.codeInput  = cs0
+                         , B.codeOutput = out } = st out cs0 where
+    st [] ('=' : _) = B.codeChange (section prev) r
+    st _ cs         = f cs
+
 section :: B.AbMap TokenRoll -> B.AbMap TokenRoll
 section prev r@B.CodeRoll { B.codeInputPt  = cp
                           , B.codeInput    = cs0
@@ -260,18 +267,21 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
--- interpretation content between {| and |}
 interp :: B.AbMap TokenRoll
-interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int cp r where
+interp = Right . interp'
 
-    v           = scan r
-    vw          = scanW r
-    u   cs tok  = Right $ B.codeUpdate cs tok r
-    gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
+-- interpretation content between {| and |}
+interp' :: B.Map TokenRoll
+interp' r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start' int cp r where
 
-    int ""                           = Right r
-    int (c:cs)    | isSpace c        = v         $ scanSpace    cp cs
-                  | isTerm c         = vw        $ scanTermPath cp wtab cs
+    v           = scan' r
+    vw          = scanW' r
+    u   cs tok  = B.codeUpdate cs tok r
+    gen cs tok  = B.codeChange relation $ B.codeUpdate cs tok r
+
+    int ""                           = r
+    int (c:cs)    | isSpace c        = v         $ scanSpace'    cp cs
+                  | isTerm c         = vw        $ scanTermPath' cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs    $ S.TTextRaw cp $ rv w
@@ -286,6 +296,9 @@ interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int cp r 
 type Scan  = B.CodePt -> S.InputText -> B.Ab (S.InputText, S.Token)
 type ScanW = B.CodePt -> B.WordTable -> S.InputText -> B.Ab (B.WordTable, S.InputText, S.Token)
 
+type Scan'  = B.CodePt -> S.InputText -> (S.InputText, S.Token)
+type ScanW' = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
+
 rv :: B.Map [a]
 rv = reverse
 
@@ -297,6 +310,13 @@ scan _ (Left message)    = Left message
 scanW :: TokenRoll -> B.Ab (B.WordTable, S.InputText, S.Token) -> B.Ab TokenRoll
 scanW r (Right (wtab, cs, tok))  = Right $ B.codeUpdateWords wtab cs tok r
 scanW _ (Left message)           = Left message
+
+scan' :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
+scan' r (cs, tok) = B.codeUpdate cs tok r
+
+-- Scan with word table.
+scanW' :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
+scanW' r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 symbolToken :: (B.CodePt -> String -> S.Token) -> String -> ScanW
 symbolToken k w cp wtab cs =
@@ -321,6 +341,11 @@ scanSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in Right (cs', S.TSpace cp $ n + 1)
 
+scanSpace' :: Scan'
+scanSpace' cp cs =
+    let (cs', n) = S.nextSpace cs
+    in (cs', S.TSpace cp $ n + 1)
+
 scanQ :: ScanW
 scanQ cp wtab cs =
     do (cs', w) <- S.nextSymbolPlain cs
@@ -344,6 +369,9 @@ scanTermSign = scanTerm S.TermTypePath
 -- | Scan term name
 scanTermPath :: ScanW
 scanTermPath = scanTerm S.TermTypePath EQ
+
+scanTermPath' :: ScanW'
+scanTermPath' = scanTerm' S.TermTypePath EQ
 
 -- | Scan quoted term
 scanTermQ :: ScanW
@@ -371,6 +399,32 @@ scanTerm q sign cp wtab = word [] where
                            Nothing -> let wtab' = Map.insert n n wtab
                                       in Right (wtab', cs, S.TTermN cp sign n)
     term ns cs         = Right (wtab, cs, S.TTerm cp q $ rv ns)
+
+-- Scan term name or term path
+scanTerm' :: S.TermType -> Ordering -> ScanW'
+scanTerm' q sign cp wtab cs0 = word [] cs0 where
+    word ns ccs@(c:cs)
+        | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
+        | isSymbol c    = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
+        | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
+    word _ _            = unk
+
+    unk                 = (wtab, [], S.TUnknown cp cs0)
+    call e f            = case e of
+                            Right (cs', w) -> f w cs'
+                            Left _         -> unk
+
+    nterm ns w cs'      = let n  = B.nioNumber $ B.codePtSource cp
+                              w' = show n ++ ('=' : w)
+                          in term (w' : ns) cs'
+
+    term ns (c:cs) | isTerm c   = word ns cs
+    term [n] cs | q == S.TermTypePath
+                       = case Map.lookup n wtab of
+                           Just n' -> (wtab, cs, S.TTermN cp sign n')
+                           Nothing -> let wtab' = Map.insert n n wtab
+                                      in (wtab', cs, S.TTermN cp sign n)
+    term ns cs         = (wtab, cs, S.TTerm cp q $ rv ns)
 
 
 -- ----------------------  Char category
