@@ -78,7 +78,6 @@ library
         Koshucode.Baala.Syntax.Token.Section
         Koshucode.Baala.Syntax.Token.Token
         Koshucode.Baala.Syntax.Token.TokenClause
-        Koshucode.Baala.Syntax.Token.TokenLine
         Koshucode.Baala.Syntax.Token.Utility
 
   -- Modules included in this library but not exported.
