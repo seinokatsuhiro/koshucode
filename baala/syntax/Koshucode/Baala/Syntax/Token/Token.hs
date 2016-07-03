@@ -11,6 +11,7 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Token
     Token (..),
     textToken,
+    unknownToken,
 
     -- * Detail type
     -- ** Text
@@ -66,7 +67,7 @@ data Token
                 -- ^ 10) Comment — @**@/text/
     | TName     B.CodePt BlankName
                 -- ^ 11) Blank name. (This is used in building content expression)
-    | TUnknown  B.CodePt String
+    | TUnknown  B.CodePt String B.AbortReason
                 -- ^ 12) Unknown token.
       deriving (Show, Eq, Ord)
 
@@ -83,7 +84,7 @@ instance SubtypeString Token where
      subtypeString (TSpace    _ _    ) = "space"
      subtypeString (TComment  _ _    ) = "comment"
      subtypeString (TName     _ _    ) = "name"
-     subtypeString (TUnknown  _ _    ) = "unknown"
+     subtypeString (TUnknown  _ _ _  ) = "unknown"
 
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
@@ -106,7 +107,7 @@ instance B.CodePtr Token where
     codePtList (TSpace   cp _)      = [cp]
     codePtList (TComment cp _)      = [cp]
     codePtList (TName    cp _)      = [cp]
-    codePtList (TUnknown cp _)      = [cp]
+    codePtList (TUnknown cp _ _)    = [cp]
 
 instance B.PPrint Token where
     pprint = d where
@@ -121,7 +122,7 @@ instance B.PPrint Token where
         d (TSpace     cp c)      = pretty "TSpace"   cp [show c]
         d (TComment   cp s)      = pretty "TComment" cp [show s]
         d (TName      cp w)      = pretty "TName"    cp [show w]
-        d (TUnknown   cp w)      = pretty "TUnknown" cp [show w]
+        d (TUnknown   cp w _)    = pretty "TUnknown" cp [show w]
 
         pretty k cp xs         = B.pprintH $ lineCol cp : k : xs
         lineCol cp             = (show $ B.codePtLineNo cp)
@@ -131,6 +132,10 @@ instance B.PPrint Token where
 textToken :: String -> Token
 textToken = TText B.def TextRaw
 
+-- | Create unknown token.
+unknownToken :: B.CodePt -> String -> B.Ab a -> Token
+unknownToken cp w (Left a)  = TUnknown cp w a
+unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 
 -- --------------------------------------------  Detail type
 

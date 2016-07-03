@@ -41,7 +41,7 @@ tokenContent tok =
       S.TSpace    _ n      -> replicate n ' '
       S.TComment  _ s      -> s
       S.TName     _ op     -> B.name op
-      S.TUnknown  _ s      -> s
+      S.TUnknown  _ s _    -> s
 
 untoken :: S.Token -> String
 untoken = dispatch where
@@ -58,7 +58,7 @@ untoken = dispatch where
           S.TSpace    _ n      -> replicate n ' '
           S.TComment  _ s      -> s
           S.TName     _ op     -> B.name op
-          S.TUnknown  _ s      -> s
+          S.TUnknown  _ s _    -> s
     text q s =
         case q of
           S.TextUnk            -> s
@@ -88,7 +88,7 @@ tokenDetailTypeString tok =
       S.TSpace    _ _      -> Nothing
       S.TComment  _ _      -> Nothing
       S.TName     _ b      -> Just $ S.subtypeString b
-      S.TUnknown  _ _      -> Nothing
+      S.TUnknown  _ _ _    -> Nothing
 
 slotTypeText :: Int -> String
 slotTypeText 0   = "positional"

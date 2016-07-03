@@ -197,7 +197,8 @@ relation' r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
         | isSingle a             = u bs            $ S.TTextRaw   cp [a]
         | isSymbol a             = vw              $ scanSymbol'  cp wtab $ a : bs
         | n == 0                 = r
-        | otherwise              = u []            $ S.TUnknown   cp cs -- S.angleQuote [a]
+        | otherwise              = u []            $ S.unknownToken cp cs
+                                                   $ Msg.forbiddenInput $ S.angleQuote [a]
 
     -- ----------------------  begin with "@"
 
@@ -220,11 +221,11 @@ relation' r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     -- read local reference, like ^/g
     hat ('/' : cs)                   = localToken cs S.LocalNest
     hat cs@(c : _) | isSymbol c      = localToken cs S.LocalSymbol
-    hat cs                           = u [] $ S.TUnknown cp cs -- Msg.adlib "local"
+    hat cs                           = u [] $ S.unknownToken cp cs $ Msg.adlib "local"
 
     localToken cs k                  = case S.nextSymbolPlain cs of
                                          Right (cs', w) -> u cs' $ S.TLocal cp (k w) (-1) []
-                                         Left _         -> u []  $ S.TUnknown cp cs
+                                         Left a         -> u []  $ S.TUnknown cp cs a
 
     -- ----------------------  begin with "|"
 
@@ -355,7 +356,7 @@ scanSymbol' cp wtab cs =
          S.SymbolGeneral w    -> symbolToken' S.TTextRaw w cp wtab cs'
          S.SymbolPlain w      -> symbolToken' S.TTextRaw w cp wtab cs'
          S.SymbolNumeric w    -> symbolToken' S.TTextRaw w cp wtab cs'
-         S.SymbolUnknown w    -> (wtab, [], S.TUnknown cp cs)
+         S.SymbolUnknown w    -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 scanSpace :: Scan
 scanSpace cp cs =
@@ -376,7 +377,7 @@ scanQ' :: ScanW'
 scanQ' cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken' S.TTextQ w cp wtab cs'
-      Left _         -> (wtab, [], S.TUnknown cp cs)
+      Left a         -> (wtab, [], S.TUnknown cp cs a)
           
 
 -- | Scan double-quoted text.
@@ -387,7 +388,7 @@ scanQQ cp cs = do (cs', w) <- S.nextQQ cs
 scanQQ' :: Scan'
 scanQQ' cp cs = case S.nextQQ cs of
                   Right (cs', w) -> (cs', S.TTextQQ cp w)
-                  Left _         -> ([], S.TUnknown cp cs)
+                  Left a         -> ([], S.TUnknown cp cs a)
 
 -- | Scan slot name, like @aaa.
 scanSlot :: Int -> Scan
@@ -399,7 +400,7 @@ scanSlot' :: Int -> Scan'
 scanSlot' n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
-      Left _         -> ([], S.TUnknown cp cs)
+      Left a         -> ([], S.TUnknown cp cs a)
       
 
 -- | Scan signed term name
@@ -455,7 +456,7 @@ scanTerm' q sign cp wtab cs0 = word [] cs0 where
         | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
     word _ _            = unk
 
-    unk                 = (wtab, [], S.TUnknown cp cs0)
+    unk                 = (wtab, [], S.unknownToken cp cs0 Msg.expOrdSym)
     call e f            = case e of
                             Right (cs', w) -> f w cs'
                             Left _         -> unk
