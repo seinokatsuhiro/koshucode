@@ -38,8 +38,7 @@ ttreeGroup = B.treeWrap S.BracketGroup
 
 -- | Convert string to token trees.
 tt :: String -> B.Ab [S.TTree]
-tt s = do ts <- S.toks s
-          ttrees $ S.sweepToken ts
+tt s = ttrees $ S.sweepToken $ S.toks s
 
 -- | Parse string and group it.
 tt1 :: String -> B.Ab S.TTree

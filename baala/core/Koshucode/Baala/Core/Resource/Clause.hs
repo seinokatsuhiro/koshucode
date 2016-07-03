@@ -119,21 +119,28 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     rslt = case tokens of
              Right ts -> dispatch ts
+             Left tok@(S.TUnknown _ _ a)
+                      -> (unkClause $ unk [tok] $ Left a, h)
              Left tok@(S.TShort _ pre _)
                       -> (unkClause $ unk [tok] $ Msg.unresPrefix pre, h)
              Left tok -> (unkClause $ unk [tok] $ Msg.bug "short", h)
 
     original = B.clauseTokens src
-    tokens | B.notNull sh = lengthen `mapM` original
-           | otherwise    = case filter S.isShortToken original of
-                              []       -> Right original
-                              tok : _  -> Left tok
+    unks     = filter isUnknown original
+    tokens | B.notNull unks = Left $ head unks
+           | B.notNull sh   = unshorten `mapM` original
+           | otherwise      = case filter S.isShortToken original of
+                                []       -> Right original
+                                tok : _  -> Left tok
 
-    lengthen :: S.Token -> Either S.Token S.Token
-    lengthen t@(S.TShort n pre b) = case lookup pre sh of
-                                      Just l  -> Right $ S.TTextQQ n $ l ++ b
-                                      Nothing -> Left t
-    lengthen t = Right t
+    isUnknown (S.TUnknown _ _ _) = True
+    isUnknown _                  = False
+
+    unshorten :: S.Token -> Either S.Token S.Token
+    unshorten t@(S.TShort n pre b) = case lookup pre sh of
+                                       Just l  -> Right $ S.TTextQQ n $ l ++ b
+                                       Nothing -> Left t
+    unshorten t = Right t
 
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower

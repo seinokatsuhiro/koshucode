@@ -30,8 +30,8 @@ resInclude :: forall c. (D.CContent c)
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude resAbout cd base nio code =
-    do ls <- S.tokenLinesBz nio code
-       let sec  = C.resLastSecNo base + 1
+    do let ls   = S.tokenLinesBz nio code
+           sec  = C.resLastSecNo base + 1
            cs   = C.consClause resAbout sec ls
        (js, cs2) <- createJudges base cs
        let cs2' = reverse cs2

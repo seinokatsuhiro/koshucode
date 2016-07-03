@@ -28,10 +28,8 @@ module Koshucode.Baala.Base.Syntax.Line
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.ByteString.Lazy.UTF8            as Bu
 import qualified Data.Map                             as Map
-import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.Message  as Msg
 
 
 -- ----------------------  Line
@@ -122,7 +120,7 @@ lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 type WordTable = Map.Map String String
 
 data CodeRoll a =
-    CodeRoll { codeMap     :: B.AbMap (CodeRoll a)
+    CodeRoll { codeMap     :: B.Map (CodeRoll a)
              , codeInputPt :: B.CodePt
              , codeInput   :: String
              , codeOutput  :: [a]
@@ -141,23 +139,23 @@ data CodeRoll a =
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
 --
-codeRollUp :: B.AbMap (CodeRoll a) -> B.NIOPoint -> String -> B.Ab [CodeLine a]
+codeRollUp :: B.Map (CodeRoll a) -> B.NIOPoint -> String -> [CodeLine a]
 codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
 
-codeRollUpBz :: B.AbMap (CodeRoll a) -> B.NIOPoint -> B.Bz -> B.Ab [CodeLine a]
+codeRollUpBz :: B.Map (CodeRoll a) -> B.NIOPoint -> B.Bz -> [CodeLine a]
 codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
-codeRollUpLines :: B.AbMap (CodeRoll a) -> B.NIOPoint -> [NumberedLine] -> B.Ab [CodeLine a]
+codeRollUpLines :: B.Map (CodeRoll a) -> B.NIOPoint -> [NumberedLine] -> [CodeLine a]
 codeRollUpLines f res = loop (CodeRoll f cp "" [] Map.empty) where
     cp    = B.def { B.codePtSource = res }
 
-    loop _ [] = Right []
+    loop _ [] = []
     loop r ((num, line) : ls) =
-       do let cp' = setLine num line cp
-          r' <- Msg.abCode [cp'] $ codeRoll $ setRoll cp' line r
-          let toks = reverse $ codeOutput r'
-          ls' <- loop r' ls
-          Right $ CodeLine num line toks : ls'
+       let cp'  = setLine num line cp
+           r'   = codeRoll $ setRoll cp' line r
+           toks = reverse $ codeOutput r'
+           ls'  = loop r' ls
+       in CodeLine num line toks : ls'
 
 setLine :: LineNumber -> String -> B.Map B.CodePt
 setLine num line cp =
@@ -171,10 +169,10 @@ setRoll cp line roll =
          , codeInput   = line
          , codeOutput  = [] }
 
-codeRoll :: B.AbMap (CodeRoll a)
+codeRoll :: B.Map (CodeRoll a)
 codeRoll roll@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input  = call
-    | otherwise   = call >>= codeRoll
+    | otherwise   = codeRoll call
     where call    = f roll { codeInputPt = setText input cp }
 
 setText :: String -> B.Map B.CodePt
@@ -193,6 +191,6 @@ codeUpdateWords ws cs tok roll =
          , codeWords  = ws }
 
 -- | Change mapper of code roll.
-codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
+codeChange :: B.Map (CodeRoll a) -> B.Map (CodeRoll a)
 codeChange f roll = roll { codeMap = f }
 

@@ -45,20 +45,19 @@ type TokenRoll = B.CodeRoll S.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.NIOPoint -> S.InputText -> B.Ab [S.Token]
-tokens res cs = do ls <- tokenLines res cs
-                   Right $ concatMap B.lineTokens ls
+tokens :: B.NIOPoint -> S.InputText -> [S.Token]
+tokens res cs = concatMap B.lineTokens $ tokenLines res cs
 
 -- | Abbreviated tokenizer.
-toks :: S.InputText -> B.Ab [S.Token]
+toks :: S.InputText -> [S.Token]
 toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
-tokenLines :: B.NIOPoint -> S.InputText -> B.Ab [TokenLine]
-tokenLines = B.codeRollUp relation
+tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
+tokenLines = B.codeRollUp relation'
 
-tokenLinesBz :: B.NIOPoint -> B.Bz -> B.Ab [TokenLine]
-tokenLinesBz = B.codeRollUpBz relation
+tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBz = B.codeRollUpBz relation'
 
 -- Line begins with the equal sign is treated as section delimter.
 start :: (S.InputText -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
@@ -75,38 +74,48 @@ start' f _ r@B.CodeRoll { B.codeMap    = prev
     st [] ('=' : _) = B.codeChange (section prev) r
     st _ cs         = f cs
 
-section :: B.AbMap TokenRoll -> B.AbMap TokenRoll
+section :: B.Map TokenRoll -> B.Map TokenRoll
 section prev r@B.CodeRoll { B.codeInputPt  = cp
                           , B.codeInput    = cs0
                           , B.codeWords    = ws
                           } = sec cs0 where
-    v    = scan r
-    vw   = scanW r
+    v    = scan' r
+    vw   = scanW' r
     out  = reverse $ S.sweepToken $ B.codeOutput r
 
-    sec ""                    = dispatch out
-    sec ('*' : '*' : _)       = dispatch out
+    sec ""                    = dispatch out  -- end of line
+    sec ('*' : '*' : _)       = dispatch out  -- end of effective text
     sec ccs@(c:cs)
-        | isSpace c     = v  $ scanSpace cp cs
-        | isSymbol c    = vw $ scanSymbol cp ws ccs
-        | otherwise     = Msg.unexpSect help
+        | isSpace c     = v  $ scanSpace'  cp cs
+        | isSymbol c    = vw $ scanSymbol' cp ws ccs
+        | otherwise     = B.codeChange prev $ unexpSect [] r
 
-    dispatch :: [S.Token] -> B.Ab TokenRoll
-    dispatch [S.TTextSect _] = Right $ B.codeChange prev r
-    dispatch [S.TTextSect _, S.TTextRaw _ name] =
+    dispatch :: [S.Token] -> TokenRoll
+    dispatch [S.TTextSect _] = B.codeChange prev r
+    dispatch ts@[S.TTextSect _, S.TTextRaw _ name] =
         case name of
-          "rel"      -> Right $ B.codeChange relation r
-          "note"     -> Right $ B.codeChange note r
-          "end"      -> Right $ B.codeChange end r
-          "license"  -> Right $ B.codeChange license r
-          "local"    -> Msg.unsupported "local section"
-          "attr"     -> Msg.unsupported "attr section"
-          "text"     -> Msg.unsupported "text section"
-          "doc"      -> Msg.unsupported "doc section"
-          "data"     -> Msg.unsupported "data section"
-          _          -> Msg.unexpSect help
-    dispatch _        = Msg.unexpSect help
+          "rel"      -> B.codeChange relation' r
+          "note"     -> B.codeChange note' r
+          "end"      -> B.codeChange end' r
+          "license"  -> B.codeChange license' r
+          "local"    -> B.codeChange prev $ unsupported "local section" r
+          "attr"     -> B.codeChange prev $ unsupported "attr section" r
+          "text"     -> B.codeChange prev $ unsupported "text section" r
+          "doc"      -> B.codeChange prev $ unsupported "doc section" r
+          "data"     -> B.codeChange prev $ unsupported "data section" r
+          _          -> B.codeChange prev $ unexpSect ts r
+    dispatch ts       = B.codeChange prev $ unexpSect ts r
 
+unsupported :: String -> B.Map TokenRoll
+unsupported msg r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
+    tok  = S.unknownToken cp cs $ Msg.unsupported msg
+    cp   = B.codeInputPt r
+
+unexpSect :: [S.Token] -> B.Map TokenRoll
+unexpSect ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
+    tok  = S.unknownToken cp cs $ Msg.unexpSect help
+    cp | null ts    = B.codeInputPt r
+       | otherwise  = B.codePt $ head ts
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
            , "=== license  for license section"
@@ -115,6 +124,9 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
 -- Tokenizer for end section.
 end :: B.AbMap TokenRoll
 end r@B.CodeRoll { B.codeInput = cs } = comment r cs
+
+end' :: B.Map TokenRoll
+end' r@B.CodeRoll { B.codeInput = cs } = comment' r cs
 
 -- Tokenizer for note section.
 note :: B.AbMap TokenRoll
@@ -169,7 +181,7 @@ relation' r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
     vw             = scanW' r
     up             = u ""
     u   cs tok     = B.codeUpdate cs tok r
-    int cs tok     = B.codeChange interp $ B.codeUpdate cs tok r
+    int cs tok     = B.codeChange interp' $ B.codeUpdate cs tok r
 
     sign '+'       = GT
     sign  _        = LT
@@ -290,7 +302,7 @@ interp' r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start' int cp 
     v           = scan' r
     vw          = scanW' r
     u   cs tok  = B.codeUpdate cs tok r
-    gen cs tok  = B.codeChange relation $ B.codeUpdate cs tok r
+    gen cs tok  = B.codeChange relation' $ B.codeUpdate cs tok r
 
     int ""                           = r
     int (c:cs)    | isSpace c        = v         $ scanSpace'    cp cs
