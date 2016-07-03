@@ -91,8 +91,8 @@ pkg_haddock () {
           cabal haddock \
               --hoogle \
               --hyperlink-source \
+              --html-location=$pkg_doc_hackage \
               --haddock-option=--pretty-html \
-              --html-location=$pkg_doc_haskell \
               `pkg_haddock_option $pkg`
         )
     done
@@ -177,7 +177,8 @@ pkg_prog=koshu-pkg.sh
 pkg_dir=`pwd | sed -n 's:\(.*/koshucode-master/baala\).*:\1:p'`
 
 pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/doc/html
-pkg_doc_haskell=http://hackage.haskell.org/packages/archive/base/latest/doc/html
+pkg_doc_hackage='http://hackage.haskell.org/package/$pkg/docs'
+
 
 case "$1" in
     cabal)
