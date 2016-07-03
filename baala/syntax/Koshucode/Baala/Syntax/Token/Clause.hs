@@ -1,5 +1,5 @@
 
-module Koshucode.Baala.Syntax.Token.TokenClause
+module Koshucode.Baala.Syntax.Token.Clause
   ( -- * Token clause
     TokenClause,
     tokenClauses,

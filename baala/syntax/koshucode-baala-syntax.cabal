@@ -72,12 +72,12 @@ library
         Koshucode.Baala.Syntax.TTree.TokenTree
 
         Koshucode.Baala.Syntax.Token
+        Koshucode.Baala.Syntax.Token.Clause
         Koshucode.Baala.Syntax.Token.Message
         Koshucode.Baala.Syntax.Token.Pattern
         Koshucode.Baala.Syntax.Token.Rel
         Koshucode.Baala.Syntax.Token.Section
         Koshucode.Baala.Syntax.Token.Token
-        Koshucode.Baala.Syntax.Token.TokenClause
         Koshucode.Baala.Syntax.Token.Utility
 
   -- Modules included in this library but not exported.
