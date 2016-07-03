@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokenizer of koshucode.
@@ -29,7 +28,7 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern   as S
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
-import qualified Koshucode.Baala.Syntax.Token.Utility   as S
+import qualified Koshucode.Baala.Syntax.Token.Section   as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
@@ -39,14 +38,6 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 -- | Token list on a line.
 type TokenLine = B.CodeLine S.Token
-
--- | Code roll for token.
-type TokenRoll = B.CodeRoll S.Token
-
--- | Read single token.
-type TokenRollMap = B.Map TokenRoll
-
-type ChangeSection = String -> Maybe TokenRollMap
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
@@ -64,46 +55,13 @@ tokenLines = B.codeRollUp $ sectionRel changeSection
 tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
 tokenLinesBz = B.codeRollUpBz $ sectionRel changeSection
 
--- Line begins with the equal sign is treated as section delimter.
-start :: ChangeSection -> (S.InputText -> TokenRoll) -> TokenRollMap
-start change f r@B.CodeRoll { B.codeMap    = prev
-                            , B.codeInput  = cs0
-                            , B.codeOutput = out } = st out cs0 where
-    st [] ('=' : _) = B.codeChange (section change prev) r
-    st _ cs         = f cs
-
-section :: ChangeSection -> TokenRollMap -> TokenRollMap
-section change prev r@B.CodeRoll { B.codeInputPt  = cp
-                                 , B.codeInput    = cs0
-                                 , B.codeWords    = ws
-                                 } = sec cs0 where
-    v      = scan r
-    vw     = scanW r
-    out    = reverse $ S.sweepToken $ B.codeOutput r
-    --toPrev = B.codeChange prev
-
-    sec ""               = dispatch out  -- end of line
-    sec ('*' : '*' : _)  = dispatch out  -- end of effective text
-    sec ccs@(c:cs)
-        | isSpace c      = v  $ scanSpace  cp cs
-        | isSymbol c     = vw $ scanSymbol cp ws ccs
-        | otherwise      = sectionUnexp [] r
-
-    dispatch :: [S.Token] -> TokenRoll
-    dispatch [S.TTextSect _] = B.codeChange prev r
-    dispatch ts@[S.TTextSect _, S.TTextRaw _ name] =
-        case change name of
-          Just ch -> ch r
-          Nothing -> sectionUnexp ts r
-    dispatch ts    = sectionUnexp ts r
-
-changeSection :: ChangeSection
+changeSection :: S.ChangeSection
 changeSection name =
     case name of
       "rel"      -> Just $ B.codeChange $ sectionRel changeSection
-      "note"     -> Just $ B.codeChange $ sectionNote changeSection
-      "end"      -> Just $ B.codeChange sectionEnd
-      "license"  -> Just $ B.codeChange $ sectionLicense changeSection
+      "note"     -> Just $ B.codeChange $ S.sectionNote changeSection
+      "end"      -> Just $ B.codeChange S.sectionEnd
+      "license"  -> Just $ B.codeChange $ S.sectionLicense changeSection
       "local"    -> Just $ sectionUnsupported "local section"
       "attr"     -> Just $ sectionUnsupported "attr section"
       "text"     -> Just $ sectionUnsupported "text section"
@@ -111,42 +69,9 @@ changeSection name =
       "data"     -> Just $ sectionUnsupported "data section"
       _          -> Nothing
 
-sectionUnsupported :: String -> TokenRollMap
+sectionUnsupported :: String -> S.TokenRollMap
 sectionUnsupported msg r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
-    cp   = B.codeInputPt r
-
-sectionUnexp :: [S.Token] -> TokenRollMap
-sectionUnexp ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
-    tok  = S.unknownToken cp cs $ Msg.unexpSect help
-    cp | null ts    = B.codeInputPt r
-       | otherwise  = B.codePt $ head ts
-    help = [ "=== rel      for relational calculation"
-           , "=== note     for commentary section"
-           , "=== license  for license section"
-           , "=== end      for ending of input" ]
-
--- Tokenizer for end section.
-sectionEnd :: TokenRollMap
-sectionEnd r@B.CodeRoll { B.codeInput = cs } = comment cs r
-
--- Tokenizer for note section.
-sectionNote :: ChangeSection -> TokenRollMap
-sectionNote change r = start change (`comment` r) r
-
-sectionLicense :: ChangeSection -> TokenRollMap
-sectionLicense change r = start change (`textLicense` r) r
-
-comment :: S.InputText -> TokenRollMap
-comment "" r = r
-comment cs r = B.codeUpdate "" tok r where
-    tok  = S.TComment cp cs
-    cp   = B.codeInputPt r
-
-textLicense :: S.InputText -> TokenRollMap
-textLicense "" r = r
-textLicense cs r = B.codeUpdate "" tok r where
-    tok  = S.TText cp S.TextLicense cs
     cp   = B.codeInputPt r
 
 
@@ -164,11 +89,11 @@ uncons3 z f = first where
     third a b bs []         = f 2 a b z bs [] []
 
 -- | Split a next token from source text.
-sectionRel :: ChangeSection -> TokenRollMap
+sectionRel :: S.ChangeSection -> S.TokenRollMap
 sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
-    v              = scan r
-    vw             = scanW r
+    v              = S.scan r
+    vw             = S.scanW r
     up             = u ""
     u   cs tok     = B.codeUpdate cs tok r
     int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok r
@@ -178,10 +103,10 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
 
     -- ----------------------  dispatch
 
-    r' = start change (uncons3 '\0' dispatch) r
+    r' = S.section change (uncons3 '\0' dispatch) r
 
     dispatch n a b c bs cs ds
-        | isSpace a              = v               $ scanSpace    cp bs
+        | S.isSpace a            = v               $ S.scanSpace  cp bs
         | isTerm a               = vw              $ scanTermPath cp wtab bs
         | isPM a && isTerm b     = vw              $ scanTermSign (sign a) cp wtab cs
         | isQQ a                 = v               $ scanQQ      cp bs
@@ -206,7 +131,7 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
                                  = up              $ S.TComment   cp bs
 
         | isSingle a             = u bs            $ S.TTextRaw   cp [a]
-        | isSymbol a             = vw              $ scanSymbol  cp wtab $ a : bs
+        | S.isSymbol a           = vw              $ S.scanSymbol cp wtab $ a : bs
         | n == 0                 = r
         | otherwise              = u []            $ S.unknownToken cp cs
                                                    $ Msg.forbiddenInput $ S.angleQuote [a]
@@ -225,13 +150,13 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     aster cs w
         | w == "**"           = up              $ S.TComment cp cs
         | w == "***"          = up              $ S.TComment cp cs
-        | otherwise           = vw              $ scanSymbol cp wtab $ w ++ cs
+        | otherwise           = vw              $ S.scanSymbol cp wtab $ w ++ cs
 
     -- ----------------------  begin with "^"
 
     -- read local reference, like ^/g
     hat ('/' : cs)                   = localToken cs S.LocalNest
-    hat cs@(c : _) | isSymbol c      = localToken cs S.LocalSymbol
+    hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
     hat cs                           = u [] $ S.unknownToken cp cs $ Msg.adlib "local"
 
     localToken cs k                  = case S.nextSymbolPlain cs of
@@ -243,14 +168,14 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     bar (c:cs) w
         | c == '|'                   = bar cs (c:w)
         | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && isSymbol c     = clock cs [c, '|']
+        | w == "|" && S.isSymbol c   = clock cs [c, '|']
     bar cs w                         = let cs' = B.trimLeft cs
                                        in u cs'        $ S.TTextRaw cp w
 
     -- read judgement sign, like |--, |-x
     judge (c:cs) w
         | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | isSymbol c                 = clock (c:cs) w
+        | S.isSymbol c               = clock (c:cs) w
     judge cs w                       = u cs            $ S.TTextBar cp $ rv w
 
     -- read clock, like |03:30|
@@ -267,7 +192,7 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     -- read keyword, like <crlf>
     angleMid (c:cs) w
         | c == '>'                   = u cs            $ angleToken $ rv w
-        | isSymbol c                 = angleMid cs (c:w)
+        | S.isSymbol c               = angleMid cs (c:w)
     angleMid cs w                    = u cs            $ S.TTextRaw cp $ '<' : rv w
 
     angleToken ""                    = S.TTextRaw cp "<>"
@@ -283,22 +208,22 @@ charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
-interp :: ChangeSection -> TokenRollMap
+interp :: S.ChangeSection -> S.TokenRollMap
 interp change r@B.CodeRoll { B.codeInputPt = cp
-                           , B.codeWords = wtab } = start change int r where
+                           , B.codeWords = wtab } = S.section change int r where
 
-    v           = scan r
-    vw          = scanW r
+    v           = S.scan r
+    vw          = S.scanW r
     u   cs tok  = B.codeUpdate cs tok r
     gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok r
 
     int ""                           = r
-    int (c:cs)    | isSpace c        = v         $ scanSpace    cp cs
+    int (c:cs)    | S.isSpace c      = v         $ S.scanSpace  cp cs
                   | isTerm c         = vw        $ scanTermPath cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs    $ S.TTextRaw cp $ rv w
-    word (c:cs) w | isSpace c        = u (c:cs)  $ S.TTextRaw cp $ rv w
+    word (c:cs) w | S.isSpace c      = u (c:cs)  $ S.TTextRaw cp $ rv w
                   | isTerm c         = u (c:cs)  $ S.TTextRaw cp $ rv w
                   | otherwise        = word cs   $ c:w
     word cs w                        = u cs      $ S.TTextRaw cp $ rv w
@@ -306,57 +231,24 @@ interp change r@B.CodeRoll { B.codeInputPt = cp
 
 -- ----------------------  Scanner
 
-type Scan  = B.CodePt -> S.InputText -> (S.InputText, S.Token)
-type ScanW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
-
 rv :: B.Map [a]
 rv = reverse
 
-scan :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
-scan r (cs, tok) = B.codeUpdate cs tok r
-
--- Scan with word table.
-scanW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
-scanW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
-
-symbolToken :: (B.CodePt -> String -> S.Token) -> String -> ScanW
-symbolToken k w cp wtab cs =
-    case Map.lookup w wtab of
-         Just w' -> (wtab, cs, k cp w')
-         Nothing -> let wtab' = Map.insert w w wtab
-                    in (wtab', cs, k cp w)
-
-scanSymbol :: ScanW
-scanSymbol cp wtab cs =
-    let (cs', sym) = S.nextSymbol cs
-    in case sym of
-         S.SymbolShort pre w  -> (wtab, cs', S.TShort cp pre w)
-         S.SymbolCommon w     -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolGeneral w    -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolPlain w      -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolNumeric w    -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolUnknown w    -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
-
-scanSpace :: Scan
-scanSpace cp cs =
-    let (cs', n) = S.nextSpace cs
-    in (cs', S.TSpace cp $ n + 1)
-
-scanQ :: ScanW
+scanQ :: S.ScanW
 scanQ cp wtab cs =
     case S.nextSymbolPlain cs of
-      Right (cs', w) -> symbolToken S.TTextQ w cp wtab cs'
+      Right (cs', w) -> S.symbolToken S.TTextQ w cp wtab cs'
       Left a         -> (wtab, [], S.TUnknown cp cs a)
           
 
 -- | Scan double-quoted text.
-scanQQ :: Scan
+scanQQ :: S.Scan
 scanQQ cp cs = case S.nextQQ cs of
                   Right (cs', w) -> (cs', S.TTextQQ cp w)
                   Left a         -> ([], S.TUnknown cp cs a)
 
 -- | Scan slot name, like @aaa.
-scanSlot :: Int -> Scan
+scanSlot :: Int -> S.Scan
 scanSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
@@ -364,23 +256,23 @@ scanSlot n cp cs =
       
 
 -- | Scan signed term name
-scanTermSign :: Ordering -> ScanW
+scanTermSign :: Ordering -> S.ScanW
 scanTermSign = scanTerm S.TermTypePath
 
 -- | Scan term name
-scanTermPath :: ScanW
+scanTermPath :: S.ScanW
 scanTermPath = scanTerm S.TermTypePath EQ
 
 -- | Scan quoted term
-scanTermQ :: ScanW
+scanTermQ :: S.ScanW
 scanTermQ = scanTerm S.TermTypeQuoted EQ
 
 -- Scan term name or term path
-scanTerm :: S.TermType -> Ordering -> ScanW
+scanTerm :: S.TermType -> Ordering -> S.ScanW
 scanTerm q sign cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
-        | isSymbol c    = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
+        | S.isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
         | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
     word _ _            = (wtab, [], S.unknownToken cp cs0 Msg.expOrdSym)
     call e f            = case e of
@@ -414,11 +306,6 @@ isQQ       = (    ==  '"'      )  -- Punctuation
 isTerm     = (    ==  '/'      )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
-isSymbol, isSpace, isShort :: B.Pred Char
-isSymbol   = S.isSymbolChar
-isSpace    = Ch.isSpace
-isShort    = Ch.isAlpha
-
 isFigure :: B.Pred Char
 isFigure c     = c == '-' || Ch.isDigit c
 
@@ -426,7 +313,7 @@ isClock :: B.Pred Char
 isClock c      = Ch.isDigit c || c `elem` ".:'+-"
 
 isShortPrefix, isCharCode :: B.Pred String
-isShortPrefix  = all isShort
+isShortPrefix  = all S.isShort
 isCharCode     = all isFigure
 
 
