@@ -5,13 +5,13 @@ about /package 'base
 |-- DIR  /code 14   /comment 4    /dir "base/Koshucode/Baala"
 |-- DIR  /code 84   /comment 29   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 114  /comment 85   /dir "base/Koshucode/Baala/Base/Abort"
-|-- DIR  /code 370  /comment 213  /dir "base/Koshucode/Baala/Base/IO"
+|-- DIR  /code 373  /comment 215  /dir "base/Koshucode/Baala/Base/IO"
 |-- DIR  /code 544  /comment 631  /dir "base/Koshucode/Baala/Base/List"
 |-- DIR  /code 216  /comment 207  /dir "base/Koshucode/Baala/Base/Prelude"
-|-- DIR  /code 336  /comment 225  /dir "base/Koshucode/Baala/Base/Syntax"
+|-- DIR  /code 331  /comment 222  /dir "base/Koshucode/Baala/Base/Syntax"
 |-- DIR  /code 666  /comment 505  /dir "base/Koshucode/Baala/Base/Text"
 
-|-- DIR-TOTAL  /code 2344  /comment 1899
+|-- DIR-TOTAL  /code 2342  /comment 1898
 
 |-- FILE  /code 14   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -21,10 +21,10 @@ about /package 'base
 |-- FILE  /code 51   /comment 36   /file "Report.hs"      /dir "base/Koshucode/Baala/Base/Abort"
 |-- FILE  /code 14   /comment 4    /file "IO.hs"          /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 27   /comment 18   /file "BzFile.hs"      /dir "base/Koshucode/Baala/Base/IO"
-|-- FILE  /code 57   /comment 33   /file "CodePt.hs"      /dir "base/Koshucode/Baala/Base/IO"
+|-- FILE  /code 61   /comment 37   /file "CodePt.hs"      /dir "base/Koshucode/Baala/Base/IO"
 |-- FILE  /code 54   /comment 32   /file "Exit.hs"        /dir "base/Koshucode/Baala/Base/IO"
-|-- FILE  /code 81   /comment 19   /file "Http.hs"        /dir "base/Koshucode/Baala/Base/IO"
-|-- FILE  /code 80   /comment 45   /file "IOPoint.hs"     /dir "base/Koshucode/Baala/Base/IO"
+|-- FILE  /code 81   /comment 18   /file "Http.hs"        /dir "base/Koshucode/Baala/Base/IO"
+|-- FILE  /code 79   /comment 44   /file "IOPoint.hs"     /dir "base/Koshucode/Baala/Base/IO"
 |-- FILE  /code 71   /comment 66   /file "SimpleOption.hs"  /dir "base/Koshucode/Baala/Base/IO"
 |-- FILE  /code 16   /comment 3    /file "List.hs"        /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 142  /comment 156  /file "Assoc.hs"       /dir "base/Koshucode/Baala/Base/List"
@@ -42,11 +42,11 @@ about /package 'base
 |-- FILE  /code 46   /comment 25   /file "Pair.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 31   /comment 50   /file "Queue.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 10   /comment 6    /file "Syntax.hs"      /dir "base/Koshucode/Baala/Base"
-|-- FILE  /code 25   /comment 20   /file "Clause.hs"      /dir "base/Koshucode/Baala/Base/Syntax"
+|-- FILE  /code 24   /comment 19   /file "Clause.hs"      /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 68   /comment 50   /file "Infix.hs"       /dir "base/Koshucode/Baala/Base/Syntax"
-|-- FILE  /code 125  /comment 75   /file "Line.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
+|-- FILE  /code 122  /comment 74   /file "Line.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 15   /comment 10   /file "Message.hs"     /dir "base/Koshucode/Baala/Base/Syntax"
-|-- FILE  /code 103  /comment 70   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
+|-- FILE  /code 102  /comment 69   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 18   /comment 3    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 36   /comment 24   /file "Comment.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 51   /comment 40   /file "LineBreak.hs"   /dir "base/Koshucode/Baala/Base/Text"
@@ -57,4 +57,4 @@ about /package 'base
 |-- FILE  /code 103  /comment 40   /file "Unicode.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 59   /comment 45   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Text"
 
-|-- FILE-TOTAL  /code 2344  /comment 1899
+|-- FILE-TOTAL  /code 2342  /comment 1898
