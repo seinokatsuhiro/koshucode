@@ -10,7 +10,7 @@ module Koshucode.Baala.Syntax.Token.Section
     -- * Simple sections
     sectionEnd, sectionNote, sectionLicense,
 
-    -- * Scanner
+    -- * Splitter
     Scan, ScanW,
     scan, scanW,
     scanSpace,
@@ -113,32 +113,39 @@ sectionLicense change r = section change license r where
 
 -- --------------------------------------------  Scanner
 
+-- | Split next token.
 type Scan  = B.CodePt -> S.InputText -> (S.InputText, S.Token)
+
+-- | Split next token with word table.
 type ScanW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
 
+-- | Update token scanner.
 scan :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
 scan r (cs, tok) = B.codeUpdate cs tok r
 
--- Scan with word table.
+-- | Update token scanner with word table.
 scanW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
 scanW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
+-- | Split space token.
 scanSpace :: Scan
 scanSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
 
+-- | Split symbolic token.
 scanSymbol :: ScanW
 scanSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
          S.SymbolShort pre w  -> (wtab, cs', S.TShort cp pre w)
-         S.SymbolCommon w     -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolGeneral w    -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolPlain w      -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolNumeric w    -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolUnknown w    -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
+         S.SymbolCommon    w  -> symbolToken S.TTextRaw w cp wtab cs'
+         S.SymbolGeneral   w  -> symbolToken S.TTextRaw w cp wtab cs'
+         S.SymbolPlain     w  -> symbolToken S.TTextRaw w cp wtab cs'
+         S.SymbolNumeric   w  -> symbolToken S.TTextRaw w cp wtab cs'
+         S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
+-- | Create symbolic token.
 symbolToken :: (B.CodePt -> String -> S.Token) -> String -> ScanW
 symbolToken k w cp wtab cs =
     case Map.lookup w wtab of
@@ -146,7 +153,11 @@ symbolToken k w cp wtab cs =
          Nothing -> let wtab' = Map.insert w w wtab
                     in (wtab', cs, k cp w)
 
-isSymbol, isSpace :: B.Pred Char
-isSymbol   = S.isSymbolChar
-isSpace    = Ch.isSpace
+-- | Test character is symbolic.
+isSymbol :: B.Pred Char
+isSymbol = S.isSymbolChar
+
+-- | Test character is space.
+isSpace :: B.Pred Char
+isSpace = Ch.isSpace
 

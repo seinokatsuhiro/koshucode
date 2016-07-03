@@ -117,15 +117,18 @@ lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 
 -- ----------------------  CodeRoll
 
+-- | Collected words.
 type WordTable = Map.Map String String
 
-data CodeRoll a =
-    CodeRoll { codeMap     :: B.Map (CodeRoll a)
-             , codeInputPt :: B.CodePt
-             , codeInput   :: String
-             , codeOutput  :: [a]
-             , codeWords   :: WordTable
-             }
+-- | Code scanner splits input text into tokens
+--   and collects these tokens.
+data CodeRoll a = CodeRoll
+     { codeMap     :: B.Map (CodeRoll a)   -- ^ Updater
+     , codeInputPt :: B.CodePt             -- ^ Code point
+     , codeInput   :: String               -- ^ Input text
+     , codeOutput  :: [a]                  -- ^ Output tokens
+     , codeWords   :: WordTable            -- ^ Collected words
+     }
 
 -- | Split source text into 'CodeLine' list.
 --
@@ -142,6 +145,7 @@ data CodeRoll a =
 codeRollUp :: B.Map (CodeRoll a) -> B.NIOPoint -> String -> [CodeLine a]
 codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
 
+-- | Lazy bytestring version of 'codeRollUp'.
 codeRollUpBz :: B.Map (CodeRoll a) -> B.NIOPoint -> B.Bz -> [CodeLine a]
 codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
