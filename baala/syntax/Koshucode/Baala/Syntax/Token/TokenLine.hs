@@ -118,20 +118,29 @@ end r@B.CodeRoll { B.codeInput = cs } = comment r cs
 
 -- Tokenizer for note section.
 note :: B.AbMap TokenRoll
-note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
+note = Right . note'
+
+note' :: B.Map TokenRoll
+note' r@B.CodeRoll { B.codeInputPt = cp } = start' (comment' r) cp r
 
 license :: B.AbMap TokenRoll
-license r@B.CodeRoll { B.codeInputPt = cp } = start (textLicense r) cp r
+license = Right . license'
+
+license' :: B.Map TokenRoll
+license' r@B.CodeRoll { B.codeInputPt = cp } = start' (textLicense' r) cp r
 
 comment :: TokenRoll -> S.InputText -> B.Ab TokenRoll
-comment r "" = Right r
-comment r cs = Right $ B.codeUpdate "" tok r where
+comment r cs = Right $ comment' r cs
+
+comment' :: TokenRoll -> S.InputText -> TokenRoll
+comment' r "" = r
+comment' r cs = B.codeUpdate "" tok r where
     tok  = S.TComment cp cs
     cp   = B.codeInputPt r
 
-textLicense :: TokenRoll -> S.InputText -> B.Ab TokenRoll
-textLicense r "" = Right r
-textLicense r cs = Right $ B.codeUpdate "" tok r where
+textLicense' :: TokenRoll -> S.InputText -> TokenRoll
+textLicense' r "" = r
+textLicense' r cs = B.codeUpdate "" tok r where
     tok  = S.TText cp S.TextLicense cs
     cp   = B.codeInputPt r
 
