@@ -14,6 +14,7 @@ module Koshucode.Baala.Syntax.Token.Utility
     isShortToken, isTermToken,
     isOpenToken, isCloseToken,
     isOpenTokenOf, isCloseTokenOf,
+    isUnknownToken,
   ) where
 
 import qualified Koshucode.Baala.Base                as B
@@ -112,6 +113,11 @@ isBlankToken _                    = False
 -- | Remove blank tokens.
 sweepToken :: B.Map [S.Token]
 sweepToken = B.omit isBlankToken
+
+-- | Test token is unknown.
+isUnknownToken :: B.Pred S.Token
+isUnknownToken (S.TUnknown _ _ _) = True
+isUnknownToken _                  = False
 
 -- | Test token is short-type token.
 isShortToken :: B.Pred S.Token

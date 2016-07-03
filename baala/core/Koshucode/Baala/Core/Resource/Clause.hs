@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Line-like token-level structure of source code.
@@ -115,26 +114,16 @@ consClause resAbout sec = loop h0 . S.tokenClauses where
 consClauseEach :: [S.Token] -> ClauseHead -> (Clause, ClauseHead)
 consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
-    -- ----------------------  Utility
-
     rslt = case tokens of
-             Right ts -> dispatch ts
-             Left tok@(S.TUnknown _ _ a)
-                      -> (unkClause $ unk [tok] $ Left a, h)
-             Left tok@(S.TShort _ pre _)
-                      -> (unkClause $ unk [tok] $ Msg.unresPrefix pre, h)
-             Left tok -> (unkClause $ unk [tok] $ Msg.bug "short", h)
+             Right ts                    -> dispatch ts
+             Left tok@(S.TUnknown _ _ a) -> unkClause [tok] $ Left a
+             Left tok@(S.TShort _ pre _) -> unkClause [tok] $ Msg.unresPrefix pre
+             Left tok                    -> unkClause [tok] $ Msg.bug "clause"
 
-    original = B.clauseTokens src
-    unks     = filter isUnknown original
-    tokens | B.notNull unks = Left $ head unks
-           | B.notNull sh   = unshorten `mapM` original
-           | otherwise      = case filter S.isShortToken original of
-                                []       -> Right original
-                                tok : _  -> Left tok
-
-    isUnknown (S.TUnknown _ _ _) = True
-    isUnknown _                  = False
+    tokens | B.notNull unks   = Left $ head unks      -- include unknown tokens
+           | B.notNull sh     = mapM unshorten orig   -- unshorten short tokens
+           | B.notNull shorts = Left $ head shorts    -- include short tokens
+           | otherwise        = Right orig
 
     unshorten :: S.Token -> Either S.Token S.Token
     unshorten t@(S.TShort n pre b) = case lookup pre sh of
@@ -142,10 +131,17 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                                        Nothing -> Left t
     unshorten t = Right t
 
+    -- ----------------------  Utility
+
+    orig           = B.clauseTokens src
+    checks         = filter checkToken orig
+    unks           = filter S.isUnknownToken checks
+    shorts         = filter S.isShortToken checks
+    checkToken t   = S.isUnknownToken t || S.isShortToken t
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
     empty          = CBodies []
-    unkClause a    = Clause h $ CUnknown a
+    unkClause ts a = clause $ CUnknown $ unk ts a
 
     -- ----------------------  Clause dispatcher
 
@@ -176,10 +172,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     newAbout about'       = (Clause h empty, h { clauseAbout = about' })
 
     -- Error messages
-    unk ts msg     = let cp = B.codePtList $ B.headNull (head original) ts
+    unk ts msg     = let cp = B.codePtList $ B.headNull (head orig) ts
                      in Msg.abClause cp msg
     unkAt ts xs    = unk ts $ Msg.unkClause xs
-    unkAtStart     = unkAt original
+    unkAtStart     = unkAt orig
     unkEEA e f a   = unkAtStart $ Msg.expect2Actual e f a
 
     -- ----------------------  Judgement or assertion
@@ -238,7 +234,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
               prefix          = B.duplicates pre
               replace         = B.duplicates rep
               invalid         = B.omit S.isShortPrefix pre
-              abort msg       = CUnknown $ unk original msg
+              abort msg       = CUnknown $ unk orig msg
 
     -- Others
     expt (S.TText _ _ n : S.TText _ _ ":" : xs)
