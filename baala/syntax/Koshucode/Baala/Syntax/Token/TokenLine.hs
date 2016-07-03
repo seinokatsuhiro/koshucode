@@ -43,6 +43,9 @@ type TokenLine = B.CodeLine S.Token
 -- | Code roll for token.
 type TokenRoll = B.CodeRoll S.Token
 
+-- | Read single token.
+type TokenRollMap = B.Map TokenRoll
+
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
 tokens :: B.NIOPoint -> S.InputText -> [S.Token]
@@ -60,21 +63,21 @@ tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
 tokenLinesBz = B.codeRollUpBz relation
 
 -- Line begins with the equal sign is treated as section delimter.
-start :: (S.InputText -> TokenRoll) -> B.CodePt -> TokenRoll -> TokenRoll
-start f _ r@B.CodeRoll { B.codeMap    = prev
-                         , B.codeInput  = cs0
-                         , B.codeOutput = out } = st out cs0 where
+start :: (S.InputText -> TokenRoll) -> TokenRollMap
+start f r@B.CodeRoll { B.codeMap    = prev
+                     , B.codeInput  = cs0
+                     , B.codeOutput = out } = st out cs0 where
     st [] ('=' : _) = B.codeChange (section prev) r
     st _ cs         = f cs
 
-section :: B.Map TokenRoll -> B.Map TokenRoll
+section :: TokenRollMap -> TokenRollMap
 section prev r@B.CodeRoll { B.codeInputPt  = cp
                           , B.codeInput    = cs0
                           , B.codeWords    = ws
                           } = sec cs0 where
-    v    = scan r
-    vw   = scanW r
-    out  = reverse $ S.sweepToken $ B.codeOutput r
+    v      = scan r
+    vw     = scanW r
+    out    = reverse $ S.sweepToken $ B.codeOutput r
     toPrev = B.codeChange prev
 
     sec ""                    = dispatch out  -- end of line
@@ -100,12 +103,12 @@ section prev r@B.CodeRoll { B.codeInputPt  = cp
           _          -> toPrev $ unexpSect ts r
     dispatch ts       = toPrev $ unexpSect ts r
 
-unsupported :: String -> B.Map TokenRoll
+unsupported :: String -> TokenRollMap
 unsupported msg r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r
 
-unexpSect :: [S.Token] -> B.Map TokenRoll
+unexpSect :: [S.Token] -> TokenRollMap
 unexpSect ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp | null ts    = B.codeInputPt r
@@ -116,25 +119,25 @@ unexpSect ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
            , "=== end      for ending of input" ]
 
 -- Tokenizer for end section.
-end :: B.Map TokenRoll
-end r@B.CodeRoll { B.codeInput = cs } = comment r cs
+end :: TokenRollMap
+end r@B.CodeRoll { B.codeInput = cs } = comment cs r
 
 -- Tokenizer for note section.
-note :: B.Map TokenRoll
-note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
+note :: TokenRollMap
+note r = start (`comment` r) r
 
-license :: B.Map TokenRoll
-license r@B.CodeRoll { B.codeInputPt = cp } = start (textLicense r) cp r
+license :: TokenRollMap
+license r = start (`textLicense` r) r
 
-comment :: TokenRoll -> S.InputText -> TokenRoll
-comment r "" = r
-comment r cs = B.codeUpdate "" tok r where
+comment :: S.InputText -> TokenRollMap
+comment "" r = r
+comment cs r = B.codeUpdate "" tok r where
     tok  = S.TComment cp cs
     cp   = B.codeInputPt r
 
-textLicense :: TokenRoll -> S.InputText -> TokenRoll
-textLicense r "" = r
-textLicense r cs = B.codeUpdate "" tok r where
+textLicense :: S.InputText -> TokenRollMap
+textLicense "" r = r
+textLicense cs r = B.codeUpdate "" tok r where
     tok  = S.TText cp S.TextLicense cs
     cp   = B.codeInputPt r
 
@@ -153,7 +156,7 @@ uncons3 z f = first where
     third a b bs []         = f 2 a b z bs [] []
 
 -- | Split a next token from source text.
-relation :: B.Map TokenRoll
+relation :: TokenRollMap
 relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
     v              = scan r
@@ -167,7 +170,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
     -- ----------------------  dispatch
 
-    r' = start (uncons3 '\0' dispatch) cp r
+    r' = start (uncons3 '\0' dispatch) r
 
     dispatch n a b c bs cs ds
         | isSpace a              = v               $ scanSpace    cp bs
@@ -272,8 +275,8 @@ charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
-interp :: B.Map TokenRoll
-interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int cp r where
+interp :: TokenRollMap
+interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = start int r where
 
     v           = scan r
     vw          = scanW r
