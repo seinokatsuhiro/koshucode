@@ -19,7 +19,7 @@ module Koshucode.Baala.Syntax.Token.TokenLine
     -- ** Asterisks
     -- $Asterisks
   
-    -- * Examples
+    -- ** Examples
     -- $Examples
   ) where
 
@@ -487,27 +487,40 @@ isCharCode     = all isFigure
 --
 --  Words and quotations.
 --
---  >>> tokens "aa\n'bb'\n\"cc\""
---  [ TText 1 0 "aa", TText 2 1 "bb", TText 3 1 "", TText 4 2 "cc" ]
+--  >>> toks $ unlines ["aa", "'bb'", "\"cc\""]
+--  [ TText <I0-L1-C0> TextRaw "aa"
+--  , TText <I0-L2-C0> TextQ "bb"
+--  , TText <I0-L2-C3> TextQ ""
+--  , TText <I0-L3-C0> TextQQ "cc" ]
 --
 --  Judgement.
 --
---  >>> tokens "|-- R  /a A0 /b 31"
---  [ TText 1 0 "|", TText 2 0 "--", TSpace 3 1, TText 4 0 "R"
---  , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TText 8 0 "A0"
---  , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TText 12 0 "31" ]
+--  >>> toks "|-- R  /a A0 /b 31"
+--  [ TText <I0-L1-C0> TextBar "|--", TSpace <I0-L1-C3> 1
+--  , TText <I0-L1-C4> TextRaw "R", TSpace <I0-L1-C5> 2
+--  , TTermN <I0-L1-C7> EQ "a", TSpace <I0-L1-C9> 1
+--  , TText <I0-L1-C10> TextRaw "A0", TSpace <I0-L1-C12> 1
+--  , TTermN <I0-L1-C13> EQ "b", TSpace <I0-L1-C15> 1
+--  , TText <I0-L1-C16> TextRaw "31" ]
 --
 --  Brackets.
 --
---  >>> tokens "aa (bb x y (z))"
---  [ TText 1 0 "aa", TSpace 2 1
---  , TOpen 3 "(", TText 4 0 "bb", TSpace 5 1
---     , TText 6 0 "x", TSpace 7 1, TText 8 0 "y", TSpace 9 1
---     , TOpen 10 "(", TText 11 0 "z", TClose 12 ")", TClose 13 ")" ]
+--  >>> toks "aa (bb x y (z))"
+--  [ TText <I0-L1-C0> TextRaw "aa"
+--  , TSpace <I0-L1-C2> 1
+--  , TOpen <I0-L1-C3> "("
+--    , TText <I0-L1-C4> TextRaw "bb", TSpace <I0-L1-C6> 1
+--    , TText <I0-L1-C7> TextRaw "x", TSpace <I0-L1-C8> 1
+--    , TText <I0-L1-C9> TextRaw "y", TSpace <I0-L1-C10> 1
+--    , TOpen <I0-L1-C11> "("
+--      , TText <I0-L1-C12> TextRaw "z"
+--    , TClose <I0-L1-C13> ")"
+--  , TClose <I0-L1-C14> ")" ]
 --
 --  A comment.
 --
---  >>> tokens "abc ** this is a comment\ndef\n"
---  [ TText 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment"
---  , TText 4 0 "def"]
+--  >>> toks $ unlines ["abc ** this is a comment", "def",""]
+--  [ TText <I0-L1-C0> TextRaw "abc", TSpace <I0-L1-C3> 1
+--  , TComment <I0-L1-C4> " this is a comment"
+--  , TText <I0-L2-C0> TextRaw "def" ]
 --

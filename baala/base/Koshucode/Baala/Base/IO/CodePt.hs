@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.IO.CodePt
@@ -19,12 +20,21 @@ import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 -- ----------------------  CodePt
 
+-- | Point of input code.
 data CodePt = CodePt
       { codePtSource     :: B.NIOPoint  -- ^ Source of code
       , codePtLineNo     :: Int         -- ^ Line number
       , codePtLineText   :: String      -- ^ Line content
       , codePtText       :: String      -- ^ Text at which begins token
-      } deriving (Show, Eq)
+      } deriving (Eq)
+
+-- | Number of input point, line number, and column number,
+--   e.g., @\<I1-L6-C14\>@.
+instance Show CodePt where
+    show cp = "<I" ++ show (B.nioNumber $ codePtSource cp)
+              ++ "-L" ++ show (codePtLineNo cp)
+              ++ "-C" ++ show (codePtColumnNo cp)
+              ++ ">"
 
 instance Ord CodePt where
     compare = codePtCompare
