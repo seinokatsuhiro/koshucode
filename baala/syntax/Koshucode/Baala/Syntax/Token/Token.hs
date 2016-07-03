@@ -68,6 +68,8 @@ data Token
                 -- ^ 10) Comment — @**@/text/
     | TName     B.CodePt BlankName
                 -- ^ 11) Blank name. (This is used in building content expression)
+    | TUnknown  B.CodePt String
+                -- ^ 12) Unknown token.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | @\"text\"@, @\"open\"@, ...
@@ -83,6 +85,7 @@ instance SubtypeString Token where
      subtypeString (TSpace    _ _    ) = "space"
      subtypeString (TComment  _ _    ) = "comment"
      subtypeString (TName     _ _    ) = "name"
+     subtypeString (TUnknown  _ _    ) = "unknown"
 
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
@@ -105,6 +108,7 @@ instance B.CodePtr Token where
     codePtList (TSpace   cp _)      = [cp]
     codePtList (TComment cp _)      = [cp]
     codePtList (TName    cp _)      = [cp]
+    codePtList (TUnknown cp _)      = [cp]
 
 instance B.PPrint Token where
     pprint = d where
@@ -119,6 +123,7 @@ instance B.PPrint Token where
         d (TSpace     cp c)      = pretty "TSpace"   cp [show c]
         d (TComment   cp s)      = pretty "TComment" cp [show s]
         d (TName      cp w)      = pretty "TName"    cp [show w]
+        d (TUnknown   cp w)      = pretty "TUnknown" cp [show w]
 
         pretty k cp xs         = B.pprintH $ lineCol cp : k : xs
         lineCol cp             = (show $ B.codePtLineNo cp)
