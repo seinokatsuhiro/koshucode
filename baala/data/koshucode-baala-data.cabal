@@ -93,10 +93,7 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                    == 4.*
-       , blaze-html              == 0.*
        , containers              == 0.5.*
-       , pretty                  == 1.*
-       , syb                     == 0.*
        , time                    == 1.*
        , koshucode-baala-base    == 0.153.*
        , koshucode-baala-syntax  == 0.153.*

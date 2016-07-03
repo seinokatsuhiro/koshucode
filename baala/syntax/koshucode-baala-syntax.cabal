@@ -87,7 +87,6 @@ library
          base                  == 4.*
        , containers            == 0.5.*
        , pretty                == 1.*
-       , syb                   == 0.*
        , koshucode-baala-base  == 0.153.*
 
   ghc-options:         -Wall

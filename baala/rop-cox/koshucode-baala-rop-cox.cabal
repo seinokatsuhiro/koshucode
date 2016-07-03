@@ -65,7 +65,6 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                        == 4.*
-       , containers                  == 0.5.*
        , koshucode-baala-base        == 0.153.*
        , koshucode-baala-syntax      == 0.153.*
        , koshucode-baala-data        == 0.153.*
