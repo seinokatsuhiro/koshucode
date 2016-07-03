@@ -5,8 +5,8 @@
 
 module Koshucode.Baala.Base.Text.PPrint
   ( PPrint (..),
-    doch, docv,
-    docWraps,
+    pprintH, pprintV,
+    pprintWraps,
   ) where
 
 import qualified Text.PrettyPrint                 as Pr
@@ -15,49 +15,49 @@ import qualified Koshucode.Baala.Base.List        as B
 
 -- | Convert to 'B.Doc' pretty printer.
 class PPrint a where
-    doc :: a -> B.Doc
+    pprint :: a -> B.Doc
 
 -- | No conversion.
 instance PPrint B.Doc where
-    doc = id
+    pprint = id
 
 -- | 'Int' printer, same as 'Pr.int'.
 instance PPrint Int where
-    doc = Pr.int
+    pprint = Pr.int
 
 -- | 'Integer' printer, same as 'Pr.integer'.
 instance PPrint Integer where
-    doc = Pr.integer
+    pprint = Pr.integer
 
 -- | 'String' printer, same as 'Pr.text'.
 instance PPrint String where
-    doc = Pr.text
+    pprint = Pr.text
 
 -- | Concatenate docs horizontally with space, same as 'Pr.hsep'.
 --
---   >>> doch ["abc", "def"]
+--   >>> pprintH ["abc", "def"]
 --   abc def
 
-doch :: (PPrint a) => [a] -> B.Doc
-doch = Pr.hsep . map doc
+pprintH :: (PPrint a) => [a] -> B.Doc
+pprintH = Pr.hsep . map pprint
 
 -- | Concatenate docs vertically, same as 'Pr.vcat'.
 --
---   >>> docv ["abc", "def"]
+--   >>> pprintV ["abc", "def"]
 --   abc
 --   def
 
-docv :: (PPrint a) => [a] -> B.Doc
-docv = Pr.vcat . map doc
+pprintV :: (PPrint a) => [a] -> B.Doc
+pprintV = Pr.vcat . map pprint
 
 -- | Wrap doc with open and close docs.
 --
---   >>> docWraps "(" ")" "abc"
+--   >>> pprintWraps "(" ")" "abc"
 --   ( abc )
 
-docWraps :: (PPrint a, PPrint b) => a -> a -> b -> B.Doc
-docWraps = docWrapBody (B.<+>)
+pprintWraps :: (PPrint a, PPrint b) => a -> a -> b -> B.Doc
+pprintWraps = pprintWrapBody (B.<+>)
 
-docWrapBody :: (PPrint a, PPrint b) => B.Bin B.Doc -> a -> a -> b -> B.Doc
-docWrapBody p open close a = doc open `p` doc a `p` doc close
+pprintWrapBody :: (PPrint a, PPrint b) => B.Bin B.Doc -> a -> a -> b -> B.Doc
+pprintWrapBody p open close a = pprint open `p` pprint a `p` pprint close
 

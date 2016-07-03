@@ -111,18 +111,18 @@ typeToMix = wf where
 typeExplain :: Type -> B.Doc
 typeExplain ty =
     case ty of
-      TypeList     t  -> B.doc "list"   B.<+> typeExplain t
-      TypeSet      t  -> B.doc "set"    B.<+> typeExplain t
-      TypeTag  tag t  -> B.doc "tag"    B.<+> B.doc (tag ++ ":") B.<+> typeExplain t
-      TypeTie     ts  -> B.doc "tie"    B.<+> vmap term ts
-      TypeRel     ts  -> B.doc "rel"    B.<+> vmap term ts
-      TypeTuple   ts  -> B.doc "tuple"  B.<+> vmap (item ":") ts
-      TypeSum     ts  -> B.doc "sum"    B.<+> vmap (item "|") ts
-      _               -> B.doc $ B.mixToFlatString $ B.mixEncode ty
+      TypeList     t  -> B.pprint "list"   B.<+> typeExplain t
+      TypeSet      t  -> B.pprint "set"    B.<+> typeExplain t
+      TypeTag  tag t  -> B.pprint "tag"    B.<+> B.pprint (tag ++ ":") B.<+> typeExplain t
+      TypeTie     ts  -> B.pprint "tie"    B.<+> vmap term ts
+      TypeRel     ts  -> B.pprint "rel"    B.<+> vmap term ts
+      TypeTuple   ts  -> B.pprint "tuple"  B.<+> vmap (item ":") ts
+      TypeSum     ts  -> B.pprint "sum"    B.<+> vmap (item "|") ts
+      _               -> B.pprint $ B.mixToFlatString $ B.mixEncode ty
     where
-      term (n,t)  =  B.doc ('/' : n) B.<+> typeExplain t
-      item i t    =  B.doc i B.<+> typeExplain t
-      vmap f      =  B.docv . map f
+      term (n,t)  =  B.pprint ('/' : n) B.<+> typeExplain t
+      item i t    =  B.pprint i B.<+> typeExplain t
+      vmap f      =  B.pprintV . map f
 
 -- | Encode term types.
 typeTermMix :: Type -> B.MixText

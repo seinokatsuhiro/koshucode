@@ -55,14 +55,14 @@ ttPrint s = case tt s of
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: S.TTreesTo B.Doc
 ttDoc = dv where
-    dv = B.docv . map d
-    d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x
+    dv = B.pprintV . map d
+    d (B.TreeL x) = B.pprint "TreeL :" B.<+> B.pprint x
     d (B.TreeB n pp xs) =
-        let treeB = B.doch ["TreeB", show n] B.<+> brackets pp
+        let treeB = B.pprintH ["TreeB", show n] B.<+> brackets pp
         in P.hang treeB 2 (dv xs)
 
-    brackets Nothing = B.doc "no brackets"
-    brackets (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc close]
+    brackets Nothing = B.pprint "no brackets"
+    brackets (Just (open, close)) = B.pprintH [B.pprint ":", B.pprint open, B.pprint close]
 
 
 -- --------------------------------------------  Split and divide

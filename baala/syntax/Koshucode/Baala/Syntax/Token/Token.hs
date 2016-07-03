@@ -107,7 +107,7 @@ instance B.CodePtr Token where
     codePtList (TName    cp _)      = [cp]
 
 instance B.PPrint Token where
-    doc = d where
+    pprint = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
         d (TTermN     cp _ n)    = pretty "TTermN"   cp [show n]
@@ -120,7 +120,7 @@ instance B.PPrint Token where
         d (TComment   cp s)      = pretty "TComment" cp [show s]
         d (TName      cp w)      = pretty "TName"    cp [show w]
 
-        pretty k cp xs         = B.doch $ lineCol cp : k : xs
+        pretty k cp xs         = B.pprintH $ lineCol cp : k : xs
         lineCol cp             = (show $ B.codePtLineNo cp)
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
 
