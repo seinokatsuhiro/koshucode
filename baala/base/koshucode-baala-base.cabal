@@ -84,6 +84,7 @@ library
         Koshucode.Baala.Base.Syntax.Infix
         Koshucode.Baala.Base.Syntax.Line
         Koshucode.Baala.Base.Syntax.Message
+        Koshucode.Baala.Base.Syntax.Scan
         Koshucode.Baala.Base.Syntax.Tree
 
         Koshucode.Baala.Base.Text
