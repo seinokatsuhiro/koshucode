@@ -22,10 +22,10 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 -- --------------------------------------------
 
-type ChangeSection = String -> Maybe S.TokenRollMap
+type ChangeSection = String -> Maybe S.TokenScanMap
 
 -- Line begins with the equal sign is treated as section delimter.
-section :: ChangeSection -> (S.InputText -> S.TokenRoll) -> S.TokenRollMap
+section :: ChangeSection -> (S.InputText -> S.TokenScan) -> S.TokenScanMap
 section change f
         sc@B.CodeScan { B.codeMap    = prev
                       , B.codeInput  = cs0
@@ -33,7 +33,7 @@ section change f
     body [] ('=' : _) = B.codeChange (selectSection change prev) sc
     body _ cs         = f cs
 
-selectSection :: ChangeSection -> S.TokenRollMap -> S.TokenRollMap
+selectSection :: ChangeSection -> S.TokenScanMap -> S.TokenScanMap
 selectSection change prev
               sc@B.CodeScan { B.codeInputPt  = cp
                             , B.codeInput    = cs0
@@ -51,7 +51,7 @@ selectSection change prev
         | S.isSymbol c   = nipw $ S.nipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
 
-    dispatch :: [S.Token] -> S.TokenRoll
+    dispatch :: [S.Token] -> S.TokenScan
     dispatch [S.TTextSect _] = B.codeChange prev sc
     dispatch ts@[S.TTextSect _, S.TTextRaw _ name] =
         case change name of
@@ -59,7 +59,7 @@ selectSection change prev
           Nothing -> sectionUnexp ts sc
     dispatch ts    = sectionUnexp ts sc
 
-sectionUnexp :: [S.Token] -> S.TokenRollMap
+sectionUnexp :: [S.Token] -> S.TokenScanMap
 sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp | null ts    = B.codeInputPt sc
@@ -73,21 +73,21 @@ sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc wher
 -- --------------------------------------------  Simple sections
 
 -- | Tokenizer for end section.
-sectionEnd :: S.TokenRollMap
+sectionEnd :: S.TokenScanMap
 sectionEnd sc@B.CodeScan { B.codeInput = cs } = comment cs sc
 
 -- | Tokenizer for note section.
-sectionNote :: ChangeSection -> S.TokenRollMap
+sectionNote :: ChangeSection -> S.TokenScanMap
 sectionNote change sc = section change (`comment` sc) sc
 
-comment :: S.InputText -> S.TokenRollMap
+comment :: S.InputText -> S.TokenScanMap
 comment "" sc = sc
 comment cs sc = B.codeUpdate "" tok sc where
     tok  = S.TComment cp cs
     cp   = B.codeInputPt sc
 
 -- | Tokenizer for license section.
-sectionLicense :: ChangeSection -> S.TokenRollMap
+sectionLicense :: ChangeSection -> S.TokenScanMap
 sectionLicense change sc = section change license sc where
     license "" = sc
     license cs = B.codeUpdate "" tok sc where

@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Syntax.Token.Nipper
   ( -- * Type
-    TokenRoll, TokenRollMap,
+    TokenScan, TokenScanMap,
     TokenNip, TokenNipW,
 
     -- * Utility
@@ -42,10 +42,10 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 -- --------------------------------------------  Type
 
 -- | Code roll for token.
-type TokenRoll = B.CodeScan String S.Token
+type TokenScan = B.CodeScan String S.Token
 
 -- | Read single token.
-type TokenRollMap = B.Map TokenRoll
+type TokenScanMap = B.Map TokenScan
 
 -- | Nip off a next token.
 type TokenNip = B.CodePt -> S.InputText -> (S.InputText, S.Token)
@@ -76,11 +76,11 @@ isTerm = ( == '/' )
 -- --------------------------------------------  Nipper
 
 -- | Update token scanner by nipper result.
-nipUpdate :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
+nipUpdate :: TokenScan -> (S.InputText, S.Token) -> TokenScan
 nipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by nipper result with word table.
-nipUpdateW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
+nipUpdateW :: TokenScan -> (B.WordTable, S.InputText, S.Token) -> TokenScan
 nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 -- ----------------------  Textual

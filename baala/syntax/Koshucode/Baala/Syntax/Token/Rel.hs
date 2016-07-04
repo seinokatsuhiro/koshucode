@@ -44,7 +44,7 @@ rv :: B.Map [a]
 rv = reverse
 
 -- | Split a next token from source text.
-sectionRel :: S.ChangeSection -> S.TokenRollMap
+sectionRel :: S.ChangeSection -> S.TokenScanMap
 sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
     nip            = S.nipUpdate  sc
@@ -160,7 +160,7 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc'
                             Nothing  -> S.TTextUnk cp s
 
 -- interpretation content between {| and |}
-interp :: S.ChangeSection -> S.TokenRollMap
+interp :: S.ChangeSection -> S.TokenScanMap
 interp change sc@B.CodeScan { B.codeInputPt = cp
                             , B.codeWords = wtab } = S.section change int sc where
 

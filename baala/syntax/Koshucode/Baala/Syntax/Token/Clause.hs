@@ -86,7 +86,7 @@ changeSection name =
       "data"     -> Just $ sectionUnsupported "data section"
       _          -> Nothing
 
-sectionUnsupported :: String -> S.TokenRollMap
+sectionUnsupported :: String -> S.TokenScanMap
 sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r
