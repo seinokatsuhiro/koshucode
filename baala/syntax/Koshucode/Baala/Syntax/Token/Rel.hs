@@ -41,20 +41,20 @@ uncons3 z f = first where
 
 -- | Split a next token from source text.
 sectionRel :: S.ChangeSection -> S.TokenRollMap
-sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' where
+sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' where
 
-    v              = S.scan r
-    vw             = S.scanW r
+    v              = S.scan  sc
+    vw             = S.scanW sc
     up             = u ""
-    u   cs tok     = B.codeUpdate cs tok r
-    int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok r
+    u   cs tok     = B.codeUpdate cs tok sc
+    int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok sc
 
     sign '+'       = GT
     sign  _        = LT
 
     -- ----------------------  dispatch
 
-    r' = S.section change (uncons3 '\0' dispatch) r
+    r' = S.section change (uncons3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
         | S.isSpace a            = v               $ S.nipSpace  cp bs
@@ -83,7 +83,7 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
 
         | isSingle a             = u bs            $ S.TTextRaw   cp [a]
         | S.isSymbol a           = vw              $ S.nipSymbol cp wtab $ a : bs
-        | n == 0                 = r
+        | n == 0                 = sc
         | otherwise              = u []            $ S.unknownToken cp cs
                                                    $ Msg.forbiddenInput $ S.angleQuote [a]
 
@@ -160,15 +160,15 @@ charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 -- interpretation content between {| and |}
 interp :: S.ChangeSection -> S.TokenRollMap
-interp change r@B.CodeRoll { B.codeInputPt = cp
-                           , B.codeWords = wtab } = S.section change int r where
+interp change sc@B.CodeScan { B.codeInputPt = cp
+                            , B.codeWords = wtab } = S.section change int sc where
 
-    v           = S.scan r
-    vw          = S.scanW r
-    u   cs tok  = B.codeUpdate cs tok r
-    gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok r
+    v           = S.scan  sc
+    vw          = S.scanW sc
+    u   cs tok  = B.codeUpdate cs tok sc
+    gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok sc
 
-    int ""                           = r
+    int ""                           = sc
     int (c:cs)    | S.isSpace c      = v         $ S.nipSpace   cp cs
                   | isTerm c         = vw        $ nipTermPath  cp wtab cs
                   | otherwise        = word (c:cs) ""

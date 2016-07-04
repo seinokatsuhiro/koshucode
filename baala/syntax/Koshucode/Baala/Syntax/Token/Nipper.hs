@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 -- --------------------------------------------  Type
 
 -- | Code roll for token.
-type TokenRoll = B.CodeRoll S.Token
+type TokenRoll = B.CodeScan S.Token
 
 -- | Read single token.
 type TokenRollMap = B.Map TokenRoll

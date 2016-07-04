@@ -67,10 +67,10 @@ toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
-tokenLines = B.codeRollUp $ S.sectionRel changeSection
+tokenLines = B.codeScanUp $ S.sectionRel changeSection
 
 tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
-tokenLinesBz = B.codeRollUpBz $ S.sectionRel changeSection
+tokenLinesBz = B.codeScanUpBz $ S.sectionRel changeSection
 
 changeSection :: S.ChangeSection
 changeSection name =
@@ -87,7 +87,7 @@ changeSection name =
       _          -> Nothing
 
 sectionUnsupported :: String -> S.TokenRollMap
-sectionUnsupported msg r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
+sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r where
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r
 

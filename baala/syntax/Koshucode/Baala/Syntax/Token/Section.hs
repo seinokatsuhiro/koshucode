@@ -27,21 +27,21 @@ type ChangeSection = String -> Maybe S.TokenRollMap
 -- Line begins with the equal sign is treated as section delimter.
 section :: ChangeSection -> (S.InputText -> S.TokenRoll) -> S.TokenRollMap
 section change f
-        r@B.CodeRoll { B.codeMap    = prev
-                     , B.codeInput  = cs0
-                     , B.codeOutput = out } = st out cs0 where
-    st [] ('=' : _) = B.codeChange (selectSection change prev) r
-    st _ cs         = f cs
+        sc@B.CodeScan { B.codeMap    = prev
+                      , B.codeInput  = cs0
+                      , B.codeOutput = out } = body out cs0 where
+    body [] ('=' : _) = B.codeChange (selectSection change prev) sc
+    body _ cs         = f cs
 
 selectSection :: ChangeSection -> S.TokenRollMap -> S.TokenRollMap
 selectSection change prev
-              r@B.CodeRoll { B.codeInputPt  = cp
-                           , B.codeInput    = cs0
-                           , B.codeWords    = ws
-                           } = sec cs0 where
-    v      = S.scan r
-    vw     = S.scanW r
-    out    = reverse $ S.sweepToken $ B.codeOutput r
+              sc@B.CodeScan { B.codeInputPt  = cp
+                            , B.codeInput    = cs0
+                            , B.codeWords    = ws
+                            } = sec cs0 where
+    v      = S.scan  sc
+    vw     = S.scanW sc
+    out    = reverse $ S.sweepToken $ B.codeOutput sc
     --toPrev = B.codeChange prev
 
     sec ""               = dispatch out  -- end of line
@@ -49,20 +49,20 @@ selectSection change prev
     sec ccs@(c:cs)
         | S.isSpace c    = v  $ S.nipSpace  cp cs
         | S.isSymbol c   = vw $ S.nipSymbol cp ws ccs
-        | otherwise      = sectionUnexp [] r
+        | otherwise      = sectionUnexp [] sc
 
     dispatch :: [S.Token] -> S.TokenRoll
-    dispatch [S.TTextSect _] = B.codeChange prev r
+    dispatch [S.TTextSect _] = B.codeChange prev sc
     dispatch ts@[S.TTextSect _, S.TTextRaw _ name] =
         case change name of
-          Just ch -> ch r
-          Nothing -> sectionUnexp ts r
-    dispatch ts    = sectionUnexp ts r
+          Just ch -> ch sc
+          Nothing -> sectionUnexp ts sc
+    dispatch ts    = sectionUnexp ts sc
 
 sectionUnexp :: [S.Token] -> S.TokenRollMap
-sectionUnexp ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
+sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
-    cp | null ts    = B.codeInputPt r
+    cp | null ts    = B.codeInputPt sc
        | otherwise  = B.codePt $ head ts
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
@@ -74,23 +74,23 @@ sectionUnexp ts r@B.CodeRoll { B.codeInput = cs } = B.codeUpdate "" tok r where
 
 -- | Tokenizer for end section.
 sectionEnd :: S.TokenRollMap
-sectionEnd r@B.CodeRoll { B.codeInput = cs } = comment cs r
+sectionEnd sc@B.CodeScan { B.codeInput = cs } = comment cs sc
 
 -- | Tokenizer for note section.
 sectionNote :: ChangeSection -> S.TokenRollMap
-sectionNote change r = section change (`comment` r) r
+sectionNote change sc = section change (`comment` sc) sc
 
 comment :: S.InputText -> S.TokenRollMap
-comment "" r = r
-comment cs r = B.codeUpdate "" tok r where
+comment "" sc = sc
+comment cs sc = B.codeUpdate "" tok sc where
     tok  = S.TComment cp cs
-    cp   = B.codeInputPt r
+    cp   = B.codeInputPt sc
 
 -- | Tokenizer for license section.
 sectionLicense :: ChangeSection -> S.TokenRollMap
-sectionLicense change r = section change license r where
-    license "" = r
-    license cs = B.codeUpdate "" tok r where
+sectionLicense change sc = section change license sc where
+    license "" = sc
+    license cs = B.codeUpdate "" tok sc where
         tok  = S.TText cp S.TextLicense cs
-        cp   = B.codeInputPt r
+        cp   = B.codeInputPt sc
 
