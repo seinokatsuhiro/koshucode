@@ -23,7 +23,8 @@ module Koshucode.Baala.Base.Text.MixText
     mixOct, mixDec, mixHex, mixSign,
     mixDecZero, mixNumZero,
     -- ** Newline
-    mixLine, mixSoft, mixHard,
+    mixLine, mixLines,
+    mixSoft, mixHard,
     -- ** Other
     mixShow, mixEmpty,
 
@@ -233,6 +234,10 @@ mixSign n = case compare n 0 of
 mixLine :: MixText -> MixText
 mixLine = (<> mixHard)
 
+-- | Append line break to each mix texts.
+mixLines :: [MixText] -> MixText
+mixLines = mconcat . map mixLine
+
 -- | Soft line break, i.e., suppress at the beginning of line.
 mixSoft :: MixText
 mixSoft = MixNewline False
@@ -305,7 +310,7 @@ putMixLines lb = hPutMixLines lb IO.stdout
 
 -- | Print mix text lines to the given output handler.
 hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
-hPutMixLines lb h = mapM_ $ hPutMixLn lb h
+hPutMixLines lb h = hPutMixLn lb h . mixLines
 
 -- | Write mix text to a file.
 writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()
