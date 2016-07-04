@@ -7,18 +7,26 @@ module Koshucode.Baala.Syntax.Token.Nipper
     TokenRoll, TokenRollMap,
     TokenNip, TokenNipW,
 
+    -- * Utility
+    isSymbol,
+    isSpace,
+    isQQ,
+    isTerm,
+
     -- * Nipper
-    scan, scanW,
+    -- ** Updater
+    nipUpdate, nipUpdateW,
+    -- ** Textual
     nipSpace,
+    nipQ, nipQQ,
+    -- ** Identifier
     nipSymbol,
     symbolToken,
-    nipQ, nipQQ,
     nipSlot,
+    -- ** Term name
     nipTermSign,
     nipTermPath,
     nipTermQ,
-    isSymbol,
-    isSpace,
   ) where
 
 import qualified Data.Map                               as Map
@@ -46,21 +54,58 @@ type TokenNip = B.CodePt -> S.InputText -> (S.InputText, S.Token)
 type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
 
 
+-- --------------------------------------------  Utility
+
+-- | Test character is symbolic.
+isSymbol :: B.Pred Char
+isSymbol = S.isSymbolChar
+
+-- | Test character is space.
+isSpace :: B.Pred Char
+isSpace = Ch.isSpace
+
+-- | Test character is double-quote.
+isQQ :: B.Pred Char
+isQQ = ( == '"' )
+
+-- | Test character is term slash.
+isTerm :: B.Pred Char
+isTerm = ( == '/' )
+
+
 -- --------------------------------------------  Nipper
 
 -- | Update token scanner by nipper result.
-scan :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
-scan r (cs, tok) = B.codeUpdate cs tok r
+nipUpdate :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
+nipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by nipper result with word table.
-scanW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
-scanW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
+nipUpdateW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
+nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
+
+-- ----------------------  Textual
 
 -- | Nip off space token.
 nipSpace :: TokenNip
 nipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
+
+-- | Nip off a single-quoted text.
+nipQ :: TokenNipW
+nipQ cp wtab cs =
+    case S.nextSymbolPlain cs of
+      Right (cs', w) -> symbolToken S.TTextQ w cp wtab cs'
+      Left a         -> (wtab, [], S.TUnknown cp cs a)
+          
+
+-- | Nip off a double-quoted text.
+nipQQ :: TokenNip
+nipQQ cp cs = case S.nextQQ cs of
+                Right (cs', w) -> (cs', S.TTextQQ cp w)
+                Left a         -> ([], S.TUnknown cp cs a)
+
+-- ----------------------  Identifier
 
 -- | Nip off symbolic token.
 nipSymbol :: TokenNipW
@@ -82,26 +127,14 @@ symbolToken k w cp wtab cs =
          Nothing -> let wtab' = Map.insert w w wtab
                     in (wtab', cs, k cp w)
 
--- | Nip off a single-quoted text.
-nipQ :: TokenNipW
-nipQ cp wtab cs =
-    case S.nextSymbolPlain cs of
-      Right (cs', w) -> symbolToken S.TTextQ w cp wtab cs'
-      Left a         -> (wtab, [], S.TUnknown cp cs a)
-          
-
--- | Nip off a double-quoted text.
-nipQQ :: TokenNip
-nipQQ cp cs = case S.nextQQ cs of
-                Right (cs', w) -> (cs', S.TTextQQ cp w)
-                Left a         -> ([], S.TUnknown cp cs a)
-
--- | Nip off a slot name, like @aaa.
+-- | Nip off a slot name, like @\@foo@.
 nipSlot :: Int -> TokenNip
 nipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
       Left a         -> ([], S.TUnknown cp cs a)
+
+-- ----------------------  Term
 
 -- | Nip off a signed term name.
 nipTermSign :: Ordering -> TokenNipW
@@ -138,17 +171,4 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
                            Nothing -> let wtab' = Map.insert n n wtab
                                       in (wtab', cs, S.TTermN cp sign n)
     term ns cs         = (wtab, cs, S.TTerm cp q $ reverse ns)
-
--- | Test character is symbolic.
-isSymbol :: B.Pred Char
-isSymbol = S.isSymbolChar
-
--- | Test character is space.
-isSpace :: B.Pred Char
-isSpace = Ch.isSpace
-
--- Punctuations
-isQQ, isTerm :: B.Pred Char
-isQQ       = ( ==  '"'  )  -- Punctuation
-isTerm     = ( ==  '/'  )  -- Punctuation
 

@@ -37,12 +37,18 @@ uncons3 z f = first where
     third a b bs cs@(c:ds)  = f 3 a b c bs cs ds
     third a b bs []         = f 2 a b z bs [] []
 
+charCodes :: S.InputText -> Maybe [Int]
+charCodes = mapM B.readInt . B.omit null . B.divide '-'
+
+rv :: B.Map [a]
+rv = reverse
+
 -- | Split a next token from source text.
 sectionRel :: S.ChangeSection -> S.TokenRollMap
-sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' where
+sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
-    v              = S.scan  sc
-    vw             = S.scanW sc
+    nip            = S.nipUpdate  sc
+    nipw           = S.nipUpdateW sc
     up             = u ""
     u   cs tok     = B.codeUpdate cs tok sc
     int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok sc
@@ -52,15 +58,15 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
 
     -- ----------------------  dispatch
 
-    r' = S.section change (uncons3 '\0' dispatch) sc
+    sc' = S.section change (uncons3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
-        | S.isSpace a            = v               $ S.nipSpace    cp bs
-        | isTerm a               = vw              $ S.nipTermPath cp wtab bs
-        | isPM a && isTerm b     = vw              $ S.nipTermSign (sign a) cp wtab cs
-        | isQQ a                 = v               $ S.nipQQ       cp bs
-        | isQ a && isTerm b      = vw              $ S.nipTermQ    cp wtab cs
-        | isQ a                  = vw              $ S.nipQ        cp wtab bs
+        | S.isSpace a            = nip             $ S.nipSpace    cp bs
+        | S.isTerm a             = nipw            $ S.nipTermPath cp wtab bs
+        | isPM a && S.isTerm b   = nipw            $ S.nipTermSign (sign a) cp wtab cs
+        | S.isQQ a               = nip             $ S.nipQQ       cp bs
+        | isQ a && S.isTerm b    = nipw            $ S.nipTermQ    cp wtab cs
+        | isQ a                  = nipw            $ S.nipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
                                  = u ds            $ S.TTextRaw   cp [a,b,c]
@@ -80,7 +86,7 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
                                  = up              $ S.TComment   cp bs
 
         | isSingle a             = u bs            $ S.TTextRaw   cp [a]
-        | S.isSymbol a           = vw              $ S.nipSymbol cp wtab $ a : bs
+        | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
         | n == 0                 = sc
         | otherwise              = u []            $ S.unknownToken cp cs
                                                    $ Msg.forbiddenInput $ S.angleQuote [a]
@@ -88,8 +94,8 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
     -- ----------------------  begin with "@"
 
     at (c:cs) n | c == '@'    = at cs           $ n + 1
-                | c == '\''   = v               $ S.nipSlot 0 cp cs  -- positional
-    at cs n                   = v               $ S.nipSlot n cp cs
+                | c == '\''   = nip             $ S.nipSlot 0 cp cs  -- positional
+    at cs n                   = nip             $ S.nipSlot n cp cs
 
     -- ----------------------  begin with "*"
 
@@ -99,7 +105,7 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
     aster cs w
         | w == "**"           = up              $ S.TComment cp cs
         | w == "***"          = up              $ S.TComment cp cs
-        | otherwise           = vw              $ S.nipSymbol cp wtab $ w ++ cs
+        | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
 
     -- ----------------------  begin with "^"
 
@@ -153,46 +159,38 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
                             Just w   -> S.TTextKey cp w
                             Nothing  -> S.TTextUnk cp s
 
-charCodes :: S.InputText -> Maybe [Int]
-charCodes = mapM B.readInt . B.omit null . B.divide '-'
-
-rv :: B.Map [a]
-rv = reverse
-
 -- interpretation content between {| and |}
 interp :: S.ChangeSection -> S.TokenRollMap
 interp change sc@B.CodeScan { B.codeInputPt = cp
                             , B.codeWords = wtab } = S.section change int sc where
 
-    v           = S.scan  sc
-    vw          = S.scanW sc
-    u   cs tok  = B.codeUpdate cs tok sc
+    nip         = S.nipUpdate  sc
+    nipw        = S.nipUpdateW sc
+    upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok sc
 
     int ""                           = sc
-    int (c:cs)    | S.isSpace c      = v         $ S.nipSpace    cp cs
-                  | isTerm c         = vw        $ S.nipTermPath cp wtab cs
+    int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
+                  | S.isTerm c       = nipw        $ S.nipTermPath cp wtab cs
                   | otherwise        = word (c:cs) ""
 
-    word cs@('|':'}':_) w            = gen cs    $ S.TTextRaw cp $ rv w
-    word (c:cs) w | S.isSpace c      = u (c:cs)  $ S.TTextRaw cp $ rv w
-                  | isTerm c         = u (c:cs)  $ S.TTextRaw cp $ rv w
-                  | otherwise        = word cs   $ c:w
-    word cs w                        = u cs      $ S.TTextRaw cp $ rv w
+    word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w
+    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ S.TTextRaw cp $ rv w
+                  | S.isTerm c       = upd (c:cs)  $ S.TTextRaw cp $ rv w
+                  | otherwise        = word cs     $ c:w
+    word cs w                        = upd cs      $ S.TTextRaw cp $ rv w
 
 
 -- ----------------------  Char category
 
 -- Punctuations
-isOpen, isClose, isGrip, isJudge, isSingle, isQ, isQQ, isTerm, isPM :: B.Pred Char
+isOpen, isClose, isGrip, isJudge, isSingle, isQ, isPM :: B.Pred Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
 isJudge    = ( `elem` "-="     )  -- Punctuation | Symbol
 isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
-isQQ       = (    ==  '"'      )  -- Punctuation
-isTerm     = (    ==  '/'      )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
 isFigure :: B.Pred Char

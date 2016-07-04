@@ -39,16 +39,16 @@ selectSection change prev
                             , B.codeInput    = cs0
                             , B.codeWords    = ws
                             } = sec cs0 where
-    v      = S.scan  sc
-    vw     = S.scanW sc
+    nip    = S.nipUpdate  sc
+    nipw   = S.nipUpdateW sc
     out    = reverse $ S.sweepToken $ B.codeOutput sc
     --toPrev = B.codeChange prev
 
     sec ""               = dispatch out  -- end of line
     sec ('*' : '*' : _)  = dispatch out  -- end of effective text
     sec ccs@(c:cs)
-        | S.isSpace c    = v  $ S.nipSpace  cp cs
-        | S.isSymbol c   = vw $ S.nipSymbol cp ws ccs
+        | S.isSpace c    = nip  $ S.nipSpace  cp cs
+        | S.isSymbol c   = nipw $ S.nipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
 
     dispatch :: [S.Token] -> S.TokenRoll
