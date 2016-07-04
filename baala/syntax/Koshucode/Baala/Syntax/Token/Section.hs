@@ -88,14 +88,12 @@ scanNote change sc = section change (`comment` sc) sc
 comment :: S.InputText -> S.TokenScanMap
 comment "" sc = sc
 comment cs sc = B.codeUpdate "" tok sc where
-    tok  = S.TComment cp cs
-    cp   = B.codeInputPt sc
+    tok = S.TComment (B.codePt sc) cs
 
 -- | Scan tokens in @license@ section.
 scanLicense :: Scanner
 scanLicense change sc = section change license sc where
     license "" = sc
     license cs = B.codeUpdate "" tok sc where
-        tok  = S.TText cp S.TextLicense cs
-        cp   = B.codeInputPt sc
+        tok = S.TText (B.codePt sc) S.TextLicense cs
 

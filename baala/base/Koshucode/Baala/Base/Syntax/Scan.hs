@@ -27,6 +27,11 @@ data CodeScan i o = CodeScan
      , codeWords   :: WordTable        -- ^ Collected words
      }
 
+-- | Return 'codeInputPt'.
+instance B.CodePtr (CodeScan i o) where
+    codePtList cp = [codeInputPt cp]
+    codePt     cp = codeInputPt cp
+
 -- | Update code scanner.
 type CodeScanMap i o = B.Map (CodeScan i o)
 
