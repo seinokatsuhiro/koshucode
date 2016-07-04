@@ -19,16 +19,16 @@ import qualified Koshucode.Baala.Base.Syntax.Line     as B
 
 
 -- | Code scanner divides input text into output tokens.
-data CodeScan a = CodeScan
-     { codeMap     :: CodeScanMap a   -- ^ Updater
-     , codeInputPt :: B.CodePt        -- ^ Code point
-     , codeInput   :: String          -- ^ Input text
-     , codeOutput  :: [a]             -- ^ Output tokens
-     , codeWords   :: WordTable       -- ^ Collected words
+data CodeScan i o = CodeScan
+     { codeMap     :: CodeScanMap i o  -- ^ Updater
+     , codeInputPt :: B.CodePt         -- ^ Code point
+     , codeInput   :: i                -- ^ Input text
+     , codeOutput  :: [o]              -- ^ Output tokens
+     , codeWords   :: WordTable        -- ^ Collected words
      }
 
 -- | Update code scanner.
-type CodeScanMap a = B.Map (CodeScan a)
+type CodeScanMap i o = B.Map (CodeScan i o)
 
 -- | Collected words.
 type WordTable = Map.Map String String
@@ -45,14 +45,14 @@ type WordTable = Map.Map String String
 --   3. Tokenize each lines,
 --      and put tokens together in 'B.CodeLine'.
 
-codeScanUp :: CodeScanMap a -> B.NIOPoint -> String -> [B.CodeLine a]
+codeScanUp :: CodeScanMap String o -> B.NIOPoint -> String -> [B.CodeLine o]
 codeScanUp f nio = codeScanUpLines f nio . B.linesCrlfNumbered
 
 -- | Lazy bytestring version of 'codeScanUp'.
-codeScanUpBz :: CodeScanMap a -> B.NIOPoint -> B.Bz -> [B.CodeLine a]
+codeScanUpBz :: CodeScanMap String o -> B.NIOPoint -> B.Bz -> [B.CodeLine o]
 codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
-codeScanUpLines :: CodeScanMap a -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine a]
+codeScanUpLines :: CodeScanMap String o -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
 codeScanUpLines f nio = loop (CodeScan f cp "" [] Map.empty) where
     cp    = B.def { B.codePtSource = nio }
 
@@ -70,13 +70,13 @@ setCodePt num line cp =
        , B.codePtLineText  = line
        , B.codePtText      = line }
 
-setScan :: B.CodePt -> String -> CodeScan a -> CodeScan a
+setScan :: B.CodePt -> i -> CodeScan i o -> CodeScan i o
 setScan cp line sc =
     sc { codeInputPt = cp
        , codeInput   = line
        , codeOutput  = [] }
 
-codeScan :: CodeScanMap a
+codeScan :: CodeScanMap String o
 codeScan sc@CodeScan { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input  = call
     | otherwise   = codeScan call
@@ -86,19 +86,19 @@ setText :: String -> B.Map B.CodePt
 setText text cp = cp { B.codePtText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.
-codeUpdate :: String -> a -> CodeScanMap a
+codeUpdate :: i -> o -> CodeScanMap i o
 codeUpdate cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc }
 
 -- | Update code scanner with word table.
-codeUpdateWords :: WordTable -> String -> a -> CodeScanMap a
+codeUpdateWords :: WordTable -> i -> o -> CodeScanMap i o
 codeUpdateWords ws cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc
        , codeWords  = ws }
 
 -- | Change mapper of code sc.
-codeChange :: CodeScanMap a -> CodeScanMap a
+codeChange :: CodeScanMap i o -> CodeScanMap i o
 codeChange f sc = sc { codeMap = f }
 
