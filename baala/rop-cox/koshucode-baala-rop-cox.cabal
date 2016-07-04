@@ -7,7 +7,7 @@ name:                koshucode-baala-rop-cox
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.154.0.0
+version:             0.155.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Relation-mapping operators with content calculations
@@ -65,9 +65,9 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                        == 4.*
-       , koshucode-baala-base        == 0.154.*
-       , koshucode-baala-syntax      == 0.154.*
-       , koshucode-baala-data        == 0.154.*
-       , koshucode-baala-core        == 0.154.*
-       , koshucode-baala-rop-flat    == 0.154.*
+       , koshucode-baala-base        == 0.155.*
+       , koshucode-baala-syntax      == 0.155.*
+       , koshucode-baala-data        == 0.155.*
+       , koshucode-baala-core        == 0.155.*
+       , koshucode-baala-rop-flat    == 0.155.*
 

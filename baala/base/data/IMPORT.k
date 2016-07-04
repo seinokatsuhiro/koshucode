@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    156 judges
+**    160 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
@@ -132,13 +132,17 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Data.ByteString.Lazy.UTF8"
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.IO"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Scan"          /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Scan"          /import "Koshucode.Baala.Base.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Scan"          /import "Koshucode.Baala.Base.Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Scan"          /import "Koshucode.Baala.Base.Syntax.Line"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Tree"          /import "Koshucode.Baala.Base.IO"
@@ -149,6 +153,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Infix"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Line"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Scan"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Tree"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
