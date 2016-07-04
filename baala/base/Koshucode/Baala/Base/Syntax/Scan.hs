@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Code scanner.
@@ -7,6 +8,8 @@ module Koshucode.Baala.Base.Syntax.Scan
     CodeScan (..), CodeScanMap, WordTable,
 
     -- * Function
+    isBol,
+    codeScanSave, codeScanRestore,
     codeScanUp, codeScanUpBz,
     codeUpdate, codeUpdateWords,
     codeChange,
@@ -20,11 +23,12 @@ import qualified Koshucode.Baala.Base.Syntax.Line     as B
 
 -- | Code scanner divides input text into output tokens.
 data CodeScan i o = CodeScan
-     { codeMap     :: CodeScanMap i o  -- ^ Updater
-     , codeInputPt :: B.CodePt         -- ^ Code point
-     , codeInput   :: i                -- ^ Input text
-     , codeOutput  :: [o]              -- ^ Output tokens
-     , codeWords   :: WordTable        -- ^ Collected words
+     { codeMapSaved :: [CodeScanMap i o]  -- ^ Saved updater
+     , codeMap      :: CodeScanMap i o    -- ^ Updater
+     , codeInputPt  :: B.CodePt           -- ^ Code point
+     , codeInput    :: i                  -- ^ Input text
+     , codeOutput   :: [o]                -- ^ Output tokens
+     , codeWords    :: WordTable          -- ^ Collected words
      }
 
 -- | Return 'codeInputPt'.
@@ -37,6 +41,22 @@ type CodeScanMap i o = B.Map (CodeScan i o)
 
 -- | Collected words.
 type WordTable = Map.Map String String
+
+-- | Test scanner at the beginning of line, i.e., no output collected.
+isBol :: CodeScan i o -> Bool
+isBol CodeScan {..} = null codeOutput
+
+-- | Save current updater.
+codeScanSave :: CodeScanMap i o
+codeScanSave sc@CodeScan { codeMapSaved = fs, codeMap = f } =
+    sc { codeMapSaved = f : fs }
+
+-- | Restore saved updater.
+codeScanRestore :: CodeScanMap i o
+codeScanRestore sc =
+    case codeMapSaved sc of
+      []      -> sc
+      f : fs  -> sc { codeMapSaved = fs, codeMap = f }
 
 -- | Split source text into 'B.CodeLine' list.
 --
@@ -58,7 +78,7 @@ codeScanUpBz :: CodeScanMap String o -> B.NIOPoint -> B.Bz -> [B.CodeLine o]
 codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
-codeScanUpLines f nio = loop (CodeScan f cp "" [] Map.empty) where
+codeScanUpLines f nio = loop (CodeScan [] f cp "" [] Map.empty) where
     cp    = B.def { B.codePtSource = nio }
 
     loop _ [] = []

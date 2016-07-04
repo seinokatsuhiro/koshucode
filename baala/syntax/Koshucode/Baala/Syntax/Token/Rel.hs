@@ -74,7 +74,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     nipw           = S.nipUpdateW sc
     up             = upd ""
     upd cs tok     = B.codeUpdate cs tok sc
-    int cs tok     = B.codeChange (scanInterp change) $ upd cs tok
+    int cs tok     = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
 
     sign '+'       = GT
     sign  _        = LT
@@ -192,7 +192,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     nip         = S.nipUpdate  sc
     nipw        = S.nipUpdateW sc
     upd cs tok  = B.codeUpdate cs tok sc
-    gen cs tok  = B.codeChange (scanRel change) $ upd cs tok
+    gen cs tok  = B.codeScanRestore $ upd cs tok
 
     int ""                           = sc
     int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
