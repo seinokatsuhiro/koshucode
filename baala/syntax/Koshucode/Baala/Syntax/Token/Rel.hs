@@ -13,7 +13,6 @@ module Koshucode.Baala.Syntax.Token.Rel
     -- $Asterisks
   ) where
 
-import qualified Data.Map                               as Map
 import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
@@ -22,7 +21,6 @@ import qualified Koshucode.Baala.Syntax.Token.Pattern   as S
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
 import qualified Koshucode.Baala.Syntax.Token.Section   as S
 import qualified Koshucode.Baala.Base.Message           as Msg
-import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 
@@ -57,12 +55,12 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
     r' = S.section change (uncons3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
-        | S.isSpace a            = v               $ S.nipSpace  cp bs
-        | isTerm a               = vw              $ nipTermPath cp wtab bs
-        | isPM a && isTerm b     = vw              $ nipTermSign (sign a) cp wtab cs
-        | isQQ a                 = v               $ nipQQ       cp bs
-        | isQ a && isTerm b      = vw              $ nipTermQ    cp wtab cs
-        | isQ a                  = vw              $ nipQ        cp wtab bs
+        | S.isSpace a            = v               $ S.nipSpace    cp bs
+        | isTerm a               = vw              $ S.nipTermPath cp wtab bs
+        | isPM a && isTerm b     = vw              $ S.nipTermSign (sign a) cp wtab cs
+        | isQQ a                 = v               $ S.nipQQ       cp bs
+        | isQ a && isTerm b      = vw              $ S.nipTermQ    cp wtab cs
+        | isQ a                  = vw              $ S.nipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
                                  = u ds            $ S.TTextRaw   cp [a,b,c]
@@ -90,8 +88,8 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
     -- ----------------------  begin with "@"
 
     at (c:cs) n | c == '@'    = at cs           $ n + 1
-                | c == '\''   = v               $ nipSlot 0 cp cs  -- positional
-    at cs n                   = v               $ nipSlot n cp cs
+                | c == '\''   = v               $ S.nipSlot 0 cp cs  -- positional
+    at cs n                   = v               $ S.nipSlot n cp cs
 
     -- ----------------------  begin with "*"
 
@@ -158,6 +156,9 @@ sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = r' 
 charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
+rv :: B.Map [a]
+rv = reverse
+
 -- interpretation content between {| and |}
 interp :: S.ChangeSection -> S.TokenRollMap
 interp change sc@B.CodeScan { B.codeInputPt = cp
@@ -169,8 +170,8 @@ interp change sc@B.CodeScan { B.codeInputPt = cp
     gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok sc
 
     int ""                           = sc
-    int (c:cs)    | S.isSpace c      = v         $ S.nipSpace   cp cs
-                  | isTerm c         = vw        $ nipTermPath  cp wtab cs
+    int (c:cs)    | S.isSpace c      = v         $ S.nipSpace    cp cs
+                  | isTerm c         = vw        $ S.nipTermPath cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs    $ S.TTextRaw cp $ rv w
@@ -178,70 +179,6 @@ interp change sc@B.CodeScan { B.codeInputPt = cp
                   | isTerm c         = u (c:cs)  $ S.TTextRaw cp $ rv w
                   | otherwise        = word cs   $ c:w
     word cs w                        = u cs      $ S.TTextRaw cp $ rv w
-
-
--- ----------------------  Nipper
-
-rv :: B.Map [a]
-rv = reverse
-
--- | Nip off a single-quoted text.
-nipQ :: S.TokenNipW
-nipQ cp wtab cs =
-    case S.nextSymbolPlain cs of
-      Right (cs', w) -> S.symbolToken S.TTextQ w cp wtab cs'
-      Left a         -> (wtab, [], S.TUnknown cp cs a)
-          
-
--- | Nip off a double-quoted text.
-nipQQ :: S.TokenNip
-nipQQ cp cs = case S.nextQQ cs of
-                Right (cs', w) -> (cs', S.TTextQQ cp w)
-                Left a         -> ([], S.TUnknown cp cs a)
-
--- | Nip off a slot name, like @aaa.
-nipSlot :: Int -> S.TokenNip
-nipSlot n cp cs =
-    case S.nextSymbolPlain cs of
-      Right (cs', w) -> (cs', S.TSlot cp n w)
-      Left a         -> ([], S.TUnknown cp cs a)
-      
-
--- | Nip off a signed term name.
-nipTermSign :: Ordering -> S.TokenNipW
-nipTermSign = nipTerm S.TermTypePath
-
--- | Nip off a term name.
-nipTermPath :: S.TokenNipW
-nipTermPath = nipTerm S.TermTypePath EQ
-
--- | Nip off a quoted term.
-nipTermQ :: S.TokenNipW
-nipTermQ = nipTerm S.TermTypeQuoted EQ
-
--- | Nip off a term name or a term path.
-nipTerm :: S.TermType -> Ordering -> S.TokenNipW
-nipTerm q sign cp wtab cs0 = word [] cs0 where
-    word ns ccs@(c:cs)
-        | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
-        | S.isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
-        | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _            = (wtab, [], S.unknownToken cp cs0 Msg.expOrdSym)
-    call e f            = case e of
-                            Right (cs', w) -> f w cs'
-                            Left a         -> (wtab, [], S.TUnknown cp cs0 a)
-
-    nterm ns w cs'      = let n  = B.nioNumber $ B.codePtSource cp
-                              w' = show n ++ ('=' : w)
-                          in term (w' : ns) cs'
-
-    term ns (c:cs) | isTerm c   = word ns cs
-    term [n] cs | q == S.TermTypePath
-                       = case Map.lookup n wtab of
-                           Just n' -> (wtab, cs, S.TTermN cp sign n')
-                           Nothing -> let wtab' = Map.insert n n wtab
-                                      in (wtab', cs, S.TTermN cp sign n)
-    term ns cs         = (wtab, cs, S.TTerm cp q $ rv ns)
 
 
 -- ----------------------  Char category
@@ -266,7 +203,6 @@ isClock c      = Ch.isDigit c || c `elem` ".:'+-"
 
 isCharCode :: B.Pred String
 isCharCode     = all isFigure
-
 
 
 -- ------------------------------------------------------------------
