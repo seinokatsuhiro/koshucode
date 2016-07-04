@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.Syntax.Line
     lineIndentPair,
 
     -- * CodeRoll
-    CodeRoll (..), WordTable,
+    CodeRoll (..), CodeRollMap, WordTable,
     codeRollUp, codeRollUpBz,
     codeUpdate, codeUpdateWords,
     codeChange,
@@ -117,18 +117,20 @@ lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 
 -- ----------------------  CodeRoll
 
--- | Collected words.
-type WordTable = Map.Map String String
-
 -- | Code scanner splits input text into tokens
 --   and collects these tokens.
 data CodeRoll a = CodeRoll
-     { codeMap     :: B.Map (CodeRoll a)   -- ^ Updater
-     , codeInputPt :: B.CodePt             -- ^ Code point
-     , codeInput   :: String               -- ^ Input text
-     , codeOutput  :: [a]                  -- ^ Output tokens
-     , codeWords   :: WordTable            -- ^ Collected words
+     { codeMap     :: CodeRollMap a   -- ^ Updater
+     , codeInputPt :: B.CodePt        -- ^ Code point
+     , codeInput   :: String          -- ^ Input text
+     , codeOutput  :: [a]             -- ^ Output tokens
+     , codeWords   :: WordTable       -- ^ Collected words
      }
+
+type CodeRollMap a = B.Map (CodeRoll a)
+
+-- | Collected words.
+type WordTable = Map.Map String String
 
 -- | Split source text into 'CodeLine' list.
 --
@@ -142,14 +144,14 @@ data CodeRoll a = CodeRoll
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
 --
-codeRollUp :: B.Map (CodeRoll a) -> B.NIOPoint -> String -> [CodeLine a]
+codeRollUp :: CodeRollMap a -> B.NIOPoint -> String -> [CodeLine a]
 codeRollUp f res = codeRollUpLines f res . linesCrlfNumbered
 
 -- | Lazy bytestring version of 'codeRollUp'.
-codeRollUpBz :: B.Map (CodeRoll a) -> B.NIOPoint -> B.Bz -> [CodeLine a]
+codeRollUpBz :: CodeRollMap a -> B.NIOPoint -> B.Bz -> [CodeLine a]
 codeRollUpBz f res = codeRollUpLines f res . linesCrlfBzNumbered
 
-codeRollUpLines :: B.Map (CodeRoll a) -> B.NIOPoint -> [NumberedLine] -> [CodeLine a]
+codeRollUpLines :: CodeRollMap a -> B.NIOPoint -> [NumberedLine] -> [CodeLine a]
 codeRollUpLines f res = loop (CodeRoll f cp "" [] Map.empty) where
     cp    = B.def { B.codePtSource = res }
 
@@ -173,7 +175,7 @@ setRoll cp line roll =
          , codeInput   = line
          , codeOutput  = [] }
 
-codeRoll :: B.Map (CodeRoll a)
+codeRoll :: CodeRollMap a
 codeRoll roll@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input  = call
     | otherwise   = codeRoll call
@@ -183,18 +185,18 @@ setText :: String -> B.Map B.CodePt
 setText text cp = cp { B.codePtText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.
-codeUpdate :: String -> a -> B.Map (CodeRoll a)
+codeUpdate :: String -> a -> CodeRollMap a
 codeUpdate cs tok roll =
     roll { codeInput  = cs
          , codeOutput = tok : codeOutput roll }
 
-codeUpdateWords :: WordTable -> String -> a -> B.Map (CodeRoll a)
+codeUpdateWords :: WordTable -> String -> a -> CodeRollMap a
 codeUpdateWords ws cs tok roll =
     roll { codeInput  = cs
          , codeOutput = tok : codeOutput roll
          , codeWords  = ws }
 
 -- | Change mapper of code roll.
-codeChange :: B.Map (CodeRoll a) -> B.Map (CodeRoll a)
+codeChange :: CodeRollMap a -> CodeRollMap a
 codeChange f roll = roll { codeMap = f }
 
