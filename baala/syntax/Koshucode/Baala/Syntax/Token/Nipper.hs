@@ -13,6 +13,8 @@ module Koshucode.Baala.Syntax.Token.Nipper
     isSpace,
     isQQ,
     isTerm,
+    isJudge,
+    isClock,
 
     -- * Nipper
     -- ** Updater
@@ -28,6 +30,8 @@ module Koshucode.Baala.Syntax.Token.Nipper
     nipTermSign,
     nipTermPath,
     nipTermQ,
+    -- ** Symbol
+    nipBar,
   ) where
 
 import qualified Data.Map                               as Map
@@ -77,6 +81,13 @@ isQQ = ( == '"' )
 isTerm :: B.Pred Char
 isTerm = ( == '/' )
 
+-- | Test character is content line, i.e., @\'-\'@ or @\'=\'@.
+isJudge :: B.Pred Char
+isJudge = ( `elem` "-=" )  -- Punctuation | Symbol
+
+-- | Test character is component of clock text.
+isClock :: B.Pred Char
+isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
 -- --------------------------------------------  Nipper
 
@@ -176,4 +187,27 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
                            Nothing -> let wtab' = Map.insert n n wtab
                                       in (wtab', cs, S.TTermN cp sign n)
     term ns cs         = (wtab, cs, S.TTerm cp q $ reverse ns)
+
+-- ----------------------  Symbol
+
+-- | Nip off token beginning with @"|"@.
+nipBar :: B.CodePt -> String -> String -> TokenNipResult
+nipBar cp = bar where
+    bar (c:cs) w
+        | c == '|'                   = bar cs (c:w)
+        | w == "|" && isJudge c      = judge cs [c, '|']
+        | w == "|" && isSymbol c     = clock cs [c, '|']
+    bar cs w                         = let cs' = B.trimLeft cs
+                                       in (cs', S.TTextRaw cp w)
+
+    -- read judgement sign, like |--, |-x
+    judge (c:cs) w
+        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
+        | isSymbol c                 = clock (c:cs) w
+    judge cs w                       = (cs, S.TTextBar cp $ reverse w)
+
+    -- read clock, like |03:30|
+    clock (c:cs) w | c == '|'        = (cs, S.TTextBar cp $ reverse (c:w))
+                   | isClock c       = clock cs (c:w)
+    clock cs w                       = (cs, S.TTextBar cp $ reverse w)
 
