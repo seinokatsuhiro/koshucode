@@ -6,8 +6,9 @@ module Koshucode.Baala.Syntax.Token.Clause
 
     -- * Token line
     TokenLine,
+    toks,
     tokenLines, tokenLinesBz,
-    tokens, toks,
+    tokenLinesBzTextAssert,
     isShortPrefix,
   
     -- * Examples
@@ -59,7 +60,7 @@ type TokenLine = B.CodeLine S.Token
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
 tokens :: B.NIOPoint -> S.InputText -> [S.Token]
-tokens res cs = concatMap B.lineTokens $ tokenLines res cs
+tokens nio cs = concatMap B.lineTokens $ tokenLines nio cs
 
 -- | Abbreviated tokenizer.
 toks :: S.InputText -> [S.Token]
@@ -67,10 +68,21 @@ toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
-tokenLines = B.codeScanUp $ S.scanRel changeSection
+tokenLines = tokenLinesWith S.scanRel
 
+-- | Tokenize lazy bytestring.
 tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
-tokenLinesBz = B.codeScanUpBz $ S.scanRel changeSection
+tokenLinesBz = tokenLinesBzWith S.scanRel
+
+-- | Tokenize lazy bytestring.
+tokenLinesBzTextAssert :: B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzTextAssert = tokenLinesBzWith S.scanTextAssert
+
+tokenLinesWith :: S.Scanner -> B.NIOPoint -> S.InputText -> [TokenLine]
+tokenLinesWith scan = B.codeScanUp $ scan changeSection
+
+tokenLinesBzWith :: S.Scanner -> B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzWith scan = B.codeScanUpBz $ scan changeSection
 
 changeSection :: S.ChangeSection
 changeSection name =
@@ -94,7 +106,7 @@ sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r
     tok  = S.unknownToken cp cs $ Msg.unsupported msg
     cp   = B.codeInputPt r
 
--- | Test strng is short prefix.
+-- | Test string is short prefix.
 isShortPrefix :: B.Pred String
 isShortPrefix  = all Ch.isAlpha
 
