@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Syntax.Token.Rel
   ( -- * Section
-    sectionRel,
+    scanRel,
+    scanInterp,
   
     -- * Token type
     -- $TokenType
@@ -24,7 +25,7 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 
--- ----------------------  Relational section
+-- ----------------------  Utility
 
 uncons3 :: a -> (Int -> a -> a -> a -> [a] -> [a] -> [a] -> b) -> [a] -> b
 uncons3 z f = first where
@@ -42,146 +43,6 @@ charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 rv :: B.Map [a]
 rv = reverse
-
--- | Split a next token from source text.
-sectionRel :: S.ChangeSection -> S.TokenScanMap
-sectionRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
-
-    nip            = S.nipUpdate  sc
-    nipw           = S.nipUpdateW sc
-    up             = u ""
-    u   cs tok     = B.codeUpdate cs tok sc
-    int cs tok     = B.codeChange (interp change) $ B.codeUpdate cs tok sc
-
-    sign '+'       = GT
-    sign  _        = LT
-
-    -- ----------------------  dispatch
-
-    sc' = S.section change (uncons3 '\0' dispatch) sc
-
-    dispatch n a b c bs cs ds
-        | S.isSpace a            = nip             $ S.nipSpace    cp bs
-        | S.isTerm a             = nipw            $ S.nipTermPath cp wtab bs
-        | isPM a && S.isTerm b   = nipw            $ S.nipTermSign (sign a) cp wtab cs
-        | S.isQQ a               = nip             $ S.nipQQ       cp bs
-        | isQ a && S.isTerm b    = nipw            $ S.nipTermQ    cp wtab cs
-        | isQ a                  = nipw            $ S.nipQ        cp wtab bs
-
-        | a == '(' && c == ')' && b `elem` "+-/=#"
-                                 = u ds            $ S.TTextRaw   cp [a,b,c]
-        | a == '{' && b == '|'   = int cs          $ S.TOpen      cp [a,b]
-        | isOpen a && isGrip b   = u cs            $ S.TOpen      cp [a,b]
-        | isGrip a && isClose b  = u cs            $ S.TClose     cp [a,b]
-        | isOpen a               = u bs            $ S.TOpen      cp [a]
-        | isClose a              = u bs            $ S.TClose     cp [a]
-
-        | a == '*'               = aster bs [a]
-        | a == '<'               = angle bs [a]
-        | a == '@'               = at    bs 1
-        | a == '|'               = bar   bs [a]
-        | a == '^'               = hat   bs
-        | a == '#' && b == '!'   = up              $ S.TComment   cp bs
-        | a == '-' && b == '*' && c == '-'
-                                 = up              $ S.TComment   cp bs
-
-        | isSingle a             = u bs            $ S.TTextRaw   cp [a]
-        | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
-        | n == 0                 = sc
-        | otherwise              = u []            $ S.unknownToken cp cs
-                                                   $ Msg.forbiddenInput $ S.angleQuote [a]
-
-    -- ----------------------  begin with "@"
-
-    at (c:cs) n | c == '@'    = at cs           $ n + 1
-                | c == '\''   = nip             $ S.nipSlot 0 cp cs  -- positional
-    at cs n                   = nip             $ S.nipSlot n cp cs
-
-    -- ----------------------  begin with "*"
-
-    aster (c:cs) w
-        | w == "****"         = u (c:cs)        $ S.TTextRaw cp w
-        | c == '*'            = aster cs (c:w)
-    aster cs w
-        | w == "**"           = up              $ S.TComment cp cs
-        | w == "***"          = up              $ S.TComment cp cs
-        | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
-
-    -- ----------------------  begin with "^"
-
-    -- read local reference, like ^/g
-    hat ('/' : cs)                   = localToken cs S.LocalNest
-    hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
-    hat cs                           = u [] $ S.unknownToken cp cs $ Msg.adlib "local"
-
-    localToken cs k                  = case S.nextSymbolPlain cs of
-                                         Right (cs', w) -> u cs' $ S.TLocal cp (k w) (-1) []
-                                         Left a         -> u []  $ S.TUnknown cp cs a
-
-    -- ----------------------  begin with "|"
-
-    bar (c:cs) w
-        | c == '|'                   = bar cs (c:w)
-        | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && S.isSymbol c   = clock cs [c, '|']
-    bar cs w                         = let cs' = B.trimLeft cs
-                                       in u cs'        $ S.TTextRaw cp w
-
-    -- read judgement sign, like |--, |-x
-    judge (c:cs) w
-        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | S.isSymbol c               = clock (c:cs) w
-    judge cs w                       = u cs            $ S.TTextBar cp $ rv w
-
-    -- read clock, like |03:30|
-    clock (c:cs) w | c == '|'        = u cs            $ S.TTextBar cp $ rv (c:w)
-                   | isClock c       = clock cs (c:w)
-    clock cs w                       = u cs            $ S.TTextBar cp $ rv w
-
-    -- ----------------------  begin with "<"
-
-    angle (c:cs) w | c == '<'        = angle cs (c:w)
-    angle cs w     | w == "<"        = angleMid cs ""
-                   | otherwise       = u cs            $ S.TTextRaw cp w
-
-    -- read keyword, like <crlf>
-    angleMid (c:cs) w
-        | c == '>'                   = u cs            $ angleToken $ rv w
-        | S.isSymbol c               = angleMid cs (c:w)
-    angleMid cs w                    = u cs            $ S.TTextRaw cp $ '<' : rv w
-
-    angleToken ""                    = S.TTextRaw cp "<>"
-    angleToken ('c' : s)
-        | isCharCode s  = case charCodes s of
-                            Just ns  -> S.TTextKey cp $ map Ch.chr ns
-                            Nothing  -> S.TTextUnk cp s
-    angleToken s        = case lookup s S.angleTexts of
-                            Just w   -> S.TTextKey cp w
-                            Nothing  -> S.TTextUnk cp s
-
--- interpretation content between {| and |}
-interp :: S.ChangeSection -> S.TokenScanMap
-interp change sc@B.CodeScan { B.codeInputPt = cp
-                            , B.codeWords = wtab } = S.section change int sc where
-
-    nip         = S.nipUpdate  sc
-    nipw        = S.nipUpdateW sc
-    upd cs tok  = B.codeUpdate cs tok sc
-    gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok sc
-
-    int ""                           = sc
-    int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
-                  | S.isTerm c       = nipw        $ S.nipTermPath cp wtab cs
-                  | otherwise        = word (c:cs) ""
-
-    word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w
-    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ S.TTextRaw cp $ rv w
-                  | S.isTerm c       = upd (c:cs)  $ S.TTextRaw cp $ rv w
-                  | otherwise        = word cs     $ c:w
-    word cs w                        = upd cs      $ S.TTextRaw cp $ rv w
-
-
--- ----------------------  Char category
 
 -- Punctuations
 isOpen, isClose, isGrip, isJudge, isSingle, isQ, isPM :: B.Pred Char
@@ -201,6 +62,148 @@ isClock c      = Ch.isDigit c || c `elem` ".:'+-"
 
 isCharCode :: B.Pred String
 isCharCode     = all isFigure
+
+
+-- ----------------------  Relational section
+
+-- | Scan a next token in relational section.
+scanRel :: S.Scanner
+scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
+
+    nip            = S.nipUpdate  sc
+    nipw           = S.nipUpdateW sc
+    up             = upd ""
+    upd cs tok     = B.codeUpdate cs tok sc
+    int cs tok     = B.codeChange (scanInterp change) $ upd cs tok
+
+    sign '+'       = GT
+    sign  _        = LT
+
+    -- ----------------------  dispatch
+
+    sc' = S.section change (uncons3 '\0' dispatch) sc
+
+    dispatch n a b c bs cs ds
+        | S.isSpace a            = nip             $ S.nipSpace    cp bs
+        | S.isTerm a             = nipw            $ S.nipTermPath cp wtab bs
+        | isPM a && S.isTerm b   = nipw            $ S.nipTermSign (sign a) cp wtab cs
+        | S.isQQ a               = nip             $ S.nipQQ       cp bs
+        | isQ a && S.isTerm b    = nipw            $ S.nipTermQ    cp wtab cs
+        | isQ a                  = nipw            $ S.nipQ        cp wtab bs
+
+        | a == '(' && c == ')' && b `elem` "+-/=#"
+                                 = upd ds          $ S.TTextRaw   cp [a,b,c]
+        | a == '{' && b == '|'   = int cs          $ S.TOpen      cp [a,b]
+        | isOpen a && isGrip b   = upd cs          $ S.TOpen      cp [a,b]
+        | isGrip a && isClose b  = upd cs          $ S.TClose     cp [a,b]
+        | isOpen a               = upd bs          $ S.TOpen      cp [a]
+        | isClose a              = upd bs          $ S.TClose     cp [a]
+
+        | a == '*'               = aster bs [a]
+        | a == '<'               = angle bs [a]
+        | a == '@'               = at    bs 1
+        | a == '|'               = bar   bs [a]
+        | a == '^'               = hat   bs
+        | a == '#' && b == '!'   = up              $ S.TComment   cp bs
+        | a == '-' && b == '*' && c == '-'
+                                 = up              $ S.TComment   cp bs
+
+        | isSingle a             = upd bs          $ S.TTextRaw   cp [a]
+        | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
+        | n == 0                 = sc
+        | otherwise              = upd []          $ S.unknownToken cp cs
+                                                   $ Msg.forbiddenInput $ S.angleQuote [a]
+
+    -- ----------------------  begin with "@"
+
+    at (c:cs) n | c == '@'    = at cs           $ n + 1
+                | c == '\''   = nip             $ S.nipSlot 0 cp cs  -- positional
+    at cs n                   = nip             $ S.nipSlot n cp cs
+
+    -- ----------------------  begin with "*"
+
+    aster (c:cs) w
+        | w == "****"         = upd (c:cs)      $ S.TTextRaw cp w
+        | c == '*'            = aster cs (c:w)
+    aster cs w
+        | w == "**"           = up              $ S.TComment cp cs
+        | w == "***"          = up              $ S.TComment cp cs
+        | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
+
+    -- ----------------------  begin with "^"
+
+    -- read local reference, like ^/g
+    hat ('/' : cs)                   = localToken cs S.LocalNest
+    hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
+    hat cs                           = upd [] $ S.unknownToken cp cs $ Msg.adlib "local"
+
+    localToken cs k                  = case S.nextSymbolPlain cs of
+                                         Right (cs', w) -> upd cs' $ S.TLocal cp (k w) (-1) []
+                                         Left a         -> upd []  $ S.TUnknown cp cs a
+
+    -- ----------------------  begin with "|"
+
+    bar (c:cs) w
+        | c == '|'                   = bar cs (c:w)
+        | w == "|" && isJudge c      = judge cs [c, '|']
+        | w == "|" && S.isSymbol c   = clock cs [c, '|']
+    bar cs w                         = let cs' = B.trimLeft cs
+                                       in upd cs'      $ S.TTextRaw cp w
+
+    -- read judgement sign, like |--, |-x
+    judge (c:cs) w
+        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
+        | S.isSymbol c               = clock (c:cs) w
+    judge cs w                       = upd cs          $ S.TTextBar cp $ rv w
+
+    -- read clock, like |03:30|
+    clock (c:cs) w | c == '|'        = upd cs          $ S.TTextBar cp $ rv (c:w)
+                   | isClock c       = clock cs (c:w)
+    clock cs w                       = upd cs          $ S.TTextBar cp $ rv w
+
+    -- ----------------------  begin with "<"
+
+    angle (c:cs) w | c == '<'        = angle cs (c:w)
+    angle cs w     | w == "<"        = angleMid cs ""
+                   | otherwise       = upd cs          $ S.TTextRaw cp w
+
+    -- read keyword, like <crlf>
+    angleMid (c:cs) w
+        | c == '>'                   = upd cs          $ angleToken $ rv w
+        | S.isSymbol c               = angleMid cs (c:w)
+    angleMid cs w                    = upd cs          $ S.TTextRaw cp $ '<' : rv w
+
+    angleToken ""                    = S.TTextRaw cp "<>"
+    angleToken ('c' : s)
+        | isCharCode s  = case charCodes s of
+                            Just ns  -> S.TTextKey cp $ map Ch.chr ns
+                            Nothing  -> S.TTextUnk cp s
+    angleToken s        = case lookup s S.angleTexts of
+                            Just w   -> S.TTextKey cp w
+                            Nothing  -> S.TTextUnk cp s
+
+
+-- ----------------------  Interpretation
+
+-- | Scan interpretation content between @{|@ and @|}@.
+scanInterp :: S.Scanner
+scanInterp change sc@B.CodeScan { B.codeInputPt = cp
+                            , B.codeWords = wtab } = S.section change int sc where
+    nip         = S.nipUpdate  sc
+    nipw        = S.nipUpdateW sc
+    upd cs tok  = B.codeUpdate cs tok sc
+    gen cs tok  = B.codeChange (scanRel change) $ upd cs tok
+
+    int ""                           = sc
+    int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
+                  | S.isTerm c       = nipw        $ S.nipTermPath cp wtab cs
+                  | otherwise        = word (c:cs) ""
+
+    word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w
+    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ S.TTextRaw cp $ rv w
+                  | S.isTerm c       = upd (c:cs)  $ S.TTextRaw cp $ rv w
+                  | otherwise        = word cs     $ c:w
+    word cs w                        = upd cs      $ S.TTextRaw cp $ rv w
 
 
 -- ------------------------------------------------------------------

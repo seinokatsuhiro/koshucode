@@ -67,24 +67,27 @@ toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
-tokenLines = B.codeScanUp $ S.sectionRel changeSection
+tokenLines = B.codeScanUp $ S.scanRel changeSection
 
 tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
-tokenLinesBz = B.codeScanUpBz $ S.sectionRel changeSection
+tokenLinesBz = B.codeScanUpBz $ S.scanRel changeSection
 
 changeSection :: S.ChangeSection
 changeSection name =
     case name of
-      "rel"      -> Just $ B.codeChange $ S.sectionRel changeSection
-      "note"     -> Just $ B.codeChange $ S.sectionNote changeSection
-      "end"      -> Just $ B.codeChange S.sectionEnd
-      "license"  -> Just $ B.codeChange $ S.sectionLicense changeSection
-      "local"    -> Just $ sectionUnsupported "local section"
-      "attr"     -> Just $ sectionUnsupported "attr section"
-      "text"     -> Just $ sectionUnsupported "text section"
-      "doc"      -> Just $ sectionUnsupported "doc section"
-      "data"     -> Just $ sectionUnsupported "data section"
+      "rel"      -> just S.scanRel
+      "note"     -> just S.scanNote
+      "end"      -> just S.scanEnd
+      "license"  -> just S.scanLicense
+      "local"    -> unsupp "local section"
+      "attr"     -> unsupp "attr section"
+      "text"     -> unsupp "text section"
+      "doc"      -> unsupp "doc section"
+      "data"     -> unsupp "data section"
       _          -> Nothing
+    where
+      just scan   = Just $ B.codeChange $ scan changeSection
+      unsupp n    = Just $ sectionUnsupported n
 
 sectionUnsupported :: String -> S.TokenScanMap
 sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r where

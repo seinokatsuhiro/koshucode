@@ -7,8 +7,9 @@ module Koshucode.Baala.Syntax.Token.Section
     ChangeSection,
     section,
 
-    -- * Simple sections
-    sectionEnd, sectionNote, sectionLicense,
+    -- * Simple scanner
+    Scanner,
+    scanEnd, scanNote, scanLicense,
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -22,6 +23,7 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 -- --------------------------------------------
 
+-- | Select scanner based on section name.
 type ChangeSection = String -> Maybe S.TokenScanMap
 
 -- Line begins with the equal sign is treated as section delimter.
@@ -72,13 +74,16 @@ sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc wher
 
 -- --------------------------------------------  Simple sections
 
--- | Tokenizer for end section.
-sectionEnd :: S.TokenScanMap
-sectionEnd sc@B.CodeScan { B.codeInput = cs } = comment cs sc
+-- | Token scanner.
+type Scanner = ChangeSection -> S.TokenScanMap
 
--- | Tokenizer for note section.
-sectionNote :: ChangeSection -> S.TokenScanMap
-sectionNote change sc = section change (`comment` sc) sc
+-- | Scan tokens in @end@ section.
+scanEnd :: Scanner
+scanEnd _ sc@B.CodeScan { B.codeInput = cs } = comment cs sc
+
+-- | Scan tokens in @note@ section.
+scanNote :: Scanner
+scanNote change sc = section change (`comment` sc) sc
 
 comment :: S.InputText -> S.TokenScanMap
 comment "" sc = sc
@@ -86,9 +91,9 @@ comment cs sc = B.codeUpdate "" tok sc where
     tok  = S.TComment cp cs
     cp   = B.codeInputPt sc
 
--- | Tokenizer for license section.
-sectionLicense :: ChangeSection -> S.TokenScanMap
-sectionLicense change sc = section change license sc where
+-- | Scan tokens in @license@ section.
+scanLicense :: Scanner
+scanLicense change sc = section change license sc where
     license "" = sc
     license cs = B.codeUpdate "" tok sc where
         tok  = S.TText cp S.TextLicense cs
