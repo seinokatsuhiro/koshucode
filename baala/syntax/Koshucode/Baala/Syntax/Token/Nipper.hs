@@ -6,6 +6,7 @@ module Koshucode.Baala.Syntax.Token.Nipper
   ( -- * Type
     TokenScan, TokenScanMap,
     TokenNip, TokenNipW,
+    TokenNipResult, TokenNipWResult,
 
     -- * Utility
     isSymbol,
@@ -47,11 +48,15 @@ type TokenScan = B.CodeScan String S.Token
 -- | Read single token.
 type TokenScanMap = B.Map TokenScan
 
+type TokenNipResult = (S.InputText, S.Token)
+
+type TokenNipWResult = (B.WordTable, S.InputText, S.Token)
+
 -- | Nip off a next token.
-type TokenNip = B.CodePt -> S.InputText -> (S.InputText, S.Token)
+type TokenNip = B.CodePt -> S.InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
-type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
+type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipWResult
 
 
 -- --------------------------------------------  Utility
@@ -76,11 +81,11 @@ isTerm = ( == '/' )
 -- --------------------------------------------  Nipper
 
 -- | Update token scanner by nipper result.
-nipUpdate :: TokenScan -> (S.InputText, S.Token) -> TokenScan
+nipUpdate :: TokenScan -> TokenNipResult -> TokenScan
 nipUpdate r (cs, tok) = B.codeUpdate cs tok r
 
 -- | Update token scanner by nipper result with word table.
-nipUpdateW :: TokenScan -> (B.WordTable, S.InputText, S.Token) -> TokenScan
+nipUpdateW :: TokenScan -> TokenNipWResult -> TokenScan
 nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 -- ----------------------  Textual

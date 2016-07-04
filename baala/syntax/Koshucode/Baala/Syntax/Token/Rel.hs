@@ -72,8 +72,8 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 
     nip            = S.nipUpdate  sc
     nipw           = S.nipUpdateW sc
-    up             = upd ""
     upd cs tok     = B.codeUpdate cs tok sc
+    updEnd         = upd ""
     int cs tok     = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
 
     sign '+'       = GT
@@ -100,13 +100,13 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | isClose a              = upd bs          $ S.TClose     cp [a]
 
         | a == '*'               = aster bs [a]
-        | a == '<'               = angle bs [a]
-        | a == '@'               = at    bs 1
-        | a == '|'               = bar   bs [a]
-        | a == '^'               = hat   bs
-        | a == '#' && b == '!'   = up              $ S.TComment   cp bs
+        | a == '<'               = nip $ nipAngle cp bs [a]
+        | a == '@'               = nip $ nipAt    cp bs 1
+        | a == '|'               = nip $ nipBar   cp bs [a]
+        | a == '^'               = nip $ nipHat   cp bs
+        | a == '#' && b == '!'   = updEnd          $ S.TComment   cp bs
         | a == '-' && b == '*' && c == '-'
-                                 = up              $ S.TComment   cp bs
+                                 = updEnd          $ S.TComment   cp bs
 
         | isSingle a             = upd bs          $ S.TTextRaw   cp [a]
         | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
@@ -114,64 +114,27 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | otherwise              = upd []          $ S.unknownToken cp cs
                                                    $ Msg.forbiddenInput $ S.angleQuote [a]
 
-    -- ----------------------  begin with "@"
-
-    at (c:cs) n | c == '@'    = at cs           $ n + 1
-                | c == '\''   = nip             $ S.nipSlot 0 cp cs  -- positional
-    at cs n                   = nip             $ S.nipSlot n cp cs
-
-    -- ----------------------  begin with "*"
-
+    aster :: String -> String -> S.TokenScan
     aster (c:cs) w
         | w == "****"         = upd (c:cs)      $ S.TTextRaw cp w
         | c == '*'            = aster cs (c:w)
     aster cs w
-        | w == "**"           = up              $ S.TComment cp cs
-        | w == "***"          = up              $ S.TComment cp cs
+        | w == "**"           = updEnd          $ S.TComment cp cs
+        | w == "***"          = updEnd          $ S.TComment cp cs
         | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
 
-    -- ----------------------  begin with "^"
-
-    -- read local reference, like ^/g
-    hat ('/' : cs)                   = localToken cs S.LocalNest
-    hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
-    hat cs                           = upd [] $ S.unknownToken cp cs $ Msg.adlib "local"
-
-    localToken cs k                  = case S.nextSymbolPlain cs of
-                                         Right (cs', w) -> upd cs' $ S.TLocal cp (k w) (-1) []
-                                         Left a         -> upd []  $ S.TUnknown cp cs a
-
-    -- ----------------------  begin with "|"
-
-    bar (c:cs) w
-        | c == '|'                   = bar cs (c:w)
-        | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && S.isSymbol c   = clock cs [c, '|']
-    bar cs w                         = let cs' = B.trimLeft cs
-                                       in upd cs'      $ S.TTextRaw cp w
-
-    -- read judgement sign, like |--, |-x
-    judge (c:cs) w
-        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | S.isSymbol c               = clock (c:cs) w
-    judge cs w                       = upd cs          $ S.TTextBar cp $ rv w
-
-    -- read clock, like |03:30|
-    clock (c:cs) w | c == '|'        = upd cs          $ S.TTextBar cp $ rv (c:w)
-                   | isClock c       = clock cs (c:w)
-    clock cs w                       = upd cs          $ S.TTextBar cp $ rv w
-
-    -- ----------------------  begin with "<"
-
+-- | Nip off token beginning with @<@.
+nipAngle :: B.CodePt -> String -> String -> S.TokenNipResult
+nipAngle cp = angle where
     angle (c:cs) w | c == '<'        = angle cs (c:w)
     angle cs w     | w == "<"        = angleMid cs ""
-                   | otherwise       = upd cs          $ S.TTextRaw cp w
+                   | otherwise       = (cs, S.TTextRaw cp w)
 
     -- read keyword, like <crlf>
     angleMid (c:cs) w
-        | c == '>'                   = upd cs          $ angleToken $ rv w
+        | c == '>'                   = (cs, angleToken $ rv w)
         | S.isSymbol c               = angleMid cs (c:w)
-    angleMid cs w                    = upd cs          $ S.TTextRaw cp $ '<' : rv w
+    angleMid cs w                    = (cs, S.TTextRaw cp $ '<' : rv w)
 
     angleToken ""                    = S.TTextRaw cp "<>"
     angleToken ('c' : s)
@@ -181,6 +144,46 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     angleToken s        = case lookup s S.angleTexts of
                             Just w   -> S.TTextKey cp w
                             Nothing  -> S.TTextUnk cp s
+
+-- | Nip off token beginning with "@".
+nipAt :: B.CodePt -> String -> Int -> S.TokenNipResult
+nipAt cp = at where
+    at (c:cs) n | c == '@'           = at cs $ n + 1
+                | c == '\''          = S.nipSlot 0 cp cs  -- positional
+    at cs n                          = S.nipSlot n cp cs
+
+-- | Nip off token beginning with @|@.
+nipBar :: B.CodePt -> String -> String -> S.TokenNipResult
+nipBar cp = bar where
+    bar (c:cs) w
+        | c == '|'                   = bar cs (c:w)
+        | w == "|" && isJudge c      = judge cs [c, '|']
+        | w == "|" && S.isSymbol c   = clock cs [c, '|']
+    bar cs w                         = let cs' = B.trimLeft cs
+                                       in (cs', S.TTextRaw cp w)
+
+    -- read judgement sign, like |--, |-x
+    judge (c:cs) w
+        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
+        | S.isSymbol c               = clock (c:cs) w
+    judge cs w                       = (cs, S.TTextBar cp $ rv w)
+
+    -- read clock, like |03:30|
+    clock (c:cs) w | c == '|'        = (cs, S.TTextBar cp $ rv (c:w))
+                   | isClock c       = clock cs (c:w)
+    clock cs w                       = (cs, S.TTextBar cp $ rv w)
+
+-- | Nip off local reference token, like @^/g@.
+nipHat :: B.CodePt -> String -> S.TokenNipResult
+nipHat cp = hat where
+    hat ('/' : cs)                   = localToken cs S.LocalNest
+    hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
+    hat cs                           = ([], S.unknownToken cp cs $ Msg.adlib "local")
+
+    localToken cs k                  = case S.nextSymbolPlain cs of
+                                         Right (cs', w) -> (cs', S.TLocal cp (k w) (-1) [])
+                                         Left a         -> ([],  S.TUnknown cp cs a)
+
 
 
 -- ----------------------  Interpretation
