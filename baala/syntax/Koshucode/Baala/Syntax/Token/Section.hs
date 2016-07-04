@@ -10,11 +10,11 @@ module Koshucode.Baala.Syntax.Token.Section
     -- * Simple sections
     sectionEnd, sectionNote, sectionLicense,
 
-    -- * Splitter
-    Scan, ScanW,
+    -- * Token nipper
+    TokenNip, TokenNipW,
     scan, scanW,
-    scanSpace,
-    scanSymbol,
+    nipSpace,
+    nipSymbol,
     symbolToken,
     isSymbol,
     isSpace,
@@ -63,8 +63,8 @@ selectSection change prev
     sec ""               = dispatch out  -- end of line
     sec ('*' : '*' : _)  = dispatch out  -- end of effective text
     sec ccs@(c:cs)
-        | isSpace c      = v  $ scanSpace  cp cs
-        | isSymbol c     = vw $ scanSymbol cp ws ccs
+        | isSpace c      = v  $ nipSpace  cp cs
+        | isSymbol c     = vw $ nipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] r
 
     dispatch :: [S.Token] -> TokenRoll
@@ -111,31 +111,31 @@ sectionLicense change r = section change license r where
         cp   = B.codeInputPt r
 
 
--- --------------------------------------------  Scanner
+-- --------------------------------------------  Nipper
 
--- | Split next token.
-type Scan  = B.CodePt -> S.InputText -> (S.InputText, S.Token)
+-- | Nip off a next token.
+type TokenNip = B.CodePt -> S.InputText -> (S.InputText, S.Token)
 
--- | Split next token with word table.
-type ScanW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
+-- | Nip off a next token with word table.
+type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> (B.WordTable, S.InputText, S.Token)
 
--- | Update token scanner.
+-- | Update token scanner by nipper result.
 scan :: TokenRoll -> (S.InputText, S.Token) -> TokenRoll
 scan r (cs, tok) = B.codeUpdate cs tok r
 
--- | Update token scanner with word table.
+-- | Update token scanner by nipper result with word table.
 scanW :: TokenRoll -> (B.WordTable, S.InputText, S.Token) -> TokenRoll
 scanW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 
 -- | Split space token.
-scanSpace :: Scan
-scanSpace cp cs =
+nipSpace :: TokenNip
+nipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
 
 -- | Split symbolic token.
-scanSymbol :: ScanW
-scanSymbol cp wtab cs =
+nipSymbol :: TokenNipW
+nipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
          S.SymbolShort pre w  -> (wtab, cs', S.TShort cp pre w)
@@ -146,7 +146,7 @@ scanSymbol cp wtab cs =
          S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 -- | Create symbolic token.
-symbolToken :: (B.CodePt -> String -> S.Token) -> String -> ScanW
+symbolToken :: (B.CodePt -> String -> S.Token) -> String -> TokenNipW
 symbolToken k w cp wtab cs =
     case Map.lookup w wtab of
          Just w' -> (wtab, cs, k cp w')

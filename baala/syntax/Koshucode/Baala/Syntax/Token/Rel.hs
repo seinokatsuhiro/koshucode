@@ -56,12 +56,12 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     r' = S.section change (uncons3 '\0' dispatch) r
 
     dispatch n a b c bs cs ds
-        | S.isSpace a            = v               $ S.scanSpace  cp bs
-        | isTerm a               = vw              $ scanTermPath cp wtab bs
-        | isPM a && isTerm b     = vw              $ scanTermSign (sign a) cp wtab cs
-        | isQQ a                 = v               $ scanQQ      cp bs
-        | isQ a && isTerm b      = vw              $ scanTermQ   cp wtab cs
-        | isQ a                  = vw              $ scanQ       cp wtab bs
+        | S.isSpace a            = v               $ S.nipSpace  cp bs
+        | isTerm a               = vw              $ nipTermPath cp wtab bs
+        | isPM a && isTerm b     = vw              $ nipTermSign (sign a) cp wtab cs
+        | isQQ a                 = v               $ nipQQ       cp bs
+        | isQ a && isTerm b      = vw              $ nipTermQ    cp wtab cs
+        | isQ a                  = vw              $ nipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
                                  = u ds            $ S.TTextRaw   cp [a,b,c]
@@ -81,7 +81,7 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
                                  = up              $ S.TComment   cp bs
 
         | isSingle a             = u bs            $ S.TTextRaw   cp [a]
-        | S.isSymbol a           = vw              $ S.scanSymbol cp wtab $ a : bs
+        | S.isSymbol a           = vw              $ S.nipSymbol cp wtab $ a : bs
         | n == 0                 = r
         | otherwise              = u []            $ S.unknownToken cp cs
                                                    $ Msg.forbiddenInput $ S.angleQuote [a]
@@ -89,8 +89,8 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     -- ----------------------  begin with "@"
 
     at (c:cs) n | c == '@'    = at cs           $ n + 1
-                | c == '\''   = v               $ scanSlot 0 cp cs  -- positional
-    at cs n                   = v               $ scanSlot n cp cs
+                | c == '\''   = v               $ nipSlot 0 cp cs  -- positional
+    at cs n                   = v               $ nipSlot n cp cs
 
     -- ----------------------  begin with "*"
 
@@ -100,7 +100,7 @@ sectionRel change r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = wtab } = r' w
     aster cs w
         | w == "**"           = up              $ S.TComment cp cs
         | w == "***"          = up              $ S.TComment cp cs
-        | otherwise           = vw              $ S.scanSymbol cp wtab $ w ++ cs
+        | otherwise           = vw              $ S.nipSymbol cp wtab $ w ++ cs
 
     -- ----------------------  begin with "^"
 
@@ -168,8 +168,8 @@ interp change r@B.CodeRoll { B.codeInputPt = cp
     gen cs tok  = B.codeChange (sectionRel change) $ B.codeUpdate cs tok r
 
     int ""                           = r
-    int (c:cs)    | S.isSpace c      = v         $ S.scanSpace  cp cs
-                  | isTerm c         = vw        $ scanTermPath cp wtab cs
+    int (c:cs)    | S.isSpace c      = v         $ S.nipSpace   cp cs
+                  | isTerm c         = vw        $ nipTermPath  cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs    $ S.TTextRaw cp $ rv w
@@ -179,47 +179,48 @@ interp change r@B.CodeRoll { B.codeInputPt = cp
     word cs w                        = u cs      $ S.TTextRaw cp $ rv w
 
 
--- ----------------------  Scanner
+-- ----------------------  Nipper
 
 rv :: B.Map [a]
 rv = reverse
 
-scanQ :: S.ScanW
-scanQ cp wtab cs =
+-- | Nip off a single-quoted text.
+nipQ :: S.TokenNipW
+nipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> S.symbolToken S.TTextQ w cp wtab cs'
       Left a         -> (wtab, [], S.TUnknown cp cs a)
           
 
--- | Scan double-quoted text.
-scanQQ :: S.Scan
-scanQQ cp cs = case S.nextQQ cs of
-                  Right (cs', w) -> (cs', S.TTextQQ cp w)
-                  Left a         -> ([], S.TUnknown cp cs a)
+-- | Nip off a double-quoted text.
+nipQQ :: S.TokenNip
+nipQQ cp cs = case S.nextQQ cs of
+                Right (cs', w) -> (cs', S.TTextQQ cp w)
+                Left a         -> ([], S.TUnknown cp cs a)
 
--- | Scan slot name, like @aaa.
-scanSlot :: Int -> S.Scan
-scanSlot n cp cs =
+-- | Nip off a slot name, like @aaa.
+nipSlot :: Int -> S.TokenNip
+nipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
       Left a         -> ([], S.TUnknown cp cs a)
       
 
--- | Scan signed term name
-scanTermSign :: Ordering -> S.ScanW
-scanTermSign = scanTerm S.TermTypePath
+-- | Nip off a signed term name.
+nipTermSign :: Ordering -> S.TokenNipW
+nipTermSign = nipTerm S.TermTypePath
 
--- | Scan term name
-scanTermPath :: S.ScanW
-scanTermPath = scanTerm S.TermTypePath EQ
+-- | Nip off a term name.
+nipTermPath :: S.TokenNipW
+nipTermPath = nipTerm S.TermTypePath EQ
 
--- | Scan quoted term
-scanTermQ :: S.ScanW
-scanTermQ = scanTerm S.TermTypeQuoted EQ
+-- | Nip off a quoted term.
+nipTermQ :: S.TokenNipW
+nipTermQ = nipTerm S.TermTypeQuoted EQ
 
--- Scan term name or term path
-scanTerm :: S.TermType -> Ordering -> S.ScanW
-scanTerm q sign cp wtab cs0 = word [] cs0 where
+-- | Nip off a term name or a term path.
+nipTerm :: S.TermType -> Ordering -> S.TokenNipW
+nipTerm q sign cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | S.isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
