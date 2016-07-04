@@ -9,7 +9,12 @@ module Koshucode.Baala.Syntax.Token.Section
 
     -- * Simple scanner
     Scanner,
-    scanEnd, scanNote, scanLicense,
+    scanEnd,
+    scanNote,
+    scanLicense,
+    scanLine,
+    scanLineInClause,
+    scanTextAssert,
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -92,8 +97,35 @@ comment cs sc = B.codeUpdate "" tok sc where
 
 -- | Scan tokens in @license@ section.
 scanLicense :: Scanner
-scanLicense change sc = section change license sc where
-    license "" = sc
-    license cs = B.codeUpdate "" tok sc where
-        tok = S.TText (B.codePt sc) S.TextLicense cs
+scanLicense = scanLine S.TextLicense
+
+-- | Scan entire line as text.
+scanLine :: S.TextForm -> Scanner
+scanLine form change sc = section change text sc where
+    text "" = sc
+    text cs = let tok = S.TText (B.codePt sc) form cs
+              in B.codeUpdate "" tok sc
+
+scanLineInClause :: S.TextForm -> Scanner
+scanLineInClause form change sc = section change text sc where
+    text "" = sc
+    text cs@(c:_)
+        | S.isSpace c = S.nipUpdate sc $ S.nipSpace (B.codePt sc) cs
+        | B.isBol sc  = B.codeScanRestore sc
+        | otherwise   = let tok = S.TText (B.codePt sc) form cs
+                        in B.codeUpdate "" tok sc
+
+scanTextAssert :: Scanner
+scanTextAssert change sc = section change text sc where
+    cp = B.codePt sc
+    text "" = sc
+    text ccs@(c:cs)
+        | S.isSpace c  = S.nipUpdate  sc $ S.nipSpace cp ccs
+        | c == '|'     = S.nipUpdate  sc $ S.nipBar cp cs [c]
+        | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
+                           $ B.codeScanSave $ S.nipUpdate sc (cs, S.TTextRaw cp [c])
+        | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
+                           (ws', _, S.TTextRaw _ "") ->
+                               S.nipUpdateW sc (ws', cs, S.TTextRaw cp [c])
+                           nip -> S.nipUpdateW sc nip
 
