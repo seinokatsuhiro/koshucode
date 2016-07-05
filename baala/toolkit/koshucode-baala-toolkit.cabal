@@ -94,6 +94,16 @@ executable koshu-syntax
        , koshucode-baala-rop-cox    == 0.155.*
        , koshucode-baala-calculator == 0.155.*
 
+executable koshu-text-assert
+  main-is:
+        koshu-text-assert.hs
+  other-modules:
+  build-depends:
+         base                       == 4.*
+       , bytestring                 == 0.*
+       , koshucode-baala-base       == 0.155.*
+       , koshucode-baala-syntax     == 0.155.*
+
 library
   -- Modules exported by the library.
   exposed-modules:
