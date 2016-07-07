@@ -36,6 +36,10 @@ class Mix a where
 instance Mix B.MixText where
     mix = id
 
+-- | Create empty mix text.
+instance Mix () where
+    mix _ = B.mixEmpty
+
 -- | Create mix text from strict bytestring.
 instance Mix Bs.ByteString where
     mix = B.mixBs
@@ -68,9 +72,10 @@ instance Mix Int where
 instance Mix [B.MixText] where
     mix = mconcat
 
--- | Create empty mix text.
-instance Mix () where
-    mix _ = B.mixEmpty
+-- | Extract mix text or empty if nothing.
+instance Mix (Maybe B.MixText) where
+    mix (Just m)  = m
+    mix (Nothing) = B.mixEmpty
 
 
 -- ----------------------  Encode
