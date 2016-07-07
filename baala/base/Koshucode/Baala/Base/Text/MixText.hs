@@ -310,7 +310,7 @@ putMixLines lb = hPutMixLines lb IO.stdout
 
 -- | Print mix text lines to the given output handler.
 hPutMixLines :: B.LineBreak -> IO.Handle -> [MixText] -> IO ()
-hPutMixLines lb h = hPutMixLn lb h . mixLines
+hPutMixLines lb h = hPutMix lb h . mixLines
 
 -- | Write mix text to a file.
 writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()
