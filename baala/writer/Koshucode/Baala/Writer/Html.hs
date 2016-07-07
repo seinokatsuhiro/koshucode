@@ -51,7 +51,7 @@ contToHtml sh = content where
 
     rel (D.Rel he bo) =
         H.table ! class_ "relation" $ do
-          let terms = term `map` D.headNames he
+          let terms = term `map` D.getTermNames he
           H.tr ! class_ "heading" $ mapM_ H.td terms
           mapM_ row bo
 

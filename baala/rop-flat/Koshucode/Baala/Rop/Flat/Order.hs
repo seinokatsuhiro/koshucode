@@ -55,7 +55,7 @@ relkitToward (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = ns `D.headLR` D.headNames he1
+      lr    = ns `D.headLR` D.getTermNames he1
       unk   = D.headLSide lr ns
       he2   = D.headMap (heMap lr) he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boMap lr
@@ -72,7 +72,7 @@ relmapLexical med = C.relmapFlow med relkitLexical
 relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
-    ns    = D.headNames he1
+    ns    = D.getTermNames he1
     lr    = B.sort ns `D.headLR` ns
     he2   = D.headMap (D.headRForward lr) he1
     kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.headRForward lr

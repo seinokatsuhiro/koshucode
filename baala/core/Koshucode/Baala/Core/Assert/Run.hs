@@ -152,7 +152,7 @@ snipRel (heSnip, boSnip) ns (D.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Msg.unkTerm left he1
     where
-      ns1   = D.headNames he1
+      ns1   = D.getTermNames he1
       ind   = ns `B.snipIndex` ns1
       left  = ns `B.snipLeft`  ns1
 
@@ -165,7 +165,7 @@ optionLexical _ = lexicalOrderRel
 
 lexicalOrderRel :: (Ord c) => B.AbMap (D.Rel c)
 lexicalOrderRel rel@(D.Rel he1 _) = snipRel B.snipForward2 ns' rel where
-    ns' = B.sort $ D.headNames he1
+    ns' = B.sort $ D.getTermNames he1
 
 
 -- ---------------------------------  Option "order"

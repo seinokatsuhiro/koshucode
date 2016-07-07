@@ -29,7 +29,7 @@ relTableLines sh r = render $ relCells 2 size [] text where
 
 relCells :: Int -> TermSize -> S.TermPath -> D.RelText -> [[B.Cell]]
 relCells pad m path (D.Rel he bo) = table where
-    table = let ns = D.headNames he
+    table = let ns = D.getTermNames he
                 h  = map (text . S.showTermName) ns
             in h : map rule h : map (tuple ns) bo
     tuple ns cs = map content $ zip ns cs

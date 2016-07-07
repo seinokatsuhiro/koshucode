@@ -78,7 +78,7 @@ relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
 relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> B.Map [[c]]
 relBodyOrder ns he = ed where
-    ed    = B.sortByName ords $ D.headNames he
+    ed    = B.sortByName ords $ D.getTermNames he
     ords  = map B.orderingCap ns
 
 
@@ -123,4 +123,4 @@ class SelectRel r where
 judgesFromRel :: D.JudgeOf c -> D.JudgeClass -> Rel c -> [D.Judge c]
 judgesFromRel judgeOf pat (Rel he bo) = map judge bo where
     judge = judgeOf pat . zip names
-    names = D.headNames he
+    names = D.getTermNames he

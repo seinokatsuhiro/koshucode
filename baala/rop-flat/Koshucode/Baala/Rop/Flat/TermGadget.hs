@@ -127,4 +127,4 @@ relmapWipe med = C.relmapFlow med relkitWipe
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing
 relkitWipe (Just he1) = Op.relkitCut ns1 (Just he1) where
-    ns1 = filter (elem '=') $ D.headNames he1
+    ns1 = filter (elem '=') $ D.getTermNames he1

@@ -151,7 +151,7 @@ relkitClockAlter :: (D.CContent c)
   -> C.RelkitFlow c
 relkitClockAlter _ Nothing = Right C.relkitNothing
 relkitClockAlter (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 where
-      ns1       = D.headNames he1
+      ns1       = D.getTermNames he1
       ind       = [n] `B.snipIndex` ns1
       pick      = B.snipFrom ind
       cut       = B.snipOff ind

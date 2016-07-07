@@ -119,7 +119,7 @@ relkitTermName n Nothing    = Msg.noAttr n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = D.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 _   = map term $ D.headNames he1
+    kitf2 _   = map term $ D.getTermNames he1
     term t    = [D.pTerm t]
 
 

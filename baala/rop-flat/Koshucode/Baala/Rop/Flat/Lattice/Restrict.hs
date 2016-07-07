@@ -100,7 +100,7 @@ relmapNoneMeet med sh = C.relmapBinary med $ relkitFilterMeet False sh
 
 relkitFilterMeet :: forall c. (Ord c) => Bool -> Op.SharedTerms -> C.RelkitBinary c
 relkitFilterMeet which sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
-    lr     = D.headNames he1 `D.headLR` D.headNames he2
+    lr     = D.getTermNames he1 `D.headLR` D.getTermNames he2
     kit3   = case Op.unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -138,7 +138,7 @@ relkitSub sh kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
                     Nothing     -> Right $ C.relkitJust he1 $ C.RelkitConst []
                     Just (e, a) -> Msg.unmatchShare e a
     where
-      lr  = D.headNames he1 `D.headLR` D.headNames he2
+      lr  = D.getTermNames he1 `D.headLR` D.getTermNames he2
       kit = relkitFilterMeet True sh kit2 he1'
 
 relkitSub _ _ _ = Right C.relkitNothing
@@ -168,7 +168,7 @@ relkitCompose _ _ _ _ = Right C.relkitNothing
 
 sharedNames :: D.Head -> D.Head -> [S.TermName]
 sharedNames he1 he2 = shared where
-    ns1     = D.headNames he1
-    ns2     = D.headNames he2
+    ns1     = D.getTermNames he1
+    ns2     = D.getTermNames he2
     lr      = D.headLR ns1 ns2
     shared  = D.headRShare lr ns2

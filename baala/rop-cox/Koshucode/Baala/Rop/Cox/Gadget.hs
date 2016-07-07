@@ -174,7 +174,7 @@ relkitInterp interp (Just he1)
 interpMatch :: D.Interp -> D.Head -> Bool
 interpMatch interp he = ns1 == ns2 where
     ns1 = B.sort $ D.interpTerms interp
-    ns2 = B.sort $ D.headNames he
+    ns2 = B.sort $ D.getTermNames he
 
 
 -- ----------------------  number
@@ -200,7 +200,7 @@ relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = let (rank, bo2) = ranking from ords (D.headNames he1) bo1
+    kitf2 bo1 = let (rank, bo2) = ranking from ords (D.getTermNames he1) bo1
                 in zipWith (:) (map D.pInt rank) bo2
     ords  = map B.orderingCap ns
 

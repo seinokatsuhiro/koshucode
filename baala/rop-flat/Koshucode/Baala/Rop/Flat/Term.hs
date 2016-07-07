@@ -106,7 +106,7 @@ relkitCutTerm = relkitProjectTerm (D.headRSide, D.headRSide)
 relkitProjectTerm :: D.HeadLRMap2 D.NamedType c -> C.RelkitBinary c
 relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
 relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
-    relkitProject lrMap $ D.headNames he2
+    relkitProject lrMap $ D.getTermNames he2
 
 relkitProject :: D.HeadLRMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
@@ -114,7 +114,7 @@ relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = ns `D.headLROrd` D.headNames he1
+      lr    = ns `D.headLROrd` D.getTermNames he1
       unk   = D.headLSideNames lr
       he2   = heMap lr `D.headMap` he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr
@@ -151,8 +151,8 @@ relkitMove (ps, ns) (Just he1)
     | psLeft  /= []         = Msg.unkTerm psLeft he1
     | otherwise             = Right kit2
     where
-      ns1        =  D.headNames he1
-      ns2        =  D.headNames he2
+      ns1        =  D.getTermNames he1
+      ns2        =  D.getTermNames he2
 
       ns2Dup     =  B.duplicates ns2
       psDup      =  B.duplicates ps

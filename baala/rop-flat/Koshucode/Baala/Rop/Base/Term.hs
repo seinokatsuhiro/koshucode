@@ -73,5 +73,5 @@ termNamesColon = loop [] [] where
 
 picker :: D.Head -> [S.TermName] -> B.Map [c]
 picker he ts = B.snipFrom ind where
-    ind = ts `B.snipIndex` D.headNames he
+    ind = ts `B.snipIndex` D.getTermNames he
 

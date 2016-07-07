@@ -73,7 +73,7 @@ relkitAdd (cops, cox) (Just he1)
     | otherwise = Msg.reqNewTerm ns he1
     where
       (ns, xs)    =  unzip cox               -- names and expressions
-      ns1         =  D.headNames he1         -- term names of input relation
+      ns1         =  D.getTermNames he1      -- term names of input relation
       ind         =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
       he2         =  ns `D.headAppend` he1
       kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
@@ -99,7 +99,7 @@ relkitSubst (cops, cox) (Just he1)
     | otherwise           = Msg.unexpTermName
     where
       (ns, xs)  =  unzip cox               -- names and expressions
-      ns1       =  D.headNames he1         -- term names of input relation
+      ns1       =  D.getTermNames he1      -- term names of input relation
       ind       =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
       cut       =  B.snipOff  ind          -- cutting-ns function
       fore      =  B.snipForward ind       -- cutting-ns function
@@ -126,7 +126,7 @@ relmapFill med = C.relmapFlow med . relkitFill
 relkitFill :: (D.CContent c) => ([S.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
 relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
-    ns1       =  D.headNames he1
+    ns1       =  D.getTermNames he1
     ind       =  ns `B.snipIndex` ns1
     pick      =  B.snipFrom ind
     cut       =  B.snipOff  ind
@@ -197,7 +197,7 @@ relkitSplit (cops, cox) (Just he1)
     | otherwise = Msg.unexpTermName
     where
       (ns, xs)    =  unzip cox               -- names and expressions
-      ns1         =  D.headNames he1         -- term names
+      ns1         =  D.getTermNames he1      -- term names
       ind         =  ns `B.snipIndex` ns1    -- shared indicies
 
       he2         =  D.headNests ns he1

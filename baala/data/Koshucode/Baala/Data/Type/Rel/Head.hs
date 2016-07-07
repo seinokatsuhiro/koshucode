@@ -14,7 +14,6 @@ module Koshucode.Baala.Data.Type.Rel.Head
     -- * Selector
     headEquiv,
     isSubhead, isSuperhead,
-    headNames,
     headDegree,
     headNested,
     headIndex1,
@@ -46,6 +45,7 @@ module Koshucode.Baala.Data.Type.Rel.Head
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data.Type.Type    as D
+import qualified Koshucode.Baala.Data.Type.Judge   as D
 
 
 
@@ -61,6 +61,9 @@ instance Monoid Head where
     mappend he1 he2 = headOf $ headType he1 `a` headType he2
         where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2
               a _ _ = D.TypeAny
+
+instance D.GetTermNames Head where
+    getTermNames = D.typeRelTermNames . headType
 
 instance B.MixEncode Head where
     mixEncode = D.typeTermMix . headType
@@ -88,7 +91,7 @@ headExplain = D.typeExplain . headType
 --
 --  Term names of heading.
 --
---    >>> let h = headFrom ["a", "b"] in headNames h
+--    >>> let h = headFrom ["a", "b"] in D.getTermNames h
 --    ["a", "b"]
 --
 --  Degree of relation.
@@ -137,14 +140,10 @@ headEquiv he1 he2 = ts he1 == ts he2 where
     ts = B.sort . D.typeRelTermNames . headType
 
 isSubhead :: Head -> Head -> Bool
-isSubhead he1 he2 = null $ headNames he1 `B.snipLeft` headNames he2 
+isSubhead he1 he2 = null $ D.getTermNames he1 `B.snipLeft` D.getTermNames he2 
 
 isSuperhead :: Head -> Head -> Bool
 isSuperhead he1 he2 = isSubhead he2 he1
-
--- | List of term names.
-headNames :: Head -> [S.TermName]
-headNames = D.typeRelTermNames . headType
 
 -- | Degree of relation, i.e., number of terms.
 headDegree :: Head -> Int
@@ -224,7 +223,7 @@ headUp = headOf . up . headType where
     up ty                    = ty
 
 headAlign :: Head -> Head -> B.Map [c]
-headAlign to from = B.snipOrder (headNames to) (headNames from)
+headAlign to from = B.snipOrder (D.getTermNames to) (D.getTermNames from)
 
 bodyAlign :: Head -> Head -> B.Map [[c]]
 bodyAlign to from = (headAlign to from `map`)

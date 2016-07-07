@@ -57,7 +57,7 @@ relkitCheckTermHas  :: [S.TermName] -> C.RelkitFlow c
 relkitCheckTermBut  :: [S.TermName] -> C.RelkitFlow c
 relkitCheckTermJust = checkTerm "Just" (\ns he1 -> D.headFrom ns `D.headEquiv` he1)
 relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> D.headFrom ns `D.isSubhead` he1)
-relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` D.headNames he1)
+relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` D.getTermNames he1)
 
 checkTerm :: String -> ([S.TermName] -> D.Head -> Bool) -> [S.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
@@ -90,7 +90,7 @@ relkitDuplicate ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr     = ns `D.headLR` D.headNames he1
+      lr     = ns `D.headLR` D.getTermNames he1
       unk    = D.headLSideNames lr
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
       dup    = not . B.isSingleton
