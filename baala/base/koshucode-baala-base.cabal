@@ -91,6 +91,7 @@ library
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.LineBreak
         Koshucode.Baala.Base.Text.MixClass
+        Koshucode.Baala.Base.Text.MixEncode
         Koshucode.Baala.Base.Text.MixText
         Koshucode.Baala.Base.Text.PPrint
         Koshucode.Baala.Base.Text.TextTable

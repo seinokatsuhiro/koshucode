@@ -6,10 +6,6 @@
 module Koshucode.Baala.Base.Text.MixClass
   ( -- * Class
     Mix (..),
-    MixEncode (..),
-    MixShortEncode (..),
-    mixIdEncode,
-    Shorten, noShorten,
 
     -- * Mix utility
     mixBracket, mixBracketS,
@@ -64,9 +60,9 @@ instance Mix String where
 instance Mix Char where
     mix = B.mixChar
 
--- | Create mix text of given-length spaces.
+-- | Create mix text for integer.
 instance Mix Int where
-    mix = B.mixSpace
+    mix = B.mixDec
 
 -- | Concatenate mix text.
 instance Mix [B.MixText] where
@@ -76,33 +72,6 @@ instance Mix [B.MixText] where
 instance Mix (Maybe B.MixText) where
     mix (Just m)  = m
     mix (Nothing) = B.mixEmpty
-
-
--- ----------------------  Encode
-
--- | Encode via mix text.
-class MixEncode a where
-    mixEncode :: a -> B.MixText
-
--- | @(+)@ or @(-)@.
-instance MixEncode Bool where
-    mixEncode True  = B.mixString "(+)"
-    mixEncode False = B.mixString "(-)"
-
--- | Encode with shortener.
-class MixShortEncode a where
-    mixShortEncode :: Shorten -> a -> B.MixText
-
--- | 'mixShortEncode' with no shortener.
-mixIdEncode :: (MixShortEncode a) => a -> B.MixText
-mixIdEncode = mixShortEncode noShorten
-
--- | Convert string to short sign.
-type Shorten = String -> Maybe String
-
--- | Shorten which does not shorten strings.
-noShorten :: Shorten
-noShorten _ = Nothing
 
 
 -- ----------------------  Utility
