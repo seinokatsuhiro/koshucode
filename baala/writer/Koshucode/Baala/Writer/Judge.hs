@@ -47,7 +47,7 @@ judgesCountMix result writer = loop where
     put :: D.Judge c -> B.Map JudgeCountMix
     put judge (mx, c, tab) =
         let c'   = c + 1
-            cls  = D.judgeClass judge
+            cls  = D.getClass judge
             mx'  = gutterMix c <> B.mixLine (writer judge)
             tab' = Map.alter inc cls tab
         in (mx <> mx', c', tab')

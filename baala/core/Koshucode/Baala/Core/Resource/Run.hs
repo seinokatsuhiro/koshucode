@@ -115,7 +115,7 @@ autoOutputResource :: (Ord c) => B.Map (C.Resource c)
 autoOutputResource res@C.Resource { C.resJudge  = js
                                   , C.resAssert = ass }
     | null ass && (C.featAutoOutput $ C.resFeature res)
-                 = res { C.resAssert = a <$> judgeClassAndTerms js }
+                 = res { C.resAssert = a <$> classAndTerms js }
     | otherwise  = res
     where a (c, ts) = S.Short [] [] $ C.Assert
             { C.assSection = 0
@@ -126,12 +126,12 @@ autoOutputResource res@C.Resource { C.resJudge  = js
             , C.assRelmap  = Just $ C.RelmapSource B.def c ts
             , C.assLinks   = [] }
 
-judgeClassAndTerms :: (Ord c) => [D.Judge c] -> [(D.JudgeClass, [S.TermName])]
-judgeClassAndTerms = list . foldr f Map.empty where
+classAndTerms :: (Ord c) => [D.Judge c] -> [(D.JudgeClass, [S.TermName])]
+classAndTerms = list . foldr f Map.empty where
     list m = fmap Set.toAscList <$> Map.toList m
 
-    f j = let c  = D.judgeClass j
-              ts = D.judgeTerms j
+    f j = let c  = D.getClass j
+              ts = D.getTerms j
           in Map.alter (alt $ Set.fromList $ map fst ts) c
 
     alt set (Nothing)    = Just $ set

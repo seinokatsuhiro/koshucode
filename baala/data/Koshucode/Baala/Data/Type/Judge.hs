@@ -7,7 +7,6 @@ module Koshucode.Baala.Data.Type.Judge
   (
     -- * Datatype
     Judge (..), JudgeClass,
-    judgeClass, judgeTerms,
     judgeTermsMap,
     judgeCons,
     sortJudgeTerms, 
@@ -20,8 +19,8 @@ module Koshucode.Baala.Data.Type.Judge
 
     -- * Class
     GetClass (..),
-    GetTerms (..),
     GetTermNames (..),
+    GetTerms (..),
 
     -- * Encode
     judgeBreak,
@@ -73,18 +72,6 @@ instance (Ord c) => Ord (Judge c) where
 instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, v) = (n, f v)
-
-instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
-    mixShortEncode sh j =
-        case j of
-          JudgeAffirm      c xs    -> judge "|--"  c xs
-          JudgeDeny        c xs    -> judge "|-X"  c xs
-          JudgeMultiDeny   c xs    -> judge "|-XX" c xs
-          JudgeChange      c xs _  -> judge "|-C"  c xs
-          JudgeMultiChange c xs _  -> judge "|-CC" c xs
-          JudgeViolate     c xs    -> judge "|-V"  c xs
-        where
-          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` termsToMix2 sh xs
 
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
@@ -150,33 +137,33 @@ isViolative _                   = False
 
 -- | Get judge class.
 class GetClass a where
-    getClass :: a c -> JudgeClass
+    getClass :: a -> JudgeClass
+
+-- | Get list of term names.
+class GetTermNames a where
+    getTermNames :: a -> [S.TermName]
 
 -- | Get term list.
 class GetTerms a where
     getTerms :: a c -> [S.Term c]
 
--- | Get list of term names.
-class GetTermNames a where
-    getTermNames :: a c -> [S.TermName]
-
-instance GetClass Judge where
+instance GetClass (Judge c) where
     getClass = judgeClass
+
+instance GetTermNames (Judge c) where
+    getTermNames = map fst . judgeTerms
 
 instance GetTerms Judge where
     getTerms = judgeTerms
 
-instance GetTermNames Judge where
-    getTermNames = map fst . judgeTerms
-
 -- | Return class of judgement.
 judgeClass :: Judge c -> JudgeClass
-judgeClass (JudgeAffirm      c _)        = c
-judgeClass (JudgeDeny        c _)        = c
-judgeClass (JudgeMultiDeny   c _)        = c
-judgeClass (JudgeChange      c _ _)      = c
-judgeClass (JudgeMultiChange c _ _)      = c
-judgeClass (JudgeViolate     c _)        = c
+judgeClass (JudgeAffirm      c _)      = c
+judgeClass (JudgeDeny        c _)      = c
+judgeClass (JudgeMultiDeny   c _)      = c
+judgeClass (JudgeChange      c _ _)    = c
+judgeClass (JudgeMultiChange c _ _)    = c
+judgeClass (JudgeViolate     c _)      = c
 
 -- | Return term list of judgement.
 judgeTerms :: Judge c -> [S.Term c]
@@ -189,6 +176,18 @@ judgeTerms (JudgeViolate     _ xs)     = xs
 
 
 -- ----------------------  Encode
+
+instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
+    mixShortEncode sh j =
+        case j of
+          JudgeAffirm      c xs    -> judge "|--"  c xs
+          JudgeDeny        c xs    -> judge "|-X"  c xs
+          JudgeMultiDeny   c xs    -> judge "|-XX" c xs
+          JudgeChange      c xs _  -> judge "|-C"  c xs
+          JudgeMultiChange c xs _  -> judge "|-CC" c xs
+          JudgeViolate     c xs    -> judge "|-V"  c xs
+        where
+          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` termsToMix2 sh xs
 
 -- | Conventional line-break setting for judges:
 --   4-spaces indent and 120-columns line.
