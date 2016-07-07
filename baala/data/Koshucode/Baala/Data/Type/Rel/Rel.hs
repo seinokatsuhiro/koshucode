@@ -54,6 +54,9 @@ instance Functor Rel where
     fmap f (Rel he bo) = let bo' = fmap f `fmap` bo
                          in Rel he bo'
 
+instance D.GetTermNames (Rel c) where
+    getTermNames = D.getTermNames . relHead
+
 instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
     mixShortEncode sh (Rel he bo) =
         let he'  = B.mixEncode he

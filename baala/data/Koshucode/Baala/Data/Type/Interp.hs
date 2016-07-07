@@ -23,6 +23,9 @@ data InterpWord
     | InterpTerm S.TermName
     deriving (Show, Eq, Ord)
 
+instance D.GetTermNames Interp where
+    getTermNames = interpTerms
+
 instance B.MixEncode Interp where
     mixEncode Interp { interpWords = xs } =
         B.mixBracketS S.interpOpen S.interpClose
