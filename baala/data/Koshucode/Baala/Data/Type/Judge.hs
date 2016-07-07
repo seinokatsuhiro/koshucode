@@ -18,6 +18,11 @@ module Koshucode.Baala.Data.Type.Judge
     affirmJudge, denyJudge,
     isAffirmative, isDenial, isViolative,
 
+    -- * Class
+    GetClass (..),
+    GetTerms (..),
+    GetTermNames (..),
+
     -- * Encode
     judgeBreak,
     termNameToMix,
@@ -84,24 +89,6 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
 
--- | Return class of judgement.
-judgeClass :: Judge c -> JudgeClass
-judgeClass (JudgeAffirm      c _)        = c
-judgeClass (JudgeDeny        c _)        = c
-judgeClass (JudgeMultiDeny   c _)        = c
-judgeClass (JudgeChange      c _ _)      = c
-judgeClass (JudgeMultiChange c _ _)      = c
-judgeClass (JudgeViolate     c _)        = c
-
--- | Return term list of judgement.
-judgeTerms :: Judge c -> [S.Term c]
-judgeTerms (JudgeAffirm      _ xs)     = xs
-judgeTerms (JudgeDeny        _ xs)     = xs
-judgeTerms (JudgeMultiDeny   _ xs)     = xs
-judgeTerms (JudgeChange      _ xs _)   = xs
-judgeTerms (JudgeMultiChange _ xs _)   = xs
-judgeTerms (JudgeViolate     _ xs)     = xs
-
 judgeTermsMap :: ([S.Term a] -> [S.Term b]) -> Judge a -> Judge b
 judgeTermsMap f (JudgeAffirm      c xs)      = JudgeAffirm    c (f xs)
 judgeTermsMap f (JudgeDeny        c xs)      = JudgeDeny      c (f xs)
@@ -157,6 +144,48 @@ isDenial _                      = False
 isViolative :: Judge c -> Bool
 isViolative (JudgeViolate _ _)  = True
 isViolative _                   = False
+
+
+-- ----------------------  Class
+
+-- | Get judge class.
+class GetClass a where
+    getClass :: a c -> JudgeClass
+
+-- | Get term list.
+class GetTerms a where
+    getTerms :: a c -> [S.Term c]
+
+-- | Get list of term names.
+class GetTermNames a where
+    getTermNames :: a c -> [S.TermName]
+
+instance GetClass Judge where
+    getClass = judgeClass
+
+instance GetTerms Judge where
+    getTerms = judgeTerms
+
+instance GetTermNames Judge where
+    getTermNames = map fst . judgeTerms
+
+-- | Return class of judgement.
+judgeClass :: Judge c -> JudgeClass
+judgeClass (JudgeAffirm      c _)        = c
+judgeClass (JudgeDeny        c _)        = c
+judgeClass (JudgeMultiDeny   c _)        = c
+judgeClass (JudgeChange      c _ _)      = c
+judgeClass (JudgeMultiChange c _ _)      = c
+judgeClass (JudgeViolate     c _)        = c
+
+-- | Return term list of judgement.
+judgeTerms :: Judge c -> [S.Term c]
+judgeTerms (JudgeAffirm      _ xs)     = xs
+judgeTerms (JudgeDeny        _ xs)     = xs
+judgeTerms (JudgeMultiDeny   _ xs)     = xs
+judgeTerms (JudgeChange      _ xs _)   = xs
+judgeTerms (JudgeMultiChange _ xs _)   = xs
+judgeTerms (JudgeViolate     _ xs)     = xs
 
 
 -- ----------------------  Encode
