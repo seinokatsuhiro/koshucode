@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Relation type.
 module Koshucode.Baala.Data.Type.Rel
   ( module Koshucode.Baala.Data.Type.Rel.Head,
     module Koshucode.Baala.Data.Type.Rel.Mono,

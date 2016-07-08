@@ -67,6 +67,11 @@ instance B.MixEncode Head where
     mixEncode = D.typeTermMix . headType
 
 -- | Pretty print head of relation.
+--
+--   >>> headExplain $ headFrom ["a", "b"]
+--   rel /a any
+--       /b any
+
 headExplain :: Head -> B.Doc
 headExplain = D.typeExplain . headType
 
@@ -196,7 +201,7 @@ headMapName = headMapBy D.typeRelMapName
 headMapBy :: (a -> B.Map D.Type) -> a -> B.Map Head
 headMapBy g f he = headOf $ g f $ headType he
 
--- | Up nested relation.
+-- | Move up nested relation.
 headUp :: B.Map Head
 headUp = headOf . up . headType where
     up (D.TypeRel [(_, ty)]) = ty

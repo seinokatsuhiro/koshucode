@@ -10,7 +10,6 @@ module Koshucode.Baala.Data.Type.Rel.Rel
   
     -- * Constant
     reldum, reldee, reldau,
-    -- $Constant
 
     -- * Converter
     SelectRel (..),
@@ -68,14 +67,17 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
 
 -- ----------------------  Sort contents
 
+-- | Sort head and body of relation.
 relSort :: (Ord c) => B.Map (Rel c)
 relSort = relSortBody . relSortHead
 
+-- | Sort head of relation.
 relSortHead :: B.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
     he' = D.headMap B.sort he
     bo' = D.bodyAlign he' he bo
 
+-- | Sort body of relation.
 relSortBody :: (Ord c) => B.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
@@ -88,25 +90,23 @@ relBodyOrder ns he = ed where
 
 -- ----------------------  Constant
 
--- $Constant
---
---  /Examples/
---
---    >>> B.doc (reldum :: Rel Bool)
---    {= =}
---
---    >>> B.doc (reldee :: Rel Bool)
---    {= [] =}
-
 -- | The nullary empty relation.
 --   In other words, relational constant
 --   that has no terms and no tuples.
+--
+--   >>> B.doc (reldum :: Rel Bool)
+--   {= =}
+
 reldum :: Rel c
 reldum = Rel mempty []
 
 -- | The nullary full relation.
 --   In other words, relational constant
 --   that has no terms and the empty tuple.
+--
+--   >>> B.doc (reldee :: Rel Bool)
+--   {= [] =}
+
 reldee :: Rel c
 reldee = Rel mempty [[]]
 

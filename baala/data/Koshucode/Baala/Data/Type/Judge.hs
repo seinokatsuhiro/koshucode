@@ -9,7 +9,7 @@ module Koshucode.Baala.Data.Type.Judge
     Judge (..), JudgeClass,
     judgeTermsMap,
     judgeCons,
-    sortJudgeTerms, 
+    --sortJudgeTerms, 
 
     -- * Logical quality
     JudgeOf,
@@ -71,11 +71,12 @@ instance (Ord c) => Ord (Judge c) where
 -- Apply function to each values
 instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
-        where g (n, v) = (n, f v)
+        where g (n, c) = (n, f c)
 
 -- | Name of judgement class, in other words, name of propositional function.
 type JudgeClass = String
 
+-- | Map function to terms.
 judgeTermsMap :: ([S.Term a] -> [S.Term b]) -> Judge a -> Judge b
 judgeTermsMap f (JudgeAffirm      c xs)      = JudgeAffirm    c (f xs)
 judgeTermsMap f (JudgeDeny        c xs)      = JudgeDeny      c (f xs)
