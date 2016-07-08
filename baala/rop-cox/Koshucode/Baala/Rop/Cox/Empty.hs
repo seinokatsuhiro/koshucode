@@ -72,7 +72,7 @@ relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 -- | Calculate maybe relmap.
 relkitMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
 relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
-    lr   = D.getTermNames he1 `D.headLR` D.getTermNames he2
+    lr   = D.shareSide he1 he2
     he3  = he2 B.<> he1
     kit3 = case Op.unmatchShare sh lr of
              Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]

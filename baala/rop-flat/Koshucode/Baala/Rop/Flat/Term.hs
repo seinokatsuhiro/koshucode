@@ -114,7 +114,7 @@ relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = ns `D.headLROrd` D.getTermNames he1
+      lr    = D.shareSideOrd ns he1
       unk   = D.headLSideNames lr
       he2   = heMap lr `D.headMap` he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr

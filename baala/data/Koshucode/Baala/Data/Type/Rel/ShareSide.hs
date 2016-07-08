@@ -7,11 +7,12 @@ module Koshucode.Baala.Data.Type.Rel.ShareSide
     HeadLR (..),
     HeadLRMap,
     HeadLRMap2,
-    headLR, headLROrd,
+    shareSide, shareSideOrd,
   ) where
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
+import qualified Koshucode.Baala.Data.Type.Judge     as D
 
 type HeadLRMap c = HeadLR c -> [c] -> [c]
 type HeadLRMap2 a b = (HeadLRMap a, HeadLRMap b)
@@ -39,9 +40,12 @@ data HeadLR c = HeadLR
     , headRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
     }
 
-headLR :: [S.TermName] -> [S.TermName] -> HeadLR a
-headLR left right = headLRBody li ri left right where
-    (li, ri) = sharedIndex left right
+-- | Create share-side structure from left and right term names.
+shareSide :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> HeadLR c
+shareSide left right = shareSideBody li ri left' right' where
+    (li, ri)  = sharedIndex left' right'
+    left'     = D.getTermNames left
+    right'    = D.getTermNames right
 
 -- sharedIndex "dxcy" "abcd"
 -- >>> ([0,2], [3,2])
@@ -52,14 +56,16 @@ sharedIndex xs1 xs2 = (ind1, ind2) where
     ind2  = B.snipIndex sh xs2
     sh    = B.intersectionFilter xs2 xs1
 
-headLROrd :: [S.TermName] -> [S.TermName] -> HeadLR a
-headLROrd left right = headLRBody li ri left right where
-    (li, ri)  = (ind2 left, ind2 right)
-    ind       = B.snipIndex left right
-    ind2      = B.snipIndex $ B.snipFrom ind right
+shareSideOrd :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> HeadLR c
+shareSideOrd left right = shareSideBody li ri left' right' where
+    (li, ri)  = (ind2 left', ind2 right')
+    ind       = B.snipIndex left' right'
+    ind2      = B.snipIndex $ B.snipFrom ind right'
+    left'     = D.getTermNames left
+    right'    = D.getTermNames right
 
-headLRBody :: [Int] -> [Int] -> [S.TermName] -> [S.TermName] -> HeadLR a
-headLRBody li ri left right = lr where
+shareSideBody :: [Int] -> [Int] -> [S.TermName] -> [S.TermName] -> HeadLR a
+shareSideBody li ri left right = lr where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri

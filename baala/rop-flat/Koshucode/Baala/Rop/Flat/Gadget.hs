@@ -137,10 +137,10 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
     | lenFrom  /= lenTo  = Msg.adlib "Require same number of terms"
     | otherwise          = Right kit3
     where
-      lrStart   = step1 `D.headLROrd` D.getTermNames he1
-      lrDist    = [to]  `D.headLROrd` D.getTermNames he1
-      lrFrom    = step1 `D.headLROrd` D.getTermNames he2
-      lrTo      = step2 `D.headLROrd` D.getTermNames he2
+      lrStart   = D.shareSideOrd step1 he1
+      lrDist    = D.shareSideOrd [to]  he1
+      lrFrom    = D.shareSideOrd step1 he2
+      lrTo      = D.shareSideOrd step2 he2
 
       unkStart  = D.headLSideNames lrStart
       unkFrom   = D.headLSideNames lrFrom

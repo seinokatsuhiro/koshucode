@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Judgements: a symbolic representations of
@@ -153,6 +154,9 @@ instance GetClass (Judge c) where
 
 instance GetTermNames (Judge c) where
     getTermNames = map fst . judgeTerms
+
+instance GetTermNames [S.TermName] where
+    getTermNames = id
 
 instance GetTerms Judge where
     getTerms = judgeTerms
