@@ -39,7 +39,7 @@ consForward med =
      Right $ relmapForward med ns
 
 relmapForward :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapForward med = C.relmapFlow med . relkitToward (D.headRForward, D.headRForward)
+relmapForward med = C.relmapFlow med . relkitToward (D.ssRForward, D.ssRForward)
 
 consBackward :: C.RopCons c
 consBackward med =
@@ -47,16 +47,16 @@ consBackward med =
      Right $ relmapBackward med ns
 
 relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapBackward med = C.relmapFlow med . relkitToward (D.headRBackward, D.headRBackward)
+relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
 
-relkitToward :: D.HeadLRMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
+relkitToward :: D.ShareSideMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
       lr    = D.shareSide ns he1
-      unk   = D.headLSide lr ns
+      unk   = D.ssLSide lr ns
       he2   = D.headMap (heMap lr) he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boMap lr
 
@@ -74,8 +74,8 @@ relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
     ns    = D.getTermNames he1
     lr    = D.shareSide (B.sort ns) ns
-    he2   = D.headMap (D.headRForward lr) he1
-    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.headRForward lr
+    he2   = D.headMap (D.ssRForward lr) he1
+    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.ssRForward lr
 
 
 -- ----------------------  order

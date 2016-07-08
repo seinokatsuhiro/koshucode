@@ -69,12 +69,12 @@ relkitMeet sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           case D.headLShareIndex lr of
+           case D.ssLShareIndex lr of
              [] -> Right $ cartesian bo1 bo2
-             _  -> let b2map = B.gatherToMap $ map (D.headRSplit lr) bo2
+             _  -> let b2map = B.gatherToMap $ map (D.ssRSplit lr) bo2
                    in Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case D.headLShare lr cs1 `B.lookupMap` b2map of
+    step b2map cs1 = case D.ssLShare lr cs1 `B.lookupMap` b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
@@ -116,7 +116,7 @@ relmapJoinList med (rmap : rmaps) = rmap B.<> rmaps' where
 relkitJoin :: SharedTerms -> C.RelkitBinary c
 relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.shareSide he1 he2
-    he3    = D.headLShare lr `D.headMap` he1
+    he3    = D.ssLShare lr `D.headMap` he1
     kit3   = case unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -124,8 +124,8 @@ relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-               left    = map $ D.headLShare lr
-               right   = map $ D.headRShare lr
+               left    = map $ D.ssLShare lr
+               right   = map $ D.ssRShare lr
            bo2 <- bmap2 bo1
            Right $ left bo1 ++ right bo2
 
@@ -138,11 +138,11 @@ relkitJoin _ _ _ = Right C.relkitNothing
 type SharedTerms = Maybe [S.TermName]
 
 -- | Calculate unmatch shared terms.
-unmatchShare :: SharedTerms -> D.HeadLR c -> Maybe ([S.TermName], [S.TermName])
+unmatchShare :: SharedTerms -> D.ShareSide c -> Maybe ([S.TermName], [S.TermName])
 unmatchShare (Nothing) _ = Nothing
 unmatchShare (Just sh) lr =
     let e = B.setList sh
-        a = B.setList $ D.headRShareNames lr
+        a = B.setList $ D.ssRShareNames lr
     in if e == a
        then Nothing
        else Just (e, a)

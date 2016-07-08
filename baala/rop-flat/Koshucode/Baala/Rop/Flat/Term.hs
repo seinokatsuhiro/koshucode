@@ -62,7 +62,7 @@ relmapPick :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapPick med = C.relmapFlow med . relkitPick
 
 relkitPick :: [S.TermName] -> C.RelkitFlow c
-relkitPick = relkitProject (D.headRShare, D.headRShare)
+relkitPick = relkitProject (D.ssRShare, D.ssRShare)
 
 consCut :: C.RopCons c
 consCut med =
@@ -73,7 +73,7 @@ relmapCut :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapCut med = C.relmapFlow med . relkitCut
 
 relkitCut :: [S.TermName] -> C.RelkitFlow c
-relkitCut = relkitProject (D.headRSide, D.headRSide)
+relkitCut = relkitProject (D.ssRSide, D.ssRSide)
 
 
 -- ----------------------  pick-term & cut-term
@@ -87,7 +87,7 @@ relmapPickTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapPickTerm med = C.relmapBinary med relkitPickTerm
 
 relkitPickTerm :: C.RelkitBinary c
-relkitPickTerm = relkitProjectTerm (D.headRShare, D.headRShare)
+relkitPickTerm = relkitProjectTerm (D.ssRShare, D.ssRShare)
 
 consCutTerm :: C.RopCons c
 consCutTerm med =
@@ -98,24 +98,24 @@ relmapCutTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 relkitCutTerm :: C.RelkitBinary c
-relkitCutTerm = relkitProjectTerm (D.headRSide, D.headRSide)
+relkitCutTerm = relkitProjectTerm (D.ssRSide, D.ssRSide)
 
 
 -- ----------------------  project
 
-relkitProjectTerm :: D.HeadLRMap2 D.NamedType c -> C.RelkitBinary c
+relkitProjectTerm :: D.ShareSideMap2 D.NamedType c -> C.RelkitBinary c
 relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
 relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
     relkitProject lrMap $ D.getTermNames he2
 
-relkitProject :: D.HeadLRMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
+relkitProject :: D.ShareSideMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
 relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
       lr    = D.shareSideOrd ns he1
-      unk   = D.headLSideNames lr
+      unk   = D.ssLSideNames lr
       he2   = heMap lr `D.headMap` he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr
 

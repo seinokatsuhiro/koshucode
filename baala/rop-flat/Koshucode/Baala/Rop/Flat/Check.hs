@@ -91,12 +91,12 @@ relkitDuplicate ns (Just he1)
     | otherwise  = Msg.unkTerm unk he1
     where
       lr     = D.shareSide ns he1
-      unk    = D.headLSideNames lr
+      unk    = D.ssLSideNames lr
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
       dup    = not . B.isSingleton
 
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.headRAssoc lr) bo1
+      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.ssRAssoc lr) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 

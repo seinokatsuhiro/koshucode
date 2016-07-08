@@ -142,10 +142,10 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
       lrFrom    = D.shareSideOrd step1 he2
       lrTo      = D.shareSideOrd step2 he2
 
-      unkStart  = D.headLSideNames lrStart
-      unkFrom   = D.headLSideNames lrFrom
-      unkTo     = D.headLSideNames lrTo
-      newDist   = D.headLSideNames lrDist
+      unkStart  = D.ssLSideNames lrStart
+      unkFrom   = D.ssLSideNames lrFrom
+      unkTo     = D.ssLSideNames lrTo
+      newDist   = D.ssLSideNames lrDist
 
       lenFrom   = length step1
       lenTo     = length step2
@@ -158,7 +158,7 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 
 relkitVisitDistanceBody :: (D.CDec c, D.CRel c, Ord c) =>
-  Bool -> D.HeadLR c -> D.HeadLR c -> D.HeadLR c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
+  Bool -> D.ShareSide c -> D.ShareSide c -> D.ShareSide c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
 relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
     | optimize1 = kitf3 (add1, tuple1, vdist1)
     | otherwise = kitf3 (addN, tupleN, vdistN)
@@ -171,7 +171,7 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
       calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
           rel    = D.pRel $ D.Rel heTo body
           body   = map tupleX $ Map.assocs $ vdistX vstep start
-          start  = D.headRShare lrStart cs1
+          start  = D.ssRShare lrStart cs1
 
       vdistN vstep cs   = visitDistanceFrom vstep cs
       vdist1 vstep [c]  = visitDistanceFrom vstep c
@@ -180,10 +180,10 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
       tupleN (cs, n)    = D.pInt n : cs
       tuple1 (c, n)     = [D.pInt n, c]
 
-      addN cs           = insertPush (D.headRShare lrFrom cs)
-                                     (D.headRShare lrTo cs)
-      add1 cs           = insertPush (head $ D.headRShare lrFrom cs)
-                                     (head $ D.headRShare lrTo cs)
+      addN cs           = insertPush (D.ssRShare lrFrom cs)
+                                     (D.ssRShare lrTo cs)
+      add1 cs           = insertPush (head $ D.ssRShare lrFrom cs)
+                                     (head $ D.ssRShare lrTo cs)
 
 calcBody :: [C.BodyMap c] -> [[c]] -> B.Ab [[[c]]]
 calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps
