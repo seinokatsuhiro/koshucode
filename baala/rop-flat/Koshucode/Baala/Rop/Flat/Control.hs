@@ -139,7 +139,7 @@ relmapEqual med = C.relmapBinary med relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    kit3 = C.relkitJust D.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
+    kit3 = C.relkitJust mempty $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1

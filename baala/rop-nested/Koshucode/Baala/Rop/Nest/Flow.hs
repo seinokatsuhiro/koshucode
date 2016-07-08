@@ -43,7 +43,7 @@ relmapDown med = C.relmapFlow med . relkitDown
 relkitDown :: (D.CRel c) => S.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
-    he2       = D.headConsNest n he1 $ D.headEmpty
+    he2       = D.headConsNest n he1 mempty
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ D.pRel $ D.Rel he1 bo1 ]]
 

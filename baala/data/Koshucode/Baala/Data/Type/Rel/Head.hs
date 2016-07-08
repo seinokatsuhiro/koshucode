@@ -8,9 +8,8 @@ module Koshucode.Baala.Data.Type.Rel.Head
     headExplain,
   
     -- * Constructor
-    headOf, headFrom, headEmpty,
-    -- $Constructor
-  
+    headOf, headFrom,
+    
     -- * Selector
     headEquiv,
     isSubhead, isSuperhead,
@@ -31,7 +30,6 @@ module Koshucode.Baala.Data.Type.Rel.Head
     headMap,
     headMapName,
     headUp,
-    headAlign,
     bodyAlign,
     -- $Mapping
 
@@ -57,7 +55,7 @@ data Head =
          } deriving (Show, Eq, Ord)
 
 instance Monoid Head where
-    mempty = headEmpty
+    mempty = headFrom []
     mappend he1 he2 = headOf $ headType he1 `a` headType he2
         where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2
               a _ _ = D.TypeAny
@@ -68,50 +66,27 @@ instance D.GetTermNames Head where
 instance B.MixEncode Head where
     mixEncode = D.typeTermMix . headType
 
+-- | Pretty print head of relation.
 headExplain :: Head -> B.Doc
 headExplain = D.typeExplain . headType
 
 
-
 -- ----------------------  Constructor
-
--- $Constructor
---
---  /Examples/
---
---  Make heading of @\/a@ @\/b@.
---
---    >>> headFrom ["a", "b"]
---    Head { headType = TypeRel [("a", TypeAny), ("b", TypeAny)] }
---
---  Show heading.
---
---    >>> B.doc $ headFrom ["a", "b"]
---    /a : /b
---
---  Term names of heading.
---
---    >>> let h = headFrom ["a", "b"] in D.getTermNames h
---    ["a", "b"]
---
---  Degree of relation.
---
---    >>> let h = headFrom ["a", "b"] in headDegree h
---    2
---
 
 -- | Make head of given type..
 headOf :: D.Type -> Head
 headOf ty = Head { headType = ty }
 
 -- | Make head from term names.
+--
+--   >>> headFrom ["a", "b"]
+--   Head { headType = TypeRel [("a", TypeAny), ("b", TypeAny)] }
+--
+--   >>> B.mixEncode $ headFrom ["a", "b"]
+--   MixText "/a /b"
+
 headFrom :: [S.TermName] -> Head
 headFrom = headOf . D.typeFlatRel
-
--- | Empty heading, i.e., no terms in heading.
-headEmpty :: Head
-headEmpty = headFrom []
-
 
 
 -- ----------------------  Selector
@@ -126,26 +101,31 @@ headEmpty = headFrom []
 --    [0]
 --    >>> let h = headFrom ["a", "b"] in headIndex h [["a"], ["b"], ["c"]]
 --    [[0], [1], [-1]]
---
---  Heading of @\/a@ @\/b@ is a subhead of @\/a@ @\/b@ @\/c@, and @\/a@ @\/e@ is not.
---
---    >>> headFrom ["a", "b"] `isSubhead` headFrom ["a", "b", "c"]
---    True
---    >>> headFrom ["a", "e"] `isSubhead` headFrom ["a", "b", "c"]
---    False
---
 
+-- | Test two heads are equivalent.
 headEquiv :: Head -> Head -> Bool
 headEquiv he1 he2 = ts he1 == ts he2 where
     ts = B.sort . D.typeRelTermNames . headType
 
+-- | Test heading is subset of another heading.
+--
+--   >>> headFrom ["a", "b"] `isSubhead` headFrom ["a", "b", "c"]
+--   True
+--   >>> headFrom ["a", "e"] `isSubhead` headFrom ["a", "b", "c"]
+--   False
+
 isSubhead :: Head -> Head -> Bool
 isSubhead he1 he2 = null $ D.getTermNames he1 `B.snipLeft` D.getTermNames he2 
 
+-- | Test heading is superset of another heading.
 isSuperhead :: Head -> Head -> Bool
 isSuperhead he1 he2 = isSubhead he2 he1
 
 -- | Degree of relation, i.e., number of terms.
+--
+--   >>> headDegree $ headFrom ["a", "b"]
+--   2
+
 headDegree :: Head -> Int
 headDegree = D.typeRelDegree . headType
 
@@ -194,7 +174,6 @@ headNests ns1 Head { headType = t } =
         where nest n = (n, t)
 
 
-
 -- ----------------------  Mapping
 
 -- $Mapping
@@ -217,6 +196,7 @@ headMapName = headMapBy D.typeRelMapName
 headMapBy :: (a -> B.Map D.Type) -> a -> B.Map Head
 headMapBy g f he = headOf $ g f $ headType he
 
+-- | Up nested relation.
 headUp :: B.Map Head
 headUp = headOf . up . headType where
     up (D.TypeRel [(_, ty)]) = ty
