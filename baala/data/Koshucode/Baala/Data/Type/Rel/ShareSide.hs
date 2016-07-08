@@ -32,14 +32,63 @@ data ShareSide c = ShareSide
     , ssRShare       :: [c] -> [c]    -- ^ Pick right-shared part from right contents
     , ssRSide        :: [c] -> [c]    -- ^ Pick right-side part from right contents
 
-    , ssRForward     :: [c] -> [c]
-    , ssRBackward    :: [c] -> [c]
-
     , ssRSplit       :: [c] -> ([c], [c])  -- ^ Pick right-shared and right-side part
     , ssRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
+
+    , ssRForward     :: [c] -> [c]
+    , ssRBackward    :: [c] -> [c]
     }
 
 -- | Create share-side structure from left and right term names.
+--
+--     >>> let ss = shareSide ["a", "b", "c"] ["b", "c", "d", "e"]
+--
+--     >>> ssDisjoint ss
+--     False
+--
+--   Left terms.
+--
+--     >>> ssLShareIndex ss
+--     [1, 2]
+--
+--     >>> ssLShareNames ss
+--     ["b", "c"]
+--
+--     >>> ssLSide ss "ABC"
+--     "A"
+--
+--     >>> ssLShare ss "ABC"
+--     "BC"
+--
+--   Right terms.
+--
+--     >>> ssRShareIndex ss
+--     [0, 1]
+--
+--     >>> ssRShareNames ss
+--     ["b", "c"]
+--
+--     >>> ssRSideNames ss
+--     ["d", "e"]
+--
+--     >>> ssRShare ss "BCDE"
+--     "BC"
+--
+--     >>> ssRSide ss "BCDE"
+--     "DE"
+--
+--     >>> ssRSplit ss "BCDE"
+--     ("BC", "DE")
+--
+--     >>> ssRAssoc ss "BCDE"
+--     ("BC", "BCDE")
+--
+--     >>> ssRForward ss "BCDE"
+--     "BCDE"
+--
+--     >>> ssRBackward ss "BCDE"
+--     "DEBC"
+
 shareSide :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
 shareSide left right = shareSideBody li ri left' right' where
     (li, ri)  = sharedIndex left' right'
@@ -64,7 +113,7 @@ shareSideOrd left right = shareSideBody li ri left' right' where
     right'    = D.getTermNames right
 
 shareSideBody :: [Int] -> [Int] -> [S.TermName] -> [S.TermName] -> ShareSide a
-shareSideBody li ri left right = lr where
+shareSideBody li ri left right = ss where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri
@@ -74,7 +123,7 @@ shareSideBody li ri left right = lr where
     rsplit xs  = (rshare xs, rside xs)
     rassoc xs  = (rshare xs, xs)
 
-    lr = ShareSide
+    ss = ShareSide
          { ssLShareIndex  = li
          , ssRShareIndex  = ri
          , ssDisjoint     = null li
@@ -86,9 +135,9 @@ shareSideBody li ri left right = lr where
          , ssLShare       = lshare
          , ssRShare       = rshare
          , ssRSide        = rside
-         , ssRForward     = rfor
-         , ssRBackward    = rback
          , ssRSplit       = rsplit
          , ssRAssoc       = rassoc
+         , ssRForward     = rfor
+         , ssRBackward    = rback
          }
 
