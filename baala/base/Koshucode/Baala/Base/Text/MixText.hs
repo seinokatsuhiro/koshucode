@@ -25,6 +25,7 @@ module Koshucode.Baala.Base.Text.MixText
     -- ** Newline
     mixLine, mixLines,
     mixSoft, mixHard,
+    mixBreak,
     -- ** Other
     mixShow, mixEmpty,
 
@@ -72,6 +73,7 @@ data MixText
     | MixSpace    Int
     | MixNewline  Bool
     | MixEmpty
+    | MixBreak    B.LineBreak MixText
 
 -- | Show mix text without line break.
 instance Show MixText where
@@ -246,6 +248,10 @@ mixSoft = MixNewline False
 mixHard :: MixText
 mixHard = MixNewline True
 
+-- | Mix text with local line break setting.
+mixBreak :: B.LineBreak -> MixText -> MixText
+mixBreak = MixBreak
+
 -- ----------------------  Others
 
 mixShow :: (Show a) => a -> MixText
@@ -339,7 +345,7 @@ bsSpaces :: Int -> Bs.ByteString
 bsSpaces n = Bs.replicate n 32
 
 mixBuild :: B.LineBreak -> MixText -> Bld -> Bld
-mixBuild lb mx p = mixBreak (auto $ B.breakWidth lb) hard p mx where
+mixBuild lb mx bld = mixBuildBody (auto $ B.breakWidth lb) hard bld mx where
     auto (Nothing) (b,_,s) _  b2  = Bw (b <> space s <> b2) 0
     auto (Just wd) (b,w,s) w2 b2
         | w + s + w2 > wd         = Br (b <> nl <> ind <> b2) (indw + w2)
@@ -352,8 +358,8 @@ mixBuild lb mx p = mixBreak (auto $ B.breakWidth lb) hard p mx where
     (ind, indw)  = indentBuilder   lb
     space        = B.byteString . bsSpaces
 
-mixBreak :: Auto -> Hard -> Bld -> MixText -> Bld
-mixBreak auto hard = (<<) where
+mixBuildBody :: Auto -> Hard -> Bld -> MixText -> Bld
+mixBuildBody auto hard = (<<) where
     bld << MixAppend x y   = bld << x << y
     bld << MixBs b         = cat bld (bsWidth b)       $ B.byteString b
     bld << MixBz b         = cat bld (bzWidth b)       $ B.lazyByteString b
@@ -363,6 +369,7 @@ mixBreak auto hard = (<<) where
     bld << MixSpace s'     = space bld s'
     bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
+    bld << MixBreak lb x   = mixBuild lb x bld
 
     cat bld@(b, w, s) w2 b2
         | s < 0            = Bw (b <> b2) (w + w2)
