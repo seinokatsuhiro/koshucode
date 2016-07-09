@@ -25,7 +25,8 @@
     | [ "Prelude" ] ] [ 4 | "Order" | [ "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Comment" | [ ]
     ] [ 0 | "LineBreak" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 3 | "Utility" | [ "Prelude" ] ] [ 4 | "MixText" | [ ] ] [ 5 |
-    "MixClass" | [ ] ] [ 6 | "PPrint" | [ "List" | "Prelude" ] ] [ 6 | "TextTable" | [ "List" | "Prelude" ] ] =}
+    "MixClass" | [ ] ] [ 5 | "MixEncode" | [ ] ] [ 6 | "PPrint" | [ "List" | "Prelude" ] ] [ 6 | "TextTable" | [ "List"
+    | "Prelude" ] ] =}
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" |
     [ ] ] [ 3 | "BzFile" | [ "Prelude" ] ] [ 3 | "Exit" | [ "Prelude" ] ] [ 4 | "Http" | [ "Prelude" ] ] [ 6 | "IOPoint"
     | [ "List" | "Prelude" ] ] [ 7 | "CodePt" | [ "Prelude" ] ] =}
@@ -65,8 +66,9 @@
     20 | "Symbol" | [ ] ] [ 27 | "Token" | [ ] ] [ 31 | "TTree" | [ ] ] [ 33 | "Message" | [ ] ] [ 35 | "Attr" | [ ] ]
     =}
 
-|-- DIR-RANK  /dir-rank 41  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 39 | "Head" |
-    [ "Base" | "Syntax" ] ] [ 40 | "Rel" | [ "Base" | "Syntax" ] ] [ 41 | "Mono" | [ "Base" ] ] =}
+|-- DIR-RANK  /dir-rank 41  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 38 |
+    "ShareSide" | [ "Base" | "Syntax" ] ] [ 39 | "Head" | [ "Base" | "Syntax" ] ] [ 40 | "Rel" | [ "Base" | "Syntax" ] ]
+    [ 41 | "Mono" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 42  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 17 | "Message" | [
     "Base" ] ] [ 21 | "Decimal" | [ ] ] [ 21 | "Time" | [ ] ] [ 37 | "Judge" | [ "Base" | "Syntax" ] ] [ 38 | "Interp" |
     [ "Base" | "Syntax" ] ] [ 38 | "Type" | [ "Base" | "Syntax" ] ] [ 42 | "Rel" | [ ] ] =}
@@ -192,6 +194,7 @@ TABLE : DIR-RANK
                                                   3     "Utility"        [ "Prelude" ]
                                                   4     "MixText"        [ ]
                                                   5     "MixClass"       [ ]
+                                                  5     "MixEncode"      [ ]
                                                   6     "PPrint"         [ "List" | "Prelude" ]
                                                   6     "TextTable"      [ "List" | "Prelude" ]
                                                   
@@ -295,6 +298,7 @@ TABLE : DIR-RANK
                                                   
   41        "Koshucode.Baala.Data.Type.Rel"       /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
+                                                  38    "ShareSide"      [ "Base" | "Syntax" ]
                                                   39    "Head"           [ "Base" | "Syntax" ]
                                                   40    "Rel"            [ "Base" | "Syntax" ]
                                                   41    "Mono"           [ "Base" ]

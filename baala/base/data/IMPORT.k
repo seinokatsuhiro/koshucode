@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    160 judges
+**    162 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
@@ -167,6 +167,8 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Koshucode.Baala.Base.Text.MixText"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixEncode"       /import "Koshucode.Baala.Base.Text.MixText"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Monoid"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Control.Exception"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Numeric"
@@ -201,6 +203,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.LineBreak"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixClass"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixEncode"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixText"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.PPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
