@@ -26,6 +26,8 @@ module Koshucode.Baala.Base.Text.MixText
     mixLine, mixLines,
     mixSoft, mixHard,
     mixBreak,
+    -- ** Block
+    mixBlock, mixBlockMap,
     -- ** Other
     mixShow, mixEmpty,
 
@@ -51,6 +53,7 @@ import qualified Data.ByteString.Builder              as B
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.ByteString.Lazy.UTF8            as Bu
 import qualified Data.Default                         as Def
+import qualified Data.List                            as L
 import qualified Data.Text                            as Tx
 import qualified Data.Text.Encoding                   as Tx
 import qualified Data.Text.Lazy                       as Tz
@@ -64,16 +67,17 @@ import qualified Koshucode.Baala.Base.Text.LineBreak  as B
 
 -- | Text mixable string, text, and bytestring.
 data MixText
-    = MixAppend   MixText MixText
-    | MixBs       Bs.ByteString
-    | MixBz       Bz.ByteString
-    | MixTx       Tx.Text
-    | MixTz       Tz.Text
-    | MixString   String
-    | MixSpace    Int
-    | MixNewline  Bool
-    | MixEmpty
-    | MixBreak    B.LineBreak MixText
+    = MixAppend   MixText MixText       -- ^ Append two mix texts
+    | MixBs       Bs.ByteString         -- ^ Strict bytestring
+    | MixBz       Bz.ByteString         -- ^ Lazy bytestring
+    | MixTx       Tx.Text               -- ^ Strict text
+    | MixTz       Tz.Text               -- ^ Lazy text
+    | MixString   String                -- ^ String
+    | MixSpace    Int                   -- ^ Given length spaces
+    | MixNewline  Bool                  -- ^ Hard/soft newline
+    | MixEmpty                          -- ^ Zero-length mix text
+    | MixBlock    [MixText]             -- ^ Block of mix texts
+    | MixBreak    B.LineBreak MixText   -- ^ Local line break
 
 -- | Show mix text without line break.
 instance Show MixText where
@@ -252,6 +256,31 @@ mixHard = MixNewline True
 mixBreak :: B.LineBreak -> MixText -> MixText
 mixBreak = MixBreak
 
+-- ----------------------  Block
+
+-- | Block of multiple mix texts.
+mixBlock :: [MixText] -> MixText
+mixBlock = MixBlock
+
+-- | Map function to mix texts directly in mix block.
+--
+--   >>> let m1 = mixBlock [mixString "cd", mixString "ef" <> mixBlock [mixString "g"]]
+--   >>> let m2 = mixBlock [mixString "ab", m1]
+--
+--   >>> m2
+--   MixText "abcdegh"
+--
+--   >>> mixBlockMap mixLine m2
+--   MixText "ab\r\ncd\r\nefg\r\n"
+--
+--   >>> mixBlockMap (\x -> mixString "[" <> x <> mixString "]") m2
+--   MixText "[ab][cd][efg]"
+
+mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
+mixBlockMap f = loop where
+    loop (MixBlock xs) = MixBlock (loop <$> xs)
+    loop m = f m
+
 -- ----------------------  Others
 
 mixShow :: (Show a) => a -> MixText
@@ -369,6 +398,7 @@ mixBuildBody auto hard = (<<) where
     bld << MixSpace s'     = space bld s'
     bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
+    bld << MixBlock xs     = L.foldl' (<<) bld xs
     bld << MixBreak lb x   = mixBuild lb x bld
 
     cat bld@(b, w, s) w2 b2
