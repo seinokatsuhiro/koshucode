@@ -9,9 +9,9 @@ about /package 'base
 |-- DIR  /code 544  /comment 631  /dir "base/Koshucode/Baala/Base/List"
 |-- DIR  /code 216  /comment 207  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 354  /comment 241  /dir "base/Koshucode/Baala/Base/Syntax"
-|-- DIR  /code 676  /comment 512  /dir "base/Koshucode/Baala/Base/Text"
+|-- DIR  /code 691  /comment 534  /dir "base/Koshucode/Baala/Base/Text"
 
-|-- DIR-TOTAL  /code 2388  /comment 1933
+|-- DIR-TOTAL  /code 2403  /comment 1955
 
 |-- FILE  /code 14   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -53,10 +53,10 @@ about /package 'base
 |-- FILE  /code 51   /comment 40   /file "LineBreak.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 56   /comment 52   /file "MixClass.hs"    /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 20   /comment 18   /file "MixEncode.hs"   /dir "base/Koshucode/Baala/Base/Text"
-|-- FILE  /code 200  /comment 199  /file "MixText.hs"     /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /code 215  /comment 221  /file "MixText.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 26   /comment 37   /file "PPrint.hs"      /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 125  /comment 57   /file "TextTable.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 103  /comment 40   /file "Unicode.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 59   /comment 45   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Text"
 
-|-- FILE-TOTAL  /code 2388  /comment 1933
+|-- FILE-TOTAL  /code 2403  /comment 1955

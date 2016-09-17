@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    162 judges
+**    163 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
@@ -177,6 +177,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Default"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy"
