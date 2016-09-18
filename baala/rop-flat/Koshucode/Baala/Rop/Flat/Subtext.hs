@@ -22,24 +22,27 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
-  do n <- Op.getTerm  med "-term"
-     t <- Op.getTrees med "-expr"
-     b <- parseBundle t
-     Right $ relmapSubtext med (n, submatchNamesBundle b, T.matchBundle b)
+  do term  <- Op.getTerm   med "-term"
+     sub   <- Op.getTrees  med "-subtext"
+     trim  <- Op.getSwitch med "-trim"
+     b     <- parseBundle sub
+     let ns    = submatchNamesBundle b
+         match = T.matchBundle b
+     Right $ relmapSubtext med (term, ns, match, trim)
 
 submatchNamesBundle :: CharBundle -> [String]
 submatchNamesBundle b = T.submatchNames $ T.seq (snd <$> b)
 
-relmapSubtext :: (D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName], T.CharMatch) -> C.Relmap c
+relmapSubtext :: (D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName], T.CharMatch, Bool) -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
-relkitSubtext :: (D.CContent c) => (S.TermName, [S.TermName], T.CharMatch) -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitSubtext :: (D.CContent c) => (S.TermName, [S.TermName], T.CharMatch, Bool) -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitSubtext _ Nothing = Right C.relkitNothing
-relkitSubtext (n, ns, match) (Just he1) = Right kit2 where
-    pick    =  Op.picker he1 [n]
+relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
+    pick    = Op.picker he1 [n]
     he2     = D.headAppend ns he1
     kit2    = C.relkitJust he2 $ C.RelkitOneToOne False f2
-    result  = subtextResult ns
+    result  = subtextResult trim ns
     f2 cs   = case pick cs of
                [c] | D.isText c
                    -> case match $ D.gText c of
@@ -47,11 +50,15 @@ relkitSubtext (n, ns, match) (Just he1) = Right kit2 where
                         Nothing      -> result [] ++ cs
                _ -> result [] ++ cs
 
-subtextResult :: (D.CEmpty c, D.CText c) => [S.TermName] -> [(S.TermName, String)] -> [c]
-subtextResult ns rs = result <$> ns where
+subtextResult :: (D.CEmpty c, D.CText c) => Bool -> [S.TermName] -> [(S.TermName, String)] -> [c]
+subtextResult trim ns rs = result <$> ns where
     result n = case lookup n rs of
-                 Just t  -> D.pText t
+                 Just t  -> D.pText $ trimIf trim t
                  Nothing -> D.empty
+
+trimIf :: Bool -> String -> String
+trimIf True  t = B.trimBoth t
+trimIf False t = t
 
 
 -- --------------------------------------------  Parser
