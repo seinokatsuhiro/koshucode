@@ -54,13 +54,12 @@ subMatches = reverse . S.paraRawSubs
 -- | Match procedure.
 match :: S.Para a -> Maybe (S.Para a)
 match pa@S.Para { S.paraBundle    = bundle
-              , S.paraRawSubs   = subs'
-              , S.paraGather    = gather
-              , S.paraExpr      = expr
-              , S.paraPos       = p
-              , S.paraInput     = s
-              , S.paraPrev      = prev
-              , S.paraRawOutput = o } = result
+                , S.paraGather    = gather
+                , S.paraExpr      = expr
+                , S.paraPos       = p
+                , S.paraInput     = s
+                , S.paraPrev      = prev
+                , S.paraRawOutput = o } = result
     where
       result = case expr of
                  S.ERec  r -> rec r
@@ -84,8 +83,9 @@ match pa@S.Para { S.paraBundle    = bundle
 
       rec (S.ERep m e)      = rep m e
       rec (S.ESub n e)      = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
-                                 let o' = S.paraRawOutput pa'
-                                 Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs'
+                                 let o'   = S.paraRawOutput pa'
+                                     subs = S.paraRawSubs pa'
+                                 Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs
                                             , S.paraRawOutput = o' ++ o }
       rec (S.EGath b e)     = do pa' <- match $ pa { S.paraGather = b, S.paraExpr = e }
                                  Just $ pa' { S.paraGather = gather }
