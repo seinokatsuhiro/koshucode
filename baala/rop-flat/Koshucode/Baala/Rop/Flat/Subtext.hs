@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Subtext            as T
 import qualified Koshucode.Baala.Subtext.Expr       as T
+import qualified Koshucode.Baala.Subtext.Para       as T
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
@@ -23,8 +24,11 @@ consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
   do n <- Op.getTerm  med "-term"
      t <- Op.getTrees med "-expr"
-     e <- parseSubtext t
-     Right $ relmapSubtext med (n, T.submatchNames e, T.matchExpr e)
+     b <- parseBundle t
+     Right $ relmapSubtext med (n, submatchNamesBundle b, T.matchBundle b)
+
+submatchNamesBundle :: CharBundle -> [String]
+submatchNamesBundle b = T.submatchNames $ T.seq (snd <$> b)
 
 relmapSubtext :: (D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName], T.CharMatch) -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
@@ -52,17 +56,56 @@ subtextResult ns rs = result <$> ns where
 
 -- --------------------------------------------  Parser
 
+-- | Type for subtext expression.
 type CharExpr = T.Expr Char
 
+-- | Type for subtext bundle.
+type CharBundle = T.Bundle Char
+
 pattern L tok   <- B.TreeL tok
+pattern B g xs  <- B.TreeB g _ xs
 pattern Key  n  <- S.TTextRaw _ n
 pattern Text t  <- S.TTextQQ  _ t
 pattern Char c  <- S.TTextQQ  _ [c]
 pattern Term n  <- S.TTermN _ _ n
 
+unknownSyntax :: (Show a) => a -> B.Ab b
+unknownSyntax x = Msg.adlib $ "subtext syntax error " ++ show x
+
+unknownBracket :: (Show a) => a -> B.Ab b
+unknownBracket g = Msg.adlib $ "subtext unknown bracket " ++ show g
+
+unknownKeyword :: String -> B.Ab b
+unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
+
+divide :: String -> S.TTreesTo [[S.TTree]]
+divide s = S.divideTreesBy (== s)
+
+-- | Parse token trees into subtext bundle.
+parseBundle :: [S.TTree] -> B.Ab CharBundle
+parseBundle = bundle where
+    bundle xs@[B S.BracketSet sub] =
+        case step1 `mapM` divide "|" sub of
+          Left _    -> single xs
+          Right nxs -> do let ns = fst <$> nxs
+                          step2 ns `mapM` nxs
+    bundle xs = single xs
+
+    single xs = do e <- parseSubtext [] xs
+                   Right $ [("start", e)]
+
+    step1 :: [S.TTree] -> B.Ab (String, [S.TTree])
+    step1 xs = case divide "=" xs of
+                 [[L (Key n)], x] -> Right (n, x)
+                 _                -> unknownSyntax xs
+
+    step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, CharExpr)
+    step2 ns (n, x) = do e <- parseSubtext ns x
+                         Right (n, e)
+
 -- | Parse token trees into subtext expression.
-parseSubtext :: [S.TTree] -> B.Ab CharExpr
-parseSubtext = trees False where
+parseSubtext :: [String] -> [S.TTree] -> B.Ab CharExpr
+parseSubtext ns = trees False where
 
     -- Trees
     trees :: Bool -> [S.TTree] -> B.Ab CharExpr
@@ -76,8 +119,9 @@ parseSubtext = trees False where
 
     -- Leaf or branch
     tree :: S.TTree -> B.Ab CharExpr
-    tree (B.TreeL x)      = leaf x
-    tree (B.TreeB g _ xs) = branch g xs
+    tree (L x)        = leaf x
+    tree (B g xs)     = branch g xs
+    tree x            = unknownSyntax x
 
     leaf :: S.Token -> B.Ab CharExpr
     leaf (Text t)     = Right $ T.equal t     -- "LITERAL"
@@ -101,17 +145,18 @@ parseSubtext = trees False where
     keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
     keyOp n _                  = unknownSyntax n
 
-    key "?"           = Right T.any
-    key "??"          = Right T.what
-    key "begin"       = Right T.begin
-    key "end"         = Right T.end
-    key "space"       = Right T.space
-    key "digit"       = Right T.digit
-    key "letter"      = Right T.letter
-    key "SP"          = many1 T.space
-    key "012"         = many1 T.digit
-    key "ABC"         = many1 T.letter
-    key x             = unknownSyntax x
+    key n | n `elem` ns  = Right $ T.change n
+    key "?"              = Right T.any
+    key "??"             = Right T.what
+    key "begin"          = Right T.begin
+    key "end"            = Right T.end
+    key "space"          = Right T.space
+    key "digit"          = Right T.digit
+    key "letter"         = Right T.letter
+    key "SP"             = many1 T.space
+    key "012"            = many1 T.digit
+    key "ABC"            = many1 T.letter
+    key n                = unknownKeyword n
 
     many1 = Right . T.many1
 
@@ -128,9 +173,4 @@ parseSubtext = trees False where
                  _      -> unknownSyntax xs
 
     inf op f g xs = Right . f =<< mapM g (divide op xs)
-    divide s = S.divideTreesBy (== s)
-
-    -- Syntax error
-    unknownSyntax x  = Msg.adlib $ "subtext syntax error " ++ show x
-    unknownBracket g = Msg.adlib $ "subtext unknown bracket " ++ show g
 
