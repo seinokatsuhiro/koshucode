@@ -4,14 +4,14 @@
 
 module Koshucode.Baala.Subtext.Operator.Combine
  ( -- * Combination
-   or, seq, not, not',
+   or, seq, last, not, not',
 
    -- * Variation
    peek, skip, gather,
    sub, (#),
  ) where
 
-import Prelude hiding ( or, seq, not )
+import Prelude hiding ( or, seq, last, not )
 
 import qualified Koshucode.Baala.Subtext.Fn              as S
 import qualified Koshucode.Baala.Subtext.Expr            as S
@@ -31,6 +31,10 @@ seq :: [S.Expr a] -> S.Expr a
 seq []  = S.succ
 seq [e] = e
 seq es  = S.ERec $ S.ESeq es
+
+-- | Find last match.
+last :: S.Expr a -> S.Expr a
+last e = S.ERec $ S.ELast e
 
 -- | Match with exceptions.
 not :: S.Expr a -> [S.Expr a] -> S.Expr a

@@ -27,6 +27,7 @@ data ExprRec a
   | ESeq          [Expr a]     -- ^ Sequential match
   | ENot (Expr a) [Expr a]     -- ^ Match with exceptions
   | ERep  MinMax  (Expr a)     -- ^ Repetitive match
+  | ELast         (Expr a)     -- ^ Find last match
   | ESub  S.Name  (Expr a)     -- ^ Submatch
   | EGath Bool    (Expr a)     -- ^ Change gathering setting
   | EPeek         (Expr a)     -- ^ Match but not consume input
@@ -66,6 +67,7 @@ recursives (ERec r)  = rec r where
     rec (ESeq    es)    = es
     rec (ENot  e es)    = e : es
     rec (ERep  _ e)     = [e]
+    rec (ELast   e)     = [e]
     rec (ESub  _ e)     = [e]
     rec (EGath _ e)     = [e]
     rec (EPeek e)       = [e]

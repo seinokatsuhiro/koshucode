@@ -82,6 +82,8 @@ match pa@S.Para { S.paraBundle    = bundle
                                    False -> Just pa'
 
       rec (S.ERep m e)      = rep m e
+      rec (S.ELast  e)      = let m s' = match $ pa { S.paraExpr = e, S.paraInput = s' }
+                              in firstJust (m <$> reverse (tails s))
       rec (S.ESub n e)      = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
                                  let o'   = S.paraRawOutput pa'
                                      subs = S.paraRawSubs pa'
@@ -160,4 +162,13 @@ match pa@S.Para { S.paraBundle    = bundle
 
       when True   = Just pa
       when False  = Nothing
+
+tails :: [a] -> [[a]]
+tails []         = [[]]
+tails xs@(_:xs') = xs : tails xs'
+
+firstJust :: [Maybe a] -> Maybe a
+firstJust []              = Nothing
+firstJust (Just x  : _)   = Just x
+firstJust (Nothing : xs ) = firstJust xs
 

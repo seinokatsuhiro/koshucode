@@ -74,7 +74,8 @@
 --     Sequence of /E1/ followed by /E2/.
 --   [ E1 or E2 ]
 --     Alternative occurence of /E1/ or /E2/.
---
+--   [ last E ]
+--     Find last /E/.
 --   [ ( E ) ]
 --     Group expression /E/.
 --   [ &#x5B; E &#x5D; ]
@@ -240,6 +241,7 @@ parseSubtext ns = trees False where
     -- Prefix operators
     keyOp "char" (L (Text s))  = Right $ T.char s             -- char E
     keyOp "word" (L (Text s))  = Right $ T.word s             -- word E
+    keyOp "last" x             = Right . T.last   =<< tree x  -- last E
     keyOp "on"   x             = Right . T.gather =<< tree x  -- on E
     keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
     keyOp n _                  = unknownSyntax n
