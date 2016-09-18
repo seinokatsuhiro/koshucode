@@ -66,6 +66,7 @@ parseSubtext = trees False where
 
     -- Trees
     trees :: Bool -> [S.TTree] -> B.Ab CharExpr
+    trees _ [L (Key n), x]   = keyOp n x
     trees _ [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
     trees _ [L (Term n)]     = Right $ T.sub n T.what      -- /N
     trees _ []               = Right T.succ                -- ()
@@ -79,15 +80,9 @@ parseSubtext = trees False where
     tree (B.TreeB g _ xs) = branch g xs
 
     leaf :: S.Token -> B.Ab CharExpr
-    leaf (Text t)   = Right $ T.equal t     -- "LITERAL"
-    leaf (Key n)    = key n
-    leaf x          = unknownSyntax x
-
-    key "?"      = Right T.any
-    key "??"     = Right T.what
-    key "begin"  = Right T.begin
-    key "end"    = Right T.end
-    key x        = unknownSyntax x
+    leaf (Text t)     = Right $ T.equal t     -- "LITERAL"
+    leaf (Key n)      = key n
+    leaf x            = unknownSyntax x
 
     branch :: S.BracketType -> [S.TTree] -> B.Ab CharExpr
     branch S.BracketGroup xs  = opTop xs            -- ( E )
@@ -98,6 +93,27 @@ parseSubtext = trees False where
 
     bracket op xs = do e <- trees False xs
                        Right $ op e
+
+    -- Prefix operators
+    keyOp "char" (L (Text s))  = Right $ T.char s             -- char E
+    keyOp "word" (L (Text s))  = Right $ T.word s             -- word E
+    keyOp "on"   x             = Right . T.gather =<< tree x  -- on E
+    keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
+    keyOp n _                  = unknownSyntax n
+
+    key "?"           = Right T.any
+    key "??"          = Right T.what
+    key "begin"       = Right T.begin
+    key "end"         = Right T.end
+    key "space"       = Right T.space
+    key "digit"       = Right T.digit
+    key "letter"      = Right T.letter
+    key "SP"          = many1 T.space
+    key "012"         = many1 T.digit
+    key "ABC"         = many1 T.letter
+    key x             = unknownSyntax x
+
+    many1 = Right . T.many1
 
     -- Infix operators
     opTop   = opAlt
