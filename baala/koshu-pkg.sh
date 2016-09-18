@@ -13,10 +13,10 @@ pkg_help () {
     echo "  copyright        List copyright in cabal files"
     echo "  dir              List package directory names"
     echo "  installed        List installed packages in sandbox"
+    echo "  installed-koshu  List installed packages named 'koshu'"
     echo "  hoogle           List Hoogle files"
     echo "  hoogle P ...     Grep P ... for Hoogle files"
     echo "  synopsis         List synopses in cabal files"
-    echo "  unreg            Unregister koshucode libraries"
     echo
     echo "COMMAND for executing"
     echo "  exec C           Execute C in each package directories"
@@ -24,6 +24,7 @@ pkg_help () {
     echo "  init             Initilize sandbox"
     echo "  haddock          Generate Haddock documents"
     echo "  rehaddock        Regenerate Haddock documents"
+    echo "  unreg            Unregister koshucode libraries"
     echo
 }
 
@@ -147,7 +148,7 @@ pkg_sandbox_init () {
 pkg_sandbox_installed () {
     if [ -e "$pkg_dir/toolkit/cabal.sandbox.config" ]; then
         ( cd "$pkg_dir/toolkit" ;
-          cabal exec ghc-pkg -- list 'koshu*' --simple-output | xargs -n 1
+          cabal exec ghc-pkg -- list "$1" --simple-output | xargs -n 1
         )
     fi
 }
@@ -200,7 +201,9 @@ case "$1" in
     init)
         pkg_exec pkg_sandbox_init ;;
     installed)
-        pkg_sandbox_installed ;;
+        pkg_sandbox_installed "*" ;;
+    installed-koshu)
+        pkg_sandbox_installed "koshu*" ;;
     haddock)
         pkg_haddock ;;
     hoogle)
