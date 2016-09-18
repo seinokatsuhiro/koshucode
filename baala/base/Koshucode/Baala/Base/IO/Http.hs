@@ -32,7 +32,7 @@ uriContent proxies uriText =
 
 requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
 requestFromURI proxies uriText =
-    do req <- H.parseUrl uriText
+    do req <- H.parseRequest uriText
        case URI.parseURI uriText of
          Nothing  -> return req
          Just uri -> do let proxy = selectProxy proxies uri
@@ -62,38 +62,40 @@ selectProxy proxies uri =
 
 catchHttpException :: B.Map (IO (Either (Int, String) B.Bz))
 catchHttpException = ( `Ex.catch` handler ) where
-    handler (H.StatusCodeException (H.Status code msg) _ _)
-        = return $ Left (code, Bc.unpack msg)
+    handler (H.HttpExceptionRequest _ (H.StatusCodeException res _))
+              = return $ Left (httpStatus res)
     handler e = return $ Left (0, httpExceptionSummary e)
+
+-- | Status code and message.
+httpStatus :: H.Response body -> (Int, String)
+httpStatus res = case H.responseStatus res of
+                   H.Status code msg -> (code, Bc.unpack msg)
 
 -- | Text message of HTTP exception.
 httpExceptionSummary :: H.HttpException -> String
-httpExceptionSummary e = case e of
-    H.StatusCodeException (H.Status _ m) _ _  -> Bc.unpack m
-    H.InvalidUrlException _ _                 -> "Invalid URL"
-    H.TooManyRedirects    _                   -> "Too many redirects"
-    H.UnparseableRedirect _                   -> "Unparseable redirect"
-    H.TooManyRetries                          -> "Too many retries"
-    H.HttpParserException _                   -> "Could not parse HTTP message"
-    H.HandshakeFailed                         -> "Handshake failed"
-    H.OverlongHeaders                         -> "Overlong headers"
-    H.ResponseTimeout                         -> "Response timeout"
-    H.FailedConnectionException  _ _          -> "Connection failed"
-    H.FailedConnectionException2 _ _ _ _      -> "Connection failed"
-    H.ExpectedBlankAfter100Continue           -> "Expected blank after 100"
-    H.InvalidStatusLine _                     -> "Invalid status line"
-    H.InvalidHeader _                         -> "Invalid header"
-    H.ProxyConnectException _ _ _             -> "Proxy connection error"
-    H.NoResponseDataReceived                  -> "No response data received"
-    H.TlsException _                          -> "TLS error"
-    H.TlsNotSupported                         -> "TLS not supported"
-    H.ResponseBodyTooShort _ _                -> "Response body too short"
-    H.InvalidChunkHeaders                     -> "Invalid chunk headers"
-    H.IncompleteHeaders                       -> "Incomplete headers"
-    H.InvalidDestinationHost _                -> "Invalid destination host"
-    H.HttpZlibException _                     -> "Zlib error"
-    H.InternalIOException _                   -> "Internal I/O error"
-    H.InvalidProxyEnvironmentVariable _ _     -> "Invalid proxy env"
-    H.ResponseLengthAndChunkingBothUsed       -> "Length and chunked"
-    H.TlsExceptionHostPort _ _ _              -> "TLS error"
+httpExceptionSummary (H.InvalidUrlException _ _)  = "Invalid URL"
+httpExceptionSummary (H.HttpExceptionRequest _ e) = httpExceptionContent e
+
+httpExceptionContent :: H.HttpExceptionContent -> String
+httpExceptionContent e = case e of
+    H.StatusCodeException res _             -> snd $ httpStatus res
+    H.TooManyRedirects    _                 -> "Too many redirects"
+    H.OverlongHeaders                       -> "Overlong headers"
+    H.ResponseTimeout                       -> "Response timeout"
+    H.ConnectionTimeout                     -> "Connection timeout"
+    H.ConnectionFailure _                   -> "Connection failure"
+    H.InvalidStatusLine _                   -> "Invalid status line"
+    H.InvalidHeader _                       -> "Invalid header"
+    H.InternalException _                   -> "Internal exception"
+    H.ProxyConnectException _ _ _           -> "Proxy connection error"
+    H.NoResponseDataReceived                -> "No response data received"
+    H.TlsNotSupported                       -> "TLS not supported"
+    H.WrongRequestBodyStreamSize _ _        -> "Wrong request body"
+    H.ResponseBodyTooShort _ _              -> "Response body too short"
+    H.InvalidChunkHeaders                   -> "Invalid chunk headers"
+    H.IncompleteHeaders                     -> "Incomplete headers"
+    H.InvalidDestinationHost _              -> "Invalid destination host"
+    H.HttpZlibException _                   -> "Zlib error"
+    H.InvalidProxyEnvironmentVariable _ _   -> "Invalid proxy env"
+    H.ConnectionClosed                      -> "Closed"
 
