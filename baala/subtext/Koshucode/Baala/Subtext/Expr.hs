@@ -8,8 +8,10 @@ module Koshucode.Baala.Subtext.Expr
    ExprBase (..),
    MinMax (..),
    FnElem, FnSpan, FnInter,
+   submatchNames,
  ) where
 
+import qualified Data.Set                    as Set
 import qualified Koshucode.Baala.Subtext.Fn  as S
 
 
@@ -54,4 +56,23 @@ type FnSpan a = S.Fn [a] (Maybe ([a], [a]))
 
 -- | Function type for inter-element matcher.
 type FnInter a = S.Fn2 (Maybe a) (Maybe a) Bool
+
+
+-- | Recursive subexpressions.
+recursives :: Expr c -> [Expr c]
+recursives (EBase _) = []
+recursives (ERec r)  = rec r where
+    rec (EOr     es)    = es
+    rec (ESeq    es)    = es
+    rec (ENot  e es)    = e : es
+    rec (ERep  _ e)     = [e]
+    rec (ESub  _ e)     = [e]
+    rec (EGath _ e)     = [e]
+    rec (EPeek e)       = [e]
+
+-- | List of submatch names.
+submatchNames :: Expr c -> [S.Name]
+submatchNames = Set.toList . loop where
+    loop (ERec (ESub n e))  = Set.insert n $ loop e
+    loop e                  = Set.unions (loop <$> recursives e)
 
