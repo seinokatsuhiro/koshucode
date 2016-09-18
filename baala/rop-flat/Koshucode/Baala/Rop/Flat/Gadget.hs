@@ -32,6 +32,7 @@ import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Op
 import qualified Koshucode.Baala.Rop.Flat.PoScale  as Op
+import qualified Koshucode.Baala.Rop.Flat.Subtext  as Op
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
@@ -59,6 +60,7 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
     , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "-x -y . -to"
     , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "-relmap/ . -step -to -distance"
     , Op.def  consSize          "size /N"                  "-term"
+    , Op.def  Op.consSubtext    "subtext /N E"             "-term -expr"
     ]
 
 
