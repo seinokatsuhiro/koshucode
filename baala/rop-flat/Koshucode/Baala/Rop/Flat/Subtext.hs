@@ -2,6 +2,98 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text decomposition by subtext.
+--
+-- = Subtext
+--
+--   Subtext is a domain-specific language for text decomposition.
+--   The @subtext@ relmap operator provides the functionality of this language.
+--   In the following descrition, we use a symbol
+--   /E/ for subtext expression,
+--   //P/ for present term name,
+--   //N/ for new term name,
+--   /N/ for symbolic name,
+--   /T/ for text,
+--   /C/ for character (single-letter text).
+--
+-- == Relmap operator
+--
+--   The @subtext@ operator decompose text using subtext expression.
+--   There are two ways for describing expression: single or bundle.
+--
+--   [ subtext /P ( E ) ]
+--     Decompose text content of /\/P/ by single expression /E/.
+--   [ subtext /P { N1 = E1 | N2 = E2 | ... } ]
+--     Decompose text by bundle of named expressions.
+--     Text decomposition starts from /N1/.
+--
+-- == Basic patterns
+--
+--   [ ? ]
+--     Any character.
+--   [ ?? ]
+--     Context-dependent pattern.
+--   [ begin ]
+--     Beginning of text.
+--   [ end ]
+--     End of text.
+--
+-- == Texts
+--
+--   [ T ]
+--     Text literal as /T/.
+--   [ char T ]
+--     Alternative occurences of characters included in /T/.
+--   [ word T ]
+--     Alternative occurences of words included in /T/.
+--   [ C1 to C2 ]
+--     Character betweeen C1 and C2.
+--
+--   [ space ]
+--     Unicode space character or space-like control character
+--     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
+--     See 'Data.Char.isSpace'.
+--   [ digit ]
+--     ASCII digit.
+--     See 'Data.Char.isDigit'.
+--   [ letter ]
+--     Unicode letter character.
+--     See 'Data.Char.isLetter'.
+--
+--   [ SP ]
+--     One-or-more spaces.
+--   [ 012 ]
+--     One-or-more digits.
+--   [ ABC ]
+--     One-or-more letters.
+--
+-- == Combinations
+--
+--   [ E1 | E2 ]
+--     Alternative occurence of /E1/ or /E2/.
+--   [ E1 ++ E2 ]
+--     Sequence of /E1/ followed by /E2/.
+--   [ E1 or E2 ]
+--     Alternative occurence of /E1/ or /E2/.
+--
+--   [ ( E ) ]
+--     Group expression /E/.
+--   [ &#x5B; E &#x5D; ]
+--     Zero-or-one occurences of /E/. (Option)
+--   [ { E } ]
+--     Zero-or-more occurences of /E/. (Zero-repeat)
+--   [ {- E -} ]
+--     One-or-more occurences of /E/. (One-repeat)
+--
+-- == Gathering subtext
+--
+--   [ /N E ]
+--     Submatch for /E/ whose name is /\/N/.
+--   [ /N ]
+--     Named submatch, equivalent to /\/N/ ??.
+--   [ off E ]
+--     Turn off gathering text in /E/.
+--   [ on E ]
+--     Turn on gathering text in /E/.
 
 module Koshucode.Baala.Rop.Flat.Subtext
   ( consSubtext, relmapSubtext, relkitSubtext,
