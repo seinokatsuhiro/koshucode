@@ -60,11 +60,34 @@ matchStart []            = S.fail
 
 -- | Simplify bundle of match expressions.
 matchSimplifyBundle :: Bundle a -> Bundle a
-matchSimplifyBundle = fmap $ fmap matchSimplify
+matchSimplifyBundle = fmap $ fmap (what . reduce)
 
--- | Simplify match expression.
-matchSimplify :: S.Expr a -> S.Expr a
-matchSimplify = top where
+-- | Remove redundant expressions.
+reduce :: S.Expr a -> S.Expr a
+reduce = top where
+    top (S.ERec  r)    = rec r
+    top (S.EBase b)    = S.EBase b
+
+    rec (S.EOr    [])                = S.fail
+    rec (S.ESeq   [])                = S.succ
+    rec (S.ERep (S.MinMax _ 0) _)    = S.succ
+
+    rec (S.EOr   [e])                = top e
+    rec (S.ESeq  [e])                = top e
+    rec (S.ENot e [])                = top e
+    rec (S.ERep (S.MinMax 1 1) e)    = top e
+
+    rec (S.EOr    es)  = S.or          (top <$> es)
+    rec (S.ESeq   es)  = S.seq         (top <$> es)
+    rec (S.ENot e es)  = S.not (top e) (top <$> es)
+    rec (S.ERep  m e)  = S.ERec $ S.ERep  m (top e)
+    rec (S.ESub  n e)  = S.ERec $ S.ESub  n (top e)
+    rec (S.EGath b e)  = S.ERec $ S.EGath b (top e)
+    rec (S.EPeek   e)  = S.ERec $ S.EPeek   (top e)
+
+-- | Replace context-dependent operator.
+what :: S.Expr a -> S.Expr a
+what = top where
     top (S.ERec r)    = S.ERec $ rec r
     top (S.EBase b)   = S.EBase b
 
@@ -74,6 +97,7 @@ matchSimplify = top where
         case replaceWhat S.any e of
           Nothing -> S.ENot (top e) (top <$> es)
           Just e' -> S.ENot e'      (top <$> es) -- what not E = any not E
+
     rec (S.ERep  m e)  = S.ERep  m $ top e
     rec (S.ESub  n e)  = S.ESub  n $ top e
     rec (S.EGath b e)  = S.EGath b $ top e
@@ -92,12 +116,12 @@ matchSimplify = top where
                 Just e' -> [e']
     seq []  = []
 
--- | Replace context-dependent operator.
 replaceWhat :: S.Expr a -> S.Expr a -> Maybe (S.Expr a)
-replaceWhat e' (S.ERec (S.ESub n e))  = do e2 <- replaceWhat e' e
-                                           Just $ S.ERec (S.ESub n e2)
-replaceWhat e' (S.ERec (S.EGath b e)) = do e2 <- replaceWhat e' e
-                                           Just $ S.ERec (S.EGath b e2)
-replaceWhat e' (S.EBase S.EWhat)      = Just e'
-replaceWhat _ _                       = Nothing
+replaceWhat rep = loop where
+    loop (S.ERec (S.ESub n e))  = do e' <- loop e
+                                     Just $ S.ERec (S.ESub n e')
+    loop (S.ERec (S.EGath b e)) = do e' <- loop e
+                                     Just $ S.ERec (S.EGath b e')
+    loop (S.EBase S.EWhat)      = Just rep
+    loop _                      = Nothing
 
