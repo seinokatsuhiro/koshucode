@@ -41,5 +41,5 @@ maybe = minMax 0 1
 
 -- | Match before given expression.
 before :: S.Expr a -> S.Expr a
-before e = many $ S.not S.any [e]
+before e = many $ S.and [S.any, S.not e]
 

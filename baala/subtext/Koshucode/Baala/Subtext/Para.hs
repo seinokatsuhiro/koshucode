@@ -76,13 +76,12 @@ reduce = top where
     rec (S.EOr   [e])                = top e
     rec (S.ESeq  [e])                = top e
     rec (S.EAnd  [e])                = top e
-    rec (S.ENot e [])                = top e
     rec (S.ERep (S.MinMax 1 1) e)    = top e
 
     rec (S.EOr    es)  = S.or          (top <$> es)
     rec (S.ESeq   es)  = S.seq         (top <$> es)
     rec (S.EAnd   es)  = S.and         (top <$> es)
-    rec (S.ENot e es)  = S.not (top e) (top <$> es)
+    rec (S.ENot    e)  = S.not              (top e)
     rec (S.ERep  m e)  = S.ERec $ S.ERep  m (top e)
     rec (S.ELast   e)  = S.ERec $ S.ELast   (top e)
     rec (S.ESub  n e)  = S.ERec $ S.ESub  n (top e)
@@ -92,16 +91,13 @@ reduce = top where
 -- | Replace context-dependent operator.
 what :: S.Expr a -> S.Expr a
 what = top where
-    top (S.ERec r)    = S.ERec $ rec r
-    top (S.EBase b)   = S.EBase b
+    top (S.ERec r)     = S.ERec $ rec r
+    top (S.EBase b)    = S.EBase b
 
-    rec (S.EOr  es)   = S.EOr  (top <$> es)
-    rec (S.ESeq es)   = S.ESeq (seq es)
-    rec (S.EAnd es)   = S.EAnd (top <$> es)
-    rec (S.ENot e es) =
-        case replaceWhat S.any e of
-          Nothing -> S.ENot (top e) (top <$> es)
-          Just e' -> S.ENot e'      (top <$> es) -- what not E = any not E
+    rec (S.EOr  es)    = S.EOr  (top <$> es)
+    rec (S.ESeq es)    = S.ESeq (seq es)
+    rec (S.EAnd es)    = S.EAnd (top <$> es)
+    rec (S.ENot e)     = S.ENot (top e)
 
     rec (S.ERep  m e)  = S.ERep  m (top e)
     rec (S.ELast   e)  = S.ELast   (top e)

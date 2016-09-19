@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Subtext.Operator.Combine
  ( -- * Combination
-   or, seq, and, not, not', last,
+   or, seq, and, not, last,
 
    -- * Variation
    peek, skip, gather,
@@ -38,21 +38,9 @@ and []  = S.succ
 and [e] = e
 and es  = S.ERec $ S.EAnd es
 
--- | Match with exceptions.
-not :: S.Expr a -> [S.Expr a] -> S.Expr a
-not e [] = e
-not e es = S.ERec $ S.ENot e es
-
--- | List version of 'not'.
---
---   * @not' [/E/, /E1/, /E2/]@ == @not /E/ [/E1/, /E2/]@
---   * @not' [/E/]@ == @/E/@
---   * @not' []@ == @seq []@ == @succ@
-
-not' :: [S.Expr a] -> S.Expr a
-not' []        = S.succ
-not' [e]       = e
-not' (e : es)  = not e es
+-- | Inverted condition.
+not :: S.Expr a -> S.Expr a
+not e = S.ERec $ S.ENot e
 
 -- | Find last match.
 last :: S.Expr a -> S.Expr a

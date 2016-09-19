@@ -26,7 +26,7 @@ data ExprRec a
   = EOr           [Expr a]     -- ^ Alternative match
   | ESeq          [Expr a]     -- ^ Sequential match
   | EAnd          [Expr a]     -- ^ Additional condition
-  | ENot (Expr a) [Expr a]     -- ^ Match with exceptions
+  | ENot          (Expr a)     -- ^ Inverted condition
   | ERep  MinMax  (Expr a)     -- ^ Repetitive match
   | ELast         (Expr a)     -- ^ Find last match
   | ESub  S.Name  (Expr a)     -- ^ Submatch
@@ -67,7 +67,7 @@ recursives (ERec r)  = rec r where
     rec (EOr     es)    = es
     rec (ESeq    es)    = es
     rec (EAnd    es)    = es
-    rec (ENot  e es)    = e : es
+    rec (ENot    e)     = [e]
     rec (ERep  _ e)     = [e]
     rec (ELast   e)     = [e]
     rec (ESub  _ e)     = [e]

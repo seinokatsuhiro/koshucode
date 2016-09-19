@@ -76,6 +76,8 @@
 --     Alternative occurence of /E1/ or /E2/.
 --   [ E1 and E2 ]
 --     /E1/ and additional condition /E2/.
+--   [ not E ]
+--     Inverted condition.
 --   [ last E ]
 --     Find last /E/.
 --   [ ( E ) ]
@@ -243,6 +245,7 @@ parseSubtext ns = trees False where
     -- Prefix operators
     keyOp "char" (L (Text s))  = Right $ T.char s             -- char E
     keyOp "word" (L (Text s))  = Right $ T.word s             -- word E
+    keyOp "not"  x             = Right . T.not    =<< tree x  -- not E
     keyOp "last" x             = Right . T.last   =<< tree x  -- last E
     keyOp "on"   x             = Right . T.gather =<< tree x  -- on E
     keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
@@ -268,8 +271,7 @@ parseSubtext ns = trees False where
     opAlt   = inf "|"   T.or   opSeq   -- E | E | E
     opSeq   = inf "++"  T.seq  opOr    -- E ++ E ++ E
     opOr    = inf "or"  T.or   opAnd   -- E or E or E
-    opAnd   = inf "and" T.and  opNot   -- E and E and E
-    opNot   = inf "not" T.not' opTo    -- E not E not E
+    opAnd   = inf "and" T.and  opTo    -- E and E and E
     opTo xs = case divide "to" xs of   -- E to E
                  [[L (Char from)], [L (Char to)]]
                         -> Right $ T.to from to

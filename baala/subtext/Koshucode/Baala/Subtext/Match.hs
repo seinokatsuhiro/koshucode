@@ -79,14 +79,13 @@ match pa@S.Para { S.paraBundle    = bundle
       rec (S.EAnd [])       = Just pa
       rec (S.EAnd (e:es))   = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
                                  let o' = S.paraRawOutput pa'
-                                 case all (matchedWith $ reverse o') es of
+                                 case all (matched $ reverse o') es of
                                    True  -> Just pa' { S.paraRawOutput = o' ++ o }
                                    False -> Nothing
 
-      rec (S.ENot e es)     = do pa' <- match $ pa { S.paraExpr = e }
-                                 case any matched es of
-                                   True  -> Nothing
-                                   False -> Just pa'
+      rec (S.ENot e)        = case match $ pa { S.paraExpr = e } of
+                                Nothing  -> Just pa
+                                Just _   -> Nothing
 
       rec (S.ERep m e)      = rep m e
       rec (S.ELast  e)      = let m s' = match $ pa { S.paraExpr = e, S.paraInput = s' }
@@ -101,11 +100,7 @@ match pa@S.Para { S.paraBundle    = bundle
       rec (S.EPeek e)       = do _ <- match $ pa { S.paraExpr = e }
                                  Just pa
 
-      matched e             = case match $ pa { S.paraExpr = e } of
-                                 Nothing -> False
-                                 Just _  -> True
-
-      matchedWith i e       = case match $ pa { S.paraExpr = e, S.paraInput = i } of
+      matched i e           = case match $ pa { S.paraExpr = e, S.paraInput = i } of
                                  Nothing -> False
                                  Just _  -> True
 
