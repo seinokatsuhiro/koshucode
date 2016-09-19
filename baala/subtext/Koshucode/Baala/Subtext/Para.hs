@@ -10,7 +10,7 @@ module Koshucode.Baala.Subtext.Para
     createPara,
   ) where
 
-import Prelude hiding (seq)
+import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Subtext.Expr      as S
@@ -70,15 +70,18 @@ reduce = top where
 
     rec (S.EOr    [])                = S.fail
     rec (S.ESeq   [])                = S.succ
+    rec (S.EAnd   [])                = S.succ
     rec (S.ERep (S.MinMax _ 0) _)    = S.succ
 
     rec (S.EOr   [e])                = top e
     rec (S.ESeq  [e])                = top e
+    rec (S.EAnd  [e])                = top e
     rec (S.ENot e [])                = top e
     rec (S.ERep (S.MinMax 1 1) e)    = top e
 
     rec (S.EOr    es)  = S.or          (top <$> es)
     rec (S.ESeq   es)  = S.seq         (top <$> es)
+    rec (S.EAnd   es)  = S.and         (top <$> es)
     rec (S.ENot e es)  = S.not (top e) (top <$> es)
     rec (S.ERep  m e)  = S.ERec $ S.ERep  m (top e)
     rec (S.ELast   e)  = S.ERec $ S.ELast   (top e)
@@ -92,8 +95,9 @@ what = top where
     top (S.ERec r)    = S.ERec $ rec r
     top (S.EBase b)   = S.EBase b
 
-    rec (S.EOr es)    = S.EOr  (top <$> es)
+    rec (S.EOr  es)   = S.EOr  (top <$> es)
     rec (S.ESeq es)   = S.ESeq (seq es)
+    rec (S.EAnd es)   = S.EAnd (top <$> es)
     rec (S.ENot e es) =
         case replaceWhat S.any e of
           Nothing -> S.ENot (top e) (top <$> es)

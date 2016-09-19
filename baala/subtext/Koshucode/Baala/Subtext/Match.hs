@@ -30,11 +30,11 @@ type CharMatch = GeneralMatch Char
 type MatchResult a = ([a], [S.Submatch a])
 
 -- | Apply match expression to input sequence.
-matchExpr :: S.Expr a -> GeneralMatch a
+matchExpr :: (Show a) => S.Expr a -> GeneralMatch a
 matchExpr e = matchBundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.
-matchBundle :: S.Bundle a -> GeneralMatch a
+matchBundle :: (Show a) => S.Bundle a -> GeneralMatch a
 matchBundle es s =
     do result <- match $ S.createPara es s
        Just $ matchResult result
@@ -52,7 +52,7 @@ subMatches :: S.Para a -> [S.Submatch a]
 subMatches = reverse . S.paraRawSubs
 
 -- | Match procedure.
-match :: S.Para a -> Maybe (S.Para a)
+match :: (Show a) => S.Para a -> Maybe (S.Para a)
 match pa@S.Para { S.paraBundle    = bundle
                 , S.paraGather    = gather
                 , S.paraExpr      = expr
@@ -67,14 +67,21 @@ match pa@S.Para { S.paraBundle    = bundle
 
       -- ----------------------  recursive
 
-      rec (S.ESeq [])       = Just pa
-      rec (S.ESeq (e:es))   = do pa' <- match $ pa { S.paraExpr = e }
-                                 match $ pa' { S.paraExpr = S.seq es }
-
       rec (S.EOr [])        = Nothing
       rec (S.EOr (e:es))    = case match $ pa { S.paraExpr = e } of
                                 Nothing  -> match $ pa { S.paraExpr = S.or es }
                                 Just pa' -> Just pa'
+
+      rec (S.ESeq [])       = Just pa
+      rec (S.ESeq (e:es))   = do pa' <- match $ pa { S.paraExpr = e }
+                                 match $ pa' { S.paraExpr = S.seq es }
+
+      rec (S.EAnd [])       = Just pa
+      rec (S.EAnd (e:es))   = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
+                                 let o' = S.paraRawOutput pa'
+                                 case all (matchedWith $ reverse o') es of
+                                   True  -> Just pa' { S.paraRawOutput = o' ++ o }
+                                   False -> Nothing
 
       rec (S.ENot e es)     = do pa' <- match $ pa { S.paraExpr = e }
                                  case any matched es of
@@ -95,6 +102,10 @@ match pa@S.Para { S.paraBundle    = bundle
                                  Just pa
 
       matched e             = case match $ pa { S.paraExpr = e } of
+                                 Nothing -> False
+                                 Just _  -> True
+
+      matchedWith i e       = case match $ pa { S.paraExpr = e, S.paraInput = i } of
                                  Nothing -> False
                                  Just _  -> True
 

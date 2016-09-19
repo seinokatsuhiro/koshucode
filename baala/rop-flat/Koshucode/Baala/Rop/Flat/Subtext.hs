@@ -74,6 +74,8 @@
 --     Sequence of /E1/ followed by /E2/.
 --   [ E1 or E2 ]
 --     Alternative occurence of /E1/ or /E2/.
+--   [ E1 and E2 ]
+--     /E1/ and additional condition /E2/.
 --   [ last E ]
 --     Find last /E/.
 --   [ ( E ) ]
@@ -265,7 +267,8 @@ parseSubtext ns = trees False where
     opTop   = opAlt
     opAlt   = inf "|"   T.or   opSeq   -- E | E | E
     opSeq   = inf "++"  T.seq  opOr    -- E ++ E ++ E
-    opOr    = inf "or"  T.or   opNot   -- E or E or E
+    opOr    = inf "or"  T.or   opAnd   -- E or E or E
+    opAnd   = inf "and" T.and  opNot   -- E and E and E
     opNot   = inf "not" T.not' opTo    -- E not E not E
     opTo xs = case divide "to" xs of   -- E to E
                  [[L (Char from)], [L (Char to)]]
