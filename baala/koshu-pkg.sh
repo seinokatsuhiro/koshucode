@@ -17,6 +17,7 @@ pkg_help () {
     echo "  hoogle           List Hoogle files"
     echo "  hoogle P ...     Grep P ... for Hoogle files"
     echo "  synopsis         List synopses in cabal files"
+    echo "  version          List version number in cabal files"
     echo
     echo "COMMAND for executing"
     echo "  exec C           Execute C in each package directories"
@@ -24,6 +25,7 @@ pkg_help () {
     echo "  init             Initilize sandbox"
     echo "  haddock          Generate Haddock documents"
     echo "  rehaddock        Regenerate Haddock documents"
+    echo "  subst X Y        Substitute X with Y in cabal files"
     echo "  unreg            Unregister koshucode libraries"
     echo
 }
@@ -55,6 +57,25 @@ pkg_cabal_path () {
             echo "$pkg_cabal"
         fi
     done
+}
+
+pkg_cabal_section () {
+    for pkg_cabal in `pkg_cabal_path`; do
+        pkg_base=`basename "$pkg_cabal"`
+        pkg_label=`printf "%-40s " "$pkg_base"`
+        sed -n "s/^$1: */$pkg_label/p" "$pkg_cabal"
+    done
+}
+
+pkg_cabal_subst () {
+    if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "Skip substitutions"
+    else
+        echo "Substitute cabal files: $1 -> $2"
+        for cab in `pkg_cabal_path`; do
+            perl -i -pe "s/$1/$2/" $cab
+        done
+    fi
 }
 
 pkg_exec () {
@@ -153,14 +174,6 @@ pkg_sandbox_installed () {
     fi
 }
 
-pkg_cabal_section () {
-    for pkg_cabal in `pkg_cabal_path`; do
-        pkg_base=`basename "$pkg_cabal"`
-        pkg_label=`printf "%-40s " "$pkg_base"`
-        sed -n "s/^$1: */$pkg_label/p" "$pkg_cabal"
-    done
-}
-
 pkg_unreg () {
     if [ -e cabal.sandbox.config ]; then
         for pkg in `pkg_dirs_rev`; do
@@ -217,10 +230,14 @@ case "$1" in
         pkg_exec cabal configure
         pkg_exec cabal build
         pkg_haddock ;;
+    subst)
+        pkg_cabal_subst "$2" "$3" ;;
     synopsis)
         pkg_cabal_section synopsis ;;
     unreg)
         pkg_unreg ;;
+    version)
+        pkg_cabal_section version ;;
     *)
         pkg_help ;;
 esac
