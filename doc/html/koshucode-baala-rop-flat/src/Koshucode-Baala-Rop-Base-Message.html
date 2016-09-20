@@ -11,21 +11,27 @@
 <a name="line-2"></a>
 <a name="line-3"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>
 <a name="line-4"></a>  <span class='hs-layout'>(</span> <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span><span class='hs-layout'>,</span>
-<a name="line-5"></a>    <span class='hs-varid'>noAttr</span><span class='hs-layout'>,</span>
-<a name="line-6"></a>    <span class='hs-varid'>notImpl</span><span class='hs-layout'>,</span>
-<a name="line-7"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-8"></a>
-<a name="line-9"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>
-<a name="line-11"></a>
+<a name="line-5"></a>    <span class='hs-varid'>reqRelmap</span><span class='hs-layout'>,</span>
+<a name="line-6"></a>    <span class='hs-varid'>noAttr</span><span class='hs-layout'>,</span>
+<a name="line-7"></a>    <span class='hs-varid'>notImpl</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-9"></a>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>
 <a name="line-12"></a>
-<a name="line-13"></a><a name="noAttr"></a><span class='hs-comment'>-- | Attribute not found</span>
-<a name="line-14"></a><span class='hs-definition'>noAttr</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a name="line-15"></a><span class='hs-definition'>noAttr</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Attribute not found"</span> <span class='hs-varid'>n</span>
-<a name="line-16"></a>
-<a name="line-17"></a><a name="notImpl"></a><span class='hs-comment'>-- | Not implemented</span>
-<a name="line-18"></a><span class='hs-definition'>notImpl</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a name="line-19"></a><span class='hs-definition'>notImpl</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Not implemented"</span>
-<a name="line-20"></a>
+<a name="line-13"></a><a name="reqRelmap"></a><span class='hs-comment'>-- | Require /N/ relmaps</span>
+<a name="line-14"></a><span class='hs-definition'>reqRelmap</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a name="line-15"></a><span class='hs-definition'>reqRelmap</span> <span class='hs-num'>0</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require no relmaps"</span>
+<a name="line-16"></a><span class='hs-definition'>reqRelmap</span> <span class='hs-num'>1</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require one relmap"</span>
+<a name="line-17"></a><span class='hs-definition'>reqRelmap</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-varop'>$</span> <span class='hs-str'>"Require "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>show</span> <span class='hs-varid'>n</span> <span class='hs-varop'>++</span> <span class='hs-str'>" relmap"</span>
+<a name="line-18"></a>
+<a name="line-19"></a><a name="noAttr"></a><span class='hs-comment'>-- | Attribute not found</span>
+<a name="line-20"></a><span class='hs-definition'>noAttr</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a name="line-21"></a><span class='hs-definition'>noAttr</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Attribute not found"</span> <span class='hs-varid'>n</span>
+<a name="line-22"></a>
+<a name="line-23"></a><a name="notImpl"></a><span class='hs-comment'>-- | Not implemented</span>
+<a name="line-24"></a><span class='hs-definition'>notImpl</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a name="line-25"></a><span class='hs-definition'>notImpl</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Not implemented"</span>
+<a name="line-26"></a>
 </pre></body>
 </html>

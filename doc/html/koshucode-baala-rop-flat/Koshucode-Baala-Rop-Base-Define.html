@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.125.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	><p class="caption"
 	>Koshucode.Baala.Rop.Base.Define</p
 	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Definition of relmap operators.</p
+	  ></div
+	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
@@ -64,13 +72,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >RopCons</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
-	    >RopAttr</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
 	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:ropList"
 	    >ropList</a
-	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="Koshucode-Baala-Rop-Base-Define.html#t:RopDefine"
 	    >RopDefine</a
@@ -80,11 +88,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ><li class="src short"
 	  ><a href="#v:def"
 	    >def</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Rop-Base-Define.html#t:RopDefine"
 	    >RopDefine</a
@@ -104,14 +112,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >RopCons</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
-	    >RopAttr</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
 	    >) <a href="src/Koshucode-Baala-Rop-Base-Define.html#RopDefine" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Constructor, usage, and attribute sorter</p
+	    >Constructor, usage, and attribute sorter</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -127,12 +135,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Operator group</p
+		  >Operator group</p
 		  ></td
 		></tr
 	      ><tr
@@ -142,7 +150,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 		  > c]</td
 		><td class="doc"
 		><p
-		  >Operator definitions</p
+		  >Operator definitions</p
 		  ></td
 		></tr
 	      ><tr
@@ -152,31 +160,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 		  > c]</td
 		><td class="doc"
 		><p
-		  >Relmap operators</p
+		  >Relmap operators</p
 		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Make implementations of relmap operators.</p
+	    >Make implementations of relmap operators.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:def" class="def"
 	    >def</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Rop-Base-Define.html#t:RopDefine"
 	    >RopDefine</a
 	    > c <a href="src/Koshucode-Baala-Rop-Base-Define.html#def" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Make definition of relmap operator.</p
+	    ></div
 	  ></div
 	></div
       ></div
@@ -184,7 +196,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.14.3</p
+	> version 2.16.1</p
       ></div
     ></body
   ></html

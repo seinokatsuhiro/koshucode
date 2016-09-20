@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.PoScale</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-PoScale.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Rop-Flat-PoScale.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.PoScale</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Partial-order scale.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:PoScale"
+	    >PoScale</a
+	    > a = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > a ([a], <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:PoScaleCalc"
+	    >PoScaleCalc</a
+	    > a = [(a, a)] -&gt; [(a, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)]</li
+	  ><li class="src short"
+	  ><a href="#v:poScale"
+	    >poScale</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a -&gt; [(a, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)]</li
+	  ><li class="src short"
+	  ><a href="#v:poScaleHeight"
+	    >poScaleHeight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScaleCalc"
+	    >PoScaleCalc</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:poScaleDepth"
+	    >poScaleDepth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScaleCalc"
+	    >PoScaleCalc</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:poHeight"
+	    >poHeight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [(a, a)] -&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:poDepth"
+	    >poDepth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [(a, a)] -&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:PoScale" class="def"
+	    >PoScale</a
+	    > a = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > a ([a], <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >) <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#PoScale" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping from element to subelements and scale.
+   Scale of element is defined by
+   1 + the maximum scale of subelements.
+   If elements are cyclic, scales of these elements are -1.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:PoScaleCalc" class="def"
+	    >PoScaleCalc</a
+	    > a = [(a, a)] -&gt; [(a, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)] <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#PoScaleCalc" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:poScale" class="def"
+	    >poScale</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a -&gt; [(a, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)] <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#poScale" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract partial-order scales.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:poScaleHeight" class="def"
+	    >poScaleHeight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScaleCalc"
+	    >PoScaleCalc</a
+	    > a <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#poScaleHeight" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:poScaleDepth" class="def"
+	    >poScaleDepth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScaleCalc"
+	    >PoScaleCalc</a
+	    > a <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#poScaleDepth" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:poHeight" class="def"
+	    >poHeight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [(a, a)] -&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#poHeight" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate partial-order height.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:poDepth" class="def"
+	    >poDepth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [(a, a)] -&gt; <a href="Koshucode-Baala-Rop-Flat-PoScale.html#t:PoScale"
+	    >PoScale</a
+	    > a <a href="src/Koshucode-Baala-Rop-Flat-PoScale.html#poDepth" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate partial-order depth.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
