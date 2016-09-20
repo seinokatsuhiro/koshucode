@@ -26,18 +26,18 @@
 |-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Base.List"  /base-rank {= /rank /base /import-dir [ 0 | "Set" | [ ] ] [
     0 | "Split" | [ ] ] [ 1 | "Dots" | [ ] ] [ 3 | "Assoc" | [ "Prelude" ] ] [ 3 | "List" | [ "Prelude" ] ] [ 3 | "Snip"
     | [ "Prelude" ] ] [ 4 | "Order" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 5  /dir "Koshucode.Baala.Subtext.Operator"  /base-rank {= /rank /base /import-dir [ 3 | "Basic"
-    | [ ] ] [ 3 | "Combine" | [ ] ] [ 4 | "Repeat" | [ ] ] [ 5 | "Char" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Base.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Comment" | [ ]
     ] [ 0 | "LineBreak" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 3 | "Utility" | [ "Prelude" ] ] [ 4 | "MixText" | [ ] ] [ 5 |
     "MixClass" | [ ] ] [ 5 | "MixEncode" | [ ] ] [ 6 | "PPrint" | [ "List" | "Prelude" ] ] [ 6 | "TextTable" | [ "List"
     | "Prelude" ] ] =}
+|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Subtext.Operator"  /base-rank {= /rank /base /import-dir [ 3 | "Basic"
+    | [ ] ] [ 4 | "Combine" | [ ] ] [ 5 | "Repeat" | [ ] ] [ 6 | "Char" | [ ] ] =}
 
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" |
     [ ] ] [ 3 | "BzFile" | [ "Prelude" ] ] [ 3 | "Exit" | [ "Prelude" ] ] [ 4 | "Http" | [ "Prelude" ] ] [ 6 | "IOPoint"
     | [ "List" | "Prelude" ] ] [ 7 | "CodePt" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 1 | "Fn" | [ ] ] [ 2
-    | "Expr" | [ ] ] [ 6 | "Operator" | [ ] ] [ 7 | "Para" | [ "Operator" ] ] [ 8 | "Match" | [ "Operator" ] ] [ 10 |
+|-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 1 | "Fn" | [ ] ] [ 2
+    | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Para" | [ "Operator" ] ] [ 9 | "Match" | [ "Operator" ] ] [ 11 |
     "Test where" | [ "Subtext" ] ] =}
 |-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 9 | "Reason" | [
     "IO" ] ] [ 10 | "Abortable" | [ "IO" | "Prelude" ] ] [ 10 | "Report" | [ "IO" | "List" | "Prelude" | "Text" ] ] [ 12
@@ -129,10 +129,10 @@
     71 | "Arith" | [ "Base" | "Data" ] ] [ 71 | "List" | [ "Base" | "Data" ] ] [ 71 | "Misc" | [ "Base" | "Data" |
     "Syntax" ] ] [ 71 | "Order" | [ "Base" | "Data" ] ] [ 71 | "Text" | [ "Base" | "Data" | "Syntax" ] ] [ 71 | "Time" |
     [ "Base" | "Data" ] ] [ 71 | "Type" | [ "Base" | "Data" ] ] [ 72 | "Bundle" | [ "Base" | "Data" ] ] =}
-|-- DIR-RANK  /dir-rank 73  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 9 | "Subtext" | [ "Operator"
-    ] ] [ 16 | "Base" | [ "Abort" | "IO" | "List" | "Prelude" | "Syntax" | "Text" ] ] [ 36 | "Syntax" | [ "Attr" |
-    "Para" | "Symbol" | "TTree" | "Token" ] ] [ 52 | "Data" | [ "Church" | "Content" | "Type" ] ] [ 68 | "Core" | [
-    "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 71 | "Writer" | [ ] ] [ 73 | "Cop" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 73  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 10 | "Subtext" | [
+    "Operator" ] ] [ 16 | "Base" | [ "Abort" | "IO" | "List" | "Prelude" | "Syntax" | "Text" ] ] [ 36 | "Syntax" | [
+    "Attr" | "Para" | "Symbol" | "TTree" | "Token" ] ] [ 52 | "Data" | [ "Church" | "Content" | "Type" ] ] [ 68 | "Core"
+    | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 71 | "Writer" | [ ] ] [ 73 | "Cop" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 73  /dir "Koshucode.Baala.Toolkit.Main"  /base-rank {= /rank /base /import-dir [ 69 | "KoshuRdf"
     | [ "Base" | "Core" | "Data" | "Syntax" ] ] [ 69 | "KoshuSyntax" | [ "Base" | "Core" | "Data" | "Syntax" ] ] [ 73 |
     "KoshuChange" | [ "Base" ] ] [ 73 | "KoshuFilter" | [ "Base" | "Core" | "Data" ] ] [ 73 | "KoshuMain" | [ "Base" |
@@ -199,13 +199,6 @@ TABLE : DIR-RANK
                                                   3     "Snip"           [ "Prelude" ]
                                                   4     "Order"          [ "Prelude" ]
                                                   
-  5         "Koshucode.Baala.Subtext.Operator"    /rank /base            /import-dir
-                                                  ----- ---------------- ----------------------------------------------------------------------------
-                                                  3     "Basic"          [ ]
-                                                  3     "Combine"        [ ]
-                                                  4     "Repeat"         [ ]
-                                                  5     "Char"           [ ]
-                                                  
   6         "Koshucode.Baala.Base.Text"           /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   0     "Comment"        [ ]
@@ -218,6 +211,13 @@ TABLE : DIR-RANK
                                                   6     "PPrint"         [ "List" | "Prelude" ]
                                                   6     "TextTable"      [ "List" | "Prelude" ]
                                                   
+  6         "Koshucode.Baala.Subtext.Operator"    /rank /base            /import-dir
+                                                  ----- ---------------- ----------------------------------------------------------------------------
+                                                  3     "Basic"          [ ]
+                                                  4     "Combine"        [ ]
+                                                  5     "Repeat"         [ ]
+                                                  6     "Char"           [ ]
+                                                  
   7         "Koshucode.Baala.Base.IO"             /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   0     "SimpleOption"   [ ]
@@ -227,14 +227,14 @@ TABLE : DIR-RANK
                                                   6     "IOPoint"        [ "List" | "Prelude" ]
                                                   7     "CodePt"         [ "Prelude" ]
                                                   
-  10        "Koshucode.Baala.Subtext"             /rank /base            /import-dir
+  11        "Koshucode.Baala.Subtext"             /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   1     "Fn"             [ ]
                                                   2     "Expr"           [ ]
-                                                  6     "Operator"       [ ]
-                                                  7     "Para"           [ "Operator" ]
-                                                  8     "Match"          [ "Operator" ]
-                                                  10    "Test where"     [ "Subtext" ]
+                                                  7     "Operator"       [ ]
+                                                  8     "Para"           [ "Operator" ]
+                                                  9     "Match"          [ "Operator" ]
+                                                  11    "Test where"     [ "Subtext" ]
                                                   
   12        "Koshucode.Baala.Base.Abort"          /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
@@ -453,7 +453,7 @@ TABLE : DIR-RANK
                                                   
   73        "Koshucode.Baala"                     /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
-                                                  9     "Subtext"        [ "Operator" ]
+                                                  10    "Subtext"        [ "Operator" ]
                                                   16    "Base"           [ "Abort" | "IO" | "List" | "Prelude" | "Syntax" | "Text" ]
                                                   36    "Syntax"         [ "Attr" | "Para" | "Symbol" | "TTree" | "Token" ]
                                                   52    "Data"           [ "Church" | "Content" | "Type" ]

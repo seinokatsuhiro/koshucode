@@ -74,7 +74,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    162 judges
+**    163 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.IO"
@@ -244,6 +244,7 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy.UTF8"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Default"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Encoding"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy"
@@ -1534,7 +1535,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    150 judges
+**    160 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Syntax"
@@ -1612,6 +1613,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.PoScale"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.Subtext"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Gadget"           /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Lattice.Restrict"  /import "Data.Set"
@@ -1685,6 +1687,16 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Source"           /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Source"           /import "Koshucode.Baala.Rop.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Rop.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Subtext"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Subtext.Expr"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Subtext.Para"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Subtext"          /import "Koshucode.Baala.Rop.Flat.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Term"             /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Term"             /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Term"             /import "Koshucode.Baala.Data"
@@ -1728,22 +1740,25 @@ Command `./dir-rank.k ../rop-flat/data/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
-    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
+    "Core" | [ ] ] [ 0 | "Data" | [ ] ] [ 0 | "Subtext" | [ ] ] [ 0 | "Syntax" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Core"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "Expr" | [ ] ] [
+    0 | "Para" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 1 | "Define" | [ ] ]
     [ 1 | "Message" | [ ] ] [ 2 | "Rop" | [ ] ] [ 2 | "Term" | [ ] ] [ 3 | "Get" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Rop.Flat.Lattice"  /base-rank {= /rank /base /import-dir [ 5 |
     "Tropashko" | [ "Base" ] ] [ 6 | "Restrict" | [ "Base" ] ] [ 7 | "Rop" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ]
-    ] [ 2 | "Message" | [ ] ] [ 5 | "Elem" | [ "Base" ] ] [ 5 | "Gadget" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5
-    | "Order" | [ "Base" ] ] [ 5 | "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [
-    6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [ ] ] [ 9 | "Check" | [ "Base" |
-    "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" | "Lattice" ] ] =}
 
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 1 | "PoScale" | [ ]
+    ] [ 2 | "Message" | [ ] ] [ 5 | "Elem" | [ "Base" ] ] [ 5 | "Meta" | [ "Base" ] ] [ 5 | "Order" | [ "Base" ] ] [ 5 |
+    "Resource" | [ "Base" ] ] [ 5 | "Source" | [ "Base" ] ] [ 5 | "Subtext" | [ "Base" ] ] [ 5 | "Term" | [ "Base" ] ] [
+    6 | "Gadget" | [ "Base" ] ] [ 6 | "Peripheral" | [ "Base" ] ] [ 6 | "TermGadget" | [ "Base" ] ] [ 8 | "Lattice" | [
+    ] ] [ 9 | "Check" | [ "Base" | "Lattice" ] ] [ 9 | "Control" | [ "Base" | "Lattice" ] ] [ 10 | "Bundle" | [ "Base" |
+    "Lattice" ] ] =}
 |-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 4 | "Base" | [ ] ] [ 11
     | "Flat" | [ "Lattice" ] ] =}
 
-*** 6 judges
+*** 7 judges
 
 === note
 
@@ -1756,11 +1771,17 @@ TABLE : DIR-RANK
                                                  0     "Base"         [ ]
                                                  0     "Core"         [ ]
                                                  0     "Data"         [ ]
+                                                 0     "Subtext"      [ ]
                                                  0     "Syntax"       [ ]
                                                  
   0         "Koshucode.Baala.Core"               /rank /base          /import-dir
                                                  ----- -------------- ------------------------
                                                  0     "Message"      [ ]
+                                                 
+  0         "Koshucode.Baala.Subtext"            /rank /base          /import-dir
+                                                 ----- -------------- ------------------------
+                                                 0     "Expr"         [ ]
+                                                 0     "Para"         [ ]
                                                  
   3         "Koshucode.Baala.Rop.Base"           /rank /base          /import-dir
                                                  ----- -------------- ------------------------
@@ -1781,12 +1802,13 @@ TABLE : DIR-RANK
                                                  1     "PoScale"      [ ]
                                                  2     "Message"      [ ]
                                                  5     "Elem"         [ "Base" ]
-                                                 5     "Gadget"       [ "Base" ]
                                                  5     "Meta"         [ "Base" ]
                                                  5     "Order"        [ "Base" ]
                                                  5     "Resource"     [ "Base" ]
                                                  5     "Source"       [ "Base" ]
+                                                 5     "Subtext"      [ "Base" ]
                                                  5     "Term"         [ "Base" ]
+                                                 6     "Gadget"       [ "Base" ]
                                                  6     "Peripheral"   [ "Base" ]
                                                  6     "TermGadget"   [ "Base" ]
                                                  8     "Lattice"      [ ]
@@ -1804,8 +1826,8 @@ TABLE : DIR-RANK
 
 **
 **  SUMMARY
-**       6 judges on DIR-RANK
-**       6 judges in total
+**       7 judges on DIR-RANK
+**       7 judges in total
 **
 ```
 
