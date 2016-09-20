@@ -21,7 +21,7 @@ char = S.list
 
 -- | Match some word in a list of words from space-separated string.
 word :: String -> S.Expr Char
-word w = S.or (S.list <$> words w)
+word w = S.or (S.equal <$> words w)
 
 -- | Match space character.
 space :: S.Expr Char
