@@ -7,11 +7,13 @@ module Koshucode.Baala.Subtext.Expr
    ExprRec (..),
    ExprBase (..),
    MinMax (..),
+   atLeast, atMost,
    FnElem, FnSpan, FnInter,
+   NameDepth,
    submatchNames,
  ) where
 
-import qualified Data.Set                    as Set
+import qualified Data.Map.Strict             as Map
 import qualified Koshucode.Baala.Subtext.Fn  as S
 
 
@@ -50,6 +52,14 @@ data MinMax
   | MinMax Int Int        -- ^ Lower and upper bound
     deriving (Show, Eq, Ord)
 
+atLeast :: Int -> MinMax -> Bool
+atLeast b (Min n)      = n >= b
+atLeast b (MinMax n _) = n >= b
+
+atMost :: Int -> MinMax -> Bool
+atMost _ (Min _)      = False
+atMost b (MinMax _ n) = n <= b
+
 -- | Function type for element matcher.
 type FnElem a = S.Fn a Bool
 
@@ -59,24 +69,24 @@ type FnSpan a = S.Fn [a] (Maybe ([a], [a]))
 -- | Function type for inter-element matcher.
 type FnInter a = S.Fn2 (Maybe a) (Maybe a) Bool
 
-
--- | Recursive subexpressions.
-recursives :: Expr c -> [Expr c]
-recursives (EBase _) = []
-recursives (ERec r)  = rec r where
-    rec (EOr     es)    = es
-    rec (ESeq    es)    = es
-    rec (EAnd    es)    = es
-    rec (ENot    e)     = [e]
-    rec (ERep  _ e)     = [e]
-    rec (ELast   e)     = [e]
-    rec (ESub  _ e)     = [e]
-    rec (EGath _ e)     = [e]
-    rec (EPeek e)       = [e]
+-- | Name and depth level.
+type NameDepth = (S.Name, Int)
 
 -- | List of submatch names.
-submatchNames :: Expr c -> [S.Name]
-submatchNames = Set.toList . loop where
-    loop (ERec (ESub n e))  = Set.insert n $ loop e
-    loop e                  = Set.unions (loop <$> recursives e)
+submatchNames :: Expr c -> [NameDepth]
+submatchNames = Map.assocs . expr 0 where
+    expr d (ERec e)    = rec d e
+    expr _ _           = Map.empty
+
+    rec d ex = case ex of
+                 EOr    es  -> Map.unions (expr d <$> es)
+                 ESeq   es  -> Map.unions (expr d <$> es)
+                 EAnd   es  -> Map.unions (expr d <$> es)
+                 ENot    e  -> expr d e
+                 ERep  m e  | atMost 1 m  -> expr d e
+                            | otherwise   -> expr (d + 1) e
+                 ELast   e  -> expr d e
+                 ESub  n e  -> Map.insertWith max n d $ expr d e
+                 EGath _ e  -> expr d e
+                 EPeek   e  -> expr d e
 

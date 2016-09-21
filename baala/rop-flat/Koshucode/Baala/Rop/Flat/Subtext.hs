@@ -101,7 +101,7 @@
 --     Turn on gathering text in /E/.
 
 module Koshucode.Baala.Rop.Flat.Subtext
-  ( consSubtext, relmapSubtext, relkitSubtext,
+  ( SubtextPara, consSubtext, relmapSubtext, relkitSubtext,
   ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -117,6 +117,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- --------------------------------------------  Operator
 
+type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
+
 consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
   do term  <- Op.getTerm   med "-term"
@@ -127,17 +129,17 @@ consSubtext med =
          match = T.matchBundle b
      Right $ relmapSubtext med (term, ns, match, trim)
 
-submatchNamesBundle :: CharBundle -> [String]
+submatchNamesBundle :: CharBundle -> [T.NameDepth]
 submatchNamesBundle b = T.submatchNames $ T.seq (snd <$> b)
 
-relmapSubtext :: (D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName], T.CharMatch, Bool) -> C.Relmap c
+relmapSubtext :: (D.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
-relkitSubtext :: (D.CContent c) => (S.TermName, [S.TermName], T.CharMatch, Bool) -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitSubtext :: (D.CContent c) => SubtextPara -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
     pick    = Op.picker he1 [n]
-    he2     = D.headAppend ns he1
+    he2     = D.headAppend (fst <$> ns) he1
     kit2    = C.relkitJust he2 $ C.RelkitOneToOne False f2
     result  = subtextResult trim ns
     f2 cs   = case pick cs of
@@ -147,11 +149,19 @@ relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
                         Nothing      -> result [] ++ cs
                _ -> result [] ++ cs
 
-subtextResult :: (D.CEmpty c, D.CText c) => Bool -> [S.TermName] -> [(S.TermName, String)] -> [c]
+subtextResult :: (D.CEmpty c, D.CText c, D.CList c) =>
+    Bool -> [T.NameDepth] -> [(S.TermName, String)] -> [c]
 subtextResult trim ns rs = result <$> ns where
-    result n = case lookup n rs of
-                 Just t  -> D.pText $ trimIf trim t
-                 Nothing -> D.empty
+    text = D.pText . trimIf trim
+    result (n, depth) =
+        case lookup' n rs of
+          ts | depth > 0  -> D.pList (text <$> ts)
+          t : _           -> text t
+          []              -> D.empty
+
+lookup' :: (Eq a) => a -> [(a, b)] -> [b]
+lookup' n ass = snd <$> filter eq ass where
+    eq (n', _) = n == n'
 
 trimIf :: Bool -> String -> String
 trimIf True  t = B.trimBoth t
