@@ -6,39 +6,27 @@ To build the program `koshu`, please type the following commands.
 For Unix-like system
 ------------------------------------------------------------------
 
-Move to the working directory.
+Move to the `calculator` directory.
 
-    cd koshucode/baala
-
-Make a build script executable.
-
-    chmod 755 cabal-koshu.sh
-
-Setup a shared sandbox.
-
-    ./cabal-koshu.sh sandbox-init
-    ./cabal-koshu.sh sandbox-deps
-
-Unregister installed libraries.
-
-    ./cabal-koshu unreg
-
-Prepare to build packages.
-
-    ./cabal-koshu.sh link
+    cd koshucode/baala/calculator/
 
 Build the `koshu` executable file.
 
-    cabal/install.link calculator
+    ./cabal-sandbox-install.sh
 
 Check the `koshu` executable file.
 
-    ls -l cabal/sanbox/bin
-
-
+    ls -l ../cabal/sanbox/bin
 
 
 For Microsoft Windows
 ------------------------------------------------------------------
 
+Open the `calculator` directory and
+double click the `cabal-sandbox-install.bat` file.
+This batch file show the following message.
+
+    Please type [i] to install koshu command or [d] to delete sandbox:
+
+Type `i` and enter.
 
