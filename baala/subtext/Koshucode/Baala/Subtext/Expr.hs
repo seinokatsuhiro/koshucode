@@ -7,11 +7,8 @@ module Koshucode.Baala.Subtext.Expr
    ExprRec (..),
    ExprBase (..),
    FnElem, FnSpan, FnInter,
-   NameDepth,
-   submatchNames,
  ) where
 
-import qualified Data.Map.Strict                 as Map
 import qualified Koshucode.Baala.Subtext.Fn      as S
 import qualified Koshucode.Baala.Subtext.MinMax  as S
 
@@ -53,25 +50,4 @@ type FnSpan a = S.Fn [a] (Maybe ([a], [a]))
 
 -- | Function type for inter-element matcher.
 type FnInter a = S.Fn2 (Maybe a) (Maybe a) Bool
-
--- | Name and depth level.
-type NameDepth = (S.Name, Int)
-
--- | List of submatch names.
-submatchNames :: Expr c -> [NameDepth]
-submatchNames = Map.assocs . expr 0 where
-    expr d (ERec e)    = rec d e
-    expr _ _           = Map.empty
-
-    rec d ex = case ex of
-                 EOr    es  -> Map.unions (expr d <$> es)
-                 ESeq   es  -> Map.unions (expr d <$> es)
-                 EAnd   es  -> Map.unions (expr d <$> es)
-                 ENot    e  -> expr d e
-                 ERep  m e  | S.atMost 1 m  -> expr d e
-                            | otherwise     -> expr (d + 1) e
-                 ELast   e  -> expr d e
-                 ESub  n e  -> Map.insertWith max n d $ expr d e
-                 EGath _ e  -> expr d e
-                 EPeek   e  -> expr d e
 

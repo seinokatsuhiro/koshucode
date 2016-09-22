@@ -125,12 +125,9 @@ consSubtext med =
      sub   <- Op.getTrees  med "-subtext"
      trim  <- Op.getSwitch med "-trim"
      b     <- parseBundle sub
-     let ns    = submatchNamesBundle b
+     let ns    = T.submatchNames b
          match = T.matchBundle b
      Right $ relmapSubtext med (term, ns, match, trim)
-
-submatchNamesBundle :: CharBundle -> [T.NameDepth]
-submatchNamesBundle b = T.submatchNames $ T.seq (snd <$> b)
 
 relmapSubtext :: (D.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext

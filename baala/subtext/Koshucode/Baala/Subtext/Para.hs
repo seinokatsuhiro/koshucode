@@ -7,6 +7,8 @@ module Koshucode.Baala.Subtext.Para
     Para (..),
     Submatch,
     Bundle, BundleMap,
+    NameDepth,
+    submatchNames,
     createPara,
   ) where
 
@@ -58,6 +60,33 @@ createPara es s =
 matchStart :: Bundle a -> S.Expr a
 matchStart ((_, e) : _)  = e
 matchStart []            = S.fail
+
+-- | Name and depth level.
+type NameDepth = (S.Name, Int)
+
+-- | List of submatch names.
+submatchNames :: Bundle a -> [NameDepth]
+submatchNames bun = Map.assocs $ expr [] 0 $ matchStart bun where
+    expr ns d (S.ERec e)               = rec ns d e
+    expr ns d (S.EBase (S.EChange n))  = ch ns d n
+    expr _ _ _                         = Map.empty
+
+    ch ns d n | n `elem` ns        = Map.empty
+              | otherwise          = case lookup n bun of
+                                       Nothing -> Map.empty
+                                       Just e  -> expr (n:ns) d e
+    rec ns d ex =
+        case ex of
+          S.EOr    es  -> Map.unions (expr ns d <$> es)
+          S.ESeq   es  -> Map.unions (expr ns d <$> es)
+          S.EAnd   es  -> Map.unions (expr ns d <$> es)
+          S.ENot    e  -> expr ns d e
+          S.ERep  m e  | S.atMost 1 m  -> expr ns d e
+                       | otherwise     -> expr ns (d + 1) e
+          S.ELast   e  -> expr ns d e
+          S.ESub  n e  -> Map.insertWith max n d $ expr ns d e
+          S.EGath _ e  -> expr ns d e
+          S.EPeek   e  -> expr ns d e
 
 -- | Simplify bundle of match expressions.
 matchSimplifyBundle :: Bundle a -> Bundle a
