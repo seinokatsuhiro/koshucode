@@ -6,15 +6,14 @@ module Koshucode.Baala.Subtext.Expr
  ( Expr (..),
    ExprRec (..),
    ExprBase (..),
-   MinMax (..),
-   atLeast, atMost,
    FnElem, FnSpan, FnInter,
    NameDepth,
    submatchNames,
  ) where
 
-import qualified Data.Map.Strict             as Map
-import qualified Koshucode.Baala.Subtext.Fn  as S
+import qualified Data.Map.Strict                 as Map
+import qualified Koshucode.Baala.Subtext.Fn      as S
+import qualified Koshucode.Baala.Subtext.MinMax  as S
 
 
 -- | Subtext match expression.
@@ -29,7 +28,7 @@ data ExprRec a
   | ESeq          [Expr a]     -- ^ Sequential match
   | EAnd          [Expr a]     -- ^ Additional condition
   | ENot          (Expr a)     -- ^ Inverted condition
-  | ERep  MinMax  (Expr a)     -- ^ Repetitive match
+  | ERep S.MinMax (Expr a)     -- ^ Repetitive match
   | ELast         (Expr a)     -- ^ Find last match
   | ESub  S.Name  (Expr a)     -- ^ Submatch
   | EGath Bool    (Expr a)     -- ^ Change gathering setting
@@ -45,20 +44,6 @@ data ExprBase a
   | EAlways Bool               -- ^ Immediate match/unmatch
   | EWhat                      -- ^ Context-dependent match
     deriving (Show, Eq, Ord)
-
--- | Lower and upper bound.
-data MinMax
-  = Min    Int            -- ^ Lower bound
-  | MinMax Int Int        -- ^ Lower and upper bound
-    deriving (Show, Eq, Ord)
-
-atLeast :: Int -> MinMax -> Bool
-atLeast b (Min n)      = n >= b
-atLeast b (MinMax n _) = n >= b
-
-atMost :: Int -> MinMax -> Bool
-atMost _ (Min _)      = False
-atMost b (MinMax _ n) = n <= b
 
 -- | Function type for element matcher.
 type FnElem a = S.Fn a Bool
@@ -83,8 +68,8 @@ submatchNames = Map.assocs . expr 0 where
                  ESeq   es  -> Map.unions (expr d <$> es)
                  EAnd   es  -> Map.unions (expr d <$> es)
                  ENot    e  -> expr d e
-                 ERep  m e  | atMost 1 m  -> expr d e
-                            | otherwise   -> expr (d + 1) e
+                 ERep  m e  | S.atMost 1 m  -> expr d e
+                            | otherwise     -> expr (d + 1) e
                  ELast   e  -> expr d e
                  ESub  n e  -> Map.insertWith max n d $ expr d e
                  EGath _ e  -> expr d e

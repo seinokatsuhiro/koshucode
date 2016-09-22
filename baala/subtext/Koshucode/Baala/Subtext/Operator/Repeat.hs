@@ -12,6 +12,7 @@ module Koshucode.Baala.Subtext.Operator.Repeat
 import Prelude hiding ( min, max, maybe )
 
 import qualified Koshucode.Baala.Subtext.Expr                as S
+import qualified Koshucode.Baala.Subtext.MinMax              as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
 

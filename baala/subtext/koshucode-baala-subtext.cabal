@@ -50,6 +50,7 @@ library
         Koshucode.Baala.Subtext.Expr
         Koshucode.Baala.Subtext.Fn
         Koshucode.Baala.Subtext.Match
+        Koshucode.Baala.Subtext.MinMax
 
         Koshucode.Baala.Subtext.Name.IntString
         Koshucode.Baala.Subtext.Name.String
