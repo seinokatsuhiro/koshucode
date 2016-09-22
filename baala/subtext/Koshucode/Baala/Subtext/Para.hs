@@ -6,7 +6,8 @@ module Koshucode.Baala.Subtext.Para
   ( -- * Parameter
     Para (..),
     Submatch,
-    Bundle, BundleMap,
+    Bundle (..), BundleMap,
+    bundle,
     NameDepth,
     submatchNames,
     createPara,
@@ -37,17 +38,23 @@ data Para a = Para
 type Submatch a = (S.Name, [a])
 
 -- | Bundle of named expressions.
-type Bundle a = [(S.Name, S.Expr a)]
+data Bundle a = Bundle
+    { bundleExpr :: [(S.Name, S.Expr a)]
+    } deriving (Show, Eq, Ord)
 
 -- | Map version of expression bundle.
 type BundleMap a = Map.Map S.Name (S.Expr a)
+
+-- | Create bundle of subtext expressions.
+bundle :: [(S.Name, S.Expr a)] -> Bundle a
+bundle es = Bundle { bundleExpr = es }
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
 createPara :: Bundle a -> [a] -> Para a
 createPara es s =
     let es' = matchSimplifyBundle es
-    in Para { paraBundle     = Map.fromList es'
+    in Para { paraBundle     = Map.fromList $ bundleExpr es'
             , paraRawSubs    = []
             , paraGather     = True
             , paraExpr       = matchStart es'
@@ -58,8 +65,9 @@ createPara es s =
 
 -- | Select start expression.
 matchStart :: Bundle a -> S.Expr a
-matchStart ((_, e) : _)  = e
-matchStart []            = S.fail
+matchStart bun = case bundleExpr bun of
+                   ((_, e) : _)  -> e
+                   []            -> S.fail
 
 -- | Name and depth level.
 type NameDepth = (S.Name, Int)
@@ -72,7 +80,7 @@ submatchNames bun = Map.assocs $ expr [] 0 $ matchStart bun where
     expr _ _ _                         = Map.empty
 
     ch ns d n | n `elem` ns        = Map.empty
-              | otherwise          = case lookup n bun of
+              | otherwise          = case lookup n $ bundleExpr bun of
                                        Nothing -> Map.empty
                                        Just e  -> expr (n:ns) d e
     rec ns d ex =
@@ -90,7 +98,8 @@ submatchNames bun = Map.assocs $ expr [] 0 $ matchStart bun where
 
 -- | Simplify bundle of match expressions.
 matchSimplifyBundle :: Bundle a -> Bundle a
-matchSimplifyBundle = fmap $ fmap (what . reduce)
+matchSimplifyBundle bun@Bundle { bundleExpr = es } =
+    bun { bundleExpr = fmap (what . reduce) <$> es }
 
 -- | Remove redundant expressions.
 reduce :: S.Expr a -> S.Expr a

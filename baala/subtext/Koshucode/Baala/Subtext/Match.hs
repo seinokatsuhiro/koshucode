@@ -32,7 +32,7 @@ type MatchResult a = ([a], [S.Submatch a])
 
 -- | Apply match expression to input sequence.
 matchExpr :: (Show a) => S.Expr a -> GeneralMatch a
-matchExpr e = matchBundle [("start", e)]
+matchExpr e = matchBundle $ S.bundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.
 matchBundle :: (Show a) => S.Bundle a -> GeneralMatch a

@@ -199,11 +199,12 @@ parseBundle = bundle where
         case step1 `mapM` divide "|" sub of
           Left _    -> single xs
           Right nxs -> do let ns = fst <$> nxs
-                          step2 ns `mapM` nxs
+                          es <- step2 ns `mapM` nxs
+                          Right $ T.bundle es
     bundle xs = single xs
 
     single xs = do e <- parseSubtext [] xs
-                   Right $ [("start", e)]
+                   Right $ T.bundle [("start", e)]
 
     step1 :: [S.TTree] -> B.Ab (String, [S.TTree])
     step1 xs = case divide "=" xs of
