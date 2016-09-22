@@ -125,7 +125,7 @@ consSubtext med =
      sub   <- Op.getTrees  med "-subtext"
      trim  <- Op.getSwitch med "-trim"
      b     <- parseBundle sub
-     let ns    = T.submatchNames b
+     let ns    = T.bundleSubmatch b
          match = T.matchBundle b
      Right $ relmapSubtext med (term, ns, match, trim)
 

@@ -7,9 +7,8 @@ module Koshucode.Baala.Subtext.Para
     Para (..),
     Submatch,
     Bundle (..), BundleMap,
-    bundle,
     NameDepth,
-    submatchNames,
+    bundle,
     createPara,
   ) where
 
@@ -41,46 +40,37 @@ type Submatch a = (S.Name, [a])
 data Bundle a = Bundle
     { bundleExpr      :: [(S.Name, S.Expr a)]
     , bundleStart     :: S.Expr a
+    , bundleSubmatch  :: [NameDepth]
     } deriving (Show, Eq, Ord)
 
 -- | Map version of expression bundle.
 type BundleMap a = Map.Map S.Name (S.Expr a)
 
--- | Create bundle of subtext expressions.
-bundle :: [(S.Name, S.Expr a)] -> Bundle a
-bundle es =
-    Bundle { bundleExpr   = es
-           , bundleStart  = start es }
-    where
-      start ((_, e) : _)  = e
-      start []            = S.fail
-
--- | Create matching parameter from
---   expression bundle and input sequence.
-createPara :: Bundle a -> [a] -> Para a
-createPara es s =
-    let es' = matchSimplifyBundle es
-    in Para { paraBundle     = Map.fromList $ bundleExpr es'
-            , paraRawSubs    = []
-            , paraGather     = True
-            , paraExpr       = bundleStart es'
-            , paraPos        = 0
-            , paraInput      = s
-            , paraPrev       = Nothing
-            , paraRawOutput  = [] }
-
 -- | Name and depth level.
 type NameDepth = (S.Name, Int)
 
+-- | Create bundle of subtext expressions.
+bundle :: [(S.Name, S.Expr a)] -> Bundle a
+bundle exprs =
+    Bundle { bundleExpr      = exprs
+           , bundleStart     = S.fail
+           , bundleSubmatch  = submatches exprs start }
+    where
+      start = startExpr exprs
+
+startExpr :: [(S.Name, S.Expr a)] -> S.Expr a
+startExpr ((_, e) : _)  = e
+startExpr []            = S.fail
+
 -- | List of submatch names.
-submatchNames :: Bundle a -> [NameDepth]
-submatchNames bun = Map.assocs $ expr [] 0 $ bundleStart bun where
+submatches :: [(S.Name, S.Expr a)] -> S.Expr a -> [NameDepth]
+submatches exprs start = Map.assocs $ expr [] 0 start where
     expr ns d (S.ERec e)               = rec ns d e
     expr ns d (S.EBase (S.EChange n))  = ch ns d n
     expr _ _ _                         = Map.empty
 
     ch ns d n | n `elem` ns        = Map.empty
-              | otherwise          = case lookup n $ bundleExpr bun of
+              | otherwise          = case lookup n exprs of
                                        Nothing -> Map.empty
                                        Just e  -> expr (n:ns) d e
     rec ns d ex =
@@ -96,10 +86,26 @@ submatchNames bun = Map.assocs $ expr [] 0 $ bundleStart bun where
           S.EGath _ e  -> expr ns d e
           S.EPeek   e  -> expr ns d e
 
+-- | Create matching parameter from
+--   expression bundle and input sequence.
+createPara :: Bundle a -> [a] -> Para a
+createPara es s =
+    let es' = matchSimplifyBundle es
+    in Para { paraBundle     = Map.fromList $ bundleExpr es'
+            , paraRawSubs    = []
+            , paraGather     = True
+            , paraExpr       = bundleStart es'
+            , paraPos        = 0
+            , paraInput      = s
+            , paraPrev       = Nothing
+            , paraRawOutput  = [] }
+
 -- | Simplify bundle of match expressions.
 matchSimplifyBundle :: Bundle a -> Bundle a
 matchSimplifyBundle bun@Bundle { bundleExpr = es } =
-    bun { bundleExpr = fmap (what . reduce) <$> es }
+    let es' = fmap (what . reduce) <$> es
+    in bun { bundleExpr  = es'
+           , bundleStart = startExpr es' }
 
 -- | Remove redundant expressions.
 reduce :: S.Expr a -> S.Expr a
