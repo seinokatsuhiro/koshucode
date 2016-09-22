@@ -39,7 +39,8 @@ type Submatch a = (S.Name, [a])
 
 -- | Bundle of named expressions.
 data Bundle a = Bundle
-    { bundleExpr :: [(S.Name, S.Expr a)]
+    { bundleExpr      :: [(S.Name, S.Expr a)]
+    , bundleStart     :: S.Expr a
     } deriving (Show, Eq, Ord)
 
 -- | Map version of expression bundle.
@@ -47,7 +48,12 @@ type BundleMap a = Map.Map S.Name (S.Expr a)
 
 -- | Create bundle of subtext expressions.
 bundle :: [(S.Name, S.Expr a)] -> Bundle a
-bundle es = Bundle { bundleExpr = es }
+bundle es =
+    Bundle { bundleExpr   = es
+           , bundleStart  = start es }
+    where
+      start ((_, e) : _)  = e
+      start []            = S.fail
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
@@ -57,24 +63,18 @@ createPara es s =
     in Para { paraBundle     = Map.fromList $ bundleExpr es'
             , paraRawSubs    = []
             , paraGather     = True
-            , paraExpr       = matchStart es'
+            , paraExpr       = bundleStart es'
             , paraPos        = 0
             , paraInput      = s
             , paraPrev       = Nothing
             , paraRawOutput  = [] }
-
--- | Select start expression.
-matchStart :: Bundle a -> S.Expr a
-matchStart bun = case bundleExpr bun of
-                   ((_, e) : _)  -> e
-                   []            -> S.fail
 
 -- | Name and depth level.
 type NameDepth = (S.Name, Int)
 
 -- | List of submatch names.
 submatchNames :: Bundle a -> [NameDepth]
-submatchNames bun = Map.assocs $ expr [] 0 $ matchStart bun where
+submatchNames bun = Map.assocs $ expr [] 0 $ bundleStart bun where
     expr ns d (S.ERec e)               = rec ns d e
     expr ns d (S.EBase (S.EChange n))  = ch ns d n
     expr _ _ _                         = Map.empty
