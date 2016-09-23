@@ -6,15 +6,13 @@ module Koshucode.Baala.Subtext.Para
   ( -- * Parameter
     Para (..),
     Submatch,
-    Bundle (..), BundleMap,
-    NameDepth,
-    bundle,
     createPara,
   ) where
 
 import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Map
+import qualified Koshucode.Baala.Subtext.Bundle    as S
 import qualified Koshucode.Baala.Subtext.Expr      as S
 import qualified Koshucode.Baala.Subtext.Fn        as S
 import qualified Koshucode.Baala.Subtext.MinMax    as S
@@ -23,7 +21,7 @@ import qualified Koshucode.Baala.Subtext.Operator  as S
 
 -- | Matching parameter.
 data Para a = Para
-  { paraBundle     :: BundleMap a    -- ^ Expression bundle
+  { paraBundle     :: S.BundleMap a  -- ^ Expression bundle
   , paraRawSubs    :: [Submatch a]   -- ^ Submatches.
   , paraGather     :: Bool           -- ^ Gather or skip match result
   , paraExpr       :: S.Expr a       -- ^ Match expression
@@ -36,76 +34,26 @@ data Para a = Para
 -- | Submatch result, its name and matched sequence.
 type Submatch a = (S.Name, [a])
 
--- | Bundle of named expressions.
-data Bundle a = Bundle
-    { bundleExpr      :: [(S.Name, S.Expr a)]
-    , bundleStart     :: S.Expr a
-    , bundleSubmatch  :: [NameDepth]
-    } deriving (Show, Eq, Ord)
-
--- | Map version of expression bundle.
-type BundleMap a = Map.Map S.Name (S.Expr a)
-
--- | Name and depth level.
-type NameDepth = (S.Name, Int)
-
--- | Create bundle of subtext expressions.
-bundle :: [(S.Name, S.Expr a)] -> Bundle a
-bundle exprs =
-    Bundle { bundleExpr      = exprs
-           , bundleStart     = S.fail
-           , bundleSubmatch  = submatches exprs start }
-    where
-      start = startExpr exprs
-
-startExpr :: [(S.Name, S.Expr a)] -> S.Expr a
-startExpr ((_, e) : _)  = e
-startExpr []            = S.fail
-
--- | List of submatch names.
-submatches :: [(S.Name, S.Expr a)] -> S.Expr a -> [NameDepth]
-submatches exprs start = Map.assocs $ expr [] 0 start where
-    expr ns d (S.ERec e)               = rec ns d e
-    expr ns d (S.EBase (S.EChange n))  = ch ns d n
-    expr _ _ _                         = Map.empty
-
-    ch ns d n | n `elem` ns        = Map.empty
-              | otherwise          = case lookup n exprs of
-                                       Nothing -> Map.empty
-                                       Just e  -> expr (n:ns) d e
-    rec ns d ex =
-        case ex of
-          S.EOr    es  -> Map.unions (expr ns d <$> es)
-          S.ESeq   es  -> Map.unions (expr ns d <$> es)
-          S.EAnd   es  -> Map.unions (expr ns d <$> es)
-          S.ENot    e  -> expr ns d e
-          S.ERep  m e  | S.atMost 1 m  -> expr ns d e
-                       | otherwise     -> expr ns (d + 1) e
-          S.ELast   e  -> expr ns d e
-          S.ESub  n e  -> Map.insertWith max n d $ expr ns d e
-          S.EGath _ e  -> expr ns d e
-          S.EPeek   e  -> expr ns d e
-
 -- | Create matching parameter from
 --   expression bundle and input sequence.
-createPara :: Bundle a -> [a] -> Para a
-createPara es s =
-    let es' = matchSimplifyBundle es
-    in Para { paraBundle     = Map.fromList $ bundleExpr es'
+createPara :: S.Bundle a -> [a] -> Para a
+createPara bun s =
+    let bun' = simplify bun
+    in Para { paraBundle     = Map.fromList $ S.bundleExpr bun'
             , paraRawSubs    = []
             , paraGather     = True
-            , paraExpr       = bundleStart es'
+            , paraExpr       = S.bundleStart bun'
             , paraPos        = 0
             , paraInput      = s
             , paraPrev       = Nothing
             , paraRawOutput  = [] }
 
 -- | Simplify bundle of match expressions.
-matchSimplifyBundle :: Bundle a -> Bundle a
-matchSimplifyBundle bun@Bundle { bundleExpr = es } =
+simplify :: S.Bundle a -> S.Bundle a
+simplify bun@S.Bundle { S.bundleExpr = es } =
     let es' = fmap (what . reduce) <$> es
-    in bun { bundleExpr  = es'
-           , bundleStart = startExpr es' }
+    in bun { S.bundleExpr  = es'
+           , S.bundleStart = S.startExpr es' }
 
 -- | Remove redundant expressions.
 reduce :: S.Expr a -> S.Expr a
