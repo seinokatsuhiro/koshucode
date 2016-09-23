@@ -13,7 +13,6 @@ import Prelude hiding ( min, max, maybe )
 
 import qualified Koshucode.Baala.Subtext.Expr                as S
 import qualified Koshucode.Baala.Subtext.MinMax              as S
-import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
 
 -- | Repetition with lower bound.
@@ -42,5 +41,5 @@ maybe = minMax 0 1
 
 -- | Match before given expression.
 before :: S.Expr a -> S.Expr a
-before e = many $ S.and [S.any, S.not e]
+before = many . S.anyNot
 

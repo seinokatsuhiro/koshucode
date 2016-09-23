@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Subtext.Operator.Combine
  ( -- * Combination
-   or, seq, and, not, last,
+   or, seq, and,
+   not, last, anyNot,
 
    -- * Variation
    peek, skip, gather,
@@ -45,6 +46,10 @@ not e = S.ERec $ S.ENot e
 -- | Find last match.
 last :: S.Expr a -> S.Expr a
 last e = S.ERec $ S.ELast e
+
+-- | Any character except for given pattern.
+anyNot :: S.Expr a -> S.Expr a
+anyNot e = and [S.any, not e]
 
 
 -- --------------------------------------------  Variation
