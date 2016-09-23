@@ -6,7 +6,7 @@ module Koshucode.Baala.Subtext.Operator.Repeat
  ( -- * Repetitive
    min, max, minMax,
    many, many1, maybe,
-   before,
+   before, sep,
  ) where
 
 import Prelude hiding ( min, max, maybe )
@@ -43,3 +43,6 @@ maybe = minMax 0 1
 before :: S.Expr a -> S.Expr a
 before = many . S.anyNot
 
+-- | X-separated values.
+sep :: S.Expr a -> S.Expr a -> S.Expr a
+sep x e = S.seq [many $ S.seq [e, x], maybe e]

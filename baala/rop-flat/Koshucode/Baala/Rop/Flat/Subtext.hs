@@ -88,6 +88,8 @@
 --     Zero-or-more occurences of /E/. (Zero-repeat)
 --   [ {- E -} ]
 --     One-or-more occurences of /E/. (One-repeat)
+--   [ E1 sep E2 ]
+--     /E1/-separated /E2/. (Zero-repeat)
 --
 -- == Gathering subtext
 --
@@ -276,15 +278,23 @@ parseSubtext ns = trees False where
 
     -- Infix operators
     opTop   = opAlt
-    opAlt   = inf "|"   T.or   opSeq   -- E | E | E
-    opSeq   = inf "++"  T.seq  opOr    -- E ++ E ++ E
-    opOr    = inf "or"  T.or   opAnd   -- E or E or E
-    opAnd   = inf "and" T.and  opTo    -- E and E and E
-    opTo xs = case divide "to" xs of   -- E to E
+    opAlt   = inf "|"   T.or    opSeq   -- E | E | E
+    opSeq   = inf "++"  T.seq   opOr    -- E ++ E ++ E
+    opOr    = inf "or"  T.or    opAnd   -- E or E or E
+    opAnd   = inf "and" T.and   opSep   -- E and E and E
+
+    inf op f g xs = Right . f =<< mapM g (divide op xs)
+
+    opSep xs = case divide "sep" xs of  -- E sep E
+                 [sep, v] -> do ev   <- trees False v
+                                esep <- trees False sep
+                                Right $ T.sep esep ev
+                 [xs2]    -> opTo xs2
+                 _        -> unknownSyntax xs
+
+    opTo xs = case divide "to" xs of    -- E to E
                  [[L (Char from)], [L (Char to)]]
                         -> Right $ T.to from to
                  [xs2]  -> trees True xs2  -- Turn on loop check
                  _      -> unknownSyntax xs
-
-    inf op f g xs = Right . f =<< mapM g (divide op xs)
 
