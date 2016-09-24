@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.Meta</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-flat', 'koshucode-baala-rop-flat', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-Meta.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.Meta</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >koshu-cop</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >koshu-cop-infix</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >koshu-source</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >koshu-rop</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >koshu-proxy</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >koshu-version</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsMeta"
+	    >ropsMeta</a
+	    > :: CContent c =&gt; [Rop c]</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuCop"
+	    >consKoshuCop</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuCop"
+	    >relkitKoshuCop</a
+	    > :: CContent c =&gt; TermName -&gt; RelkitHook c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuCopInfix"
+	    >consKoshuCopInfix</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuCopInfix"
+	    >relkitKoshuCopInfix</a
+	    > :: CContent c =&gt; (TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuSource"
+	    >consKoshuSource</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapKoshuSource"
+	    >relmapKoshuSource</a
+	    > :: CContent c =&gt; Intmed c -&gt; (TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuRop"
+	    >consKoshuRop</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuRop"
+	    >relkitKoshuRop</a
+	    > :: CContent c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuProxy"
+	    >consKoshuProxy</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuProxy"
+	    >relkitKoshuProxy</a
+	    > :: CContent c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuVersion"
+	    >consKoshuVersion</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuVersion"
+	    >relkitKoshuVersion</a
+	    > :: CContent c =&gt; TermName -&gt; RelkitHook c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsMeta" class="def"
+	    >ropsMeta</a
+	    > :: CContent c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#ropsMeta');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Implementation of relational operators.</p
+	    ><dl
+	    ><dt
+	      ><code
+		>koshu-cop /N</code
+		></dt
+	      ><dd
+	      >Retrieve list of content operators.</dd
+	      ><dt
+	      >@koshu-cop-infix /N [ -height /N \</dt
+	      ><dd
+	      >[ -dir /N ]@]
+     Retrieve list of infix specifications.</dd
+	      ><dt
+	      ><code
+		>koshu-rop /N</code
+		></dt
+	      ><dd
+	      >Retrieve list of relmap operators.</dd
+	      ><dt
+	      ><code
+		>koshu-version /N</code
+		></dt
+	      ><dd
+	      >Get version number of the koshu calculator.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	>koshu-cop</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuCop" class="def"
+	    >consKoshuCop</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuCop');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuCop" class="def"
+	    >relkitKoshuCop</a
+	    > :: CContent c =&gt; TermName -&gt; RelkitHook c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relkitKoshuCop');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>koshu-cop-infix</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuCopInfix" class="def"
+	    >consKoshuCopInfix</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuCopInfix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuCopInfix" class="def"
+	    >relkitKoshuCopInfix</a
+	    > :: CContent c =&gt; (TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relkitKoshuCopInfix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>koshu-source</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuSource" class="def"
+	    >consKoshuSource</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuSource');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapKoshuSource" class="def"
+	    >relmapKoshuSource</a
+	    > :: CContent c =&gt; Intmed c -&gt; (TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relmapKoshuSource');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>koshu-rop</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuRop" class="def"
+	    >consKoshuRop</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuRop');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuRop" class="def"
+	    >relkitKoshuRop</a
+	    > :: CContent c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relkitKoshuRop');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>koshu-proxy</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuProxy" class="def"
+	    >consKoshuProxy</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuProxy');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuProxy" class="def"
+	    >relkitKoshuProxy</a
+	    > :: CContent c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > TermName) -&gt; RelkitHook c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relkitKoshuProxy');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:6"
+	>koshu-version</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuVersion" class="def"
+	    >consKoshuVersion</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#consKoshuVersion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuVersion" class="def"
+	    >relkitKoshuVersion</a
+	    > :: CContent c =&gt; TermName -&gt; RelkitHook c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Meta.html#relkitKoshuVersion');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Assert.Dataset</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('core', 'koshucode-baala-core', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Assert-Dataset.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Assert.Dataset</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Dataset as a set of judges.</p
+	  ><p
+	  >Dataset is like a bridge of judges and relations.
+   We can get a relation from a dataset,
+   that dataset is build from judges.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Dataset"
+	    >Dataset</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:dataset"
+	    >dataset</a
+	    > :: [Judge c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:datasetAdd"
+	    >datasetAdd</a
+	    > :: [Judge c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:datasetSelect"
+	    >datasetSelect</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CEmpty c) =&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelSelect"
+	    >RelSelect</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Dataset" class="def"
+	    >Dataset</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html#Dataset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Dataset is a set of judges.</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Dataset" class="caption collapser" onclick="toggleSection('i:Dataset')"
+	    >Instances</p
+	    ><div id="section.i:Dataset" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > (<a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+		      >Dataset</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html#line-28');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Dataset that has no judges.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dataset" class="def"
+	    >dataset</a
+	    > :: [Judge c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html#dataset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Gather judges into a dataset.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:datasetAdd" class="def"
+	    >datasetAdd</a
+	    > :: [Judge c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html#datasetAdd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add judges to dataset.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:datasetSelect" class="def"
+	    >datasetSelect</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Assert-Dataset.html#datasetSelect');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		  >Ord</a
+		  > c, CEmpty c)</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
+		  >Dataset</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Dataset</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelSelect"
+		  >RelSelect</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Relation selector</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Select relation from dataset.
+   If a giving term is not in judges, <code
+	      >CEmpty</code
+	      > sign is used.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

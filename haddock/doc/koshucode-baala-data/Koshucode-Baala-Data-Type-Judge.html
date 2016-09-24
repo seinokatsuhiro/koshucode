@@ -1,0 +1,951 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Judge</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Judge.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Judge</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Datatype</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Logical quality</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Class</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Encode</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Judgements: a symbolic representations of
+   affirmed or denied statements.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Judge"
+	    >Judge</a
+	    > c<ul class="subs"
+	    ><li
+	      >= <a href="#v:JudgeAffirm"
+		>JudgeAffirm</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c]</li
+	      ><li
+	      >| <a href="#v:JudgeDeny"
+		>JudgeDeny</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c]</li
+	      ><li
+	      >| <a href="#v:JudgeMultiDeny"
+		>JudgeMultiDeny</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c]</li
+	      ><li
+	      >| <a href="#v:JudgeChange"
+		>JudgeChange</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c] [Term c]</li
+	      ><li
+	      >| <a href="#v:JudgeMultiChange"
+		>JudgeMultiChange</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c] [Term c]</li
+	      ><li
+	      >| <a href="#v:JudgeViolate"
+		>JudgeViolate</a
+		> <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		> [Term c]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeClass"
+	    >JudgeClass</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeTermsMap"
+	    >judgeTermsMap</a
+	    > :: ([Term a] -&gt; [Term b]) -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > a -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > b</li
+	  ><li class="src short"
+	  ><a href="#v:judgeCons"
+	    >judgeCons</a
+	    > :: Term c -&gt; Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeOf"
+	    >JudgeOf</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [Term c] -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:affirm"
+	    >affirm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:deny"
+	    >deny</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:affirmJudge"
+	    >affirmJudge</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:denyJudge"
+	    >denyJudge</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:isAffirmative"
+	    >isAffirmative</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isDenial"
+	    >isDenial</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isViolative"
+	    >isViolative</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:GetClass"
+	    >GetClass</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:getClass"
+		>getClass</a
+		> :: a -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		>JudgeClass</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:GetTermNames"
+	    >GetTermNames</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:getTermNames"
+		>getTermNames</a
+		> :: a -&gt; [TermName]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:GetTerms"
+	    >GetTerms</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:getTerms"
+		>getTerms</a
+		> :: a c -&gt; [Term c]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeBreak"
+	    >judgeBreak</a
+	    > :: LineBreak</li
+	  ><li class="src short"
+	  ><a href="#v:termNameToMix"
+	    >termNameToMix</a
+	    > :: TermName -&gt; MixText</li
+	  ><li class="src short"
+	  ><a href="#v:termsToMix1"
+	    >termsToMix1</a
+	    > :: MixShortEncode c =&gt; Shorten -&gt; [Term c] -&gt; MixText</li
+	  ><li class="src short"
+	  ><a href="#v:termsToMix2"
+	    >termsToMix2</a
+	    > :: MixShortEncode c =&gt; Shorten -&gt; [Term c] -&gt; MixText</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Datatype</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Judge" class="def"
+	    >Judge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#Judge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Judgement on type <code
+	      >c</code
+	      >.</p
+	    ><p
+	    >Judgement (or judge for short) is divided into three parts:
+   logical quality, name of class, and argument.
+   Boolean values <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      > or <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:False"
+		>False</a
+		></code
+	      > of logical quality
+   corresponds to affirmed or denied judge.
+   A name of judgement class represents
+   certain sentence class that gives intepretation of data.
+   Sentence class has placeholders filled by
+   <code
+	      >Named</code
+	      > <code
+	      >c</code
+	      > in argument.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:JudgeAffirm" class="def"
+		  >JudgeAffirm</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-- P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeDeny" class="def"
+		  >JudgeDeny</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-x P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeMultiDeny" class="def"
+		  >JudgeMultiDeny</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-xx P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeChange" class="def"
+		  >JudgeChange</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c] [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-c P /x 10 +/y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeMultiChange" class="def"
+		  >JudgeMultiChange</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c] [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-cc P /x 10 +/y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeViolate" class="def"
+		  >JudgeViolate</a
+		  > <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [Term c]</td
+		><td class="doc"
+		><pre
+		  >|-v P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Judge" class="caption collapser" onclick="toggleSection('i:Judge')"
+	    >Instances</p
+	    ><div id="section.i:Judge" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-73');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTerms"
+		      >GetTerms</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-161');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-58');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-62');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-56');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >MixShortEncode c =&gt; MixShortEncode (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-185');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-155');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetClass"
+		      >GetClass</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-152');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeClass" class="def"
+	    >JudgeClass</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#JudgeClass');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of judgement class, in other words, name of propositional function.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeTermsMap" class="def"
+	    >judgeTermsMap</a
+	    > :: ([Term a] -&gt; [Term b]) -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > a -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > b <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#judgeTermsMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map function to terms.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeCons" class="def"
+	    >judgeCons</a
+	    > :: Term c -&gt; Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#judgeCons');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Prepend a term into judgement.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Logical quality</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeOf" class="def"
+	    >JudgeOf</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [Term c] -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#JudgeOf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct judgement from its class and terms.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:affirm" class="def"
+	    >affirm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#affirm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct affirmative judgement.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:deny" class="def"
+	    >deny</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#deny');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct denial judgement.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:affirmJudge" class="def"
+	    >affirmJudge</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#affirmJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Affirm judgement, i.e., change logical quality to affirmative.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:denyJudge" class="def"
+	    >denyJudge</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#denyJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Deny judgement, i.e., change logical quality to denial.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isAffirmative" class="def"
+	    >isAffirmative</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#isAffirmative');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is affirmed.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isDenial" class="def"
+	    >isDenial</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#isDenial');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is denied.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isViolative" class="def"
+	    >isViolative</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#isViolative');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is for violation.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Class</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:GetClass" class="def"
+	    >GetClass</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#GetClass');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get judge class.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:getClass" class="def"
+	      >getClass</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Data-Type-Judge.html#t:JudgeClass"
+	      >JudgeClass</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#getClass');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:GetClass" class="caption collapser" onclick="toggleSection('i:GetClass')"
+	    >Instances</p
+	    ><div id="section.i:GetClass" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetClass"
+		      >GetClass</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-152');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:GetTermNames" class="def"
+	    >GetTermNames</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#GetTermNames');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get list of term names.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:getTermNames" class="def"
+	      >getTermNames</a
+	      > :: a -&gt; [TermName] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#getTermNames');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:GetTermNames" class="caption collapser" onclick="toggleSection('i:GetTermNames')"
+	    >Instances</p
+	    ><div id="section.i:GetTermNames" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+		      >Head</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-57');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		      >Interp</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-26');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > [TermName]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-158');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > (<a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-155');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		      >Rel</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-56');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:GetTerms" class="def"
+	    >GetTerms</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#GetTerms');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get term list.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:getTerms" class="def"
+	      >getTerms</a
+	      > :: a c -&gt; [Term c] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#getTerms');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:GetTerms" class="caption collapser" onclick="toggleSection('i:GetTerms')"
+	    >Instances</p
+	    ><div id="section.i:GetTerms" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Type-Judge.html#t:GetTerms"
+		      >GetTerms</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge.html#t:Judge"
+		      >Judge</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#line-161');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Encode</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeBreak" class="def"
+	    >judgeBreak</a
+	    > :: LineBreak <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#judgeBreak');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Conventional line-break setting for judges:
+   4-spaces indent and 120-columns line.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameToMix" class="def"
+	    >termNameToMix</a
+	    > :: TermName -&gt; MixText <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#termNameToMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsToMix1" class="def"
+	    >termsToMix1</a
+	    > :: MixShortEncode c =&gt; Shorten -&gt; [Term c] -&gt; MixText <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#termsToMix1');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term list with one-space separator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsToMix2" class="def"
+	    >termsToMix2</a
+	    > :: MixShortEncode c =&gt; Shorten -&gt; [Term c] -&gt; MixText <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge.html#termsToMix2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term list with two-spaces separator.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

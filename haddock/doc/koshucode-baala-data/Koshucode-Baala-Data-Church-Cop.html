@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Church.Cop</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Church-Cop.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Church.Cop</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operator</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Operator name</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Operator set</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Term-content operator.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Cop"
+	    >Cop</a
+	    > c<ul class="subs"
+	    ><li
+	      >= <a href="#v:CopCalc"
+		>CopCalc</a
+		> BlankName (<a href="Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+		>CopCalc</a
+		> c)</li
+	      ><li
+	      >| <a href="#v:CopCox"
+		>CopCox</a
+		> BlankName (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopCox"
+		>CopCox</a
+		> c)</li
+	      ><li
+	      >| <a href="#v:CopTree"
+		>CopTree</a
+		> BlankName <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		>CopTree</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CopCox"
+	    >CopCox</a
+	    > c = [<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c] -&gt; Ab (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CopTree"
+	    >CopTree</a
+	    > = [TTree] -&gt; Ab TTree</li
+	  ><li class="src short"
+	  ><a href="#v:copName"
+	    >copName</a
+	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    >Cop</a
+	    > c -&gt; BlankName</li
+	  ><li class="src short"
+	  ><a href="#v:copNormal"
+	    >copNormal</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName</li
+	  ><li class="src short"
+	  ><a href="#v:copInternal"
+	    >copInternal</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName</li
+	  ><li class="src short"
+	  ><a href="#v:copPrefix"
+	    >copPrefix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName</li
+	  ><li class="src short"
+	  ><a href="#v:copInfix"
+	    >copInfix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName</li
+	  ><li class="src short"
+	  ><a href="#v:copPostfix"
+	    >copPostfix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:CopSet"
+	    >CopSet</a
+	    > c = <a href="#v:CopSet"
+	    >CopSet</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:copsetCopList"
+		>copsetCopList</a
+		> :: [<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		>Cop</a
+		> c]</li
+	      ><li
+	      ><a href="#v:copsetInfixList"
+		>copsetInfixList</a
+		> :: [Named InfixHeight]</li
+	      ><li
+	      ><a href="#v:copsetCalcList"
+		>copsetCalcList</a
+		> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		>Cop</a
+		> c)]</li
+	      ><li
+	      ><a href="#v:copsetCoxList"
+		>copsetCoxList</a
+		> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		>Cop</a
+		> c)]</li
+	      ><li
+	      ><a href="#v:copsetTreeList"
+		>copsetTreeList</a
+		> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		>Cop</a
+		> c)]</li
+	      ><li
+	      ><a href="#v:copsetFindCalc"
+		>copsetFindCalc</a
+		> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+		>CopFind</a
+		> (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+		>Cox</a
+		> c)</li
+	      ><li
+	      ><a href="#v:copsetFindCox"
+		>copsetFindCox</a
+		> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+		>CopFind</a
+		> (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopCox"
+		>CopCox</a
+		> c)</li
+	      ><li
+	      ><a href="#v:copsetFindTree"
+		>copsetFindTree</a
+		> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+		>CopFind</a
+		> <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		>CopTree</a
+		></li
+	      ><li
+	      ><a href="#v:copsetDerived"
+		>copsetDerived</a
+		> :: [<a href="Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+		>NamedCox</a
+		> c]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CopFind"
+	    >CopFind</a
+	    > f = BlankName -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > f</li
+	  ><li class="src short"
+	  ><a href="#v:copset"
+	    >copset</a
+	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copsetFill"
+	    >copsetFill</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Operator</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Cop" class="def"
+	    >Cop</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#Cop');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term-content operator.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:CopCalc" class="def"
+		  >CopCalc</a
+		  > BlankName (<a href="Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+		  >CopCalc</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Convert <code
+		    >c</code
+		    > (content)</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:CopCox" class="def"
+		  >CopCox</a
+		  > BlankName (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopCox"
+		  >CopCox</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Convert <code
+		    ><a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+		      >Cox</a
+		      ></code
+		    > c</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:CopTree" class="def"
+		  >CopTree</a
+		  > BlankName <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+		  >CopTree</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Convert <code
+		    ><a href="B.html#v:TTree"
+		      >TTree</a
+		      ></code
+		    ></p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Cop" class="caption collapser" onclick="toggleSection('i:Cop')"
+	    >Instances</p
+	    ><div id="section.i:Cop" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		      >Cop</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-36');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >Name (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+		      >Cop</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-41');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CopCox" class="def"
+	    >CopCox</a
+	    > c = [<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c] -&gt; Ab (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopCox');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Expression-level syntax.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CopTree" class="def"
+	    >CopTree</a
+	    > = [TTree] -&gt; Ab TTree <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopTree');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tree-level syntax.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copName" class="def"
+	    >copName</a
+	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    >Cop</a
+	    > c -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Operator name</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copNormal" class="def"
+	    >copNormal</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copNormal');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name for non-binary operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copInternal" class="def"
+	    >copInternal</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copInternal');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name for program-generated operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copPrefix" class="def"
+	    >copPrefix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copPrefix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name for prefix operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copInfix" class="def"
+	    >copInfix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copInfix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name for infix operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copPostfix" class="def"
+	    >copPostfix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; BlankName <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copPostfix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name for postfix operator.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Operator set</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:CopSet" class="def"
+	    >CopSet</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:CopSet" class="def"
+		  >CopSet</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:copsetCopList" class="def"
+			>copsetCopList</a
+			> :: [<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+			>Cop</a
+			> c]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetInfixList" class="def"
+			>copsetInfixList</a
+			> :: [Named InfixHeight]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetCalcList" class="def"
+			>copsetCalcList</a
+			> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+			>Cop</a
+			> c)]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetCoxList" class="def"
+			>copsetCoxList</a
+			> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+			>Cop</a
+			> c)]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetTreeList" class="def"
+			>copsetTreeList</a
+			> :: [Named (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+			>Cop</a
+			> c)]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetFindCalc" class="def"
+			>copsetFindCalc</a
+			> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+			>CopFind</a
+			> (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+			>Cox</a
+			> c)</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetFindCox" class="def"
+			>copsetFindCox</a
+			> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+			>CopFind</a
+			> (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopCox"
+			>CopCox</a
+			> c)</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetFindTree" class="def"
+			>copsetFindTree</a
+			> :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopFind"
+			>CopFind</a
+			> <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopTree"
+			>CopTree</a
+			></dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:copsetDerived" class="def"
+			>copsetDerived</a
+			> :: [<a href="Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+			>NamedCox</a
+			> c]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CopFind" class="def"
+	    >CopFind</a
+	    > f = BlankName -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > f <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopFind');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Find content operator from its name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copset" class="def"
+	    >copset</a
+	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Empty operator set.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copsetFill" class="def"
+	    >copsetFill</a
+	    > :: Map (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copsetFill');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Resource.Message</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('core', 'koshucode-baala-core', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Resource-Message.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Resource.Message</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Abortable</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Message</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:abClause"
+	    >abClause</a
+	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b)</li
+	  ><li class="src short"
+	  ><a href="#v:dupPrefix"
+	    >dupPrefix</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:dupReplacement"
+	    >dupReplacement</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:httpError"
+	    >httpError</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:invalidPrefix"
+	    >invalidPrefix</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:noFile"
+	    >noFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:sameIOPoints"
+	    >sameIOPoints</a
+	    > :: IOPoint -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unkClause"
+	    >unkClause</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unresPrefix"
+	    >unresPrefix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Abortable</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abClause" class="def"
+	    >abClause</a
+	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#abClause');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Message</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dupPrefix" class="def"
+	    >dupPrefix</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#dupPrefix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Duplicate prefix</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dupReplacement" class="def"
+	    >dupReplacement</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#dupReplacement');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Duplicate replacement</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:httpError" class="def"
+	    >httpError</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#httpError');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >HTTP Error</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:invalidPrefix" class="def"
+	    >invalidPrefix</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#invalidPrefix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Invalid prefix character</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:noFile" class="def"
+	    >noFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#noFile');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >File not found</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sameIOPoints" class="def"
+	    >sameIOPoints</a
+	    > :: IOPoint -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#sameIOPoints');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Same I/O points</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unkClause" class="def"
+	    >unkClause</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#unkClause');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unknown clause</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unresPrefix" class="def"
+	    >unresPrefix</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Message.html#unresPrefix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unresolved prefix</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

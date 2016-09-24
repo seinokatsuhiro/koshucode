@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.Message</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-flat', 'koshucode-baala-rop-flat', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-Message.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.Message</p
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Rop-Base-Message.html"
+	    >Koshucode.Baala.Rop.Base.Message</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:checkTerm"
+	    >checkTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [TermName] -&gt; Head -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:diffHead"
+	    >diffHead</a
+	    > :: [Head] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:dupTerm"
+	    >dupTerm</a
+	    > :: [TermName] -&gt; Head -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:dumpCox"
+	    >dumpCox</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c =&gt; c -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:dumpRel"
+	    >dumpRel</a
+	    > :: (CRel c, MixShortEncode c) =&gt; Rel c -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:dumpTrees"
+	    >dumpTrees</a
+	    > :: [TTree] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:oddAttr"
+	    >oddAttr</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqBool"
+	    >reqBool</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqRel"
+	    >reqRel</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqCollection"
+	    >reqCollection</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqInterp"
+	    >reqInterp</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqNewTerm"
+	    >reqNewTerm</a
+	    > :: [TermName] -&gt; Head -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqUnaryFn"
+	    >reqUnaryFn</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unexpTermName"
+	    >unexpTermName</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unmatchShare"
+	    >unmatchShare</a
+	    > :: [TermName] -&gt; [TermName] -&gt; Ab a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Rop-Base-Message.html"
+	    >Koshucode.Baala.Rop.Base.Message</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:checkTerm" class="def"
+	    >checkTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [TermName] -&gt; Head -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#checkTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >check-term failed</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:diffHead" class="def"
+	    >diffHead</a
+	    > :: [Head] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#diffHead');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Different headings</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dupTerm" class="def"
+	    >dupTerm</a
+	    > :: [TermName] -&gt; Head -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#dupTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Duplicate term name</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpCox" class="def"
+	    >dumpCox</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c =&gt; c -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#dumpCox');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Dump content expression</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpRel" class="def"
+	    >dumpRel</a
+	    > :: (CRel c, MixShortEncode c) =&gt; Rel c -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#dumpRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Dump relation</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpTrees" class="def"
+	    >dumpTrees</a
+	    > :: [TTree] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#dumpTrees');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Dump token trees</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:oddAttr" class="def"
+	    >oddAttr</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#oddAttr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Odd attribute</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqBool" class="def"
+	    >reqBool</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqBool');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require Boolean</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqRel" class="def"
+	    >reqRel</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require relation</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqCollection" class="def"
+	    >reqCollection</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqCollection');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require collection type</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqInterp" class="def"
+	    >reqInterp</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqInterp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require data interpretation</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqNewTerm" class="def"
+	    >reqNewTerm</a
+	    > :: [TermName] -&gt; Head -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqNewTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require new term names</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqUnaryFn" class="def"
+	    >reqUnaryFn</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#reqUnaryFn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require unary function</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unexpTermName" class="def"
+	    >unexpTermName</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#unexpTermName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unexpected term names</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unmatchShare" class="def"
+	    >unmatchShare</a
+	    > :: [TermName] -&gt; [TermName] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Message.html#unmatchShare');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

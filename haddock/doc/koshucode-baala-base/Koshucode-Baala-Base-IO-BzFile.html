@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.IO.BzFile</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-IO-BzFile.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.IO.BzFile</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >File path and content in lazy bytestring.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:BzFile"
+	    >BzFile</a
+	    > = <a href="#v:BzFile"
+	    >BzFile</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:bzFilePath"
+		>bzFilePath</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+		>FilePath</a
+		></li
+	      ><li
+	      ><a href="#v:bzFileContent"
+		>bzFileContent</a
+		> :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		>Bz</a
+		></li
+	      ><li
+	      ><a href="#v:bzFileException"
+		>bzFileException</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Control-Exception-Base.html#t:SomeException"
+		>SomeException</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:readBzFile"
+	    >readBzFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
+	    >BzFile</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tryReadFile"
+	    >tryReadFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Exception-Base.html#t:Exception"
+	    >Exception</a
+	    > e =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > e <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:BzFile" class="def"
+	    >BzFile</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#BzFile');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >File path and content in lazy bytestring.
+   The function <code
+	      ><a href="Koshucode-Baala-Base-IO-BzFile.html#v:readBzFile"
+		>readBzFile</a
+		></code
+	      > creates:</p
+	    ><ul
+	    ><li
+	      ><code
+		><a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
+		  >BzFile</a
+		  ></code
+		> with content and <code
+		><a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:Nothing"
+		  >Nothing</a
+		  ></code
+		>-exception on success,</li
+	      ><li
+	      ><code
+		><a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
+		  >BzFile</a
+		  ></code
+		> with empty content and <code
+		><a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#v:Just"
+		  >Just</a
+		  ></code
+		>-exception on failure.</li
+	      ></ul
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:BzFile" class="def"
+		  >BzFile</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:bzFilePath" class="def"
+			>bzFilePath</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+			>FilePath</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Path of file.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:bzFileContent" class="def"
+			>bzFileContent</a
+			> :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+			>Bz</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>File content as lazy bytestring.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:bzFileException" class="def"
+			>bzFileException</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> <a href="http://hackage.haskell.org/package/base/docs/Control-Exception-Base.html#t:SomeException"
+			>SomeException</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Exception when reading file.</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:BzFile" class="caption collapser" onclick="toggleSection('i:BzFile')"
+	    >Instances</p
+	    ><div id="section.i:BzFile" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
+		      >BzFile</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readBzFile" class="def"
+	    >readBzFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Base-IO-BzFile.html#t:BzFile"
+	    >BzFile</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#readBzFile');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read file from given path.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tryReadFile" class="def"
+	    >tryReadFile</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Control-Exception-Base.html#t:Exception"
+	    >Exception</a
+	    > e =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > e <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-BzFile.html#tryReadFile');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read file content as lazy bytestring.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

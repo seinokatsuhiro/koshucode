@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.Order</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-flat', 'koshucode-baala-rop-flat', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-Order.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.Order</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >forward</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >backward</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >lexical</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >order</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsOrder"
+	    >ropsOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [Rop c]</li
+	  ><li class="src short"
+	  ><a href="#v:consForward"
+	    >consForward</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapForward"
+	    >relmapForward</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:consBackward"
+	    >consBackward</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapBackward"
+	    >relmapBackward</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:consLexical"
+	    >consLexical</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapLexical"
+	    >relmapLexical</a
+	    > :: Intmed c -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:consOrder"
+	    >consOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapOrder"
+	    >relmapOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; [SignedTermName] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitOrder"
+	    >relkitOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [SignedTermName] -&gt; RelkitFlow c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsOrder" class="def"
+	    >ropsOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#ropsOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pseudorelmap operators for term and tuple ordering.</p
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	>forward</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consForward" class="def"
+	    >consForward</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#consForward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapForward" class="def"
+	    >relmapForward</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#relmapForward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>backward</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consBackward" class="def"
+	    >consBackward</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#consBackward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapBackward" class="def"
+	    >relmapBackward</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#relmapBackward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>lexical</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consLexical" class="def"
+	    >consLexical</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#consLexical');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapLexical" class="def"
+	    >relmapLexical</a
+	    > :: Intmed c -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#relmapLexical');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>order</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consOrder" class="def"
+	    >consOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#consOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapOrder" class="def"
+	    >relmapOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; [SignedTermName] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#relmapOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitOrder" class="def"
+	    >relkitOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [SignedTermName] -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Order.html#relkitOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

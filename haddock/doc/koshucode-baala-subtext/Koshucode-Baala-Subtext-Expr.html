@@ -1,0 +1,722 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Expr</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Expr.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Expr</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Subtext match expression.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Expr"
+	    >Expr</a
+	    > a<ul class="subs"
+	    ><li
+	      >= <a href="#v:ERec"
+		>ERec</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprRec"
+		>ExprRec</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:EBase"
+		>EBase</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprBase"
+		>ExprBase</a
+		> a)</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ExprRec"
+	    >ExprRec</a
+	    > a<ul class="subs"
+	    ><li
+	      >= <a href="#v:EOr"
+		>EOr</a
+		> [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a]</li
+	      ><li
+	      >| <a href="#v:ESeq"
+		>ESeq</a
+		> [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a]</li
+	      ><li
+	      >| <a href="#v:EAnd"
+		>EAnd</a
+		> [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a]</li
+	      ><li
+	      >| <a href="#v:ENot"
+		>ENot</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:ERep"
+		>ERep</a
+		> <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+		>MinMax</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:ELast"
+		>ELast</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:ESub"
+		>ESub</a
+		> <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+		>Name</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:EGath"
+		>EGath</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:EPeek"
+		>EPeek</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ExprBase"
+	    >ExprBase</a
+	    > a<ul class="subs"
+	    ><li
+	      >= <a href="#v:EElem"
+		>EElem</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnElem"
+		>FnElem</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:ESpan"
+		>ESpan</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnSpan"
+		>FnSpan</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:EInter"
+		>EInter</a
+		> (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnInter"
+		>FnInter</a
+		> a)</li
+	      ><li
+	      >| <a href="#v:EChange"
+		>EChange</a
+		> <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+		>Name</a
+		></li
+	      ><li
+	      >| <a href="#v:EAlways"
+		>EAlways</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      >| <a href="#v:EWhat"
+		>EWhat</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:FnElem"
+	    >FnElem</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn"
+	    >Fn</a
+	    > a <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:FnSpan"
+	    >FnSpan</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn"
+	    >Fn</a
+	    > [a] (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > ([a], [a]))</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:FnInter"
+	    >FnInter</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn2"
+	    >Fn2</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a) (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a) <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Expr" class="def"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#Expr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Subtext match expression.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ERec" class="def"
+		  >ERec</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprRec"
+		  >ExprRec</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Recursive expression</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EBase" class="def"
+		  >EBase</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprBase"
+		  >ExprBase</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Non-recursive expression</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Expr" class="caption collapser" onclick="toggleSection('i:Expr')"
+	    >Instances</p
+	    ><div id="section.i:Expr" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		      >Expr</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-20');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		      >Expr</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-20');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		      >Expr</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-20');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ExprRec" class="def"
+	    >ExprRec</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#ExprRec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Recursive expression.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:EOr" class="def"
+		  >EOr</a
+		  > [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a]</td
+		><td class="doc"
+		><p
+		  >Alternative match</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ESeq" class="def"
+		  >ESeq</a
+		  > [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a]</td
+		><td class="doc"
+		><p
+		  >Sequential match</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EAnd" class="def"
+		  >EAnd</a
+		  > [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a]</td
+		><td class="doc"
+		><p
+		  >Additional condition</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ENot" class="def"
+		  >ENot</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Inverted condition</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ERep" class="def"
+		  >ERep</a
+		  > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+		  >MinMax</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Repetitive match</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ELast" class="def"
+		  >ELast</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Find last match</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ESub" class="def"
+		  >ESub</a
+		  > <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+		  >Name</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Submatch</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EGath" class="def"
+		  >EGath</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Change gathering setting</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EPeek" class="def"
+		  >EPeek</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		  >Expr</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Match but not consume input</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ExprRec" class="caption collapser" onclick="toggleSection('i:ExprRec')"
+	    >Instances</p
+	    ><div id="section.i:ExprRec" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprRec"
+		      >ExprRec</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-33');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprRec"
+		      >ExprRec</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-33');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprRec"
+		      >ExprRec</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-33');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ExprBase" class="def"
+	    >ExprBase</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#ExprBase');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Non-recursive expression.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:EElem" class="def"
+		  >EElem</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnElem"
+		  >FnElem</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Element matcher</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ESpan" class="def"
+		  >ESpan</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnSpan"
+		  >FnSpan</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Spanning (multi-element) matcher</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EInter" class="def"
+		  >EInter</a
+		  > (<a href="Koshucode-Baala-Subtext-Expr.html#t:FnInter"
+		  >FnInter</a
+		  > a)</td
+		><td class="doc"
+		><p
+		  >Inter-element matcher</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EChange" class="def"
+		  >EChange</a
+		  > <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+		  >Name</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Change to other expression</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EAlways" class="def"
+		  >EAlways</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Immediate match/unmatch</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:EWhat" class="def"
+		  >EWhat</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Context-dependent match</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ExprBase" class="caption collapser" onclick="toggleSection('i:ExprBase')"
+	    >Instances</p
+	    ><div id="section.i:ExprBase" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprBase"
+		      >ExprBase</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprBase"
+		      >ExprBase</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Expr.html#t:ExprBase"
+		      >ExprBase</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:FnElem" class="def"
+	    >FnElem</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn"
+	    >Fn</a
+	    > a <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#FnElem');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Function type for element matcher.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:FnSpan" class="def"
+	    >FnSpan</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn"
+	    >Fn</a
+	    > [a] (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > ([a], [a])) <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#FnSpan');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Function type for spanning matcher.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:FnInter" class="def"
+	    >FnInter</a
+	    > a = <a href="Koshucode-Baala-Subtext-Fn.html#t:Fn2"
+	    >Fn2</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a) (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a) <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Expr.html#FnInter');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Function type for inter-element matcher.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

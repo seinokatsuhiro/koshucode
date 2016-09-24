@@ -1,0 +1,569 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.Lattice.Tropashko</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-flat', 'koshucode-baala-rop-flat', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.Lattice.Tropashko</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Fundamental operators</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >meet (natural join)</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >join (inner union)</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Check shared terms</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Fundamental operators in relational algebra.</p
+	  ><p
+	  >Tropashko's relational lattice is a kind of relational algebra.
+   Relational algebra is an algebraic formulation for relational model.
+   In constrast to Codd's original relational algebra,
+   Tropashko lattice is in more conventional and strict ways.
+   The lattice has fundamental operators from which
+   other operators are derived.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:consMeet"
+	    >consMeet</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapMeet"
+	    >relmapMeet</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; Relmap c -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitMeet"
+	    >relkitMeet</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; RelkitBinary c</li
+	  ><li class="src short"
+	  ><a href="#v:consJoin"
+	    >consJoin</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapJoin"
+	    >relmapJoin</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; Relmap c -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapJoinList"
+	    >relmapJoinList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; [Relmap c] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitJoin"
+	    >relkitJoin</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; RelkitBinary c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SharedTerms"
+	    >SharedTerms</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > [TermName]</li
+	  ><li class="src short"
+	  ><a href="#v:unmatchShare"
+	    >unmatchShare</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; ShareSide c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > ([TermName], [TermName])</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Fundamental operators</h1
+	><div class="doc"
+	><p
+	  >In lattice theory, there are two operators <em
+	    >meet</em
+	    > and <em
+	    >join</em
+	    >.</p
+	  ><dl
+	  ><dt
+	    >R1 ^ R2</dt
+	    ><dd
+	    >Meet of <em
+	      >R1</em
+	      > and <em
+	      >R2</em
+	      >.
+               This operator is one of generalized intersection,
+               as it were, a more-speaking-and-less-mentioning operation.
+               '<code
+	      >Meet'</code
+	      > is same as ''natural join'' in SQL.
+               <em
+	      >R1</em
+	      > tuple is meetable to <em
+	      >R2</em
+	      > tuple if and only if
+               shared terms of <em
+	      >R1</em
+	      > tuple and <em
+	      >R2</em
+	      > tuple
+               are same contents.</dd
+	    ><dt
+	    >R1 v R2</dt
+	    ><dd
+	    >Join of <em
+	      >R1</em
+	      > and <em
+	      >R2</em
+	      >.
+               This operator is one of generalized union,
+               as it were, a less-speaking-and-more-mentioning operation.
+               Toropashko calls it ''inner union''.
+               Join of <em
+	      >R1</em
+	      > and <em
+	      >R2</em
+	      > is ordinary union of
+               shared-term-projection tuples in <em
+	      >R1</em
+	      > and <em
+	      >R2</em
+	      >.</dd
+	    ></dl
+	  ></div
+	><h1 id="g:2"
+	>meet (natural join)</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consMeet" class="def"
+	    >consMeet</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#consMeet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct relmap to meet relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapMeet" class="def"
+	    >relmapMeet</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#relmapMeet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		  >Ord</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; Intmed c</td
+		><td class="doc"
+		><p
+		  >Source infomation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+		  >SharedTerms</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Shared terms</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; Relmap c</td
+		><td class="doc"
+		><p
+		  >Subrelmap of meet operator</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; Relmap c</td
+		><td class="doc"
+		><p
+		  >Relmap of meet operator</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Meet two relations.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitMeet" class="def"
+	    >relkitMeet</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; RelkitBinary c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#relkitMeet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Meet two relations.</p
+	    ></div
+	  ></div
+	><div class="doc"
+	><p
+	  >Summary of calculating meet of relations like
+    <code
+	    >(/a /b /c)</code
+	    > meet <code
+	    >(/b /c /d)</code
+	    > = <code
+	    >(/d ++ /a /b /c)</code
+	    >.
+    In this case, shared terms are <code
+	    >/b</code
+	    > and <code
+	    >/c</code
+	    >,
+    left-sided term is <code
+	    >/a</code
+	    >, and right-sided term is <code
+	    >/d</code
+	    >.</p
+	  ><dl
+	  ><dt
+	    >Input</dt
+	    ><dd
+	    >Relations <code
+	      >(Rel he1 bo1)</code
+	      > and <code
+	      >(Rel he2 bo2)</code
+	      ></dd
+	    ><dt
+	    >Output</dt
+	    ><dd
+	    >Relation <code
+	      >(Rel he3 b3)</code
+	      ></dd
+	    ></dl
+	  ><ol
+	  ><li
+	    >Let <code
+	      >s1</code
+	      > be shared-term information of <code
+	      >he1</code
+	      >.</li
+	    ><li
+	    >Let <code
+	      >s2</code
+	      > be shared-term information of <code
+	      >he2</code
+	      >.</li
+	    ><li
+	    >Let <code
+	      >cs1</code
+	      > :: <code
+	      >[c]</code
+	      > be element of <code
+	      >bo1</code
+	      >.</li
+	    ><li
+	    >Let <code
+	      >cs2</code
+	      > :: <code
+	      >[c]</code
+	      > be element of <code
+	      >bo2</code
+	      >.</li
+	    ><li
+	    >Split each <code
+	      >cs2</code
+	      >, by <code
+	      >s2</code
+	      >,
+       into shared and sided terms :: <code
+	      >([c], [c])</code
+	      >.</li
+	    ><li
+	    >For each same shared terms, collect the sided terms.
+       Let it be <code
+	      >(share2, sides2)</code
+	      > :: <code
+	      >([c], [[c]])</code
+	      >.</li
+	    ><li
+	    >Pick shared terms <code
+	      >share1</code
+	      > :: <code
+	      >[c]</code
+	      >,
+       by <code
+	      >s1</code
+	      >, from each <code
+	      >cs1</code
+	      >.</li
+	    ><li
+	    >Concat <code
+	      >cs1</code
+	      > and each of <code
+	      >sides2</code
+	      >
+       where <code
+	      >share1</code
+	      > equals <code
+	      >share2</code
+	      >,</li
+	    ></ol
+	  ></div
+	><h1 id="g:3"
+	>join (inner union)</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consJoin" class="def"
+	    >consJoin</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#consJoin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct relmap to join relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapJoin" class="def"
+	    >relmapJoin</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#relmapJoin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		  >Ord</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; Intmed c</td
+		><td class="doc"
+		><p
+		  >Source infomation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+		  >SharedTerms</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Shared terms</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; Relmap c</td
+		><td class="doc"
+		><p
+		  >Subrelmap of join operator</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; Relmap c</td
+		><td class="doc"
+		><p
+		  >Relmap of join operator</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Join two relations.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapJoinList" class="def"
+	    >relmapJoinList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; Intmed c -&gt; [Relmap c] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#relmapJoinList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Join multiple relations.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitJoin" class="def"
+	    >relkitJoin</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; RelkitBinary c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#relkitJoin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Join two relations.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Check shared terms</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SharedTerms" class="def"
+	    >SharedTerms</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > [TermName] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#SharedTerms');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Shared terms for composing check.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unmatchShare" class="def"
+	    >unmatchShare</a
+	    > :: <a href="Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; ShareSide c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > ([TermName], [TermName]) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#unmatchShare');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate unmatch shared terms.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

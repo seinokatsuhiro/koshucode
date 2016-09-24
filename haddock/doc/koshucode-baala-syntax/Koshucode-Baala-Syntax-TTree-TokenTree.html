@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.TTree.TokenTree</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-TTree-TokenTree.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.158.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.TTree.TokenTree</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Type</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Tree</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Conversion</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Pattern</a
+	    ><ul
+	    ><li
+	      ><a href="#g:5"
+		>Term leaf</a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Text leaf</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Tree of tokens</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TTree"
+	    >TTree</a
+	    > = CodeTree <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:NamedTree"
+	    >NamedTree</a
+	    > = Named <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:NamedTrees"
+	    >NamedTrees</a
+	    > = Named [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TTreeTo"
+	    >TTreeTo</a
+	    > a = <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TTreesTo"
+	    >TTreesTo</a
+	    > a = [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > a = <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TTreesToAb"
+	    >TTreesToAb</a
+	    > a = [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; Ab a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TermLeaf"
+	    >TermLeaf</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TermType"
+	    >TermType</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TermLeafName"
+	    >TermLeafName</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TermLeafPath"
+	    >TermLeafPath</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TermLeafLocal"
+	    >TermLeafLocal</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Local"
+	    >Local</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeaf"
+	    >TextLeaf</a
+	    > ::   <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
+	    >TextForm</a
+	    > -&gt; CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafRaw"
+	    >TextLeafRaw</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafAttr"
+	    >TextLeafAttr</a
+	    > ::   CodePt -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafAttr2"
+	    >TextLeafAttr2</a
+	    > ::   CodePt -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafQ"
+	    >TextLeafQ</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafQQ"
+	    >TextLeafQQ</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:TextLeafKey"
+	    >TextLeafKey</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Type</h1
+	><h2 id="g:2"
+	>Tree</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TTree" class="def"
+	    >TTree</a
+	    > = CodeTree <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TTree');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tree of tokens.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:NamedTree" class="def"
+	    >NamedTree</a
+	    > = Named <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#NamedTree');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pair of token tree and its name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:NamedTrees" class="def"
+	    >NamedTrees</a
+	    > = Named [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#NamedTrees');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pair of token trees and its name.</p
+	    ></div
+	  ></div
+	><h2 id="g:3"
+	>Conversion</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TTreeTo" class="def"
+	    >TTreeTo</a
+	    > a = <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TTreeTo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert token tree to something.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TTreesTo" class="def"
+	    >TTreesTo</a
+	    > a = [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; a <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TTreesTo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert list of token tree to sometning.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TTreeToAb" class="def"
+	    >TTreeToAb</a
+	    > a = <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TTreeToAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert token tree to something, abortable.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TTreesToAb" class="def"
+	    >TTreesToAb</a
+	    > a = [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TTreesToAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert list of token tree to sometning, abortable.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Pattern</h1
+	><h2 id="g:5"
+	>Term leaf</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TermLeaf" class="def"
+	    >TermLeaf</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TermType"
+	    >TermType</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TermLeaf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TermLeafName" class="def"
+	    >TermLeafName</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TermLeafName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TermLeafPath" class="def"
+	    >TermLeafPath</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TermLeafPath');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TermLeafLocal" class="def"
+	    >TermLeafLocal</a
+	    > ::   CodePt -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Local"
+	    >Local</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TermLeafLocal');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:6"
+	>Text leaf</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeaf" class="def"
+	    >TextLeaf</a
+	    > ::   <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
+	    >TextForm</a
+	    > -&gt; CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeaf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafRaw" class="def"
+	    >TextLeafRaw</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafRaw');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf of <code
+	      ><a href="Koshucode-Baala-Syntax-Token-Token.html#v:TextRaw"
+		>TextRaw</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafAttr" class="def"
+	    >TextLeafAttr</a
+	    > ::   CodePt -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafAttr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf beginning with single hyphen.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafAttr2" class="def"
+	    >TextLeafAttr2</a
+	    > ::   CodePt -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafAttr2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf beginning with double hyphens.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafQ" class="def"
+	    >TextLeafQ</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf of <code
+	      ><a href="Koshucode-Baala-Syntax-Token-Token.html#v:TextQ"
+		>TextQ</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafQQ" class="def"
+	    >TextLeafQQ</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafQQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf of <code
+	      ><a href="Koshucode-Baala-Syntax-Token-Token.html#v:TextQQ"
+		>TextQQ</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:TextLeafKey" class="def"
+	    >TextLeafKey</a
+	    > ::   CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; CodeTree t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-TokenTree.html#TextLeafKey');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text leaf of <code
+	      ><a href="Koshucode-Baala-Syntax-Token-Token.html#v:TextKey"
+		>TextKey</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.List.Set</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-List-Set.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.List.Set</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Set-like operation.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:duplicates"
+	    >duplicates</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:unique"
+	    >unique</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:unionUp"
+	    >unionUp</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:intersectionFilter"
+	    >intersectionFilter</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:setList"
+	    >setList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:setEq"
+	    >setEq</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:disjoint"
+	    >disjoint</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:overlap"
+	    >overlap</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:duplicates" class="def"
+	    >duplicates</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#duplicates');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Keep duplicate elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>duplicates &quot;banana&quot;
+</code
+		></strong
+	      >&quot;ana&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unique" class="def"
+	    >unique</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#unique');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Remove duplicate elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>unique &quot;banana&quot;
+</code
+		></strong
+	      >&quot;ban&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unionUp" class="def"
+	    >unionUp</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#unionUp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Union list to base list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>unionUp &quot;cde&quot; &quot;abc&quot;
+</code
+		></strong
+	      >&quot;deabc&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>List.union &quot;cde&quot; &quot;abc&quot;
+</code
+		></strong
+	      >&quot;cdeab&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:intersectionFilter" class="def"
+	    >intersectionFilter</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#intersectionFilter');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Filter by set menbership.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>intersectionFilter &quot;abcd&quot; &quot;dxcy&quot;
+</code
+		></strong
+	      >&quot;dc&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:setList" class="def"
+	    >setList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#setList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to set-like list, in other words,
+   remove duplicate elements and sort list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>setList &quot;abracadabra&quot;
+</code
+		></strong
+	      >&quot;abcdr&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:setEq" class="def"
+	    >setEq</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#setEq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set-like equality, in other words, 
+   duplication and ordering are ignored.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>setEq &quot;abc&quot; &quot;bca&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>setEq &quot;abc&quot; &quot;ab&quot;
+</code
+		></strong
+	      >False
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:disjoint" class="def"
+	    >disjoint</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#disjoint');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test two list has no elements in common.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>disjoint &quot;abc&quot; &quot;de&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>disjoint &quot;abc&quot; &quot;cde&quot;
+</code
+		></strong
+	      >False
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:overlap" class="def"
+	    >overlap</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#overlap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test two list has some common elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>overlap &quot;abc&quot; &quot;de&quot;
+</code
+		></strong
+	      >False
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>overlap &quot;abc&quot; &quot;cde&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

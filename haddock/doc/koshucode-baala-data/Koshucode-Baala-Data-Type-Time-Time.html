@@ -1,0 +1,850 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Time.Time</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Time-Time.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Time.Time</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Data type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Construct</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >First day</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Range</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Arithmetic</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Time"
+	    >Time</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:TimeYmdcz"
+		>TimeYmdcz</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		>Date</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+		>Clock</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+		>Sec</a
+		></li
+	      ><li
+	      >| <a href="#v:TimeYmdc"
+		>TimeYmdc</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		>Date</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+		>Clock</a
+		></li
+	      ><li
+	      >| <a href="#v:TimeYmd"
+		>TimeYmd</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		>Date</a
+		></li
+	      ><li
+	      >| <a href="#v:TimeYw"
+		>TimeYw</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+		>MJDay</a
+		></li
+	      ><li
+	      >| <a href="#v:TimeYm"
+		>TimeYm</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+		>MJDay</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeYmd"
+	    >timeYmd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+	    >MJDay</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeYmdc"
+	    >timeYmdc</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+	    >MJDay</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFromYmAb"
+	    >timeFromYmAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Month"
+	    >Month</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFromYwAb"
+	    >timeFromYwAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Week"
+	    >Week</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFromDczAb"
+	    >timeFromDczAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+	    >Sec</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFromMjd"
+	    >timeFromMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeMjd"
+	    >timeMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeMapDate"
+	    >timeMapDate</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeMapMjd"
+	    >timeMapMjd</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timePrecision"
+	    >timePrecision</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFloorMonth"
+	    >timeFloorMonth</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeFloorYear"
+	    >timeFloorYear</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeCeilMonth"
+	    >timeCeilMonth</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeCeilYaer"
+	    >timeCeilYaer</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeRangeDay"
+	    >timeRangeDay</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeRangeMonth"
+	    >timeRangeMonth</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeRangeYear"
+	    >timeRangeYear</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAddDay"
+	    >timeAddDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAddWeek"
+	    >timeAddWeek</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAddMonth"
+	    >timeAddMonth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAddYear"
+	    >timeAddYear</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAddClock"
+	    >timeAddClock</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; AbMap <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeDiff"
+	    >timeDiff</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Data type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Time" class="def"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#Time');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:TimeYmdcz" class="def"
+		  >TimeYmdcz</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		  >Date</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+		  >Clock</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+		  >Sec</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Date and time with time zone</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TimeYmdc" class="def"
+		  >TimeYmdc</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		  >Date</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+		  >Clock</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Date and time</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TimeYmd" class="def"
+		  >TimeYmd</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+		  >Date</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Year, month, and day</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TimeYw" class="def"
+		  >TimeYw</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+		  >MJDay</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Year and week</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TimeYm" class="def"
+		  >TimeYm</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+		  >MJDay</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Year and month</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Time" class="caption collapser" onclick="toggleSection('i:Time')"
+	    >Instances</p
+	    ><div id="section.i:Time" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+		      >Time</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-44');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+		      >Time</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-44');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+		      >Time</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-44');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    >MixEncode <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+		      >Time</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-86');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Construct</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeYmd" class="def"
+	    >timeYmd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+	    >MJDay</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeYmd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeYmdc" class="def"
+	    >timeYmdc</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
+	    >MJDay</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeYmdc');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFromYmAb" class="def"
+	    >timeFromYmAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Month"
+	    >Month</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromYmAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time data from year and month.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFromYwAb" class="def"
+	    >timeFromYwAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Week"
+	    >Week</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromYwAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time data from year and week.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFromDczAb" class="def"
+	    >timeFromDczAb</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+	    >Sec</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromDczAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time data from date, clock, and time zone.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFromMjd" class="def"
+	    >timeFromMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time data form modified Julian date.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeMjd" class="def"
+	    >timeMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeMapDate" class="def"
+	    >timeMapDate</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMapDate');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeMapMjd" class="def"
+	    >timeMapMjd</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMapMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timePrecision" class="def"
+	    >timePrecision</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timePrecision');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>First day</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFloorMonth" class="def"
+	    >timeFloorMonth</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFloorMonth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeFloorYear" class="def"
+	    >timeFloorYear</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFloorYear');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeCeilMonth" class="def"
+	    >timeCeilMonth</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeCeilMonth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeCeilYaer" class="def"
+	    >timeCeilYaer</a
+	    > :: Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeCeilYaer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="doc"
+	><p
+	  ><em
+	    >Examples</em
+	    ></p
+	  ><p
+	  >The first day of month.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >timeFloorMonth $ timeFromYmd 2014 11 3
+</code
+	      ></strong
+	    >TimeYmd 2014-11-01
+</pre
+	  ><p
+	  >The first day of year.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >timeFloorYear $ timeFromYmd 2014 11 3
+</code
+	      ></strong
+	    >TimeYmd 2014-01-01
+</pre
+	  ><p
+	  >The first day of next month.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >timeCeilMonth $ timeFromYmd 2014 11 3
+</code
+	      ></strong
+	    >TimeYmd 2014-12-01
+</pre
+	  ><p
+	  >The first day of next year.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >timeCeilYaer $ timeFromYmd 2014 11 3
+</code
+	      ></strong
+	    >TimeYmd 2015-01-01
+</pre
+	  ></div
+	><h1 id="g:4"
+	>Range</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeRangeDay" class="def"
+	    >timeRangeDay</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeRangeDay');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeRangeMonth" class="def"
+	    >timeRangeMonth</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeRangeMonth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeRangeYear" class="def"
+	    >timeRangeYear</a
+	    > :: RangeBy <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeRangeYear');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>Arithmetic</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAddDay" class="def"
+	    >timeAddDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAddDay');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add days to time.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAddWeek" class="def"
+	    >timeAddWeek</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAddWeek');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add weeks to time.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAddMonth" class="def"
+	    >timeAddMonth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAddMonth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add months to time.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAddYear" class="def"
+	    >timeAddYear</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
+	    >Year</a
+	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAddYear');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add years to time.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAddClock" class="def"
+	    >timeAddClock</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; AbMap <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAddClock');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add clock to time.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeDiff" class="def"
+	    >timeDiff</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; Ab <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeDiff');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate clock from time to time.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

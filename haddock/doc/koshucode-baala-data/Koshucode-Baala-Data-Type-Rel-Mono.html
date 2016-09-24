@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Rel.Mono</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Rel-Mono.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Rel.Mono</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Content type for nested relations.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Mono"
+	    >Mono</a
+	    > c<ul class="subs"
+	    ><li
+	      >= <a href="#v:MonoTerm"
+		>MonoTerm</a
+		> c</li
+	      ><li
+	      >| <a href="#v:MonoNest"
+		>MonoNest</a
+		> (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+		>RelMono</a
+		> c)</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelMono"
+	    >RelMono</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelText"
+	    >RelText</a
+	    > = <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isMonoTerm"
+	    >isMonoTerm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isMonoNest"
+	    >isMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:gMonoTerm"
+	    >gMonoTerm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:gMonoNest"
+	    >gMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:pMonoTerm"
+	    >pMonoTerm</a
+	    > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:pMonoNest"
+	    >pMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Mono" class="def"
+	    >Mono</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#Mono');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Monotype relation.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:MonoTerm" class="def"
+		  >MonoTerm</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Terminal content</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:MonoNest" class="def"
+		  >MonoNest</a
+		  > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+		  >RelMono</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Nested relation</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Mono" class="caption collapser" onclick="toggleSection('i:Mono')"
+	    >Instances</p
+	    ><div id="section.i:Mono" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+		      >Mono</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#line-19');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+		      >Mono</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#line-19');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+		      >Mono</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#line-19');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelMono" class="def"
+	    >RelMono</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > (<a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#RelMono');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelText" class="def"
+	    >RelText</a
+	    > = <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#RelText');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isMonoTerm" class="def"
+	    >isMonoTerm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#isMonoTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test terminal content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isMonoNest" class="def"
+	    >isMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#isMonoNest');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test nested relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gMonoTerm" class="def"
+	    >gMonoTerm</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#gMonoTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get terminal content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gMonoNest" class="def"
+	    >gMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#gMonoNest');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get nested relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:pMonoTerm" class="def"
+	    >pMonoTerm</a
+	    > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#pMonoTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Put terminal content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:pMonoNest" class="def"
+	    >pMonoNest</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:RelMono"
+	    >RelMono</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Mono.html#t:Mono"
+	    >Mono</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Mono.html#pMonoNest');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Put nested relation.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

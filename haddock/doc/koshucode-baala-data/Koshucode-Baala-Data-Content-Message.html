@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Content.Message</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Content-Message.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Content.Message</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Abortable</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Message</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Utility</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:abLiteral"
+	    >abLiteral</a
+	    > :: TTreeTo (Map (Ab b))</li
+	  ><li class="src short"
+	  ><a href="#v:nothing"
+	    >nothing</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:oddRelation"
+	    >oddRelation</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:quoteType"
+	    >quoteType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqFlatName"
+	    >reqFlatName</a
+	    > :: Token -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqRelTuple"
+	    >reqRelTuple</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:reqTermName"
+	    >reqTermName</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unkBracket"
+	    >unkBracket</a
+	    > :: Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unkType"
+	    >unkType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unkWord"
+	    >unkWord</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:unmatchType"
+	    >unmatchType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a</li
+	  ><li class="src short"
+	  ><a href="#v:expectActual"
+	    >expectActual</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:expect2Actual"
+	    >expect2Actual</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Abortable</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abLiteral" class="def"
+	    >abLiteral</a
+	    > :: TTreeTo (Map (Ab b)) <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#abLiteral');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Message</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nothing" class="def"
+	    >nothing</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#nothing');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nothing</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:oddRelation" class="def"
+	    >oddRelation</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#oddRelation');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Odd relation literal</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:quoteType" class="def"
+	    >quoteType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#quoteType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Quoted type name</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqFlatName" class="def"
+	    >reqFlatName</a
+	    > :: Token -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#reqFlatName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require flat name</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqRelTuple" class="def"
+	    >reqRelTuple</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#reqRelTuple');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require tuple in list</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqTermName" class="def"
+	    >reqTermName</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#reqTermName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Require term name</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unkBracket" class="def"
+	    >unkBracket</a
+	    > :: Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#unkBracket');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unknown bracket</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unkType" class="def"
+	    >unkType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#unkType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unknown type name</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unkWord" class="def"
+	    >unkWord</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#unkWord');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unknown word</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unmatchType" class="def"
+	    >unmatchType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#unmatchType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Utility</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:expectActual" class="def"
+	    >expectActual</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#expectActual');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:expect2Actual" class="def"
+	    >expect2Actual</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Message.html#expect2Actual');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

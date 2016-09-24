@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Token.Utility</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Token-Utility.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.158.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Token.Utility</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Selectors</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Type of token</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Token utilities.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:tokenContent"
+	    >tokenContent</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:untoken"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tokenDetailTypeString"
+	    >tokenDetailTypeString</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tokenParents"
+	    >tokenParents</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isBlankToken"
+	    >isBlankToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sweepToken"
+	    >sweepToken</a
+	    > :: Map [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isShortToken"
+	    >isShortToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isTermToken"
+	    >isTermToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isOpenToken"
+	    >isOpenToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isCloseToken"
+	    >isCloseToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isOpenTokenOf"
+	    >isOpenTokenOf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isCloseTokenOf"
+	    >isCloseTokenOf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isUnknownToken"
+	    >isUnknownToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Selectors</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenContent" class="def"
+	    >tokenContent</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#tokenContent');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get the content of token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let tok = S.TTermPath B.def [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
+</code
+		></strong
+	      >&quot;/r/x&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:untoken" class="def"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#untoken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenDetailTypeString" class="def"
+	    >tokenDetailTypeString</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#tokenDetailTypeString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get detail type string of token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let tok = S.textToken &quot;flower&quot; in (S.subtypeString tok, tokenDetailTypeString tok)
+</code
+		></strong
+	      >(&quot;text&quot;, Just &quot;raw&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenParents" class="def"
+	    >tokenParents</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#tokenParents');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Type of token</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isBlankToken" class="def"
+	    >isBlankToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBlankToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is blank, i.e., comment or space.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sweepToken" class="def"
+	    >sweepToken</a
+	    > :: Map [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#sweepToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Remove blank tokens.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isShortToken" class="def"
+	    >isShortToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isShortToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is short-type token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isTermToken" class="def"
+	    >isTermToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isTermToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is term-type token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isOpenToken" class="def"
+	    >isOpenToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isOpenToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is open-type token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isCloseToken" class="def"
+	    >isCloseToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isCloseToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is close-type token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isOpenTokenOf" class="def"
+	    >isOpenTokenOf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isOpenTokenOf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is a open-type of the specific bracket.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let tok = S.TOpen B.def &quot;(&quot; in isOpenTokenOf &quot;(&quot; tok
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let tok = S.TOpen B.def &quot;{&quot; in isOpenTokenOf &quot;(&quot; tok
+</code
+		></strong
+	      >False
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isCloseTokenOf" class="def"
+	    >isCloseTokenOf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isCloseTokenOf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is a close-type of the specific bracket.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isUnknownToken" class="def"
+	    >isUnknownToken</a
+	    > :: Pred <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isUnknownToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is unknown.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

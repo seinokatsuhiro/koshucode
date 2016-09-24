@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Cox.Empty</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-cox', 'koshucode-baala-rop-cox', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Cox-Empty.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-cox-0.158.0.0: Relation-mapping operators with content calculations</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Cox.Empty</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >both</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >maybe</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >compose-maybe</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsCoxEmpty"
+	    >ropsCoxEmpty</a
+	    > :: CContent c =&gt; [Rop c]</li
+	  ><li class="src short"
+	  ><a href="#v:consBoth"
+	    >consBoth</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapBoth"
+	    >relmapBoth</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c)</li
+	  ><li class="src short"
+	  ><a href="#v:consMaybe"
+	    >consMaybe</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapMaybe"
+	    >relmapMaybe</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c)</li
+	  ><li class="src short"
+	  ><a href="#v:relkitMaybe"
+	    >relkitMaybe</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; RelkitBinary c</li
+	  ><li class="src short"
+	  ><a href="#v:consComposeMaybe"
+	    >consComposeMaybe</a
+	    > :: CContent c =&gt; RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapComposeMaybe"
+	    >relmapComposeMaybe</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsCoxEmpty" class="def"
+	    >ropsCoxEmpty</a
+	    > :: CContent c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#ropsCoxEmpty');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relmap operators that handles empties.</p
+	    ><dl
+	    ><dt
+	      ><code
+		>both R</code
+		></dt
+	      ><dd
+	      ></dd
+	      ><dt
+	      ><code
+		>maybe R</code
+		></dt
+	      ><dd
+	      >Meet input and given relation.
+     It keeps input tuples of which counterparts are totally negated.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	>both</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consBoth" class="def"
+	    >consBoth</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#consBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapBoth" class="def"
+	    >relmapBoth</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#relmapBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>maybe</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consMaybe" class="def"
+	    >consMaybe</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#consMaybe');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct maybe relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapMaybe" class="def"
+	    >relmapMaybe</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#relmapMaybe');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Maybe relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitMaybe" class="def"
+	    >relkitMaybe</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; RelkitBinary c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#relkitMaybe');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate maybe relmap.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>compose-maybe</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consComposeMaybe" class="def"
+	    >consComposeMaybe</a
+	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#consComposeMaybe');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct relmap for relational composition.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>a | compose-maybe b
+</code
+		></strong
+	      ></pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapComposeMaybe" class="def"
+	    >relmapComposeMaybe</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, CRel c) =&gt; Intmed c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Flat-Lattice-Tropashko.html#t:SharedTerms"
+	    >SharedTerms</a
+	    > -&gt; c -&gt; Map (Relmap c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Empty.html#relmapComposeMaybe');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relational composition.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

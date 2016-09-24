@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Writer.Judge</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('writer', 'koshucode-baala-writer', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Writer-Judge.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-writer-0.158.0.0: Writers for the Koshu calculator</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Writer.Judge</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Writer</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Counter</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:putJudges"
+	    >putJudges</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c, MixShortEncode c) =&gt; [Judge c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:putJudgesWith"
+	    >putJudgesWith</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c, MixShortEncode c) =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; [Judge c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:hPutJudgesWith"
+	    >hPutJudgesWith</a
+	    > :: MixShortEncode c =&gt; ResultWriterJudge c</li
+	  ><li class="src short"
+	  ><a href="#v:judgesCountMix"
+	    >judgesCountMix</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. Result c -&gt; (Judge c -&gt; MixText) -&gt; [Judge c] -&gt; Map <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCountMix"
+	    >JudgeCountMix</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeCount"
+	    >JudgeCount</a
+	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > JudgeClass <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeCountMix"
+	    >JudgeCountMix</a
+	    > = (MixText, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > JudgeClass <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:judgeCount"
+	    >judgeCount</a
+	    > :: [JudgeClass] -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCount"
+	    >JudgeCount</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeCountMix"
+	    >judgeCountMix</a
+	    > :: [JudgeClass] -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCountMix"
+	    >JudgeCountMix</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeSummary"
+	    >judgeSummary</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCount"
+	    >JudgeCount</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Writer</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putJudges" class="def"
+	    >putJudges</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c, MixShortEncode c) =&gt; [Judge c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#putJudges');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putJudgesWith" class="def"
+	    >putJudgesWith</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c, MixShortEncode c) =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; [Judge c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#putJudgesWith');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><a href="http://hackage.haskell.org/package/base/docs/GHC-IO-Handle-FD.html#v:stdout"
+		>stdout</a
+		></code
+	      > version of <code
+	      ><a href="Koshucode-Baala-Writer-Judge.html#v:hPutJudgesWith"
+		>hPutJudgesWith</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:hPutJudgesWith" class="def"
+	    >hPutJudgesWith</a
+	    > :: MixShortEncode c =&gt; ResultWriterJudge c <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#hPutJudgesWith');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print list of judges.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgesCountMix" class="def"
+	    >judgesCountMix</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. Result c -&gt; (Judge c -&gt; MixText) -&gt; [Judge c] -&gt; Map <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCountMix"
+	    >JudgeCountMix</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#judgesCountMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Counter</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeCount" class="def"
+	    >JudgeCount</a
+	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > JudgeClass <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#JudgeCount');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Total and per-judgement counter</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeCountMix" class="def"
+	    >JudgeCountMix</a
+	    > = (MixText, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > JudgeClass <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#JudgeCountMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeCount" class="def"
+	    >judgeCount</a
+	    > :: [JudgeClass] -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCount"
+	    >JudgeCount</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#judgeCount');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeCountMix" class="def"
+	    >judgeCountMix</a
+	    > :: [JudgeClass] -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCountMix"
+	    >JudgeCountMix</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#judgeCountMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeSummary" class="def"
+	    >judgeSummary</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-Exit.html#t:ExitCode"
+	    >ExitCode</a
+	    > -&gt; <a href="Koshucode-Baala-Writer-Judge.html#t:JudgeCount"
+	    >JudgeCount</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Writer-Judge.html#judgeSummary');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Attr.AttrName</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Attr-AttrName.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.158.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Attr.AttrName</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Attribute name.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:AttrName"
+	    >AttrName</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:AttrNormal"
+		>AttrNormal</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:AttrRelmapNormal"
+		>AttrRelmapNormal</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:AttrRelmapLocal"
+		>AttrRelmapLocal</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isAttrNameRelmap"
+	    >isAttrNameRelmap</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:attrNameText"
+	    >attrNameText</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:attrNameCode"
+	    >attrNameCode</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:attrNameTrunk"
+	    >attrNameTrunk</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:AttrName" class="def"
+	    >AttrName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#AttrName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Attribute name of relmap.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:AttrNormal" class="def"
+		  >AttrNormal</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Normal attribute</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AttrRelmapNormal" class="def"
+		  >AttrRelmapNormal</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Attribute for submap</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AttrRelmapLocal" class="def"
+		  >AttrRelmapLocal</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Attribute for submap with local relation references</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:AttrName" class="caption collapser" onclick="toggleSection('i:AttrName')"
+	    >Instances</p
+	    ><div id="section.i:AttrName" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+		      >AttrName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#line-17');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+		      >AttrName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#line-17');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+		      >AttrName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#line-17');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isAttrNameRelmap" class="def"
+	    >isAttrNameRelmap</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#isAttrNameRelmap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test attribute name is for subrelmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:attrNameText" class="def"
+	    >attrNameText</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#attrNameText');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String part of attribute names.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:attrNameCode" class="def"
+	    >attrNameCode</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#attrNameCode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Attribute string with hyphen.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:attrNameTrunk" class="def"
+	    >attrNameTrunk</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-AttrName.html#attrNameTrunk');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Constant for attribute name <code
+	      >@trunk</code
+	      >.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

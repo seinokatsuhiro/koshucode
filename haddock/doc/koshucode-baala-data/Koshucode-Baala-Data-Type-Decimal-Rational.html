@@ -1,0 +1,655 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Decimal.Rational</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Decimal-Rational.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Decimal.Rational</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Shorthand</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Round and truncate</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Floor and ceiling</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Quotient and remainder</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Extra functions for rational numbers.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:-37--37-"
+	    >(%%)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Rational"
+	    >Rational</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:-47--47-."
+	    >(//.)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n -&gt; (n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:-47--47-"
+	    >(//)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n -&gt; (n, n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioHalf"
+	    >ratioHalf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:ratioFracle"
+	    >ratioFracle</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > i, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; i -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundAt"
+	    >ratioRoundAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundEvenAt"
+	    >ratioRoundEvenAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundPer"
+	    >ratioRoundPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundEvenPer"
+	    >ratioRoundEvenPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioTruncAt"
+	    >ratioTruncAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioTruncPer"
+	    >ratioTruncPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundOutAt"
+	    >ratioRoundOutAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRoundOutPer"
+	    >ratioRoundOutPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioFloorAt"
+	    >ratioFloorAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioFloorPer"
+	    >ratioFloorPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioCeilAt"
+	    >ratioCeilAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioCeilPer"
+	    >ratioCeilPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioQuo"
+	    >ratioQuo</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioRem"
+	    >ratioRem</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:ratioQuoRem"
+	    >ratioQuoRem</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Shorthand</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-37--37-" class="def"
+	    >(%%)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Rational"
+	    >Rational</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#%25%25');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Rational"
+		>Rational</a
+		></code
+	      > version of <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#v:-37-"
+		>%</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-47--47-." class="def"
+	    >(//.)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n -&gt; (n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#%2F%2F.');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Integer part and proper fraction part of ratio of two numbers,
+   i.e., <em
+	      >x</em
+	      > <code
+	      ><a href="Koshucode-Baala-Data-Type-Decimal-Rational.html#v:-47--47-."
+		>//.</a
+		></code
+	      > <em
+	      >y</em
+	      > == (<em
+	      >integer</em
+	      >, <em
+	      >proper-fraction</em
+	      >) of <em
+	      >x</em
+	      > <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#v:-37-"
+		>%</a
+		></code
+	      > <em
+	      >y</em
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-47--47-" class="def"
+	    >(//)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; n -&gt; (n, n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#%2F%2F');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Synonym of <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Prelude.html#v:quotRem"
+		>quotRem</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioHalf" class="def"
+	    >ratioHalf</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioHalf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >1 <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#v:-37-"
+		>%</a
+		></code
+	      > 2</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioFracle" class="def"
+	    >ratioFracle</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > i, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; i -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioFracle');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unit rational number for decimal fractional length.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Round and truncate</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundAt" class="def"
+	    >ratioRoundAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundEvenAt" class="def"
+	    >ratioRoundEvenAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundEvenAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round-to-even rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundPer" class="def"
+	    >ratioRoundPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundEvenPer" class="def"
+	    >ratioRoundEvenPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundEvenPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round-to-even rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioTruncAt" class="def"
+	    >ratioTruncAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioTruncAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncate rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioTruncPer" class="def"
+	    >ratioTruncPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioTruncPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Truncate rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundOutAt" class="def"
+	    >ratioRoundOutAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundOutAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round out (toward infinity) rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRoundOutPer" class="def"
+	    >ratioRoundOutPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRoundOutPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Round out (toward infinity) rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Floor and ceiling</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioFloorAt" class="def"
+	    >ratioFloorAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioFloorAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Floor rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioFloorPer" class="def"
+	    >ratioFloorPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioFloorPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Floor rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioCeilAt" class="def"
+	    >ratioCeilAt</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > l, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n) =&gt; l -&gt; Map (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioCeilAt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ceiling rational number at decimal fractional length.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioCeilPer" class="def"
+	    >ratioCeilPer</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioCeilPer');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Ceiling rational number per unit rational number.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Quotient and remainder</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioQuo" class="def"
+	    >ratioQuo</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioQuo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioRem" class="def"
+	    >ratioRem</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; Bin (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioRem');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ratioQuoRem" class="def"
+	    >ratioQuoRem</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ratio.html#t:Ratio"
+	    >Ratio</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Decimal-Rational.html#ratioQuoRem');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

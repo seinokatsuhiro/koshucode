@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Writer.Json</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('writer', 'koshucode-baala-writer', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Writer-Json.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Writer-Json.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-writer-0.158.0.0: Writers for the Koshu calculator</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Writer.Json</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >JSON</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >GeoJSON</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:resultJson"
+	    >resultJson</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; ResultWriter c</li
+	  ><li class="src short"
+	  ><a href="#v:termsToJSON"
+	    >termsToJSON</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; [Term c] -&gt; Value</li
+	  ><li class="src short"
+	  ><a href="#v:jsonNull"
+	    >jsonNull</a
+	    > :: Value</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToJSON"
+	    >ToJSON</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toJSON"
+		>toJSON</a
+		> :: a -&gt; Value</li
+	      ><li
+	      ><a href="#v:toEncoding"
+		>toEncoding</a
+		> :: a -&gt; Encoding</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:resultGeoJson"
+	    >resultGeoJson</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; ResultWriter c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToGeoJSON"
+	    >ToGeoJSON</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toGeoJSON"
+		>toGeoJSON</a
+		> :: a -&gt; Value</li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>JSON</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:resultJson" class="def"
+	    >resultJson</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; ResultWriter c <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#resultJson');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsToJSON" class="def"
+	    >termsToJSON</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; [Term c] -&gt; Value <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#termsToJSON');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:jsonNull" class="def"
+	    >jsonNull</a
+	    > :: Value <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#jsonNull');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToJSON" class="def"
+	    >ToJSON</a
+	    > a <span class="keyword"
+	    >where</span
+	    ></p
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    >Nothing</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toJSON" class="def"
+	      >toJSON</a
+	      > :: a -&gt; Value</p
+	    ><p class="src"
+	    ><a name="v:toEncoding" class="def"
+	      >toEncoding</a
+	      > :: a -&gt; Encoding</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>GeoJSON</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:resultGeoJson" class="def"
+	    >resultGeoJson</a
+	    > :: <a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+	    >ToJSON</a
+	    > c =&gt; ResultWriter c <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#resultGeoJson');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToGeoJSON" class="def"
+	    >ToGeoJSON</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#ToGeoJSON');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toGeoJSON" class="def"
+	      >toGeoJSON</a
+	      > :: a -&gt; Value <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#toGeoJSON');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToGeoJSON" class="caption collapser" onclick="toggleSection('i:ToGeoJSON')"
+	    >Instances</p
+	    ><div id="section.i:ToGeoJSON" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Writer-Json.html#t:ToJSON"
+		      >ToJSON</a
+		      > c =&gt; <a href="Koshucode-Baala-Writer-Json.html#t:ToGeoJSON"
+		      >ToGeoJSON</a
+		      > (Judge c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Writer-Json.html#line-108');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,1616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Para.ParaSpec</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Para-ParaSpec.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.158.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Para.ParaSpec</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Specification</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>ParaSpec</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>ParaSpecPos</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Unmatch reason</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Construction</a
+	    ><ul
+	    ><li
+	      ><a href="#g:6"
+		>Positional</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>Named positional</a
+		></li
+	      ><li
+	      ><a href="#g:8"
+		>Required / Optional</a
+		></li
+	      ><li
+	      ><a href="#g:9"
+		>Multiple-occurence</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Parameter specification.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ParaSpec"
+	    >ParaSpec</a
+	    > n = <a href="#v:ParaSpec"
+	    >ParaSpec</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:paraSpecPos"
+		>paraSpecPos</a
+		> :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		>ParaSpecPos</a
+		> n</li
+	      ><li
+	      ><a href="#v:paraSpecReqP"
+		>paraSpecReqP</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecOptP"
+		>paraSpecOptP</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecReqN"
+		>paraSpecReqN</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecOptN"
+		>paraSpecOptN</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecFirst"
+		>paraSpecFirst</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecLast"
+		>paraSpecLast</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:paraSpecMulti"
+		>paraSpecMulti</a
+		> :: [n]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNames"
+	    >paraSpecNames</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNamesP"
+	    >paraSpecNamesP</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpecNamesN"
+	    >paraSpecNamesN</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ParaSpecPos"
+	    >ParaSpecPos</a
+	    > n<ul class="subs"
+	    ><li
+	      >= <a href="#v:ParaItem"
+		>ParaItem</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> [n]</li
+	      ><li
+	      >| <a href="#v:ParaItemOpt"
+		>ParaItemOpt</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> [n] [n]</li
+	      ><li
+	      >| <a href="#v:ParaItemRest"
+		>ParaItemRest</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> [n] n</li
+	      ><li
+	      >| <a href="#v:ParaMin"
+		>ParaMin</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      >| <a href="#v:ParaRange"
+		>ParaRange</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:paraMinLength"
+	    >paraMinLength</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+	    >ParaSpecPos</a
+	    > n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:ParaUnmatch"
+	    >ParaUnmatch</a
+	    > n<ul class="subs"
+	    ><li
+	      >= <a href="#v:ParaOutOfRange"
+		>ParaOutOfRange</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		> (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		>ParaSpecPos</a
+		> n)</li
+	      ><li
+	      >| <a href="#v:ParaUnknown"
+		>ParaUnknown</a
+		> [n]</li
+	      ><li
+	      >| <a href="#v:ParaMissing"
+		>ParaMissing</a
+		> [n]</li
+	      ><li
+	      >| <a href="#v:ParaMultiple"
+		>ParaMultiple</a
+		> [n]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:paraMatch"
+	    >paraMatch</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+	    >ParaUnmatch</a
+	    > n) (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ParaTo"
+	    >ParaTo</a
+	    > n a b = <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; b</li
+	  ><li class="src short"
+	  ><a href="#v:paraSelect"
+	    >paraSelect</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; b -&gt; [(<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaTo"
+	    >ParaTo</a
+	    > n a b)] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaTo"
+	    >ParaTo</a
+	    > n a b</li
+	  ><li class="src short"
+	  ><a href="#v:paraChoose"
+	    >paraChoose</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n =&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n)] -&gt; <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+	    >ParaUnmatch</a
+	    > n] (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n = Map (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n)</li
+	  ><li class="src short"
+	  ><a href="#v:paraSpec"
+	    >paraSpec</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraMin"
+	    >paraMin</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraMax"
+	    >paraMax</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraJust"
+	    >paraJust</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraRange"
+	    >paraRange</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:para0"
+	    >para0</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:para1"
+	    >para1</a
+	    > :: n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:para2"
+	    >para2</a
+	    > :: n -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:para3"
+	    >para3</a
+	    > :: n -&gt; n -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraItem"
+	    >paraItem</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraItemOpt"
+	    >paraItemOpt</a
+	    > :: [n] -&gt; [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraItemRest"
+	    >paraItemRest</a
+	    > :: [n] -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraReq"
+	    >paraReq</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraOpt"
+	    >paraOpt</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraFirst"
+	    >paraFirst</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraLast"
+	    >paraLast</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ><li class="src short"
+	  ><a href="#v:paraMulti"
+	    >paraMulti</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Specification</h1
+	><h2 id="g:2"
+	>ParaSpec</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ParaSpec" class="def"
+	    >ParaSpec</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#ParaSpec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parameter specification.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ParaSpec" class="def"
+		  >ParaSpec</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:paraSpecPos" class="def"
+			>paraSpecPos</a
+			> :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+			>ParaSpecPos</a
+			> n</dt
+		      ><dd class="doc"
+		      ><p
+			>Positional parameter</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecReqP" class="def"
+			>paraSpecReqP</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Positional required parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecOptP" class="def"
+			>paraSpecOptP</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Positional optional parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecReqN" class="def"
+			>paraSpecReqN</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Explicitly-named required parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecOptN" class="def"
+			>paraSpecOptN</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Explicitly-named optional parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecFirst" class="def"
+			>paraSpecFirst</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Allow multiple-occurence, use first parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecLast" class="def"
+			>paraSpecLast</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Allow multiple-occurence, use last parameters</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:paraSpecMulti" class="def"
+			>paraSpecMulti</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			>Allow multiple-occurence, use all parameters</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ParaSpec" class="caption collapser" onclick="toggleSection('i:ParaSpec')"
+	    >Instances</p
+	    ><div id="section.i:ParaSpec" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+		      >ParaSpec</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-66');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+		      >ParaSpec</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+		      >ParaSpec</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+		      >ParaSpec</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-53');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+		      >ParaSpec</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-56');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >No parameters</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNames" class="def"
+	    >paraSpecNames</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNames');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of all parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNamesP" class="def"
+	    >paraSpecNamesP</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNamesP');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of positional parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpecNamesN" class="def"
+	    >paraSpecNamesN</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; [n] <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpecNamesN');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name list of explicitly-named parameters.</p
+	    ></div
+	  ></div
+	><h2 id="g:3"
+	>ParaSpecPos</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ParaSpecPos" class="def"
+	    >ParaSpecPos</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#ParaSpecPos');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Positional parameter specification.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ParaItem" class="def"
+		  >ParaItem</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  > [n]</td
+		><td class="doc"
+		><p
+		  >Named positional parameters</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaItemOpt" class="def"
+		  >ParaItemOpt</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  > [n] [n]</td
+		><td class="doc"
+		><p
+		  >Named positional and optional parameters</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaItemRest" class="def"
+		  >ParaItemRest</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  > [n] n</td
+		><td class="doc"
+		><p
+		  >Named positional and rest parameters</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaMin" class="def"
+		  >ParaMin</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Lower bound of parameter length</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaRange" class="def"
+		  >ParaRange</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Lower and upper bound of parameter length</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ParaSpecPos" class="caption collapser" onclick="toggleSection('i:ParaSpecPos')"
+	    >Instances</p
+	    ><div id="section.i:ParaSpecPos" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		      >ParaSpecPos</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-100');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		      >ParaSpecPos</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-98');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		      >ParaSpecPos</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-98');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		      >ParaSpecPos</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-98');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraMinLength" class="def"
+	    >paraMinLength</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+	    >ParaSpecPos</a
+	    > n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMinLength');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Minimal length of positional parameters.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Unmatch reason</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:ParaUnmatch" class="def"
+	    >ParaUnmatch</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#ParaUnmatch');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unmatch reason of real parameter and its specifition.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ParaOutOfRange" class="def"
+		  >ParaOutOfRange</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecPos"
+		  >ParaSpecPos</a
+		  > n)</td
+		><td class="doc"
+		><p
+		  >Positional parameter is unmatched.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaUnknown" class="def"
+		  >ParaUnknown</a
+		  > [n]</td
+		><td class="doc"
+		><p
+		  >Unknown parameter is specified.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaMissing" class="def"
+		  >ParaMissing</a
+		  > [n]</td
+		><td class="doc"
+		><p
+		  >Required parameter is missing.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ParaMultiple" class="def"
+		  >ParaMultiple</a
+		  > [n]</td
+		><td class="doc"
+		><p
+		  >Parameter occurs more than once.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ParaUnmatch" class="caption collapser" onclick="toggleSection('i:ParaUnmatch')"
+	    >Instances</p
+	    ><div id="section.i:ParaUnmatch" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+		      >ParaUnmatch</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-126');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+		      >ParaUnmatch</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-124');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+		      >ParaUnmatch</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-124');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+		      >ParaUnmatch</a
+		      > n)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#line-124');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraMatch" class="def"
+	    >paraMatch</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n -&gt; <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+	    >ParaUnmatch</a
+	    > n) (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a) <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMatch');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test and revise parameter to satisfy specification.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ParaTo" class="def"
+	    >ParaTo</a
+	    > n a b = <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; b <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#ParaTo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map parameter to some value.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSelect" class="def"
+	    >paraSelect</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; b -&gt; [(<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaTo"
+	    >ParaTo</a
+	    > n a b)] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaTo"
+	    >ParaTo</a
+	    > n a b <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSelect');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Select matched specification and apply <code
+	      ><a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaTo"
+		>ParaTo</a
+		></code
+	      > function.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraChoose" class="def"
+	    >paraChoose</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n =&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n)] -&gt; <a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaUnmatch"
+	    >ParaUnmatch</a
+	    > n] (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
+	    >Para</a
+	    > n a) <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraChoose');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>Construction</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ParaSpecMap" class="def"
+	    >ParaSpecMap</a
+	    > n = Map (<a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n) <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#ParaSpecMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraSpec" class="def"
+	    >paraSpec</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > n, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n) =&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraSpec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:6"
+	>Positional</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraMin" class="def"
+	    >paraMin</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lower bound of length of positional parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraMin 1
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b&quot;
+</code
+		></strong
+	      >Right Para ...
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;&quot;
+</code
+		></strong
+	      >Left ParaOutOfRange ...
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraMax" class="def"
+	    >paraMax</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMax');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Upper bound of length of positional parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraMax 1
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a&quot;
+</code
+		></strong
+	      >Right Para ...
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b&quot;
+</code
+		></strong
+	      >Left ParaOutOfRange ...
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraJust" class="def"
+	    >paraJust</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraJust');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Fixed-length positional parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraJust 1
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a&quot;
+</code
+		></strong
+	      >Right Para ...
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;&quot;
+</code
+		></strong
+	      >Left ParaOutOfRange ...
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraRange" class="def"
+	    >paraRange</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraRange');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lower and upper bound of length of positional parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraRange 1 2
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a&quot;
+</code
+		></strong
+	      >Right Para ...
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b c&quot;
+</code
+		></strong
+	      >Left ParaOutOfRange ...
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:7"
+	>Named positional</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:para0" class="def"
+	    >para0</a
+	    > :: <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#para0');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >No positional parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:para1" class="def"
+	    >para1</a
+	    > :: n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#para1');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named one positional parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:para2" class="def"
+	    >para2</a
+	    > :: n -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#para2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named two positional parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:para3" class="def"
+	    >para3</a
+	    > :: n -&gt; n -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#para3');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named three positional parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraItem" class="def"
+	    >paraItem</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraItem');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named arbitrary positional parameters.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraItem [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;, &quot;w&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b c d&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;,[[&quot;a&quot;]]), ..., (&quot;w&quot;,[[&quot;d&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraItemOpt" class="def"
+	    >paraItemOpt</a
+	    > :: [n] -&gt; [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraItemOpt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named arbitrary and one optional parameters.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraItemOpt [&quot;x&quot;, &quot;y&quot;] [&quot;z&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;,[[&quot;a&quot;]]),(&quot;y&quot;,[[&quot;b&quot;]])] })
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b c&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;,[[&quot;a&quot;]]),(&quot;y&quot;,[[&quot;b&quot;]]),(&quot;z&quot;,[[&quot;c&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraItemRest" class="def"
+	    >paraItemRest</a
+	    > :: [n] -&gt; n -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraItemRest');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named arbitrary and one optional parameters.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraItemRest [&quot;x&quot;, &quot;y&quot;] &quot;z&quot;
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;a b c d&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;,[[&quot;a&quot;]]),(&quot;y&quot;,[[&quot;b&quot;]]),(&quot;z&quot;,[[&quot;c&quot;,&quot;d&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:8"
+	>Required / Optional</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraReq" class="def"
+	    >paraReq</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraReq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Required named parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let p = S.paraWords S.paraHyphen &quot;-x a -y b&quot;
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraReq [&quot;x&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s p
+</code
+		></strong
+	      >Left (ParaUnknown [&quot;y&quot;])
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraOpt" class="def"
+	    >paraOpt</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraOpt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Optional named parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let p = S.paraWords S.paraHyphen &quot;-x a -y b&quot;
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraReq [&quot;x&quot;] . paraOpt [&quot;y&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s p
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;a&quot;]]), (&quot;y&quot;, [[&quot;b&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:9"
+	>Multiple-occurence</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraFirst" class="def"
+	    >paraFirst</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraFirst');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Allow multiple-occurence and use first parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraReq [&quot;x&quot;] . paraFirst [&quot;x&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;-x a -x b c&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;a&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraLast" class="def"
+	    >paraLast</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraLast');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Allow multiple-occurence and use last parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraReq [&quot;x&quot;] . paraLast [&quot;x&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;-x a -x b c&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;b&quot;,&quot;c&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraMulti" class="def"
+	    >paraMulti</a
+	    > :: [n] -&gt; <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpecMap"
+	    >ParaSpecMap</a
+	    > n <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-ParaSpec.html#paraMulti');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Multiple-occurence parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let s = paraSpec $ paraReq [&quot;x&quot;] . paraMulti [&quot;x&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraMatch s $ S.paraWords S.paraHyphen &quot;-x a -x b c&quot;
+</code
+		></strong
+	      >Right (Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;a&quot;],[&quot;b&quot;,&quot;c&quot;]])] })
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

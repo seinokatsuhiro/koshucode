@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.IO.Http</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-IO-Http.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.IO.Http</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Retrieve via HTTP.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:UriText"
+	    >UriText</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:HttpProxy"
+	    >HttpProxy</a
+	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-IO-Http.html#t:UriText"
+	    >UriText</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:uriContent"
+	    >uriContent</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-Http.html#t:UriText"
+	    >UriText</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:httpExceptionSummary"
+	    >httpExceptionSummary</a
+	    > :: HttpException -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:UriText" class="def"
+	    >UriText</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#UriText');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >URI.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:HttpProxy" class="def"
+	    >HttpProxy</a
+	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-IO-Http.html#t:UriText"
+	    >UriText</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#HttpProxy');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pair of protocol name and proxy URI.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:uriContent" class="def"
+	    >uriContent</a
+	    > :: [<a href="Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-IO-Http.html#t:UriText"
+	    >UriText</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#uriContent');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get HTTP content as lazy bytestring.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:httpExceptionSummary" class="def"
+	    >httpExceptionSummary</a
+	    > :: HttpException -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-Http.html#httpExceptionSummary');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Text message of HTTP exception.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Operator.Combine</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Operator-Combine.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Operator.Combine</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Combination</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Variation</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Combinations and variations.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:or"
+	    >or</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:seq"
+	    >seq</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:and"
+	    >and</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:not"
+	    >not</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:last"
+	    >last</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:anyNot"
+	    >anyNot</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:peek"
+	    >peek</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:skip"
+	    >skip</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:gather"
+	    >gather</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:sub"
+	    >sub</a
+	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:-35-"
+	    >(#)</a
+	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Combination</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:or" class="def"
+	    >or</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#or');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Alternative match.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:seq" class="def"
+	    >seq</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#seq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sequential match.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:and" class="def"
+	    >and</a
+	    > :: [<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#and');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Additional condition.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:not" class="def"
+	    >not</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#not');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Inverted condition.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:last" class="def"
+	    >last</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#last');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Find last match.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:anyNot" class="def"
+	    >anyNot</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#anyNot');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Any character except for given pattern.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Variation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:peek" class="def"
+	    >peek</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#peek');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Match but stay.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:skip" class="def"
+	    >skip</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#skip');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Turn off gathering match.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gather" class="def"
+	    >gather</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#gather');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Turn on gathering match.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sub" class="def"
+	    >sub</a
+	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#sub');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named submatch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-35-" class="def"
+	    >(#)</a
+	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#%23');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named submatch.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Flat.Term</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop-flat', 'koshucode-baala-rop-flat', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Flat-Term.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Flat.Term</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >pick</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >cut</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >pick-term</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >cut-term</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >move</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >rename</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsTerm"
+	    >ropsTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [Rop c]</li
+	  ><li class="src short"
+	  ><a href="#v:consPick"
+	    >consPick</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapPick"
+	    >relmapPick</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitPick"
+	    >relkitPick</a
+	    > :: [TermName] -&gt; RelkitFlow c</li
+	  ><li class="src short"
+	  ><a href="#v:consCut"
+	    >consCut</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapCut"
+	    >relmapCut</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitCut"
+	    >relkitCut</a
+	    > :: [TermName] -&gt; RelkitFlow c</li
+	  ><li class="src short"
+	  ><a href="#v:consPickTerm"
+	    >consPickTerm</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapPickTerm"
+	    >relmapPickTerm</a
+	    > :: Intmed c -&gt; Relmap c -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitPickTerm"
+	    >relkitPickTerm</a
+	    > :: RelkitBinary c</li
+	  ><li class="src short"
+	  ><a href="#v:consCutTerm"
+	    >consCutTerm</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapCutTerm"
+	    >relmapCutTerm</a
+	    > :: Intmed c -&gt; Relmap c -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitCutTerm"
+	    >relkitCutTerm</a
+	    > :: RelkitBinary c</li
+	  ><li class="src short"
+	  ><a href="#v:consMove"
+	    >consMove</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapMove"
+	    >relmapMove</a
+	    > :: Intmed c -&gt; ([TermName], [TermName]) -&gt; Relmap c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitMove"
+	    >relkitMove</a
+	    > :: ([TermName], [TermName]) -&gt; RelkitFlow c</li
+	  ><li class="src short"
+	  ><a href="#v:consRename"
+	    >consRename</a
+	    > :: RopCons c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapRename"
+	    >relmapRename</a
+	    > :: Intmed c -&gt; [TermName2] -&gt; Relmap c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsTerm" class="def"
+	    >ropsTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#ropsTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relmap operators for manipulating term names.</p
+	    ><dl
+	    ><dt
+	      ><code
+		>cut</code
+		></dt
+	      ><dd
+	      >Project relation to unspecified terms.</dd
+	      ><dt
+	      ><code
+		>cut-term</code
+		></dt
+	      ><dd
+	      >Project relation to terms not in relmap output.</dd
+	      ><dt
+	      ><code
+		>pick</code
+		></dt
+	      ><dd
+	      >Project relation to specified terms.</dd
+	      ><dt
+	      ><code
+		>pick-term</code
+		></dt
+	      ><dd
+	      >Project relation to terms in relmap output.</dd
+	      ><dt
+	      ><code
+		>rename</code
+		></dt
+	      ><dd
+	      >Change term name.</dd
+	      ><dt
+	      ><code
+		>move</code
+		></dt
+	      ><dd
+	      >Change heading.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	>pick</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consPick" class="def"
+	    >consPick</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consPick');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapPick" class="def"
+	    >relmapPick</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapPick');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitPick" class="def"
+	    >relkitPick</a
+	    > :: [TermName] -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relkitPick');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>cut</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consCut" class="def"
+	    >consCut</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consCut');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapCut" class="def"
+	    >relmapCut</a
+	    > :: Intmed c -&gt; [TermName] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapCut');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitCut" class="def"
+	    >relkitCut</a
+	    > :: [TermName] -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relkitCut');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>pick-term</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consPickTerm" class="def"
+	    >consPickTerm</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consPickTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapPickTerm" class="def"
+	    >relmapPickTerm</a
+	    > :: Intmed c -&gt; Relmap c -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapPickTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitPickTerm" class="def"
+	    >relkitPickTerm</a
+	    > :: RelkitBinary c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relkitPickTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>cut-term</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consCutTerm" class="def"
+	    >consCutTerm</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consCutTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapCutTerm" class="def"
+	    >relmapCutTerm</a
+	    > :: Intmed c -&gt; Relmap c -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapCutTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitCutTerm" class="def"
+	    >relkitCutTerm</a
+	    > :: RelkitBinary c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relkitCutTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:5"
+	>move</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consMove" class="def"
+	    >consMove</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consMove');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapMove" class="def"
+	    >relmapMove</a
+	    > :: Intmed c -&gt; ([TermName], [TermName]) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapMove');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitMove" class="def"
+	    >relkitMove</a
+	    > :: ([TermName], [TermName]) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relkitMove');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:6"
+	>rename</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consRename" class="def"
+	    >consRename</a
+	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#consRename');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapRename" class="def"
+	    >relmapRename</a
+	    > :: Intmed c -&gt; [TermName2] -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Term.html#relmapRename');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Bundle</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Bundle.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Bundle</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Bundle</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Bundle of expressions.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Bundle"
+	    >Bundle</a
+	    > a = <a href="#v:Bundle"
+	    >Bundle</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:bundleExpr"
+		>bundleExpr</a
+		> :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+		>Name</a
+		>, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a)]</li
+	      ><li
+	      ><a href="#v:bundleStart"
+		>bundleStart</a
+		> :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+		>Expr</a
+		> a</li
+	      ><li
+	      ><a href="#v:bundleSubmatch"
+		>bundleSubmatch</a
+		> :: [<a href="Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
+		>NameDepth</a
+		>]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:BundleMap"
+	    >BundleMap</a
+	    > a = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:NameDepth"
+	    >NameDepth</a
+	    > = (<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:bundle"
+	    >bundle</a
+	    > :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)] -&gt; <a href="Koshucode-Baala-Subtext-Bundle.html#t:Bundle"
+	    >Bundle</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:startExpr"
+	    >startExpr</a
+	    > :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Bundle</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Bundle" class="def"
+	    >Bundle</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#Bundle');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Bundle of named expressions.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Bundle" class="def"
+		  >Bundle</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:bundleExpr" class="def"
+			>bundleExpr</a
+			> :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+			>Name</a
+			>, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+			>Expr</a
+			> a)]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:bundleStart" class="def"
+			>bundleStart</a
+			> :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+			>Expr</a
+			> a</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:bundleSubmatch" class="def"
+			>bundleSubmatch</a
+			> :: [<a href="Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
+			>NameDepth</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Bundle" class="caption collapser" onclick="toggleSection('i:Bundle')"
+	    >Instances</p
+	    ><div id="section.i:Bundle" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Subtext-Bundle.html#t:Bundle"
+		      >Bundle</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Subtext-Bundle.html#t:Bundle"
+		      >Bundle</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Subtext-Bundle.html#t:Bundle"
+		      >Bundle</a
+		      > a)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#line-25');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:BundleMap" class="def"
+	    >BundleMap</a
+	    > a = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a) <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#BundleMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map version of expression bundle.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:NameDepth" class="def"
+	    >NameDepth</a
+	    > = (<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#NameDepth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Submatch name and its depth level.
+   Depth is incremented when entering repeatable expressions.
+   Submatch of non-zero depth is collected in list.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bundle" class="def"
+	    >bundle</a
+	    > :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)] -&gt; <a href="Koshucode-Baala-Subtext-Bundle.html#t:Bundle"
+	    >Bundle</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#bundle');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create bundle of subtext expressions.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:startExpr" class="def"
+	    >startExpr</a
+	    > :: [(<a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    >Name</a
+	    >, <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Bundle.html#startExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The start expression of bundle.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,952 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Content.Complex</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Content-Complex.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Content.Complex</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Complex contents</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Collection</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Relational</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>Type</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Complex content type.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CList"
+	    >CList</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isList"
+		>isList</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gList"
+		>gList</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:pList"
+		>pList</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getList"
+		>getList</a
+		> :: Ab c -&gt; Ab [c]</li
+	      ><li
+	      ><a href="#v:putList"
+		>putList</a
+		> :: [c] -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CSet"
+	    >CSet</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isSet"
+		>isSet</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gSet"
+		>gSet</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:pSet"
+		>pSet</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getSet"
+		>getSet</a
+		> :: Ab c -&gt; Ab [c]</li
+	      ><li
+	      ><a href="#v:putSet"
+		>putSet</a
+		> :: [c] -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:gSetSort"
+	    >gSetSort</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; c -&gt; [c]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CTie"
+	    >CTie</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isTie"
+		>isTie</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gTie"
+		>gTie</a
+		> :: c -&gt; [Term c]</li
+	      ><li
+	      ><a href="#v:pTie"
+		>pTie</a
+		> :: [Term c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getTie"
+		>getTie</a
+		> :: Ab c -&gt; Ab [Term c]</li
+	      ><li
+	      ><a href="#v:putTie"
+		>putTie</a
+		> :: [Term c] -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CRel"
+	    >CRel</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isRel"
+		>isRel</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gRel"
+		>gRel</a
+		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		>Rel</a
+		> c</li
+	      ><li
+	      ><a href="#v:pRel"
+		>pRel</a
+		> :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		>Rel</a
+		> c -&gt; c</li
+	      ><li
+	      ><a href="#v:getRel"
+		>getRel</a
+		> :: Ab c -&gt; Ab (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		>Rel</a
+		> c)</li
+	      ><li
+	      ><a href="#v:putRel"
+		>putRel</a
+		> :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		>Rel</a
+		> c -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:dee"
+	    >dee</a
+	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:dum"
+	    >dum</a
+	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CInterp"
+	    >CInterp</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isInterp"
+		>isInterp</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gInterp"
+		>gInterp</a
+		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		>Interp</a
+		></li
+	      ><li
+	      ><a href="#v:pInterp"
+		>pInterp</a
+		> :: <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		>Interp</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:getInterp"
+		>getInterp</a
+		> :: Ab c -&gt; Ab <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		>Interp</a
+		></li
+	      ><li
+	      ><a href="#v:putInterp"
+		>putInterp</a
+		> :: <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		>Interp</a
+		> -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a href="#t:CType"
+	    >CType</a
+	    > c <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isType"
+		>isType</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:gType"
+		>gType</a
+		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		>Type</a
+		></li
+	      ><li
+	      ><a href="#v:pType"
+		>pType</a
+		> :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		>Type</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:getType"
+		>getType</a
+		> :: Ab c -&gt; Ab <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		>Type</a
+		></li
+	      ><li
+	      ><a href="#v:putType"
+		>putType</a
+		> :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		>Type</a
+		> -&gt; Ab c</li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Complex contents</h1
+	><h2 id="g:2"
+	>Collection</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CList" class="def"
+	    >CList</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of contents.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isList"
+	      >isList</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gList"
+	      >gList</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pList"
+	      >pList</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isList" class="def"
+	      >isList</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gList" class="def"
+	      >gList</a
+	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pList" class="def"
+	      >pList</a
+	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getList" class="def"
+	      >getList</a
+	      > :: Ab c -&gt; Ab [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putList" class="def"
+	      >putList</a
+	      > :: [c] -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putList');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CList" class="caption collapser" onclick="toggleSection('i:CList')"
+	    >Instances</p
+	    ><div id="section.i:CList" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CList"
+		      >CList</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-173');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CSet" class="def"
+	    >CSet</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set of contents.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isSet"
+	      >isSet</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gSet"
+	      >gSet</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pSet"
+	      >pSet</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isSet" class="def"
+	      >isSet</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isSet');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gSet" class="def"
+	      >gSet</a
+	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gSet');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pSet" class="def"
+	      >pSet</a
+	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pSet');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getSet" class="def"
+	      >getSet</a
+	      > :: Ab c -&gt; Ab [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getSet');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putSet" class="def"
+	      >putSet</a
+	      > :: [c] -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putSet');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CSet" class="caption collapser" onclick="toggleSection('i:CSet')"
+	    >Instances</p
+	    ><div id="section.i:CSet" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+		      >CSet</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-214');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gSetSort" class="def"
+	    >gSetSort</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gSetSort');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:3"
+	>Relational</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CTie" class="def"
+	    >CTie</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CTie');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tie of terms.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isTie"
+	      >isTie</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gTie"
+	      >gTie</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pTie"
+	      >pTie</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isTie" class="def"
+	      >isTie</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isTie');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gTie" class="def"
+	      >gTie</a
+	      > :: c -&gt; [Term c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gTie');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pTie" class="def"
+	      >pTie</a
+	      > :: [Term c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pTie');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getTie" class="def"
+	      >getTie</a
+	      > :: Ab c -&gt; Ab [Term c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getTie');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putTie" class="def"
+	      >putTie</a
+	      > :: [Term c] -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putTie');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CTie" class="caption collapser" onclick="toggleSection('i:CTie')"
+	    >Instances</p
+	    ><div id="section.i:CTie" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+		      >CTie</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-221');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CRel" class="def"
+	    >CRel</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relation of terms.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isRel"
+	      >isRel</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gRel"
+	      >gRel</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pRel"
+	      >pRel</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isRel" class="def"
+	      >isRel</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isRel');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gRel" class="def"
+	      >gRel</a
+	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      >Rel</a
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gRel');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pRel" class="def"
+	      >pRel</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      >Rel</a
+	      > c -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pRel');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getRel" class="def"
+	      >getRel</a
+	      > :: Ab c -&gt; Ab (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      >Rel</a
+	      > c) <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getRel');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putRel" class="def"
+	      >putRel</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      >Rel</a
+	      > c -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putRel');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CRel" class="caption collapser" onclick="toggleSection('i:CRel')"
+	    >Instances</p
+	    ><div id="section.i:CRel" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+		      >CRel</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-228');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dee" class="def"
+	    >dee</a
+	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#dee');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nullary full relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dum" class="def"
+	    >dum</a
+	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#dum');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nullary empty relation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CInterp" class="def"
+	    >CInterp</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CInterp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Data intepretation.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isInterp"
+	      >isInterp</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gInterp"
+	      >gInterp</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pInterp"
+	      >pInterp</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isInterp" class="def"
+	      >isInterp</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isInterp');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gInterp" class="def"
+	      >gInterp</a
+	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+	      >Interp</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gInterp');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pInterp" class="def"
+	      >pInterp</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+	      >Interp</a
+	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pInterp');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getInterp" class="def"
+	      >getInterp</a
+	      > :: Ab c -&gt; Ab <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+	      >Interp</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getInterp');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putInterp" class="def"
+	      >putInterp</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+	      >Interp</a
+	      > -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putInterp');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CInterp" class="caption collapser" onclick="toggleSection('i:CInterp')"
+	    >Instances</p
+	    ><div id="section.i:CInterp" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CInterp"
+		      >CInterp</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-200');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>Type</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c =&gt; <a name="t:CType" class="def"
+	    >CType</a
+	    > c <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type of content.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isType"
+	      >isType</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gType"
+	      >gType</a
+	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pType"
+	      >pType</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isType" class="def"
+	      >isType</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isType');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:gType" class="def"
+	      >gType</a
+	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      >Type</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gType');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:pType" class="def"
+	      >pType</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      >Type</a
+	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pType');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getType" class="def"
+	      >getType</a
+	      > :: Ab c -&gt; Ab <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      >Type</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getType');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putType" class="def"
+	      >putType</a
+	      > :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      >Type</a
+	      > -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putType');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CType" class="caption collapser" onclick="toggleSection('i:CType')"
+	    >Instances</p
+	    ><div id="section.i:CType" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CType"
+		      >CType</a
+		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
+		      >BaalaC</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-207');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
