@@ -111,11 +111,15 @@ pkg_haddock () {
         ( cd "$pkg"
           pkg_section "haddock (in $pkg)"
           cabal haddock \
+              --html \
+              --css=../haddock/ocean2.css \
+              --hscolour-css=../haddock/hscolour2.css \
               --hoogle \
               --hyperlink-source \
               --html-location=$pkg_doc_hackage \
               --haddock-option=--pretty-html \
               `pkg_haddock_option $pkg`
+          pkg_haddock_postproc "$pkg"
         )
     done
 }
@@ -132,6 +136,27 @@ pkg_haddock_option () {
         fi
     done
 }
+
+pkg_haddock_postproc () {(
+    cd dist/doc/html
+
+    # Source link
+    for html in */*.html; do
+        dir=`dirname $html`
+        perl -i -p - <<EOF $html
+s|^window.onload|function showSource (href) { window.parent.Haddock.showSource('$1', '$dir', href); }
+window.onload|;
+s/<a href="(src[^"]*)"/<a onclick="showSource('\1');" href="javascript:void(0);"/;
+EOF
+    done
+
+    # Line number
+    for html in */src/*.html; do
+        perl -i -p - <<EOF $html
+s|<a name="line-([^"]*)">|<a class="number" name="line-\1">\1|;
+EOF
+    done
+)}
 
 pkg_hoogle () {
     for pkg in `pkg_dirs`; do
