@@ -6,6 +6,7 @@ module Koshucode.Baala.Subtext.Operator.Repeat
  ( -- * Repetitive
    min, max, minMax,
    many, many1, maybe,
+   unrep,
    before, sep,
  ) where
 
@@ -39,9 +40,22 @@ many1 = min 1
 maybe :: S.Expr a -> S.Expr a
 maybe = minMax 0 1
 
+-- | Cancel repetition.
+unrep :: S.Expr a -> S.Expr a
+unrep = berry f where
+    f (S.ERec (S.ERep _ e)) = unrep e
+    f e = e
+
+-- | Map to berry expression.
+berry :: (S.Expr a -> S.Expr a) -> S.Expr a -> S.Expr a
+berry f = loop where
+    loop (S.ERec (S.ESub n e))   = S.sub n $ loop e
+    loop (S.ERec (S.EGath b e))  = (S.ERec (S.EGath b $ loop e))
+    loop e = f e
+
 -- | Match before given expression.
 before :: S.Expr a -> S.Expr a
-before = many . S.anyNot
+before = many . S.anyNot . unrep
 
 -- | X-separated values.
 sep :: S.Expr a -> S.Expr a -> S.Expr a
