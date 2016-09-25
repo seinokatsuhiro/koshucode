@@ -117,6 +117,7 @@ pkg_haddock () {
               --hoogle \
               --hyperlink-source \
               --html-location=$pkg_doc_hackage \
+              --haddock-option=--no-warnings \
               --haddock-option=--pretty-html \
               `pkg_haddock_option $pkg`
           pkg_haddock_postproc "$pkg"
