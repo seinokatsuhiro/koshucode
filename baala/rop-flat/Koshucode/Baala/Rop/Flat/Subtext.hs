@@ -80,6 +80,8 @@
 --     Inverted condition.
 --   [ last E ]
 --     Find last /E/.
+--   [ before E ]
+--     Sequence of not /E/.
 --   [ ( E ) ]
 --     Group expression /E/.
 --   [ &#x5B; E &#x5D; ]
@@ -113,7 +115,6 @@ import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Subtext            as T
 import qualified Koshucode.Baala.Subtext.Expr       as T
-import qualified Koshucode.Baala.Subtext.Para       as T
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
@@ -257,6 +258,7 @@ parseSubtext ns = trees False where
     keyOp "word" (L (Text s))  = Right $ T.word s             -- word E
     keyOp "not"  x             = Right . T.not    =<< tree x  -- not E
     keyOp "last" x             = Right . T.last   =<< tree x  -- last E
+    keyOp "before" x           = Right . T.before =<< tree x  -- before E
     keyOp "on"   x             = Right . T.gather =<< tree x  -- on E
     keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
     keyOp n _                  = unknownSyntax n
