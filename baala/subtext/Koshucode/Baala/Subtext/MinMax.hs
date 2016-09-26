@@ -13,10 +13,14 @@ data MinMax
   | MinMax Int Int        -- ^ Lower and upper bound
     deriving (Show, Eq, Ord)
 
+-- | Lower bound.
+lowerBound :: MinMax -> Int
+lowerBound (Min n)      = n
+lowerBound (MinMax n _) = n
+
 -- | Test lower bound.
 atLeast :: Int -> MinMax -> Bool
-atLeast b (Min n)      = n >= b
-atLeast b (MinMax n _) = n >= b
+atLeast b m = (lowerBound m) >= b
 
 -- | Test upper bound.
 atMost :: Int -> MinMax -> Bool

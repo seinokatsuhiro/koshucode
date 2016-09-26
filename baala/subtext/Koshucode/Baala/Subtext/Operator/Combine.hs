@@ -16,6 +16,7 @@ import Prelude hiding ( or, seq, and, not, last )
 
 import qualified Koshucode.Baala.Subtext.Fn              as S
 import qualified Koshucode.Baala.Subtext.Expr            as S
+import qualified Koshucode.Baala.Subtext.MinMax          as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic  as S
 
 
@@ -40,8 +41,25 @@ and [e] = e
 and es  = S.ERec $ S.EAnd es
 
 -- | Inverted condition.
+--   If expression is zero-repeatable, stirp off the repeatition operator,
+--   because zero-repetition can be matched any input.
 not :: S.Expr a -> S.Expr a
-not e = S.ERec $ S.ENot e
+not = S.ERec . S.ENot . unrep
+
+-- | Strip off zero-repetition operator.
+unrep :: S.Expr a -> S.Expr a
+unrep = berry f where
+    f (S.ERec (S.ERep m e))
+        | S.atLeast 0 m  = unrep e
+        | otherwise      = S.ERec (S.ERep m e)
+    f e = e
+
+-- | Map to berry expression.
+berry :: (S.Expr a -> S.Expr a) -> S.Expr a -> S.Expr a
+berry f = loop where
+    loop (S.ERec (S.ESub n e))   = sub n $ loop e
+    loop (S.ERec (S.EGath b e))  = (S.ERec (S.EGath b $ loop e))
+    loop e = f e
 
 -- | Find last match.
 last :: S.Expr a -> S.Expr a
