@@ -118,7 +118,6 @@ import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Subtext            as T
-import qualified Koshucode.Baala.Subtext.Expr       as T
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
@@ -174,9 +173,6 @@ trimIf False t = t
 
 -- --------------------------------------------  Parser
 
--- | Type for subtext expression.
-type CharExpr = T.Expr Char
-
 -- | Type for subtext bundle.
 type CharBundle = T.Bundle Char
 
@@ -221,16 +217,16 @@ parseBundle = bundle where
                  [[L (Key n)], x] -> Right (n, x)
                  _                -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, CharExpr)
+    step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, T.CharExpr)
     step2 ns (n, x) = do e <- parseSubtext ns x
                          Right (n, e)
 
 -- | Parse token trees into subtext expression.
-parseSubtext :: [String] -> [S.TTree] -> B.Ab CharExpr
+parseSubtext :: [String] -> [S.TTree] -> B.Ab T.CharExpr
 parseSubtext ns = trees False where
 
     -- Trees
-    trees :: Bool -> [S.TTree] -> B.Ab CharExpr
+    trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
     trees False xs              = opTop xs
     trees True (L (Key n) : xs) = pre n xs
     trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
@@ -240,17 +236,17 @@ parseSubtext ns = trees False where
     trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
-    tree :: S.TTree -> B.Ab CharExpr
+    tree :: S.TTree -> B.Ab T.CharExpr
     tree (L x)        = leaf x
     tree (B g xs)     = branch g xs
     tree x            = unknownSyntax x
 
-    leaf :: S.Token -> B.Ab CharExpr
+    leaf :: S.Token -> B.Ab T.CharExpr
     leaf (Text t)     = Right $ T.equal t     -- "LITERAL"
     leaf (Key n)      = pre n []
     leaf x            = unknownSyntax x
 
-    branch :: S.BracketType -> [S.TTree] -> B.Ab CharExpr
+    branch :: S.BracketType -> [S.TTree] -> B.Ab T.CharExpr
     branch S.BracketGroup xs  = opTop xs            -- ( E )
     branch S.BracketSet   xs  = bracket T.many  xs  -- { E }
     branch S.BracketTie   xs  = bracket T.many1 xs  -- {- E -}

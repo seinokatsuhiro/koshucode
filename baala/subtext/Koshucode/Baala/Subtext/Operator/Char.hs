@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Subtext.Operator.Char
  ( -- * Character
+   CharExpr,
    char, word,
    space, spaces, spaces1,
    digit, letter,
@@ -17,43 +18,46 @@ import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Repeat     as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
 
+-- | Subtext expression for character input.
+type CharExpr = S.Expr Char
+
 -- | Match some character in a list of characters.
-char :: [Char] -> S.Expr Char
+char :: [Char] -> CharExpr
 char = S.list
 
 -- | Match some word in a list of words from space-separated string.
-word :: String -> S.Expr Char
+word :: String -> CharExpr
 word w = S.or (S.equal <$> words w)
 
 -- | Match space character.
-space :: S.Expr Char
+space :: CharExpr
 space = S.elem "space" C.isSpace
 
 -- | Match zero-or-more space characters.
-spaces :: S.Expr Char
+spaces :: CharExpr
 spaces = S.many space
 
 -- | Match one-or-more space characters.
-spaces1 :: S.Expr Char
+spaces1 :: CharExpr
 spaces1 = S.many1 space
 
 -- | Match digit characters.
-digit :: S.Expr Char
+digit :: CharExpr
 digit = S.elem "digit" C.isDigit
 
 -- | Match letter characters.
-letter :: S.Expr Char
+letter :: CharExpr
 letter = S.elem "letter" C.isLetter
 
 -- | Test unicode general category with category set.
-categorySet :: Set.Set C.GeneralCategory -> S.Expr Char
+categorySet :: Set.Set C.GeneralCategory -> CharExpr
 categorySet cs = S.elem "category" cat where
     cat c = C.generalCategory c `Set.member` cs
 
 -- | Test unicode general category with short names.
 --   The argument string is space-separated names.
 --   If unknown name is given, returns the name in 'Left' data.
-category :: String -> Either String (S.Expr Char)
+category :: String -> Either String CharExpr
 category s =
     do cs <- categoryLookup `mapM` words s
        Right $ categorySet $ Set.unions cs
