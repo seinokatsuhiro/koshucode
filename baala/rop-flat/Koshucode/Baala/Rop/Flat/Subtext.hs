@@ -45,8 +45,12 @@
 --     Alternative occurences of characters included in /T/.
 --   [ word T ]
 --     Alternative occurences of words included in /T/.
+--   [ category T ... ]
+--     Characters in the Unicode general categories,
+--     /T/ is one-letter or two-letter category name.
+--     See 'T.categoryLookup'.
 --   [ C1 to C2 ]
---     Character betweeen C1 and C2.
+--     Characters betweeen C1 and C2.
 --
 --   [ space ]
 --     Unicode space character or space-like control character
@@ -192,6 +196,9 @@ unknownBracket g = Msg.adlib $ "subtext unknown bracket " ++ show g
 unknownKeyword :: String -> B.Ab b
 unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
 
+unknownCategory :: String -> B.Ab b
+unknownCategory n = Msg.adlib $ "subtext unknown general category " ++ n
+
 divide :: String -> S.TTreesTo [[S.TTree]]
 divide s = S.divideTreesBy (== s)
 
@@ -224,13 +231,13 @@ parseSubtext ns = trees False where
 
     -- Trees
     trees :: Bool -> [S.TTree] -> B.Ab CharExpr
-    trees _ [L (Key n), x]   = keyOp n x
-    trees _ [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
-    trees _ [L (Term n)]     = Right $ T.sub n T.what      -- /N
-    trees _ []               = Right T.succ                -- ()
-    trees _ [x]              = tree x
-    trees False xs           = opTop xs
-    trees True  xs           = unknownSyntax $ show xs
+    trees False xs              = opTop xs
+    trees True (L (Key n) : xs) = pre n xs
+    trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
+    trees True [L (Term n)]     = Right $ T.sub n T.what      -- /N
+    trees True []               = Right T.succ                -- ()
+    trees True [x]              = tree x
+    trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
     tree :: S.TTree -> B.Ab CharExpr
@@ -240,7 +247,7 @@ parseSubtext ns = trees False where
 
     leaf :: S.Token -> B.Ab CharExpr
     leaf (Text t)     = Right $ T.equal t     -- "LITERAL"
-    leaf (Key n)      = key n
+    leaf (Key n)      = pre n []
     leaf x            = unknownSyntax x
 
     branch :: S.BracketType -> [S.TTree] -> B.Ab CharExpr
@@ -252,29 +259,6 @@ parseSubtext ns = trees False where
 
     bracket op xs = do e <- trees False xs
                        Right $ op e
-
-    -- Prefix operators
-    keyOp "char" (L (Text s))  = Right $ T.char s             -- char E
-    keyOp "word" (L (Text s))  = Right $ T.word s             -- word E
-    keyOp "not"  x             = Right . T.not    =<< tree x  -- not E
-    keyOp "last" x             = Right . T.last   =<< tree x  -- last E
-    keyOp "before" x           = Right . T.before =<< tree x  -- before E
-    keyOp "on"   x             = Right . T.gather =<< tree x  -- on E
-    keyOp "off"  x             = Right . T.skip   =<< tree x  -- off E
-    keyOp n _                  = unknownSyntax n
-
-    key n | n `elem` ns  = Right $ T.change n
-    key "?"              = Right T.any
-    key "??"             = Right T.what
-    key "begin"          = Right T.begin
-    key "end"            = Right T.end
-    key "space"          = Right T.space
-    key "digit"          = Right T.digit
-    key "letter"         = Right T.letter
-    key "SP"             = many1 T.space
-    key "012"            = many1 T.digit
-    key "ABC"            = many1 T.letter
-    key n                = unknownKeyword n
 
     many1 = Right . T.many1
 
@@ -299,4 +283,34 @@ parseSubtext ns = trees False where
                         -> Right $ T.to from to
                  [xs2]  -> trees True xs2  -- Turn on loop check
                  _      -> unknownSyntax xs
+
+    -- Prefix operators
+    pre n [] | n `elem` ns   = Right $ T.change n
+
+    pre "?"       []         = Right T.any
+    pre "??"      []         = Right T.what
+    pre "begin"   []         = Right T.begin
+    pre "end"     []         = Right T.end
+    pre "space"   []         = Right T.space
+    pre "digit"   []         = Right T.digit
+    pre "letter"  []         = Right T.letter
+    pre "SP"      []         = many1 T.space
+    pre "012"     []         = many1 T.digit
+    pre "ABC"     []         = many1 T.letter
+
+    pre "char" [L (Text s)]  = Right $ T.char s             -- char T
+    pre "word" [L (Text s)]  = Right $ T.word s             -- word T
+    pre "not"    [x]         = Right . T.not    =<< tree x  -- not E
+    pre "last"   [x]         = Right . T.last   =<< tree x  -- last E
+    pre "before" [x]         = Right . T.before =<< tree x  -- before E
+    pre "on"     [x]         = Right . T.gather =<< tree x  -- on E
+    pre "off"    [x]         = Right . T.skip   =<< tree x  -- off E
+    pre "category" xs        = do ks <- keyword `mapM` xs   -- category T
+                                  case T.category $ unwords ks of
+                                    Right e -> Right e
+                                    Left n  -> unknownCategory n
+    pre n _                  = unknownKeyword n
+
+    keyword (L (Key s))      = Right s
+    keyword x                = unknownSyntax x
 
