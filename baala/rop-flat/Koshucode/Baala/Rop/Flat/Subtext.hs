@@ -57,11 +57,14 @@
 --     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
 --     See 'Data.Char.isSpace'.
 --   [ digit ]
---     ASCII digit.
+--     ASCII digits.
 --     See 'Data.Char.isDigit'.
---   [ letter ]
---     Unicode letter character.
---     See 'Data.Char.isLetter'.
+--   [ ascii ]
+--     ASCII characters.
+--     See 'Data.Char.isAscii'.
+--   [ latin-1 ]
+--     ISO 8859-1 (Latin-1) characters.
+--     See 'Data.Char.isLatin1'.
 --
 --   [ SP ]
 --     One-or-more spaces.
@@ -290,6 +293,8 @@ parseSubtext ns = trees False where
     pre "space"   []         = Right T.space
     pre "digit"   []         = Right T.digit
     pre "letter"  []         = Right T.letter
+    pre "ascii"   []         = Right T.ascii
+    pre "latin-1" []         = Right T.latin1
     pre "SP"      []         = many1 T.space
     pre "012"     []         = many1 T.digit
     pre "ABC"     []         = many1 T.letter

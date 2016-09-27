@@ -3,11 +3,16 @@
 -- | Operators for text match.
 
 module Koshucode.Baala.Subtext.Operator.Char
- ( -- * Character
+ ( -- * Type
    CharExpr,
+
+   -- * Character
    char, word,
    space, spaces, spaces1,
    digit, letter,
+   ascii, latin1,
+
+   -- * General category
    categorySet, category, categoryLookup,
  ) where
 
@@ -48,6 +53,17 @@ digit = S.elem "digit" C.isDigit
 -- | Match letter characters.
 letter :: CharExpr
 letter = S.elem "letter" C.isLetter
+
+-- | Match first 128 characters of Unicode character set.
+ascii :: CharExpr
+ascii = S.elem "letter" C.isAscii
+
+-- | Match first 256 characters of Unicode character set.
+latin1 :: CharExpr
+latin1 = S.elem "letter" C.isLatin1
+
+
+-- --------------------------------------------  Category
 
 -- | Test unicode general category with category set.
 categorySet :: Set.Set C.GeneralCategory -> CharExpr
