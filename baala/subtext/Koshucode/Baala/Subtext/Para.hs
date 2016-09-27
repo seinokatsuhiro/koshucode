@@ -85,7 +85,9 @@ reduce = top where
 what :: S.Expr a -> S.Expr a
 what = top where
     top (S.ERec r)     = S.ERec $ rec r
-    top (S.EBase b)    = S.EBase b
+    top e              = case replaceWhat S.anySeq e of
+                           Nothing -> e
+                           Just e' -> e'  -- ?? = { ? }
 
     rec (S.EOr  es)    = S.EOr  (top <$> es)
     rec (S.ESeq es)    = S.ESeq (seq es)
@@ -98,25 +100,23 @@ what = top where
     rec (S.EGath b e)  = S.EGath b (top e)
     rec (S.EPeek   e)  = S.EPeek   (top e)
     
-    seq (e1 : e2 : es) =
-        let e2'  = top e2
-            rest = e2' : es
-            rep  = replaceWhat $ S.before e2'
-        in case (rep e1, rep e2') of
-             (Nothing, _)        -> top e1 : seq rest
-             (Just e1', Nothing) -> e1'    : seq rest  -- what ++ E = before E ++ E
-             (Just _, Just _)    ->          seq rest  -- what ++ what = what
-    seq [e] = case replaceWhat (S.many S.any) e of
-                Nothing -> [top e]                     -- E ++ what = E ++ { ? }
-                Just e' -> [e']
+    seq (e1 : es@(e2 : _)) =
+        let rep = replaceWhat $ S.before e2
+        in case (rep e1, rep e2) of
+             (Nothing, _)        -> top e1 : seq es
+             (Just e1', Nothing) -> e1'    : seq es  -- ?? ++ E = before E ++ E
+             (Just _, Just _)    ->          seq es  -- ?? ++ ?? = ??
+    seq [e] = [top e]
     seq []  = []
 
 replaceWhat :: S.Expr a -> S.Expr a -> Maybe (S.Expr a)
-replaceWhat rep = loop where
-    loop (S.ERec (S.ESub n e))  = do e' <- loop e
-                                     Just $ S.ERec (S.ESub n e')
-    loop (S.ERec (S.EGath b e)) = do e' <- loop e
-                                     Just $ S.ERec (S.EGath b e')
-    loop (S.EBase S.EWhat)      = Just rep
-    loop _                      = Nothing
+replaceWhat rep = berryM loop where
+    loop (S.EBase S.EWhat)  = Just rep
+    loop _                  = Nothing
 
+-- | Map to berry expression.
+berryM :: (Monad m) => (S.Expr a -> m (S.Expr a)) -> S.Expr a -> m (S.Expr a)
+berryM f = loop where
+    loop (S.ERec (S.ESub n e))  = return . S.ERec . S.ESub  n =<< loop e
+    loop (S.ERec (S.EGath b e)) = return . S.ERec . S.EGath b =<< loop e
+    loop e = f e

@@ -6,13 +6,14 @@ module Koshucode.Baala.Subtext.Operator.Repeat
  ( -- * Repetitive
    min, max, minMax,
    many, many1, maybe,
-   before, sep,
+   anySeq, before, sep,
  ) where
 
 import Prelude hiding ( min, max, maybe )
 
 import qualified Koshucode.Baala.Subtext.Expr                as S
 import qualified Koshucode.Baala.Subtext.MinMax              as S
+import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
 
 -- | Repetition with lower bound.
@@ -38,6 +39,10 @@ many1 = min 1
 -- | Match zero or one times.
 maybe :: S.Expr a -> S.Expr a
 maybe = minMax 0 1
+
+-- | Many of any.
+anySeq :: S.Expr a
+anySeq = many S.any
 
 -- | Match before given expression.
 before :: S.Expr a -> S.Expr a
