@@ -78,6 +78,7 @@ reduce = top where
     rec (S.ERep  m e)  = S.ERec $ S.ERep  m (top e)
     rec (S.ELast   e)  = S.ERec $ S.ELast   (top e)
     rec (S.ESub  n e)  = S.ERec $ S.ESub  n (top e)
+    rec (S.EAs   f e)  = S.ERec $ S.EAs   f (top e)
     rec (S.EGath b e)  = S.ERec $ S.EGath b (top e)
     rec (S.EPeek   e)  = S.ERec $ S.EPeek   (top e)
 
@@ -97,6 +98,7 @@ what = top where
     rec (S.ERep  m e)  = S.ERep  m (top e)
     rec (S.ELast   e)  = S.ELast   (top e)
     rec (S.ESub  n e)  = S.ESub  n (top e)
+    rec (S.EAs   f e)  = S.EAs   f (top e)
     rec (S.EGath b e)  = S.EGath b (top e)
     rec (S.EPeek   e)  = S.EPeek   (top e)
     

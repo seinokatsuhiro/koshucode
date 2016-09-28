@@ -10,6 +10,7 @@ module Koshucode.Baala.Subtext.Operator.Combine
    -- * Variation
    peek, skip, gather,
    sub, (#),
+   as, asConst,
  ) where
 
 import Prelude hiding ( or, seq, and, not, last )
@@ -94,4 +95,12 @@ sub n = S.ERec . S.ESub n
 -- | Named submatch.
 (#) :: S.Name -> S.Expr a -> S.Expr a
 n # e = sub n e
+
+-- | Match with modification.
+as :: S.FnAs a -> S.Expr a -> S.Expr a
+as f = S.ERec . S.EAs f
+
+-- | Replace to given sequence.
+asConst :: [a] -> S.Expr a -> S.Expr a
+asConst c = as $ S.Fn "as-const" $ const c
 

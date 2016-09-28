@@ -89,6 +89,11 @@
 --     Find last /E/.
 --   [ before E ]
 --     Sequence of not /E/.
+--   [ E as T ]
+--     Replace to text /T/ when /E/ is matched.
+--
+-- == Repetition
+--
 --   [ ( E ) ]
 --     Group expression /E/.
 --   [ &#x5B; E &#x5D; ]
@@ -274,10 +279,17 @@ parseSubtext ns = trees False where
                  [sep, v] -> do ev   <- trees False v
                                 esep <- trees False sep
                                 Right $ T.sep esep ev
-                 [xs2]    -> opTo xs2
+                 [xs2]    -> opAs xs2
                  _        -> unknownSyntax xs
 
-    opTo xs = case divide "to" xs of    -- E to E
+    opAs xs = case divide "as" xs of    -- E as E
+                 [xs2, [L (Text to)]]
+                        -> do e <- trees False xs2
+                              Right $ T.asConst to e
+                 [xs2]  -> opTo xs2
+                 _      -> unknownSyntax xs
+
+    opTo xs = case divide "to" xs of    -- C to C
                  [[L (Char from)], [L (Char to)]]
                         -> Right $ T.to from to
                  [xs2]  -> trees True xs2  -- Turn on loop check

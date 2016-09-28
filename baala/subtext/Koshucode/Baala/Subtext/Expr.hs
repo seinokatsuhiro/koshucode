@@ -6,7 +6,7 @@ module Koshucode.Baala.Subtext.Expr
  ( Expr (..),
    ExprRec (..),
    ExprBase (..),
-   FnElem, FnSpan, FnInter,
+   FnElem, FnSpan, FnInter, FnAs,
  ) where
 
 import qualified Koshucode.Baala.Subtext.Fn      as S
@@ -28,6 +28,7 @@ data ExprRec a
   | ERep S.MinMax (Expr a)     -- ^ Repetitive match
   | ELast         (Expr a)     -- ^ Find last match
   | ESub  S.Name  (Expr a)     -- ^ Submatch
+  | EAs (FnAs a)  (Expr a)     -- ^ Modification matcher
   | EGath Bool    (Expr a)     -- ^ Change gathering setting
   | EPeek         (Expr a)     -- ^ Match but not consume input
     deriving (Show, Eq, Ord)
@@ -50,4 +51,7 @@ type FnSpan a = S.Fn [a] (Maybe ([a], [a]))
 
 -- | Function type for inter-element matcher.
 type FnInter a = S.Fn2 (Maybe a) (Maybe a) Bool
+
+-- | Function type for modification matcher.
+type FnAs a = S.Fn [a] [a]
 

@@ -67,6 +67,7 @@ submatches exprs start = Map.assocs $ expr [] 0 start where
                        | otherwise     -> expr ns (d + 1) e
           S.ELast   e  -> expr ns d e
           S.ESub  n e  -> Map.insertWith max n d $ expr ns d e
+          S.EAs   _ e  -> expr ns d e
           S.EGath _ e  -> expr ns d e
           S.EPeek   e  -> expr ns d e
 

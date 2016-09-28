@@ -96,6 +96,10 @@ match pa@S.Para { S.paraBundle    = bundle
                                      subs = S.paraRawSubs pa'
                                  Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs
                                             , S.paraRawOutput = o' ++ o }
+      rec (S.EAs (S.Fn _ f) e)
+                            = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
+                                 let o' = S.paraRawOutput pa'
+                                 Just $ pa' { S.paraRawOutput = reverse (f o') ++ o }
       rec (S.EGath b e)     = do pa' <- match $ pa { S.paraGather = b, S.paraExpr = e }
                                  Just $ pa' { S.paraGather = gather }
       rec (S.EPeek e)       = do _ <- match $ pa { S.paraExpr = e }
