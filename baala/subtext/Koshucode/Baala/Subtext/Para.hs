@@ -80,7 +80,6 @@ reduce = top where
     rec (S.ESub  n e)  = S.ERec $ S.ESub  n (top e)
     rec (S.EAs   f e)  = S.ERec $ S.EAs   f (top e)
     rec (S.EGath b e)  = S.ERec $ S.EGath b (top e)
-    rec (S.EPeek   e)  = S.ERec $ S.EPeek   (top e)
 
 -- | Replace context-dependent operator.
 what :: S.Expr a -> S.Expr a
@@ -100,7 +99,6 @@ what = top where
     rec (S.ESub  n e)  = S.ESub  n (top e)
     rec (S.EAs   f e)  = S.EAs   f (top e)
     rec (S.EGath b e)  = S.EGath b (top e)
-    rec (S.EPeek   e)  = S.EPeek   (top e)
     
     seq (e1 : es@(e2 : _)) =
         let rep = replaceWhat $ S.before e2

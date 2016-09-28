@@ -102,8 +102,6 @@ match pa@S.Para { S.paraBundle    = bundle
                                  Just $ pa' { S.paraRawOutput = reverse (f o') ++ o }
       rec (S.EGath b e)     = do pa' <- match $ pa { S.paraGather = b, S.paraExpr = e }
                                  Just $ pa' { S.paraGather = gather }
-      rec (S.EPeek e)       = do _ <- match $ pa { S.paraExpr = e }
-                                 Just pa
 
       matched e             = case match $ pa { S.paraExpr = e } of
                                  Nothing -> False

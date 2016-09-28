@@ -8,7 +8,7 @@ module Koshucode.Baala.Subtext.Operator.Combine
    not, last, anyNot,
 
    -- * Variation
-   peek, skip, gather,
+   stay, skip, gather,
    sub, (#),
    as, asConst,
  ) where
@@ -74,8 +74,8 @@ anyNot e = and [S.any, not e]
 -- --------------------------------------------  Variation
 
 -- | Match but stay.
-peek :: S.Expr a -> S.Expr a
-peek = S.ERec . S.EPeek
+stay :: S.Expr a -> S.Expr a
+stay e = and [S.succ, e]
 
 -- | Turn off gathering match.
 skip :: S.Expr a -> S.Expr a

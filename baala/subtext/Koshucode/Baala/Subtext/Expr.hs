@@ -30,7 +30,6 @@ data ExprRec a
   | ESub  S.Name  (Expr a)     -- ^ Submatch
   | EAs (FnAs a)  (Expr a)     -- ^ Modification matcher
   | EGath Bool    (Expr a)     -- ^ Change gathering setting
-  | EPeek         (Expr a)     -- ^ Match but not consume input
     deriving (Show, Eq, Ord)
 
 -- | Non-recursive expression.

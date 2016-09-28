@@ -91,6 +91,8 @@
 --     Sequence of not /E/.
 --   [ E as T ]
 --     Replace to text /T/ when /E/ is matched.
+--   [ stay E ]
+--     Match /E/ but input position is not changed.
 --
 -- == Repetition
 --
@@ -316,6 +318,7 @@ parseSubtext ns = trees False where
     pre "not"    [x]         = Right . T.not    =<< tree x  -- not E
     pre "last"   [x]         = Right . T.last   =<< tree x  -- last E
     pre "before" [x]         = Right . T.before =<< tree x  -- before E
+    pre "stay"   [x]         = Right . T.stay   =<< tree x  -- stay E
     pre "on"     [x]         = Right . T.gather =<< tree x  -- on E
     pre "off"    [x]         = Right . T.skip   =<< tree x  -- off E
     pre "category" xs        = do ks <- keyword `mapM` xs   -- category T
