@@ -71,6 +71,9 @@ reduce = top where
     rec (S.EAnd  [e])                = top e
     rec (S.ERep (S.MinMax 1 1) e)    = top e
 
+    rec (S.ERep m1 (S.ERec (S.ERep m2 e)))
+                       = top $ S.ERec $ S.ERep (S.times m1 m2) e
+
     rec (S.EOr    es)  = S.or          (top <$> es)
     rec (S.ESeq   es)  = S.seq         (top <$> es)
     rec (S.EAnd   es)  = S.and         (top <$> es)
