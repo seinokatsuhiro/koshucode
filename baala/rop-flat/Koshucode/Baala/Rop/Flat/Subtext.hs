@@ -47,33 +47,32 @@
 --     Alternative occurences of characters included in /T/.
 --   [ word T ]
 --     Alternative occurences of words included in /T/.
---   [ category T ... ]
+--   [ cat T ... ]
 --     Characters in the Unicode general categories,
 --     /T/ is one-letter or two-letter category name.
 --     See 'T.categoryLookup'.
 --   [ C1 to C2 ]
 --     Characters betweeen C1 and C2.
 --
---   [ space ]
+--   [ sp ]
 --     Unicode space character or space-like control character
 --     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
 --     See 'Data.Char.isSpace'.
+--   [ 012 ]
+--     Unicode numbers.
+--     See 'T.categoryNumber'.
 --   [ digit ]
 --     ASCII digits.
 --     See 'Data.Char.isDigit'.
+--   [ abc ]
+--     Unicode letters or marks.
+--     See 'T.categoryLetter' or 'T.categoryMark'.
 --   [ ascii ]
 --     ASCII characters.
 --     See 'Data.Char.isAscii'.
 --   [ latin-1 ]
 --     ISO 8859-1 (Latin-1) characters.
 --     See 'Data.Char.isLatin1'.
---
---   [ SP ]
---     One-or-more spaces.
---   [ 012 ]
---     One-or-more digits.
---   [ ABC ]
---     One-or-more letters.
 --
 -- == Combinations
 --
@@ -101,7 +100,7 @@
 --   [ { E } ]
 --     Zero-or-more occurences of /E/. (Zero-repeat)
 --   [ { E } ( N ) ]
---     /N/ occurences of /E/.
+--     /N/-times occurences of /E/.
 --   [ { E } ( L to ) ]
 --     Repetition of /E/ with lower bound /L/.
 --   [ { E } ( to U ) ]
@@ -332,14 +331,12 @@ parseSubtext ns = trees False where
     pre "??"      []         = Right T.what
     pre "begin"   []         = Right T.begin
     pre "end"     []         = Right T.end
-    pre "space"   []         = Right T.space
     pre "digit"   []         = Right T.digit
-    pre "letter"  []         = Right T.letter
     pre "ascii"   []         = Right T.ascii
     pre "latin-1" []         = Right T.latin1
-    pre "SP"      []         = many1 T.space
-    pre "012"     []         = many1 T.digit
-    pre "ABC"     []         = many1 T.letter
+    pre "sp"      []         = Right T.space
+    pre "012"     []         = Right $ T.categoryList T.categoryNumber
+    pre "abc"     []         = Right $ T.categoryList (T.categoryLetter ++ T.categoryMark)
 
     pre "char" [L (Text s)]  = Right $ T.char s             -- char T
     pre "word" [L (Text s)]  = Right $ T.word s             -- word T
@@ -349,13 +346,11 @@ parseSubtext ns = trees False where
     pre "stay"   [x]         = Right . T.stay   =<< tree x  -- stay E
     pre "on"     [x]         = Right . T.gather =<< tree x  -- on E
     pre "off"    [x]         = Right . T.skip   =<< tree x  -- off E
-    pre "category" xs        = do ks <- keyword `mapM` xs   -- category T
+    pre "cat"    xs          = do ks <- keyword `mapM` xs   -- cat T
                                   case T.category $ unwords ks of
                                     Right e -> Right e
                                     Left n  -> unknownCategory n
     pre n _                  = unknownKeyword n
-
-    many1 = Right . T.many1
 
     keyword (L (Key s))      = Right s
     keyword x                = unknownSyntax x

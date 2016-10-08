@@ -13,7 +13,15 @@ module Koshucode.Baala.Subtext.Operator.Char
    ascii, latin1,
 
    -- * General category
-   categorySet, category, categoryLookup,
+   categorySet, categoryList,
+   category, categoryLookup,
+   categoryLetter,
+   categoryMark,
+   categoryNumber,
+   categoryPunctuation,
+   categorySymbol,
+   categorySeparator,
+   categoryOther,
  ) where
 
 import qualified Data.Char                                   as C
@@ -70,6 +78,10 @@ categorySet :: Set.Set C.GeneralCategory -> CharExpr
 categorySet cs = S.elem "category" cat where
     cat c = C.generalCategory c `Set.member` cs
 
+-- | Test unicode general category with category list.
+categoryList :: [C.GeneralCategory] -> CharExpr
+categoryList = categorySet . Set.fromList
+
 -- | Test unicode general category with short names.
 --   The argument string is space-separated names.
 --   If unknown name is given, returns the name in 'Left' data.
@@ -78,7 +90,7 @@ category s =
     do cs <- categoryLookup `mapM` words s
        Right $ categorySet $ Set.unions cs
 
--- | Lookup unicode general cateogries by its short name.
+-- | Lookup unicode general categories by its short name.
 --   Short name means two-letter category name
 --   (e.g., @"lu"@ for upper case letter, @"zs"@ for space), or
 --   one-letter category group (e.g., @"l"@ for letter, @"z"@ for separator).
@@ -95,18 +107,13 @@ category s =
 categoryLookup :: String -> Either String (Set.Set C.GeneralCategory)
 categoryLookup n =
     case C.toLower <$> n of
-      "l"     -> l [ C.UppercaseLetter, C.LowercaseLetter, C.TitlecaseLetter,
-                     C.ModifierLetter, C.OtherLetter ]
-      "m"     -> l [ C.NonSpacingMark, C.SpacingCombiningMark, C.EnclosingMark ]
-      "n"     -> l [ C.DecimalNumber, C.LetterNumber, C.OtherNumber ]
-      "p"     -> l [ C.ConnectorPunctuation, C.DashPunctuation,
-                     C.OpenPunctuation, C.ClosePunctuation, C.InitialQuote,
-                     C.FinalQuote, C.OtherPunctuation ]
-      "s"     -> l [ C.MathSymbol, C.CurrencySymbol,
-                     C.ModifierSymbol, C.OtherSymbol ]
-      "z"     -> l [ C.Space, C.LineSeparator, C.ParagraphSeparator ]
-      "c"     -> l [ C.Control, C.Format, C.Surrogate,
-                     C.PrivateUse, C.NotAssigned ]
+      "l"     -> l categoryLetter
+      "m"     -> l categoryMark
+      "n"     -> l categoryNumber
+      "p"     -> l categoryPunctuation
+      "s"     -> l categorySymbol
+      "z"     -> l categorySeparator
+      "c"     -> l categoryOther
 
       "lu"    -> s C.UppercaseLetter
       "ll"    -> s C.LowercaseLetter
@@ -149,3 +156,37 @@ categoryLookup n =
     where
       l = Right . Set.fromList
       s = Right . Set.singleton
+
+-- | List of letter categories (L).
+categoryLetter      :: [C.GeneralCategory]
+categoryLetter       = [C.UppercaseLetter, C.LowercaseLetter, C.TitlecaseLetter,
+                        C.ModifierLetter, C.OtherLetter]
+
+-- | List of mark categories (M).
+categoryMark        :: [C.GeneralCategory]
+categoryMark         = [C.NonSpacingMark, C.SpacingCombiningMark, C.EnclosingMark]
+
+-- | List of number categories (N).
+categoryNumber      :: [C.GeneralCategory]
+categoryNumber       = [C.DecimalNumber, C.LetterNumber, C.OtherNumber]
+
+-- | List of punctuation categories (P).
+categoryPunctuation :: [C.GeneralCategory]
+categoryPunctuation  = [C.ConnectorPunctuation, C.DashPunctuation,
+                        C.OpenPunctuation, C.ClosePunctuation, C.InitialQuote,
+                        C.FinalQuote, C.OtherPunctuation]
+
+-- | List of symbol categories (S).
+categorySymbol      :: [C.GeneralCategory]
+categorySymbol       = [C.MathSymbol, C.CurrencySymbol,
+                        C.ModifierSymbol, C.OtherSymbol]
+
+-- | List of separator categories (Z).
+categorySeparator   :: [C.GeneralCategory]
+categorySeparator    = [C.Space, C.LineSeparator, C.ParagraphSeparator]
+
+-- | List of other categories (C).
+categoryOther       :: [C.GeneralCategory]
+categoryOther        = [C.Control, C.Format, C.Surrogate,
+                        C.PrivateUse, C.NotAssigned]
+
