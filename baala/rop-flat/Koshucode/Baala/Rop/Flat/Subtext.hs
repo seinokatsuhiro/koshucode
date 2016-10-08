@@ -198,7 +198,9 @@ type CharBundle = T.Bundle Char
 
 pattern L tok   <- B.TreeL tok
 pattern K n     <- L (Key n)
-pattern To      <- Key "to"
+pattern T s     <- L (Text s)
+pattern C c     <- L (Char c)
+pattern To      <- K "to"
 
 pattern B g xs  <- B.TreeB g _ xs
 pattern G xs    <- B S.BracketGroup xs
@@ -283,13 +285,13 @@ parseSubtext ns = trees False where
                        Right $ op e
 
     times :: [S.TTree] -> [S.TTree] -> B.Ab T.CharExpr
-    times [ Empty , L To , Empty ] = bracket (T.many)
-    times [ K a   , L To         ] = bracket (T.min (int a))
-    times [ K a   , L To , Empty ] = bracket (T.min (int a))
-    times [         L To , K b   ] = bracket (T.max (int b))
-    times [ Empty , L To , K b   ] = bracket (T.max (int b))
-    times [ K a   , L To , K b   ] = bracket (T.minMax (int a) (int b))
-    times [ K a                  ] = bracket (T.minMax (int a) (int a))
+    times [ Empty , To , Empty ] = bracket (T.many)
+    times [ K a   , To         ] = bracket (T.min (int a))
+    times [ K a   , To , Empty ] = bracket (T.min (int a))
+    times [         To , K b   ] = bracket (T.max (int b))
+    times [ Empty , To , K b   ] = bracket (T.max (int b))
+    times [ K a   , To , K b   ] = bracket (T.minMax (int a) (int b))
+    times [ K a                ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
     int s = case B.readInt s of
@@ -315,47 +317,45 @@ parseSubtext ns = trees False where
                  _        -> unknownSyntax xs
 
     opAs xs = case divide "as" xs of    -- E as E
-                 [xs2, [L (Text to)]]
-                        -> do e <- trees False xs2
-                              Right $ T.asConst to e
-                 [xs2]  -> opTo xs2
-                 _      -> unknownSyntax xs
+                 [xs2, [T to]] -> do e <- trees False xs2
+                                     Right $ T.asConst to e
+                 [xs2]         -> opTo xs2
+                 _             -> unknownSyntax xs
 
     opTo xs = case divide "to" xs of    -- C to C
-                 [[L (Char from)], [L (Char to)]]
-                        -> Right $ T.to from to
-                 [xs2]  -> trees True xs2  -- Turn on loop check
-                 _      -> unknownSyntax xs
+                 [[C fr], [C to]] -> Right $ T.to fr to
+                 [xs2]            -> trees True xs2  -- Turn on loop check
+                 _                -> unknownSyntax xs
 
     -- Prefix operators
-    pre n [] | n `elem` ns   = Right $ T.change n
+    pre n [] | n `elem` ns  = Right $ T.change n
 
-    pre "?"       []         = Right T.any
-    pre "??"      []         = Right T.what
-    pre "begin"   []         = Right T.begin
-    pre "end"     []         = Right T.end
-    pre "digit"   []         = Right T.digit
-    pre "ascii"   []         = Right T.ascii
-    pre "latin-1" []         = Right T.latin1
-    pre "sp"      []         = Right T.space
-    pre "012"     []         = Right $ T.categoryList T.categoryNumber
-    pre "abc"     []         = Right $ T.categoryList (T.categoryLetter ++ T.categoryMark)
-    pre "+-"      []         = Right $ T.categoryList (T.categoryPunctuation ++ T.categorySymbol)
+    pre "?"       []        = Right T.any
+    pre "??"      []        = Right T.what
+    pre "begin"   []        = Right T.begin
+    pre "end"     []        = Right T.end
+    pre "digit"   []        = Right T.digit
+    pre "ascii"   []        = Right T.ascii
+    pre "latin-1" []        = Right T.latin1
+    pre "sp"      []        = Right T.space
+    pre "012"     []        = Right $ T.categoryList T.categoryNumber
+    pre "abc"     []        = Right $ T.categoryList (T.categoryLetter ++ T.categoryMark)
+    pre "+-"      []        = Right $ T.categoryList (T.categoryPunctuation ++ T.categorySymbol)
 
-    pre "char" [L (Text s)]  = Right $ T.char s             -- char T
-    pre "word" [L (Text s)]  = Right $ T.word s             -- word T
-    pre "not"    [x]         = Right . T.not    =<< tree x  -- not E
-    pre "last"   [x]         = Right . T.last   =<< tree x  -- last E
-    pre "before" [x]         = Right . T.before =<< tree x  -- before E
-    pre "stay"   [x]         = Right . T.stay   =<< tree x  -- stay E
-    pre "on"     [x]         = Right . T.gather =<< tree x  -- on E
-    pre "off"    [x]         = Right . T.skip   =<< tree x  -- off E
-    pre "cat"    xs          = do ks <- keyword `mapM` xs   -- cat T
-                                  case T.category $ unwords ks of
-                                    Right e -> Right e
-                                    Left n  -> unknownCategory n
-    pre n _                  = unknownKeyword n
+    pre "char"   [T s]      = Right $ T.char s             -- char T
+    pre "word"   [T s]      = Right $ T.word s             -- word T
+    pre "not"    [x]        = Right . T.not    =<< tree x  -- not E
+    pre "last"   [x]        = Right . T.last   =<< tree x  -- last E
+    pre "before" [x]        = Right . T.before =<< tree x  -- before E
+    pre "stay"   [x]        = Right . T.stay   =<< tree x  -- stay E
+    pre "on"     [x]        = Right . T.gather =<< tree x  -- on E
+    pre "off"    [x]        = Right . T.skip   =<< tree x  -- off E
+    pre "cat"    xs         = do ks <- keyword `mapM` xs   -- cat T
+                                 case T.category $ unwords ks of
+                                   Right e -> Right e
+                                   Left n  -> unknownCategory n
+    pre n _                 = unknownKeyword n
 
-    keyword (L (Key s))      = Right s
-    keyword x                = unknownSyntax x
+    keyword (K s)           = Right s
+    keyword x               = unknownSyntax x
 
