@@ -4,10 +4,10 @@ about /package 'rop-flat
 
 |-- DIR  /code 38   /comment 12   /dir "rop-flat/Koshucode/Baala/Rop"
 |-- DIR  /code 229  /comment 165  /dir "rop-flat/Koshucode/Baala/Rop/Base"
-|-- DIR  /code 1478  /comment 951  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- DIR  /code 1510  /comment 986  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- DIR  /code 214  /comment 203  /dir "rop-flat/Koshucode/Baala/Rop/Flat/Lattice"
 
-|-- DIR-TOTAL  /code 1959  /comment 1331
+|-- DIR-TOTAL  /code 1991  /comment 1366
 
 |-- FILE  /code 10   /comment 6    /file "Base.hs"        /dir "rop-flat/Koshucode/Baala/Rop"
 |-- FILE  /code 18   /comment 12   /file "Define.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Base"
@@ -32,8 +32,8 @@ about /package 'rop-flat
 |-- FILE  /code 56   /comment 35   /file "PoScale.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 66   /comment 36   /file "Resource.hs"    /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 50   /comment 73   /file "Source.hs"      /dir "rop-flat/Koshucode/Baala/Rop/Flat"
-|-- FILE  /code 149  /comment 153  /file "Subtext.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
+|-- FILE  /code 181  /comment 188  /file "Subtext.hs"     /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 103  /comment 66   /file "Term.hs"        /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 |-- FILE  /code 77   /comment 53   /file "TermGadget.hs"  /dir "rop-flat/Koshucode/Baala/Rop/Flat"
 
-|-- FILE-TOTAL  /code 1959  /comment 1331
+|-- FILE-TOTAL  /code 1991  /comment 1366

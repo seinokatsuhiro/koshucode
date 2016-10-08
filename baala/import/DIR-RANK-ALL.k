@@ -36,9 +36,9 @@
 |-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 0 | "SimpleOption" |
     [ ] ] [ 3 | "BzFile" | [ "Prelude" ] ] [ 3 | "Exit" | [ "Prelude" ] ] [ 4 | "Http" | [ "Prelude" ] ] [ 6 | "IOPoint"
     | [ "List" | "Prelude" ] ] [ 7 | "CodePt" | [ "Prelude" ] ] =}
-|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "MinMax" | [ ] ]
-    [ 1 | "Fn" | [ ] ] [ 2 | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Bundle" | [ "Operator" ] ] [ 9 | "Para" | [
-    "Operator" ] ] [ 10 | "Match" | [ "Operator" ] ] =}
+|-- DIR-RANK  /dir-rank 10  /dir "Koshucode.Baala.Subtext"  /base-rank {= /rank /base /import-dir [ 0 | "Category" | [ ]
+    ] [ 0 | "MinMax" | [ ] ] [ 1 | "Fn" | [ ] ] [ 2 | "Expr" | [ ] ] [ 7 | "Operator" | [ ] ] [ 8 | "Bundle" | [
+    "Operator" ] ] [ 9 | "Para" | [ "Operator" ] ] [ 10 | "Match" | [ "Operator" ] ] =}
 |-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 9 | "Reason" | [
     "IO" ] ] [ 10 | "Abortable" | [ "IO" | "Prelude" ] ] [ 10 | "Report" | [ "IO" | "List" | "Prelude" | "Text" ] ] [ 12
     | "Message" | [ "Abort" ] ] =}
@@ -229,6 +229,7 @@ TABLE : DIR-RANK
                                                   
   10        "Koshucode.Baala.Subtext"             /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
+                                                  0     "Category"       [ ]
                                                   0     "MinMax"         [ ]
                                                   1     "Fn"             [ ]
                                                   2     "Expr"           [ ]
