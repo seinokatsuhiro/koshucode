@@ -70,6 +70,12 @@
 --   [ +- ]
 --     Unicode punctuation or symbol character.
 --     See 'T.categoryPunctuation' or 'T.categorySymbol'.
+--   [ open ]
+--     Open punctuations.
+--     See 'T.categoryOpen'.
+--   [ close ]
+--     Close punctuations.
+--     See 'T.categoryClose'.
 --   [ ascii ]
 --     ASCII characters.
 --     See 'Data.Char.isAscii'.
@@ -339,8 +345,10 @@ parseSubtext ns = trees False where
     pre "latin-1" []        = Right T.latin1
     pre "sp"      []        = Right T.space
     pre "012"     []        = Right $ T.categoryList T.categoryNumber
-    pre "abc"     []        = Right $ T.categoryList (T.categoryLetter ++ T.categoryMark)
-    pre "+-"      []        = Right $ T.categoryList (T.categoryPunctuation ++ T.categorySymbol)
+    pre "abc"     []        = Right $ T.categoryList T.categoryAlpha
+    pre "+-"      []        = Right $ T.categoryList T.categorySign
+    pre "open"    []        = Right $ T.categoryList T.categoryOpen
+    pre "close"   []        = Right $ T.categoryList T.categoryClose
 
     pre "char"   [T s]      = Right $ T.char s             -- char T
     pre "word"   [T s]      = Right $ T.word s             -- word T
