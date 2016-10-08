@@ -59,14 +59,17 @@
 --     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
 --     See 'Data.Char.isSpace'.
 --   [ 012 ]
---     Unicode numbers.
+--     Unicode number character.
 --     See 'T.categoryNumber'.
 --   [ digit ]
 --     ASCII digits.
 --     See 'Data.Char.isDigit'.
 --   [ abc ]
---     Unicode letters or marks.
+--     Unicode letter or mark character.
 --     See 'T.categoryLetter' or 'T.categoryMark'.
+--   [ +- ]
+--     Unicode punctuation or symbol character.
+--     See 'T.categoryPunctuation' or 'T.categorySymbol'.
 --   [ ascii ]
 --     ASCII characters.
 --     See 'Data.Char.isAscii'.
@@ -337,6 +340,7 @@ parseSubtext ns = trees False where
     pre "sp"      []         = Right T.space
     pre "012"     []         = Right $ T.categoryList T.categoryNumber
     pre "abc"     []         = Right $ T.categoryList (T.categoryLetter ++ T.categoryMark)
+    pre "+-"      []         = Right $ T.categoryList (T.categoryPunctuation ++ T.categorySymbol)
 
     pre "char" [L (Text s)]  = Right $ T.char s             -- char T
     pre "word" [L (Text s)]  = Right $ T.word s             -- word T
