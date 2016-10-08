@@ -58,7 +58,7 @@ match :: (Show a) => S.Para a -> Maybe (S.Para a)
 match pa@S.Para { S.paraBundle    = bundle
                 , S.paraGather    = gather
                 , S.paraExpr      = expr
-                , S.paraPos       = p
+                , S.paraPos       = pos
                 , S.paraInput     = s
                 , S.paraPrev      = prev
                 , S.paraRawOutput = o } = result
@@ -67,43 +67,45 @@ match pa@S.Para { S.paraBundle    = bundle
                  S.ERec  r -> rec r
                  S.EBase b -> base b
 
+      para ? e = match $ para { S.paraExpr = e }
+
       -- ----------------------  recursive
 
       rec (S.EOr [])        = Nothing
-      rec (S.EOr (e:es))    = case match $ pa { S.paraExpr = e } of
-                                Nothing  -> match $ pa { S.paraExpr = S.or es }
+      rec (S.EOr (e:es))    = case pa ? e of
+                                Nothing  -> pa ? S.or es
                                 Just pa' -> Just pa'
 
       rec (S.ESeq [])       = Just pa
-      rec (S.ESeq (e:es))   = do pa' <- match $ pa { S.paraExpr = e }
-                                 match $ pa' { S.paraExpr = S.seq es }
+      rec (S.ESeq (e:es))   = do pa' <- pa ? e
+                                 pa' ? S.seq es
 
       rec (S.EAnd [])       = Just pa
-      rec (S.EAnd (e:es))   = do pa' <- match $ pa { S.paraExpr = e }
+      rec (S.EAnd (e:es))   = do pa' <- pa ? e
                                  case all matched es of
                                    True  -> Just pa'
                                    False -> Nothing
 
-      rec (S.ENot e)        = case match $ pa { S.paraExpr = e } of
+      rec (S.ENot e)        = case pa ? e of
                                 Nothing  -> Just pa
                                 Just _   -> Nothing
 
       rec (S.ERep m e)      = rep m e
-      rec (S.ELast  e)      = let m s' = match $ pa { S.paraExpr = e, S.paraInput = s' }
+      rec (S.ELast  e)      = let m s' = pa { S.paraInput = s' } ? e
                               in firstJust (m <$> reverse (tails s))
-      rec (S.ESub n e)      = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
+      rec (S.ESub n e)      = do pa' <- pa { S.paraRawOutput = [] } ? e
                                  let o'   = S.paraRawOutput pa'
                                      subs = S.paraRawSubs pa'
                                  Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs
                                             , S.paraRawOutput = o' ++ o }
       rec (S.EAs (S.Fn _ f) e)
-                            = do pa' <- match $ pa { S.paraExpr = e, S.paraRawOutput = [] }
+                            = do pa' <- pa { S.paraRawOutput = [] } ? e
                                  let o' = S.paraRawOutput pa'
                                  Just $ pa' { S.paraRawOutput = reverse (f o') ++ o }
-      rec (S.EGath b e)     = do pa' <- match $ pa { S.paraGather = b, S.paraExpr = e }
+      rec (S.EGath b e)     = do pa' <- pa { S.paraGather = b } ? e
                                  Just $ pa' { S.paraGather = gather }
 
-      matched e             = case match $ pa { S.paraExpr = e } of
+      matched e             = case pa ? e of
                                  Nothing -> False
                                  Just _  -> True
 
@@ -112,28 +114,28 @@ match pa@S.Para { S.paraBundle    = bundle
       -- { E } ( A to )    = { E } ( A - 1 to )
       -- { E } ( A to B )  = { E } ( A - 1 to B - 1 )
 
-      rep (S.Min a) e = case match $ pa { S.paraExpr = e } of
+      rep (S.Min a) e = case pa ? e of
                           Nothing  -> lower a
                           Just pa' -> next pa' $ S.min (a - 1) e
 
       rep (S.MinMax a b) e
           | b < a     = Nothing
           | b <= 0    = Just pa
-          | otherwise = case match $ pa { S.paraExpr = e } of
+          | otherwise = case pa ? e of
                            Nothing  -> lower a
                            Just pa' -> next pa' $ S.minMax (a - 1) (b - 1) e
 
       lower a | a <= 0     = Just pa
               | otherwise  = Nothing
 
-      next pa' e' | p == S.paraPos pa'  = Just pa'   -- matched but not consumed
-                  | otherwise           = match $ pa' { S.paraExpr = e' }
+      next pa' e' | pos == S.paraPos pa'  = Just pa'   -- matched but not consumed
+                  | otherwise             = pa' ? e'
 
       -- ----------------------  base
 
       base (S.EElem (S.Fn _ f)) =
           case s of
-            x : s' | f x   -> Just $ pa { S.paraPos       = p + 1
+            x : s' | f x   -> Just $ pa { S.paraPos       = pos + 1
                                         , S.paraInput     = s'
                                         , S.paraPrev      = Just x
                                         , S.paraRawOutput = output $ x : o }
@@ -141,7 +143,7 @@ match pa@S.Para { S.paraBundle    = bundle
 
       base (S.ESpan (S.Fn _ f)) =
           do (w, s') <- f s
-             Just $ pa { S.paraPos       = p + length w
+             Just $ pa { S.paraPos       = pos + length w
                        , S.paraInput     = s'
                        , S.paraPrev      = case reverse w of
                                              x : _ -> Just x
@@ -156,7 +158,7 @@ match pa@S.Para { S.paraBundle    = bundle
 
       base (S.EChange n) =
           do e' <- Map.lookup n bundle
-             match $ pa { S.paraExpr = e' }
+             pa ? e'
 
       base (S.EAlways b)       = when b
       base S.EWhat             = Nothing
