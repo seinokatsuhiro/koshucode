@@ -109,20 +109,15 @@ match pa@S.Para { S.paraBundle    = bundle
 
       -- ----------------------  repetition
 
-      -- min A E
-      --   = E ++ min (A - 1) E
-      --   | empty if A <= 0
-      --
-      -- min-max A B E
-      --   = empty if B <= 0
-      --   | E ++ min-max (A - 1) (B - 1) E
-      --   | empty if A <= 0
+      -- { E } ( A to )    = { E } ( A - 1 to )
+      -- { E } ( A to B )  = { E } ( A - 1 to B - 1 )
 
       rep (S.Min a) e = case match $ pa { S.paraExpr = e } of
                           Nothing  -> lower a
                           Just pa' -> next pa' $ S.min (a - 1) e
 
       rep (S.MinMax a b) e
+          | b < a     = Nothing
           | b <= 0    = Just pa
           | otherwise = case match $ pa { S.paraExpr = e } of
                            Nothing  -> lower a
