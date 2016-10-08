@@ -36,6 +36,8 @@
 --     Beginning of text.
 --   [ end ]
 --     End of text.
+--   [ ( E ) ]
+--     Group expression /E/.
 --
 -- == Texts
 --
@@ -96,12 +98,18 @@
 --
 -- == Repetition
 --
---   [ ( E ) ]
---     Group expression /E/.
---   [ &#x5B; E &#x5D; ]
---     Zero-or-one occurences of /E/. (Option)
 --   [ { E } ]
 --     Zero-or-more occurences of /E/. (Zero-repeat)
+--   [ { E } ( N ) ]
+--     /N/ occurences of /E/.
+--   [ { E } ( L to ) ]
+--     Repetition of /E/ with lower bound /L/.
+--   [ { E } ( to U ) ]
+--     Repetition of /E/ with upper bound /U/.
+--   [ { E } ( L to U ) ]
+--     Repetition of /E/ with lower bound /L/ and upper bound /U/.
+--   [ &#x5B; E &#x5D; ]
+--     Zero-or-one occurences of /E/. (Option)
 --   [ {- E -} ]
 --     One-or-more occurences of /E/. (One-repeat)
 --   [ E1 sep E2 ]
@@ -187,7 +195,13 @@ trimIf False t = t
 type CharBundle = T.Bundle Char
 
 pattern L tok   <- B.TreeL tok
+pattern K n     <- L (Key n)
+pattern To      <- Key "to"
+
 pattern B g xs  <- B.TreeB g _ xs
+pattern G xs    <- B S.BracketGroup xs
+pattern Empty   <- G []
+
 pattern Key  n  <- S.TTextRaw _ n
 pattern Text t  <- S.TTextQQ  _ t
 pattern Char c  <- S.TTextQQ  _ [c]
@@ -224,7 +238,7 @@ parseBundle = bundle where
 
     step1 :: [S.TTree] -> B.Ab (String, [S.TTree])
     step1 xs = case divide "=" xs of
-                 [[L (Key n)], x] -> Right (n, x)
+                 [[K n], x] -> Right (n, x)
                  _                -> unknownSyntax xs
 
     step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, T.CharExpr)
@@ -238,7 +252,7 @@ parseSubtext ns = trees False where
     -- Trees
     trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
     trees False xs              = opTop xs
-    trees True (L (Key n) : xs) = pre n xs
+    trees True (K n : xs)       = pre n xs
     trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
     trees True [L (Term n)]     = Right $ T.sub n T.what      -- /N
     trees True []               = Right T.succ                -- ()
@@ -257,23 +271,37 @@ parseSubtext ns = trees False where
     leaf x            = unknownSyntax x
 
     branch :: S.BracketType -> [S.TTree] -> B.Ab T.CharExpr
-    branch S.BracketGroup xs  = opTop xs            -- ( E )
-    branch S.BracketSet   xs  = bracket T.many  xs  -- { E }
-    branch S.BracketTie   xs  = bracket T.many1 xs  -- {- E -}
-    branch S.BracketList  xs  = bracket T.maybe xs  -- [ E ]
-    branch br             _   = unknownBracket br
+    branch S.BracketGroup   = opTop            -- ( E )
+    branch S.BracketSet     = bracket T.many   -- { E }
+    branch S.BracketTie     = bracket T.many1  -- {- E -}
+    branch S.BracketList    = bracket T.maybe  -- [ E ]
+    branch br               = const $ unknownBracket br
 
     bracket op xs = do e <- trees False xs
                        Right $ op e
 
-    many1 = Right . T.many1
+    times :: [S.TTree] -> [S.TTree] -> B.Ab T.CharExpr
+    times [ Empty , L To , Empty ] = bracket (T.many)
+    times [ K a   , L To         ] = bracket (T.min (int a))
+    times [ K a   , L To , Empty ] = bracket (T.min (int a))
+    times [         L To , K b   ] = bracket (T.max (int b))
+    times [ Empty , L To , K b   ] = bracket (T.max (int b))
+    times [ K a   , L To , K b   ] = bracket (T.minMax (int a) (int b))
+    times [ K a                  ] = bracket (T.minMax (int a) (int a))
+    times xs = const $ unknownSyntax $ show xs
+
+    int s = case B.readInt s of
+              Just n   -> n
+              Nothing  -> error "require integer"
 
     -- Infix operators
-    opTop   = opAlt
-    opAlt   = inf "|"   T.or    opSeq   -- E | E | E
-    opSeq   = inf "++"  T.seq   opOr    -- E ++ E ++ E
-    opOr    = inf "or"  T.or    opAnd   -- E or E or E
-    opAnd   = inf "and" T.and   opSep   -- E and E and E
+    opTop :: [S.TTree] -> B.Ab T.CharExpr
+    opTop [B S.BracketSet xs, G m] = times m xs
+    opTop xs = opAlt xs
+    opAlt    = inf "|"   T.or    opSeq   -- E | E | E
+    opSeq    = inf "++"  T.seq   opOr    -- E ++ E ++ E
+    opOr     = inf "or"  T.or    opAnd   -- E or E or E
+    opAnd    = inf "and" T.and   opSep   -- E and E and E
 
     inf op f g xs = Right . f =<< mapM g (divide op xs)
 
@@ -326,6 +354,8 @@ parseSubtext ns = trees False where
                                     Right e -> Right e
                                     Left n  -> unknownCategory n
     pre n _                  = unknownKeyword n
+
+    many1 = Right . T.many1
 
     keyword (L (Key s))      = Right s
     keyword x                = unknownSyntax x
