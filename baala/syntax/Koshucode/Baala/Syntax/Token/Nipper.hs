@@ -66,27 +66,27 @@ type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipWResult
 -- --------------------------------------------  Utility
 
 -- | Test character is symbolic.
-isSymbol :: B.Pred Char
+isSymbol :: B.Test Char
 isSymbol = S.isSymbolChar
 
 -- | Test character is space.
-isSpace :: B.Pred Char
+isSpace :: B.Test Char
 isSpace = Ch.isSpace
 
 -- | Test character is double-quote.
-isQQ :: B.Pred Char
+isQQ :: B.Test Char
 isQQ = ( == '"' )
 
 -- | Test character is term slash.
-isTerm :: B.Pred Char
+isTerm :: B.Test Char
 isTerm = ( == '/' )
 
 -- | Test character is content line, i.e., @\'-\'@ or @\'=\'@.
-isJudge :: B.Pred Char
+isJudge :: B.Test Char
 isJudge = ( `elem` "-=" )  -- Punctuation | Symbol
 
 -- | Test character is component of clock text.
-isClock :: B.Pred Char
+isClock :: B.Test Char
 isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
 -- --------------------------------------------  Nipper

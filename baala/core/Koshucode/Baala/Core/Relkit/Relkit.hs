@@ -38,7 +38,7 @@ data RelkitCore c
     = RelkitFull         Bool (                B.Map     [[c]] )
     | RelkitOneToMany    Bool (                B.ManyMap [c]   )
     | RelkitOneToOne     Bool (                B.Map     [c]   )
-    | RelkitPred              (                B.Pred    [c]   )
+    | RelkitPred              (                B.Test    [c]   )
 
     | RelkitAbFull       Bool ( [BodyMap c] -> B.AbMap     [[c]]   ) [RelkitBody c]
     | RelkitOneToAbMany  Bool ( [BodyMap c] -> B.AbManyMap [c]     ) [RelkitBody c]

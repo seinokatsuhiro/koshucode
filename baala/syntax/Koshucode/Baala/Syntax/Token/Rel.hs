@@ -45,7 +45,7 @@ rv :: B.Map [a]
 rv = reverse
 
 -- Punctuations
-isOpen, isClose, isGrip, isSingle, isQ, isPM :: B.Pred Char
+isOpen, isClose, isGrip, isSingle, isQ, isPM :: B.Test Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
@@ -53,10 +53,10 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
-isFigure :: B.Pred Char
+isFigure :: B.Test Char
 isFigure c     = c == '-' || Ch.isDigit c
 
-isCharCode :: B.Pred String
+isCharCode :: B.Test String
 isCharCode     = all isFigure
 
 

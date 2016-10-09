@@ -131,11 +131,11 @@ construct calc = expr where
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
-isName :: B.Pred String
+isName :: B.Test String
 isName (c:_)  = isNameFirst c
 isName _      = False
 
-isNameFirst :: B.Pred Char
+isNameFirst :: B.Test Char
 isNameFirst c = case B.majorGeneralCategory c of
                   B.UnicodeLetter     ->  True
                   B.UnicodeMark       ->  True

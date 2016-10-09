@@ -107,7 +107,7 @@ sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r
     cp   = B.codeInputPt r
 
 -- | Test string is short prefix.
-isShortPrefix :: B.Pred String
+isShortPrefix :: B.Test String
 isShortPrefix  = all Ch.isAlpha
 
 

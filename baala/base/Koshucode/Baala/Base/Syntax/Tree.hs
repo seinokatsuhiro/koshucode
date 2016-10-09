@@ -96,7 +96,7 @@ leaves (TreeL x)       = [x]
 --   >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 -- 
-undouble :: B.Pred p -> B.Map (CodeTree p a)
+undouble :: B.Test p -> B.Map (CodeTree p a)
 undouble p = loop where
     loop (TreeB n pp xs) | p n =
         case map loop xs of
@@ -123,15 +123,15 @@ data Bracket p
     | BracketClose p    -- ^ Close bracket
       deriving (Show, Eq, Ord)
 
-isNotBracket :: B.Pred (Bracket p)
+isNotBracket :: B.Test (Bracket p)
 isNotBracket (BracketNone)       = True
 isNotBracket _                   = False
 
-isOpenBracket :: B.Pred (Bracket p)
+isOpenBracket :: B.Test (Bracket p)
 isOpenBracket (BracketOpen _)    = True
 isOpenBracket _                  = False
 
-isCloseBracket :: B.Pred (Bracket p)
+isCloseBracket :: B.Test (Bracket p)
 isCloseBracket (BracketClose _)  = True
 isCloseBracket _                 = False
 
@@ -158,7 +158,7 @@ type GetBracketType p a = a -> Bracket p
 --
 bracketTable
     :: (Eq a)
-    => [(p, B.Pred a, B.Pred a)] -- ^ List of (/type/, /open/, /close/)
+    => [(p, B.Test a, B.Test a)] -- ^ List of (/type/, /open/, /close/)
     -> GetBracketType p a
 bracketTable xs = bracketType where
     bracketTypeTable = map bracketOpen xs ++ map bracketClose xs

@@ -87,21 +87,21 @@ ttDoc = dv where
 --           , TText  CodePt {..} TextRaw "|"
 --           , TText  CodePt {..} TextRaw "c" ] )
 
-splitTokensBy :: B.Pred String -> B.SplitList3e S.Token
+splitTokensBy :: B.Test String -> B.SplitList3e S.Token
 splitTokensBy p = B.splitBy p2 where
     p2 (S.TTextRaw _ x)  = p x
     p2 _ = False
 
-raw :: B.Pred String -> S.TTree -> Bool
+raw :: B.Test String -> S.TTree -> Bool
 raw p (S.TextLeafRaw _ w) = p w
 raw _ _ = False
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: B.Pred String -> B.SplitList3e S.TTree
+splitTreesBy :: B.Test String -> B.SplitList3e S.TTree
 splitTreesBy = B.splitBy . raw
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: B.Pred String -> S.TTreesTo [[S.TTree]]
+divideTreesBy :: B.Test String -> S.TTreesTo [[S.TTree]]
 divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.

@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Prelude.Class
     Named,
     named,
     Map, ManyMap,
-    Pred, Test, Test2,
+    Test, Test2,
     YesNo (..),
     Index,
     Collect,
@@ -31,9 +31,6 @@ type Map a = a -> a
 
 -- | Map from something to list of something.
 type ManyMap a = a -> [a]
-
--- | Boolean-valued function.
-type Pred a = a -> Bool
 
 -- | Boolean-valued function, also called predicate.
 type Test a = a -> Bool
