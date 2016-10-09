@@ -41,20 +41,7 @@ Please see examples or elementary book.
   (This book is written in Japanese)
 
 `koshu` is implemented using Haskell.
-Documentations of software libraries at
-
-* [koshucode-baala-base]
-* [koshucode-baala-syntax]
-* [koshucode-baala-data]
-* [koshucode-baala-core]
-* [koshucode-baala-writer]
-* [koshucode-baala-rop-flat]
-* [koshucode-baala-rop-nested]
-* [koshucode-baala-rop-cox]
-* [koshucode-baala-cop]
-* [koshucode-baala-calculator]
-* [koshucode-baala-toolkit]
-
+There is [Haddock documentation] of the software libraries.
 These libraries include Haskell modules for Koshucode.
 As an example of `koshu`, [a table of module dependencies][DIR-RANK-ALL]
 is calculated using [`dir-rank.k`][dir-rank].
@@ -69,18 +56,6 @@ There are many bugs and potentials.
 [example]:                    https://github.com/seinokatsuhiro/koshucode-example/tree/master/dictionary
 [dictionary]:                 http://shop.oreilly.com/product/9780596527983.do
 [abc-of-koshucode]:           https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
-
-[koshucode-baala-base]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
-[koshucode-baala-syntax]:     https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/
-[koshucode-baala-data]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/
-[koshucode-baala-core]:       https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
-[koshucode-baala-writer]:     https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-writer/
-[koshucode-baala-rop-flat]:   https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/
-[koshucode-baala-rop-nested]: https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-nested/
-[koshucode-baala-rop-cox]:    https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-cox/
-[koshucode-baala-cop]:        https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-cop/
-[koshucode-baala-calculator]: https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
-[koshucode-baala-toolkit]:    https://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
-
+[Haddock documentation]:      https://seinokatsuhiro.github.io/koshucode/haddock/double.html
 [DIR-RANK-ALL]:               baala/import/DIR-RANK-ALL.k
 [dir-rank]:                   baala/import/dir-rank.k
