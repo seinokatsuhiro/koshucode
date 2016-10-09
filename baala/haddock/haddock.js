@@ -41,8 +41,8 @@ var Haddock = (function ($) {
     }
 
     function prefix (name) {
-        return name + '/dist/doc/html';
-        //return 'haddock/doc';
+        return '../' + name + '/dist/doc/html';
+        //return 'doc';
     }
 
     function calcHeight () {
