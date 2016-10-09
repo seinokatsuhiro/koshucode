@@ -216,7 +216,7 @@ pkg_unreg () {
 pkg_prog=koshu-pkg.sh
 pkg_dir=`pwd | sed -n 's:\(.*/koshucode-master/baala\).*:\1:p'`
 
-pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/doc/html
+pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/haddock/doc
 pkg_doc_hackage='http://hackage.haskell.org/package/$pkg/docs'
 
 
