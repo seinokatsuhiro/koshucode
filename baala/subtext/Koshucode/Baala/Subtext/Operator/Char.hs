@@ -15,12 +15,17 @@ module Koshucode.Baala.Subtext.Operator.Char
    -- * General category
    categorySet, categoryList,
    category,
+
+   -- * Conversion
+   asLower,
+   asUpper,
  ) where
 
 import qualified Data.Char                                   as C
 import qualified Data.Set                                    as Set
 import qualified Koshucode.Baala.Subtext.Category            as S
 import qualified Koshucode.Baala.Subtext.Expr                as S
+import qualified Koshucode.Baala.Subtext.Fn                  as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Repeat     as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
@@ -83,3 +88,14 @@ category :: String -> Either String CharExpr
 category s =
     do cs <- S.categoryLookup `mapM` words s
        Right $ categorySet $ Set.unions cs
+
+
+-- --------------------------------------------  Conversion
+
+-- | Convert matched text into lower case.
+asLower :: CharExpr -> CharExpr
+asLower = S.as (S.Fn "lower" $ map C.toLower)
+
+-- | Convert matched text into upper case.
+asUpper :: CharExpr -> CharExpr
+asUpper = S.as (S.Fn "upper" $ map C.toUpper)

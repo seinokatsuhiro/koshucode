@@ -107,10 +107,14 @@
 --     Find last /E/.
 --   [ before E ]
 --     Sequence of not /E/.
---   [ E as T ]
---     Replace to text /T/ when /E/ is matched.
 --   [ stay E ]
 --     Match /E/ but input position is not changed.
+--   [ E as T ]
+--     Replace to text /T/ when /E/ is matched.
+--   [ E as lower ]
+--     Convert text to lower case when /E/ is matched.
+--   [ E as upper ]
+--     Convert text to upper case when /E/ is matched.
 --
 -- == Repetition
 --
@@ -331,10 +335,11 @@ parseSubtext ns = trees False where
                  _        -> unknownSyntax xs
 
     opAs xs = case divide "as" xs of    -- E as E
-                 [xs2, [T to]] -> do e <- trees False xs2
-                                     Right $ T.asConst to e
-                 [xs2]         -> opTo xs2
-                 _             -> unknownSyntax xs
+                 [xs2, [K "lower"]] -> Right . T.asLower    =<< trees False xs2
+                 [xs2, [K "upper"]] -> Right . T.asUpper    =<< trees False xs2
+                 [xs2, [T to]]      -> Right . T.asConst to =<< trees False xs2
+                 [xs2]              -> opTo xs2
+                 _                  -> unknownSyntax xs
 
     opTo xs = case divide "to" xs of    -- C to C
                  [[C fr], [C to]] -> Right $ T.to fr to
