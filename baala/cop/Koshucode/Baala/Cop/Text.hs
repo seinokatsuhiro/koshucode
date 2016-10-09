@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Content operators on texts.
 
 module Koshucode.Baala.Cop.Text
   ( copsText

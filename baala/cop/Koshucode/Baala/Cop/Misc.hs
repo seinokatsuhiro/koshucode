@@ -28,6 +28,7 @@ import qualified Koshucode.Baala.Cop.Message     as Msg
 --  [@type@]      Type of content.
 --
 
+-- | Content operators on miscellaneous.
 copsMisc :: (D.CContent c) => [D.Cop c]
 copsMisc =
     [ D.CopCalc  (D.copNormal   "type")    copType

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Content operators on Boolean.
 
 module Koshucode.Baala.Cop.Logic
   ( copsLogic
@@ -30,6 +30,7 @@ import qualified Koshucode.Baala.Cop.Coxhand  as H
 --  [@when@]     Inverse implication.
 --
 
+-- | Content operators on Boolean.
 copsLogic :: (D.CBool c, D.CEmpty c) => [D.Cop c]
 copsLogic =
     [ D.CopCalc  (D.copInfix    "and")     copAnd

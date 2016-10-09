@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Arithmetic content operators.
 
 module Koshucode.Baala.Cop.Arith
   ( copsArith
@@ -30,6 +30,7 @@ import qualified Koshucode.Baala.Cop.Message as Msg
 --  [@abs@]   Absolute value.
 --
 
+-- | Arithmetic content operators.
 copsArith :: (D.CContent c) => [D.Cop c]
 copsArith =
     [ D.CopCalc  (D.copPrefix "+")          copPlus1

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Operators on content order.
 
 module Koshucode.Baala.Cop.Order
   ( copsOrder
@@ -29,6 +29,7 @@ import qualified Koshucode.Baala.Cop.Message        as Msg
 --  [@>=@]    Grater than or equal.
 --
 
+-- | Oerators on content order.
 copsOrder :: (D.CBool c, Eq c, Ord c) => [D.Cop c]
 copsOrder =
     [ orderInfix     "="   (==)

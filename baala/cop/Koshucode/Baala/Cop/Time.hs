@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Content operators on clocks and times.
 
 module Koshucode.Baala.Cop.Time
   ( copsTime
@@ -27,6 +27,7 @@ import qualified Koshucode.Baala.Cop.Message as Msg
 --  [@mjd@]        Modified Jurian Day of time.
 --
 
+-- | Content operators on clocks and times.
 copsTime :: (D.CTime c, D.CDec c) => [D.Cop c]
 copsTime =
     [ D.CopCalc  (D.copNormal "add-day")    $ copTimeAdd D.timeAddDay

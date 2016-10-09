@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Content operators on types.
 
 module Koshucode.Baala.Cop.Type
   ( copsType
@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Cop.Message     as Msg
 --  [@to-text@]    Convert to text.
 --
 
+-- | Content operators on types.
 copsType :: (D.CContent c) => [D.Cop c]
 copsType =
     [ D.CopCalc  (D.copNormal "to-dec")       copToDec

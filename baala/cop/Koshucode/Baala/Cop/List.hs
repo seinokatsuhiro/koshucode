@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content operators.
+-- | Content operators on lists.
 
 module Koshucode.Baala.Cop.List
   ( copsList
@@ -38,6 +38,7 @@ import qualified Koshucode.Baala.Cop.Message     as Msg
 --  [@minus@]      Remove elements.
 --
 
+-- | Content operators on lists.
 copsList :: (D.CContent c) => [D.Cop c]
 copsList =
     [ D.CopCalc  (D.copInfix "++")              copAppend
