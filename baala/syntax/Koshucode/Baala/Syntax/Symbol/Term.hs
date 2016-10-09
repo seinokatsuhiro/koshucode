@@ -15,6 +15,8 @@ module Koshucode.Baala.Syntax.Symbol.Term
     termsP, termsN, termsPN,
   ) where
 
+import qualified Koshucode.Baala.Base   as B
+
 
 -- ----------------------  Term name
 
@@ -50,22 +52,22 @@ term n c = (n, c)
 -- ----------------------  Present or new term
 
 -- | Check present term.
-termP :: Int -> Bool
+termP :: B.Test Int
 termP = (>= 0)
 
 -- | Check new term.
-termN :: Int -> Bool
+termN :: B.Test Int
 termN = (< 0)
 
-termPN :: Int -> Int -> Bool
+termPN :: Int -> B.Test Int
 termPN p n = termP p && termN n
 
-termsP :: [Int] -> Bool
+termsP :: B.Test [Int]
 termsP = all termP
 
-termsN :: [Int] -> Bool
+termsN :: B.Test [Int]
 termsN = all termN
 
-termsPN :: [Int] -> [Int] -> Bool
+termsPN :: [Int] -> B.Test [Int]
 termsPN ps ns = termsP ps && termsN ns
 

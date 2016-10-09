@@ -34,7 +34,7 @@ type Next a = InputText -> (InputText, a)
 type AbNext a = InputText -> B.Ab (InputText, a)
 
 -- Punctuations
-isQQ, isSpace :: B.Pred Char
+isQQ, isSpace :: B.Test Char
 isQQ       = (== '"')
 isSpace    = Ch.isSpace
 
@@ -88,7 +88,7 @@ nextQQ = loop "" where
 -- >            ................ Unknown
 
 data Symbol
-    = SymbolCommon    String           -- ^ General-ordinary-numeric symbol
+    = SymbolCommon    String           -- ^ General-plain-numeric symbol
     | SymbolGeneral   String           -- ^ General symbol
     | SymbolPlain     String           -- ^ Plain symbol
     | SymbolNumeric   String           -- ^ Numeric symbol
@@ -101,7 +101,7 @@ data Symbol
 
 -- | Test symbol is general, in other words,
 --   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.
-isGeneralSymbol :: Symbol -> Bool
+isGeneralSymbol :: B.Test Symbol
 isGeneralSymbol (SymbolCommon _)   = True
 isGeneralSymbol (SymbolPlain _)    = True
 isGeneralSymbol (SymbolGeneral _)  = True
@@ -109,20 +109,20 @@ isGeneralSymbol _                  = False
 
 -- | Test symbol is plain, in other words,
 --   'SymbolCommon' or 'SymbolPlain'.
-isPlainSymbol :: Symbol -> Bool
+isPlainSymbol :: B.Test Symbol
 isPlainSymbol (SymbolCommon _)     = True
 isPlainSymbol (SymbolPlain _)      = True
 isPlainSymbol _                    = False
 
 -- | Test symbol is numeric, in other words,
 --   'SymbolCommon' or 'SymbolNumeric'.
-isNumericSymbol :: Symbol -> Bool
+isNumericSymbol :: B.Test Symbol
 isNumericSymbol (SymbolCommon _)   = True
 isNumericSymbol (SymbolNumeric _)  = True
 isNumericSymbol _                  = False
 
 -- | Test symbol is 'SymbolShort'.
-isShortSymbol :: Symbol -> Bool
+isShortSymbol :: B.Test Symbol
 isShortSymbol (SymbolShort _ _)    = True
 isShortSymbol _                    = False
 
@@ -130,27 +130,27 @@ isShortSymbol _                    = False
 -- ----------------------  Char test
 
 -- | Test character is a symbol component.
-isSymbolChar :: Char -> Bool
+isSymbolChar :: B.Test Char
 isSymbolChar c = isGeneralChar c || isNumericChar c
 
 -- | Test character is a general-symbol component.
-isGeneralChar :: Char -> Bool
+isGeneralChar :: B.Test Char
 isGeneralChar = isCharG'
 
 -- | Test character is a plain-symbol component.
-isPlainChar :: Char -> Bool
+isPlainChar :: B.Test Char
 isPlainChar = isCharP'
 
 -- | Test character is a numeric-symbol component.
-isNumericChar :: Char -> Bool
+isNumericChar :: B.Test Char
 isNumericChar = isCharN'
 
-isCharGpn, isCharDigit, isCharHyphen :: Char -> Bool
+isCharGpn, isCharDigit, isCharHyphen :: B.Test Char
 isCharGpn    c  = isCharDigit c || isCharHyphen c
 isCharDigit  c  = c >= '0' && c <= '9'
 isCharHyphen c  = c == '-'
 
-isCharGp :: Char -> Bool
+isCharGp :: B.Test Char
 isCharGp c =
     case B.majorGeneralCategory c of
       B.UnicodeLetter    -> True
@@ -158,12 +158,12 @@ isCharGp c =
       B.UnicodeNumber    -> True      -- include isCharDigit
       _                  -> c == '_' || c == '?'
 
-isCharGn, isCharG, isCharN :: Char -> Bool
+isCharGn, isCharG, isCharN :: B.Test Char
 isCharGn c   = c == '+'
 isCharG  c   = c `elem` "*=<>~"
 isCharN  c   = c == '.' || c == '#'
 
-isCharGp', isCharP', isCharGn', isCharG', isCharN' :: Char -> Bool
+isCharGp', isCharP', isCharGn', isCharG', isCharN' :: B.Test Char
 isCharGp' c  = isCharGp  c || isCharHyphen c
 isCharP'     = isCharGp'
 isCharGn' c  = isCharGpn c || isCharGn c
