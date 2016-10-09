@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.158.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.160.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -73,7 +73,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Ord</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitTable"
 	    >RelkitTable</a
-	    > c -&gt; Map (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#relkitLink');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -87,11 +89,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >forall</span
 	    > h c. (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c, CRel c, SelectRel h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Local"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Rel.html#t:SelectRel"
+	    >SelectRel</a
+	    > h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Local"
 	    >Local</a
 	    > [[c]]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
 	    >RelkitBody</a
-	    > c -&gt; AbMap [[c]] <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#relkitRun');" href="javascript:void(0);" class="link"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > [[c]] <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#relkitRun');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -101,7 +109,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >fixedRelation</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; Map (AbMap [[c]]) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#fixedRelation');" href="javascript:void(0);" class="link"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > [[c]]) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#fixedRelation');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -109,7 +121,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:bmapAlign" class="def"
 	    >bmapAlign</a
-	    > :: Head -&gt; Head -&gt; Map (AbMap [[c]]) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#bmapAlign');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > [[c]]) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#bmapAlign');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

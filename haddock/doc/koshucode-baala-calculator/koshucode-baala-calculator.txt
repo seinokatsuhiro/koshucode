@@ -9,7 +9,7 @@
 --   <a>koshu</a> command. <a>koshu</a> reads koshucode data, calculates
 --   it, and writes the result.
 @package koshucode-baala-calculator
-@version 0.158.0.0
+@version 0.160.0.0
 
 module Koshucode.Baala.Toolkit.Library.Version
 version :: Version

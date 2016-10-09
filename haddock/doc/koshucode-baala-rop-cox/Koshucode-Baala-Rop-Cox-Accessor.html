@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.158.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.160.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -77,35 +77,133 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><li class="src short"
 	  ><a href="#v:ropsCoxAccessor"
 	    >ropsCoxAccessor</a
-	    > :: CContent c =&gt; [Rop c]</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:relmapClock"
 	    >relmapClock</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c))) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitClock"
 	    >relkitClock</a
-	    > :: CContent c =&gt; (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -&gt; RelkitFlow c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c))) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapClockGet"
 	    >relmapClockGet</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, Cox c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > TermName]) -&gt; Relmap c</li
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitClockGet"
 	    >relkitClockGet</a
-	    > :: CContent c =&gt; (CopSet c, Cox c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > TermName]) -&gt; RelkitFlow c</li
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapClockAlter"
 	    >relmapClockAlter</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c)) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitClockAlter"
 	    >relkitClockAlter</a
-	    > :: CContent c =&gt; (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -&gt; RelkitFlow c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c)) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -115,7 +213,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:ropsCoxAccessor" class="def"
 	    >ropsCoxAccessor</a
-	    > :: CContent c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#ropsCoxAccessor');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#ropsCoxAccessor');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -129,7 +231,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relmapClock" class="def"
 	    >relmapClock</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClock');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c))) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClock');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -137,7 +259,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relkitClock" class="def"
 	    >relkitClock</a
-	    > :: CContent c =&gt; (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClock');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c))) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClock');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -147,9 +287,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relmapClockGet" class="def"
 	    >relmapClockGet</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, Cox c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > TermName]) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClockGet');" href="javascript:void(0);" class="link"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClockGet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -157,9 +309,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relkitClockGet" class="def"
 	    >relkitClockGet</a
-	    > :: CContent c =&gt; (CopSet c, Cox c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c, [<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > TermName]) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClockGet');" href="javascript:void(0);" class="link"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClockGet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -169,7 +331,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relmapClockAlter" class="def"
 	    >relmapClockAlter</a
-	    > :: CContent c =&gt; Intmed c -&gt; (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClockAlter');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c)) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relmapClockAlter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -177,7 +357,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:relkitClockAlter" class="def"
 	    >relkitClockAlter</a
-	    > :: CContent c =&gt; (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClockAlter');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:MaybeCox"
+	    >MaybeCox</a
+	    > c)) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Accessor.html#relkitClockAlter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

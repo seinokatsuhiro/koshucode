@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -127,8 +127,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Expr</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:peek"
-	    >peek</a
+	  ><a href="#v:stay"
+	    >stay</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
 	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
@@ -166,6 +166,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:as"
+	    >as</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:FnAs"
+	    >FnAs</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:asConst"
+	    >asConst</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
 	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -236,7 +254,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Inverted condition.</p
+	    >Inverted condition.
+   If expression is zero-repeatable, stirp off the repeatition operator,
+   because zero-repetition can be matched any input.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -275,13 +295,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	>Variation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:peek" class="def"
-	    >peek</a
+	  ><a name="v:stay" class="def"
+	    >stay</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
 	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#peek');" href="javascript:void(0);" class="link"
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#stay');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -355,6 +375,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><div class="doc"
 	  ><p
 	    >Named submatch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:as" class="def"
+	    >as</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:FnAs"
+	    >FnAs</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#as');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Match with modification.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:asConst" class="def"
+	    >asConst</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#asConst');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Replace to given sequence.</p
 	    ></div
 	  ></div
 	></div

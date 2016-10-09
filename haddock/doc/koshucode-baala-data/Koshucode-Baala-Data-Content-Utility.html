@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.160.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,7 +81,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Ord</a
 	    > c, <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
 	    >Show</a
-	    > c, MixShortEncode c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixEncode.html#t:MixShortEncode"
+	    >MixShortEncode</a
+	    > c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CEmpty"
 	    >CEmpty</a
@@ -121,11 +123,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><li
 	      ><a href="#v:appendContent"
 		>appendContent</a
-		> :: c -&gt; c -&gt; Ab c</li
+		> :: c -&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> c</li
 	      ><li
 	      ><a href="#v:joinContent"
 		>joinContent</a
-		> :: [c] -&gt; Ab c</li
+		> :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> c</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -203,9 +209,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >contApTextToText</a
 	    > :: <a href="Koshucode-Baala-Data-Content-Simple.html#t:CText"
 	    >CText</a
-	    > c =&gt; Map <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; AbMap c</li
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:contMapTextToList"
 	    >contMapTextToList</a
@@ -215,7 +225,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >CText</a
 	    > c) =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
-	    > -&gt; c) -&gt; AbMap c</li
+	    > -&gt; c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:judgeContString"
 	    >judgeContString</a
@@ -239,11 +251,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:mixBracketList"
 	    >mixBracketList</a
-	    > :: MixText -&gt; MixText</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mixBracketSet"
 	    >mixBracketSet</a
-	    > :: MixText -&gt; MixText</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:contMinimum"
 	    >contMinimum</a
@@ -303,7 +323,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Ord</a
 	    > c, <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
 	    >Show</a
-	    > c, MixShortEncode c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixEncode.html#t:MixShortEncode"
+	    >MixShortEncode</a
+	    > c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c, <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CEmpty"
 	    >CEmpty</a
@@ -356,13 +378,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:appendContent" class="def"
 	      >appendContent</a
-	      > :: c -&gt; c -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#appendContent');" href="javascript:void(0);" class="link"
+	      > :: c -&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#appendContent');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:joinContent" class="def"
 	      >joinContent</a
-	      > :: [c] -&gt; Ab c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#joinContent');" href="javascript:void(0);" class="link"
+	      > :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#joinContent');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -553,9 +579,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >contApTextToText</a
 	    > :: <a href="Koshucode-Baala-Data-Content-Simple.html#t:CText"
 	    >CText</a
-	    > c =&gt; Map <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; AbMap c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contApTextToText');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contApTextToText');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -569,7 +599,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >CText</a
 	    > c) =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
-	    > -&gt; c) -&gt; AbMap c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contMapTextToList');" href="javascript:void(0);" class="link"
+	    > -&gt; c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contMapTextToList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -609,7 +641,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:mixBracketList" class="def"
 	    >mixBracketList</a
-	    > :: MixText -&gt; MixText <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#mixBracketList');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#mixBracketList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -617,7 +653,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:mixBracketSet" class="def"
 	    >mixBracketSet</a
-	    > :: MixText -&gt; MixText <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#mixBracketSet');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#mixBracketSet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

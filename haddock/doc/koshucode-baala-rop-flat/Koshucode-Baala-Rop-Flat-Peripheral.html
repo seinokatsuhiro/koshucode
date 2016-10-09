@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.160.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -85,57 +85,147 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><li class="src short"
 	  ><a href="#v:ropsPeripheral"
 	    >ropsPeripheral</a
-	    > :: CContent c =&gt; [Rop c]</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:consRdf"
 	    >consRdf</a
-	    > :: RopCons c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consTie"
 	    >consTie</a
-	    > :: CTie c =&gt; RopCons c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapTie"
 	    >relmapTie</a
-	    > :: CTie c =&gt; Intmed c -&gt; ([TermName], TermName) -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitTie"
 	    >relkitTie</a
-	    > :: CTie c =&gt; ([TermName], TermName) -&gt; RelkitFlow c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consUntie"
 	    >consUntie</a
-	    > :: CTie c =&gt; RopCons c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapUntie"
 	    >relmapUntie</a
-	    > :: CTie c =&gt; Intmed c -&gt; (TermName, [TermName]) -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitUntie"
 	    >relkitUntie</a
-	    > :: CTie c =&gt; (TermName, [TermName]) -&gt; RelkitFlow c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consTermName"
 	    >consTermName</a
-	    > :: CTerm c =&gt; RopCons c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapTermName"
 	    >relmapTermName</a
-	    > :: CTerm c =&gt; Intmed c -&gt; TermName -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitTermName"
 	    >relkitTermName</a
-	    > :: CTerm c =&gt; TermName -&gt; RelkitFlow c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapToday"
 	    >relmapToday</a
-	    > :: CTime c =&gt; Intmed c -&gt; (TermName, Time) -&gt; Relmap c</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTime"
+	    >CTime</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitToday"
 	    >relkitToday</a
-	    > :: CTime c =&gt; (TermName, Time) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTime"
+	    >CTime</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > Head -&gt; Ab (Relkit c)</li
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -145,7 +235,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:ropsPeripheral" class="def"
 	    >ropsPeripheral</a
-	    > :: CContent c =&gt; [Rop c] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#ropsPeripheral');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#ropsPeripheral');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -159,7 +253,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:consRdf" class="def"
 	    >consRdf</a
-	    > :: RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consRdf');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consRdf');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -169,7 +265,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:consTie" class="def"
 	    >consTie</a
-	    > :: CTie c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consTie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -177,7 +277,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relmapTie" class="def"
 	    >relmapTie</a
-	    > :: CTie c =&gt; Intmed c -&gt; ([TermName], TermName) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapTie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -185,7 +295,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relkitTie" class="def"
 	    >relkitTie</a
-	    > :: CTie c =&gt; ([TermName], TermName) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitTie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -195,7 +313,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:consUntie" class="def"
 	    >consUntie</a
-	    > :: CTie c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consUntie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consUntie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -203,7 +325,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relmapUntie" class="def"
 	    >relmapUntie</a
-	    > :: CTie c =&gt; Intmed c -&gt; (TermName, [TermName]) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapUntie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapUntie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -211,7 +343,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relkitUntie" class="def"
 	    >relkitUntie</a
-	    > :: CTie c =&gt; (TermName, [TermName]) -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitUntie');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+	    >CTie</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitUntie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -221,7 +361,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:consTermName" class="def"
 	    >consTermName</a
-	    > :: CTerm c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consTermName');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#consTermName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -229,7 +373,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relmapTermName" class="def"
 	    >relmapTermName</a
-	    > :: CTerm c =&gt; Intmed c -&gt; TermName -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapTermName');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapTermName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -237,7 +389,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relkitTermName" class="def"
 	    >relkitTermName</a
-	    > :: CTerm c =&gt; TermName -&gt; RelkitFlow c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitTermName');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitTermName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -247,7 +405,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relmapToday" class="def"
 	    >relmapToday</a
-	    > :: CTime c =&gt; Intmed c -&gt; (TermName, Time) -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapToday');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTime"
+	    >CTime</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relmapToday');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -255,9 +423,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relkitToday" class="def"
 	    >relkitToday</a
-	    > :: CTime c =&gt; (TermName, Time) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CTime"
+	    >CTime</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > Head -&gt; Ab (Relkit c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitToday');" href="javascript:void(0);" class="link"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Peripheral.html#relkitToday');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

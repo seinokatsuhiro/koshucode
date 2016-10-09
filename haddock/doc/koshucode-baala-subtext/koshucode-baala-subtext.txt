@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.158.0.0
+@version 0.160.0.0
 
 
 -- | Text name.
@@ -55,17 +55,40 @@ module Koshucode.Baala.Subtext.MinMax
 -- | Lower and upper bound.
 data MinMax
 
--- | Lower bound
+-- | Lower bound and unlimited upper bound
 Min :: Int -> MinMax
 
 -- | Lower and upper bound
 MinMax :: Int -> Int -> MinMax
 
 -- | Test lower bound.
+--   
+--   <pre>
+--   &gt;&gt;&gt; atLeast 1 $ Min 0
+--   False
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; atLeast 1 $ Min 1
+--   True
+--   </pre>
 atLeast :: Int -> MinMax -> Bool
 
 -- | Test upper bound.
 atMost :: Int -> MinMax -> Bool
+
+-- | Compose nested min-max.
+--   
+--   <pre>
+--   &gt;&gt;&gt; MinMax 2 4 `times` MinMax 3 5
+--   MinMax 6 20
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; MinMax 2 4 `times` Min 3
+--   Min 6
+--   </pre>
+times :: MinMax -> MinMax -> MinMax
 instance GHC.Classes.Ord Koshucode.Baala.Subtext.MinMax.MinMax
 instance GHC.Classes.Eq Koshucode.Baala.Subtext.MinMax.MinMax
 instance GHC.Show.Show Koshucode.Baala.Subtext.MinMax.MinMax
@@ -130,11 +153,11 @@ ELast :: (Expr a) -> ExprRec a
 -- | Submatch
 ESub :: Name -> (Expr a) -> ExprRec a
 
+-- | Modification matcher
+EAs :: (FnAs a) -> (Expr a) -> ExprRec a
+
 -- | Change gathering setting
 EGath :: Bool -> (Expr a) -> ExprRec a
-
--- | Match but not consume input
-EPeek :: (Expr a) -> ExprRec a
 
 -- | Non-recursive expression.
 data ExprBase a
@@ -165,12 +188,15 @@ type FnSpan a = Fn [a] (Maybe ([a], [a]))
 
 -- | Function type for inter-element matcher.
 type FnInter a = Fn2 (Maybe a) (Maybe a) Bool
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprRec a)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprRec a)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprRec a)
+
+-- | Function type for modification matcher.
+type FnAs a = Fn [a] [a]
 instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.Expr a)
 instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.Expr a)
 instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.Expr a)
+instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprRec a)
+instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprRec a)
+instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprRec a)
 instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Expr.ExprBase a)
 instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Expr.ExprBase a)
 instance GHC.Show.Show (Koshucode.Baala.Subtext.Expr.ExprBase a)
@@ -234,7 +260,9 @@ seq :: [Expr a] -> Expr a
 -- | Additional condition.
 and :: [Expr a] -> Expr a
 
--- | Inverted condition.
+-- | Inverted condition. If expression is zero-repeatable, stirp off the
+--   repeatition operator, because zero-repetition can be matched any
+--   input.
 not :: Expr a -> Expr a
 
 -- | Find last match.
@@ -244,7 +272,7 @@ last :: Expr a -> Expr a
 anyNot :: Expr a -> Expr a
 
 -- | Match but stay.
-peek :: Expr a -> Expr a
+stay :: Expr a -> Expr a
 
 -- | Turn off gathering match.
 skip :: Expr a -> Expr a
@@ -258,9 +286,24 @@ sub :: Name -> Expr a -> Expr a
 -- | Named submatch.
 (#) :: Name -> Expr a -> Expr a
 
+-- | Match with modification.
+as :: FnAs a -> Expr a -> Expr a
+
+-- | Replace to given sequence.
+asConst :: [a] -> Expr a -> Expr a
+
 
 -- | Repetitive operators.
 module Koshucode.Baala.Subtext.Operator.Repeat
+
+-- | Repetition with min-max parameter.
+repeat :: MinMax -> Expr a -> Expr a
+
+-- | Extract min-max parameter.
+repeatTimes :: Expr a -> Maybe MinMax
+
+-- | Extract internal expression.
+repeatExpr :: Expr a -> Maybe (Expr a)
 
 -- | Repetition with lower bound.
 min :: Int -> Expr a -> Expr a
@@ -280,6 +323,9 @@ many1 :: Expr a -> Expr a
 -- | Match zero or one times.
 maybe :: Expr a -> Expr a
 
+-- | Many of any.
+anySeq :: Expr a
+
 -- | Match before given expression.
 before :: Expr a -> Expr a
 
@@ -287,29 +333,107 @@ before :: Expr a -> Expr a
 sep :: Expr a -> Expr a -> Expr a
 
 
+-- | Unicode general category.
+module Koshucode.Baala.Subtext.Category
+
+-- | List of letter categories (L).
+categoryLetter :: [GeneralCategory]
+
+-- | List of mark categories (M).
+categoryMark :: [GeneralCategory]
+
+-- | List of number categories (N).
+categoryNumber :: [GeneralCategory]
+
+-- | List of punctuation categories (P).
+categoryPunctuation :: [GeneralCategory]
+
+-- | List of symbol categories (S).
+categorySymbol :: [GeneralCategory]
+
+-- | List of separator categories (Z).
+categorySeparator :: [GeneralCategory]
+
+-- | List of other categories (C).
+categoryOther :: [GeneralCategory]
+
+-- | List of alphabetic categories (L + M).
+categoryAlpha :: [GeneralCategory]
+
+-- | List of textual-sign categories (P + S).
+categorySign :: [GeneralCategory]
+
+-- | List of open brackets (Ps + Pi).
+categoryOpen :: [GeneralCategory]
+
+-- | List of close brackets (Pe + Pf).
+categoryClose :: [GeneralCategory]
+
+-- | Lookup unicode general categories by its short name. Short name means
+--   two-letter category name (e.g., <tt>"lu"</tt> for upper case letter,
+--   <tt>"zs"</tt> for space), or one-letter category group (e.g.,
+--   <tt>"l"</tt> for letter, <tt>"z"</tt> for separator).
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "lu"
+--   Right (fromList [UppercaseLetter])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "n"
+--   Right (fromList [DecimalNumber, LetterNumber, OtherNumber])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "lx"
+--   Left "lx"
+--   </pre>
+categoryLookup :: String -> Either String (Set GeneralCategory)
+
+
 -- | Operators for text match.
 module Koshucode.Baala.Subtext.Operator.Char
 
+-- | Subtext expression for character input.
+type CharExpr = Expr Char
+
 -- | Match some character in a list of characters.
-char :: [Char] -> Expr Char
+char :: [Char] -> CharExpr
 
 -- | Match some word in a list of words from space-separated string.
-word :: String -> Expr Char
+word :: String -> CharExpr
 
 -- | Match space character.
-space :: Expr Char
+space :: CharExpr
 
 -- | Match zero-or-more space characters.
-spaces :: Expr Char
+spaces :: CharExpr
 
 -- | Match one-or-more space characters.
-spaces1 :: Expr Char
+spaces1 :: CharExpr
 
 -- | Match digit characters.
-digit :: Expr Char
+digit :: CharExpr
 
 -- | Match letter characters.
-letter :: Expr Char
+letter :: CharExpr
+
+-- | Match first 128 characters of Unicode character set.
+ascii :: CharExpr
+
+-- | Match first 256 characters of Unicode character set.
+latin1 :: CharExpr
+
+-- | Test unicode general category with category set.
+categorySet :: Set GeneralCategory -> CharExpr
+
+-- | Test unicode general category with category list.
+categoryList :: [GeneralCategory] -> CharExpr
+
+-- | Test unicode general category with short names. The argument string is
+--   space-separated names. If unknown name is given, returns the name in
+--   <a>Left</a> data.
+category :: String -> Either String CharExpr
 
 
 -- | Match operators.

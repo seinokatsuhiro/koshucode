@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.158.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.160.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -73,71 +73,107 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><li class="src short"
 	  ><a href="#v:getCox"
 	    >getCox</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (Cox c)</li
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:getMaybeCox"
 	    >getMaybeCox</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > (Cox c))</li
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c))</li
 	  ><li class="src short"
 	  ><a href="#v:getOptionCox"
 	    >getOptionCox</a
-	    > :: CContent c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (Cox c)</li
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:getTermCoxes"
 	    >getTermCoxes</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c [NamedCox c]</li
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:getNamedCoxes"
 	    >getNamedCoxes</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c [NamedCox c]</li
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:getWhere"
 	    >getWhere</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (CopSet c)</li
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:getContent"
 	    >getContent</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getContents"
 	    >getContents</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c [c]</li
 	  ><li class="src short"
 	  ><a href="#v:getOptContent"
 	    >getOptContent</a
-	    > :: CContent c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getFiller"
 	    >getFiller</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getInt"
 	    >getInt</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c DecimalInteger</li
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -147,9 +183,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getCox" class="def"
 	    >getCox</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (Cox c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getCox');" href="javascript:void(0);" class="link"
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -161,11 +201,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getMaybeCox" class="def"
 	    >getMaybeCox</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > (Cox c)) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getMaybeCox');" href="javascript:void(0);" class="link"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getMaybeCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -173,9 +217,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getOptionCox" class="def"
 	    >getOptionCox</a
-	    > :: CContent c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (Cox c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getOptionCox');" href="javascript:void(0);" class="link"
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getOptionCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -183,9 +231,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getTermCoxes" class="def"
 	    >getTermCoxes</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c [NamedCox c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getTermCoxes');" href="javascript:void(0);" class="link"
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getTermCoxes');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -197,9 +249,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getNamedCoxes" class="def"
 	    >getNamedCoxes</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c [NamedCox c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getNamedCoxes');" href="javascript:void(0);" class="link"
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:NamedCox"
+	    >NamedCox</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getNamedCoxes');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -211,9 +267,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getWhere" class="def"
 	    >getWhere</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c (CopSet c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getWhere');" href="javascript:void(0);" class="link"
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getWhere');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -223,7 +283,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getContent" class="def"
 	    >getContent</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getContent');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -237,7 +299,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getContents" class="def"
 	    >getContents</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c [c] <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getContents');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -251,7 +315,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getOptContent" class="def"
 	    >getOptContent</a
-	    > :: CContent c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getOptContent');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -265,7 +331,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getFiller" class="def"
 	    >getFiller</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getFiller');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -279,9 +347,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><p class="src"
 	  ><a name="v:getInt" class="def"
 	    >getInt</a
-	    > :: CContent c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-rop-flat/Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
-	    > c DecimalInteger <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getInt');" href="javascript:void(0);" class="link"
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Decimal-Decimal.html#t:DecimalInteger"
+	    >DecimalInteger</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Get.html#getInt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

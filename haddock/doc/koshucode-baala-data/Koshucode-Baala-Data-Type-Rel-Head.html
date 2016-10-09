@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.158.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.160.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -125,7 +125,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><li class="src short"
 	  ><a href="#v:headFrom"
 	    >headFrom</a
-	    > :: [TermName] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
@@ -171,7 +173,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >headNested</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [(TermName, <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > -&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    >)]</li
 	  ><li class="src short"
@@ -179,7 +183,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >headIndex1</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; TermPath -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
 	  ><li class="src short"
@@ -193,47 +199,75 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><li class="src short"
 	  ><a href="#v:headCons"
 	    >headCons</a
-	    > :: TermName -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headAppend"
 	    >headAppend</a
-	    > :: [TermName] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headConsNest"
 	    >headConsNest</a
-	    > :: TermName -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headNests"
 	    >headNests</a
-	    > :: [TermName] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headMap"
 	    >headMap</a
-	    > :: Map [<a href="Koshucode-Baala-Data-Type-Type.html#t:NamedType"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Data-Type-Type.html#t:NamedType"
 	    >NamedType</a
-	    >] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headMapName"
 	    >headMapName</a
-	    > :: Map TermName -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headUp"
 	    >headUp</a
-	    > :: Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    ></li
 	  ><li class="src short"
@@ -243,7 +277,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Head</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; Map [[c]]</li
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [[c]]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -360,7 +396,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    >MixEncode <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-MixEncode.html#t:MixEncode"
+		      >MixEncode</a
+		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
 		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-60');" href="javascript:void(0);" class="link"
@@ -436,7 +474,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headFrom" class="def"
 	    >headFrom</a
-	    > :: [TermName] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headFrom');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -572,7 +612,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >headNested</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [(TermName, <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > -&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    >)] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headNested');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -588,7 +630,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >headIndex1</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; TermPath -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
+	    >TermPath</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headIndex1');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -642,7 +686,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headCons" class="def"
 	    >headCons</a
-	    > :: TermName -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headCons');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -656,7 +704,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headAppend" class="def"
 	    >headAppend</a
-	    > :: [TermName] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headAppend');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -670,9 +722,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headConsNest" class="def"
 	    >headConsNest</a
-	    > :: TermName -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headConsNest');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -682,7 +738,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headNests" class="def"
 	    >headNests</a
-	    > :: [TermName] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headNests');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -714,9 +774,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headMap" class="def"
 	    >headMap</a
-	    > :: Map [<a href="Koshucode-Baala-Data-Type-Type.html#t:NamedType"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Data-Type-Type.html#t:NamedType"
 	    >NamedType</a
-	    >] -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headMap');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -730,7 +794,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headMapName" class="def"
 	    >headMapName</a
-	    > :: Map TermName -&gt; Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headMapName');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -740,7 +810,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:headUp" class="def"
 	    >headUp</a
-	    > :: Map <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headUp');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -758,7 +830,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Head</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; Map [[c]] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#bodyAlign');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [[c]] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#bodyAlign');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

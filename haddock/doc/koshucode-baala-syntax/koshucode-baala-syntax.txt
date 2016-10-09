@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.158.0.0
+@version 0.160.0.0
 
 module Koshucode.Baala.Syntax.Symbol.Term
 

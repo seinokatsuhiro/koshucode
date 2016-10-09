@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.158.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.160.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -73,31 +73,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><li class="src short"
 	  ><a href="#v:abOption"
 	    >abOption</a
-	    > :: TTreesTo (Map (Ab b))</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTreesTo"
+	    >TTreesTo</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b))</li
 	  ><li class="src short"
 	  ><a href="#v:abRelmap"
 	    >abRelmap</a
-	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b)</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)</li
 	  ><li class="src short"
 	  ><a href="#v:abSpecialize"
 	    >abSpecialize</a
-	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b)</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)</li
 	  ><li class="src short"
 	  ><a href="#v:unkNestVar"
 	    >unkNestVar</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [Token] -&gt; [((Token, Local <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [((<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Local"
+	    >Local</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    >), Head)] -&gt; Ab a</li
+	    >), <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    >)] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
 	  ><li class="src short"
 	  ><a href="#v:disabledInputClause"
 	    >disabledInputClause</a
-	    > :: Ab b</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b</li
 	  ><li class="src short"
 	  ><a href="#v:disabledOutputClause"
 	    >disabledOutputClause</a
-	    > :: Ab b</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -107,7 +139,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:abOption" class="def"
 	    >abOption</a
-	    > :: TTreesTo (Map (Ab b)) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abOption');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTreesTo"
+	    >TTreesTo</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abOption');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -115,7 +153,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:abRelmap" class="def"
 	    >abRelmap</a
-	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abRelmap');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abRelmap');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -123,7 +167,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:abSpecialize" class="def"
 	    >abSpecialize</a
-	    > :: CodePtr cp =&gt; [cp] -&gt; Map (Ab b) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abSpecialize');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#abSpecialize');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -135,9 +185,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >unkNestVar</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [Token] -&gt; [((Token, Local <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [((<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Local"
+	    >Local</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    >), Head)] -&gt; Ab a <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#unkNestVar');" href="javascript:void(0);" class="link"
+	    >), <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    >)] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#unkNestVar');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -145,7 +205,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:disabledInputClause" class="def"
 	    >disabledInputClause</a
-	    > :: Ab b <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#disabledInputClause');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#disabledInputClause');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -157,7 +219,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:disabledOutputClause" class="def"
 	    >disabledOutputClause</a
-	    > :: Ab b <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#disabledOutputClause');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Message.html#disabledOutputClause');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

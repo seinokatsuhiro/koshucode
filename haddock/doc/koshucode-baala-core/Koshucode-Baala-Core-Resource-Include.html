@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.158.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.160.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -69,19 +69,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >resInclude</a
 	    > :: <span class="keyword"
 	    >forall</span
-	    > c. CContent c =&gt; [Token] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
 	    >Resource</a
-	    > c -&gt; NIOPoint -&gt; Bz -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:AbResource"
 	    >AbResource</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:coxBuildG"
 	    >coxBuildG</a
-	    > :: CContent c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c -&gt; TTreeToAb (Cox c)</li
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -100,13 +114,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: CContent c</td
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+		  >CContent</a
+		  > c</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; [Token]</td
+		>=&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+		  >Token</a
+		  >]</td
 		><td class="doc"
 		><p
 		  >Additional terms</p
@@ -134,7 +152,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; NIOPoint</td
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+		  >NIOPoint</a
+		  ></td
 		><td class="doc"
 		><p
 		  >Input point</p
@@ -142,7 +162,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; Bz</td
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		  >Bz</a
+		  ></td
 		><td class="doc"
 		><p
 		  >Source code</p
@@ -169,9 +191,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:coxBuildG" class="def"
 	    >coxBuildG</a
-	    > :: CContent c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c -&gt; TTreeToAb (Cox c) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Include.html#coxBuildG');" href="javascript:void(0);" class="link"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Include.html#coxBuildG');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

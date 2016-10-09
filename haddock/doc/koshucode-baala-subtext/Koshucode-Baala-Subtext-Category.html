@@ -1,0 +1,395 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Subtext.Category</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('subtext', 'koshucode-baala-subtext', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtext-Category.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Subtext.Category</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Category group</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Category lookup</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Unicode general category.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:categoryLetter"
+	    >categoryLetter</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryMark"
+	    >categoryMark</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryNumber"
+	    >categoryNumber</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryPunctuation"
+	    >categoryPunctuation</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categorySymbol"
+	    >categorySymbol</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categorySeparator"
+	    >categorySeparator</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryOther"
+	    >categoryOther</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryAlpha"
+	    >categoryAlpha</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categorySign"
+	    >categorySign</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryOpen"
+	    >categoryOpen</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryClose"
+	    >categoryClose</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:categoryLookup"
+	    >categoryLookup</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > (<a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+	    >Set</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Category group</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryLetter" class="def"
+	    >categoryLetter</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryLetter');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of letter categories (L).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryMark" class="def"
+	    >categoryMark</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryMark');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of mark categories (M).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryNumber" class="def"
+	    >categoryNumber</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryNumber');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of number categories (N).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryPunctuation" class="def"
+	    >categoryPunctuation</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryPunctuation');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of punctuation categories (P).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categorySymbol" class="def"
+	    >categorySymbol</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categorySymbol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of symbol categories (S).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categorySeparator" class="def"
+	    >categorySeparator</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categorySeparator');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of separator categories (Z).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryOther" class="def"
+	    >categoryOther</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryOther');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of other categories (C).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryAlpha" class="def"
+	    >categoryAlpha</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryAlpha');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of alphabetic categories (L + M).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categorySign" class="def"
+	    >categorySign</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categorySign');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of textual-sign categories (P + S).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryOpen" class="def"
+	    >categoryOpen</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryOpen');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of open brackets (Ps + Pi).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryClose" class="def"
+	    >categoryClose</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryClose');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of close brackets (Pe + Pf).</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Category lookup</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryLookup" class="def"
+	    >categoryLookup</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > (<a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+	    >Set</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Subtext-Category.html#categoryLookup');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lookup unicode general categories by its short name.
+   Short name means two-letter category name
+   (e.g., <code
+	      >&quot;lu&quot;</code
+	      > for upper case letter, <code
+	      >&quot;zs&quot;</code
+	      > for space), or
+   one-letter category group (e.g., <code
+	      >&quot;l&quot;</code
+	      > for letter, <code
+	      >&quot;z&quot;</code
+	      > for separator).</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>categoryLookup &quot;lu&quot;
+</code
+		></strong
+	      >Right (fromList [UppercaseLetter])
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>categoryLookup &quot;n&quot;
+</code
+		></strong
+	      >Right (fromList [DecimalNumber, LetterNumber, OtherNumber])
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>categoryLookup &quot;lx&quot;
+</code
+		></strong
+	      >Left &quot;lx&quot;
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

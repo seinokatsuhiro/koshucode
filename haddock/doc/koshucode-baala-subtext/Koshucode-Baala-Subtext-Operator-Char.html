@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><ul
 	><li
 	  ><a href="#g:1"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
 	    >Character</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >General category</a
 	    ></li
 	  ></ul
 	></div
@@ -75,69 +83,127 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CharExpr"
+	    >CharExpr</a
+	    > = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:char"
 	    >char</a
 	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
-	    >] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:word"
 	    >word</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:space"
 	    >space</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:spaces"
 	    >spaces</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:spaces1"
 	    >spaces1</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:digit"
 	    >digit</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:letter"
 	    >letter</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ascii"
+	    >ascii</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:latin1"
+	    >latin1</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:categorySet"
+	    >categorySet</a
+	    > :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+	    >Set</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:categoryList"
+	    >categoryList</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:category"
+	    >category</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CharExpr" class="def"
+	    >CharExpr</a
+	    > = <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#CharExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Subtext expression for character input.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
 	>Character</h1
 	><div class="top"
 	><p class="src"
@@ -145,10 +211,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >char</a
 	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
-	    >] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#char');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -163,10 +227,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >word</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#word');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -179,10 +241,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:space" class="def"
 	    >space</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#space');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -195,10 +255,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:spaces" class="def"
 	    >spaces</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -211,10 +269,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:spaces1" class="def"
 	    >spaces1</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#spaces1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -227,10 +283,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:digit" class="def"
 	    >digit</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#digit');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -243,16 +297,104 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:letter" class="def"
 	    >letter</a
-	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
-	    >Expr</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
-	    >Char</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#letter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Match letter characters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ascii" class="def"
+	    >ascii</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#ascii');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Match first 128 characters of Unicode character set.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:latin1" class="def"
+	    >latin1</a
+	    > :: <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#latin1');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Match first 256 characters of Unicode character set.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>General category</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categorySet" class="def"
+	    >categorySet</a
+	    > :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+	    >Set</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categorySet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test unicode general category with category set.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:categoryList" class="def"
+	    >categoryList</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:GeneralCategory"
+	    >GeneralCategory</a
+	    >] -&gt; <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#categoryList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test unicode general category with category list.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:category" class="def"
+	    >category</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="Koshucode-Baala-Subtext-Operator-Char.html#t:CharExpr"
+	    >CharExpr</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Char.html#category');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test unicode general category with short names.
+   The argument string is space-separated names.
+   If unknown name is given, returns the name in <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#v:Left"
+		>Left</a
+		></code
+	      > data.</p
 	    ></div
 	  ></div
 	></div

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Repetitive</a
+	    >Basic repetition</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Derived repetition</a
 	    ></li
 	  ></ul
 	></div
@@ -75,6 +79,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><a href="#v:repeat"
+	    >repeat</a
+	    > :: <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:repeatTimes"
+	    >repeatTimes</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:repeatExpr"
+	    >repeatExpr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a)</li
+	  ><li class="src short"
 	  ><a href="#v:min"
 	    >min</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
@@ -131,6 +165,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Expr</a
 	    > a</li
 	  ><li class="src short"
+	  ><a href="#v:anySeq"
+	    >anySeq</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
 	  ><a href="#v:before"
 	    >before</a
 	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
@@ -152,7 +192,61 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Repetitive</h1
+	>Basic repetition</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:repeat" class="def"
+	    >repeat</a
+	    > :: <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Repeat.html#repeat');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Repetition with min-max parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:repeatTimes" class="def"
+	    >repeatTimes</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Repeat.html#repeatTimes');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract min-max parameter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:repeatExpr" class="def"
+	    >repeatExpr</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a) <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Repeat.html#repeatExpr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract internal expression.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:min" class="def"
@@ -209,6 +303,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Repetition with lower and upper bound.</p
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Derived repetition</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:many" class="def"
@@ -255,6 +351,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><div class="doc"
 	  ><p
 	    >Match zero or one times.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:anySeq" class="def"
+	    >anySeq</a
+	    > :: <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Repeat.html#anySeq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Many of any.</p
 	    ></div
 	  ></div
 	><div class="top"

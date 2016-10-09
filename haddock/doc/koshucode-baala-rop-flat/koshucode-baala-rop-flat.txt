@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.158.0.0
+@version 0.160.0.0
 
 
 -- | Partial-order scale.
@@ -447,6 +447,7 @@ relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermN
 --   <li><i> ?? </i> Context-dependent pattern.</li>
 --   <li><i> begin </i> Beginning of text.</li>
 --   <li><i> end </i> End of text.</li>
+--   <li><i> ( E ) </i> Group expression <i>E</i>.</li>
 --   </ul>
 --   
 --   <h2>Texts</h2>
@@ -457,19 +458,28 @@ relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermN
 --   <i>T</i>.</li>
 --   <li><i> word T </i> Alternative occurences of words included in
 --   <i>T</i>.</li>
---   <li><i> C1 to C2 </i> Character betweeen C1 and C2.</li>
+--   <li><i> cat T ... </i> Characters in the Unicode general categories,
+--   <i>T</i> is one-letter or two-letter category name. See
+--   <a>categoryLookup</a>.</li>
+--   <li><i> C1 to C2 </i> Characters betweeen C1 and C2.</li>
 --   </ul>
 --   
 --   <ul>
---   <li><i> space </i> Unicode space character or space-like control
+--   <li><i> sp </i> Unicode space character or space-like control
 --   character including tabs (HT/VT), newlines (CR/LF), or form feed (FF).
 --   See <a>isSpace</a>.</li>
---   <li><i> digit </i> ASCII digit. See <a>isDigit</a>.</li>
---   <li><i> letter </i> Unicode letter character. See
---   <a>isLetter</a>.</li>
---   <li><i> SP </i> One-or-more spaces.</li>
---   <li><i> 012 </i> One-or-more digits.</li>
---   <li><i> ABC </i> One-or-more letters.</li>
+--   <li><i> 012 </i> Unicode number character. See
+--   <a>categoryNumber</a>.</li>
+--   <li><i> digit </i> ASCII digits. See <a>isDigit</a>.</li>
+--   <li><i> abc </i> Unicode letter or mark character. See
+--   <a>categoryLetter</a> or <a>categoryMark</a>.</li>
+--   <li><i> +- </i> Unicode punctuation or symbol character. See
+--   <a>categoryPunctuation</a> or <a>categorySymbol</a>.</li>
+--   <li><i> open </i> Open punctuations. See <a>categoryOpen</a>.</li>
+--   <li><i> close </i> Close punctuations. See <a>categoryClose</a>.</li>
+--   <li><i> ascii </i> ASCII characters. See <a>isAscii</a>.</li>
+--   <li><i> latin-1 </i> ISO 8859-1 (Latin-1) characters. See
+--   <a>isLatin1</a>.</li>
 --   </ul>
 --   
 --   <h2>Combinations</h2>
@@ -485,10 +495,26 @@ relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermN
 --   <i>E2</i>.</li>
 --   <li><i> not E </i> Inverted condition.</li>
 --   <li><i> last E </i> Find last <i>E</i>.</li>
---   <li><i> ( E ) </i> Group expression <i>E</i>.</li>
---   <li><i> [ E ] </i> Zero-or-one occurences of <i>E</i>. (Option)</li>
+--   <li><i> before E </i> Sequence of not <i>E</i>.</li>
+--   <li><i> E as T </i> Replace to text <i>T</i> when <i>E</i> is
+--   matched.</li>
+--   <li><i> stay E </i> Match <i>E</i> but input position is not
+--   changed.</li>
+--   </ul>
+--   
+--   <h2>Repetition</h2>
+--   
+--   <ul>
 --   <li><i> { E } </i> Zero-or-more occurences of <i>E</i>.
 --   (Zero-repeat)</li>
+--   <li><i> { E } ( N ) </i> <i>N</i>-times occurences of <i>E</i>.</li>
+--   <li><i> { E } ( L to ) </i> Repetition of <i>E</i> with lower bound
+--   <i>L</i>.</li>
+--   <li><i> { E } ( to U ) </i> Repetition of <i>E</i> with upper bound
+--   <i>U</i>.</li>
+--   <li><i> { E } ( L to U ) </i> Repetition of <i>E</i> with lower bound
+--   <i>L</i> and upper bound <i>U</i>.</li>
+--   <li><i> [ E ] </i> Zero-or-one occurences of <i>E</i>. (Option)</li>
 --   <li><i> {- E -} </i> One-or-more occurences of <i>E</i>.
 --   (One-repeat)</li>
 --   <li><i> E1 sep E2 </i> <i>E1</i>-separated <i>E2</i>.

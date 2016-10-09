@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.158.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.160.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -109,7 +109,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:TokenScan"
 	    >TokenScan</a
-	    > = CodeScan <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -119,7 +121,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:TokenScanMap"
 	    >TokenScanMap</a
-	    > = Map <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
 	    >TokenScan</a
 	    ></li
 	  ><li class="src short"
@@ -127,7 +131,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:TokenNip"
 	    >TokenNip</a
-	    > = CodePt -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipResult"
 	    >TokenNipResult</a
@@ -137,7 +143,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:TokenNipW"
 	    >TokenNipW</a
-	    > = CodePt -&gt; WordTable -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipWResult"
 	    >TokenNipWResult</a
@@ -157,7 +167,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a href="#t:TokenNipWResult"
 	    >TokenNipWResult</a
-	    > = (WordTable, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -165,37 +177,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:isSymbol"
 	    >isSymbol</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isSpace"
 	    >isSpace</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isQQ"
 	    >isQQ</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isTerm"
 	    >isTerm</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isJudge"
 	    >isJudge</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isClock"
 	    >isClock</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    ></li
 	  ><li class="src short"
@@ -245,7 +269,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:symbolToken"
 	    >symbolToken</a
-	    > :: (CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -285,7 +311,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:nipBar"
 	    >nipBar</a
-	    > :: CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
@@ -303,7 +331,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:TokenScan" class="def"
 	    >TokenScan</a
-	    > = CodeScan <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -321,7 +351,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:TokenScanMap" class="def"
 	    >TokenScanMap</a
-	    > = Map <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
 	    >TokenScan</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#TokenScanMap');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -337,7 +369,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:TokenNip" class="def"
 	    >TokenNip</a
-	    > = CodePt -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipResult"
 	    >TokenNipResult</a
@@ -355,7 +389,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:TokenNipW" class="def"
 	    >TokenNipW</a
-	    > = CodePt -&gt; WordTable -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipWResult"
 	    >TokenNipWResult</a
@@ -387,7 +425,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:TokenNipWResult" class="def"
 	    >TokenNipWResult</a
-	    > = (WordTable, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
 	    >InputText</a
 	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -401,7 +441,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isSymbol" class="def"
 	    >isSymbol</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isSymbol');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -415,7 +457,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isSpace" class="def"
 	    >isSpace</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isSpace');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -429,7 +473,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isQQ" class="def"
 	    >isQQ</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isQQ');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -443,7 +489,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isTerm" class="def"
 	    >isTerm</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isTerm');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -457,7 +505,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isJudge" class="def"
 	    >isJudge</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isJudge');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -475,7 +525,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:isClock" class="def"
 	    >isClock</a
-	    > :: Pred <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#isClock');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -589,7 +641,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:symbolToken" class="def"
 	    >symbolToken</a
-	    > :: (CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -675,7 +729,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:nipBar" class="def"
 	    >nipBar</a
-	    > :: CodePt -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a

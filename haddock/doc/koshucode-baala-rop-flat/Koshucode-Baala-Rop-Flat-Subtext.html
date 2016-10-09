@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.158.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.160.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -127,6 +127,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > end </dt
 	    ><dd
 	    >End of text.</dd
+	    ><dt
+	    > ( E ) </dt
+	    ><dd
+	    >Group expression <em
+	      >E</em
+	      >.</dd
 	    ></dl
 	  ><h2
 	  >Texts</h2
@@ -150,13 +156,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >T</em
 	      >.</dd
 	    ><dt
+	    > cat T ... </dt
+	    ><dd
+	    >Characters in the Unicode general categories,
+     <em
+	      >T</em
+	      > is one-letter or two-letter category name.
+     See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLookup"
+		>categoryLookup</a
+		></code
+	      >.</dd
+	    ><dt
 	    > C1 to C2 </dt
 	    ><dd
-	    >Character betweeen C1 and C2.</dd
+	    >Characters betweeen C1 and C2.</dd
 	    ></dl
 	  ><dl
 	  ><dt
-	    > space </dt
+	    > sp </dt
 	    ><dd
 	    >Unicode space character or space-like control character
      including tabs (HT/VT), newlines (CR/LF), or form feed (FF).
@@ -166,35 +184,85 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		></code
 	      >.</dd
 	    ><dt
+	    > 012 </dt
+	    ><dd
+	    >Unicode number character.
+     See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryNumber"
+		>categoryNumber</a
+		></code
+	      >.</dd
+	    ><dt
 	    > digit </dt
 	    ><dd
-	    >ASCII digit.
+	    >ASCII digits.
      See <code
 	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#v:isDigit"
 		>isDigit</a
 		></code
 	      >.</dd
 	    ><dt
-	    > letter </dt
+	    > abc </dt
 	    ><dd
-	    >Unicode letter character.
+	    >Unicode letter or mark character.
      See <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#v:isLetter"
-		>isLetter</a
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLetter"
+		>categoryLetter</a
+		></code
+	      > or <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryMark"
+		>categoryMark</a
 		></code
 	      >.</dd
 	    ><dt
-	    > SP </dt
+	    > +- </dt
 	    ><dd
-	    >One-or-more spaces.</dd
+	    >Unicode punctuation or symbol character.
+     See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryPunctuation"
+		>categoryPunctuation</a
+		></code
+	      > or <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categorySymbol"
+		>categorySymbol</a
+		></code
+	      >.</dd
 	    ><dt
-	    > 012 </dt
+	    > open </dt
 	    ><dd
-	    >One-or-more digits.</dd
+	    >Open punctuations.
+     See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryOpen"
+		>categoryOpen</a
+		></code
+	      >.</dd
 	    ><dt
-	    > ABC </dt
+	    > close </dt
 	    ><dd
-	    >One-or-more letters.</dd
+	    >Close punctuations.
+     See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryClose"
+		>categoryClose</a
+		></code
+	      >.</dd
+	    ><dt
+	    > ascii </dt
+	    ><dd
+	    >ASCII characters.
+     See <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#v:isAscii"
+		>isAscii</a
+		></code
+	      >.</dd
+	    ><dt
+	    > latin-1 </dt
+	    ><dd
+	    >ISO 8859-1 (Latin-1) characters.
+     See <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#v:isLatin1"
+		>isLatin1</a
+		></code
+	      >.</dd
 	    ></dl
 	  ><h2
 	  >Combinations</h2
@@ -242,10 +310,68 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >E</em
 	      >.</dd
 	    ><dt
-	    > ( E ) </dt
+	    > before E </dt
 	    ><dd
-	    >Group expression <em
+	    >Sequence of not <em
 	      >E</em
+	      >.</dd
+	    ><dt
+	    > E as T </dt
+	    ><dd
+	    >Replace to text <em
+	      >T</em
+	      > when <em
+	      >E</em
+	      > is matched.</dd
+	    ><dt
+	    > stay E </dt
+	    ><dd
+	    >Match <em
+	      >E</em
+	      > but input position is not changed.</dd
+	    ></dl
+	  ><h2
+	  >Repetition</h2
+	  ><dl
+	  ><dt
+	    > { E } </dt
+	    ><dd
+	    >Zero-or-more occurences of <em
+	      >E</em
+	      >. (Zero-repeat)</dd
+	    ><dt
+	    > { E } ( N ) </dt
+	    ><dd
+	    ><em
+	      >N</em
+	      >-times occurences of <em
+	      >E</em
+	      >.</dd
+	    ><dt
+	    > { E } ( L to ) </dt
+	    ><dd
+	    >Repetition of <em
+	      >E</em
+	      > with lower bound <em
+	      >L</em
+	      >.</dd
+	    ><dt
+	    > { E } ( to U ) </dt
+	    ><dd
+	    >Repetition of <em
+	      >E</em
+	      > with upper bound <em
+	      >U</em
+	      >.</dd
+	    ><dt
+	    > { E } ( L to U ) </dt
+	    ><dd
+	    >Repetition of <em
+	      >E</em
+	      > with lower bound <em
+	      >L</em
+	      > and upper bound <em
+	      >U</em
 	      >.</dd
 	    ><dt
 	    > [ E ] </dt
@@ -253,12 +379,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Zero-or-one occurences of <em
 	      >E</em
 	      >. (Option)</dd
-	    ><dt
-	    > { E } </dt
-	    ><dd
-	    >Zero-or-more occurences of <em
-	      >E</em
-	      >. (Zero-repeat)</dd
 	    ><dt
 	    > {- E -} </dt
 	    ><dd
@@ -315,7 +435,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >type</span
 	    > <a name="t:SubtextPara" class="def"
 	    >SubtextPara</a
-	    > = (TermName, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
 	    >NameDepth</a
 	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Match.html#t:CharMatch"
 	    >CharMatch</a
@@ -329,7 +451,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:consSubtext" class="def"
 	    >consSubtext</a
-	    > :: CContent c =&gt; RopCons c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#consSubtext');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#consSubtext');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -337,9 +463,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relmapSubtext" class="def"
 	    >relmapSubtext</a
-	    > :: CContent c =&gt; Intmed c -&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
 	    >SubtextPara</a
-	    > -&gt; Relmap c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relmapSubtext');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relmapSubtext');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -347,11 +479,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="src"
 	  ><a name="v:relkitSubtext" class="def"
 	    >relkitSubtext</a
-	    > :: CContent c =&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
 	    >SubtextPara</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > Head -&gt; Ab (Relkit c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relkitSubtext');" href="javascript:void(0);" class="link"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relkitSubtext');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ></div

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.158.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -106,6 +106,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:times"
+	    >times</a
+	    > :: <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -137,7 +147,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 		  ></td
 		><td class="doc"
 		><p
-		  >Lower bound</p
+		  >Lower bound and unlimited upper bound</p
 		  ></td
 		></tr
 	      ><tr
@@ -169,7 +179,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 		      > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
 		      >MinMax</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-14');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-15');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -183,7 +193,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 		      > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
 		      >MinMax</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-14');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-15');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -197,7 +207,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 		      > <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
 		      >MinMax</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-14');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#line-15');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -223,6 +233,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><div class="doc"
 	  ><p
 	    >Test lower bound.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>atLeast 1 $ Min 0
+</code
+		></strong
+	      >False
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>atLeast 1 $ Min 1
+</code
+		></strong
+	      >True
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -241,6 +271,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><div class="doc"
 	  ><p
 	    >Test upper bound.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:times" class="def"
+	    >times</a
+	    > :: <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > -&gt; <a href="Koshucode-Baala-Subtext-MinMax.html#t:MinMax"
+	    >MinMax</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Subtext-MinMax.html#times');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Compose nested min-max.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>MinMax 2 4 `times` MinMax 3 5
+</code
+		></strong
+	      >MinMax 6 20
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>MinMax 2 4 `times` Min 3
+</code
+		></strong
+	      >Min 6
+</pre
 	    ></div
 	  ></div
 	></div
