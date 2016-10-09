@@ -13,6 +13,7 @@ import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Message     as Msg
 
+-- | Content operators on texts.
 copsText :: (D.CContent c) => [D.Cop c]
 copsText =
     [ D.CopCalc  (D.copInfix "*=")                copEndWithInfix
@@ -22,6 +23,8 @@ copsText =
     , D.CopCalc  (D.copNormal "base-part")        copBasePart
     , D.CopCalc  (D.copNormal "char")             copChar
     , D.CopCalc  (D.copNormal "char-group")       copCharGroup
+    , D.CopCalc  (D.copNormal "check")            copCheck
+    , D.CopCalc  (D.copNormal "from-bool")        copFromBool
     , D.CopCalc  (D.copNormal "char-group-1")     copCharGroup1
     , D.CopCalc  (D.copNormal "code-list")        copCodeList
     , D.CopCalc  (D.copNormal "dir-part")         copDirPart
@@ -130,6 +133,35 @@ copCharGroup1 = op where
 
 charGroup :: Char -> String
 charGroup = B.generalCategoryName . B.majorGeneralCategory
+
+
+-- ----------------------  from-bool
+
+-- from-bool "yes" "no" (+) => "yes"
+copFromBool :: (D.CContent c) => D.CopCalc c
+copFromBool = op where
+    op [Right t, Right f, Right c]
+        | D.isBool c = Right $ fromBool t f $ D.gBool c
+        | otherwise  = Right c
+    op xs = typeUnmatch xs
+
+-- check (+) => "✓" (U+2713)
+copCheck :: (D.CContent c) => D.CopCalc c
+copCheck = op where
+    op [Right c]
+        | D.isBool c = Right $ from D.empty $ D.gBool c
+        | otherwise  = Right c
+    op [Right c, Right alt]
+        | D.isBool c = Right $ from alt $ D.gBool c
+        | otherwise  = Right c
+    op xs = typeUnmatch xs
+
+    from = fromBool (D.pText "✓")
+
+-- | Choose true/false sign for Boolean value.
+fromBool :: (D.CContent c) => c -> c -> Bool -> c
+fromBool t _ True   = t
+fromBool _ f False  = f
 
 
 -- ----------------------  base-part / dir-part
