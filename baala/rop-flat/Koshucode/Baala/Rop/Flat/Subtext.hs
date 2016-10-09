@@ -82,6 +82,14 @@
 --   [ latin-1 ]
 --     ISO 8859-1 (Latin-1) characters.
 --     See 'Data.Char.isLatin1'.
+--   [ koshu-symbol ]
+--     Symbol character in Koshucode.
+--   [ koshu-general ]
+--     General character in Koshucode.
+--   [ koshu-plain ]
+--     Plain character in Koshucode.
+--   [ koshu-numeric ]
+--     Numeric character in Koshucode.
 --
 -- == Combinations
 --
@@ -349,6 +357,10 @@ parseSubtext ns = trees False where
     pre "+-"      []        = Right $ T.categoryList T.categorySign
     pre "open"    []        = Right $ T.categoryList T.categoryOpen
     pre "close"   []        = Right $ T.categoryList T.categoryClose
+    pre "koshu-symbol"  []  = Right koshuSymbol
+    pre "koshu-general" []  = Right koshuGeneral
+    pre "koshu-plain"   []  = Right koshuPlain
+    pre "koshu-numeric" []  = Right koshuNumeric
 
     pre "char"   [T s]      = Right $ T.char s             -- char T
     pre "word"   [T s]      = Right $ T.word s             -- word T
@@ -367,3 +379,14 @@ parseSubtext ns = trees False where
     keyword (K s)           = Right s
     keyword x               = unknownSyntax x
 
+koshuSymbol :: T.CharExpr
+koshuSymbol = T.elem "koshu-symbol" S.isSymbolChar
+
+koshuGeneral :: T.CharExpr
+koshuGeneral = T.elem "koshu-general" S.isGeneralChar
+
+koshuPlain :: T.CharExpr
+koshuPlain = T.elem "koshu-plain" S.isPlainChar
+
+koshuNumeric :: T.CharExpr
+koshuNumeric = T.elem "koshu-numeric" S.isNumericChar
