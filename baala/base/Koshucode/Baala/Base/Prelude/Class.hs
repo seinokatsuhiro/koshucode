@@ -1,20 +1,20 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | General utilities
+-- | General utilities.
 
 module Koshucode.Baala.Base.Prelude.Class
   ( Name (..),
     Named,
     named,
     Map, ManyMap,
-    Pred,
+    Pred, Test,
     YesNo (..),
     Index,
     Collect,
     Choose (..),
   ) where
 
--- | Types that has name
+-- | Types that has name.
 class Name a where
     name  :: a -> String
     names :: [a] -> [String]
@@ -26,11 +26,19 @@ type Named a = (String, a)
 named :: (Name a) => a -> Named a
 named a = (name a, a)
 
+-- | Map from something to same type.
 type Map a = a -> a
+
+-- | Map from something to list of something.
 type ManyMap a = a -> [a]
 
+-- | Boolean-valued function.
 type Pred a = a -> Bool
 
+-- | Boolean-valued function, also called predicate.
+type Test a = a -> Bool
+
+-- | Type of value which is classified as yes or no.
 data YesNo a = Yes a | No a
                deriving (Show, Eq, Ord)
 
