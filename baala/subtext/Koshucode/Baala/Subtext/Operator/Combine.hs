@@ -10,7 +10,10 @@ module Koshucode.Baala.Subtext.Operator.Combine
    -- * Variation
    stay, skip, gather,
    sub, (#),
+
+   -- * Modification
    as, asConst,
+   asPrepend, asAppend, asWrap,
  ) where
 
 import Prelude hiding ( or, seq, and, not, last )
@@ -96,11 +99,28 @@ sub n = S.ERec . S.ESub n
 (#) :: S.Name -> S.Expr a -> S.Expr a
 n # e = sub n e
 
+
+-- --------------------------------------------  Modification
+
 -- | Match with modification.
 as :: S.FnAs a -> S.Expr a -> S.Expr a
 as f = S.ERec . S.EAs f
 
 -- | Replace to given sequence.
 asConst :: [a] -> S.Expr a -> S.Expr a
-asConst c = as $ S.Fn "as-const" $ const c
+asConst c = as $ S.Fn "const" $ const c
 
+-- | Add segment to the beginning of matched sequence.
+asPrepend :: [a] -> S.Expr a -> S.Expr a
+asPrepend a = as (S.Fn "add-prepend" ((a ++) . reverse))
+
+-- | Add segment to the end of matched sequence.
+asAppend :: [a] -> S.Expr a -> S.Expr a
+asAppend a = as (S.Fn "add-append" ((++ a)  . reverse))
+
+-- | Add segments to the beginning and end of matched sequence.
+asWrap :: [a] -> [a]  -> S.Expr a -> S.Expr a
+asWrap a b = as (S.Fn "add-wrap" (wrap a b . reverse))
+
+wrap :: [a] -> [a] -> [a] -> [a]
+wrap a b x = a ++ x ++ b

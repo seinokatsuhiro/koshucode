@@ -26,7 +26,7 @@
 --     Decompose text by bundle of named expressions.
 --     Text decomposition starts from /N1/.
 --
--- == Basic patterns
+-- == Basic pattern
 --
 --   [ ? ]
 --     Any character.
@@ -39,7 +39,7 @@
 --   [ ( E ) ]
 --     Group expression /E/.
 --
--- == Texts
+-- == Text
 --
 --   [ T ]
 --     Text literal as /T/.
@@ -91,7 +91,7 @@
 --   [ koshu-numeric ]
 --     Numeric character in Koshucode.
 --
--- == Combinations
+-- == Combination
 --
 --   [ E1 | E2 ]
 --     Alternative occurence of /E1/ or /E2/.
@@ -109,8 +109,17 @@
 --     Sequence of not /E/.
 --   [ stay E ]
 --     Match /E/ but input position is not changed.
+--
+-- == Modification
+--
 --   [ E as T ]
 --     Replace to text /T/ when /E/ is matched.
+--   [ E as wrap T1 T2 ]
+--     Wrap matched text in /T1/ and /T2/.
+--   [ E as prepend T ]
+--     Prepend /T/ to matched text.
+--   [ E as append T ]
+--     Append /T/ to matched text.
 --   [ E as lower ]
 --     Convert text to lower case when /E/ is matched.
 --   [ E as upper ]
@@ -161,8 +170,10 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- --------------------------------------------  Operator
 
+-- | Type of subtext parameters.
 type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
 
+-- | Construct relmap for text extraction.
 consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
   do term  <- Op.getTerm   med "-term"
@@ -173,9 +184,11 @@ consSubtext med =
          match = T.matchBundle b
      Right $ relmapSubtext med (term, ns, match, trim)
 
+-- | Create subtext relmap.
 relmapSubtext :: (D.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
+-- | Create subtext relkit.
 relkitSubtext :: (D.CContent c) => SubtextPara -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
@@ -337,6 +350,10 @@ parseSubtext ns = trees False where
     opAs xs = case divide "as" xs of    -- E as E
                  [xs2, [K "lower"]] -> Right . T.asLower    =<< trees False xs2
                  [xs2, [K "upper"]] -> Right . T.asUpper    =<< trees False xs2
+                 [xs2, [K "wrap", T a, T b]] -> Right . T.asWrap a b  =<< trees False xs2
+                 [xs2, [K "prepend", T a]]   -> Right . T.asPrepend a =<< trees False xs2
+                 [xs2, [K "append", T b]]    -> Right . T.asAppend  b =<< trees False xs2
+                     
                  [xs2, [T to]]      -> Right . T.asConst to =<< trees False xs2
                  [xs2]              -> opTo xs2
                  _                  -> unknownSyntax xs
