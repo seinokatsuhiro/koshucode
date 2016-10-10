@@ -38,6 +38,7 @@ consForward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapForward med ns
 
+-- | Create @forward@ relmap.
 relmapForward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapForward med = C.relmapFlow med . relkitToward (D.ssRForward, D.ssRForward)
 
@@ -46,6 +47,7 @@ consBackward med =
   do ns <- Op.getTerms med "-term"
      Right $ relmapBackward med ns
 
+-- | Create @backward@ relmap.
 relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
 
@@ -67,6 +69,7 @@ relkitToward (heMap, boMap) ns (Just he1)
 consLexical :: C.RopCons c
 consLexical med = Right $ relmapLexical med
 
+-- | Create @lexical@ relmap.
 relmapLexical :: C.Intmed c -> C.Relmap c
 relmapLexical med = C.relmapFlow med relkitLexical
 
@@ -87,6 +90,7 @@ consOrder med =
     do ns <- Op.getOption [] Op.getSignedTerms med "-term"
        Right $ relmapOrder med ns
 
+-- | Create @order@ relmap.
 relmapOrder :: (Ord c) => C.Intmed c -> [S.SignedTermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 

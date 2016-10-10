@@ -75,6 +75,7 @@ consMember med =
      xs   <- Op.getTerm med "-set"
      Right $ relmapMember med (x, xs)
 
+-- | Create @member@ relmap.
 relmapMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
   => C.Intmed c -> S.TermName2 -> C.Relmap c
 relmapMember med = C.relmapFlow med . relkitMember
@@ -124,6 +125,7 @@ consIndexElem from med =
      (i, x) <- Op.getTerm2 med "-to"
      Right $ relmapIndexElem from med (i, x, xs)
 
+-- | Create @ix-elem@ or @iz-elem@ relmap.
 relmapIndexElem :: (Ord c, D.CContent c) => Int -> C.Intmed c -> S.TermName3 -> C.Relmap c
 relmapIndexElem from med = C.relmapFlow med . relkitIndexElem from
 
@@ -175,9 +177,11 @@ consUnroll med =
      xs  <- Op.getTerms med "-from"
      Right $ relmapUnroll med (t, c, xs)
 
+-- | Create @unroll@ relmap.
 relmapUnroll :: (D.CTerm c) => C.Intmed c -> (S.TermName, S.TermName, [S.TermName]) -> C.Relmap c
 relmapUnroll med = C.relmapFlow med . relkitUnroll
 
+-- | Create @unroll@ relkit.
 relkitUnroll :: (D.CTerm c) =>  (S.TermName, S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUnroll _ Nothing = Right C.relkitNothing
 relkitUnroll (t, c, from) (Just he1) = kit2 where
@@ -203,6 +207,7 @@ consElemBegin med =
      to   <- Op.getTerms med "-to"
      Right $ relmapElemBegin med (coll, to)
 
+-- | Create @elem-begin@ relmap.
 relmapElemBegin :: (Ord c, D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapElemBegin med = C.relmapFlow med . relkitElemBy B.takeFill
 
@@ -216,9 +221,11 @@ consElemEnd med =
      to   <- Op.getTerms med "-to"
      Right $ relmapElemEnd med (coll, to)
 
+-- | Create @elem-end@ relmap.
 relmapElemEnd :: (Ord c, D.CContent c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapElemEnd med = C.relmapFlow med . relkitElemBy B.takeTailFill
 
+-- | Create @elem-begin@ or @elem-end@ relkit.
 relkitElemBy :: (Ord c, D.CContent c) => (c -> Int -> [c] -> [c]) -> (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitElemBy _ _ Nothing = Right C.relkitNothing
 relkitElemBy f (coll, to) (Just he1) = kit2 where
@@ -243,6 +250,7 @@ consUncollect med =
      to    <- Op.getTerms med "-to"
      Right $ relmapUncollect med (coll, to)
 
+-- | Create @uncollect@ relmap.
 relmapUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
   => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUncollect med = C.relmapFlow med . relkitUncollect

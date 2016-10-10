@@ -61,6 +61,7 @@ consKoshuCop med =
   do name <- Op.getTerm med "-name"
      Right $ relmapKoshuCop med name
 
+-- | Create @koshu-cop@ relmap.
 relmapKoshuCop :: (D.CContent c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapKoshuCop med = C.relmapHook med . relkitKoshuCop
 
@@ -80,6 +81,7 @@ consKoshuCopInfix med =
      dir    <- Op.getMaybe Op.getTerm med "-dir"
      Right $ relmapKoshuCopInfix med (name, height, dir)
 
+-- | Create @koshu-cop-infix@ relmap.
 relmapKoshuCopInfix :: (D.CContent c) => C.Intmed c -> (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuCopInfix med = C.relmapHook med . relkitKoshuCopInfix
 
@@ -110,6 +112,7 @@ consKoshuRop med =
      usage <- Op.getMaybe Op.getTerm med "-usage"
      Right $ relmapKoshuRop med (Just name, group, usage)
 
+-- | Create @koshu-rop@ relmap.
 relmapKoshuRop :: (D.CContent c)
     => C.Intmed c -> (Maybe S.TermName, Maybe S.TermName, Maybe S.TermName)
     -> C.Relmap c
@@ -140,6 +143,7 @@ consKoshuProxy med =
      uri    <- Op.getTerm med "-uri"
      Right $ relmapKoshuProxy med (Just proto, Just uri)
 
+-- | Create @koshu-proxy@ relmap.
 relmapKoshuProxy :: (D.CContent c)
     => C.Intmed c -> (Maybe S.TermName, Maybe S.TermName)
     -> C.Relmap c
@@ -217,6 +221,7 @@ consKoshuSource med =
      name <- Op.getMaybe Op.getTerm med "-name"
      Right $ relmapKoshuSource med (num, ty, name)
 
+-- | Create @koshu-source@ relmap.
 relmapKoshuSource :: (D.CContent c) => C.Intmed c -> (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuSource med = C.relmapHook med . relkitKoshuSource
 
@@ -248,6 +253,7 @@ consKoshuAngleText med =
      c <- Op.getMaybe Op.getTerm med "-text"
      Right $ relmapKoshuAngleText med (n, c)
 
+-- | Create @koshu-angle-text@ relmap.
 relmapKoshuAngleText :: (Ord c, D.CText c) => C.Intmed c -> (S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuAngleText med = C.relmapFlow med . relkitKoshuAngleText
 

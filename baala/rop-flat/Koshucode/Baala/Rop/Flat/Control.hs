@@ -52,6 +52,7 @@ consIf med =
 
 type Relmap3 c = (C.Relmap c, C.Relmap c, C.Relmap c)
 
+-- | Create @if@ relmap.
 relmapIf :: (Ord c) => C.Intmed c -> Relmap3 c -> C.Relmap c
 relmapIf med (mt, ma, mb) = C.relmapConfl med relkitIf [mt, ma, mb]
 
@@ -113,6 +114,7 @@ consFixJoin med =
   do rmap <- Op.getRelmap med "-relmap"
      Right $ relmapFix med (Op.relmapJoin med Nothing rmap)
 
+-- | Create @fix@ relmap.
 relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapFix med = C.relmapBinary med relkitFix
 
@@ -136,6 +138,7 @@ consEqual med =
     do rmap <- Op.getRelmap med "-relmap"
        Right $ relmapEqual med rmap
 
+-- | Create @equal@ relmap.
 relmapEqual :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapEqual med = C.relmapBinary med relkitEqual
 

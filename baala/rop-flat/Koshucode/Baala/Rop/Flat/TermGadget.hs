@@ -53,6 +53,7 @@ consPrefix med =
        to  <- Op.getTerms med $ if tag then "-to" else "-term"
        Right $ relmapPrefix med pre to
 
+-- | Create @prefix@ relmap.
 relmapPrefix :: C.Intmed c -> String -> [String] -> C.Relmap c
 relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 
@@ -77,6 +78,7 @@ consUnprefix med =
     do pre <- Op.getTerm med "-prefix"
        Right $ relmapUnprefix med pre
 
+-- | Create @unprefix@ relmap.
 relmapUnprefix :: C.Intmed c -> String -> C.Relmap c
 relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 
@@ -103,6 +105,7 @@ consPrefixChange med =
        old <- Op.getTerm med "-old"
        Right $ relmapPrefixChange med (new, old)
 
+-- | Create @prefix-change@ relmap.
 relmapPrefixChange :: C.Intmed c -> (String, String) -> C.Relmap c
 relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 
@@ -124,6 +127,7 @@ relkitPrefixChange (new, old) (Just he1) = Right kit2 where
 consWipe :: C.RopCons c
 consWipe = Right . relmapWipe
 
+-- | Create @wipe@ relmap.
 relmapWipe :: C.Intmed c -> C.Relmap c
 relmapWipe med = C.relmapFlow med relkitWipe
 

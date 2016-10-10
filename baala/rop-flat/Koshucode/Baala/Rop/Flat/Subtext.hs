@@ -184,11 +184,11 @@ consSubtext med =
          match = T.matchBundle b
      Right $ relmapSubtext med (term, ns, match, trim)
 
--- | Create subtext relmap.
+-- | Create @subtext@ relmap.
 relmapSubtext :: (D.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
--- | Create subtext relkit.
+-- | Create @subtext@ relkit.
 relkitSubtext :: (D.CContent c) => SubtextPara -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where

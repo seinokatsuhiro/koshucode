@@ -61,6 +61,7 @@ consTie med =
      to <- Op.getTerm  med "-to"
      Right $ relmapTie med (ns, to)
 
+-- | Create @tie@ relmap.
 relmapTie :: (D.CTie c) => C.Intmed c -> ([S.TermName], S.TermName) -> C.Relmap c
 relmapTie med = C.relmapFlow med . relkitTie
 
@@ -85,6 +86,7 @@ consUntie med =
      ns   <- Op.getTerms med "-only"
      Right $ relmapUntie med (from, ns)
 
+-- | Create @untie@ relmap.
 relmapUntie :: (D.CTie c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUntie med = C.relmapFlow med . relkitUntie
 
@@ -113,6 +115,7 @@ consTermName med =
   do n <- Op.getTerm med "-term"
      Right $ relmapTermName med n
 
+-- | Create @term-name@ relmap.
 relmapTermName :: (D.CTerm c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
@@ -136,6 +139,7 @@ consToday med =
      let t = C.globalTime $ C.ropGlobal med
      Right $ relmapToday med (n, t)
 
+-- | Create @today@ relmap.
 relmapToday :: (D.CTime c) => C.Intmed c -> (S.TermName, D.Time) -> C.Relmap c
 relmapToday med = C.relmapFlow med . relkitToday
 

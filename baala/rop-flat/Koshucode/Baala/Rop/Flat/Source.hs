@@ -55,9 +55,11 @@ consEmpty med =
     do ns <- Op.getTerms med "-term"
        Right $ relmapEmpty med ns
 
+-- | Create @empty@ relmap.
 relmapEmpty :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapEmpty med = C.relmapFlow med . relkitEmpty
 
+-- | Create @empty@ relkit.
 relkitEmpty :: [S.TermName] -> C.RelkitFlow c
 relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
     he2 = Just $ D.headFrom ns
@@ -93,9 +95,11 @@ consSourceTerm med =
      rmap  <- Op.getRelmap med "-relmap"
      Right $ relmapSourceTerm med pat rmap
 
+-- | Create @source-term@ relmap.
 relmapSourceTerm :: C.Intmed c -> String -> B.Map (C.Relmap c)
 relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
+-- | Create @source-term@ relkit.
 relkitSourceTerm :: String -> C.RelkitBinary c
 relkitSourceTerm _   (C.Relkit _ Nothing    _) _ = Right C.relkitNothing
 relkitSourceTerm pat (C.Relkit _ (Just he2) _) _ = Right kit3 where

@@ -71,6 +71,7 @@ consContents med =
     do n <- Op.getTerm med "-term"
        Right $ relmapContents med n
 
+-- | Create @contents@ relmap.
 relmapContents :: (Ord c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapContents med = C.relmapFlow med . relkitContents
 
@@ -99,6 +100,7 @@ consPoScale scale med =
        (z,r) <- Op.getTerm2 med "-to"
        Right $ relmapPoScale scale med (x,y,z,r)
 
+-- | Create @partial-order-height@ or @partial-order-depth@ relmap.
 relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
@@ -128,6 +130,7 @@ consVisitDistance med =
          [step1, step2] -> Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
          _              -> Msg.adlib "Require two sets of terms"
 
+-- | Create @visit-distance@ relmap.
 relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([S.TermName], [S.TermName], S.TermName, S.TermName) -> B.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
@@ -238,6 +241,7 @@ consSize med =
   do n <- Op.getTerm med "-term"
      Right $ relmapSize med n
 
+-- | Create @size@ relmap.
 relmapSize :: (D.CDec c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapSize med n = C.relmapFlow med $ relkitSize n
 
@@ -254,6 +258,7 @@ relkitSize n _ = Right kit2 where
 consEqlize :: (Ord c) => C.RopCons c
 consEqlize med = Right $ relmapEqlize med
 
+-- | Create @eqlize@ relmap.
 relmapEqlize :: (Ord c) => C.Intmed c -> C.Relmap c
 relmapEqlize med = C.relmapFlow med relkitEqlize
 

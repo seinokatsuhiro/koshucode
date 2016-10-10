@@ -44,6 +44,7 @@ consKoshuResRop med =
      name  <- Op.getTerm med "-name"
      Right $ relmapKoshuResRop med (sec, name)
 
+-- | Create @koshu-res-rop@ relmap.
 relmapKoshuResRop :: (D.CContent c)
     => C.Intmed c -> (S.TermName, S.TermName)
     -> C.Relmap c
@@ -68,6 +69,7 @@ consKoshuResSink med =
      pat   <- Op.getTerm med "-pat"
      Right $ relmapKoshuResSink med (sec, pat)
 
+-- | Create @koshu-res-sink@ relmap.
 relmapKoshuResSink :: (D.CContent c)
     => C.Intmed c -> (S.TermName, S.TermName)
     -> C.Relmap c
@@ -92,6 +94,7 @@ consKoshuResArticle med =
   do name <- Op.getTerm med "-name"
      Right $ relmapKoshuResArticle med name
 
+-- | Create @koshu-res-article@ relmap.
 relmapKoshuResArticle :: (D.CContent c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapKoshuResArticle med = C.relmapHook med . relkitKoshuResArticle
 

@@ -51,6 +51,7 @@ consAppend = app . map snd . C.medSubmap where
 consId :: C.RopCons c
 consId med = Right $ relmapId med
 
+-- | Create @id@ relmap.
 relmapId :: C.Intmed c -> C.Relmap c
 relmapId med = C.relmapFlow med $ Right . C.relkitId
 
