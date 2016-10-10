@@ -49,6 +49,7 @@ relmapKoshuResRop :: (D.CContent c)
     -> C.Relmap c
 relmapKoshuResRop med = C.relmapHook med . relkitKoshuResRop
 
+-- | Create @koshu-res-rop@ relkit.
 relkitKoshuResRop :: (D.CContent c)
     => (S.TermName, S.TermName)
     -> C.RelkitHook c
@@ -72,6 +73,7 @@ relmapKoshuResSink :: (D.CContent c)
     -> C.Relmap c
 relmapKoshuResSink med = C.relmapHook med . relkitKoshuResSink
 
+-- | Create @koshu-res-sink@ relkit.
 relkitKoshuResSink :: (D.CContent c)
     => (S.TermName, S.TermName)
     -> C.RelkitHook c
@@ -93,6 +95,7 @@ consKoshuResArticle med =
 relmapKoshuResArticle :: (D.CContent c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapKoshuResArticle med = C.relmapHook med . relkitKoshuResArticle
 
+-- | Create @koshu-res-article@ relkit.
 relkitKoshuResArticle :: (D.CContent c) => S.TermName -> C.RelkitHook c
 relkitKoshuResArticle name res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2

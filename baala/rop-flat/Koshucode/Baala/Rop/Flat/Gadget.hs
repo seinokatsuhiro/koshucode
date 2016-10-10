@@ -74,6 +74,7 @@ consContents med =
 relmapContents :: (Ord c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapContents med = C.relmapFlow med . relkitContents
 
+-- | Create @contents@ relkit.
 relkitContents :: (Ord c) => S.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = D.headFrom [n]
@@ -101,6 +102,7 @@ consPoScale scale med =
 relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
+-- | Create @partial-order-height@ or @partial-order-depth@ relkit.
 relkitPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> S.TermName4 -> C.RelkitFlow c
 relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
@@ -129,6 +131,7 @@ consVisitDistance med =
 relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([S.TermName], [S.TermName], S.TermName, S.TermName) -> B.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
+-- | Create @visit-distance@ relkit.
 relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([S.TermName], [S.TermName], S.TermName, S.TermName) -> C.RelkitBinary c
 relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
     | unkStart /= []     = Msg.unkTerm unkStart he1
@@ -238,6 +241,7 @@ consSize med =
 relmapSize :: (D.CDec c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapSize med n = C.relmapFlow med $ relkitSize n
 
+-- | Create @size@ relkit.
 relkitSize :: (D.CDec c) => S.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = D.headFrom [n]
@@ -253,6 +257,7 @@ consEqlize med = Right $ relmapEqlize med
 relmapEqlize :: (Ord c) => C.Intmed c -> C.Relmap c
 relmapEqlize med = C.relmapFlow med relkitEqlize
 
+-- | Create @eqlize@ relkit.
 relkitEqlize :: (Ord c) => C.RelkitFlow c
 relkitEqlize Nothing = Right C.relkitNothing
 relkitEqlize (Just he1) = Right kit2 where

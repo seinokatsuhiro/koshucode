@@ -64,6 +64,7 @@ consTie med =
 relmapTie :: (D.CTie c) => C.Intmed c -> ([S.TermName], S.TermName) -> C.Relmap c
 relmapTie med = C.relmapFlow med . relkitTie
 
+-- | Create @tie@ relkit.
 relkitTie :: (D.CTie c) => ([S.TermName], S.TermName) -> C.RelkitFlow c
 relkitTie _ Nothing = Right C.relkitNothing
 relkitTie (ns, to) (Just he1) = Right kit2 where
@@ -87,6 +88,7 @@ consUntie med =
 relmapUntie :: (D.CTie c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUntie med = C.relmapFlow med . relkitUntie
 
+-- | Create @untie@ relkit.
 relkitUntie :: (D.CTie c) => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
@@ -114,6 +116,7 @@ consTermName med =
 relmapTermName :: (D.CTerm c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
+-- | Create @term-name@ relkit.
 relkitTermName :: (D.CTerm c) => S.TermName -> C.RelkitFlow c
 relkitTermName n Nothing    = Msg.noAttr n
 relkitTermName n (Just he1) = Right kit2 where
@@ -136,6 +139,7 @@ consToday med =
 relmapToday :: (D.CTime c) => C.Intmed c -> (S.TermName, D.Time) -> C.Relmap c
 relmapToday med = C.relmapFlow med . relkitToday
 
+-- | Create @today@ relkit.
 relkitToday :: (D.CTime c) => (S.TermName, D.Time) -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitToday _ Nothing = Right C.relkitNothing
 relkitToday (n, t) (Just he1) = Right kit2 where

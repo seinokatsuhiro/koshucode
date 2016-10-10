@@ -45,6 +45,7 @@ ropsTermGadget = Op.ropList "term"  -- GROUP
 
 -- ----------------------  prefix
 
+-- | Add prefix to specified terms.
 consPrefix :: C.RopCons c
 consPrefix med =
     do let tag = Op.getTag med "to"
@@ -55,7 +56,7 @@ consPrefix med =
 relmapPrefix :: C.Intmed c -> String -> [String] -> C.Relmap c
 relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 
--- | Add prefix to specified terms.
+-- | Create @prefix@ relkit.
 relkitPrefix :: String -> [String] -> C.RelkitFlow c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
 relkitPrefix pre ns (Just he1) = Right kit2 where
@@ -70,6 +71,7 @@ prefixName pre ns = pre ++ "-" ++ ns
 
 -- ----------------------  unprefix
 
+-- | Remove prefix.
 consUnprefix :: C.RopCons c
 consUnprefix med =
     do pre <- Op.getTerm med "-prefix"
@@ -78,7 +80,7 @@ consUnprefix med =
 relmapUnprefix :: C.Intmed c -> String -> C.Relmap c
 relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 
--- | Remove prefix
+-- | Create @unprefix@ relkit.
 relkitUnprefix :: String -> C.RelkitFlow c
 relkitUnprefix _ Nothing = Right C.relkitNothing
 relkitUnprefix pre (Just he1) = Right kit2 where
@@ -94,6 +96,7 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
+-- | Change prefix.
 consPrefixChange :: C.RopCons c
 consPrefixChange med =
     do new <- Op.getTerm med "-new"
@@ -103,7 +106,7 @@ consPrefixChange med =
 relmapPrefixChange :: C.Intmed c -> (String, String) -> C.Relmap c
 relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 
--- | Change prefix
+-- | Create @prefix-change@ relkit.
 relkitPrefixChange :: (String, String) -> C.RelkitFlow c
 relkitPrefixChange _ Nothing = Right C.relkitNothing
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
@@ -124,6 +127,7 @@ consWipe = Right . relmapWipe
 relmapWipe :: C.Intmed c -> C.Relmap c
 relmapWipe med = C.relmapFlow med relkitWipe
 
+-- | Create @wipe@ relkit.
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing
 relkitWipe (Just he1) = Op.relkitCut ns1 (Just he1) where

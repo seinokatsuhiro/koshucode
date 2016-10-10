@@ -49,6 +49,7 @@ consBackward med =
 relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
 
+-- | Create @forward@ or @backward@ relkit.
 relkitToward :: D.ShareSideMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (heMap, boMap) ns (Just he1)
@@ -69,6 +70,7 @@ consLexical med = Right $ relmapLexical med
 relmapLexical :: C.Intmed c -> C.Relmap c
 relmapLexical med = C.relmapFlow med relkitLexical
 
+-- | Create @lexical@ relkit.
 relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
@@ -88,6 +90,7 @@ consOrder med =
 relmapOrder :: (Ord c) => C.Intmed c -> [S.SignedTermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 
+-- | Create @order@ relkit.
 relkitOrder :: (Ord c) => [S.SignedTermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where

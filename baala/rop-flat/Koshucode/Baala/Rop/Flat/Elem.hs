@@ -79,6 +79,7 @@ relmapMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
   => C.Intmed c -> S.TermName2 -> C.Relmap c
 relmapMember med = C.relmapFlow med . relkitMember
 
+-- | Create @member@ relkit.
 relkitMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
   => S.TermName2 -> C.RelkitFlow c
 relkitMember _ Nothing = Right C.relkitNothing
@@ -116,7 +117,7 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
 --
 --   >>> ix-elem /list -to /i /elem
 --   >>> iz-elem /list -to /i /elem
-
+--
 consIndexElem :: (Ord c, D.CContent c) => Int -> C.RopCons c
 consIndexElem from med =
   do xs     <- Op.getTerm  med "-coll"
@@ -126,6 +127,7 @@ consIndexElem from med =
 relmapIndexElem :: (Ord c, D.CContent c) => Int -> C.Intmed c -> S.TermName3 -> C.Relmap c
 relmapIndexElem from med = C.relmapFlow med . relkitIndexElem from
 
+-- | Create @ix-elem@ or @iz-elem@ relkit.
 relkitIndexElem :: (Ord c, D.CContent c) => Int -> S.TermName3 -> C.RelkitFlow c
 relkitIndexElem _ _ Nothing = Right C.relkitNothing
 relkitIndexElem from (i, x, xs) he1'@(Just he1) = kit2 where
@@ -245,6 +247,7 @@ relmapUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
   => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
 relmapUncollect med = C.relmapFlow med . relkitUncollect
 
+-- | Create @uncollect@ relkit.
 relkitUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
   => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUncollect _ Nothing = Right C.relkitNothing

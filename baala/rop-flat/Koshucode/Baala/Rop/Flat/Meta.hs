@@ -30,7 +30,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
 --   [@koshu-cop \/N@]
 --     Retrieve list of content operators.
 -- 
---   [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
+--   [@koshu-cop-infix \/N &#x5B; -height \/N &#x5D;&#x5B; -dir \/N &#x5D;@]
 --     Retrieve list of infix specifications.
 -- 
 --   [@koshu-rop /N@]
@@ -64,6 +64,7 @@ consKoshuCop med =
 relmapKoshuCop :: (D.CContent c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapKoshuCop med = C.relmapHook med . relkitKoshuCop
 
+-- | Create @koshu-cop@ relkit.
 relkitKoshuCop :: (D.CContent c) => S.TermName -> C.RelkitHook c
 relkitKoshuCop name res _ =
     Right $ C.relkitConstBody [name] $ map (B.li1 . D.pText . B.name) $ C.globalCops g
@@ -82,6 +83,7 @@ consKoshuCopInfix med =
 relmapKoshuCopInfix :: (D.CContent c) => C.Intmed c -> (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuCopInfix med = C.relmapHook med . relkitKoshuCopInfix
 
+-- | Create @koshu-cop-infix@ relkit.
 relkitKoshuCopInfix :: (D.CContent c) => (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.RelkitHook c
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     g     = C.getGlobal res
@@ -113,6 +115,7 @@ relmapKoshuRop :: (D.CContent c)
     -> C.Relmap c
 relmapKoshuRop med = C.relmapHook med . relkitKoshuRop
 
+-- | Create @koshu-rop@ relkit.
 relkitKoshuRop :: (D.CContent c)
     => (Maybe S.TermName, Maybe S.TermName, Maybe S.TermName)
     -> C.RelkitHook c
@@ -142,6 +145,7 @@ relmapKoshuProxy :: (D.CContent c)
     -> C.Relmap c
 relmapKoshuProxy med = C.relmapHook med . relkitKoshuProxy
 
+-- | Create @koshu-proxy@ relkit.
 relkitKoshuProxy :: (D.CContent c)
     => (Maybe S.TermName, Maybe S.TermName)
     -> C.RelkitHook c
@@ -178,6 +182,7 @@ consKoshuVersion med =
       to   <- D.contentCons undefined t
       Right $ C.relmapHook med $ relkitKoshuVersionCheck (from, to) n
 
+-- | Create @koshu-version@ relkit.
 relkitKoshuVersion :: (D.CContent c) => S.TermName -> C.RelkitHook c
 relkitKoshuVersion n h _ =
     Right $ C.relkitConstSingleton [n] [ D.pList $ map D.pInt $ apiVersion ver ] where
@@ -215,6 +220,7 @@ consKoshuSource med =
 relmapKoshuSource :: (D.CContent c) => C.Intmed c -> (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuSource med = C.relmapHook med . relkitKoshuSource
 
+-- | Create @koshu-source@ relkit.
 relkitKoshuSource :: (D.CContent c) => (S.TermName, Maybe S.TermName, Maybe S.TermName) -> C.RelkitHook c
 relkitKoshuSource (num, ty, name) h _ = Right kit2 where
     code       = C.resIncluded h
@@ -245,6 +251,7 @@ consKoshuAngleText med =
 relmapKoshuAngleText :: (Ord c, D.CText c) => C.Intmed c -> (S.TermName, Maybe S.TermName) -> C.Relmap c
 relmapKoshuAngleText med = C.relmapFlow med . relkitKoshuAngleText
 
+-- | Create @koshu-angle-text@ relkit.
 relkitKoshuAngleText :: (Ord c, D.CText c) => (S.TermName, Maybe S.TermName) -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitKoshuAngleText (n, Just c) _ = Right kit2 where
     kit2 = koshuAngleTextBody [n, c] assn
