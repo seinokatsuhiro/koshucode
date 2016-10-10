@@ -2,161 +2,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Text decomposition by subtext.
---
--- = Subtext
---
---   Subtext is a domain-specific language for text decomposition.
---   The @subtext@ relmap operator provides the functionality of this language.
---   In the following descrition, we use a symbol
---   /E/ for subtext expression,
---   //P/ for present term name,
---   //N/ for new term name,
---   /N/ for symbolic name,
---   /T/ for text,
---   /C/ for character (single-letter text).
---
--- == Relmap operator
---
---   The @subtext@ operator decompose text using subtext expression.
---   There are two ways for describing expression: single or bundle.
---
---   [ subtext /P ( E ) ]
---     Decompose text content of /\/P/ by single expression /E/.
---   [ subtext /P { N1 = E1 | N2 = E2 | ... } ]
---     Decompose text by bundle of named expressions.
---     Text decomposition starts from /N1/.
---
--- == Basic pattern
---
---   [ ? ]
---     Any character.
---   [ ?? ]
---     Context-dependent pattern.
---   [ begin ]
---     Beginning of text.
---   [ end ]
---     End of text.
---   [ ( E ) ]
---     Group expression /E/.
---
--- == Text
---
---   [ T ]
---     Text literal as /T/.
---   [ char T ]
---     Alternative occurences of characters included in /T/.
---   [ word T ]
---     Alternative occurences of words included in /T/.
---   [ cat T ... ]
---     Characters in the Unicode general categories,
---     /T/ is one-letter or two-letter category name.
---     See 'T.categoryLookup'.
---   [ C1 to C2 ]
---     Characters betweeen C1 and C2.
---
---   [ sp ]
---     Unicode space character or space-like control character
---     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
---     See 'Data.Char.isSpace'.
---   [ 012 ]
---     Unicode number character.
---     See 'T.categoryNumber'.
---   [ digit ]
---     ASCII digits.
---     See 'Data.Char.isDigit'.
---   [ abc ]
---     Unicode letter or mark character.
---     See 'T.categoryLetter' or 'T.categoryMark'.
---   [ +- ]
---     Unicode punctuation or symbol character.
---     See 'T.categoryPunctuation' or 'T.categorySymbol'.
---   [ open ]
---     Open punctuations.
---     See 'T.categoryOpen'.
---   [ close ]
---     Close punctuations.
---     See 'T.categoryClose'.
---   [ ascii ]
---     ASCII characters.
---     See 'Data.Char.isAscii'.
---   [ latin-1 ]
---     ISO 8859-1 (Latin-1) characters.
---     See 'Data.Char.isLatin1'.
---   [ koshu-symbol ]
---     Symbol character in Koshucode.
---   [ koshu-general ]
---     General character in Koshucode.
---   [ koshu-plain ]
---     Plain character in Koshucode.
---   [ koshu-numeric ]
---     Numeric character in Koshucode.
---
--- == Combination
---
---   [ E1 | E2 ]
---     Alternative occurence of /E1/ or /E2/.
---   [ E1 ++ E2 ]
---     Sequence of /E1/ followed by /E2/.
---   [ E1 or E2 ]
---     Alternative occurence of /E1/ or /E2/.
---   [ E1 and E2 ]
---     /E1/ and additional condition /E2/.
---   [ not E ]
---     Inverted condition.
---   [ last E ]
---     Find last /E/.
---   [ before E ]
---     Sequence of not /E/.
---   [ stay E ]
---     Match /E/ but input position is not changed.
---
--- == Modification
---
---   [ E as T ]
---     Replace to text /T/ when /E/ is matched.
---   [ E as wrap T1 T2 ]
---     Wrap matched text in /T1/ and /T2/.
---   [ E as prepend T ]
---     Prepend /T/ to matched text.
---   [ E as append T ]
---     Append /T/ to matched text.
---   [ E as lower ]
---     Convert text to lower case when /E/ is matched.
---   [ E as upper ]
---     Convert text to upper case when /E/ is matched.
---
--- == Repetition
---
---   [ { E } ]
---     Zero-or-more occurences of /E/. (Zero-repeat)
---   [ { E } ( N ) ]
---     /N/-times occurences of /E/.
---   [ { E } ( L to ) ]
---     Repetition of /E/ with lower bound /L/.
---   [ { E } ( to U ) ]
---     Repetition of /E/ with upper bound /U/.
---   [ { E } ( L to U ) ]
---     Repetition of /E/ with lower bound /L/ and upper bound /U/.
---   [ &#x5B; E &#x5D; ]
---     Zero-or-one occurences of /E/. (Option)
---   [ {- E -} ]
---     One-or-more occurences of /E/. (One-repeat)
---   [ E1 sep E2 ]
---     /E1/-separated /E2/. (Zero-repeat)
---
--- == Gathering subtext
---
---   [ /N E ]
---     Submatch for /E/ whose name is /\/N/.
---   [ /N ]
---     Named submatch, equivalent to /\/N/ ??.
---   [ off E ]
---     Turn off gathering text in /E/.
---   [ on E ]
---     Turn on gathering text in /E/.
 
 module Koshucode.Baala.Rop.Flat.Subtext
-  ( SubtextPara, consSubtext, relmapSubtext, relkitSubtext,
+  ( -- * Relmap
+    SubtextPara, consSubtext, relmapSubtext, relkitSubtext,
+    -- * Subtext
+    -- $Subtext
   ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -173,7 +24,20 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Type of subtext parameters.
 type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
 
--- | Construct relmap for text extraction.
+-- | __subtext \/P E__
+--
+--   Construct @subtext@ relmap.
+--   Decompose text content of \/P
+--   by matcing with subtext expression E.
+--   Terms contained in E are added to output relation.
+--   Expression E is either single or bundle:
+--
+--   [( E1 )]
+--     Decompose text by single expression E.
+--   [{ N1 = E1 | N2 = E2 | ... }]
+--     Decompose text by bundle of named expressions.
+--     Text decomposition starts from N1.
+--
 consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
   do term  <- Op.getTerm   med "-term"
@@ -412,3 +276,158 @@ koshuPlain = T.elem "koshu-plain" S.isPlainChar
 
 koshuNumeric :: T.CharExpr
 koshuNumeric = T.elem "koshu-numeric" S.isNumericChar
+
+
+-- --------------------------------------------  Subtext
+
+-- $Subtext
+--
+--   Subtext is a domain-specific language for text decomposition.
+--   The @subtext@ relmap operator provides the functionality of this language.
+--   In the following descrition, we use a symbol
+--   /E/ for subtext expression,
+--   //P/ for present term name,
+--   //N/ for new term name,
+--   /N/ for symbolic name,
+--   /T/ for text,
+--   /C/ for character (single-letter text).
+--
+-- == Relmap operator
+--
+--   The @subtext@ operator decompose text using subtext expression.
+--   There are two ways for describing expression: single or bundle.
+--
+--   [ subtext /P ( E ) ]
+--     Decompose text content of /\/P/ by single expression /E/.
+--   [ subtext /P { N1 = E1 | N2 = E2 | ... } ]
+--     Decompose text by bundle of named expressions.
+--     Text decomposition starts from /N1/.
+--
+-- == Basic pattern
+--
+--   [ ? ]
+--     Any character.
+--   [ ?? ]
+--     Context-dependent pattern.
+--   [ begin ]
+--     Beginning of text.
+--   [ end ]
+--     End of text.
+--   [ ( E ) ]
+--     Group expression /E/.
+--
+-- == Gathering subtext
+--
+--   [ /N E ]
+--     Submatch for /E/ whose name is /\/N/.
+--   [ /N ]
+--     Named submatch, equivalent to /\/N/ ??.
+--   [ off E ]
+--     Turn off gathering text in /E/.
+--   [ on E ]
+--     Turn on gathering text in /E/.
+--
+-- == Text
+--
+--   [ T ]
+--     Text literal as /T/.
+--   [ char T ]
+--     Alternative occurences of characters included in /T/.
+--   [ word T ]
+--     Alternative occurences of words included in /T/.
+--   [ cat T ... ]
+--     Characters in the Unicode general categories,
+--     /T/ is one-letter or two-letter category name.
+--     See 'T.categoryLookup'.
+--   [ C1 to C2 ]
+--     Characters betweeen C1 and C2.
+--
+--   [ sp ]
+--     Unicode space character or space-like control character
+--     including tabs (HT\/VT), newlines (CR\/LF), or form feed (FF).
+--     See 'Data.Char.isSpace'.
+--   [ 012 ]
+--     Unicode number character.
+--     See 'T.categoryNumber'.
+--   [ digit ]
+--     ASCII digits.
+--     See 'Data.Char.isDigit'.
+--   [ abc ]
+--     Unicode letter or mark character.
+--     See 'T.categoryLetter' or 'T.categoryMark'.
+--   [ +- ]
+--     Unicode punctuation or symbol character.
+--     See 'T.categoryPunctuation' or 'T.categorySymbol'.
+--   [ open ]
+--     Open punctuations.
+--     See 'T.categoryOpen'.
+--   [ close ]
+--     Close punctuations.
+--     See 'T.categoryClose'.
+--   [ ascii ]
+--     ASCII characters.
+--     See 'Data.Char.isAscii'.
+--   [ latin-1 ]
+--     ISO 8859-1 (Latin-1) characters.
+--     See 'Data.Char.isLatin1'.
+--   [ koshu-symbol ]
+--     Symbol character in Koshucode.
+--   [ koshu-general ]
+--     General character in Koshucode.
+--   [ koshu-plain ]
+--     Plain character in Koshucode.
+--   [ koshu-numeric ]
+--     Numeric character in Koshucode.
+--
+-- == Combination
+--
+--   [ E1 | E2 ]
+--     Alternative occurence of /E1/ or /E2/.
+--   [ E1 ++ E2 ]
+--     Sequence of /E1/ followed by /E2/.
+--   [ E1 or E2 ]
+--     Alternative occurence of /E1/ or /E2/.
+--   [ E1 and E2 ]
+--     /E1/ and additional condition /E2/.
+--   [ not E ]
+--     Inverted condition.
+--   [ last E ]
+--     Find last /E/.
+--   [ before E ]
+--     Sequence of not /E/.
+--   [ stay E ]
+--     Match /E/ but input position is not changed.
+--
+-- == Repetition
+--
+--   [ { E } ]
+--     Zero-or-more occurences of /E/. (Zero-repeat)
+--   [ { E } ( N ) ]
+--     /N/-times occurences of /E/.
+--   [ { E } ( L to ) ]
+--     Repetition of /E/ with lower bound /L/.
+--   [ { E } ( to U ) ]
+--     Repetition of /E/ with upper bound /U/.
+--   [ { E } ( L to U ) ]
+--     Repetition of /E/ with lower bound /L/ and upper bound /U/.
+--   [ &#x5B; E &#x5D; ]
+--     Zero-or-one occurences of /E/. (Option)
+--   [ {- E -} ]
+--     One-or-more occurences of /E/. (One-repeat)
+--   [ E1 sep E2 ]
+--     /E1/-separated /E2/. (Zero-repeat)
+--
+-- == Modification
+--
+--   [ E as T ]
+--     Replace to text /T/ when /E/ is matched.
+--   [ E as wrap T1 T2 ]
+--     Wrap matched text in /T1/ and /T2/.
+--   [ E as prepend T ]
+--     Prepend /T/ to matched text.
+--   [ E as append T ]
+--     Append /T/ to matched text.
+--   [ E as lower ]
+--     Convert text to lower case when /E/ is matched.
+--   [ E as upper ]
+--     Convert text to upper case when /E/ is matched.
