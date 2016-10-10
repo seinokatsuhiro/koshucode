@@ -20,11 +20,12 @@ pkg_help () {
     echo "  version          List version number in cabal files"
     echo
     echo "COMMAND for executing"
+    echo "  doc0             Generate Haddock documents less verbosely"
+    echo "  doc              Generate Haddock documents with default verbosity"
+    echo "  doc2             Regenerate Haddock documents"
     echo "  exec C           Execute C in each package directories"
     echo "  exec-all C       Same as exec except for ignoring exit status"
     echo "  init             Initilize sandbox"
-    echo "  haddock          Generate Haddock documents"
-    echo "  rehaddock        Regenerate Haddock documents"
     echo "  subst X Y        Substitute X with Y in cabal files"
     echo "  unreg            Unregister koshucode libraries"
     echo
@@ -111,6 +112,7 @@ pkg_haddock () {
         ( cd "$pkg"
           pkg_section "haddock (in $pkg)"
           cabal haddock \
+              --verbose=$pkg_doc_verbose \
               --html \
               --css=../haddock/ocean2.css \
               --hscolour-css=../haddock/hscolour2.css \
@@ -218,7 +220,7 @@ pkg_dir=`pwd | sed -n 's:\(.*/koshucode-master/baala\).*:\1:p'`
 
 pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/haddock/doc
 pkg_doc_hackage='http://hackage.haskell.org/package/$pkg/docs'
-
+pkg_doc_verbose=1
 
 case "$1" in
     cabal)
@@ -243,7 +245,14 @@ case "$1" in
         pkg_sandbox_installed "*" ;;
     installed-koshu)
         pkg_sandbox_installed "koshu*" ;;
-    haddock)
+    doc0)
+        pkg_doc_verbose=0
+        pkg_haddock ;;
+    doc)
+        pkg_haddock ;;
+    doc2)
+        pkg_exec cabal configure
+        pkg_exec cabal build
         pkg_haddock ;;
     hoogle)
         shift
@@ -252,10 +261,6 @@ case "$1" in
         else
             pkg_hoogle_grep "$@"
         fi ;;
-    rehaddock)
-        pkg_exec cabal configure
-        pkg_exec cabal build
-        pkg_haddock ;;
     subst)
         pkg_cabal_subst "$2" "$3" ;;
     synopsis)
