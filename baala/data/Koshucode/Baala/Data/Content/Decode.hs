@@ -186,13 +186,14 @@ consRelTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
 
 -- ----------------------  Assert type
 
+-- | Type of assertions.
 data AssertType
-    = AssertAffirm       -- ^ @|==@ /pattern/ @:@ /relmap/
-    | AssertDeny         -- ^ @|=x@ /pattern/ @:@ /relmap/
-    | AssertMultiDeny    -- ^ @|=xx@ /pattern/ @:@ /relmap/
-    | AssertChange       -- ^ @|=c@ /pattern/ @:@ /relmap/
-    | AssertMultiChange  -- ^ @|=cc@ /pattern/ @:@ /relmap/
-    | AssertViolate      -- ^ @|=v@ /pattern/ @:@ /relmap/
+    = AssertAffirm       -- ^ @|==@ /C/ @:@ /R/ generates affirmative judges.
+    | AssertDeny         -- ^ @|=x@ /C/ @:@ /R/ generates denial judges.
+    | AssertMultiDeny    -- ^ @|=xx@ /C/ @:@ /R/ generates multiple-denial judges.
+    | AssertChange       -- ^ @|=c@ /C/ @:@ /R/ generates changement judges.
+    | AssertMultiChange  -- ^ @|=cc@ /C/ @:@ /R/ generates multiple-changement judges.
+    | AssertViolate      -- ^ @|=v@ /C/ @:@ /R/ generates violation judges.
       deriving (Show, Eq, Ord)
 
 -- | Frege's stroke and various assertion lines.
