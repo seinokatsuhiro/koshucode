@@ -18,6 +18,8 @@ import qualified Koshucode.Baala.Rop.Base           as Op
 import qualified Koshucode.Baala.Subtext            as T
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 
 -- --------------------------------------------  Operator
 
@@ -91,13 +93,11 @@ trimIf False t = t
 -- | Type for subtext bundle.
 type CharBundle = T.Bundle Char
 
-pattern L tok   <- B.TreeL tok
 pattern K n     <- L (Key n)
 pattern T s     <- L (Text s)
 pattern C c     <- L (Char c)
 pattern To      <- K "to"
 
-pattern B g xs  <- B.TreeB g _ xs
 pattern G xs    <- B S.BracketGroup xs
 pattern Empty   <- G []
 

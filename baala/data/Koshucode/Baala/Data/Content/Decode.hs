@@ -35,14 +35,11 @@ import qualified Koshucode.Baala.Data.Content.Utility    as D
 import qualified Koshucode.Baala.Base.Message            as Msg
 import qualified Koshucode.Baala.Data.Content.Message    as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 
 -- ----------------------  General content
 
-pattern L tok      <- B.TreeL tok
-pattern B b xs     <- B.TreeB b _ xs
-pattern LText f s  <- L (Text f s)
-pattern LRaw s     <- LText S.TextRaw s
-pattern LQq s      <- LText S.TextQQ s
 pattern LName s    <- L (S.TTermN _ _ s)
 pattern Text f s   <- S.TText _ f s
 
