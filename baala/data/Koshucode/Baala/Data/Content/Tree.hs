@@ -5,7 +5,6 @@
 
 module Koshucode.Baala.Data.Content.Tree
   ( -- * Single content
-    treesToText,
     treeToText,
     treesToDigits,
     tokenClock,
@@ -34,9 +33,9 @@ import qualified Koshucode.Baala.Data.Content.Message  as Msg
 --   >>> S.tt "aa bb" >>= treesToText False
 --   Right "aabb"
 --
-treesToText :: Bool -> S.TTreesToAb String
-treesToText q xs = do ss <- treesToTexts q xs
-                      Right $ concat ss
+-- treesToText :: Bool -> S.TTreesToAb String
+-- treesToText q xs = do ss <- treesToTexts q xs
+--                       Right $ concat ss
 
 -- | Get text list from token trees.
 treesToTexts :: Bool -> S.TTreesToAb [String]

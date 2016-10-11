@@ -82,7 +82,6 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     token t                  = Msg.unkWord $ S.tokenContent t
 
     group g xs@(LText f _ : _)
-        | f  > S.TextRaw   = eith g D.putText $ D.treesToText True xs
         | f == S.TextRaw   = eithcon (eith g
                                D.putTime $ D.treesToTime   xs)
                                decimal   $ D.treesToDigits xs
