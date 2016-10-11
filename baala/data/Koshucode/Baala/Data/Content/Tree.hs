@@ -22,6 +22,8 @@ import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 
 -- ----------------------  Text
 
@@ -43,7 +45,7 @@ treesToTexts q = mapM $ treeToText q
 
 -- | Get text from token tree.
 treeToText :: Bool -> S.TTreeToAb String
-treeToText q (B.TreeL tok) = tokenToText q tok
+treeToText q (L tok) = tokenToText q tok
 treeToText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
@@ -242,9 +244,9 @@ treeToInterpWord (B.TreeL x) =
 -- | Get flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
 treeToFlatTerm :: S.TTreeToAb S.TermName
-treeToFlatTerm (S.TermLeafName _ _ n)  = Right n
-treeToFlatTerm (B.TreeL t)             = Msg.reqFlatName t
-treeToFlatTerm _                       = Msg.reqTermName
+treeToFlatTerm (L (S.TTermN _ _ n))  = Right n
+treeToFlatTerm (L t)                 = Msg.reqFlatName t
+treeToFlatTerm _                     = Msg.reqTermName
 
 -- | Get list of named token trees from token trees.
 --
@@ -265,9 +267,9 @@ treesToTerms = name where
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
-    isTermLeaf (S.TermLeafName _ _ _) = True
-    isTermLeaf (S.TermLeafPath _ _)   = True
-    isTermLeaf _                      = False
+    isTermLeaf (L (S.TTermN _ _ _))             = True
+    isTermLeaf (L (S.TTerm _ S.TermTypePath _)) = True
+    isTermLeaf _                                = False
 
 -- | Get list of named token trees from token trees.
 --   This function wraps long branches into group.

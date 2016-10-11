@@ -15,6 +15,8 @@ import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 -- | Construct content expression from token tree
 coxBuild :: forall c. (D.CContent c)
   => D.ContentCalc c -> D.CopSet c -> S.TTreeToAb (D.Cox c)
@@ -81,14 +83,14 @@ construct calc = expr where
          in cons cp tree
 
     cons :: [B.CodePt] -> S.TTreeToAb (D.Cox c)
-    cons cp tree@(B.TreeB S.BracketGroup _ subtrees)
+    cons cp tree@(B S.BracketGroup subtrees)
          = case subtrees of
-             f@(S.TextLeaf q _ w) : xs
+             f@(L (S.TText _ q w)) : xs
                  | q == S.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
              -- term with options (experimental)
-             (B.TreeL (S.TTermPath _ ns)) : _
+             (L (S.TTermPath _ ns)) : _
                  -> Right $ D.CoxTerm cp ns []
 
              -- fill args in the blanks (application)
@@ -96,19 +98,19 @@ construct calc = expr where
              []     -> lit cp tree
 
     -- form with blanks (function)
-    cons cp (B.TreeB S.BracketForm _ [vars, b1]) =
+    cons cp (B S.BracketForm [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
            let vs = map S.tokenContent $ B.untree vars'
            Right $ D.CoxForm cp tag vs b2
-    cons _ (B.TreeB S.BracketForm _ trees) =
+    cons _ (B S.BracketForm trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
-    cons cp tree@(B.TreeB _ _ _) = lit cp tree
+    cons cp tree@(B _ _) = lit cp tree
 
     -- literal or variable
-    cons cp tree@(B.TreeL tok) = case tok of
+    cons cp tree@(L tok) = case tok of
         S.TTermN _ _ n             -> Right $ D.CoxTerm  cp [n] []
         S.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
         S.TName _ op               -> Right $ D.CoxBlank cp op
@@ -116,6 +118,8 @@ construct calc = expr where
         S.TText _ _ _              -> lit cp tree
         S.TTermQ _ _               -> lit cp tree
         _                          -> B.bug "core/leaf"
+
+    cons _ _ = B.bug "core"
 
     fill cp f xs =
         do f'  <- expr f
