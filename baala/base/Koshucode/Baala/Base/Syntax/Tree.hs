@@ -1,14 +1,19 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Tree structure.
+
 module Koshucode.Baala.Base.Syntax.Tree
   ( -- * Tree
     CodeTree (..),
     tree, trees,
-    treeWrap,
+
+    -- * Transformation
     untree, untrees,
-    leaves, undouble,
-    mapToLeaf,
+    treeLeaves,
+    undouble,
+    treeWrap,
+    treeLeafMap, treeBranchMap,
   
     -- * Bracket
     Bracket (..),
@@ -23,19 +28,20 @@ import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
 
 
-
 -- ----------------------  Tree
 
 -- | Tree of leaf and branch.
 data CodeTree p a
-    = TreeL a                                -- ^ Terminal of tree.
-    | TreeB p (Maybe (a, a)) [CodeTree p a]  -- ^ Bracket-type and subtrees.
+    = TreeL { treeLeaf         :: a
+            } -- ^ Terminal of tree.
+    | TreeB { treeBracketType  :: p
+            , treeBracketLeaf  :: Maybe (a, a)
+            , treeBranch       :: [CodeTree p a]
+            } -- ^ Bracket-type and subtrees.
       deriving (Show, Eq, Ord)
 
 instance Functor (CodeTree p) where
-    fmap f (TreeL x)       = TreeL (f x)
-    fmap f (TreeB n Nothing xs) = TreeB n Nothing $ map (fmap f) xs
-    fmap f (TreeB n (Just (x, y)) xs) = TreeB n (Just (f x, f y)) $ map (fmap f) xs
+    fmap = mapToAllLeaf
 
 -- | Convert a list of elements to a single tree.
 tree :: (Ord p, B.CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
@@ -69,10 +75,6 @@ trees bracketType zero xs = result where
 
 -- ----------------------  Utility
 
-treeWrap :: p -> [CodeTree p a] -> CodeTree p a
-treeWrap _   [x] = x
-treeWrap one xs  = TreeB one Nothing xs
-
 -- | Convert tree to list of tokens.
 untrees :: [CodeTree p a] -> [a]
 untrees = concatMap untree
@@ -86,9 +88,10 @@ untree = loop where
     loop (TreeB _ (Just (open, close)) xs) =
         open : concatMap loop xs ++ [close]
 
-leaves :: CodeTree p a -> [a]
-leaves (TreeB _ _ ts)  = concatMap leaves ts
-leaves (TreeL x)       = [x]
+-- | Collect leaves in tree.
+treeLeaves :: CodeTree p a -> [a]
+treeLeaves (TreeB _ _ ts)  = concatMap treeLeaves ts
+treeLeaves (TreeL x)       = [x]
 
 -- | Simplify tree by removing double brackets,
 --   like @((a))@ to @(a)@.
@@ -104,14 +107,30 @@ undouble p = loop where
           xs2 -> TreeB n pp xs2
     loop x = x
 
--- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
--- e2 = TreeB 2 [e1, TreeB 1 [TreeB 0 [TreeL 0]]]
--- e3 = undouble e2
+-- | Wrap trees into single tree.
+treeWrap :: p -> [CodeTree p a] -> CodeTree p a
+treeWrap _   [x] = x
+treeWrap one xs  = TreeB one Nothing xs
 
-mapToLeaf :: (a -> a) -> B.Map (CodeTree p a)
-mapToLeaf f = loop where
-    loop (TreeB p aa sub)  = TreeB p aa $ map loop sub
-    loop (TreeL a)        = TreeL $ f a
+mapToAllLeaf :: (a -> b) -> CodeTree p a -> CodeTree p b
+mapToAllLeaf f = loop where
+    loop (TreeL x)                   = TreeL $ f x
+    loop (TreeB n (Nothing)     xs)  = TreeB n (Nothing)         $ map loop xs
+    loop (TreeB n (Just (x, y)) xs)  = TreeB n (Just (f x, f y)) $ map loop xs
+
+-- | Map function to all leaves.
+--   This function is similar to 'fmap',
+--   but not map to 'treeBracketLeaf'.
+treeLeafMap :: (a -> a) -> B.Map (CodeTree p a)
+treeLeafMap f = loop where
+    loop (TreeL x)        = TreeL $ f x
+    loop (TreeB p aa xs)  = TreeB p aa $ map loop xs
+
+-- | Map function to all branches.
+treeBranchMap :: (p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a) -> B.Map (CodeTree p a)
+treeBranchMap f = loop where
+    loop (TreeL x)        = TreeL x
+    loop (TreeB p aa xs)  = f p aa $ map loop xs
 
 
 -- ----------------------  Bracket
@@ -168,4 +187,3 @@ bracketTable xs = bracketType where
         case B.lookupSatisfy a bracketTypeTable of
           Just p  -> p
           Nothing -> BracketNone
-

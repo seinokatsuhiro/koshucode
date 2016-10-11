@@ -173,7 +173,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
         markLocalToken _ loc = loc
 
         markLocalRelmap :: B.Map S.Token -> B.Map (S.AttrName, [S.TTree])
-        markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.mapToLeaf mark <$> ts)
+        markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeLeafMap mark <$> ts)
         markLocalRelmap _ (n, ts) = (n, ts)
 
 
