@@ -4,8 +4,7 @@
 -- | Utilities for token trees.
 
 module Koshucode.Baala.Data.Content.Tree
-  ( treesToTokens,
-    treesToTexts,
+  ( treesToText,
     treeToText,
     treesToDigits,
     tokenClock,
@@ -14,42 +13,33 @@ module Koshucode.Baala.Data.Content.Tree
     treesToTerms,
     treesToTerms1,
     treesToInterp,
-    -- $Function
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
-import qualified Koshucode.Baala.Base.Message          as Msg
 import qualified Koshucode.Baala.Data.Content.Message  as Msg
-
--- $Function
---
---  /Example/
---
---  >>> treesToTerms =<< B.tt "/a 'A3 /b 10"
---  Right [("/a", [TreeL ...]),
---         ("/b", [TreeL ...])]
---
-
-
--- ----------------------  Token
-
-treesToTokens :: S.TTreesToAb [S.Token]
-treesToTokens = mapM token where
-    token (B.TreeL t) = Right t
-    token _ = Msg.adlib "not token"
 
 
 -- ----------------------  Text
 
-treesToTexts :: Bool -> S.TTreesToAb [String]
-treesToTexts q = loop [] where
-    loop ss [] = Right $ reverse ss
-    loop ss (B.TreeL x : xs) = do s <- tokenToText q x
-                                  loop (s : ss) xs
-    loop _ _ = Msg.nothing
+-- | Get single text from token trees.
+--
+--   >>> S.tt "'aa 'bb" >>= treesToText True
+--   Right "aabb"
+--
+--   >>> S.tt "aa bb" >>= treesToText False
+--   Right "aabb"
+--
+treesToText :: Bool -> S.TTreesToAb String
+treesToText q xs = do ss <- treesToTexts q xs
+                      Right $ concat ss
 
+-- | Get text list from token trees.
+treesToTexts :: Bool -> S.TTreesToAb [String]
+treesToTexts q = mapM $ treeToText q
+
+-- | Get text from token tree.
 treeToText :: Bool -> S.TTreeToAb String
 treeToText q (B.TreeL tok) = tokenToText q tok
 treeToText _ _ = Msg.nothing
@@ -60,6 +50,11 @@ tokenToText True  (S.TText _ q w) | q > S.TextRaw  = Right w
 tokenToText False (S.TTextRaw _ w)                 = Right w
 tokenToText _ _  =  Msg.nothing
 
+-- | Get digits from token trees.
+--
+--   >>> S.tt "-123 450.00" >>= treesToDigits
+--   Right "-123450.00"
+--
 treesToDigits :: S.TTreesToAb String
 treesToDigits = concatDigits B.<=< treesToTexts False
 
@@ -75,6 +70,7 @@ concatDigits = first where
 
 -- ----------------------  Clock
 
+-- | Get clock from token.
 tokenClock :: S.Token -> B.Ab D.Clock
 tokenClock (S.TTextBar _ ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
@@ -135,6 +131,17 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
+-- | Get time from token trees.
+--
+--   >>> S.tt "2013-04-18 12:00" >>= treesToTime
+--   Right (TimeYmdc (Monthly 2013-04-18) (ClockDhm 0 43200))
+--
+--   >>> S.tt "2013-04-18" >>= treesToTime
+--   Right (TimeYmd (Monthly 2013-04-18))
+--
+--   >>> S.tt "2013-#16" >>= treesToTime
+--   Right (TimeYw 2013-04-15)
+--
 treesToTime :: S.TTreesToAb D.Time
 treesToTime = concatTime B.<=< treesToTexts False
 
@@ -213,7 +220,12 @@ treeToFlatTerm (S.TermLeafName _ _ n)  = Right n
 treeToFlatTerm (B.TreeL t)             = Msg.reqFlatName t
 treeToFlatTerm _                       = Msg.reqTermName
 
--- | Convert token trees into a list of named token trees.
+-- | Get list of named token trees from token trees.
+--
+--   >>> S.tt "/a 'A3 /b 10" >>= treesToTerms
+--   Right [("a", [TreeL ...]),
+--          ("b", [TreeL ...])]
+--
 treesToTerms :: S.TTreesToAb [S.NamedTrees]
 treesToTerms = name where
     name [] = Right []
@@ -231,6 +243,8 @@ treesToTerms = name where
     isTermLeaf (S.TermLeafPath _ _)   = True
     isTermLeaf _                      = False
 
+-- | Get list of named token trees from token trees.
+--   This function wraps long branches into group.
 treesToTerms1 :: S.TTreesToAb [S.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
                       Right $ B.mapSndTo S.ttreeGroup xs'
@@ -238,6 +252,12 @@ treesToTerms1 xs = do xs' <- treesToTerms xs
 
 -- ----------------------  Interp
 
+-- | Get interpretation from token trees.
+--
+--   >>> S.tt "term /a" >>= treesToInterp
+--   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
+--                   interpTerms = ["a"] })
+--
 treesToInterp :: S.TTreesToAb D.Interp
 treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
 
