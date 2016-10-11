@@ -24,20 +24,27 @@ module Koshucode.Baala.Data.Content.Decode
     -- $CompoundData
   ) where
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data.Type             as D
-import qualified Koshucode.Baala.Data.Content.Singleton    as D
-import qualified Koshucode.Baala.Data.Content.Complex  as D
-import qualified Koshucode.Baala.Data.Content.Simple   as D
-import qualified Koshucode.Baala.Data.Content.Tree     as D
-import qualified Koshucode.Baala.Data.Content.Utility  as D
-import qualified Koshucode.Baala.Base.Message          as Msg
-import qualified Koshucode.Baala.Data.Content.Message  as Msg
-
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Data.Type               as D
+import qualified Koshucode.Baala.Data.Content.Singleton  as D
+import qualified Koshucode.Baala.Data.Content.Complex    as D
+import qualified Koshucode.Baala.Data.Content.Simple     as D
+import qualified Koshucode.Baala.Data.Content.Tree       as D
+import qualified Koshucode.Baala.Data.Content.Utility    as D
+import qualified Koshucode.Baala.Base.Message            as Msg
+import qualified Koshucode.Baala.Data.Content.Message    as Msg
 
 
 -- ----------------------  General content
+
+pattern L tok      <- B.TreeL tok
+pattern B b xs     <- B.TreeB b _ xs
+pattern LText f s  <- L (Text f s)
+pattern LRaw s     <- LText S.TextRaw s
+pattern LQq s      <- LText S.TextQQ s
+pattern LName s    <- L (S.TTermN _ _ s)
+pattern Text f s   <- S.TText _ f s
 
 -- | Content constructor.
 type ContentCons c = S.TTreeToAb c
@@ -49,13 +56,13 @@ type ContentCalc c = S.TTreeToAb c
 contentCons :: forall c. (D.CContent c) => ContentCalc c -> ContentCons c
 contentCons calc tree = Msg.abLiteral tree $ cons tree where
     cons :: ContentCons c
-    cons x@(B.TreeL t)
-        = eithcon (eithcon (eithcon (token t)
-            D.putClock  $ D.tokenClock t)
+    cons x@(L tok)
+        = eithcon (eithcon (eithcon (token tok)
+            D.putClock  $ D.tokenClock tok)
             D.putTime   $ D.treesToTime   [x])
             decimal     $ D.treesToDigits [x]
-    cons g@(B.TreeB b _ xs) = case b of
-        S.BracketGroup   -> group g
+    cons g@(B b xs) = case b of
+        S.BracketGroup   -> group g xs
         S.BracketList    -> D.putList   =<< consContents cons xs
         S.BracketSet     -> D.putSet    =<< consContents cons xs
         S.BracketTie     ->                 consAngle    cons xs
@@ -63,9 +70,10 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
         S.BracketType    -> D.putType   =<< consType          xs
         S.BracketInterp  -> D.putInterp =<< D.treesToInterp   xs
         _                -> Msg.unkBracket
+    cons _ = B.bug "contentCons"
 
     token :: S.Token -> B.Ab c
-    token (S.TText _ n w)
+    token (Text n w)
         | n <= S.TextRaw     = keyword w
         | n == S.TextQ       = D.putCode w
         | otherwise          = D.putText w
@@ -73,26 +81,25 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     token (S.TTerm _ _ [n])  = D.putTerm n
     token t                  = Msg.unkWord $ S.tokenContent t
 
-    group :: S.TTreeToAb c
-    group g@(B.TreeB _ _ xs@(S.TextLeaf f _ _ : _))
-        | f  > S.TextRaw     = eith g text $ D.treesToTexts True xs
-        | f == S.TextRaw     = eithcon (eith g
-                                 D.putTime $ D.treesToTime   xs)
-                                 decimal   $ D.treesToDigits xs
-    group (B.TreeB _ _ [])   = Right D.empty
-    group g                  = calc g
+    group g xs@(LText f _ : _)
+        | f  > S.TextRaw   = eith g text $ D.treesToTexts True xs
+        | f == S.TextRaw   = eithcon (eith g
+                               D.putTime $ D.treesToTime   xs)
+                               decimal   $ D.treesToDigits xs
+    group _ []             = Right D.empty
+    group g _              = calc g
 
     eithcon f      = either (const f)
     eith g         = either (const $ calc g)
     text           = D.putText . concat
     decimal        = D.putDec B.<=< D.decodeDecimal
 
-    keyword :: (D.CEmpty c, D.CBool c) => String -> B.Ab c
+    keyword :: String -> B.Ab c
     keyword "(+)"  = Right D.true
     keyword "(-)"  = Right D.false
     keyword "(/)"  = Right D.end
-    keyword "0"    = Right D.false
-    keyword "1"    = Right D.true
+    keyword "0"    = Right D.false  -- obsolete
+    keyword "1"    = Right D.true   -- obsolete
     keyword "dum"  = Right D.dum
     keyword "dee"  = Right D.dee
     keyword w      = Msg.unkWord w
@@ -120,9 +127,9 @@ consContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      consAngle                consAngle
 
 consAngle :: (D.CContent c) => ContentCons c -> S.TTreesToAb c
-consAngle cons xs@(S.TermLeafName _ _ _ : _) = D.putTie =<< consTie cons xs
+consAngle cons xs@(LName _ : _) = D.putTie =<< consTie cons xs
 consAngle _ [] = D.putTie []
-consAngle _ [S.TextLeafRaw _ "words", S.TextLeafQQ _ ws] = D.putList $ map D.pText $ words ws
+consAngle _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
 consAngle _ _ = Msg.adlib "unknown angle bracket"
 
 -- Tie
@@ -165,11 +172,11 @@ consRel cons xs =
 
 consTermNames :: S.TTreesTo ([S.TermName], [S.TTree])
 consTermNames = terms [] where
-    terms ns (S.TermLeafName _ _ n : xs) = terms (n : ns) xs
+    terms ns (LName n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 consRelTuple :: (D.CContent c) => ContentCons c -> Int -> S.TTreeToAb [c]
-consRelTuple cons n g@(B.TreeB S.BracketList _ xs) =
+consRelTuple cons n g@(B S.BracketList xs) =
     do cs <- consContents cons xs
        let n' = length cs
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
@@ -188,6 +195,7 @@ data AssertType
     | AssertViolate      -- ^ @|=v@ /pattern/ @:@ /relmap/
       deriving (Show, Eq, Ord)
 
+-- | Frege's stroke and various assertion lines.
 assertSymbol :: AssertType -> String
 assertSymbol AssertAffirm       = "|=="
 assertSymbol AssertDeny         = "|=X"
@@ -214,14 +222,14 @@ consType = gen where
                [x] ->  single x
                xs2 ->  Right . D.TypeSum =<< mapM gen xs2
 
-    single [B.TreeB _ _ xs]  = gen xs
-    single (S.TextLeaf f _ n : xs)
+    single [B _ xs]          = gen xs
+    single (LText f n : xs)
         | f == S.TextRaw     = dispatch n xs
         | otherwise          = Msg.quoteType n
     single []                = Right $ D.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [S.TextLeafRaw _ w] | w `elem` ws = Right $ Just w
+    precision ws [LRaw w] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 
