@@ -16,15 +16,15 @@ module Koshucode.Baala.Syntax.TTree.TokenTree
     pattern TermLeaf,
     pattern TermLeafName,
     pattern TermLeafPath,
-    pattern TermLeafLocal,
+    --pattern TermLeafLocal,
     -- ** Text leaf
     pattern TextLeaf,
     pattern TextLeafRaw,
     pattern TextLeafAttr,
     pattern TextLeafAttr2,
     pattern TextLeafQ,
-    pattern TextLeafQQ,
-    pattern TextLeafKey,
+    --pattern TextLeafQQ,
+    --pattern TextLeafKey,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -57,7 +57,7 @@ type TTreesToAb a = [TTree] -> B.Ab a
 pattern TermLeaf      cp q ws    = B.TreeL (S.TTerm   cp q ws)
 pattern TermLeafName  cp sign w  = B.TreeL (S.TTermN  cp sign w)
 pattern TermLeafPath  cp ws      = TermLeaf cp S.TermTypePath ws
-pattern TermLeafLocal cp v e ps  = B.TreeL (S.TLocal cp v e ps)
+--pattern TermLeafLocal cp v e ps  = B.TreeL (S.TLocal cp v e ps)
 
 -- | Text leaf.
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
@@ -70,7 +70,7 @@ pattern TextLeafAttr2 cp w  = TextLeaf S.TextRaw cp ('-' : '-' : w)
 -- | Text leaf of 'S.TextQ'.
 pattern TextLeafQ     cp w  = TextLeaf S.TextQ   cp w
 -- | Text leaf of 'S.TextQQ'.
-pattern TextLeafQQ    cp w  = TextLeaf S.TextQQ  cp w
+--pattern TextLeafQQ    cp w  = TextLeaf S.TextQQ  cp w
 -- | Text leaf of 'S.TextKey'.
-pattern TextLeafKey   cp w  = TextLeaf S.TextKey cp w
+--pattern TextLeafKey   cp w  = TextLeaf S.TextKey cp w
 
