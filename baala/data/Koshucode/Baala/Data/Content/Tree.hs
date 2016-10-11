@@ -4,15 +4,18 @@
 -- | Utilities for token trees.
 
 module Koshucode.Baala.Data.Content.Tree
-  ( treesToText,
+  ( -- * Single content
+    treesToText,
     treeToText,
     treesToDigits,
     tokenClock,
     treesToTime,
+    treesToInterp,
     treeToFlatTerm,
+
+    -- * Multiple contents
     treesToTerms,
     treesToTerms1,
-    treesToInterp,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -49,6 +52,9 @@ tokenToText :: Bool -> S.Token -> B.Ab String
 tokenToText True  (S.TText _ q w) | q > S.TextRaw  = Right w
 tokenToText False (S.TTextRaw _ w)                 = Right w
 tokenToText _ _  =  Msg.nothing
+
+
+-- ----------------------  Number
 
 -- | Get digits from token trees.
 --
@@ -211,6 +217,27 @@ concatTime = year where
                           in k c $ Just z
 
 
+-- ----------------------  Interp
+
+-- | Get interpretation from token trees.
+--
+--   >>> S.tt "term /a" >>= treesToInterp
+--   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
+--                   interpTerms = ["a"] })
+--
+treesToInterp :: S.TTreesToAb D.Interp
+treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
+
+treeToInterpWord :: S.TTreeToAb D.InterpWord
+treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
+treeToInterpWord (B.TreeL x) =
+    case x of
+      S.TText _ _ w    -> Right $ D.InterpText w
+      S.TTermN _ _ n   -> Right $ D.InterpTerm n
+      S.TTerm _ _ [n]  -> Right $ D.InterpTerm n
+      _                -> Msg.nothing
+
+
 -- ----------------------  Term
 
 -- | Get flat term name from token tree.
@@ -248,24 +275,3 @@ treesToTerms = name where
 treesToTerms1 :: S.TTreesToAb [S.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
                       Right $ B.mapSndTo S.ttreeGroup xs'
-
-
--- ----------------------  Interp
-
--- | Get interpretation from token trees.
---
---   >>> S.tt "term /a" >>= treesToInterp
---   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
---                   interpTerms = ["a"] })
---
-treesToInterp :: S.TTreesToAb D.Interp
-treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
-
-treeToInterpWord :: S.TTreeToAb D.InterpWord
-treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
-treeToInterpWord (B.TreeL x) =
-    case x of
-      S.TText _ _ w    -> Right $ D.InterpText w
-      S.TTermN _ _ n   -> Right $ D.InterpTerm n
-      S.TTerm _ _ [n]  -> Right $ D.InterpTerm n
-      _                -> Msg.nothing

@@ -64,21 +64,25 @@ getAbortableOption y f med name =
 
 -- ----------------------  Basic
 
+-- | Get relmap parameter.
 getPara :: C.Intmed c -> S.AttrPara
 getPara = C.lexAttr . C.medLexmap
 
 getTag :: C.Intmed c -> String -> Bool
-getTag med = (`elem` getTags med)
+getTag med tag = tag `elem` getTags med
 
+-- | Get usage tags.
 getTags :: C.Intmed c -> [String]
 getTags = S.paraTags . getPara
 
+-- | Get optional parameter with default value.
 getOption :: a -> RopGet c a -> RopGet c a
 getOption y get med name =
     case lookupTree name med of
       Nothing -> Right y
       Just _  -> get med name
 
+-- | Get parameter whenever given or not.
 getMaybe :: RopGet c a -> RopGet c (Maybe a)
 getMaybe get med name =
     case lookupTree name med of
@@ -105,16 +109,18 @@ getWord = getAbortable get where
 
 -- ----------------------  Tree
 
+-- | Get trees as single tree.
+getTree :: RopGet c S.TTree
+getTree med name =
+    do trees <- getTrees med name
+       Right $ S.ttreeGroup trees
+
+-- | Get trees from parameter.
 getTrees :: RopGet c [S.TTree]
 getTrees med name =
     case lookupTree name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
-
-getTree :: RopGet c S.TTree
-getTree med name =
-    do trees <- getTrees med name
-       Right $ S.ttreeGroup trees
 
 getWordTrees :: RopGet c [B.Named S.TTree]
 getWordTrees med name =
