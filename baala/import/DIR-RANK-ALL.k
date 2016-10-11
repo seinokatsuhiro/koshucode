@@ -52,9 +52,9 @@
 
 |-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Syntax.Para"  /base-rank {= /rank /base /import-dir [ 17 | "Para" | [
     "Base" ] ] [ 18 | "Get" | [ "Base" ] ] [ 18 | "ParaSpec" | [ "Base" ] ] =}
-|-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 0 | "Term" | [
-    ] ] [ 17 | "AngleText" | [ "Base" ] ] [ 17 | "Message" | [ "Base" ] ] [ 18 | "Next" | [ "Base" ] ] [ 19 | "Short" |
-    [ "Base" ] ] =}
+|-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala.Syntax.Symbol"  /base-rank {= /rank /base /import-dir [ 17 |
+    "AngleText" | [ "Base" ] ] [ 17 | "Message" | [ "Base" ] ] [ 17 | "Term" | [ "Base" ] ] [ 18 | "Next" | [ "Base" ] ]
+    [ 19 | "Short" | [ "Base" ] ] =}
 |-- DIR-RANK  /dir-rank 20  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 17 |
     "Decimal" | [ "Base" ] ] [ 17 | "Rational" | [ "Base" ] ] [ 18 | "Fraction" | [ "Base" ] ] [ 19 | "Coder" | [ "Base"
     ] ] [ 20 | "BinaryAb" | [ "Base" ] ] =}
@@ -66,7 +66,8 @@
     "Symbol" ] ] [ 26 | "Clause" | [ "Base" | "Symbol" ] ] =}
 
 |-- DIR-RANK  /dir-rank 30  /dir "Koshucode.Baala.Syntax.TTree"  /base-rank {= /rank /base /import-dir [ 28 | "Bracket"
-    | [ "Base" | "Token" ] ] [ 29 | "TokenTree" | [ "Base" | "Token" ] ] [ 30 | "Parse" | [ "Base" | "Token" ] ] =}
+    | [ "Base" | "Token" ] ] [ 28 | "Pattern" | [ "Base" | "Token" ] ] [ 29 | "TokenTree" | [ "Base" | "Token" ] ] [ 30
+    | "Parse" | [ "Base" | "Token" ] ] =}
 |-- DIR-RANK  /dir-rank 34  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
     [ ] ] [ 32 | "Message" | [ "Base" | "Para" | "Symbol" | "TTree" ] ] [ 33 | "Attr" | [ "Base" | "Para" | "TTree" ] ]
     [ 33 | "Slot" | [ "Base" | "TTree" | "Token" ] ] [ 34 | "AttrEd" | [ "Base" | "TTree" | "Token" ] ] [ 34 | "Parse" |
@@ -272,9 +273,9 @@ TABLE : DIR-RANK
                                                   
   19        "Koshucode.Baala.Syntax.Symbol"       /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
-                                                  0     "Term"           [ ]
                                                   17    "AngleText"      [ "Base" ]
                                                   17    "Message"        [ "Base" ]
+                                                  17    "Term"           [ "Base" ]
                                                   18    "Next"           [ "Base" ]
                                                   19    "Short"          [ "Base" ]
                                                   
@@ -306,6 +307,7 @@ TABLE : DIR-RANK
   30        "Koshucode.Baala.Syntax.TTree"        /rank /base            /import-dir
                                                   ----- ---------------- ----------------------------------------------------------------------------
                                                   28    "Bracket"        [ "Base" | "Token" ]
+                                                  28    "Pattern"        [ "Base" | "Token" ]
                                                   29    "TokenTree"      [ "Base" | "Token" ]
                                                   30    "Parse"          [ "Base" | "Token" ]
                                                   
