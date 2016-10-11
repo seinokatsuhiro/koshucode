@@ -27,11 +27,27 @@ import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 ttrees :: [S.Token] -> B.Ab [S.TTree]
-ttrees = B.trees S.getBracketType B.BracketNone
+ttrees = B.trees S.getBracketType B.BracketNone . joinText
 
 -- | Wrap trees in group.
 ttreeGroup :: S.TTreesTo S.TTree
 ttreeGroup = B.treeWrap S.BracketGroup
+
+-- | Join fragmented texts.
+joinText :: B.Map [S.Token]
+joinText = join where
+    join ((S.TText cp f1 s1) : (S.TText _ f2 s2) : xs)
+        | isQqKey f1 && isQqKey f2
+            = let x' = S.TText cp S.TextQQ (s1 ++ s2)
+              in join (x' : xs)
+    join ((S.TText cp f1 s1) : xs)
+        | isQqKey f1                = (S.TText cp S.TextQQ s1) : join xs
+    join (x : xs)                   = x : join xs
+    join []                         = []
+
+-- | Test double-quoted or related text.
+isQqKey :: B.Test S.TextForm
+isQqKey f = f == S.TextQQ || f == S.TextKey
 
 
 -- --------------------------------------------  Abbreviation

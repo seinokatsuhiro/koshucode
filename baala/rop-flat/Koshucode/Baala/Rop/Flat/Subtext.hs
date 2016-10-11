@@ -193,6 +193,10 @@ parseSubtext ns = trees False where
               Just n   -> n
               Nothing  -> error "require integer"
 
+    text (T x)                     = Right x
+    text (B S.BracketGroup [T x])  = Right x
+    text x                         = unknownSyntax x
+
     -- Infix operators
     opTop :: [S.TTree] -> B.Ab T.CharExpr
     opTop [B S.BracketSet xs, G m] = times m xs
@@ -214,9 +218,16 @@ parseSubtext ns = trees False where
     opAs xs = case divide "as" xs of    -- E as E
                  [xs2, [K "lower"]] -> Right . T.asLower    =<< trees False xs2
                  [xs2, [K "upper"]] -> Right . T.asUpper    =<< trees False xs2
-                 [xs2, [K "wrap", T a, T b]] -> Right . T.asWrap a b  =<< trees False xs2
-                 [xs2, [K "prepend", T a]]   -> Right . T.asPrepend a =<< trees False xs2
-                 [xs2, [K "append", T b]]    -> Right . T.asAppend  b =<< trees False xs2
+                 [xs2, [K "wrap", a, b]]   -> do at <- text a
+                                                 bt <- text b
+                                                 e  <- trees False xs2
+                                                 Right $ T.asWrap at bt e 
+                 [xs2, [K "prepend", a]]   -> do at <- text a
+                                                 e  <- trees False xs2
+                                                 Right $ T.asPrepend at e
+                 [xs2, [K "append", b]]    -> do bt <- text b
+                                                 e  <- trees False xs2
+                                                 Right $ T.asAppend bt e
                      
                  [xs2, [T to]]      -> Right . T.asConst to =<< trees False xs2
                  [xs2]              -> opTo xs2
