@@ -1,16 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Name of term.
+-- | Term types and related functions.
 
 module Koshucode.Baala.Syntax.Symbol.Term
-  ( -- * Term name
-    TermName, TermName2, TermName3,
-    TermName4, TermName5, TermName6,
-    TermPath, SignedTermName,
+  ( -- * Term
+    Term, term,
+
+    -- * Term name
+    TermName, TermPath, SignedTermName,
     showTermName, showTermPath,
 
-    -- * Term
-    Term, term,
+    -- * Term name tuple
+    TermName2, TermName3,
+    TermName4, TermName5, TermName6,
 
     -- * Present or new term
     termP, termN, --termPN,
@@ -20,10 +22,50 @@ module Koshucode.Baala.Syntax.Symbol.Term
 import qualified Koshucode.Baala.Base   as B
 
 
+-- ----------------------  Term
+
+-- | Term type: pair of term name and content.
+type Term c = (TermName, c)
+
+-- | Create term.
+--
+--   >>> term "size" 10 :: Term Int
+--   ("size", 10)
+--
+term :: TermName -> c -> Term c
+term n c = (n, c)
+
+
 -- ----------------------  Term name
 
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
 type TermName = String
+
+-- | Path of term names, e.g., term name @\/r\/x@
+--   is correspond to path @[\"r\", \"x\"]@.
+type TermPath = [TermName]
+
+-- | Term name with plus-minus sign, e.g., @+\/size@, @-\/size@, or @\/size@.
+type SignedTermName = (Ordering, TermName)
+
+-- | Encode term name into string.
+--
+--   >>> showTermName "size"
+--   "/size"
+--
+showTermName :: TermName -> String
+showTermName n = '/' : n
+
+-- | Encode term path into string.
+--
+--   >>> showTermPath ["r", "x"]
+--   "/r/x"
+--
+showTermPath :: TermPath -> String
+showTermPath = concatMap showTermName
+
+
+-- ----------------------  Term name tuple
 
 -- | Tuple of 2 term names.
 type TermName2 = (TermName, TermName)
@@ -39,39 +81,6 @@ type TermName5 = (TermName, TermName, TermName, TermName, TermName)
 
 -- | Tuple of 6 term names.
 type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
-
--- | Path of term names, e.g., term name @\/r\/x@
---   is correspond to path @[\"r\", \"x\"]@.
-type TermPath = [TermName]
-
--- | Term name with plus-minus sign, e.g., @+\/size@, @-\/size@, or @\/size@.
-type SignedTermName = (Ordering, TermName)
-
--- | Encode term name into string.
-showTermName :: TermName -> String
-showTermName n = '/' : n
-
--- | Encode term path into string.
---
---   >>> showTermPath ["g", "a"]
---   "/g/a"
---
-showTermPath :: TermPath -> String
-showTermPath = concatMap showTermName
-
-
--- ----------------------  Term
-
--- | Term type: pair of term name and content.
-type Term c = (TermName, c)
-
--- | Create term.
---
---   >>> term "size" 10 :: Term Int
---   ("size",10)
---
-term :: TermName -> c -> Term c
-term n c = (n, c)
 
 
 -- ----------------------  Present or new term
