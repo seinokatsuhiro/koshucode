@@ -109,7 +109,7 @@ judgeToken :: Int -> S.Token -> C.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
     args = [ ("line"           , D.pInt ln)
            , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
-           , ("token-type"     , D.pText $ S.subtypeString tok)
+           , ("token-type"     , D.pText $ S.subtypeName tok)
            , ("token-subtype"  , D.maybeEmpty D.pText $ S.tokenDetailTypeString tok)
            , ("cont"           , D.pText $ S.tokenContent  tok) ]
 
@@ -182,7 +182,7 @@ judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
 
 judgeTokenType :: S.Token -> C.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
-    args = [ ("token-type", D.pText $ S.subtypeString t) ]
+    args = [ ("token-type", D.pText $ S.subtypeName t) ]
 
 judgesClauseType :: [C.JudgeC]
 judgesClauseType = map j cs where

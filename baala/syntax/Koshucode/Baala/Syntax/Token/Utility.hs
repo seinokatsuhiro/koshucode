@@ -72,13 +72,13 @@ untoken = dispatch where
 
 -- | Get detail type string of token.
 --
---   >>> let tok = S.textToken "flower" in (S.subtypeString tok, tokenDetailTypeString tok)
+--   >>> let tok = S.textToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 
 tokenDetailTypeString :: S.Token -> Maybe String
 tokenDetailTypeString tok =
     case tok of
-      S.TText     _ f _    -> Just $ S.subtypeString f
+      S.TText     _ f _    -> Just $ S.subtypeName f
       S.TShort    _ _ _    -> Nothing
       S.TTermN    _ _ _    -> Nothing
       S.TTerm     _ _ _    -> Nothing
@@ -88,7 +88,7 @@ tokenDetailTypeString tok =
       S.TClose    _ _      -> Nothing
       S.TSpace    _ _      -> Nothing
       S.TComment  _ _      -> Nothing
-      S.TName     _ b      -> Just $ S.subtypeString b
+      S.TName     _ b      -> Just $ S.subtypeName b
       S.TUnknown  _ _ _    -> Nothing
 
 slotTypeText :: Int -> String

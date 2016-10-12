@@ -5,15 +5,15 @@
 
 module Koshucode.Baala.Syntax.Token.Token
   (
-    -- * Subtype string
-    SubtypeString (..),
+    -- * Subtype name
+    SubtypeName (..),
 
     -- * Token
     Token (..),
     textToken,
     unknownToken,
 
-    -- * Detail type
+    -- * Subtype
     -- ** Text
     TextForm (..),
 
@@ -31,9 +31,9 @@ module Koshucode.Baala.Syntax.Token.Token
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax.Symbol    as S
 
-
-class SubtypeString a where
-    subtypeString :: a -> String
+-- | Type wihch has subtype and its name.
+class SubtypeName a where
+    subtypeName :: a -> String
 
 
 -- --------------------------------------------  Token type
@@ -72,19 +72,19 @@ data Token
       deriving (Show, Eq, Ord)
 
 -- | @\"text\"@, @\"open\"@, ...
-instance SubtypeString Token where
-     subtypeString (TText     _ _ _  ) = "text"
-     subtypeString (TShort    _ _ _  ) = "short"
-     subtypeString (TTermN    _ _ _  ) = "term"
-     subtypeString (TTerm     _ _ _  ) = "term"
-     subtypeString (TLocal    _ _ _ _) = "local"
-     subtypeString (TSlot     _ _ _  ) = "slot"
-     subtypeString (TOpen     _ _    ) = "open"
-     subtypeString (TClose    _ _    ) = "close"
-     subtypeString (TSpace    _ _    ) = "space"
-     subtypeString (TComment  _ _    ) = "comment"
-     subtypeString (TName     _ _    ) = "name"
-     subtypeString (TUnknown  _ _ _  ) = "unknown"
+instance SubtypeName Token where
+     subtypeName (TText     _ _ _  ) = "text"
+     subtypeName (TShort    _ _ _  ) = "short"
+     subtypeName (TTermN    _ _ _  ) = "term"
+     subtypeName (TTerm     _ _ _  ) = "term"
+     subtypeName (TLocal    _ _ _ _) = "local"
+     subtypeName (TSlot     _ _ _  ) = "slot"
+     subtypeName (TOpen     _ _    ) = "open"
+     subtypeName (TClose    _ _    ) = "close"
+     subtypeName (TSpace    _ _    ) = "space"
+     subtypeName (TComment  _ _    ) = "comment"
+     subtypeName (TName     _ _    ) = "name"
+     subtypeName (TUnknown  _ _ _  ) = "unknown"
 
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
@@ -137,10 +137,12 @@ unknownToken :: B.CodePt -> String -> B.Ab a -> Token
 unknownToken cp w (Left a)  = TUnknown cp w a
 unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 
--- --------------------------------------------  Detail type
+
+-- --------------------------------------------  Subtype
 
 -- ----------------------  Text
 
+-- | Subtype of text token.
 data TextForm
     = TextUnk      -- ^ Unknown keyword
     | TextRaw      -- ^ Naked text
@@ -152,14 +154,14 @@ data TextForm
       deriving (Show, Eq, Ord)
 
 -- | @\"raw\"@, @\"q\"@, ...
-instance SubtypeString TextForm where
-    subtypeString TextUnk      = "unknown"
-    subtypeString TextRaw      = "raw"
-    subtypeString TextQ        = "q"
-    subtypeString TextQQ       = "qq"
-    subtypeString TextKey      = "key"
-    subtypeString TextBar      = "bar"
-    subtypeString TextLicense  = "license"
+instance SubtypeName TextForm where
+    subtypeName TextUnk      = "unknown"
+    subtypeName TextRaw      = "raw"
+    subtypeName TextQ        = "q"
+    subtypeName TextQQ       = "qq"
+    subtypeName TextKey      = "key"
+    subtypeName TextBar      = "bar"
+    subtypeName TextLicense  = "license"
 
 
 -- ----------------------  Term
@@ -172,9 +174,10 @@ data TermType
 
 -- ----------------------  Local
 
+-- | Local reference.
 data Local a
-    = LocalSymbol a
-    | LocalNest a
+    = LocalSymbol a        -- ^ Reference to local relation — @^r@
+    | LocalNest a          -- ^ Reference to nested relation — @^/r@
       deriving (Show, Eq, Ord)
 
 unlocal :: Local a -> a
@@ -200,10 +203,10 @@ instance B.Name BlankName where
     name (BlankPostfix  n)   = n
 
 -- | @\"normal\"@, @\"internal\"@, ...
-instance SubtypeString BlankName where
-    subtypeString (BlankNormal   _) = "normal"
-    subtypeString (BlankInternal _) = "internal"
-    subtypeString (BlankPrefix   _) = "prefix"
-    subtypeString (BlankInfix    _) = "infix"
-    subtypeString (BlankPostfix  _) = "postfix"
+instance SubtypeName BlankName where
+    subtypeName (BlankNormal   _) = "normal"
+    subtypeName (BlankInternal _) = "internal"
+    subtypeName (BlankPrefix   _) = "prefix"
+    subtypeName (BlankInfix    _) = "infix"
+    subtypeName (BlankPostfix  _) = "postfix"
 
