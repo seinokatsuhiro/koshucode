@@ -63,6 +63,7 @@ consFor med =
        rmap <- Op.getRelmap med "-relmap"
        Right $ relmapFor med n rmap
 
+-- | Create @for@ relmap.
 relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n B.<> rmap)
 
@@ -70,6 +71,7 @@ relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitFor n
 
+-- | Create @for@ relkit.
 relkitFor :: forall c. (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     lr    = D.shareSide [n] he1
@@ -104,9 +106,11 @@ consGroup med =
      sh   <- Op.getMaybe Op.getTerms med "-share"
      Right $ relmapGroup med sh n rmap
 
+-- | Create @group@ relmap.
 relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
 relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 
+-- | Create @group@ relkit.
 relkitGroup :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> S.TermName -> C.RelkitBinary c
 relkitGroup sh n (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr      = D.shareSide he1 he2
@@ -150,10 +154,12 @@ consSlice med =
      rmap <- Op.getOptRelmap C.relmapId med "-relmap"
      Right $ relmapSlice med n rmap
 
+-- | Create @slice@ relmap.
 relmapSlice :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
 relmapSlice med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitSlice n
 
+-- | Create @slice@ relkit.
 relkitSlice :: (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitSlice n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = D.headConsNest n he2 he1
@@ -172,10 +178,12 @@ consSliceUp med =
   do rmap <- Op.getOptRelmap C.relmapId med "-relmap"
      Right $ relmapSliceUp med rmap
 
+-- | Create @slice-up@ relmap.
 relmapSliceUp :: (D.CRel c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSliceUp med = C.relmapNest med . bin where
     bin = C.relmapBinary med relkitSliceUp
 
+-- | Create @slice-up@ relkit.
 relkitSliceUp :: (D.CRel c) => C.RelkitBinary c
 relkitSliceUp (C.Relkit _ (Just he2) kitb2) _ = Right kit3 where
     kit3  = C.relkitJust he2 $ C.RelkitOneToAbMany False kitf3 [kitb2]

@@ -45,6 +45,7 @@ consOppGroup med =
      sh   <- Op.getMaybe Op.getTerms med "-share"
      Right $ relmapOppGroup med sh n rmap
 
+-- | Create @odd-group@ relmap.
 relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
 relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
     rmapGroup  = rmap B.<> Op.relmapGroup med sh n rmapLocal
@@ -58,6 +59,7 @@ consJoinUp med =
   do nest <- Op.getTerms med "-term"
      Right $ relmapJoinUp med nest
 
+-- | Create @join-up@ relmap.
 relmapJoinUp :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
     rmaps   = link `map` nest
@@ -82,6 +84,13 @@ consNest med =
      to       <- Op.getTerm    med "-to"
      Right $ relmapNest med (co, ns, to)
 
+consPickGroup :: (Ord c, D.CRel c) => C.RopCons c
+consPickGroup med =
+  do ns <- Op.getTerms med "-term"
+     to <- Op.getTerm  med "-to"
+     Right $ relmapNest med (True, ns, to)
+
+-- | Create @self-group@ relmap.
 relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
 relmapNest med (co, ns, to) = group B.<> for where
     group  = relmapOppGroup med Nothing to key
@@ -90,12 +99,6 @@ relmapNest med (co, ns, to) = group B.<> for where
     nest   = if co then cut  else pick
     pick   = Op.relmapPick med ns
     cut    = Op.relmapCut  med ns
-
-consPickGroup :: (Ord c, D.CRel c) => C.RopCons c
-consPickGroup med =
-  do ns <- Op.getTerms med "-term"
-     to <- Op.getTerm  med "-to"
-     Right $ relmapNest med (True, ns, to)
 
 
 -- ----------------------  ungroup
@@ -110,6 +113,7 @@ consUngroup med =
   do n <- Op.getTerm med "-term"
      Right $ relmapUngroup med n
 
+-- | Create @ungroup@ relmap.
 relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
     ungroup = slice B.<> cut
