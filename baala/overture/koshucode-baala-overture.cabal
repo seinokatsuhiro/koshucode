@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-subtext
+name:                koshucode-baala-overture
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,13 +10,10 @@ name:                koshucode-baala-subtext
 version:             0.161.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            A text matching library
+synopsis:            Preliminary library for Koshucode
 
 -- A longer description of the package.
-description:         Subtext provides text matching functionality
-                     with sequential, alternative, and repetitive expressions.
-                     It collects submatches and
-                     switch matching expression among multiple expressions.
+description:         Preliminary library for Koshucode.
 
 -- The license under which the package is released.
 license:             BSD3
@@ -34,7 +31,7 @@ maintainer:
 -- A copyright notice.
 copyright:           2016, SEINO Katsuhiro
 
-category:            Text
+category:            Prelude
 
 build-type:          Simple
 
@@ -46,30 +43,19 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Subtext
-        Koshucode.Baala.Subtext.Bundle
-        Koshucode.Baala.Subtext.Category
-        Koshucode.Baala.Subtext.Expr
-        Koshucode.Baala.Subtext.Match
-        Koshucode.Baala.Subtext.MinMax
-
-        Koshucode.Baala.Subtext.Operator
-        Koshucode.Baala.Subtext.Operator.Basic
-        Koshucode.Baala.Subtext.Operator.Char
-        Koshucode.Baala.Subtext.Operator.Combine
-        Koshucode.Baala.Subtext.Operator.Repeat
-
-        Koshucode.Baala.Subtext.Para
+        Koshucode.Baala.Overture.Fn
+        Koshucode.Baala.Overture.Name.IntString
+        Koshucode.Baala.Overture.Name.String
+        Koshucode.Baala.Overture.Name.Text
 
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                      == 4.*
-       , containers                == 0.*
-       , text                      == 1.*
-       , koshucode-baala-overture  == 0.161.0.0
+         base                  == 4.*
+       , containers            == 0.*
+       , text                  == 1.*
 
   ghc-options:         -Wall
 
