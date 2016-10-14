@@ -48,9 +48,11 @@ consFilter b med =
        coxIn  <- Op.getCox med "-in"
        Right $ relmapFilter med (b, cops, coxIn)
 
+-- | Create @keep@ and @omit@ relmap.
 relmapFilter :: (D.CContent c) => C.Intmed c -> (Bool, D.CopSet c, D.Cox c) -> C.Relmap c
 relmapFilter med = C.relmapFlow med . relkitFilter
 
+-- | Create @keep@ and @omit@ relkit.
 relkitFilter :: (D.CContent c) => (Bool, D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, cops, body) (Just he1) = Right kit2 where
@@ -68,9 +70,11 @@ consContain med =
     do c <- Op.getContent med "-expr"
        Right $ relmapContain med c
 
+-- | Create @contain@ relmap.
 relmapContain :: (Eq c) => C.Intmed c -> c -> C.Relmap c
 relmapContain med = C.relmapFlow med . relkitContain
 
+-- | Create @contain@ relkit.
 relkitContain :: (Eq c) => c -> C.RelkitFlow c
 relkitContain _ Nothing = Right C.relkitNothing
 relkitContain c (Just he1) = Right kit2 where
@@ -80,13 +84,18 @@ relkitContain c (Just he1) = Right kit2 where
 
 -- ----------------------  omit-all
 
+-- | __omit-all__
+--
+--   Throw away all tuples in a relation.
+--
 consOmitAll :: C.RopCons c
 consOmitAll med = Right $ relmapOmitAll med
 
+-- | Create @omit-all@ relmap.
 relmapOmitAll :: C.Intmed c -> C.Relmap c
 relmapOmitAll med = C.relmapFlow med relkitOmitAll
 
--- | Throw away all tuples in a relation.
+-- | Create @omit-all@ relkit.
 relkitOmitAll :: C.RelkitFlow c
 relkitOmitAll he1 = Right $ C.relkit he1 $ C.RelkitConst []
 

@@ -52,10 +52,12 @@ consClock med =
       fill (Nothing, Just m, s) = fill (Just zero, Just m, s)
       fill hms = hms
 
+-- | Create @clock@ relmap.
 relmapClock :: (D.CContent c) =>
   C.Intmed c -> (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))) -> C.Relmap c
 relmapClock med = C.relmapFlow med . relkitClock
 
+-- | Create @clock@ relkit.
 relkitClock :: (D.CContent c)
   => (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)))
   -> C.RelkitFlow c
@@ -106,10 +108,12 @@ consClockGet med =
      let ns    = [sign, day, hour, minute, sec]
      Right $ relmapClockGet med (cops, clock, ns)
 
+-- | Create @clock-get@ relmap.
 relmapClockGet :: (D.CContent c) =>
   C.Intmed c -> (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.Relmap c
 relmapClockGet med = C.relmapFlow med . relkitClockGet
 
+-- | Create @clock-get@ relkit.
 relkitClockGet :: (D.CContent c) =>
   (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.RelkitFlow c
 relkitClockGet _ Nothing = Right C.relkitNothing
@@ -142,10 +146,12 @@ consClockAlter med =
        sec      <- Op.getMaybeCox med "-sec"
        Right $ relmapClockAlter med (cops, clock, (day, hour, minute, sec))
 
+-- | Create @clock-alter@ relmap.
 relmapClockAlter :: (D.CContent c) =>
   C.Intmed c -> (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)) -> C.Relmap c
 relmapClockAlter med = C.relmapFlow med . relkitClockAlter
 
+-- | Create @clock-alter@ relkit.
 relkitClockAlter :: (D.CContent c)
   => (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))
   -> C.RelkitFlow c

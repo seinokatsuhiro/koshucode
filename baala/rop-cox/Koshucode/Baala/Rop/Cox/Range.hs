@@ -67,9 +67,11 @@ getRangeAttr med =
 consRange :: (D.CContent c) => C.RopCons c
 consRange med = Right . relmapRange med =<< getRangeAttr med
 
+-- | Create @range@ relmap.
 relmapRange :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRange med = C.relmapFlow med . relkitRange
 
+-- | Create @range@ relkit.
 relkitRange :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
@@ -90,9 +92,11 @@ relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
 consRangeYear :: (D.CContent c) => C.RopCons c
 consRangeYear med = Right . relmapRangeYear med =<< getRangeAttr med
 
+-- | Create @range-year@ relmap.
 relmapRangeYear :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeYear med = C.relmapFlow med . relkitRangeYear
 
+-- | Create @range-year@ relkit.
 relkitRangeYear :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeYear = relkitRangeBy D.timeRangeYear
 
@@ -102,9 +106,11 @@ relkitRangeYear = relkitRangeBy D.timeRangeYear
 consRangeMonth :: (D.CContent c) => C.RopCons c
 consRangeMonth med = Right . relmapRangeMonth med =<< getRangeAttr med
 
+-- | Create @range-month@ relmap.
 relmapRangeMonth :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeMonth med = C.relmapFlow med . relkitRangeMonth
 
+-- | Create @range-month@ relkit.
 relkitRangeMonth :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMonth = relkitRangeBy D.timeRangeMonth
 
@@ -114,12 +120,15 @@ relkitRangeMonth = relkitRangeBy D.timeRangeMonth
 consRangeDay :: (D.CContent c) => C.RopCons c
 consRangeDay med = Right . relmapRangeDay med =<< getRangeAttr med
 
+-- | Create @range-day@ relmap.
 relmapRangeDay :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeDay med = C.relmapFlow med . relkitRangeDay
 
+-- | Create @range-day@ relkit.
 relkitRangeDay :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeDay = relkitRangeBy D.timeRangeDay
 
+-- | Create /range-by/ relkit.
 relkitRangeBy :: (D.CContent c) => B.RangeBy D.Time -> RangeAttr c -> C.RelkitFlow c
 relkitRangeBy _ _ Nothing = Right C.relkitNothing
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
@@ -136,9 +145,11 @@ relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
 consRangeHour :: (D.CContent c) => C.RopCons c
 consRangeHour med = Right . relmapRangeHour med =<< getRangeAttr med
 
+-- | Create @range-hour@ relmap.
 relmapRangeHour :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeHour med = C.relmapFlow med . relkitRangeHour
 
+-- | Create @range-hour@ relkit.
 relkitRangeHour :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeHour = relkitRangeClock 3600
 
@@ -148,9 +159,11 @@ relkitRangeHour = relkitRangeClock 3600
 consRangeMinute :: (D.CContent c) => C.RopCons c
 consRangeMinute med = Right . relmapRangeMinute med =<< getRangeAttr med
 
+-- | Create @range-minute@ relmap.
 relmapRangeMinute :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeMinute med = C.relmapFlow med . relkitRangeMinute
 
+-- | Create @range-minute@ relkit.
 relkitRangeMinute :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMinute = relkitRangeClock 60
 
@@ -160,12 +173,15 @@ relkitRangeMinute = relkitRangeClock 60
 consRangeSecond :: (D.CContent c) => C.RopCons c
 consRangeSecond med = Right . relmapRangeSecond med =<< getRangeAttr med
 
+-- | Create @range-second@ relmap.
 relmapRangeSecond :: (D.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
 relmapRangeSecond med = C.relmapFlow med . relkitRangeSecond
 
+-- | Create @range-second@ relkit.
 relkitRangeSecond :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeSecond = relkitRangeClock 1
 
+-- | Create /range-clock/relkit.
 relkitRangeClock :: (D.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
 relkitRangeClock _ _ Nothing = Right C.relkitNothing
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where

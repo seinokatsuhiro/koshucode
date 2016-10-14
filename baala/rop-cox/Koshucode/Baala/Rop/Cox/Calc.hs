@@ -63,9 +63,11 @@ consAdd med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapAdd med (cops, cox)
 
+-- | Create @add@ relmap.
 relmapAdd :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapAdd med = C.relmapFlow med . relkitAdd
 
+-- | Create @add@ relkit.
 relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
@@ -89,9 +91,11 @@ consSubst med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapSubst med (cops, cox)
 
+-- | Create @subst@ relmap.
 relmapSubst :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapSubst med = C.relmapFlow med . relkitSubst
 
+-- | Create @subst@ relkit.
 relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
@@ -120,9 +124,11 @@ consFill med =
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapFill med (ns, cops, coxTo)
 
+-- | Create @fill@ relmap.
 relmapFill :: (D.CContent c) => C.Intmed c -> ([S.TermName], D.CopSet c, D.Cox c) -> C.Relmap c
 relmapFill med = C.relmapFlow med . relkitFill
 
+-- | Create @fill@ relkit.
 relkitFill :: (D.CContent c) => ([S.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
 relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
@@ -165,9 +171,11 @@ consReplaceAll med =
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapReplaceAll med (cops, coxFrom, coxTo)
 
+-- | Create @replace-all@ relmap.
 relmapReplaceAll :: (D.CContent c) => C.Intmed c -> (D.CopSet c, D.Cox c, D.Cox c) -> C.Relmap c
 relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 
+-- | Create @replace-all@ relkit.
 relkitReplaceAll :: (D.CContent c) => (D.CopSet c, D.Cox c, D.Cox c) -> C.RelkitFlow c
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
@@ -187,9 +195,11 @@ consSplit med =
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapSplit med (cops, cox)
 
+-- | Create @split@ relmap.
 relmapSplit :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapSplit med = C.relmapFlow med . relkitSplit
 
+-- | Create @split@ relkit.
 relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
@@ -233,9 +243,11 @@ consUnary med =
        cs <- Op.getContents med "-expr"
        Right $ relmapUnary med (n, cs)
 
+-- | Create @unary@ relmap.
 relmapUnary :: (D.CContent c) => C.Intmed c -> (S.TermName, [c]) -> C.Relmap c
 relmapUnary med = C.relmapFlow med . relkitUnary
 
+-- | Create @unary@ relkit.
 relkitUnary :: (D.CContent c) => (S.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
     he2    = D.headFrom [n]

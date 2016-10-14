@@ -60,9 +60,11 @@ consConst med =
          True  -> Right $ relmapConst med $ D.gRel lit
          False -> Msg.reqRel
 
+-- | Create @const@ relmap.
 relmapConst :: C.Intmed c -> D.Rel c -> C.Relmap c
 relmapConst med = C.relmapFlow med . relkitConst
 
+-- | Create @const@ relkit.
 relkitConst :: D.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
 relkitConst (D.Rel he bo) _ = Right kit2 where
@@ -82,9 +84,11 @@ consGeoDatumJp med =
        let cops = C.globalCopset $ C.ropGlobal med
        Right $ relmapGeoDatumJp med (cops, (n,x,y), (lat,long))
 
+-- | Create @geo-datum-jp@ relmap.
 relmapGeoDatumJp :: (Ord c, D.CContent c) => C.Intmed c -> (D.CopSet c, D.Cox3 c, S.TermName2) -> C.Relmap c
 relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
 
+-- | Create @geo-datum-jp@ relkit.
 relkitGeoDatumJp :: (Ord c, D.CContent c) => (D.CopSet c, D.Cox3 c, S.TermName2) -> C.RelkitFlow c
 relkitGeoDatumJp _ Nothing = Right C.relkitNothing
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
@@ -120,9 +124,11 @@ consGeoDegree med =
        sec  <- Op.getTerm med "-sec"
        Right $ relmapGeoDegree med (real, deg, mnt, sec)
 
+-- | Create @geo-degree@ relmap.
 relmapGeoDegree :: (Ord c, D.CContent c) => C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapGeoDegree med = C.relmapFlow med . relkitGeoDegree
 
+-- | Create @geo-degree@ relkit.
 relkitGeoDegree :: (Ord c, D.CContent c) => S.TermName4 -> C.RelkitFlow c
 relkitGeoDegree _ Nothing = Right C.relkitNothing
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
@@ -162,9 +168,11 @@ consInterp2 med =
          True  -> Right $ relmapInterp med $ D.gInterp c
          False -> Msg.reqInterp
 
+-- | Create @interp@ relmap.
 relmapInterp :: (D.CContent c) => C.Intmed c -> D.Interp -> C.Relmap c
 relmapInterp med = C.relmapFlow med . relkitInterp
 
+-- | Create @interp@ relkit.
 relkitInterp :: (D.CContent c) => D.Interp -> C.RelkitFlow c
 relkitInterp _ Nothing = Right C.relkitNothing
 relkitInterp interp (Just he1)
@@ -186,9 +194,11 @@ consNumber med =
        from <- Op.getOption 0  Op.getInt         med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
+-- | Create @number@ relmap.
 relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
 
+-- | Create @number@ relkit.
 relkitNumber :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
@@ -218,17 +228,21 @@ consRank med =
                         else relmapGapRank
        Right $ relmapRank med (n, ns, fromInteger from)
 
+-- | Create @rank -dense@ relmap.
 relmapDenseRank :: (D.CDec c, Ord c) =>
    C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
+-- | Create @rank -dense@ relkit.
 relkitDenseRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
+-- | Create @rank@ relmap.
 relmapGapRank :: (D.CDec c, Ord c) =>
    C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
 relmapGapRank med = C.relmapFlow med . relkitGapRank
 
+-- | Create @rank@ relkit.
 relkitGapRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
@@ -241,9 +255,11 @@ consRepeat med =
      rmap <- Op.getRelmap med "-relmap"
      Right $ relmapRepeat med cnt rmap
 
+-- | Create @repeat@ relmap.
 relmapRepeat :: (Ord c) => C.Intmed c -> Integer -> B.Map (C.Relmap c)
 relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
+-- | Create @repeat@ relkit.
 relkitRepeat :: forall c. (Ord c) => Integer -> C.RelkitBinary c
 relkitRepeat cnt (C.Relkit _ (Just he2) kitb2) (Just he1)
     | D.headEquiv he1 he2 = Right $ kit3

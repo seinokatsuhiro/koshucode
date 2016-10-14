@@ -47,6 +47,7 @@ consBoth med =
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapBoth med sh fill rmap
 
+-- | Create @both@ relmap.
 relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
 relmapBoth med sh fill rmap = C.relmapCopy med "i" rmapBoth where
     rmapBoth = rmapL B.<> Op.relmapJoin med sh rmapR
@@ -65,11 +66,11 @@ consMaybe med =
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapMaybe med sh fill rmap
 
--- | Maybe relmap.
+-- | Create @maybe@ relmap.
 relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
 relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 
--- | Calculate maybe relmap.
+-- | Create @maybe@ relkit.
 relkitMaybe :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> c -> C.RelkitBinary c
 relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr   = D.shareSide he1 he2
@@ -100,7 +101,9 @@ selectFiller fill _ = fill
 
 -- ----------------------  compose-maybe
 
--- | Construct relmap for relational composition.
+-- | __compose-maybe__
+--
+---  Construct relmap for relational composition.
 --
 --   >>> a | compose-maybe b
 
@@ -111,7 +114,7 @@ consComposeMaybe med =
        sh   <- Op.getMaybe Op.getTerms med "-share"
        Right $ relmapComposeMaybe med sh fill rmap
 
--- | Relational composition.
+-- | Create @compose-maybe@ relmap.
 relmapComposeMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
 relmapComposeMaybe med sh fill = C.relmapBinary med $ Op.relkitCompose m sh where
     m sh2 = relkitMaybe sh2 fill
