@@ -15,7 +15,7 @@ import qualified Prelude as P
 import           Prelude hiding ( elem, any, span, succ, fail )
 
 import qualified Data.List                       as L
-import qualified Koshucode.Baala.Subtext.Fn      as S
+import qualified Koshucode.Baala.Overture.Fn     as S
 import qualified Koshucode.Baala.Subtext.Expr    as S
 
 -- | Element match.

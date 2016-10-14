@@ -9,7 +9,7 @@ module Koshucode.Baala.Subtext.Expr
    FnElem, FnSpan, FnInter, FnAs,
  ) where
 
-import qualified Koshucode.Baala.Subtext.Fn      as S
+import qualified Koshucode.Baala.Overture.Fn     as S
 import qualified Koshucode.Baala.Subtext.MinMax  as S
 
 

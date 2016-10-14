@@ -18,7 +18,7 @@ module Koshucode.Baala.Subtext.Operator.Combine
 
 import Prelude hiding ( or, seq, and, not, last )
 
-import qualified Koshucode.Baala.Subtext.Fn              as S
+import qualified Koshucode.Baala.Overture.Fn             as S
 import qualified Koshucode.Baala.Subtext.Expr            as S
 import qualified Koshucode.Baala.Subtext.MinMax          as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic  as S

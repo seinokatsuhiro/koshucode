@@ -12,9 +12,9 @@ module Koshucode.Baala.Subtext.Para
 import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Map
+import qualified Koshucode.Baala.Overture.Fn       as S
 import qualified Koshucode.Baala.Subtext.Bundle    as S
 import qualified Koshucode.Baala.Subtext.Expr      as S
-import qualified Koshucode.Baala.Subtext.Fn        as S
 import qualified Koshucode.Baala.Subtext.MinMax    as S
 import qualified Koshucode.Baala.Subtext.Operator  as S
 

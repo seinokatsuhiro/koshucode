@@ -25,7 +25,7 @@ import qualified Data.Char                                   as C
 import qualified Data.Set                                    as Set
 import qualified Koshucode.Baala.Subtext.Category            as S
 import qualified Koshucode.Baala.Subtext.Expr                as S
-import qualified Koshucode.Baala.Subtext.Fn                  as S
+import qualified Koshucode.Baala.Overture.Fn                 as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Repeat     as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S

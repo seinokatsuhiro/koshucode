@@ -2,13 +2,13 @@
 
 -- | Named function.
 
-module Koshucode.Baala.Subtext.Fn
+module Koshucode.Baala.Overture.Fn
  ( Name,
    Fn (..),
    Fn2 (..),
  ) where
 
-import Koshucode.Baala.Subtext.Name.String
+import Koshucode.Baala.Overture.Name.String
 
 
 -- ----------------------  Fn
