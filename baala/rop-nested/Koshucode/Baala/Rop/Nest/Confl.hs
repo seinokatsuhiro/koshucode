@@ -1,24 +1,17 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Confluent operators for nested relations.
+
 module Koshucode.Baala.Rop.Nest.Confl
-  ( 
-    -- * copy
+  ( -- * copy
     consCopy,
-    -- $CopyExample
-  
     -- * for
     consFor, relmapFor, relkitFor,
-    -- $ForExample
-  
     -- * group
     consGroup, relmapGroup, relkitGroup,
-    -- $GroupExample
-  
     -- * slice
     consSlice, relmapSlice, relkitSlice,
-    -- $SliceExample
-  
     -- * slice-up
     consSliceUp, relmapSliceUp, relkitSliceUp,
   ) where
@@ -35,12 +28,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- ----------------------  copy
 
--- $CopyExample
+-- | __copy N R__
 --
---  Equivalent operation for @down@ @\/r@.
+--   Copy input relation and referenced by ^N in R.
 --
---    > copy r ( dee | slice /r r )
-
+--   For example, @down@ @\/r@ can be rewrite to
+--   @copy r ( dee | slice \/r ^r )@.
+--
 consCopy :: C.RopCons c
 consCopy med =
   do n    <- Op.getWord   med "-var"
@@ -48,15 +42,15 @@ consCopy med =
      Right $ C.relmapCopy med n rmap
 
 
-
 -- ----------------------  for
 
--- $ForExample
+-- | __for \/P R__
+-- 
+--  Map nested relation at \/P by relmap R.
 --
---  Remove term @\/c@ from a nested relation in term @\/r@.
+--  The relamp @for \/r ( cut \/c )@ removes
+--  term @\/c@ from a nested relation at the term @\/r@.
 --
---    > for /r ( cut /c )
-
 consFor :: (D.CRel c) => C.RopCons c
 consFor med =
     do n    <- Op.getTerm   med "-term"
@@ -91,14 +85,12 @@ relkitFor _ _ _ = Right C.relkitNothing
 
 -- ----------------------  group
 
--- $GroupExample
+-- | __group R -to \/N__
 --
---  Split relation from @b@ by relation from @a@.
---  In other words, group @b@ by @a@.
---  Result relations are nested in term @\/r@.
+--  Group relation from relmap @R@ by input relation.
+--  Grouped relations are added as content of term \/N
+--  to each input tuples.
 --
---    > a | group b -to /r
-
 consGroup :: (Ord c, D.CRel c) => C.RopCons c
 consGroup med =
   do rmap <- Op.getRelmap med "-relmap"
@@ -137,17 +129,15 @@ relkitGroup _ _ _ _ = Right C.relkitNothing
 
 -- ----------------------  slice
 
--- $SliceExample
+-- | __slice \/N [R]__
 --
---  Add nested relation in term @\/p@.
+--  Slice input relation.
+--  Each slices have single tuple of input relation,
+--  and added as content of term \/N to each input tuples.
+--  If R is given, slices are mapped by R.
+--  If input relation has a nested relation at term \/P,
+--  the relation can be referenced by ^\/P in R.
 --
---    > slice /p ( source P /a /b )
---
---  Add nested relation as meet of @\/p@ and @\/q@.
---
---    > slice /r ( ^/p | meet ^/q )
---
-
 consSlice :: (D.CRel c) => C.RopCons c
 consSlice med =
   do n    <- Op.getTerm   med "-term"
@@ -173,6 +163,7 @@ relkitSlice _ _ _ = Right C.relkitNothing
 
 -- ----------------------  slice-up
 
+-- | __slice-up R__
 consSliceUp :: (D.CRel c) => C.RopCons c
 consSliceUp med =
   do rmap <- Op.getOptRelmap C.relmapId med "-relmap"
