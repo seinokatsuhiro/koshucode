@@ -38,11 +38,11 @@ pkg_section () {
 }
 
 pkg_dirs () {
-    echo subtext base syntax data core writer rop-flat rop-nested rop-cox cop calculator toolkit
+    echo overture subtext base syntax data core writer rop-flat rop-nested rop-cox cop calculator toolkit
 }
 
 pkg_dirs_rev () {
-    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data syntax base subtext
+    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data syntax base subtext overture
 }
 
 pkg_cabal () {
