@@ -2,7 +2,7 @@
 
 -- | Integer or string name.
 
-module Koshucode.Baala.Subtext.Name.IntString
+module Koshucode.Baala.Overture.Name.IntString
  ( Name (..),
    GetName (..),
  ) where

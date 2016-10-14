@@ -2,7 +2,7 @@
 
 -- | Text name.
 
-module Koshucode.Baala.Subtext.Name.Text
+module Koshucode.Baala.Overture.Name.Text
  ( Name,
    GetName (..),
  ) where
