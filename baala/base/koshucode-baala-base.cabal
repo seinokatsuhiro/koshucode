@@ -94,6 +94,7 @@ library
         Koshucode.Baala.Base.Text.MixEncode
         Koshucode.Baala.Base.Text.MixText
         Koshucode.Baala.Base.Text.PPrint
+        Koshucode.Baala.Base.Text.Suffix
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
         Koshucode.Baala.Base.Text.Utility
