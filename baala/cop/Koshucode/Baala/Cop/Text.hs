@@ -4,7 +4,8 @@
 -- | Content operators on texts.
 
 module Koshucode.Baala.Cop.Text
-  ( copsText
+  ( copsText,
+    copSuffix, copUnsuffix,
   ) where
 
 import qualified Data.Char                       as Char
@@ -50,6 +51,9 @@ copsText =
     , D.CopCalc  (D.copNormal "unwords-by")       copUnwordsBy
     , D.CopCalc  (D.copNormal "words")            copWords
     , D.CopCalc  (D.copNormal "words-by")         copWordsBy
+
+    , D.CopCalc  (D.copNormal "suffix")           copSuffix
+    , D.CopCalc  (D.copNormal "unsuffix")         copUnsuffix
 
     , D.CopCalc  (D.copNormal "match-beg")        copBeginWithNormal
     , D.CopCalc  (D.copNormal "match-end")        copEndWithNormal
@@ -386,4 +390,27 @@ extractText c
     | D.isText c  = Just $ D.gText c
     | D.isTerm c  = Just $ D.gTerm c
     | otherwise   = Nothing
+
+
+-- ----------------------  suffix & unsuffix
+
+-- | __suffix LIST__ adds unique suffixes to text elements of /LIST/.
+copSuffix :: (D.CText c, D.CList c) => D.CopCalc c
+copSuffix = op where
+    op [Right ls] | D.isList ls && (all D.isText $ D.gList ls)
+           = D.putList (D.pText <$> B.uniqueNames '-' (D.gText <$> D.gList ls))
+    op [c] = c
+    op xs  = typeUnmatch xs
+
+-- | __unsuffix C__ remove integer suffixes from /C/.
+copUnsuffix :: forall c. (D.CContent c) => D.CopCalc c
+copUnsuffix = op where
+    op [Right c] = Right $ unsuf c
+    op [c]       = c
+    op xs        = typeUnmatch xs
+
+    unsuf c | D.isText c  = D.pText $ B.unsuffix Char.isDigit '-' $ D.gText c
+            | D.isList c  = D.pList (unsuf <$> D.gList c)
+            | D.isSet  c  = D.pSet  (unsuf <$> D.gSet c)
+            | otherwise   = c
 
