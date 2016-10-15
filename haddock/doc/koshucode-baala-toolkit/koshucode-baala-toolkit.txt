@@ -8,7 +8,7 @@
 --   except for <tt>koshu</tt> command. Please check package
 --   <tt>koshucode-baala-calculator</tt> for <tt>koshu</tt> command.
 @package koshucode-baala-toolkit
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Koshucode syntactic tool.
@@ -50,6 +50,8 @@ instance GHC.Show.Show Koshucode.Baala.Toolkit.Library.RDF.RDFTupleType
 
 -- | RDF-to-Koshucode converter.
 module Koshucode.Baala.Toolkit.Main.KoshuRdf
+
+-- | The main function for <tt>koshu-rdf</tt> command.
 koshuRdfMain :: IO ()
 instance GHC.Enum.Bounded Koshucode.Baala.Toolkit.Main.KoshuRdf.Option
 instance GHC.Enum.Enum Koshucode.Baala.Toolkit.Main.KoshuRdf.Option
@@ -58,14 +60,24 @@ instance GHC.Classes.Eq Koshucode.Baala.Toolkit.Main.KoshuRdf.Option
 instance GHC.Show.Show Koshucode.Baala.Toolkit.Main.KoshuRdf.Option
 
 
--- | Input sources.
+-- | Input resources.
 module Koshucode.Baala.Toolkit.Library.Input
+
+-- | Input resource.
 data Input
 Stdin :: Input
 File :: FilePath -> Input
+
+-- | Input name.
 inputText :: Input -> String
+
+-- | Read input resource.
 readInput :: Input -> IO String
+
+-- | Read multiple input resources.
 readInputs :: [Input] -> IO [String]
+
+-- | Read input code and extract judges.
 readJudge :: String -> [JudgeC]
 instance GHC.Classes.Eq Koshucode.Baala.Toolkit.Library.Input.Input
 instance GHC.Show.Show Koshucode.Baala.Toolkit.Library.Input.Input
@@ -74,13 +86,19 @@ instance GHC.Show.Show Koshucode.Baala.Toolkit.Library.Input.Input
 -- | Functions for changes between two datasets.
 module Koshucode.Baala.Toolkit.Library.Change
 
--- | Calculate and write judges <i>B</i> minus <i>A</i>.
+-- | Read, calculate, and write judges <i>B</i> minus <i>A</i>.
 minusInput :: Input -> Input -> IO ExitCode
-minusInputJudge :: Input -> Input -> IO ([JudgeC])
+
+-- | Read and calculate judges subtraction.
+minusInputJudge :: Input -> Input -> IO [JudgeC]
+
+-- | Calculate subtraction of judges.
 minusJudge :: (Ord c) => [Judge c] -> [Judge c] -> [Judge c]
 
 -- | Calculate and write judges <i>B</i> update by <i>C</i>.
 updateInput :: Input -> Input -> IO ExitCode
+
+-- | Apply change judges.
 updateJudge :: (Ord c) => [Judge c] -> [Judge c] -> [Judge c]
 
 

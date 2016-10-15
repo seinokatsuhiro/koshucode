@@ -6,36 +6,94 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.160.0.0
+@version 0.162.0.0
 
+
+-- | Term types and related functions.
 module Koshucode.Baala.Syntax.Symbol.Term
 
--- | Name of term, e.g., <tt>"file"</tt> for the term name <tt>/file</tt>.
+-- | Term type: pair of term name and content.
+type Term c = (TermName, c)
+
+-- | Create term.
+--   
+--   <pre>
+--   &gt;&gt;&gt; term "size" 10 :: Term Int
+--   ("size", 10)
+--   </pre>
+term :: TermName -> c -> Term c
+
+-- | Name of term, e.g., <tt>"size"</tt> for the term name <tt>/size</tt>.
 type TermName = String
-type TermName2 = (String, String)
-type TermName3 = (String, String, String)
-type TermName4 = (String, String, String, String)
-type TermName5 = (String, String, String, String, String)
-type TermName6 = (String, String, String, String, String, String)
 
 -- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
 --   path <tt>["r", "x"]</tt>.
 type TermPath = [TermName]
+
+-- | Term name with plus-minus sign, e.g., <tt>+/size</tt>,
+--   <tt>-/size</tt>, or <tt>/size</tt>.
 type SignedTermName = (Ordering, TermName)
+
+-- | Encode term name into string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; showTermName "size"
+--   "/size"
+--   </pre>
 showTermName :: TermName -> String
+
+-- | Encode term path into string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; showTermPath ["r", "x"]
+--   "/r/x"
+--   </pre>
 showTermPath :: TermPath -> String
-type Term c = (TermName, c)
-term :: TermName -> c -> Term c
+
+-- | Tuple of 2 term names.
+type TermName2 = (TermName, TermName)
+
+-- | Tuple of 3 term names.
+type TermName3 = (TermName, TermName, TermName)
+
+-- | Tuple of 4 term names.
+type TermName4 = (TermName, TermName, TermName, TermName)
+
+-- | Tuple of 5 term names.
+type TermName5 = (TermName, TermName, TermName, TermName, TermName)
+
+-- | Tuple of 6 term names.
+type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
 -- | Check present term.
-termP :: Int -> Bool
+--   
+--   <pre>
+--   &gt;&gt;&gt; termP 2
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; termP 0
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; termP (-1)
+--   False
+--   </pre>
+termP :: Test Int
 
 -- | Check new term.
-termN :: Int -> Bool
-termPN :: Int -> Int -> Bool
-termsP :: [Int] -> Bool
-termsN :: [Int] -> Bool
-termsPN :: [Int] -> [Int] -> Bool
+termN :: Test Int
+
+-- | Check all terms are present.
+termsP :: Test [Int]
+
+-- | Check all terms are new.
+termsN :: Test [Int]
+
+-- | Check present terms and new terms.
+termsPN :: Test2 [Int] [Int]
 
 
 -- | Text enclosed in angle brackets.
@@ -530,7 +588,7 @@ nextQQ :: AbNext String
 --   </pre>
 data Symbol
 
--- | General-ordinary-numeric symbol
+-- | General-plain-numeric symbol
 SymbolCommon :: String -> Symbol
 
 -- | General symbol
@@ -550,30 +608,30 @@ SymbolUnknown :: String -> Symbol
 
 -- | Test symbol is general, in other words, <a>SymbolCommon</a>,
 --   <a>SymbolPlain</a> or <a>SymbolGeneral</a>.
-isGeneralSymbol :: Symbol -> Bool
+isGeneralSymbol :: Test Symbol
 
 -- | Test symbol is plain, in other words, <a>SymbolCommon</a> or
 --   <a>SymbolPlain</a>.
-isPlainSymbol :: Symbol -> Bool
+isPlainSymbol :: Test Symbol
 
 -- | Test symbol is numeric, in other words, <a>SymbolCommon</a> or
 --   <a>SymbolNumeric</a>.
-isNumericSymbol :: Symbol -> Bool
+isNumericSymbol :: Test Symbol
 
 -- | Test symbol is <a>SymbolShort</a>.
-isShortSymbol :: Symbol -> Bool
+isShortSymbol :: Test Symbol
 
 -- | Test character is a symbol component.
-isSymbolChar :: Char -> Bool
+isSymbolChar :: Test Char
 
 -- | Test character is a general-symbol component.
-isGeneralChar :: Char -> Bool
+isGeneralChar :: Test Char
 
 -- | Test character is a plain-symbol component.
-isPlainChar :: Char -> Bool
+isPlainChar :: Test Char
 
 -- | Test character is a numeric-symbol component.
-isNumericChar :: Char -> Bool
+isNumericChar :: Test Char
 
 -- | Get next symbol.
 nextSymbol :: Next Symbol
@@ -614,8 +672,10 @@ module Koshucode.Baala.Syntax.Symbol
 
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Syntax.Token.Token
-class SubtypeString a
-subtypeString :: SubtypeString a => a -> String
+
+-- | Type wihch has subtype and its name.
+class SubtypeName a
+subtypeName :: SubtypeName a => a -> String
 
 -- | There are eleven types of tokens.
 data Token
@@ -663,6 +723,8 @@ textToken :: String -> Token
 
 -- | Create unknown token.
 unknownToken :: CodePt -> String -> Ab a -> Token
+
+-- | Subtype of text token.
 data TextForm
 
 -- | Unknown keyword
@@ -692,8 +754,14 @@ TermTypePath :: TermType
 
 -- | Quoted term name
 TermTypeQuoted :: TermType
+
+-- | Local reference.
 data Local a
+
+-- | Reference to local relation — <tt>^r</tt>
 LocalSymbol :: a -> Local a
+
+-- | Reference to nested relation — <tt>^/r</tt>
 LocalNest :: a -> Local a
 unlocal :: Local a -> a
 data BlankName
@@ -717,13 +785,13 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TermType
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
-instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.TextForm
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
-instance Koshucode.Baala.Syntax.Token.Token.SubtypeString Koshucode.Baala.Syntax.Token.Token.BlankName
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.BlankName
 
 
 -- | Token pattern.
@@ -791,29 +859,29 @@ untoken :: Token -> String
 -- | Get detail type string of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; let tok = S.textToken "flower" in (S.subtypeString tok, tokenDetailTypeString tok)
+--   &gt;&gt;&gt; let tok = S.textToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 --   </pre>
 tokenDetailTypeString :: Token -> Maybe String
 tokenParents :: Token -> [Token]
 
 -- | Test token is blank, i.e., comment or space.
-isBlankToken :: Pred Token
+isBlankToken :: Test Token
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
 
 -- | Test token is short-type token.
-isShortToken :: Pred Token
+isShortToken :: Test Token
 
 -- | Test token is term-type token.
-isTermToken :: Pred Token
+isTermToken :: Test Token
 
 -- | Test token is open-type token.
-isOpenToken :: Pred Token
+isOpenToken :: Test Token
 
 -- | Test token is close-type token.
-isCloseToken :: Pred Token
+isCloseToken :: Test Token
 
 -- | Test token is a open-type of the specific bracket.
 --   
@@ -826,13 +894,13 @@ isCloseToken :: Pred Token
 --   &gt;&gt;&gt; let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
 --   False
 --   </pre>
-isOpenTokenOf :: String -> Pred Token
+isOpenTokenOf :: String -> Test Token
 
 -- | Test token is a close-type of the specific bracket.
-isCloseTokenOf :: String -> Pred Token
+isCloseTokenOf :: String -> Test Token
 
 -- | Test token is unknown.
-isUnknownToken :: Pred Token
+isUnknownToken :: Test Token
 
 
 -- | Token nipper.
@@ -853,22 +921,22 @@ type TokenNipResult = (InputText, Token)
 type TokenNipWResult = (WordTable, InputText, Token)
 
 -- | Test character is symbolic.
-isSymbol :: Pred Char
+isSymbol :: Test Char
 
 -- | Test character is space.
-isSpace :: Pred Char
+isSpace :: Test Char
 
 -- | Test character is double-quote.
-isQQ :: Pred Char
+isQQ :: Test Char
 
 -- | Test character is term slash.
-isTerm :: Pred Char
+isTerm :: Test Char
 
 -- | Test character is content line, i.e., <tt>'-'</tt> or <tt>'='</tt>.
-isJudge :: Pred Char
+isJudge :: Test Char
 
 -- | Test character is component of clock text.
-isClock :: Pred Char
+isClock :: Test Char
 
 -- | Update token scanner by nipper result.
 nipUpdate :: TokenScan -> TokenNipResult -> TokenScan
@@ -963,7 +1031,7 @@ tokenLinesBz :: NIOPoint -> Bz -> [TokenLine]
 tokenLinesBzTextAssert :: NIOPoint -> Bz -> [TokenLine]
 
 -- | Test string is short prefix.
-isShortPrefix :: Pred String
+isShortPrefix :: Test String
 
 
 -- | Token and tokenizer.
@@ -1087,10 +1155,6 @@ type TTreesToAb a = [TTree] -> Ab a
 
 -- | Text leaf of <a>TextQ</a>.
 
--- | Text leaf of <a>TextQQ</a>.
-
--- | Text leaf of <a>TextKey</a>.
-
 
 -- | Parser for token tree.
 module Koshucode.Baala.Syntax.TTree.Parse
@@ -1139,13 +1203,13 @@ ttDoc :: TTreesTo Doc
 --           , TText  CodePt {..} TextRaw "|"
 --           , TText  CodePt {..} TextRaw "c" ] )
 --   </pre>
-splitTokensBy :: Pred String -> SplitList3e Token
+splitTokensBy :: Test String -> SplitList3e Token
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: Pred String -> SplitList3e TTree
+splitTreesBy :: Test String -> SplitList3e TTree
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: Pred String -> TTreesTo [[TTree]]
+divideTreesBy :: Test String -> TTreesTo [[TTree]]
 
 -- | Divide token trees by vertical bar <tt>"|"</tt>.
 divideTreesByBar :: TTreesTo [[TTree]]
@@ -1159,6 +1223,20 @@ divideTreesByEqual :: TTreesTo [[TTree]]
 
 -- | Token trees.
 module Koshucode.Baala.Syntax.TTree
+
+
+-- | Patterns for token tree.
+module Koshucode.Baala.Syntax.TTree.Pattern
+
+-- | Token leaf.
+
+-- | Token branch.
+
+-- | Text leaf.
+
+-- | Raw text leaf.
+
+-- | Double-quoted text leaf.
 
 module Koshucode.Baala.Syntax.Para
 

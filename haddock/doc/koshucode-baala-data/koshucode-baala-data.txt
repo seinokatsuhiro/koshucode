@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Extra functions for rational numbers.
@@ -1481,21 +1481,64 @@ pMaybeText :: (CText c, CEmpty c) => String -> c
 
 -- | Utilities for token trees.
 module Koshucode.Baala.Data.Content.Tree
-treesToTokens :: TTreesToAb [Token]
-treesToTexts :: Bool -> TTreesToAb [String]
+
+-- | Get text from token tree.
 treeToText :: Bool -> TTreeToAb String
+
+-- | Get digits from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "-123 450.00" &gt;&gt;= treesToDigits
+--   Right "-123450.00"
+--   </pre>
 treesToDigits :: TTreesToAb String
+
+-- | Get clock from token.
 tokenClock :: Token -> Ab Clock
+
+-- | Get time from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "2013-04-18 12:00" &gt;&gt;= treesToTime
+--   Right (TimeYmdc (Monthly 2013-04-18) (ClockDhm 0 43200))
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "2013-04-18" &gt;&gt;= treesToTime
+--   Right (TimeYmd (Monthly 2013-04-18))
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "2013-#16" &gt;&gt;= treesToTime
+--   Right (TimeYw 2013-04-15)
+--   </pre>
 treesToTime :: TTreesToAb Time
+
+-- | Get interpretation from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "term /a" &gt;&gt;= treesToInterp
+--   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
+--                   interpTerms = ["a"] })
+--   </pre>
+treesToInterp :: TTreesToAb Interp
 
 -- | Get flat term name from token tree. If the token tree contains nested
 --   term name, this function failed.
 treeToFlatTerm :: TTreeToAb TermName
 
--- | Convert token trees into a list of named token trees.
+-- | Get list of named token trees from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a 'A3 /b 10" &gt;&gt;= treesToTerms
+--   Right [("a", [TreeL ...]),
+--          ("b", [TreeL ...])]
+--   </pre>
 treesToTerms :: TTreesToAb [NamedTrees]
+
+-- | Get list of named token trees from token trees. This function wraps
+--   long branches into group.
 treesToTerms1 :: TTreesToAb [NamedTree]
-treesToInterp :: TTreesToAb Interp
 
 module Koshucode.Baala.Data.Content.Utility
 class (Ord c, Show c, MixShortEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty
@@ -1633,26 +1676,33 @@ contentCons :: (CContent c) => ContentCalc c -> ContentCons c
 -- | Convert token trees into a judge. Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesToJudge :: (CContent c) => ContentCalc c -> AssertType -> JudgeClass -> TTreesToAb (Judge c)
+
+-- | Type of assertions.
 data AssertType
 
--- | <tt>|==</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|==</tt> <i>C</i> <tt>:</tt> <i>R</i> generates affirmative
+--   judges.
 AssertAffirm :: AssertType
 
--- | <tt>|=x</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=x</tt> <i>C</i> <tt>:</tt> <i>R</i> generates denial judges.
 AssertDeny :: AssertType
 
--- | <tt>|=xx</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=xx</tt> <i>C</i> <tt>:</tt> <i>R</i> generates multiple-denial
+--   judges.
 AssertMultiDeny :: AssertType
 
--- | <tt>|=c</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=c</tt> <i>C</i> <tt>:</tt> <i>R</i> generates changement judges.
 AssertChange :: AssertType
 
--- | <tt>|=cc</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=cc</tt> <i>C</i> <tt>:</tt> <i>R</i> generates
+--   multiple-changement judges.
 AssertMultiChange :: AssertType
 
--- | <tt>|=v</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=v</tt> <i>C</i> <tt>:</tt> <i>R</i> generates violation judges.
 AssertViolate :: AssertType
 assertAs :: AssertType -> JudgeOf c
+
+-- | Frege's stroke and various assertion lines.
 assertSymbol :: AssertType -> String
 instance GHC.Classes.Ord Koshucode.Baala.Data.Content.Decode.AssertType
 instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Decode.AssertType

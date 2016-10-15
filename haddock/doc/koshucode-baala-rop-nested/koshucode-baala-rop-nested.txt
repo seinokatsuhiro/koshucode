@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-nested
-@version 0.160.0.0
+@version 0.162.0.0
 
 module Koshucode.Baala.Rop.Nest.Message
 
@@ -17,28 +17,86 @@ notNestRel :: [TermName] -> Head -> Ab a
 
 module Koshucode.Baala.Rop.Nest.Flow
 consDown :: (CRel c) => RopCons c
+
+-- | Create <tt>down</tt> relmap.
 relmapDown :: (CRel c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>down</tt> relkit.
 relkitDown :: (CRel c) => TermName -> RelkitFlow c
 consUp :: (CRel c) => RopCons c
+
+-- | Create <tt>up</tt> relmap.
 relmapUp :: (CRel c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>up</tt> relkit.
 relkitUp :: (CRel c) => TermName -> RelkitFlow c
 consChunk :: (Ord c, CRel c) => RopCons c
+
+-- | Create <tt>chunk</tt> relmap.
 relmapChunk :: (Ord c, CRel c) => Intmed c -> [TermName] -> [TermName] -> Relmap c
+
+-- | Create <tt>chunk</tt> relkit.
 relkitChunk :: (Ord c, CRel c) => [TermName] -> [TermName] -> RelkitFlow c
 
+
+-- | Confluent operators for nested relations.
 module Koshucode.Baala.Rop.Nest.Confl
+
+-- | <b>copy N R</b>
+--   
+--   Copy input relation and referenced by ^N in R.
+--   
+--   For example, <tt>down</tt> <tt>/r</tt> can be rewrite to <tt>copy r (
+--   dee | slice /r ^r )</tt>.
 consCopy :: RopCons c
+
+-- | <b>for /P R</b>
+--   
+--   Map nested relation at /P by relmap R.
+--   
+--   The relamp <tt>for /r ( cut /c )</tt> removes term <tt>/c</tt> from a
+--   nested relation at the term <tt>/r</tt>.
 consFor :: (CRel c) => RopCons c
+
+-- | Create <tt>for</tt> relmap.
 relmapFor :: (CRel c) => Intmed c -> TermName -> Map (Relmap c)
+
+-- | Create <tt>for</tt> relkit.
 relkitFor :: (CRel c) => TermName -> RelkitBinary c
+
+-- | <b>group R -to /N</b>
+--   
+--   Group relation from relmap <tt>R</tt> by input relation. Grouped
+--   relations are added as content of term /N to each input tuples.
 consGroup :: (Ord c, CRel c) => RopCons c
+
+-- | Create <tt>group</tt> relmap.
 relmapGroup :: (Ord c, CRel c) => Intmed c -> SharedTerms -> TermName -> Map (Relmap c)
+
+-- | Create <tt>group</tt> relkit.
 relkitGroup :: (Ord c, CRel c) => SharedTerms -> TermName -> RelkitBinary c
+
+-- | <b>slice /N [R]</b>
+--   
+--   Slice input relation. Each slices have single tuple of input relation,
+--   and added as content of term /N to each input tuples. If R is given,
+--   slices are mapped by R. If input relation has a nested relation at
+--   term /P, the relation can be referenced by ^/P in R.
 consSlice :: (CRel c) => RopCons c
+
+-- | Create <tt>slice</tt> relmap.
 relmapSlice :: (CRel c) => Intmed c -> TermName -> Map (Relmap c)
+
+-- | Create <tt>slice</tt> relkit.
 relkitSlice :: (CRel c) => TermName -> RelkitBinary c
+
+-- | <b>slice-up R</b>
 consSliceUp :: (CRel c) => RopCons c
+
+-- | Create <tt>slice-up</tt> relmap.
 relmapSliceUp :: (CRel c) => Intmed c -> Map (Relmap c)
+
+-- | Create <tt>slice-up</tt> relkit.
 relkitSliceUp :: (CRel c) => RelkitBinary c
 
 
@@ -46,11 +104,17 @@ relkitSliceUp :: (CRel c) => RelkitBinary c
 module Koshucode.Baala.Rop.Nest.Deriv
 consOppGroup :: (Ord c, CRel c) => RopCons c
 consJoinUp :: (Ord c) => RopCons c
+
+-- | Create <tt>join-up</tt> relmap.
 relmapJoinUp :: (Ord c) => Intmed c -> [TermName] -> Relmap c
 consPickGroup :: (Ord c, CRel c) => RopCons c
 consNest :: (Ord c, CRel c) => RopCons c
+
+-- | Create <tt>self-group</tt> relmap.
 relmapNest :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
 consUngroup :: (Ord c, CRel c) => RopCons c
+
+-- | Create <tt>ungroup</tt> relmap.
 relmapUngroup :: (Ord c, CRel c) => Intmed c -> TermName -> Relmap c
 
 

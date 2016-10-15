@@ -8,45 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.160.0.0
-
-
--- | Text name.
-module Koshucode.Baala.Subtext.Name.Text
-
--- | Text name.
-type Name = Text
-
--- | Class for types which has name.
-class GetName a
-getName :: GetName a => a -> Name
-
-
--- | Integer or string name.
-module Koshucode.Baala.Subtext.Name.IntString
-
--- | String or integer name.
-data Name
-NameI :: Int -> Name
-NameS :: String -> Name
-
--- | Class for types which has name.
-class GetName a
-getName :: GetName a => a -> Name
-instance GHC.Classes.Ord Koshucode.Baala.Subtext.Name.IntString.Name
-instance GHC.Classes.Eq Koshucode.Baala.Subtext.Name.IntString.Name
-instance GHC.Show.Show Koshucode.Baala.Subtext.Name.IntString.Name
-
-
--- | String name.
-module Koshucode.Baala.Subtext.Name.String
-
--- | String name.
-type Name = String
-
--- | Class for types which has name.
-class GetName a
-getName :: GetName a => a -> Name
+@version 0.162.0.0
 
 
 -- | Lower and upper bound.
@@ -92,29 +54,6 @@ times :: MinMax -> MinMax -> MinMax
 instance GHC.Classes.Ord Koshucode.Baala.Subtext.MinMax.MinMax
 instance GHC.Classes.Eq Koshucode.Baala.Subtext.MinMax.MinMax
 instance GHC.Show.Show Koshucode.Baala.Subtext.MinMax.MinMax
-
-
--- | Named function.
-module Koshucode.Baala.Subtext.Fn
-
--- | String name.
-type Name = String
-
--- | Named function.
-data Fn a b
-Fn :: Name -> (a -> b) -> Fn a b
-
--- | Two-argument named function.
-data Fn2 a b c
-Fn2 :: Name -> (a -> b -> c) -> Fn2 a b c
-instance Koshucode.Baala.Subtext.Name.String.GetName (Koshucode.Baala.Subtext.Fn.Fn a b)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Fn.Fn a b)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Fn.Fn a b)
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Fn.Fn a b)
-instance Koshucode.Baala.Subtext.Name.String.GetName (Koshucode.Baala.Subtext.Fn.Fn2 a b c)
-instance GHC.Show.Show (Koshucode.Baala.Subtext.Fn.Fn2 a b c)
-instance GHC.Classes.Eq (Koshucode.Baala.Subtext.Fn.Fn2 a b c)
-instance GHC.Classes.Ord (Koshucode.Baala.Subtext.Fn.Fn2 a b c)
 
 
 -- | Subtext match expression.
@@ -292,6 +231,15 @@ as :: FnAs a -> Expr a -> Expr a
 -- | Replace to given sequence.
 asConst :: [a] -> Expr a -> Expr a
 
+-- | Add segment to the beginning of matched sequence.
+asPrepend :: [a] -> Expr a -> Expr a
+
+-- | Add segment to the end of matched sequence.
+asAppend :: [a] -> Expr a -> Expr a
+
+-- | Add segments to the beginning and end of matched sequence.
+asWrap :: [a] -> [a] -> Expr a -> Expr a
+
 
 -- | Repetitive operators.
 module Koshucode.Baala.Subtext.Operator.Repeat
@@ -434,6 +382,12 @@ categoryList :: [GeneralCategory] -> CharExpr
 --   space-separated names. If unknown name is given, returns the name in
 --   <a>Left</a> data.
 category :: String -> Either String CharExpr
+
+-- | Convert matched text into lower case.
+asLower :: CharExpr -> CharExpr
+
+-- | Convert matched text into upper case.
+asUpper :: CharExpr -> CharExpr
 
 
 -- | Match operators.

@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Replace sublists.
@@ -149,45 +149,66 @@ b3 :: Cox c
 module Koshucode.Baala.Cop.Message
 
 
--- | Content operators.
+-- | Content operators on texts.
 module Koshucode.Baala.Cop.Text
 
 -- | Content operators on texts.
 copsText :: (CContent c) => [Cop c]
 
+-- | <b>suffix LIST</b> adds unique suffixes to text elements of
+--   <i>LIST</i>.
+copSuffix :: (CText c, CList c) => CopCalc c
 
--- | Content operators.
+-- | <b>unsuffix C</b> remove integer suffixes from <i>C</i>.
+copUnsuffix :: (CContent c) => CopCalc c
+
+
+-- | Content operators on types.
 module Koshucode.Baala.Cop.Type
+
+-- | Content operators on types.
 copsType :: (CContent c) => [Cop c]
 
 
--- | Content operators.
+-- | Content operators on clocks and times.
 module Koshucode.Baala.Cop.Time
+
+-- | Content operators on clocks and times.
 copsTime :: (CTime c, CDec c) => [Cop c]
 
 
--- | Content operators.
+-- | Operators on content order.
 module Koshucode.Baala.Cop.Order
+
+-- | Oerators on content order.
 copsOrder :: (CBool c, Eq c, Ord c) => [Cop c]
 
 
 -- | Content operators.
 module Koshucode.Baala.Cop.Misc
+
+-- | Content operators on miscellaneous.
 copsMisc :: (CContent c) => [Cop c]
 
 
--- | Content operators.
+-- | Content operators on Boolean.
 module Koshucode.Baala.Cop.Logic
+
+-- | Content operators on Boolean.
 copsLogic :: (CBool c, CEmpty c) => [Cop c]
 
 
--- | Content operators.
+-- | Content operators on lists.
 module Koshucode.Baala.Cop.List
+
+-- | Content operators on lists.
 copsList :: (CContent c) => [Cop c]
 
 
--- | Content operators.
+-- | Arithmetic content operators.
 module Koshucode.Baala.Cop.Arith
+
+-- | Arithmetic content operators.
 copsArith :: (CContent c) => [Cop c]
 
 

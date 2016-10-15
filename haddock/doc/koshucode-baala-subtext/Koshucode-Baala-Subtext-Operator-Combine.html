@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-subtext-0.160.0.0: A text matching library</p
+      >koshucode-baala-subtext-0.162.0.0: A text matching library</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -63,6 +63,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><li
 	  ><a href="#g:2"
 	    >Variation</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Modification</a
 	    ></li
 	  ></ul
 	></div
@@ -153,7 +157,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><li class="src short"
 	  ><a href="#v:sub"
 	    >sub</a
-	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -163,7 +167,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><li class="src short"
 	  ><a href="#v:-35-"
 	    >(#)</a
-	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -184,6 +188,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><a href="#v:asConst"
 	    >asConst</a
 	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:asPrepend"
+	    >asPrepend</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:asAppend"
+	    >asAppend</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:asWrap"
+	    >asWrap</a
+	    > :: [a] -&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
 	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -345,7 +373,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:sub" class="def"
 	    >sub</a
-	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -363,7 +391,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	><p class="src"
 	  ><a name="v:-35-" class="def"
 	    >(#)</a
-	    > :: <a href="Koshucode-Baala-Subtext-Name-String.html#t:Name"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Name-String.html#t:Name"
 	    >Name</a
 	    > -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
 	    >Expr</a
@@ -377,6 +405,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	    >Named submatch.</p
 	    ></div
 	  ></div
+	><h1 id="g:3"
+	>Modification</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:as" class="def"
@@ -409,6 +439,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Subtex
 	  ><div class="doc"
 	  ><p
 	    >Replace to given sequence.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:asPrepend" class="def"
+	    >asPrepend</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#asPrepend');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add segment to the beginning of matched sequence.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:asAppend" class="def"
+	    >asAppend</a
+	    > :: [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#asAppend');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add segment to the end of matched sequence.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:asWrap" class="def"
+	    >asWrap</a
+	    > :: [a] -&gt; [a] -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a -&gt; <a href="Koshucode-Baala-Subtext-Expr.html#t:Expr"
+	    >Expr</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Subtext-Operator-Combine.html#asWrap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add segments to the beginning and end of matched sequence.</p
 	    ></div
 	  ></div
 	></div

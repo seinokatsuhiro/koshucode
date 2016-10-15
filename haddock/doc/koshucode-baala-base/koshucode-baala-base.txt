@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Unicode general categories.
@@ -590,10 +590,10 @@ instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Prelude.Queue.Qu
 instance Data.Default.Class.Default (Koshucode.Baala.Base.Prelude.Queue.Queue a)
 
 
--- | General utilities
+-- | General utilities.
 module Koshucode.Baala.Base.Prelude.Class
 
--- | Types that has name
+-- | Types that has name.
 class Name a where names = map name
 name :: Name a => a -> String
 names :: Name a => [a] -> [String]
@@ -601,9 +601,20 @@ names :: Name a => [a] -> [String]
 -- | Entry in association list.
 type Named a = (String, a)
 named :: (Name a) => a -> Named a
+
+-- | Map from something to same type.
 type Map a = a -> a
+
+-- | Map from something to list of something.
 type ManyMap a = a -> [a]
-type Pred a = a -> Bool
+
+-- | Boolean-valued function, also called predicate.
+type Test a = a -> Bool
+
+-- | Boolean-valued function with 2 arguments.
+type Test2 a b = a -> b -> Bool
+
+-- | Type of value which is classified as yes or no.
 data YesNo a
 Yes :: a -> YesNo a
 No :: a -> YesNo a
@@ -1872,6 +1883,36 @@ instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Position
 instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Position
 instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Position
 
+
+-- | Suffix and prefix.
+module Koshucode.Baala.Base.Text.Suffix
+
+-- | Remove characters-delimiter prefix.
+--   
+--   <pre>
+--   &gt;&gt;&gt; unprefix (`elem` "0123456789") '-' "12-foo"
+--   "foo"
+--   </pre>
+unprefix :: Test Char -> Char -> Map String
+
+-- | Remove delimiter-characters suffix.
+--   
+--   <pre>
+--   &gt;&gt;&gt; unsuffix (`elem` "0123456789") '-' "foo-12"
+--   "foo"
+--   </pre>
+unsuffix :: Test Char -> Char -> Map String
+
+-- | Make names unique by adding integer suffixes.
+--   
+--   <pre>
+--   &gt;&gt;&gt; uniqueNames '-' $ words "a b b c"
+--   ["a", "b-1", "b-2", "c"]
+--   </pre>
+uniqueNames :: Char -> Map [String]
+
+
+-- | Bundle of text modules.
 module Koshucode.Baala.Base.Text
 
 module Koshucode.Baala.Base.IO
@@ -2112,6 +2153,8 @@ extraOpenBracket :: Ab a
 
 module Koshucode.Baala.Base.Message
 
+
+-- | Tree structure.
 module Koshucode.Baala.Base.Syntax.Tree
 
 -- | Tree of leaf and branch.
@@ -2119,23 +2162,28 @@ data CodeTree p a
 
 -- | Terminal of tree.
 TreeL :: a -> CodeTree p a
+[treeLeaf] :: CodeTree p a -> a
 
 -- | Bracket-type and subtrees.
-TreeB :: p -> (Maybe (a, a)) -> [CodeTree p a] -> CodeTree p a
+TreeB :: p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a
+[treeBracketType] :: CodeTree p a -> p
+[treeBracketLeaf] :: CodeTree p a -> Maybe (a, a)
+[treeBranch] :: CodeTree p a -> [CodeTree p a]
 
 -- | Convert a list of elements to a single tree.
 tree :: (Ord p, CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
 
 -- | Convert a list of elements to trees.
 trees :: (Ord p, CodePtr a) => GetBracketType p a -> Bracket p -> [a] -> Ab [CodeTree p a]
-treeWrap :: p -> [CodeTree p a] -> CodeTree p a
 
 -- | Convert tree to list of tokens.
 untree :: CodeTree p a -> [a]
 
 -- | Convert tree to list of tokens.
 untrees :: [CodeTree p a] -> [a]
-leaves :: CodeTree p a -> [a]
+
+-- | Collect leaves in tree.
+treeLeaves :: CodeTree p a -> [a]
 
 -- | Simplify tree by removing double brackets, like <tt>((a))</tt> to
 --   <tt>(a)</tt>.
@@ -2144,8 +2192,17 @@ leaves :: CodeTree p a -> [a]
 --   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 --   </pre>
-undouble :: Pred p -> Map (CodeTree p a)
-mapToLeaf :: (a -> a) -> Map (CodeTree p a)
+undouble :: Test p -> Map (CodeTree p a)
+
+-- | Wrap trees into single tree.
+treeWrap :: p -> [CodeTree p a] -> CodeTree p a
+
+-- | Map function to all leaves. This function is similar to <a>fmap</a>,
+--   but not map to <a>treeBracketLeaf</a>.
+treeLeafMap :: (a -> a) -> Map (CodeTree p a)
+
+-- | Map function to all branches.
+treeBranchMap :: (p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a) -> Map (CodeTree p a)
 
 -- | Bracket type.
 data Bracket p
@@ -2179,7 +2236,7 @@ type GetBracketType p a = a -> Bracket p
 --   &gt;&gt;&gt; map pt "ab(cd[ef])g"
 --   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --   </pre>
-bracketTable :: (Eq a) => [(p, Pred a, Pred a)] -> GetBracketType p a
+bracketTable :: (Eq a) => [(p, Test a, Test a)] -> GetBracketType p a
 instance GHC.Classes.Ord p => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
 instance GHC.Classes.Eq p => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
 instance GHC.Show.Show p => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Tree.Bracket p)

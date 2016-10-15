@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Partial-order scale.
@@ -122,8 +122,14 @@ picker :: Head -> [TermName] -> Map [c]
 module Koshucode.Baala.Rop.Base.Get
 type RopGet c a = Intmed c  Use of relmap operator -> String  Name of keyword, e.g., @\"-term\"@ -> Ab a  Attribute of relmap
 getTag :: Intmed c -> String -> Bool
+
+-- | Get usage tags.
 getTags :: Intmed c -> [String]
+
+-- | Get optional parameter with default value.
 getOption :: a -> RopGet c a -> RopGet c a
+
+-- | Get parameter whenever given or not.
 getMaybe :: RopGet c a -> RopGet c (Maybe a)
 
 -- | Get <tt>True</tt> when attribute is given, <tt>False</tt> otherwise.
@@ -138,7 +144,11 @@ getSwitch :: Intmed c -> String -> Ab Bool
 --     ...
 --   </pre>
 getWord :: RopGet c String
+
+-- | Get trees as single tree.
 getTree :: RopGet c TTree
+
+-- | Get trees from parameter.
 getTrees :: RopGet c [TTree]
 getWordTrees :: RopGet c [Named TTree]
 getTreesByColon :: RopGet c [[TTree]]
@@ -196,6 +206,8 @@ module Koshucode.Baala.Rop.Base.Rop
 --   </ul>
 ropsBuiltin :: [Rop c]
 consId :: RopCons c
+
+-- | Create <tt>id</tt> relmap.
 relmapId :: Intmed c -> Relmap c
 
 -- | Placeholder for unimplemented operator.
@@ -212,8 +224,8 @@ module Koshucode.Baala.Rop.Flat.Meta
 --   <ul>
 --   <li><i><tt>koshu-cop /N</tt></i> Retrieve list of content
 --   operators.</li>
---   <li><i>@koshu-cop-infix /N [ -height /N \</i> [ -dir /N ]@] Retrieve
---   list of infix specifications.</li>
+--   <li><i><tt>koshu-cop-infix /N [ -height /N ][ -dir /N ]</tt></i>
+--   Retrieve list of infix specifications.</li>
 --   <li><i><tt>koshu-rop /N</tt></i> Retrieve list of relmap
 --   operators.</li>
 --   <li><i><tt>koshu-version /N</tt></i> Get version number of the koshu
@@ -221,16 +233,28 @@ module Koshucode.Baala.Rop.Flat.Meta
 --   </ul>
 ropsMeta :: (CContent c) => [Rop c]
 consKoshuCop :: CContent c => RopCons c
+
+-- | Create <tt>koshu-cop</tt> relkit.
 relkitKoshuCop :: (CContent c) => TermName -> RelkitHook c
 consKoshuCopInfix :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-cop-infix</tt> relkit.
 relkitKoshuCopInfix :: (CContent c) => (TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
 consKoshuSource :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-source</tt> relmap.
 relmapKoshuSource :: (CContent c) => Intmed c -> (TermName, Maybe TermName, Maybe TermName) -> Relmap c
 consKoshuRop :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-rop</tt> relkit.
 relkitKoshuRop :: (CContent c) => (Maybe TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
 consKoshuProxy :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-proxy</tt> relkit.
 relkitKoshuProxy :: (CContent c) => (Maybe TermName, Maybe TermName) -> RelkitHook c
 consKoshuVersion :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-version</tt> relkit.
 relkitKoshuVersion :: (CContent c) => TermName -> RelkitHook c
 
 module Koshucode.Baala.Rop.Flat.Order
@@ -238,13 +262,23 @@ module Koshucode.Baala.Rop.Flat.Order
 -- | Pseudorelmap operators for term and tuple ordering.
 ropsOrder :: (Ord c) => [Rop c]
 consForward :: RopCons c
+
+-- | Create <tt>forward</tt> relmap.
 relmapForward :: Intmed c -> [TermName] -> Relmap c
 consBackward :: RopCons c
+
+-- | Create <tt>backward</tt> relmap.
 relmapBackward :: Intmed c -> [TermName] -> Relmap c
 consLexical :: RopCons c
+
+-- | Create <tt>lexical</tt> relmap.
 relmapLexical :: Intmed c -> Relmap c
 consOrder :: (Ord c) => RopCons c
+
+-- | Create <tt>order</tt> relmap.
 relmapOrder :: (Ord c) => Intmed c -> [SignedTermName] -> Relmap c
+
+-- | Create <tt>order</tt> relkit.
 relkitOrder :: (Ord c) => [SignedTermName] -> RelkitFlow c
 
 module Koshucode.Baala.Rop.Flat.Resource
@@ -259,10 +293,16 @@ module Koshucode.Baala.Rop.Flat.Resource
 --   </ul>
 ropsResource :: (CContent c) => [Rop c]
 consKoshuResRop :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-res-rop</tt> relkit.
 relkitKoshuResRop :: (CContent c) => (TermName, TermName) -> RelkitHook c
 consKoshuResSink :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-res-sink</tt> relkit.
 relkitKoshuResSink :: (CContent c) => (TermName, TermName) -> RelkitHook c
 consKoshuResArticle :: (CContent c) => RopCons c
+
+-- | Create <tt>koshu-res-article</tt> relkit.
 relkitKoshuResArticle :: (CContent c) => TermName -> RelkitHook c
 
 module Koshucode.Baala.Rop.Flat.Source
@@ -279,11 +319,17 @@ ropsSource :: (CContent c) => [Rop c]
 consDee :: RopCons c
 consDum :: RopCons c
 consEmpty :: RopCons c
+
+-- | Create <tt>empty</tt> relmap.
 relmapEmpty :: Intmed c -> [TermName] -> Relmap c
 consSource :: RopCons c
 consSourceTerm :: RopCons c
+
+-- | Create <tt>source-term</tt> relmap.
 relmapSourceTerm :: Intmed c -> String -> Map (Relmap c)
 
+
+-- | Relmap operators for manipulating term names.
 module Koshucode.Baala.Rop.Flat.Term
 
 -- | Relmap operators for manipulating term names.
@@ -299,22 +345,84 @@ module Koshucode.Baala.Rop.Flat.Term
 --   <li><i><tt>move</tt></i> Change heading.</li>
 --   </ul>
 ropsTerm :: (Ord c) => [Rop c]
+
+-- | <b>pick /P ...</b>
+--   
+--   Construct <tt>pick</tt> relmap operator for relational projection by
+--   picking terms.
 consPick :: RopCons c
+
+-- | Create <tt>pick</tt> relmap.
 relmapPick :: Intmed c -> [TermName] -> Relmap c
+
+-- | Create <tt>pick</tt> relkit.
 relkitPick :: [TermName] -> RelkitFlow c
+
+-- | <b>cut /P ...</b>
+--   
+--   Construct <tt>cut</tt> relmap operator for relational projection by
+--   cutting terms. This operator is an inversion of <tt>pick</tt>.
 consCut :: RopCons c
+
+-- | Create <tt>cut</tt> relmap.
 relmapCut :: Intmed c -> [TermName] -> Relmap c
+
+-- | Create <tt>cut</tt> relkit.
 relkitCut :: [TermName] -> RelkitFlow c
+
+-- | <b>pick-term R</b>
+--   
+--   Construct <tt>pick-term</tt> relmap operator. This operator is similar
+--   to <tt>pick</tt> instead of given terms but relation terms.
 consPickTerm :: RopCons c
+
+-- | Create <tt>pick-term</tt> relmap.
 relmapPickTerm :: Intmed c -> Relmap c -> Relmap c
+
+-- | Create <tt>pick-term</tt> relkit.
 relkitPickTerm :: RelkitBinary c
+
+-- | <b>cut-term R</b>
+--   
+--   Construct <tt>cut-term</tt> relmap operator. This operator is similar
+--   to <tt>cut</tt> instead of given terms but relation terms.
 consCutTerm :: RopCons c
+
+-- | Create <tt>cut-term</tt> relmap.
 relmapCutTerm :: Intmed c -> Relmap c -> Relmap c
+
+-- | Create <tt>cut-term</tt> relkit.
 relkitCutTerm :: RelkitBinary c
+
+-- | <b>move /P ... -to /N ...</b>
+--   
+--   Construct <tt>move</tt> relmap operator for renaming term names. Terms
+--   /P ... of input relation are renamed corresponding terms /N .... The
+--   <tt>move</tt> operator provides same functionality as <tt>rename</tt>.
+--   Operator <tt>move</tt> is suitable for renaming few terms, operator
+--   <tt>rename</tt> for many terms. The following relmaps have same
+--   effect:
+--   
+--   <pre>
+--   rename /N /P /N /P ...
+--   move /P ... -to /N ...
+--   </pre>
 consMove :: RopCons c
+
+-- | Create <tt>move</tt> relmap.
 relmapMove :: Intmed c -> ([TermName], [TermName]) -> Relmap c
+
+-- | Create <tt>move</tt> relkit.
 relkitMove :: ([TermName], [TermName]) -> RelkitFlow c
+
+-- | <b>rename /N /P /N /P ...</b>
+--   
+--   Construct <tt>rename</tt> relmap operator for renaming term names.
+--   Term /P is renamed to term /N for each pair of terms /N /P. The
+--   <tt>rename</tt> operator provides same functionality as <tt>move</tt>.
 consRename :: RopCons c
+
+-- | Create <tt>rename</tt> relmap.
 relmapRename :: Intmed c -> [TermName2] -> Relmap c
 
 module Koshucode.Baala.Rop.Flat.Peripheral
@@ -323,15 +431,31 @@ module Koshucode.Baala.Rop.Flat.Peripheral
 ropsPeripheral :: (CContent c) => [Rop c]
 consRdf :: RopCons c
 consTie :: (CTie c) => RopCons c
+
+-- | Create <tt>tie</tt> relmap.
 relmapTie :: (CTie c) => Intmed c -> ([TermName], TermName) -> Relmap c
+
+-- | Create <tt>tie</tt> relkit.
 relkitTie :: (CTie c) => ([TermName], TermName) -> RelkitFlow c
 consUntie :: (CTie c) => RopCons c
+
+-- | Create <tt>untie</tt> relmap.
 relmapUntie :: (CTie c) => Intmed c -> (TermName, [TermName]) -> Relmap c
+
+-- | Create <tt>untie</tt> relkit.
 relkitUntie :: (CTie c) => (TermName, [TermName]) -> RelkitFlow c
 consTermName :: (CTerm c) => RopCons c
+
+-- | Create <tt>term-name</tt> relmap.
 relmapTermName :: (CTerm c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>term-name</tt> relkit.
 relkitTermName :: (CTerm c) => TermName -> RelkitFlow c
+
+-- | Create <tt>today</tt> relmap.
 relmapToday :: (CTime c) => Intmed c -> (TermName, Time) -> Relmap c
+
+-- | Create <tt>today</tt> relkit.
 relkitToday :: (CTime c) => (TermName, Time) -> Maybe Head -> Ab (Relkit c)
 
 module Koshucode.Baala.Rop.Flat.TermGadget
@@ -348,23 +472,39 @@ module Koshucode.Baala.Rop.Flat.TermGadget
 --   <li><i><tt>wipe</tt></i> Cut working terms.</li>
 --   </ul>
 ropsTermGadget :: (Ord c) => [Rop c]
-consPrefix :: RopCons c
-relmapPrefix :: Intmed c -> String -> [String] -> Relmap c
 
 -- | Add prefix to specified terms.
+consPrefix :: RopCons c
+
+-- | Create <tt>prefix</tt> relmap.
+relmapPrefix :: Intmed c -> String -> [String] -> Relmap c
+
+-- | Create <tt>prefix</tt> relkit.
 relkitPrefix :: String -> [String] -> RelkitFlow c
+
+-- | Remove prefix.
 consUnprefix :: RopCons c
+
+-- | Create <tt>unprefix</tt> relmap.
 relmapUnprefix :: Intmed c -> String -> Relmap c
 
--- | Remove prefix
+-- | Create <tt>unprefix</tt> relkit.
 relkitUnprefix :: String -> RelkitFlow c
+
+-- | Change prefix.
 consPrefixChange :: RopCons c
+
+-- | Create <tt>prefix-change</tt> relmap.
 relmapPrefixChange :: Intmed c -> (String, String) -> Relmap c
 
--- | Change prefix
+-- | Create <tt>prefix-change</tt> relkit.
 relkitPrefixChange :: (String, String) -> RelkitFlow c
 consWipe :: RopCons c
+
+-- | Create <tt>wipe</tt> relmap.
 relmapWipe :: Intmed c -> Relmap c
+
+-- | Create <tt>wipe</tt> relkit.
 relkitWipe :: RelkitFlow c
 
 module Koshucode.Baala.Rop.Flat.Elem
@@ -374,7 +514,11 @@ ropsElem :: (CContent c) => [Rop c]
 
 -- | Expand elements from collection.
 consMember :: (Ord c, CSet c, CList c, CText c) => RopCons c
+
+-- | Create <tt>member</tt> relmap.
 relmapMember :: (Ord c, CSet c, CList c, CText c) => Intmed c -> TermName2 -> Relmap c
+
+-- | Create <tt>member</tt> relkit.
 relkitMember :: (Ord c, CSet c, CList c, CText c) => TermName2 -> RelkitFlow c
 
 -- | Expand index and element from collection.
@@ -385,7 +529,11 @@ relkitMember :: (Ord c, CSet c, CList c, CText c) => TermName2 -> RelkitFlow c
 --   &gt;&gt;&gt; iz-elem /list -to /i /elem
 --   </pre>
 consIndexElem :: (Ord c, CContent c) => Int -> RopCons c
+
+-- | Create <tt>ix-elem</tt> or <tt>iz-elem</tt> relmap.
 relmapIndexElem :: (Ord c, CContent c) => Int -> Intmed c -> TermName3 -> Relmap c
+
+-- | Create <tt>ix-elem</tt> or <tt>iz-elem</tt> relkit.
 relkitIndexElem :: (Ord c, CContent c) => Int -> TermName3 -> RelkitFlow c
 
 -- | Unroll (expand) terms to tuples.
@@ -394,6 +542,8 @@ relkitIndexElem :: (Ord c, CContent c) => Int -> TermName3 -> RelkitFlow c
 --   &gt;&gt;&gt; unroll /term /content -from /1 /2 /3 /4
 --   </pre>
 consUnroll :: (CTerm c) => RopCons c
+
+-- | Create <tt>unroll</tt> relmap.
 relmapUnroll :: (CTerm c) => Intmed c -> (TermName, TermName, [TermName]) -> Relmap c
 
 -- | Extract elements from collection.
@@ -402,6 +552,8 @@ relmapUnroll :: (CTerm c) => Intmed c -> (TermName, TermName, [TermName]) -> Rel
 --   &gt;&gt;&gt; elem-begin /list -to /a /b /c
 --   </pre>
 consElemBegin :: (Ord c, CContent c) => RopCons c
+
+-- | Create <tt>elem-begin</tt> relmap.
 relmapElemBegin :: (Ord c, CContent c) => Intmed c -> (TermName, [TermName]) -> Relmap c
 
 -- | Extract end-side elements from collection.
@@ -410,129 +562,41 @@ relmapElemBegin :: (Ord c, CContent c) => Intmed c -> (TermName, [TermName]) -> 
 --   &gt;&gt;&gt; elem-end /list -to /a /b /c
 --   </pre>
 consElemEnd :: (Ord c, CContent c) => RopCons c
+
+-- | Create <tt>elem-end</tt> relmap.
 relmapElemEnd :: (Ord c, CContent c) => Intmed c -> (TermName, [TermName]) -> Relmap c
 consUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => RopCons c
+
+-- | Create <tt>uncollect</tt> relmap.
 relmapUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => Intmed c -> (TermName, [TermName]) -> Relmap c
+
+-- | Create <tt>uncollect</tt> relkit.
 relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermName, [TermName]) -> RelkitFlow c
 
 
 -- | Text decomposition by subtext.
---   
---   <h1>Subtext</h1>
---   
---   Subtext is a domain-specific language for text decomposition. The
---   <tt>subtext</tt> relmap operator provides the functionality of this
---   language. In the following descrition, we use a symbol <i>E</i> for
---   subtext expression, /<i>P</i> for present term name, /<i>N</i> for new
---   term name, <i>N</i> for symbolic name, <i>T</i> for text, <i>C</i> for
---   character (single-letter text).
---   
---   <h2>Relmap operator</h2>
---   
---   The <tt>subtext</tt> operator decompose text using subtext expression.
---   There are two ways for describing expression: single or bundle.
---   
---   <ul>
---   <li><i> subtext /P ( E ) </i> Decompose text content of <i>/P</i> by
---   single expression <i>E</i>.</li>
---   <li><i> subtext /P { N1 = E1 | N2 = E2 | ... } </i> Decompose text by
---   bundle of named expressions. Text decomposition starts from
---   <i>N1</i>.</li>
---   </ul>
---   
---   <h2>Basic patterns</h2>
---   
---   <ul>
---   <li><i> ? </i> Any character.</li>
---   <li><i> ?? </i> Context-dependent pattern.</li>
---   <li><i> begin </i> Beginning of text.</li>
---   <li><i> end </i> End of text.</li>
---   <li><i> ( E ) </i> Group expression <i>E</i>.</li>
---   </ul>
---   
---   <h2>Texts</h2>
---   
---   <ul>
---   <li><i> T </i> Text literal as <i>T</i>.</li>
---   <li><i> char T </i> Alternative occurences of characters included in
---   <i>T</i>.</li>
---   <li><i> word T </i> Alternative occurences of words included in
---   <i>T</i>.</li>
---   <li><i> cat T ... </i> Characters in the Unicode general categories,
---   <i>T</i> is one-letter or two-letter category name. See
---   <a>categoryLookup</a>.</li>
---   <li><i> C1 to C2 </i> Characters betweeen C1 and C2.</li>
---   </ul>
---   
---   <ul>
---   <li><i> sp </i> Unicode space character or space-like control
---   character including tabs (HT/VT), newlines (CR/LF), or form feed (FF).
---   See <a>isSpace</a>.</li>
---   <li><i> 012 </i> Unicode number character. See
---   <a>categoryNumber</a>.</li>
---   <li><i> digit </i> ASCII digits. See <a>isDigit</a>.</li>
---   <li><i> abc </i> Unicode letter or mark character. See
---   <a>categoryLetter</a> or <a>categoryMark</a>.</li>
---   <li><i> +- </i> Unicode punctuation or symbol character. See
---   <a>categoryPunctuation</a> or <a>categorySymbol</a>.</li>
---   <li><i> open </i> Open punctuations. See <a>categoryOpen</a>.</li>
---   <li><i> close </i> Close punctuations. See <a>categoryClose</a>.</li>
---   <li><i> ascii </i> ASCII characters. See <a>isAscii</a>.</li>
---   <li><i> latin-1 </i> ISO 8859-1 (Latin-1) characters. See
---   <a>isLatin1</a>.</li>
---   </ul>
---   
---   <h2>Combinations</h2>
---   
---   <ul>
---   <li><i> E1 | E2 </i> Alternative occurence of <i>E1</i> or
---   <i>E2</i>.</li>
---   <li><i> E1 ++ E2 </i> Sequence of <i>E1</i> followed by
---   <i>E2</i>.</li>
---   <li><i> E1 or E2 </i> Alternative occurence of <i>E1</i> or
---   <i>E2</i>.</li>
---   <li><i> E1 and E2 </i> <i>E1</i> and additional condition
---   <i>E2</i>.</li>
---   <li><i> not E </i> Inverted condition.</li>
---   <li><i> last E </i> Find last <i>E</i>.</li>
---   <li><i> before E </i> Sequence of not <i>E</i>.</li>
---   <li><i> E as T </i> Replace to text <i>T</i> when <i>E</i> is
---   matched.</li>
---   <li><i> stay E </i> Match <i>E</i> but input position is not
---   changed.</li>
---   </ul>
---   
---   <h2>Repetition</h2>
---   
---   <ul>
---   <li><i> { E } </i> Zero-or-more occurences of <i>E</i>.
---   (Zero-repeat)</li>
---   <li><i> { E } ( N ) </i> <i>N</i>-times occurences of <i>E</i>.</li>
---   <li><i> { E } ( L to ) </i> Repetition of <i>E</i> with lower bound
---   <i>L</i>.</li>
---   <li><i> { E } ( to U ) </i> Repetition of <i>E</i> with upper bound
---   <i>U</i>.</li>
---   <li><i> { E } ( L to U ) </i> Repetition of <i>E</i> with lower bound
---   <i>L</i> and upper bound <i>U</i>.</li>
---   <li><i> [ E ] </i> Zero-or-one occurences of <i>E</i>. (Option)</li>
---   <li><i> {- E -} </i> One-or-more occurences of <i>E</i>.
---   (One-repeat)</li>
---   <li><i> E1 sep E2 </i> <i>E1</i>-separated <i>E2</i>.
---   (Zero-repeat)</li>
---   </ul>
---   
---   <h2>Gathering subtext</h2>
---   
---   <ul>
---   <li><i> /N E </i> Submatch for <i>E</i> whose name is <i>/N</i>.</li>
---   <li><i> /N </i> Named submatch, equivalent to <i>/N</i> ??.</li>
---   <li><i> off E </i> Turn off gathering text in <i>E</i>.</li>
---   <li><i> on E </i> Turn on gathering text in <i>E</i>.</li>
---   </ul>
 module Koshucode.Baala.Rop.Flat.Subtext
+
+-- | Type of subtext parameters.
 type SubtextPara = (TermName, [NameDepth], CharMatch, Bool)
+
+-- | <b>subtext /P E</b>
+--   
+--   Construct <tt>subtext</tt> relmap. Decompose text content of /P by
+--   matcing with subtext expression E. Terms contained in E are added to
+--   output relation. Expression E is either single or bundle:
+--   
+--   <ul>
+--   <li><i>( E1 )</i> Decompose text by single expression E.</li>
+--   <li><i>{ N1 = E1 | N2 = E2 | ... }</i> Decompose text by bundle of
+--   named expressions. Text decomposition starts from N1.</li>
+--   </ul>
 consSubtext :: (CContent c) => RopCons c
+
+-- | Create <tt>subtext</tt> relmap.
 relmapSubtext :: (CContent c) => Intmed c -> SubtextPara -> Relmap c
+
+-- | Create <tt>subtext</tt> relkit.
 relkitSubtext :: (CContent c) => SubtextPara -> Maybe Head -> Ab (Relkit c)
 
 module Koshucode.Baala.Rop.Flat.Gadget
@@ -550,19 +614,37 @@ module Koshucode.Baala.Rop.Flat.Gadget
 --   </ul>
 ropsGadget :: (CContent c) => [Rop c]
 consContents :: (Ord c) => RopCons c
+
+-- | Create <tt>contents</tt> relmap.
 relmapContents :: (Ord c) => Intmed c -> TermName -> Relmap c
 consPoHeight :: (Ord c, CDec c) => RopCons c
 consPoDepth :: (Ord c, CDec c) => RopCons c
 consPoScale :: (Ord c, CDec c) => PoScaleCalc c -> RopCons c
+
+-- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
+--   relmap.
 relmapPoScale :: (Ord c, CDec c) => PoScaleCalc c -> Intmed c -> TermName4 -> Relmap c
+
+-- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
+--   relkit.
 relkitPoScale :: (Ord c, CDec c) => PoScaleCalc c -> TermName4 -> RelkitFlow c
 consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
+
+-- | Create <tt>visit-distance</tt> relmap.
 relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
 consSize :: (CDec c) => RopCons c
+
+-- | Create <tt>size</tt> relmap.
 relmapSize :: (CDec c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>size</tt> relkit.
 relkitSize :: (CDec c) => TermName -> RelkitFlow c
 consEqlize :: (Ord c) => RopCons c
+
+-- | Create <tt>eqlize</tt> relmap.
 relmapEqlize :: (Ord c) => Intmed c -> Relmap c
+
+-- | Create <tt>eqlize</tt> relkit.
 relkitEqlize :: (Ord c) => RelkitFlow c
 consDumpTree :: (CDec c) => RopCons c
 
@@ -699,14 +781,22 @@ module Koshucode.Baala.Rop.Flat.Control
 -- | Implementation of relational operators.
 ropsControl :: (CContent c) => [Rop c]
 consIf :: (Ord c) => RopCons c
+
+-- | Create <tt>if</tt> relmap.
 relmapIf :: (Ord c) => Intmed c -> Relmap3 c -> Relmap c
+
+-- | Create <tt>if</tt> relkit.
 relkitIf :: (Ord c) => RelkitConfl c
 consWhen :: (Ord c) => RopCons c
 consUnless :: (Ord c) => RopCons c
 consFix :: (Ord c) => RopCons c
 consFixJoin :: (Ord c) => RopCons c
 consEqual :: (Ord c) => RopCons c
+
+-- | Create <tt>equal</tt> relmap.
 relmapEqual :: (Ord c) => Intmed c -> Map (Relmap c)
+
+-- | Create <tt>equal</tt> relkit.
 relkitEqual :: (Ord c) => RelkitBinary c
 
 module Koshucode.Baala.Rop.Flat.Bundle

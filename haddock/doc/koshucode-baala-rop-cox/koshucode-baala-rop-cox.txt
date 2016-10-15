@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.160.0.0
+@version 0.162.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -60,18 +60,44 @@ module Koshucode.Baala.Rop.Cox.Range
 ropsCoxRange :: (CContent c) => [Rop c]
 type RangeAttr c = (TermName, CopSet c, Cox c, Cox c)
 consRange :: (CContent c) => RopCons c
+
+-- | Create <tt>range</tt> relmap.
 relmapRange :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-year</tt> relmap.
 relmapRangeYear :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-year</tt> relkit.
 relkitRangeYear :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+-- | Create <tt>range-month</tt> relmap.
 relmapRangeMonth :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-month</tt> relkit.
 relkitRangeMonth :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+-- | Create <tt>range-day</tt> relmap.
 relmapRangeDay :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-day</tt> relkit.
 relkitRangeDay :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+-- | Create <tt>range-hour</tt> relmap.
 relmapRangeHour :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-hour</tt> relkit.
 relkitRangeHour :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+-- | Create <tt>range-minute</tt> relmap.
 relmapRangeMinute :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-minute</tt> relkit.
 relkitRangeMinute :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+-- | Create <tt>range-second</tt> relmap.
 relmapRangeSecond :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
+
+-- | Create <tt>range-second</tt> relkit.
 relkitRangeSecond :: (CContent c) => RangeAttr c -> RelkitFlow c
 
 module Koshucode.Baala.Rop.Cox.Gadget
@@ -79,12 +105,24 @@ module Koshucode.Baala.Rop.Cox.Gadget
 -- | Implementation of relational operators.
 ropsCoxGadget :: (CContent c) => [Rop c]
 consNumber :: (Ord c, CContent c) => RopCons c
+
+-- | Create <tt>number</tt> relmap.
 relmapNumber :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+
+-- | Create <tt>number</tt> relkit.
 relkitNumber :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
 consRank :: (Ord c, CContent c) => RopCons c
+
+-- | Create <tt>rank</tt> relmap.
 relmapGapRank :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+
+-- | Create <tt>rank</tt> relkit.
 relkitGapRank :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+
+-- | Create <tt>rank -dense</tt> relmap.
 relmapDenseRank :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+
+-- | Create <tt>rank -dense</tt> relkit.
 relkitDenseRank :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
 consRepeat :: (Ord c, CContent c) => RopCons c
 
@@ -98,12 +136,26 @@ module Koshucode.Baala.Rop.Cox.Filter
 --   </ul>
 ropsCoxFilter :: (CContent c) => [Rop c]
 consFilter :: (CContent c) => Bool -> RopCons c
+
+-- | Create <tt>keep</tt> and <tt>omit</tt> relmap.
 relmapFilter :: (CContent c) => Intmed c -> (Bool, CopSet c, Cox c) -> Relmap c
+
+-- | Create <tt>keep</tt> and <tt>omit</tt> relkit.
 relkitFilter :: (CContent c) => (Bool, CopSet c, Cox c) -> RelkitFlow c
 consContain :: (CContent c) => RopCons c
+
+-- | Create <tt>contain</tt> relmap.
 relmapContain :: (Eq c) => Intmed c -> c -> Relmap c
+
+-- | Create <tt>contain</tt> relkit.
 relkitContain :: (Eq c) => c -> RelkitFlow c
+
+-- | <b>omit-all</b>
+--   
+--   Throw away all tuples in a relation.
 consOmitAll :: RopCons c
+
+-- | Create <tt>omit-all</tt> relmap.
 relmapOmitAll :: Intmed c -> Relmap c
 
 module Koshucode.Baala.Rop.Cox.Empty
@@ -117,25 +169,23 @@ module Koshucode.Baala.Rop.Cox.Empty
 --   </ul>
 ropsCoxEmpty :: (CContent c) => [Rop c]
 consBoth :: (CContent c) => RopCons c
+
+-- | Create <tt>both</tt> relmap.
 relmapBoth :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
 -- | Construct maybe relmap.
 consMaybe :: (CContent c) => RopCons c
 
--- | Maybe relmap.
+-- | Create <tt>maybe</tt> relmap.
 relmapMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
--- | Calculate maybe relmap.
+-- | Create <tt>maybe</tt> relkit.
 relkitMaybe :: (Ord c, CRel c) => SharedTerms -> c -> RelkitBinary c
 
--- | Construct relmap for relational composition.
---   
---   <pre>
---   &gt;&gt;&gt; a | compose-maybe b
---   </pre>
+-- | <b>compose-maybe</b>
 consComposeMaybe :: (CContent c) => RopCons c
 
--- | Relational composition.
+-- | Create <tt>compose-maybe</tt> relmap.
 relmapComposeMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
 module Koshucode.Baala.Rop.Cox.Calc
@@ -148,29 +198,55 @@ module Koshucode.Baala.Rop.Cox.Calc
 --   </ul>
 ropsCoxCalc :: (CContent c) => [Rop c]
 consAdd :: (CContent c) => RopCons c
+
+-- | Create <tt>add</tt> relmap.
 relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 consSubst :: (CContent c) => RopCons c
+
+-- | Create <tt>subst</tt> relmap.
 relmapSubst :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 consFill :: (CContent c) => RopCons c
+
+-- | Create <tt>fill</tt> relmap.
 relmapFill :: (CContent c) => Intmed c -> ([TermName], CopSet c, Cox c) -> Relmap c
 consReplace :: (CContent c) => RopCons c
 consReplaceAll :: (CContent c) => RopCons c
+
+-- | Create <tt>replace-all</tt> relmap.
 relmapReplaceAll :: (CContent c) => Intmed c -> (CopSet c, Cox c, Cox c) -> Relmap c
 consSplit :: (CContent c) => RopCons c
+
+-- | Create <tt>split</tt> relmap.
 relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+
+-- | Create <tt>split</tt> relkit.
 relkitSplit :: (CContent c) => (CopSet c, [NamedCox c]) -> RelkitFlow c
 consUnary :: (CContent c) => RopCons c
+
+-- | Create <tt>unary</tt> relmap.
 relmapUnary :: (CContent c) => Intmed c -> (TermName, [c]) -> Relmap c
 
 module Koshucode.Baala.Rop.Cox.Accessor
 
 -- | Implementation of relational operators.
 ropsCoxAccessor :: (CContent c) => [Rop c]
+
+-- | Create <tt>clock</tt> relmap.
 relmapClock :: (CContent c) => Intmed c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
+
+-- | Create <tt>clock</tt> relkit.
 relkitClock :: (CContent c) => (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> RelkitFlow c
+
+-- | Create <tt>clock-get</tt> relmap.
 relmapClockGet :: (CContent c) => Intmed c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
+
+-- | Create <tt>clock-get</tt> relkit.
 relkitClockGet :: (CContent c) => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
+
+-- | Create <tt>clock-alter</tt> relmap.
 relmapClockAlter :: (CContent c) => Intmed c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
+
+-- | Create <tt>clock-alter</tt> relkit.
 relkitClockAlter :: (CContent c) => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
 module Koshucode.Baala.Rop.Cox.Bundle

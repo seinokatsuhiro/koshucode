@@ -9,9 +9,13 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.160.0.0
+@version 0.162.0.0
 
+
+-- | Judgement writer.
 module Koshucode.Baala.Writer.Judge
+
+-- | Print list of judgements.
 putJudges :: (Show c, MixShortEncode c) => [Judge c] -> IO ()
 
 -- | <a>stdout</a> version of <a>hPutJudgesWith</a>.
@@ -19,25 +23,61 @@ putJudgesWith :: (Show c, MixShortEncode c) => ExitCode -> [Judge c] -> IO ExitC
 
 -- | Print list of judges.
 hPutJudgesWith :: (MixShortEncode c) => ResultWriterJudge c
+
+-- | Edit judgements to mix text.
 judgesCountMix :: Result c -> (Judge c -> MixText) -> [Judge c] -> Map JudgeCountMix
 
--- | Total and per-judgement counter
+-- | Total and per-judgement counter.
 type JudgeCount = (Int, Map JudgeClass Int)
+
+-- | Mix text and judgement counter.
 type JudgeCountMix = (MixText, Int, Map JudgeClass Int)
+
+-- | Zero counters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; judgeCount $ words "A B C"
+--   (0, fromList [("A",0), ("B",0), ("C",0)])
+--   </pre>
 judgeCount :: [JudgeClass] -> JudgeCount
+
+-- | Empty and zero counters.
 judgeCountMix :: [JudgeClass] -> JudgeCountMix
+
+-- | Generate judgement counter comment.
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--   **
+--   **  SUMMARY
+--   **       3 judges on A
+--   **       6 judges on B
+--   **       1 judge  on C
+--   **      10 judges in total
+--   **
+--   </pre>
 judgeSummary :: ExitCode -> JudgeCount -> [String]
 
+
+-- | Koshucode output.
 module Koshucode.Baala.Writer.Koshu
+
+-- | Koshucode writer.
 resultKoshu :: (MixShortEncode c) => ResultWriter c
 
+
+-- | JSON output.
 module Koshucode.Baala.Writer.Json
+
+-- | JSON writer.
 resultJson :: (ToJSON c) => ResultWriter c
 termsToJSON :: (ToJSON c) => [Term c] -> Value
 jsonNull :: Value
 class ToJSON a
 toJSON :: ToJSON a => a -> Value
 toEncoding :: ToJSON a => a -> Encoding
+
+-- | GeoJSON writer.
 resultGeoJson :: (ToJSON c) => ResultWriter c
 class ToGeoJSON a
 toGeoJSON :: ToGeoJSON a => a -> Value
@@ -59,6 +99,8 @@ resultHtmlCompact :: (CContent c) => ResultWriter c
 contToHtml :: (CContent c) => Shorten -> c -> Html
 instance Text.Blaze.ToMarkup Koshucode.Baala.Base.Abort.Reason.AbortReason
 
+
+-- | CSV output.
 module Koshucode.Baala.Writer.Csv
 
 -- | Comman-separated-values output without heading.
@@ -70,4 +112,6 @@ resultCsvHeading :: (CContent c) => ResultWriter c
 -- | Tab-separated-values output with heading.
 resultTsvHeading :: (CContent c) => ResultWriter c
 
+
+-- | Bundle of writer modules.
 module Koshucode.Baala.Writer

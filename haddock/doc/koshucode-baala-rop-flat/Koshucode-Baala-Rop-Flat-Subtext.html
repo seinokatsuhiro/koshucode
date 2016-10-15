@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.160.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.162.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,15 +52,198 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	><p class="caption"
 	>Koshucode.Baala.Rop.Flat.Subtext</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Relmap</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Subtext</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
 	  >Text decomposition by subtext.</p
-	  ><h1
-	  >Subtext</h1
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:SubtextPara"
+	    >SubtextPara</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
+	    >NameDepth</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Match.html#t:CharMatch"
+	    >CharMatch</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:consSubtext"
+	    >consSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapSubtext"
+	    >relmapSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    >SubtextPara</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitSubtext"
+	    >relkitSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    >SubtextPara</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Relmap</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:SubtextPara" class="def"
+	    >SubtextPara</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
+	    >NameDepth</a
+	    >], <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Match.html#t:CharMatch"
+	    >CharMatch</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#SubtextPara');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
 	  ><p
+	    >Type of subtext parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consSubtext" class="def"
+	    >consSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#consSubtext');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >subtext /P E</strong
+	      ></p
+	    ><p
+	    >Construct <code
+	      >subtext</code
+	      > relmap.
+   Decompose text content of /P
+   by matcing with subtext expression E.
+   Terms contained in E are added to output relation.
+   Expression E is either single or bundle:</p
+	    ><dl
+	    ><dt
+	      >( E1 )</dt
+	      ><dd
+	      >Decompose text by single expression E.</dd
+	      ><dt
+	      >{ N1 = E1 | N2 = E2 | ... }</dt
+	      ><dd
+	      >Decompose text by bundle of named expressions.
+     Text decomposition starts from N1.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapSubtext" class="def"
+	    >relmapSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    >SubtextPara</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relmapSubtext');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >subtext</code
+	      > relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitSubtext" class="def"
+	    >relkitSubtext</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
+	    >SubtextPara</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relkitSubtext');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >subtext</code
+	      > relkit.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Subtext</h1
+	><div class="doc"
+	><p
 	  >Subtext is a domain-specific language for text decomposition.
    The <code
 	    >subtext</code
@@ -109,7 +292,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >.</dd
 	    ></dl
 	  ><h2
-	  >Basic patterns</h2
+	  >Basic pattern</h2
 	  ><dl
 	  ><dt
 	    > ? </dt
@@ -135,7 +318,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >.</dd
 	    ></dl
 	  ><h2
-	  >Texts</h2
+	  >Gathering subtext</h2
+	  ><dl
+	  ><dt
+	    > /N E </dt
+	    ><dd
+	    >Submatch for <em
+	      >E</em
+	      > whose name is <em
+	      >/N</em
+	      >.</dd
+	    ><dt
+	    > /N </dt
+	    ><dd
+	    >Named submatch, equivalent to <em
+	      >/N</em
+	      > ??.</dd
+	    ><dt
+	    > off E </dt
+	    ><dd
+	    >Turn off gathering text in <em
+	      >E</em
+	      >.</dd
+	    ><dt
+	    > on E </dt
+	    ><dd
+	    >Turn on gathering text in <em
+	      >E</em
+	      >.</dd
+	    ></dl
+	  ><h2
+	  >Text</h2
 	  ><dl
 	  ><dt
 	    > T </dt
@@ -163,7 +376,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >T</em
 	      > is one-letter or two-letter category name.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLookup"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLookup"
 		>categoryLookup</a
 		></code
 	      >.</dd
@@ -188,7 +401,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ><dd
 	    >Unicode number character.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryNumber"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryNumber"
 		>categoryNumber</a
 		></code
 	      >.</dd
@@ -206,11 +419,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ><dd
 	    >Unicode letter or mark character.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLetter"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryLetter"
 		>categoryLetter</a
 		></code
 	      > or <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryMark"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryMark"
 		>categoryMark</a
 		></code
 	      >.</dd
@@ -219,11 +432,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ><dd
 	    >Unicode punctuation or symbol character.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryPunctuation"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryPunctuation"
 		>categoryPunctuation</a
 		></code
 	      > or <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categorySymbol"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categorySymbol"
 		>categorySymbol</a
 		></code
 	      >.</dd
@@ -232,7 +445,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ><dd
 	    >Open punctuations.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryOpen"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryOpen"
 		>categoryOpen</a
 		></code
 	      >.</dd
@@ -241,7 +454,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ><dd
 	    >Close punctuations.
      See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryClose"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-subtext/Koshucode-Baala-Subtext-Category.html#v:categoryClose"
 		>categoryClose</a
 		></code
 	      >.</dd
@@ -263,9 +476,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		>isLatin1</a
 		></code
 	      >.</dd
+	    ><dt
+	    > koshu-symbol </dt
+	    ><dd
+	    >Symbol character in Koshucode.</dd
+	    ><dt
+	    > koshu-general </dt
+	    ><dd
+	    >General character in Koshucode.</dd
+	    ><dt
+	    > koshu-plain </dt
+	    ><dd
+	    >Plain character in Koshucode.</dd
+	    ><dt
+	    > koshu-numeric </dt
+	    ><dd
+	    >Numeric character in Koshucode.</dd
 	    ></dl
 	  ><h2
-	  >Combinations</h2
+	  >Combination</h2
 	  ><dl
 	  ><dt
 	    > E1 | E2 </dt
@@ -315,14 +544,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Sequence of not <em
 	      >E</em
 	      >.</dd
-	    ><dt
-	    > E as T </dt
-	    ><dd
-	    >Replace to text <em
-	      >T</em
-	      > when <em
-	      >E</em
-	      > is matched.</dd
 	    ><dt
 	    > stay E </dt
 	    ><dd
@@ -395,105 +616,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >. (Zero-repeat)</dd
 	    ></dl
 	  ><h2
-	  >Gathering subtext</h2
+	  >Modification</h2
 	  ><dl
 	  ><dt
-	    > /N E </dt
+	    > E as T </dt
 	    ><dd
-	    >Submatch for <em
+	    >Replace to text <em
+	      >T</em
+	      > when <em
 	      >E</em
-	      > whose name is <em
-	      >/N</em
+	      > is matched.</dd
+	    ><dt
+	    > E as wrap T1 T2 </dt
+	    ><dd
+	    >Wrap matched text in <em
+	      >T1</em
+	      > and <em
+	      >T2</em
 	      >.</dd
 	    ><dt
-	    > /N </dt
+	    > E as prepend T </dt
 	    ><dd
-	    >Named submatch, equivalent to <em
-	      >/N</em
-	      > ??.</dd
+	    >Prepend <em
+	      >T</em
+	      > to matched text.</dd
 	    ><dt
-	    > off E </dt
+	    > E as append T </dt
 	    ><dd
-	    >Turn off gathering text in <em
-	      >E</em
-	      >.</dd
+	    >Append <em
+	      >T</em
+	      > to matched text.</dd
 	    ><dt
-	    > on E </dt
+	    > E as lower </dt
 	    ><dd
-	    >Turn on gathering text in <em
+	    >Convert text to lower case when <em
 	      >E</em
-	      >.</dd
+	      > is matched.</dd
+	    ><dt
+	    > E as upper </dt
+	    ><dd
+	    >Convert text to upper case when <em
+	      >E</em
+	      > is matched.</dd
 	    ></dl
-	  ></div
-	></div
-      ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:SubtextPara" class="def"
-	    >SubtextPara</a
-	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Bundle.html#t:NameDepth"
-	    >NameDepth</a
-	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-subtext/Koshucode-Baala-Subtext-Match.html#t:CharMatch"
-	    >CharMatch</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#SubtextPara');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:consSubtext" class="def"
-	    >consSubtext</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#consSubtext');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relmapSubtext" class="def"
-	    >relmapSubtext</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
-	    >Intmed</a
-	    > c -&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
-	    >SubtextPara</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
-	    >Relmap</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relmapSubtext');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relkitSubtext" class="def"
-	    >relkitSubtext</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Rop-Flat-Subtext.html#t:SubtextPara"
-	    >SubtextPara</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
-	    >Relkit</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Subtext.html#relkitSubtext');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	></div
       ></div

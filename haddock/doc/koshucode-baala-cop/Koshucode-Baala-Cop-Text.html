@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-cop-0.160.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-cop-0.162.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,7 +57,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	>Description</p
 	><div class="doc"
 	><p
-	  >Content operators.</p
+	  >Content operators on texts.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -67,11 +67,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	><li class="src short"
 	  ><a href="#v:copsText"
 	    >copsText</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 	    >Cop</a
 	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:copSuffix"
+	    >copSuffix</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copUnsuffix"
+	    >copUnsuffix</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -81,9 +101,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	><p class="src"
 	  ><a name="v:copsText" class="def"
 	    >copsText</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 	    >Cop</a
 	    > c] <a onclick="showSource('src/Koshucode-Baala-Cop-Text.html#copsText');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -91,6 +111,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Te
 	  ><div class="doc"
 	  ><p
 	    >Content operators on texts.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copSuffix" class="def"
+	    >copSuffix</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Text.html#copSuffix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >suffix LIST</strong
+	      > adds unique suffixes to text elements of <em
+	      >LIST</em
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copUnsuffix" class="def"
+	    >copUnsuffix</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Text.html#copUnsuffix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >unsuffix C</strong
+	      > remove integer suffixes from <em
+	      >C</em
+	      >.</p
 	    ></div
 	  ></div
 	></div

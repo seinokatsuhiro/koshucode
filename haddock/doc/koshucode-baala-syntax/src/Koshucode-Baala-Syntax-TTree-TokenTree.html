@@ -25,15 +25,15 @@
 <a class="number" name="line-16">16</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TermLeaf</span><span class='hs-layout'>,</span>
 <a class="number" name="line-17">17</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TermLeafName</span><span class='hs-layout'>,</span>
 <a class="number" name="line-18">18</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TermLeafPath</span><span class='hs-layout'>,</span>
-<a class="number" name="line-19">19</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TermLeafLocal</span><span class='hs-layout'>,</span>
+<a class="number" name="line-19">19</a>    <span class='hs-comment'>--pattern TermLeafLocal,</span>
 <a class="number" name="line-20">20</a>    <span class='hs-comment'>-- ** Text leaf</span>
 <a class="number" name="line-21">21</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeaf</span><span class='hs-layout'>,</span>
 <a class="number" name="line-22">22</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafRaw</span><span class='hs-layout'>,</span>
 <a class="number" name="line-23">23</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafAttr</span><span class='hs-layout'>,</span>
 <a class="number" name="line-24">24</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafAttr2</span><span class='hs-layout'>,</span>
 <a class="number" name="line-25">25</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafQ</span><span class='hs-layout'>,</span>
-<a class="number" name="line-26">26</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafQQ</span><span class='hs-layout'>,</span>
-<a class="number" name="line-27">27</a>    <span class='hs-varid'>pattern</span> <span class='hs-conid'>TextLeafKey</span><span class='hs-layout'>,</span>
+<a class="number" name="line-26">26</a>    <span class='hs-comment'>--pattern TextLeafQQ,</span>
+<a class="number" name="line-27">27</a>    <span class='hs-comment'>--pattern TextLeafKey,</span>
 <a class="number" name="line-28">28</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-29">29</a>
 <a class="number" name="line-30">30</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                    <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
@@ -66,7 +66,7 @@
 <a class="number" name="line-57">57</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TermLeaf</span>      <span class='hs-varid'>cp</span> <span class='hs-varid'>q</span> <span class='hs-varid'>ws</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span>   <span class='hs-varid'>cp</span> <span class='hs-varid'>q</span> <span class='hs-varid'>ws</span><span class='hs-layout'>)</span>
 <a class="number" name="line-58">58</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TermLeafName</span>  <span class='hs-varid'>cp</span> <span class='hs-varid'>sign</span> <span class='hs-varid'>w</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTermN</span>  <span class='hs-varid'>cp</span> <span class='hs-varid'>sign</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
 <a class="number" name="line-59">59</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TermLeafPath</span>  <span class='hs-varid'>cp</span> <span class='hs-varid'>ws</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermLeaf</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermTypePath</span> <span class='hs-varid'>ws</span>
-<a class="number" name="line-60">60</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TermLeafLocal</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>v</span> <span class='hs-varid'>e</span> <span class='hs-varid'>ps</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TLocal</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>v</span> <span class='hs-varid'>e</span> <span class='hs-varid'>ps</span><span class='hs-layout'>)</span>
+<a class="number" name="line-60">60</a><span class='hs-comment'>--pattern TermLeafLocal cp v e ps  = B.TreeL (S.TLocal cp v e ps)</span>
 <a class="number" name="line-61">61</a>
 <a class="number" name="line-62">62</a><span class='hs-comment'>-- | Text leaf.</span>
 <a class="number" name="line-63">63</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TextLeaf</span> <span class='hs-varid'>form</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TText</span>   <span class='hs-varid'>cp</span> <span class='hs-varid'>form</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
@@ -79,9 +79,9 @@
 <a class="number" name="line-70">70</a><span class='hs-comment'>-- | Text leaf of 'S.TextQ'.</span>
 <a class="number" name="line-71">71</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TextLeafQ</span>     <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TextLeaf</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TextQ</span>   <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>
 <a class="number" name="line-72">72</a><span class='hs-comment'>-- | Text leaf of 'S.TextQQ'.</span>
-<a class="number" name="line-73">73</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TextLeafQQ</span>    <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TextLeaf</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TextQQ</span>  <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>
+<a class="number" name="line-73">73</a><span class='hs-comment'>--pattern TextLeafQQ    cp w  = TextLeaf S.TextQQ  cp w</span>
 <a class="number" name="line-74">74</a><span class='hs-comment'>-- | Text leaf of 'S.TextKey'.</span>
-<a class="number" name="line-75">75</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TextLeafKey</span>   <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TextLeaf</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TextKey</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span>
+<a class="number" name="line-75">75</a><span class='hs-comment'>--pattern TextLeafKey   cp w  = TextLeaf S.TextKey cp w</span>
 <a class="number" name="line-76">76</a>
 </pre></body>
 </html>
