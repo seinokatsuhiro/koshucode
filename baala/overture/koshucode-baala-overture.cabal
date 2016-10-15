@@ -43,10 +43,12 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
+        Koshucode.Baala.Overture
         Koshucode.Baala.Overture.Fn
         Koshucode.Baala.Overture.Name.IntString
         Koshucode.Baala.Overture.Name.String
         Koshucode.Baala.Overture.Name.Text
+        Koshucode.Baala.Overture.Type
 
   -- Modules included in this library but not exported.
   --other-modules:       
