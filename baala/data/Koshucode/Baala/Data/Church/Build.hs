@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Church.Build
   ( coxBuild, coxForm,
   ) where
 
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data.Content           as D
@@ -135,11 +136,11 @@ construct calc = expr where
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
-isName :: B.Test String
+isName :: O.Test String
 isName (c:_)  = isNameFirst c
 isName _      = False
 
-isNameFirst :: B.Test Char
+isNameFirst :: O.Test Char
 isNameFirst c = case B.majorGeneralCategory c of
                   B.UnicodeLetter     ->  True
                   B.UnicodeMark       ->  True

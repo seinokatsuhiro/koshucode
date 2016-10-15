@@ -16,6 +16,7 @@ module Koshucode.Baala.Syntax.Symbol.Short
   ) where
 
 import qualified Data.List                                as L
+import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax.Symbol.AngleText  as S
 import qualified Koshucode.Baala.Syntax.Symbol.Next       as S
@@ -71,6 +72,6 @@ shortText = loop . reverse . B.sortWith len where
               | otherwise         = S.angleQuote s
 
 -- | Test string is general sign.
-isGeneralText :: B.Test String
+isGeneralText :: O.Test String
 isGeneralText = all S.isGeneralChar
 

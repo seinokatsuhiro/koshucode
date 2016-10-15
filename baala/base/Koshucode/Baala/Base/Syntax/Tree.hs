@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.Syntax.Tree
     bracketTable
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.Abort            as B
 import qualified Koshucode.Baala.Base.IO               as B
 import qualified Koshucode.Baala.Base.List             as B
@@ -99,7 +100,7 @@ treeLeaves (TreeL x)       = [x]
 --   >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 -- 
-undouble :: B.Test p -> B.Map (CodeTree p a)
+undouble :: O.Test p -> B.Map (CodeTree p a)
 undouble p = loop where
     loop (TreeB n pp xs) | p n =
         case map loop xs of
@@ -142,15 +143,15 @@ data Bracket p
     | BracketClose p    -- ^ Close bracket
       deriving (Show, Eq, Ord)
 
-isNotBracket :: B.Test (Bracket p)
+isNotBracket :: O.Test (Bracket p)
 isNotBracket (BracketNone)       = True
 isNotBracket _                   = False
 
-isOpenBracket :: B.Test (Bracket p)
+isOpenBracket :: O.Test (Bracket p)
 isOpenBracket (BracketOpen _)    = True
 isOpenBracket _                  = False
 
-isCloseBracket :: B.Test (Bracket p)
+isCloseBracket :: O.Test (Bracket p)
 isCloseBracket (BracketClose _)  = True
 isCloseBracket _                 = False
 
@@ -177,7 +178,7 @@ type GetBracketType p a = a -> Bracket p
 --
 bracketTable
     :: (Eq a)
-    => [(p, B.Test a, B.Test a)] -- ^ List of (/type/, /open/, /close/)
+    => [(p, O.Test a, O.Test a)] -- ^ List of (/type/, /open/, /close/)
     -> GetBracketType p a
 bracketTable xs = bracketType where
     bracketTypeTable = map bracketOpen xs ++ map bracketClose xs

@@ -15,6 +15,7 @@ module Koshucode.Baala.Syntax.Token.Rel
   ) where
 
 import qualified Data.Char                              as Ch
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Nipper    as S
@@ -45,7 +46,7 @@ rv :: B.Map [a]
 rv = reverse
 
 -- Punctuations
-isOpen, isClose, isGrip, isSingle, isQ, isPM :: B.Test Char
+isOpen, isClose, isGrip, isSingle, isQ, isPM :: O.Test Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
 isClose    = ( `elem` "}])"    )  -- Punctuation
 isGrip     = ( `elem` "-=|?"   )  -- Punctuation | Symbol   -- :*+
@@ -53,10 +54,10 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
-isFigure :: B.Test Char
+isFigure :: O.Test Char
 isFigure c     = c == '-' || Ch.isDigit c
 
-isCharCode :: B.Test String
+isCharCode :: O.Test String
 isCharCode     = all isFigure
 
 

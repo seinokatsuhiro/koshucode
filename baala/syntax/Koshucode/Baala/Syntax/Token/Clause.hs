@@ -16,6 +16,7 @@ module Koshucode.Baala.Syntax.Token.Clause
   ) where
 
 import qualified Data.Char                              as Ch
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Nipper    as S
@@ -107,7 +108,7 @@ sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r
     cp   = B.codeInputPt r
 
 -- | Test string is short prefix.
-isShortPrefix :: B.Test String
+isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
 
 

@@ -21,6 +21,7 @@ module Koshucode.Baala.Syntax.Symbol.Next
   ) where
 
 import qualified Data.Char                              as Ch
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 
@@ -34,7 +35,7 @@ type Next a = InputText -> (InputText, a)
 type AbNext a = InputText -> B.Ab (InputText, a)
 
 -- Punctuations
-isQQ, isSpace :: B.Test Char
+isQQ, isSpace :: O.Test Char
 isQQ       = (== '"')
 isSpace    = Ch.isSpace
 
@@ -101,7 +102,7 @@ data Symbol
 
 -- | Test symbol is general, in other words,
 --   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.
-isGeneralSymbol :: B.Test Symbol
+isGeneralSymbol :: O.Test Symbol
 isGeneralSymbol (SymbolCommon _)   = True
 isGeneralSymbol (SymbolPlain _)    = True
 isGeneralSymbol (SymbolGeneral _)  = True
@@ -109,20 +110,20 @@ isGeneralSymbol _                  = False
 
 -- | Test symbol is plain, in other words,
 --   'SymbolCommon' or 'SymbolPlain'.
-isPlainSymbol :: B.Test Symbol
+isPlainSymbol :: O.Test Symbol
 isPlainSymbol (SymbolCommon _)     = True
 isPlainSymbol (SymbolPlain _)      = True
 isPlainSymbol _                    = False
 
 -- | Test symbol is numeric, in other words,
 --   'SymbolCommon' or 'SymbolNumeric'.
-isNumericSymbol :: B.Test Symbol
+isNumericSymbol :: O.Test Symbol
 isNumericSymbol (SymbolCommon _)   = True
 isNumericSymbol (SymbolNumeric _)  = True
 isNumericSymbol _                  = False
 
 -- | Test symbol is 'SymbolShort'.
-isShortSymbol :: B.Test Symbol
+isShortSymbol :: O.Test Symbol
 isShortSymbol (SymbolShort _ _)    = True
 isShortSymbol _                    = False
 
@@ -130,27 +131,27 @@ isShortSymbol _                    = False
 -- ----------------------  Char test
 
 -- | Test character is a symbol component.
-isSymbolChar :: B.Test Char
+isSymbolChar :: O.Test Char
 isSymbolChar c = isGeneralChar c || isNumericChar c
 
 -- | Test character is a general-symbol component.
-isGeneralChar :: B.Test Char
+isGeneralChar :: O.Test Char
 isGeneralChar = isCharG'
 
 -- | Test character is a plain-symbol component.
-isPlainChar :: B.Test Char
+isPlainChar :: O.Test Char
 isPlainChar = isCharP'
 
 -- | Test character is a numeric-symbol component.
-isNumericChar :: B.Test Char
+isNumericChar :: O.Test Char
 isNumericChar = isCharN'
 
-isCharGpn, isCharDigit, isCharHyphen :: B.Test Char
+isCharGpn, isCharDigit, isCharHyphen :: O.Test Char
 isCharGpn    c  = isCharDigit c || isCharHyphen c
 isCharDigit  c  = c >= '0' && c <= '9'
 isCharHyphen c  = c == '-'
 
-isCharGp :: B.Test Char
+isCharGp :: O.Test Char
 isCharGp c =
     case B.majorGeneralCategory c of
       B.UnicodeLetter    -> True
@@ -158,12 +159,12 @@ isCharGp c =
       B.UnicodeNumber    -> True      -- include isCharDigit
       _                  -> c == '_' || c == '?'
 
-isCharGn, isCharG, isCharN :: B.Test Char
+isCharGn, isCharG, isCharN :: O.Test Char
 isCharGn c   = c == '+'
 isCharG  c   = c `elem` "*=<>~"
 isCharN  c   = c == '.' || c == '#'
 
-isCharGp', isCharP', isCharGn', isCharG', isCharN' :: B.Test Char
+isCharGp', isCharP', isCharGn', isCharG', isCharN' :: O.Test Char
 isCharGp' c  = isCharGp  c || isCharHyphen c
 isCharP'     = isCharGp'
 isCharGn' c  = isCharGpn c || isCharGn c

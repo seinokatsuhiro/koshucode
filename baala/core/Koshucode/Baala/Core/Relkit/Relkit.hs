@@ -15,6 +15,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
     RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
   ) where
 
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
@@ -38,7 +39,7 @@ data RelkitCore c
     = RelkitFull         Bool (                B.Map     [[c]] )
     | RelkitOneToMany    Bool (                B.ManyMap [c]   )
     | RelkitOneToOne     Bool (                B.Map     [c]   )
-    | RelkitPred              (                B.Test    [c]   )
+    | RelkitPred              (                O.Test    [c]   )
 
     | RelkitAbFull       Bool ( [BodyMap c] -> B.AbMap     [[c]]   ) [RelkitBody c]
     | RelkitOneToAbMany  Bool ( [BodyMap c] -> B.AbManyMap [c]     ) [RelkitBody c]

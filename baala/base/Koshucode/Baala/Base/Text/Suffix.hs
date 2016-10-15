@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Text.Suffix
   ) where
 
 import qualified Data.Map.Strict                   as Map
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.List         as B
 
@@ -17,7 +18,7 @@ import qualified Koshucode.Baala.Base.List         as B
 --   >>> unprefix (`elem` "0123456789") '-' "12-foo"
 --   "foo"
 --
-unprefix :: B.Test Char -> Char -> B.Map String
+unprefix :: O.Test Char -> Char -> B.Map String
 unprefix test del s = loop s where
     loop [] = s
     loop (c:cs) | test c      = loop cs
@@ -29,7 +30,7 @@ unprefix test del s = loop s where
 --   >>> unsuffix (`elem` "0123456789") '-' "foo-12"
 --   "foo"
 --
-unsuffix :: B.Test Char -> Char -> B.Map String
+unsuffix :: O.Test Char -> Char -> B.Map String
 unsuffix test del = B.reverseMap $ unprefix test del
 
 -- | Two-argument function which returns a constant value.

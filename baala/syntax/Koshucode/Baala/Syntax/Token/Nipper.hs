@@ -36,6 +36,7 @@ module Koshucode.Baala.Syntax.Token.Nipper
 
 import qualified Data.Map                               as Map
 import qualified Data.Char                              as Ch
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern   as S
@@ -66,27 +67,27 @@ type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipWResult
 -- --------------------------------------------  Utility
 
 -- | Test character is symbolic.
-isSymbol :: B.Test Char
+isSymbol :: O.Test Char
 isSymbol = S.isSymbolChar
 
 -- | Test character is space.
-isSpace :: B.Test Char
+isSpace :: O.Test Char
 isSpace = Ch.isSpace
 
 -- | Test character is double-quote.
-isQQ :: B.Test Char
+isQQ :: O.Test Char
 isQQ = ( == '"' )
 
 -- | Test character is term slash.
-isTerm :: B.Test Char
+isTerm :: O.Test Char
 isTerm = ( == '/' )
 
 -- | Test character is content line, i.e., @\'-\'@ or @\'=\'@.
-isJudge :: B.Test Char
+isJudge :: O.Test Char
 isJudge = ( `elem` "-=" )  -- Punctuation | Symbol
 
 -- | Test character is component of clock text.
-isClock :: B.Test Char
+isClock :: O.Test Char
 isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
 -- --------------------------------------------  Nipper

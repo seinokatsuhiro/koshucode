@@ -17,6 +17,7 @@ module Koshucode.Baala.Syntax.Token.Utility
     isUnknownToken,
   ) where
 
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
@@ -105,7 +106,7 @@ tokenParents _                   = []
 -- ----------------------  Predicate
 
 -- | Test token is blank, i.e., comment or space.
-isBlankToken :: B.Test S.Token
+isBlankToken :: O.Test S.Token
 isBlankToken (S.TSpace _ _)       = True
 isBlankToken (S.TComment _ _)     = True
 isBlankToken _                    = False
@@ -115,28 +116,28 @@ sweepToken :: B.Map [S.Token]
 sweepToken = B.omit isBlankToken
 
 -- | Test token is unknown.
-isUnknownToken :: B.Test S.Token
+isUnknownToken :: O.Test S.Token
 isUnknownToken (S.TUnknown _ _ _) = True
 isUnknownToken _                  = False
 
 -- | Test token is short-type token.
-isShortToken :: B.Test S.Token
+isShortToken :: O.Test S.Token
 isShortToken (S.TShort _ _ _)     = True
 isShortToken _                    = False
 
 -- | Test token is term-type token.
-isTermToken :: B.Test S.Token
+isTermToken :: O.Test S.Token
 isTermToken (S.TTermN _ _ _)      = True
 isTermToken (S.TTerm _ _ _)       = True
 isTermToken _                     = False
 
 -- | Test token is open-type token.
-isOpenToken :: B.Test S.Token
+isOpenToken :: O.Test S.Token
 isOpenToken (S.TOpen _ _)         = True
 isOpenToken _                     = False
 
 -- | Test token is close-type token.
-isCloseToken :: B.Test S.Token
+isCloseToken :: O.Test S.Token
 isCloseToken (S.TClose _ _)       = True
 isCloseToken _                    = False
 
@@ -148,12 +149,12 @@ isCloseToken _                    = False
 --   >>> let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
 --   False
 
-isOpenTokenOf :: String -> B.Test S.Token
+isOpenTokenOf :: String -> O.Test S.Token
 isOpenTokenOf p1 (S.TOpen _ p2)   = p1 == p2
 isOpenTokenOf _ _                 = False
 
 -- | Test token is a close-type of the specific bracket.
-isCloseTokenOf :: String -> B.Test S.Token
+isCloseTokenOf :: String -> O.Test S.Token
 isCloseTokenOf p1 (S.TClose _ p2) = p1 == p2
 isCloseTokenOf _ _                = False
 

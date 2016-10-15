@@ -16,6 +16,7 @@ module Koshucode.Baala.Syntax.TTree.Parse
   ) where
 
 import qualified Text.PrettyPrint                        as P
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
@@ -46,7 +47,7 @@ joinText = join where
     join []                         = []
 
 -- | Test double-quoted or related text.
-isQqKey :: B.Test S.TextForm
+isQqKey :: O.Test S.TextForm
 isQqKey f = f == S.TextQQ || f == S.TextKey
 
 
@@ -103,21 +104,21 @@ ttDoc = dv where
 --           , TText  CodePt {..} TextRaw "|"
 --           , TText  CodePt {..} TextRaw "c" ] )
 
-splitTokensBy :: B.Test String -> B.SplitList3e S.Token
+splitTokensBy :: O.Test String -> B.SplitList3e S.Token
 splitTokensBy p = B.splitBy p2 where
     p2 (S.TTextRaw _ x)  = p x
     p2 _ = False
 
-raw :: B.Test String -> S.TTree -> Bool
+raw :: O.Test String -> S.TTree -> Bool
 raw p (S.TextLeafRaw _ w) = p w
 raw _ _ = False
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: B.Test String -> B.SplitList3e S.TTree
+splitTreesBy :: O.Test String -> B.SplitList3e S.TTree
 splitTreesBy = B.splitBy . raw
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: B.Test String -> S.TTreesTo [[S.TTree]]
+divideTreesBy :: O.Test String -> S.TTreesTo [[S.TTree]]
 divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.

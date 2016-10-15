@@ -19,7 +19,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     termsP, termsN, termsPN,
   ) where
 
-import qualified Koshucode.Baala.Base   as B
+import qualified Koshucode.Baala.Overture   as O
 
 
 -- ----------------------  Term
@@ -96,26 +96,26 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 --   >>> termP (-1)
 --   False
 --
-termP :: B.Test Int
+termP :: O.Test Int
 termP = (>= 0)
 
 -- | Check new term.
-termN :: B.Test Int
+termN :: O.Test Int
 termN = (< 0)
 
 -- Check present and new terms.
---termPN :: B.Test2 Int Int
+--termPN :: O.Test2 Int Int
 --termPN p n = termP p && termN n
 
 -- | Check all terms are present.
-termsP :: B.Test [Int]
+termsP :: O.Test [Int]
 termsP = all termP
 
 -- | Check all terms are new.
-termsN :: B.Test [Int]
+termsN :: O.Test [Int]
 termsN = all termN
 
 -- | Check present terms and new terms.
-termsPN :: B.Test2 [Int] [Int]
+termsPN :: O.Test2 [Int] [Int]
 termsPN ps ns = termsP ps && termsN ns
 
