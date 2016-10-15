@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | CSV output.
+
 module Koshucode.Baala.Writer.Csv
   ( resultCsv,
     resultCsvHeading,

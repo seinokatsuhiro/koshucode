@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of writer modules.
+
 module Koshucode.Baala.Writer
   ( module Koshucode.Baala.Writer.Csv,
     module Koshucode.Baala.Writer.Html,

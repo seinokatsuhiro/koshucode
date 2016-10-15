@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Judgement writer.
+
 module Koshucode.Baala.Writer.Judge
   ( -- * Writer
     putJudges, putJudgesWith, hPutJudgesWith,
@@ -19,6 +21,7 @@ import qualified Koshucode.Baala.Core                as C
 
 -- ----------------------  Writer
 
+-- | Print list of judgements.
 putJudges :: (Show c, B.MixShortEncode c) => [D.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (B.exitCode 0) js
@@ -36,6 +39,7 @@ hPutJudgesWith h result status js =
        B.hPutLines h $ judgeSummary status (cnt, tab)
        return status
 
+-- | Edit judgements to mix text.
 judgesCountMix :: forall c.
     C.Result c -> (D.Judge c -> B.MixText) -> [D.Judge c] -> B.Map JudgeCountMix
 judgesCountMix result writer = loop where
@@ -70,19 +74,38 @@ when :: (Monoid a) => a -> Bool -> a
 when a True  = a
 when _ False = mempty
 
+
 -- ----------------------  Counter
 
--- | Total and per-judgement counter
+-- | Total and per-judgement counter.
 type JudgeCount = (Int, Map.Map D.JudgeClass Int)
+
+-- | Mix text and judgement counter.
 type JudgeCountMix = (B.MixText, Int, Map.Map D.JudgeClass Int)
 
+-- | Zero counters.
+--
+--   >>> judgeCount $ words "A B C"
+--   (0, fromList [("A",0), ("B",0), ("C",0)])
+--
 judgeCount :: [D.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
+-- | Empty and zero counters.
 judgeCountMix :: [D.JudgeClass] -> JudgeCountMix
 judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
--- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+-- | Generate judgement counter comment.
+--
+--  >>> B.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--  **
+--  **  SUMMARY
+--  **       3 judges on A
+--  **       6 judges on B
+--  **       1 judge  on C
+--  **      10 judges in total
+--  **
+--
 judgeSummary :: B.ExitCode -> JudgeCount -> [String]
 judgeSummary status (_, tab) = B.texts sumDoc where
     label | status == B.ExitSuccess = "SUMMARY"

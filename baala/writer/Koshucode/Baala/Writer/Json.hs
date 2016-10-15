@@ -2,6 +2,8 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
+-- | JSON output.
+
 module Koshucode.Baala.Writer.Json
   ( -- * JSON
     resultJson,
@@ -26,6 +28,7 @@ import qualified Koshucode.Baala.Core              as C
 
 -- --------------------------------------------  JSON
 
+-- | JSON writer.
 resultJson :: (A.ToJSON c) => C.ResultWriter c
 resultJson = C.ResultWriterJudge "json" hPutJSON
 
@@ -82,6 +85,7 @@ instance A.ToJSON D.BaalaC where
 
 -- --------------------------------------------  GeoJSON
 
+-- | GeoJSON writer.
 resultGeoJson :: (A.ToJSON c) => C.ResultWriter c
 resultGeoJson = C.ResultWriterJudge "geojson" hPutGeoJson
 

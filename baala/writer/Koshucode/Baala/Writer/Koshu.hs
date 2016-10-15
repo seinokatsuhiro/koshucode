@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Koshucode output.
+
 module Koshucode.Baala.Writer.Koshu
   ( resultKoshu,
   ) where
@@ -13,6 +15,7 @@ import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 
+-- | Koshucode writer.
 resultKoshu :: (B.MixShortEncode c) => C.ResultWriter c
 resultKoshu = C.ResultWriterChunk "koshu" hPutKoshu
 
