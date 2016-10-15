@@ -2,13 +2,20 @@
 
 var Haddock = (function ($) {
 
+    // Switch for development mode.
+    var development = false;
+
+    // Package list.
     var packages =
         [ 'overture', 'subtext', 'base', 'syntax', 'data', 'core',
           'writer', 'rop-flat', 'rop-nested', 'rop-cox', 'cop',
           'calculator', 'toolkit' ];
 
-    function init () {
-        packages.forEach(function (name){
+    function init (p) {
+        if (p.dev) {
+            development = true;
+        }
+        packages.forEach(function (name) {
             $('.buttons').append(
                 '<div title="Show '
                     + name + ' package" class="button pkg-'
@@ -41,8 +48,11 @@ var Haddock = (function ($) {
     }
 
     function prefix (name) {
-        return '../' + name + '/dist/doc/html';
-        //return 'doc';
+        if (development) {
+            return '../' + name + '/dist/doc/html';
+        } else {
+            return 'doc';
+        }
     }
 
     function calcHeight () {
