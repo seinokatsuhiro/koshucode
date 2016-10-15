@@ -51,7 +51,7 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 type TokenScan = B.CodeScan String S.Token
 
 -- | Read single token.
-type TokenScanMap = B.Map TokenScan
+type TokenScanMap = O.Map TokenScan
 
 type TokenNipResult = (S.InputText, S.Token)
 

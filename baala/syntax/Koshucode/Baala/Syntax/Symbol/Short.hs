@@ -37,7 +37,7 @@ type ShortDef = B.Named String
 instance Functor Short where
     fmap f (Short pt he bo) = Short pt he $ f bo
 
-shortTrim :: B.Map [Short [a]]
+shortTrim :: O.Map [Short [a]]
 shortTrim = B.omit $ null . shortBody
 
 shortM :: (Monad m) => Short (m a) -> m (Short a)

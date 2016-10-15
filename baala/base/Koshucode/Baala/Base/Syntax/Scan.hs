@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Syntax.Scan
   ) where
 
 import qualified Data.Map                             as Map
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax.Line     as B
@@ -37,7 +38,7 @@ instance B.CodePtr (CodeScan i o) where
     codePt     cp = codeInputPt cp
 
 -- | Update code scanner.
-type CodeScanMap i o = B.Map (CodeScan i o)
+type CodeScanMap i o = O.Map (CodeScan i o)
 
 -- | Collected words.
 type WordTable = Map.Map String String
@@ -89,7 +90,7 @@ codeScanUpLines f nio = loop (CodeScan [] f cp "" [] Map.empty) where
            ls'  = loop r' ls
        in B.CodeLine num line toks : ls'
 
-setCodePt :: B.LineNumber -> String -> B.Map B.CodePt
+setCodePt :: B.LineNumber -> String -> O.Map B.CodePt
 setCodePt num line cp =
     cp { B.codePtLineNo    = num
        , B.codePtLineText  = line
@@ -107,7 +108,7 @@ codeScan sc@CodeScan { codeMap = f, codeInputPt = cp, codeInput = input }
     | otherwise   = codeScan call
     where call    = f sc { codeInputPt = setText input cp }
 
-setText :: String -> B.Map B.CodePt
+setText :: String -> O.Map B.CodePt
 setText text cp = cp { B.codePtText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.

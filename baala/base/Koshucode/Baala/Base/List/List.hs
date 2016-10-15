@@ -25,7 +25,7 @@ module Koshucode.Baala.Base.List.List
     reverseMap,
   ) where
 
-import qualified Koshucode.Baala.Base.Prelude   as B
+import qualified Koshucode.Baala.Overture       as O
 
 
 -- ----------------------  List
@@ -51,7 +51,7 @@ notNull = not . null
 maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 maybeEmpty m f = maybe [] f m
 
-right :: b -> B.Map (Either a b)
+right :: b -> O.Map (Either a b)
 right _ (Right x) = Right x
 right x (Left _)  = Right x
 
@@ -140,7 +140,7 @@ consIf False _ xs  = xs
 
 type RangeBy a = a -> a -> [a]
 
-rangeBy :: (Ord a) => B.Map a -> RangeBy a
+rangeBy :: (Ord a) => O.Map a -> RangeBy a
 rangeBy step from to = loop from where
     loop f | f > to    = []
            | otherwise = f : loop (step f)
@@ -164,7 +164,7 @@ map2 = fmap . fmap
 -- map2 :: (a -> b) -> [[a]] -> [[b]]
 -- map2 = map . map
 
-mapAt :: (B.Map a) -> Int -> B.Map [a]
+mapAt :: (O.Map a) -> Int -> O.Map [a]
 mapAt f = loop where
     loop 0 (x : xs) = f x : xs
     loop i (x : xs) = x : loop (i - 1) xs
@@ -176,22 +176,22 @@ mapWithLast f g = loop where
     loop [x] = [g x]
     loop (x:xs) = f x : loop xs
 
-omit :: (a -> Bool) -> B.Map [a]
+omit :: (a -> Bool) -> O.Map [a]
 omit f = filter $ not . f
 
-filterFst :: (a -> Bool) -> B.Map [(a, b)]
+filterFst :: (a -> Bool) -> O.Map [(a, b)]
 filterFst p = filter (p . fst)
 
-squeeze :: (a -> Bool) -> B.Map [a]
+squeeze :: (a -> Bool) -> O.Map [a]
 squeeze p = loop where
     loop (x1 : x2 : xs)
         | p x1 && p x2 = x2 : squeeze p xs
         | otherwise    = x1 : squeeze p (x2 : xs)
     loop xs = xs
 
-squeezeEmptyLines :: B.Map [String]
+squeezeEmptyLines :: O.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
 
-reverseMap :: B.Map [a] -> B.Map [a]
+reverseMap :: O.Map [a] -> O.Map [a]
 reverseMap f = reverse . f . reverse
 

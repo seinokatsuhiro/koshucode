@@ -42,7 +42,7 @@ uncons3 z f = first where
 charCodes :: S.InputText -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
-rv :: B.Map [a]
+rv :: O.Map [a]
 rv = reverse
 
 -- Punctuations

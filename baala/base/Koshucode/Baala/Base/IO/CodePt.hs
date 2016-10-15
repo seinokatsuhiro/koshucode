@@ -14,6 +14,7 @@ module Koshucode.Baala.Base.IO.CodePt
     Sourced (..),
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
@@ -65,7 +66,7 @@ codePtDisplay (tag, p)
       code      = B.ioPointText $ B.nioPoint $ codePtSource p
       text      = codePtText p
 
-      shorten :: B.Map String
+      shorten :: O.Map String
       shorten s | length s > 48  = take 45 s ++ "..."
                 | otherwise      = s
 

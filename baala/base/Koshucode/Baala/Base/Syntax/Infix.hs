@@ -10,9 +10,10 @@ module Koshucode.Baala.Base.Syntax.Infix
     InfixAb, InfixAbMap, InfixTree, InfixMapper,
   ) where
 
-import qualified Data.Map                         as Map
-import qualified Koshucode.Baala.Base.Prelude     as B
-import qualified Koshucode.Baala.Base.Syntax.Tree as B
+import qualified Data.Map                          as Map
+import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax.Tree  as B
 
 
 -- ----------------------  Height function
@@ -59,7 +60,7 @@ type InfixMapper p a  =  InfixAbMap a [InfixTree p a] -> InfixAbMap a (InfixTree
 
 -- | Split branches in a given tree at infixed binary operators.
 infixToPrefix :: forall p a.
-    (B.Map a, B.Map a, B.Map a)
+    (O.Map a, O.Map a, O.Map a)
      -> (a -> InfixHeight)
      -> B.Collect (InfixTree p a)
      -> InfixMapper p a
@@ -89,7 +90,7 @@ infixToPrefix (pre, inf, post) ht g mapper tree =
                                      Right [conv inf op, g left', g right']
       move (_, _)              =  error "infixToPrefix"
 
-conv :: B.Map a -> B.Map (InfixTree p a)
+conv :: O.Map a -> O.Map (InfixTree p a)
 conv = fmap . B.mapSnd
 
 treeHeight :: InfixTree p a -> InfixHeight

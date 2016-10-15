@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.Text.Suffix
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.List         as B
 
 -- | Remove characters-delimiter prefix.
@@ -18,7 +17,7 @@ import qualified Koshucode.Baala.Base.List         as B
 --   >>> unprefix (`elem` "0123456789") '-' "12-foo"
 --   "foo"
 --
-unprefix :: O.Test Char -> Char -> B.Map String
+unprefix :: O.Test Char -> Char -> O.Map String
 unprefix test del s = loop s where
     loop [] = s
     loop (c:cs) | test c      = loop cs
@@ -30,7 +29,7 @@ unprefix test del s = loop s where
 --   >>> unsuffix (`elem` "0123456789") '-' "foo-12"
 --   "foo"
 --
-unsuffix :: O.Test Char -> Char -> B.Map String
+unsuffix :: O.Test Char -> Char -> O.Map String
 unsuffix test del = B.reverseMap $ unprefix test del
 
 -- | Two-argument function which returns a constant value.
@@ -41,22 +40,15 @@ unsuffix test del = B.reverseMap $ unprefix test del
 const2 :: a -> b -> c -> a
 const2 a _ _ = a
 
--- | Homotype 'Either'.
-type Eith a = Either a a
-
-uneith :: Eith a -> a
-uneith (Left x)   = x
-uneith (Right x)  = x
-
 -- | Make names unique by adding integer suffixes.
 --
 --   >>> uniqueNames '-' $ words "a b b c"
 --   ["a", "b-1", "b-2", "c"]
 --
-uniqueNames :: Char -> B.Map [String]
-uniqueNames del xs = uneith <$> uniqueNamesEith del (Left <$> xs)
+uniqueNames :: Char -> O.Map [String]
+uniqueNames del xs = O.uneith <$> uniqueNamesEith del (Left <$> xs)
 
-uniqueNamesEith :: Char -> B.Map [Eith String]
+uniqueNamesEith :: Char -> O.Map [O.Eith String]
 uniqueNamesEith del xxs = loop False (Map.map intSuffixes dup) xxs [] where
     loop b m (Left x : xs) ys
         = case Map.lookup x m of

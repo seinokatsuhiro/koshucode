@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.List.Order
     gapRankFrom,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.List.Snip    as B
 
@@ -52,7 +53,7 @@ uncap (Desc a) = a
 --
 --   >>> sortByName (words "a b c") [Asc "b"] [[1,3,3], [1,2,3], [1,1,3 :: Int]]
 --   [[1,1,3], [1,2,3], [1,3,3]]
-sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> B.Map [[a]]
+sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> O.Map [[a]]
 sortByName ords ns = map snd . sortByNameOrder ords ns
 
 sortByNameOrder :: (Ord a, Eq n) => [OrderCap n] -> [n] -> [[a]] -> [([OrderCap a], [a])]
@@ -69,7 +70,7 @@ sortBy ords = B.sort . B.mapFstTo (caps ords)
 caps :: [OrderCapping a] -> [a] -> [OrderCap a]
 caps ords = zipWith ($) (ords ++ repeat Asc)
 
-sortWith :: (Ord a, Ord b) => (a -> b) -> B.Map [a]
+sortWith :: (Ord a, Ord b) => (a -> b) -> O.Map [a]
 sortWith f = map snd . B.sort . map g where
     g x = (f x, x)
 

@@ -12,6 +12,7 @@ import qualified Control.Exception                  as Ex
 import qualified Network.HTTP.Conduit               as H
 import qualified Network.HTTP.Types.Status          as H
 import qualified Network.URI                        as URI
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text.Utility  as B
 
@@ -38,7 +39,7 @@ requestFromURI proxies uriText =
          Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
     where 
-      add :: Maybe UriText -> B.Map H.Request
+      add :: Maybe UriText -> O.Map H.Request
       add proxy req = B.fromMaybe req $ do
           proxy'    <- proxy
           uri       <- URI.parseURI proxy'
@@ -60,7 +61,7 @@ selectProxy proxies uri =
        proxy <- lookup scheme proxies
        proxy
 
-catchHttpException :: B.Map (IO (Either (Int, String) B.Bz))
+catchHttpException :: O.Map (IO (Either (Int, String) B.Bz))
 catchHttpException = ( `Ex.catch` handler ) where
     handler (H.HttpExceptionRequest _ (H.StatusCodeException res _))
               = return $ Left (httpStatus res)

@@ -36,7 +36,7 @@ module Koshucode.Baala.Base.List.Assoc
 
 import qualified Data.Map                       as Map
 import qualified Data.Maybe                     as Maybe
-import qualified Koshucode.Baala.Base.Prelude   as B
+import qualified Koshucode.Baala.Overture       as O
 
 
 
@@ -121,7 +121,7 @@ assocFinder xs k = Map.lookup k $ Map.fromList xs
 --
 --   >>> assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
 --   [("a",1), ("c",3)]
-assocPick :: (Eq k) => [k] -> B.Map [(k, a)]
+assocPick :: (Eq k) => [k] -> O.Map [(k, a)]
 assocPick xs = loop where
     loop [] = []
     loop (kv@(key, _) : kvs)
@@ -135,10 +135,10 @@ assocPick xs = loop where
 --
 --   >>> assocCut1 "b" [("a",1), ("b",2), ("c",3)]
 --   [("a",1), ("c",3)]
-assocCut :: (Eq k) => [k] -> B.Map [(k, a)]
+assocCut :: (Eq k) => [k] -> O.Map [(k, a)]
 assocCut ks xs = foldr assocCut1 xs ks
 
-assocCut1 :: (Eq k) => k -> B.Map [(k, a)]
+assocCut1 :: (Eq k) => k -> O.Map [(k, a)]
 assocCut1 k1 = loop where
     loop [] = []
     loop (x@(k2, _) : xs)
@@ -149,7 +149,7 @@ assocCut1 k1 = loop where
 --
 --   >>> assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
 --   [("x",1), ("b",2), ("c",3)]
-assocRename1 :: (Eq k) => k -> k -> B.Map [(k, a)]
+assocRename1 :: (Eq k) => k -> k -> O.Map [(k, a)]
 assocRename1 new old = map r where
     r (k, x) | k == old  = (new, x)
              | otherwise = (k, x)
@@ -220,7 +220,7 @@ data OnceMore a
 -- isMore :: OnceMore a -> Bool
 -- isMore = not . isOnce
 
-push :: a -> B.Map (OnceMore a)
+push :: a -> O.Map (OnceMore a)
 push x (Once x2) = More [x, x2]
 push x (More xs) = More (x : xs)
 
@@ -230,7 +230,7 @@ assocGather [] = []
 assocGather ((k, a) : xs) = assocPush k a $ assocGather xs
 
 -- | Push  key and value into once/more assoc list.
-assocPush :: (Eq k) => k -> a -> B.Map [(k, OnceMore a)]
+assocPush :: (Eq k) => k -> a -> O.Map [(k, OnceMore a)]
 assocPush k x = loop where
     loop [] = [(k, Once x)]
     loop (p@(k2, x2) : xs)

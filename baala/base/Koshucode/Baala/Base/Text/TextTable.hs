@@ -24,8 +24,8 @@ module Koshucode.Baala.Base.Text.TextTable
 
 import qualified Data.Char                      as C
 import qualified Data.List                      as L
+import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Base.List      as B
-import qualified Koshucode.Baala.Base.Prelude   as B
 
 
 -- ---------------------------------  Position
@@ -155,7 +155,7 @@ renderCell (Cell texts wd ht pos pad) = map width $ height texts where
     width  = position displaySize pad pos wd
     height = position length "" Front ht
 
-unpad :: B.Map Cell
+unpad :: O.Map Cell
 unpad cell
     | cellPad cell == ' ' = cell { cellWidth = 0 }
     | otherwise           = cell

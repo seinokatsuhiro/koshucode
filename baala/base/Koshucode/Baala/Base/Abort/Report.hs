@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Abort.Report
     abortMessage, bug,
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.IO            as B
 import qualified Koshucode.Baala.Base.List          as B
 import qualified Koshucode.Baala.Base.Prelude       as B
@@ -71,11 +72,11 @@ abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
               , B.textBlockCell B.Front codes
               , B.textBlockCell B.Front $ map dots tags ]]
 
-    dots :: B.Map String
+    dots :: O.Map String
     dots ""   = ""
     dots text = ".. " ++ text
 
-    sandwich :: a -> a -> B.Map [a]
+    sandwich :: a -> a -> O.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
 source :: [(String, B.CodePt)] -> [(String, String)]

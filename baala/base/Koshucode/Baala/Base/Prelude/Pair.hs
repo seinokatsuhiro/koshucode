@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Prelude.Pair
     sequenceFst, sequenceSnd,
   ) where
 
-import qualified Koshucode.Baala.Base.Prelude.Class as B
+import qualified Koshucode.Baala.Overture            as O
 
 
 -- ----------------------  Map
@@ -22,10 +22,10 @@ mapFst f (x, y) = (f x, y)
 mapSnd :: (b -> c) -> (a, b) -> (a, c)
 mapSnd f (x, y) = (x, f y)
 
-consFst :: a -> B.Map ([a], b)
+consFst :: a -> O.Map ([a], b)
 consFst x = mapFst (x:)
 
-consSnd :: b -> B.Map (a, [b])
+consSnd :: b -> O.Map (a, [b])
 consSnd x = mapSnd (x:)
 
 mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)

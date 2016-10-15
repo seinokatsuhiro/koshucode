@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Text.Utility
 
 import qualified Data.Char                     as Ch
 import qualified System.IO                     as IO
-import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Koshucode.Baala.Overture      as O
 
 
 -- ----------------------  Trim
@@ -24,17 +24,17 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 isSpace :: Char -> Bool
 isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
 
-trimLeft :: B.Map String
+trimLeft :: O.Map String
 trimLeft = dropWhile isSpace
 
-trimRight :: B.Map String
+trimRight :: O.Map String
 trimRight [] = []
 trimRight (x : xs) =
     case x : trimRight xs of
       [y] | isSpace y -> []
       ys -> ys
 
-trimBoth :: B.Map String
+trimBoth :: O.Map String
 trimBoth = trimRight . trimLeft
 
 
@@ -44,10 +44,10 @@ trimBoth = trimRight . trimLeft
 --
 --   >>> padRight 10 "abc"
 --   "abc       "
-padRight :: Int -> B.Map String
+padRight :: Int -> O.Map String
 padRight = padRightWith ' '
 
-padRightWith :: Char -> Int -> B.Map String
+padRightWith :: Char -> Int -> O.Map String
 padRightWith p n s = s ++ replicate rest p where
     rest = max 0 (n - stringWidth s)
 
@@ -55,10 +55,10 @@ padRightWith p n s = s ++ replicate rest p where
 --
 --   >>> padLeft 10 "abc"
 --   "       abc"
-padLeft :: Int -> B.Map String
+padLeft :: Int -> O.Map String
 padLeft = padLeftWith ' '
 
-padLeftWith :: Char -> Int -> B.Map String
+padLeftWith :: Char -> Int -> O.Map String
 padLeftWith p n s = replicate rest p ++ s where
     rest = max 0 (n - stringWidth s)
 

@@ -23,13 +23,14 @@ module Koshucode.Baala.Base.List.Snip
   ) where
 
 import qualified Data.List                           as List
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base.Prelude        as B
 
 
 -- --------------------------------------------  Type
 
 -- | Snipping elements using indicies.
-type Snip a = [Int] -> B.Map [a]
+type Snip a = [Int] -> O.Map [a]
 
 -- | Snip for differenct type values.
 type Snip2 a b = (Snip a, Snip b)
@@ -172,7 +173,7 @@ snipShare xs ys = snipIndex xs ys `snipFrom` ys
 snipRight :: (Eq a) => Bin [a]
 snipRight xs ys = snipLeft ys xs
 
-snipOrder :: (Eq a) => [a] -> [a] -> B.Map [c]
+snipOrder :: (Eq a) => [a] -> [a] -> O.Map [c]
 snipOrder to from
     | to == from = id
     | otherwise  = snipFrom $ snipIndex to from

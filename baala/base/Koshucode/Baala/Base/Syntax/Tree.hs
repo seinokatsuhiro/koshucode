@@ -100,7 +100,7 @@ treeLeaves (TreeL x)       = [x]
 --   >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 -- 
-undouble :: O.Test p -> B.Map (CodeTree p a)
+undouble :: O.Test p -> O.Map (CodeTree p a)
 undouble p = loop where
     loop (TreeB n pp xs) | p n =
         case map loop xs of
@@ -122,13 +122,13 @@ mapToAllLeaf f = loop where
 -- | Map function to all leaves.
 --   This function is similar to 'fmap',
 --   but not map to 'treeBracketLeaf'.
-treeLeafMap :: (a -> a) -> B.Map (CodeTree p a)
+treeLeafMap :: (a -> a) -> O.Map (CodeTree p a)
 treeLeafMap f = loop where
     loop (TreeL x)        = TreeL $ f x
     loop (TreeB p aa xs)  = TreeB p aa $ map loop xs
 
 -- | Map function to all branches.
-treeBranchMap :: (p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a) -> B.Map (CodeTree p a)
+treeBranchMap :: (p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a) -> O.Map (CodeTree p a)
 treeBranchMap f = loop where
     loop (TreeL x)        = TreeL x
     loop (TreeB p aa xs)  = f p aa $ map loop xs

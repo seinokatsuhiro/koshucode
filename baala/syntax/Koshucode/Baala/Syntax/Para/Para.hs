@@ -19,6 +19,7 @@ module Koshucode.Baala.Syntax.Para.Para
   ) where
 
 import qualified Data.Map.Strict                       as Map
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 
 
@@ -114,11 +115,11 @@ paraPosName pn p =
        return $ p { paraName = paraName p `Map.union` m }
 
 -- | Add named parameter.
-paraNameAdd :: (Ord n) => n -> [a] -> B.Map (Para n a)
+paraNameAdd :: (Ord n) => n -> [a] -> O.Map (Para n a)
 paraNameAdd n vs p@Para { paraName = m } =
     p { paraName = paraInsert n vs m }
 
-paraInsert :: (Ord n) => n -> [a] -> B.Map (ParaMap n a)
+paraInsert :: (Ord n) => n -> [a] -> O.Map (ParaMap n a)
 paraInsert n a = Map.insertWith (++) n [a]
 
 -- | Map names of named parameters.

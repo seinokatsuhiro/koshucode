@@ -18,6 +18,7 @@ module Koshucode.Baala.Syntax.Attr.Attr
     maybeDoubleHyphen,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax.Para           as S
 import qualified Koshucode.Baala.Syntax.TTree          as S
@@ -37,7 +38,7 @@ data AttrLayout = AttrLayout [(Maybe String, AttrBranch)]
 -- | Single layout.
 data AttrBranch = AttrBranch
     { attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
-    , attrClassifier  :: B.Map S.AttrName   -- ^ Attribute classifier
+    , attrClassifier  :: O.Map S.AttrName   -- ^ Attribute classifier
     }
 
 instance Show AttrBranch where
@@ -48,7 +49,7 @@ attrBranch :: AttrParaSpec -> AttrBranch
 attrBranch spec = AttrBranch spec $ attrClassify spec
 
 -- | Set type of attribute name.
-attrClassify :: AttrParaSpec -> B.Map S.AttrName
+attrClassify :: AttrParaSpec -> O.Map S.AttrName
 attrClassify spec n = n' where
     n' = case lookup (S.attrNameText n) pairs of
            Just k  -> k

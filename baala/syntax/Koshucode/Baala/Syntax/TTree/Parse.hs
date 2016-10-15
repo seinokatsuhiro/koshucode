@@ -35,7 +35,7 @@ ttreeGroup :: S.TTreesTo S.TTree
 ttreeGroup = B.treeWrap S.BracketGroup
 
 -- | Join fragmented texts.
-joinText :: B.Map [S.Token]
+joinText :: O.Map [S.Token]
 joinText = join where
     join ((S.TText cp f1 s1) : (S.TText _ f2 s2) : xs)
         | isQqKey f1 && isQqKey f2

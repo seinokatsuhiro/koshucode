@@ -16,6 +16,7 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
   ) where
 
 import qualified Data.Char                    as Ch
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 
 -- $Angle
@@ -38,7 +39,7 @@ import qualified Koshucode.Baala.Base         as B
 
 -- | Convert string into double-quoted and angle-quoted form.
 
-angleQuote :: B.Map String
+angleQuote :: O.Map String
 angleQuote = open . loop where
     loop "" = "\""
     loop ccs@(c : cs) =

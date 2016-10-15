@@ -31,6 +31,7 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     paraFirst, paraLast, paraMulti,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax.Para.Para  as S
 
@@ -207,7 +208,7 @@ paraChoose specs p = loop [] specs where
 
 -- --------------------------------------------  Construct
 
-type ParaSpecMap n = B.Map (ParaSpec n)
+type ParaSpecMap n = O.Map (ParaSpec n)
 
 paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
 paraSpec edit = paraCheck $ edit B.def

@@ -112,7 +112,7 @@ isBlankToken (S.TComment _ _)     = True
 isBlankToken _                    = False
 
 -- | Remove blank tokens.
-sweepToken :: B.Map [S.Token]
+sweepToken :: O.Map [S.Token]
 sweepToken = B.omit isBlankToken
 
 -- | Test token is unknown.
