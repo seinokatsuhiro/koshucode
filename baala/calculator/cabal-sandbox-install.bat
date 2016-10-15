@@ -24,6 +24,7 @@ goto :EOF
     if "%1" == "install" (
         call :INIT_SANDBOX
 
+        cabal sandbox add-source ..\overture
         cabal sandbox add-source ..\subtext
         cabal sandbox add-source ..\base
         cabal sandbox add-source ..\syntax
