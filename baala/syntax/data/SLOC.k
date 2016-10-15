@@ -6,11 +6,11 @@ about /package 'syntax
 |-- DIR  /code 56   /comment 28   /dir "syntax/Koshucode/Baala/Syntax"
 |-- DIR  /code 359  /comment 240  /dir "syntax/Koshucode/Baala/Syntax/Attr"
 |-- DIR  /code 344  /comment 275  /dir "syntax/Koshucode/Baala/Syntax/Para"
-|-- DIR  /code 271  /comment 300  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
+|-- DIR  /code 271  /comment 309  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /code 175  /comment 170  /dir "syntax/Koshucode/Baala/Syntax/TTree"
-|-- DIR  /code 698  /comment 515  /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- DIR  /code 698  /comment 518  /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- DIR-TOTAL  /code 1915  /comment 1532
+|-- DIR-TOTAL  /code 1915  /comment 1544
 
 |-- FILE  /code 12   /comment 4    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
 |-- FILE  /code 12   /comment 4    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
@@ -30,7 +30,7 @@ about /package 'syntax
 |-- FILE  /code 10   /comment 8    /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- FILE  /code 129  /comment 112  /file "Next.hs"        /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- FILE  /code 44   /comment 32   /file "Short.hs"       /dir "syntax/Koshucode/Baala/Syntax/Symbol"
-|-- FILE  /code 36   /comment 76   /file "Term.hs"        /dir "syntax/Koshucode/Baala/Syntax/Symbol"
+|-- FILE  /code 36   /comment 85   /file "Term.hs"        /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- FILE  /code 8    /comment 6    /file "TTree.hs"       /dir "syntax/Koshucode/Baala/Syntax"
 |-- FILE  /code 65   /comment 39   /file "Bracket.hs"     /dir "syntax/Koshucode/Baala/Syntax/TTree"
 |-- FILE  /code 64   /comment 70   /file "Parse.hs"       /dir "syntax/Koshucode/Baala/Syntax/TTree"
@@ -43,7 +43,7 @@ about /package 'syntax
 |-- FILE  /code 24   /comment 47   /file "Pattern.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 128  /comment 120  /file "Rel.hs"         /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 95   /comment 36   /file "Section.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
-|-- FILE  /code 133  /comment 76   /file "Token.hs"       /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- FILE  /code 133  /comment 79   /file "Token.hs"       /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 104  /comment 55   /file "Utility.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- FILE-TOTAL  /code 1915  /comment 1532
+|-- FILE-TOTAL  /code 1915  /comment 1544

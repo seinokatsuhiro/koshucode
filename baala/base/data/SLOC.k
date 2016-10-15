@@ -3,15 +3,15 @@
 about /package 'base
 
 |-- DIR  /code 14   /comment 4    /dir "base/Koshucode/Baala"
-|-- DIR  /code 88   /comment 29   /dir "base/Koshucode/Baala/Base"
+|-- DIR  /code 90   /comment 31   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 114  /comment 85   /dir "base/Koshucode/Baala/Base/Abort"
 |-- DIR  /code 381  /comment 227  /dir "base/Koshucode/Baala/Base/IO"
 |-- DIR  /code 544  /comment 631  /dir "base/Koshucode/Baala/Base/List"
 |-- DIR  /code 217  /comment 214  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 366  /comment 247  /dir "base/Koshucode/Baala/Base/Syntax"
-|-- DIR  /code 691  /comment 534  /dir "base/Koshucode/Baala/Base/Text"
+|-- DIR  /code 732  /comment 577  /dir "base/Koshucode/Baala/Base/Text"
 
-|-- DIR-TOTAL  /code 2415  /comment 1971
+|-- DIR-TOTAL  /code 2458  /comment 2016
 
 |-- FILE  /code 14   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -48,15 +48,16 @@ about /package 'base
 |-- FILE  /code 15   /comment 10   /file "Message.hs"     /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 78   /comment 51   /file "Scan.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 114  /comment 75   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
-|-- FILE  /code 20   /comment 3    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
+|-- FILE  /code 22   /comment 5    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 36   /comment 24   /file "Comment.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 51   /comment 40   /file "LineBreak.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 56   /comment 52   /file "MixClass.hs"    /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 20   /comment 18   /file "MixEncode.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 215  /comment 221  /file "MixText.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 26   /comment 37   /file "PPrint.hs"      /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /code 41   /comment 43   /file "Suffix.hs"      /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 125  /comment 57   /file "TextTable.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 103  /comment 40   /file "Unicode.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 59   /comment 45   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Text"
 
-|-- FILE-TOTAL  /code 2415  /comment 1971
+|-- FILE-TOTAL  /code 2458  /comment 2016
