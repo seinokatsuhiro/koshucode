@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Functions for changes between two datasets. -}
+-- | Functions for changes between two datasets.
 
 module Koshucode.Baala.Toolkit.Library.Change
   (
@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Toolkit.Library.Input as L
 
 -- ----------------------  Minus
 
--- | Calculate and write judges /B/ minus /A/.
+-- | Read, calculate, and write judges /B/ minus /A/.
 minusInput
     :: L.Input   -- ^ /B:/ Source of base section
     -> L.Input   -- ^ /A:/ Source of altered section
@@ -39,11 +39,13 @@ minusInput inputA inputB =
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) js
 
-minusInputJudge :: L.Input -> L.Input -> IO ([C.JudgeC])
+-- | Read and calculate judges subtraction.
+minusInputJudge :: L.Input -> L.Input -> IO [C.JudgeC]
 minusInputJudge inputA inputB =
     do [textA, textB] <- L.readInputs [inputA, inputB]
        return $ L.readJudge textA `minusJudge` L.readJudge textB
 
+-- | Calculate subtraction of judges.
 minusJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
 minusJudge judA judB = map D.denyJudge judC ++ judD where
     setA = S.fromList judA
@@ -79,6 +81,7 @@ updateInput inputB inputC =
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
 
+-- | Apply change judges.
 updateJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
 updateJudge judB judC = judA where
     setB = S.fromList $ judB

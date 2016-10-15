@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
 -- ----------------------  Main
 
+-- | The main function for @koshu-rdf@ command.
 koshuRdfMain :: IO ()
 koshuRdfMain = do
   (opts, files) <- parseCommand =<< B.progAndArgs
