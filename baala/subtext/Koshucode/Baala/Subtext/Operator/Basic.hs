@@ -15,12 +15,12 @@ import qualified Prelude as P
 import           Prelude hiding ( elem, any, span, succ, fail )
 
 import qualified Data.List                       as L
-import qualified Koshucode.Baala.Overture.Fn     as S
+import qualified Koshucode.Baala.Overture.Fn     as O
 import qualified Koshucode.Baala.Subtext.Expr    as S
 
 -- | Element match.
-elem :: S.Name -> (a -> Bool) -> S.Expr a
-elem n f = S.EBase $ S.EElem $ S.Fn n f
+elem :: O.Name -> (a -> Bool) -> S.Expr a
+elem n f = S.EBase $ S.EElem $ O.Fn n f
 
 -- | Match any element.
 any :: S.Expr a
@@ -40,8 +40,8 @@ list :: (Eq a) => [a] -> S.Expr a
 list xs = elem "list" (`P.elem` xs)
 
 -- | Spanning match.
-span :: S.Name -> ([a] -> Maybe ([a], [a])) -> S.Expr a
-span n f = S.EBase $ S.ESpan $ S.Fn n f
+span :: O.Name -> ([a] -> Maybe ([a], [a])) -> S.Expr a
+span n f = S.EBase $ S.ESpan $ O.Fn n f
 
 -- | Match exactly the given sequence.
 equal :: (Eq a) => [a] -> S.Expr a
@@ -50,8 +50,8 @@ equal w = span "equal" f where
              Just (reverse w, s')
 
 -- | Inter-element match.
-inter :: S.Name -> (Maybe a -> Maybe a -> Bool) -> S.Expr a
-inter n f = S.EBase $ S.EInter $ S.Fn2 n f
+inter :: O.Name -> (Maybe a -> Maybe a -> Bool) -> S.Expr a
+inter n f = S.EBase $ S.EInter $ O.Fn2 n f
 
 -- | Match at the beginning of sequence.
 begin :: S.Expr a
@@ -81,6 +81,6 @@ what :: S.Expr a
 what = S.EBase S.EWhat
 
 -- | Change to other matcher.
-change :: S.Name -> S.Expr a
+change :: O.Name -> S.Expr a
 change n = S.EBase $ S.EChange n
 

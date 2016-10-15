@@ -12,7 +12,7 @@ module Koshucode.Baala.Subtext.Para
 import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Map
-import qualified Koshucode.Baala.Overture.Fn       as S
+import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as S
 import qualified Koshucode.Baala.Subtext.Expr      as S
 import qualified Koshucode.Baala.Subtext.MinMax    as S
@@ -32,7 +32,7 @@ data Para a = Para
   } deriving (Show, Eq, Ord)
 
 -- | Submatch result, its name and matched sequence.
-type Submatch a = (S.Name, [a])
+type Submatch a = (O.Name, [a])
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.

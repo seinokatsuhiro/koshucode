@@ -18,7 +18,7 @@ module Koshucode.Baala.Subtext.Operator.Combine
 
 import Prelude hiding ( or, seq, and, not, last )
 
-import qualified Koshucode.Baala.Overture.Fn             as S
+import qualified Koshucode.Baala.Overture.Fn             as O
 import qualified Koshucode.Baala.Subtext.Expr            as S
 import qualified Koshucode.Baala.Subtext.MinMax          as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic  as S
@@ -92,11 +92,11 @@ gath :: Bool -> S.Expr a -> S.Expr a
 gath b = S.ERec . S.EGath b
 
 -- | Named submatch.
-sub :: S.Name -> S.Expr a -> S.Expr a
+sub :: O.Name -> S.Expr a -> S.Expr a
 sub n = S.ERec . S.ESub n
 
 -- | Named submatch.
-(#) :: S.Name -> S.Expr a -> S.Expr a
+(#) :: O.Name -> S.Expr a -> S.Expr a
 n # e = sub n e
 
 
@@ -108,19 +108,19 @@ as f = S.ERec . S.EAs f
 
 -- | Replace to given sequence.
 asConst :: [a] -> S.Expr a -> S.Expr a
-asConst c = as $ S.Fn "const" $ const c
+asConst c = as $ O.Fn "const" $ const c
 
 -- | Add segment to the beginning of matched sequence.
 asPrepend :: [a] -> S.Expr a -> S.Expr a
-asPrepend a = as (S.Fn "add-prepend" ((a ++) . reverse))
+asPrepend a = as (O.Fn "add-prepend" ((a ++) . reverse))
 
 -- | Add segment to the end of matched sequence.
 asAppend :: [a] -> S.Expr a -> S.Expr a
-asAppend a = as (S.Fn "add-append" ((++ a)  . reverse))
+asAppend a = as (O.Fn "add-append" ((++ a)  . reverse))
 
 -- | Add segments to the beginning and end of matched sequence.
 asWrap :: [a] -> [a]  -> S.Expr a -> S.Expr a
-asWrap a b = as (S.Fn "add-wrap" (wrap a b . reverse))
+asWrap a b = as (O.Fn "add-wrap" (wrap a b . reverse))
 
 wrap :: [a] -> [a] -> [a] -> [a]
 wrap a b x = a ++ x ++ b

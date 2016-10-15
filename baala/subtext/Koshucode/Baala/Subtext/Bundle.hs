@@ -11,7 +11,7 @@ module Koshucode.Baala.Subtext.Bundle
   ) where
 
 import qualified Data.Map.Strict                   as Map
-import qualified Koshucode.Baala.Overture.Fn       as S
+import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Expr      as S
 import qualified Koshucode.Baala.Subtext.MinMax    as S
 import qualified Koshucode.Baala.Subtext.Operator  as S
@@ -19,21 +19,21 @@ import qualified Koshucode.Baala.Subtext.Operator  as S
 
 -- | Bundle of named expressions.
 data Bundle a = Bundle
-    { bundleExpr      :: [(S.Name, S.Expr a)]
+    { bundleExpr      :: [(O.Name, S.Expr a)]
     , bundleStart     :: S.Expr a
     , bundleSubmatch  :: [NameDepth]
     } deriving (Show, Eq, Ord)
 
 -- | Map version of expression bundle.
-type BundleMap a = Map.Map S.Name (S.Expr a)
+type BundleMap a = Map.Map O.Name (S.Expr a)
 
 -- | Submatch name and its depth level.
 --   Depth is incremented when entering repeatable expressions.
 --   Submatch of non-zero depth is collected in list.
-type NameDepth = (S.Name, Int)
+type NameDepth = (O.Name, Int)
 
 -- | Create bundle of subtext expressions.
-bundle :: [(S.Name, S.Expr a)] -> Bundle a
+bundle :: [(O.Name, S.Expr a)] -> Bundle a
 bundle exprs =
     Bundle { bundleExpr      = exprs
            , bundleStart     = S.fail
@@ -42,12 +42,12 @@ bundle exprs =
       start = startExpr exprs
 
 -- | The start expression of bundle.
-startExpr :: [(S.Name, S.Expr a)] -> S.Expr a
+startExpr :: [(O.Name, S.Expr a)] -> S.Expr a
 startExpr ((_, e) : _)  = e
 startExpr []            = S.fail
 
 -- | List of submatch names.
-submatches :: [(S.Name, S.Expr a)] -> S.Expr a -> [NameDepth]
+submatches :: [(O.Name, S.Expr a)] -> S.Expr a -> [NameDepth]
 submatches exprs start = Map.assocs $ expr [] 0 start where
     expr ns d (S.ERec e)               = rec ns d e
     expr ns d (S.EBase (S.EChange n))  = ch ns d n

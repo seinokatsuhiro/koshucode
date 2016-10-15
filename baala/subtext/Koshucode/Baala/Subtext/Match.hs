@@ -14,7 +14,7 @@ module Koshucode.Baala.Subtext.Match
 import Prelude hiding (seq)
 
 import qualified Data.Map.Strict                   as Map
-import qualified Koshucode.Baala.Overture.Fn       as S
+import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as S
 import qualified Koshucode.Baala.Subtext.Expr      as S
 import qualified Koshucode.Baala.Subtext.MinMax    as S
@@ -98,7 +98,7 @@ match pa@S.Para { S.paraBundle    = bundle
                                      subs = S.paraRawSubs pa'
                                  Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs
                                             , S.paraRawOutput = o' ++ o }
-      rec (S.EAs (S.Fn _ f) e)
+      rec (S.EAs (O.Fn _ f) e)
                             = do pa' <- pa { S.paraRawOutput = [] } ? e
                                  let o' = S.paraRawOutput pa'
                                  Just $ pa' { S.paraRawOutput = reverse (f o') ++ o }
@@ -133,7 +133,7 @@ match pa@S.Para { S.paraBundle    = bundle
 
       -- ----------------------  base
 
-      base (S.EElem (S.Fn _ f)) =
+      base (S.EElem (O.Fn _ f)) =
           case s of
             x : s' | f x   -> Just $ pa { S.paraPos       = pos + 1
                                         , S.paraInput     = s'
@@ -141,7 +141,7 @@ match pa@S.Para { S.paraBundle    = bundle
                                         , S.paraRawOutput = output $ x : o }
             _              -> Nothing
 
-      base (S.ESpan (S.Fn _ f)) =
+      base (S.ESpan (O.Fn _ f)) =
           do (w, s') <- f s
              Just $ pa { S.paraPos       = pos + length w
                        , S.paraInput     = s'
@@ -150,7 +150,7 @@ match pa@S.Para { S.paraBundle    = bundle
                                              []    -> prev
                        , S.paraRawOutput = output $ w ++ o }
 
-      base (S.EInter (S.Fn2 _ f)) =
+      base (S.EInter (O.Fn2 _ f)) =
           case s of
             r : _  | f prev (Just r)   -> Just pa
             []     | f prev (Nothing)  -> Just pa
