@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Functions for implementing the Koshucode calculator.
+
 module Koshucode.Baala.Toolkit.Library.Run
   ( runFiles,
     getProxies,
-    theContent,
-    --mkdir,
   ) where
 
 import qualified System.Environment     as Env
@@ -13,9 +13,6 @@ import qualified Koshucode.Baala.Data   as D
 import qualified Koshucode.Baala.Core   as C
 import qualified Koshucode.Baala.Writer as W
 
-
-
--- ----------------------
 
 -- | Read and union sections from files, and run the section.
 runFiles :: (D.CContent c, W.ToJSON c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
@@ -27,7 +24,10 @@ runFiles g ns =
                         Left a   -> C.globalAbort g a
                         Right r  -> C.putResult r
 
-getProxies :: IO [(String, Maybe String)]
+-- | Get proxy settings.
+--   This function looks environment variables
+--   of @http_proxy@, @https_proxy@, and @ftp_proxy@.
+getProxies :: IO [B.HttpProxy]
 getProxies =
     do httpProxy   <- Env.lookupEnv "http_proxy"
        httpsProxy  <- Env.lookupEnv "https_proxy"
@@ -35,28 +35,3 @@ getProxies =
        return [ ("http"  , httpProxy)
               , ("https" , httpsProxy)
               , ("ftp"   , ftpProxy) ]
-
-
-
--- ---------------------- Calculation list
-
--- mkdir :: FilePath -> IO ()
--- mkdir path = 
---     do let dir = Path.dropFileName path
---        Dir.createDirectoryIfMissing True dir
-
-
-
--- ----------------------  The
-
-theContent :: (D.CContent c) => String -> [B.Named c] -> Maybe c
-theContent = lookup
-
--- theContents :: (C.CContent c) => [String] -> [B.Named c] -> Maybe [c]
--- theContents ns assn = mapM (`theContent` assn) ns
-
--- theStrings :: (C.CContent c) => c -> [String]
--- theStrings c | C.isText c  =  [C.gText c]
--- theStrings c | C.isList c  =  map C.gText $ C.gList c
--- theStrings _               =  []
-

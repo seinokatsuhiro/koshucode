@@ -41,6 +41,7 @@ header = unlines
     , ""
     ] ++ "OPTIONS"
 
+-- | The main function for @koshu-filter@ command.
 koshuFilter :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO Int
 koshuFilter g withRes =
   do (prog, argv) <- B.progAndArgs
