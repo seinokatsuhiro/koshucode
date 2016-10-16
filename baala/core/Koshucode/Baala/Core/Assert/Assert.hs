@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Assert.Assert
     assertNormal, assertViolated,
   ) where
 
+import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
@@ -47,11 +48,11 @@ type ShortAssert' h c = S.Short (Assert' h c)
 type ShortAsserts' h c = S.Short [Assert' h c]
 
 -- | Select affirmative or denial assertions.
-assertNormal :: B.Map [ShortAssert' h c]
+assertNormal :: O.Map [ShortAssert' h c]
 assertNormal = B.omit violated
 
 -- | Select violated assertions.
-assertViolated :: B.Map [ShortAssert' h c]
+assertViolated :: O.Map [ShortAssert' h c]
 assertViolated = filter violated
 
 violated :: ShortAssert' h c -> Bool

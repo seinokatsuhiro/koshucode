@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
     SecNo, NName, NNamed,
   ) where
 
+import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
@@ -138,7 +139,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                                          , C.lexToken  = tok
                                          , C.lexAttr   = para }
 
-        check :: B.Map C.Lexmap
+        check :: O.Map C.Lexmap
         check lx | C.lexType lx == C.LexmapDerived
                      = let n    = C.lexName lx
                            msg  = "Same name as base relmap operator '" ++ n ++ "'"
@@ -169,12 +170,12 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                Right ((S.attrNameCode n, lx), tab)
 
         -- Cons up parent token when no parent or same eid.
-        markLocalToken :: S.Token -> B.Map S.Token
+        markLocalToken :: S.Token -> O.Map S.Token
         markLocalToken p (S.TLocal cp v eid' ps) | null ps || eid == eid'
                         = S.TLocal cp v eid $ p : ps
         markLocalToken _ loc = loc
 
-        markLocalRelmap :: B.Map S.Token -> B.Map (S.AttrName, [S.TTree])
+        markLocalRelmap :: O.Map S.Token -> O.Map (S.AttrName, [S.TTree])
         markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeLeafMap mark <$> ts)
         markLocalRelmap _ (n, ts) = (n, ts)
 

@@ -19,11 +19,12 @@ module Koshucode.Baala.Data.Content.Message
     expect2Actual,
   ) where
 
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Syntax.Message  as Msg
 
-abLiteral :: S.TTreeTo (B.Map (B.Ab b))
+abLiteral :: S.TTreeTo (O.Map (B.Ab b))
 abLiteral = Msg.abortableTree "literal"
 
 -- | Nothing

@@ -18,6 +18,7 @@ module Koshucode.Baala.Data.Church.Cox
     -- $Process
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Church.Message  as Msg
@@ -98,7 +99,7 @@ coxLit :: c -> Cox c
 coxLit = CoxLit []
 
 -- Convert CoxForm1 to CoxForm.
-coxFold :: B.Map (Cox c)
+coxFold :: O.Map (Cox c)
 coxFold (CoxForm1 cp1 tag1 v1 e1) =
     case coxFold e1 of
       CoxForm _ tag2 vs e2 | tag1 == tag2  ->  CoxForm cp1 tag1 (v1:vs) e2
@@ -120,13 +121,13 @@ coxSyntacticArity = loop where
         | otherwise      = 0
     loop _ = 0
 
-coxMap :: B.Map (B.Map (Cox c))
+coxMap :: O.Map (O.Map (Cox c))
 coxMap g (CoxFill  cp f xs)         = CoxFill  cp (g f) (map g xs)
 coxMap g (CoxForm1 cp tag v  body)  = CoxForm1 cp tag v  (g body)
 coxMap g (CoxForm  cp tag vs body)  = CoxForm  cp tag vs (g body)
 coxMap _ e = e
 
-coxCall :: Cox c -> (B.Map (Cox c)) -> Cox c
+coxCall :: Cox c -> (O.Map (Cox c)) -> Cox c
 coxCall cox g = coxMap g cox
 
 checkIrreducible :: B.AbMap (Cox c)

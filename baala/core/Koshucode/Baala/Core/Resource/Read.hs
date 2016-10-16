@@ -15,6 +15,7 @@ import qualified Control.Monad.State                     as M
 import qualified Data.ByteString.Lazy                    as Bz
 import qualified System.Directory                        as Dir
 import qualified System.FilePath                         as Path
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -39,7 +40,7 @@ globalIO f g =
     in M.runStateT (f $ C.globalHook g') g'
 
 -- | Set global data to root resource.
-setGlobal :: B.Map (C.Global c)
+setGlobal :: O.Map (C.Global c)
 setGlobal g =
     let root = C.globalHook g
     in  g { C.globalHook = root { C.resGlobal = g }}

@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Assert.Run
   ( runAssertJudges,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data                  as D
@@ -46,7 +47,7 @@ runAssertDataset hook option (S.Short _ sh ass) =
       assert True  q p = D.assertAs q p
       assert False q p = D.assertAs q p . omitEmpty
 
-      omitEmpty :: (D.CEmpty c) => B.Map [S.Term c]
+      omitEmpty :: (D.CEmpty c) => O.Map [S.Term c]
       omitEmpty =  B.omit (D.isEmpty . snd)
 
 runRelmapViaRelkit :: (Ord c, D.CRel c, D.SelectRel h, C.GetGlobal h)
@@ -173,11 +174,11 @@ lexicalOrderRel rel@(D.Rel he1 _) = snipRel B.snipForward2 ns' rel where
 optionOrder :: (Ord c, D.CRel c) => [S.TTree] ->  B.AbMap (D.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1
 
-relSortDeep :: (Ord c, D.CRel c) => B.Map (D.Rel c)
+relSortDeep :: (Ord c, D.CRel c) => O.Map (D.Rel c)
 relSortDeep = relApply f where
     f (D.Rel he bo) = D.Rel he $ B.sort bo
 
-relApply :: (D.CRel c) => B.Map (B.Map (D.Rel c))
+relApply :: (D.CRel c) => O.Map (O.Map (D.Rel c))
 relApply f (D.Rel he bo) = f $ D.Rel he $ B.map2 nest bo where
     nest c | D.isRel c = D.pRel $ relApply f $ D.gRel c
            | otherwise = c

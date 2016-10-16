@@ -37,6 +37,7 @@ module Koshucode.Baala.Data.Type.Decimal.Coder
 
 import qualified Data.Char                                   as Ch
 import qualified Data.Ratio                                  as R
+import qualified Koshucode.Baala.Overture                    as O
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Fraction  as D
@@ -49,7 +50,7 @@ import qualified Koshucode.Baala.Data.Type.Message           as Msg
 -- | Decode to @a@.
 type DecodeAb a = String -> B.Ab a
 
-type Sign = B.Map D.DecimalInteger
+type Sign = O.Map D.DecimalInteger
 
 -- | Decode base-2 digits to decimal.
 decodeBinary :: DecodeAb D.Decimal
@@ -150,7 +151,7 @@ ord = fromIntegral. Ch.ord
 
 -- ----------------------  Encode
 
-separator :: B.Map String
+separator :: O.Map String
 separator ""            = ""
 separator [c]           = [c]
 separator cs@(' ' : _)  = cs
@@ -174,22 +175,22 @@ encodeDecimal = encodeDecimalWith separator
 encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
-encodeDecimalWith :: B.Map String -> D.Decimal -> String
+encodeDecimalWith :: O.Map String -> D.Decimal -> String
 encodeDecimalWith sep = encode . D.decimalRoundOut where
     encode D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
                           (int, frac) | l > 0      -> int ++ "." ++ frac
                                       | otherwise  -> int
 
-decimalSign :: D.DecimalRatio -> B.Map String
+decimalSign :: D.DecimalRatio -> O.Map String
 decimalSign r cs | r < 0      = '-' : cs
                  | otherwise  = cs
 
-ratioDigits :: (Integral n) => B.Map String -> D.DecimalFracle -> R.Ratio n -> (String, String)
+ratioDigits :: (Integral n) => O.Map String -> D.DecimalFracle -> R.Ratio n -> (String, String)
 ratioDigits sep l r = case properFraction r of
                         (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-integerDigits :: B.Map String -> D.DecimalFracle -> Integer -> String
+integerDigits :: O.Map String -> D.DecimalFracle -> Integer -> String
 integerDigits sep = loop 0 "" where
     loop :: Int -> String -> D.DecimalFracle -> Integer -> String
     loop n cs l i
@@ -202,7 +203,7 @@ integerDigits sep = loop 0 "" where
     up l r | l < 0      = 'o'
            | otherwise  = Ch.intToDigit (fromInteger r)
 
-fracDigits :: (Integral n) => B.Map String -> D.DecimalFracle -> R.Ratio n -> String
+fracDigits :: (Integral n) => O.Map String -> D.DecimalFracle -> R.Ratio n -> String
 fracDigits sep = loop (0 :: Int) where
     loop n l 0 = fill n l
     loop _ 0 _ = ""

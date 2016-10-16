@@ -29,6 +29,7 @@ module Koshucode.Baala.Core.Relmap.Global
   ) where
 
 import qualified Data.Version                        as Ver
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
@@ -80,13 +81,13 @@ globalCommandLine :: Global' h c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
-globalFill :: (D.CContent c) => B.Map (Global' h c)
+globalFill :: (D.CContent c) => O.Map (Global' h c)
 globalFill g = g
 
 globalRops   :: Global' h c -> [C.Rop' h c]
 globalRops    = opsetRopList . globalOpset
 
-globalRopsAdd :: [C.Rop' h c] -> B.Map (Global' h c)
+globalRopsAdd :: [C.Rop' h c] -> O.Map (Global' h c)
 globalRopsAdd rops g = g { globalOpset = opsetFill ops' } where
     ops' = opsetRopsAdd rops ops
     ops  = globalOpset g
@@ -137,7 +138,7 @@ instance B.Default (OpSet' h c) where
                 , opsetFindRop = const Nothing
                 , opsetCop     = D.copset }
 
-opsetFill :: B.Map (OpSet' h c)
+opsetFill :: O.Map (OpSet' h c)
 opsetFill ops = ops2 where
     ops2      = ops { opsetFindRop = findRop
                     , opsetCop     = copset2 }
@@ -146,7 +147,7 @@ opsetFill ops = ops2 where
     rops      = map name $ opsetRopList ops
     name rop  = (B.name rop, rop)
 
-opsetRopsAdd :: [C.Rop' h c] -> B.Map (OpSet' h c)
+opsetRopsAdd :: [C.Rop' h c] -> O.Map (OpSet' h c)
 opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 
 

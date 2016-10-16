@@ -36,9 +36,9 @@ type RelkitBody c = B.Sourced (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
-    = RelkitFull         Bool (                B.Map     [[c]] )
+    = RelkitFull         Bool (                O.Map     [[c]] )
     | RelkitOneToMany    Bool (                B.ManyMap [c]   )
-    | RelkitOneToOne     Bool (                B.Map     [c]   )
+    | RelkitOneToOne     Bool (                O.Map     [c]   )
     | RelkitPred              (                O.Test    [c]   )
 
     | RelkitAbFull       Bool ( [BodyMap c] -> B.AbMap     [[c]]   ) [RelkitBody c]

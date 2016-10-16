@@ -22,6 +22,7 @@ module Koshucode.Baala.Data.Content.Utility
     pTermSet, pTextSet, pTextList,
   ) where
 
+import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Data.Type                as D
@@ -109,7 +110,7 @@ contAp get put f = put . f . get
 contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
 contMap get put f = contAp get put $ map f
 
-contApTextToText :: (D.CText c) => B.Map String -> B.AbMap c
+contApTextToText :: (D.CText c) => O.Map String -> B.AbMap c
 contApTextToText = contAp D.gText D.putText
 
 contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c

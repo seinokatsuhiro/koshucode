@@ -9,11 +9,12 @@ module Koshucode.Baala.Core.Lexmap.Message
     unkRelmap,
   ) where
 
+import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data.Message  as Msg
 
-abLexmap      :: S.TTreesTo (B.Map (B.Ab b))
+abLexmap      :: S.TTreesTo (O.Map (B.Ab b))
 abLexmap      = Msg.abortableTrees "lexmap"
 
 -- | Ambiguous relmaps

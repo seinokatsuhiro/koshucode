@@ -16,6 +16,7 @@ module Koshucode.Baala.Data.Type.Rel.Rel
     judgesFromRel,
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type.Rel.Head   as D
@@ -68,20 +69,20 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
 -- ----------------------  Sort contents
 
 -- | Sort head and body of relation.
-relSort :: (Ord c) => B.Map (Rel c)
+relSort :: (Ord c) => O.Map (Rel c)
 relSort = relSortBody . relSortHead
 
 -- | Sort head of relation.
-relSortHead :: B.Map (Rel c)
+relSortHead :: O.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
     he' = D.headMap B.sort he
     bo' = D.bodyAlign he' he bo
 
 -- | Sort body of relation.
-relSortBody :: (Ord c) => B.Map (Rel c)
+relSortBody :: (Ord c) => O.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
-relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> B.Map [[c]]
+relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> O.Map [[c]]
 relBodyOrder ns he = ed where
     ed    = B.sortByName ords $ D.getTermNames he
     ords  = map B.orderingCap ns

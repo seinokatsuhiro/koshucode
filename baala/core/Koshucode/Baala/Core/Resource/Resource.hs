@@ -28,6 +28,7 @@ module Koshucode.Baala.Core.Resource.Resource
     global,
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
@@ -114,7 +115,7 @@ resFeature :: Resource c -> C.Feature
 resFeature res = C.globalFeature $ resGlobal res
 
 -- | Add messages.
-resMessagesAdd :: [String] -> B.Map (Resource c)
+resMessagesAdd :: [String] -> O.Map (Resource c)
 resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 
 
@@ -124,16 +125,16 @@ resMessagesAdd msg res = res { resMessage = msg ++ resMessage res }
 type InputQueue = (B.Queue C.InputPoint, [B.NIOPoint])
 
 -- | Map to input queue.
-resQueueMap :: B.Map InputQueue -> B.Map (Resource c)
+resQueueMap :: O.Map InputQueue -> O.Map (Resource c)
 resQueueMap f res@Resource {..} = res { resInputQueue = f resInputQueue }
 
 -- | Add input to todo-part of input queue.
-resQueueTodo :: C.InputPoint -> B.Map (Resource c)
+resQueueTodo :: C.InputPoint -> O.Map (Resource c)
 resQueueTodo t = resQueueMap todo where
     todo (q, done) = (B.enq t q, done)
 
 -- | Add input to done-part of input queue.
-resQueueDone :: B.NIOPoint -> B.Map (Resource c)
+resQueueDone :: B.NIOPoint -> O.Map (Resource c)
 resQueueDone d = resQueueMap push where
     push (q, done) = (q, d:done)
 

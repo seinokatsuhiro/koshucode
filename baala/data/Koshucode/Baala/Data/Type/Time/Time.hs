@@ -26,6 +26,7 @@ module Koshucode.Baala.Data.Type.Time.Time
 
 import qualified Data.Time.Calendar                     as T
 import qualified Data.Time.Calendar.WeekDate            as T
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Data.Type.Time.Clock   as D
 import qualified Koshucode.Baala.Data.Type.Time.Date    as D
@@ -66,14 +67,14 @@ timePrecision (TimeYmd   _)      = "day"
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
-timeMapDay :: B.Map D.MJDay -> B.Map Time
+timeMapDay :: O.Map D.MJDay -> O.Map Time
 timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
 timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
 timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)
 timeMapDay f (TimeYw    d)       = TimeYw    (f d)
 timeMapDay f (TimeYm    d)       = TimeYm    (f d)
 
-timeMapDate :: B.Map D.Date -> B.Map Time
+timeMapDate :: O.Map D.Date -> O.Map Time
 timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
 timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
 timeMapDate f (TimeYmd   d)      = TimeYmd   (f d)
@@ -149,7 +150,7 @@ timeYmdTuple = T.toGregorian . timeDay
 timeFromMjd :: D.DayCount -> Time
 timeFromMjd = timeYmd . T.ModifiedJulianDay
 
-timeMapMjd :: B.Map D.DayCount -> B.Map Time
+timeMapMjd :: O.Map D.DayCount -> O.Map Time
 timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
@@ -180,22 +181,22 @@ timeMapMjd f time = timeMapDay g time where
 --    >>> timeCeilYaer $ timeFromYmd 2014 11 3
 --    TimeYmd 2015-01-01
 
-timeFloorMonth :: B.Map Time
+timeFloorMonth :: O.Map Time
 timeFloorMonth time =
     case timeYmdTuple time of
       (y, m, _) -> timeFromYmd y m 1
 
-timeFloorYear :: B.Map Time
+timeFloorYear :: O.Map Time
 timeFloorYear time =
     case timeYmdTuple time of
       (y, _, _) -> timeFromYmd y 1 1
 
-timeCeilMonth :: B.Map Time
+timeCeilMonth :: O.Map Time
 timeCeilMonth time =
     case timeYmdTuple time of
       (y, m, _) -> timeFromYmdTuple $ monthStep (y, m, 1)
 
-timeCeilYaer :: B.Map Time
+timeCeilYaer :: O.Map Time
 timeCeilYaer time =
     case timeYmdTuple time of
       (y, _, _) -> timeFromYmdTuple $ yearStep (y, 1, 1)
@@ -212,17 +213,17 @@ timeRangeMonth = timeRangeBy monthStep
 timeRangeYear :: B.RangeBy Time
 timeRangeYear = timeRangeBy yearStep
 
-timeRangeBy :: B.Map D.YmdTuple -> B.RangeBy Time
+timeRangeBy :: O.Map D.YmdTuple -> B.RangeBy Time
 timeRangeBy step from to = times where
     dayFrom =  timeYmdTuple from
     dayTo   =  timeYmdTuple to
     times   =  map timeFromYmdTuple $ B.rangeBy step dayFrom dayTo
 
-monthStep :: B.Map D.YmdTuple
+monthStep :: O.Map D.YmdTuple
 monthStep (y, m, d) | m < 12    = (y, m + 1, d)
                     | otherwise = (y + 1, 1, d)
 
-yearStep :: B.Map D.YmdTuple
+yearStep :: O.Map D.YmdTuple
 yearStep (y, m, d)  | y == (-1) = (1, m, d)
                     | otherwise = (y + 1, m, d)
 
@@ -230,22 +231,22 @@ yearStep (y, m, d)  | y == (-1) = (1, m, d)
 -- ----------------------  Add
 
 -- | Add days to time.
-timeAddDay :: D.DayCount -> B.Map Time
+timeAddDay :: D.DayCount -> O.Map Time
 timeAddDay n = timeMapMjd (+ n)
 
 -- | Add weeks to time.
-timeAddWeek :: Integer -> B.Map Time
+timeAddWeek :: Integer -> O.Map Time
 timeAddWeek n = timeAddDay (7 * n)
 
 -- | Add months to time.
-timeAddMonth :: Integer -> B.Map Time
+timeAddMonth :: Integer -> O.Map Time
 timeAddMonth n time = timeFromYmd y' (fromInteger m') d where
     (y, m, d)  = timeYmdTuple time
     (yd, m')   = (toInteger m + n) `divMod` 12
     y'         = y + yd
 
 -- | Add years to time.
-timeAddYear :: D.Year -> B.Map Time
+timeAddYear :: D.Year -> O.Map Time
 timeAddYear n time = timeFromYmd (y + n) m d where
     (y, m, d) = timeYmdTuple time
 

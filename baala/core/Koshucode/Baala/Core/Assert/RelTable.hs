@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Assert.RelTable
 
 import qualified Data.List                    as List
 import qualified Data.Map                     as Map
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
@@ -68,14 +69,14 @@ termMap gRel from f (D.Rel he bo) = accum [] ts bo Map.empty where
 
     ts = D.typeTerms $ D.headType he
 
-    accum :: S.TermPath -> [D.NamedType] -> [[c]] -> B.Map (TermMap a)
+    accum :: S.TermPath -> [D.NamedType] -> [[c]] -> O.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
 
-    column :: S.TermPath -> (D.NamedType, [c]) -> B.Map (TermMap a)
+    column :: S.TermPath -> (D.NamedType, [c]) -> O.Map (TermMap a)
     column path ((n, D.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
     column path ((n, _)            , cs2) m = foldr (add $ n : path) m cs2
 
-    add :: S.TermPath -> c -> B.Map (TermMap a)
+    add :: S.TermPath -> c -> O.Map (TermMap a)
     add path c m = Map.insertWith f path (from c) m
 
     bodies :: [c] -> [[c]]

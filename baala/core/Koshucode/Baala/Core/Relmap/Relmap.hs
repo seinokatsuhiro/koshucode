@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
     relmapNameList,
   ) where
 
+import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
@@ -117,7 +118,7 @@ relmapNameList = relmapList f where
     f (RelmapLink lx) = [C.lexName lx]
     f _ = []
 
-relmapList :: B.Map (Relmap' h c -> [a])
+relmapList :: O.Map (Relmap' h c -> [a])
 relmapList f = loop where
     loop (RelmapAppend rmap1 rmap2)  = loop rmap1 ++ loop rmap2
     loop (RelmapCalc _ _ rmaps)      = concatMap loop rmaps

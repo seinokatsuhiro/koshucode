@@ -17,6 +17,7 @@ module Koshucode.Baala.Data.Type.Time.Date
 import qualified Data.Time.Calendar                as T
 import qualified Data.Time.Calendar.WeekDate       as T
 import qualified Data.Time.Calendar.OrdinalDate    as T
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Type.Message as Msg
 
@@ -98,23 +99,23 @@ dateDay (Monthly day)  = day
 dateDay (Weekly  day)  = day
 dateDay (Yearly  day)  = day
 
-dateMapDay :: B.Map MJDay -> B.Map Date
+dateMapDay :: O.Map MJDay -> O.Map Date
 dateMapDay f (Monthly day)  = Monthly $ f day
 dateMapDay f (Weekly  day)  = Weekly  $ f day
 dateMapDay f (Yearly  day)  = Yearly  $ f day
 
-dateAdd :: (Integral n) => n -> B.Map Date
+dateAdd :: (Integral n) => n -> O.Map Date
 dateAdd d = dateMapDay $ T.addDays (fromIntegral d)
 
 -- | Convert into monthly date.
-monthly :: B.Map Date
+monthly :: O.Map Date
 monthly = Monthly . dateDay
 
 -- | Convert into weekly date.
-weekly :: B.Map Date
+weekly :: O.Map Date
 weekly  = Weekly . dateDay
 
 -- | Convert into yearly date.
-yearly :: B.Map Date
+yearly :: O.Map Date
 yearly  = Yearly . dateDay
 

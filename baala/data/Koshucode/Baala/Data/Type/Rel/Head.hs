@@ -34,6 +34,7 @@ module Koshucode.Baala.Data.Type.Rel.Head
     -- $Mapping
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data.Type.Type    as D
@@ -156,18 +157,18 @@ headTypes _ = B.bug "headTypes"
 --
 
 -- | Add term name to head.
-headCons :: S.TermName -> B.Map Head
+headCons :: S.TermName -> O.Map Head
 headCons n1 = headOf . D.typeConsRel n1 . headType
 
 -- | Add term names to head.
-headAppend :: [S.TermName] -> B.Map Head
+headAppend :: [S.TermName] -> O.Map Head
 headAppend ns1 = headOf . D.typeAppendRel ns1 . headType
 
-headConsNest :: S.TermName -> Head -> B.Map Head
+headConsNest :: S.TermName -> Head -> O.Map Head
 headConsNest n1 Head { headType = t1 } Head { headType = t } =
     headOf $ D.typeConsNest n1 t1 t
 
-headNests :: [S.TermName] -> B.Map Head
+headNests :: [S.TermName] -> O.Map Head
 headNests ns1 Head { headType = t } =
     headOf $ D.TypeRel $ map nest ns1
         where nest n = (n, t)
@@ -186,24 +187,24 @@ headNests ns1 Head { headType = t } =
 --
 
 -- | Reconstruct head.
-headMap :: B.Map [D.NamedType] -> B.Map Head
+headMap :: O.Map [D.NamedType] -> O.Map Head
 headMap = headMapBy D.typeRelMapTerms
 
-headMapName :: B.Map S.TermName -> B.Map Head
+headMapName :: O.Map S.TermName -> O.Map Head
 headMapName = headMapBy D.typeRelMapName
 
-headMapBy :: (a -> B.Map D.Type) -> a -> B.Map Head
+headMapBy :: (a -> O.Map D.Type) -> a -> O.Map Head
 headMapBy g f he = headOf $ g f $ headType he
 
 -- | Move up nested relation.
-headUp :: B.Map Head
+headUp :: O.Map Head
 headUp = headOf . up . headType where
     up (D.TypeRel [(_, ty)]) = ty
     up ty                    = ty
 
-headAlign :: Head -> Head -> B.Map [c]
+headAlign :: Head -> Head -> O.Map [c]
 headAlign to from = B.snipOrder (D.getTermNames to) (D.getTermNames from)
 
-bodyAlign :: Head -> Head -> B.Map [[c]]
+bodyAlign :: Head -> Head -> O.Map [[c]]
 bodyAlign to from = (headAlign to from `map`)
 

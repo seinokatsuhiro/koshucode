@@ -21,6 +21,7 @@ module Koshucode.Baala.Core.Relmap.Construct
     ConsRelmap', consRelmap,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data                  as D
@@ -67,10 +68,10 @@ relmapConfl = C.RelmapCalc . C.medLexmap
 -- ----------------------  Variable
 
 -- | Parent for nested relation references.
-relmapNest :: C.Intmed' h c -> B.Map (C.Relmap' h c)
+relmapNest :: C.Intmed' h c -> O.Map (C.Relmap' h c)
 relmapNest = C.RelmapNest . C.medLexmap
 
-relmapCopy :: C.Intmed' h c -> C.RopName -> B.Map (C.Relmap' h c)
+relmapCopy :: C.Intmed' h c -> C.RopName -> O.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.medLexmap
 
 relmapLink :: C.Intmed' h c -> C.Relmap' h c

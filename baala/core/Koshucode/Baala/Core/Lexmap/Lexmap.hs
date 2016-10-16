@@ -15,6 +15,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     lexAttrTree,
   ) where
 
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 
@@ -57,7 +58,7 @@ lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 lexName :: Lexmap -> RopName
 lexName = S.tokenContent . lexToken
 
-lexAddMessage :: String -> B.Map Lexmap
+lexAddMessage :: String -> O.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
 lexMessageList :: Lexmap -> [String]

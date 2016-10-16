@@ -14,6 +14,7 @@ module Koshucode.Baala.Data.Church.Cop
     CopSet (..), CopFind, copset, copsetFill,
   ) where
 
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data.Church.Cox  as D
@@ -95,7 +96,7 @@ copset :: CopSet c
 copset = CopSet [] [] [] [] [] find find find [] where
     find _ = Nothing
 
-copsetFill :: B.Map (CopSet c)
+copsetFill :: O.Map (CopSet c)
 copsetFill opset = opset2 where
 
     opset2 = opset { copsetFindCalc  =  contFind

@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Resource.Run
 
 import qualified Data.Map.Strict                         as Map
 import qualified Data.Set                                as Set
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -111,7 +112,7 @@ findRelmap ds sec name =
 
 -- ---------------------- Automatic output
 
-autoOutputResource :: (Ord c) => B.Map (C.Resource c)
+autoOutputResource :: (Ord c) => O.Map (C.Resource c)
 autoOutputResource res@C.Resource { C.resJudge  = js
                                   , C.resAssert = ass }
     | null ass && (C.featAutoOutput $ C.resFeature res)

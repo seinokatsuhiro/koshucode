@@ -24,33 +24,34 @@ module Koshucode.Baala.Data.Church.Message
     detailTermRel,
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Syntax.Message       as Msg
 
-abCoxBuild :: S.TTreeTo (B.Map (B.Ab b))
+abCoxBuild :: S.TTreeTo (O.Map (B.Ab b))
 abCoxBuild = Msg.abortableTree "cox-build"
 
-abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxCalc :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abCoxCalc = B.abortable "cox-calc"
 
-abCoxFill :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxFill :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abCoxFill = B.abortable "cox-fill"
 
-abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxIrrep :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abCoxIrrep = B.abortable "cox-irrep"
 
-abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxPosition :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abCoxPosition = B.abortable "cox-position"
 
-abCoxPrefix :: S.TTreeTo (B.Map (B.Ab b))
+abCoxPrefix :: S.TTreeTo (O.Map (B.Ab b))
 abCoxPrefix = Msg.abortableTree "cox-prefix"
 
-abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxReduce :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abCoxReduce = B.abortable "cox-reduce"
 
-abCoxSyntax :: S.TTreeTo (B.Map (B.Ab b))
+abCoxSyntax :: S.TTreeTo (O.Map (B.Ab b))
 abCoxSyntax = Msg.abortableTree "cox-syntax"
 
 -- | Ambiguous infix operators

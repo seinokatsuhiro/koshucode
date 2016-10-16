@@ -13,6 +13,7 @@ module Koshucode.Baala.Data.Church.Run
     getRightArg1, getRightArg2, getRightArg3,
   ) where
 
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data.Type              as D
@@ -101,7 +102,7 @@ reduce = red [] where
 
       vs = map fst args
 
-link :: forall c. D.CopSet c -> [D.NamedCox c] -> B.Map (D.Cox c)
+link :: forall c. D.CopSet c -> [D.NamedCox c] -> O.Map (D.Cox c)
 link copset deriv = li where
     li cox@(D.CoxBlank _ n)   =  B.fromMaybe cox $ find n
     li cox                    =  D.coxCall cox li

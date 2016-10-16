@@ -12,6 +12,7 @@ module Koshucode.Baala.Data.Content.Singleton
     CEnd (..),
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Data.Content.Message as Msg
@@ -41,7 +42,7 @@ maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 maybeEmpty f (Just a)   = f a
 maybeEmpty _ (Nothing)  = empty
 
-omitEmpty :: (CEmpty c) => B.Map [(a, c)]
+omitEmpty :: (CEmpty c) => O.Map [(a, c)]
 omitEmpty = B.omit (isEmpty . snd)
 
 -- | End of everything: the maximum content.

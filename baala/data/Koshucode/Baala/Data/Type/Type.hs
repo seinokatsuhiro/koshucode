@@ -31,6 +31,7 @@ module Koshucode.Baala.Data.Type.Type
     -- $Types
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data.Type.Judge   as D
@@ -141,16 +142,16 @@ typeFlatRel ns = TypeRel $ map term ns where
     term n = (n, TypeAny)
 
 -- | Add term name to relation type.
-typeConsRel :: S.TermName -> B.Map Type
+typeConsRel :: S.TermName -> O.Map Type
 typeConsRel n = typeConsNest n TypeAny
 
 -- | Add term name and type to relation type.
-typeConsNest :: S.TermName -> Type -> B.Map Type
+typeConsNest :: S.TermName -> Type -> O.Map Type
 typeConsNest n t (TypeRel ts) = TypeRel $ (n, t) : ts
 typeConsNest _ _ t = t
 
 -- | Add term names to relation type.
-typeAppendRel :: [S.TermName] -> B.Map Type
+typeAppendRel :: [S.TermName] -> O.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
 typeAppendRel _ t = t
 
@@ -208,16 +209,16 @@ typeRelIndex _ _ = []
 -- ----------------------  Modify
 
 -- | Modify terms of relation type.
-typeRelMapTerms :: B.Map [NamedType] -> B.Map Type
+typeRelMapTerms :: O.Map [NamedType] -> O.Map Type
 typeRelMapTerms f (TypeRel ts) = TypeRel $ f ts
 typeRelMapTerms _ t = t
 
 -- | Modify term of relation type.
-typeRelMapTerm :: B.Map NamedType -> B.Map Type
+typeRelMapTerm :: O.Map NamedType -> O.Map Type
 typeRelMapTerm f t = typeRelMapTerms (map f) t
 
 -- | Modify term name of relation type.
-typeRelMapName :: B.Map S.TermName -> B.Map Type
+typeRelMapName :: O.Map S.TermName -> O.Map Type
 typeRelMapName = typeRelMapTerm . B.mapFst
 
 

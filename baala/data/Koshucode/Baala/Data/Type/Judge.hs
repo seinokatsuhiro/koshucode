@@ -29,6 +29,7 @@ module Koshucode.Baala.Data.Type.Judge
     termsToMix1, termsToMix2,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 
@@ -87,11 +88,11 @@ judgeTermsMap f (JudgeMultiChange c xs xs')  = JudgeChange    c (f xs) (f xs')
 judgeTermsMap f (JudgeViolate     c xs)      = JudgeViolate   c (f xs)
 
 -- | Prepend a term into judgement.
-judgeCons :: S.Term c -> B.Map (Judge c)
+judgeCons :: S.Term c -> O.Map (Judge c)
 judgeCons x = judgeTermsMap (x :)
 
 -- | Sort terms in alphabetical order.
-sortJudgeTerms :: (Ord c) => B.Map (Judge c)
+sortJudgeTerms :: (Ord c) => O.Map (Judge c)
 sortJudgeTerms = judgeTermsMap B.sort
 
 
@@ -109,12 +110,12 @@ deny :: JudgeOf c
 deny = JudgeDeny
 
 -- | Affirm judgement, i.e., change logical quality to affirmative.
-affirmJudge :: B.Map (Judge c)
+affirmJudge :: O.Map (Judge c)
 affirmJudge (JudgeDeny p xs) = JudgeAffirm p xs
 affirmJudge _ = B.bug "affirmJudge"
 
 -- | Deny judgement, i.e., change logical quality to denial.
-denyJudge :: B.Map (Judge c)
+denyJudge :: O.Map (Judge c)
 denyJudge (JudgeAffirm p xs) = JudgeDeny p xs
 denyJudge _ = B.bug "denyJudge"
 

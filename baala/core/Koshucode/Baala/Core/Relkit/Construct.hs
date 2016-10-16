@@ -22,6 +22,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     a2lookup,
   ) where
 
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Data                as D
@@ -43,7 +44,7 @@ relkitJust ho = relkit $ Just ho
 relkitNothing :: C.Relkit c
 relkitNothing = relkit Nothing C.RelkitId
 
-relkitSetSource :: (B.CodePtr a) => a -> B.Map (C.Relkit c)
+relkitSetSource :: (B.CodePtr a) => a -> O.Map (C.Relkit c)
 relkitSetSource src (C.Relkit hi ho (B.Sourced _ core)) =
     C.Relkit hi ho $ B.Sourced (B.codePtList src) core
 
@@ -77,10 +78,10 @@ relkitSource p ns = relkitJust he kit where
 
 -- ----------------------  Relation reference
 
-relkitCopy :: S.Token -> String -> B.Map (C.Relkit c)
+relkitCopy :: S.Token -> String -> O.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
-relkitNest :: S.Token -> [(String, Int)] -> B.Map (C.Relkit c)
+relkitNest :: S.Token -> [(String, Int)] -> O.Map (C.Relkit c)
 relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 
 relkitNestVar :: S.Token -> String -> D.Head -> C.Relkit c

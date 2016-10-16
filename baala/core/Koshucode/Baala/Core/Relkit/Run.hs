@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Relkit.Run
     bmapAlign,
   ) where
 
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
@@ -18,15 +19,15 @@ import qualified Koshucode.Baala.Core.Relkit.Construct  as C
 import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
 import qualified Koshucode.Baala.Core.Relkit.Message    as Msg
 
-relkitLink :: forall c. (Ord c) => C.RelkitTable c -> B.Map (C.Relkit c)
+relkitLink :: forall c. (Ord c) => C.RelkitTable c -> O.Map (C.Relkit c)
 relkitLink kits = linkKit where
-    linkKit :: B.Map (C.Relkit c)
+    linkKit :: O.Map (C.Relkit c)
     linkKit (C.Relkit hi ho bo) = C.Relkit hi ho $ link bo
 
     kitsRec :: C.RelkitTable c
     kitsRec = linkKit `B.mapSndTo` kits
 
-    link :: B.Map (C.RelkitBody c)
+    link :: O.Map (C.RelkitBody c)
     link (B.Sourced src core) =
         B.Sourced src $
          case core of
@@ -105,12 +106,12 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, D.relBody $ D.gRel $ cs !! ind)
 
-fixedRelation :: (Ord c) => B.Map (B.AbMap [[c]])
+fixedRelation :: (Ord c) => O.Map (B.AbMap [[c]])
 fixedRelation f = fix where
     fix bo1 = do bo2 <- f bo1
                  if bo1 == bo2 then Right bo2 else fix bo2
 
-bmapAlign :: D.Head -> D.Head -> B.Map (B.AbMap [[c]])
+bmapAlign :: D.Head -> D.Head -> O.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
                Right $ D.bodyAlign he1 he2 bo2

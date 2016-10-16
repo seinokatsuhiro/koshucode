@@ -11,18 +11,19 @@ module Koshucode.Baala.Core.Relmap.Message
     disabledOutputClause,
   ) where
 
+import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Data.Message  as Msg
 
-abOption :: S.TTreesTo (B.Map (B.Ab b))
+abOption :: S.TTreesTo (O.Map (B.Ab b))
 abOption = Msg.abortableTrees "option"
 
-abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abRelmap :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
 
-abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abSpecialize :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
 
 unkNestVar :: String -> [S.Token] -> [((S.Token, S.Local String), D.Head)] -> B.Ab a
@@ -37,7 +38,7 @@ unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
           indent    = ("  " ++)
           term      = ('/' :)
 
-quote :: B.Map String
+quote :: O.Map String
 quote s = "'" ++ s ++ "'"
 
 tokenAtPoint :: S.Token -> String

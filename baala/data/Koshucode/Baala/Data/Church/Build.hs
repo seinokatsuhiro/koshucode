@@ -34,9 +34,9 @@ coxBuild calc copset =
       findTree = D.copsetFindTree  copset
       htab     = D.copsetInfixList copset
 
-debruijn :: B.Map (D.Cox c)
+debruijn :: O.Map (D.Cox c)
 debruijn = index [] where
-    index :: [String] -> B.Map (D.Cox c)
+    index :: [String] -> O.Map (D.Cox c)
     index vars cox = case cox of
        D.CoxBlank cp n     -> let v = B.name n
                               in maybe cox (D.CoxLocal cp v) $ indexFrom 1 v vars
@@ -50,9 +50,9 @@ indexFrom origin key = loop origin where
     loop i (x:xs) | x == key  = Just i
                   | otherwise = loop (i + 1) xs
 
-coxUnfold :: B.Map (D.Cox c)
+coxUnfold :: O.Map (D.Cox c)
 coxUnfold = unfold . D.coxMap coxUnfold where
-    unfold :: B.Map (D.Cox c)
+    unfold :: O.Map (D.Cox c)
     unfold cox = case cox of
         D.CoxForm _ _ [] b -> unfold b
         D.CoxForm cp tag (v : vs) b
@@ -156,7 +156,7 @@ prefix htab tree =
        Left  xs    -> Msg.ambInfixes $ map detail xs
     where
       conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
-      c :: (String -> S.BlankName) -> B.Map S.Token
+      c :: (String -> S.BlankName) -> O.Map S.Token
       c f (S.TTextRaw cp s) = S.TName cp $ f s
       c _ x = x
 
@@ -182,7 +182,7 @@ mapper f = loop where
            Right $ B.TreeB S.BracketForm p1 [vs, undoubleGroup $ B.TreeB S.BracketGroup p2 body']
     loop tree = Right tree
 
-undoubleGroup :: B.Map (B.CodeTree S.BracketType a)
+undoubleGroup :: O.Map (B.CodeTree S.BracketType a)
 undoubleGroup = B.undouble (== S.BracketGroup)
 
 -- expand tree-level syntax
@@ -208,7 +208,7 @@ convTree find = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePt] -> D.CoxTag -> [String] -> B.Map (D.Cox c)
+coxForm :: [B.CodePt] -> D.CoxTag -> [String] -> O.Map (D.Cox c)
 coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . D.CoxForm cp0 tag vs where
     n = length vs
     outside vars cox = case cox of

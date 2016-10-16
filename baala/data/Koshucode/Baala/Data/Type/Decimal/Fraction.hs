@@ -31,6 +31,7 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
   ) where
 
 import qualified Data.Ratio                                  as R
+import qualified Koshucode.Baala.Overture                    as O
 import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
@@ -41,11 +42,11 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
 -- ----------------------  Integer and fraction
 
 -- | Integer part of decimals.
-decimalIntPart :: B.Map D.Decimal
+decimalIntPart :: O.Map D.Decimal
 decimalIntPart = fst . decimalIntFrac
 
 -- | Fractional part of decimals.
-decimalFracPart :: B.Map D.Decimal
+decimalFracPart :: O.Map D.Decimal
 decimalFracPart = snd . decimalIntFrac
 
 decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
@@ -73,7 +74,7 @@ updateDecimal d l r = d { D.decimalFracle = l
 -- ----------------------  Round
 
 -- | Round decimal per self fractional length.
-decimalRound :: B.Map D.Decimal
+decimalRound :: O.Map D.Decimal
 decimalRound d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundAt l r
 
@@ -93,7 +94,7 @@ decimalRoundPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
 -- ----------------------  Round to even
 
 -- | Round decimal to even per self fractional length.
-decimalRoundEven :: B.Map D.Decimal
+decimalRoundEven :: O.Map D.Decimal
 decimalRoundEven d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundEvenAt l r
 
@@ -113,7 +114,7 @@ decimalRoundEvenPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
 -- ----------------------  Truncate
 
 -- | Truncate decimal per self fractional length.
-decimalTrunc :: B.Map D.Decimal
+decimalTrunc :: O.Map D.Decimal
 decimalTrunc d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncAt l r
 
@@ -131,14 +132,14 @@ decimalTruncPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
     updateDecimal d l $ D.ratioTruncPer per r
 
 -- | Truncation error of decimal.
-decimalTruncError :: B.Map D.Decimal
+decimalTruncError :: O.Map D.Decimal
 decimalTruncError d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d (l + 1) (r `D.ratioRem` D.ratioFracle l)
 
 -- ----------------------  Round out
 
 -- | Round out (toward infinity) decimal to even per self fractional length.
-decimalRoundOut :: B.Map D.Decimal
+decimalRoundOut :: O.Map D.Decimal
 decimalRoundOut d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundOutAt l r
 
@@ -158,7 +159,7 @@ decimalRoundOutPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
 -- ----------------------  Floor
 
 -- | Floor decimal per self fractional length.
-decimalFloor :: B.Map D.Decimal
+decimalFloor :: O.Map D.Decimal
 decimalFloor d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioFloorAt l r
 
@@ -178,7 +179,7 @@ decimalFloorPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
 -- ----------------------  Ceil
 
 -- | Ceiling decimal per self fractional length.
-decimalCeil :: B.Map D.Decimal
+decimalCeil :: O.Map D.Decimal
 decimalCeil d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioCeilAt l r
 

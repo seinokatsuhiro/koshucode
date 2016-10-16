@@ -23,6 +23,7 @@ module Koshucode.Baala.Data.Type.Time.Clock
     clockRangeBy, clockStep,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type.Time.Date     as D
 import qualified Koshucode.Baala.Base.Message            as Msg
@@ -114,7 +115,7 @@ clockDhms clock =
       sec             = abs $ clockSec clock
       (d, h, m, s)    = dhmsFromSec $ abs sec
 
-clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> B.Map Clock
+clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> O.Map Clock
 clockAlter d' h' m' s' clock =
     case clockDhms clock of
       (d, Just h,  Just m,  Just s)  -> clockFromDhms (d' ! d) (h' ! h) (m' ! m) (s' ! s)
@@ -143,7 +144,7 @@ clockBodyToMix c = body $ clockPos c where
     body (ClockDh   day sec)  = sign $ daySecToMix dhToMix   day sec
     body (ClockD    day)      = sign $ dayToMix day
 
-signToMix :: Int -> B.Map B.MixText
+signToMix :: Int -> O.Map B.MixText
 signToMix (-1) m = B.mixString "-" B.<> m
 signToMix _    m = m
 
@@ -181,7 +182,7 @@ dayToMix d = B.mixDec d B.<> B.mixString "'"
 -- | Type for abortable binary operator.
 type AbBin a  = a -> a -> B.Ab a
 
-clockMap :: B.Map DayCount -> B.Map Sec -> B.Map Clock
+clockMap :: O.Map DayCount -> O.Map Sec -> O.Map Clock
 clockMap f g (ClockDhms d s)  = adjust ClockDhms (f d) (g s)
 clockMap f g (ClockDhm  d s)  = adjust ClockDhm  (f d) (g s)
 clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
@@ -211,11 +212,11 @@ adjust k d s = let (d', s')  = s `divMod` daySeconds
 -- ----------------------  Calculation
 
 -- | Convert clock to positive clock.
-clockPos :: B.Map Clock
+clockPos :: O.Map Clock
 clockPos = clockMap abs abs
 
 -- | Convert clock to negative clock.
-clockNeg :: B.Map Clock
+clockNeg :: O.Map Clock
 clockNeg = clockMap neg neg
 
 neg :: (Ord a, Num a) => a -> a
@@ -223,15 +224,15 @@ neg a | a > 0      = - a
       | otherwise  = a
 
 -- | Set day-count to zero.
-clockCutDay :: B.Map Clock
+clockCutDay :: O.Map Clock
 clockCutDay = clockMap (const 0) id
 
 -- | Add day-count.
-clockAddDay :: DayCount -> B.Map Clock
+clockAddDay :: DayCount -> O.Map Clock
 clockAddDay d = clockMap (+ d) id
 
 -- | Add second.
-clockAddSec :: Sec -> B.Map Clock
+clockAddSec :: Sec -> O.Map Clock
 clockAddSec s = clockMap id (+ s)
 
 -- | Calculation of clock plus clock.
@@ -242,19 +243,19 @@ clockAdd = clockMap2 (+) (+)
 clockSub :: AbBin Clock
 clockSub = clockMap2 (-) (-)
 
-clockTimes :: Int -> B.Map Clock
+clockTimes :: Int -> O.Map Clock
 clockTimes m = clockMap (* (toInteger m)) (* m)
 
 
 -- ----------------------  Range
 
-clockRangeBy :: B.Map (DayCount, Sec) -> B.RangeBy Clock
+clockRangeBy :: O.Map (DayCount, Sec) -> B.RangeBy Clock
 clockRangeBy step from to = clocks where
     from'  =  clockTuple from
     to'    =  clockTuple to
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
 
-clockStep :: Sec -> B.Map (DayCount, Sec)
+clockStep :: Sec -> O.Map (DayCount, Sec)
 clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` daySeconds
                        in (d + toInteger d', s')
 

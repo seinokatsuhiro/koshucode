@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Relmap.Specialize
     RelmapLinkTable',
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
@@ -90,7 +91,7 @@ relmapSpecialize hook links = spec [] [] where
                     n   = C.lexName   lx
                     ps  = S.tokenParents tok
 
-        post :: C.Lexmap -> B.Map (B.Ab (C.RelkitTable c, C.Relkit c))
+        post :: C.Lexmap -> O.Map (B.Ab (C.RelkitTable c, C.Relkit c))
         post lx result =
             Msg.abSpecialize [lx] $ do
                (kdef2, kit) <- result

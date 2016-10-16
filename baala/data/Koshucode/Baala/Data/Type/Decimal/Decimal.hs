@@ -40,6 +40,7 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
   ) where
 
 import qualified Data.Ratio                        as R
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 
 
@@ -72,7 +73,7 @@ decimalFracleSet :: DecimalFracle -> B.AbMap Decimal
 decimalFracleSet f d@Decimal {..} = Right $ d { decimalFracle = f }
 
 -- | Map function to rational number in decimal.
-decimalRatioMap :: B.Map DecimalRatio -> B.Map Decimal
+decimalRatioMap :: O.Map DecimalRatio -> O.Map Decimal
 decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 
 
