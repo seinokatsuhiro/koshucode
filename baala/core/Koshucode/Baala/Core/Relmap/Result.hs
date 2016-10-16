@@ -1,5 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Result of relational calculation.
@@ -23,6 +22,7 @@ module Koshucode.Baala.Core.Relmap.Result
   ) where
 
 import qualified System.IO                         as IO
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -81,6 +81,21 @@ type ShortResultChunks c = S.Short [ResultChunk c]
 resultChunkJudges :: ResultChunk c -> [D.Judge c]
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
+
+shortChunkJudges :: [ShortResultChunks c] -> [D.Judge c]
+shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody
+
+resultShortChunks :: Result c -> O.Eith [ShortResultChunks c]
+resultShortChunks Result {..}
+    | null violated = Right normal
+    | otherwise     = Left  violated
+    where
+      normal    = resultNormal
+      violated  = S.shortTrim $ B.map2 (filter hasJudge) resultViolated
+
+      hasJudge :: ResultChunk c -> Bool
+      hasJudge (ResultJudge js)  = B.notNull js
+      hasJudge _                 = False
 
 
 -- ----------------------  Writer
@@ -143,18 +158,11 @@ putResult result =
       output -> B.bug $ "putResult " ++ show output
 
 -- | Print result of calculation, and return status.
-hPutResult :: forall c. IO.Handle -> Result c -> IO B.ExitCode
-hPutResult h result
-    | null violated  = hPutAllChunks h result (B.exitCode 0) normal
-    | otherwise      = hPutAllChunks h result (B.exitCode 1) violated
-    where
-      normal, violated :: [ShortResultChunks c]
-      normal    = resultNormal result
-      violated  = S.shortTrim $ B.map2 (filter hasJudge) $ resultViolated result
-
-      hasJudge :: ResultChunk c -> Bool
-      hasJudge (ResultJudge js)  = B.notNull js
-      hasJudge _                 = False
+hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
+hPutResult h result =
+    case resultShortChunks result of
+      Right sh  -> hPutAllChunks h result (B.exitCode 0) sh
+      Left  sh  -> hPutAllChunks h result (B.exitCode 1) sh
 
 hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
@@ -162,8 +170,4 @@ hPutAllChunks h result status sh =
        case resultWriter result of
          ResultWriterRaw   _ w  -> w h result status ()
          ResultWriterChunk _ w  -> w h result status sh
-         ResultWriterJudge _ w  -> w h result status $ judges sh
-    where
-      judges :: [ShortResultChunks c] -> [D.Judge c]
-      judges = concatMap resultChunkJudges . concatMap S.shortBody
-
+         ResultWriterJudge _ w  -> w h result status $ shortChunkJudges sh
