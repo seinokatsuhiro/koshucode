@@ -9,14 +9,15 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   -- $koshu.hs
   ) where
 
-import qualified Data.Time              as T
-import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Data   as D
-import qualified Koshucode.Baala.Core   as C
-import qualified Koshucode.Baala.Writer as W
-import qualified Koshucode.Baala.Base.IO.SimpleOption          as Opt
-import qualified Koshucode.Baala.Toolkit.Library.Element       as L
-import qualified Koshucode.Baala.Toolkit.Library.Run           as L
+import qualified Data.Time                  as T
+import qualified Koshucode.Baala.Overture   as O
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Data       as D
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Writer     as W
+import qualified Koshucode.Baala.Base.IO.SimpleOption     as Opt
+import qualified Koshucode.Baala.Toolkit.Library.Element  as L
+import qualified Koshucode.Baala.Toolkit.Library.Run      as L
 
 
 -- Flow
@@ -102,7 +103,7 @@ initParam (Right (opts, args)) =
       -- replace "||" to "\n"
       oneLiner :: B.Map String
       oneLiner []               = []
-      oneLiner ('|' : '|' : xs) = '\n' : oneLiner (B.trimLeft xs)
+      oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimLeft xs)
       oneLiner (x : xs)         = x : oneLiner xs
 
 

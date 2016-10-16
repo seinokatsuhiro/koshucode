@@ -85,7 +85,7 @@ lookup' n ass = snd <$> filter eq ass where
     eq (n', _) = n == n'
 
 trimIf :: Bool -> String -> String
-trimIf True  t = B.trimBoth t
+trimIf True  t = O.trimBoth t
 trimIf False t = t
 
 
@@ -190,7 +190,7 @@ parseSubtext ns = trees False where
     times [ K a                ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
-    int s = case B.readInt s of
+    int s = case O.readInt s of
               Just n   -> n
               Nothing  -> error "require integer"
 

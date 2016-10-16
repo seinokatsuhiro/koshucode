@@ -9,6 +9,7 @@ module Koshucode.Baala.Writer.Koshu
 
 import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Syntax              as S
@@ -35,8 +36,8 @@ hPutKoshu h result status sh =
 hPutHead :: IO.Handle -> C.Result c -> IO ()
 hPutHead h result =
     do IO.hPutStrLn h B.emacsModeComment
-       B.hPutLines  h $ B.texts $ comm inputs
-       B.hPutEmptyLine h
+       O.hPutLines  h $ B.texts $ comm inputs
+       O.hPutEmptyLine h
     where
       inputs = C.inputPoint  `map` C.resultInput result
       itext  = B.ioPointText `map` inputs
@@ -52,22 +53,22 @@ hPutLicense h C.Result { C.resultLicense = ls }
     | null ls    = return ()
     | otherwise  = do mapM_ put ls
                       IO.hPutStrLn h "=== rel"
-                      B.hPutEmptyLine h
+                      O.hPutEmptyLine h
     where
       put license =
           do IO.hPutStrLn h "=== license"
-             B.hPutEmptyLine h
-             B.hPutLines h license
-             B.hPutEmptyLine h
+             O.hPutEmptyLine h
+             O.hPutLines h license
+             O.hPutEmptyLine h
 
 hPutEcho :: IO.Handle -> C.Result c -> IO ()
 hPutEcho h result =
     do let echo = C.resultEcho result
-       B.hPutLines h $ concat echo
-       B.when (echo /= []) $ B.hPutEmptyLine h
+       O.hPutLines h $ concat echo
+       B.when (echo /= []) $ O.hPutEmptyLine h
 
 hPutFoot :: IO.Handle -> B.ExitCode -> W.JudgeCount -> IO ()
-hPutFoot h status cnt = B.hPutLines h $ W.judgeSummary status cnt
+hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
 
 
 -- ----------------------  Chunk
@@ -80,11 +81,11 @@ hPutShortChunk h result cnt (S.Short _ def output) =
 hPutShort :: IO.Handle -> [S.ShortDef] -> IO ()
 hPutShort _ [] = return ()
 hPutShort h def =
-    do B.hPutLines h $ "short" : map shortLine def
-       B.hPutEmptyLine h
+    do O.hPutLines h $ "short" : map shortLine def
+       O.hPutEmptyLine h
     where
       shortLine :: (String, String) -> String
-      shortLine (a, b) = "  " ++ B.padRight width a ++
+      shortLine (a, b) = "  " ++ O.padRight width a ++
                          " "  ++ show b
       width :: Int
       width = maximum $ map (length . fst) def
@@ -106,9 +107,9 @@ hPutChunks h result sh = loop where
 hPutNote :: IO.Handle -> [String] -> IO ()
 hPutNote h ls =
     do IO.hPutStrLn    h "=== note"
-       B.hPutEmptyLine h
-       B.hPutLines     h ls
-       B.hPutEmptyLine h
+       O.hPutEmptyLine h
+       O.hPutLines     h ls
+       O.hPutEmptyLine h
        IO.hPutStrLn    h "=== rel"
-       B.hPutEmptyLine h
+       O.hPutEmptyLine h
 

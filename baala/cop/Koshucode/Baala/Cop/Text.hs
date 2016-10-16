@@ -237,13 +237,13 @@ wordList c
 -- ----------------------  trim
 
 copTrimBegin :: (D.CContent c) => D.CopCalc c
-copTrimBegin = copTrimBy B.trimLeft
+copTrimBegin = copTrimBy O.trimLeft
 
 copTrimEnd :: (D.CContent c) => D.CopCalc c
-copTrimEnd = copTrimBy B.trimRight
+copTrimEnd = copTrimBy O.trimRight
 
 copTrimBoth :: (D.CContent c) => D.CopCalc c
-copTrimBoth = copTrimBy B.trimBoth
+copTrimBoth = copTrimBy O.trimBoth
 
 copTrimBy :: (D.CContent c) => B.Map String -> D.CopCalc c
 copTrimBy f arg =

@@ -8,6 +8,7 @@ module Koshucode.Baala.Syntax.Attr.Slot
     substSlot,
   ) where
 
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.TTree           as S
 import qualified Koshucode.Baala.Syntax.Token           as S
@@ -41,7 +42,7 @@ substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
 
     pos :: [S.TTree] -> String -> B.Ab [S.TTree]
     pos od "all" = Right od
-    pos od n     = case B.readInt n of
+    pos od n     = case O.readInt n of
                      Just i  -> Right . B.li1 =<< od `at` i
                      Nothing -> Msg.noSlotName 0 n
 

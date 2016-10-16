@@ -59,7 +59,7 @@ import qualified Data.Text.Encoding                   as Tx
 import qualified Data.Text.Lazy                       as Tz
 import qualified Data.Text.Lazy.Encoding              as Tz
 import qualified System.IO                            as IO
-import qualified Koshucode.Baala.Base.Text.Utility    as B
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.Text.LineBreak  as B
 
 
@@ -139,7 +139,7 @@ mixChar c = mixString [c]
 --   MixText "abc......."
 
 mixLeft :: Char -> Int -> MixText -> MixText
-mixLeft c n mx = mixString $ B.padRightWith c n $ mixToStringDef mx
+mixLeft c n mx = mixString $ O.padRightWith c n $ mixToStringDef mx
 
 -- | Put mix text to right edge in given-length char sequence.
 --
@@ -147,7 +147,7 @@ mixLeft c n mx = mixString $ B.padRightWith c n $ mixToStringDef mx
 --   MixText ".......abc"
 
 mixRight :: Char -> Int -> MixText -> MixText
-mixRight c n mx = mixString $ B.padLeftWith c n $ mixToStringDef mx
+mixRight c n mx = mixString $ O.padLeftWith c n $ mixToStringDef mx
 
 -- ----------------------  Space
 
@@ -394,7 +394,7 @@ mixBuildBody auto hard = (<<) where
     bld << MixBz b         = cat bld (bzWidth b)       $ B.lazyByteString b
     bld << MixTx t         = cat bld (txWidth t)       $ Tx.encodeUtf8Builder t
     bld << MixTz t         = cat bld (tzWidth t)       $ Tz.encodeUtf8Builder t
-    bld << MixString s     = cat bld (B.stringWidth s) $ B.stringUtf8 s
+    bld << MixString s     = cat bld (O.stringWidth s) $ B.stringUtf8 s
     bld << MixSpace s'     = space bld s'
     bld << MixNewline b    = nl b bld
     bld << MixEmpty        = bld
@@ -432,5 +432,5 @@ continueBuilder :: B.LineBreak -> B.Builder
 continueBuilder B.LineBreak { B.breakContinue = nl } = B.stringUtf8 nl
 
 indentBuilder :: B.LineBreak -> (B.Builder, Int)
-indentBuilder B.LineBreak { B.breakIndent = i } = (B.stringUtf8 i, B.stringWidth i)
+indentBuilder B.LineBreak { B.breakIndent = i } = (B.stringUtf8 i, O.stringWidth i)
 

@@ -9,6 +9,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
   ) where
 
 import qualified System.Console.GetOpt                   as G
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -123,7 +124,7 @@ dumpCode :: Bool -> FilePath -> String -> IO ()
 dumpCode omit path code = 
     f $ S.tokenLines (B.NIOPoint 0 $ B.IOPointFile "" path) code
     where f ts = do let cs = C.consClause [] 0 ts
-                    B.putLines $ B.texts $ dumpDesc path
+                    O.putLines $ B.texts $ dumpDesc path
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline
 
@@ -135,7 +136,7 @@ dumpClause omit (clseq, c) =
     do let src = C.clauseSource $ C.clauseHead c
            ls  = B.clauseLines src
        putNewline
-       B.putLines $ map comment ls
+       O.putLines $ map comment ls
        putNewline
        putJudge $ judgeClause clseq c
        dumpLine clseq ls
@@ -159,7 +160,7 @@ dumpToken omit (B.CodeLine ln _ toks) =
 
 dumpDict :: IO ()
 dumpDict =
-    do B.putLines $ B.texts descDict
+    do O.putLines $ B.texts descDict
        putNewline
        putJudges judgesClauseType
        putNewline

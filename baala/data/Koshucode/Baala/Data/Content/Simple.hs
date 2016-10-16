@@ -17,6 +17,7 @@ module Koshucode.Baala.Data.Content.Simple
     CText (..), pMaybeText,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Content.Singleton  as D
@@ -146,6 +147,6 @@ class (D.CTypeOf c) => CText c where
     putText     =    Right . pText
 
 pMaybeText :: (CText c, D.CEmpty c) => String -> c
-pMaybeText s | B.trimLeft s == "" = D.empty
+pMaybeText s | O.trimLeft s == "" = D.empty
              | otherwise          = pText s
 

@@ -198,7 +198,7 @@ nipBar cp = bar where
         | c == '|'                   = bar cs (c:w)
         | w == "|" && isJudge c      = judge cs [c, '|']
         | w == "|" && isSymbol c     = clock cs [c, '|']
-    bar cs w                         = let cs' = B.trimLeft cs
+    bar cs w                         = let cs' = O.trimLeft cs
                                        in (cs', S.TTextRaw cp w)
 
     -- read judgement sign, like |--, |-x

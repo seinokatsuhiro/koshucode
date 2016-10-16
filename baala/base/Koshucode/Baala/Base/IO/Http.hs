@@ -14,7 +14,6 @@ import qualified Network.HTTP.Types.Status          as H
 import qualified Network.URI                        as URI
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Text.Utility  as B
 
 -- | URI.
 type UriText = String
@@ -49,7 +48,7 @@ requestFromURI proxies uriText =
           Just $ H.addProxy host' port req
 
 uriPortNumber :: String -> Int
-uriPortNumber (':' : n) = B.fromMaybe defaultPortNumber $ B.readInt n
+uriPortNumber (':' : n) = B.fromMaybe defaultPortNumber $ O.readInt n
 uriPortNumber _         = defaultPortNumber
 
 defaultPortNumber :: Int

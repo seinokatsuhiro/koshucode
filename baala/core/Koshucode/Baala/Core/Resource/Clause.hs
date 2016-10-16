@@ -14,6 +14,7 @@ module Koshucode.Baala.Core.Resource.Clause
   ) where
 
 import qualified Data.Char                              as Char
+import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
@@ -162,7 +163,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         | k == "****"               = clause    $ empty
     dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
     dispatch []                     = clause    $ empty
-    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ B.trimRight ln
+    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ O.trimRight ln
     dispatch _                      = clause    $ CUnknown $ unkAtStart []
 
     -- Return form

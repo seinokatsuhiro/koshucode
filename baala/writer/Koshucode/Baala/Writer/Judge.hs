@@ -14,6 +14,7 @@ module Koshucode.Baala.Writer.Judge
 
 import Data.Monoid ((<>))
 import qualified Data.Map                            as Map
+import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
@@ -36,7 +37,7 @@ hPutJudgesWith :: (B.MixShortEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixIdEncode js $ judgeCountMix []
        B.hPutMix D.judgeBreak h mx
-       B.hPutLines h $ judgeSummary status (cnt, tab)
+       O.hPutLines h $ judgeSummary status (cnt, tab)
        return status
 
 -- | Edit judgements to mix text.
@@ -97,7 +98,7 @@ judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Generate judgement counter comment.
 --
---  >>> B.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--  >>> O.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 --  **
 --  **  SUMMARY
 --  **       3 judges on A
@@ -120,7 +121,7 @@ judgeSummary status (_, tab) = B.texts sumDoc where
     sumOf :: Map.Map a Int -> Int
     sumOf = Map.foldr (+) 0
 
-    countPad = B.padLeft 11 . count
+    countPad = O.padLeft 11 . count
 
 count :: Int -> String
 count 0  = "no judges"

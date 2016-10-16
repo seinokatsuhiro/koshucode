@@ -40,7 +40,7 @@ uncons3 z f = first where
     third a b bs []         = f 2 a b z bs [] []
 
 charCodes :: S.InputText -> Maybe [Int]
-charCodes = mapM B.readInt . B.omit null . B.divide '-'
+charCodes = mapM O.readInt . B.omit null . B.divide '-'
 
 rv :: O.Map [a]
 rv = reverse

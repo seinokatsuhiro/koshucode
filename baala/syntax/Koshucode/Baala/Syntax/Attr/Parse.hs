@@ -7,6 +7,7 @@ module Koshucode.Baala.Syntax.Attr.Parse
     parseParaSpec,
   ) where
 
+import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax.Para          as S
 import qualified Koshucode.Baala.Syntax.Attr.Attr     as S
@@ -104,7 +105,7 @@ parseParaSpec = multi where
     multi     = map single . divide '|'
 
     single s  = case divide ':' s of
-                  [n, l]   -> (Just $ B.trimBoth n, layout l)
+                  [n, l]   -> (Just $ O.trimBoth n, layout l)
                   [l]      -> (Nothing, layout l)
                   _        -> paraBug "neither T:L/L" s
 
