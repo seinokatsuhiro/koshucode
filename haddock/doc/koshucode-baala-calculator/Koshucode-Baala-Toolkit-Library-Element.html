@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-calculator-0.162.0.0: A portable relational calculator</p
+      >koshucode-baala-calculator-0.163.0.0: A portable relational calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Toolkit.Library.Element</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Elements of data resource.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -86,105 +94,98 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Retrive constituents of sections.</p
+	    >Retrive elements of data resource.
+   This function may output judges of the following classes.</p
+	    ><dl
+	    ><dt
+	      ><code
+		>KOSHU-AFFIRM</code
+		></dt
+	      ><dd
+	      >There is affirmed relmap for class <code
+		>/pat</code
+		>
+     in the resource <code
+		>/res</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-DENY</code
+		></dt
+	      ><dd
+	      >There is denied relmap for class <code
+		>/pat</code
+		>
+     in the resource <code
+		>/res</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-JUDGE-TERM</code
+		></dt
+	      ><dd
+	      >In the resource <code
+		>/res</code
+		>,
+     there are judges of class <code
+		>/pat</code
+		>
+     with term named <code
+		>/name</code
+		> having <code
+		>/content</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-RELMAP-NAME</code
+		></dt
+	      ><dd
+	      >There is a relmap named <code
+		>/name</code
+		> in the resource <code
+		>/res</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-RELMAP-REF</code
+		></dt
+	      ><dd
+	      >Relmap <code
+		>/name</code
+		> in the resource <code
+		>/res</code
+		>
+     refers the other relmap <code
+		>/ref</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-RELMAP-ROP</code
+		></dt
+	      ><dd
+	      >Relmap <code
+		>/name</code
+		> in the resource <code
+		>/res</code
+		>
+     uses the relmap operator <code
+		>/rop</code
+		>.</dd
+	      ><dt
+	      ><code
+		>KOSHU-RELMAP-SOURCE</code
+		></dt
+	      ><dd
+	      >Judges of class <code
+		>/pat</code
+		> with terms <code
+		>/terms</code
+		>
+     are read from the resource <code
+		>/res</code
+		>.</dd
+	      ></dl
 	    ></div
-	  ></div
-	><div class="doc"
-	><p
-	  ><code
-	    ><a href="Koshucode-Baala-Toolkit-Library-Element.html#v:resourceElem"
-	      >resourceElem</a
-	      ></code
-	    > may output judges of the following patterns.</p
-	  ><dl
-	  ><dt
-	    ><code
-	      >KOSHU-AFFIRM</code
-	      ></dt
-	    ><dd
-	    >There is affirmed relmap for pattern <code
-	      >/pat</code
-	      >
-   in the resource <code
-	      >/res</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-DENY</code
-	      ></dt
-	    ><dd
-	    >There is denied relmap for pattern <code
-	      >/pat</code
-	      >
-   in the resource <code
-	      >/res</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-JUDGE-TERM</code
-	      ></dt
-	    ><dd
-	    >In the resource <code
-	      >/res</code
-	      >,
-   there are judges of pattern <code
-	      >/pat</code
-	      >
-   with term named <code
-	      >/name</code
-	      > having <code
-	      >/content</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-RELMAP-NAME</code
-	      ></dt
-	    ><dd
-	    >There is a relmap named <code
-	      >/name</code
-	      > in the resource <code
-	      >/res</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-RELMAP-REF</code
-	      ></dt
-	    ><dd
-	    >Relmap <code
-	      >/name</code
-	      > in the resource <code
-	      >/res</code
-	      >
-   refers the other relmap <code
-	      >/ref</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-RELMAP-ROP</code
-	      ></dt
-	    ><dd
-	    >Relmap <code
-	      >/name</code
-	      > in the resource <code
-	      >/res</code
-	      >
-   uses the relmap operator <code
-	      >/rop</code
-	      >.</dd
-	    ><dt
-	    ><code
-	      >KOSHU-RELMAP-SOURCE</code
-	      ></dt
-	    ><dd
-	    >Judges of pattern <code
-	      >/pat</code
-	      > with terms <code
-	      >/terms</code
-	      >
-   are read from the resource <code
-	      >/res</code
-	      >.</dd
-	    ></dl
 	  ></div
 	></div
       ></div

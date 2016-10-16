@@ -9,22 +9,34 @@
 --   <a>koshu</a> command. <a>koshu</a> reads koshucode data, calculates
 --   it, and writes the result.
 @package koshucode-baala-calculator
-@version 0.162.0.0
+@version 0.163.0.0
 
+
+-- | Version number.
 module Koshucode.Baala.Toolkit.Library.Version
+
+-- | Version number of the Koshucode calculator.
 version :: Version
+
+-- | String representation of the version number.
 versionString :: String
 
+
+-- | Functions for implementing the Koshucode calculator.
 module Koshucode.Baala.Toolkit.Library.Run
 
 -- | Read and union sections from files, and run the section.
 runFiles :: (CContent c, ToJSON c) => Global c -> [IOPoint] -> IO ExitCode
-getProxies :: IO [(String, Maybe String)]
-theContent :: (CContent c) => String -> [Named c] -> Maybe c
+
+-- | Get proxy settings. This function looks environment variables of
+--   <tt>http_proxy</tt>, <tt>https_proxy</tt>, and <tt>ftp_proxy</tt>.
+getProxies :: IO [HttpProxy]
 
 
 -- | Koshu filter program.
 module Koshucode.Baala.Toolkit.Main.KoshuFilter
+
+-- | The main function for <tt>koshu-filter</tt> command.
 koshuFilter :: (CContent c) => Global c -> (Resource c -> IO Int) -> IO Int
 instance GHC.Classes.Eq Koshucode.Baala.Toolkit.Main.KoshuFilter.Option
 instance GHC.Show.Show Koshucode.Baala.Toolkit.Main.KoshuFilter.Option
@@ -39,9 +51,31 @@ baalaGlobal :: (CContent c) => Global c
 -- | Relmap operators
 baalaRops :: (CContent c) => [Rop c]
 
+
+-- | Elements of data resource.
 module Koshucode.Baala.Toolkit.Library.Element
 
--- | Retrive constituents of sections.
+-- | Retrive elements of data resource. This function may output judges of
+--   the following classes.
+--   
+--   <ul>
+--   <li><i><tt>KOSHU-AFFIRM</tt></i> There is affirmed relmap for class
+--   <tt>/pat</tt> in the resource <tt>/res</tt>.</li>
+--   <li><i><tt>KOSHU-DENY</tt></i> There is denied relmap for class
+--   <tt>/pat</tt> in the resource <tt>/res</tt>.</li>
+--   <li><i><tt>KOSHU-JUDGE-TERM</tt></i> In the resource <tt>/res</tt>,
+--   there are judges of class <tt>/pat</tt> with term named <tt>/name</tt>
+--   having <tt>/content</tt>.</li>
+--   <li><i><tt>KOSHU-RELMAP-NAME</tt></i> There is a relmap named
+--   <tt>/name</tt> in the resource <tt>/res</tt>.</li>
+--   <li><i><tt>KOSHU-RELMAP-REF</tt></i> Relmap <tt>/name</tt> in the
+--   resource <tt>/res</tt> refers the other relmap <tt>/ref</tt>.</li>
+--   <li><i><tt>KOSHU-RELMAP-ROP</tt></i> Relmap <tt>/name</tt> in the
+--   resource <tt>/res</tt> uses the relmap operator <tt>/rop</tt>.</li>
+--   <li><i><tt>KOSHU-RELMAP-SOURCE</tt></i> Judges of class <tt>/pat</tt>
+--   with terms <tt>/terms</tt> are read from the resource
+--   <tt>/res</tt>.</li>
+--   </ul>
 resourceElem :: (CContent c) => Resource c -> [Judge c]
 
 

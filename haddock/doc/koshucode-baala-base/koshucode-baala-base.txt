@@ -8,62 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.162.0.0
-
-
--- | Unicode general categories.
-module Koshucode.Baala.Base.Text.Unicode
-
--- | Major category of the Unicode general categories.
-data MajorGeneralCategory
-
--- | Lu Ll Lt Lm Lo
-UnicodeLetter :: MajorGeneralCategory
-
--- | Mn Mc Me
-UnicodeMark :: MajorGeneralCategory
-
--- | Nd Nl No
-UnicodeNumber :: MajorGeneralCategory
-
--- | Pc Pd Ps Pe Pi Pf Po
-UnicodePunctuation :: MajorGeneralCategory
-
--- | Sm Sc Sk So
-UnicodeSymbol :: MajorGeneralCategory
-
--- | Zs Zl Zp
-UnicodeSeperator :: MajorGeneralCategory
-
--- | Cc Cf Cs Co Cn
-UnicodeOther :: MajorGeneralCategory
-
--- | Major general category of character.
-majorGeneralCategory :: Char -> MajorGeneralCategory
-
--- | Convert general category to major category.
-toMajorGeneralCategory :: GeneralCategory -> MajorGeneralCategory
-
--- | Name of general category. This function returns one of
---   <tt>letter</tt>, <tt>mark</tt>, <tt>number</tt>, <tt>punct</tt>,
---   <tt>symbol</tt>, <tt>sep</tt>, or <tt>other</tt>.
-generalCategoryName :: MajorGeneralCategory -> String
-
--- | Major-minor category symbols like <tt>Lu</tt>.
-generalCategoryLetter :: GeneralCategory -> String
-
--- | One-letter representation of general category. This function returns
---   one of <tt>L</tt> (letter), <tt>M</tt> (mark), <tt>N</tt> (number),
---   <tt>P</tt> (punctuation), <tt>S</tt> (symbol), <tt>Z</tt> (seperator),
---   or <tt>C</tt> (other).
-generalCategoryMajorLetter :: MajorGeneralCategory -> Char
-
--- | One-letter representation of minor general category.
-generalCategoryMinorLetter :: GeneralCategory -> Char
-instance GHC.Enum.Bounded Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
-instance GHC.Show.Show Koshucode.Baala.Base.Text.Unicode.MajorGeneralCategory
+@version 0.163.0.0
 
 
 -- | Line break setting for mix text.
@@ -122,6 +67,267 @@ instance GHC.Classes.Eq Koshucode.Baala.Base.Text.LineBreak.LineBreak
 instance GHC.Show.Show Koshucode.Baala.Base.Text.LineBreak.LineBreak
 instance Data.Default.Class.Default Koshucode.Baala.Base.Text.LineBreak.LineBreak
 
+
+-- | Mix text.
+module Koshucode.Baala.Base.Text.MixText
+
+-- | Text mixable string, text, and bytestring.
+data MixText
+
+-- | Create mix text from strict bytestring.
+mixBs :: ByteString -> MixText
+
+-- | Create mix text from lazy bytestring.
+mixBz :: ByteString -> MixText
+
+-- | Create mix text from strict text.
+mixTx :: Text -> MixText
+
+-- | Create mix text from lazy text.
+mixTz :: Text -> MixText
+
+-- | Create mix text from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
+--   MixText "abcdef"
+--   </pre>
+mixString :: String -> MixText
+
+-- | Create mix text from char.
+mixChar :: Char -> MixText
+
+-- | Put mix text to left edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
+--   MixText "abc......."
+--   </pre>
+mixLeft :: Char -> Int -> MixText -> MixText
+
+-- | Put mix text to right edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
+--   MixText ".......abc"
+--   </pre>
+mixRight :: Char -> Int -> MixText -> MixText
+
+-- | Create mix text of given-length spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
+--   MixText "|    |"
+--   </pre>
+mixSpace :: Int -> MixText
+
+-- | Infix mix space.
+mixSep :: MixText -> MixText -> MixText
+mixSep2 :: MixText -> MixText -> MixText
+
+-- | Empty space.
+mix0 :: MixText
+
+-- | One space.
+mix1 :: MixText
+
+-- | Two-length spaces.
+mix2 :: MixText
+
+-- | Three-length spaces.
+mix3 :: MixText
+
+-- | Four-length spaces.
+mix4 :: MixText
+
+-- | Mix text of octal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixOct (12 :: Int)
+--   MixText "14"
+--   </pre>
+mixOct :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDec (12 :: Int)
+--   MixText "12"
+--   </pre>
+mixDec :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of hexadecimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixHex (12 :: Int)
+--   MixText "c"
+--   </pre>
+mixHex :: (Integral n, Show n) => n -> MixText
+mixSign :: (Num n, Ord n) => n -> MixText
+
+-- | Zero-padding decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
+--   MixText "000123"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
+--   MixText "-00123"
+--   </pre>
+mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
+mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
+
+-- | Append line break.
+mixLine :: MixText -> MixText
+
+-- | Append line break to each mix texts.
+mixLines :: [MixText] -> MixText
+
+-- | Soft line break, i.e., suppress at the beginning of line.
+mixSoft :: MixText
+
+-- | Hard line break, i.e., suppress only after auto line break.
+mixHard :: MixText
+
+-- | Mix text with local line break setting.
+mixBreak :: LineBreak -> MixText -> MixText
+
+-- | Block of multiple mix texts.
+mixBlock :: [MixText] -> MixText
+
+-- | Map function to mix texts directly in mix block.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let m1 = mixBlock [mixString "cd", mixString "ef" &lt;&gt; mixBlock [mixString "g"]]
+--   
+--   &gt;&gt;&gt; let m2 = mixBlock [mixString "ab", m1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2
+--   MixText "abcdegh"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBlockMap mixLine m2
+--   MixText "ab\r\ncd\r\nefg\r\n"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBlockMap (\x -&gt; mixString "[" &lt;&gt; x &lt;&gt; mixString "]") m2
+--   MixText "[ab][cd][efg]"
+--   </pre>
+mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
+mixShow :: (Show a) => a -> MixText
+
+-- | Empty mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixEmpty
+--   MixText ""
+--   </pre>
+mixEmpty :: MixText
+
+-- | Convert mix text to lazy bytestring builder.
+mixToBuilder :: LineBreak -> MixText -> Builder
+
+-- | Convert mix text to lazy bytestring.
+mixToBz :: LineBreak -> MixText -> ByteString
+
+-- | Convert mix text to string.
+mixToString :: LineBreak -> MixText -> String
+
+-- | Convert mix text to string without line breaks.
+mixToFlatString :: MixText -> String
+
+-- | Print mix text to the standard output.
+putMix :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text and newline to the standard output.
+putMixLn :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text to the given output handler.
+hPutMix :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text and newline to the given output handler.
+hPutMixLn :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text lines to the standard output.
+putMixLines :: LineBreak -> [MixText] -> IO ()
+
+-- | Print mix text lines to the given output handler.
+hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
+
+-- | Write mix text to a file.
+writeMix :: LineBreak -> FilePath -> MixText -> IO ()
+instance GHC.Show.Show Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.MixText.MixText
+instance Data.Default.Class.Default Koshucode.Baala.Base.Text.MixText.MixText
+instance GHC.Base.Monoid Koshucode.Baala.Base.Text.MixText.MixText
+
+
+-- | Class for constructing mix text.
+module Koshucode.Baala.Base.Text.MixClass
+
+-- | Construct mix text.
+class Mix a
+mix :: Mix a => a -> MixText
+
+-- | Enclose mix text with open and close bracket.
+mixBracket :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Enclose mix text with bracket and space.
+mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Concatenate mix texts with delimiter.
+mixJoin :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Concatenate mix texts with delimiter and space.
+mixJoinS :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Join with one space.
+mixJoin1 :: [MixText] -> MixText
+
+-- | Join with vertical bar.
+mixJoinBar :: [MixText] -> MixText
+mixInfix :: (Mix m) => m -> MixText -> MixText -> MixText
+instance Koshucode.Baala.Base.Text.MixClass.Mix Koshucode.Baala.Base.Text.MixText.MixText
+instance Koshucode.Baala.Base.Text.MixClass.Mix ()
+instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Internal.ByteString
+instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Lazy.Internal.ByteString
+instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Text
+instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Base.String
+instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Char
+instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Int
+instance Koshucode.Baala.Base.Text.MixClass.Mix [Koshucode.Baala.Base.Text.MixText.MixText]
+instance Koshucode.Baala.Base.Text.MixClass.Mix (GHC.Base.Maybe Koshucode.Baala.Base.Text.MixText.MixText)
+
+
+-- | Encode using mix text.
+module Koshucode.Baala.Base.Text.MixEncode
+
+-- | Encode via mix text.
+class MixEncode a
+mixEncode :: MixEncode a => a -> MixText
+
+-- | Encode with shortener.
+class MixShortEncode a
+mixShortEncode :: MixShortEncode a => Shorten -> a -> MixText
+
+-- | <a>mixShortEncode</a> with no shortener.
+mixIdEncode :: (MixShortEncode a) => a -> MixText
+
+-- | Convert string to short sign.
+type Shorten = String -> Maybe String
+
+-- | Shorten which does not shorten strings.
+noShorten :: Shorten
+instance Koshucode.Baala.Base.Text.MixEncode.MixEncode GHC.Types.Bool
+
 module Koshucode.Baala.Base.Text.Comment
 
 -- | Something that can become a string list.
@@ -156,6 +362,19 @@ instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Comment.CommentSec
 instance GHC.Show.Show Koshucode.Baala.Base.Text.Comment.CommentSec
 instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentDoc
 instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentSec
+
+module Koshucode.Baala.Base.Prelude.Pair
+mapFst :: (a -> c) -> (a, b) -> (c, b)
+mapSnd :: (b -> c) -> (a, b) -> (a, c)
+consFst :: a -> Map ([a], b)
+consSnd :: b -> Map (a, [b])
+mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
+mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m (a, c)
+right2 :: (Either a b, Either a c) -> Either a (b, c)
+right3 :: (Either a b, Either a c, Either a d) -> Either a (b, c, d)
+right4 :: (Either a b, Either a c, Either a d, Either a e) -> Either a (b, c, d, e)
+sequenceFst :: (Monad m) => [(m a, b)] -> m [(a, b)]
+sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 
 module Koshucode.Baala.Base.Prelude.Import
 
@@ -608,12 +827,6 @@ type Map a = a -> a
 -- | Map from something to list of something.
 type ManyMap a = a -> [a]
 
--- | Boolean-valued function, also called predicate.
-type Test a = a -> Bool
-
--- | Boolean-valued function with 2 arguments.
-type Test2 a b = a -> b -> Bool
-
 -- | Type of value which is classified as yes or no.
 data YesNo a
 Yes :: a -> YesNo a
@@ -627,19 +840,6 @@ instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Prelude.Class.
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Prelude.Class.YesNo a)
 instance Koshucode.Baala.Base.Prelude.Class.Choose GHC.Base.Maybe
 instance Koshucode.Baala.Base.Prelude.Class.Choose (Data.Either.Either a)
-
-module Koshucode.Baala.Base.Prelude.Pair
-mapFst :: (a -> c) -> (a, b) -> (c, b)
-mapSnd :: (b -> c) -> (a, b) -> (a, c)
-consFst :: a -> Map ([a], b)
-consSnd :: b -> Map (a, [b])
-mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
-mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m (a, c)
-right2 :: (Either a b, Either a c) -> Either a (b, c)
-right3 :: (Either a b, Either a c, Either a d) -> Either a (b, c, d)
-right4 :: (Either a b, Either a c, Either a d, Either a e) -> Either a (b, c, d, e)
-sequenceFst :: (Monad m) => [(m a, b)] -> m [(a, b)]
-sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 
 
 -- | Case-error versions of functions.
@@ -991,146 +1191,6 @@ disjoint :: (Eq a) => [a] -> [a] -> Bool
 --   </pre>
 overlap :: (Eq a) => [a] -> [a] -> Bool
 
-
--- | Dots pattern.
-module Koshucode.Baala.Base.List.Dots
-
--- | Divide dots-pattern string.
---   
---   <pre>
---   &gt;&gt;&gt; dotsStrings "abc ... xyz"
---   ["abc","...","xyz"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; dotsStrings "a ... h ... ... v ..."
---   ["a","...","h","...","v","..."]
---   </pre>
-dotsStrings :: String -> [String]
-
--- | Concatenate dots-pattern strings, inserting one space between dots and
---   word.
---   
---   <pre>
---   &gt;&gt;&gt; undotsStrings ["abc", "...", "xyz"]
---   "abc ... xyz"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; undotsStrings ["a", "...", "h", "...", "...", "v", "..."]
---   "a ... h ... v ..."
---   </pre>
-undotsStrings :: [String] -> String
-
--- | Take dots-parts from string.
---   
---   <pre>
---   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefghijklmnopqrstuvwxyz"
---   Just ["bcdefg","ijklmnopqrstu","wxyz"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefg"
---   Nothing
---   </pre>
-takeDots :: [String] -> String -> Maybe [String]
-
-module Koshucode.Baala.Base.Prelude
-
-
--- | Utilities for association lists.
-module Koshucode.Baala.Base.List.Assoc
-type Lookup a = String -> Maybe a
-
--- | Construct assoc list by splitting base list.
-assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
-
--- | Check which given key is there in assoc list.
-assocExist :: (Eq k) => k -> [(k, a)] -> Bool
-namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
-lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
-
--- | Lookup assoc list that keys are truth-valued functions.
-lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
-assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
-
--- | Pick up associations that have given keys.
---   
---   <pre>
---   &gt;&gt;&gt; assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
---   [("a",1), ("c",3)]
---   </pre>
-assocPick :: (Eq k) => [k] -> Map [(k, a)]
-
--- | Cut off associations that have given keys.
---   
---   <pre>
---   &gt;&gt;&gt; assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
---   [("b",2)]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; assocCut1 "b" [("a",1), ("b",2), ("c",3)]
---   [("a",1), ("c",3)]
---   </pre>
-assocCut :: (Eq k) => [k] -> Map [(k, a)]
-assocCut1 :: (Eq k) => k -> Map [(k, a)]
-
--- | Change key of assoc list.
---   
---   <pre>
---   &gt;&gt;&gt; assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
---   [("x",1), ("b",2), ("c",3)]
---   </pre>
-assocRename1 :: (Eq k) => k -> k -> Map [(k, a)]
-assocRehead :: (Eq k) => [(k, k)] -> [(k, v)] -> [(k, v)]
-
--- | Compose two assocs.
---   
---   <pre>
---   &gt;&gt;&gt; assocCompose [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
---   [("A","P"), ("A","Q"), ("B","S")]
---   </pre>
-assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
-
--- | Meet two assocs.
---   
---   <pre>
---   &gt;&gt;&gt; assocMeet [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
---   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
---   </pre>
-assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
-data OnceMore a
-Once :: a -> OnceMore a
-More :: [a] -> OnceMore a
-
--- | Convert general assoc list into once/more assoc list.
-assocGather :: (Eq k) => [(k, a)] -> [(k, OnceMore a)]
-
--- | Push key and value into once/more assoc list.
-assocPush :: (Eq k) => k -> a -> Map [(k, OnceMore a)]
-
--- | Extract once part from once/more assoc list.
-assocOnce :: [(k, OnceMore a)] -> [(k, a)]
-
--- | Extract more part from once/more assoc list.
-assocMore :: [(k, OnceMore a)] -> [(k, [a])]
-type Gather a b = a -> (b, a)
-
--- | Gather what is gotten by splitter.
-gather :: Gather [a] b -> [a] -> [b]
-gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
-
--- | Gather (<i>k</i>, <i>v</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
-gatherToMap :: (Ord k) => [(k, v)] -> Map k [v]
-
--- | Gather (<i>v</i>, <i>k</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
-gatherToMapSwap :: (Ord k) => [(v, k)] -> Map k [v]
-gatherToAssoc :: (Ord k) => [(k, v)] -> [(k, [v])]
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Assoc.OnceMore a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Assoc.OnceMore a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Assoc.OnceMore a)
-
 module Koshucode.Baala.Base.List.List
 
 -- | Tails of list.
@@ -1229,6 +1289,146 @@ filterFst :: (a -> Bool) -> Map [(a, b)]
 squeeze :: (a -> Bool) -> Map [a]
 squeezeEmptyLines :: Map [String]
 reverseMap :: Map [a] -> Map [a]
+
+
+-- | Dots pattern.
+module Koshucode.Baala.Base.List.Dots
+
+-- | Divide dots-pattern string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dotsStrings "abc ... xyz"
+--   ["abc","...","xyz"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dotsStrings "a ... h ... ... v ..."
+--   ["a","...","h","...","v","..."]
+--   </pre>
+dotsStrings :: String -> [String]
+
+-- | Concatenate dots-pattern strings, inserting one space between dots and
+--   word.
+--   
+--   <pre>
+--   &gt;&gt;&gt; undotsStrings ["abc", "...", "xyz"]
+--   "abc ... xyz"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; undotsStrings ["a", "...", "h", "...", "...", "v", "..."]
+--   "a ... h ... v ..."
+--   </pre>
+undotsStrings :: [String] -> String
+
+-- | Take dots-parts from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefghijklmnopqrstuvwxyz"
+--   Just ["bcdefg","ijklmnopqrstu","wxyz"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; takeDots ["a", "...", "h", "...", "v", "..."] "abcdefg"
+--   Nothing
+--   </pre>
+takeDots :: [String] -> String -> Maybe [String]
+
+
+-- | Utilities for association lists.
+module Koshucode.Baala.Base.List.Assoc
+type Lookup a = String -> Maybe a
+
+-- | Construct assoc list by splitting base list.
+assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
+
+-- | Check which given key is there in assoc list.
+assocExist :: (Eq k) => k -> [(k, a)] -> Bool
+namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
+lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
+
+-- | Lookup assoc list that keys are truth-valued functions.
+lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
+
+-- | Pick up associations that have given keys.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocPick ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
+--   </pre>
+assocPick :: (Eq k) => [k] -> Map [(k, a)]
+
+-- | Cut off associations that have given keys.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
+--   [("b",2)]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCut1 "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
+--   </pre>
+assocCut :: (Eq k) => [k] -> Map [(k, a)]
+assocCut1 :: (Eq k) => k -> Map [(k, a)]
+
+-- | Change key of assoc list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
+--   [("x",1), ("b",2), ("c",3)]
+--   </pre>
+assocRename1 :: (Eq k) => k -> k -> Map [(k, a)]
+assocRehead :: (Eq k) => [(k, k)] -> [(k, v)] -> [(k, v)]
+
+-- | Compose two assocs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocCompose [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","P"), ("A","Q"), ("B","S")]
+--   </pre>
+assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
+
+-- | Meet two assocs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocMeet [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
+--   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
+--   </pre>
+assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
+data OnceMore a
+Once :: a -> OnceMore a
+More :: [a] -> OnceMore a
+
+-- | Convert general assoc list into once/more assoc list.
+assocGather :: (Eq k) => [(k, a)] -> [(k, OnceMore a)]
+
+-- | Push key and value into once/more assoc list.
+assocPush :: (Eq k) => k -> a -> Map [(k, OnceMore a)]
+
+-- | Extract once part from once/more assoc list.
+assocOnce :: [(k, OnceMore a)] -> [(k, a)]
+
+-- | Extract more part from once/more assoc list.
+assocMore :: [(k, OnceMore a)] -> [(k, [a])]
+type Gather a b = a -> (b, a)
+
+-- | Gather what is gotten by splitter.
+gather :: Gather [a] b -> [a] -> [b]
+gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
+
+-- | Gather (<i>k</i>, <i>v</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
+gatherToMap :: (Ord k) => [(k, v)] -> Map k [v]
+
+-- | Gather (<i>v</i>, <i>k</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
+gatherToMapSwap :: (Ord k) => [(v, k)] -> Map k [v]
+gatherToAssoc :: (Ord k) => [(k, v)] -> [(k, [v])]
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Assoc.OnceMore a)
+
+module Koshucode.Baala.Base.Prelude
 
 
 -- | Snipping elements.
@@ -1395,37 +1595,6 @@ putAbortWith :: String -> IO a
 putFailure :: String -> IO a
 putFailureLn :: String -> IO a
 
-module Koshucode.Baala.Base.Text.Utility
-trimLeft :: Map String
-trimRight :: Map String
-trimBoth :: Map String
-
--- | Add spaces to right.
---   
---   <pre>
---   &gt;&gt;&gt; padRight 10 "abc"
---   "abc       "
---   </pre>
-padRight :: Int -> Map String
-padRightWith :: Char -> Int -> Map String
-
--- | Add spaces to left.
---   
---   <pre>
---   &gt;&gt;&gt; padLeft 10 "abc"
---   "       abc"
---   </pre>
-padLeft :: Int -> Map String
-padLeftWith :: Char -> Int -> Map String
-stringWidth :: String -> Int
-putShow :: (Show a) => a -> IO ()
-putShowLn :: (Show a) => a -> IO ()
-putLines :: [String] -> IO ()
-hPutLines :: Handle -> [String] -> IO ()
-hPutEmptyLine :: Handle -> IO ()
-readInt :: String -> Maybe Int
-readInteger :: String -> Maybe Integer
-
 
 -- | Retrieve via HTTP.
 module Koshucode.Baala.Base.IO.Http
@@ -1441,267 +1610,6 @@ uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
 
 -- | Text message of HTTP exception.
 httpExceptionSummary :: HttpException -> String
-
-
--- | Mix text.
-module Koshucode.Baala.Base.Text.MixText
-
--- | Text mixable string, text, and bytestring.
-data MixText
-
--- | Create mix text from strict bytestring.
-mixBs :: ByteString -> MixText
-
--- | Create mix text from lazy bytestring.
-mixBz :: ByteString -> MixText
-
--- | Create mix text from strict text.
-mixTx :: Text -> MixText
-
--- | Create mix text from lazy text.
-mixTz :: Text -> MixText
-
--- | Create mix text from string.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
---   MixText "abcdef"
---   </pre>
-mixString :: String -> MixText
-
--- | Create mix text from char.
-mixChar :: Char -> MixText
-
--- | Put mix text to left edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
---   MixText "abc......."
---   </pre>
-mixLeft :: Char -> Int -> MixText -> MixText
-
--- | Put mix text to right edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
---   MixText ".......abc"
---   </pre>
-mixRight :: Char -> Int -> MixText -> MixText
-
--- | Create mix text of given-length spaces.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
---   MixText "|    |"
---   </pre>
-mixSpace :: Int -> MixText
-
--- | Infix mix space.
-mixSep :: MixText -> MixText -> MixText
-mixSep2 :: MixText -> MixText -> MixText
-
--- | Empty space.
-mix0 :: MixText
-
--- | One space.
-mix1 :: MixText
-
--- | Two-length spaces.
-mix2 :: MixText
-
--- | Three-length spaces.
-mix3 :: MixText
-
--- | Four-length spaces.
-mix4 :: MixText
-
--- | Mix text of octal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixOct (12 :: Int)
---   MixText "14"
---   </pre>
-mixOct :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDec (12 :: Int)
---   MixText "12"
---   </pre>
-mixDec :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of hexadecimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixHex (12 :: Int)
---   MixText "c"
---   </pre>
-mixHex :: (Integral n, Show n) => n -> MixText
-mixSign :: (Num n, Ord n) => n -> MixText
-
--- | Zero-padding decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
---   MixText "000123"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
---   MixText "-00123"
---   </pre>
-mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
-mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
-
--- | Append line break.
-mixLine :: MixText -> MixText
-
--- | Append line break to each mix texts.
-mixLines :: [MixText] -> MixText
-
--- | Soft line break, i.e., suppress at the beginning of line.
-mixSoft :: MixText
-
--- | Hard line break, i.e., suppress only after auto line break.
-mixHard :: MixText
-
--- | Mix text with local line break setting.
-mixBreak :: LineBreak -> MixText -> MixText
-
--- | Block of multiple mix texts.
-mixBlock :: [MixText] -> MixText
-
--- | Map function to mix texts directly in mix block.
---   
---   <pre>
---   &gt;&gt;&gt; let m1 = mixBlock [mixString "cd", mixString "ef" &lt;&gt; mixBlock [mixString "g"]]
---   
---   &gt;&gt;&gt; let m2 = mixBlock [mixString "ab", m1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; m2
---   MixText "abcdegh"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixBlockMap mixLine m2
---   MixText "ab\r\ncd\r\nefg\r\n"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixBlockMap (\x -&gt; mixString "[" &lt;&gt; x &lt;&gt; mixString "]") m2
---   MixText "[ab][cd][efg]"
---   </pre>
-mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
-mixShow :: (Show a) => a -> MixText
-
--- | Empty mix text.
---   
---   <pre>
---   &gt;&gt;&gt; mixEmpty
---   MixText ""
---   </pre>
-mixEmpty :: MixText
-
--- | Convert mix text to lazy bytestring builder.
-mixToBuilder :: LineBreak -> MixText -> Builder
-
--- | Convert mix text to lazy bytestring.
-mixToBz :: LineBreak -> MixText -> ByteString
-
--- | Convert mix text to string.
-mixToString :: LineBreak -> MixText -> String
-
--- | Convert mix text to string without line breaks.
-mixToFlatString :: MixText -> String
-
--- | Print mix text to the standard output.
-putMix :: LineBreak -> MixText -> IO ()
-
--- | Print mix text and newline to the standard output.
-putMixLn :: LineBreak -> MixText -> IO ()
-
--- | Print mix text to the given output handler.
-hPutMix :: LineBreak -> Handle -> MixText -> IO ()
-
--- | Print mix text and newline to the given output handler.
-hPutMixLn :: LineBreak -> Handle -> MixText -> IO ()
-
--- | Print mix text lines to the standard output.
-putMixLines :: LineBreak -> [MixText] -> IO ()
-
--- | Print mix text lines to the given output handler.
-hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
-
--- | Write mix text to a file.
-writeMix :: LineBreak -> FilePath -> MixText -> IO ()
-instance GHC.Show.Show Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.MixText.MixText
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Base.Monoid Koshucode.Baala.Base.Text.MixText.MixText
-
-
--- | Class for constructing mix text.
-module Koshucode.Baala.Base.Text.MixClass
-
--- | Construct mix text.
-class Mix a
-mix :: Mix a => a -> MixText
-
--- | Enclose mix text with open and close bracket.
-mixBracket :: (Mix m) => m -> m -> MixText -> MixText
-
--- | Enclose mix text with bracket and space.
-mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
-
--- | Concatenate mix texts with delimiter.
-mixJoin :: (Mix m) => m -> [MixText] -> MixText
-
--- | Concatenate mix texts with delimiter and space.
-mixJoinS :: (Mix m) => m -> [MixText] -> MixText
-
--- | Join with one space.
-mixJoin1 :: [MixText] -> MixText
-
--- | Join with vertical bar.
-mixJoinBar :: [MixText] -> MixText
-mixInfix :: (Mix m) => m -> MixText -> MixText -> MixText
-instance Koshucode.Baala.Base.Text.MixClass.Mix Koshucode.Baala.Base.Text.MixText.MixText
-instance Koshucode.Baala.Base.Text.MixClass.Mix ()
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Lazy.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Text
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Lazy.Text
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Base.String
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Char
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Int
-instance Koshucode.Baala.Base.Text.MixClass.Mix [Koshucode.Baala.Base.Text.MixText.MixText]
-instance Koshucode.Baala.Base.Text.MixClass.Mix (GHC.Base.Maybe Koshucode.Baala.Base.Text.MixText.MixText)
-
-
--- | Encode using mix text.
-module Koshucode.Baala.Base.Text.MixEncode
-
--- | Encode via mix text.
-class MixEncode a
-mixEncode :: MixEncode a => a -> MixText
-
--- | Encode with shortener.
-class MixShortEncode a
-mixShortEncode :: MixShortEncode a => Shorten -> a -> MixText
-
--- | <a>mixShortEncode</a> with no shortener.
-mixIdEncode :: (MixShortEncode a) => a -> MixText
-
--- | Convert string to short sign.
-type Shorten = String -> Maybe String
-
--- | Shorten which does not shorten strings.
-noShorten :: Shorten
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode GHC.Types.Bool
 
 module Koshucode.Baala.Base.List
 

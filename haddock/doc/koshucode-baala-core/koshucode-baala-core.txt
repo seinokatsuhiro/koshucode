@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.162.0.0
+@version 0.163.0.0
 
 
 -- | Result of relational calculation.
@@ -29,26 +29,60 @@ Result :: ResultWriter c -> Bool -> Bool -> Int -> Int -> [InputPoint] -> IOPoin
 [resultViolated] :: Result c -> [ShortResultChunks c]
 [resultNormal] :: Result c -> [ShortResultChunks c]
 [resultClass] :: Result c -> [JudgeClass]
+
+-- | Input point of data resource.
 data InputPoint
 InputPoint :: IOPoint -> [TTree] -> InputPoint
+
+-- | Input point
 [inputPoint] :: InputPoint -> IOPoint
+
+-- | Common terms
 [inputPointAbout] :: InputPoint -> [TTree]
 
 -- | Chunk of judgements.
 data ResultChunk c
+
+-- | List of judges
 ResultJudge :: [Judge c] -> ResultChunk c
+
+-- | Named relation instead of judges
 ResultRel :: JudgeClass -> (Rel c) -> ResultChunk c
+
+-- | Commentary note
 ResultNote :: [String] -> ResultChunk c
-type ResultWriterChunk c = Handle -> Result c -> ExitCode -> [ShortResultChunks c] -> IO ExitCode
-type ResultWriterJudge c = Handle -> Result c -> ExitCode -> [Judge c] -> IO ExitCode
+
+-- | Short block in result.
 type ShortResultChunks c = Short [ResultChunk c]
-resultChunkJudges :: ResultChunk c -> [Judge c]
-resultDump :: (Show c) => ResultWriter c
+
+-- | Writer of calculation result.
 data ResultWriter c
+
+-- | Write from result
+ResultWriterRaw :: String -> (ResultWriterRaw c) -> ResultWriter c
+
+-- | Write from short chunks
 ResultWriterChunk :: String -> (ResultWriterChunk c) -> ResultWriter c
+
+-- | Write from judges
 ResultWriterJudge :: String -> (ResultWriterJudge c) -> ResultWriter c
 
--- | <a>stdout</a> version of <a>hPutResult</a>.
+-- | Type of result writer function.
+type ResultWriterFrom d c = Handle -> Result c -> ExitCode -> d -> IO ExitCode
+
+-- | Write result based on result itself.
+type ResultWriterRaw c = ResultWriterFrom () c
+
+-- | Write result based on its short chunks.
+type ResultWriterChunk c = ResultWriterFrom [ShortResultChunks c] c
+
+-- | Write result based on its judges.
+type ResultWriterJudge c = ResultWriterFrom [Judge c] c
+
+-- | Dump result.
+resultDump :: (Show c) => ResultWriter c
+
+-- | Print calculation result.
 putResult :: Result c -> IO ExitCode
 
 -- | Print result of calculation, and return status.
@@ -64,6 +98,7 @@ instance GHC.Classes.Eq Koshucode.Baala.Core.Relmap.Result.InputPoint
 instance GHC.Show.Show Koshucode.Baala.Core.Relmap.Result.InputPoint
 instance GHC.Show.Show c => Data.Default.Class.Default (Koshucode.Baala.Core.Relmap.Result.Result c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Result.ResultWriter c)
+instance Koshucode.Baala.Syntax.Token.Token.SubtypeName (Koshucode.Baala.Core.Relmap.Result.ResultWriter c)
 instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Result.ResultWriter c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Result.ResultWriter c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Result.ResultWriter c)

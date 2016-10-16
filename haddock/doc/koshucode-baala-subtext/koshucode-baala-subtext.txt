@@ -8,7 +8,7 @@
 --   alternative, and repetitive expressions. It collects submatches and
 --   switch matching expression among multiple expressions.
 @package koshucode-baala-subtext
-@version 0.162.0.0
+@version 0.163.0.0
 
 
 -- | Lower and upper bound.
@@ -279,64 +279,6 @@ before :: Expr a -> Expr a
 
 -- | X-separated values.
 sep :: Expr a -> Expr a -> Expr a
-
-
--- | Unicode general category.
-module Koshucode.Baala.Subtext.Category
-
--- | List of letter categories (L).
-categoryLetter :: [GeneralCategory]
-
--- | List of mark categories (M).
-categoryMark :: [GeneralCategory]
-
--- | List of number categories (N).
-categoryNumber :: [GeneralCategory]
-
--- | List of punctuation categories (P).
-categoryPunctuation :: [GeneralCategory]
-
--- | List of symbol categories (S).
-categorySymbol :: [GeneralCategory]
-
--- | List of separator categories (Z).
-categorySeparator :: [GeneralCategory]
-
--- | List of other categories (C).
-categoryOther :: [GeneralCategory]
-
--- | List of alphabetic categories (L + M).
-categoryAlpha :: [GeneralCategory]
-
--- | List of textual-sign categories (P + S).
-categorySign :: [GeneralCategory]
-
--- | List of open brackets (Ps + Pi).
-categoryOpen :: [GeneralCategory]
-
--- | List of close brackets (Pe + Pf).
-categoryClose :: [GeneralCategory]
-
--- | Lookup unicode general categories by its short name. Short name means
---   two-letter category name (e.g., <tt>"lu"</tt> for upper case letter,
---   <tt>"zs"</tt> for space), or one-letter category group (e.g.,
---   <tt>"l"</tt> for letter, <tt>"z"</tt> for separator).
---   
---   <pre>
---   &gt;&gt;&gt; categoryLookup "lu"
---   Right (fromList [UppercaseLetter])
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; categoryLookup "n"
---   Right (fromList [DecimalNumber, LetterNumber, OtherNumber])
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; categoryLookup "lx"
---   Left "lx"
---   </pre>
-categoryLookup :: String -> Either String (Set GeneralCategory)
 
 
 -- | Operators for text match.

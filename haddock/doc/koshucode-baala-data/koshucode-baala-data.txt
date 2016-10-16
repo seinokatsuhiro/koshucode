@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.162.0.0
+@version 0.163.0.0
 
 
 -- | Extra functions for rational numbers.

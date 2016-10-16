@@ -9,11 +9,11 @@
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a class="number" name="line-2">2</a>
-<a class="number" name="line-3">3</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Toolkit</span><span class='hs-varop'>.</span><span class='hs-conid'>Library</span><span class='hs-varop'>.</span><span class='hs-conid'>Run</span>
-<a class="number" name="line-4">4</a>  <span class='hs-layout'>(</span> <span class='hs-varid'>runFiles</span><span class='hs-layout'>,</span>
-<a class="number" name="line-5">5</a>    <span class='hs-varid'>getProxies</span><span class='hs-layout'>,</span>
-<a class="number" name="line-6">6</a>    <span class='hs-varid'>theContent</span><span class='hs-layout'>,</span>
-<a class="number" name="line-7">7</a>    <span class='hs-varop'>--mkdir,</span>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Functions for implementing the Koshucode calculator.</span>
+<a class="number" name="line-4">4</a>
+<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Toolkit</span><span class='hs-varop'>.</span><span class='hs-conid'>Library</span><span class='hs-varop'>.</span><span class='hs-conid'>Run</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-varid'>runFiles</span><span class='hs-layout'>,</span>
+<a class="number" name="line-7">7</a>    <span class='hs-varid'>getProxies</span><span class='hs-layout'>,</span>
 <a class="number" name="line-8">8</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-9">9</a>
 <a class="number" name="line-10">10</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>System</span><span class='hs-varop'>.</span><span class='hs-conid'>Environment</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>Env</span>
@@ -23,20 +23,20 @@
 <a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Writer</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>W</span>
 <a class="number" name="line-15">15</a>
 <a class="number" name="line-16">16</a>
-<a class="number" name="line-17">17</a>
-<a class="number" name="line-18">18</a><span class='hs-comment'>-- ----------------------</span>
-<a class="number" name="line-19">19</a>
-<a class="number" name="line-20">20</a><a name="runFiles"></a><span class='hs-comment'>-- | Read and union sections from files, and run the section.</span>
-<a class="number" name="line-21">21</a><span class='hs-definition'>runFiles</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>W</span><span class='hs-varop'>.</span><span class='hs-conid'>ToJSON</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Global</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>IOPoint</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitCode</span>
-<a class="number" name="line-22">22</a><span class='hs-definition'>runFiles</span> <span class='hs-varid'>g</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-23">23</a>    <span class='hs-keyword'>do</span> <span class='hs-layout'>(</span><span class='hs-varid'>abRes</span><span class='hs-layout'>,</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resRead</span> <span class='hs-varid'>g</span> <span class='hs-varid'>ns</span>
-<a class="number" name="line-24">24</a>       <span class='hs-keyword'>case</span> <span class='hs-varid'>abRes</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-25">25</a>         <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>globalAbort</span> <span class='hs-varid'>g</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-26">26</a>         <span class='hs-conid'>Right</span> <span class='hs-varid'>res</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>case</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resRun</span> <span class='hs-varid'>res</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-27">27</a>                        <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>globalAbort</span> <span class='hs-varid'>g</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-28">28</a>                        <span class='hs-conid'>Right</span> <span class='hs-varid'>r</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>putResult</span> <span class='hs-varid'>r</span>
-<a class="number" name="line-29">29</a>
-<a class="number" name="line-30">30</a><a name="getProxies"></a><span class='hs-definition'>getProxies</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>String</span><span class='hs-layout'>,</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-17">17</a><a name="runFiles"></a><span class='hs-comment'>-- | Read and union sections from files, and run the section.</span>
+<a class="number" name="line-18">18</a><span class='hs-definition'>runFiles</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>W</span><span class='hs-varop'>.</span><span class='hs-conid'>ToJSON</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Global</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>IOPoint</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ExitCode</span>
+<a class="number" name="line-19">19</a><span class='hs-definition'>runFiles</span> <span class='hs-varid'>g</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-20">20</a>    <span class='hs-keyword'>do</span> <span class='hs-layout'>(</span><span class='hs-varid'>abRes</span><span class='hs-layout'>,</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resRead</span> <span class='hs-varid'>g</span> <span class='hs-varid'>ns</span>
+<a class="number" name="line-21">21</a>       <span class='hs-keyword'>case</span> <span class='hs-varid'>abRes</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-22">22</a>         <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>globalAbort</span> <span class='hs-varid'>g</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-23">23</a>         <span class='hs-conid'>Right</span> <span class='hs-varid'>res</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>case</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resRun</span> <span class='hs-varid'>res</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-24">24</a>                        <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>globalAbort</span> <span class='hs-varid'>g</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-25">25</a>                        <span class='hs-conid'>Right</span> <span class='hs-varid'>r</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>putResult</span> <span class='hs-varid'>r</span>
+<a class="number" name="line-26">26</a>
+<a class="number" name="line-27">27</a><a name="getProxies"></a><span class='hs-comment'>-- | Get proxy settings.</span>
+<a class="number" name="line-28">28</a><span class='hs-comment'>--   This function looks environment variables</span>
+<a class="number" name="line-29">29</a><span class='hs-comment'>--   of @http_proxy@, @https_proxy@, and @ftp_proxy@.</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>getProxies</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>HttpProxy</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-31">31</a><span class='hs-definition'>getProxies</span> <span class='hs-keyglyph'>=</span>
 <a class="number" name="line-32">32</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>httpProxy</span>   <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Env</span><span class='hs-varop'>.</span><span class='hs-varid'>lookupEnv</span> <span class='hs-str'>"http_proxy"</span>
 <a class="number" name="line-33">33</a>       <span class='hs-varid'>httpsProxy</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Env</span><span class='hs-varop'>.</span><span class='hs-varid'>lookupEnv</span> <span class='hs-str'>"https_proxy"</span>
@@ -44,30 +44,5 @@
 <a class="number" name="line-35">35</a>       <span class='hs-varid'>return</span> <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-str'>"http"</span>  <span class='hs-layout'>,</span> <span class='hs-varid'>httpProxy</span><span class='hs-layout'>)</span>
 <a class="number" name="line-36">36</a>              <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-str'>"https"</span> <span class='hs-layout'>,</span> <span class='hs-varid'>httpsProxy</span><span class='hs-layout'>)</span>
 <a class="number" name="line-37">37</a>              <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-str'>"ftp"</span>   <span class='hs-layout'>,</span> <span class='hs-varid'>ftpProxy</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>]</span>
-<a class="number" name="line-38">38</a>
-<a class="number" name="line-39">39</a>
-<a class="number" name="line-40">40</a>
-<a class="number" name="line-41">41</a><span class='hs-comment'>-- ---------------------- Calculation list</span>
-<a class="number" name="line-42">42</a>
-<a class="number" name="line-43">43</a><span class='hs-comment'>-- mkdir :: FilePath -&gt; IO ()</span>
-<a class="number" name="line-44">44</a><span class='hs-comment'>-- mkdir path = </span>
-<a class="number" name="line-45">45</a><span class='hs-comment'>--     do let dir = Path.dropFileName path</span>
-<a class="number" name="line-46">46</a><span class='hs-comment'>--        Dir.createDirectoryIfMissing True dir</span>
-<a class="number" name="line-47">47</a>
-<a class="number" name="line-48">48</a>
-<a class="number" name="line-49">49</a>
-<a class="number" name="line-50">50</a><span class='hs-comment'>-- ----------------------  The</span>
-<a class="number" name="line-51">51</a>
-<a class="number" name="line-52">52</a><a name="theContent"></a><span class='hs-definition'>theContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-53">53</a><span class='hs-definition'>theContent</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>lookup</span>
-<a class="number" name="line-54">54</a>
-<a class="number" name="line-55">55</a><span class='hs-comment'>-- theContents :: (C.CContent c) =&gt; [String] -&gt; [B.Named c] -&gt; Maybe [c]</span>
-<a class="number" name="line-56">56</a><span class='hs-comment'>-- theContents ns assn = mapM (`theContent` assn) ns</span>
-<a class="number" name="line-57">57</a>
-<a class="number" name="line-58">58</a><span class='hs-comment'>-- theStrings :: (C.CContent c) =&gt; c -&gt; [String]</span>
-<a class="number" name="line-59">59</a><span class='hs-comment'>-- theStrings c | C.isText c  =  [C.gText c]</span>
-<a class="number" name="line-60">60</a><span class='hs-comment'>-- theStrings c | C.isList c  =  map C.gText $ C.gList c</span>
-<a class="number" name="line-61">61</a><span class='hs-comment'>-- theStrings _               =  []</span>
-<a class="number" name="line-62">62</a>
 </pre></body>
 </html>

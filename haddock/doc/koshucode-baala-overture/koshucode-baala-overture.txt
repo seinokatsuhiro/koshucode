@@ -6,7 +6,120 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.162.0.0
+@version 0.163.0.0
+
+
+-- | Unicode general categories.
+module Koshucode.Baala.Overture.Text.Unicode
+
+-- | Major category of the Unicode general categories.
+data MajorGeneralCategory
+
+-- | Lu Ll Lt Lm Lo
+UnicodeLetter :: MajorGeneralCategory
+
+-- | Mn Mc Me
+UnicodeMark :: MajorGeneralCategory
+
+-- | Nd Nl No
+UnicodeNumber :: MajorGeneralCategory
+
+-- | Pc Pd Ps Pe Pi Pf Po
+UnicodePunctuation :: MajorGeneralCategory
+
+-- | Sm Sc Sk So
+UnicodeSymbol :: MajorGeneralCategory
+
+-- | Zs Zl Zp
+UnicodeSeperator :: MajorGeneralCategory
+
+-- | Cc Cf Cs Co Cn
+UnicodeOther :: MajorGeneralCategory
+
+-- | Major general category of character.
+majorGeneralCategory :: Char -> MajorGeneralCategory
+
+-- | Convert general category to major category.
+toMajorGeneralCategory :: GeneralCategory -> MajorGeneralCategory
+
+-- | Name of general category. This function returns one of
+--   <tt>letter</tt>, <tt>mark</tt>, <tt>number</tt>, <tt>punct</tt>,
+--   <tt>symbol</tt>, <tt>sep</tt>, or <tt>other</tt>.
+generalCategoryName :: MajorGeneralCategory -> String
+
+-- | Major-minor category symbols like <tt>Lu</tt>.
+generalCategoryLetter :: GeneralCategory -> String
+
+-- | One-letter representation of general category. This function returns
+--   one of <tt>L</tt> (letter), <tt>M</tt> (mark), <tt>N</tt> (number),
+--   <tt>P</tt> (punctuation), <tt>S</tt> (symbol), <tt>Z</tt> (seperator),
+--   or <tt>C</tt> (other).
+generalCategoryMajorLetter :: MajorGeneralCategory -> Char
+
+-- | One-letter representation of minor general category.
+generalCategoryMinorLetter :: GeneralCategory -> Char
+instance GHC.Enum.Bounded Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
+instance GHC.Classes.Ord Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
+instance GHC.Classes.Eq Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
+instance GHC.Show.Show Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
+
+
+-- | Unicode general category.
+module Koshucode.Baala.Overture.Text.Category
+
+-- | List of letter categories (L).
+categoryLetter :: [GeneralCategory]
+
+-- | List of mark categories (M).
+categoryMark :: [GeneralCategory]
+
+-- | List of number categories (N).
+categoryNumber :: [GeneralCategory]
+
+-- | List of punctuation categories (P).
+categoryPunctuation :: [GeneralCategory]
+
+-- | List of symbol categories (S).
+categorySymbol :: [GeneralCategory]
+
+-- | List of separator categories (Z).
+categorySeparator :: [GeneralCategory]
+
+-- | List of other categories (C).
+categoryOther :: [GeneralCategory]
+
+-- | List of alphabetic categories (L + M).
+categoryAlpha :: [GeneralCategory]
+
+-- | List of textual-sign categories (P + S).
+categorySign :: [GeneralCategory]
+
+-- | List of open brackets (Ps + Pi).
+categoryOpen :: [GeneralCategory]
+
+-- | List of close brackets (Pe + Pf).
+categoryClose :: [GeneralCategory]
+
+-- | Lookup unicode general categories by its short name. Short name means
+--   two-letter category name (e.g., <tt>"lu"</tt> for upper case letter,
+--   <tt>"zs"</tt> for space), or one-letter category group (e.g.,
+--   <tt>"l"</tt> for letter, <tt>"z"</tt> for separator).
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "lu"
+--   Right (fromList [UppercaseLetter])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "n"
+--   Right (fromList [DecimalNumber, LetterNumber, OtherNumber])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; categoryLookup "lx"
+--   Left "lx"
+--   </pre>
+categoryLookup :: String -> Either String (Set GeneralCategory)
 
 
 -- | Text name.
@@ -68,3 +181,113 @@ instance Koshucode.Baala.Overture.Name.String.GetName (Koshucode.Baala.Overture.
 instance GHC.Show.Show (Koshucode.Baala.Overture.Fn.Fn2 a b c)
 instance GHC.Classes.Eq (Koshucode.Baala.Overture.Fn.Fn2 a b c)
 instance GHC.Classes.Ord (Koshucode.Baala.Overture.Fn.Fn2 a b c)
+
+
+-- | Derivied types.
+module Koshucode.Baala.Overture.Type
+
+-- | Homotype <a>Either</a>.
+type Eith a = Either a a
+
+-- | Extract <a>Eith</a> content.
+uneith :: Eith a -> a
+
+-- | Map from something to same type.
+type Map a = a -> a
+
+-- | Map from something to list of something.
+type ManyMap a = a -> [a]
+
+-- | Boolean-valued function, also called predicate.
+type Test a = a -> Bool
+
+-- | Boolean-valued function with 2 arguments.
+type Test2 a b = a -> b -> Bool
+
+
+-- | String utility.
+module Koshucode.Baala.Overture.Text.Utility
+
+-- | Remove space and space-like characters from the beginning of string.
+trimLeft :: Map String
+
+-- | Remove space and space-like characters from the end of string.
+trimRight :: Map String
+
+-- | Remove space and space-like characters from the beginning and end of
+--   string.
+trimBoth :: Map String
+
+-- | Add spaces to the left.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padLeft 10 "abc"
+--   "       abc"
+--   </pre>
+padLeft :: Int -> Map String
+
+-- | Add spaces to the right.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padRight 10 "abc"
+--   "abc       "
+--   </pre>
+padRight :: Int -> Map String
+
+-- | Add given character to the left.
+padLeftWith :: Char -> Int -> Map String
+
+-- | Add given character to the right.
+padRightWith :: Char -> Int -> Map String
+
+-- | Calculate width of string.
+stringWidth :: String -> Int
+
+-- | Print showing value.
+putShow :: (Show a) => a -> IO ()
+
+-- | Print showing value with newline.
+putShowLn :: (Show a) => a -> IO ()
+
+-- | Print multiple lines.
+putLines :: [String] -> IO ()
+
+-- | Print multiple lines.
+hPutLines :: Handle -> [String] -> IO ()
+
+-- | Print empty line.
+hPutEmptyLine :: Handle -> IO ()
+
+-- | Read integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; readInt "12"
+--   Just 12
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; readInt "12.3"
+--   Nothing
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; readInt "12345678901234567890"
+--   Just (-6101065172474983726)
+--   </pre>
+readInt :: String -> Maybe Int
+
+-- | Read integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; readInteger "12345678901234567890"
+--   Just 12345678901234567890
+--   </pre>
+readInteger :: String -> Maybe Integer
+
+
+-- | Bundle of text modules.
+module Koshucode.Baala.Overture.Text
+
+
+-- | Bundle of overture modules.
+module Koshucode.Baala.Overture

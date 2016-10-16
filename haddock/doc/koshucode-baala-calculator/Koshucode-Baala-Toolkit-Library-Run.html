@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-calculator-0.162.0.0: A portable relational calculator</p
+      >koshucode-baala-calculator-0.163.0.0: A portable relational calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Toolkit.Library.Run</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Functions for implementing the Koshucode calculator.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -77,25 +85,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >getProxies</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
-	    > [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >)]</li
-	  ><li class="src short"
-	  ><a href="#v:theContent"
-	    >theContent</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > c</li
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -131,31 +123,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >getProxies</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
-	    > [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >)] <a onclick="showSource('src/Koshucode-Baala-Toolkit-Library-Run.html#getProxies');" href="javascript:void(0);" class="link"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-Http.html#t:HttpProxy"
+	    >HttpProxy</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Toolkit-Library-Run.html#getProxies');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:theContent" class="def"
-	    >theContent</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Utility.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > c] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Toolkit-Library-Run.html#theContent');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get proxy settings.
+   This function looks environment variables
+   of <code
+	      >http_proxy</code
+	      >, <code
+	      >https_proxy</code
+	      >, and <code
+	      >ftp_proxy</code
+	      >.</p
+	    ></div
 	  ></div
 	></div
       ></div

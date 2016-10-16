@@ -28,7 +28,7 @@
 <a class="number" name="line-19">19</a>    <span class='hs-varid'>termsP</span><span class='hs-layout'>,</span> <span class='hs-varid'>termsN</span><span class='hs-layout'>,</span> <span class='hs-varid'>termsPN</span><span class='hs-layout'>,</span>
 <a class="number" name="line-20">20</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-21">21</a>
-<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>   <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>   <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
 <a class="number" name="line-23">23</a>
 <a class="number" name="line-24">24</a>
 <a class="number" name="line-25">25</a><span class='hs-comment'>-- ----------------------  Term</span>
@@ -105,27 +105,27 @@
 <a class="number" name="line-96">96</a><span class='hs-comment'>--   &gt;&gt;&gt; termP (-1)</span>
 <a class="number" name="line-97">97</a><span class='hs-comment'>--   False</span>
 <a class="number" name="line-98">98</a><span class='hs-comment'>--</span>
-<a class="number" name="line-99">99</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-99">99</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Int</span>
 <a class="number" name="line-100">100</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;=</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
 <a class="number" name="line-101">101</a>
 <a class="number" name="line-102">102</a><a name="termN"></a><span class='hs-comment'>-- | Check new term.</span>
-<a class="number" name="line-103">103</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-103">103</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Int</span>
 <a class="number" name="line-104">104</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
 <a class="number" name="line-105">105</a>
 <a class="number" name="line-106">106</a><span class='hs-comment'>-- Check present and new terms.</span>
-<a class="number" name="line-107">107</a><span class='hs-comment'>--termPN :: B.Test2 Int Int</span>
+<a class="number" name="line-107">107</a><span class='hs-comment'>--termPN :: O.Test2 Int Int</span>
 <a class="number" name="line-108">108</a><span class='hs-comment'>--termPN p n = termP p &amp;&amp; termN n</span>
 <a class="number" name="line-109">109</a>
 <a class="number" name="line-110">110</a><a name="termsP"></a><span class='hs-comment'>-- | Check all terms are present.</span>
-<a class="number" name="line-111">111</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-111">111</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-112">112</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termP</span>
 <a class="number" name="line-113">113</a>
 <a class="number" name="line-114">114</a><a name="termsN"></a><span class='hs-comment'>-- | Check all terms are new.</span>
-<a class="number" name="line-115">115</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-115">115</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-116">116</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termN</span>
 <a class="number" name="line-117">117</a>
 <a class="number" name="line-118">118</a><a name="termsPN"></a><span class='hs-comment'>-- | Check present terms and new terms.</span>
-<a class="number" name="line-119">119</a><span class='hs-definition'>termsPN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Test2</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-119">119</a><span class='hs-definition'>termsPN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test2</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-120">120</a><span class='hs-definition'>termsPN</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>termsP</span> <span class='hs-varid'>ps</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>termsN</span> <span class='hs-varid'>ns</span>
 <a class="number" name="line-121">121</a>
 </pre></body>
