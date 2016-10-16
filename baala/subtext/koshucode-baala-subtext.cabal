@@ -48,7 +48,6 @@ library
   exposed-modules:
         Koshucode.Baala.Subtext
         Koshucode.Baala.Subtext.Bundle
-        Koshucode.Baala.Subtext.Category
         Koshucode.Baala.Subtext.Expr
         Koshucode.Baala.Subtext.Match
         Koshucode.Baala.Subtext.MinMax

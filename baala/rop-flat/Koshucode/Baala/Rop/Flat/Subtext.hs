@@ -10,6 +10,7 @@ module Koshucode.Baala.Rop.Flat.Subtext
     -- $Subtext
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
@@ -249,11 +250,11 @@ parseSubtext ns = trees False where
     pre "ascii"   []        = Right T.ascii
     pre "latin-1" []        = Right T.latin1
     pre "sp"      []        = Right T.space
-    pre "012"     []        = Right $ T.categoryList T.categoryNumber
-    pre "abc"     []        = Right $ T.categoryList T.categoryAlpha
-    pre "+-"      []        = Right $ T.categoryList T.categorySign
-    pre "open"    []        = Right $ T.categoryList T.categoryOpen
-    pre "close"   []        = Right $ T.categoryList T.categoryClose
+    pre "012"     []        = Right $ T.categoryList O.categoryNumber
+    pre "abc"     []        = Right $ T.categoryList O.categoryAlpha
+    pre "+-"      []        = Right $ T.categoryList O.categorySign
+    pre "open"    []        = Right $ T.categoryList O.categoryOpen
+    pre "close"   []        = Right $ T.categoryList O.categoryClose
     pre "koshu-symbol"  []  = Right koshuSymbol
     pre "koshu-general" []  = Right koshuGeneral
     pre "koshu-plain"   []  = Right koshuPlain

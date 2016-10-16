@@ -2,7 +2,7 @@
 
 -- | Unicode general category.
 
-module Koshucode.Baala.Subtext.Category
+module Koshucode.Baala.Overture.Text.Category
  ( -- * Category group
    categoryLetter,
    categoryMark,

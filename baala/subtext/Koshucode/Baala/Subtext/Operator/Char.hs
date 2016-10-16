@@ -23,9 +23,9 @@ module Koshucode.Baala.Subtext.Operator.Char
 
 import qualified Data.Char                                   as C
 import qualified Data.Set                                    as Set
-import qualified Koshucode.Baala.Subtext.Category            as S
-import qualified Koshucode.Baala.Subtext.Expr                as S
+import qualified Koshucode.Baala.Overture                    as O
 import qualified Koshucode.Baala.Overture.Fn                 as O
+import qualified Koshucode.Baala.Subtext.Expr                as S
 import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
 import qualified Koshucode.Baala.Subtext.Operator.Repeat     as S
 import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
@@ -86,7 +86,7 @@ categoryList = categorySet . Set.fromList
 --   If unknown name is given, returns the name in 'Left' data.
 category :: String -> Either String CharExpr
 category s =
-    do cs <- S.categoryLookup `mapM` words s
+    do cs <- O.categoryLookup `mapM` words s
        Right $ categorySet $ Set.unions cs
 
 
