@@ -10,7 +10,7 @@ module Koshucode.Baala.Subtext.Expr
  ) where
 
 import qualified Koshucode.Baala.Overture.Fn     as O
-import qualified Koshucode.Baala.Subtext.MinMax  as S
+import qualified Koshucode.Baala.Subtext.MinMax  as T
 
 
 -- | Subtext match expression.
@@ -25,7 +25,7 @@ data ExprRec a
   | ESeq          [Expr a]     -- ^ Sequential match
   | EAnd          [Expr a]     -- ^ Additional condition
   | ENot          (Expr a)     -- ^ Inverted condition
-  | ERep S.MinMax (Expr a)     -- ^ Repetitive match
+  | ERep T.MinMax (Expr a)     -- ^ Repetitive match
   | ELast         (Expr a)     -- ^ Find last match
   | ESub  O.Name  (Expr a)     -- ^ Submatch
   | EAs (FnAs a)  (Expr a)     -- ^ Modification matcher

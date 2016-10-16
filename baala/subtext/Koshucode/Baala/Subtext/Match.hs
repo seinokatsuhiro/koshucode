@@ -15,11 +15,11 @@ import Prelude hiding (seq)
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Overture.Fn       as O
-import qualified Koshucode.Baala.Subtext.Bundle    as S
-import qualified Koshucode.Baala.Subtext.Expr      as S
-import qualified Koshucode.Baala.Subtext.MinMax    as S
-import qualified Koshucode.Baala.Subtext.Operator  as S
-import qualified Koshucode.Baala.Subtext.Para      as S
+import qualified Koshucode.Baala.Subtext.Bundle    as T
+import qualified Koshucode.Baala.Subtext.Expr      as T
+import qualified Koshucode.Baala.Subtext.MinMax    as T
+import qualified Koshucode.Baala.Subtext.Operator  as T
+import qualified Koshucode.Baala.Subtext.Para      as T
 
 -- | Function from input sequence to match result.
 --   When unmatched, 'Nothing' is returned.
@@ -29,81 +29,81 @@ type GeneralMatch a = [a] -> Maybe (MatchResult a)
 type CharMatch = GeneralMatch Char
 
 -- | Main and submatches.
-type MatchResult a = ([a], [S.Submatch a])
+type MatchResult a = ([a], [T.Submatch a])
 
 -- | Apply match expression to input sequence.
-matchExpr :: (Show a) => S.Expr a -> GeneralMatch a
-matchExpr e = matchBundle $ S.bundle [("start", e)]
+matchExpr :: (Show a) => T.Expr a -> GeneralMatch a
+matchExpr e = matchBundle $ T.bundle [("start", e)]
 
 -- | Apply expression bundle to input sequence.
-matchBundle :: (Show a) => S.Bundle a -> GeneralMatch a
+matchBundle :: (Show a) => T.Bundle a -> GeneralMatch a
 matchBundle es s =
-    do result <- match $ S.createPara es s
+    do result <- match $ T.createPara es s
        Just $ matchResult result
 
 -- | Extract match result from parameter.
-matchResult :: S.Para a -> MatchResult a
+matchResult :: T.Para a -> MatchResult a
 matchResult result = (mainMatch result, subMatches result)
 
 -- | Extract matched text.
-mainMatch :: S.Para a -> [a]
-mainMatch = reverse . S.paraRawOutput
+mainMatch :: T.Para a -> [a]
+mainMatch = reverse . T.paraRawOutput
 
 -- | Extract submatches.
-subMatches :: S.Para a -> [S.Submatch a]
-subMatches = reverse . S.paraRawSubs
+subMatches :: T.Para a -> [T.Submatch a]
+subMatches = reverse . T.paraRawSubs
 
 -- | Match procedure.
-match :: (Show a) => S.Para a -> Maybe (S.Para a)
-match pa@S.Para { S.paraBundle    = bundle
-                , S.paraGather    = gather
-                , S.paraExpr      = expr
-                , S.paraPos       = pos
-                , S.paraInput     = s
-                , S.paraPrev      = prev
-                , S.paraRawOutput = o } = result
+match :: (Show a) => T.Para a -> Maybe (T.Para a)
+match pa@T.Para { T.paraBundle    = bundle
+                , T.paraGather    = gather
+                , T.paraExpr      = expr
+                , T.paraPos       = pos
+                , T.paraInput     = s
+                , T.paraPrev      = prev
+                , T.paraRawOutput = o } = result
     where
       result = case expr of
-                 S.ERec  r -> rec r
-                 S.EBase b -> base b
+                 T.ERec  r -> rec r
+                 T.EBase b -> base b
 
-      para ? e = match $ para { S.paraExpr = e }
+      para ? e = match $ para { T.paraExpr = e }
 
       -- ----------------------  recursive
 
-      rec (S.EOr [])        = Nothing
-      rec (S.EOr (e:es))    = case pa ? e of
-                                Nothing  -> pa ? S.or es
+      rec (T.EOr [])        = Nothing
+      rec (T.EOr (e:es))    = case pa ? e of
+                                Nothing  -> pa ? T.or es
                                 Just pa' -> Just pa'
 
-      rec (S.ESeq [])       = Just pa
-      rec (S.ESeq (e:es))   = do pa' <- pa ? e
-                                 pa' ? S.seq es
+      rec (T.ESeq [])       = Just pa
+      rec (T.ESeq (e:es))   = do pa' <- pa ? e
+                                 pa' ? T.seq es
 
-      rec (S.EAnd [])       = Just pa
-      rec (S.EAnd (e:es))   = do pa' <- pa ? e
+      rec (T.EAnd [])       = Just pa
+      rec (T.EAnd (e:es))   = do pa' <- pa ? e
                                  case all matched es of
                                    True  -> Just pa'
                                    False -> Nothing
 
-      rec (S.ENot e)        = case pa ? e of
+      rec (T.ENot e)        = case pa ? e of
                                 Nothing  -> Just pa
                                 Just _   -> Nothing
 
-      rec (S.ERep m e)      = rep m e
-      rec (S.ELast  e)      = let m s' = pa { S.paraInput = s' } ? e
+      rec (T.ERep m e)      = rep m e
+      rec (T.ELast  e)      = let m s' = pa { T.paraInput = s' } ? e
                               in firstJust (m <$> reverse (tails s))
-      rec (S.ESub n e)      = do pa' <- pa { S.paraRawOutput = [] } ? e
-                                 let o'   = S.paraRawOutput pa'
-                                     subs = S.paraRawSubs pa'
-                                 Just $ pa' { S.paraRawSubs   = (n, reverse o') : subs
-                                            , S.paraRawOutput = o' ++ o }
-      rec (S.EAs (O.Fn _ f) e)
-                            = do pa' <- pa { S.paraRawOutput = [] } ? e
-                                 let o' = S.paraRawOutput pa'
-                                 Just $ pa' { S.paraRawOutput = reverse (f o') ++ o }
-      rec (S.EGath b e)     = do pa' <- pa { S.paraGather = b } ? e
-                                 Just $ pa' { S.paraGather = gather }
+      rec (T.ESub n e)      = do pa' <- pa { T.paraRawOutput = [] } ? e
+                                 let o'   = T.paraRawOutput pa'
+                                     subs = T.paraRawSubs pa'
+                                 Just $ pa' { T.paraRawSubs   = (n, reverse o') : subs
+                                            , T.paraRawOutput = o' ++ o }
+      rec (T.EAs (O.Fn _ f) e)
+                            = do pa' <- pa { T.paraRawOutput = [] } ? e
+                                 let o' = T.paraRawOutput pa'
+                                 Just $ pa' { T.paraRawOutput = reverse (f o') ++ o }
+      rec (T.EGath b e)     = do pa' <- pa { T.paraGather = b } ? e
+                                 Just $ pa' { T.paraGather = gather }
 
       matched e             = case pa ? e of
                                  Nothing -> False
@@ -114,54 +114,54 @@ match pa@S.Para { S.paraBundle    = bundle
       -- { E } ( A to )    = { E } ( A - 1 to )
       -- { E } ( A to B )  = { E } ( A - 1 to B - 1 )
 
-      rep (S.Min a) e = case pa ? e of
+      rep (T.Min a) e = case pa ? e of
                           Nothing  -> lower a
-                          Just pa' -> next pa' $ S.min (a - 1) e
+                          Just pa' -> next pa' $ T.min (a - 1) e
 
-      rep (S.MinMax a b) e
+      rep (T.MinMax a b) e
           | b < a     = Nothing
           | b <= 0    = Just pa
           | otherwise = case pa ? e of
                            Nothing  -> lower a
-                           Just pa' -> next pa' $ S.minMax (a - 1) (b - 1) e
+                           Just pa' -> next pa' $ T.minMax (a - 1) (b - 1) e
 
       lower a | a <= 0     = Just pa
               | otherwise  = Nothing
 
-      next pa' e' | pos == S.paraPos pa'  = Just pa'   -- matched but not consumed
+      next pa' e' | pos == T.paraPos pa'  = Just pa'   -- matched but not consumed
                   | otherwise             = pa' ? e'
 
       -- ----------------------  base
 
-      base (S.EElem (O.Fn _ f)) =
+      base (T.EElem (O.Fn _ f)) =
           case s of
-            x : s' | f x   -> Just $ pa { S.paraPos       = pos + 1
-                                        , S.paraInput     = s'
-                                        , S.paraPrev      = Just x
-                                        , S.paraRawOutput = output $ x : o }
+            x : s' | f x   -> Just $ pa { T.paraPos       = pos + 1
+                                        , T.paraInput     = s'
+                                        , T.paraPrev      = Just x
+                                        , T.paraRawOutput = output $ x : o }
             _              -> Nothing
 
-      base (S.ESpan (O.Fn _ f)) =
+      base (T.ESpan (O.Fn _ f)) =
           do (w, s') <- f s
-             Just $ pa { S.paraPos       = pos + length w
-                       , S.paraInput     = s'
-                       , S.paraPrev      = case reverse w of
+             Just $ pa { T.paraPos       = pos + length w
+                       , T.paraInput     = s'
+                       , T.paraPrev      = case reverse w of
                                              x : _ -> Just x
                                              []    -> prev
-                       , S.paraRawOutput = output $ w ++ o }
+                       , T.paraRawOutput = output $ w ++ o }
 
-      base (S.EInter (O.Fn2 _ f)) =
+      base (T.EInter (O.Fn2 _ f)) =
           case s of
             r : _  | f prev (Just r)   -> Just pa
             []     | f prev (Nothing)  -> Just pa
             _                          -> Nothing
 
-      base (S.EChange n) =
+      base (T.EChange n) =
           do e' <- Map.lookup n bundle
              pa ? e'
 
-      base (S.EAlways b)       = when b
-      base S.EWhat             = Nothing
+      base (T.EAlways b)       = when b
+      base T.EWhat             = Nothing
 
       output o' | gather    = o'
                 | otherwise = o

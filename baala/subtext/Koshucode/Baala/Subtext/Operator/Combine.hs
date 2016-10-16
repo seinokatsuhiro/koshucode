@@ -19,107 +19,107 @@ module Koshucode.Baala.Subtext.Operator.Combine
 import Prelude hiding ( or, seq, and, not, last )
 
 import qualified Koshucode.Baala.Overture.Fn             as O
-import qualified Koshucode.Baala.Subtext.Expr            as S
-import qualified Koshucode.Baala.Subtext.MinMax          as S
-import qualified Koshucode.Baala.Subtext.Operator.Basic  as S
+import qualified Koshucode.Baala.Subtext.Expr            as T
+import qualified Koshucode.Baala.Subtext.MinMax          as T
+import qualified Koshucode.Baala.Subtext.Operator.Basic  as T
 
 
 -- --------------------------------------------  Combination
 
 -- | Alternative match.
-or :: [S.Expr a] -> S.Expr a
-or []  = S.fail
+or :: [T.Expr a] -> T.Expr a
+or []  = T.fail
 or [e] = e
-or es  = S.ERec $ S.EOr es
+or es  = T.ERec $ T.EOr es
 
 -- | Sequential match.
-seq :: [S.Expr a] -> S.Expr a
-seq []  = S.succ
+seq :: [T.Expr a] -> T.Expr a
+seq []  = T.succ
 seq [e] = e
-seq es  = S.ERec $ S.ESeq es
+seq es  = T.ERec $ T.ESeq es
 
 -- | Additional condition.
-and :: [S.Expr a] -> S.Expr a
-and []  = S.succ
+and :: [T.Expr a] -> T.Expr a
+and []  = T.succ
 and [e] = e
-and es  = S.ERec $ S.EAnd es
+and es  = T.ERec $ T.EAnd es
 
 -- | Inverted condition.
 --   If expression is zero-repeatable, stirp off the repeatition operator,
 --   because zero-repetition can be matched any input.
-not :: S.Expr a -> S.Expr a
-not = S.ERec . S.ENot . unrep
+not :: T.Expr a -> T.Expr a
+not = T.ERec . T.ENot . unrep
 
 -- | Strip off zero-repetition operator.
-unrep :: S.Expr a -> S.Expr a
+unrep :: T.Expr a -> T.Expr a
 unrep = berry f where
-    f (S.ERec (S.ERep m e))
-        | S.atLeast 0 m  = unrep e
-        | otherwise      = S.ERec (S.ERep m e)
+    f (T.ERec (T.ERep m e))
+        | T.atLeast 0 m  = unrep e
+        | otherwise      = T.ERec (T.ERep m e)
     f e = e
 
 -- | Map to berry expression.
-berry :: (S.Expr a -> S.Expr a) -> S.Expr a -> S.Expr a
+berry :: (T.Expr a -> T.Expr a) -> T.Expr a -> T.Expr a
 berry f = loop where
-    loop (S.ERec (S.ESub n e))   = sub n $ loop e
-    loop (S.ERec (S.EGath b e))  = (S.ERec (S.EGath b $ loop e))
+    loop (T.ERec (T.ESub n e))   = sub n $ loop e
+    loop (T.ERec (T.EGath b e))  = (T.ERec (T.EGath b $ loop e))
     loop e = f e
 
 -- | Find last match.
-last :: S.Expr a -> S.Expr a
-last e = S.ERec $ S.ELast e
+last :: T.Expr a -> T.Expr a
+last e = T.ERec $ T.ELast e
 
 -- | Any character except for given pattern.
-anyNot :: S.Expr a -> S.Expr a
-anyNot e = and [S.any, not e]
+anyNot :: T.Expr a -> T.Expr a
+anyNot e = and [T.any, not e]
 
 
 -- --------------------------------------------  Variation
 
 -- | Match but stay.
-stay :: S.Expr a -> S.Expr a
-stay e = and [S.succ, e]
+stay :: T.Expr a -> T.Expr a
+stay e = and [T.succ, e]
 
 -- | Turn off gathering match.
-skip :: S.Expr a -> S.Expr a
+skip :: T.Expr a -> T.Expr a
 skip = gath False
 
 -- | Turn on gathering match.
-gather :: S.Expr a -> S.Expr a
+gather :: T.Expr a -> T.Expr a
 gather = gath True
 
-gath :: Bool -> S.Expr a -> S.Expr a
-gath b = S.ERec . S.EGath b
+gath :: Bool -> T.Expr a -> T.Expr a
+gath b = T.ERec . T.EGath b
 
 -- | Named submatch.
-sub :: O.Name -> S.Expr a -> S.Expr a
-sub n = S.ERec . S.ESub n
+sub :: O.Name -> T.Expr a -> T.Expr a
+sub n = T.ERec . T.ESub n
 
 -- | Named submatch.
-(#) :: O.Name -> S.Expr a -> S.Expr a
+(#) :: O.Name -> T.Expr a -> T.Expr a
 n # e = sub n e
 
 
 -- --------------------------------------------  Modification
 
 -- | Match with modification.
-as :: S.FnAs a -> S.Expr a -> S.Expr a
-as f = S.ERec . S.EAs f
+as :: T.FnAs a -> T.Expr a -> T.Expr a
+as f = T.ERec . T.EAs f
 
 -- | Replace to given sequence.
-asConst :: [a] -> S.Expr a -> S.Expr a
+asConst :: [a] -> T.Expr a -> T.Expr a
 asConst c = as $ O.Fn "const" $ const c
 
 -- | Add segment to the beginning of matched sequence.
-asPrepend :: [a] -> S.Expr a -> S.Expr a
+asPrepend :: [a] -> T.Expr a -> T.Expr a
 asPrepend a = as (O.Fn "add-prepend" ((a ++) . reverse))
 
 -- | Add segment to the end of matched sequence.
-asAppend :: [a] -> S.Expr a -> S.Expr a
+asAppend :: [a] -> T.Expr a -> T.Expr a
 asAppend a = as (O.Fn "add-append" ((++ a)  . reverse))
 
 -- | Add segments to the beginning and end of matched sequence.
-asWrap :: [a] -> [a]  -> S.Expr a -> S.Expr a
+asWrap :: [a] -> [a]  -> T.Expr a -> T.Expr a
 asWrap a b = as (O.Fn "add-wrap" (wrap a b . reverse))
 
 wrap :: [a] -> [a] -> [a] -> [a]

@@ -13,18 +13,18 @@ import Prelude hiding (seq, and)
 
 import qualified Data.Map.Strict                   as Map
 import qualified Koshucode.Baala.Overture.Fn       as O
-import qualified Koshucode.Baala.Subtext.Bundle    as S
-import qualified Koshucode.Baala.Subtext.Expr      as S
-import qualified Koshucode.Baala.Subtext.MinMax    as S
-import qualified Koshucode.Baala.Subtext.Operator  as S
+import qualified Koshucode.Baala.Subtext.Bundle    as T
+import qualified Koshucode.Baala.Subtext.Expr      as T
+import qualified Koshucode.Baala.Subtext.MinMax    as T
+import qualified Koshucode.Baala.Subtext.Operator  as T
 
 
 -- | Matching parameter.
 data Para a = Para
-  { paraBundle     :: S.BundleMap a  -- ^ Expression bundle
+  { paraBundle     :: T.BundleMap a  -- ^ Expression bundle
   , paraRawSubs    :: [Submatch a]   -- ^ Submatches.
   , paraGather     :: Bool           -- ^ Gather or skip match result
-  , paraExpr       :: S.Expr a       -- ^ Match expression
+  , paraExpr       :: T.Expr a       -- ^ Match expression
   , paraPos        :: Int            -- ^ Position on input sequence
   , paraInput      :: [a]            -- ^ Input sequence
   , paraPrev       :: Maybe a        -- ^ Previous element
@@ -36,75 +36,75 @@ type Submatch a = (O.Name, [a])
 
 -- | Create matching parameter from
 --   expression bundle and input sequence.
-createPara :: S.Bundle a -> [a] -> Para a
+createPara :: T.Bundle a -> [a] -> Para a
 createPara bun s =
     let bun' = simplify bun
-    in Para { paraBundle     = Map.fromList $ S.bundleExpr bun'
+    in Para { paraBundle     = Map.fromList $ T.bundleExpr bun'
             , paraRawSubs    = []
             , paraGather     = True
-            , paraExpr       = S.bundleStart bun'
+            , paraExpr       = T.bundleStart bun'
             , paraPos        = 0
             , paraInput      = s
             , paraPrev       = Nothing
             , paraRawOutput  = [] }
 
 -- | Simplify bundle of match expressions.
-simplify :: S.Bundle a -> S.Bundle a
-simplify bun@S.Bundle { S.bundleExpr = es } =
+simplify :: T.Bundle a -> T.Bundle a
+simplify bun@T.Bundle { T.bundleExpr = es } =
     let es' = fmap (what . reduce) <$> es
-    in bun { S.bundleExpr  = es'
-           , S.bundleStart = S.startExpr es' }
+    in bun { T.bundleExpr  = es'
+           , T.bundleStart = T.startExpr es' }
 
 -- | Remove redundant expressions.
-reduce :: S.Expr a -> S.Expr a
+reduce :: T.Expr a -> T.Expr a
 reduce = top where
-    top (S.ERec  r)    = rec r
-    top (S.EBase b)    = S.EBase b
+    top (T.ERec  r)    = rec r
+    top (T.EBase b)    = T.EBase b
 
-    rec (S.EOr    [])                = S.fail
-    rec (S.ESeq   [])                = S.succ
-    rec (S.EAnd   [])                = S.succ
-    rec (S.ERep (S.MinMax _ 0) _)    = S.succ
+    rec (T.EOr    [])                = T.fail
+    rec (T.ESeq   [])                = T.succ
+    rec (T.EAnd   [])                = T.succ
+    rec (T.ERep (T.MinMax _ 0) _)    = T.succ
 
-    rec (S.EOr   [e])                = top e
-    rec (S.ESeq  [e])                = top e
-    rec (S.EAnd  [e])                = top e
-    rec (S.ERep (S.MinMax 1 1) e)    = top e
+    rec (T.EOr   [e])                = top e
+    rec (T.ESeq  [e])                = top e
+    rec (T.EAnd  [e])                = top e
+    rec (T.ERep (T.MinMax 1 1) e)    = top e
 
-    rec (S.ERep m1 (S.ERec (S.ERep m2 e)))
-                       = top $ S.ERec $ S.ERep (S.times m1 m2) e
+    rec (T.ERep m1 (T.ERec (T.ERep m2 e)))
+                       = top $ T.ERec $ T.ERep (T.times m1 m2) e
 
-    rec (S.EOr    es)  = S.or          (top <$> es)
-    rec (S.ESeq   es)  = S.seq         (top <$> es)
-    rec (S.EAnd   es)  = S.and         (top <$> es)
-    rec (S.ENot    e)  = S.not              (top e)
-    rec (S.ERep  m e)  = S.ERec $ S.ERep  m (top e)
-    rec (S.ELast   e)  = S.ERec $ S.ELast   (top e)
-    rec (S.ESub  n e)  = S.ERec $ S.ESub  n (top e)
-    rec (S.EAs   f e)  = S.ERec $ S.EAs   f (top e)
-    rec (S.EGath b e)  = S.ERec $ S.EGath b (top e)
+    rec (T.EOr    es)  = T.or          (top <$> es)
+    rec (T.ESeq   es)  = T.seq         (top <$> es)
+    rec (T.EAnd   es)  = T.and         (top <$> es)
+    rec (T.ENot    e)  = T.not              (top e)
+    rec (T.ERep  m e)  = T.ERec $ T.ERep  m (top e)
+    rec (T.ELast   e)  = T.ERec $ T.ELast   (top e)
+    rec (T.ESub  n e)  = T.ERec $ T.ESub  n (top e)
+    rec (T.EAs   f e)  = T.ERec $ T.EAs   f (top e)
+    rec (T.EGath b e)  = T.ERec $ T.EGath b (top e)
 
 -- | Replace context-dependent operator.
-what :: S.Expr a -> S.Expr a
+what :: T.Expr a -> T.Expr a
 what = top where
-    top (S.ERec r)     = S.ERec $ rec r
-    top e              = case replaceWhat S.anySeq e of
+    top (T.ERec r)     = T.ERec $ rec r
+    top e              = case replaceWhat T.anySeq e of
                            Nothing -> e
                            Just e' -> e'  -- ?? = { ? }
 
-    rec (S.EOr  es)    = S.EOr  (top <$> es)
-    rec (S.ESeq es)    = S.ESeq (seq es)
-    rec (S.EAnd es)    = S.EAnd (top <$> es)
-    rec (S.ENot e)     = S.ENot (top e)
+    rec (T.EOr  es)    = T.EOr  (top <$> es)
+    rec (T.ESeq es)    = T.ESeq (seq es)
+    rec (T.EAnd es)    = T.EAnd (top <$> es)
+    rec (T.ENot e)     = T.ENot (top e)
 
-    rec (S.ERep  m e)  = S.ERep  m (top e)
-    rec (S.ELast   e)  = S.ELast   (top e)
-    rec (S.ESub  n e)  = S.ESub  n (top e)
-    rec (S.EAs   f e)  = S.EAs   f (top e)
-    rec (S.EGath b e)  = S.EGath b (top e)
+    rec (T.ERep  m e)  = T.ERep  m (top e)
+    rec (T.ELast   e)  = T.ELast   (top e)
+    rec (T.ESub  n e)  = T.ESub  n (top e)
+    rec (T.EAs   f e)  = T.EAs   f (top e)
+    rec (T.EGath b e)  = T.EGath b (top e)
     
     seq (e1 : es@(e2 : _)) =
-        let rep = replaceWhat $ S.before e2
+        let rep = replaceWhat $ T.before e2
         in case (rep e1, rep e2) of
              (Nothing, _)        -> top e1 : seq es
              (Just e1', Nothing) -> e1'    : seq es  -- ?? ++ E = before E ++ E
@@ -112,14 +112,14 @@ what = top where
     seq [e] = [top e]
     seq []  = []
 
-replaceWhat :: S.Expr a -> S.Expr a -> Maybe (S.Expr a)
+replaceWhat :: T.Expr a -> T.Expr a -> Maybe (T.Expr a)
 replaceWhat rep = berryM loop where
-    loop (S.EBase S.EWhat)  = Just rep
+    loop (T.EBase T.EWhat)  = Just rep
     loop _                  = Nothing
 
 -- | Map to berry expression.
-berryM :: (Monad m) => (S.Expr a -> m (S.Expr a)) -> S.Expr a -> m (S.Expr a)
+berryM :: (Monad m) => (T.Expr a -> m (T.Expr a)) -> T.Expr a -> m (T.Expr a)
 berryM f = loop where
-    loop (S.ERec (S.ESub n e))  = return . S.ERec . S.ESub  n =<< loop e
-    loop (S.ERec (S.EGath b e)) = return . S.ERec . S.EGath b =<< loop e
+    loop (T.ERec (T.ESub n e))  = return . T.ERec . T.ESub  n =<< loop e
+    loop (T.ERec (T.EGath b e)) = return . T.ERec . T.EGath b =<< loop e
     loop e = f e

@@ -14,63 +14,63 @@ module Koshucode.Baala.Subtext.Operator.Repeat
 
 import Prelude hiding ( repeat, min, max, maybe )
 
-import qualified Koshucode.Baala.Subtext.Expr                as S
-import qualified Koshucode.Baala.Subtext.MinMax              as S
-import qualified Koshucode.Baala.Subtext.Operator.Basic      as S
-import qualified Koshucode.Baala.Subtext.Operator.Combine    as S
+import qualified Koshucode.Baala.Subtext.Expr                as T
+import qualified Koshucode.Baala.Subtext.MinMax              as T
+import qualified Koshucode.Baala.Subtext.Operator.Basic      as T
+import qualified Koshucode.Baala.Subtext.Operator.Combine    as T
 
 
 -- ----------------------  Basic repetition
 
 -- | Repetition with min-max parameter.
-repeat :: S.MinMax -> S.Expr a -> S.Expr a
-repeat m = S.ERec . S.ERep m
+repeat :: T.MinMax -> T.Expr a -> T.Expr a
+repeat m = T.ERec . T.ERep m
 
 -- | Extract min-max parameter.
-repeatTimes :: S.Expr a -> Maybe S.MinMax
-repeatTimes (S.ERec (S.ERep t _))  = Just t
+repeatTimes :: T.Expr a -> Maybe T.MinMax
+repeatTimes (T.ERec (T.ERep t _))  = Just t
 repeatTimes _                      = Nothing
 
 -- | Extract internal expression.
-repeatExpr :: S.Expr a -> Maybe (S.Expr a)
-repeatExpr (S.ERec (S.ERep _ e))   = Just e
+repeatExpr :: T.Expr a -> Maybe (T.Expr a)
+repeatExpr (T.ERec (T.ERep _ e))   = Just e
 repeatExpr _                       = Nothing
 
 -- | Repetition with lower bound.
-min :: Int -> S.Expr a -> S.Expr a
-min a = repeat $ S.Min a
+min :: Int -> T.Expr a -> T.Expr a
+min a = repeat $ T.Min a
 
 -- | Repetition upper bound.
-max :: Int -> S.Expr a -> S.Expr a
+max :: Int -> T.Expr a -> T.Expr a
 max = minMax 0
 
 -- | Repetition with lower and upper bound.
-minMax :: Int -> Int -> S.Expr a -> S.Expr a
-minMax a b = repeat $ S.MinMax a b
+minMax :: Int -> Int -> T.Expr a -> T.Expr a
+minMax a b = repeat $ T.MinMax a b
 
 
 -- ----------------------  Derived repetition
 
 -- | Match zero or more times.
-many :: S.Expr a -> S.Expr a
+many :: T.Expr a -> T.Expr a
 many = min 0
 
 -- | Match one or more times.
-many1 :: S.Expr a -> S.Expr a
+many1 :: T.Expr a -> T.Expr a
 many1 = min 1
 
 -- | Match zero or one times.
-maybe :: S.Expr a -> S.Expr a
+maybe :: T.Expr a -> T.Expr a
 maybe = minMax 0 1
 
 -- | Many of any.
-anySeq :: S.Expr a
-anySeq = many S.any
+anySeq :: T.Expr a
+anySeq = many T.any
 
 -- | Match before given expression.
-before :: S.Expr a -> S.Expr a
-before = many . S.anyNot
+before :: T.Expr a -> T.Expr a
+before = many . T.anyNot
 
 -- | X-separated values.
-sep :: S.Expr a -> S.Expr a -> S.Expr a
-sep x e = S.seq [many $ S.seq [e, x], maybe e]
+sep :: T.Expr a -> T.Expr a -> T.Expr a
+sep x e = T.seq [many $ T.seq [e, x], maybe e]
