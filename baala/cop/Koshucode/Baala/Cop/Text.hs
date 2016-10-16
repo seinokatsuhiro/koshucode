@@ -9,6 +9,7 @@ module Koshucode.Baala.Cop.Text
   ) where
 
 import qualified Data.Char                       as Char
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
@@ -136,7 +137,7 @@ copCharGroup1 = op where
     op xs = typeUnmatch xs
 
 charGroup :: Char -> String
-charGroup = B.generalCategoryName . B.majorGeneralCategory
+charGroup = O.generalCategoryName . O.majorGeneralCategory
 
 
 -- ----------------------  from-bool

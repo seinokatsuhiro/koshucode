@@ -38,11 +38,11 @@ debruijn :: B.Map (D.Cox c)
 debruijn = index [] where
     index :: [String] -> B.Map (D.Cox c)
     index vars cox = case cox of
-       D.CoxBlank cp n     ->  let v = B.name n
-                               in maybe cox (D.CoxLocal cp v) $ indexFrom 1 v vars
-       D.CoxFill _ _ _     ->  D.coxCall cox (index vars)
-       D.CoxForm1 _ _ v _  ->  D.coxCall cox (index $ v : vars)
-       _                   ->  cox
+       D.CoxBlank cp n     -> let v = B.name n
+                              in maybe cox (D.CoxLocal cp v) $ indexFrom 1 v vars
+       D.CoxFill _ _ _     -> D.coxCall cox (index vars)
+       D.CoxForm1 _ _ v _  -> D.coxCall cox (index $ v : vars)
+       _                   -> cox
 
 indexFrom :: (Eq c) => Int -> c -> [c] -> Maybe Int
 indexFrom origin key = loop origin where
@@ -141,11 +141,11 @@ isName (c:_)  = isNameFirst c
 isName _      = False
 
 isNameFirst :: O.Test Char
-isNameFirst c = case B.majorGeneralCategory c of
-                  B.UnicodeLetter     ->  True
-                  B.UnicodeMark       ->  True
-                  B.UnicodeSymbol     ->  True
-                  _                   ->  False
+isNameFirst c = case O.majorGeneralCategory c of
+                  O.UnicodeLetter  -> True
+                  O.UnicodeMark    -> True
+                  O.UnicodeSymbol  -> True
+                  _                -> False
 
 -- convert from infix operator to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap S.TTree
@@ -213,9 +213,9 @@ coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . D.CoxForm cp0 tag vs wh
     n = length vs
     outside vars cox = case cox of
        D.CoxLocal cp v i    
-           | v `elem` vars  ->  D.CoxLocal cp v i        -- inside blank
-           | otherwise      ->  D.CoxLocal cp v (i + n)  -- outside blank
-       D.CoxFill _ _ _      ->  D.coxCall cox (outside vars)
-       D.CoxForm1 _ _ v _   ->  D.coxCall cox (outside $ v : vars)
-       _                    ->  cox
+           | v `elem` vars  -> D.CoxLocal cp v i        -- inside blank
+           | otherwise      -> D.CoxLocal cp v (i + n)  -- outside blank
+       D.CoxFill _ _ _      -> D.coxCall cox (outside vars)
+       D.CoxForm1 _ _ v _   -> D.coxCall cox (outside $ v : vars)
+       _                    -> cox
 

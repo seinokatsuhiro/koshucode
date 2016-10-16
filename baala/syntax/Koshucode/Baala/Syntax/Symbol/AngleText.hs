@@ -17,7 +17,6 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
 
 import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Base         as B
 
 -- $Angle
 --
@@ -65,9 +64,9 @@ angleQuote = open . loop where
 angleSplit :: String -> Maybe (String, String)
 angleSplit [] = Nothing
 angleSplit (c : cs)
-    = case B.majorGeneralCategory c of
-        B.UnicodePunctuation -> punct c
-        B.UnicodeOther       -> other c
+    = case O.majorGeneralCategory c of
+        O.UnicodePunctuation -> punct c
+        O.UnicodeOther       -> other c
         _                    -> Nothing
       where
         just cs2 a           =  Just ("<" ++ a ++ ">", cs2)

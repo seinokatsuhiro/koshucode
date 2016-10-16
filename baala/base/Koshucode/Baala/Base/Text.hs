@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Text
     module Koshucode.Baala.Base.Text.PPrint,
     module Koshucode.Baala.Base.Text.TextTable,
     module Koshucode.Baala.Base.Text.Suffix,
-    module Koshucode.Baala.Base.Text.Unicode,
     module Koshucode.Baala.Base.Text.Utility,
   ) where
 
@@ -23,5 +22,4 @@ import Koshucode.Baala.Base.Text.MixText
 import Koshucode.Baala.Base.Text.PPrint
 import Koshucode.Baala.Base.Text.TextTable
 import Koshucode.Baala.Base.Text.Suffix
-import Koshucode.Baala.Base.Text.Unicode
 import Koshucode.Baala.Base.Text.Utility

@@ -2,7 +2,7 @@
 
 -- | Unicode general categories.
 
-module Koshucode.Baala.Base.Text.Unicode
+module Koshucode.Baala.Overture.Text.Unicode
   ( MajorGeneralCategory (..),
     majorGeneralCategory,
     toMajorGeneralCategory,

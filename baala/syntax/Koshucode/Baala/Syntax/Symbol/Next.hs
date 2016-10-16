@@ -153,10 +153,10 @@ isCharHyphen c  = c == '-'
 
 isCharGp :: O.Test Char
 isCharGp c =
-    case B.majorGeneralCategory c of
-      B.UnicodeLetter    -> True
-      B.UnicodeMark      -> True
-      B.UnicodeNumber    -> True      -- include isCharDigit
+    case O.majorGeneralCategory c of
+      O.UnicodeLetter    -> True
+      O.UnicodeMark      -> True
+      O.UnicodeNumber    -> True      -- include isCharDigit
       _                  -> c == '_' || c == '?'
 
 isCharGn, isCharG, isCharN :: O.Test Char
