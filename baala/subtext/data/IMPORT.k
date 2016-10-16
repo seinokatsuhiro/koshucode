@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    55 judges
+**    52 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Data.Map.Strict"
@@ -15,9 +15,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Koshucode.Baala.Subtext.Expr"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Koshucode.Baala.Subtext.MinMax"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Bundle"            /import "Koshucode.Baala.Subtext.Operator"
-
-|-- IMPORT  /module "Koshucode.Baala.Subtext.Category"          /import "Data.Char"
-|-- IMPORT  /module "Koshucode.Baala.Subtext.Category"          /import "Data.Set"
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Expr"              /import "Koshucode.Baala.Overture.Fn"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Expr"              /import "Koshucode.Baala.Subtext.MinMax"
@@ -40,9 +37,9 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Data.Set"
-|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Category"
-|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Expr"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Overture.Fn"
+|-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Expr"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Operator.Basic"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Operator.Repeat"
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Operator.Char"     /import "Koshucode.Baala.Subtext.Operator.Combine"
@@ -73,7 +70,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Subtext.Para"              /import "Koshucode.Baala.Subtext.Operator"
 
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Bundle"
-|-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Category"
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Match"
 |-- IMPORT  /module "Koshucode.Baala.Subtext"                   /import "Koshucode.Baala.Subtext.Operator"
 
