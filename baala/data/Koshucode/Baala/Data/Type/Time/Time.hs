@@ -24,8 +24,8 @@ module Koshucode.Baala.Data.Type.Time.Time
     timeAddClock, timeDiff,
   ) where
 
-import qualified Data.Time.Calendar                     as T
-import qualified Data.Time.Calendar.WeekDate            as T
+import qualified Data.Time.Calendar                     as Tim
+import qualified Data.Time.Calendar.WeekDate            as Tim
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Data.Type.Time.Clock   as D
@@ -51,7 +51,7 @@ timeYmd   :: D.MJDay -> Time
 timeYmd    = TimeYmd . D.Monthly
 
 timeMjd :: Time -> D.DayCount
-timeMjd = T.toModifiedJulianDay . timeDay
+timeMjd = Tim.toModifiedJulianDay . timeDay
 
 timeDay :: Time -> D.MJDay
 timeDay (TimeYmdcz d _ _)        = D.dateDay d
@@ -93,8 +93,8 @@ timeToMix time =
       TimeYmdcz d c z  -> dcz d c z `B.mixSep` szone z
       TimeYmdc  d c    -> dc d c
       TimeYmd   d      -> B.mixEncode d
-      TimeYw    day    -> yw $ T.toWeekDate  day
-      TimeYm    day    -> ym $ T.toGregorian day
+      TimeYw    day    -> yw $ Tim.toWeekDate  day
+      TimeYm    day    -> ym $ Tim.toGregorian day
     where
       dcz               :: D.Date -> D.Clock -> D.Sec -> B.MixText
       dcz d c z         = let c'  = D.clockAddSec z c
@@ -120,14 +120,14 @@ timeToMix time =
 -- | Create time data from year and month.
 timeFromYmAb :: D.Year -> D.Month -> B.Ab Time
 timeFromYmAb y m =
-    case T.fromGregorianValid y m 1 of
+    case Tim.fromGregorianValid y m 1 of
       Just day -> Right $ TimeYm day
       Nothing  -> Msg.notDate y m 1
 
 -- | Create time data from year and week.
 timeFromYwAb :: D.Year -> D.Week -> B.Ab Time
 timeFromYwAb y w =
-    case T.fromWeekDateValid y w 1 of
+    case Tim.fromWeekDateValid y w 1 of
       Just day -> Right $ TimeYw day
       Nothing  -> Msg.notDate y w 1
 
@@ -137,22 +137,22 @@ timeFromDczAb d c Nothing   = Right $ TimeYmdc  d c
 timeFromDczAb d c (Just z)  = Right $ TimeYmdcz d c z
 
 timeFromYmd :: D.Year -> D.Month -> D.Day -> Time
-timeFromYmd y m d = timeYmd $ T.fromGregorian y m d
+timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
 
 timeFromYmdTuple :: D.YmdTuple -> Time
 timeFromYmdTuple = timeYmd . dayFromYmdTuple where
-    dayFromYmdTuple (y, m, d) = T.fromGregorian y m d
+    dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d
 
 timeYmdTuple :: Time -> D.YmdTuple
-timeYmdTuple = T.toGregorian . timeDay
+timeYmdTuple = Tim.toGregorian . timeDay
 
 -- | Create time data form modified Julian date.
 timeFromMjd :: D.DayCount -> Time
-timeFromMjd = timeYmd . T.ModifiedJulianDay
+timeFromMjd = timeYmd . Tim.ModifiedJulianDay
 
 timeMapMjd :: O.Map D.DayCount -> O.Map Time
 timeMapMjd f time = timeMapDay g time where
-    g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
+    g (Tim.ModifiedJulianDay d) = Tim.ModifiedJulianDay $ f d
 
 
 -- ----------------------  First day
@@ -286,4 +286,4 @@ timeDiffDate :: D.Date -> D.Date -> Integer
 timeDiffDate d2 d1 = D.dateDay d2 `timeDiffDay` D.dateDay d1
 
 timeDiffDay :: D.MJDay -> D.MJDay -> Integer
-timeDiffDay d2 d1 = T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
+timeDiffDay d2 d1 = Tim.toModifiedJulianDay d2 - Tim.toModifiedJulianDay d1

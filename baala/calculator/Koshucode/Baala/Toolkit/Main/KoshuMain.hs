@@ -9,7 +9,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   -- $koshu.hs
   ) where
 
-import qualified Data.Time                  as T
+import qualified Data.Time                  as Tim
 import qualified Koshucode.Baala.Overture   as O
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Data       as D
@@ -54,8 +54,8 @@ data Param c = Param
     , paramProg          :: String
     , paramArgs          :: [String]
     , paramProxy         :: [(String, Maybe String)]
-    , paramTime          :: T.ZonedTime
-    , paramDay           :: T.Day
+    , paramTime          :: Tim.ZonedTime
+    , paramDay           :: Tim.Day
     } deriving (Show)
 
 initParam :: (Show c, D.CContent c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
@@ -63,8 +63,8 @@ initParam (Left errs) = B.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- B.progAndArgs
        proxy     <- L.getProxies
-       time      <- T.getZonedTime
-       let day = T.localDay $ T.zonedTimeToLocalTime time
+       time      <- Tim.getZonedTime
+       let day = Tim.localDay $ Tim.zonedTimeToLocalTime time
        return $ Param { paramAutoOutput    = getFlag "auto-output"
                       , paramElement       = getFlag "element"
                       , paramWriter        = writer

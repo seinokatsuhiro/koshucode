@@ -14,9 +14,9 @@ module Koshucode.Baala.Data.Type.Time.Date
     mix02,
   ) where
 
-import qualified Data.Time.Calendar                as T
-import qualified Data.Time.Calendar.WeekDate       as T
-import qualified Data.Time.Calendar.OrdinalDate    as T
+import qualified Data.Time.Calendar                as Tim
+import qualified Data.Time.Calendar.WeekDate       as Tim
+import qualified Data.Time.Calendar.OrdinalDate    as Tim
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Type.Message as Msg
@@ -33,7 +33,7 @@ data Date
 instance Eq  Date where  a == b         = dateDay a == dateDay b
 instance Ord Date where  a `compare` b  = dateDay a `compare` dateDay b
 
-type MJDay    = T.Day     -- ^ The Modified Julian Day
+type MJDay    = Tim.Day     -- ^ The Modified Julian Day
 type Year     = Integer
 type Week     = Int
 type Month    = Int
@@ -50,9 +50,9 @@ instance B.MixEncode Date where
 dateToMix :: Date -> B.MixText
 dateToMix date =
     case date of
-      Monthly d   -> dateMonth $ T.toGregorian    d
-      Weekly  d   -> dateWeek  $ T.toWeekDate     d
-      Yearly  d   -> dateYear  $ T.toOrdinalDate  d
+      Monthly d   -> dateMonth $ Tim.toGregorian    d
+      Weekly  d   -> dateWeek  $ Tim.toWeekDate     d
+      Yearly  d   -> dateYear  $ Tim.toOrdinalDate  d
     where
       dateMonth (y, m, d)  = B.mixDec y `hyMix`   mix02 m `hyMix` mix02 d
       dateWeek  (y, w, d)  = B.mixDec y `hywMix`  B.mixDec w   `hyMix` B.mixDec d
@@ -72,21 +72,21 @@ hywwMix  = B.mixInfix "-##"
 -- | Create date from year, month, and day.
 dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
 dateFromYmdAb y m d =
-    case T.fromGregorianValid y m d of
+    case Tim.fromGregorianValid y m d of
       Just day -> Right $ Monthly day
       Nothing  -> Msg.notDate y m d
 
 -- | Create date from year, week, and day.
 dateFromYwdAb :: Year -> Week -> Day -> B.Ab Date
 dateFromYwdAb y w d =
-    case T.fromWeekDateValid y w d of
+    case Tim.fromWeekDateValid y w d of
       Just day -> Right $ Weekly day
       Nothing  -> Msg.notDate y w d
 
 -- | Create date from year and day.
 dateFromYdAb :: Year -> Day -> B.Ab Date
 dateFromYdAb y d =
-    case T.fromOrdinalDateValid y d of
+    case Tim.fromOrdinalDateValid y d of
       Just day -> Right $ Yearly day
       Nothing  -> Msg.notDate y 0 d
 
@@ -105,7 +105,7 @@ dateMapDay f (Weekly  day)  = Weekly  $ f day
 dateMapDay f (Yearly  day)  = Yearly  $ f day
 
 dateAdd :: (Integral n) => n -> O.Map Date
-dateAdd d = dateMapDay $ T.addDays (fromIntegral d)
+dateAdd d = dateMapDay $ Tim.addDays (fromIntegral d)
 
 -- | Convert into monthly date.
 monthly :: O.Map Date
