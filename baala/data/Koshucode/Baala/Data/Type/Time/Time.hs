@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Time
+
 module Koshucode.Baala.Data.Type.Time.Time
   ( -- * Data type
     Time (..),
@@ -14,7 +16,6 @@ module Koshucode.Baala.Data.Type.Time.Time
     -- * First day
     timeFloorMonth, timeFloorYear,
     timeCeilMonth, timeCeilYaer,
-    -- $FirstDay
 
     -- * Range
     timeRangeDay, timeRangeMonth, timeRangeYear,
@@ -36,6 +37,7 @@ import qualified Koshucode.Baala.Data.Type.Message      as Msg
 
 -- ----------------------  Time
 
+-- | Time is a small duration on timeline.
 data Time
     = TimeYmdcz D.Date D.Clock D.Sec  -- ^ Date and time with time zone
     | TimeYmdc  D.Date D.Clock        -- ^ Date and time
@@ -44,15 +46,19 @@ data Time
     | TimeYm    D.MJDay               -- ^ Year and month
       deriving (Show, Eq, Ord)
 
-timeYmdc  :: D.MJDay -> D.Clock -> Time
-timeYmdc   = TimeYmdc . D.Monthly
-
+-- | Create monthly date from the Modified Julian Day.
 timeYmd   :: D.MJDay -> Time
 timeYmd    = TimeYmd . D.Monthly
 
+-- | Create monthly time from the Modified Julian Day and clock.
+timeYmdc  :: D.MJDay -> D.Clock -> Time
+timeYmdc   = TimeYmdc . D.Monthly
+
+-- | Get integer content of the Modified Julian Day of time.
 timeMjd :: Time -> D.DayCount
 timeMjd = Tim.toModifiedJulianDay . timeDay
 
+-- Get the Modified Julian Day of time.
 timeDay :: Time -> D.MJDay
 timeDay (TimeYmdcz d _ _)        = D.dateDay d
 timeDay (TimeYmdc  d _)          = D.dateDay d
@@ -60,6 +66,7 @@ timeDay (TimeYmd   d)            = D.dateDay d
 timeDay (TimeYw    d)            = d
 timeDay (TimeYm    d)            = d
 
+-- | Get the name of time precision.
 timePrecision :: Time -> String
 timePrecision (TimeYmdcz _ c _)  = D.clockPrecision c ++ " zone"
 timePrecision (TimeYmdc  _ c)    = D.clockPrecision c
@@ -67,6 +74,7 @@ timePrecision (TimeYmd   _)      = "day"
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
+-- | Map day part of time.
 timeMapDay :: O.Map D.MJDay -> O.Map Time
 timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
 timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
@@ -74,6 +82,7 @@ timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)
 timeMapDay f (TimeYw    d)       = TimeYw    (f d)
 timeMapDay f (TimeYm    d)       = TimeYm    (f d)
 
+-- | Map day part of time.
 timeMapDate :: O.Map D.Date -> O.Map Time
 timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
 timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
@@ -147,9 +156,14 @@ timeYmdTuple :: Time -> D.YmdTuple
 timeYmdTuple = Tim.toGregorian . timeDay
 
 -- | Create time data form modified Julian date.
+--
+--   >>> timeFromMjd 55555
+--   TimeYmd (Monthly 2010-12-25)
+--
 timeFromMjd :: D.DayCount -> Time
 timeFromMjd = timeYmd . Tim.ModifiedJulianDay
 
+-- | Map integer content of the Modified Julian Day.
 timeMapMjd :: O.Map D.DayCount -> O.Map Time
 timeMapMjd f time = timeMapDay g time where
     g (Tim.ModifiedJulianDay d) = Tim.ModifiedJulianDay $ f d
@@ -157,61 +171,71 @@ timeMapMjd f time = timeMapDay g time where
 
 -- ----------------------  First day
 
--- $FirstDay
+-- | Convert to the first day of month.
 --
---  /Examples/
+--   >>> timeFloorMonth $ timeFromYmd 2014 11 3
+--   TimeYmd (Monthly 2014-11-01)
 --
---  The first day of month.
---
---    >>> timeFloorMonth $ timeFromYmd 2014 11 3
---    TimeYmd 2014-11-01
---
---  The first day of year.
---
---    >>> timeFloorYear $ timeFromYmd 2014 11 3
---    TimeYmd 2014-01-01
---
---  The first day of next month.
---
---    >>> timeCeilMonth $ timeFromYmd 2014 11 3
---    TimeYmd 2014-12-01
---
---  The first day of next year.
---
---    >>> timeCeilYaer $ timeFromYmd 2014 11 3
---    TimeYmd 2015-01-01
-
 timeFloorMonth :: O.Map Time
 timeFloorMonth time =
     case timeYmdTuple time of
       (y, m, _) -> timeFromYmd y m 1
 
+-- | Convert to the first day of year.
+--
+--   >>> timeFloorYear $ timeFromYmd 2014 11 3
+--   TimeYmd (Monthly 2014-01-01)
+--
 timeFloorYear :: O.Map Time
 timeFloorYear time =
     case timeYmdTuple time of
       (y, _, _) -> timeFromYmd y 1 1
 
+-- | Conbert to the first day of next month.
+--
+--   >>> timeCeilMonth $ timeFromYmd 2014 11 3
+--   TimeYmd (Monthly 2014-12-01)
+--
+--   >>> timeCeilMonth $ timeFromYmd 2014 12 25
+--   TimeYmd (Monthly 2015-01-01)
+--
 timeCeilMonth :: O.Map Time
 timeCeilMonth time =
     case timeYmdTuple time of
-      (y, m, _) -> timeFromYmdTuple $ monthStep (y, m, 1)
+      (y, m, _) -> timeFromYmdTuple $ monthUp (y, m, 1)
 
+-- | Conbert to the first day of next year.
+--
+--    >>> timeCeilYaer $ timeFromYmd 2014 11 3
+--    TimeYmd (Monthly 2015-01-01)
+--
 timeCeilYaer :: O.Map Time
 timeCeilYaer time =
     case timeYmdTuple time of
-      (y, _, _) -> timeFromYmdTuple $ yearStep (y, 1, 1)
+      (y, _, _) -> timeFromYmdTuple $ yearUp (y, 1, 1)
 
 
 -- ----------------------  Range
 
+-- | Create range of time.
+--
+--   >>> timeRangeDay (timeFromYmd 2014 11 3) (timeFromYmd 2014 11 5)
+--   [TimeYmd (Monthly 2014-11-03), TimeYmd (Monthly 2014-11-04), TimeYmd (Monthly 2014-11-05)]
+--
 timeRangeDay :: B.RangeBy Time
 timeRangeDay from to = map timeFromMjd [timeMjd from .. timeMjd to]
 
+-- | Create range of time.
+--
+--   >>> timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
+--   [TimeYmd (Monthly 2014-12-31), TimeYmd (Monthly 2015-01-31), TimeYmd (Monthly 2015-02-28)]
+--
 timeRangeMonth :: B.RangeBy Time
-timeRangeMonth = timeRangeBy monthStep
+timeRangeMonth = timeRangeBy monthUp
 
+-- | Create range of time.
 timeRangeYear :: B.RangeBy Time
-timeRangeYear = timeRangeBy yearStep
+timeRangeYear = timeRangeBy yearUp
 
 timeRangeBy :: O.Map D.YmdTuple -> B.RangeBy Time
 timeRangeBy step from to = times where
@@ -219,13 +243,15 @@ timeRangeBy step from to = times where
     dayTo   =  timeYmdTuple to
     times   =  map timeFromYmdTuple $ B.rangeBy step dayFrom dayTo
 
-monthStep :: O.Map D.YmdTuple
-monthStep (y, m, d) | m < 12    = (y, m + 1, d)
-                    | otherwise = (y + 1, 1, d)
+-- | Increment month.
+monthUp :: O.Map D.YmdTuple
+monthUp (y, m, d) | m < 12    = (y, m + 1, d)
+                  | otherwise = (y + 1, 1, d)
 
-yearStep :: O.Map D.YmdTuple
-yearStep (y, m, d)  | y == (-1) = (1, m, d)
-                    | otherwise = (y + 1, m, d)
+-- | Increment year.
+yearUp :: O.Map D.YmdTuple
+yearUp (y, m, d)  | y == (-1) = (1, m, d)
+                  | otherwise = (y + 1, m, d)
 
 
 -- ----------------------  Add

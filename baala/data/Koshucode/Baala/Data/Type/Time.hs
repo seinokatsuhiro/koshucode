@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of time modules.
+
 module Koshucode.Baala.Data.Type.Time
   ( module Koshucode.Baala.Data.Type.Time.Clock,
     module Koshucode.Baala.Data.Type.Time.Date,
