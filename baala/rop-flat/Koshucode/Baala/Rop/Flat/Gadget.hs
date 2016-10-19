@@ -26,6 +26,7 @@ module Koshucode.Baala.Rop.Flat.Gadget
   ) where
 
 import qualified Data.Map.Strict                   as Map
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -131,7 +132,7 @@ consVisitDistance med =
          _              -> Msg.adlib "Require two sets of terms"
 
 -- | Create @visit-distance@ relmap.
-relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([S.TermName], [S.TermName], S.TermName, S.TermName) -> B.Map (C.Relmap c)
+relmapVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.Intmed c -> ([S.TermName], [S.TermName], S.TermName, S.TermName) -> O.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
 -- | Create @visit-distance@ relkit.
@@ -222,7 +223,7 @@ insertFirst :: (Ord k) => k -> a -> Map.Map k a -> Map.Map k a
 insertFirst = Map.insertWith first where
     first _ old = old
 
-insertPush :: (Ord k) => k -> a -> B.Map (Map.Map k [a])
+insertPush :: (Ord k) => k -> a -> O.Map (Map.Map k [a])
 insertPush k a = Map.insertWith push k [a] where
     push _ as = a : as
 

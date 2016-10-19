@@ -9,6 +9,7 @@ module Koshucode.Baala.Cop.List
   ) where
 
 import qualified Data.List                       as List
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Cop.Coxhand     as H
@@ -168,7 +169,7 @@ collMap (f, g) xs
     | D.isEmpty xs  = Right D.empty
     | otherwise     = typeUnmatch [Right xs]
 
-gpMap :: D.CGetPut [a] c -> B.Map [a] -> c -> B.Ab c
+gpMap :: D.CGetPut [a] c -> O.Map [a] -> c -> B.Ab c
 gpMap (get, put) f = Right . put . f . get
 
 

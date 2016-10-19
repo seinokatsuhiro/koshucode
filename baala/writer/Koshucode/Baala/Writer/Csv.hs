@@ -10,6 +10,7 @@ module Koshucode.Baala.Writer.Csv
   ) where
 
 import qualified Data.Char                 as Char
+import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 import qualified Koshucode.Baala.Data      as D
@@ -101,13 +102,13 @@ csvHeadSetting = csvSetting { xsvHead = True }
 tabHeadSetting :: XsvSetting
 tabHeadSetting = tabSetting { xsvHead = True }
 
-enquote :: B.Map String
+enquote :: O.Map String
 enquote str = '"' : q str where
     q ""          = ['"']
     q ('"' : xs)  = '"' : '"' : q xs
     q (x : xs)    =         x : q xs
 
-toSpace :: B.Map String
+toSpace :: O.Map String
 toSpace ""           = ""
 toSpace (x : xs) | Char.isControl x  = ' ' : xs'
                  | otherwise         =   x : xs'

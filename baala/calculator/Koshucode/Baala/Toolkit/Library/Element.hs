@@ -6,10 +6,11 @@ module Koshucode.Baala.Toolkit.Library.Element
   ( resourceElem
   ) where
 
-import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Syntax  as S
-import qualified Koshucode.Baala.Data    as D
-import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Overture  as O
+import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.Syntax    as S
+import qualified Koshucode.Baala.Data      as D
+import qualified Koshucode.Baala.Core      as C
 
 infixr 0 -:-
 (-:-) :: a -> b -> (a, b)
@@ -55,7 +56,7 @@ resourceElem res = map art js where
                   , elemAssert      $ ass
                   , elemNamedRelmap $ concatMap C.assLinks ass ]
 
-elemJudge :: (D.CContent c) => B.Map [D.Judge c]
+elemJudge :: (D.CContent c) => O.Map [D.Judge c]
 elemJudge = B.unique . concatMap f where
     f j = map (term $ D.getClass j) (D.getTerms j)
     term p (n, c) = D.affirm "KOSHU-JUDGE-TERM"

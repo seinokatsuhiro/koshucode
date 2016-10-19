@@ -15,6 +15,7 @@ import           Text.Blaze.XHtml5                  ((!))
 import           Text.Blaze.XHtml5.Attributes       (class_)
 import qualified Text.Blaze.Html.Renderer.Pretty    as Hi
 import qualified Text.Blaze.Html.Renderer.String    as Hc
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Syntax             as S
@@ -92,10 +93,10 @@ instance H.ToMarkup B.AbortReason where
                                   source "abort-point-context" "Context " ctx
 
 -- | 'H.div' with class name.
-div_ :: H.AttributeValue -> B.Map H.Html
+div_ :: H.AttributeValue -> O.Map H.Html
 div_ c = H.div H.! class_ c
 
 -- | 'H.span' with class name.
-span_ :: H.AttributeValue -> B.Map H.Html
+span_ :: H.AttributeValue -> O.Map H.Html
 span_ c = H.span H.! class_ c
 

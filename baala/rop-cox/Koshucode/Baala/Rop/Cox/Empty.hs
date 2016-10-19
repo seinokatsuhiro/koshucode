@@ -11,6 +11,7 @@ module Koshucode.Baala.Rop.Cox.Empty
     consComposeMaybe, relmapComposeMaybe,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
@@ -48,7 +49,7 @@ consBoth med =
        Right $ relmapBoth med sh fill rmap
 
 -- | Create @both@ relmap.
-relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> O.Map (C.Relmap c)
 relmapBoth med sh fill rmap = C.relmapCopy med "i" rmapBoth where
     rmapBoth = rmapL B.<> Op.relmapJoin med sh rmapR
     rmapR    = rmap  B.<> relmapMaybe med sh fill rmapIn
@@ -67,7 +68,7 @@ consMaybe med =
        Right $ relmapMaybe med sh fill rmap
 
 -- | Create @maybe@ relmap.
-relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> O.Map (C.Relmap c)
 relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 
 -- | Create @maybe@ relkit.
@@ -115,7 +116,7 @@ consComposeMaybe med =
        Right $ relmapComposeMaybe med sh fill rmap
 
 -- | Create @compose-maybe@ relmap.
-relmapComposeMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> B.Map (C.Relmap c)
+relmapComposeMaybe :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> c -> O.Map (C.Relmap c)
 relmapComposeMaybe med sh fill = C.relmapBinary med $ Op.relkitCompose m sh where
     m sh2 = relkitMaybe sh2 fill
 

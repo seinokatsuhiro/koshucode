@@ -7,7 +7,7 @@ module Koshucode.Baala.Cop.Time
     -- $Operators
   ) where
 
-import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Overture    as O
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Cop.Message as Msg
 
@@ -40,7 +40,7 @@ copsTime =
     , D.CopCalc  (D.copNormal "yearly")     $ copDateForm D.yearly
     ]
 
-copTimeAdd :: (D.CTime c, D.CDec c) => (Integer -> B.Map D.Time) -> D.CopCalc c
+copTimeAdd :: (D.CTime c, D.CDec c) => (Integer -> O.Map D.Time) -> D.CopCalc c
 copTimeAdd add [Right c1, Right c2]
     | D.isDec c1 && D.isTime c2 = addc c1 c2
     | D.isDec c2 && D.isTime c1 = addc c2 c1
@@ -53,7 +53,7 @@ copMjd :: (D.CTime c, D.CDec c) => D.CopCalc c
 copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
 
-copDateForm :: (D.CTime c) => B.Map D.Date -> D.CopCalc c
+copDateForm :: (D.CTime c) => O.Map D.Date -> D.CopCalc c
 copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeMapDate f $ D.gTime c
 copDateForm _ _ = Msg.unexpAttr "date"
 

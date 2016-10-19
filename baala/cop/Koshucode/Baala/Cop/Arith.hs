@@ -8,6 +8,7 @@ module Koshucode.Baala.Cop.Arith
     -- $Operators
   ) where
 
+import qualified Koshucode.Baala.Overture    as O
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Cop.Message as Msg
@@ -208,7 +209,7 @@ copRoundUp       = round1 D.decimalCeil
 copRoundUpAt     = round2 D.decimalCeilAt
 copRoundUpPer    = round2 D.decimalCeilPer
 
-round1 :: (D.CText c, D.CDec c) => B.Map D.Decimal -> [B.Ab c] -> B.Ab c
+round1 :: (D.CText c, D.CDec c) => O.Map D.Decimal -> [B.Ab c] -> B.Ab c
 round1 f arg = 
     do dec <- getDec1 arg
        D.putDec $ f dec

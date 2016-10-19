@@ -20,6 +20,7 @@ module Koshucode.Baala.Rop.Nest.Deriv
     consUngroup, relmapUngroup,
   ) where
 
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
@@ -46,7 +47,7 @@ consOppGroup med =
      Right $ relmapOppGroup med sh n rmap
 
 -- | Create @odd-group@ relmap.
-relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
+relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
 relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
     rmapGroup  = rmap B.<> Op.relmapGroup med sh n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n

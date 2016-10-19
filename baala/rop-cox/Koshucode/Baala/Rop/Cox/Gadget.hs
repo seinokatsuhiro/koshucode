@@ -17,6 +17,7 @@ module Koshucode.Baala.Rop.Cox.Gadget
   ) where
 
 import Prelude hiding (getContents)
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
@@ -256,7 +257,7 @@ consRepeat med =
      Right $ relmapRepeat med cnt rmap
 
 -- | Create @repeat@ relmap.
-relmapRepeat :: (Ord c) => C.Intmed c -> Integer -> B.Map (C.Relmap c)
+relmapRepeat :: (Ord c) => C.Intmed c -> Integer -> O.Map (C.Relmap c)
 relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
 -- | Create @repeat@ relkit.

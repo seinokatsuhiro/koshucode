@@ -19,6 +19,7 @@ module Koshucode.Baala.Rop.Flat.Lattice.Restrict
   ) where
 
 import qualified Data.Set                                   as Set
+import qualified Koshucode.Baala.Overture                   as O
 import qualified Koshucode.Baala.Base                       as B
 import qualified Koshucode.Baala.Syntax                     as S
 import qualified Koshucode.Baala.Data                       as D
@@ -38,7 +39,7 @@ consSome med =
        Right $ relmapSome med rmap
 
 -- | Relmap of existential filter.
-relmapSome :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
+relmapSome :: (Ord c) => C.Intmed c -> O.Map (C.Relmap c)
 relmapSome med = C.relmapBinary med relkitSome
 
 -- | Calculate existential filter.
@@ -61,7 +62,7 @@ consNone med =
        Right $ relmapNone med rmap
 
 -- | Relmap of non-existential filter.
-relmapNone :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
+relmapNone :: (Ord c) => C.Intmed c -> O.Map (C.Relmap c)
 relmapNone med = C.relmapBinary med relkitNone
 
 -- | Calculate non-existential filter.
@@ -127,7 +128,7 @@ consSub med =
        Right $ relmapSub med sh rmap
 
 -- | Relmap for subrelation filter.
-relmapSub :: (Ord c) => C.Intmed c -> Op.SharedTerms -> B.Map (C.Relmap c)
+relmapSub :: (Ord c) => C.Intmed c -> Op.SharedTerms -> O.Map (C.Relmap c)
 relmapSub med sh = C.relmapBinary med $ relkitSub sh
 
 -- | Calculate subrelation filter.
@@ -155,7 +156,7 @@ consCompose med =
        Right $ relmapCompose med sh rmap
 
 -- | Relational composition.
-relmapCompose :: (Ord c) => C.Intmed c -> Op.SharedTerms -> B.Map (C.Relmap c)
+relmapCompose :: (Ord c) => C.Intmed c -> Op.SharedTerms -> O.Map (C.Relmap c)
 relmapCompose med sh = C.relmapBinary med $ relkitCompose Op.relkitMeet sh
 
 -- | Calculate relational composition.

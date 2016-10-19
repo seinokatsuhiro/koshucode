@@ -10,6 +10,7 @@ module Koshucode.Baala.Rop.Base.Term
     picker,
   ) where
 
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
@@ -71,7 +72,7 @@ termNamesColon = loop [] [] where
     loop ret ns []                          = Right $ reverse $ reverse ns : ret
     loop _ _ _                              = Msg.reqTermName
 
-picker :: D.Head -> [S.TermName] -> B.Map [c]
+picker :: D.Head -> [S.TermName] -> O.Map [c]
 picker he ts = B.snipFrom ind where
     ind = ts `B.snipIndex` D.getTermNames he
 

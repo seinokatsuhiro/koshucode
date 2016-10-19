@@ -17,6 +17,7 @@ module Koshucode.Baala.Rop.Flat.Control
     consEqual, relmapEqual, relkitEqual,
   ) where
 
+import qualified Koshucode.Baala.Overture    as O
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Data        as D
 import qualified Koshucode.Baala.Core        as C
@@ -69,7 +70,7 @@ relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB)
              case boT of
                [] -> align $ bmapB bo1
                _  -> bmapA bo1
-      align :: B.Map (B.Ab [[c]])
+      align :: O.Map (B.Ab [[c]])
       align = fmap $ D.bodyAlign heA heB
 
 relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit hiB' hoB' kitbB)] _
@@ -115,7 +116,7 @@ consFixJoin med =
      Right $ relmapFix med (Op.relmapJoin med Nothing rmap)
 
 -- | Create @fix@ relmap.
-relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
+relmapFix :: (Ord c) => C.Intmed c -> O.Map (C.Relmap c)
 relmapFix med = C.relmapBinary med relkitFix
 
 -- | Create @fix@ relkit.
@@ -139,7 +140,7 @@ consEqual med =
        Right $ relmapEqual med rmap
 
 -- | Create @equal@ relmap.
-relmapEqual :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
+relmapEqual :: (Ord c) => C.Intmed c -> O.Map (C.Relmap c)
 relmapEqual med = C.relmapBinary med relkitEqual
 
 -- | Create @equal@ relkit.

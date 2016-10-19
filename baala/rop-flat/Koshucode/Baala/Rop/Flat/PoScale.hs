@@ -10,9 +10,10 @@ module Koshucode.Baala.Rop.Flat.PoScale
     poHeight, poDepth,
   ) where
 
-import qualified Data.Map              as Map
-import qualified Data.Set              as Set
-import qualified Koshucode.Baala.Base  as B
+import qualified Data.Map                  as Map
+import qualified Data.Set                  as Set
+import qualified Koshucode.Baala.Overture  as O
+import qualified Koshucode.Baala.Base      as B
 
 -- | Mapping from element to subelements and scale.
 --   Scale of element is defined by
@@ -48,15 +49,15 @@ poScaleBy gather ord = poScaleUpdate m where
     v subs  = (subs, Nothing)
 
 -- | Update partial-order scale for all elements.
-poScaleUpdate :: (Ord a) => B.Map (PoScale a)
+poScaleUpdate :: (Ord a) => O.Map (PoScale a)
 poScaleUpdate m = foldr poScaleUpdate1 m $ Map.keys m
 
 -- | Update partial-order scale for an element.
-poScaleUpdate1 :: forall a. (Ord a) => a -> B.Map (PoScale a)
+poScaleUpdate1 :: forall a. (Ord a) => a -> O.Map (PoScale a)
 poScaleUpdate1 x1 m1 = m2 where
     m2 = loop Set.empty x1 m1
 
-    loop :: Set.Set a -> a -> B.Map (PoScale a)
+    loop :: Set.Set a -> a -> O.Map (PoScale a)
     loop visit x m
         | Set.member x visit = Map.update neg x m
         | otherwise = case Map.lookup x m of
@@ -72,7 +73,7 @@ poScaleUpdate1 x1 m1 = m2 where
     up r (sub, _)  = Just $ p sub (r + 1)
     p sub r        = (sub, Just r)
 
-    scale :: a -> [a] -> B.Map (PoScale a)
+    scale :: a -> [a] -> O.Map (PoScale a)
     scale x sub m =
         case get m `mapM` sub of
           Nothing -> m

@@ -42,14 +42,14 @@ hPutJudgesWith h result status js =
 
 -- | Edit judgements to mix text.
 judgesCountMix :: forall c.
-    C.Result c -> (D.Judge c -> B.MixText) -> [D.Judge c] -> B.Map JudgeCountMix
+    C.Result c -> (D.Judge c -> B.MixText) -> [D.Judge c] -> O.Map JudgeCountMix
 judgesCountMix result writer = loop where
     loop (j : js) cnt  = loop js $ put j cnt
     loop [] (mx, c, tab) =
         let mx' = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
         in (mx <> mx', c, tab)
 
-    put :: D.Judge c -> B.Map JudgeCountMix
+    put :: D.Judge c -> O.Map JudgeCountMix
     put judge (mx, c, tab) =
         let c'   = c + 1
             cls  = D.getClass judge

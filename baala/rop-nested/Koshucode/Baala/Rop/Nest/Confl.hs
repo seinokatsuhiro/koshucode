@@ -16,6 +16,7 @@ module Koshucode.Baala.Rop.Nest.Confl
     consSliceUp, relmapSliceUp, relkitSliceUp,
   ) where
 
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -58,10 +59,10 @@ consFor med =
        Right $ relmapFor med n rmap
 
 -- | Create @for@ relmap.
-relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
+relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
 relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n B.<> rmap)
 
-relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
+relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitFor n
 
@@ -99,7 +100,7 @@ consGroup med =
      Right $ relmapGroup med sh n rmap
 
 -- | Create @group@ relmap.
-relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> B.Map (C.Relmap c)
+relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
 relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 
 -- | Create @group@ relkit.
@@ -145,7 +146,7 @@ consSlice med =
      Right $ relmapSlice med n rmap
 
 -- | Create @slice@ relmap.
-relmapSlice :: (D.CRel c) => C.Intmed c -> S.TermName -> B.Map (C.Relmap c)
+relmapSlice :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
 relmapSlice med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitSlice n
 
@@ -170,7 +171,7 @@ consSliceUp med =
      Right $ relmapSliceUp med rmap
 
 -- | Create @slice-up@ relmap.
-relmapSliceUp :: (D.CRel c) => C.Intmed c -> B.Map (C.Relmap c)
+relmapSliceUp :: (D.CRel c) => C.Intmed c -> O.Map (C.Relmap c)
 relmapSliceUp med = C.relmapNest med . bin where
     bin = C.relmapBinary med relkitSliceUp
 

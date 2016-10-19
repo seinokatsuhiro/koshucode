@@ -20,7 +20,7 @@ module Koshucode.Baala.Rop.Flat.Source
     -- $source-term
   ) where
 
-import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
@@ -96,7 +96,7 @@ consSourceTerm med =
      Right $ relmapSourceTerm med pat rmap
 
 -- | Create @source-term@ relmap.
-relmapSourceTerm :: C.Intmed c -> String -> B.Map (C.Relmap c)
+relmapSourceTerm :: C.Intmed c -> String -> O.Map (C.Relmap c)
 relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
 -- | Create @source-term@ relkit.
