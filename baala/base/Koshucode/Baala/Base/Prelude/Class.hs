@@ -26,9 +26,11 @@ named :: (Name a) => a -> Named a
 named a = (name a, a)
 
 -- | Map from something to same type.
+{-# DEPRECATED Map "Replaced by 'Koshucode.Baala.Overture.Type.Map'." #-}
 type Map a = a -> a
 
 -- | Map from something to list of something.
+{-# DEPRECATED ManyMap "Replaced by 'Koshucode.Baala.Overture.Type.ManyMap'." #-}
 type ManyMap a = a -> [a]
 
 -- | Type of value which is classified as yes or no.
