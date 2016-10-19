@@ -8,6 +8,7 @@ pkg_help () {
     echo "  $pkg_prog COMMAND"
     echo
     echo "COMMAND for listing"
+    echo "  baala-dir        Show baala directory"
     echo "  cabal            List cabal files"
     echo "  cabal-path       List paths of cabal files"
     echo "  copyright        List copyright in cabal files"
@@ -30,6 +31,11 @@ pkg_help () {
     echo "  subst X Y        Substitute X with Y in cabal files"
     echo "  unreg            Unregister koshucode libraries"
     echo
+}
+
+pkg_abort () {
+    echo "ABORT / $*"
+    exit 2
 }
 
 pkg_section () {
@@ -91,8 +97,7 @@ pkg_exec () {
         pkg_status=$?
         if [ $pkg_status != 0 ]; then
             echo 
-            echo "ABORTED (status $pkg_status)"
-            exit 2
+            abort "status $pkg_status"
         fi
     done
 }
@@ -105,7 +110,7 @@ pkg_exec_all () {
         )
         pkg_status=$?
         if [ $pkg_status != 0 ]; then
-            echo "ABORTED (status $pkg_status)"
+            echo "ABORT / status $pkg_status"
         fi
     done
 }
@@ -213,7 +218,6 @@ pkg_unreg () {
     else
         echo "No sandbox config"
     fi
-
 }
 
 # --------------------------------------------  main
@@ -225,7 +229,13 @@ pkg_doc_koshu=http://seinokatsuhiro.github.io/koshucode/haddock/doc
 pkg_doc_hackage='http://hackage.haskell.org/package/$pkg/docs'
 pkg_doc_verbose=1
 
+if [ ! -d "$pkg_dir" ]; then
+    pkg_abort "No baala directory"
+fi
+
 case "$1" in
+    baala-dir)
+        echo "$pkg_dir" ;;
     cabal)
         pkg_cabal ;;
     cabal-path)
