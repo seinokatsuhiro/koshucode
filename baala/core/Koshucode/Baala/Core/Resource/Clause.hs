@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Resource.Clause
     consClause,
   ) where
 
-import qualified Data.Char                              as Char
+import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
@@ -140,7 +140,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     shorts         = filter S.isShortToken checks
     checkToken t   = S.isUnknownToken t || S.isShortToken t
     isDelim        = ( `elem` ["=", ":", "|"] )
-    lower          = map Char.toLower
+    lower          = map Ch.toLower
     empty          = CBodies []
     unkClause ts a = clause $ CUnknown $ unk ts a
 

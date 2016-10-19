@@ -24,7 +24,7 @@
 --
 -- ------------------------------------------------------------------
 
-import qualified Data.Char                   as C
+import qualified Data.Char                   as Ch
 import qualified Text.PrettyPrint            as P
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
@@ -67,8 +67,8 @@ unk  line = B.doc $ "** UNKNOWN: " ++ line
 
 unconsWord :: String -> (String, String)
 unconsWord xs = (word, rest') where
-    (word, rest) = span (not . C.isSpace) xs
-    rest'        = dropWhile C.isSpace rest
+    (word, rest) = span (not . Ch.isSpace) xs
+    rest'        = dropWhile Ch.isSpace rest
 
 namedTtDoc :: [B.NamedTrees] -> B.Doc
 namedTtDoc = B.docv . map d where

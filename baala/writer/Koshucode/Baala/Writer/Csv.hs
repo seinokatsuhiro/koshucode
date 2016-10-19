@@ -9,7 +9,7 @@ module Koshucode.Baala.Writer.Csv
     resultTsvHeading,
   ) where
 
-import qualified Data.Char                 as Char
+import qualified Data.Char                 as Ch
 import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
@@ -110,7 +110,7 @@ enquote str = '"' : q str where
 
 toSpace :: O.Map String
 toSpace ""           = ""
-toSpace (x : xs) | Char.isControl x  = ' ' : xs'
+toSpace (x : xs) | Ch.isControl x    = ' ' : xs'
                  | otherwise         =   x : xs'
                  where xs' = toSpace xs
 

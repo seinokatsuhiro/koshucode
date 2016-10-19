@@ -22,7 +22,7 @@ module Koshucode.Baala.Base.Text.TextTable
     renderTable,
   ) where
 
-import qualified Data.Char                      as C
+import qualified Data.Char                      as Ch
 import qualified Data.List                      as L
 import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Base.List      as B
@@ -178,5 +178,5 @@ displaySizeChar :: Char -> Int
 displaySizeChar c
     | n < 4096  = 1
     | otherwise = 2
-    where n = C.ord c
+    where n = Ch.ord c
 

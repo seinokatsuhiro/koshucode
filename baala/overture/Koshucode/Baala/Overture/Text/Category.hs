@@ -20,60 +20,60 @@ module Koshucode.Baala.Overture.Text.Category
    categoryLookup,
  ) where
 
-import qualified Data.Char      as C
+import qualified Data.Char      as Ch
 import qualified Data.Set       as Set
 
 
 -- --------------------------------------------  Category group
 
 -- | List of letter categories (L).
-categoryLetter      :: [C.GeneralCategory]
-categoryLetter       = [C.UppercaseLetter, C.LowercaseLetter, C.TitlecaseLetter,
-                        C.ModifierLetter, C.OtherLetter]
+categoryLetter      :: [Ch.GeneralCategory]
+categoryLetter       = [Ch.UppercaseLetter, Ch.LowercaseLetter, Ch.TitlecaseLetter,
+                        Ch.ModifierLetter, Ch.OtherLetter]
 
 -- | List of mark categories (M).
-categoryMark        :: [C.GeneralCategory]
-categoryMark         = [C.NonSpacingMark, C.SpacingCombiningMark, C.EnclosingMark]
+categoryMark        :: [Ch.GeneralCategory]
+categoryMark         = [Ch.NonSpacingMark, Ch.SpacingCombiningMark, Ch.EnclosingMark]
 
 -- | List of number categories (N).
-categoryNumber      :: [C.GeneralCategory]
-categoryNumber       = [C.DecimalNumber, C.LetterNumber, C.OtherNumber]
+categoryNumber      :: [Ch.GeneralCategory]
+categoryNumber       = [Ch.DecimalNumber, Ch.LetterNumber, Ch.OtherNumber]
 
 -- | List of punctuation categories (P).
-categoryPunctuation :: [C.GeneralCategory]
-categoryPunctuation  = [C.ConnectorPunctuation, C.DashPunctuation,
-                        C.OpenPunctuation, C.ClosePunctuation, C.InitialQuote,
-                        C.FinalQuote, C.OtherPunctuation]
+categoryPunctuation :: [Ch.GeneralCategory]
+categoryPunctuation  = [Ch.ConnectorPunctuation, Ch.DashPunctuation,
+                        Ch.OpenPunctuation, Ch.ClosePunctuation, Ch.InitialQuote,
+                        Ch.FinalQuote, Ch.OtherPunctuation]
 
 -- | List of symbol categories (S).
-categorySymbol      :: [C.GeneralCategory]
-categorySymbol       = [C.MathSymbol, C.CurrencySymbol,
-                        C.ModifierSymbol, C.OtherSymbol]
+categorySymbol      :: [Ch.GeneralCategory]
+categorySymbol       = [Ch.MathSymbol, Ch.CurrencySymbol,
+                        Ch.ModifierSymbol, Ch.OtherSymbol]
 
 -- | List of separator categories (Z).
-categorySeparator   :: [C.GeneralCategory]
-categorySeparator    = [C.Space, C.LineSeparator, C.ParagraphSeparator]
+categorySeparator   :: [Ch.GeneralCategory]
+categorySeparator    = [Ch.Space, Ch.LineSeparator, Ch.ParagraphSeparator]
 
 -- | List of other categories (C).
-categoryOther       :: [C.GeneralCategory]
-categoryOther        = [C.Control, C.Format, C.Surrogate,
-                        C.PrivateUse, C.NotAssigned]
+categoryOther       :: [Ch.GeneralCategory]
+categoryOther        = [Ch.Control, Ch.Format, Ch.Surrogate,
+                        Ch.PrivateUse, Ch.NotAssigned]
 
 -- | List of alphabetic categories (L + M).
-categoryAlpha       :: [C.GeneralCategory]
+categoryAlpha       :: [Ch.GeneralCategory]
 categoryAlpha        = categoryLetter ++ categoryMark
 
 -- | List of textual-sign categories (P + S).
-categorySign        :: [C.GeneralCategory]
+categorySign        :: [Ch.GeneralCategory]
 categorySign         = categoryPunctuation ++ categorySymbol
 
 -- | List of open brackets (Ps + Pi).
-categoryOpen        :: [C.GeneralCategory]
-categoryOpen         = [C.OpenPunctuation, C.InitialQuote]
+categoryOpen        :: [Ch.GeneralCategory]
+categoryOpen         = [Ch.OpenPunctuation, Ch.InitialQuote]
 
 -- | List of close brackets (Pe + Pf).
-categoryClose       :: [C.GeneralCategory]
-categoryClose        = [C.ClosePunctuation, C.FinalQuote]
+categoryClose       :: [Ch.GeneralCategory]
+categoryClose        = [Ch.ClosePunctuation, Ch.FinalQuote]
 
 
 -- --------------------------------------------  Category lookup
@@ -92,9 +92,9 @@ categoryClose        = [C.ClosePunctuation, C.FinalQuote]
 --   >>> categoryLookup "lx"
 --   Left "lx"
 
-categoryLookup :: String -> Either String (Set.Set C.GeneralCategory)
+categoryLookup :: String -> Either String (Set.Set Ch.GeneralCategory)
 categoryLookup n =
-    case C.toLower <$> n of
+    case Ch.toLower <$> n of
       "l"     -> l categoryLetter
       "m"     -> l categoryMark
       "n"     -> l categoryNumber
@@ -103,42 +103,42 @@ categoryLookup n =
       "z"     -> l categorySeparator
       "c"     -> l categoryOther
 
-      "lu"    -> s C.UppercaseLetter
-      "ll"    -> s C.LowercaseLetter
-      "lt"    -> s C.TitlecaseLetter
-      "lm"    -> s C.ModifierLetter
-      "lo"    -> s C.OtherLetter
+      "lu"    -> s Ch.UppercaseLetter
+      "ll"    -> s Ch.LowercaseLetter
+      "lt"    -> s Ch.TitlecaseLetter
+      "lm"    -> s Ch.ModifierLetter
+      "lo"    -> s Ch.OtherLetter
 
-      "mn"    -> s C.NonSpacingMark
-      "mc"    -> s C.SpacingCombiningMark
-      "me"    -> s C.EnclosingMark
+      "mn"    -> s Ch.NonSpacingMark
+      "mc"    -> s Ch.SpacingCombiningMark
+      "me"    -> s Ch.EnclosingMark
 
-      "nd"    -> s C.DecimalNumber
-      "nl"    -> s C.LetterNumber
-      "no"    -> s C.OtherNumber
+      "nd"    -> s Ch.DecimalNumber
+      "nl"    -> s Ch.LetterNumber
+      "no"    -> s Ch.OtherNumber
 
-      "pc"    -> s C.ConnectorPunctuation
-      "pd"    -> s C.DashPunctuation
-      "ps"    -> s C.OpenPunctuation
-      "pe"    -> s C.ClosePunctuation
-      "pi"    -> s C.InitialQuote
-      "pf"    -> s C.FinalQuote
-      "po"    -> s C.OtherPunctuation
+      "pc"    -> s Ch.ConnectorPunctuation
+      "pd"    -> s Ch.DashPunctuation
+      "ps"    -> s Ch.OpenPunctuation
+      "pe"    -> s Ch.ClosePunctuation
+      "pi"    -> s Ch.InitialQuote
+      "pf"    -> s Ch.FinalQuote
+      "po"    -> s Ch.OtherPunctuation
 
-      "sm"    -> s C.MathSymbol
-      "sc"    -> s C.CurrencySymbol
-      "sk"    -> s C.ModifierSymbol
-      "so"    -> s C.OtherSymbol
+      "sm"    -> s Ch.MathSymbol
+      "sc"    -> s Ch.CurrencySymbol
+      "sk"    -> s Ch.ModifierSymbol
+      "so"    -> s Ch.OtherSymbol
 
-      "zs"    -> s C.Space
-      "zl"    -> s C.LineSeparator
-      "zp"    -> s C.ParagraphSeparator
+      "zs"    -> s Ch.Space
+      "zl"    -> s Ch.LineSeparator
+      "zp"    -> s Ch.ParagraphSeparator
 
-      "cc"    -> s C.Control
-      "cf"    -> s C.Format
-      "cs"    -> s C.Surrogate
-      "co"    -> s C.PrivateUse
-      "cn"    -> s C.NotAssigned
+      "cc"    -> s Ch.Control
+      "cf"    -> s Ch.Format
+      "cs"    -> s Ch.Surrogate
+      "co"    -> s Ch.PrivateUse
+      "cn"    -> s Ch.NotAssigned
 
       _       -> Left n
     where

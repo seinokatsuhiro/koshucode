@@ -8,7 +8,7 @@ module Koshucode.Baala.Cop.Text
     copSuffix, copUnsuffix,
   ) where
 
-import qualified Data.Char                       as Char
+import qualified Data.Char                       as Ch
 import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
@@ -107,7 +107,7 @@ isText2 x y = D.isText x && D.isText y
 -- char 70 => "F"
 copChar :: (D.CContent c) => D.CopCalc c
 copChar = op where
-    op [Right c] | D.isDec c = D.putText [Char.chr $ fromInteger $ D.decimalNum $ D.gDec c]
+    op [Right c] | D.isDec c = D.putText [Ch.chr $ fromInteger $ D.decimalNum $ D.gDec c]
     op xs = typeUnmatch xs
 
 -- code-list "abc" => [ 97 : 98 : 99 ]
@@ -117,7 +117,7 @@ copCodeList = op where
     op xs = typeUnmatch xs
 
     contOrd :: (D.CDec c) => Char -> c
-    contOrd = D.pInt . Char.ord
+    contOrd = D.pInt . Ch.ord
 
 -- char-group "a!" => [ 'letter : 'punct ]
 copCharGroup :: (D.CContent c) => D.CopCalc c
@@ -410,7 +410,7 @@ copUnsuffix = op where
     op [c]       = c
     op xs        = typeUnmatch xs
 
-    unsuf c | D.isText c  = D.pText $ B.unsuffix Char.isDigit '-' $ D.gText c
+    unsuf c | D.isText c  = D.pText $ B.unsuffix Ch.isDigit '-' $ D.gText c
             | D.isList c  = D.pList (unsuf <$> D.gList c)
             | D.isSet  c  = D.pSet  (unsuf <$> D.gSet c)
             | otherwise   = c

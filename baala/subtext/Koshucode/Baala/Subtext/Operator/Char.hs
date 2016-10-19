@@ -21,7 +21,7 @@ module Koshucode.Baala.Subtext.Operator.Char
    asUpper,
  ) where
 
-import qualified Data.Char                                   as C
+import qualified Data.Char                                   as Ch
 import qualified Data.Set                                    as Set
 import qualified Koshucode.Baala.Overture                    as O
 import qualified Koshucode.Baala.Overture.Fn                 as O
@@ -43,7 +43,7 @@ word w = T.or (T.equal <$> words w)
 
 -- | Match space character.
 space :: CharExpr
-space = T.elem "space" C.isSpace
+space = T.elem "space" Ch.isSpace
 
 -- | Match zero-or-more space characters.
 spaces :: CharExpr
@@ -55,30 +55,30 @@ spaces1 = T.many1 space
 
 -- | Match digit characters.
 digit :: CharExpr
-digit = T.elem "digit" C.isDigit
+digit = T.elem "digit" Ch.isDigit
 
 -- | Match letter characters.
 letter :: CharExpr
-letter = T.elem "letter" C.isLetter
+letter = T.elem "letter" Ch.isLetter
 
 -- | Match first 128 characters of Unicode character set.
 ascii :: CharExpr
-ascii = T.elem "letter" C.isAscii
+ascii = T.elem "letter" Ch.isAscii
 
 -- | Match first 256 characters of Unicode character set.
 latin1 :: CharExpr
-latin1 = T.elem "letter" C.isLatin1
+latin1 = T.elem "letter" Ch.isLatin1
 
 
 -- --------------------------------------------  Category
 
 -- | Test unicode general category with category set.
-categorySet :: Set.Set C.GeneralCategory -> CharExpr
+categorySet :: Set.Set Ch.GeneralCategory -> CharExpr
 categorySet cs = T.elem "category" cat where
-    cat c = C.generalCategory c `Set.member` cs
+    cat c = Ch.generalCategory c `Set.member` cs
 
 -- | Test unicode general category with category list.
-categoryList :: [C.GeneralCategory] -> CharExpr
+categoryList :: [Ch.GeneralCategory] -> CharExpr
 categoryList = categorySet . Set.fromList
 
 -- | Test unicode general category with short names.
@@ -94,8 +94,8 @@ category s =
 
 -- | Convert matched text into lower case.
 asLower :: CharExpr -> CharExpr
-asLower = T.as (O.Fn "lower" $ map C.toLower)
+asLower = T.as (O.Fn "lower" $ map Ch.toLower)
 
 -- | Convert matched text into upper case.
 asUpper :: CharExpr -> CharExpr
-asUpper = T.as (O.Fn "upper" $ map C.toUpper)
+asUpper = T.as (O.Fn "upper" $ map Ch.toUpper)

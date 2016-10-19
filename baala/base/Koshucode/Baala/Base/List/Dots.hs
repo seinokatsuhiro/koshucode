@@ -9,11 +9,11 @@ module Koshucode.Baala.Base.List.Dots
     takeDots,
   ) where
 
-import qualified Data.Char                           as Char
+import qualified Data.Char                           as Ch
 import qualified Koshucode.Baala.Base.List.Split     as B
 
 trimLeft :: String -> String
-trimLeft = dropWhile Char.isSpace
+trimLeft = dropWhile Ch.isSpace
 
 pattern Dots a s = '.' : '.' : '.' : a : s
 
@@ -36,23 +36,23 @@ undup k = loop where
 dotsStrings :: String -> [String]
 dotsStrings = begin where
     begin (Dots a s)
-        | Char.isSpace a     = dots (mid "" $ trimLeft s)
-    begin s                  = mid "" s
+        | Ch.isSpace a     = dots (mid "" $ trimLeft s)
+    begin s                = mid "" s
 
     mid w (b : Dots a s)
-        | Char.isSpace b &&
-          Char.isSpace a     = revTrim w : dots (begin $ trimLeft s)
-    mid w (c:s)              = mid (c:w) s
-    mid w ""                 = end w
+        | Ch.isSpace b &&
+          Ch.isSpace a     = revTrim w : dots (begin $ trimLeft s)
+    mid w (c:s)            = mid (c:w) s
+    mid w ""               = end w
 
     end (Dots a w)
-        | Char.isSpace a     = revTrim w : dots []
-    end w                    = [reverse w]
+        | Ch.isSpace a     = revTrim w : dots []
+    end w                  = [reverse w]
 
-    dots pat@("..." : _)     = pat
-    dots pat                 = "..." : pat
+    dots pat@("..." : _)   = pat
+    dots pat               = "..." : pat
 
-    revTrim                  = reverse . trimLeft
+    revTrim                = reverse . trimLeft
 
 -- | Concatenate dots-pattern strings,
 --   inserting one space between dots and word.
