@@ -20,6 +20,7 @@ pkg_help () {
     echo "  version          List version number in cabal files"
     echo
     echo "COMMAND for executing"
+    echo "  clean            Clean up build result"
     echo "  doc0             Generate Haddock documents less verbosely"
     echo "  doc              Generate Haddock documents with default verbosity"
     echo "  doc2             Regenerate Haddock documents"
@@ -38,11 +39,13 @@ pkg_section () {
 }
 
 pkg_dirs () {
-    echo overture subtext base syntax data core writer rop-flat rop-nested rop-cox cop calculator toolkit
+    echo overture subtext base syntax data core writer \
+        rop-flat rop-nested rop-cox cop calculator toolkit
 }
 
 pkg_dirs_rev () {
-    echo toolkit calculator cop rop-cox rop-nested rop-flat writer core data syntax base subtext overture
+    echo toolkit calculator cop rop-cox rop-nested rop-flat \
+        writer core data syntax base subtext overture
 }
 
 pkg_cabal () {
@@ -227,6 +230,8 @@ case "$1" in
         pkg_cabal ;;
     cabal-path)
         pkg_cabal_path ;;
+    clean)
+        pkg_exec cabal clean ;;
     copyright)
         pkg_cabal_section copyright ;;
     dir)
