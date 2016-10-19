@@ -202,12 +202,21 @@ pkg_sandbox_init () {
     fi
 }
 
-pkg_sandbox_installed () {
+pkg_installed () {
     if [ -e "$pkg_dir/toolkit/cabal.sandbox.config" ]; then
         ( cd "$pkg_dir/toolkit" ;
-          cabal exec ghc-pkg -- list "$1" --simple-output | xargs -n 1
+          pkg_installed_list "$1" | pkg_installed_list_k
         )
     fi
+}
+
+pkg_installed_list () {
+    cabal exec ghc-pkg -- list "$1" --simple-output | xargs -n 1
+}
+
+# Convert version string to Koshucode.
+pkg_installed_list_k () {
+    perl -pe 's%(.*)-([\d.]+)$%|-- INSTALLED  /package "$1"  /version "$2"%'
 }
 
 pkg_unreg () {
@@ -257,9 +266,9 @@ case "$1" in
     init)
         pkg_exec pkg_sandbox_init ;;
     installed)
-        pkg_sandbox_installed "*" ;;
+        pkg_installed "*" ;;
     installed-koshu)
-        pkg_sandbox_installed "koshu*" ;;
+        pkg_installed "koshu*" ;;
     doc0)
         pkg_doc_verbose=0
         pkg_haddock ;;
