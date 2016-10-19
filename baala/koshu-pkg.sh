@@ -38,6 +38,10 @@ pkg_abort () {
     exit 2
 }
 
+pkg_status () {
+    echo "STATUS $pkg_status / $*"
+}
+
 pkg_section () {
     echo
     echo "***********  $*"
@@ -203,11 +207,7 @@ pkg_sandbox_init () {
 }
 
 pkg_installed () {
-    if [ -e "$pkg_dir/toolkit/cabal.sandbox.config" ]; then
-        ( cd "$pkg_dir/toolkit" ;
-          pkg_installed_list "$1" | pkg_installed_list_k
-        )
-    fi
+    pkg_installed_list "$1" | pkg_installed_list_k
 }
 
 pkg_installed_list () {
@@ -220,12 +220,19 @@ pkg_installed_list_k () {
 }
 
 pkg_unreg () {
-    if [ -e cabal.sandbox.config ]; then
-        for pkg in `pkg_dirs_rev`; do
-            cabal exec ghc-pkg unregister koshucode-baala-$pkg
-        done
-    else
-        echo "No sandbox config"
+    for pkg in `pkg_dirs_rev`; do
+        cabal exec ghc-pkg unregister koshucode-baala-$pkg
+        pkg_status=$?
+        pkg_status "Unregister koshucode-baala-$pkg"
+    done
+}
+
+# Execute command in the toolkit directory.
+pkg_toolkit () {
+    if [ -e "$pkg_dir/toolkit/cabal.sandbox.config" ]; then
+        ( cd "$pkg_dir/toolkit" ;
+          "$@"
+        )
     fi
 }
 
@@ -266,9 +273,9 @@ case "$1" in
     init)
         pkg_exec pkg_sandbox_init ;;
     installed)
-        pkg_installed "*" ;;
+        pkg_toolkit pkg_installed "*" ;;
     installed-koshu)
-        pkg_installed "koshu*" ;;
+        pkg_toolkit pkg_installed "koshu*" ;;
     doc0)
         pkg_doc_verbose=0
         pkg_haddock ;;
@@ -290,7 +297,7 @@ case "$1" in
     synopsis)
         pkg_cabal_section synopsis ;;
     unreg)
-        pkg_unreg ;;
+        pkg_toolkit pkg_unreg ;;
     version)
         pkg_cabal_section version ;;
     *)
