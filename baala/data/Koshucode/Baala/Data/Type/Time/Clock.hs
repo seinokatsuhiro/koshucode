@@ -39,7 +39,7 @@ data Clock
     | ClockDhm  DayCount Sec    -- ^ Clock represented by multiple of minute
     | ClockDh   DayCount Sec    -- ^ Clock represented by multiple of hour
     | ClockD    DayCount        -- ^ Clock represented by multiple of day
-      deriving (Show, Eq, Ord)
+      deriving (Eq, Ord)
 
 -- | Integer type for the Modified Julian Day.
 type DayCount = Integer
@@ -56,7 +56,7 @@ type Sec = Int
 -- | Create clock from MJD, hour, minute, and second.
 --
 --   >>> clockFromDhms 1 9 40 20
---   ClockDhms 1 34820
+--   |1'09:40:20|
 --
 clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
 clockFromDhms d h m s = ClockDhms d $ secFromHms (h, m, s)
@@ -76,10 +76,10 @@ clockFromD = ClockD
 -- | Create clock from hour, minute, and second.
 --
 --   >>> clockFromHms 9 40 Nothing
---   ClockDhm 0 34800
+--   |09:40|
 --
 --   >>> clockFromHms 9 40 (Just 20)
---   ClockDhms 0 34820
+--   |09:40:20|
 --
 clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
 clockFromHms h m (Nothing)  = clockFromDhm  0 h m
@@ -163,6 +163,11 @@ clockAlter d' h' m' s' clock =
 
 -- ----------------------  Writer
 
+-- | @|D'HH:MM:SS|@
+instance Show Clock where
+    show = B.mixToFlatString . B.mixEncode
+
+-- | @|D'HH:MM:SS|@
 instance B.MixEncode Clock where
     mixEncode = clockToMix
 
@@ -297,7 +302,7 @@ clockTimes m = clockMap (* (toInteger m)) (* m)
 -- | Create sequence between two clocks.
 --
 --   >>> clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
---   [ClockDhms 0 0, ClockDhms 0 120, ClockDhms 0 240]
+--   [|00:00:00|, |00:02:00|, |00:04:00|]
 --
 clockRangeBy :: O.Map (DayCount, Sec) -> B.RangeBy Clock
 clockRangeBy step from to = clocks where
