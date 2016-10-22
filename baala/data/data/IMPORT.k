@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    185 judges
+**    199 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -196,6 +196,10 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Data.Type.Time.Date"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Base.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Data.Type.Time.Clock"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar.WeekDate"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar.OrdinalDate"
@@ -205,16 +209,28 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Data.Time.Calendar.WeekDate"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Data.Time.LocalTime"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.Clock"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.Date"
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Data.Time.Calendar"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Clock"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Date"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Time"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Base.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Clock"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Date"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Time"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.TimeCalc"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Type"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Type"            /import "Koshucode.Baala.Base"
