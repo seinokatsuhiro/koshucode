@@ -7,7 +7,6 @@ module Koshucode.Baala.Toolkit.Main.KoshuFilter
   ) where
 
 import qualified System.Console.GetOpt                 as G
-import qualified Data.Time                             as Tim
 import qualified System.IO                             as IO
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data                  as D
@@ -46,8 +45,7 @@ koshuFilter :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO In
 koshuFilter g withRes =
   do (prog, argv) <- B.progAndArgs
      proxy        <- L.getProxies
-     time         <- Tim.getZonedTime
-     let day       = Tim.localDay $ Tim.zonedTimeToLocalTime time
+     today        <- D.today
      case G.getOpt G.Permute options argv of
        (opts, paths, [])
            | has OptHelp     -> B.putSuccess usage
@@ -62,7 +60,7 @@ koshuFilter g withRes =
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy
-                       , C.globalTime      = D.timeYmd day
+                       , C.globalTime      = today
                        , C.globalHook      = root }
 
        (_, _, errs) -> B.putFailure $ concat errs
