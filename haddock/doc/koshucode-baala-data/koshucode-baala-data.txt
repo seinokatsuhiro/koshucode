@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.163.0.0
+@version 0.164.0.0
 
 
 -- | Extra functions for rational numbers.
@@ -544,22 +544,52 @@ headNested :: Head -> [(TermName, Head)]
 
 -- | Index of a term.
 headIndex1 :: Head -> TermPath -> [Int]
+
+-- | Get types of relation terms.
 headTypes :: Head -> [Type]
 
 -- | Add term name to head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headCons "c" $ headFrom ["a", "b"]
+--   Head { headType = TypeRel [("c",TypeAny), ("a",TypeAny), ("b",TypeAny)] }
+--   </pre>
 headCons :: TermName -> Map Head
 
 -- | Add term names to head.
 headAppend :: [TermName] -> Map Head
+
+-- | Add term name for nested relation.
 headConsNest :: TermName -> Head -> Map Head
+
+-- | Create nested relation terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headNests ["x", "y"] $ headFrom ["a"]
+--   Head { headType = TypeRel [("x", TypeRel [("a",TypeAny)]), ("y", TypeRel [("a",TypeAny)])] }
+--   </pre>
 headNests :: [TermName] -> Map Head
 
 -- | Reconstruct head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headMap reverse $ headFrom ["a", "b"]
+--   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
+--   </pre>
 headMap :: Map [NamedType] -> Map Head
+
+-- | Convert term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headMapName ("x" ++) $ headFrom ["a", "b"]
+--   Head { headType = TypeRel [("xa",TypeAny), ("xb",TypeAny)] }
+--   </pre>
 headMapName :: Map TermName -> Map Head
 
 -- | Move up nested relation.
 headUp :: Map Head
+
+-- | Change order of terms.
 bodyAlign :: Head -> Head -> Map [[c]]
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Rel.Head.Head
@@ -589,6 +619,8 @@ type Body c = [[c]]
 
 -- | Sort head and body of relation.
 relSort :: (Ord c) => Map (Rel c)
+
+-- | Sort relation body according to order specification.
 relBodyOrder :: (Ord c) => [SignedTermName] -> Head -> Map [[c]]
 
 -- | The nullary empty relation. In other words, relational constant that
@@ -611,6 +643,8 @@ reldee :: Rel c
 
 -- | The empty relation with all terms. This is fake.
 reldau :: Rel c
+
+-- | Type for having relations.
 class SelectRel r
 
 -- | Convert judges to relation.
@@ -629,7 +663,7 @@ instance Koshucode.Baala.Base.Text.MixEncode.MixShortEncode c => Koshucode.Baala
 -- | Content type for nested relations.
 module Koshucode.Baala.Data.Type.Rel.Mono
 
--- | Monotype relation.
+-- | Content type for monotype relation.
 data Mono c
 
 -- | Terminal content
@@ -637,6 +671,8 @@ MonoTerm :: c -> Mono c
 
 -- | Nested relation
 MonoNest :: (RelMono c) -> Mono c
+
+-- | Monotype relation.
 type RelMono c = Rel (Mono c)
 
 -- | Text relation.
@@ -959,7 +995,11 @@ instance GHC.Show.Show Koshucode.Baala.Data.Type.Decimal.BinaryAb.FracleSide
 
 module Koshucode.Baala.Data.Type.Decimal
 
+
+-- | Date.
 module Koshucode.Baala.Data.Type.Time.Date
+
+-- | Date.
 data Date
 
 -- | Date in <i>YYYY-MM-DD</i>
@@ -970,11 +1010,23 @@ Weekly :: MJDay -> Date
 
 -- | Date in <i>YYYY-##D</i>
 Yearly :: MJDay -> Date
-type MJDay = Day  The Modified Julian Day
+
+-- | Type for the Modified Julian Day.
+type MJDay = Day
+
+-- | Type for year, month, and day.
 type YmdTuple = (Year, Month, Day)
+
+-- | Year type.
 type Year = Integer
+
+-- | Month type.
 type Month = Int
+
+-- | Week type.
 type Week = Int
+
+-- | Day type.
 type Day = Int
 
 -- | Create date from year, month, and day.
@@ -986,26 +1038,59 @@ dateFromYwdAb :: Year -> Week -> Day -> Ab Date
 -- | Create date from year and day.
 dateFromYdAb :: Year -> Day -> Ab Date
 
--- | Get the internal Modified Julian Day.
-dateDay :: Date -> MJDay
-dateMapDay :: Map MJDay -> Map Date
-dateAdd :: (Integral n) => n -> Map Date
+-- | Create date from the Modified Julian Day.
+dateFromMjd :: Integer -> Date
 
 -- | Convert into monthly date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; monthly $ dateFromMjd 55555
+--   Date 2010-12-25
+--   </pre>
 monthly :: Map Date
 
 -- | Convert into weekly date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; weekly $ dateFromMjd 55555
+--   Date 2010-#51-6
+--   </pre>
 weekly :: Map Date
 
 -- | Convert into yearly date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; yearly $ dateFromMjd 55555
+--   Date 2010-##359
+--   </pre>
 yearly :: Map Date
+
+-- | Get the internal Modified Julian Day.
+dateDay :: Date -> MJDay
+
+-- | Map the content of date.
+dateMapDay :: Map MJDay -> Map Date
+
+-- | Add days.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dateAdd 7 $ dateFromMjd 55555
+--   Date 2011-01-01
+--   </pre>
+dateAdd :: (Integral n) => n -> Map Date
+
+-- | Create mix text with two-width zeros.
 mix02 :: Int -> MixText
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Date.Date
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Date.Date
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Date.Date
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Date.Date
 instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Date.Date
 
+
+-- | Clock: distance between two times.
 module Koshucode.Baala.Data.Type.Time.Clock
+
+-- | Clock as distance between two times.
 data Clock
 
 -- | Clock represented by multiple of second
@@ -1019,21 +1104,68 @@ ClockDh :: DayCount -> Sec -> Clock
 
 -- | Clock represented by multiple of day
 ClockD :: DayCount -> Clock
+
+-- | Integer type for the Modified Julian Day.
 type DayCount = Integer
+
+-- | Hour type.
 type Hour = Int
+
+-- | Minute type.
 type Min = Int
+
+-- | Second type.
 type Sec = Int
 
--- | Type for abortable binary operator.
-type AbBin a = a -> a -> Ab a
+-- | Convert clock to mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockBodyToMix $ clockFromDhm 0 9 40
+--   MixText "09:40"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.mixEncode $ clockFromDhm 0 9 40
+--   MixText "|09:40|"
+--   </pre>
 clockBodyToMix :: Clock -> MixText
+
+-- | Create clock from MJD, hour, minute, and second.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockFromDhms 1 9 40 20
+--   |1'09:40:20|
+--   </pre>
 clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
+
+-- | Create clock from MJD, hour, and minute.
 clockFromDhm :: DayCount -> Hour -> Min -> Clock
+
+-- | Create clock from MJD and hour.
 clockFromDh :: DayCount -> Hour -> Clock
+
+-- | Create clock from MJD.
 clockFromD :: DayCount -> Clock
+
+-- | Create clock from hour, minute, and optional second.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockFromHms 9 40 Nothing
+--   |09:40|
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockFromHms 9 40 (Just 20)
+--   |09:40:20|
+--   </pre>
 clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
 
--- | Decompose second into day-count, hour, minute and second parts.
+-- | Decompose second into MJD, hour, minute and second parts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dhmsFromSec 333333
+--   (3,9,15,33)
+--   </pre>
 dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
 
 -- | Aggregate hour, minute, and second into single second.
@@ -1042,14 +1174,37 @@ secFromHms :: (Hour, Min, Sec) -> Sec
 -- | Sign of clock as <tt>-1</tt>, <tt>0</tt>, <tt>1</tt>.
 clockSign :: Clock -> Int
 
--- | Day-count part of clock.
+-- | MJD part of clock.
 clockDayCount :: Clock -> DayCount
 
 -- | Second part of clock.
 clockSec :: Clock -> Sec
+
+-- | Precision string of clock.
 clockPrecision :: Clock -> String
+
+-- | Extract elements of clock.
 clockDhms :: Clock -> (DayCount, Maybe Hour, Maybe Min, Maybe Sec)
+
+-- | Replace elements of clock.
 clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> Map Clock
+
+-- | Map MDJ and second of clock.
+clockMap :: Map DayCount -> Map Sec -> Map Clock
+
+-- | Combine MDJ and second of two clocks.
+clockMap2 :: Bin DayCount -> Bin Sec -> BinAb Clock
+
+-- | Seconds in a day, i.e., 86400 seconds.
+daySeconds :: (Num a) => a
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Clock.Clock
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Clock.Clock
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Clock.Clock
+instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Clock.Clock
+
+
+-- | Calculation on clock.
+module Koshucode.Baala.Data.Type.Time.ClockCalc
 
 -- | Convert clock to positive clock.
 clockPos :: Map Clock
@@ -1057,35 +1212,46 @@ clockPos :: Map Clock
 -- | Convert clock to negative clock.
 clockNeg :: Map Clock
 
--- | Set day-count to zero.
+-- | Set MJD to zero.
 clockCutDay :: Map Clock
 
--- | Add day-count.
+-- | Add MJD.
 clockAddDay :: DayCount -> Map Clock
 
 -- | Add second.
 clockAddSec :: Sec -> Map Clock
 
 -- | Calculation of clock plus clock.
-clockAdd :: AbBin Clock
+clockAdd :: BinAb Clock
 
 -- | Calculation of clock minus clock.
-clockSub :: AbBin Clock
-clockTimes :: Int -> Map Clock
-clockRangeBy :: Map (DayCount, Sec) -> RangeBy Clock
-clockStep :: Sec -> Map (DayCount, Sec)
-instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Clock.Clock
-instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Clock.Clock
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Clock.Clock
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Clock.Clock
+clockSub :: BinAb Clock
 
+-- | Multiplication of clock.
+clockTimes :: Int -> Map Clock
+
+-- | Create sequence between two clocks.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
+--   [|00:00:00|, |00:02:00|, |00:04:00|]
+--   </pre>
+clockRangeBy :: Map (DayCount, Sec) -> RangeBy Clock
+
+-- | Create clock step of given second.
+clockStep :: Sec -> Map (DayCount, Sec)
+
+
+-- | Time
 module Koshucode.Baala.Data.Type.Time.Time
+
+-- | Time is a small duration on timeline.
 data Time
 
--- | Date and time with time zone
+-- | Date and clock with time zone
 TimeYmdcz :: Date -> Clock -> Sec -> Time
 
--- | Date and time
+-- | Date and clock
 TimeYmdc :: Date -> Clock -> Time
 
 -- | Year, month, and day
@@ -1096,8 +1262,27 @@ TimeYw :: MJDay -> Time
 
 -- | Year and month
 TimeYm :: MJDay -> Time
+
+-- | Get integer content of the Modified Julian Day of time.
+timeMjd :: Time -> DayCount
+
+-- | Get the name of time precision.
+timePrecision :: Time -> String
+timeYmdTuple :: Time -> YmdTuple
+
+-- | Create monthly date from the Modified Julian Day.
 timeYmd :: MJDay -> Time
+
+-- | Create monthly time from the Modified Julian Day and clock.
 timeYmdc :: MJDay -> Clock -> Time
+
+-- | Create time data form modified Julian date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFromMjd 55555
+--   2010-12-25
+--   </pre>
+timeFromMjd :: DayCount -> Time
 
 -- | Create time data from year and month.
 timeFromYmAb :: Year -> Month -> Ab Time
@@ -1107,20 +1292,55 @@ timeFromYwAb :: Year -> Week -> Ab Time
 
 -- | Create time data from date, clock, and time zone.
 timeFromDczAb :: Date -> Clock -> Maybe Sec -> Ab Time
+timeFromYmd :: Year -> Month -> Day -> Time
+timeFromYmdTuple :: YmdTuple -> Time
 
--- | Create time data form modified Julian date.
-timeFromMjd :: DayCount -> Time
-timeMjd :: Time -> DayCount
+-- | Get today.
+--   
+--   <pre>
+--   &gt;&gt;&gt; today
+--   2013-04-18
+--   </pre>
+today :: IO Time
+
+-- | Get current time without time zone.
+--   
+--   <pre>
+--   &gt;&gt;&gt; now
+--   2013-04-18 08:37:36
+--   </pre>
+now :: IO Time
+
+-- | Get current time with time zone.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nowZoned
+--   2013-04-18 08:37:36 +09:00
+--   </pre>
+nowZoned :: IO Time
+
+-- | Omit clock part.
+timeOmitClock :: Map Time
+
+-- | Omit timezone.
+timeOmitZone :: Map Time
+
+-- | Map day part of time.
 timeMapDate :: Map Date -> Map Time
+
+-- | Map integer content of the Modified Julian Day.
 timeMapMjd :: Map DayCount -> Map Time
-timePrecision :: Time -> String
-timeFloorMonth :: Map Time
-timeFloorYear :: Map Time
-timeCeilMonth :: Map Time
-timeCeilYaer :: Map Time
-timeRangeDay :: RangeBy Time
-timeRangeMonth :: RangeBy Time
-timeRangeYear :: RangeBy Time
+
+-- | Convert local time to Koshu time content.
+timeFromZonedTime :: ZonedTime -> Time
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Time.Time
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Time.Time
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Time.Time
+instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Time.Time
+
+
+-- | Calculation on time.
+module Koshucode.Baala.Data.Type.Time.TimeCalc
 
 -- | Add days to time.
 timeAddDay :: DayCount -> Map Time
@@ -1139,11 +1359,65 @@ timeAddClock :: Clock -> AbMap Time
 
 -- | Calculate clock from time to time.
 timeDiff :: Time -> Time -> Ab Clock
-instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Time.Time
-instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Time.Time
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Time.Time
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Time.Time
 
+-- | Convert to the first day of month.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFloorMonth $ timeFromYmd 2014 11 3
+--   2014-11-01
+--   </pre>
+timeFloorMonth :: Map Time
+
+-- | Convert to the first day of year.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFloorYear $ timeFromYmd 2014 11 3
+--   2014-01-01
+--   </pre>
+timeFloorYear :: Map Time
+
+-- | Convert to the first day of next month.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeCeilMonth $ timeFromYmd 2014 11 3
+--   2014-12-01
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeCeilMonth $ timeFromYmd 2014 12 25
+--   2015-01-01
+--   </pre>
+timeCeilMonth :: Map Time
+
+-- | Convert to the first day of next year.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeCeilYaer $ timeFromYmd 2014 11 3
+--   2015-01-01
+--   </pre>
+timeCeilYaer :: Map Time
+
+-- | Create range of time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeRangeDay (timeFromYmd 2014 11 3) (timeFromYmd 2014 11 5)
+--   [2014-11-03, 2014-11-04, 2014-11-05]
+--   </pre>
+timeRangeDay :: RangeBy Time
+
+-- | Create range of time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
+--   [2014-12-31, 2015-01-31, 2015-02-28]
+--   </pre>
+timeRangeMonth :: RangeBy Time
+
+-- | Create range of time.
+timeRangeYear :: RangeBy Time
+
+
+-- | Bundle of time modules.
 module Koshucode.Baala.Data.Type.Time
 
 module Koshucode.Baala.Data.Content.Message

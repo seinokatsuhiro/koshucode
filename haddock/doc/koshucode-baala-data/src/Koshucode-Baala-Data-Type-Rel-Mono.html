@@ -21,44 +21,45 @@
 <a class="number" name="line-12">12</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>               <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a class="number" name="line-13">13</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
 <a class="number" name="line-14">14</a>
-<a class="number" name="line-15">15</a><a name="Mono"></a><span class='hs-comment'>-- | Monotype relation.</span>
+<a class="number" name="line-15">15</a><a name="Mono"></a><span class='hs-comment'>-- | Content type for monotype relation.</span>
 <a class="number" name="line-16">16</a><a name="Mono"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span>
 <a class="number" name="line-17">17</a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>MonoTerm</span> <span class='hs-varid'>c</span>                 <span class='hs-comment'>-- ^ Terminal content</span>
 <a class="number" name="line-18">18</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>MonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>       <span class='hs-comment'>-- ^ Nested relation</span>
 <a class="number" name="line-19">19</a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>)</span>
 <a class="number" name="line-20">20</a>
-<a class="number" name="line-21">21</a><a name="RelMono"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span> <span class='hs-layout'>(</span><span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
-<a class="number" name="line-22">22</a>
-<a class="number" name="line-23">23</a><a name="RelText"></a><span class='hs-comment'>-- | Text relation.</span>
-<a class="number" name="line-24">24</a><a name="RelText"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>RelText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>RelMono</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-25">25</a>
-<a class="number" name="line-26">26</a><a name="isMonoTerm"></a><span class='hs-comment'>-- | Test terminal content.</span>
-<a class="number" name="line-27">27</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-28">28</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-29">29</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-30">30</a>
-<a class="number" name="line-31">31</a><a name="isMonoNest"></a><span class='hs-comment'>-- | Test nested relation.</span>
-<a class="number" name="line-32">32</a><span class='hs-definition'>isMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a class="number" name="line-33">33</a><span class='hs-definition'>isMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-34">34</a><span class='hs-definition'>isMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-35">35</a>
-<a class="number" name="line-36">36</a><a name="gMonoTerm"></a><span class='hs-comment'>-- | Get terminal content.</span>
-<a class="number" name="line-37">37</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-38">38</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-39">39</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span> <span class='hs-str'>"gMonoTerm"</span>
-<a class="number" name="line-40">40</a>
-<a class="number" name="line-41">41</a><a name="gMonoNest"></a><span class='hs-comment'>-- | Get nested relation.</span>
-<a class="number" name="line-42">42</a><span class='hs-definition'>gMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-43">43</a><span class='hs-definition'>gMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r</span>
-<a class="number" name="line-44">44</a><span class='hs-definition'>gMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span> <span class='hs-str'>"gMonoNest"</span>
-<a class="number" name="line-45">45</a>
-<a class="number" name="line-46">46</a><a name="pMonoTerm"></a><span class='hs-comment'>-- | Put terminal content.</span>
-<a class="number" name="line-47">47</a><span class='hs-definition'>pMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-48">48</a><span class='hs-definition'>pMonoTerm</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>MonoTerm</span>
-<a class="number" name="line-49">49</a>
-<a class="number" name="line-50">50</a><a name="pMonoNest"></a><span class='hs-comment'>-- | Put nested relation.</span>
-<a class="number" name="line-51">51</a><span class='hs-definition'>pMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-52">52</a><span class='hs-definition'>pMonoNest</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>MonoNest</span>
-<a class="number" name="line-53">53</a>
+<a class="number" name="line-21">21</a><a name="RelMono"></a><span class='hs-comment'>-- | Monotype relation.</span>
+<a class="number" name="line-22">22</a><a name="RelMono"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span> <span class='hs-layout'>(</span><span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
+<a class="number" name="line-23">23</a>
+<a class="number" name="line-24">24</a><a name="RelText"></a><span class='hs-comment'>-- | Text relation.</span>
+<a class="number" name="line-25">25</a><a name="RelText"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>RelText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>RelMono</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-26">26</a>
+<a class="number" name="line-27">27</a><a name="isMonoTerm"></a><span class='hs-comment'>-- | Test terminal content.</span>
+<a class="number" name="line-28">28</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-29">29</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>isMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a class="number" name="line-31">31</a>
+<a class="number" name="line-32">32</a><a name="isMonoNest"></a><span class='hs-comment'>-- | Test nested relation.</span>
+<a class="number" name="line-33">33</a><span class='hs-definition'>isMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-34">34</a><span class='hs-definition'>isMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a class="number" name="line-35">35</a><span class='hs-definition'>isMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a class="number" name="line-36">36</a>
+<a class="number" name="line-37">37</a><a name="gMonoTerm"></a><span class='hs-comment'>-- | Get terminal content.</span>
+<a class="number" name="line-38">38</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-39">39</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-40">40</a><span class='hs-definition'>gMonoTerm</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span> <span class='hs-str'>"gMonoTerm"</span>
+<a class="number" name="line-41">41</a>
+<a class="number" name="line-42">42</a><a name="gMonoNest"></a><span class='hs-comment'>-- | Get nested relation.</span>
+<a class="number" name="line-43">43</a><span class='hs-definition'>gMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-44">44</a><span class='hs-definition'>gMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoNest</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r</span>
+<a class="number" name="line-45">45</a><span class='hs-definition'>gMonoNest</span> <span class='hs-layout'>(</span><span class='hs-conid'>MonoTerm</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span> <span class='hs-str'>"gMonoNest"</span>
+<a class="number" name="line-46">46</a>
+<a class="number" name="line-47">47</a><a name="pMonoTerm"></a><span class='hs-comment'>-- | Put terminal content.</span>
+<a class="number" name="line-48">48</a><span class='hs-definition'>pMonoTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-49">49</a><span class='hs-definition'>pMonoTerm</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>MonoTerm</span>
+<a class="number" name="line-50">50</a>
+<a class="number" name="line-51">51</a><a name="pMonoNest"></a><span class='hs-comment'>-- | Put nested relation.</span>
+<a class="number" name="line-52">52</a><span class='hs-definition'>pMonoNest</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>RelMono</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mono</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-53">53</a><span class='hs-definition'>pMonoNest</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>MonoNest</span>
+<a class="number" name="line-54">54</a>
 </pre></body>
 </html>

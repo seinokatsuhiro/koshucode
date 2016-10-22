@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.163.0.0
+@version 0.164.0.0
 
 
 -- | Line break setting for mix text.
@@ -822,9 +822,13 @@ type Named a = (String, a)
 named :: (Name a) => a -> Named a
 
 -- | Map from something to same type.
+
+-- | <i>Deprecated: Replaced by <a>Map</a>.</i>
 type Map a = a -> a
 
 -- | Map from something to list of something.
+
+-- | <i>Deprecated: Replaced by <a>ManyMap</a>.</i>
 type ManyMap a = a -> [a]
 
 -- | Type of value which is classified as yes or no.
@@ -1828,6 +1832,8 @@ module Koshucode.Baala.Base.IO
 
 -- | Abort reasons.
 module Koshucode.Baala.Base.Abort.Reason
+
+-- | Abort reason.
 data AbortReason
 AbortReason :: String -> [String] -> [String] -> [(String, CodePt)] -> AbortReason
 
@@ -1848,8 +1854,14 @@ type Ab a = Either AbortReason a
 
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
+
+-- | Abortable many map.
 type AbManyMap a = a -> Ab [a]
-type AbPred a = a -> Ab Bool
+
+-- | Abortable Boolean-valued function.
+type AbTest a = a -> Ab Bool
+
+-- | Abortable I/O.
 type IOAb a = IO (Ab a)
 
 -- | Type for abortable binary operators.

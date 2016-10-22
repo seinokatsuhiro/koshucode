@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.163.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -345,7 +345,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-48');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -359,7 +359,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-48');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -373,7 +373,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-48');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -387,7 +387,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-52');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -401,7 +401,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-61');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-59');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -415,7 +415,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 		      >Head</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-58');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#line-56');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -653,6 +653,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headTypes');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get types of relation terms.</p
+	    ></div
 	  ></div
 	><div class="doc"
 	><p
@@ -698,6 +702,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Add term name to head.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headCons &quot;c&quot; $ headFrom [&quot;a&quot;, &quot;b&quot;]
+</code
+		></strong
+	      >Head { headType = TypeRel [(&quot;c&quot;,TypeAny), (&quot;a&quot;,TypeAny), (&quot;b&quot;,TypeAny)] }
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -733,6 +747,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headConsNest');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add term name for nested relation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -747,26 +765,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headNests');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Example</em
-	    ></p
+	  ><div class="doc"
 	  ><p
-	  >Add term <code
-	    >/c</code
-	    > to heading.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let h = headFrom [&quot;a&quot;, &quot;b&quot;] in headCons &quot;c&quot; h
+	    >Create nested relation terms.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headNests [&quot;x&quot;, &quot;y&quot;] $ headFrom [&quot;a&quot;]
 </code
-	      ></strong
-	    >Head { headType = TypeRel [(&quot;c&quot;, TypeAny), (&quot;a&quot;, TypeAny), (&quot;b&quot;, TypeAny)] }
+		></strong
+	      >Head { headType = TypeRel [(&quot;x&quot;, TypeRel [(&quot;a&quot;,TypeAny)]), (&quot;y&quot;, TypeRel [(&quot;a&quot;,TypeAny)])] }
 </pre
+	    ></div
 	  ></div
 	><h1 id="g:5"
 	>Mapping</h1
@@ -788,6 +800,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Reconstruct head.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headMap reverse $ headFrom [&quot;a&quot;, &quot;b&quot;]
+</code
+		></strong
+	      >Head {headType = TypeRel [(&quot;b&quot;,TypeAny),(&quot;a&quot;,TypeAny)]}
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -805,6 +827,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#headMapName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert term names.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headMapName (&quot;x&quot; ++) $ headFrom [&quot;a&quot;, &quot;b&quot;]
+</code
+		></strong
+	      >Head { headType = TypeRel [(&quot;xa&quot;,TypeAny), (&quot;xb&quot;,TypeAny)] }
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -835,24 +871,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > [[c]] <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Head.html#bodyAlign');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Example</em
-	    ></p
+	  ><div class="doc"
 	  ><p
-	  >Reverse term names.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let h = headFrom [&quot;a&quot;, &quot;b&quot;] in headMap reverse h
-</code
-	      ></strong
-	    >Head { headType = TypeRel [(&quot;b&quot;, TypeAny), (&quot;a&quot;, TypeAny)] }
-</pre
+	    >Change order of terms.</p
+	    ></div
 	  ></div
 	></div
       ></div

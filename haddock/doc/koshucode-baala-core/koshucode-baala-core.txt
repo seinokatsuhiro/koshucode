@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.163.0.0
+@version 0.164.0.0
 
 
 -- | Result of relational calculation.
@@ -330,8 +330,8 @@ RelkitPred :: (Test [c]) -> RelkitCore c
 RelkitAbFull :: Bool -> ([BodyMap c] -> AbMap [[c]]) -> [RelkitBody c] -> RelkitCore c
 RelkitOneToAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
 RelkitOneToAbOne :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
-RelkitAbSemi :: (AbPred [[c]]) -> (RelkitBody c) -> RelkitCore c
-RelkitAbPred :: (AbPred [c]) -> RelkitCore c
+RelkitAbSemi :: (AbTest [[c]]) -> (RelkitBody c) -> RelkitCore c
+RelkitAbTest :: (AbTest [c]) -> RelkitCore c
 RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
 RelkitConst :: [[c]] -> RelkitCore c
 RelkitId :: RelkitCore c

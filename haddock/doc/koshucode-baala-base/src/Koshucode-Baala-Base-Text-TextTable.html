@@ -31,7 +31,7 @@
 <a class="number" name="line-22">22</a>    <span class='hs-varid'>renderTable</span><span class='hs-layout'>,</span>
 <a class="number" name="line-23">23</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-24">24</a>
-<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                      <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                      <span class='hs-keyword'>as</span> <span class='hs-conid'>Ch</span>
 <a class="number" name="line-26">26</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span>                      <span class='hs-keyword'>as</span> <span class='hs-conid'>L</span>
 <a class="number" name="line-27">27</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
 <a class="number" name="line-28">28</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span>      <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
@@ -187,7 +187,7 @@
 <a class="number" name="line-178">178</a><span class='hs-definition'>displaySizeChar</span> <span class='hs-varid'>c</span>
 <a class="number" name="line-179">179</a>    <span class='hs-keyglyph'>|</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&lt;</span> <span class='hs-num'>4096</span>  <span class='hs-keyglyph'>=</span> <span class='hs-num'>1</span>
 <a class="number" name="line-180">180</a>    <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>2</span>
-<a class="number" name="line-181">181</a>    <span class='hs-keyword'>where</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>ord</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-181">181</a>    <span class='hs-keyword'>where</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>ord</span> <span class='hs-varid'>c</span>
 <a class="number" name="line-182">182</a>
 </pre></body>
 </html>
