@@ -41,11 +41,11 @@ clockAddSec :: D.Sec -> O.Map D.Clock
 clockAddSec s = D.clockMap id (+ s)
 
 -- | Calculation of clock plus clock.
-clockAdd :: D.AbBin D.Clock
+clockAdd :: B.BinAb D.Clock
 clockAdd = D.clockMap2 (+) (+)
 
 -- | Calculation of clock minus clock.
-clockSub :: D.AbBin D.Clock
+clockSub :: B.BinAb D.Clock
 clockSub = D.clockMap2 (-) (-)
 
 -- | Multiplication of clock.

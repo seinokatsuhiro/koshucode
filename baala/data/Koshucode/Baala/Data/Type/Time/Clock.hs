@@ -5,7 +5,6 @@
 module Koshucode.Baala.Data.Type.Time.Clock
   ( -- * Data type
     Clock (..), DayCount, Hour, Min, Sec,
-    AbBin,
     clockBodyToMix,
 
     -- * Accessor
@@ -229,9 +228,6 @@ dayToMix d = B.mixDec d B.<> B.mixString "'"
 
 -- ----------------------  Map
 
--- | Type for abortable binary operator.
-type AbBin a  = a -> a -> B.Ab a
-
 -- | Map MDJ and second of clock.
 clockMap :: O.Map DayCount -> O.Map Sec -> O.Map Clock
 clockMap f g (ClockDhms d s)  = adjust ClockDhms (f d) (g s)
@@ -240,7 +236,7 @@ clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
 clockMap f _ (ClockD    d)    =        ClockD    (f d)
 
 -- | Combine MDJ and second of two clocks.
-clockMap2 :: B.Bin DayCount -> B.Bin Sec -> AbBin Clock
+clockMap2 :: B.Bin DayCount -> B.Bin Sec -> B.BinAb Clock
 clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
 clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
 clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
