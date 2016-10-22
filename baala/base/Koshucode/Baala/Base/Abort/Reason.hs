@@ -6,7 +6,9 @@
 module Koshucode.Baala.Base.Abort.Reason
   ( -- * Data type
     AbortReason (..),
-    Ab, AbMap, AbManyMap, AbPred, IOAb, BinAb,
+
+    -- * Derived type
+    Ab, AbMap, AbManyMap, AbTest, IOAb, BinAb,
   
     -- * Constructor
     abortBecause,
@@ -16,6 +18,10 @@ module Koshucode.Baala.Base.Abort.Reason
 
 import qualified Koshucode.Baala.Base.IO    as B
 
+
+-- --------------------------------------------  Type
+
+-- | Abort reason.
 data AbortReason = AbortReason
     { abortReason :: String                -- ^ Reason in one line
     , abortDetail :: [String]              -- ^ Detailed description
@@ -23,20 +29,29 @@ data AbortReason = AbortReason
     , abortPoint  :: [(String, B.CodePt)]  -- ^ Tag and aborting point
     } deriving (Show, Eq, Ord)
 
+
+-- --------------------------------------------  Deriving type
+
 -- | Abortable result, i.e., either of right result or abort reason.
 type Ab a = Either AbortReason a
 
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
 
+-- | Abortable many map.
 type AbManyMap a = a -> Ab [a]
 
-type AbPred a = a -> Ab Bool
+-- | Abortable Boolean-valued function.
+type AbTest a = a -> Ab Bool
 
+-- | Abortable I/O.
 type IOAb a = IO (Ab a)
 
 -- | Type for abortable binary operators.
 type BinAb a = a -> a -> Ab a
+
+
+-- --------------------------------------------  Constructor
 
 -- | Construct abort reason with reason text.
 abortBecause :: String -> AbortReason

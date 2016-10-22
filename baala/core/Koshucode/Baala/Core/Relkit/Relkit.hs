@@ -37,15 +37,15 @@ type RelkitBody c = B.Sourced (RelkitCore c)
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
     = RelkitFull         Bool (                O.Map     [[c]] )
-    | RelkitOneToMany    Bool (                B.ManyMap [c]   )
+    | RelkitOneToMany    Bool (                O.ManyMap [c]   )
     | RelkitOneToOne     Bool (                O.Map     [c]   )
     | RelkitPred              (                O.Test    [c]   )
 
     | RelkitAbFull       Bool ( [BodyMap c] -> B.AbMap     [[c]]   ) [RelkitBody c]
     | RelkitOneToAbMany  Bool ( [BodyMap c] -> B.AbManyMap [c]     ) [RelkitBody c]
     | RelkitOneToAbOne   Bool ( [BodyMap c] -> B.AbMap     [c]     ) [RelkitBody c]
-    | RelkitAbSemi            (                B.AbPred    [[c]]   ) (RelkitBody c)
-    | RelkitAbPred            (                B.AbPred    [c]     )
+    | RelkitAbSemi            (                B.AbTest    [[c]]   ) (RelkitBody c)
+    | RelkitAbTest            (                B.AbTest    [c]     )
 
     | RelkitAppend       (RelkitBody c) (RelkitBody c)
     | RelkitConst        [[c]]
@@ -68,7 +68,7 @@ instance Show (RelkitCore c) where
     show (RelkitOneToAbMany _ _ _) = "RelkitOneToAbMany"
     show (RelkitOneToAbOne _ _ _)  = "RelkitOneToAbOne"
     show (RelkitAbSemi      _ _)   = "RelkitAbSemi"
-    show (RelkitAbPred        _)   = "RelkitAbPred"
+    show (RelkitAbTest        _)   = "RelkitAbTest"
 
     show (RelkitConst         _)   = "RelkitConst"
     show (RelkitAppend      x y)   = "RelkitAppend " ++ show [x,y]
