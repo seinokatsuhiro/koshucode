@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Relation type
@@ -82,6 +81,7 @@ relSortHead (Rel he bo) = Rel he' bo' where
 relSortBody :: (Ord c) => O.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
+-- | Sort relation body according to order specification.
 relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> O.Map [[c]]
 relBodyOrder ns he = ed where
     ed    = B.sortByName ords $ D.getTermNames he
@@ -119,6 +119,7 @@ reldau = Rel mempty []
 
 -- ----------------------  Converter
 
+-- | Type for having relations.
 class SelectRel r where
     -- | Convert judges to relation.
     selectRel :: r c -> D.JudgeClass -> [S.TermName] -> Rel c

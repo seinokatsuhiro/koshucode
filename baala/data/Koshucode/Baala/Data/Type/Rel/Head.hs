@@ -24,14 +24,12 @@ module Koshucode.Baala.Data.Type.Rel.Head
     headAppend,
     headConsNest,
     headNests,
-    -- $AddTerm
   
     -- * Mapping
     headMap,
     headMapName,
     headUp,
     bodyAlign,
-    -- $Mapping
   ) where
 
 import qualified Koshucode.Baala.Overture          as O
@@ -139,6 +137,7 @@ headNested he = ts2 where
     ts2 = map h $ filter (D.isTypeRel . snd) $ D.typeTerms $ headType he
     h (n, t) = (n, headOf t)
 
+-- | Get types of relation terms.
 headTypes :: Head -> [D.Type]
 headTypes (Head (D.TypeRel ts)) = map snd ts
 headTypes _ = B.bug "headTypes"
@@ -146,17 +145,11 @@ headTypes _ = B.bug "headTypes"
 
 -- ----------------------  Add terms
 
--- $AddTerm
---
---  /Example/
---
---  Add term @\/c@ to heading.
---
---    >>> let h = headFrom ["a", "b"] in headCons "c" h
---    Head { headType = TypeRel [("c", TypeAny), ("a", TypeAny), ("b", TypeAny)] }
---
-
 -- | Add term name to head.
+--
+--   >>> headCons "c" $ headFrom ["a", "b"]
+--   Head { headType = TypeRel [("c",TypeAny), ("a",TypeAny), ("b",TypeAny)] }
+--
 headCons :: S.TermName -> O.Map Head
 headCons n1 = headOf . D.typeConsRel n1 . headType
 
@@ -164,10 +157,16 @@ headCons n1 = headOf . D.typeConsRel n1 . headType
 headAppend :: [S.TermName] -> O.Map Head
 headAppend ns1 = headOf . D.typeAppendRel ns1 . headType
 
+-- | Add term name for nested relation.
 headConsNest :: S.TermName -> Head -> O.Map Head
 headConsNest n1 Head { headType = t1 } Head { headType = t } =
     headOf $ D.typeConsNest n1 t1 t
 
+-- | Create nested relation terms.
+--
+--   >>> headNests ["x", "y"] $ headFrom ["a"]
+--   Head { headType = TypeRel [("x", TypeRel [("a",TypeAny)]), ("y", TypeRel [("a",TypeAny)])] }
+--
 headNests :: [S.TermName] -> O.Map Head
 headNests ns1 Head { headType = t } =
     headOf $ D.TypeRel $ map nest ns1
@@ -176,20 +175,19 @@ headNests ns1 Head { headType = t } =
 
 -- ----------------------  Mapping
 
--- $Mapping
---
---  /Example/
---
---  Reverse term names.
---
---    >>> let h = headFrom ["a", "b"] in headMap reverse h
---    Head { headType = TypeRel [("b", TypeAny), ("a", TypeAny)] }
---
-
 -- | Reconstruct head.
+--
+--   >>> headMap reverse $ headFrom ["a", "b"]
+--   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
+--
 headMap :: O.Map [D.NamedType] -> O.Map Head
 headMap = headMapBy D.typeRelMapTerms
 
+-- | Convert term names.
+--
+--   >>> headMapName ("x" ++) $ headFrom ["a", "b"]
+--   Head { headType = TypeRel [("xa",TypeAny), ("xb",TypeAny)] }
+--
 headMapName :: O.Map S.TermName -> O.Map Head
 headMapName = headMapBy D.typeRelMapName
 
@@ -202,9 +200,15 @@ headUp = headOf . up . headType where
     up (D.TypeRel [(_, ty)]) = ty
     up ty                    = ty
 
+-- | Change order of terms.
+--
+--   >>> headAlign (headFrom ["a", "b"]) (headFrom ["b", "a"]) ["x", "y"]
+--   ["y", "x"]
+--
 headAlign :: Head -> Head -> O.Map [c]
 headAlign to from = B.snipOrder (D.getTermNames to) (D.getTermNames from)
 
+-- | Change order of terms.
 bodyAlign :: Head -> Head -> O.Map [[c]]
 bodyAlign to from = (headAlign to from `map`)
 

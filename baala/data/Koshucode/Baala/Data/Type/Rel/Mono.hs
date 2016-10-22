@@ -12,12 +12,13 @@ module Koshucode.Baala.Data.Type.Rel.Mono
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Data.Type.Rel.Rel  as D
 
--- | Monotype relation.
+-- | Content type for monotype relation.
 data Mono c
     = MonoTerm c                 -- ^ Terminal content
     | MonoNest (RelMono c)       -- ^ Nested relation
       deriving (Show, Eq, Ord)
 
+-- | Monotype relation.
 type RelMono c = D.Rel (Mono c)
 
 -- | Text relation.
