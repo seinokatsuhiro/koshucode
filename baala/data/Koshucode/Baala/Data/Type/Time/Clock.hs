@@ -18,11 +18,10 @@ module Koshucode.Baala.Data.Type.Time.Clock
     clockPrecision,
     clockDhms, clockAlter,
 
-    -- * Calculation
-    clockPos, clockNeg,
-    clockCutDay, clockAddDay, clockAddSec,
-    clockAdd, clockSub, clockTimes,
-    clockRangeBy, clockStep,
+    -- * Conversion
+    clockMap,
+    clockMap2,
+    daySeconds,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -73,7 +72,7 @@ clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
 clockFromD :: DayCount -> Clock
 clockFromD = ClockD
 
--- | Create clock from hour, minute, and second.
+-- | Create clock from hour, minute, and optional second.
 --
 --   >>> clockFromHms 9 40 Nothing
 --   |09:40|
@@ -191,6 +190,10 @@ clockBodyToMix c = body $ clockPos c where
     body (ClockDh   day sec)  = sign $ daySecToMix dhToMix   day sec
     body (ClockD    day)      = sign $ dayToMix day
 
+-- | Convert clock to positive clock.
+clockPos :: O.Map Clock
+clockPos = clockMap abs abs
+
 signToMix :: Int -> O.Map B.MixText
 signToMix (-1) m = B.mixString "-" B.<> m
 signToMix _    m = m
@@ -244,6 +247,7 @@ clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s
 clockMap2 f _ (ClockD    d)   (ClockD    e)    = Right  $ ClockD    (f d e)
 clockMap2 _ _ _ _ = Msg.adlib "clock"
 
+-- | Seconds in a day, i.e., 86400 seconds.
 daySeconds :: (Num a) => a
 daySeconds = 86400   -- 24 * 60 * 60
 
@@ -257,69 +261,3 @@ adjust k d s = let (d', s')  = s `divMod` daySeconds
                   then k (d2 + 1) (s' - daySeconds)
                   else k d2 s'
 
-
--- ----------------------  Calculation
-
--- | Convert clock to positive clock.
-clockPos :: O.Map Clock
-clockPos = clockMap abs abs
-
--- | Convert clock to negative clock.
-clockNeg :: O.Map Clock
-clockNeg = clockMap neg neg
-
-neg :: (Ord a, Num a) => a -> a
-neg a | a > 0      = - a
-      | otherwise  = a
-
--- | Set MJD to zero.
-clockCutDay :: O.Map Clock
-clockCutDay = clockMap (const 0) id
-
--- | Add MJD.
-clockAddDay :: DayCount -> O.Map Clock
-clockAddDay d = clockMap (+ d) id
-
--- | Add second.
-clockAddSec :: Sec -> O.Map Clock
-clockAddSec s = clockMap id (+ s)
-
--- | Calculation of clock plus clock.
-clockAdd :: AbBin Clock
-clockAdd = clockMap2 (+) (+)
-
--- | Calculation of clock minus clock.
-clockSub :: AbBin Clock
-clockSub = clockMap2 (-) (-)
-
--- | Multiplication of clock.
-clockTimes :: Int -> O.Map Clock
-clockTimes m = clockMap (* (toInteger m)) (* m)
-
-
--- ----------------------  Range
-
--- | Create sequence between two clocks.
---
---   >>> clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
---   [|00:00:00|, |00:02:00|, |00:04:00|]
---
-clockRangeBy :: O.Map (DayCount, Sec) -> B.RangeBy Clock
-clockRangeBy step from to = clocks where
-    from'  =  clockTuple from
-    to'    =  clockTuple to
-    clocks =  map fromClockTuple $ B.rangeBy step from' to'
-
--- | Create clock step of given second.
-clockStep :: Sec -> O.Map (DayCount, Sec)
-clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` daySeconds
-                       in (d + toInteger d', s')
-
-clockTuple :: Clock -> (DayCount, Sec)
-clockTuple (ClockDhms d s)  =  (d, s)
-clockTuple (ClockDhm  d s)  =  (d, s)
-clockTuple (ClockDh   d s)  =  (d, s)
-clockTuple (ClockD    d)    =  (d, 0)
-
-fromClockTuple :: (DayCount, Sec) -> Clock
-fromClockTuple (d, s) = ClockDhms d s

@@ -15,13 +15,14 @@ module Koshucode.Baala.Data.Type.Time.TimeCalc
     timeRangeDay, timeRangeMonth, timeRangeYear,
   ) where
 
-import qualified Data.Time.Calendar                     as Tim
-import qualified Koshucode.Baala.Overture               as O
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data.Type.Time.Clock   as D
-import qualified Koshucode.Baala.Data.Type.Time.Date    as D
-import qualified Koshucode.Baala.Data.Type.Time.Time    as D
-import qualified Koshucode.Baala.Base.Message           as Msg
+import qualified Data.Time.Calendar                         as Tim
+import qualified Koshucode.Baala.Overture                   as O
+import qualified Koshucode.Baala.Base                       as B
+import qualified Koshucode.Baala.Data.Type.Time.Clock       as D
+import qualified Koshucode.Baala.Data.Type.Time.ClockCalc   as D
+import qualified Koshucode.Baala.Data.Type.Time.Date        as D
+import qualified Koshucode.Baala.Data.Type.Time.Time        as D
+import qualified Koshucode.Baala.Base.Message               as Msg
 
 
 -- ----------------------  Add

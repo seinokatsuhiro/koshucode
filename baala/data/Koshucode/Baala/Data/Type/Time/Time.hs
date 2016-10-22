@@ -23,14 +23,15 @@ module Koshucode.Baala.Data.Type.Time.Time
     timeFromZonedTime,
   ) where
 
-import qualified Data.Time.Calendar                     as Tim
-import qualified Data.Time.Calendar.WeekDate            as Tim
-import qualified Data.Time.LocalTime                    as Tim
-import qualified Koshucode.Baala.Overture               as O
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Data.Type.Time.Clock   as D
-import qualified Koshucode.Baala.Data.Type.Time.Date    as D
-import qualified Koshucode.Baala.Data.Type.Message      as Msg
+import qualified Data.Time.Calendar                         as Tim
+import qualified Data.Time.Calendar.WeekDate                as Tim
+import qualified Data.Time.LocalTime                        as Tim
+import qualified Koshucode.Baala.Overture                   as O
+import qualified Koshucode.Baala.Base                       as B
+import qualified Koshucode.Baala.Data.Type.Time.Clock       as D
+import qualified Koshucode.Baala.Data.Type.Time.ClockCalc   as D
+import qualified Koshucode.Baala.Data.Type.Time.Date        as D
+import qualified Koshucode.Baala.Data.Type.Message          as Msg
 
 
 -- ----------------------  Time
