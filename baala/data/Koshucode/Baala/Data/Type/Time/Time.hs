@@ -5,13 +5,20 @@
 module Koshucode.Baala.Data.Type.Time.Time
   ( -- * Data type
     Time (..),
+    timeMjd, timePrecision,
 
-    -- * Construct
-    timeYmd, timeYmdc,
+    -- * Construction
+    timeYmd, timeYmdc, timeFromMjd,
     timeFromYmAb, timeFromYwAb,
     timeFromDczAb,
-    timeFromMjd, timeMjd,
-    timeMapDate, timeMapMjd, timePrecision,
+
+    -- * Construction with I/O
+    today, now, nowZoned,
+
+    -- * Conversion
+    timeOmitClock, timeOmitZone,
+    timeMapDate, timeMapMjd,
+    timeFromZonedTime,
 
     -- * First day
     timeFloorMonth, timeFloorYear,
@@ -27,6 +34,7 @@ module Koshucode.Baala.Data.Type.Time.Time
 
 import qualified Data.Time.Calendar                     as Tim
 import qualified Data.Time.Calendar.WeekDate            as Tim
+import qualified Data.Time.LocalTime                    as Tim
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Data.Type.Time.Clock   as D
@@ -44,15 +52,7 @@ data Time
     | TimeYmd   D.Date                -- ^ Year, month, and day
     | TimeYw    D.MJDay               -- ^ Year and week
     | TimeYm    D.MJDay               -- ^ Year and month
-      deriving (Show, Eq, Ord)
-
--- | Create monthly date from the Modified Julian Day.
-timeYmd   :: D.MJDay -> Time
-timeYmd    = TimeYmd . D.Monthly
-
--- | Create monthly time from the Modified Julian Day and clock.
-timeYmdc  :: D.MJDay -> D.Clock -> Time
-timeYmdc   = TimeYmdc . D.Monthly
+      deriving (Eq, Ord)
 
 -- | Get integer content of the Modified Julian Day of time.
 timeMjd :: Time -> D.DayCount
@@ -60,11 +60,11 @@ timeMjd = Tim.toModifiedJulianDay . timeDay
 
 -- Get the Modified Julian Day of time.
 timeDay :: Time -> D.MJDay
-timeDay (TimeYmdcz d _ _)        = D.dateDay d
-timeDay (TimeYmdc  d _)          = D.dateDay d
-timeDay (TimeYmd   d)            = D.dateDay d
-timeDay (TimeYw    d)            = d
-timeDay (TimeYm    d)            = d
+timeDay (TimeYmdcz d _ _)   = D.dateDay d
+timeDay (TimeYmdc  d _)     = D.dateDay d
+timeDay (TimeYmd   d)       = D.dateDay d
+timeDay (TimeYw    d)       = d
+timeDay (TimeYm    d)       = d
 
 -- | Get the name of time precision.
 timePrecision :: Time -> String
@@ -74,24 +74,11 @@ timePrecision (TimeYmd   _)      = "day"
 timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
--- | Map day part of time.
-timeMapDay :: O.Map D.MJDay -> O.Map Time
-timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
-timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
-timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)
-timeMapDay f (TimeYw    d)       = TimeYw    (f d)
-timeMapDay f (TimeYm    d)       = TimeYm    (f d)
-
--- | Map day part of time.
-timeMapDate :: O.Map D.Date -> O.Map Time
-timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
-timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
-timeMapDate f (TimeYmd   d)      = TimeYmd   (f d)
-timeMapDate _ (TimeYw    d)      = TimeYw    d
-timeMapDate _ (TimeYm    d)      = TimeYm    d
-
 
 -- ----------------------  Write
+
+instance Show Time where
+    show = B.mixToFlatString . B.mixEncode
 
 instance B.MixEncode Time where
     mixEncode = timeToMix
@@ -126,6 +113,22 @@ timeToMix time =
 
 -- ----------------------  Construct
 
+-- | Create monthly date from the Modified Julian Day.
+timeYmd :: D.MJDay -> Time
+timeYmd = TimeYmd . D.Monthly
+
+-- | Create monthly time from the Modified Julian Day and clock.
+timeYmdc :: D.MJDay -> D.Clock -> Time
+timeYmdc = TimeYmdc . D.Monthly
+
+-- | Create time data form modified Julian date.
+--
+--   >>> timeFromMjd 55555
+--   2010-12-25
+--
+timeFromMjd :: D.DayCount -> Time
+timeFromMjd = timeYmd . Tim.ModifiedJulianDay
+
 -- | Create time data from year and month.
 timeFromYmAb :: D.Year -> D.Month -> B.Ab Time
 timeFromYmAb y m =
@@ -155,18 +158,82 @@ timeFromYmdTuple = timeYmd . dayFromYmdTuple where
 timeYmdTuple :: Time -> D.YmdTuple
 timeYmdTuple = Tim.toGregorian . timeDay
 
--- | Create time data form modified Julian date.
+-- | Get today.
 --
---   >>> timeFromMjd 55555
---   TimeYmd (Monthly 2010-12-25)
+--   >>> today
+--   2013-04-18
 --
-timeFromMjd :: D.DayCount -> Time
-timeFromMjd = timeYmd . Tim.ModifiedJulianDay
+today :: IO Time
+today = do time <- now
+           return $ timeOmitClock time
+
+-- | Get current time without time zone.
+--
+--   >>> now
+--   2013-04-18 08:37:36
+--
+now :: IO Time
+now = do time <- Tim.getZonedTime
+         return $ timeOmitZone $ timeFromZonedTime time
+
+-- | Get current time with time zone.
+--
+--   >>> nowZoned
+--   2013-04-18 08:37:36 +09:00
+--
+nowZoned :: IO Time
+nowZoned = do time <- Tim.getZonedTime
+              return $ timeFromZonedTime time
+
+
+-- ----------------------  Conversion
+
+-- | Omit timezone.
+timeOmitZone :: O.Map Time
+timeOmitZone (TimeYmdcz d c _)  = TimeYmdc d c
+timeOmitZone (TimeYmdc  d c)    = TimeYmdc d c
+timeOmitZone (TimeYmd   d)      = TimeYmd d
+timeOmitZone (TimeYw    d)      = TimeYw  d
+timeOmitZone (TimeYm    d)      = TimeYm  d
+
+-- | Omit clock part.
+timeOmitClock :: O.Map Time
+timeOmitClock (TimeYmdcz d _ _)  = TimeYmd d
+timeOmitClock (TimeYmdc  d _)    = TimeYmd d
+timeOmitClock (TimeYmd   d)      = TimeYmd d
+timeOmitClock (TimeYw    d)      = TimeYw  d
+timeOmitClock (TimeYm    d)      = TimeYm  d
+
+-- | Map day part of time.
+timeMapDate :: O.Map D.Date -> O.Map Time
+timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
+timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
+timeMapDate f (TimeYmd   d)      = TimeYmd   (f d)
+timeMapDate _ (TimeYw    d)      = TimeYw    d
+timeMapDate _ (TimeYm    d)      = TimeYm    d
+
+-- | Map day part of time.
+timeMapDay :: O.Map D.MJDay -> O.Map Time
+timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
+timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
+timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)
+timeMapDay f (TimeYw    d)       = TimeYw    (f d)
+timeMapDay f (TimeYm    d)       = TimeYm    (f d)
 
 -- | Map integer content of the Modified Julian Day.
 timeMapMjd :: O.Map D.DayCount -> O.Map Time
 timeMapMjd f time = timeMapDay g time where
     g (Tim.ModifiedJulianDay d) = Tim.ModifiedJulianDay $ f d
+
+-- | Convert local time to Koshu time content.
+timeFromZonedTime :: Tim.ZonedTime -> Time
+timeFromZonedTime Tim.ZonedTime
+                      { Tim.zonedTimeToLocalTime = Tim.LocalTime mjd (Tim.TimeOfDay h m s)
+                      , Tim.zonedTimeZone = Tim.TimeZone { Tim.timeZoneMinutes = z }}
+    = TimeYmdcz d (D.clockFromDhms 0 h m s') (60 * z)
+      where
+        d  = D.dateFromMjd $ Tim.toModifiedJulianDay mjd
+        s' = fromEnum s `div` 1000000000000
 
 
 -- ----------------------  First day
@@ -174,7 +241,7 @@ timeMapMjd f time = timeMapDay g time where
 -- | Convert to the first day of month.
 --
 --   >>> timeFloorMonth $ timeFromYmd 2014 11 3
---   TimeYmd (Monthly 2014-11-01)
+--   2014-11-01
 --
 timeFloorMonth :: O.Map Time
 timeFloorMonth time =
@@ -184,7 +251,7 @@ timeFloorMonth time =
 -- | Convert to the first day of year.
 --
 --   >>> timeFloorYear $ timeFromYmd 2014 11 3
---   TimeYmd (Monthly 2014-01-01)
+--   2014-01-01
 --
 timeFloorYear :: O.Map Time
 timeFloorYear time =
@@ -194,10 +261,10 @@ timeFloorYear time =
 -- | Conbert to the first day of next month.
 --
 --   >>> timeCeilMonth $ timeFromYmd 2014 11 3
---   TimeYmd (Monthly 2014-12-01)
+--   2014-12-01
 --
 --   >>> timeCeilMonth $ timeFromYmd 2014 12 25
---   TimeYmd (Monthly 2015-01-01)
+--   2015-01-01
 --
 timeCeilMonth :: O.Map Time
 timeCeilMonth time =
@@ -207,7 +274,7 @@ timeCeilMonth time =
 -- | Conbert to the first day of next year.
 --
 --    >>> timeCeilYaer $ timeFromYmd 2014 11 3
---    TimeYmd (Monthly 2015-01-01)
+--    2015-01-01
 --
 timeCeilYaer :: O.Map Time
 timeCeilYaer time =
@@ -220,7 +287,7 @@ timeCeilYaer time =
 -- | Create range of time.
 --
 --   >>> timeRangeDay (timeFromYmd 2014 11 3) (timeFromYmd 2014 11 5)
---   [TimeYmd (Monthly 2014-11-03), TimeYmd (Monthly 2014-11-04), TimeYmd (Monthly 2014-11-05)]
+--   [2014-11-03, 2014-11-04, 2014-11-05]
 --
 timeRangeDay :: B.RangeBy Time
 timeRangeDay from to = map timeFromMjd [timeMjd from .. timeMjd to]
@@ -228,7 +295,7 @@ timeRangeDay from to = map timeFromMjd [timeMjd from .. timeMjd to]
 -- | Create range of time.
 --
 --   >>> timeRangeMonth (timeFromYmd 2014 12 31) (timeFromYmd 2015 03 5)
---   [TimeYmd (Monthly 2014-12-31), TimeYmd (Monthly 2015-01-31), TimeYmd (Monthly 2015-02-28)]
+--   [2014-12-31, 2015-01-31, 2015-02-28]
 --
 timeRangeMonth :: B.RangeBy Time
 timeRangeMonth = timeRangeBy monthUp
