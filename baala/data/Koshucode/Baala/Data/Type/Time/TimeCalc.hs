@@ -82,7 +82,7 @@ timeDiffDc d2 c2 d1 c1 =
 timeDiffDate :: D.Date -> D.Date -> Integer
 timeDiffDate d2 d1 = D.dateDay d2 `timeDiffDay` D.dateDay d1
 
-timeDiffDay :: D.MJDay -> D.MJDay -> Integer
+timeDiffDay :: D.Mjd -> D.Mjd -> Integer
 timeDiffDay d2 d1 = Tim.toModifiedJulianDay d2 - Tim.toModifiedJulianDay d1
 
 

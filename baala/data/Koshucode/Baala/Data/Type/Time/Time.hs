@@ -41,8 +41,8 @@ data Time
     = TimeYmdcz D.Date D.Clock D.Sec  -- ^ Date and clock with time zone
     | TimeYmdc  D.Date D.Clock        -- ^ Date and clock
     | TimeYmd   D.Date                -- ^ Year, month, and day
-    | TimeYw    D.MJDay               -- ^ Year and week
-    | TimeYm    D.MJDay               -- ^ Year and month
+    | TimeYw    D.Mjd                 -- ^ Year and week
+    | TimeYm    D.Mjd                 -- ^ Year and month
       deriving (Eq, Ord)
 
 -- | Get integer content of the Modified Julian Day of time.
@@ -50,7 +50,7 @@ timeMjd :: Time -> D.DayCount
 timeMjd = Tim.toModifiedJulianDay . timeDay
 
 -- Get the Modified Julian Day of time.
-timeDay :: Time -> D.MJDay
+timeDay :: Time -> D.Mjd
 timeDay (TimeYmdcz d _ _)   = D.dateDay d
 timeDay (TimeYmdc  d _)     = D.dateDay d
 timeDay (TimeYmd   d)       = D.dateDay d
@@ -108,11 +108,11 @@ timeToMix time =
 -- ----------------------  Construct
 
 -- | Create monthly date from the Modified Julian Day.
-timeYmd :: D.MJDay -> Time
+timeYmd :: D.Mjd -> Time
 timeYmd = TimeYmd . D.Monthly
 
 -- | Create monthly time from the Modified Julian Day and clock.
-timeYmdc :: D.MJDay -> D.Clock -> Time
+timeYmdc :: D.Mjd -> D.Clock -> Time
 timeYmdc = TimeYmdc . D.Monthly
 
 -- | Create time data form modified Julian date.
@@ -204,7 +204,7 @@ timeMapDate _ (TimeYw    d)      = TimeYw    d
 timeMapDate _ (TimeYm    d)      = TimeYm    d
 
 -- | Map day part of time.
-timeMapDay :: O.Map D.MJDay -> O.Map Time
+timeMapDay :: O.Map D.Mjd -> O.Map Time
 timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
 timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
 timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)

@@ -1,16 +1,22 @@
-{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 -- | Date.
 
 module Koshucode.Baala.Data.Type.Time.Date
-  ( -- * Data type
-    Date (..), MJDay, YmdTuple,
+  ( -- * Modified Julian Day
+    Mjd, mjd, unMjd,
+
+    -- * Data type
+    Date (..), YmdTuple,
     Year, Month, Week, Day,
+
     -- * Construction
     dateFromYmdAb, dateFromYwdAb,
     dateFromYdAb, dateFromMjd,
-    -- * Form conversion
+
+    -- * Conversion
     monthly, weekly, yearly,
+
     -- * Utility
     dateDay, dateMapDay, dateAdd,
     mix02,
@@ -24,13 +30,35 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Data.Type.Message as Msg
 
 
+-- ----------------------  Modified Julian Day
+
+-- | Type for the Modified Julian Day.
+type Mjd = Tim.Day
+
+-- | Create MJD.
+mjd :: Integer -> Tim.Day
+mjd = Tim.ModifiedJulianDay
+
+-- | Extract MJD integer value.
+unMjd :: Tim.Day -> Integer
+unMjd = Tim.toModifiedJulianDay
+
+instance Num Tim.Day where
+    x + y        = mjd (unMjd x + unMjd y)
+    x - y        = mjd (unMjd x - unMjd y)
+    x * y        = mjd (unMjd x * unMjd y)
+    abs          = mjd . abs . unMjd
+    signum       = mjd . signum . unMjd
+    fromInteger  = mjd
+
+
 -- ----------------------  Type
 
 -- | Date.
 data Date
-    = Monthly MJDay    -- ^ Date in /YYYY-MM-DD/
-    | Weekly  MJDay    -- ^ Date in /YYYY-#W-D/
-    | Yearly  MJDay    -- ^ Date in /YYYY-##D/
+    = Monthly Mjd    -- ^ Date in /YYYY-MM-DD/
+    | Weekly  Mjd    -- ^ Date in /YYYY-#W-D/
+    | Yearly  Mjd    -- ^ Date in /YYYY-##D/
 
 instance Eq  Date where
     a == b = dateDay a == dateDay b
@@ -40,9 +68,6 @@ instance Ord Date where
 
 instance Show Date where
     show d = "Date " ++ B.mixToFlatString (dateToMix d)
-
--- | Type for the Modified Julian Day.
-type MJDay = Tim.Day
 
 -- | Year type.
 type Year = Integer
@@ -144,13 +169,13 @@ yearly  = Yearly . dateDay
 -- ----------------------  Utility
 
 -- | Get the internal Modified Julian Day.
-dateDay :: Date -> MJDay
+dateDay :: Date -> Mjd
 dateDay (Monthly day)  = day
 dateDay (Weekly  day)  = day
 dateDay (Yearly  day)  = day
 
 -- | Map the content of date.
-dateMapDay :: O.Map MJDay -> O.Map Date
+dateMapDay :: O.Map Mjd -> O.Map Date
 dateMapDay f (Monthly day)  = Monthly $ f day
 dateMapDay f (Weekly  day)  = Weekly  $ f day
 dateMapDay f (Yearly  day)  = Yearly  $ f day
