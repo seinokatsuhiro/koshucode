@@ -80,7 +80,7 @@ timeDiffDc d2 c2 d1 c1 =
        Right $ D.clockAddDay d3 c3
 
 timeDiffDate :: D.Date -> D.Date -> Integer
-timeDiffDate d2 d1 = D.dateDay d2 `timeDiffDay` D.dateDay d1
+timeDiffDate d2 d1 = D.dateMjd d2 `timeDiffDay` D.dateMjd d1
 
 timeDiffDay :: D.Mjd -> D.Mjd -> Integer
 timeDiffDay d2 d1 = Tim.toModifiedJulianDay d2 - Tim.toModifiedJulianDay d1

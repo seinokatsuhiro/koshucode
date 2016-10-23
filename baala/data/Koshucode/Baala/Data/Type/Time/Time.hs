@@ -51,9 +51,9 @@ timeMjd = Tim.toModifiedJulianDay . timeDay
 
 -- Get the Modified Julian Day of time.
 timeDay :: Time -> D.Mjd
-timeDay (TimeYmdcz d _ _)   = D.dateDay d
-timeDay (TimeYmdc  d _)     = D.dateDay d
-timeDay (TimeYmd   d)       = D.dateDay d
+timeDay (TimeYmdcz d _ _)   = D.dateMjd d
+timeDay (TimeYmdc  d _)     = D.dateMjd d
+timeDay (TimeYmd   d)       = D.dateMjd d
 timeDay (TimeYw    d)       = d
 timeDay (TimeYm    d)       = d
 
@@ -205,9 +205,9 @@ timeMapDate _ (TimeYm    d)      = TimeYm    d
 
 -- | Map day part of time.
 timeMapDay :: O.Map D.Mjd -> O.Map Time
-timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMapDay f d) c z
-timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMapDay f d) c
-timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMapDay f d)
+timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMap f d) c z
+timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMap f d) c
+timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMap f d)
 timeMapDay f (TimeYw    d)       = TimeYw    (f d)
 timeMapDay f (TimeYm    d)       = TimeYm    (f d)
 

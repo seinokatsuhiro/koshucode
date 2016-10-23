@@ -11,14 +11,16 @@ module Koshucode.Baala.Data.Type.Time.Date
     Year, Month, Week, Day,
 
     -- * Construction
-    dateFromYmdAb, dateFromYwdAb,
-    dateFromYdAb, dateFromMjd,
+    dateFromMjd,
+    dateFromYmdAb,
+    dateFromYwdAb,
+    dateFromYdAb, 
 
     -- * Conversion
     monthly, weekly, yearly,
 
     -- * Utility
-    dateDay, dateMapDay, dateAdd,
+    dateMjd, dateMap, dateAdd,
     mix02,
   ) where
 
@@ -61,10 +63,10 @@ data Date
     | Yearly  Mjd    -- ^ Date in /YYYY-##D/
 
 instance Eq  Date where
-    a == b = dateDay a == dateDay b
+    a == b = dateMjd a == dateMjd b
 
 instance Ord Date where
-    a `compare` b = dateDay a `compare` dateDay b
+    a `compare` b = dateMjd a `compare` dateMjd b
 
 instance Show Date where
     show d = "Date " ++ B.mixToFlatString (dateToMix d)
@@ -113,7 +115,22 @@ mix02 = B.mixDecZero 2
 
 -- ----------------------  Construction
 
+-- | Create date from the Modified Julian Day.
+--
+--   >>> dateFromMjd 55555
+--   Date 2010-12-25
+--
+dateFromMjd :: Integer -> Date
+dateFromMjd = Monthly . Tim.ModifiedJulianDay
+
 -- | Create date from year, month, and day.
+--
+--   >>> dateFromYmdAb 2013 4 18
+--   Right Date 2013-04-18
+--
+--   >>> dateFromYmdAb 2013 4 31
+--   Left ...
+--
 dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
 dateFromYmdAb y m d =
     case Tim.fromGregorianValid y m d of
@@ -134,10 +151,6 @@ dateFromYdAb y d =
       Just day -> Right $ Yearly day
       Nothing  -> Msg.notDate y 0 d
 
--- | Create date from the Modified Julian Day.
-dateFromMjd :: Integer -> Date
-dateFromMjd = Monthly . Tim.ModifiedJulianDay
-
 
 -- ----------------------  Form conversion
 
@@ -147,7 +160,7 @@ dateFromMjd = Monthly . Tim.ModifiedJulianDay
 --   Date 2010-12-25
 --
 monthly :: O.Map Date
-monthly = Monthly . dateDay
+monthly = Monthly . dateMjd
 
 -- | Convert into weekly date.
 --
@@ -155,7 +168,7 @@ monthly = Monthly . dateDay
 --   Date 2010-#51-6
 --
 weekly :: O.Map Date
-weekly  = Weekly . dateDay
+weekly  = Weekly . dateMjd
 
 -- | Convert into yearly date.
 --
@@ -163,22 +176,22 @@ weekly  = Weekly . dateDay
 --   Date 2010-##359
 --
 yearly :: O.Map Date
-yearly  = Yearly . dateDay
+yearly  = Yearly . dateMjd
 
 
 -- ----------------------  Utility
 
 -- | Get the internal Modified Julian Day.
-dateDay :: Date -> Mjd
-dateDay (Monthly day)  = day
-dateDay (Weekly  day)  = day
-dateDay (Yearly  day)  = day
+dateMjd :: Date -> Mjd
+dateMjd (Monthly day)  = day
+dateMjd (Weekly  day)  = day
+dateMjd (Yearly  day)  = day
 
 -- | Map the content of date.
-dateMapDay :: O.Map Mjd -> O.Map Date
-dateMapDay f (Monthly day)  = Monthly $ f day
-dateMapDay f (Weekly  day)  = Weekly  $ f day
-dateMapDay f (Yearly  day)  = Yearly  $ f day
+dateMap :: O.Map Mjd -> O.Map Date
+dateMap f (Monthly day)  = Monthly $ f day
+dateMap f (Weekly  day)  = Weekly  $ f day
+dateMap f (Yearly  day)  = Yearly  $ f day
 
 -- | Add days.
 --
@@ -186,4 +199,4 @@ dateMapDay f (Yearly  day)  = Yearly  $ f day
 --   Date 2011-01-01
 --
 dateAdd :: (Integral n) => n -> O.Map Date
-dateAdd = dateMapDay . Tim.addDays . fromIntegral
+dateAdd = dateMap . Tim.addDays . fromIntegral
