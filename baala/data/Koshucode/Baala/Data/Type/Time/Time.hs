@@ -21,6 +21,7 @@ module Koshucode.Baala.Data.Type.Time.Time
     timeOmitClock, timeOmitZone,
     timeMapDate, timeMapMjd,
     timeFromZonedTime,
+    timeDaysSec,
   ) where
 
 import qualified Data.Time.Calendar                         as Tim
@@ -225,3 +226,19 @@ timeFromZonedTime Tim.ZonedTime
       where
         d  = D.dateFromMjd $ Tim.toModifiedJulianDay mjd
         s' = fromEnum s `div` 1000000000000
+
+-- | Days and seconds of time.
+--
+--   >>> timeDaysSec $ timeFromMjd 55555
+--   (55555,0)
+--
+timeDaysSec :: Time -> D.DaysSec
+timeDaysSec (TimeYmdcz d c _)  = dateClockDaysSec d c
+timeDaysSec (TimeYmdc d c)     = dateClockDaysSec d c
+timeDaysSec (TimeYmd d)        = (D.unMjd $ D.dateMjd d, 0)
+timeDaysSec (TimeYw d)         = (D.unMjd d, 0)
+timeDaysSec (TimeYm d)         = (D.unMjd d, 0)
+
+dateClockDaysSec :: D.Date -> D.Clock -> D.DaysSec
+dateClockDaysSec d c = let (d', s) = D.clockDaysSec c
+                       in (D.unMjd (D.dateMjd d) + d', s)
