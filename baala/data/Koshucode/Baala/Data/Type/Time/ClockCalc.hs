@@ -33,7 +33,7 @@ clockCutDay :: O.Map D.Clock
 clockCutDay = D.clockMap (const 0) id
 
 -- | Add MJD.
-clockAddDay :: D.DayCount -> O.Map D.Clock
+clockAddDay :: D.Days -> O.Map D.Clock
 clockAddDay d = D.clockMap (+ d) id
 
 -- | Add second.
@@ -60,22 +60,22 @@ clockTimes m = D.clockMap (* (toInteger m)) (* m)
 --   >>> clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
 --   [|00:00:00|, |00:02:00|, |00:04:00|]
 --
-clockRangeBy :: O.Map (D.DayCount, D.Sec) -> B.RangeBy D.Clock
+clockRangeBy :: O.Map (D.Days, D.Sec) -> B.RangeBy D.Clock
 clockRangeBy step from to = clocks where
     from'  =  clockTuple from
     to'    =  clockTuple to
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
 
 -- | Create clock step of given second.
-clockStep :: D.Sec -> O.Map (D.DayCount, D.Sec)
+clockStep :: D.Sec -> O.Map (D.Days, D.Sec)
 clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` D.daySeconds
                        in (d + toInteger d', s')
 
-clockTuple :: D.Clock -> (D.DayCount, D.Sec)
+clockTuple :: D.Clock -> (D.Days, D.Sec)
 clockTuple (D.ClockDhms d s)  =  (d, s)
 clockTuple (D.ClockDhm  d s)  =  (d, s)
 clockTuple (D.ClockDh   d s)  =  (d, s)
 clockTuple (D.ClockD    d)    =  (d, 0)
 
-fromClockTuple :: (D.DayCount, D.Sec) -> D.Clock
+fromClockTuple :: (D.Days, D.Sec) -> D.Clock
 fromClockTuple (d, s) = D.ClockDhms d s

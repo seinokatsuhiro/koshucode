@@ -7,7 +7,7 @@ module Koshucode.Baala.Data.Type.Time.Date
     Mjd, mjd, unMjd,
 
     -- * Data type
-    Date (..), YmdTuple,
+    Date (..), Ymd,
     Year, Month, Week, Day,
 
     -- * Construction
@@ -38,11 +38,11 @@ import qualified Koshucode.Baala.Data.Type.Message as Msg
 type Mjd = Tim.Day
 
 -- | Create MJD.
-mjd :: Integer -> Tim.Day
+mjd :: Integer -> Mjd
 mjd = Tim.ModifiedJulianDay
 
 -- | Extract MJD integer value.
-unMjd :: Tim.Day -> Integer
+unMjd :: Mjd -> Integer
 unMjd = Tim.toModifiedJulianDay
 
 instance Num Tim.Day where
@@ -71,6 +71,9 @@ instance Ord Date where
 instance Show Date where
     show d = "Date " ++ B.mixToFlatString (dateToMix d)
 
+-- | Type for year, month, and day.
+type Ymd = (Year, Month, Day)
+
 -- | Year type.
 type Year = Integer
 
@@ -82,9 +85,6 @@ type Month = Int
 
 -- | Day type.
 type Day = Int
-
--- | Type for year, month, and day.
-type YmdTuple = (Year, Month, Day)
 
 
 -- ----------------------  Write

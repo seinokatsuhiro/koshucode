@@ -46,7 +46,7 @@ data Time
       deriving (Eq, Ord)
 
 -- | Get integer content of the Modified Julian Day of time.
-timeMjd :: Time -> D.DayCount
+timeMjd :: Time -> D.Days
 timeMjd = Tim.toModifiedJulianDay . timeDay
 
 -- Get the Modified Julian Day of time.
@@ -57,7 +57,7 @@ timeDay (TimeYmd   d)       = D.dateMjd d
 timeDay (TimeYw    d)       = d
 timeDay (TimeYm    d)       = d
 
-timeYmdTuple :: Time -> D.YmdTuple
+timeYmdTuple :: Time -> D.Ymd
 timeYmdTuple = Tim.toGregorian . timeDay
 
 -- | Get the name of time precision.
@@ -88,7 +88,7 @@ timeToMix time =
     where
       dcz               :: D.Date -> D.Clock -> D.Sec -> B.MixText
       dcz d c z         = let c'  = D.clockAddSec z c
-                              day = D.clockDayCount c'
+                              day = D.clockDays c'
                           in dc (day `D.dateAdd` d) (D.clockCutDay c')
 
       dc                :: D.Date -> D.Clock -> B.MixText
@@ -120,7 +120,7 @@ timeYmdc = TimeYmdc . D.Monthly
 --   >>> timeFromMjd 55555
 --   2010-12-25
 --
-timeFromMjd :: D.DayCount -> Time
+timeFromMjd :: D.Days -> Time
 timeFromMjd = timeYmd . Tim.ModifiedJulianDay
 
 -- | Create time data from year and month.
@@ -145,7 +145,7 @@ timeFromDczAb d c (Just z)  = Right $ TimeYmdcz d c z
 timeFromYmd :: D.Year -> D.Month -> D.Day -> Time
 timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
 
-timeFromYmdTuple :: D.YmdTuple -> Time
+timeFromYmdTuple :: D.Ymd -> Time
 timeFromYmdTuple = timeYmd . dayFromYmdTuple where
     dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d
 
@@ -212,7 +212,7 @@ timeMapDay f (TimeYw    d)       = TimeYw    (f d)
 timeMapDay f (TimeYm    d)       = TimeYm    (f d)
 
 -- | Map integer content of the Modified Julian Day.
-timeMapMjd :: O.Map D.DayCount -> O.Map Time
+timeMapMjd :: O.Map D.Days -> O.Map Time
 timeMapMjd f time = timeMapDay g time where
     g (Tim.ModifiedJulianDay d) = Tim.ModifiedJulianDay $ f d
 

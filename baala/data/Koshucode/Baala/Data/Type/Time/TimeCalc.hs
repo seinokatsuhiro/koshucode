@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Base.Message               as Msg
 -- ----------------------  Add
 
 -- | Add days to time.
-timeAddDay :: D.DayCount -> O.Map D.Time
+timeAddDay :: D.Days -> O.Map D.Time
 timeAddDay n = D.timeMapMjd (+ n)
 
 -- | Add weeks to time.
@@ -58,8 +58,8 @@ timeAddClock _ _ = Msg.adlib "add-clock"
 timeAddClockWith :: (D.Date -> D.Clock -> D.Time) -> D.Clock -> D.Date -> D.Clock -> B.Ab D.Time
 timeAddClockWith time c1 d2 c2 =
     do c3 <- D.clockAdd c1 c2
-       let d3 = D.clockDayCount c3
-           c4 = D.clockCutDay   c3
+       let d3 = D.clockDays   c3
+           c4 = D.clockCutDay c3
        Right $ timeAddDay d3 $ time d2 c4
 
 
@@ -154,18 +154,18 @@ timeRangeMonth = timeRangeBy monthUp
 timeRangeYear :: B.RangeBy D.Time
 timeRangeYear = timeRangeBy yearUp
 
-timeRangeBy :: O.Map D.YmdTuple -> B.RangeBy D.Time
+timeRangeBy :: O.Map D.Ymd -> B.RangeBy D.Time
 timeRangeBy step from to = times where
     dayFrom =  D.timeYmdTuple from
     dayTo   =  D.timeYmdTuple to
     times   =  map D.timeFromYmdTuple $ B.rangeBy step dayFrom dayTo
 
 -- | Increment month.
-monthUp :: O.Map D.YmdTuple
+monthUp :: O.Map D.Ymd
 monthUp (y, m, d) | m < 12    = (y, m + 1, d)
                   | otherwise = (y + 1, 1, d)
 
 -- | Increment year.
-yearUp :: O.Map D.YmdTuple
+yearUp :: O.Map D.Ymd
 yearUp (y, m, d)  | y == (-1) = (1, m, d)
                   | otherwise = (y + 1, m, d)

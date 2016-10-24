@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Data.Type.Time.Clock
   ( -- * Data type
-    Clock (..), DayCount, Hour, Min, Sec,
+    Clock (..), Days, Hour, Min, Sec,
     clockBodyToMix,
 
     -- * Accessor
@@ -13,7 +13,7 @@ module Koshucode.Baala.Data.Type.Time.Clock
     dhmsFromSec, secFromHms,
 
     -- * Property
-    clockSign, clockDayCount, clockSec,
+    clockSign, clockDays, clockSec,
     clockPrecision,
     clockDhms, clockAlter,
 
@@ -33,14 +33,14 @@ import qualified Koshucode.Baala.Base.Message            as Msg
 
 -- | Clock as distance between two times.
 data Clock
-    = ClockDhms DayCount Sec    -- ^ Clock represented by multiple of second
-    | ClockDhm  DayCount Sec    -- ^ Clock represented by multiple of minute
-    | ClockDh   DayCount Sec    -- ^ Clock represented by multiple of hour
-    | ClockD    DayCount        -- ^ Clock represented by multiple of day
+    = ClockDhms Days Sec    -- ^ Clock represented by multiple of second
+    | ClockDhm  Days Sec    -- ^ Clock represented by multiple of minute
+    | ClockDh   Days Sec    -- ^ Clock represented by multiple of hour
+    | ClockD    Days        -- ^ Clock represented by multiple of day
       deriving (Eq, Ord)
 
 -- | Integer type for the Modified Julian Day.
-type DayCount = Integer
+type Days = Integer
 
 -- | Hour type.
 type Hour = Int
@@ -51,24 +51,24 @@ type Min = Int
 -- | Second type.
 type Sec = Int
 
--- | Create clock from MJD, hour, minute, and second.
+-- | Create clock from days, hour, minute, and second.
 --
 --   >>> clockFromDhms 1 9 40 20
 --   |1'09:40:20|
 --
-clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
+clockFromDhms :: Days -> Hour -> Min -> Sec -> Clock
 clockFromDhms d h m s = ClockDhms d $ secFromHms (h, m, s)
 
--- | Create clock from MJD, hour, and minute.
-clockFromDhm :: DayCount -> Hour -> Min -> Clock
+-- | Create clock from days, hour, and minute.
+clockFromDhm :: Days -> Hour -> Min -> Clock
 clockFromDhm d h m = ClockDhm d $ secFromHms (h, m, 0)
 
--- | Create clock from MJD and hour.
-clockFromDh :: DayCount -> Hour -> Clock
+-- | Create clock from days and hour.
+clockFromDh :: Days -> Hour -> Clock
 clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
 
--- | Create clock from MJD.
-clockFromD :: DayCount -> Clock
+-- | Create clock from days.
+clockFromD :: Days -> Clock
 clockFromD = ClockD
 
 -- | Create clock from hour, minute, and optional second.
@@ -87,12 +87,12 @@ clockFromHms h m (Just s)   = clockFromDhms 0 h m s
 secFromHms :: (Hour, Min, Sec) -> Sec
 secFromHms (h, m, s) = s + 60 * (m + 60 * h)
 
--- | Decompose second into MJD, hour, minute and second parts.
+-- | Decompose second into days, hour, minute and second parts.
 --
 --   >>> dhmsFromSec 333333
 --   (3,9,15,33)
 --
-dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
+dhmsFromSec :: Sec -> (Days, Hour, Min, Sec)
 dhmsFromSec sec =
     let (m', s)   = sec `quotRem` 60
         (h', m)   = m'  `quotRem` 60
@@ -104,26 +104,26 @@ dhmsFromSec sec =
 
 -- | Sign of clock as @-1@, @0@, @1@.
 clockSign :: Clock -> Int
-clockSign c | day == 0 && sec == 0  = 0
-            | day >= 0 && sec >= 0  = 1
-            | day <= 0 && sec <= 0  = -1
-            | otherwise             = B.bug $ "inconsistent " ++ show c
-            where day = clockDayCount c
-                  sec = clockSec      c
+clockSign c | d == 0 && s == 0  = 0
+            | d >= 0 && s >= 0  = 1
+            | d <= 0 && s <= 0  = -1
+            | otherwise         = B.bug $ "inconsistent " ++ show c
+            where d = clockDays c
+                  s = clockSec  c
 
--- | MJD part of clock.
-clockDayCount :: Clock -> DayCount
-clockDayCount (ClockDhms day _)  = day
-clockDayCount (ClockDhm  day _)  = day
-clockDayCount (ClockDh   day _)  = day
-clockDayCount (ClockD    day)    = day
+-- | days part of clock.
+clockDays :: Clock -> Days
+clockDays (ClockDhms d _)  = d
+clockDays (ClockDhm  d _)  = d
+clockDays (ClockDh   d _)  = d
+clockDays (ClockD    d)    = d
 
 -- | Second part of clock.
 clockSec :: Clock -> Sec
-clockSec (ClockDhms _ sec)       = sec
-clockSec (ClockDhm  _ sec)       = sec
-clockSec (ClockDh   _ sec)       = sec
-clockSec (ClockD    _)           = 0
+clockSec (ClockDhms _ s)   = s
+clockSec (ClockDhm  _ s)   = s
+clockSec (ClockDh   _ s)   = s
+clockSec (ClockD    _)     = 0
 
 -- | Precision string of clock.
 clockPrecision :: Clock -> String
@@ -133,7 +133,7 @@ clockPrecision (ClockDh   _ _)   = "hour"
 clockPrecision (ClockD    _)     = "day"
 
 -- | Extract elements of clock.
-clockDhms :: Clock -> (DayCount, Maybe Hour, Maybe Min, Maybe Sec)
+clockDhms :: Clock -> (Days, Maybe Hour, Maybe Min, Maybe Sec)
 clockDhms clock =
     case clock of
       ClockDhms _ _  -> (day + d, Just h, Just m, Just s)
@@ -141,12 +141,12 @@ clockDhms clock =
       ClockDh   _ _  -> (day + d, Just h, Nothing, Nothing)
       ClockD    _    -> (day + d, Nothing, Nothing, Nothing)
     where
-      day             = abs $ clockDayCount clock
+      day             = abs $ clockDays clock
       sec             = abs $ clockSec clock
       (d, h, m, s)    = dhmsFromSec $ abs sec
 
 -- | Replace elements of clock.
-clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> O.Map Clock
+clockAlter :: Maybe Days -> Maybe Hour -> Maybe Min -> Maybe Sec -> O.Map Clock
 clockAlter d' h' m' s' clock =
     case clockDhms clock of
       (d, Just h,  Just m,  Just s)  -> clockFromDhms (d' ! d) (h' ! h) (m' ! m) (s' ! s)
@@ -197,7 +197,7 @@ signToMix :: Int -> O.Map B.MixText
 signToMix (-1) m = B.mixString "-" B.<> m
 signToMix _    m = m
 
-daySecToMix :: (Sec -> (DayCount, B.MixText)) -> DayCount -> Sec -> B.MixText
+daySecToMix :: (Sec -> (Days, B.MixText)) -> Days -> Sec -> B.MixText
 daySecToMix secMix day sec =
     let (d, mx) = secMix sec
     in case day + d of
@@ -207,36 +207,36 @@ daySecToMix secMix day sec =
 mixColon :: B.Bin B.MixText
 mixColon = B.mixInfix ":"
 
-dhmsToMix :: Sec -> (DayCount, B.MixText)
+dhmsToMix :: Sec -> (Days, B.MixText)
 dhmsToMix sec = (d, hms) where
     hms            = D.mix02 h `mixColon` D.mix02 m `mixColon` D.mix02 s
     (d, h, m, s)   = dhmsFromSec $ abs sec
 
-dhmToMix :: Sec -> (DayCount, B.MixText)
+dhmToMix :: Sec -> (Days, B.MixText)
 dhmToMix sec = (d, hm) where
     hm             = D.mix02 h `mixColon` D.mix02 m
     (d, h, m, _)   = dhmsFromSec sec
 
-dhToMix :: Sec -> (DayCount, B.MixText)
+dhToMix :: Sec -> (Days, B.MixText)
 dhToMix sec = (d, hm) where
     hm             = D.mix02 h
     (d, h, _, _)   = dhmsFromSec sec
 
-dayToMix :: DayCount -> B.MixText
+dayToMix :: Days -> B.MixText
 dayToMix d = B.mixDec d B.<> B.mixString "'"
 
 
 -- ----------------------  Map
 
 -- | Map MDJ and second of clock.
-clockMap :: O.Map DayCount -> O.Map Sec -> O.Map Clock
+clockMap :: O.Map Days -> O.Map Sec -> O.Map Clock
 clockMap f g (ClockDhms d s)  = adjust ClockDhms (f d) (g s)
 clockMap f g (ClockDhm  d s)  = adjust ClockDhm  (f d) (g s)
 clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
 clockMap f _ (ClockD    d)    =        ClockD    (f d)
 
 -- | Combine MDJ and second of two clocks.
-clockMap2 :: B.Bin DayCount -> B.Bin Sec -> B.BinAb Clock
+clockMap2 :: B.Bin Days -> B.Bin Sec -> B.BinAb Clock
 clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
 clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
 clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
@@ -247,10 +247,10 @@ clockMap2 _ _ _ _ = Msg.adlib "clock"
 daySeconds :: (Num a) => a
 daySeconds = 86400   -- 24 * 60 * 60
 
-adjustAb :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> B.Ab Clock
+adjustAb :: (Days -> Sec -> Clock) -> Days -> Sec -> B.Ab Clock
 adjustAb k d s = Right $ adjust k d s
 
-adjust :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> Clock
+adjust :: (Days -> Sec -> Clock) -> Days -> Sec -> Clock
 adjust k d s = let (d', s')  = s `divMod` daySeconds
                    d2        = d + toInteger d'
                in if d2 < 0 && s' > 0
