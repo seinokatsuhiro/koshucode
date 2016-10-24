@@ -58,8 +58,8 @@ timeAddClock _ _ = Msg.adlib "add-clock"
 timeAddClockWith :: (D.Date -> D.Clock -> D.Time) -> D.Clock -> D.Date -> D.Clock -> B.Ab D.Time
 timeAddClockWith time c1 d2 c2 =
     do c3 <- D.clockAdd c1 c2
-       let d3 = D.clockDays   c3
-           c4 = D.clockCutDay c3
+       let (d3, _) = D.clockDaysSec c3
+           c4      = D.clockCutDay  c3
        Right $ timeAddDay d3 $ time d2 c4
 
 

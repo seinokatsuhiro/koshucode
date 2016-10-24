@@ -4,16 +4,19 @@
 
 module Koshucode.Baala.Data.Type.Time.Clock
   ( -- * Data type
-    Clock (..), Days, Hour, Min, Sec,
+    Clock (..),
+    DaysSec, Days, Hour, Min, Sec,
     clockBodyToMix,
 
-    -- * Accessor
-    clockFromDhms, clockFromDhm, clockFromDh, clockFromD,
+    -- * Constructor
+    clockFromDhms, clockFromDhm,
+    clockFromDh, clockFromD,
     clockFromHms,
     dhmsFromSec, secFromHms,
 
     -- * Property
-    clockSign, clockDays, clockSec,
+    clockDaysSec,
+    clockSign, 
     clockPrecision,
     clockDhms, clockAlter,
 
@@ -38,6 +41,9 @@ data Clock
     | ClockDh   Days Sec    -- ^ Clock represented by multiple of hour
     | ClockD    Days        -- ^ Clock represented by multiple of day
       deriving (Eq, Ord)
+
+-- | Days and seconds.
+type DaysSec = (Days, Sec)
 
 -- | Integer type for the Modified Julian Day.
 type Days = Integer
@@ -102,28 +108,31 @@ dhmsFromSec sec =
 
 -- ----------------------  Property
 
+-- | Days and second of clock.
+--
+--   >>> clockDaysSec $ clockFromDhms 1 9 15 33
+--   (1,33333)
+--
+clockDaysSec :: Clock -> DaysSec
+clockDaysSec (ClockDhms d s)  = (d, s)
+clockDaysSec (ClockDhm  d s)  = (d, s)
+clockDaysSec (ClockDh   d s)  = (d, s)
+clockDaysSec (ClockD    d)    = (d, 0)
+
 -- | Sign of clock as @-1@, @0@, @1@.
+--
+--   >>> clockSign $ clockFromDhms 1 9 15 33
+--   1
+--
+--   >>> clockSign $ clockFromDhms 0 0 0 0
+--   0
+--
 clockSign :: Clock -> Int
 clockSign c | d == 0 && s == 0  = 0
             | d >= 0 && s >= 0  = 1
             | d <= 0 && s <= 0  = -1
             | otherwise         = B.bug $ "inconsistent " ++ show c
-            where d = clockDays c
-                  s = clockSec  c
-
--- | days part of clock.
-clockDays :: Clock -> Days
-clockDays (ClockDhms d _)  = d
-clockDays (ClockDhm  d _)  = d
-clockDays (ClockDh   d _)  = d
-clockDays (ClockD    d)    = d
-
--- | Second part of clock.
-clockSec :: Clock -> Sec
-clockSec (ClockDhms _ s)   = s
-clockSec (ClockDhm  _ s)   = s
-clockSec (ClockDh   _ s)   = s
-clockSec (ClockD    _)     = 0
+            where (d, s) = clockDaysSec c
 
 -- | Precision string of clock.
 clockPrecision :: Clock -> String
@@ -141,9 +150,14 @@ clockDhms clock =
       ClockDh   _ _  -> (day + d, Just h, Nothing, Nothing)
       ClockD    _    -> (day + d, Nothing, Nothing, Nothing)
     where
-      day             = abs $ clockDays clock
-      sec             = abs $ clockSec clock
-      (d, h, m, s)    = dhmsFromSec $ abs sec
+      (day, sec)      = abs2 $ clockDaysSec clock
+      (d, h, m, s)    = dhmsFromSec sec
+
+abs2 :: (Num a, Num b) => O.Map (a, b)
+abs2 = map2 abs abs
+
+map2 :: (a -> a') -> (b -> b') -> (a, b) -> (a', b')
+map2 f g (x, y) = (f x, g y)
 
 -- | Replace elements of clock.
 clockAlter :: Maybe Days -> Maybe Hour -> Maybe Min -> Maybe Sec -> O.Map Clock

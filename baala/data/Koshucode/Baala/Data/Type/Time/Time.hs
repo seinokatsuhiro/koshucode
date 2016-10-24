@@ -87,8 +87,8 @@ timeToMix time =
       TimeYm    day    -> ym $ Tim.toGregorian day
     where
       dcz               :: D.Date -> D.Clock -> D.Sec -> B.MixText
-      dcz d c z         = let c'  = D.clockAddSec z c
-                              day = D.clockDays c'
+      dcz d c z         = let c'       = D.clockAddSec z c
+                              (day, _) = D.clockDaysSec c'
                           in dc (day `D.dateAdd` d) (D.clockCutDay c')
 
       dc                :: D.Date -> D.Clock -> B.MixText
