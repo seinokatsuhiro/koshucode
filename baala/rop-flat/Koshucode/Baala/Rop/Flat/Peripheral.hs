@@ -16,8 +16,8 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     -- * term-name
     consTermName, relmapTermName, relkitTermName,
   
-    -- * today
-    relmapToday, relkitToday,
+    -- * today & now
+    consToday, consNow, relmapAdd1, relkitAdd1,
   ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -32,7 +32,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def consRdf           "rdf P /S /O"              " -pattern -term*"
+    [ Op.def consNow           "now /N"                   "-term"
+    , Op.def consRdf           "rdf P /S /O"              " -pattern -term*"
     , Op.def consTermName      "term-name /N"             "-term"
     , Op.def consTie           "tie /P ... -to N"         "-term* . -to"
     , Op.def consToday         "today /N"                 "-term"
@@ -42,6 +43,7 @@ ropsPeripheral = Op.ropList "peripheral"
 
 -- ----------------------  RDF
 
+-- | __rdf P \/S \/O__
 consRdf :: C.RopCons c
 consRdf med =
     do sign  <- Op.getWord  med "-pattern"
@@ -53,8 +55,7 @@ consRdf med =
 
 -- ----------------------  tie
 
---    > tie /x /y /z -to /a
-
+-- | __tie \/P ... -to \/N__
 consTie :: (D.CTie c) => C.RopCons c
 consTie med =
   do ns <- Op.getTerms med "-term"
@@ -78,8 +79,7 @@ relkitTie (ns, to) (Just he1) = Right kit2 where
 
 -- ----------------------  untie
 
---    > untie /a -only /x /y
-
+-- | __untie \/P -to \/N ...__
 consUntie :: (D.CTie c) => C.RopCons c
 consUntie med =
   do from <- Op.getTerm  med "-from"
@@ -110,6 +110,7 @@ tiePick ns tie = mapM pick ns where
 
 -- ----------------------  term-name
 
+-- | __term-name \/N__
 consTermName :: (D.CTerm c) => C.RopCons c
 consTermName med =
   do n <- Op.getTerm med "-term"
@@ -131,23 +132,38 @@ relkitTermName n (Just he1) = Right kit2 where
 
 -- ----------------------  today
 
---  today /day
-
+-- | __today \/N__
+--
+--   Get today's time at term \/N.
+--
 consToday :: (D.CTime c) => C.RopCons c
 consToday med =
   do n <- Op.getTerm med "-term"
      let t = C.globalTime $ C.ropGlobal med
-     Right $ relmapToday med (n, t)
+     Right $ relmapAdd1 med (n, D.pTime $ D.timeOmitClock t)
 
--- | Create @today@ relmap.
-relmapToday :: (D.CTime c) => C.Intmed c -> (S.TermName, D.Time) -> C.Relmap c
-relmapToday med = C.relmapFlow med . relkitToday
 
--- | Create @today@ relkit.
-relkitToday :: (D.CTime c) => (S.TermName, D.Time) -> Maybe D.Head -> B.Ab (C.Relkit c)
-relkitToday _ Nothing = Right C.relkitNothing
-relkitToday (n, t) (Just he1) = Right kit2 where
+-- ----------------------  now
+
+-- | __now \/N__
+--
+--   Get current time at term \/N.
+--
+consNow :: (D.CTime c) => C.RopCons c
+consNow med =
+  do n <- Op.getTerm med "-term"
+     let t = C.globalTime $ C.ropGlobal med
+     Right $ relmapAdd1 med (n, D.pTime t)
+
+-- | Create @today@ and @now@ relmap.
+relmapAdd1 :: C.Intmed c -> (S.TermName, c) -> C.Relmap c
+relmapAdd1 med = C.relmapFlow med . relkitAdd1
+
+-- | Create @today@ and @now@ relkit.
+relkitAdd1 :: (S.TermName, c) -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitAdd1 _ Nothing = Right C.relkitNothing
+relkitAdd1 (n, c) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitOneToOne False f2
-    f2 cs = D.pTime t : cs
+    f2 cs = c : cs
 

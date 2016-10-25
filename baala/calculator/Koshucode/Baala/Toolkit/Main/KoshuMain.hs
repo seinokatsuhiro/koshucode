@@ -53,7 +53,7 @@ data Param c = Param
     , paramProg          :: String
     , paramArgs          :: [String]
     , paramProxy         :: [(String, Maybe String)]
-    , paramToday         :: D.Time
+    , paramNow           :: D.Time
     } deriving (Show)
 
 initParam :: (Show c, D.CContent c, W.ToJSON c) => Opt.ParseResult -> IO (Param c)
@@ -61,7 +61,7 @@ initParam (Left errs) = B.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- B.progAndArgs
        proxy     <- L.getProxies
-       today     <- D.today
+       now       <- D.now
        return $ Param { paramAutoOutput    = getFlag "auto-output"
                       , paramElement       = getFlag "element"
                       , paramWriter        = writer
@@ -76,7 +76,7 @@ initParam (Right (opts, args)) =
                       , paramProg          = prog
                       , paramArgs          = args
                       , paramProxy         = proxy
-                      , paramToday         = today }
+                      , paramNow           = now }
     where
       getFlag  = Opt.getFlag opts
       getReq   = Opt.getReq  opts
@@ -165,10 +165,10 @@ koshuMainParam g p
       g2    = C.globalFill g
               { C.globalFeature   = feat { C.featAutoOutput = paramAutoOutput p }
               , C.globalResult    = rslt { C.resultWriter = paramWriter p }
-              , C.globalProgram   = paramProg p
-              , C.globalArgs      = paramArgs p
+              , C.globalProgram   = paramProg  p
+              , C.globalArgs      = paramArgs  p
               , C.globalProxy     = paramProxy p
-              , C.globalTime      = paramToday p }
+              , C.globalTime      = paramNow   p }
 
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
