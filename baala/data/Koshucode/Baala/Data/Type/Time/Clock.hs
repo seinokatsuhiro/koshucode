@@ -5,7 +5,7 @@
 module Koshucode.Baala.Data.Type.Time.Clock
   ( -- * Data type
     Clock (..),
-    DaysSec, Days, Hour, Min, Sec,
+    Days, Hour, Min, Sec,
     clockBodyToMix,
 
     -- * Constructor
@@ -16,6 +16,7 @@ module Koshucode.Baala.Data.Type.Time.Clock
 
     -- * Property
     clockDaysSec,
+    clockDaysClock,
     clockSign, 
     clockPrecision,
     clockDhms, clockAlter,
@@ -23,6 +24,10 @@ module Koshucode.Baala.Data.Type.Time.Clock
     -- * Conversion
     clockMap,
     clockMap2,
+
+    -- * Days and seconds
+    DaysSec,
+    daysSec,
     daySeconds,
   ) where
 
@@ -41,9 +46,6 @@ data Clock
     | ClockDh   Days Sec    -- ^ Clock represented by multiple of hour
     | ClockD    Days        -- ^ Clock represented by multiple of day
       deriving (Eq, Ord)
-
--- | Days and seconds.
-type DaysSec = (Days, Sec)
 
 -- | Integer type for the Modified Julian Day.
 type Days = Integer
@@ -111,13 +113,24 @@ dhmsFromSec sec =
 -- | Days and second of clock.
 --
 --   >>> clockDaysSec $ clockFromDhms 1 9 15 33
---   (1,33333)
+--   (1, 33333)
 --
 clockDaysSec :: Clock -> DaysSec
 clockDaysSec (ClockDhms d s)  = (d, s)
 clockDaysSec (ClockDhm  d s)  = (d, s)
 clockDaysSec (ClockDh   d s)  = (d, s)
 clockDaysSec (ClockD    d)    = (d, 0)
+
+-- | Split days part from clock.
+--
+--   >>> clockDaysClock $ clockFromDhms 1 9 15 33
+--   (1, |09:15:33|)
+--
+clockDaysClock :: Clock -> (Days, Clock)
+clockDaysClock (ClockDhms d s)  = (d, ClockDhms 0 s)
+clockDaysClock (ClockDhm  d s)  = (d, ClockDhm  0 s)
+clockDaysClock (ClockDh   d s)  = (d, ClockDh   0 s)
+clockDaysClock (ClockD    d)    = (d, ClockD    0)
 
 -- | Sign of clock as @-1@, @0@, @1@.
 --
@@ -257,17 +270,39 @@ clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s
 clockMap2 f _ (ClockD    d)   (ClockD    e)    = Right  $ ClockD    (f d e)
 clockMap2 _ _ _ _ = Msg.adlib "clock"
 
--- | Seconds in a day, i.e., 86400 seconds.
-daySeconds :: (Num a) => a
-daySeconds = 86400   -- 24 * 60 * 60
-
 adjustAb :: (Days -> Sec -> Clock) -> Days -> Sec -> B.Ab Clock
 adjustAb k d s = Right $ adjust k d s
 
 adjust :: (Days -> Sec -> Clock) -> Days -> Sec -> Clock
-adjust k d s = let (d', s')  = s `divMod` daySeconds
-                   d2        = d + toInteger d'
+adjust k d s = let (d', s')  = daysSec s
+                   d2        = d + d'
                in if d2 < 0 && s' > 0
                   then k (d2 + 1) (s' - daySeconds)
                   else k d2 s'
+
+
+-- ----------------------  Days and seconds
+
+-- | Days and seconds.
+type DaysSec = (Days, Sec)
+
+-- | Seconds in a day, i.e., 86400 seconds.
+--
+--   >>> daySeconds :: Int
+--   86400
+--
+daySeconds :: (Num a) => a
+daySeconds = 86400   -- 24 * 60 * 60
+
+-- | Calculate days and seconds.
+--
+--   >>> daysSec 777777
+--   (9, 177)
+--
+--   >>> daysSec (-777777)
+--   (-10, 86223)
+--
+daysSec :: Sec -> DaysSec
+daysSec s = let (d', s') = s `divMod` daySeconds
+            in (toInteger d', s')
 
