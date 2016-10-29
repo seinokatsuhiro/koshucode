@@ -1,23 +1,22 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Type-specific operators.
+
 module Koshucode.Baala.Rop.Flat.Peripheral
   ( ropsPeripheral,
-  
     -- * RDF
     consRdf,
-  
     -- * tie
     consTie, relmapTie, relkitTie,
-  
     -- * untie
     consUntie, relmapUntie, relkitUntie,
-  
     -- * term-name
     consTermName, relmapTermName, relkitTermName,
-  
-    -- * today & now
-    consToday, consNow, relmapAdd1, relkitAdd1,
+    -- * time
+    consToday, consNow,
+    -- * add term
+    consAdd1, relmapAdd1, relkitAdd1,
   ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -32,7 +31,10 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def consNow           "now /N"                   "-term"
+    [ Op.def consNow           "now /N"                 $ unwords
+                                                        [ "local : -term"
+                                                        , "| utc : -term . -utc"
+                                                        , "| zoned : -term . -zoned" ]
     , Op.def consRdf           "rdf P /S /O"              " -pattern -term*"
     , Op.def consTermName      "term-name /N"             "-term"
     , Op.def consTie           "tie /P ... -to N"         "-term* . -to"
@@ -130,7 +132,7 @@ relkitTermName n (Just he1) = Right kit2 where
     term t    = [D.pTerm t]
 
 
--- ----------------------  today
+-- ----------------------  today & now
 
 -- | __today \/N__
 --
@@ -140,27 +142,37 @@ consToday :: (D.CTime c) => C.RopCons c
 consToday med =
   do n <- Op.getTerm med "-term"
      let t = C.globalTime $ C.ropGlobal med
-     Right $ relmapAdd1 med (n, D.pTime $ D.timeOmitClock t)
+     consAdd1 (n, D.pTime $ D.timeOmitClock t) med
 
-
--- ----------------------  now
-
--- | __now \/N__
---
---   Get current time at term \/N.
+-- | [now \/N] Get current local time without time zone at term \/N.
+--   [now \/N -zoned] Get current local time with time zone at term \/N.
+--   [now \/N -utc] Get current UTC.
 --
 consNow :: (D.CTime c) => C.RopCons c
 consNow med =
   do n <- Op.getTerm med "-term"
-     let t = C.globalTime $ C.ropGlobal med
-     Right $ relmapAdd1 med (n, D.pTime t)
+     let tim    = C.globalTime $ C.ropGlobal med
+         tag    = (`elem` Op.getTags med)
+         cons f = consAdd1 (n, D.pTime $ f tim) med
+     case () of
+       _ | tag "local"  -> cons D.timeLocalize
+         | tag "zoned"  -> cons id
+         | tag "utc"    -> cons $ D.timeAlterZone $ const 0
+         | otherwise    -> Msg.adlib "unknown tag"
 
--- | Create @today@ and @now@ relmap.
-relmapAdd1 :: C.Intmed c -> (S.TermName, c) -> C.Relmap c
-relmapAdd1 med = C.relmapFlow med . relkitAdd1
 
--- | Create @today@ and @now@ relkit.
-relkitAdd1 :: (S.TermName, c) -> Maybe D.Head -> B.Ab (C.Relkit c)
+-- ----------------------  Add term
+
+-- | Add single constant term to each tuples.
+consAdd1 :: S.Term c -> C.RopCons c
+consAdd1 term med = Right $ relmapAdd1 term med
+
+-- | Create term-adding relmap.
+relmapAdd1 :: S.Term c -> C.Intmed c -> C.Relmap c
+relmapAdd1 term med = C.relmapFlow med $ relkitAdd1 term
+
+-- | Create term-adding relkit.
+relkitAdd1 :: S.Term c -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitAdd1 _ Nothing = Right C.relkitNothing
 relkitAdd1 (n, c) (Just he1) = Right kit2 where
     he2   = D.headCons n he1

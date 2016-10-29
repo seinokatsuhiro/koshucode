@@ -61,7 +61,7 @@ initParam (Left errs) = B.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- B.progAndArgs
        proxy     <- L.getProxies
-       now       <- D.now
+       now       <- D.nowZoned
        return $ Param { paramAutoOutput    = getFlag "auto-output"
                       , paramElement       = getFlag "element"
                       , paramWriter        = writer
