@@ -15,10 +15,11 @@ module Koshucode.Baala.Data.Type.Time.Time
     timeFromYmd, timeFromYmdTuple,
 
     -- * Construction with I/O
-    today, now, nowZoned,
+    nowUtc, nowZoned, now, today,
 
     -- * Conversion
-    timeOmitClock, timeOmitZone,
+    timeOmitClock, timeAlterZone, timeOmitZone,
+    timeLocalize,
     timeMapDate, timeMapMjd,
     timeFromZonedTime,
     timeDaysSec,
@@ -26,6 +27,7 @@ module Koshucode.Baala.Data.Type.Time.Time
 
 import qualified Data.Time.Calendar                         as Tim
 import qualified Data.Time.Calendar.WeekDate                as Tim
+import qualified Data.Time.Clock                            as Tim
 import qualified Data.Time.LocalTime                        as Tim
 import qualified Koshucode.Baala.Overture                   as O
 import qualified Koshucode.Baala.Base                       as B
@@ -140,8 +142,16 @@ timeFromYwAb y w =
 
 -- | Create time data from date, clock, and time zone.
 timeFromDczAb :: D.Date -> D.Clock -> Maybe D.Sec -> B.Ab Time
-timeFromDczAb d c Nothing   = Right $ TimeYmdc  d c
-timeFromDczAb d c (Just z)  = Right $ TimeYmdcz d c z
+timeFromDczAb d c Nothing  = Right $ timeFromDc  d c
+timeFromDczAb d c (Just z) = Right $ timeFromDcz d c z
+
+timeFromDc :: D.Date -> D.Clock -> Time
+timeFromDc d c = let (d', c') = D.clockDaysClock c
+                 in TimeYmdc (D.dateAdd d' d) c'
+
+timeFromDcz :: D.Date -> D.Clock -> D.Sec -> Time
+timeFromDcz d c z = let (d', c') = D.clockDaysClock c
+                    in TimeYmdcz (D.dateAdd d' d) c' z
 
 timeFromYmd :: D.Year -> D.Month -> D.Day -> Time
 timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
@@ -149,6 +159,37 @@ timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
 timeFromYmdTuple :: D.Ymd -> Time
 timeFromYmdTuple = timeYmd . dayFromYmdTuple where
     dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d
+
+
+-- ----------------------  Construction with I/O
+
+-- | Get UTC.
+--
+--   >>> nowUtc
+--   2013-04-18 08:37:36 UTC
+--
+nowUtc :: IO Time
+nowUtc = do time <- Tim.getZonedTime
+            let time' = time { Tim.zonedTimeZone = Tim.utc }
+            return $ timeFromZonedTime time'
+
+-- | Get current time with time zone.
+--
+--   >>> nowZoned
+--   2013-04-18 17:37:36 +09:00
+--
+nowZoned :: IO Time
+nowZoned = do time <- Tim.getZonedTime
+              return $ timeFromZonedTime time
+
+-- | Get current local time without time zone.
+--
+--   >>> now
+--   2013-04-18 17:37:36
+--
+now :: IO Time
+now = do time <- Tim.getZonedTime
+         return $ timeLocalize $ timeFromZonedTime time
 
 -- | Get today.
 --
@@ -159,34 +200,31 @@ today :: IO Time
 today = do time <- now
            return $ timeOmitClock time
 
--- | Get current time without time zone.
---
---   >>> now
---   2013-04-18 08:37:36
---
-now :: IO Time
-now = do time <- Tim.getZonedTime
-         return $ timeOmitZone $ timeFromZonedTime time
-
--- | Get current time with time zone.
---
---   >>> nowZoned
---   2013-04-18 08:37:36 +09:00
---
-nowZoned :: IO Time
-nowZoned = do time <- Tim.getZonedTime
-              return $ timeFromZonedTime time
-
 
 -- ----------------------  Conversion
 
 -- | Omit timezone.
 timeOmitZone :: O.Map Time
-timeOmitZone (TimeYmdcz d c _)  = TimeYmdc d c
+timeOmitZone (TimeYmdcz d c _)  = timeFromDc d c
 timeOmitZone (TimeYmdc  d c)    = TimeYmdc d c
 timeOmitZone (TimeYmd   d)      = TimeYmd d
 timeOmitZone (TimeYw    d)      = TimeYw  d
 timeOmitZone (TimeYm    d)      = TimeYm  d
+
+-- | Omit timezone.
+timeLocalize :: O.Map Time
+timeLocalize (TimeYmdcz d c z)  = timeFromDc d $ D.clockAddSec z c
+timeLocalize (TimeYmdc  d c)    = TimeYmdc d c
+timeLocalize (TimeYmd   d)      = TimeYmd d
+timeLocalize (TimeYw    d)      = TimeYw  d
+timeLocalize (TimeYm    d)      = TimeYm  d
+
+timeAlterZone :: O.Map D.Sec -> O.Map Time
+timeAlterZone f (TimeYmdcz d c z)  = timeFromDcz d c $ f z
+timeAlterZone _ t@(TimeYmdc  _ _)  = t
+timeAlterZone _ t@(TimeYmd   _)    = t
+timeAlterZone _ t@(TimeYw    _)    = t
+timeAlterZone _ t@(TimeYm    _)    = t
 
 -- | Omit clock part.
 timeOmitClock :: O.Map Time
@@ -219,13 +257,12 @@ timeMapMjd f time = timeMapDay g time where
 
 -- | Convert local time to Koshu time content.
 timeFromZonedTime :: Tim.ZonedTime -> Time
-timeFromZonedTime Tim.ZonedTime
-                      { Tim.zonedTimeToLocalTime = Tim.LocalTime mjd (Tim.TimeOfDay h m s)
-                      , Tim.zonedTimeZone = Tim.TimeZone { Tim.timeZoneMinutes = z }}
-    = TimeYmdcz d (D.clockFromDhms 0 h m s') (60 * z)
-      where
-        d  = D.dateFromMjd $ Tim.toModifiedJulianDay mjd
-        s' = fromEnum s `div` 1000000000000
+timeFromZonedTime zt = time where
+    Tim.UTCTime mjd s = Tim.zonedTimeToUTC zt
+    s'   = fromEnum s `div` 1000000000000
+    d    = D.dateFromMjd $ Tim.toModifiedJulianDay mjd
+    c    = D.clockFromDhms 0 0 0 s'
+    time = TimeYmdcz d c (60 * Tim.timeZoneMinutes (Tim.zonedTimeZone zt))
 
 -- | Days and seconds of time.
 --
