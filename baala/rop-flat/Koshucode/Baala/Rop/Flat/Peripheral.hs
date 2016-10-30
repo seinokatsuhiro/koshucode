@@ -142,7 +142,7 @@ consToday :: (D.CTime c) => C.RopCons c
 consToday med =
   do n <- Op.getTerm med "-term"
      let t = C.globalTime $ C.ropGlobal med
-     consAdd1 (n, D.pTime $ D.timeOmitClock t) med
+     consAdd1 (n, D.pTime $ D.timeCutClock t) med
 
 -- | [now \/N] Get current local time without time zone at term \/N.
 --   [now \/N -zoned] Get current local time with time zone at term \/N.

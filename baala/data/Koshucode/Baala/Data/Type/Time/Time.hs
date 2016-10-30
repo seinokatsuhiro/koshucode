@@ -19,7 +19,7 @@ module Koshucode.Baala.Data.Type.Time.Time
     nowUtc, nowZoned, now, today,
 
     -- * Conversion
-    timeOmitClock, timeAltZone, timeOmitZone,
+    timeCutClock, timeAltZone, timeCutZone,
     timeLocalize,
     timeAltDate, timeAltDays,
     timeFromZonedTime,
@@ -211,20 +211,21 @@ now = do time <- Tim.getZonedTime
 --
 today :: IO Time
 today = do time <- now
-           return $ timeOmitClock time
+           return $ timeCutClock time
 
 
 -- ----------------------  Conversion
 
--- | Omit timezone.
-timeOmitZone :: O.Map Time
-timeOmitZone (TimeYmdcz d c _)  = timeFromDc d c
-timeOmitZone (TimeYmdc  d c)    = TimeYmdc d c
-timeOmitZone (TimeYmd   d)      = TimeYmd d
-timeOmitZone (TimeYw    d)      = TimeYw  d
-timeOmitZone (TimeYm    d)      = TimeYm  d
+-- | Cut timezone.
+timeCutZone :: O.Map Time
+timeCutZone (TimeYmdcz d c _)  = timeFromDc d c
+timeCutZone (TimeYmdc  d c)    = TimeYmdc d c
+timeCutZone (TimeYmd   d)      = TimeYmd d
+timeCutZone (TimeYw    d)      = TimeYw  d
+timeCutZone (TimeYm    d)      = TimeYm  d
 
--- | Omit timezone.
+-- | Cut timezone and convert to local time,
+--   i.e., addition of UTC and time zone.
 timeLocalize :: O.Map Time
 timeLocalize (TimeYmdcz d c z)  = timeFromDc d $ D.clockAddSec z c
 timeLocalize (TimeYmdc  d c)    = TimeYmdc d c
@@ -240,13 +241,13 @@ timeAltZone _ t@(TimeYmd   _)    = t
 timeAltZone _ t@(TimeYw    _)    = t
 timeAltZone _ t@(TimeYm    _)    = t
 
--- | Omit clock part.
-timeOmitClock :: O.Map Time
-timeOmitClock (TimeYmdcz d _ _)  = TimeYmd d
-timeOmitClock (TimeYmdc  d _)    = TimeYmd d
-timeOmitClock (TimeYmd   d)      = TimeYmd d
-timeOmitClock (TimeYw    d)      = TimeYw  d
-timeOmitClock (TimeYm    d)      = TimeYm  d
+-- | Cut clock part.
+timeCutClock :: O.Map Time
+timeCutClock (TimeYmdcz d _ _)  = TimeYmd d
+timeCutClock (TimeYmdc  d _)    = TimeYmd d
+timeCutClock (TimeYmd   d)      = TimeYmd d
+timeCutClock (TimeYw    d)      = TimeYw  d
+timeCutClock (TimeYm    d)      = TimeYm  d
 
 -- | Alter day part.
 timeAltDate :: O.Map D.Date -> O.Map Time
