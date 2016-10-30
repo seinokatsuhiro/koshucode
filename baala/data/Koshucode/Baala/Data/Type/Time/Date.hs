@@ -20,7 +20,7 @@ module Koshucode.Baala.Data.Type.Time.Date
     monthly, weekly, yearly,
 
     -- * Utility
-    dateMjd, dateMap, dateAdd,
+    dateMjd, dateAltMjd, dateAdd,
     mix02,
   ) where
 
@@ -109,6 +109,10 @@ dateToMix date =
       hyord = B.mixInfix "-##"
 
 -- | Create mix text with two-width zeros.
+--
+--   >>> mix02 5
+--   MixText "05"
+--
 mix02 :: Int -> B.MixText
 mix02 = B.mixDecZero 2
 
@@ -187,11 +191,11 @@ dateMjd (Monthly day)  = day
 dateMjd (Weekly  day)  = day
 dateMjd (Yearly  day)  = day
 
--- | Map the content of date.
-dateMap :: O.Map Mjd -> O.Map Date
-dateMap f (Monthly day)  = Monthly $ f day
-dateMap f (Weekly  day)  = Weekly  $ f day
-dateMap f (Yearly  day)  = Yearly  $ f day
+-- | Alter the Modified Julian Day of date.
+dateAltMjd :: O.Map Mjd -> O.Map Date
+dateAltMjd f (Monthly day)  = Monthly $ f day
+dateAltMjd f (Weekly  day)  = Weekly  $ f day
+dateAltMjd f (Yearly  day)  = Yearly  $ f day
 
 -- | Add days.
 --
@@ -199,4 +203,4 @@ dateMap f (Yearly  day)  = Yearly  $ f day
 --   Date 2011-01-01
 --
 dateAdd :: (Integral n) => n -> O.Map Date
-dateAdd = dateMap . Tim.addDays . fromIntegral
+dateAdd = dateAltMjd . Tim.addDays . fromIntegral

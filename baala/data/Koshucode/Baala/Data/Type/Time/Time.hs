@@ -259,9 +259,9 @@ timeAltDate _ (TimeYm    d)      = TimeYm    d
 
 -- | Alter the Modified Julian Day of date part.
 timeAltMjd :: O.Map D.Mjd -> O.Map Time
-timeAltMjd f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMap f d) c z
-timeAltMjd f (TimeYmdc  d c)     = TimeYmdc  (D.dateMap f d) c
-timeAltMjd f (TimeYmd   d)       = TimeYmd   (D.dateMap f d)
+timeAltMjd f (TimeYmdcz d c z)   = TimeYmdcz (D.dateAltMjd f d) c z
+timeAltMjd f (TimeYmdc  d c)     = TimeYmdc  (D.dateAltMjd f d) c
+timeAltMjd f (TimeYmd   d)       = TimeYmd   (D.dateAltMjd f d)
 timeAltMjd f (TimeYw    d)       = TimeYw    (f d)
 timeAltMjd f (TimeYm    d)       = TimeYm    (f d)
 
