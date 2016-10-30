@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Relkit.Run
     relkitRun,
     fixedRelation,
     bmapAlign,
+    Local, Lexical,
   ) where
 
 import qualified Koshucode.Baala.Overture               as O
@@ -15,10 +16,10 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit     as C
-import qualified Koshucode.Baala.Core.Relkit.Construct  as C
 import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
 import qualified Koshucode.Baala.Core.Relkit.Message    as Msg
 
+-- | Resolve relmap reference.
 relkitLink :: forall c. (Ord c) => C.RelkitTable c -> O.Map (C.Relkit c)
 relkitLink kits = linkKit where
     linkKit :: O.Map (C.Relkit c)
@@ -45,8 +46,9 @@ relkitLink kits = linkKit where
            _                             -> core
 
 -- todo: optimization
+-- | Run relkit.
 relkitRun :: forall h. forall c. (Ord c, D.CRel c, D.SelectRel h)
-    => h c -> [C.Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
+    => h c -> [Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
      case core of
@@ -74,9 +76,9 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNestVar p n         -> case C.a2lookup p n rs of
+       C.RelkitNestVar p n         -> case a2lookup p n rs of
                                         Just bo2  -> Right bo2
-                                        Nothing   -> Msg.unkNestRel p n $ C.localsLines rs
+                                        Nothing   -> Msg.unkNestRel p n $ localsLines rs
        C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
                                          right True $ concat bo2
        C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
@@ -106,13 +108,34 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, D.relBody $ D.gRel $ cs !! ind)
 
+-- | Calculate fixed relation.
 fixedRelation :: (Ord c) => O.Map (B.AbMap [[c]])
 fixedRelation f = fix where
     fix bo1 = do bo2 <- f bo1
                  if bo1 == bo2 then Right bo2 else fix bo2
 
+-- | Change term order.
 bmapAlign :: D.Head -> D.Head -> O.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
                Right $ D.bodyAlign he1 he2 bo2
+
+{-# WARNING Local, Lexical "This is only used in defined module." #-}
+type Local a = Lexical [B.Named a]
+type Lexical a = (S.Token, a)
+
+localsLines :: [Local a] -> [String]
+localsLines xs = map desc $ a2keys xs where
+    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords bs
+
+a2keys :: [(a, [(b, c)])] -> [(a, [b])]
+a2keys = B.mapSndTo (map fst)
+
+-- a2expand :: [(a, [(b, c)])] -> [((a, b), c)]
+-- a2expand = concatMap f where
+--     f (a, bc)   = map (g a) bc
+--     g a (b, c)  = ((a, b), c)
+
+a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
+a2lookup a b = lookup a B.>=> lookup b
 

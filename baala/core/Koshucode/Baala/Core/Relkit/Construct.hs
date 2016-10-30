@@ -15,11 +15,6 @@ module Koshucode.Baala.Core.Relkit.Construct
 
     -- * Relation reference
     relkitCopy, relkitNest, relkitNestVar,
-
-    -- * Local
-    Local, Lexical,
-    localsLines,
-    a2lookup,
   ) where
 
 import qualified Koshucode.Baala.Overture            as O
@@ -99,26 +94,4 @@ relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 -- | Relkit for local relation reference.
 relkitNestVar :: S.Token -> String -> D.Head -> C.Relkit c
 relkitNestVar p n he = relkitJust he $ C.RelkitNestVar p n
-
-
--- ----------------------  Local relations
-
-type Local a = Lexical [B.Named a]
-
-type Lexical a = (S.Token, a)
-
-localsLines :: [Local a] -> [String]
-localsLines xs = map desc $ a2keys xs where
-    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords bs
-
-a2keys :: [(a, [(b, c)])] -> [(a, [b])]
-a2keys = B.mapSndTo (map fst)
-
--- a2expand :: [(a, [(b, c)])] -> [((a, b), c)]
--- a2expand = concatMap f where
---     f (a, bc)   = map (g a) bc
---     g a (b, c)  = ((a, b), c)
-
-a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
-a2lookup a b = lookup a B.>=> lookup b
 
