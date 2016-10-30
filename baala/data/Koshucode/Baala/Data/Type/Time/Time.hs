@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Data.Type.Time.Time
   ( -- * Data type
-    Time (..),
+    Time (..), Zone,
     timeMjd, timePrecision,
     timeYmdTuple,
 
@@ -41,12 +41,15 @@ import qualified Koshucode.Baala.Data.Type.Message          as Msg
 
 -- | Time is a small duration on timeline.
 data Time
-    = TimeYmdcz D.Date D.Clock D.Sec  -- ^ Date and clock with time zone
-    | TimeYmdc  D.Date D.Clock        -- ^ Date and clock
-    | TimeYmd   D.Date                -- ^ Year, month, and day
-    | TimeYw    D.Mjd                 -- ^ Year and week
-    | TimeYm    D.Mjd                 -- ^ Year and month
+    = TimeYmdcz D.Date D.Clock Zone  -- ^ Date and clock with time zone
+    | TimeYmdc  D.Date D.Clock       -- ^ Date and clock
+    | TimeYmd   D.Date               -- ^ Year, month, and day
+    | TimeYw    D.Mjd                -- ^ Year and week
+    | TimeYm    D.Mjd                -- ^ Year and month
       deriving (Eq, Ord)
+
+-- | Time zone as offset from UTC.
+type Zone = D.Sec
 
 -- | Get integer content of the Modified Julian Day of time.
 timeMjd :: Time -> D.Days
@@ -89,7 +92,7 @@ timeToMix time =
       TimeYw    day    -> yw $ Tim.toWeekDate  day
       TimeYm    day    -> ym $ Tim.toGregorian day
     where
-      dcz               :: D.Date -> D.Clock -> D.Sec -> B.MixText
+      dcz               :: D.Date -> D.Clock -> Zone -> B.MixText
       dcz d c z         = let c'       = D.clockAddSec z c
                               (day, _) = D.clockDaysSec c'
                           in dc (day `D.dateAdd` d) (D.clockCutDay c')
@@ -141,7 +144,7 @@ timeFromYwAb y w =
       Nothing  -> Msg.notDate y w 1
 
 -- | Create time data from date, clock, and time zone.
-timeFromDczAb :: D.Date -> D.Clock -> Maybe D.Sec -> B.Ab Time
+timeFromDczAb :: D.Date -> D.Clock -> Maybe Zone -> B.Ab Time
 timeFromDczAb d c Nothing  = Right $ timeFromDc  d c
 timeFromDczAb d c (Just z) = Right $ timeFromDcz d c z
 
@@ -149,7 +152,7 @@ timeFromDc :: D.Date -> D.Clock -> Time
 timeFromDc d c = let (d', c') = D.clockDaysClock c
                  in TimeYmdc (D.dateAdd d' d) c'
 
-timeFromDcz :: D.Date -> D.Clock -> D.Sec -> Time
+timeFromDcz :: D.Date -> D.Clock -> Zone -> Time
 timeFromDcz d c z = let (d', c') = D.clockDaysClock c
                     in TimeYmdcz (D.dateAdd d' d) c' z
 
@@ -219,7 +222,8 @@ timeLocalize (TimeYmd   d)      = TimeYmd d
 timeLocalize (TimeYw    d)      = TimeYw  d
 timeLocalize (TimeYm    d)      = TimeYm  d
 
-timeAlterZone :: O.Map D.Sec -> O.Map Time
+-- | Alter time zone.
+timeAlterZone :: O.Map Zone -> O.Map Time
 timeAlterZone f (TimeYmdcz d c z)  = timeFromDcz d c $ f z
 timeAlterZone _ t@(TimeYmdc  _ _)  = t
 timeAlterZone _ t@(TimeYmd   _)    = t
