@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Base.Message               as Msg
 
 -- | Add days to time.
 timeAddDay :: D.Days -> O.Map D.Time
-timeAddDay n = D.timeMapMjd (+ n)
+timeAddDay n = D.timeAltDays (+ n)
 
 -- | Add weeks to time.
 timeAddWeek :: Integer -> O.Map D.Time

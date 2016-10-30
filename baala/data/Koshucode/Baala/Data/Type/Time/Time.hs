@@ -5,8 +5,9 @@
 module Koshucode.Baala.Data.Type.Time.Time
   ( -- * Data type
     Time (..), Zone,
-    timeMjd, timePrecision,
+    timeMjd,
     timeYmdTuple,
+    timePrecision,
 
     -- * Construction
     timeYmd, timeYmdc, timeFromMjd,
@@ -18,9 +19,9 @@ module Koshucode.Baala.Data.Type.Time.Time
     nowUtc, nowZoned, now, today,
 
     -- * Conversion
-    timeOmitClock, timeAlterZone, timeOmitZone,
+    timeOmitClock, timeAltZone, timeOmitZone,
     timeLocalize,
-    timeMapDate, timeMapMjd,
+    timeAltDate, timeAltDays,
     timeFromZonedTime,
     timeDaysSec,
   ) where
@@ -52,6 +53,10 @@ data Time
 type Zone = D.Sec
 
 -- | Get integer content of the Modified Julian Day of time.
+--
+--   >>> timeMjd $ timeFromMjd 55555
+--   55555
+--
 timeMjd :: Time -> D.Days
 timeMjd = Tim.toModifiedJulianDay . timeDay
 
@@ -63,6 +68,11 @@ timeDay (TimeYmd   d)       = D.dateMjd d
 timeDay (TimeYw    d)       = d
 timeDay (TimeYm    d)       = d
 
+-- | Convert time to year\/month\/day tuple.
+--
+--   >>> timeYmdTuple $ timeFromMjd 55555
+--   (2010,12,25)
+--
 timeYmdTuple :: Time -> D.Ymd
 timeYmdTuple = Tim.toGregorian . timeDay
 
@@ -222,13 +232,13 @@ timeLocalize (TimeYmd   d)      = TimeYmd d
 timeLocalize (TimeYw    d)      = TimeYw  d
 timeLocalize (TimeYm    d)      = TimeYm  d
 
--- | Alter time zone.
-timeAlterZone :: O.Map Zone -> O.Map Time
-timeAlterZone f (TimeYmdcz d c z)  = timeFromDcz d c $ f z
-timeAlterZone _ t@(TimeYmdc  _ _)  = t
-timeAlterZone _ t@(TimeYmd   _)    = t
-timeAlterZone _ t@(TimeYw    _)    = t
-timeAlterZone _ t@(TimeYm    _)    = t
+-- | Alter time zone part.
+timeAltZone :: O.Map Zone -> O.Map Time
+timeAltZone f (TimeYmdcz d c z)  = timeFromDcz d c $ f z
+timeAltZone _ t@(TimeYmdc  _ _)  = t
+timeAltZone _ t@(TimeYmd   _)    = t
+timeAltZone _ t@(TimeYw    _)    = t
+timeAltZone _ t@(TimeYm    _)    = t
 
 -- | Omit clock part.
 timeOmitClock :: O.Map Time
@@ -238,25 +248,25 @@ timeOmitClock (TimeYmd   d)      = TimeYmd d
 timeOmitClock (TimeYw    d)      = TimeYw  d
 timeOmitClock (TimeYm    d)      = TimeYm  d
 
--- | Map day part of time.
-timeMapDate :: O.Map D.Date -> O.Map Time
-timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
-timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
-timeMapDate f (TimeYmd   d)      = TimeYmd   (f d)
-timeMapDate _ (TimeYw    d)      = TimeYw    d
-timeMapDate _ (TimeYm    d)      = TimeYm    d
+-- | Alter day part.
+timeAltDate :: O.Map D.Date -> O.Map Time
+timeAltDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
+timeAltDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
+timeAltDate f (TimeYmd   d)      = TimeYmd   (f d)
+timeAltDate _ (TimeYw    d)      = TimeYw    d
+timeAltDate _ (TimeYm    d)      = TimeYm    d
 
--- | Map day part of time.
-timeMapDay :: O.Map D.Mjd -> O.Map Time
-timeMapDay f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMap f d) c z
-timeMapDay f (TimeYmdc  d c)     = TimeYmdc  (D.dateMap f d) c
-timeMapDay f (TimeYmd   d)       = TimeYmd   (D.dateMap f d)
-timeMapDay f (TimeYw    d)       = TimeYw    (f d)
-timeMapDay f (TimeYm    d)       = TimeYm    (f d)
+-- | Alter the Modified Julian Day of date part.
+timeAltMjd :: O.Map D.Mjd -> O.Map Time
+timeAltMjd f (TimeYmdcz d c z)   = TimeYmdcz (D.dateMap f d) c z
+timeAltMjd f (TimeYmdc  d c)     = TimeYmdc  (D.dateMap f d) c
+timeAltMjd f (TimeYmd   d)       = TimeYmd   (D.dateMap f d)
+timeAltMjd f (TimeYw    d)       = TimeYw    (f d)
+timeAltMjd f (TimeYm    d)       = TimeYm    (f d)
 
--- | Map integer content of the Modified Julian Day.
-timeMapMjd :: O.Map D.Days -> O.Map Time
-timeMapMjd f time = timeMapDay g time where
+-- | Alter integer content of the Modified Julian Day.
+timeAltDays :: O.Map D.Days -> O.Map Time
+timeAltDays f time = timeAltMjd g time where
     g (Tim.ModifiedJulianDay d) = Tim.ModifiedJulianDay $ f d
 
 -- | Convert local time to Koshu time content.

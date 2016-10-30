@@ -157,7 +157,7 @@ consNow med =
      case () of
        _ | tag "local"  -> cons D.timeLocalize
          | tag "zoned"  -> cons id
-         | tag "utc"    -> cons $ D.timeAlterZone $ const 0
+         | tag "utc"    -> cons $ D.timeAltZone $ const 0
          | otherwise    -> Msg.adlib "unknown tag"
 
 

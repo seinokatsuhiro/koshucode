@@ -54,6 +54,6 @@ copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
 
 copDateForm :: (D.CTime c) => O.Map D.Date -> D.CopCalc c
-copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeMapDate f $ D.gTime c
+copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeAltDate f $ D.gTime c
 copDateForm _ _ = Msg.unexpAttr "date"
 
