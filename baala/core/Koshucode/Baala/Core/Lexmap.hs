@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Lexical relmap.
+
 module Koshucode.Baala.Core.Lexmap
   ( module Koshucode.Baala.Core.Lexmap.Construct,
     module Koshucode.Baala.Core.Lexmap.Lexmap,

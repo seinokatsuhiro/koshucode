@@ -39,9 +39,12 @@ import qualified Koshucode.Baala.Core.Relmap.Result  as C
 
 -- ----------------------  GetGlobal
 
+-- | Type which has global parameter.
 class GetGlobal h where
+    -- | Get global parameter.
     getGlobal :: h c -> Global' h c
 
+-- | Get global parameter from relmap intermediate data.
 ropGlobal :: (GetGlobal h) => C.Intmed' h c -> Global' h c
 ropGlobal = getGlobal . C.medHook
 
@@ -74,33 +77,42 @@ instance Show (Global' h c) where
     show Global { globalVersion = ver }
         = "Global (" ++ show ver ++ ")"
 
+-- | Textual representation of version number.
 globalVersionText :: Global' h c -> String
 globalVersionText = Ver.showVersion . globalVersion
-  
+
+-- | Command line text, i.e., program name and arguments.
 globalCommandLine :: Global' h c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
+-- | Make complete global parameter by filling auto-generated part.
 globalFill :: (D.CContent c) => O.Map (Global' h c)
 globalFill g = g
 
+-- | List of relmap operators.
 globalRops   :: Global' h c -> [C.Rop' h c]
 globalRops    = opsetRopList . globalOpset
 
+-- | Add relmap operators.
 globalRopsAdd :: [C.Rop' h c] -> O.Map (Global' h c)
 globalRopsAdd rops g = g { globalOpset = opsetFill ops' } where
     ops' = opsetRopsAdd rops ops
     ops  = globalOpset g
 
+-- | List of content operators.
 globalCops   :: Global' h c -> [D.Cop c]
-globalCops    = D.copsetCopList . opsetCop . globalOpset
+globalCops    = D.copsetCopList . globalCopset
 
-globalInfix  :: Global' h c -> [B.Named B.InfixHeight]
-globalInfix   = D.copsetInfixList . opsetCop . globalOpset
-
+-- | Set of content operators.
 globalCopset :: Global' h c -> D.CopSet c
 globalCopset  = opsetCop . globalOpset
 
+-- | List of settings of infix operators.
+globalInfix  :: Global' h c -> [B.Named B.InfixHeight]
+globalInfix   = D.copsetInfixList . opsetCop . globalOpset
+
+-- | Abort with command line.
 globalAbort :: Global' h c -> B.AbortReason -> IO a
 globalAbort = B.abort . globalCommandLine
 
@@ -138,6 +150,7 @@ instance B.Default (OpSet' h c) where
                 , opsetFindRop = const Nothing
                 , opsetCop     = D.copset }
 
+-- | Make complete operator set by filling auto-generated part.
 opsetFill :: O.Map (OpSet' h c)
 opsetFill ops = ops2 where
     ops2      = ops { opsetFindRop = findRop

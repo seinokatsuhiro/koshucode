@@ -141,18 +141,40 @@ resQueueDone d = resQueueMap push where
 
 -- ----------------------  Hook
 
+-- | Assertion of relation.
 type Assert          c = C.Assert'          Resource c
+
+-- | Relmap construction.
 type ConsRelmap      c = C.ConsRelmap'      Resource c
+
+-- | Global parameter.
 type Global          c = C.Global'          Resource c
+
+-- | Generic relmap.
 type Relmap          c = C.Relmap'          Resource c
+
+-- | Make relkit with data resource.
 type RelkitHook      c = C.RelkitHook'      Resource c
+
+-- | Lexmap-to-relmap table.
 type RelmapLinkTable c = C.RelmapLinkTable' Resource c
+
+-- | Relmap operator.
 type Rop             c = C.Rop'             Resource c
+
+-- | Constructor of relmap operator.
 type RopCons         c = C.RopCons'         Resource c
+
+-- | Intermediate relmap.
 type Intmed          c = C.Intmed'          Resource c
+
+-- | Assertion with short signs.
 type ShortAssert     c = C.ShortAssert'     Resource c
+
+-- | Assertion list with short signs.
 type ShortAsserts    c = C.ShortAsserts'    Resource c
 
+-- | Default global parameter.
 global :: (D.CContent c) => Global c
 global = C.global' B.def
 

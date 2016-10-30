@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of core modules.
+
 module Koshucode.Baala.Core
   ( -- * Modules
     module Koshucode.Baala.Core.Assert,
