@@ -1,21 +1,14 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Derived operators for nested relations.
 
 module Koshucode.Baala.Rop.Nest.Deriv
-  ( 
-    -- * opp-group
+  ( -- * opp-group
     consOppGroup,
-    -- $OppGroupExample
-  
     -- * join-up
     consJoinUp, relmapJoinUp,
-  
     -- * nest / pick-group
     consPickGroup, consNest, relmapNest,
-    -- $Nest
-  
     -- * ungroup
     consUngroup, relmapUngroup,
   ) where
@@ -33,12 +26,10 @@ import qualified Koshucode.Baala.Rop.Nest.Confl  as Op
 
 -- ----------------------  opp-group
 
--- $OppGroupExample
+-- | __opp-group R -to \/N [-share \/P ...]__
 --
---  Opposite operand version of group -- grouping relation by relmap output.
+--   Opposite operand version of @group@ -- grouping relation by relmap output.
 --
---   > source P /a /b | opp-group ( pick /a ) -to /g
-
 consOppGroup :: (Ord c, D.CRel c) => C.RopCons c
 consOppGroup med =
   do rmap <- Op.getRelmap med "-relmap"
@@ -55,6 +46,7 @@ relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
 
 -- ----------------------  join-up
 
+-- | __join-up \/P ...__
 consJoinUp :: (Ord c) => C.RopCons c
 consJoinUp med =
   do nest <- Op.getTerms med "-term"
@@ -69,22 +61,17 @@ relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
 
 -- ----------------------  nest / pick-group
 
--- $Nest
---
---  Make nested relation @\/g@ that has term @\/y@ and @\/z@.
---
---    > nest /y /z -to /g
---
---  Make nested relation @\/g@ for each term @\/x@.
---
---    > pick-group /x -to /g
-
+-- | __nest [~] \/P ... -to \/N__
 consNest :: (Ord c, D.CRel c) => C.RopCons c
 consNest med =
   do (co, ns) <- Op.getTermsCo med "-term"
      to       <- Op.getTerm    med "-to"
      Right $ relmapNest med (co, ns, to)
 
+-- | __self-group \/P ... -to \/N__
+--
+--   Nest down terms \/P ... at term \/N.
+--
 consPickGroup :: (Ord c, D.CRel c) => C.RopCons c
 consPickGroup med =
   do ns <- Op.getTerms med "-term"
@@ -104,11 +91,10 @@ relmapNest med (co, ns, to) = group B.<> for where
 
 -- ----------------------  ungroup
 
--- $Ungroup
+-- | __ungroup \/P__
 --
---  > ungroup /g
---  > slice-up ( meet ^/g ) | cut /g
-
+--   Lift up nested relation \/P and meet with non-nested terms.
+--
 consUngroup :: (Ord c, D.CRel c) => C.RopCons c
 consUngroup med =
   do n <- Op.getTerm med "-term"

@@ -1,15 +1,12 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
+
+-- | Relmap operators concerning nested relation.
 
 module Koshucode.Baala.Rop.Nest.Flow
   ( -- * down
     consDown, relmapDown, relkitDown,
-    -- $DownExample
-  
     -- * up
     consUp, relmapUp, relkitUp,
-    -- $UpExample
-  
     -- * chunk
     consChunk, relmapChunk, relkitChunk,
   ) where
@@ -22,16 +19,13 @@ import qualified Koshucode.Baala.Rop.Base          as Op
 import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
 
 
-
 -- ----------------------  down
 
--- $DownExample
+-- | __down \/N__
 --
---  Enclose relation from @a@ into term @\/r@.
---  In other words, relation flows down to nested level.
+--   Enclose input relation at term @\/N@.
+--   In other words, relation flows down to nested level.
 --
---    > a | down /r
-
 consDown :: (D.CRel c) => C.RopCons c
 consDown med =
   do n <- Op.getTerm med "-term"
@@ -50,15 +44,12 @@ relkitDown n (Just he1) = Right kit2 where
     kitf2 bo1 = [[ D.pRel $ D.Rel he1 bo1 ]]
 
 
-
 -- ----------------------  up
 
--- $UpExample
+-- | __up \/P__
 --
---  Lift nested relation @\/r@ up onto current flow.
+--   Lift nested relation @\/P@ up to current flow.
 --
---    > b | up /r
-
 consUp :: (D.CRel c) => C.RopCons c
 consUp med =
   do n <- Op.getTerm med "-term"
@@ -87,8 +78,11 @@ relkitUp n (Just he1)
 
 -- ----------------------  chunk
 
---  > chunk /a /b /c
-
+-- | __chunk \/N ... -order \/P ...__
+--
+--   Split input relation into multiple chunks named \/N ....
+--   The input relation is ordered by \/P ....
+--
 consChunk :: (Ord c, D.CRel c) => C.RopCons c
 consChunk med =
   do ns  <- Op.getTerms med "-term"
