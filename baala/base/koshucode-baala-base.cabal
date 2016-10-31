@@ -7,7 +7,7 @@ name:                koshucode-baala-base
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.164.0.0
+version:             0.165.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A notational system for relational model
@@ -112,7 +112,7 @@ library
        , pretty                    == 1.*
        , text                      == 1.*
        , utf8-string               == 1.*
-       , koshucode-baala-overture  == 0.164.0.0
+       , koshucode-baala-overture  == 0.165.0.0
 
   ghc-options:         -Wall
 

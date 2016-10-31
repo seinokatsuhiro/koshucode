@@ -9,9 +9,10 @@ about /package 'data
 |-- DIR  /code 356  /comment 261  /dir "data/Koshucode/Baala/Data/Type"
 |-- DIR  /code 483  /comment 390  /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- DIR  /code 250  /comment 292  /dir "data/Koshucode/Baala/Data/Type/Rel"
-|-- DIR  /code 506  /comment 396  /dir "data/Koshucode/Baala/Data/Type/Time"
+|-- DIR  /code 567  /comment 495  /dir "data/Koshucode/Baala/Data/Type/Time"
+|-- DIR  /code 32   /comment 19   /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- DIR-TOTAL  /code 3115  /comment 2183
+|-- DIR-TOTAL  /code 3208  /comment 2301
 
 |-- FILE  /code 9    /comment 3    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 3    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -46,11 +47,12 @@ about /package 'data
 |-- FILE  /code 62   /comment 69   /file "Rel.hs"         /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- FILE  /code 72   /comment 71   /file "ShareSide.hs"   /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- FILE  /code 12   /comment 5    /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type"
-|-- FILE  /code 152  /comment 107  /file "Clock.hs"       /dir "data/Koshucode/Baala/Data/Type/Time"
+|-- FILE  /code 164  /comment 144  /file "Clock.hs"       /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 43   /comment 38   /file "ClockCalc.hs"   /dir "data/Koshucode/Baala/Data/Type/Time"
-|-- FILE  /code 82   /comment 82   /file "Date.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
-|-- FILE  /code 141  /comment 86   /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
+|-- FILE  /code 96   /comment 110  /file "Date.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
+|-- FILE  /code 176  /comment 120  /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 88   /comment 83   /file "TimeCalc.hs"    /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 142  /comment 124  /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Type"
+|-- FILE  /code 32   /comment 19   /file "TypeCalc.hs"    /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- FILE-TOTAL  /code 3115  /comment 2183
+|-- FILE-TOTAL  /code 3208  /comment 2301
