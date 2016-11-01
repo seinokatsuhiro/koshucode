@@ -61,7 +61,7 @@ initParam (Left errs) = B.putFailure $ concat errs
 initParam (Right (opts, args)) =
     do (prog, _) <- B.progAndArgs
        proxy     <- L.getProxies
-       now       <- D.nowZoned
+       now       <- currentTime
        return $ Param { paramAutoOutput    = getFlag "auto-output"
                       , paramElement       = getFlag "element"
                       , paramWriter        = writer
@@ -102,6 +102,10 @@ initParam (Right (opts, args)) =
       oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimLeft xs)
       oneLiner (x : xs)         = x : oneLiner xs
 
+      currentTime = case D.ttTime $ unwords $ getReq "now" of
+                      Right t -> return t
+                      Left _  -> D.nowZoned
+
 
 -- ----------------------  Main
 
@@ -137,6 +141,7 @@ options =
     , Opt.flag ""  ["json"]                    "JSON output"
     , Opt.flag ""  ["geojson"]                 "GeoJSON output"
     , Opt.req  ""  ["liner"] "CODE"            "One liner"
+    , Opt.req  ""  ["now"] "CODE"              "Set system time"
     , Opt.flag ""  ["pretty"]                  "Pretty print"
     , Opt.flag ""  ["run"]                     "Run input code"
     , Opt.flag ""  ["show-encoding"]           "Show character encoding"
