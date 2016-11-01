@@ -8,7 +8,8 @@ module Koshucode.Baala.Base.Abort.Reason
     AbortReason (..),
 
     -- * Derived type
-    Ab, AbMap, AbManyMap, AbTest, IOAb, BinAb,
+    Ab, AbMap, MapAb, AbManyMap,
+    AbTest, IOAb, BinAb,
   
     -- * Constructor
     abortBecause,
@@ -37,6 +38,9 @@ type Ab a = Either AbortReason a
 
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
+
+-- | Abortable-to-abortable mapping.
+type MapAb a = Ab a -> Ab a
 
 -- | Abortable many map.
 type AbManyMap a = a -> Ab [a]

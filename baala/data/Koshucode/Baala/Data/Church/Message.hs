@@ -24,35 +24,48 @@ module Koshucode.Baala.Data.Church.Message
     detailTermRel,
   ) where
 
-import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type            as D
 import qualified Koshucode.Baala.Syntax.Message       as Msg
 
-abCoxBuild :: S.TTreeTo (O.Map (B.Ab b))
+
+-- --------------------------------------------  Abortable scope
+
+-- | Abortable scope for cox building.
+abCoxBuild :: S.TTreeTo (B.MapAb b)
 abCoxBuild = Msg.abortableTree "cox-build"
 
-abCoxCalc :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for cox calculation.
+abCoxCalc :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxCalc = B.abortable "cox-calc"
 
-abCoxFill :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for cox filling.
+abCoxFill :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxFill = B.abortable "cox-fill"
 
-abCoxIrrep :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for irreducible expression.
+abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxIrrep = B.abortable "cox-irrep"
 
-abCoxPosition :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for cox position.
+abCoxPosition :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxPosition = B.abortable "cox-position"
 
-abCoxPrefix :: S.TTreeTo (O.Map (B.Ab b))
+-- | Abortable scope for cox prefix.
+abCoxPrefix :: S.TTreeTo (B.MapAb b)
 abCoxPrefix = Msg.abortableTree "cox-prefix"
 
-abCoxReduce :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for cox reduction.
+abCoxReduce :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxReduce = B.abortable "cox-reduce"
 
-abCoxSyntax :: S.TTreeTo (O.Map (B.Ab b))
+-- | Abortable scope for cox syntax.
+abCoxSyntax :: S.TTreeTo (B.MapAb b)
 abCoxSyntax = Msg.abortableTree "cox-syntax"
+
+
+-- --------------------------------------------  Message
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
@@ -105,7 +118,8 @@ var (v, k) = v ++ "/" ++ show k
 args :: [String] -> String
 args vs = unwords $ map var $ zip vs [1..]
 
-detailTermRel :: String -> [String] -> D.Head -> [String]
+-- | Terms and input relation heading.
+detailTermRel :: String -> [S.TermName] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
     indent = map ("  " ++)
