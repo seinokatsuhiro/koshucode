@@ -1,18 +1,18 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Utilities for token trees.
+-- | Term content parsers.
 
 module Koshucode.Baala.Data.Content.Tree
   ( -- * Single content
     treeToText,
     treesToDigits,
     tokenClock,
-    treesToTime,
+    treesToTime, ttTime,
     treesToInterp,
-    treeToFlatTerm,
 
     -- * Multiple contents
+    treeToFlatTerm,
     treesToTerms,
     treesToTerms1,
   ) where
@@ -38,12 +38,15 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 -- treesToText :: Bool -> S.TTreesToAb String
 -- treesToText q xs = do ss <- treesToTexts q xs
 --                       Right $ concat ss
-
--- | Get text list from token trees.
+--
 treesToTexts :: Bool -> S.TTreesToAb [String]
 treesToTexts q = mapM $ treeToText q
 
 -- | Get text from token tree.
+--
+--   >>> S.tt1 "aa" >>= treeToText False
+--   Right "aa"
+--
 treeToText :: Bool -> S.TTreeToAb String
 treeToText q (L tok) = tokenToText q tok
 treeToText _ _ = Msg.nothing
@@ -78,6 +81,10 @@ concatDigits = first where
 -- ----------------------  Clock
 
 -- | Get clock from token.
+--
+--   >>> tokenClock $ head $ S.toks "|12:00|"
+--   Right |12:00|
+--
 tokenClock :: S.Token -> B.Ab D.Clock
 tokenClock (S.TTextBar _ ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
@@ -141,16 +148,24 @@ fromDigit _    =  Nothing
 -- | Get time from token trees.
 --
 --   >>> S.tt "2013-04-18 12:00" >>= treesToTime
---   Right (TimeYmdc (Monthly 2013-04-18) (ClockDhm 0 43200))
+--   Right 2013-04-18 12:00
 --
 --   >>> S.tt "2013-04-18" >>= treesToTime
---   Right (TimeYmd (Monthly 2013-04-18))
+--   Right 2013-04-18
 --
 --   >>> S.tt "2013-#16" >>= treesToTime
---   Right (TimeYw 2013-04-15)
+--   Right 2013-#16
 --
 treesToTime :: S.TTreesToAb D.Time
 treesToTime = concatTime B.<=< treesToTexts False
+
+-- | Get time from string.
+--
+--   >>> ttTime "2013-04-18 12:00"
+--   Right 2013-04-18 12:00
+--
+ttTime :: String -> B.Ab D.Time
+ttTime = S.tt B.>=> treesToTime
 
 concatTime :: [String] -> B.Ab D.Time
 concatTime = year where
@@ -243,6 +258,13 @@ treeToInterpWord (B.TreeL x) =
 
 -- | Get flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
+--
+--   >>> S.tt1 "/a" >>= treeToFlatTerm
+--   Right "a"
+--
+--   >>> S.tt1 "/a/x" >>= treeToFlatTerm
+--   Left ...
+--
 treeToFlatTerm :: S.TTreeToAb S.TermName
 treeToFlatTerm (L (S.TTermN _ _ n))  = Right n
 treeToFlatTerm (L t)                 = Msg.reqFlatName t
