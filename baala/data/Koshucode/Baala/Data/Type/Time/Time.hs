@@ -274,9 +274,8 @@ timeAltDays f time = timeAltMjd g time where
 timeFromZonedTime :: Tim.ZonedTime -> Time
 timeFromZonedTime zt = time where
     Tim.UTCTime mjd s = Tim.zonedTimeToUTC zt
-    s'   = fromEnum s `div` 1000000000000
     d    = D.dateFromMjd $ Tim.toModifiedJulianDay mjd
-    c    = D.clockFromDhms 0 0 0 s'
+    c    = D.clockFromDhms 0 0 0 $ floor s
     time = TimeYmdcz d c (60 * Tim.timeZoneMinutes (Tim.zonedTimeZone zt))
 
 -- | Days and seconds of time.
