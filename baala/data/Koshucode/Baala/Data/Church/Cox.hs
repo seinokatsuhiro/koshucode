@@ -38,16 +38,25 @@ data Cox c
     | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks
     | CoxWith  [B.CodePt] [NamedCox c] (Cox c)     -- ^ Cox with outside arguments
 
+-- | Expression pair.
 type Cox2 c = (Cox c, Cox c)
+
+-- | Expression triple.
 type Cox3 c = (Cox c, Cox c, Cox c)
+
+-- | Expression quadruple.
 type Cox4 c = (Cox c, Cox c, Cox c, Cox c)
 
+-- | Maybe expression.
 type MaybeCox c = Maybe (Cox c)
+
+-- | Named expression.
 type NamedCox c = B.Named (Cox c)
 
 -- | Term-content calculator.
 type CopCalc c = [B.Ab c] -> B.Ab c
 
+-- | Expression tag.
 type CoxTag = Maybe String
 
 instance B.CodePtr (Cox c) where
@@ -95,6 +104,7 @@ blankNameToDoc (S.BlankPrefix   n) = B.pprint n B.<+> B.pprint "(prefix)"
 blankNameToDoc (S.BlankInfix    n) = B.pprint n B.<+> B.pprint "(infix)"
 blankNameToDoc (S.BlankPostfix  n) = B.pprint n B.<+> B.pprint "(postfix)"
 
+-- | Create literal expression.
 coxLit :: c -> Cox c
 coxLit = CoxLit []
 
@@ -112,6 +122,7 @@ isCoxForm (CoxForm1  _ _ _ _)  = True
 isCoxForm (CoxForm   _ _ _ _)  = True
 isCoxForm _                    = False
 
+-- | Get arity of expression.
 coxSyntacticArity :: Cox c -> Int
 coxSyntacticArity = loop where
     loop (CoxForm   _ _ vs cox)  = loop cox + length vs
@@ -121,15 +132,18 @@ coxSyntacticArity = loop where
         | otherwise      = 0
     loop _ = 0
 
+-- | Map expression form.
 coxMap :: O.Map (O.Map (Cox c))
 coxMap g (CoxFill  cp f xs)         = CoxFill  cp (g f) (map g xs)
 coxMap g (CoxForm1 cp tag v  body)  = CoxForm1 cp tag v  (g body)
 coxMap g (CoxForm  cp tag vs body)  = CoxForm  cp tag vs (g body)
 coxMap _ e = e
 
+-- | Fill expression form.
 coxCall :: Cox c -> (O.Map (Cox c)) -> Cox c
 coxCall cox g = coxMap g cox
 
+-- | Check irreducible expression.
 checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e
     | irreducible e  = Right e

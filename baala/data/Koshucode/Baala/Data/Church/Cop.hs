@@ -42,6 +42,7 @@ instance Show (Cop c) where
 instance B.Name (Cop c) where
     name = B.name . copName
 
+-- | Name of content operator.
 copName :: Cop c -> S.BlankName
 copName (CopCalc  n _) = n
 copName (CopCox   n _) = n
@@ -73,6 +74,7 @@ copInfix = S.BlankInfix
 
 -- ----------------------  Operator set
 
+-- | Set of content operators.
 data CopSet c = CopSet
     { copsetCopList    :: [Cop c]
     , copsetInfixList  :: [B.Named B.InfixHeight]
@@ -96,6 +98,7 @@ copset :: CopSet c
 copset = CopSet [] [] [] [] [] find find find [] where
     find _ = Nothing
 
+-- | Complete operator set.
 copsetFill :: O.Map (CopSet c)
 copsetFill opset = opset2 where
 

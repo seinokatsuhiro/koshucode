@@ -1,10 +1,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Term-content calcutation.
+-- | Term-content calculation.
 
 module Koshucode.Baala.Data.Church.Run
-  ( RunCox, RunList,
+  ( RunList,
     coxRunCox, coxRunList,
     calcContent,
   
@@ -135,18 +135,21 @@ position he = spos where
 
 -- --------------------------------------------  Run
 
-type RunCox  c = D.Cox c -> B.Ab c
-type RunList c = [c]     -> B.Ab c
+-- | Tuple-to-content calculation.
+type RunList c = [c] -> B.Ab c
 
-coxRunCox :: (D.CContent c) => D.CopSet c -> D.Head -> [c] -> RunCox c
+-- | Calculate content expression with specific tuple.
+coxRunCox :: (D.CContent c) => D.CopSet c -> D.Head -> [c] -> D.Cox c -> B.Ab c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
-coxRunPure :: (D.CContent c) => D.CopSet c -> RunCox c
+coxRunPure :: (D.CContent c) => D.CopSet c -> D.Cox c -> B.Ab c
 coxRunPure cops cox = coxRunList cops mempty cox []
 
+-- | Calculate content expression with specific tuple.
 coxRunList :: (D.CContent c) => D.CopSet c -> D.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
+-- | Calculate content expression.
 calcContent :: (D.CContent c) => D.CopSet c -> D.ContentCalc c
 calcContent cops = calc where
     calc tree = coxRunPure cops =<< D.coxBuild calc cops tree
@@ -192,24 +195,30 @@ list !!! index = loop index list where
 
 -- --------------------------------------------  getArgN
 
+-- | Extract single argument.
 getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
 getArg1 [x]       = Right x
 getArg1 _         = Msg.unmatchType ""
 
+-- | Extract two arguments.
 getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
 getArg2 [x, y]    = Right (x, y)
 getArg2 _         = Msg.unmatchType ""
 
+-- | Extract three arguments.
 getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
 getArg3 _         = Msg.unmatchType ""
 
+-- | Extract single non-abortable argument.
 getRightArg1 :: [B.Ab c] -> B.Ab c
 getRightArg1 = getArg1 B.>=> id
 
+-- | Extract two non-abortable arguments.
 getRightArg2 :: [B.Ab c] -> B.Ab (c, c)
 getRightArg2 = getArg2 B.>=> B.right2
 
+-- | Extract three non-abortable arguments.
 getRightArg3 :: [B.Ab c] -> B.Ab (c, c, c)
 getRightArg3 = getArg3 B.>=> B.right3
 
