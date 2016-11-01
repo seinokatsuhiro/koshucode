@@ -11,6 +11,7 @@ module Koshucode.Baala.Data.Church.Build
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
+import qualified Koshucode.Baala.Data.Class             as D
 import qualified Koshucode.Baala.Data.Content           as D
 import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D

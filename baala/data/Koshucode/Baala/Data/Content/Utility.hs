@@ -1,11 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Data.Content.Utility
-  ( -- * Generic content
-    CContent (..),
-    typeOrder,
-
-    -- * Get & Put
+  ( -- * Get & Put
     CGetPut,
     gpText, gpList, gpSet, gpSetSort,
 
@@ -27,47 +23,6 @@ import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Data.Type                as D
 import qualified Koshucode.Baala.Data.Class               as D
-
-
--- ----------------------  Generic content
-
-class (Ord c, Show c, B.MixShortEncode c, D.CTypeOf c,
-       D.CEmpty c, D.CEnd c,
-       D.CBool c, D.CCode c, D.CText c, D.CClock c, D.CTime c,
-       D.CTerm c, D.CDec c, D.CType c, D.CInterp c,
-       D.CList c, D.CSet c, D.CTie c, D.CRel c) =>
-    CContent c where
-
-    appendContent :: c -> c -> B.Ab c
-
-    joinContent :: [c] -> B.Ab c
-    joinContent = B.foldM appendContent D.empty
-
-typeOrder :: (CContent c) => c -> Int
-typeOrder c
-    -- empty
-    | D.isEmpty    c = 1
-
-    -- simple
-    | D.isBool     c = 11
-    | D.isDec      c = 12
-    | D.isClock    c = 13
-    | D.isTime     c = 14
-    | D.isCode     c = 15
-    | D.isTerm     c = 16
-    | D.isText     c = 17
-
-    -- complex
-    | D.isList     c = 21
-    | D.isSet      c = 22
-    | D.isTie      c = 23
-    | D.isRel      c = 24
-    | D.isInterp   c = 25
-    | D.isType     c = 27
-
-    -- end
-    | D.isEnd      c = 31
-    | otherwise      = error "unknown content"
 
 
 -- ----------------------  Get & Put
@@ -114,15 +69,15 @@ contApTextToText = contAp D.gText D.putText
 contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap D.gText D.putList
 
-judgeContString :: (CContent c) => D.Judge c -> D.Judge String
+judgeContString :: (D.CContent c) => D.Judge c -> D.Judge String
 judgeContString = (contString <$>)
 
 -- | Convert content to string value.
-contString :: (CContent c) => c -> String
+contString :: (D.CContent c) => c -> String
 contString = B.mixToFlatString. contStringMix
 
 -- | Convert content to pretty print doc.
-contStringMix :: (CContent c) => c -> B.MixText
+contStringMix :: (D.CContent c) => c -> B.MixText
 contStringMix c
     | D.isCode   c  = B.mixString $ D.gCode c
     | D.isText   c  = B.mixString $ D.gText c

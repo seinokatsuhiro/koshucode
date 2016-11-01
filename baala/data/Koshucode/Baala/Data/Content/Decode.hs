@@ -29,7 +29,6 @@ import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Content.Tree       as D
-import qualified Koshucode.Baala.Data.Content.Utility    as D
 import qualified Koshucode.Baala.Base.Message            as Msg
 import qualified Koshucode.Baala.Data.Content.Message    as Msg
 

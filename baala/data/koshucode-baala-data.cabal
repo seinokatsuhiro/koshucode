@@ -65,6 +65,7 @@ library
 
         Koshucode.Baala.Data.Class
         Koshucode.Baala.Data.Class.Complex
+        Koshucode.Baala.Data.Class.Content
         Koshucode.Baala.Data.Class.Message
         Koshucode.Baala.Data.Class.Simple
         Koshucode.Baala.Data.Class.Singleton
