@@ -2,7 +2,7 @@
 
 -- | Singleton content type.
 
-module Koshucode.Baala.Data.Content.Singleton
+module Koshucode.Baala.Data.Class.Singleton
   ( -- * Type
     CTypeOf (..),
     getAbAb,
@@ -15,7 +15,7 @@ module Koshucode.Baala.Data.Content.Singleton
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Data.Type            as D
-import qualified Koshucode.Baala.Data.Content.Message as Msg
+import qualified Koshucode.Baala.Data.Class.Message   as Msg
 
 
 -- --------------------------------------------  Type

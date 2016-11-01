@@ -2,7 +2,7 @@
 
 -- | Simple content type.
 
-module Koshucode.Baala.Data.Content.Simple
+module Koshucode.Baala.Data.Class.Simple
   ( -- * Simple contents
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
@@ -20,7 +20,7 @@ module Koshucode.Baala.Data.Content.Simple
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type               as D
-import qualified Koshucode.Baala.Data.Content.Singleton  as D
+import qualified Koshucode.Baala.Data.Class.Singleton    as D
 
 
 -- --------------------------------------------  Simple contents

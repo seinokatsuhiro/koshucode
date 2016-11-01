@@ -2,7 +2,7 @@
 
 -- | Complex content type.
 
-module Koshucode.Baala.Data.Content.Complex
+module Koshucode.Baala.Data.Class.Complex
   ( -- * Complex contents
     -- ** Collection
     CList (..),
@@ -18,7 +18,7 @@ module Koshucode.Baala.Data.Content.Complex
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
-import qualified Koshucode.Baala.Data.Content.Singleton  as D
+import qualified Koshucode.Baala.Data.Class.Singleton    as D
 
 
 -- --------------------------------------------  Complex contents
