@@ -8,8 +8,8 @@ module Koshucode.Baala.Data.Class.Singleton
     getContent,
   
     -- * Empty and End
-    CEmpty (..), maybeEmpty, omitEmpty,
-    CEnd (..),
+    CEmpty (..), maybeEmpty, omitEmpty, contMaximum,
+    CEnd (..), contMinimum, 
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
@@ -51,8 +51,16 @@ maybeEmpty _ (Nothing)  = empty
 omitEmpty :: (CEmpty c) => O.Map [S.Term c]
 omitEmpty = B.omit (isEmpty . snd)
 
+-- | Maximum content of contents list.
+contMaximum :: (Ord c, CEmpty c) => [c] -> c
+contMaximum = B.maximumNull empty
+
 -- | End of everything: the maximum content.
 class (CTypeOf c) => CEnd c where
     isEnd       :: c -> Bool
     end         :: c
+
+-- | Minimum content of contents list.
+contMinimum :: (Ord c, CEnd c) => [c] -> c
+contMinimum = B.minimumNull end
 

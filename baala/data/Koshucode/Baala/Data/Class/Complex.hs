@@ -5,8 +5,8 @@
 module Koshucode.Baala.Data.Class.Complex
   ( -- * Complex contents
     -- ** Collection
-    CList (..),
-    CSet (..), gSetSort,
+    CList (..), pTextList,
+    CSet (..), pTermSet, pTextSet, gSetSort, isMember,
     -- ** Relational
     CTie (..),
     CRel (..), dee, dum,
@@ -19,6 +19,7 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class.Singleton    as D
+import qualified Koshucode.Baala.Data.Class.Simple       as D
 
 
 -- --------------------------------------------  Complex contents
@@ -37,6 +38,10 @@ class (D.CTypeOf c) => CList c where
     putList     ::     [c] -> B.Ab c
     putList     =    Right . pList
 
+-- | Create list of text contents.
+pTextList :: (D.CText c, CList c) => [String] -> c
+pTextList = pList . map D.pText
+
 -- ----------------------  Set
 
 -- | Set of contents.
@@ -51,9 +56,23 @@ class (D.CTypeOf c) => CSet c where
     putSet      ::        [c] -> B.Ab c
     putSet      =       Right . pSet
 
+-- | Create set of term contents.
+pTermSet :: (D.CTerm c, CSet c) => [String] -> c
+pTermSet = pSet . map D.pTerm
+
+-- | Create set of text contents.
+pTextSet :: (D.CText c, CSet c) => [String] -> c
+pTextSet = pSet . map D.pText
+
 -- | Sorted version of 'gSet'.
 gSetSort :: (Ord c, CSet c) => c -> [c]
 gSetSort = B.sort . gSet
+
+-- | Test membership between element and collection contents.
+isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
+isMember x xs | isSet xs  = x `elem` gSet xs
+isMember x xs | isList xs = x `elem` gList xs
+isMember _ _ = False
 
 -- ----------------------  Tie
 

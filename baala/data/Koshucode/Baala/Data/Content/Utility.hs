@@ -1,12 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Utilities for term contents.
+
 module Koshucode.Baala.Data.Content.Utility
   ( -- * Get & Put
     CGetPut,
     gpText, gpList, gpSet, gpSetSort,
 
     -- * Utility
-    isMember,
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
@@ -14,8 +15,6 @@ module Koshucode.Baala.Data.Content.Utility
     contString,
     mixBracketList,
     mixBracketSet,
-    contMinimum, contMaximum,
-    pTermSet, pTextSet, pTextList,
   ) where
 
 import qualified Koshucode.Baala.Overture                 as O
@@ -49,19 +48,17 @@ gpSetSort = (D.gSetSort, D.pSet)
 
 -- ----------------------  Utility
 
--- | Test membership between element and collection contents.
-isMember :: (Eq c, D.CSet c, D.CList c) => c -> c -> Bool
-isMember x xs | D.isSet xs  = x `elem` D.gSet xs
-isMember x xs | D.isList xs = x `elem` D.gList xs
-isMember _ _ = False
-
 -- | Apply function to internal value of content.
-contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
+--
+--   >>> contAp gText pText reverse (pText "abc" :: BaalaC) :: BaalaC
+--   VText "cba"
+--
+contAp :: (a' -> a) -> (b -> b') -> (a -> b) -> a' -> b'
 contAp get put f = put . f . get
 
 -- | Map function to internal value of content.
-contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
-contMap get put f = contAp get put $ map f
+contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
+contMap get put f = contAp get put $ fmap f
 
 contApTextToText :: (D.CText c) => O.Map String -> B.AbMap c
 contApTextToText = contAp D.gText D.putText
@@ -69,10 +66,15 @@ contApTextToText = contAp D.gText D.putText
 contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap D.gText D.putList
 
+-- | Convert term content to string value.
 judgeContString :: (D.CContent c) => D.Judge c -> D.Judge String
 judgeContString = (contString <$>)
 
 -- | Convert content to string value.
+--
+--   >>> contString (pText "a" :: BaalaC)
+--   "a"
+--
 contString :: (D.CContent c) => c -> String
 contString = B.mixToFlatString. contStringMix
 
@@ -97,26 +99,19 @@ contStringMix c
     | D.isType   c  = B.mixString "<type>"
     | otherwise     = B.mixString "<?>"
 
+-- | Enclose mix text in list brackets.
+--
+--   >>> mixBracketList $ B.mixString "a"
+--   MixText "[ a ]"
+--
 mixBracketList :: B.MixText -> B.MixText
 mixBracketList = B.mixBracketS S.listOpen S.listClose
 
+-- | Enclose mix text in set brackets.
+--
+--   >>> mixBracketSet $ B.mixString "a"
+--   MixText "{ a }"
+--
 mixBracketSet :: B.MixText -> B.MixText
 mixBracketSet = B.mixBracketS S.setOpen S.setClose
-
--- | Minimum content of contents list.
-contMinimum :: (Ord c, D.CEnd c) => [c] -> c
-contMinimum = B.minimumNull D.end
-
--- | Maximum content of contents list.
-contMaximum :: (Ord c, D.CEmpty c) => [c] -> c
-contMaximum = B.maximumNull D.empty
-
-pTermSet :: (D.CTerm c, D.CSet c) => [String] -> c
-pTermSet = D.pSet . map D.pTerm
-
-pTextSet :: (D.CText c, D.CSet c) => [String] -> c
-pTextSet = D.pSet . map D.pText
-
-pTextList :: (D.CText c, D.CList c) => [String] -> c
-pTextList = D.pList . map D.pText
 
