@@ -34,7 +34,7 @@ class (D.CTypeOf c) => CBool c where
     gBool       ::       c -> Bool
 
     getBool     ::  B.Ab c -> B.Ab Bool
-    getBool     =   D.getAbAb isBool gBool
+    getBool     =   D.getContent isBool gBool
 
     putBool     ::    Bool -> B.Ab c
     putBool     =    Right . pBool
@@ -64,7 +64,7 @@ class (D.CTypeOf c) => CDec c where
     pDec        ::   D.Decimal -> c
 
     getDec      ::     B.Ab c -> B.Ab D.Decimal
-    getDec      =      D.getAbAb isDec gDec
+    getDec      =      D.getContent isDec gDec
 
     putDec      ::   D.Decimal -> B.Ab c
     putDec      =    Right . pDec
@@ -90,7 +90,7 @@ class (D.CTypeOf c) => CClock c where
     pClock       ::     D.Clock -> c
 
     getClock     ::      B.Ab c -> B.Ab D.Clock
-    getClock     =       D.getAbAb isClock gClock
+    getClock     =       D.getContent isClock gClock
 
     putClock     ::     D.Clock -> B.Ab c
     putClock     =      Right . pClock
@@ -104,7 +104,7 @@ class (D.CTypeOf c) => CTime c where
     pTime        ::      D.Time -> c
 
     getTime      ::     B.Ab c -> B.Ab D.Time
-    getTime      =      D.getAbAb isTime gTime
+    getTime      =      D.getContent isTime gTime
 
     putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
@@ -118,7 +118,7 @@ class (D.CTypeOf c) => CCode c where
     pCode        ::      String -> c
 
     getCode      ::      B.Ab c -> B.Ab String
-    getCode      =       D.getAbAb isCode gCode
+    getCode      =       D.getContent isCode gCode
 
     putCode      ::      String -> B.Ab c
     putCode      =       Right . pCode
@@ -132,7 +132,7 @@ class (D.CTypeOf c) => CTerm c where
     pTerm        ::      String -> c
 
     getTerm      ::      B.Ab c -> B.Ab String
-    getTerm      =       D.getAbAb isTerm gTerm
+    getTerm      =       D.getContent isTerm gTerm
 
     putTerm      ::      String -> B.Ab c
     putTerm      =       Right . pTerm
@@ -147,7 +147,7 @@ class (D.CTypeOf c) => CText c where
     pText       :: String -> c
 
     getText     :: B.Ab c -> B.Ab String
-    getText      = D.getAbAb isText gText
+    getText      = D.getContent isText gText
 
     putText     :: String -> B.Ab c
     putText      = Right . pText

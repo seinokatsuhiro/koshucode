@@ -32,7 +32,7 @@ class (D.CTypeOf c) => CList c where
     pList       ::     [c] -> c
 
     getList     ::  B.Ab c -> B.Ab [c]
-    getList     =   D.getAbAb isList gList
+    getList     =   D.getContent isList gList
 
     putList     ::     [c] -> B.Ab c
     putList     =    Right . pList
@@ -46,11 +46,12 @@ class (D.CTypeOf c) => CSet c where
     pSet        ::        [c] -> c
 
     getSet      ::     B.Ab c -> B.Ab [c]
-    getSet      =      D.getAbAb isSet gSet
+    getSet      =      D.getContent isSet gSet
 
     putSet      ::        [c] -> B.Ab c
     putSet      =       Right . pSet
 
+-- | Sorted version of 'gSet'.
 gSetSort :: (Ord c, CSet c) => c -> [c]
 gSetSort = B.sort . gSet
 
@@ -63,7 +64,7 @@ class (D.CTypeOf c) => CTie c where
     pTie        ::  [S.Term c] -> c
 
     getTie      ::      B.Ab c -> B.Ab [S.Term c]
-    getTie      =       D.getAbAb isTie gTie
+    getTie      =       D.getContent isTie gTie
 
     putTie      ::  [S.Term c] -> B.Ab c
     putTie      =  Right . pTie
@@ -77,16 +78,16 @@ class (D.CTypeOf c) => CRel c where
     pRel        ::     D.Rel c -> c
 
     getRel      ::      B.Ab c -> B.Ab (D.Rel c)
-    getRel      =       D.getAbAb isRel gRel
+    getRel      =       D.getContent isRel gRel
 
     putRel      ::     D.Rel c -> B.Ab c
     putRel      =      Right . pRel
 
--- | Nullary full relation.
+-- | The nullary full relation.
 dee :: (CRel c) => c
 dee = pRel D.reldee
 
--- | Nullary empty relation.
+-- | The nullary empty relation.
 dum :: (CRel c) => c
 dum = pRel D.reldum
 
@@ -99,7 +100,7 @@ class (D.CTypeOf c) => CInterp c where
     pInterp     ::    D.Interp -> c
 
     getInterp   ::      B.Ab c -> B.Ab D.Interp
-    getInterp   =       D.getAbAb isInterp gInterp
+    getInterp   =       D.getContent isInterp gInterp
 
     putInterp   ::    D.Interp -> B.Ab c
     putInterp   =     Right . pInterp
@@ -113,7 +114,7 @@ class (D.CTypeOf c) => CType c where
     pType       ::      D.Type -> c
 
     getType     ::      B.Ab c -> B.Ab D.Type
-    getType     =       D.getAbAb isType gType
+    getType     =       D.getContent isType gType
 
     putType     ::      D.Type -> B.Ab c
     putType     =       Right . pType
