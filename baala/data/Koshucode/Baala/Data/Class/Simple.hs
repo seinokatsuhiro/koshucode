@@ -7,7 +7,7 @@ module Koshucode.Baala.Data.Class.Simple
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
     -- ** Decimal
-    CDec (..), pInt, pInteger, pDecFromInt, pDecFromInteger,
+    CDec (..), pInt, pInteger, pIntegral,
     -- ** Clock and time
     CClock (..),
     CTime (..),
@@ -39,13 +39,19 @@ class (D.CTypeOf c) => CBool c where
     putBool     ::    Bool -> B.Ab c
     putBool     =    Right . pBool
 
-true, false :: (CBool c) => c
+-- | Boolean constant true.
+true :: (CBool c) => c
 true  = pBool True
+
+-- | Boolean constant false.
+false :: (CBool c) => c
 false = pBool False
 
+-- | Boolean constant true.
 putTrue :: (CBool c) => B.Ab c
 putTrue  = putBool True
 
+-- | Boolean constant false.
 putFalse :: (CBool c) => B.Ab c
 putFalse = putBool False
 
@@ -63,17 +69,17 @@ class (D.CTypeOf c) => CDec c where
     putDec      ::   D.Decimal -> B.Ab c
     putDec      =    Right . pDec
 
+-- | Create decimal content.
 pInt :: (CDec c) => Int -> c
-pInt = pDec . fromInteger . toInteger
+pInt = pIntegral
 
+-- | Create decimal content.
 pInteger :: (CDec c) => Integer -> c
 pInteger = pDec . fromInteger
 
-pDecFromInt :: (CDec c) => Int -> c
-pDecFromInt = pInt
-
-pDecFromInteger :: (CDec c) => Integer -> c
-pDecFromInteger = pInteger
+-- | Create decimal content.
+pIntegral :: (CDec c, Integral n) => n -> c
+pIntegral = pInteger . toInteger
 
 -- ----------------------  Clock
 
@@ -136,16 +142,24 @@ class (D.CTypeOf c) => CTerm c where
 
 -- | Double-quoted text content.
 class (D.CTypeOf c) => CText c where
-    isText      ::       c -> Bool
-    gText       ::       c -> String
-    pText       ::  String -> c
+    isText      :: c -> Bool
+    gText       :: c -> String
+    pText       :: String -> c
 
-    getText     ::  B.Ab c -> B.Ab String
-    getText     =   D.getAbAb isText gText
+    getText     :: B.Ab c -> B.Ab String
+    getText      = D.getAbAb isText gText
 
-    putText     ::  String -> B.Ab c
-    putText     =    Right . pText
+    putText     :: String -> B.Ab c
+    putText      = Right . pText
 
+-- | Create Text or empty content.
+--
+--   >>> pMaybeText "a" :: BaalaC
+--   VText "a"
+--
+--   >>> pMaybeText "" :: BaalaC
+--   VEmpty
+--
 pMaybeText :: (CText c, D.CEmpty c) => String -> c
 pMaybeText s | O.trimLeft s == "" = D.empty
              | otherwise          = pText s
