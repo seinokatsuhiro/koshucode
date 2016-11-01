@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Data.Content.Message
   ( -- * Abortable
     abLiteral,
@@ -13,7 +15,6 @@ module Koshucode.Baala.Data.Content.Message
     unkBracket,
     unkType,
     unkWord,
-    unmatchType,
     -- * Utility
     expectActual,
     expect2Actual,
@@ -24,6 +25,7 @@ import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Syntax.Message  as Msg
 
+-- | Abortable scope for literal.
 abLiteral :: S.TTreeTo (O.Map (B.Ab b))
 abLiteral = Msg.abortableTree "literal"
 
@@ -61,9 +63,6 @@ unkBracket = Left $ B.abortBecause "Unknown bracket"
 -- | Unknown type name
 unkType :: String -> B.Ab a
 unkType = Left . B.abortLine "Unknown type name"
-
-unmatchType :: String -> B.Ab a
-unmatchType = Left . B.abortLine "Type unmatch"
 
 -- | Unknown word
 unkWord :: String -> B.Ab a

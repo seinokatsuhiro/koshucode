@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Content calculation.
+
 module Koshucode.Baala.Data.Church
   ( module Koshucode.Baala.Data.Church.Build
   , module Koshucode.Baala.Data.Church.Cop
