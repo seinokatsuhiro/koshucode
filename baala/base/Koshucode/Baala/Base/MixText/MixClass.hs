@@ -3,7 +3,7 @@
 
 -- | Class for constructing mix text.
 
-module Koshucode.Baala.Base.Text.MixClass
+module Koshucode.Baala.Base.MixText.MixClass
   ( -- * Class
     Mix (..),
 
@@ -15,11 +15,11 @@ module Koshucode.Baala.Base.Text.MixClass
   ) where
 
 import Data.Monoid ((<>))
-import qualified Data.ByteString                      as Bs
-import qualified Data.ByteString.Lazy                 as Bz
-import qualified Data.Text                            as Tx
-import qualified Data.Text.Lazy                       as Tz
-import qualified Koshucode.Baala.Base.Text.MixText    as B
+import qualified Data.ByteString                         as Bs
+import qualified Data.ByteString.Lazy                    as Bz
+import qualified Data.Text                               as Tx
+import qualified Data.Text.Lazy                          as Tz
+import qualified Koshucode.Baala.Base.MixText.MixText    as B
 
 
 -- ----------------------  Construct
@@ -103,6 +103,11 @@ mixJoin1 = mixJoin B.mix1
 mixJoinBar :: [B.MixText] -> B.MixText
 mixJoinBar = mixJoinS "|"
 
+-- | Insert infix text.
+--
+--   >>> mixInfix "-" (mix "12") (mix "34")
+--   MixText "12-34"
+--
 mixInfix :: (Mix m) => m -> B.MixText -> B.MixText -> B.MixText
 mixInfix inf l r = l <> mix inf <> r
 

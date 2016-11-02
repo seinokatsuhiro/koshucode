@@ -72,6 +72,12 @@ library
         Koshucode.Baala.Base.IO.IOPoint
         Koshucode.Baala.Base.IO.SimpleOption
 
+        Koshucode.Baala.Base.MixText
+        Koshucode.Baala.Base.MixText.LineBreak
+        Koshucode.Baala.Base.MixText.MixClass
+        Koshucode.Baala.Base.MixText.MixEncode
+        Koshucode.Baala.Base.MixText.MixText
+
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Case
         Koshucode.Baala.Base.Prelude.Class
@@ -89,10 +95,6 @@ library
 
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
-        Koshucode.Baala.Base.Text.LineBreak
-        Koshucode.Baala.Base.Text.MixClass
-        Koshucode.Baala.Base.Text.MixEncode
-        Koshucode.Baala.Base.Text.MixText
         Koshucode.Baala.Base.Text.PPrint
         Koshucode.Baala.Base.Text.Suffix
         Koshucode.Baala.Base.Text.TextTable

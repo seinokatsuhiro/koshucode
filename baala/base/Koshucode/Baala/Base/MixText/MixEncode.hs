@@ -2,7 +2,7 @@
 
 -- | Encode using mix text.
 
-module Koshucode.Baala.Base.Text.MixEncode
+module Koshucode.Baala.Base.MixText.MixEncode
   ( -- * Encode
     MixEncode (..),
     MixShortEncode (..),
@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Text.MixEncode
     Shorten, noShorten,
   ) where
 
-import qualified Koshucode.Baala.Base.Text.MixText    as B
+import qualified Koshucode.Baala.Base.MixText.MixText    as B
 
 -- | Encode via mix text.
 class MixEncode a where

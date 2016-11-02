@@ -5,7 +5,7 @@
 
 -- | Mix text.
 
-module Koshucode.Baala.Base.Text.MixText
+module Koshucode.Baala.Base.MixText.MixText
   ( -- * Type
     MixText,
 
@@ -46,21 +46,21 @@ module Koshucode.Baala.Base.Text.MixText
   ) where
 
 import Data.Monoid ((<>))
-import qualified Control.Exception                    as E
-import qualified Numeric                              as N
-import qualified Data.ByteString                      as Bs
-import qualified Data.ByteString.Builder              as B
-import qualified Data.ByteString.Lazy                 as Bz
-import qualified Data.ByteString.Lazy.UTF8            as Bu
-import qualified Data.Default                         as Def
-import qualified Data.List                            as L
-import qualified Data.Text                            as Tx
-import qualified Data.Text.Encoding                   as Tx
-import qualified Data.Text.Lazy                       as Tz
-import qualified Data.Text.Lazy.Encoding              as Tz
-import qualified System.IO                            as IO
-import qualified Koshucode.Baala.Overture             as O
-import qualified Koshucode.Baala.Base.Text.LineBreak  as B
+import qualified Control.Exception                            as E
+import qualified Numeric                                      as N
+import qualified Data.ByteString                              as Bs
+import qualified Data.ByteString.Builder                      as B
+import qualified Data.ByteString.Lazy                         as Bz
+import qualified Data.ByteString.Lazy.UTF8                    as Bu
+import qualified Data.Default                                 as Def
+import qualified Data.List                                    as L
+import qualified Data.Text                                    as Tx
+import qualified Data.Text.Encoding                           as Tx
+import qualified Data.Text.Lazy                               as Tz
+import qualified Data.Text.Lazy.Encoding                      as Tz
+import qualified System.IO                                    as IO
+import qualified Koshucode.Baala.Overture                     as O
+import qualified Koshucode.Baala.Base.MixText.LineBreak       as B
 
 
 -- --------------------------------------------  MixText
@@ -125,7 +125,7 @@ mixTz = MixTz
 --
 --   >>> mixString "abc" <> mixString "def"
 --   MixText "abcdef"
-
+--
 mixString :: String -> MixText
 mixString = MixString
 
@@ -137,7 +137,7 @@ mixChar c = mixString [c]
 --
 --   >>> mixLeft '.' 10 $ mixString "abc"
 --   MixText "abc......."
-
+--
 mixLeft :: Char -> Int -> MixText -> MixText
 mixLeft c n mx = mixString $ O.padRightWith c n $ mixToStringDef mx
 
@@ -145,7 +145,7 @@ mixLeft c n mx = mixString $ O.padRightWith c n $ mixToStringDef mx
 --
 --   >>> mixRight '.' 10 $ mixString "abc"
 --   MixText ".......abc"
-
+--
 mixRight :: Char -> Int -> MixText -> MixText
 mixRight c n mx = mixString $ O.padLeftWith c n $ mixToStringDef mx
 
@@ -155,32 +155,44 @@ mixRight c n mx = mixString $ O.padLeftWith c n $ mixToStringDef mx
 --
 --   >>> mixString "|" <> mixSpace 4 <> mixString "|"
 --   MixText "|    |"
-
+--
 mixSpace :: Int -> MixText
 mixSpace = MixSpace
 
 -- | Infix mix space.
+--
+--   >>> mixString "a" `mixSep` mixString "b"
+--   MixText "a b"
+--
 mixSep :: MixText -> MixText -> MixText
 mixSep l r = l <> mix1 <> r
 
+-- | Infix mix space.
+--
+--   >>> mixString "a" `mixSep2` mixString "b"
+--   MixText "a  b"
+--
 mixSep2 :: MixText -> MixText -> MixText
 mixSep2 l r = l <> mix2 <> r
 
 -- | Empty space.
 mix0 :: MixText
+mix0 = mixSpace 0
+
 -- | One space.
 mix1 :: MixText
+mix1 = mixSpace 1
+
 -- | Two-length spaces.
 mix2 :: MixText
+mix2 = mixSpace 2
+
 -- | Three-length spaces.
 mix3 :: MixText
+mix3 = mixSpace 3
+
 -- | Four-length spaces.
 mix4 :: MixText
-
-mix0 = mixSpace 0
-mix1 = mixSpace 1
-mix2 = mixSpace 2
-mix3 = mixSpace 3
 mix4 = mixSpace 4
 
 -- ----------------------  Number
@@ -189,7 +201,7 @@ mix4 = mixSpace 4
 --
 --  >>> mixOct (12 :: Int)
 --  MixText "14"
-
+--
 mixOct :: (Integral n, Show n) => n -> MixText
 mixOct = mixNum N.showOct
 
@@ -197,7 +209,7 @@ mixOct = mixNum N.showOct
 --
 --  >>> mixDec (12 :: Int)
 --  MixText "12"
-
+--
 mixDec :: (Integral n, Show n) => n -> MixText
 mixDec = mixNum N.showInt
 
@@ -205,7 +217,7 @@ mixDec = mixNum N.showInt
 --
 --  >>> mixHex (12 :: Int)
 --  MixText "c"
-
+--
 mixHex :: (Integral n, Show n) => n -> MixText
 mixHex = mixNum N.showHex
 
@@ -215,19 +227,35 @@ mixNum f n | n >= 0    = mixString (f n "")
 
 -- | Zero-padding decimal number.
 --
---   >>> mixDecZero 6 (123 :: Int)
+--   >>> mixDecZero 6 $ O.int 123
 --   MixText "000123"
 --
---   >>> mixDecZero 6 (-123 :: Int)
+--   >>> mixDecZero 6 $ O.int (-123)
 --   MixText "-00123"
-
+--
 mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
 mixDecZero = mixNumZero mixDec
 
+-- | Generalized version of 'mixDecZero'.
+--
+--   >>> mixNumZero mixHex 6 $ O.int 123
+--   MixText "00007b"
+--
 mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
 mixNumZero f w n | n >= 0     = mixRight '0' w (f n)
                  | otherwise  = mixChar '-' <> mixRight '0' (w - 1) (f $ abs n)
 
+-- | Sign of number or space.
+--
+--   >>> mixSign $ O.int 3
+--   MixText "+"
+--
+--   >>> mixSign $ O.int (-3)
+--   MixText "-"
+--
+--   >>> mixSign $ O.int 0
+--   MixText " "
+--
 mixSign :: (Num n, Ord n) => n -> MixText
 mixSign n = case compare n 0 of
               GT -> mixChar '+'
@@ -275,7 +303,7 @@ mixBlock = MixBlock
 --
 --   >>> mixBlockMap (\x -> mixString "[" <> x <> mixString "]") m2
 --   MixText "[ab][cd][efg]"
-
+--
 mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
 mixBlockMap f = loop where
     loop (MixBlock xs) = MixBlock (loop <$> xs)
@@ -283,6 +311,11 @@ mixBlockMap f = loop where
 
 -- ----------------------  Others
 
+-- | Showed mix text.
+--
+--   >>> mixShow (Just 'a')
+--   MixText "Just 'a'"
+--
 mixShow :: (Show a) => a -> MixText
 mixShow = mixString . show
 
@@ -290,7 +323,7 @@ mixShow = mixString . show
 --
 --   >>> mixEmpty
 --   MixText ""
-
+--
 mixEmpty :: MixText
 mixEmpty = MixEmpty
 

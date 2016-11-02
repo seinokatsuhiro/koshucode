@@ -2,7 +2,7 @@
 
 -- | Line break setting for mix text.
 
-module Koshucode.Baala.Base.Text.LineBreak
+module Koshucode.Baala.Base.MixText.LineBreak
   ( -- * Line break
     LineBreak (..),
     lfString, crlfString,
