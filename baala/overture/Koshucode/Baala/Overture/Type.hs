@@ -7,12 +7,17 @@ module Koshucode.Baala.Overture.Type
    uneith,
    Map, ManyMap,
    Test, Test2,
+   int, integer,
  ) where
 
 -- | Homotype 'Either'.
 type Eith a = Either a a
 
 -- | Extract 'Eith' content.
+--
+--   >>> uneith <$> [Left "L", Right "R"]
+--   ["L", "R"]
+--
 uneith :: Eith a -> a
 uneith (Left x)   = x
 uneith (Right x)  = x
@@ -29,3 +34,30 @@ type Test a = a -> Bool
 -- | Boolean-valued function with 2 arguments.
 type Test2 a b = a -> b -> Bool
 
+-- | 'Int' shorthand.
+--
+--   >>> int 12
+--   12
+--
+--   This is same as:
+--
+--   >>> 12 :: Int
+--   12
+--
+int :: Map Int
+{-# INLINE int #-}
+int = id
+
+-- | 'Integer' shorthand.
+--
+--   >>> integer 12
+--   12
+--
+--   This is same as:
+--
+--   >>> 12 :: Integer
+--   12
+--
+integer :: Map Integer
+{-# INLINE integer #-}
+integer = id
