@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Core.Lexmap.Message
   ( -- * Abortable
     abLexmap,
@@ -14,6 +16,7 @@ import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data.Message  as Msg
 
+-- | Abortable scope for lexmap.
 abLexmap      :: S.TTreesTo (O.Map (B.Ab b))
 abLexmap      = Msg.abortableTrees "lexmap"
 

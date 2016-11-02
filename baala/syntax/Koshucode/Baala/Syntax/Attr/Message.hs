@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Syntax.Attr.Message
   ( -- * Abortable
     abAttr,
@@ -25,15 +27,19 @@ import qualified Koshucode.Baala.Syntax.Para             as S
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.TTree            as S
 
+-- | Abortable scope for attribute.
 abAttr        :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abAttr        = B.abortable "attr"
 
+-- | Abortable scope for attribute.
 abAttrTrees   :: S.TTreesTo (O.Map (B.Ab b))
 abAttrTrees   = abortableTrees "attr"
 
+-- | Abortable scope for slot.
 abSlot        :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abSlot        = B.abortable "slot"
 
+-- | Abortable scope for slot.
 abSlotTree    :: S.TTreeTo (O.Map (B.Ab b))
 abSlotTree    = abortableTree "slot"
 

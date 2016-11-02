@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Data.Type.Message
   ( -- * Abortable
     -- * Message

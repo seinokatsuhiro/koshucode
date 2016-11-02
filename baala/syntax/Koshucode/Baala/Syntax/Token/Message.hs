@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Syntax.Token.Message
   ( -- * Abortable
     abToken,
@@ -12,6 +14,7 @@ module Koshucode.Baala.Syntax.Token.Message
 import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 
+-- | Abortable scope for token.
 abToken :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abToken = B.abortable "token"
 

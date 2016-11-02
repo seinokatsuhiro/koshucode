@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Rop.Flat.Message
   ( module Koshucode.Baala.Rop.Base.Message,
     checkTerm,
@@ -95,6 +97,7 @@ unexpTermName = Left $ B.abortBecause "Unexpected term names"
 showHead :: D.Head -> String
 showHead = unwords . D.getTermNames
 
+-- | Unmatch shared terms.
 unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a
 unmatchShare e a =
     Left $ B.abortLines "Unmatch shared terms"

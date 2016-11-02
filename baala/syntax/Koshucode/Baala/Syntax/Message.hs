@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of message modules.
+
 module Koshucode.Baala.Syntax.Message
   ( module Koshucode.Baala.Syntax.Attr.Message,
     module Koshucode.Baala.Syntax.Symbol.Message,

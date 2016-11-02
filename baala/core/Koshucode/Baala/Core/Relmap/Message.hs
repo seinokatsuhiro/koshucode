@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Core.Relmap.Message
   ( -- * Abortable
     abOption,
@@ -17,15 +19,19 @@ import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Data.Message  as Msg
 
+-- | Abortable scope for option.
 abOption :: S.TTreesTo (O.Map (B.Ab b))
 abOption = Msg.abortableTrees "option"
 
+-- | Abortable scope for relmap.
 abRelmap :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
 
+-- | Abortable scope for specialization.
 abSpecialize :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
 
+-- | Unknown nested relation reference.
 unkNestVar :: String -> [S.Token] -> [((S.Token, S.Local String), D.Head)] -> B.Ab a
 unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
                            $ ("search" : map indent dynamic)

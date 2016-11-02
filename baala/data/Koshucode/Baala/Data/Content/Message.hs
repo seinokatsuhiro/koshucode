@@ -68,10 +68,12 @@ unkType = Left . B.abortLine "Unknown type name"
 unkWord :: String -> B.Ab a
 unkWord = Left . B.abortLine "Unknown word"
 
+-- | Expect and actual.
 expectActual :: String -> String -> [String]
 expectActual e a       = [ "Expect " ++ e
                          , "Actual " ++ a ]
 
+-- | Expect (2 lines) and actual.
 expect2Actual :: String -> String -> String -> [String]
 expect2Actual e1 e2 a  = [ "Expect " ++ e1
                          , "       " ++ e2

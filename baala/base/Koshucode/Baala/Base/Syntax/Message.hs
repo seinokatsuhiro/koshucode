@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Base.Syntax.Message
   ( -- * Abortable
     abCode,
@@ -8,11 +10,11 @@ module Koshucode.Baala.Base.Syntax.Message
     extraOpenBracket,
   ) where
 
-import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base.Abort          as B
 import qualified Koshucode.Baala.Base.IO             as B
 
-abCode :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+-- | Abortable scope for code.
+abCode :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCode = B.abortable "code"
 
 -- | Extra close bracket

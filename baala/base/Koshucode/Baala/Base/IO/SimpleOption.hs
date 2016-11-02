@@ -132,6 +132,7 @@ printHelp :: [String] -> SimpleOptions -> IO ()
 printHelp text opts = do putStr $ helpMessage text opts
                          putStrLn ""
 
+-- | Create help message.
 helpMessage :: [String] -> SimpleOptions -> String
 helpMessage text = Opt.usageInfo (unlines text ++ "OPTION")
 

@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Rop.Base.Message
   ( module Koshucode.Baala.Core.Message,
     reqRelmap,

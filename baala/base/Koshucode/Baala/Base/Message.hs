@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of message modules.
+
 module Koshucode.Baala.Base.Message
   ( module Koshucode.Baala.Base.Abort.Message,
     module Koshucode.Baala.Base.Syntax.Message,

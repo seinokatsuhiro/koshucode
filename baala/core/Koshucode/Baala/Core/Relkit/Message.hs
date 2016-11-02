@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Core.Relkit.Message
   ( -- * Abortable
     abRun,
@@ -11,6 +13,7 @@ import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 
+-- | Abortable scope for running relkit.
 abRun :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abRun = B.abortable "run"
 

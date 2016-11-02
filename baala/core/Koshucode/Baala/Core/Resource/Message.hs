@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Message list.
+
 module Koshucode.Baala.Core.Resource.Message
   ( -- * Abortable
     abClause,
@@ -17,6 +19,7 @@ module Koshucode.Baala.Core.Resource.Message
 import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 
+-- | Abortable scope for clause.
 abClause :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abClause = B.abortable "clause"
 
