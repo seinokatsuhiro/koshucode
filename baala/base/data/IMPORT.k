@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    168 judges
+**    172 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Overture"
@@ -99,6 +99,44 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Message"              /import "Koshucode.Baala.Base.Abort.Message"
 |-- IMPORT  /module "Koshucode.Baala.Base.Message"              /import "Koshucode.Baala.Base.Syntax.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Koshucode.Baala.Base.MixText.MixText"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.Deriv"        /import "Koshucode.Baala.Base.MixText.MixClass"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.LineBreak"    /import "Data.Default"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.ByteString"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixClass"     /import "Koshucode.Baala.Base.MixText.MixText"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixEncode"    /import "Koshucode.Baala.Base.MixText.MixText"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Monoid"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Control.Exception"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Numeric"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.ByteString"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.ByteString.Builder"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.ByteString.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.ByteString.Lazy.UTF8"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Default"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Text.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Text.Lazy"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Data.Text.Lazy.Encoding"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText.MixText"      /import "Koshucode.Baala.Base.MixText.LineBreak"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText"              /import "Koshucode.Baala.Base.MixText.LineBreak"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText"              /import "Koshucode.Baala.Base.MixText.Deriv"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText"              /import "Koshucode.Baala.Base.MixText.MixClass"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText"              /import "Koshucode.Baala.Base.MixText.MixText"
+|-- IMPORT  /module "Koshucode.Baala.Base.MixText"              /import "Koshucode.Baala.Base.MixText.MixEncode"
+
 
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Import"       /import "Control.Monad"
@@ -140,7 +178,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Line"          /import "Koshucode.Baala.Base.Prelude"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Message"       /import "Koshucode.Baala.Base.IO"
 
@@ -165,34 +202,6 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.LineBreak"       /import "Data.Default"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.Monoid"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.ByteString"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.ByteString.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Data.Text.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixClass"        /import "Koshucode.Baala.Base.Text.MixText"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixEncode"       /import "Koshucode.Baala.Base.Text.MixText"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Monoid"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Control.Exception"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Numeric"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Builder"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.ByteString.Lazy.UTF8"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Default"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.List"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Data.Text.Lazy.Encoding"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.MixText"         /import "Koshucode.Baala.Base.Text.LineBreak"
-
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Koshucode.Baala.Base.List"
@@ -207,10 +216,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Koshucode.Baala.Base.List"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.LineBreak"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixClass"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixEncode"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.MixText"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.PPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Suffix"
@@ -218,6 +223,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.List"
+|-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.MixText"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Base"                      /import "Koshucode.Baala.Base.Text"
