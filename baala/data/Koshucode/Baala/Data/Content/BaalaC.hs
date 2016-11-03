@@ -1,9 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Baala content type.
+-- | The Baala content type.
 
 module Koshucode.Baala.Data.Content.BaalaC
-  ( BaalaC (..),
+  ( the,
+    BaalaC (..),
   ) where
 
 import qualified Data.Set                                as Set
@@ -17,7 +18,16 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 -- ----------------------  Content type
 
--- | Vanilla content type
+-- | Shorthand function for the Baala content type.
+--
+--   >>> the $ D.pText "a"
+--   VText "a"
+--
+the :: BaalaC -> BaalaC
+{-# INLINE the #-}
+the = id
+
+-- | The Baala content type.
 data BaalaC
     = VBool    Bool               -- ^ Boolean type
     | VCode    String             -- ^ Code type
