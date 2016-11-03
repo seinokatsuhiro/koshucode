@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,18 +58,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type</a
+	    >Modified Julian Day</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Construction</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Form conversion</a
+	    >Construction</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
+	    >Conversion</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
 	    >Utility</a
 	    ></li
 	  ></ul
@@ -88,6 +92,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Mjd"
+	    >Mjd</a
+	    > = <a href="http://hackage.haskell.org/package/time/docs/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:mjd"
+	    >mjd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:unMjd"
+	    >unMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:Date"
 	    >Date</a
@@ -95,36 +123,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    ><li
 	      >= <a href="#v:Monthly"
 		>Monthly</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		>MJDay</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		>Mjd</a
 		></li
 	      ><li
 	      >| <a href="#v:Weekly"
 		>Weekly</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		>MJDay</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		>Mjd</a
 		></li
 	      ><li
 	      >| <a href="#v:Yearly"
 		>Yearly</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		>MJDay</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		>Mjd</a
 		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:MJDay"
-	    >MJDay</a
-	    > = <a href="http://hackage.haskell.org/package/time/docs/Data-Time-Calendar.html#t:Day"
-	    >Day</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:YmdTuple"
-	    >YmdTuple</a
+	    > <a href="#t:Ymd"
+	    >Ymd</a
 	    > = (<a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
 	    >Year</a
 	    >, <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Month"
@@ -163,6 +183,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Day</a
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:dateFromMjd"
+	    >dateFromMjd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:dateFromYmdAb"
@@ -205,14 +233,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateFromMjd"
-	    >dateFromMjd</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
-	    >Integer</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
-	    >Date</a
-	    ></li
-	  ><li class="src short"
 	  ><a href="#v:monthly"
 	    >monthly</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -237,20 +257,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Date</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateDay"
-	    >dateDay</a
+	  ><a href="#v:dateMjd"
+	    >dateMjd</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:dateMapDay"
-	    >dateMapDay</a
+	  ><a href="#v:dateAltMjd"
+	    >dateAltMjd</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
@@ -271,13 +291,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >mix02</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 	    >MixText</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
+	>Modified Julian Day</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Mjd" class="def"
+	    >Mjd</a
+	    > = <a href="http://hackage.haskell.org/package/time/docs/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#Mjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for the Modified Julian Day.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mjd" class="def"
+	    >mjd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#mjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create MJD.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unMjd" class="def"
+	    >unMjd</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#unMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract MJD integer value.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
 	>Data type</h1
 	><div class="top"
 	><p class="src"
@@ -300,8 +370,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><td class="src"
 		><a name="v:Monthly" class="def"
 		  >Monthly</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		  >MJDay</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		  >Mjd</a
 		  ></td
 		><td class="doc"
 		><p
@@ -314,8 +384,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><td class="src"
 		><a name="v:Weekly" class="def"
 		  >Weekly</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		  >MJDay</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		  >Mjd</a
 		  ></td
 		><td class="doc"
 		><p
@@ -328,8 +398,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><td class="src"
 		><a name="v:Yearly" class="def"
 		  >Yearly</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		  >MJDay</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		  >Mjd</a
 		  ></td
 		><td class="doc"
 		><p
@@ -353,7 +423,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-35');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-65');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -367,7 +437,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-68');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -381,7 +451,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-41');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-71');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -390,12 +460,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Text-MixEncode.html#t:MixEncode"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
 		      >MixEncode</a
 		      > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 		      >Date</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-65');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#line-92');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -409,31 +479,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:MJDay" class="def"
-	    >MJDay</a
-	    > = <a href="http://hackage.haskell.org/package/time/docs/Data-Time-Calendar.html#t:Day"
-	    >Day</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#MJDay');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Type for the Modified Julian Day.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:YmdTuple" class="def"
-	    >YmdTuple</a
+	    > <a name="t:Ymd" class="def"
+	    >Ymd</a
 	    > = (<a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Year"
 	    >Year</a
 	    >, <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Month"
 	    >Month</a
 	    >, <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Day"
 	    >Day</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#YmdTuple');" href="javascript:void(0);" class="link"
+	    >) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#Ymd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -505,8 +559,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Day type.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
+	><h1 id="g:3"
 	>Construction</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dateFromMjd" class="def"
+	    >dateFromMjd</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateFromMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create date from the Modified Julian Day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dateFromMjd 55555
+</code
+		></strong
+	      >Date 2010-12-25
+</pre
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dateFromYmdAb" class="def"
@@ -527,6 +607,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Create date from year, month, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dateFromYmdAb 2013 4 18
+</code
+		></strong
+	      >Right Date 2013-04-18
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dateFromYmdAb 2013 4 31
+</code
+		></strong
+	      >Left ...
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -571,24 +671,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Create date from year and day.</p
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:dateFromMjd" class="def"
-	    >dateFromMjd</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
-	    >Integer</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
-	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateFromMjd');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Create date from the Modified Julian Day.</p
-	    ></div
-	  ></div
-	><h1 id="g:3"
-	>Form conversion</h1
+	><h1 id="g:4"
+	>Conversion</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:monthly" class="def"
@@ -667,17 +751,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 </pre
 	    ></div
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:5"
 	>Utility</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateDay" class="def"
-	    >dateDay</a
+	  ><a name="v:dateMjd" class="def"
+	    >dateMjd</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateDay');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateMjd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -687,22 +771,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:dateMapDay" class="def"
-	    >dateMapDay</a
+	  ><a name="v:dateAltMjd" class="def"
+	    >dateAltMjd</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
 	    >Date</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateMapDay');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#dateAltMjd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Map the content of date.</p
+	    >Alter the Modified Julian Day of date.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -739,7 +823,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >mix02</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Text-MixText.html#t:MixText"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 	    >MixText</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Date.html#mix02');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -747,6 +831,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Create mix text with two-width zeros.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mix02 5
+</code
+		></strong
+	      >MixText &quot;05&quot;
+</pre
 	    ></div
 	  ></div
 	></div

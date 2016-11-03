@@ -8,14 +8,23 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-nested
-@version 0.164.0.0
+@version 0.166.0.0
 
+
+-- | Messages for relmap operators on nested relations.
 module Koshucode.Baala.Rop.Nest.Message
 
 -- | Not a nested relation
 notNestRel :: [TermName] -> Head -> Ab a
 
+
+-- | Relmap operators concerning nested relation.
 module Koshucode.Baala.Rop.Nest.Flow
+
+-- | <b>down /N</b>
+--   
+--   Enclose input relation at term <tt>/N</tt>. In other words, relation
+--   flows down to nested level.
 consDown :: (CRel c) => RopCons c
 
 -- | Create <tt>down</tt> relmap.
@@ -23,6 +32,10 @@ relmapDown :: (CRel c) => Intmed c -> TermName -> Relmap c
 
 -- | Create <tt>down</tt> relkit.
 relkitDown :: (CRel c) => TermName -> RelkitFlow c
+
+-- | <b>up /P</b>
+--   
+--   Lift nested relation <tt>/P</tt> up to current flow.
 consUp :: (CRel c) => RopCons c
 
 -- | Create <tt>up</tt> relmap.
@@ -30,6 +43,11 @@ relmapUp :: (CRel c) => Intmed c -> TermName -> Relmap c
 
 -- | Create <tt>up</tt> relkit.
 relkitUp :: (CRel c) => TermName -> RelkitFlow c
+
+-- | <b>chunk /N ... -order /P ...</b>
+--   
+--   Split input relation into multiple chunks named /N .... The input
+--   relation is ordered by /P ....
 consChunk :: (Ord c, CRel c) => RopCons c
 
 -- | Create <tt>chunk</tt> relmap.
@@ -102,16 +120,33 @@ relkitSliceUp :: (CRel c) => RelkitBinary c
 
 -- | Derived operators for nested relations.
 module Koshucode.Baala.Rop.Nest.Deriv
+
+-- | <b>opp-group R -to /N [-share /P ...]</b>
+--   
+--   Opposite operand version of <tt>group</tt> -- grouping relation by
+--   relmap output.
 consOppGroup :: (Ord c, CRel c) => RopCons c
+
+-- | <b>join-up /P ...</b>
 consJoinUp :: (Ord c) => RopCons c
 
 -- | Create <tt>join-up</tt> relmap.
 relmapJoinUp :: (Ord c) => Intmed c -> [TermName] -> Relmap c
+
+-- | <b>self-group /P ... -to /N</b>
+--   
+--   Nest down terms /P ... at term /N.
 consPickGroup :: (Ord c, CRel c) => RopCons c
+
+-- | <b>nest [~] /P ... -to /N</b>
 consNest :: (Ord c, CRel c) => RopCons c
 
 -- | Create <tt>self-group</tt> relmap.
 relmapNest :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
+
+-- | <b>ungroup /P</b>
+--   
+--   Lift up nested relation /P and meet with non-nested terms.
 consUngroup :: (Ord c, CRel c) => RopCons c
 
 -- | Create <tt>ungroup</tt> relmap.

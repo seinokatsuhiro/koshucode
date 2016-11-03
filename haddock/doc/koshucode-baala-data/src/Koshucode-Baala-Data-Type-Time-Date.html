@@ -7,169 +7,211 @@
 <link type='text/css' rel='stylesheet' href='hscolour.css' />
 </head>
 <body>
-<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
+<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}</span>
 <a class="number" name="line-2">2</a>
 <a class="number" name="line-3">3</a><span class='hs-comment'>-- | Date.</span>
 <a class="number" name="line-4">4</a>
 <a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Date</span>
-<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Data type</span>
-<a class="number" name="line-7">7</a>    <span class='hs-conid'>Date</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-conid'>MJDay</span><span class='hs-layout'>,</span> <span class='hs-conid'>YmdTuple</span><span class='hs-layout'>,</span>
-<a class="number" name="line-8">8</a>    <span class='hs-conid'>Year</span><span class='hs-layout'>,</span> <span class='hs-conid'>Month</span><span class='hs-layout'>,</span> <span class='hs-conid'>Week</span><span class='hs-layout'>,</span> <span class='hs-conid'>Day</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-comment'>-- * Construction</span>
-<a class="number" name="line-10">10</a>    <span class='hs-varid'>dateFromYmdAb</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateFromYwdAb</span><span class='hs-layout'>,</span>
-<a class="number" name="line-11">11</a>    <span class='hs-varid'>dateFromYdAb</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateFromMjd</span><span class='hs-layout'>,</span>
-<a class="number" name="line-12">12</a>    <span class='hs-comment'>-- * Form conversion</span>
-<a class="number" name="line-13">13</a>    <span class='hs-varid'>monthly</span><span class='hs-layout'>,</span> <span class='hs-varid'>weekly</span><span class='hs-layout'>,</span> <span class='hs-varid'>yearly</span><span class='hs-layout'>,</span>
-<a class="number" name="line-14">14</a>    <span class='hs-comment'>-- * Utility</span>
-<a class="number" name="line-15">15</a>    <span class='hs-varid'>dateDay</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateMapDay</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateAdd</span><span class='hs-layout'>,</span>
-<a class="number" name="line-16">16</a>    <span class='hs-varid'>mix02</span><span class='hs-layout'>,</span>
-<a class="number" name="line-17">17</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Modified Julian Day</span>
+<a class="number" name="line-7">7</a>    <span class='hs-conid'>Mjd</span><span class='hs-layout'>,</span> <span class='hs-varid'>mjd</span><span class='hs-layout'>,</span> <span class='hs-varid'>unMjd</span><span class='hs-layout'>,</span>
+<a class="number" name="line-8">8</a>
+<a class="number" name="line-9">9</a>    <span class='hs-comment'>-- * Data type</span>
+<a class="number" name="line-10">10</a>    <span class='hs-conid'>Date</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ymd</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>    <span class='hs-conid'>Year</span><span class='hs-layout'>,</span> <span class='hs-conid'>Month</span><span class='hs-layout'>,</span> <span class='hs-conid'>Week</span><span class='hs-layout'>,</span> <span class='hs-conid'>Day</span><span class='hs-layout'>,</span>
+<a class="number" name="line-12">12</a>
+<a class="number" name="line-13">13</a>    <span class='hs-comment'>-- * Construction</span>
+<a class="number" name="line-14">14</a>    <span class='hs-varid'>dateFromMjd</span><span class='hs-layout'>,</span>
+<a class="number" name="line-15">15</a>    <span class='hs-varid'>dateFromYmdAb</span><span class='hs-layout'>,</span>
+<a class="number" name="line-16">16</a>    <span class='hs-varid'>dateFromYwdAb</span><span class='hs-layout'>,</span>
+<a class="number" name="line-17">17</a>    <span class='hs-varid'>dateFromYdAb</span><span class='hs-layout'>,</span> 
 <a class="number" name="line-18">18</a>
-<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
-<a class="number" name="line-20">20</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span><span class='hs-varop'>.</span><span class='hs-conid'>WeekDate</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
-<a class="number" name="line-21">21</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span><span class='hs-varop'>.</span><span class='hs-conid'>OrdinalDate</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
-<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>              <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
-<a class="number" name="line-25">25</a>
+<a class="number" name="line-19">19</a>    <span class='hs-comment'>-- * Conversion</span>
+<a class="number" name="line-20">20</a>    <span class='hs-varid'>monthly</span><span class='hs-layout'>,</span> <span class='hs-varid'>weekly</span><span class='hs-layout'>,</span> <span class='hs-varid'>yearly</span><span class='hs-layout'>,</span>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a>    <span class='hs-comment'>-- * Utility</span>
+<a class="number" name="line-23">23</a>    <span class='hs-varid'>dateMjd</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateAltMjd</span><span class='hs-layout'>,</span> <span class='hs-varid'>dateAdd</span><span class='hs-layout'>,</span>
+<a class="number" name="line-24">24</a>    <span class='hs-varid'>mix02</span><span class='hs-layout'>,</span>
+<a class="number" name="line-25">25</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-26">26</a>
-<a class="number" name="line-27">27</a><span class='hs-comment'>-- ----------------------  Type</span>
-<a class="number" name="line-28">28</a>
-<a class="number" name="line-29">29</a><a name="Date"></a><span class='hs-comment'>-- | Date.</span>
-<a class="number" name="line-30">30</a><a name="Date"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-31">31</a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-conid'>MJDay</span>    <span class='hs-comment'>-- ^ Date in /YYYY-MM-DD/</span>
-<a class="number" name="line-32">32</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Weekly</span>  <span class='hs-conid'>MJDay</span>    <span class='hs-comment'>-- ^ Date in /YYYY-#W-D/</span>
-<a class="number" name="line-33">33</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Yearly</span>  <span class='hs-conid'>MJDay</span>    <span class='hs-comment'>-- ^ Date in /YYYY-##D/</span>
+<a class="number" name="line-27">27</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
+<a class="number" name="line-28">28</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span><span class='hs-varop'>.</span><span class='hs-conid'>WeekDate</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
+<a class="number" name="line-29">29</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span><span class='hs-varop'>.</span><span class='hs-conid'>Calendar</span><span class='hs-varop'>.</span><span class='hs-conid'>OrdinalDate</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>Tim</span>
+<a class="number" name="line-30">30</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-31">31</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>              <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-32">32</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
+<a class="number" name="line-33">33</a>
 <a class="number" name="line-34">34</a>
-<a class="number" name="line-35">35</a><a name="instance%20Eq%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Eq</span>  <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-36">36</a>    <span class='hs-varid'>a</span> <span class='hs-varop'>==</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateDay</span> <span class='hs-varid'>a</span> <span class='hs-varop'>==</span> <span class='hs-varid'>dateDay</span> <span class='hs-varid'>b</span>
-<a class="number" name="line-37">37</a>
-<a class="number" name="line-38">38</a><a name="instance%20Ord%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Ord</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-39">39</a>    <span class='hs-varid'>a</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateDay</span> <span class='hs-varid'>a</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>dateDay</span> <span class='hs-varid'>b</span>
-<a class="number" name="line-40">40</a>
-<a class="number" name="line-41">41</a><a name="instance%20Show%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Show</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-42">42</a>    <span class='hs-varid'>show</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-str'>"Date "</span> <span class='hs-varop'>++</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixToFlatString</span> <span class='hs-layout'>(</span><span class='hs-varid'>dateToMix</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>
+<a class="number" name="line-35">35</a><span class='hs-comment'>-- ----------------------  Modified Julian Day</span>
+<a class="number" name="line-36">36</a>
+<a class="number" name="line-37">37</a><a name="Mjd"></a><span class='hs-comment'>-- | Type for the Modified Julian Day.</span>
+<a class="number" name="line-38">38</a><a name="Mjd"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Mjd</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>Day</span>
+<a class="number" name="line-39">39</a>
+<a class="number" name="line-40">40</a><a name="mjd"></a><span class='hs-comment'>-- | Create MJD.</span>
+<a class="number" name="line-41">41</a><span class='hs-definition'>mjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Integer</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mjd</span>
+<a class="number" name="line-42">42</a><span class='hs-definition'>mjd</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>ModifiedJulianDay</span>
 <a class="number" name="line-43">43</a>
-<a class="number" name="line-44">44</a><a name="MJDay"></a><span class='hs-comment'>-- | Type for the Modified Julian Day.</span>
-<a class="number" name="line-45">45</a><a name="MJDay"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>MJDay</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>Day</span>
-<a class="number" name="line-46">46</a>
-<a class="number" name="line-47">47</a><a name="Year"></a><span class='hs-comment'>-- | Year type.</span>
-<a class="number" name="line-48">48</a><a name="Year"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Integer</span>
-<a class="number" name="line-49">49</a>
-<a class="number" name="line-50">50</a><a name="Week"></a><span class='hs-comment'>-- | Week type.</span>
-<a class="number" name="line-51">51</a><a name="Week"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Week</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
-<a class="number" name="line-52">52</a>
-<a class="number" name="line-53">53</a><a name="Month"></a><span class='hs-comment'>-- | Month type.</span>
-<a class="number" name="line-54">54</a><a name="Month"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Month</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-44">44</a><a name="unMjd"></a><span class='hs-comment'>-- | Extract MJD integer value.</span>
+<a class="number" name="line-45">45</a><span class='hs-definition'>unMjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Mjd</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Integer</span>
+<a class="number" name="line-46">46</a><span class='hs-definition'>unMjd</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toModifiedJulianDay</span>
+<a class="number" name="line-47">47</a>
+<a class="number" name="line-48">48</a><a name="instance%20Num%20Tim.Day"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Num</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>Day</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-49">49</a>    <span class='hs-varid'>x</span> <span class='hs-varop'>+</span> <span class='hs-varid'>y</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span> <span class='hs-layout'>(</span><span class='hs-varid'>unMjd</span> <span class='hs-varid'>x</span> <span class='hs-varop'>+</span> <span class='hs-varid'>unMjd</span> <span class='hs-varid'>y</span><span class='hs-layout'>)</span>
+<a class="number" name="line-50">50</a>    <span class='hs-varid'>x</span> <span class='hs-comment'>-</span> <span class='hs-varid'>y</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span> <span class='hs-layout'>(</span><span class='hs-varid'>unMjd</span> <span class='hs-varid'>x</span> <span class='hs-comment'>-</span> <span class='hs-varid'>unMjd</span> <span class='hs-varid'>y</span><span class='hs-layout'>)</span>
+<a class="number" name="line-51">51</a>    <span class='hs-varid'>x</span> <span class='hs-varop'>*</span> <span class='hs-varid'>y</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span> <span class='hs-layout'>(</span><span class='hs-varid'>unMjd</span> <span class='hs-varid'>x</span> <span class='hs-varop'>*</span> <span class='hs-varid'>unMjd</span> <span class='hs-varid'>y</span><span class='hs-layout'>)</span>
+<a class="number" name="line-52">52</a>    <span class='hs-varid'>abs</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span> <span class='hs-varop'>.</span> <span class='hs-varid'>abs</span> <span class='hs-varop'>.</span> <span class='hs-varid'>unMjd</span>
+<a class="number" name="line-53">53</a>    <span class='hs-varid'>signum</span>       <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span> <span class='hs-varop'>.</span> <span class='hs-varid'>signum</span> <span class='hs-varop'>.</span> <span class='hs-varid'>unMjd</span>
+<a class="number" name="line-54">54</a>    <span class='hs-varid'>fromInteger</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mjd</span>
 <a class="number" name="line-55">55</a>
-<a class="number" name="line-56">56</a><a name="Day"></a><span class='hs-comment'>-- | Day type.</span>
-<a class="number" name="line-57">57</a><a name="Day"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-56">56</a>
+<a class="number" name="line-57">57</a><span class='hs-comment'>-- ----------------------  Type</span>
 <a class="number" name="line-58">58</a>
-<a class="number" name="line-59">59</a><a name="YmdTuple"></a><span class='hs-comment'>-- | Type for year, month, and day.</span>
-<a class="number" name="line-60">60</a><a name="YmdTuple"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>YmdTuple</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>Year</span><span class='hs-layout'>,</span> <span class='hs-conid'>Month</span><span class='hs-layout'>,</span> <span class='hs-conid'>Day</span><span class='hs-layout'>)</span>
-<a class="number" name="line-61">61</a>
-<a class="number" name="line-62">62</a>
-<a class="number" name="line-63">63</a><span class='hs-comment'>-- ----------------------  Write</span>
+<a class="number" name="line-59">59</a><a name="Date"></a><span class='hs-comment'>-- | Date.</span>
+<a class="number" name="line-60">60</a><a name="Date"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-61">61</a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-conid'>Mjd</span>    <span class='hs-comment'>-- ^ Date in /YYYY-MM-DD/</span>
+<a class="number" name="line-62">62</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Weekly</span>  <span class='hs-conid'>Mjd</span>    <span class='hs-comment'>-- ^ Date in /YYYY-#W-D/</span>
+<a class="number" name="line-63">63</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Yearly</span>  <span class='hs-conid'>Mjd</span>    <span class='hs-comment'>-- ^ Date in /YYYY-##D/</span>
 <a class="number" name="line-64">64</a>
-<a class="number" name="line-65">65</a><a name="instance%20B.MixEncode%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixEncode</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-66">66</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateToMix</span>
+<a class="number" name="line-65">65</a><a name="instance%20Eq%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Eq</span>  <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-66">66</a>    <span class='hs-varid'>a</span> <span class='hs-varop'>==</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateMjd</span> <span class='hs-varid'>a</span> <span class='hs-varop'>==</span> <span class='hs-varid'>dateMjd</span> <span class='hs-varid'>b</span>
 <a class="number" name="line-67">67</a>
-<a class="number" name="line-68">68</a><a name="dateToMix"></a><span class='hs-comment'>-- | Encode date.</span>
-<a class="number" name="line-69">69</a><span class='hs-definition'>dateToMix</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Date</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
-<a class="number" name="line-70">70</a><span class='hs-definition'>dateToMix</span> <span class='hs-varid'>date</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-71">71</a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>date</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-72">72</a>      <span class='hs-conid'>Monthly</span> <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateMonth</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toGregorian</span>    <span class='hs-varid'>d</span>
-<a class="number" name="line-73">73</a>      <span class='hs-conid'>Weekly</span>  <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateWeek</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toWeekDate</span>     <span class='hs-varid'>d</span>
-<a class="number" name="line-74">74</a>      <span class='hs-conid'>Yearly</span>  <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateYear</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toOrdinalDate</span>  <span class='hs-varid'>d</span>
-<a class="number" name="line-75">75</a>    <span class='hs-keyword'>where</span>
-<a class="number" name="line-76">76</a>      <span class='hs-varid'>dateMonth</span> <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>m</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hy`</span>    <span class='hs-varid'>mix02</span> <span class='hs-varid'>m</span>    <span class='hs-varop'>`hy`</span> <span class='hs-varid'>mix02</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-77">77</a>      <span class='hs-varid'>dateWeek</span>  <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>w</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hyw`</span>   <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>w</span> <span class='hs-varop'>`hy`</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-78">78</a>      <span class='hs-varid'>dateYear</span>  <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hyord`</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-68">68</a><a name="instance%20Ord%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Ord</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-69">69</a>    <span class='hs-varid'>a</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateMjd</span> <span class='hs-varid'>a</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>dateMjd</span> <span class='hs-varid'>b</span>
+<a class="number" name="line-70">70</a>
+<a class="number" name="line-71">71</a><a name="instance%20Show%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Show</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-72">72</a>    <span class='hs-varid'>show</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span> <span class='hs-str'>"Date "</span> <span class='hs-varop'>++</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixToFlatString</span> <span class='hs-layout'>(</span><span class='hs-varid'>dateToMix</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>
+<a class="number" name="line-73">73</a>
+<a class="number" name="line-74">74</a><a name="Ymd"></a><span class='hs-comment'>-- | Type for year, month, and day.</span>
+<a class="number" name="line-75">75</a><a name="Ymd"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Ymd</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>Year</span><span class='hs-layout'>,</span> <span class='hs-conid'>Month</span><span class='hs-layout'>,</span> <span class='hs-conid'>Day</span><span class='hs-layout'>)</span>
+<a class="number" name="line-76">76</a>
+<a class="number" name="line-77">77</a><a name="Year"></a><span class='hs-comment'>-- | Year type.</span>
+<a class="number" name="line-78">78</a><a name="Year"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Integer</span>
 <a class="number" name="line-79">79</a>
-<a class="number" name="line-80">80</a>      <span class='hs-varid'>hy</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-"</span>
-<a class="number" name="line-81">81</a>      <span class='hs-varid'>hyw</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-#"</span>
-<a class="number" name="line-82">82</a>      <span class='hs-varid'>hyord</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-##"</span>
-<a class="number" name="line-83">83</a>
-<a class="number" name="line-84">84</a><a name="mix02"></a><span class='hs-comment'>-- | Create mix text with two-width zeros.</span>
-<a class="number" name="line-85">85</a><span class='hs-definition'>mix02</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
-<a class="number" name="line-86">86</a><span class='hs-definition'>mix02</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDecZero</span> <span class='hs-num'>2</span>
-<a class="number" name="line-87">87</a>
+<a class="number" name="line-80">80</a><a name="Week"></a><span class='hs-comment'>-- | Week type.</span>
+<a class="number" name="line-81">81</a><a name="Week"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Week</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-82">82</a>
+<a class="number" name="line-83">83</a><a name="Month"></a><span class='hs-comment'>-- | Month type.</span>
+<a class="number" name="line-84">84</a><a name="Month"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Month</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-85">85</a>
+<a class="number" name="line-86">86</a><a name="Day"></a><span class='hs-comment'>-- | Day type.</span>
+<a class="number" name="line-87">87</a><a name="Day"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
 <a class="number" name="line-88">88</a>
-<a class="number" name="line-89">89</a><span class='hs-comment'>-- ----------------------  Construction</span>
-<a class="number" name="line-90">90</a>
-<a class="number" name="line-91">91</a><a name="dateFromYmdAb"></a><span class='hs-comment'>-- | Create date from year, month, and day.</span>
-<a class="number" name="line-92">92</a><span class='hs-definition'>dateFromYmdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Month</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-93">93</a><span class='hs-definition'>dateFromYmdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-94">94</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromGregorianValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-95">95</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-96">96</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-97">97</a>
-<a class="number" name="line-98">98</a><a name="dateFromYwdAb"></a><span class='hs-comment'>-- | Create date from year, week, and day.</span>
-<a class="number" name="line-99">99</a><span class='hs-definition'>dateFromYwdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Week</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-100">100</a><span class='hs-definition'>dateFromYwdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-101">101</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromWeekDateValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-102">102</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Weekly</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-103">103</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-104">104</a>
-<a class="number" name="line-105">105</a><a name="dateFromYdAb"></a><span class='hs-comment'>-- | Create date from year and day.</span>
-<a class="number" name="line-106">106</a><span class='hs-definition'>dateFromYdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-107">107</a><span class='hs-definition'>dateFromYdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-108">108</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromOrdinalDateValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-109">109</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Yearly</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-110">110</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-num'>0</span> <span class='hs-varid'>d</span>
-<a class="number" name="line-111">111</a>
-<a class="number" name="line-112">112</a><a name="dateFromMjd"></a><span class='hs-comment'>-- | Create date from the Modified Julian Day.</span>
-<a class="number" name="line-113">113</a><span class='hs-definition'>dateFromMjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Integer</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-114">114</a><span class='hs-definition'>dateFromMjd</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>ModifiedJulianDay</span>
-<a class="number" name="line-115">115</a>
-<a class="number" name="line-116">116</a>
-<a class="number" name="line-117">117</a><span class='hs-comment'>-- ----------------------  Form conversion</span>
+<a class="number" name="line-89">89</a>
+<a class="number" name="line-90">90</a><span class='hs-comment'>-- ----------------------  Write</span>
+<a class="number" name="line-91">91</a>
+<a class="number" name="line-92">92</a><a name="instance%20B.MixEncode%20Date"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixEncode</span> <span class='hs-conid'>Date</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-93">93</a>    <span class='hs-varid'>mixEncode</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateToMix</span>
+<a class="number" name="line-94">94</a>
+<a class="number" name="line-95">95</a><a name="dateToMix"></a><span class='hs-comment'>-- | Encode date.</span>
+<a class="number" name="line-96">96</a><span class='hs-definition'>dateToMix</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Date</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
+<a class="number" name="line-97">97</a><span class='hs-definition'>dateToMix</span> <span class='hs-varid'>date</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-98">98</a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>date</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-99">99</a>      <span class='hs-conid'>Monthly</span> <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateMonth</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toGregorian</span>    <span class='hs-varid'>d</span>
+<a class="number" name="line-100">100</a>      <span class='hs-conid'>Weekly</span>  <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateWeek</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toWeekDate</span>     <span class='hs-varid'>d</span>
+<a class="number" name="line-101">101</a>      <span class='hs-conid'>Yearly</span>  <span class='hs-varid'>d</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>dateYear</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>toOrdinalDate</span>  <span class='hs-varid'>d</span>
+<a class="number" name="line-102">102</a>    <span class='hs-keyword'>where</span>
+<a class="number" name="line-103">103</a>      <span class='hs-varid'>dateMonth</span> <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>m</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hy`</span>    <span class='hs-varid'>mix02</span> <span class='hs-varid'>m</span>    <span class='hs-varop'>`hy`</span> <span class='hs-varid'>mix02</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-104">104</a>      <span class='hs-varid'>dateWeek</span>  <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>w</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hyw`</span>   <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>w</span> <span class='hs-varop'>`hy`</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-105">105</a>      <span class='hs-varid'>dateYear</span>  <span class='hs-layout'>(</span><span class='hs-varid'>y</span><span class='hs-layout'>,</span> <span class='hs-varid'>d</span><span class='hs-layout'>)</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>y</span> <span class='hs-varop'>`hyord`</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDec</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-106">106</a>
+<a class="number" name="line-107">107</a>      <span class='hs-varid'>hy</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-"</span>
+<a class="number" name="line-108">108</a>      <span class='hs-varid'>hyw</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-#"</span>
+<a class="number" name="line-109">109</a>      <span class='hs-varid'>hyord</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixInfix</span> <span class='hs-str'>"-##"</span>
+<a class="number" name="line-110">110</a>
+<a class="number" name="line-111">111</a><a name="mix02"></a><span class='hs-comment'>-- | Create mix text with two-width zeros.</span>
+<a class="number" name="line-112">112</a><span class='hs-comment'>--</span>
+<a class="number" name="line-113">113</a><span class='hs-comment'>--   &gt;&gt;&gt; mix02 5</span>
+<a class="number" name="line-114">114</a><span class='hs-comment'>--   MixText "05"</span>
+<a class="number" name="line-115">115</a><span class='hs-comment'>--</span>
+<a class="number" name="line-116">116</a><span class='hs-definition'>mix02</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>MixText</span>
+<a class="number" name="line-117">117</a><span class='hs-definition'>mix02</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mixDecZero</span> <span class='hs-num'>2</span>
 <a class="number" name="line-118">118</a>
-<a class="number" name="line-119">119</a><a name="monthly"></a><span class='hs-comment'>-- | Convert into monthly date.</span>
-<a class="number" name="line-120">120</a><span class='hs-comment'>--</span>
-<a class="number" name="line-121">121</a><span class='hs-comment'>--   &gt;&gt;&gt; monthly $ dateFromMjd 55555</span>
-<a class="number" name="line-122">122</a><span class='hs-comment'>--   Date 2010-12-25</span>
+<a class="number" name="line-119">119</a>
+<a class="number" name="line-120">120</a><span class='hs-comment'>-- ----------------------  Construction</span>
+<a class="number" name="line-121">121</a>
+<a class="number" name="line-122">122</a><a name="dateFromMjd"></a><span class='hs-comment'>-- | Create date from the Modified Julian Day.</span>
 <a class="number" name="line-123">123</a><span class='hs-comment'>--</span>
-<a class="number" name="line-124">124</a><span class='hs-definition'>monthly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-125">125</a><span class='hs-definition'>monthly</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateDay</span>
-<a class="number" name="line-126">126</a>
-<a class="number" name="line-127">127</a><a name="weekly"></a><span class='hs-comment'>-- | Convert into weekly date.</span>
-<a class="number" name="line-128">128</a><span class='hs-comment'>--</span>
-<a class="number" name="line-129">129</a><span class='hs-comment'>--   &gt;&gt;&gt; weekly $ dateFromMjd 55555</span>
-<a class="number" name="line-130">130</a><span class='hs-comment'>--   Date 2010-#51-6</span>
+<a class="number" name="line-124">124</a><span class='hs-comment'>--   &gt;&gt;&gt; dateFromMjd 55555</span>
+<a class="number" name="line-125">125</a><span class='hs-comment'>--   Date 2010-12-25</span>
+<a class="number" name="line-126">126</a><span class='hs-comment'>--</span>
+<a class="number" name="line-127">127</a><span class='hs-definition'>dateFromMjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Integer</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-128">128</a><span class='hs-definition'>dateFromMjd</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-conid'>ModifiedJulianDay</span>
+<a class="number" name="line-129">129</a>
+<a class="number" name="line-130">130</a><a name="dateFromYmdAb"></a><span class='hs-comment'>-- | Create date from year, month, and day.</span>
 <a class="number" name="line-131">131</a><span class='hs-comment'>--</span>
-<a class="number" name="line-132">132</a><span class='hs-definition'>weekly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-133">133</a><span class='hs-definition'>weekly</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Weekly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateDay</span>
-<a class="number" name="line-134">134</a>
-<a class="number" name="line-135">135</a><a name="yearly"></a><span class='hs-comment'>-- | Convert into yearly date.</span>
-<a class="number" name="line-136">136</a><span class='hs-comment'>--</span>
-<a class="number" name="line-137">137</a><span class='hs-comment'>--   &gt;&gt;&gt; yearly $ dateFromMjd 55555</span>
-<a class="number" name="line-138">138</a><span class='hs-comment'>--   Date 2010-##359</span>
-<a class="number" name="line-139">139</a><span class='hs-comment'>--</span>
-<a class="number" name="line-140">140</a><span class='hs-definition'>yearly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-141">141</a><span class='hs-definition'>yearly</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Yearly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateDay</span>
-<a class="number" name="line-142">142</a>
+<a class="number" name="line-132">132</a><span class='hs-comment'>--   &gt;&gt;&gt; dateFromYmdAb 2013 4 18</span>
+<a class="number" name="line-133">133</a><span class='hs-comment'>--   Right Date 2013-04-18</span>
+<a class="number" name="line-134">134</a><span class='hs-comment'>--</span>
+<a class="number" name="line-135">135</a><span class='hs-comment'>--   &gt;&gt;&gt; dateFromYmdAb 2013 4 31</span>
+<a class="number" name="line-136">136</a><span class='hs-comment'>--   Left ...</span>
+<a class="number" name="line-137">137</a><span class='hs-comment'>--</span>
+<a class="number" name="line-138">138</a><span class='hs-definition'>dateFromYmdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Month</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-139">139</a><span class='hs-definition'>dateFromYmdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-140">140</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromGregorianValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-141">141</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-142">142</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-varid'>m</span> <span class='hs-varid'>d</span>
 <a class="number" name="line-143">143</a>
-<a class="number" name="line-144">144</a><span class='hs-comment'>-- ----------------------  Utility</span>
-<a class="number" name="line-145">145</a>
-<a class="number" name="line-146">146</a><a name="dateDay"></a><span class='hs-comment'>-- | Get the internal Modified Julian Day.</span>
-<a class="number" name="line-147">147</a><span class='hs-definition'>dateDay</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Date</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>MJDay</span>
-<a class="number" name="line-148">148</a><span class='hs-definition'>dateDay</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-149">149</a><span class='hs-definition'>dateDay</span> <span class='hs-layout'>(</span><span class='hs-conid'>Weekly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-150">150</a><span class='hs-definition'>dateDay</span> <span class='hs-layout'>(</span><span class='hs-conid'>Yearly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-151">151</a>
-<a class="number" name="line-152">152</a><a name="dateMapDay"></a><span class='hs-comment'>-- | Map the content of date.</span>
-<a class="number" name="line-153">153</a><span class='hs-definition'>dateMapDay</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>MJDay</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-154">154</a><span class='hs-definition'>dateMapDay</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-155">155</a><span class='hs-definition'>dateMapDay</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Weekly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Weekly</span>  <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
-<a class="number" name="line-156">156</a><span class='hs-definition'>dateMapDay</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Yearly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Yearly</span>  <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-144">144</a><a name="dateFromYwdAb"></a><span class='hs-comment'>-- | Create date from year, week, and day.</span>
+<a class="number" name="line-145">145</a><span class='hs-definition'>dateFromYwdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Week</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-146">146</a><span class='hs-definition'>dateFromYwdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-147">147</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromWeekDateValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-148">148</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Weekly</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-149">149</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-varid'>w</span> <span class='hs-varid'>d</span>
+<a class="number" name="line-150">150</a>
+<a class="number" name="line-151">151</a><a name="dateFromYdAb"></a><span class='hs-comment'>-- | Create date from year and day.</span>
+<a class="number" name="line-152">152</a><span class='hs-definition'>dateFromYdAb</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Year</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-153">153</a><span class='hs-definition'>dateFromYdAb</span> <span class='hs-varid'>y</span> <span class='hs-varid'>d</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-154">154</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>fromOrdinalDateValid</span> <span class='hs-varid'>y</span> <span class='hs-varid'>d</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-155">155</a>      <span class='hs-conid'>Just</span> <span class='hs-varid'>day</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Yearly</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-156">156</a>      <span class='hs-conid'>Nothing</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>notDate</span> <span class='hs-varid'>y</span> <span class='hs-num'>0</span> <span class='hs-varid'>d</span>
 <a class="number" name="line-157">157</a>
-<a class="number" name="line-158">158</a><a name="dateAdd"></a><span class='hs-comment'>-- | Add days.</span>
-<a class="number" name="line-159">159</a><span class='hs-comment'>--</span>
-<a class="number" name="line-160">160</a><span class='hs-comment'>--   &gt;&gt;&gt; dateAdd 7 $ dateFromMjd 55555</span>
-<a class="number" name="line-161">161</a><span class='hs-comment'>--   Date 2011-01-01</span>
+<a class="number" name="line-158">158</a>
+<a class="number" name="line-159">159</a><span class='hs-comment'>-- ----------------------  Form conversion</span>
+<a class="number" name="line-160">160</a>
+<a class="number" name="line-161">161</a><a name="monthly"></a><span class='hs-comment'>-- | Convert into monthly date.</span>
 <a class="number" name="line-162">162</a><span class='hs-comment'>--</span>
-<a class="number" name="line-163">163</a><span class='hs-definition'>dateAdd</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
-<a class="number" name="line-164">164</a><span class='hs-definition'>dateAdd</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateMapDay</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>addDays</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
+<a class="number" name="line-163">163</a><span class='hs-comment'>--   &gt;&gt;&gt; monthly $ dateFromMjd 55555</span>
+<a class="number" name="line-164">164</a><span class='hs-comment'>--   Date 2010-12-25</span>
+<a class="number" name="line-165">165</a><span class='hs-comment'>--</span>
+<a class="number" name="line-166">166</a><span class='hs-definition'>monthly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-167">167</a><span class='hs-definition'>monthly</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateMjd</span>
+<a class="number" name="line-168">168</a>
+<a class="number" name="line-169">169</a><a name="weekly"></a><span class='hs-comment'>-- | Convert into weekly date.</span>
+<a class="number" name="line-170">170</a><span class='hs-comment'>--</span>
+<a class="number" name="line-171">171</a><span class='hs-comment'>--   &gt;&gt;&gt; weekly $ dateFromMjd 55555</span>
+<a class="number" name="line-172">172</a><span class='hs-comment'>--   Date 2010-#51-6</span>
+<a class="number" name="line-173">173</a><span class='hs-comment'>--</span>
+<a class="number" name="line-174">174</a><span class='hs-definition'>weekly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-175">175</a><span class='hs-definition'>weekly</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Weekly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateMjd</span>
+<a class="number" name="line-176">176</a>
+<a class="number" name="line-177">177</a><a name="yearly"></a><span class='hs-comment'>-- | Convert into yearly date.</span>
+<a class="number" name="line-178">178</a><span class='hs-comment'>--</span>
+<a class="number" name="line-179">179</a><span class='hs-comment'>--   &gt;&gt;&gt; yearly $ dateFromMjd 55555</span>
+<a class="number" name="line-180">180</a><span class='hs-comment'>--   Date 2010-##359</span>
+<a class="number" name="line-181">181</a><span class='hs-comment'>--</span>
+<a class="number" name="line-182">182</a><span class='hs-definition'>yearly</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-183">183</a><span class='hs-definition'>yearly</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Yearly</span> <span class='hs-varop'>.</span> <span class='hs-varid'>dateMjd</span>
+<a class="number" name="line-184">184</a>
+<a class="number" name="line-185">185</a>
+<a class="number" name="line-186">186</a><span class='hs-comment'>-- ----------------------  Utility</span>
+<a class="number" name="line-187">187</a>
+<a class="number" name="line-188">188</a><a name="dateMjd"></a><span class='hs-comment'>-- | Get the internal Modified Julian Day.</span>
+<a class="number" name="line-189">189</a><span class='hs-definition'>dateMjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Date</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Mjd</span>
+<a class="number" name="line-190">190</a><span class='hs-definition'>dateMjd</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-191">191</a><span class='hs-definition'>dateMjd</span> <span class='hs-layout'>(</span><span class='hs-conid'>Weekly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-192">192</a><span class='hs-definition'>dateMjd</span> <span class='hs-layout'>(</span><span class='hs-conid'>Yearly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-193">193</a>
+<a class="number" name="line-194">194</a><a name="dateAltMjd"></a><span class='hs-comment'>-- | Alter the Modified Julian Day of date.</span>
+<a class="number" name="line-195">195</a><span class='hs-definition'>dateAltMjd</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Mjd</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-196">196</a><span class='hs-definition'>dateAltMjd</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monthly</span> <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Monthly</span> <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-197">197</a><span class='hs-definition'>dateAltMjd</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Weekly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Weekly</span>  <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-198">198</a><span class='hs-definition'>dateAltMjd</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Yearly</span>  <span class='hs-varid'>day</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Yearly</span>  <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varid'>day</span>
+<a class="number" name="line-199">199</a>
+<a class="number" name="line-200">200</a><a name="dateAdd"></a><span class='hs-comment'>-- | Add days.</span>
+<a class="number" name="line-201">201</a><span class='hs-comment'>--</span>
+<a class="number" name="line-202">202</a><span class='hs-comment'>--   &gt;&gt;&gt; dateAdd 7 $ dateFromMjd 55555</span>
+<a class="number" name="line-203">203</a><span class='hs-comment'>--   Date 2011-01-01</span>
+<a class="number" name="line-204">204</a><span class='hs-comment'>--</span>
+<a class="number" name="line-205">205</a><span class='hs-definition'>dateAdd</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Integral</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Date</span>
+<a class="number" name="line-206">206</a><span class='hs-definition'>dateAdd</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dateAltMjd</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Tim</span><span class='hs-varop'>.</span><span class='hs-varid'>addDays</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fromIntegral</span>
 </pre></body>
 </html>

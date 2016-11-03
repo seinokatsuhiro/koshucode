@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Partial-order scale.
@@ -31,6 +31,8 @@ poHeight :: (Ord a) => [(a, a)] -> PoScale a
 -- | Calculate partial-order depth.
 poDepth :: (Ord a) => [(a, a)] -> PoScale a
 
+
+-- | Message list.
 module Koshucode.Baala.Rop.Base.Message
 
 -- | Require <i>N</i> relmaps
@@ -42,6 +44,8 @@ noAttr :: String -> Ab a
 -- | Not implemented
 notImpl :: Ab a
 
+
+-- | Message list.
 module Koshucode.Baala.Rop.Flat.Message
 
 -- | check-term failed
@@ -85,6 +89,8 @@ reqUnaryFn :: Ab a
 
 -- | Unexpected term names
 unexpTermName :: Ab a
+
+-- | Unmatch shared terms.
 unmatchShare :: [TermName] -> [TermName] -> Ab a
 
 
@@ -425,11 +431,17 @@ consRename :: RopCons c
 -- | Create <tt>rename</tt> relmap.
 relmapRename :: Intmed c -> [TermName2] -> Relmap c
 
+
+-- | Type-specific operators.
 module Koshucode.Baala.Rop.Flat.Peripheral
 
 -- | Implementation of relational operators.
 ropsPeripheral :: (CContent c) => [Rop c]
+
+-- | <b>rdf P /S /O</b>
 consRdf :: RopCons c
+
+-- | <b>tie /P ... -to /N</b>
 consTie :: (CTie c) => RopCons c
 
 -- | Create <tt>tie</tt> relmap.
@@ -437,6 +449,8 @@ relmapTie :: (CTie c) => Intmed c -> ([TermName], TermName) -> Relmap c
 
 -- | Create <tt>tie</tt> relkit.
 relkitTie :: (CTie c) => ([TermName], TermName) -> RelkitFlow c
+
+-- | <b>untie /P -to /N ...</b>
 consUntie :: (CTie c) => RopCons c
 
 -- | Create <tt>untie</tt> relmap.
@@ -444,6 +458,8 @@ relmapUntie :: (CTie c) => Intmed c -> (TermName, [TermName]) -> Relmap c
 
 -- | Create <tt>untie</tt> relkit.
 relkitUntie :: (CTie c) => (TermName, [TermName]) -> RelkitFlow c
+
+-- | <b>term-name /N</b>
 consTermName :: (CTerm c) => RopCons c
 
 -- | Create <tt>term-name</tt> relmap.
@@ -452,11 +468,28 @@ relmapTermName :: (CTerm c) => Intmed c -> TermName -> Relmap c
 -- | Create <tt>term-name</tt> relkit.
 relkitTermName :: (CTerm c) => TermName -> RelkitFlow c
 
--- | Create <tt>today</tt> relmap.
-relmapToday :: (CTime c) => Intmed c -> (TermName, Time) -> Relmap c
+-- | <b>today /N</b>
+--   
+--   Get today's time at term /N.
+consToday :: (CTime c) => RopCons c
 
--- | Create <tt>today</tt> relkit.
-relkitToday :: (CTime c) => (TermName, Time) -> Maybe Head -> Ab (Relkit c)
+-- | <ul>
+--   <li><i>now /N</i> Get current local time without time zone at term
+--   /N.</li>
+--   <li><i>now /N -zoned</i> Get current local time with time zone at term
+--   /N.</li>
+--   <li><i>now /N -utc</i> Get current UTC.</li>
+--   </ul>
+consNow :: (CTime c) => RopCons c
+
+-- | Add single constant term to each tuples.
+consAdd1 :: Term c -> RopCons c
+
+-- | Create term-adding relmap.
+relmapAdd1 :: Term c -> Intmed c -> Relmap c
+
+-- | Create term-adding relkit.
+relkitAdd1 :: Term c -> Maybe Head -> Ab (Relkit c)
 
 module Koshucode.Baala.Rop.Flat.TermGadget
 

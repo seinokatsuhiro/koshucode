@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -67,7 +67,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Term-content calcutation.</p
+	  >Term-content calculation.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -75,16 +75,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:RunCox"
-	    >RunCox</a
-	    > c = <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c</li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:RunList"
@@ -95,19 +85,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:coxRunCox"
 	    >coxRunCox</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
 	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:RunCox"
-	    >RunCox</a
+	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:coxRunList"
 	    >coxRunList</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
@@ -121,7 +113,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:calcContent"
 	    >calcContent</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
@@ -197,20 +189,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RunCox" class="def"
-	    >RunCox</a
-	    > c = <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#RunCox');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
 	    > <a name="t:RunList" class="def"
 	    >RunList</a
 	    > c = [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
@@ -218,28 +196,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#RunList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tuple-to-content calculation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:coxRunCox" class="def"
 	    >coxRunCox</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
 	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
-	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:RunCox"
-	    >RunCox</a
+	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#coxRunCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate content expression with specific tuple.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:coxRunList" class="def"
 	    >coxRunList</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
@@ -252,12 +240,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#coxRunList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate content expression with specific tuple.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:calcContent" class="def"
 	    >calcContent</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Utility.html#t:CContent"
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
@@ -266,6 +258,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#calcContent');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate content expression.</p
+	    ></div
 	  ></div
 	><h1 id="g:1"
 	>Getting arguments</h1
@@ -282,6 +278,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getArg1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract single argument.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -298,6 +298,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getArg2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract two arguments.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -316,6 +320,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getArg3');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract three arguments.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -328,6 +336,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getRightArg1');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract single non-abortable argument.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -340,6 +352,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > (c, c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getRightArg2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract two non-abortable arguments.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -352,6 +368,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > (c, c, c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#getRightArg3');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract three non-abortable arguments.</p
+	    ></div
 	  ></div
 	></div
       ></div

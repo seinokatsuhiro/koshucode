@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -25,6 +25,8 @@ type GeoPoint = (Double, Double)
 convDegree :: Int -> GeoPoint -> GeoPoint
 convRadian :: Int -> GeoPoint -> GeoPoint
 
+
+-- | Message list.
 module Koshucode.Baala.Rop.Cox.Message
 
 module Koshucode.Baala.Rop.Cox.Get

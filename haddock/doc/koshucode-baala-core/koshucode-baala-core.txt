@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Result of relational calculation.
@@ -186,7 +186,11 @@ relTable :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> String
 relTableLines :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> [String]
 relText :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> RelText
 
+
+-- | Message list.
 module Koshucode.Baala.Core.Resource.Message
+
+-- | Abortable scope for clause.
 abClause :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Duplicate prefix
@@ -213,10 +217,20 @@ unkClause :: [String] -> Ab a
 -- | Unresolved prefix
 unresPrefix :: String -> Ab a
 
+
+-- | Message list.
 module Koshucode.Baala.Core.Relmap.Message
+
+-- | Abortable scope for option.
 abOption :: TTreesTo (Map (Ab b))
+
+-- | Abortable scope for relmap.
 abRelmap :: (CodePtr cp) => [cp] -> Map (Ab b)
+
+-- | Abortable scope for specialization.
 abSpecialize :: (CodePtr cp) => [cp] -> Map (Ab b)
+
+-- | Unknown nested relation reference.
 unkNestVar :: String -> [Token] -> [((Token, Local String), Head)] -> Ab a
 
 -- | Disabled feature: input clause
@@ -240,13 +254,21 @@ instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 
+
+-- | Message list.
 module Koshucode.Baala.Core.Relkit.Message
+
+-- | Abortable scope for running relkit.
 abRun :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Unknown nested relation
 unkNestRel :: Token -> String -> [String] -> Ab a
 
+
+-- | Message list.
 module Koshucode.Baala.Core.Lexmap.Message
+
+-- | Abortable scope for lexmap.
 abLexmap :: TTreesTo (Map (Ab b))
 
 -- | Ambiguous relmaps
@@ -293,14 +315,22 @@ type NName = (SecNo, String)
 -- | Pair which key is a numbered name.
 type NNamed a = (NName, a)
 
+
+-- | Message list.
 module Koshucode.Baala.Core.Assert.Message
+
+-- | Abortable scope for assertion.
 abAssert :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Unknown option
 unkOption :: ParaUnmatch String -> Ab a
 
+
+-- | Bundle of message modules.
 module Koshucode.Baala.Core.Message
 
+
+-- | Lexical relmap.
 module Koshucode.Baala.Core.Lexmap
 
 
@@ -369,32 +399,69 @@ instance GHC.Show.Show (Koshucode.Baala.Core.Relkit.Relkit.RelkitCore c)
 
 -- | Relkit constructors.
 module Koshucode.Baala.Core.Relkit.Construct
+
+-- | Construct relkit with output heading and relation-to-relation
+--   calculation.
 relkit :: Maybe Head -> RelkitCore c -> Relkit c
+
+-- | Relkit for identity relmap.
 relkitId :: Maybe Head -> Relkit c
+
+-- | Determinated relkit.
 relkitJust :: Head -> RelkitCore c -> Relkit c
+
+-- | Indeterminated relkit.
 relkitNothing :: Relkit c
+
+-- | Set relkit source.
 relkitSetSource :: (CodePtr a) => a -> Map (Relkit c)
+
+-- | Relkit for constant relmap.
 relkitConst :: Rel c -> Relkit c
+
+-- | Relkit for relmap which output empty relation.
 relkitConstEmpty :: [TermName] -> Relkit c
+
+-- | Relkit for relmap which outputs singleton relation.
 relkitConstSingleton :: [TermName] -> [c] -> Relkit c
+
+-- | Relkit for constant relmap.
 relkitConstBody :: [TermName] -> [[c]] -> Relkit c
+
+-- | Relkit for source relmap.
 relkitSource :: JudgeClass -> [TermName] -> Relkit c
+
+-- | Relkit for copy relmap.
 relkitCopy :: Token -> String -> Map (Relkit c)
+
+-- | Relkit for self-group relmap.
 relkitNest :: Token -> [(String, Int)] -> Map (Relkit c)
+
+-- | Relkit for local relation reference.
 relkitNestVar :: Token -> String -> Head -> Relkit c
-type Local a = Lexical [Named a]
-type Lexical a = (Token, a)
-localsLines :: [Local a] -> [String]
-a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
 instance GHC.Base.Monoid (Koshucode.Baala.Core.Relkit.Relkit.Relkit c)
 
 
 -- | Link and run relmaps.
 module Koshucode.Baala.Core.Relkit.Run
+
+-- | Resolve relmap reference.
 relkitLink :: (Ord c) => RelkitTable c -> Map (Relkit c)
+
+-- | Run relkit.
 relkitRun :: (Ord c, CRel c, SelectRel h) => h c -> [Local [[c]]] -> RelkitBody c -> AbMap [[c]]
+
+-- | Calculate fixed relation.
 fixedRelation :: (Ord c) => Map (AbMap [[c]])
+
+-- | Change term order.
 bmapAlign :: Head -> Head -> Map (AbMap [[c]])
+
+-- | <i>Warning: This is only used in defined module.</i>
+type Local a = Lexical [Named a]
+
+-- | <i>Warning: This is only used in defined module.</i>
+type Lexical a = (Token, a)
 
 
 -- | Relation-to-relation mapping.
@@ -599,20 +666,44 @@ Global :: String -> Version -> OpSet' h c -> Feature -> String -> [String] -> [H
 
 -- | Usually, data resource is used as hook
 [globalHook] :: Global' h c -> h c
+
+-- | Textual representation of version number.
 globalVersionText :: Global' h c -> String
+
+-- | Command line text, i.e., program name and arguments.
 globalCommandLine :: Global' h c -> [String]
+
+-- | Make complete global parameter by filling auto-generated part.
 globalFill :: (CContent c) => Map (Global' h c)
+
+-- | List of relmap operators.
 globalRops :: Global' h c -> [Rop' h c]
+
+-- | Add relmap operators.
 globalRopsAdd :: [Rop' h c] -> Map (Global' h c)
+
+-- | List of content operators.
 globalCops :: Global' h c -> [Cop c]
+
+-- | Set of content operators.
 globalCopset :: Global' h c -> CopSet c
+
+-- | List of settings of infix operators.
 globalInfix :: Global' h c -> [Named InfixHeight]
+
+-- | Abort with command line.
 globalAbort :: Global' h c -> AbortReason -> IO a
 
 -- | Empty global parameters.
 global' :: (Show c, CBool c, CText c) => h c -> Global' h c
+
+-- | Type which has global parameter.
 class GetGlobal h
+
+-- | Get global parameter.
 getGlobal :: GetGlobal h => h c -> Global' h c
+
+-- | Get global parameter from relmap intermediate data.
 ropGlobal :: (GetGlobal h) => Intmed' h c -> Global' h c
 
 -- | Get operator set from <tt>Intmed</tt>.
@@ -624,6 +715,8 @@ OpSet :: [Rop' h c] -> FindRop' h c -> CopSet c -> OpSet' h c
 [opsetRopList] :: OpSet' h c -> [Rop' h c]
 [opsetFindRop] :: OpSet' h c -> FindRop' h c
 [opsetCop] :: OpSet' h c -> CopSet c
+
+-- | Make complete operator set by filling auto-generated part.
 opsetFill :: Map (OpSet' h c)
 
 -- | Enable or disable featrues.
@@ -898,22 +991,46 @@ resQueueTodo :: InputPoint -> Map (Resource c)
 
 -- | Add input to done-part of input queue.
 resQueueDone :: NIOPoint -> Map (Resource c)
+
+-- | Assertion of relation.
 type Assert c = Assert' Resource c
+
+-- | Relmap construction.
 type ConsRelmap c = ConsRelmap' Resource c
+
+-- | Global parameter.
 type Global c = Global' Resource c
+
+-- | Make relkit with data resource.
 type RelkitHook c = RelkitHook' Resource c
+
+-- | Generic relmap.
 type Relmap c = Relmap' Resource c
+
+-- | Lexmap-to-relmap table.
 type RelmapLinkTable c = RelmapLinkTable' Resource c
+
+-- | Relmap operator.
 type Rop c = Rop' Resource c
+
+-- | Constructor of relmap operator.
 type RopCons c = RopCons' Resource c
+
+-- | Intermediate relmap.
 type Intmed c = Intmed' Resource c
+
+-- | Assertion with short signs.
 type ShortAssert c = ShortAssert' Resource c
+
+-- | Assertion list with short signs.
 type ShortAsserts c = ShortAsserts' Resource c
+
+-- | Default global parameter.
 global :: (CContent c) => Global c
 instance GHC.Show.Show (Koshucode.Baala.Core.Resource.Resource.Resource c)
 instance Koshucode.Baala.Data.Type.Rel.Rel.SelectRel Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Core.Relmap.Global.GetGlobal Koshucode.Baala.Core.Resource.Resource.Resource
-instance Koshucode.Baala.Data.Content.Utility.CContent c => Data.Default.Class.Default (Koshucode.Baala.Core.Resource.Resource.Resource c)
+instance Koshucode.Baala.Data.Class.Content.CContent c => Data.Default.Class.Default (Koshucode.Baala.Core.Resource.Resource.Resource c)
 
 
 -- | Concrete content type.
@@ -991,4 +1108,6 @@ relmapCons :: (GetGlobal h) => h c -> (ConsLexmap, ConsRelmap' h c)
 --   <a>Resource</a> is bundle of calculation stuff.
 module Koshucode.Baala.Core.Resource
 
+
+-- | Bundle of core modules.
 module Koshucode.Baala.Core

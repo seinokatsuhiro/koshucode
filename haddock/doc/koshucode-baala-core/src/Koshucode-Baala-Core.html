@@ -9,88 +9,90 @@
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a class="number" name="line-2">2</a>
-<a class="number" name="line-3">3</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>
-<a class="number" name="line-4">4</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Modules</span>
-<a class="number" name="line-5">5</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span><span class='hs-layout'>,</span>
-<a class="number" name="line-6">6</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Lexmap</span><span class='hs-layout'>,</span>
-<a class="number" name="line-7">7</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span><span class='hs-layout'>,</span>
-<a class="number" name="line-8">8</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>  
-<a class="number" name="line-11">11</a>    <span class='hs-comment'>-- * Dependencies</span>
-<a class="number" name="line-12">12</a>    <span class='hs-comment'>-- $ModuleDependency</span>
-<a class="number" name="line-13">13</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-14">14</a>
-<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span>
-<a class="number" name="line-16">16</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Lexmap</span>
-<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span>
-<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>
-<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span>
-<a class="number" name="line-20">20</a>
-<a class="number" name="line-21">21</a>
-<a class="number" name="line-22">22</a><span class='hs-comment'>-- ----------------------</span>
-<a class="number" name="line-23">23</a><span class='hs-comment'>-- $ModuleDependency</span>
-<a class="number" name="line-24">24</a><span class='hs-comment'>--</span>
-<a class="number" name="line-25">25</a><span class='hs-comment'>-- * @[Core]@ module is a union of</span>
-<a class="number" name="line-26">26</a><span class='hs-comment'>--   @Resource@,</span>
-<a class="number" name="line-27">27</a><span class='hs-comment'>--   @Assert@,</span>
-<a class="number" name="line-28">28</a><span class='hs-comment'>--   @Relmap@, and</span>
-<a class="number" name="line-29">29</a><span class='hs-comment'>--   @Content@ modules.</span>
-<a class="number" name="line-30">30</a><span class='hs-comment'>--</span>
-<a class="number" name="line-31">31</a><span class='hs-comment'>-- * @Resource@ module uses</span>
-<a class="number" name="line-32">32</a><span class='hs-comment'>--   @Assert@,</span>
-<a class="number" name="line-33">33</a><span class='hs-comment'>--   @Relmap@,</span>
-<a class="number" name="line-34">34</a><span class='hs-comment'>--   @Content@, and</span>
-<a class="number" name="line-35">35</a><span class='hs-comment'>--   @[Base]@ modules.</span>
-<a class="number" name="line-36">36</a><span class='hs-comment'>--</span>
-<a class="number" name="line-37">37</a><span class='hs-comment'>-- * @Assert@ module uses</span>
-<a class="number" name="line-38">38</a><span class='hs-comment'>--   @Relmap@,</span>
-<a class="number" name="line-39">39</a><span class='hs-comment'>--   @Content@, and</span>
-<a class="number" name="line-40">40</a><span class='hs-comment'>--   @[Base]@ modules.</span>
-<a class="number" name="line-41">41</a><span class='hs-comment'>--</span>
-<a class="number" name="line-42">42</a><span class='hs-comment'>-- * @Relmap@ module uses</span>
-<a class="number" name="line-43">43</a><span class='hs-comment'>--   @Content@, and</span>
-<a class="number" name="line-44">44</a><span class='hs-comment'>--   @[Base]@ modules.</span>
-<a class="number" name="line-45">45</a><span class='hs-comment'>--</span>
-<a class="number" name="line-46">46</a><span class='hs-comment'>-- * @Content@ module uses</span>
-<a class="number" name="line-47">47</a><span class='hs-comment'>--   @Data@, and</span>
-<a class="number" name="line-48">48</a><span class='hs-comment'>--   @[Base]@ modules.</span>
-<a class="number" name="line-49">49</a><span class='hs-comment'>--</span>
-<a class="number" name="line-50">50</a><span class='hs-comment'>-- * @[Base]@ module is a union of</span>
-<a class="number" name="line-51">51</a><span class='hs-comment'>--   @Data@,</span>
-<a class="number" name="line-52">52</a><span class='hs-comment'>--   @Abort@,</span>
-<a class="number" name="line-53">53</a><span class='hs-comment'>--   @Syntax@, and</span>
-<a class="number" name="line-54">54</a><span class='hs-comment'>--   @Prelude@ modules.</span>
-<a class="number" name="line-55">55</a><span class='hs-comment'>--</span>
-<a class="number" name="line-56">56</a><span class='hs-comment'>-- * @Abort@ module uses</span>
-<a class="number" name="line-57">57</a><span class='hs-comment'>--   @Syntax@ and</span>
-<a class="number" name="line-58">58</a><span class='hs-comment'>--   @Prelude@ modules.</span>
-<a class="number" name="line-59">59</a><span class='hs-comment'>--</span>
-<a class="number" name="line-60">60</a><span class='hs-comment'>-- * @Syntax@ module uses</span>
-<a class="number" name="line-61">61</a><span class='hs-comment'>--   @Prelude@ module.</span>
-<a class="number" name="line-62">62</a><span class='hs-comment'>--</span>
-<a class="number" name="line-63">63</a><span class='hs-comment'>-- * @Data@ module uses</span>
-<a class="number" name="line-64">64</a><span class='hs-comment'>--   @Prelude@ module.</span>
-<a class="number" name="line-65">65</a><span class='hs-comment'>--</span>
-<a class="number" name="line-66">66</a><span class='hs-comment'>-- * @Prelude@ module uses</span>
-<a class="number" name="line-67">67</a><span class='hs-comment'>--   no modules in Koshucode.</span>
-<a class="number" name="line-68">68</a><span class='hs-comment'>--</span>
-<a class="number" name="line-69">69</a><span class='hs-comment'>-- Following picture shows reduced dependencies.</span>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Bundle of core modules.</span>
+<a class="number" name="line-4">4</a>
+<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Modules</span>
+<a class="number" name="line-7">7</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span><span class='hs-layout'>,</span>
+<a class="number" name="line-8">8</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Lexmap</span><span class='hs-layout'>,</span>
+<a class="number" name="line-9">9</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>    <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span><span class='hs-layout'>,</span>
+<a class="number" name="line-12">12</a>  
+<a class="number" name="line-13">13</a>    <span class='hs-comment'>-- * Dependencies</span>
+<a class="number" name="line-14">14</a>    <span class='hs-comment'>-- $ModuleDependency</span>
+<a class="number" name="line-15">15</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-16">16</a>
+<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span>
+<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Lexmap</span>
+<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span>
+<a class="number" name="line-20">20</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>
+<a class="number" name="line-21">21</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span>
+<a class="number" name="line-22">22</a>
+<a class="number" name="line-23">23</a>
+<a class="number" name="line-24">24</a><span class='hs-comment'>-- ----------------------</span>
+<a class="number" name="line-25">25</a><span class='hs-comment'>-- $ModuleDependency</span>
+<a class="number" name="line-26">26</a><span class='hs-comment'>--</span>
+<a class="number" name="line-27">27</a><span class='hs-comment'>-- * @[Core]@ module is a union of</span>
+<a class="number" name="line-28">28</a><span class='hs-comment'>--   @Resource@,</span>
+<a class="number" name="line-29">29</a><span class='hs-comment'>--   @Assert@,</span>
+<a class="number" name="line-30">30</a><span class='hs-comment'>--   @Relmap@, and</span>
+<a class="number" name="line-31">31</a><span class='hs-comment'>--   @Content@ modules.</span>
+<a class="number" name="line-32">32</a><span class='hs-comment'>--</span>
+<a class="number" name="line-33">33</a><span class='hs-comment'>-- * @Resource@ module uses</span>
+<a class="number" name="line-34">34</a><span class='hs-comment'>--   @Assert@,</span>
+<a class="number" name="line-35">35</a><span class='hs-comment'>--   @Relmap@,</span>
+<a class="number" name="line-36">36</a><span class='hs-comment'>--   @Content@, and</span>
+<a class="number" name="line-37">37</a><span class='hs-comment'>--   @[Base]@ modules.</span>
+<a class="number" name="line-38">38</a><span class='hs-comment'>--</span>
+<a class="number" name="line-39">39</a><span class='hs-comment'>-- * @Assert@ module uses</span>
+<a class="number" name="line-40">40</a><span class='hs-comment'>--   @Relmap@,</span>
+<a class="number" name="line-41">41</a><span class='hs-comment'>--   @Content@, and</span>
+<a class="number" name="line-42">42</a><span class='hs-comment'>--   @[Base]@ modules.</span>
+<a class="number" name="line-43">43</a><span class='hs-comment'>--</span>
+<a class="number" name="line-44">44</a><span class='hs-comment'>-- * @Relmap@ module uses</span>
+<a class="number" name="line-45">45</a><span class='hs-comment'>--   @Content@, and</span>
+<a class="number" name="line-46">46</a><span class='hs-comment'>--   @[Base]@ modules.</span>
+<a class="number" name="line-47">47</a><span class='hs-comment'>--</span>
+<a class="number" name="line-48">48</a><span class='hs-comment'>-- * @Content@ module uses</span>
+<a class="number" name="line-49">49</a><span class='hs-comment'>--   @Data@, and</span>
+<a class="number" name="line-50">50</a><span class='hs-comment'>--   @[Base]@ modules.</span>
+<a class="number" name="line-51">51</a><span class='hs-comment'>--</span>
+<a class="number" name="line-52">52</a><span class='hs-comment'>-- * @[Base]@ module is a union of</span>
+<a class="number" name="line-53">53</a><span class='hs-comment'>--   @Data@,</span>
+<a class="number" name="line-54">54</a><span class='hs-comment'>--   @Abort@,</span>
+<a class="number" name="line-55">55</a><span class='hs-comment'>--   @Syntax@, and</span>
+<a class="number" name="line-56">56</a><span class='hs-comment'>--   @Prelude@ modules.</span>
+<a class="number" name="line-57">57</a><span class='hs-comment'>--</span>
+<a class="number" name="line-58">58</a><span class='hs-comment'>-- * @Abort@ module uses</span>
+<a class="number" name="line-59">59</a><span class='hs-comment'>--   @Syntax@ and</span>
+<a class="number" name="line-60">60</a><span class='hs-comment'>--   @Prelude@ modules.</span>
+<a class="number" name="line-61">61</a><span class='hs-comment'>--</span>
+<a class="number" name="line-62">62</a><span class='hs-comment'>-- * @Syntax@ module uses</span>
+<a class="number" name="line-63">63</a><span class='hs-comment'>--   @Prelude@ module.</span>
+<a class="number" name="line-64">64</a><span class='hs-comment'>--</span>
+<a class="number" name="line-65">65</a><span class='hs-comment'>-- * @Data@ module uses</span>
+<a class="number" name="line-66">66</a><span class='hs-comment'>--   @Prelude@ module.</span>
+<a class="number" name="line-67">67</a><span class='hs-comment'>--</span>
+<a class="number" name="line-68">68</a><span class='hs-comment'>-- * @Prelude@ module uses</span>
+<a class="number" name="line-69">69</a><span class='hs-comment'>--   no modules in Koshucode.</span>
 <a class="number" name="line-70">70</a><span class='hs-comment'>--</span>
-<a class="number" name="line-71">71</a><span class='hs-comment'>-- @</span>
-<a class="number" name="line-72">72</a><span class='hs-comment'>--      [Core]             [Base]</span>
-<a class="number" name="line-73">73</a><span class='hs-comment'>--        |                /    \\</span>
-<a class="number" name="line-74">74</a><span class='hs-comment'>--     Resource           /     Abort</span>
-<a class="number" name="line-75">75</a><span class='hs-comment'>--        |              /        |</span>
-<a class="number" name="line-76">76</a><span class='hs-comment'>--      Assert          Data    Token</span>
-<a class="number" name="line-77">77</a><span class='hs-comment'>--        |              \\        |</span>
-<a class="number" name="line-78">78</a><span class='hs-comment'>--      Relmap            \\     Syntax</span>
-<a class="number" name="line-79">79</a><span class='hs-comment'>--        |                \\     /</span>
-<a class="number" name="line-80">80</a><span class='hs-comment'>--      Content             Prelude</span>
-<a class="number" name="line-81">81</a><span class='hs-comment'>--        |</span>
-<a class="number" name="line-82">82</a><span class='hs-comment'>--      [Base]</span>
-<a class="number" name="line-83">83</a><span class='hs-comment'>-- @</span>
-<a class="number" name="line-84">84</a><span class='hs-comment'>--</span>
-<a class="number" name="line-85">85</a>
+<a class="number" name="line-71">71</a><span class='hs-comment'>-- Following picture shows reduced dependencies.</span>
+<a class="number" name="line-72">72</a><span class='hs-comment'>--</span>
+<a class="number" name="line-73">73</a><span class='hs-comment'>-- @</span>
+<a class="number" name="line-74">74</a><span class='hs-comment'>--      [Core]             [Base]</span>
+<a class="number" name="line-75">75</a><span class='hs-comment'>--        |                /    \\</span>
+<a class="number" name="line-76">76</a><span class='hs-comment'>--     Resource           /     Abort</span>
+<a class="number" name="line-77">77</a><span class='hs-comment'>--        |              /        |</span>
+<a class="number" name="line-78">78</a><span class='hs-comment'>--      Assert          Data    Token</span>
+<a class="number" name="line-79">79</a><span class='hs-comment'>--        |              \\        |</span>
+<a class="number" name="line-80">80</a><span class='hs-comment'>--      Relmap            \\     Syntax</span>
+<a class="number" name="line-81">81</a><span class='hs-comment'>--        |                \\     /</span>
+<a class="number" name="line-82">82</a><span class='hs-comment'>--      Content             Prelude</span>
+<a class="number" name="line-83">83</a><span class='hs-comment'>--        |</span>
+<a class="number" name="line-84">84</a><span class='hs-comment'>--      [Base]</span>
+<a class="number" name="line-85">85</a><span class='hs-comment'>-- @</span>
+<a class="number" name="line-86">86</a><span class='hs-comment'>--</span>
+<a class="number" name="line-87">87</a>
 </pre></body>
 </html>

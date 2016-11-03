@@ -141,8 +141,9 @@
 <a class="number" name="line-132">132</a><span class='hs-definition'>printHelp</span> <span class='hs-varid'>text</span> <span class='hs-varid'>opts</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>putStr</span> <span class='hs-varop'>$</span> <span class='hs-varid'>helpMessage</span> <span class='hs-varid'>text</span> <span class='hs-varid'>opts</span>
 <a class="number" name="line-133">133</a>                         <span class='hs-varid'>putStrLn</span> <span class='hs-str'>""</span>
 <a class="number" name="line-134">134</a>
-<a class="number" name="line-135">135</a><a name="helpMessage"></a><span class='hs-definition'>helpMessage</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SimpleOptions</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-136">136</a><span class='hs-definition'>helpMessage</span> <span class='hs-varid'>text</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Opt</span><span class='hs-varop'>.</span><span class='hs-varid'>usageInfo</span> <span class='hs-layout'>(</span><span class='hs-varid'>unlines</span> <span class='hs-varid'>text</span> <span class='hs-varop'>++</span> <span class='hs-str'>"OPTION"</span><span class='hs-layout'>)</span>
-<a class="number" name="line-137">137</a>
+<a class="number" name="line-135">135</a><a name="helpMessage"></a><span class='hs-comment'>-- | Create help message.</span>
+<a class="number" name="line-136">136</a><span class='hs-definition'>helpMessage</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>SimpleOptions</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-137">137</a><span class='hs-definition'>helpMessage</span> <span class='hs-varid'>text</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Opt</span><span class='hs-varop'>.</span><span class='hs-varid'>usageInfo</span> <span class='hs-layout'>(</span><span class='hs-varid'>unlines</span> <span class='hs-varid'>text</span> <span class='hs-varop'>++</span> <span class='hs-str'>"OPTION"</span><span class='hs-layout'>)</span>
+<a class="number" name="line-138">138</a>
 </pre></body>
 </html>

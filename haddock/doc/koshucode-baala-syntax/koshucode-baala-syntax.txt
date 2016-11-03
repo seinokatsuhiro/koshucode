@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Term types and related functions.
@@ -512,7 +512,11 @@ instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 
+
+-- | Message list.
 module Koshucode.Baala.Syntax.Token.Message
+
+-- | Abortable scope for token.
 abToken :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Forbidden input
@@ -524,6 +528,8 @@ unexpSect :: [String] -> Ab a
 -- | Unknown bracket text
 unkAngleText :: String -> Ab a
 
+
+-- | Message list.
 module Koshucode.Baala.Syntax.Symbol.Message
 
 -- | Expect ordinary symbol
@@ -1240,10 +1246,20 @@ module Koshucode.Baala.Syntax.TTree.Pattern
 
 module Koshucode.Baala.Syntax.Para
 
+
+-- | Message list.
 module Koshucode.Baala.Syntax.Attr.Message
+
+-- | Abortable scope for attribute.
 abAttr :: (CodePtr cp) => [cp] -> Map (Ab b)
+
+-- | Abortable scope for attribute.
 abAttrTrees :: TTreesTo (Map (Ab b))
+
+-- | Abortable scope for slot.
 abSlot :: (CodePtr cp) => [cp] -> Map (Ab b)
+
+-- | Abortable scope for slot.
 abSlotTree :: TTreeTo (Map (Ab b))
 
 -- | Same as <tt>abortable</tt> except for using <a>TTree</a> instead of
@@ -1278,6 +1294,8 @@ unexpAttr :: String -> Ab a
 -- | Unmatch any patterns
 unexpAttrMulti :: [ParaUnmatch String] -> Ab a
 
+
+-- | Bundle of message modules.
 module Koshucode.Baala.Syntax.Message
 
 

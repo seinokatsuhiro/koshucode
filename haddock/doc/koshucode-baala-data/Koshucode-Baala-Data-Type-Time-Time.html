@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -99,8 +99,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		>Date</a
 		> <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
 		>Clock</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
-		>Sec</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+		>Zone</a
 		></li
 	      ><li
 	      >| <a href="#v:TimeYmdc"
@@ -119,24 +119,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><li
 	      >| <a href="#v:TimeYw"
 		>TimeYw</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		>MJDay</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		>Mjd</a
 		></li
 	      ><li
 	      >| <a href="#v:TimeYm"
 		>TimeYm</a
-		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		>MJDay</a
+		> <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		>Mjd</a
 		></li
 	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Zone"
+	    >Zone</a
+	    > = <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+	    >Sec</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:timeMjd"
 	    >timeMjd</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeYmdTuple"
+	    >timeYmdTuple</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Ymd"
+	    >Ymd</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:timePrecision"
@@ -147,26 +163,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:timeYmdTuple"
-	    >timeYmdTuple</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
-	    >Time</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:YmdTuple"
-	    >YmdTuple</a
-	    ></li
-	  ><li class="src short"
 	  ><a href="#v:timeYmd"
 	    >timeYmd</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:timeYmdc"
 	    >timeYmdc</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -175,8 +183,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><li class="src short"
 	  ><a href="#v:timeFromMjd"
 	    >timeFromMjd</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
@@ -213,8 +221,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Clock</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
-	    >Sec</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+	    >Zone</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -235,22 +243,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><li class="src short"
 	  ><a href="#v:timeFromYmdTuple"
 	    >timeFromYmdTuple</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:YmdTuple"
-	    >YmdTuple</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Ymd"
+	    >Ymd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:today"
-	    >today</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
-	    >Time</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:now"
-	    >now</a
+	  ><a href="#v:nowUtc"
+	    >nowUtc</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -265,24 +265,60 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Time</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:timeOmitClock"
-	    >timeOmitClock</a
+	  ><a href="#v:now"
+	    >now</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:today"
+	    >today</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeCutClock"
+	    >timeCutClock</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:timeOmitZone"
-	    >timeOmitZone</a
+	  ><a href="#v:timeAltZone"
+	    >timeAltZone</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+	    >Zone</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeCutZone"
+	    >timeCutZone</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:timeMapDate"
-	    >timeMapDate</a
+	  ><a href="#v:timeLocalize"
+	    >timeLocalize</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeAltDate"
+	    >timeAltDate</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
@@ -293,12 +329,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Time</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:timeMapMjd"
-	    >timeMapMjd</a
+	  ><a href="#v:timeAltDays"
+	    >timeAltDays</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -311,6 +347,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >ZonedTime</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:timeDaysSec"
+	    >timeDaysSec</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DaysSec"
+	    >DaysSec</a
 	    ></li
 	  ></ul
 	></div
@@ -342,8 +386,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		  >Date</a
 		  > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
 		  >Clock</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
-		  >Sec</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+		  >Zone</a
 		  ></td
 		><td class="doc"
 		><p
@@ -380,8 +424,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><td class="src"
 		><a name="v:TimeYw" class="def"
 		  >TimeYw</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		  >MJDay</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		  >Mjd</a
 		  ></td
 		><td class="doc"
 		><p
@@ -392,8 +436,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	      ><td class="src"
 		><a name="v:TimeYm" class="def"
 		  >TimeYm</a
-		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-		  >MJDay</a
+		  > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+		  >Mjd</a
 		  ></td
 		><td class="doc"
 		><p
@@ -415,7 +459,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 		      >Time</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-46');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -429,7 +473,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 		      >Time</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-46');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -443,7 +487,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 		      >Time</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-74');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-90');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -452,12 +496,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Text-MixEncode.html#t:MixEncode"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
 		      >MixEncode</a
 		      > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 		      >Time</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-77');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#line-93');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -469,18 +513,70 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Zone" class="def"
+	    >Zone</a
+	    > = <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
+	    >Sec</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#Zone');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Time zone as offset from UTC.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:timeMjd" class="def"
 	    >timeMjd</a
 	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMjd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Get integer content of the Modified Julian Day of time.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeMjd $ timeFromMjd 55555
+</code
+		></strong
+	      >55555
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeYmdTuple" class="def"
+	    >timeYmdTuple</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Ymd"
+	    >Ymd</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeYmdTuple');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert time to year/month/day tuple.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeYmdTuple $ timeFromMjd 55555
+</code
+		></strong
+	      >(2010,12,25)
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -499,26 +595,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Get the name of time precision.</p
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:timeYmdTuple" class="def"
-	    >timeYmdTuple</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
-	    >Time</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:YmdTuple"
-	    >YmdTuple</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeYmdTuple');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
 	><h1 id="g:2"
 	>Construction</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:timeYmd" class="def"
 	    >timeYmd</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeYmd');" href="javascript:void(0);" class="link"
@@ -533,8 +617,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:timeYmdc" class="def"
 	    >timeYmdc</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:MJDay"
-	    >MJDay</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Mjd"
+	    >Mjd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Clock"
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -551,8 +635,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:timeFromMjd" class="def"
 	    >timeFromMjd</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromMjd');" href="javascript:void(0);" class="link"
@@ -623,8 +707,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Clock</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Sec"
-	    >Sec</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+	    >Zone</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
@@ -657,8 +741,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:timeFromYmdTuple" class="def"
 	    >timeFromYmdTuple</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:YmdTuple"
-	    >YmdTuple</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Ymd"
+	    >Ymd</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromYmdTuple');" href="javascript:void(0);" class="link"
@@ -667,6 +751,84 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></div
 	><h1 id="g:3"
 	>Construction with I/O</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nowUtc" class="def"
+	    >nowUtc</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#nowUtc');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get UTC.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nowUtc
+</code
+		></strong
+	      >2013-04-18 08:37:36 UTC
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nowZoned" class="def"
+	    >nowZoned</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#nowZoned');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get current time with time zone.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nowZoned
+</code
+		></strong
+	      >2013-04-18 17:37:36 +09:00
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:now" class="def"
+	    >now</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#now');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get current local time without time zone.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>now
+</code
+		></strong
+	      >2013-04-18 17:37:36
+</pre
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:today" class="def"
@@ -693,96 +855,81 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 </pre
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:now" class="def"
-	    >now</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
-	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#now');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Get current time without time zone.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>now
-</code
-		></strong
-	      >2013-04-18 08:37:36
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:nowZoned" class="def"
-	    >nowZoned</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
-	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#nowZoned');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Get current time with time zone.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>nowZoned
-</code
-		></strong
-	      >2013-04-18 08:37:36 +09:00
-</pre
-	    ></div
-	  ></div
 	><h1 id="g:4"
 	>Conversion</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:timeOmitClock" class="def"
-	    >timeOmitClock</a
+	  ><a name="v:timeCutClock" class="def"
+	    >timeCutClock</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeOmitClock');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeCutClock');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Omit clock part.</p
+	    >Cut clock part.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:timeOmitZone" class="def"
-	    >timeOmitZone</a
+	  ><a name="v:timeAltZone" class="def"
+	    >timeAltZone</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Zone"
+	    >Zone</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAltZone');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Alter time zone part.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeCutZone" class="def"
+	    >timeCutZone</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeOmitZone');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeCutZone');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Omit timezone.</p
+	    >Cut timezone.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:timeMapDate" class="def"
-	    >timeMapDate</a
+	  ><a name="v:timeLocalize" class="def"
+	    >timeLocalize</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeLocalize');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cut timezone and convert to local time,
+   i.e., addition of UTC and time zone.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeAltDate" class="def"
+	    >timeAltDate</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Date.html#t:Date"
@@ -791,32 +938,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMapDate');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAltDate');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Map day part of time.</p
+	    >Alter day part.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:timeMapMjd" class="def"
-	    >timeMapMjd</a
+	  ><a name="v:timeAltDays" class="def"
+	    >timeAltDays</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
-	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DayCount"
-	    >DayCount</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:Days"
+	    >Days</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeMapMjd');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeAltDays');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Map integer content of the Modified Julian Day.</p
+	    >Alter integer content of the Modified Julian Day.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -833,6 +980,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Convert local time to Koshu time content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:timeDaysSec" class="def"
+	    >timeDaysSec</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Time-Clock.html#t:DaysSec"
+	    >DaysSec</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeDaysSec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Days and seconds of time.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeDaysSec $ timeFromMjd 55555
+</code
+		></strong
+	      >(55555,0)
+</pre
 	    ></div
 	  ></div
 	></div

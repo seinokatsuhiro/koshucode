@@ -8,325 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.164.0.0
-
-
--- | Line break setting for mix text.
-module Koshucode.Baala.Base.Text.LineBreak
-
--- | Line break setting.
-data LineBreak
-LineBreak :: Maybe Int -> String -> String -> String -> LineBreak
-
--- | Max width of line.
-[breakWidth] :: LineBreak -> Maybe Int
-
--- | Newline string.
-[breakNewline] :: LineBreak -> String
-
--- | Newline string for breaking long line.
-[breakContinue] :: LineBreak -> String
-
--- | Indent string for breaking long line.
-[breakIndent] :: LineBreak -> String
-
--- | LF: <tt>"\n"</tt>
-lfString :: String
-
--- | CRLF: <tt>"\r\n"</tt>
-crlfString :: String
-
--- | Line break by single space.
-noBreak :: LineBreak
-
--- | Line break by LF.
-lfBreak :: LineBreak
-
--- | Line break by CRLF.
-crlfBreak :: LineBreak
-
--- | Line break by LF with 2 spaces indent and given-length column.
-lf2 :: Int -> LineBreak
-
--- | Line break by LF with 4 spaces indent and given-length column.
-lf4 :: Int -> LineBreak
-
--- | Line break by LF with 8 spaces indent and given-length column.
-lf8 :: Int -> LineBreak
-
--- | Line break by CRLF with 2 spaces indent and given-length column.
-crlf2 :: Int -> LineBreak
-
--- | Line break by CRLF with 4 spaces indent and given-length column.
-crlf4 :: Int -> LineBreak
-
--- | Line break by CRLF with 8 spaces indent and given-length column.
-crlf8 :: Int -> LineBreak
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance GHC.Show.Show Koshucode.Baala.Base.Text.LineBreak.LineBreak
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.LineBreak.LineBreak
-
-
--- | Mix text.
-module Koshucode.Baala.Base.Text.MixText
-
--- | Text mixable string, text, and bytestring.
-data MixText
-
--- | Create mix text from strict bytestring.
-mixBs :: ByteString -> MixText
-
--- | Create mix text from lazy bytestring.
-mixBz :: ByteString -> MixText
-
--- | Create mix text from strict text.
-mixTx :: Text -> MixText
-
--- | Create mix text from lazy text.
-mixTz :: Text -> MixText
-
--- | Create mix text from string.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
---   MixText "abcdef"
---   </pre>
-mixString :: String -> MixText
-
--- | Create mix text from char.
-mixChar :: Char -> MixText
-
--- | Put mix text to left edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
---   MixText "abc......."
---   </pre>
-mixLeft :: Char -> Int -> MixText -> MixText
-
--- | Put mix text to right edge in given-length char sequence.
---   
---   <pre>
---   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
---   MixText ".......abc"
---   </pre>
-mixRight :: Char -> Int -> MixText -> MixText
-
--- | Create mix text of given-length spaces.
---   
---   <pre>
---   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
---   MixText "|    |"
---   </pre>
-mixSpace :: Int -> MixText
-
--- | Infix mix space.
-mixSep :: MixText -> MixText -> MixText
-mixSep2 :: MixText -> MixText -> MixText
-
--- | Empty space.
-mix0 :: MixText
-
--- | One space.
-mix1 :: MixText
-
--- | Two-length spaces.
-mix2 :: MixText
-
--- | Three-length spaces.
-mix3 :: MixText
-
--- | Four-length spaces.
-mix4 :: MixText
-
--- | Mix text of octal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixOct (12 :: Int)
---   MixText "14"
---   </pre>
-mixOct :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDec (12 :: Int)
---   MixText "12"
---   </pre>
-mixDec :: (Integral n, Show n) => n -> MixText
-
--- | Mix text of hexadecimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixHex (12 :: Int)
---   MixText "c"
---   </pre>
-mixHex :: (Integral n, Show n) => n -> MixText
-mixSign :: (Num n, Ord n) => n -> MixText
-
--- | Zero-padding decimal number.
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (123 :: Int)
---   MixText "000123"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixDecZero 6 (-123 :: Int)
---   MixText "-00123"
---   </pre>
-mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
-mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
-
--- | Append line break.
-mixLine :: MixText -> MixText
-
--- | Append line break to each mix texts.
-mixLines :: [MixText] -> MixText
-
--- | Soft line break, i.e., suppress at the beginning of line.
-mixSoft :: MixText
-
--- | Hard line break, i.e., suppress only after auto line break.
-mixHard :: MixText
-
--- | Mix text with local line break setting.
-mixBreak :: LineBreak -> MixText -> MixText
-
--- | Block of multiple mix texts.
-mixBlock :: [MixText] -> MixText
-
--- | Map function to mix texts directly in mix block.
---   
---   <pre>
---   &gt;&gt;&gt; let m1 = mixBlock [mixString "cd", mixString "ef" &lt;&gt; mixBlock [mixString "g"]]
---   
---   &gt;&gt;&gt; let m2 = mixBlock [mixString "ab", m1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; m2
---   MixText "abcdegh"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixBlockMap mixLine m2
---   MixText "ab\r\ncd\r\nefg\r\n"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; mixBlockMap (\x -&gt; mixString "[" &lt;&gt; x &lt;&gt; mixString "]") m2
---   MixText "[ab][cd][efg]"
---   </pre>
-mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
-mixShow :: (Show a) => a -> MixText
-
--- | Empty mix text.
---   
---   <pre>
---   &gt;&gt;&gt; mixEmpty
---   MixText ""
---   </pre>
-mixEmpty :: MixText
-
--- | Convert mix text to lazy bytestring builder.
-mixToBuilder :: LineBreak -> MixText -> Builder
-
--- | Convert mix text to lazy bytestring.
-mixToBz :: LineBreak -> MixText -> ByteString
-
--- | Convert mix text to string.
-mixToString :: LineBreak -> MixText -> String
-
--- | Convert mix text to string without line breaks.
-mixToFlatString :: MixText -> String
-
--- | Print mix text to the standard output.
-putMix :: LineBreak -> MixText -> IO ()
-
--- | Print mix text and newline to the standard output.
-putMixLn :: LineBreak -> MixText -> IO ()
-
--- | Print mix text to the given output handler.
-hPutMix :: LineBreak -> Handle -> MixText -> IO ()
-
--- | Print mix text and newline to the given output handler.
-hPutMixLn :: LineBreak -> Handle -> MixText -> IO ()
-
--- | Print mix text lines to the standard output.
-putMixLines :: LineBreak -> [MixText] -> IO ()
-
--- | Print mix text lines to the given output handler.
-hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
-
--- | Write mix text to a file.
-writeMix :: LineBreak -> FilePath -> MixText -> IO ()
-instance GHC.Show.Show Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.MixText.MixText
-instance Data.Default.Class.Default Koshucode.Baala.Base.Text.MixText.MixText
-instance GHC.Base.Monoid Koshucode.Baala.Base.Text.MixText.MixText
-
-
--- | Class for constructing mix text.
-module Koshucode.Baala.Base.Text.MixClass
-
--- | Construct mix text.
-class Mix a
-mix :: Mix a => a -> MixText
-
--- | Enclose mix text with open and close bracket.
-mixBracket :: (Mix m) => m -> m -> MixText -> MixText
-
--- | Enclose mix text with bracket and space.
-mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
-
--- | Concatenate mix texts with delimiter.
-mixJoin :: (Mix m) => m -> [MixText] -> MixText
-
--- | Concatenate mix texts with delimiter and space.
-mixJoinS :: (Mix m) => m -> [MixText] -> MixText
-
--- | Join with one space.
-mixJoin1 :: [MixText] -> MixText
-
--- | Join with vertical bar.
-mixJoinBar :: [MixText] -> MixText
-mixInfix :: (Mix m) => m -> MixText -> MixText -> MixText
-instance Koshucode.Baala.Base.Text.MixClass.Mix Koshucode.Baala.Base.Text.MixText.MixText
-instance Koshucode.Baala.Base.Text.MixClass.Mix ()
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.ByteString.Lazy.Internal.ByteString
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Text
-instance Koshucode.Baala.Base.Text.MixClass.Mix Data.Text.Internal.Lazy.Text
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Base.String
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Char
-instance Koshucode.Baala.Base.Text.MixClass.Mix GHC.Types.Int
-instance Koshucode.Baala.Base.Text.MixClass.Mix [Koshucode.Baala.Base.Text.MixText.MixText]
-instance Koshucode.Baala.Base.Text.MixClass.Mix (GHC.Base.Maybe Koshucode.Baala.Base.Text.MixText.MixText)
-
-
--- | Encode using mix text.
-module Koshucode.Baala.Base.Text.MixEncode
-
--- | Encode via mix text.
-class MixEncode a
-mixEncode :: MixEncode a => a -> MixText
-
--- | Encode with shortener.
-class MixShortEncode a
-mixShortEncode :: MixShortEncode a => Shorten -> a -> MixText
-
--- | <a>mixShortEncode</a> with no shortener.
-mixIdEncode :: (MixShortEncode a) => a -> MixText
-
--- | Convert string to short sign.
-type Shorten = String -> Maybe String
-
--- | Shorten which does not shorten strings.
-noShorten :: Shorten
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode GHC.Types.Bool
+@version 0.166.0.0
 
 module Koshucode.Baala.Base.Text.Comment
 
@@ -926,6 +608,402 @@ quotRemZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
 divModZero :: (Integral a) => (a, a) -> a -> a -> (a, a)
 
 
+-- | Line break setting for mix text.
+module Koshucode.Baala.Base.MixText.LineBreak
+
+-- | Line break setting.
+data LineBreak
+LineBreak :: Maybe Int -> String -> String -> String -> LineBreak
+
+-- | Max width of line.
+[breakWidth] :: LineBreak -> Maybe Int
+
+-- | Newline string.
+[breakNewline] :: LineBreak -> String
+
+-- | Newline string for breaking long line.
+[breakContinue] :: LineBreak -> String
+
+-- | Indent string for breaking long line.
+[breakIndent] :: LineBreak -> String
+
+-- | LF: <tt>"\n"</tt>
+lfString :: String
+
+-- | CRLF: <tt>"\r\n"</tt>
+crlfString :: String
+
+-- | Line break by single space.
+noBreak :: LineBreak
+
+-- | Line break by LF.
+lfBreak :: LineBreak
+
+-- | Line break by CRLF.
+crlfBreak :: LineBreak
+
+-- | Line break by LF with 2 spaces indent and given-length column.
+lf2 :: Int -> LineBreak
+
+-- | Line break by LF with 4 spaces indent and given-length column.
+lf4 :: Int -> LineBreak
+
+-- | Line break by LF with 8 spaces indent and given-length column.
+lf8 :: Int -> LineBreak
+
+-- | Line break by CRLF with 2 spaces indent and given-length column.
+crlf2 :: Int -> LineBreak
+
+-- | Line break by CRLF with 4 spaces indent and given-length column.
+crlf4 :: Int -> LineBreak
+
+-- | Line break by CRLF with 8 spaces indent and given-length column.
+crlf8 :: Int -> LineBreak
+instance GHC.Classes.Ord Koshucode.Baala.Base.MixText.LineBreak.LineBreak
+instance GHC.Classes.Eq Koshucode.Baala.Base.MixText.LineBreak.LineBreak
+instance GHC.Show.Show Koshucode.Baala.Base.MixText.LineBreak.LineBreak
+instance Data.Default.Class.Default Koshucode.Baala.Base.MixText.LineBreak.LineBreak
+
+
+-- | Mix text.
+module Koshucode.Baala.Base.MixText.MixText
+
+-- | Text mixable string, text, and bytestring.
+data MixText
+
+-- | Create mix text from strict bytestring.
+mixBs :: ByteString -> MixText
+
+-- | Create mix text from lazy bytestring.
+mixBz :: ByteString -> MixText
+
+-- | Create mix text from strict text.
+mixTx :: Text -> MixText
+
+-- | Create mix text from lazy text.
+mixTz :: Text -> MixText
+
+-- | Create mix text from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "abc" &lt;&gt; mixString "def"
+--   MixText "abcdef"
+--   </pre>
+mixString :: String -> MixText
+
+-- | Create mix text from char.
+mixChar :: Char -> MixText
+
+-- | Put mix text to left edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixLeft '.' 10 $ mixString "abc"
+--   MixText "abc......."
+--   </pre>
+mixLeft :: Char -> Int -> MixText -> MixText
+
+-- | Put mix text to right edge in given-length char sequence.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixRight '.' 10 $ mixString "abc"
+--   MixText ".......abc"
+--   </pre>
+mixRight :: Char -> Int -> MixText -> MixText
+
+-- | Create mix text of given-length spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "|" &lt;&gt; mixSpace 4 &lt;&gt; mixString "|"
+--   MixText "|    |"
+--   </pre>
+mixSpace :: Int -> MixText
+
+-- | Infix mix space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "a" `mixSep` mixString "b"
+--   MixText "a b"
+--   </pre>
+mixSep :: MixText -> MixText -> MixText
+
+-- | Infix mix space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixString "a" `mixSep2` mixString "b"
+--   MixText "a  b"
+--   </pre>
+mixSep2 :: MixText -> MixText -> MixText
+
+-- | Empty space.
+mix0 :: MixText
+
+-- | One space.
+mix1 :: MixText
+
+-- | Two-length spaces.
+mix2 :: MixText
+
+-- | Three-length spaces.
+mix3 :: MixText
+
+-- | Four-length spaces.
+mix4 :: MixText
+
+-- | Mix text of octal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixOct (12 :: Int)
+--   MixText "14"
+--   </pre>
+mixOct :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDec (12 :: Int)
+--   MixText "12"
+--   </pre>
+mixDec :: (Integral n, Show n) => n -> MixText
+
+-- | Mix text of hexadecimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixHex (12 :: Int)
+--   MixText "c"
+--   </pre>
+mixHex :: (Integral n, Show n) => n -> MixText
+
+-- | Sign of number or space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixSign $ O.int 3
+--   MixText "+"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixSign $ O.int (-3)
+--   MixText "-"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixSign $ O.int 0
+--   MixText " "
+--   </pre>
+mixSign :: (Num n, Ord n) => n -> MixText
+
+-- | Zero-padding decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 $ O.int 123
+--   MixText "000123"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixDecZero 6 $ O.int (-123)
+--   MixText "-00123"
+--   </pre>
+mixDecZero :: (Integral n, Show n) => Int -> n -> MixText
+
+-- | Generalized version of <a>mixDecZero</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixNumZero mixHex 6 $ O.int 123
+--   MixText "00007b"
+--   </pre>
+mixNumZero :: (Integral n, Show n) => (n -> MixText) -> Int -> n -> MixText
+
+-- | Append line break.
+mixLine :: MixText -> MixText
+
+-- | Append line break to each mix texts.
+mixLines :: [MixText] -> MixText
+
+-- | Soft line break, i.e., suppress at the beginning of line.
+mixSoft :: MixText
+
+-- | Hard line break, i.e., suppress only after auto line break.
+mixHard :: MixText
+
+-- | Mix text with local line break setting.
+mixBreak :: LineBreak -> MixText -> MixText
+
+-- | Block of multiple mix texts.
+mixBlock :: [MixText] -> MixText
+
+-- | Map function to mix texts directly in mix block.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let m1 = mixBlock [mixString "cd", mixString "ef" &lt;&gt; mixBlock [mixString "g"]]
+--   
+--   &gt;&gt;&gt; let m2 = mixBlock [mixString "ab", m1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2
+--   MixText "abcdegh"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBlockMap mixLine m2
+--   MixText "ab\r\ncd\r\nefg\r\n"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBlockMap (\x -&gt; mixString "[" &lt;&gt; x &lt;&gt; mixString "]") m2
+--   MixText "[ab][cd][efg]"
+--   </pre>
+mixBlockMap :: (MixText -> MixText) -> MixText -> MixText
+
+-- | Showed mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixShow (Just 'a')
+--   MixText "Just 'a'"
+--   </pre>
+mixShow :: (Show a) => a -> MixText
+
+-- | Empty mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixEmpty
+--   MixText ""
+--   </pre>
+mixEmpty :: MixText
+
+-- | Convert mix text to lazy bytestring builder.
+mixToBuilder :: LineBreak -> MixText -> Builder
+
+-- | Convert mix text to lazy bytestring.
+mixToBz :: LineBreak -> MixText -> ByteString
+
+-- | Convert mix text to string.
+mixToString :: LineBreak -> MixText -> String
+
+-- | Convert mix text to string without line breaks.
+mixToFlatString :: MixText -> String
+
+-- | Print mix text to the standard output.
+putMix :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text and newline to the standard output.
+putMixLn :: LineBreak -> MixText -> IO ()
+
+-- | Print mix text to the given output handler.
+hPutMix :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text and newline to the given output handler.
+hPutMixLn :: LineBreak -> Handle -> MixText -> IO ()
+
+-- | Print mix text lines to the standard output.
+putMixLines :: LineBreak -> [MixText] -> IO ()
+
+-- | Print mix text lines to the given output handler.
+hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
+
+-- | Write mix text to a file.
+writeMix :: LineBreak -> FilePath -> MixText -> IO ()
+instance GHC.Show.Show Koshucode.Baala.Base.MixText.MixText.MixText
+instance GHC.Classes.Eq Koshucode.Baala.Base.MixText.MixText.MixText
+instance GHC.Classes.Ord Koshucode.Baala.Base.MixText.MixText.MixText
+instance Data.Default.Class.Default Koshucode.Baala.Base.MixText.MixText.MixText
+instance GHC.Base.Monoid Koshucode.Baala.Base.MixText.MixText.MixText
+
+
+-- | Class for constructing mix text.
+module Koshucode.Baala.Base.MixText.MixClass
+
+-- | Construct mix text.
+class Mix a
+mix :: Mix a => a -> MixText
+
+-- | Enclose mix text with open and close bracket.
+mixBracket :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Enclose mix text with bracket and space.
+mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
+
+-- | Concatenate mix texts with delimiter.
+mixJoin :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Concatenate mix texts with delimiter and space.
+mixJoinS :: (Mix m) => m -> [MixText] -> MixText
+
+-- | Join with one space.
+mixJoin1 :: [MixText] -> MixText
+
+-- | Join with vertical bar.
+mixJoinBar :: [MixText] -> MixText
+
+-- | Insert infix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixInfix "-" (mix "12") (mix "34")
+--   MixText "12-34"
+--   </pre>
+mixInfix :: (Mix m) => m -> MixText -> MixText -> MixText
+instance Koshucode.Baala.Base.MixText.MixClass.Mix Koshucode.Baala.Base.MixText.MixText.MixText
+instance Koshucode.Baala.Base.MixText.MixClass.Mix ()
+instance Koshucode.Baala.Base.MixText.MixClass.Mix Data.ByteString.Internal.ByteString
+instance Koshucode.Baala.Base.MixText.MixClass.Mix Data.ByteString.Lazy.Internal.ByteString
+instance Koshucode.Baala.Base.MixText.MixClass.Mix Data.Text.Internal.Text
+instance Koshucode.Baala.Base.MixText.MixClass.Mix Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Base.MixText.MixClass.Mix GHC.Base.String
+instance Koshucode.Baala.Base.MixText.MixClass.Mix GHC.Types.Char
+instance Koshucode.Baala.Base.MixText.MixClass.Mix GHC.Types.Int
+instance Koshucode.Baala.Base.MixText.MixClass.Mix [Koshucode.Baala.Base.MixText.MixText.MixText]
+instance Koshucode.Baala.Base.MixText.MixClass.Mix (GHC.Base.Maybe Koshucode.Baala.Base.MixText.MixText.MixText)
+
+
+-- | Derived mix text.
+module Koshucode.Baala.Base.MixText.Deriv
+
+-- | Mix text tab character.
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.mixString "a" `mixTab` B.mixString "b"
+--   MixText "a\tb"
+--   </pre>
+mixTab :: MixText
+
+-- | Concatenate terms of content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixTerms B.mix2 [("a", "foo"), ("b", "bar")]
+--   MixText "/a foo  /b bar"
+--   </pre>
+mixTerms :: (Mix sep, Mix c) => sep -> [(String, c)] -> MixText
+
+-- | Create judgement using mix text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixJudge B.mix2 "AB" [("a", "foo"), ("b", "bar")]
+--   MixText "|-- AB  /a foo  /b bar"
+--   </pre>
+mixJudge :: (Mix sep, Mix cl, Mix c) => sep -> cl -> [(String, c)] -> MixText
+
+
+-- | Encode using mix text.
+module Koshucode.Baala.Base.MixText.MixEncode
+
+-- | Encode via mix text.
+class MixEncode a
+mixEncode :: MixEncode a => a -> MixText
+
+-- | Encode with shortener.
+class MixShortEncode a
+mixShortEncode :: MixShortEncode a => Shorten -> a -> MixText
+
+-- | <a>mixShortEncode</a> with no shortener.
+mixIdEncode :: (MixShortEncode a) => a -> MixText
+
+-- | Convert string to short sign.
+type Shorten = String -> Maybe String
+
+-- | Shorten which does not shorten strings.
+noShorten :: Shorten
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode GHC.Types.Bool
+
+
 -- | Simple functions for parsing command-line options. This module is
 --   based on <a>System.Console.GetOpt</a>.
 module Koshucode.Baala.Base.IO.SimpleOption
@@ -970,6 +1048,8 @@ version :: SimpleOptionDescr
 
 -- | Print help message.
 printHelp :: [String] -> SimpleOptions -> IO ()
+
+-- | Create help message.
 helpMessage :: [String] -> SimpleOptions -> String
 
 -- | Provides one possible concrete representation for <a>Version</a>. For
@@ -1615,6 +1695,10 @@ uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
 -- | Text message of HTTP exception.
 httpExceptionSummary :: HttpException -> String
 
+
+-- | Mix text.
+module Koshucode.Baala.Base.MixText
+
 module Koshucode.Baala.Base.List
 
 
@@ -1855,6 +1939,9 @@ type Ab a = Either AbortReason a
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
 
+-- | Abortable-to-abortable mapping.
+type MapAb a = Ab a -> Ab a
+
 -- | Abortable many map.
 type AbManyMap a = a -> Ab [a]
 
@@ -2051,19 +2138,25 @@ instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Sca
 -- | Abort symbols
 module Koshucode.Baala.Base.Abort
 
+
+-- | Message list.
 module Koshucode.Baala.Base.Abort.Message
 
--- | AD-LIB: reason
+-- | AD-LIB: <i>reason</i>
 adlib :: String -> Ab a
 
--- | BUG: reason
+-- | BUG: <i>reason</i>
 bug :: String -> Ab a
 
--- | Unsupported feature
+-- | Unsupported feature.
 unsupported :: String -> Ab a
 
+
+-- | Message list.
 module Koshucode.Baala.Base.Syntax.Message
-abCode :: (CodePtr cp) => [cp] -> Map (Ab b)
+
+-- | Abortable scope for code.
+abCode :: (CodePtr cp) => [cp] -> MapAb b
 
 -- | Extra close bracket
 extraCloseBracket :: Ab a
@@ -2071,6 +2164,8 @@ extraCloseBracket :: Ab a
 -- | Unclosed open bracket
 extraOpenBracket :: Ab a
 
+
+-- | Bundle of message modules.
 module Koshucode.Baala.Base.Message
 
 
@@ -2202,4 +2297,6 @@ type InfixMapper p a = InfixAbMap a [InfixTree p a] -> InfixAbMap a (InfixTree p
 -- | Syntactic functions.
 module Koshucode.Baala.Base.Syntax
 
+
+-- | Bundle of base modules.
 module Koshucode.Baala.Base

@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Unicode general categories.
@@ -190,6 +190,11 @@ module Koshucode.Baala.Overture.Type
 type Eith a = Either a a
 
 -- | Extract <a>Eith</a> content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; uneith &lt;$&gt; [Left "L", Right "R"]
+--   ["L", "R"]
+--   </pre>
 uneith :: Eith a -> a
 
 -- | Map from something to same type.
@@ -203,6 +208,36 @@ type Test a = a -> Bool
 
 -- | Boolean-valued function with 2 arguments.
 type Test2 a b = a -> b -> Bool
+
+-- | <a>Int</a> shorthand.
+--   
+--   <pre>
+--   &gt;&gt;&gt; int 12
+--   12
+--   </pre>
+--   
+--   This is same as:
+--   
+--   <pre>
+--   &gt;&gt;&gt; 12 :: Int
+--   12
+--   </pre>
+int :: Map Int
+
+-- | <a>Integer</a> shorthand.
+--   
+--   <pre>
+--   &gt;&gt;&gt; integer 12
+--   12
+--   </pre>
+--   
+--   This is same as:
+--   
+--   <pre>
+--   &gt;&gt;&gt; 12 :: Integer
+--   12
+--   </pre>
+integer :: Map Integer
 
 
 -- | String utility.

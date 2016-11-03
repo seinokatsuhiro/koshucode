@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -67,10 +67,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li
 	  ><a href="#g:3"
 	    >Relation reference</a
-	    ></li
-	  ><li
-	  ><a href="#g:4"
-	    >Local</a
 	    ></li
 	  ></ul
 	></div
@@ -214,42 +210,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
 	    > c</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Local"
-	    >Local</a
-	    > a = <a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Lexical"
-	    >Lexical</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > a]</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Lexical"
-	    >Lexical</a
-	    > a = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >, a)</li
-	  ><li class="src short"
-	  ><a href="#v:localsLines"
-	    >localsLines</a
-	    > :: [<a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Local"
-	    >Local</a
-	    > a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:a2lookup"
-	    >a2lookup</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > b) =&gt; a -&gt; b -&gt; [(a, [(b, c)])] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -270,6 +230,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkit');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct relkit with output heading
+   and relation-to-relation calculation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -284,6 +249,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitId');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for identity relmap.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -298,6 +267,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitJust');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Determinated relkit.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -308,6 +281,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitNothing');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Indeterminated relkit.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -322,6 +299,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitSetSource');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set relkit source.</p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Source of relation</h1
@@ -336,6 +317,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConst');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for constant relmap.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -348,6 +333,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConstEmpty');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for relmap which output empty relation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -360,6 +349,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConstSingleton');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for relmap which outputs singleton relation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -372,6 +365,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConstBody');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for constant relmap.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -386,6 +383,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitSource');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for source relmap.</p
+	    ></div
 	  ></div
 	><h1 id="g:3"
 	>Relation reference</h1
@@ -404,6 +405,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitCopy');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for copy relmap.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -422,6 +427,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitNest');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for self-group relmap.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -438,60 +447,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitNestVar');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><h1 id="g:4"
-	>Local</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Local" class="def"
-	    >Local</a
-	    > a = <a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Lexical"
-	    >Lexical</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > a] <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#Local');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Lexical" class="def"
-	    >Lexical</a
-	    > a = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >, a) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#Lexical');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:localsLines" class="def"
-	    >localsLines</a
-	    > :: [<a href="Koshucode-Baala-Core-Relkit-Construct.html#t:Local"
-	    >Local</a
-	    > a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#localsLines');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:a2lookup" class="def"
-	    >a2lookup</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a, <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > b) =&gt; a -&gt; b -&gt; [(a, [(b, c)])] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#a2lookup');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit for local relation reference.</p
+	    ></div
 	  ></div
 	></div
       ></div

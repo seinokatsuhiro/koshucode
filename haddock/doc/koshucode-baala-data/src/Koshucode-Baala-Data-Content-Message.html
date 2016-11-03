@@ -9,83 +9,84 @@
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a class="number" name="line-2">2</a>
-<a class="number" name="line-3">3</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Content</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>
-<a class="number" name="line-4">4</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Abortable</span>
-<a class="number" name="line-5">5</a>    <span class='hs-varid'>abLiteral</span><span class='hs-layout'>,</span>
-<a class="number" name="line-6">6</a>    <span class='hs-comment'>-- * Message</span>
-<a class="number" name="line-7">7</a>    <span class='hs-varid'>nothing</span><span class='hs-layout'>,</span>
-<a class="number" name="line-8">8</a>    <span class='hs-varid'>oddRelation</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-varid'>quoteType</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>    <span class='hs-varid'>reqFlatName</span><span class='hs-layout'>,</span>
-<a class="number" name="line-11">11</a>    <span class='hs-varid'>reqRelTuple</span><span class='hs-layout'>,</span>
-<a class="number" name="line-12">12</a>    <span class='hs-varid'>reqTermName</span><span class='hs-layout'>,</span>
-<a class="number" name="line-13">13</a>    <span class='hs-varid'>unkBracket</span><span class='hs-layout'>,</span>
-<a class="number" name="line-14">14</a>    <span class='hs-varid'>unkType</span><span class='hs-layout'>,</span>
-<a class="number" name="line-15">15</a>    <span class='hs-varid'>unkWord</span><span class='hs-layout'>,</span>
-<a class="number" name="line-16">16</a>    <span class='hs-varid'>unmatchType</span><span class='hs-layout'>,</span>
-<a class="number" name="line-17">17</a>    <span class='hs-comment'>-- * Utility</span>
-<a class="number" name="line-18">18</a>    <span class='hs-varid'>expectActual</span><span class='hs-layout'>,</span>
-<a class="number" name="line-19">19</a>    <span class='hs-varid'>expect2Actual</span><span class='hs-layout'>,</span>
-<a class="number" name="line-20">20</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-21">21</a>
-<a class="number" name="line-22">22</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>        <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
-<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
-<a class="number" name="line-26">26</a>
-<a class="number" name="line-27">27</a><a name="abLiteral"></a><span class='hs-definition'>abLiteral</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTreeTo</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-28">28</a><span class='hs-definition'>abLiteral</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>abortableTree</span> <span class='hs-str'>"literal"</span>
-<a class="number" name="line-29">29</a>
-<a class="number" name="line-30">30</a><a name="nothing"></a><span class='hs-comment'>-- | Nothing</span>
-<a class="number" name="line-31">31</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-32">32</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Nothing"</span>
-<a class="number" name="line-33">33</a>
-<a class="number" name="line-34">34</a><a name="oddRelation"></a><span class='hs-comment'>-- | Odd relation literal</span>
-<a class="number" name="line-35">35</a><span class='hs-definition'>oddRelation</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-36">36</a><span class='hs-definition'>oddRelation</span> <span class='hs-varid'>e</span> <span class='hs-varid'>a</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLines</span> <span class='hs-str'>"Odd relation literal"</span>
-<a class="number" name="line-37">37</a>                        <span class='hs-varop'>$</span> <span class='hs-varid'>expectActual</span> <span class='hs-layout'>(</span><span class='hs-varid'>len</span> <span class='hs-varid'>e</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>len</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
-<a class="number" name="line-38">38</a>    <span class='hs-keyword'>where</span> <span class='hs-varid'>len</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>show</span> <span class='hs-varid'>n</span> <span class='hs-varop'>++</span> <span class='hs-str'>" contents"</span>
-<a class="number" name="line-39">39</a>
-<a class="number" name="line-40">40</a><a name="quoteType"></a><span class='hs-comment'>-- | Quoted type name</span>
-<a class="number" name="line-41">41</a><span class='hs-definition'>quoteType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-42">42</a><span class='hs-definition'>quoteType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Quoted type name"</span>
-<a class="number" name="line-43">43</a>
-<a class="number" name="line-44">44</a><a name="reqFlatName"></a><span class='hs-comment'>-- | Require flat name</span>
-<a class="number" name="line-45">45</a><span class='hs-definition'>reqFlatName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-46">46</a><span class='hs-definition'>reqFlatName</span> <span class='hs-varid'>tok</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Require flat name"</span> <span class='hs-varid'>n</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-47">47</a>    <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>tokenContent</span> <span class='hs-varid'>tok</span>
-<a class="number" name="line-48">48</a>
-<a class="number" name="line-49">49</a><a name="reqRelTuple"></a><span class='hs-comment'>-- | Require tuple in list</span>
-<a class="number" name="line-50">50</a><span class='hs-definition'>reqRelTuple</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-51">51</a><span class='hs-definition'>reqRelTuple</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require tuple in list"</span>
-<a class="number" name="line-52">52</a>
-<a class="number" name="line-53">53</a><a name="reqTermName"></a><span class='hs-comment'>-- | Require term name</span>
-<a class="number" name="line-54">54</a><span class='hs-definition'>reqTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-55">55</a><span class='hs-definition'>reqTermName</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require term name"</span>
-<a class="number" name="line-56">56</a>
-<a class="number" name="line-57">57</a><a name="unkBracket"></a><span class='hs-comment'>-- | Unknown bracket</span>
-<a class="number" name="line-58">58</a><span class='hs-definition'>unkBracket</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-59">59</a><span class='hs-definition'>unkBracket</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Unknown bracket"</span>
-<a class="number" name="line-60">60</a>
-<a class="number" name="line-61">61</a><a name="unkType"></a><span class='hs-comment'>-- | Unknown type name</span>
-<a class="number" name="line-62">62</a><span class='hs-definition'>unkType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-63">63</a><span class='hs-definition'>unkType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unknown type name"</span>
-<a class="number" name="line-64">64</a>
-<a class="number" name="line-65">65</a><a name="unmatchType"></a><span class='hs-definition'>unmatchType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-66">66</a><span class='hs-definition'>unmatchType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Type unmatch"</span>
-<a class="number" name="line-67">67</a>
-<a class="number" name="line-68">68</a><a name="unkWord"></a><span class='hs-comment'>-- | Unknown word</span>
-<a class="number" name="line-69">69</a><span class='hs-definition'>unkWord</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-70">70</a><span class='hs-definition'>unkWord</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unknown word"</span>
-<a class="number" name="line-71">71</a>
-<a class="number" name="line-72">72</a><a name="expectActual"></a><span class='hs-definition'>expectActual</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Message list.</span>
+<a class="number" name="line-4">4</a>
+<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Content</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Abortable</span>
+<a class="number" name="line-7">7</a>    <span class='hs-varid'>abLiteral</span><span class='hs-layout'>,</span>
+<a class="number" name="line-8">8</a>    <span class='hs-comment'>-- * Message</span>
+<a class="number" name="line-9">9</a>    <span class='hs-varid'>nothing</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>    <span class='hs-varid'>oddRelation</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>    <span class='hs-varid'>quoteType</span><span class='hs-layout'>,</span>
+<a class="number" name="line-12">12</a>    <span class='hs-varid'>reqFlatName</span><span class='hs-layout'>,</span>
+<a class="number" name="line-13">13</a>    <span class='hs-varid'>reqRelTuple</span><span class='hs-layout'>,</span>
+<a class="number" name="line-14">14</a>    <span class='hs-varid'>reqTermName</span><span class='hs-layout'>,</span>
+<a class="number" name="line-15">15</a>    <span class='hs-varid'>unkBracket</span><span class='hs-layout'>,</span>
+<a class="number" name="line-16">16</a>    <span class='hs-varid'>unkType</span><span class='hs-layout'>,</span>
+<a class="number" name="line-17">17</a>    <span class='hs-varid'>unkWord</span><span class='hs-layout'>,</span>
+<a class="number" name="line-18">18</a>    <span class='hs-comment'>-- * Utility</span>
+<a class="number" name="line-19">19</a>    <span class='hs-varid'>expectActual</span><span class='hs-layout'>,</span>
+<a class="number" name="line-20">20</a>    <span class='hs-varid'>expect2Actual</span><span class='hs-layout'>,</span>
+<a class="number" name="line-21">21</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-22">22</a>
+<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>        <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
+<a class="number" name="line-26">26</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
+<a class="number" name="line-27">27</a>
+<a class="number" name="line-28">28</a><a name="abLiteral"></a><span class='hs-comment'>-- | Abortable scope for literal.</span>
+<a class="number" name="line-29">29</a><span class='hs-definition'>abLiteral</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTreeTo</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>abLiteral</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>abortableTree</span> <span class='hs-str'>"literal"</span>
+<a class="number" name="line-31">31</a>
+<a class="number" name="line-32">32</a><a name="nothing"></a><span class='hs-comment'>-- | Nothing</span>
+<a class="number" name="line-33">33</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-34">34</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Nothing"</span>
+<a class="number" name="line-35">35</a>
+<a class="number" name="line-36">36</a><a name="oddRelation"></a><span class='hs-comment'>-- | Odd relation literal</span>
+<a class="number" name="line-37">37</a><span class='hs-definition'>oddRelation</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-38">38</a><span class='hs-definition'>oddRelation</span> <span class='hs-varid'>e</span> <span class='hs-varid'>a</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLines</span> <span class='hs-str'>"Odd relation literal"</span>
+<a class="number" name="line-39">39</a>                        <span class='hs-varop'>$</span> <span class='hs-varid'>expectActual</span> <span class='hs-layout'>(</span><span class='hs-varid'>len</span> <span class='hs-varid'>e</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>len</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
+<a class="number" name="line-40">40</a>    <span class='hs-keyword'>where</span> <span class='hs-varid'>len</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>show</span> <span class='hs-varid'>n</span> <span class='hs-varop'>++</span> <span class='hs-str'>" contents"</span>
+<a class="number" name="line-41">41</a>
+<a class="number" name="line-42">42</a><a name="quoteType"></a><span class='hs-comment'>-- | Quoted type name</span>
+<a class="number" name="line-43">43</a><span class='hs-definition'>quoteType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-44">44</a><span class='hs-definition'>quoteType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Quoted type name"</span>
+<a class="number" name="line-45">45</a>
+<a class="number" name="line-46">46</a><a name="reqFlatName"></a><span class='hs-comment'>-- | Require flat name</span>
+<a class="number" name="line-47">47</a><span class='hs-definition'>reqFlatName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-48">48</a><span class='hs-definition'>reqFlatName</span> <span class='hs-varid'>tok</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Require flat name"</span> <span class='hs-varid'>n</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-49">49</a>    <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>tokenContent</span> <span class='hs-varid'>tok</span>
+<a class="number" name="line-50">50</a>
+<a class="number" name="line-51">51</a><a name="reqRelTuple"></a><span class='hs-comment'>-- | Require tuple in list</span>
+<a class="number" name="line-52">52</a><span class='hs-definition'>reqRelTuple</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-53">53</a><span class='hs-definition'>reqRelTuple</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require tuple in list"</span>
+<a class="number" name="line-54">54</a>
+<a class="number" name="line-55">55</a><a name="reqTermName"></a><span class='hs-comment'>-- | Require term name</span>
+<a class="number" name="line-56">56</a><span class='hs-definition'>reqTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-57">57</a><span class='hs-definition'>reqTermName</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Require term name"</span>
+<a class="number" name="line-58">58</a>
+<a class="number" name="line-59">59</a><a name="unkBracket"></a><span class='hs-comment'>-- | Unknown bracket</span>
+<a class="number" name="line-60">60</a><span class='hs-definition'>unkBracket</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-61">61</a><span class='hs-definition'>unkBracket</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-str'>"Unknown bracket"</span>
+<a class="number" name="line-62">62</a>
+<a class="number" name="line-63">63</a><a name="unkType"></a><span class='hs-comment'>-- | Unknown type name</span>
+<a class="number" name="line-64">64</a><span class='hs-definition'>unkType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-65">65</a><span class='hs-definition'>unkType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unknown type name"</span>
+<a class="number" name="line-66">66</a>
+<a class="number" name="line-67">67</a><a name="unkWord"></a><span class='hs-comment'>-- | Unknown word</span>
+<a class="number" name="line-68">68</a><span class='hs-definition'>unkWord</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-69">69</a><span class='hs-definition'>unkWord</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unknown word"</span>
+<a class="number" name="line-70">70</a>
+<a class="number" name="line-71">71</a><a name="expectActual"></a><span class='hs-comment'>-- | Expect and actual.</span>
+<a class="number" name="line-72">72</a><span class='hs-definition'>expectActual</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-73">73</a><span class='hs-definition'>expectActual</span> <span class='hs-varid'>e</span> <span class='hs-varid'>a</span>       <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span> <span class='hs-str'>"Expect "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>e</span>
 <a class="number" name="line-74">74</a>                         <span class='hs-layout'>,</span> <span class='hs-str'>"Actual "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>]</span>
 <a class="number" name="line-75">75</a>
-<a class="number" name="line-76">76</a><a name="expect2Actual"></a><span class='hs-definition'>expect2Actual</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-77">77</a><span class='hs-definition'>expect2Actual</span> <span class='hs-varid'>e1</span> <span class='hs-varid'>e2</span> <span class='hs-varid'>a</span>  <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span> <span class='hs-str'>"Expect "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>e1</span>
-<a class="number" name="line-78">78</a>                         <span class='hs-layout'>,</span> <span class='hs-str'>"       "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>e2</span>
-<a class="number" name="line-79">79</a>                         <span class='hs-layout'>,</span> <span class='hs-str'>"Actual "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>]</span>
-<a class="number" name="line-80">80</a>
+<a class="number" name="line-76">76</a><a name="expect2Actual"></a><span class='hs-comment'>-- | Expect (2 lines) and actual.</span>
+<a class="number" name="line-77">77</a><span class='hs-definition'>expect2Actual</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-78">78</a><span class='hs-definition'>expect2Actual</span> <span class='hs-varid'>e1</span> <span class='hs-varid'>e2</span> <span class='hs-varid'>a</span>  <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span> <span class='hs-str'>"Expect "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>e1</span>
+<a class="number" name="line-79">79</a>                         <span class='hs-layout'>,</span> <span class='hs-str'>"       "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>e2</span>
+<a class="number" name="line-80">80</a>                         <span class='hs-layout'>,</span> <span class='hs-str'>"Actual "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>]</span>
+<a class="number" name="line-81">81</a>
 </pre></body>
 </html>

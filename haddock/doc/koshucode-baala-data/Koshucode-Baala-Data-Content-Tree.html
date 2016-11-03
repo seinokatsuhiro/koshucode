@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -71,7 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Utilities for token trees.</p
+	  >Term content parsers.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -111,6 +111,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >treesToTime</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTreesToAb"
 	    >TTreesToAb</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ttTime"
+	    >ttTime</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
 	    >Time</a
 	    ></li
@@ -167,6 +177,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><div class="doc"
 	  ><p
 	    >Get text from token tree.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.tt1 &quot;aa&quot; &gt;&gt;= treeToText False
+</code
+		></strong
+	      >Right &quot;aa&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -211,6 +231,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><div class="doc"
 	  ><p
 	    >Get clock from token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tokenClock $ head $ S.toks &quot;|12:00|&quot;
+</code
+		></strong
+	      >Right |12:00|
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -235,7 +265,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>S.tt &quot;2013-04-18 12:00&quot; &gt;&gt;= treesToTime
 </code
 		></strong
-	      >Right (TimeYmdc (Monthly 2013-04-18) (ClockDhm 0 43200))
+	      >Right 2013-04-18 12:00
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -245,7 +275,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>S.tt &quot;2013-04-18&quot; &gt;&gt;= treesToTime
 </code
 		></strong
-	      >Right (TimeYmd (Monthly 2013-04-18))
+	      >Right 2013-04-18
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -255,7 +285,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>S.tt &quot;2013-#16&quot; &gt;&gt;= treesToTime
 </code
 		></strong
-	      >Right (TimeYw 2013-04-15)
+	      >Right 2013-#16
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ttTime" class="def"
+	    >ttTime</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Data-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Tree.html#ttTime');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get time from string.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>ttTime &quot;2013-04-18 12:00&quot;
+</code
+		></strong
+	      >Right 2013-04-18 12:00
 </pre
 	    ></div
 	  ></div
@@ -286,6 +344,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 </pre
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Multiple contents</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:treeToFlatTerm" class="def"
@@ -301,10 +361,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p
 	    >Get flat term name from token tree.
    If the token tree contains nested term name, this function failed.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.tt1 &quot;/a&quot; &gt;&gt;= treeToFlatTerm
+</code
+		></strong
+	      >Right &quot;a&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.tt1 &quot;/a/x&quot; &gt;&gt;= treeToFlatTerm
+</code
+		></strong
+	      >Left ...
+</pre
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Multiple contents</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:treesToTerms" class="def"

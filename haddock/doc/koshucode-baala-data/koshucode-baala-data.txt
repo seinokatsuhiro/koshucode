@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.164.0.0
+@version 0.166.0.0
 
 
 -- | Extra functions for rational numbers.
@@ -351,7 +351,7 @@ instance Koshucode.Baala.Data.Type.Judge.GetClass (Koshucode.Baala.Data.Type.Jud
 instance Koshucode.Baala.Data.Type.Judge.GetTermNames (Koshucode.Baala.Data.Type.Judge.Judge c)
 instance Koshucode.Baala.Data.Type.Judge.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
 instance Koshucode.Baala.Data.Type.Judge.GetTerms Koshucode.Baala.Data.Type.Judge.Judge
-instance Koshucode.Baala.Base.Text.MixEncode.MixShortEncode c => Koshucode.Baala.Base.Text.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Judge.Judge c)
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Judge.Judge c)
 
 module Koshucode.Baala.Data.Type.Type
 
@@ -478,7 +478,7 @@ typeRelMapName :: Map TermName -> Map Type
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Type.Type
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Type.Type
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Type.Type
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Type.Type
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Type.Type
 
 
 -- | Heading of relations
@@ -596,7 +596,7 @@ instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Base.Monoid Koshucode.Baala.Data.Type.Rel.Head.Head
 instance Koshucode.Baala.Data.Type.Judge.GetTermNames Koshucode.Baala.Data.Type.Rel.Head.Head
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Rel.Head.Head
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Rel.Head.Head
 
 
 -- | Relation type
@@ -657,7 +657,7 @@ instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Rel.Rel
 instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance GHC.Base.Functor Koshucode.Baala.Data.Type.Rel.Rel.Rel
 instance Koshucode.Baala.Data.Type.Judge.GetTermNames (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
-instance Koshucode.Baala.Base.Text.MixEncode.MixShortEncode c => Koshucode.Baala.Base.Text.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 
 
 -- | Content type for nested relations.
@@ -860,9 +860,11 @@ instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Interp.InterpWord
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Interp.InterpWord
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Interp.InterpWord
 instance Koshucode.Baala.Data.Type.Judge.GetTermNames Koshucode.Baala.Data.Type.Interp.Interp
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.Interp
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.InterpWord
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.Interp
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.InterpWord
 
+
+-- | Message list.
 module Koshucode.Baala.Data.Type.Message
 
 -- | Divide by zero
@@ -999,23 +1001,29 @@ module Koshucode.Baala.Data.Type.Decimal
 -- | Date.
 module Koshucode.Baala.Data.Type.Time.Date
 
+-- | Type for the Modified Julian Day.
+type Mjd = Day
+
+-- | Create MJD.
+mjd :: Integer -> Mjd
+
+-- | Extract MJD integer value.
+unMjd :: Mjd -> Integer
+
 -- | Date.
 data Date
 
 -- | Date in <i>YYYY-MM-DD</i>
-Monthly :: MJDay -> Date
+Monthly :: Mjd -> Date
 
 -- | Date in <i>YYYY-#W-D</i>
-Weekly :: MJDay -> Date
+Weekly :: Mjd -> Date
 
 -- | Date in <i>YYYY-##D</i>
-Yearly :: MJDay -> Date
-
--- | Type for the Modified Julian Day.
-type MJDay = Day
+Yearly :: Mjd -> Date
 
 -- | Type for year, month, and day.
-type YmdTuple = (Year, Month, Day)
+type Ymd = (Year, Month, Day)
 
 -- | Year type.
 type Year = Integer
@@ -1029,7 +1037,25 @@ type Week = Int
 -- | Day type.
 type Day = Int
 
+-- | Create date from the Modified Julian Day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dateFromMjd 55555
+--   Date 2010-12-25
+--   </pre>
+dateFromMjd :: Integer -> Date
+
 -- | Create date from year, month, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dateFromYmdAb 2013 4 18
+--   Right Date 2013-04-18
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dateFromYmdAb 2013 4 31
+--   Left ...
+--   </pre>
 dateFromYmdAb :: Year -> Month -> Day -> Ab Date
 
 -- | Create date from year, week, and day.
@@ -1037,9 +1063,6 @@ dateFromYwdAb :: Year -> Week -> Day -> Ab Date
 
 -- | Create date from year and day.
 dateFromYdAb :: Year -> Day -> Ab Date
-
--- | Create date from the Modified Julian Day.
-dateFromMjd :: Integer -> Date
 
 -- | Convert into monthly date.
 --   
@@ -1066,10 +1089,10 @@ weekly :: Map Date
 yearly :: Map Date
 
 -- | Get the internal Modified Julian Day.
-dateDay :: Date -> MJDay
+dateMjd :: Date -> Mjd
 
--- | Map the content of date.
-dateMapDay :: Map MJDay -> Map Date
+-- | Alter the Modified Julian Day of date.
+dateAltMjd :: Map Mjd -> Map Date
 
 -- | Add days.
 --   
@@ -1080,11 +1103,17 @@ dateMapDay :: Map MJDay -> Map Date
 dateAdd :: (Integral n) => n -> Map Date
 
 -- | Create mix text with two-width zeros.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mix02 5
+--   MixText "05"
+--   </pre>
 mix02 :: Int -> MixText
+instance GHC.Num.Num Data.Time.Calendar.Days.Day
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Date.Date
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Date.Date
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Date.Date
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Date.Date
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Date.Date
 
 
 -- | Clock: distance between two times.
@@ -1094,19 +1123,19 @@ module Koshucode.Baala.Data.Type.Time.Clock
 data Clock
 
 -- | Clock represented by multiple of second
-ClockDhms :: DayCount -> Sec -> Clock
+ClockDhms :: Days -> Sec -> Clock
 
 -- | Clock represented by multiple of minute
-ClockDhm :: DayCount -> Sec -> Clock
+ClockDhm :: Days -> Sec -> Clock
 
 -- | Clock represented by multiple of hour
-ClockDh :: DayCount -> Sec -> Clock
+ClockDh :: Days -> Sec -> Clock
 
 -- | Clock represented by multiple of day
-ClockD :: DayCount -> Clock
+ClockD :: Days -> Clock
 
 -- | Integer type for the Modified Julian Day.
-type DayCount = Integer
+type Days = Integer
 
 -- | Hour type.
 type Hour = Int
@@ -1130,22 +1159,22 @@ type Sec = Int
 --   </pre>
 clockBodyToMix :: Clock -> MixText
 
--- | Create clock from MJD, hour, minute, and second.
+-- | Create clock from days, hour, minute, and second.
 --   
 --   <pre>
 --   &gt;&gt;&gt; clockFromDhms 1 9 40 20
 --   |1'09:40:20|
 --   </pre>
-clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
+clockFromDhms :: Days -> Hour -> Min -> Sec -> Clock
 
--- | Create clock from MJD, hour, and minute.
-clockFromDhm :: DayCount -> Hour -> Min -> Clock
+-- | Create clock from days, hour, and minute.
+clockFromDhm :: Days -> Hour -> Min -> Clock
 
--- | Create clock from MJD and hour.
-clockFromDh :: DayCount -> Hour -> Clock
+-- | Create clock from days and hour.
+clockFromDh :: Days -> Hour -> Clock
 
--- | Create clock from MJD.
-clockFromD :: DayCount -> Clock
+-- | Create clock from days.
+clockFromD :: Days -> Clock
 
 -- | Create clock from hour, minute, and optional second.
 --   
@@ -1160,47 +1189,88 @@ clockFromD :: DayCount -> Clock
 --   </pre>
 clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
 
--- | Decompose second into MJD, hour, minute and second parts.
+-- | Decompose second into days, hour, minute and second parts.
 --   
 --   <pre>
 --   &gt;&gt;&gt; dhmsFromSec 333333
 --   (3,9,15,33)
 --   </pre>
-dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
+dhmsFromSec :: Sec -> (Days, Hour, Min, Sec)
 
 -- | Aggregate hour, minute, and second into single second.
 secFromHms :: (Hour, Min, Sec) -> Sec
 
+-- | Days and second of clock.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockDaysSec $ clockFromDhms 1 9 15 33
+--   (1, 33333)
+--   </pre>
+clockDaysSec :: Clock -> DaysSec
+
+-- | Split days part from clock.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockDaysClock $ clockFromDhms 1 9 15 33
+--   (1, |09:15:33|)
+--   </pre>
+clockDaysClock :: Clock -> (Days, Clock)
+
 -- | Sign of clock as <tt>-1</tt>, <tt>0</tt>, <tt>1</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockSign $ clockFromDhms 1 9 15 33
+--   1
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; clockSign $ clockFromDhms 0 0 0 0
+--   0
+--   </pre>
 clockSign :: Clock -> Int
-
--- | MJD part of clock.
-clockDayCount :: Clock -> DayCount
-
--- | Second part of clock.
-clockSec :: Clock -> Sec
 
 -- | Precision string of clock.
 clockPrecision :: Clock -> String
 
 -- | Extract elements of clock.
-clockDhms :: Clock -> (DayCount, Maybe Hour, Maybe Min, Maybe Sec)
+clockDhms :: Clock -> (Days, Maybe Hour, Maybe Min, Maybe Sec)
 
 -- | Replace elements of clock.
-clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> Map Clock
+clockAlter :: Maybe Days -> Maybe Hour -> Maybe Min -> Maybe Sec -> Map Clock
 
 -- | Map MDJ and second of clock.
-clockMap :: Map DayCount -> Map Sec -> Map Clock
+clockMap :: Map Days -> Map Sec -> Map Clock
 
 -- | Combine MDJ and second of two clocks.
-clockMap2 :: Bin DayCount -> Bin Sec -> BinAb Clock
+clockMap2 :: Bin Days -> Bin Sec -> BinAb Clock
+
+-- | Days and seconds.
+type DaysSec = (Days, Sec)
+
+-- | Calculate days and seconds.
+--   
+--   <pre>
+--   &gt;&gt;&gt; daysSec 777777
+--   (9, 177)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; daysSec (-777777)
+--   (-10, 86223)
+--   </pre>
+daysSec :: Sec -> DaysSec
 
 -- | Seconds in a day, i.e., 86400 seconds.
+--   
+--   <pre>
+--   &gt;&gt;&gt; daySeconds :: Int
+--   86400
+--   </pre>
 daySeconds :: (Num a) => a
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Clock.Clock
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Clock.Clock
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Clock.Clock
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Clock.Clock
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Clock.Clock
 
 
 -- | Calculation on clock.
@@ -1216,7 +1286,7 @@ clockNeg :: Map Clock
 clockCutDay :: Map Clock
 
 -- | Add MJD.
-clockAddDay :: DayCount -> Map Clock
+clockAddDay :: Days -> Map Clock
 
 -- | Add second.
 clockAddSec :: Sec -> Map Clock
@@ -1236,10 +1306,10 @@ clockTimes :: Int -> Map Clock
 --   &gt;&gt;&gt; clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
 --   [|00:00:00|, |00:02:00|, |00:04:00|]
 --   </pre>
-clockRangeBy :: Map (DayCount, Sec) -> RangeBy Clock
+clockRangeBy :: Map (Days, Sec) -> RangeBy Clock
 
 -- | Create clock step of given second.
-clockStep :: Sec -> Map (DayCount, Sec)
+clockStep :: Sec -> Map (Days, Sec)
 
 
 -- | Time
@@ -1249,7 +1319,7 @@ module Koshucode.Baala.Data.Type.Time.Time
 data Time
 
 -- | Date and clock with time zone
-TimeYmdcz :: Date -> Clock -> Sec -> Time
+TimeYmdcz :: Date -> Clock -> Zone -> Time
 
 -- | Date and clock
 TimeYmdc :: Date -> Clock -> Time
@@ -1258,23 +1328,38 @@ TimeYmdc :: Date -> Clock -> Time
 TimeYmd :: Date -> Time
 
 -- | Year and week
-TimeYw :: MJDay -> Time
+TimeYw :: Mjd -> Time
 
 -- | Year and month
-TimeYm :: MJDay -> Time
+TimeYm :: Mjd -> Time
+
+-- | Time zone as offset from UTC.
+type Zone = Sec
 
 -- | Get integer content of the Modified Julian Day of time.
-timeMjd :: Time -> DayCount
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeMjd $ timeFromMjd 55555
+--   55555
+--   </pre>
+timeMjd :: Time -> Days
+
+-- | Convert time to year/month/day tuple.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeYmdTuple $ timeFromMjd 55555
+--   (2010,12,25)
+--   </pre>
+timeYmdTuple :: Time -> Ymd
 
 -- | Get the name of time precision.
 timePrecision :: Time -> String
-timeYmdTuple :: Time -> YmdTuple
 
 -- | Create monthly date from the Modified Julian Day.
-timeYmd :: MJDay -> Time
+timeYmd :: Mjd -> Time
 
 -- | Create monthly time from the Modified Julian Day and clock.
-timeYmdc :: MJDay -> Clock -> Time
+timeYmdc :: Mjd -> Clock -> Time
 
 -- | Create time data form modified Julian date.
 --   
@@ -1282,7 +1367,7 @@ timeYmdc :: MJDay -> Clock -> Time
 --   &gt;&gt;&gt; timeFromMjd 55555
 --   2010-12-25
 --   </pre>
-timeFromMjd :: DayCount -> Time
+timeFromMjd :: Days -> Time
 
 -- | Create time data from year and month.
 timeFromYmAb :: Year -> Month -> Ab Time
@@ -1291,9 +1376,33 @@ timeFromYmAb :: Year -> Month -> Ab Time
 timeFromYwAb :: Year -> Week -> Ab Time
 
 -- | Create time data from date, clock, and time zone.
-timeFromDczAb :: Date -> Clock -> Maybe Sec -> Ab Time
+timeFromDczAb :: Date -> Clock -> Maybe Zone -> Ab Time
 timeFromYmd :: Year -> Month -> Day -> Time
-timeFromYmdTuple :: YmdTuple -> Time
+timeFromYmdTuple :: Ymd -> Time
+
+-- | Get UTC.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nowUtc
+--   2013-04-18 08:37:36 UTC
+--   </pre>
+nowUtc :: IO Time
+
+-- | Get current time with time zone.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nowZoned
+--   2013-04-18 17:37:36 +09:00
+--   </pre>
+nowZoned :: IO Time
+
+-- | Get current local time without time zone.
+--   
+--   <pre>
+--   &gt;&gt;&gt; now
+--   2013-04-18 17:37:36
+--   </pre>
+now :: IO Time
 
 -- | Get today.
 --   
@@ -1303,47 +1412,46 @@ timeFromYmdTuple :: YmdTuple -> Time
 --   </pre>
 today :: IO Time
 
--- | Get current time without time zone.
---   
---   <pre>
---   &gt;&gt;&gt; now
---   2013-04-18 08:37:36
---   </pre>
-now :: IO Time
+-- | Cut clock part.
+timeCutClock :: Map Time
 
--- | Get current time with time zone.
---   
---   <pre>
---   &gt;&gt;&gt; nowZoned
---   2013-04-18 08:37:36 +09:00
---   </pre>
-nowZoned :: IO Time
+-- | Alter time zone part.
+timeAltZone :: Map Zone -> Map Time
 
--- | Omit clock part.
-timeOmitClock :: Map Time
+-- | Cut timezone.
+timeCutZone :: Map Time
 
--- | Omit timezone.
-timeOmitZone :: Map Time
+-- | Cut timezone and convert to local time, i.e., addition of UTC and time
+--   zone.
+timeLocalize :: Map Time
 
--- | Map day part of time.
-timeMapDate :: Map Date -> Map Time
+-- | Alter day part.
+timeAltDate :: Map Date -> Map Time
 
--- | Map integer content of the Modified Julian Day.
-timeMapMjd :: Map DayCount -> Map Time
+-- | Alter integer content of the Modified Julian Day.
+timeAltDays :: Map Days -> Map Time
 
 -- | Convert local time to Koshu time content.
 timeFromZonedTime :: ZonedTime -> Time
+
+-- | Days and seconds of time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeDaysSec $ timeFromMjd 55555
+--   (55555,0)
+--   </pre>
+timeDaysSec :: Time -> DaysSec
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Time.Time.Time
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Time.Time.Time
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Time.Time.Time
-instance Koshucode.Baala.Base.Text.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Time.Time
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Time.Time.Time
 
 
 -- | Calculation on time.
 module Koshucode.Baala.Data.Type.Time.TimeCalc
 
 -- | Add days to time.
-timeAddDay :: DayCount -> Map Time
+timeAddDay :: Days -> Map Time
 
 -- | Add weeks to time.
 timeAddWeek :: Integer -> Map Time
@@ -1420,7 +1528,11 @@ timeRangeYear :: RangeBy Time
 -- | Bundle of time modules.
 module Koshucode.Baala.Data.Type.Time
 
+
+-- | Message list.
 module Koshucode.Baala.Data.Content.Message
+
+-- | Abortable scope for literal.
 abLiteral :: TTreeTo (Map (Ab b))
 
 -- | Nothing
@@ -1449,23 +1561,51 @@ unkType :: String -> Ab a
 
 -- | Unknown word
 unkWord :: String -> Ab a
-unmatchType :: String -> Ab a
+
+-- | Expect and actual.
 expectActual :: String -> String -> [String]
+
+-- | Expect (2 lines) and actual.
 expect2Actual :: String -> String -> String -> [String]
+
+
+-- | Message list.
+module Koshucode.Baala.Data.Class.Message
+
+-- | Type unmatch
+unmatchType :: String -> Ab a
 
 
 -- | Definitions of data for Koshucode.
 module Koshucode.Baala.Data.Type
 
+
+-- | Message list.
 module Koshucode.Baala.Data.Church.Message
-abCoxBuild :: TTreeTo (Map (Ab b))
-abCoxCalc :: (CodePtr cp) => [cp] -> Map (Ab b)
-abCoxFill :: (CodePtr cp) => [cp] -> Map (Ab b)
-abCoxIrrep :: (CodePtr cp) => [cp] -> Map (Ab b)
-abCoxPosition :: (CodePtr cp) => [cp] -> Map (Ab b)
-abCoxPrefix :: TTreeTo (Map (Ab b))
-abCoxReduce :: (CodePtr cp) => [cp] -> Map (Ab b)
-abCoxSyntax :: TTreeTo (Map (Ab b))
+
+-- | Abortable scope for cox building.
+abCoxBuild :: TTreeTo (MapAb b)
+
+-- | Abortable scope for cox calculation.
+abCoxCalc :: (CodePtr cp) => [cp] -> MapAb b
+
+-- | Abortable scope for cox filling.
+abCoxFill :: (CodePtr cp) => [cp] -> MapAb b
+
+-- | Abortable scope for irreducible expression.
+abCoxIrrep :: (CodePtr cp) => [cp] -> MapAb b
+
+-- | Abortable scope for cox position.
+abCoxPosition :: (CodePtr cp) => [cp] -> MapAb b
+
+-- | Abortable scope for cox prefix.
+abCoxPrefix :: TTreeTo (MapAb b)
+
+-- | Abortable scope for cox reduction.
+abCoxReduce :: (CodePtr cp) => [cp] -> MapAb b
+
+-- | Abortable scope for cox syntax.
+abCoxSyntax :: TTreeTo (MapAb b)
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> Ab a
@@ -1493,8 +1633,12 @@ unkTerm :: [TermName] -> Head -> Ab a
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> Ab a
-detailTermRel :: String -> [String] -> Head -> [String]
 
+-- | Terms and input relation heading.
+detailTermRel :: String -> [TermName] -> Head -> [String]
+
+
+-- | Bundle of message modules.
 module Koshucode.Baala.Data.Message
 
 
@@ -1530,22 +1674,44 @@ CoxForm :: [CodePt] -> CoxTag -> [String] -> (Cox c) -> Cox c
 
 -- | Cox with outside arguments
 CoxWith :: [CodePt] -> [NamedCox c] -> (Cox c) -> Cox c
+
+-- | Expression pair.
 type Cox2 c = (Cox c, Cox c)
+
+-- | Expression triple.
 type Cox3 c = (Cox c, Cox c, Cox c)
+
+-- | Expression quadruple.
 type Cox4 c = (Cox c, Cox c, Cox c, Cox c)
+
+-- | Maybe expression.
 type MaybeCox c = Maybe (Cox c)
+
+-- | Named expression.
 type NamedCox c = Named (Cox c)
 
 -- | Term-content calculator.
 type CopCalc c = [Ab c] -> Ab c
+
+-- | Expression tag.
 type CoxTag = Maybe String
+
+-- | Create literal expression.
 coxLit :: c -> Cox c
+
+-- | Get arity of expression.
 coxSyntacticArity :: Cox c -> Int
+
+-- | Map expression form.
 coxMap :: Map (Map (Cox c))
+
+-- | Fill expression form.
 coxCall :: Cox c -> (Map (Cox c)) -> Cox c
+
+-- | Check irreducible expression.
 checkIrreducible :: AbMap (Cox c)
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Data.Church.Cox.Cox c)
-instance Koshucode.Baala.Base.Text.MixEncode.MixShortEncode c => GHC.Show.Show (Koshucode.Baala.Data.Church.Cox.Cox c)
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => GHC.Show.Show (Koshucode.Baala.Data.Church.Cox.Cox c)
 
 
 -- | Term-content operator.
@@ -1568,6 +1734,8 @@ type CopCox c = [Cox c] -> Ab (Cox c)
 
 -- | Tree-level syntax.
 type CopTree = [TTree] -> Ab TTree
+
+-- | Name of content operator.
 copName :: Cop c -> BlankName
 
 -- | Name for non-binary operator.
@@ -1584,6 +1752,8 @@ copInfix :: String -> BlankName
 
 -- | Name for postfix operator.
 copPostfix :: String -> BlankName
+
+-- | Set of content operators.
 data CopSet c
 CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -> [Named (Cop c)] -> CopFind (Cox c) -> CopFind (CopCox c) -> CopFind CopTree -> [NamedCox c] -> CopSet c
 [copsetCopList] :: CopSet c -> [Cop c]
@@ -1601,162 +1771,22 @@ type CopFind f = BlankName -> Maybe f
 
 -- | Empty operator set.
 copset :: CopSet c
+
+-- | Complete operator set.
 copsetFill :: Map (CopSet c)
 instance GHC.Show.Show (Koshucode.Baala.Data.Church.Cop.Cop c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Data.Church.Cop.Cop c)
 
 
--- | Singleton content type.
-module Koshucode.Baala.Data.Content.Singleton
-class CTypeOf c
-typeOf :: CTypeOf c => c -> Type
-getAbAb :: (CTypeOf c) => (c -> Bool) -> (c -> b) -> Ab c -> Ab b
-
--- | Empty: the minimum content.
-class (CTypeOf c) => CEmpty c
-isEmpty :: CEmpty c => c -> Bool
-empty :: CEmpty c => c
-maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
-omitEmpty :: (CEmpty c) => Map [(a, c)]
-
--- | End of everything: the maximum content.
-class (CTypeOf c) => CEnd c
-isEnd :: CEnd c => c -> Bool
-end :: CEnd c => c
-
-
--- | Complex content type.
-module Koshucode.Baala.Data.Content.Complex
-
--- | List of contents.
-class (CTypeOf c) => CList c where getList = getAbAb isList gList putList = Right . pList
-isList :: CList c => c -> Bool
-gList :: CList c => c -> [c]
-pList :: CList c => [c] -> c
-getList :: CList c => Ab c -> Ab [c]
-putList :: CList c => [c] -> Ab c
-
--- | Set of contents.
-class (CTypeOf c) => CSet c where getSet = getAbAb isSet gSet putSet = Right . pSet
-isSet :: CSet c => c -> Bool
-gSet :: CSet c => c -> [c]
-pSet :: CSet c => [c] -> c
-getSet :: CSet c => Ab c -> Ab [c]
-putSet :: CSet c => [c] -> Ab c
-gSetSort :: (Ord c, CSet c) => c -> [c]
-
--- | Tie of terms.
-class (CTypeOf c) => CTie c where getTie = getAbAb isTie gTie putTie = Right . pTie
-isTie :: CTie c => c -> Bool
-gTie :: CTie c => c -> [Term c]
-pTie :: CTie c => [Term c] -> c
-getTie :: CTie c => Ab c -> Ab [Term c]
-putTie :: CTie c => [Term c] -> Ab c
-
--- | Relation of terms.
-class (CTypeOf c) => CRel c where getRel = getAbAb isRel gRel putRel = Right . pRel
-isRel :: CRel c => c -> Bool
-gRel :: CRel c => c -> Rel c
-pRel :: CRel c => Rel c -> c
-getRel :: CRel c => Ab c -> Ab (Rel c)
-putRel :: CRel c => Rel c -> Ab c
-
--- | Nullary full relation.
-dee :: (CRel c) => c
-
--- | Nullary empty relation.
-dum :: (CRel c) => c
-
--- | Data intepretation.
-class (CTypeOf c) => CInterp c where getInterp = getAbAb isInterp gInterp putInterp = Right . pInterp
-isInterp :: CInterp c => c -> Bool
-gInterp :: CInterp c => c -> Interp
-pInterp :: CInterp c => Interp -> c
-getInterp :: CInterp c => Ab c -> Ab Interp
-putInterp :: CInterp c => Interp -> Ab c
-
--- | Type of content.
-class (CTypeOf c) => CType c where getType = getAbAb isType gType putType = Right . pType
-isType :: CType c => c -> Bool
-gType :: CType c => c -> Type
-pType :: CType c => Type -> c
-getType :: CType c => Ab c -> Ab Type
-putType :: CType c => Type -> Ab c
-
-
--- | Simple content type.
-module Koshucode.Baala.Data.Content.Simple
-
--- | True or false, affirmed or denied.
-class (CTypeOf c) => CBool c where getBool = getAbAb isBool gBool putBool = Right . pBool
-isBool :: CBool c => c -> Bool
-pBool :: CBool c => Bool -> c
-gBool :: CBool c => c -> Bool
-getBool :: CBool c => Ab c -> Ab Bool
-putBool :: CBool c => Bool -> Ab c
-true :: (CBool c) => c
-false :: (CBool c) => c
-putTrue :: (CBool c) => Ab c
-putFalse :: (CBool c) => Ab c
-
--- | Decimal number.
-class (CTypeOf c) => CDec c where getDec = getAbAb isDec gDec putDec = Right . pDec
-isDec :: CDec c => c -> Bool
-gDec :: CDec c => c -> Decimal
-pDec :: CDec c => Decimal -> c
-getDec :: CDec c => Ab c -> Ab Decimal
-putDec :: CDec c => Decimal -> Ab c
-pInt :: (CDec c) => Int -> c
-pInteger :: (CDec c) => Integer -> c
-pDecFromInt :: (CDec c) => Int -> c
-pDecFromInteger :: (CDec c) => Integer -> c
-
--- | Distance between two points in timeline.
-class (CTypeOf c) => CClock c where getClock = getAbAb isClock gClock putClock = Right . pClock
-isClock :: CClock c => c -> Bool
-gClock :: CClock c => c -> Clock
-pClock :: CClock c => Clock -> c
-getClock :: CClock c => Ab c -> Ab Clock
-putClock :: CClock c => Clock -> Ab c
-
--- | Point in timeline.
-class (CTypeOf c) => CTime c where getTime = getAbAb isTime gTime putTime = Right . pTime
-isTime :: CTime c => c -> Bool
-gTime :: CTime c => c -> Time
-pTime :: CTime c => Time -> c
-getTime :: CTime c => Ab c -> Ab Time
-putTime :: CTime c => Time -> Ab c
-
--- | Code.
-class (CTypeOf c) => CCode c where getCode = getAbAb isCode gCode putCode = Right . pCode
-isCode :: CCode c => c -> Bool
-gCode :: CCode c => c -> String
-pCode :: CCode c => String -> c
-getCode :: CCode c => Ab c -> Ab String
-putCode :: CCode c => String -> Ab c
-
--- | Term name.
-class (CTypeOf c) => CTerm c where getTerm = getAbAb isTerm gTerm putTerm = Right . pTerm
-isTerm :: CTerm c => c -> Bool
-gTerm :: CTerm c => c -> String
-pTerm :: CTerm c => String -> c
-getTerm :: CTerm c => Ab c -> Ab String
-putTerm :: CTerm c => String -> Ab c
-
--- | Double-quoted text content.
-class (CTypeOf c) => CText c where getText = getAbAb isText gText putText = Right . pText
-isText :: CText c => c -> Bool
-gText :: CText c => c -> String
-pText :: CText c => String -> c
-getText :: CText c => Ab c -> Ab String
-putText :: CText c => String -> Ab c
-pMaybeText :: (CText c, CEmpty c) => String -> c
-
-
--- | Utilities for token trees.
+-- | Term content parsers.
 module Koshucode.Baala.Data.Content.Tree
 
 -- | Get text from token tree.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "aa" &gt;&gt;= treeToText False
+--   Right "aa"
+--   </pre>
 treeToText :: Bool -> TTreeToAb String
 
 -- | Get digits from token trees.
@@ -1768,25 +1798,38 @@ treeToText :: Bool -> TTreeToAb String
 treesToDigits :: TTreesToAb String
 
 -- | Get clock from token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokenClock $ head $ S.toks "|12:00|"
+--   Right |12:00|
+--   </pre>
 tokenClock :: Token -> Ab Clock
 
 -- | Get time from token trees.
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.tt "2013-04-18 12:00" &gt;&gt;= treesToTime
---   Right (TimeYmdc (Monthly 2013-04-18) (ClockDhm 0 43200))
+--   Right 2013-04-18 12:00
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.tt "2013-04-18" &gt;&gt;= treesToTime
---   Right (TimeYmd (Monthly 2013-04-18))
+--   Right 2013-04-18
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.tt "2013-#16" &gt;&gt;= treesToTime
---   Right (TimeYw 2013-04-15)
+--   Right 2013-#16
 --   </pre>
 treesToTime :: TTreesToAb Time
+
+-- | Get time from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ttTime "2013-04-18 12:00"
+--   Right 2013-04-18 12:00
+--   </pre>
+ttTime :: String -> Ab Time
 
 -- | Get interpretation from token trees.
 --   
@@ -1799,6 +1842,16 @@ treesToInterp :: TTreesToAb Interp
 
 -- | Get flat term name from token tree. If the token tree contains nested
 --   term name, this function failed.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "/a" &gt;&gt;= treeToFlatTerm
+--   Right "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "/a/x" &gt;&gt;= treeToFlatTerm
+--   Left ...
+--   </pre>
 treeToFlatTerm :: TTreeToAb TermName
 
 -- | Get list of named token trees from token trees.
@@ -1814,125 +1867,223 @@ treesToTerms :: TTreesToAb [NamedTrees]
 --   long branches into group.
 treesToTerms1 :: TTreesToAb [NamedTree]
 
-module Koshucode.Baala.Data.Content.Utility
-class (Ord c, Show c, MixShortEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty
-appendContent :: CContent c => c -> c -> Ab c
-joinContent :: CContent c => [c] -> Ab c
-typeOrder :: (CContent c) => c -> Int
 
--- | Pair of get and put.
-type CGetPut a c = (c -> a, a -> c)
+-- | Singleton content type.
+module Koshucode.Baala.Data.Class.Singleton
 
--- | <tt>gText</tt> and <tt>pText</tt>.
-gpText :: (CText c) => CGetPut [Char] c
+-- | Classifiable into <a>Type</a>.
+class CTypeOf c
 
--- | <tt>gList</tt> and <tt>pList</tt>.
-gpList :: (CList c) => CGetPut [c] c
+-- | Get type of content.
+typeOf :: CTypeOf c => c -> Type
 
--- | <tt>gSet</tt> and <tt>pSet</tt>.
-gpSet :: (CSet c) => CGetPut [c] c
+-- | Get content which may be aborted.
+getContent :: (CTypeOf c) => Test c -> (c -> b) -> Ab c -> Ab b
 
--- | <tt>gSetSort</tt> and <tt>pSet</tt>.
-gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
+-- | Empty: the minimum content.
+class (CTypeOf c) => CEmpty c
+isEmpty :: CEmpty c => c -> Bool
+empty :: CEmpty c => c
 
--- | Test membership between element and collection contents.
-isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
+-- | Create empty or non-empty content.
+maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 
--- | Apply function to internal value of content.
-contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
+-- | Cut empty terms.
+omitEmpty :: (CEmpty c) => Map [Term c]
 
--- | Map function to internal value of content.
-contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
-contApTextToText :: (CText c) => Map String -> AbMap c
-contMapTextToList :: (CList c, CText c) => (Char -> c) -> AbMap c
-judgeContString :: (CContent c) => Judge c -> Judge String
+-- | Maximum content of contents list.
+contMaximum :: (Ord c, CEmpty c) => [c] -> c
 
--- | Convert content to string value.
-contString :: (CContent c) => c -> String
-mixBracketList :: MixText -> MixText
-mixBracketSet :: MixText -> MixText
+-- | End of everything: the maximum content.
+class (CTypeOf c) => CEnd c
+isEnd :: CEnd c => c -> Bool
+end :: CEnd c => c
 
 -- | Minimum content of contents list.
 contMinimum :: (Ord c, CEnd c) => [c] -> c
 
--- | Maximum content of contents list.
-contMaximum :: (Ord c, CEmpty c) => [c] -> c
-pTermSet :: (CTerm c, CSet c) => [String] -> c
-pTextSet :: (CText c, CSet c) => [String] -> c
+
+-- | Simple content type.
+module Koshucode.Baala.Data.Class.Simple
+
+-- | True or false, affirmed or denied.
+class (CTypeOf c) => CBool c where getBool = getContent isBool gBool putBool = Right . pBool
+isBool :: CBool c => c -> Bool
+pBool :: CBool c => Bool -> c
+gBool :: CBool c => c -> Bool
+getBool :: CBool c => Ab c -> Ab Bool
+putBool :: CBool c => Bool -> Ab c
+
+-- | Boolean constant true.
+true :: (CBool c) => c
+
+-- | Boolean constant false.
+false :: (CBool c) => c
+
+-- | Boolean constant true.
+putTrue :: (CBool c) => Ab c
+
+-- | Boolean constant false.
+putFalse :: (CBool c) => Ab c
+
+-- | Decimal number.
+class (CTypeOf c) => CDec c where getDec = getContent isDec gDec putDec = Right . pDec
+isDec :: CDec c => c -> Bool
+gDec :: CDec c => c -> Decimal
+pDec :: CDec c => Decimal -> c
+getDec :: CDec c => Ab c -> Ab Decimal
+putDec :: CDec c => Decimal -> Ab c
+
+-- | Create decimal content.
+pInt :: (CDec c) => Int -> c
+
+-- | Create decimal content.
+pInteger :: (CDec c) => Integer -> c
+
+-- | Create decimal content.
+pIntegral :: (CDec c, Integral n) => n -> c
+
+-- | Distance between two points in timeline.
+class (CTypeOf c) => CClock c where getClock = getContent isClock gClock putClock = Right . pClock
+isClock :: CClock c => c -> Bool
+gClock :: CClock c => c -> Clock
+pClock :: CClock c => Clock -> c
+getClock :: CClock c => Ab c -> Ab Clock
+putClock :: CClock c => Clock -> Ab c
+
+-- | Point in timeline.
+class (CTypeOf c) => CTime c where getTime = getContent isTime gTime putTime = Right . pTime
+isTime :: CTime c => c -> Bool
+gTime :: CTime c => c -> Time
+pTime :: CTime c => Time -> c
+getTime :: CTime c => Ab c -> Ab Time
+putTime :: CTime c => Time -> Ab c
+
+-- | Code.
+class (CTypeOf c) => CCode c where getCode = getContent isCode gCode putCode = Right . pCode
+isCode :: CCode c => c -> Bool
+gCode :: CCode c => c -> String
+pCode :: CCode c => String -> c
+getCode :: CCode c => Ab c -> Ab String
+putCode :: CCode c => String -> Ab c
+
+-- | Term name.
+class (CTypeOf c) => CTerm c where getTerm = getContent isTerm gTerm putTerm = Right . pTerm
+isTerm :: CTerm c => c -> Bool
+gTerm :: CTerm c => c -> String
+pTerm :: CTerm c => String -> c
+getTerm :: CTerm c => Ab c -> Ab String
+putTerm :: CTerm c => String -> Ab c
+
+-- | Double-quoted text content.
+class (CTypeOf c) => CText c where getText = getContent isText gText putText = Right . pText
+isText :: CText c => c -> Bool
+gText :: CText c => c -> String
+pText :: CText c => String -> c
+getText :: CText c => Ab c -> Ab String
+putText :: CText c => String -> Ab c
+
+-- | Create Text or empty content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pMaybeText "a" :: BaalaC
+--   VText "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; pMaybeText "" :: BaalaC
+--   VEmpty
+--   </pre>
+pMaybeText :: (CText c, CEmpty c) => String -> c
+
+
+-- | Complex content type.
+module Koshucode.Baala.Data.Class.Complex
+
+-- | List of contents.
+class (CTypeOf c) => CList c where getList = getContent isList gList putList = Right . pList
+isList :: CList c => c -> Bool
+gList :: CList c => c -> [c]
+pList :: CList c => [c] -> c
+getList :: CList c => Ab c -> Ab [c]
+putList :: CList c => [c] -> Ab c
+
+-- | Create list of text contents.
 pTextList :: (CText c, CList c) => [String] -> c
 
+-- | Set of contents.
+class (CTypeOf c) => CSet c where getSet = getContent isSet gSet putSet = Right . pSet
+isSet :: CSet c => c -> Bool
+gSet :: CSet c => c -> [c]
+pSet :: CSet c => [c] -> c
+getSet :: CSet c => Ab c -> Ab [c]
+putSet :: CSet c => [c] -> Ab c
 
--- | Baala content type.
-module Koshucode.Baala.Data.Content.BaalaC
+-- | Create set of term contents.
+pTermSet :: (CTerm c, CSet c) => [String] -> c
 
--- | Vanilla content type
-data BaalaC
+-- | Create set of text contents.
+pTextSet :: (CText c, CSet c) => [String] -> c
 
--- | Boolean type
-VBool :: Bool -> BaalaC
+-- | Sorted version of <a>gSet</a>.
+gSetSort :: (Ord c, CSet c) => c -> [c]
 
--- | Code type
-VCode :: String -> BaalaC
+-- | Test membership between element and collection contents.
+isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 
--- | String type
-VText :: String -> BaalaC
+-- | Tie of terms.
+class (CTypeOf c) => CTie c where getTie = getContent isTie gTie putTie = Right . pTie
+isTie :: CTie c => c -> Bool
+gTie :: CTie c => c -> [Term c]
+pTie :: CTie c => [Term c] -> c
+getTie :: CTie c => Ab c -> Ab [Term c]
+putTie :: CTie c => [Term c] -> Ab c
 
--- | Term name type
-VTerm :: String -> BaalaC
+-- | Relation of terms.
+class (CTypeOf c) => CRel c where getRel = getContent isRel gRel putRel = Right . pRel
+isRel :: CRel c => c -> Bool
+gRel :: CRel c => c -> Rel c
+pRel :: CRel c => Rel c -> c
+getRel :: CRel c => Ab c -> Ab (Rel c)
+putRel :: CRel c => Rel c -> Ab c
 
--- | Decimal number type
-VDec :: Decimal -> BaalaC
+-- | The nullary full relation.
+dee :: (CRel c) => c
 
--- | Clock type
-VClock :: Clock -> BaalaC
+-- | The nullary empty relation.
+dum :: (CRel c) => c
 
--- | Time type
-VTime :: Time -> BaalaC
+-- | Data intepretation.
+class (CTypeOf c) => CInterp c where getInterp = getContent isInterp gInterp putInterp = Right . pInterp
+isInterp :: CInterp c => c -> Bool
+gInterp :: CInterp c => c -> Interp
+pInterp :: CInterp c => Interp -> c
+getInterp :: CInterp c => Ab c -> Ab Interp
+putInterp :: CInterp c => Interp -> Ab c
 
--- | Sign of no ordinary type
-VEmpty :: BaalaC
+-- | Type of content.
+class (CTypeOf c) => CType c where getType = getContent isType gType putType = Right . pType
+isType :: CType c => c -> Bool
+gType :: CType c => c -> Type
+pType :: CType c => Type -> c
+getType :: CType c => Ab c -> Ab Type
+putType :: CType c => Type -> Ab c
 
--- | The end of everything
-VEnd :: BaalaC
 
--- | Interpretation type
-VInterp :: Interp -> BaalaC
+-- | Generic content class.
+module Koshucode.Baala.Data.Class.Content
 
--- | Type for type
-VType :: Type -> BaalaC
+-- | Generic content class.
+class (Ord c, Show c, MixShortEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty
+appendContent :: CContent c => c -> c -> Ab c
+joinContent :: CContent c => [c] -> Ab c
 
--- | List type (objective collection)
-VList :: [BaalaC] -> BaalaC
+-- | Order of type.
+typeOrder :: (CContent c) => c -> Int
 
--- | Set type (informative collection)
-VSet :: [BaalaC] -> BaalaC
 
--- | Tie type (set of terms)
-VTie :: [Named BaalaC] -> BaalaC
-
--- | Relation type
-VRel :: (Rel BaalaC) -> BaalaC
-instance GHC.Show.Show Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance GHC.Classes.Eq Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance GHC.Classes.Ord Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Singleton.CTypeOf Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Utility.CContent Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Base.Text.MixEncode.MixShortEncode Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CBool Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CDec Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CClock Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CTime Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CCode Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CText Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CList Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Singleton.CEmpty Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Singleton.CEnd Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Simple.CTerm Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CInterp Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CType Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CSet Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CTie Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Content.Complex.CRel Koshucode.Baala.Data.Content.BaalaC.BaalaC
+-- | Classes for term contents.
+module Koshucode.Baala.Data.Class
 
 
 -- | Decode token trees to contents.
@@ -1983,6 +2134,146 @@ instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Decode.AssertType
 instance GHC.Show.Show Koshucode.Baala.Data.Content.Decode.AssertType
 
 
+-- | Utilities for term contents.
+module Koshucode.Baala.Data.Content.Utility
+
+-- | Pair of get and put.
+type CGetPut a c = (c -> a, a -> c)
+
+-- | <tt>gText</tt> and <tt>pText</tt>.
+gpText :: (CText c) => CGetPut [Char] c
+
+-- | <tt>gList</tt> and <tt>pList</tt>.
+gpList :: (CList c) => CGetPut [c] c
+
+-- | <tt>gSet</tt> and <tt>pSet</tt>.
+gpSet :: (CSet c) => CGetPut [c] c
+
+-- | <tt>gSetSort</tt> and <tt>pSet</tt>.
+gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
+
+-- | Apply function to internal value of content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contAp gText pText reverse (pText "abc" :: BaalaC) :: BaalaC
+--   VText "cba"
+--   </pre>
+contAp :: (a' -> a) -> (b -> b') -> (a -> b) -> a' -> b'
+
+-- | Map function to internal value of content.
+contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
+contApTextToText :: (CText c) => Map String -> AbMap c
+contMapTextToList :: (CList c, CText c) => (Char -> c) -> AbMap c
+
+-- | Convert term content to string value.
+judgeContString :: (CContent c) => Judge c -> Judge String
+
+-- | Convert content to string value.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contString (pText "a" :: BaalaC)
+--   "a"
+--   </pre>
+contString :: (CContent c) => c -> String
+
+-- | Enclose mix text in list brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBracketList $ B.mixString "a"
+--   MixText "[ a ]"
+--   </pre>
+mixBracketList :: MixText -> MixText
+
+-- | Enclose mix text in set brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBracketSet $ B.mixString "a"
+--   MixText "{ a }"
+--   </pre>
+mixBracketSet :: MixText -> MixText
+
+
+-- | The Baala content type.
+module Koshucode.Baala.Data.Content.BaalaC
+
+-- | Shorthand function for the Baala content type.
+--   
+--   <pre>
+--   &gt;&gt;&gt; the $ D.pText "a"
+--   VText "a"
+--   </pre>
+the :: BaalaC -> BaalaC
+
+-- | The Baala content type.
+data BaalaC
+
+-- | Boolean type
+VBool :: Bool -> BaalaC
+
+-- | Code type
+VCode :: String -> BaalaC
+
+-- | String type
+VText :: String -> BaalaC
+
+-- | Term name type
+VTerm :: String -> BaalaC
+
+-- | Decimal number type
+VDec :: Decimal -> BaalaC
+
+-- | Clock type
+VClock :: Clock -> BaalaC
+
+-- | Time type
+VTime :: Time -> BaalaC
+
+-- | Sign of no ordinary type
+VEmpty :: BaalaC
+
+-- | The end of everything
+VEnd :: BaalaC
+
+-- | Interpretation type
+VInterp :: Interp -> BaalaC
+
+-- | Type for type
+VType :: Type -> BaalaC
+
+-- | List type (objective collection)
+VList :: [BaalaC] -> BaalaC
+
+-- | Set type (informative collection)
+VSet :: [BaalaC] -> BaalaC
+
+-- | Tie type (set of terms)
+VTie :: [Named BaalaC] -> BaalaC
+
+-- | Relation type
+VRel :: (Rel BaalaC) -> BaalaC
+instance GHC.Show.Show Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance GHC.Classes.Eq Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance GHC.Classes.Ord Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Singleton.CTypeOf Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Content.CContent Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CBool Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CDec Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CClock Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CTime Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CCode Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CText Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CList Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Singleton.CEmpty Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Singleton.CEnd Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CTerm Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CInterp Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CSet Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CTie Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CRel Koshucode.Baala.Data.Content.BaalaC.BaalaC
+
+
 -- | Content of term in judgement.
 module Koshucode.Baala.Data.Content
 
@@ -1997,21 +2288,44 @@ coxBuild :: (CContent c) => ContentCalc c -> CopSet c -> TTreeToAb (Cox c)
 coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)
 
 
--- | Term-content calcutation.
+-- | Term-content calculation.
 module Koshucode.Baala.Data.Church.Run
-type RunCox c = Cox c -> Ab c
+
+-- | Tuple-to-content calculation.
 type RunList c = [c] -> Ab c
-coxRunCox :: (CContent c) => CopSet c -> Head -> [c] -> RunCox c
+
+-- | Calculate content expression with specific tuple.
+coxRunCox :: (CContent c) => CopSet c -> Head -> [c] -> Cox c -> Ab c
+
+-- | Calculate content expression with specific tuple.
 coxRunList :: (CContent c) => CopSet c -> Head -> Cox c -> RunList c
+
+-- | Calculate content expression.
 calcContent :: (CContent c) => CopSet c -> ContentCalc c
+
+-- | Extract single argument.
 getArg1 :: [Ab c] -> Ab (Ab c)
+
+-- | Extract two arguments.
 getArg2 :: [Ab c] -> Ab (Ab c, Ab c)
+
+-- | Extract three arguments.
 getArg3 :: [Ab c] -> Ab (Ab c, Ab c, Ab c)
+
+-- | Extract single non-abortable argument.
 getRightArg1 :: [Ab c] -> Ab c
+
+-- | Extract two non-abortable arguments.
 getRightArg2 :: [Ab c] -> Ab (c, c)
+
+-- | Extract three non-abortable arguments.
 getRightArg3 :: [Ab c] -> Ab (c, c, c)
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Data.Church.Run.Beta c)
 
+
+-- | Content calculation.
 module Koshucode.Baala.Data.Church
 
+
+-- | Bundle of data modules.
 module Koshucode.Baala.Data

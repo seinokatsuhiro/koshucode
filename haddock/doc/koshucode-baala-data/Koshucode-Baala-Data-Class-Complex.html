@@ -3,14 +3,14 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Data.Content.Complex</title
+    >Koshucode.Baala.Data.Class.Complex</title
     ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
 function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Content-Complex.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Class-Complex.html");};
 //]]>
 </script
     ></head
@@ -18,7 +18,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html');" href="javascript:void(0);"
+	><a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html');" href="javascript:void(0);"
 	  >Source</a
 	  ></li
 	><li
@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.164.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -50,7 +50,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Data.Content.Complex</p
+	>Koshucode.Baala.Data.Class.Complex</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -91,7 +91,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CList"
 	    >CList</a
@@ -129,9 +129,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></ul
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:pTextList"
+	    >pTextList</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c</li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CSet"
 	    >CSet</a
@@ -169,17 +179,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></ul
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:pTermSet"
+	    >pTermSet</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:pTextSet"
+	    >pTextSet</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c</li
+	  ><li class="src short"
 	  ><a href="#v:gSetSort"
 	    >gSetSort</a
 	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
 	    >CSet</a
 	    > c) =&gt; c -&gt; [c]</li
 	  ><li class="src short"
+	  ><a href="#v:isMember"
+	    >isMember</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; c -&gt; c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CTie"
 	    >CTie</a
@@ -227,7 +269,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CRel"
 	    >CRel</a
@@ -275,19 +317,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:dee"
 	    >dee</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    > :: <a href="Koshucode-Baala-Data-Class-Complex.html#t:CRel"
 	    >CRel</a
 	    > c =&gt; c</li
 	  ><li class="src short"
 	  ><a href="#v:dum"
 	    >dum</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    > :: <a href="Koshucode-Baala-Data-Class-Complex.html#t:CRel"
 	    >CRel</a
 	    > c =&gt; c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CInterp"
 	    >CInterp</a
@@ -335,7 +377,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CType"
 	    >CType</a
@@ -391,13 +433,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CList" class="def"
 	    >CList</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CList');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -408,11 +450,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isList"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isList"
 	      >isList</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gList"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gList"
 	      >gList</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pList"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pList"
 	      >pList</a
 	      ></p
 	    ></div
@@ -424,19 +466,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isList</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isList');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:gList" class="def"
 	      >gList</a
-	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gList');" href="javascript:void(0);" class="link"
+	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:pList" class="def"
 	      >pList</a
-	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pList');" href="javascript:void(0);" class="link"
+	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -446,7 +488,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getList');" href="javascript:void(0);" class="link"
+	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -454,7 +496,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >putList</a
 	      > :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putList');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -466,12 +508,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CList"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CList"
 		      >CList</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-173');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-181');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -483,15 +525,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:pTextList" class="def"
+	    >pTextList</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pTextList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create list of text contents.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CSet" class="def"
 	    >CSet</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CSet');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CSet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -502,11 +562,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isSet"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isSet"
 	      >isSet</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gSet"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gSet"
 	      >gSet</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pSet"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pSet"
 	      >pSet</a
 	      ></p
 	    ></div
@@ -518,19 +578,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isSet</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isSet');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:gSet" class="def"
 	      >gSet</a
-	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gSet');" href="javascript:void(0);" class="link"
+	      > :: c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:pSet" class="def"
 	      >pSet</a
-	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pSet');" href="javascript:void(0);" class="link"
+	      > :: [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -540,7 +600,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getSet');" href="javascript:void(0);" class="link"
+	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -548,7 +608,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >putSet</a
 	      > :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putSet');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -560,12 +620,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
 		      >CSet</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-214');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-222');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -577,15 +637,79 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:pTermSet" class="def"
+	    >pTermSet</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pTermSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create set of term contents.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:pTextSet" class="def"
+	    >pTextSet</a
+	    > :: (<a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pTextSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create set of text contents.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:gSetSort" class="def"
 	    >gSetSort</a
 	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Content-Complex.html#t:CSet"
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
 	    >CSet</a
-	    > c) =&gt; c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gSetSort');" href="javascript:void(0);" class="link"
+	    > c) =&gt; c -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gSetSort');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sorted version of <code
+	      ><a href="Koshucode-Baala-Data-Class-Complex.html#v:gSet"
+		>gSet</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isMember" class="def"
+	    >isMember</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; c -&gt; c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isMember');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test membership between element and collection contents.</p
+	    ></div
 	  ></div
 	><h2 id="g:3"
 	>Relational</h2
@@ -593,13 +717,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CTie" class="def"
 	    >CTie</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CTie');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -610,11 +734,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isTie"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isTie"
 	      >isTie</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gTie"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gTie"
 	      >gTie</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pTie"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pTie"
 	      >pTie</a
 	      ></p
 	    ></div
@@ -626,7 +750,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isTie</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isTie');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -634,7 +758,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >gTie</a
 	      > :: c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	      >Term</a
-	      > c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gTie');" href="javascript:void(0);" class="link"
+	      > c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -642,7 +766,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >pTie</a
 	      > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	      >Term</a
-	      > c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pTie');" href="javascript:void(0);" class="link"
+	      > c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -654,7 +778,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	      >Term</a
-	      > c] <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getTie');" href="javascript:void(0);" class="link"
+	      > c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -664,7 +788,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Term</a
 	      > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putTie');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -676,12 +800,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CTie"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CTie"
 		      >CTie</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-221');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-229');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -695,13 +819,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CRel" class="def"
 	    >CRel</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CRel');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CRel');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -712,11 +836,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isRel"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isRel"
 	      >isRel</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gRel"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gRel"
 	      >gRel</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pRel"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pRel"
 	      >pRel</a
 	      ></p
 	    ></div
@@ -728,7 +852,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isRel</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isRel');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -736,7 +860,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >gRel</a
 	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gRel');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -744,7 +868,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >pRel</a
 	      > :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
-	      > c -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pRel');" href="javascript:void(0);" class="link"
+	      > c -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -756,7 +880,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
-	      > c) <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getRel');" href="javascript:void(0);" class="link"
+	      > c) <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -766,7 +890,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Rel</a
 	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putRel');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -778,12 +902,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CRel"
 		      >CRel</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-228');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-236');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -797,41 +921,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:dee" class="def"
 	    >dee</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    > :: <a href="Koshucode-Baala-Data-Class-Complex.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#dee');" href="javascript:void(0);" class="link"
+	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#dee');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Nullary full relation.</p
+	    >The nullary full relation.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dum" class="def"
 	    >dum</a
-	    > :: <a href="Koshucode-Baala-Data-Content-Complex.html#t:CRel"
+	    > :: <a href="Koshucode-Baala-Data-Class-Complex.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#dum');" href="javascript:void(0);" class="link"
+	    > c =&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#dum');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Nullary empty relation.</p
+	    >The nullary empty relation.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CInterp" class="def"
 	    >CInterp</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CInterp');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CInterp');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -842,11 +966,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isInterp"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isInterp"
 	      >isInterp</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gInterp"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gInterp"
 	      >gInterp</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pInterp"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pInterp"
 	      >pInterp</a
 	      ></p
 	    ></div
@@ -858,7 +982,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isInterp</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isInterp');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -866,7 +990,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >gInterp</a
 	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
 	      >Interp</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gInterp');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -874,7 +998,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >pInterp</a
 	      > :: <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
 	      >Interp</a
-	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pInterp');" href="javascript:void(0);" class="link"
+	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -886,7 +1010,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
 	      >Interp</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getInterp');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -896,7 +1020,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Interp</a
 	      > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putInterp');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -908,12 +1032,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CInterp"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CInterp"
 		      >CInterp</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-200');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-208');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -929,13 +1053,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Content-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CType" class="def"
 	    >CType</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#CType');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#CType');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -946,11 +1070,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><p class="caption"
 	    >Minimal complete definition</p
 	    ><p class="src"
-	    ><a href="Koshucode-Baala-Data-Content-Complex.html#v:isType"
+	    ><a href="Koshucode-Baala-Data-Class-Complex.html#v:isType"
 	      >isType</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:gType"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:gType"
 	      >gType</a
-	      >, <a href="Koshucode-Baala-Data-Content-Complex.html#v:pType"
+	      >, <a href="Koshucode-Baala-Data-Class-Complex.html#v:pType"
 	      >pType</a
 	      ></p
 	    ></div
@@ -962,7 +1086,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >isType</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#isType');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#isType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -970,7 +1094,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >gType</a
 	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
 	      >Type</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#gType');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -978,7 +1102,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >pType</a
 	      > :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
 	      >Type</a
-	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#pType');" href="javascript:void(0);" class="link"
+	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -990,7 +1114,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Ab</a
 	      > <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
 	      >Type</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#getType');" href="javascript:void(0);" class="link"
+	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -1000,7 +1124,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      >Type</a
 	      > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
-	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#putType');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#putType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -1012,12 +1136,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Content-Complex.html#t:CType"
+		    ><a href="Koshucode-Baala-Data-Class-Complex.html#t:CType"
 		      >CType</a
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-Complex.html#line-207');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-215');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
