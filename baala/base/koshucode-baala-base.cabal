@@ -73,6 +73,7 @@ library
         Koshucode.Baala.Base.IO.SimpleOption
 
         Koshucode.Baala.Base.MixText
+        Koshucode.Baala.Base.MixText.Deriv
         Koshucode.Baala.Base.MixText.LineBreak
         Koshucode.Baala.Base.MixText.MixClass
         Koshucode.Baala.Base.MixText.MixEncode
