@@ -7,7 +7,7 @@ module Koshucode.Baala.Cop.Logic
     -- $Operators
   ) where
 
-import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Cop.Coxhand  as H
 
@@ -53,14 +53,14 @@ cop1 p arg =
        x  <- D.getBool $ Right xc
        D.putBool $ p x
 
-cop2 :: (D.CBool c) => B.Bin Bool -> D.CopCalc c
+cop2 :: (D.CBool c) => O.Bin Bool -> D.CopCalc c
 cop2 p arg =
     do (xc, yc) <- D.getRightArg2 arg
        x <- D.getBool $ Right xc
        y <- D.getBool $ Right yc
        D.putBool $ p x y
 
-copN :: (D.CBool c) => Bool -> B.Bin Bool -> D.CopCalc c
+copN :: (D.CBool c) => Bool -> O.Bin Bool -> D.CopCalc c
 copN unit op = loop where
     loop []   = D.putBool unit
     loop [xc] = xc

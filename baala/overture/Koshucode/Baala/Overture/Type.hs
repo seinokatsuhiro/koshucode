@@ -7,6 +7,7 @@ module Koshucode.Baala.Overture.Type
    uneith,
    Map, ManyMap,
    Test, Test2,
+   Bin,
    int, integer,
  ) where
 
@@ -33,6 +34,9 @@ type Test a = a -> Bool
 
 -- | Boolean-valued function with 2 arguments.
 type Test2 a b = a -> b -> Bool
+
+-- | Type for binary operators.
+type Bin a = a -> a -> a
 
 -- | 'Int' shorthand.
 --

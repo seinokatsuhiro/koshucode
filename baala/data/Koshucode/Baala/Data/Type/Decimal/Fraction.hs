@@ -32,7 +32,6 @@ module Koshucode.Baala.Data.Type.Decimal.Fraction
 
 import qualified Data.Ratio                                  as R
 import qualified Koshucode.Baala.Overture                    as O
-import qualified Koshucode.Baala.Base                        as B
 import qualified Koshucode.Baala.Data.Type.Decimal.Decimal   as D
 import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
 
@@ -84,14 +83,14 @@ decimalRound d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundAt l r
 
 -- | Round decimal per fractional length.
-decimalRoundAt :: B.Bin D.Decimal
+decimalRoundAt :: O.Bin D.Decimal
 decimalRoundAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioRoundAt l' r
 
 -- | Round decimal per unit decimal.
-decimalRoundPer :: B.Bin D.Decimal
+decimalRoundPer :: O.Bin D.Decimal
 decimalRoundPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundPer per r
@@ -104,14 +103,14 @@ decimalRoundEven d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundEvenAt l r
 
 -- | Round decimal to even per fractional length.
-decimalRoundEvenAt :: B.Bin D.Decimal
+decimalRoundEvenAt :: O.Bin D.Decimal
 decimalRoundEvenAt D.Decimal { D.decimalRatio = l }
                  d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioRoundEvenAt l' r
 
 -- | Round decimal to even per unit decimal.
-decimalRoundEvenPer :: B.Bin D.Decimal
+decimalRoundEvenPer :: O.Bin D.Decimal
 decimalRoundEvenPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
                   d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundEvenPer per r
@@ -124,14 +123,14 @@ decimalTrunc d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncAt l r
 
 -- | Truncate decimal per fractional length.
-decimalTruncAt :: B.Bin D.Decimal
+decimalTruncAt :: O.Bin D.Decimal
 decimalTruncAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioTruncAt l' r
 
 -- | Truncate decimal per unit decimal.
-decimalTruncPer :: B.Bin D.Decimal
+decimalTruncPer :: O.Bin D.Decimal
 decimalTruncPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioTruncPer per r
@@ -149,14 +148,14 @@ decimalRoundOut d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundOutAt l r
 
 -- | Round out (toward infinity) decimal to even per fractional length.
-decimalRoundOutAt :: B.Bin D.Decimal
+decimalRoundOutAt :: O.Bin D.Decimal
 decimalRoundOutAt D.Decimal { D.decimalRatio = l }
                  d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioRoundOutAt l' r
 
 -- | Round out (toward infinity) decimal to even per unit decimal.
-decimalRoundOutPer :: B.Bin D.Decimal
+decimalRoundOutPer :: O.Bin D.Decimal
 decimalRoundOutPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
                   d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioRoundOutPer per r
@@ -169,14 +168,14 @@ decimalFloor d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioFloorAt l r
 
 -- | Floor decimal per fractional length.
-decimalFloorAt :: B.Bin D.Decimal
+decimalFloorAt :: O.Bin D.Decimal
 decimalFloorAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioFloorAt l' r
 
 -- | Floor decimal per unit decimal.
-decimalFloorPer :: B.Bin D.Decimal
+decimalFloorPer :: O.Bin D.Decimal
 decimalFloorPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioFloorPer per r
@@ -189,14 +188,14 @@ decimalCeil d@D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
     updateDecimal d l $ D.ratioCeilAt l r
 
 -- | Ceiling decimal per fractional length.
-decimalCeilAt :: B.Bin D.Decimal
+decimalCeilAt :: O.Bin D.Decimal
 decimalCeilAt D.Decimal { D.decimalRatio = l }
              d@D.Decimal { D.decimalRatio = r } =
     let l' = fst $ properFraction l
     in updateDecimal d l' $ D.ratioCeilAt l' r
 
 -- | Ceiling decimal per unit decimal.
-decimalCeilPer :: B.Bin D.Decimal
+decimalCeilPer :: O.Bin D.Decimal
 decimalCeilPer D.Decimal { D.decimalFracle = l, D.decimalRatio = per }
               d@D.Decimal { D.decimalRatio = r } =
     updateDecimal d l $ D.ratioCeilPer per r

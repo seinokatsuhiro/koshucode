@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.List.Snip
   ( -- * Type
-    Snip, Snip2, Bin,
+    Snip, Snip2,
   
     -- * Function
     snipFull, snipIndex, snipPair,
@@ -34,9 +34,6 @@ type Snip a = [Int] -> O.Map [a]
 
 -- | Snip for differenct type values.
 type Snip2 a b = (Snip a, Snip b)
-
--- | Type for binary operators.
-type Bin a = a -> a -> a
 
 
 -- --------------------------------------------  Function
@@ -162,15 +159,15 @@ snipBackward2 :: Snip2 a b
 snipBackward2 = (snipBackward, snipBackward)
 
 -- | Take left-side elements.
-snipLeft :: (Eq a) => Bin [a]
+snipLeft :: (Eq a) => O.Bin [a]
 snipLeft xs ys = snipIndex ys xs `snipOff` xs
 
 -- | Take shared elements.
-snipShare :: (Eq a) => Bin [a]
+snipShare :: (Eq a) => O.Bin [a]
 snipShare xs ys = snipIndex xs ys `snipFrom` ys
 
 -- | Take right-side elements.
-snipRight :: (Eq a) => Bin [a]
+snipRight :: (Eq a) => O.Bin [a]
 snipRight xs ys = snipLeft ys xs
 
 snipOrder :: (Eq a) => [a] -> [a] -> O.Map [c]

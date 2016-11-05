@@ -7,7 +7,7 @@ module Koshucode.Baala.Cop.Order
     -- $Operators
   ) where
 
-import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Cop.Coxhand        as H
 import qualified Koshucode.Baala.Cop.Message        as Msg
@@ -77,9 +77,9 @@ between :: D.CopCox c
 between [low, high] = Right $ H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
 between _ = Msg.adlib "require operand"
 
-binAnd :: B.Bin (D.Cox c)
+binAnd :: O.Bin (D.Cox c)
 binAnd  = H.bin "and"
 
-binAsc :: B.Bin (D.Cox c)
+binAsc :: O.Bin (D.Cox c)
 binAsc  = H.bin "<="
 

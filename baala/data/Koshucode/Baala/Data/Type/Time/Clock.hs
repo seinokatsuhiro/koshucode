@@ -231,7 +231,7 @@ daySecToMix secMix day sec =
          0  -> mx
          d2 -> dayToMix d2 B.<> mx
 
-mixColon :: B.Bin B.MixText
+mixColon :: O.Bin B.MixText
 mixColon = B.mixInfix ":"
 
 dhmsToMix :: Sec -> (Days, B.MixText)
@@ -263,7 +263,7 @@ clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
 clockMap f _ (ClockD    d)    =        ClockD    (f d)
 
 -- | Combine MDJ and second of two clocks.
-clockMap2 :: B.Bin Days -> B.Bin Sec -> B.BinAb Clock
+clockMap2 :: O.Bin Days -> O.Bin Sec -> B.BinAb Clock
 clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
 clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
 clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)

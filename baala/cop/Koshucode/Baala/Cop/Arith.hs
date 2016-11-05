@@ -214,7 +214,7 @@ round1 f arg =
     do dec <- getDec1 arg
        D.putDec $ f dec
 
-round2 :: (D.CText c, D.CDec c) => B.Bin D.Decimal -> [B.Ab c] -> B.Ab c
+round2 :: (D.CText c, D.CDec c) => O.Bin D.Decimal -> [B.Ab c] -> B.Ab c
 round2 f arg = 
     do (per, dec) <- getDec2 arg
        D.putDec $ f per dec

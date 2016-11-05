@@ -23,7 +23,6 @@ module Koshucode.Baala.Data.Type.Decimal.Rational
 
 import qualified Data.Ratio                     as R
 import qualified Koshucode.Baala.Overture       as O
-import qualified Koshucode.Baala.Base           as B
 
 
 -- --------------------------------------------  Shorthand
@@ -58,7 +57,7 @@ ratioFracle l = 10 ^^ (- l)
 -- test (0 :: Int)  `mapM_` ((%% 4) <$> [-8 .. 15])
 -- test (-2 :: Int) `mapM_` ((%% 1) <$> [-100, -50 .. 500])
 
-ratioRoundPerBy :: (Integral n) => (n -> B.Bin (R.Ratio n)) -> B.Bin (R.Ratio n)
+ratioRoundPerBy :: (Integral n) => (n -> O.Bin (R.Ratio n)) -> O.Bin (R.Ratio n)
 ratioRoundPerBy conv per r = signum r * conv int frac trunc where
     (int, frac)  = properFraction (abs r / per)
     trunc        = (int R.% 1) * per
@@ -72,13 +71,13 @@ ratioRoundEvenAt :: (Integral l, Integral n) => l -> O.Map (R.Ratio n)
 ratioRoundEvenAt = ratioRoundEvenPer . ratioFracle
 
 -- | Round rational number per unit rational number.
-ratioRoundPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioRoundPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioRoundPer per = ratioRoundPerBy conv per where
     conv _ frac trunc | frac >= ratioHalf  = trunc + per
                       | otherwise          = trunc
 
 -- | Round-to-even rational number per unit rational number.
-ratioRoundEvenPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioRoundEvenPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioRoundEvenPer per = ratioRoundPerBy conv per where
     conv int frac trunc =
         case frac `compare` ratioHalf of
@@ -91,7 +90,7 @@ ratioTruncAt :: (Integral l, Integral n) => l -> O.Map (R.Ratio n)
 ratioTruncAt = ratioTruncPer . ratioFracle
 
 -- | Truncate rational number per unit rational number.
-ratioTruncPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioTruncPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioTruncPer = ratioRoundPerBy conv where
     conv _ _ trunc = trunc
 
@@ -100,7 +99,7 @@ ratioRoundOutAt :: (Integral l, Integral n) => l -> O.Map (R.Ratio n)
 ratioRoundOutAt = ratioRoundOutPer . ratioFracle
 
 -- | Round out (toward infinity) rational number per unit rational number.
-ratioRoundOutPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioRoundOutPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioRoundOutPer per = ratioRoundPerBy conv per where
     conv _ frac trunc | frac > 0  = trunc + per
                       | otherwise = trunc
@@ -112,7 +111,7 @@ ratioRoundOutPer per = ratioRoundPerBy conv per where
 -- let test l r = putStrLn $ sh (ratioFloorAt l r) ++ "  |  " ++ sh (ratioCeilAt l r) ++ "  <-  " ++ sh r
 -- test (0 :: Int)  `mapM_` ((%% 4) <$> [-8 .. 15])
 
-ratioFloorPerBy :: (Integral n) => B.Bin (R.Ratio n) -> B.Bin (R.Ratio n)
+ratioFloorPerBy :: (Integral n) => O.Bin (R.Ratio n) -> O.Bin (R.Ratio n)
 ratioFloorPerBy conv per r = conv frac trunc where
     (int, frac)  = properFraction (r / per)
     trunc        = (int R.% 1) * per
@@ -122,7 +121,7 @@ ratioFloorAt :: (Integral l, Integral n) => l -> O.Map (R.Ratio n)
 ratioFloorAt = ratioFloorPer . ratioFracle
 
 -- | Floor rational number per unit rational number.
-ratioFloorPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioFloorPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioFloorPer per = ratioFloorPerBy conv per where
     conv frac trunc | frac < 0   = trunc - per
                     | otherwise  = trunc
@@ -132,7 +131,7 @@ ratioCeilAt :: (Integral l, Integral n) => l -> O.Map (R.Ratio n)
 ratioCeilAt = ratioCeilPer . ratioFracle
 
 -- | Ceiling rational number per unit rational number.
-ratioCeilPer :: (Integral n) => B.Bin (R.Ratio n)
+ratioCeilPer :: (Integral n) => O.Bin (R.Ratio n)
 ratioCeilPer per = ratioFloorPerBy conv per where
     conv frac trunc | frac > 0   = trunc + per
                     | otherwise  = trunc
@@ -145,7 +144,7 @@ ratioCeilPer per = ratioFloorPerBy conv per where
 --   >>> ratioQuo (5 %% 1) (2 %% 3)
 --   7 % 1
 --
-ratioQuo :: (Integral n) => B.Bin (R.Ratio n)
+ratioQuo :: (Integral n) => O.Bin (R.Ratio n)
 ratioQuo x y = fst $ ratioQuoRem x y
 
 -- | Remainder of two ratio numbers.
@@ -153,7 +152,7 @@ ratioQuo x y = fst $ ratioQuoRem x y
 --   >>> ratioRem (5 %% 1) (2 %% 3)
 --   1 % 3
 --
-ratioRem :: (Integral n) => B.Bin (R.Ratio n)
+ratioRem :: (Integral n) => O.Bin (R.Ratio n)
 ratioRem x y = snd $ ratioQuoRem x y
 
 -- | Quotient and remainder of two ratio numbers.

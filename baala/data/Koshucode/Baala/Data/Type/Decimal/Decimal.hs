@@ -80,16 +80,16 @@ decimalRatioMap f d@Decimal {..} = d { decimalRatio = f decimalRatio }
 -- --------------------------------------------  Binary
 
 -- | Binary operation for two decimals.
-type BinDecimal = B.Bin Decimal
+type BinDecimal = O.Bin Decimal
 
 -- | Abortable binary operation for two decimals.
 type BinAbDecimal = B.BinAb Decimal
 
 -- | Combinate fracle.
-type BinFracle = B.Bin DecimalFracle
+type BinFracle = O.Bin DecimalFracle
 
 -- | Combinate rational number.
-type BinRatio = B.Bin DecimalRatio
+type BinRatio = O.Bin DecimalRatio
 
 -- | Binary operation for two decimals.
 decimalBin :: BinFracle -> BinRatio -> BinDecimal

@@ -261,20 +261,20 @@ copTrimTextEnd = copTrimTextBy trimTextEnd
 copTrimTextBoth :: (D.CContent c) => D.CopCalc c
 copTrimTextBoth = copTrimTextBy trimTextBoth
 
-copTrimTextBy :: (D.CContent c) => B.Bin String -> D.CopCalc c
+copTrimTextBy :: (D.CContent c) => O.Bin String -> D.CopCalc c
 copTrimTextBy f arg =
     do (trim, text) <- D.getRightArg2 arg
        case D.isText trim && D.isText text of
          True  -> D.putText $ f (D.gText trim) (D.gText text)
          False -> typeUnmatch arg
 
-trimTextBegin :: (Eq a) => B.Bin [a]
+trimTextBegin :: (Eq a) => O.Bin [a]
 trimTextBegin s = dropWhile (`elem` s)
 
-trimTextEnd :: (Eq a) => B.Bin [a]
+trimTextEnd :: (Eq a) => O.Bin [a]
 trimTextEnd s = reverse . trimTextBegin s . reverse
 
-trimTextBoth :: (Eq a) => B.Bin [a]
+trimTextBoth :: (Eq a) => O.Bin [a]
 trimTextBoth s = trimTextEnd s . trimTextBegin s
 
 

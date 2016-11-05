@@ -10,8 +10,8 @@ module Koshucode.Baala.Base.Text.PPrint
   ) where
 
 import qualified Text.PrettyPrint                 as Pr
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base.Prelude     as B
-import qualified Koshucode.Baala.Base.List        as B
 
 -- | Convert to 'B.Doc' pretty printer.
 class PPrint a where
@@ -58,6 +58,6 @@ pprintV = Pr.vcat . map pprint
 pprintWraps :: (PPrint a, PPrint b) => a -> a -> b -> B.Doc
 pprintWraps = pprintWrapBody (B.<+>)
 
-pprintWrapBody :: (PPrint a, PPrint b) => B.Bin B.Doc -> a -> a -> b -> B.Doc
+pprintWrapBody :: (PPrint a, PPrint b) => O.Bin B.Doc -> a -> a -> b -> B.Doc
 pprintWrapBody p open close a = pprint open `p` pprint a `p` pprint close
 
