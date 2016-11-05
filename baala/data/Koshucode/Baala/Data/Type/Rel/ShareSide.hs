@@ -6,7 +6,7 @@ module Koshucode.Baala.Data.Type.Rel.ShareSide
   ( ShareSide (..),
     ShareSideMap,
     ShareSideMap2,
-    shareSide, shareSideOrd,
+    shareSide,
   ) where
 
 import qualified Koshucode.Baala.Base                as B
@@ -96,19 +96,6 @@ shareSide :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
 shareSide left right = shareSideBody (li, ri) (ln, rn) where
     (ln, rn) = getTermNames2 left right
     (li, ri) = doubleIndex ln rn $ B.memberFilter rn ln
-
--- | Right axis version of 'shareSide'.
---
---   >>> ssLShareIndex $ shareSideOrd ["a", "b"] ["b", "a"]
---   [1,0]
---
---   >>> ssLShareIndex $ shareSide ["a", "b"] ["b", "a"]
---   [0,1]
---
-shareSideOrd :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
-shareSideOrd left right = shareSideBody (li, ri) (ln, rn) where
-    (ln, rn) = getTermNames2 left right
-    (li, ri) = doubleIndex ln rn $ B.memberFilter ln rn
 
 doubleIndex :: (Ord a) => [a] -> [a] -> [a] -> Dbl [Int]
 doubleIndex ln rn xn = (B.snipIndex xn ln, B.snipIndex xn rn)
