@@ -278,7 +278,7 @@ case "$1" in
         pkg_toolkit pkg_installed "koshu*" ;;
     doc0)
         pkg_doc_verbose=0
-        pkg_haddock ;;
+        pkg_haddock 2> /dev/null ;;
     doc)
         pkg_haddock ;;
     doc2)
