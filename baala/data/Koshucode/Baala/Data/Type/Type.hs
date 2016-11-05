@@ -1,6 +1,8 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Type for types.
+
 module Koshucode.Baala.Data.Type.Type
   ( -- * Type
     Type (..),
@@ -63,6 +65,7 @@ data Type
     | TypeSum     [Type]          -- ^ Sum type
       deriving (Show, Eq, Ord)
 
+-- | Term type, i.e., term name and type of its content.
 type NamedType = B.Named Type
 
 instance B.MixEncode Type where

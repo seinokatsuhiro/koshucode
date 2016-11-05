@@ -137,14 +137,30 @@ ratioCeilPer per = ratioFloorPerBy conv per where
     conv frac trunc | frac > 0   = trunc + per
                     | otherwise  = trunc
 
+
 -- --------------------------------------------  Quotient and remainder
 
+-- | Quotient of two ratio numbers.
+--
+--   >>> ratioQuo (5 %% 1) (2 %% 3)
+--   7 % 1
+--
 ratioQuo :: (Integral n) => B.Bin (R.Ratio n)
 ratioQuo x y = fst $ ratioQuoRem x y
 
+-- | Remainder of two ratio numbers.
+--
+--   >>> ratioRem (5 %% 1) (2 %% 3)
+--   1 % 3
+--
 ratioRem :: (Integral n) => B.Bin (R.Ratio n)
 ratioRem x y = snd $ ratioQuoRem x y
 
+-- | Quotient and remainder of two ratio numbers.
+--
+--   >>> ratioQuoRem (5 %% 1) (2 %% 3)
+--   (7 % 1, 1 % 3)
+--
 ratioQuoRem :: (Integral n) => R.Ratio n -> R.Ratio n -> (R.Ratio n, R.Ratio n)
 ratioQuoRem = ratioQuoRem'
 

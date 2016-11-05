@@ -197,6 +197,7 @@ assertSymbol AssertChange       = "|=C"
 assertSymbol AssertMultiChange  = "|=CC"
 assertSymbol AssertViolate      = "|=V"
 
+-- | Create judgement corresponding to assertion type.
 assertAs :: AssertType -> D.JudgeOf c
 assertAs AssertAffirm        = D.JudgeAffirm
 assertAs AssertDeny          = D.JudgeDeny

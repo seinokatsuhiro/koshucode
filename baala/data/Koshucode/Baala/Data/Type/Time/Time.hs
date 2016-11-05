@@ -166,9 +166,25 @@ timeFromDcz :: D.Date -> D.Clock -> Zone -> Time
 timeFromDcz d c z = let (d', c') = D.clockDaysClock c
                     in TimeYmdcz (D.dateAdd d' d) c' z
 
+-- | Create time from year, month, and day.
+--
+--   >>> timeFromYmd 2013 4 18
+--   2013-04-18
+--
+--   >>> timeFromYmd 2013 4 0
+--   2013-04-01
+--
+--   >>> timeFromYmd 2013 4 33
+--   2013-04-30
+--
 timeFromYmd :: D.Year -> D.Month -> D.Day -> Time
 timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
 
+-- | Craete time from tuple of year, month, and day.
+--
+--   >>> timeFromYmdTuple (2013, 4, 18)
+--   2013-04-18
+--
 timeFromYmdTuple :: D.Ymd -> Time
 timeFromYmdTuple = timeYmd . dayFromYmdTuple where
     dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d

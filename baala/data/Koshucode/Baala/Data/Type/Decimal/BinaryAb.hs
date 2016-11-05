@@ -22,11 +22,12 @@ import qualified Koshucode.Baala.Data.Type.Message           as Msg
 
 -- ----------------------  Fracle
 
+-- | Fracle-selection mode in composing decimals.
 data FracleSide
-    = FracleLong       -- ^ Select longer fracle
-    | FracleLeft       -- ^ Select left fracle
-    | FracleRight      -- ^ Select right fracle
-    | FracleStrict     -- ^ Check same fracles
+    = FracleLong       -- ^ Select longer fracle (@+@)
+    | FracleLeft       -- ^ Select left fracle (@.+@)
+    | FracleRight      -- ^ Select right fracle (@+.@)
+    | FracleStrict     -- ^ Check same fracles (@.+.@)
       deriving (Show, Ord, Eq)
 
 constLeft :: a -> b -> a

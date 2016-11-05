@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Decimal number type.
+
 module Koshucode.Baala.Data.Type.Decimal
   ( module Koshucode.Baala.Data.Type.Decimal.BinaryAb,
     module Koshucode.Baala.Data.Type.Decimal.Coder,

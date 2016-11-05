@@ -60,9 +60,19 @@ contAp get put f = put . f . get
 contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
 contMap get put f = contAp get put $ fmap f
 
+-- | Apply function to internal string of text content.
+--
+--   >>> contApTextToText reverse (the $ pText "abc")
+--   Right (VText "cba")
+--
 contApTextToText :: (D.CText c) => O.Map String -> B.AbMap c
 contApTextToText = contAp D.gText D.putText
 
+-- | Map function to characters of internal string of text content.
+--
+--   >>> contMapTextToList (\c -> pText [c]) (the $ pText "abc")
+--   Right (VList [VText "a",VText "b",VText "c"])
+--
 contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c
 contMapTextToList = contMap D.gText D.putList
 

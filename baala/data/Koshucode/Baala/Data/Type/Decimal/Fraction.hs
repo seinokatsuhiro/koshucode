@@ -41,14 +41,19 @@ import qualified Koshucode.Baala.Data.Type.Decimal.Rational  as D
 
 -- ----------------------  Integer and fraction
 
--- | Integer part of decimals.
+-- | Integer part of decimal.
 decimalIntPart :: O.Map D.Decimal
 decimalIntPart = fst . decimalIntFrac
 
--- | Fractional part of decimals.
+-- | Fractional part of decimal.
 decimalFracPart :: O.Map D.Decimal
 decimalFracPart = snd . decimalIntFrac
 
+-- | Integer and fractional parts of decimal.
+--
+--   >>> decimalIntFrac $ D.realDecimal 2 (4.5 :: Double)
+--   (Decimal (2) 4, Decimal (2) 0 + 1 % 2)
+--
 decimalIntFrac :: D.Decimal -> (D.Decimal, D.Decimal)
 decimalIntFrac d = (dec $ i D.%% 1, dec f) where
     (i, f) = properFraction $ D.decimalRatio d
