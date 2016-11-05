@@ -13,7 +13,10 @@ import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Data.Type.Judge     as D
 
+-- | Share-side picker.
 type ShareSideMap c = ShareSide c -> [c] -> [c]
+
+-- | Double share-side picker.
 type ShareSideMap2 a b = (ShareSideMap a, ShareSideMap b)
 
 -- | Shared and side terms.
@@ -35,8 +38,8 @@ data ShareSide c = ShareSide
     , ssRSplit       :: [c] -> ([c], [c])  -- ^ Pick right-shared and right-side part
     , ssRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
 
-    , ssRForward     :: [c] -> [c]
-    , ssRBackward    :: [c] -> [c]
+    , ssRForward     :: [c] -> [c]    -- ^ Move shared terms forward.
+    , ssRBackward    :: [c] -> [c]    -- ^ Move shared terms backward.
     }
 
 -- | Create share-side structure from left and right term names.
@@ -88,32 +91,37 @@ data ShareSide c = ShareSide
 --
 --     >>> ssRBackward ss "BCDE"
 --     "DEBC"
-
+--
 shareSide :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
-shareSide left right = shareSideBody li ri left' right' where
-    (li, ri)  = sharedIndex left' right'
-    left'     = D.getTermNames left
-    right'    = D.getTermNames right
+shareSide left right = shareSideBody (li, ri) (ln, rn) where
+    (ln, rn) = getTermNames2 left right
+    (li, ri) = doubleIndex ln rn $ B.memberFilter rn ln
 
--- sharedIndex "dxcy" "abcd"
--- >>> ([0,2], [3,2])
---       d c    d c
-sharedIndex :: (Ord a) => [a] -> [a] -> ([Int], [Int])
-sharedIndex xs1 xs2 = (ind1, ind2) where
-    ind1  = B.snipIndex sh xs1
-    ind2  = B.snipIndex sh xs2
-    sh    = B.intersectionFilter xs2 xs1
-
+-- | Right axis version of 'shareSide'.
+--
+--   >>> ssLShareIndex $ shareSideOrd ["a", "b"] ["b", "a"]
+--   [1,0]
+--
+--   >>> ssLShareIndex $ shareSide ["a", "b"] ["b", "a"]
+--   [0,1]
+--
 shareSideOrd :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
-shareSideOrd left right = shareSideBody li ri left' right' where
-    (li, ri)  = (ind2 left', ind2 right')
-    ind       = B.snipIndex left' right'
-    ind2      = B.snipIndex $ B.snipFrom ind right'
-    left'     = D.getTermNames left
-    right'    = D.getTermNames right
+shareSideOrd left right = shareSideBody (li, ri) (ln, rn) where
+    (ln, rn) = getTermNames2 left right
+    (li, ri) = doubleIndex ln rn $ B.memberFilter ln rn
 
-shareSideBody :: [Int] -> [Int] -> [S.TermName] -> [S.TermName] -> ShareSide a
-shareSideBody li ri left right = ss where
+doubleIndex :: (Ord a) => [a] -> [a] -> [a] -> Dbl [Int]
+doubleIndex ln rn xn = (B.snipIndex xn ln, B.snipIndex xn rn)
+
+-- | Double of something.
+type Dbl a = (a, a)
+
+-- | Get pair of term names.
+getTermNames2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.TermName]
+getTermNames2 l r = (D.getTermNames l, D.getTermNames r)
+
+shareSideBody :: Dbl [Int] -> Dbl [S.TermName] -> ShareSide a
+shareSideBody (li, ri) (ln, rn) = ss where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri
@@ -127,10 +135,10 @@ shareSideBody li ri left right = ss where
          { ssLShareIndex  = li
          , ssRShareIndex  = ri
          , ssDisjoint     = null li
-         , ssLSideNames   = lside  left
-         , ssLShareNames  = lshare left
-         , ssRShareNames  = rshare right
-         , ssRSideNames   = rside  right
+         , ssLSideNames   = lside  ln
+         , ssLShareNames  = lshare ln
+         , ssRShareNames  = rshare rn
+         , ssRSideNames   = rside  rn
          , ssLSide        = lside
          , ssLShare       = lshare
          , ssRShare       = rshare
@@ -140,4 +148,3 @@ shareSideBody li ri left right = ss where
          , ssRForward     = rfor
          , ssRBackward    = rback
          }
-
