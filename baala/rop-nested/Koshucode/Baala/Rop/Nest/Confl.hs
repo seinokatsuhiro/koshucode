@@ -69,7 +69,7 @@ relmapForInner med n = C.relmapNest med . bin where
 -- | Create @for@ relkit.
 relkitFor :: forall c. (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    lr    = D.shareSide [n] he1
+    lr    = D.termPicker [n] he1
     side  = D.ssRSide lr
     he3   = D.headConsNest n he2 $ D.headMap side he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
@@ -106,7 +106,7 @@ relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 -- | Create @group@ relkit.
 relkitGroup :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> S.TermName -> C.RelkitBinary c
 relkitGroup sh n (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
-    lr      = D.shareSide he1 he2
+    lr      = D.termPicker he1 he2
     toMap2  = B.gatherToMap . map (D.ssRAssoc lr)
     he3     = D.headConsNest n he2 he1
     kit3    = case Op.unmatchShare sh lr of

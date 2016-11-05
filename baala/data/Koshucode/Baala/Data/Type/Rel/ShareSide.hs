@@ -1,26 +1,26 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Shared and side terms.
+-- | Term picker.
 
 module Koshucode.Baala.Data.Type.Rel.ShareSide
-  ( ShareSide (..),
-    ShareSideMap,
-    ShareSideMap2,
-    shareSide,
+  ( TermPicker (..),
+    TermPick,
+    TermPick2,
+    termPicker,
   ) where
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Data.Type.Judge     as D
 
--- | Share-side picker.
-type ShareSideMap c = ShareSide c -> [c] -> [c]
+-- | Type for picking terms.
+type TermPick c = TermPicker c -> [c] -> [c]
 
--- | Double share-side picker.
-type ShareSideMap2 a b = (ShareSideMap a, ShareSideMap b)
+-- | Double picker.
+type TermPick2 a b = (TermPick a, TermPick b)
 
--- | Shared and side terms.
-data ShareSide c = ShareSide
+-- | Data for picking terms.
+data TermPicker c = TermPicker
     { ssLShareIndex  :: [Int]         -- ^ Indicies of right-shared part
     , ssRShareIndex  :: [Int]         -- ^ Indicies of left-shared part
     , ssDisjoint     :: Bool          -- ^ Whether shared part is empty
@@ -42,9 +42,9 @@ data ShareSide c = ShareSide
     , ssRBackward    :: [c] -> [c]    -- ^ Move shared terms backward.
     }
 
--- | Create share-side structure from left and right term names.
+-- | Create term picker from left and right term names.
 --
---     >>> let ss = shareSide ["a", "b", "c"] ["b", "c", "d", "e"]
+--     >>> let ss = termPicker ["a", "b", "c"] ["b", "c", "d", "e"]
 --
 --     >>> ssDisjoint ss
 --     False
@@ -92,8 +92,8 @@ data ShareSide c = ShareSide
 --     >>> ssRBackward ss "BCDE"
 --     "DEBC"
 --
-shareSide :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> ShareSide c
-shareSide left right = shareSideBody (li, ri) (ln, rn) where
+termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
+termPicker left right = termPickerBody (li, ri) (ln, rn) where
     (ln, rn) = getTermNames2 left right
     (li, ri) = doubleIndex ln rn $ B.memberFilter rn ln
 
@@ -107,8 +107,8 @@ type Dbl a = (a, a)
 getTermNames2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.TermName]
 getTermNames2 l r = (D.getTermNames l, D.getTermNames r)
 
-shareSideBody :: Dbl [Int] -> Dbl [S.TermName] -> ShareSide a
-shareSideBody (li, ri) (ln, rn) = ss where
+termPickerBody :: Dbl [Int] -> Dbl [S.TermName] -> TermPicker a
+termPickerBody (li, ri) (ln, rn) = ss where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri
@@ -118,7 +118,7 @@ shareSideBody (li, ri) (ln, rn) = ss where
     rsplit xs  = (rshare xs, rside xs)
     rassoc xs  = (rshare xs, xs)
 
-    ss = ShareSide
+    ss = TermPicker
          { ssLShareIndex  = li
          , ssRShareIndex  = ri
          , ssDisjoint     = null li

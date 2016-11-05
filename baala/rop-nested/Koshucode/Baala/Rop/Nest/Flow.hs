@@ -67,7 +67,7 @@ relkitUp n (Just he1)
     | B.isSingleton t1   = Right kit2
     | otherwise          = Msg.notNestRel [n] he1
     where
-      lr     = D.shareSide [n] he1
+      lr     = D.termPicker [n] he1
       share  = D.ssRShare lr
       he1'   = D.headMap share he1
       t1     = D.headNested he1'

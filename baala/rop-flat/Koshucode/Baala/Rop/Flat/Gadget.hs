@@ -146,10 +146,10 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
     | lenFrom  /= lenTo  = Msg.adlib "Require same number of terms"
     | otherwise          = Right kit3
     where
-      lrStart   = D.shareSide step1 he1
-      lrDist    = D.shareSide [to]  he1
-      lrFrom    = D.shareSide step1 he2
-      lrTo      = D.shareSide step2 he2
+      lrStart   = D.termPicker step1 he1
+      lrDist    = D.termPicker [to]  he1
+      lrFrom    = D.termPicker step1 he2
+      lrTo      = D.termPicker step2 he2
 
       unkStart  = D.ssLSideNames lrStart
       unkFrom   = D.ssLSideNames lrFrom
@@ -167,7 +167,7 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 
 relkitVisitDistanceBody :: (D.CDec c, D.CRel c, Ord c) =>
-  Bool -> D.ShareSide c -> D.ShareSide c -> D.ShareSide c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
+  Bool -> D.TermPicker c -> D.TermPicker c -> D.TermPicker c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
 relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
     | optimize1 = kitf3 (add1, tuple1, vdist1)
     | otherwise = kitf3 (addN, tupleN, vdistN)

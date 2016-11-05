@@ -90,7 +90,7 @@ relkitDuplicate ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr     = D.shareSide ns he1
+      lr     = D.termPicker ns he1
       unk    = D.ssLSideNames lr
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
       dup    = not . B.isSingleton

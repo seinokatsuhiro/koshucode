@@ -52,13 +52,13 @@ relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
 
 -- | Create @forward@ or @backward@ relkit.
-relkitToward :: D.ShareSideMap2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
+relkitToward :: D.TermPick2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
-      lr    = D.shareSide ns he1
+      lr    = D.termPicker ns he1
       unk   = D.ssLSide lr ns
       he2   = D.headMap (heMap lr) he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boMap lr
@@ -78,7 +78,7 @@ relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
     ns    = D.getTermNames he1
-    lr    = D.shareSide (B.sort ns) ns
+    lr    = D.termPicker (B.sort ns) ns
     he2   = D.headMap (D.ssRForward lr) he1
     kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.ssRForward lr
 
