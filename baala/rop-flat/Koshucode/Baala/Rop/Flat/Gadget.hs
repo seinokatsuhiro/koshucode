@@ -138,23 +138,20 @@ relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 -- | Create @visit-distance@ relkit.
 relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([S.TermName], [S.TermName], S.TermName, S.TermName) -> C.RelkitBinary c
 relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
-    | unkStart /= []     = Msg.unkTerm unkStart he1
-    | unkFrom  /= []     = Msg.unkTerm unkFrom  he2
-    | unkTo    /= []     = Msg.unkTerm unkTo    he2
+    | D.unkTermsExist pkStart   = Msg.unkTerm (D.unkTerms pkStart) he1
+    | D.unkTermsExist pkFrom    = Msg.unkTerm (D.unkTerms pkFrom)  he2
+    | D.unkTermsExist pkTo      = Msg.unkTerm (D.unkTerms pkTo)    he2
     | dup      /= []     = Msg.dupAttr dup
     | newDist  == []     = Msg.adlib "Require new term"
     | lenFrom  /= lenTo  = Msg.adlib "Require same number of terms"
     | otherwise          = Right kit3
     where
-      lrStart   = D.termPicker step1 he1
-      lrDist    = D.termPicker [to]  he1
-      lrFrom    = D.termPicker step1 he2
-      lrTo      = D.termPicker step2 he2
+      pkStart   = D.termPicker step1 he1
+      pkDist    = D.termPicker [to]  he1
+      pkFrom    = D.termPicker step1 he2
+      pkTo      = D.termPicker step2 he2
 
-      unkStart  = D.ssLSideNames lrStart
-      unkFrom   = D.ssLSideNames lrFrom
-      unkTo     = D.ssLSideNames lrTo
-      newDist   = D.ssLSideNames lrDist
+      newDist   = D.ssLSideNames pkDist
 
       lenFrom   = length step1
       lenTo     = length step2
@@ -162,13 +159,13 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
       he3       = D.headConsNest to heTo he1
       heTo      = D.headFrom $ dist : step1
       kit3      = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
-      kitf3     = relkitVisitDistanceBody (lenFrom == 1) lrStart lrFrom lrTo heTo
+      kitf3     = relkitVisitDistanceBody (lenFrom == 1) pkStart pkFrom pkTo heTo
 
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 
 relkitVisitDistanceBody :: (D.CDec c, D.CRel c, Ord c) =>
   Bool -> D.TermPicker c -> D.TermPicker c -> D.TermPicker c -> D.Head -> [C.BodyMap c] -> B.AbMap [[c]]
-relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
+relkitVisitDistanceBody optimize1 pkStart pkFrom pkTo heTo
     | optimize1 = kitf3 (add1, tuple1, vdist1)
     | otherwise = kitf3 (addN, tupleN, vdistN)
     where
@@ -180,7 +177,7 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
       calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
           rel    = D.pRel $ D.Rel heTo body
           body   = map tupleX $ Map.assocs $ vdistX vstep start
-          start  = D.ssRShare lrStart cs1
+          start  = D.ssRShare pkStart cs1
 
       vdistN vstep cs   = visitDistanceFrom vstep cs
       vdist1 vstep [c]  = visitDistanceFrom vstep c
@@ -189,10 +186,10 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
       tupleN (cs, n)    = D.pInt n : cs
       tuple1 (c, n)     = [D.pInt n, c]
 
-      addN cs           = insertPush (D.ssRShare lrFrom cs)
-                                     (D.ssRShare lrTo cs)
-      add1 cs           = insertPush (head $ D.ssRShare lrFrom cs)
-                                     (head $ D.ssRShare lrTo cs)
+      addN cs           = insertPush (D.ssRShare pkFrom cs)
+                                     (D.ssRShare pkTo cs)
+      add1 cs           = insertPush (head $ D.ssRShare pkFrom cs)
+                                     (head $ D.ssRShare pkTo cs)
 
 calcBody :: [C.BodyMap c] -> [[c]] -> B.Ab [[[c]]]
 calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps

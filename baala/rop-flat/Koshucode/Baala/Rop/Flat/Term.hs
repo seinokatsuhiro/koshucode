@@ -142,14 +142,13 @@ relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
 
 relkitProject :: D.TermPick2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
-relkitProject (heMap, boMap) ns (Just he1)
-    | null unk   = Right kit2
-    | otherwise  = Msg.unkTerm unk he1
+relkitProject (hePick, boPick) ns (Just he1)
+    | D.unkTermsExist pk  = Msg.unkTerm (D.unkTerms pk) he1
+    | otherwise           = Right kit2
     where
-      lr    = D.termPicker ns he1
-      unk   = D.ssLSideNames lr
-      he2   = heMap lr `D.headMap` he1
-      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr
+      pk    = D.termPicker ns he1
+      he2   = hePick pk `D.headMap` he1
+      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boPick pk
 
 
 -- ----------------------  move

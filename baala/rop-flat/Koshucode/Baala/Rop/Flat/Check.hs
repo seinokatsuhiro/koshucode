@@ -87,16 +87,15 @@ relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 relkitDuplicate :: (Ord c) => [S.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
-    | null unk   = Right kit2
-    | otherwise  = Msg.unkTerm unk he1
+    | D.unkTermsExist pk  = Msg.unkTerm (D.unkTerms pk) he1
+    | otherwise           = Right kit2
     where
-      lr     = D.termPicker ns he1
-      unk    = D.ssLSideNames lr
+      pk     = D.termPicker ns he1
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
       dup    = not . B.isSingleton
 
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.ssRAssoc lr) bo1
+      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.ssRAssoc pk) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 
