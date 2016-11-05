@@ -2,7 +2,7 @@
 
 -- | Term picker.
 
-module Koshucode.Baala.Data.Type.Rel.ShareSide
+module Koshucode.Baala.Data.Type.Rel.TermPicker
   ( TermPicker (..),
     TermPick,
     TermPick2,
