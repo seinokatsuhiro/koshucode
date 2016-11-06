@@ -7,7 +7,7 @@
 module Koshucode.Baala.Data.Type.Judge
   (
     -- * Datatype
-    Judge (..), JudgeClass,
+    Judge (..),
     judgeTermsMap,
     judgeCons,
     --sortJudgeTerms, 
@@ -18,20 +18,16 @@ module Koshucode.Baala.Data.Type.Judge
     affirmJudge, denyJudge,
     isAffirmative, isDenial, isViolative,
 
-    -- * Class
-    GetClass (..),
-    GetTermNames (..),
-    GetTerms (..),
-
     -- * Encode
     judgeBreak,
     termNameToMix,
     termsToMix1, termsToMix2,
   ) where
 
-import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Overture              as O
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Syntax                as S
+import qualified Koshucode.Baala.Data.Type.JudgeClass  as D
 
 
 -- ----------------------  Datatype
@@ -48,12 +44,12 @@ import qualified Koshucode.Baala.Syntax            as S
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      JudgeClass [S.Term c]             -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        JudgeClass [S.Term c]             -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   JudgeClass [S.Term c]             -- ^ @|-xx P \/x 10 \/y 20@
-    | JudgeChange      JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
-    | JudgeMultiChange JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     JudgeClass [S.Term c]             -- ^ @|-v P \/x 10 \/y 20@
+    = JudgeAffirm      D.JudgeClass [S.Term c]             -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        D.JudgeClass [S.Term c]             -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   D.JudgeClass [S.Term c]             -- ^ @|-xx P \/x 10 \/y 20@
+    | JudgeChange      D.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
+    | JudgeMultiChange D.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
+    | JudgeViolate     D.JudgeClass [S.Term c]             -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -74,9 +70,6 @@ instance (Ord c) => Ord (Judge c) where
 instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, c) = (n, f c)
-
--- | Name of judgement class, in other words, name of propositional function.
-type JudgeClass = String
 
 -- | Map function to terms.
 judgeTermsMap :: ([S.Term a] -> [S.Term b]) -> Judge a -> Judge b
@@ -99,7 +92,7 @@ sortJudgeTerms = judgeTermsMap B.sort
 -- ----------------------  Logical quality
 
 -- | Construct judgement from its class and terms.
-type JudgeOf c = JudgeClass -> [S.Term c] -> Judge c
+type JudgeOf c = D.JudgeClass -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 affirm :: JudgeOf c
@@ -138,32 +131,17 @@ isViolative _                   = False
 
 -- ----------------------  Class
 
--- | Get judge class.
-class GetClass a where
-    getClass :: a -> JudgeClass
-
--- | Get list of term names.
-class GetTermNames a where
-    getTermNames :: a -> [S.TermName]
-
--- | Get term list.
-class GetTerms a where
-    getTerms :: a c -> [S.Term c]
-
-instance GetClass (Judge c) where
+instance D.GetClass (Judge c) where
     getClass = judgeClass
 
-instance GetTermNames (Judge c) where
+instance D.GetTermNames (Judge c) where
     getTermNames = map fst . judgeTerms
 
-instance GetTermNames [S.TermName] where
-    getTermNames = id
-
-instance GetTerms Judge where
+instance D.GetTerms Judge where
     getTerms = judgeTerms
 
 -- | Return class of judgement.
-judgeClass :: Judge c -> JudgeClass
+judgeClass :: Judge c -> D.JudgeClass
 judgeClass (JudgeAffirm      c _)      = c
 judgeClass (JudgeDeny        c _)      = c
 judgeClass (JudgeMultiDeny   c _)      = c
@@ -201,6 +179,10 @@ judgeBreak :: B.LineBreak
 judgeBreak = B.crlf4 120
 
 -- | Encode term name.
+--
+--   >>> termNameToMix "foo"
+--   MixText "/foo"
+--
 termNameToMix :: S.TermName -> B.MixText
 termNameToMix n = B.mixString ('/' : n)
 
