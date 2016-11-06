@@ -76,7 +76,7 @@ relSort = relSortBody . relSortHead
 relSortHead :: O.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
     he' = D.headMap B.sort he
-    bo' = D.bodyAlign he' he bo
+    bo' = D.bodyForward he' he bo
 
 -- | Sort body of relation.
 relSortBody :: (Ord c) => O.Map (Rel c)

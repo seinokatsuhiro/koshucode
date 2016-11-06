@@ -118,7 +118,7 @@ fixedRelation f = fix where
 bmapAlign :: D.Head -> D.Head -> O.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
-               Right $ D.bodyAlign he1 he2 bo2
+               Right $ D.bodyForward he1 he2 bo2
 
 {-# WARNING Local, Lexical "This is only used in defined module." #-}
 type Local a = Lexical [B.Named a]

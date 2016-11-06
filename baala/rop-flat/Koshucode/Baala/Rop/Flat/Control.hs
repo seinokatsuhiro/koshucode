@@ -71,7 +71,7 @@ relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB)
                [] -> align $ bmapB bo1
                _  -> bmapA bo1
       align :: O.Map (B.Ab [[c]])
-      align = fmap $ D.bodyAlign heA heB
+      align = fmap $ D.bodyForward heA heB
 
 relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit hiB' hoB' kitbB)] _
     | isNothing2 hoA' hoB' = Right C.relkitNothing

@@ -29,7 +29,8 @@ module Koshucode.Baala.Data.Type.Rel.Head
     headMap,
     headMapName,
     headUp,
-    bodyAlign,
+    headForward,
+    bodyForward,
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
@@ -37,7 +38,7 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type.Type       as D
 import qualified Koshucode.Baala.Data.Type.JudgeClass as D
-
+import qualified Koshucode.Baala.Data.Type.Rel.TermPicker as D
 
 
 -- ---------------------- Type
@@ -200,15 +201,18 @@ headUp = headOf . up . headType where
     up (D.TypeRel [(_, ty)]) = ty
     up ty                    = ty
 
--- | Change order of terms.
+-- | Move terms forward.
 --
---   >>> headAlign (headFrom ["a", "b"]) (headFrom ["b", "a"]) ["x", "y"]
+--   >>> headForward ["c"] ["a", "b", "c"] ["x", "y", "z"]
+--   ["z", "y", "x"]
+--
+--   >>> headForward (headFrom ["a", "b"]) (headFrom ["b", "a"]) ["x", "y"]
 --   ["y", "x"]
 --
-headAlign :: Head -> Head -> O.Map [c]
-headAlign to from = B.snipOrder (D.getTermNames to) (D.getTermNames from)
+headForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [c]
+headForward to from = D.ssRForward $ D.termPicker to from
 
--- | Change order of terms.
-bodyAlign :: Head -> Head -> O.Map [[c]]
-bodyAlign to from = (headAlign to from `map`)
+-- | Move terms forward.
+bodyForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [[c]]
+bodyForward to from = (headForward to from <$>)
 
