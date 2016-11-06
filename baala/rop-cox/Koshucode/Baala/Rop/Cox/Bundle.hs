@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+
+-- | Relational operators with content calculation.
 
 module Koshucode.Baala.Rop.Cox.Bundle
   ( ropsCox,
@@ -14,6 +15,7 @@ import qualified Koshucode.Baala.Rop.Cox.Filter    as Rop
 import qualified Koshucode.Baala.Rop.Cox.Gadget    as Rop
 import qualified Koshucode.Baala.Rop.Cox.Range     as Rop
 
+-- | Relational operators with content calculation.
 ropsCox :: (D.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxAccessor
           ++ Rop.ropsCoxCalc

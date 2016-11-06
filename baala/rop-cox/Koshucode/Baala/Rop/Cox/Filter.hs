@@ -1,6 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- | Relation filter.
+
 module Koshucode.Baala.Rop.Cox.Filter
   ( ropsCoxFilter,
   
@@ -42,6 +44,13 @@ ropsCoxFilter = Op.ropList "cox-filter"
 
 -- ----------------------  filter
 
+-- | [keep E]
+--     Keep tuples which expression E is true.
+--
+--   [omit E]
+--     Omit tuples which expression E is true.
+--     @omit E@ is equivalent to @keep not E@.
+--
 consFilter :: (D.CContent c) => Bool -> C.RopCons c
 consFilter b med =
     do cops   <- Op.getWhere med "-where"
@@ -65,6 +74,10 @@ relkitFilter (which, cops, body) (Just he1) = Right kit2 where
 
 -- ----------------------  contain
 
+-- | __contain E__
+--
+--   Keep tuples in which some terms has content E.
+--
 consContain :: (D.CContent c) => C.RopCons c
 consContain med =
     do c <- Op.getContent med "-expr"
@@ -86,7 +99,7 @@ relkitContain c (Just he1) = Right kit2 where
 
 -- | __omit-all__
 --
---   Throw away all tuples in a relation.
+--   Throw away all tuples.
 --
 consOmitAll :: C.RopCons c
 consOmitAll med = Right $ relmapOmitAll med

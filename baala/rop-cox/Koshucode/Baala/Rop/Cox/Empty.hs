@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Relational compositions whose contents are maybe the empty.
+
 module Koshucode.Baala.Rop.Cox.Empty
   ( ropsCoxEmpty,
     -- * both
@@ -41,6 +43,7 @@ ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
 
 -- ----------------------  both
 
+-- | __both R -share \/P ... -fill E__
 consBoth :: (D.CContent c) => C.RopCons c
 consBoth med =
     do rmap <- Op.getRelmap med "-relmap"

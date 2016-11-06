@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+
+-- | Accessor relmap operators.
 
 module Koshucode.Baala.Rop.Cox.Accessor
   ( ropsCoxAccessor,

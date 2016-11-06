@@ -1,9 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- | Gadgets with content calculation.
+
 module Koshucode.Baala.Rop.Cox.Gadget
   ( ropsCoxGadget,
   
+    -- * number
+    consConst, relmapConst, relkitConst,
+
     -- * number
     consNumber, relmapNumber, relkitNumber,
   
@@ -36,24 +41,20 @@ ropsCoxGadget = Op.ropList "cox-gadget"
     , Op.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "-n -x -y . -to"
     , Op.def consGeoDegree  "geo-degree /N /P /P /P"         "-real -deg -min -sec"
     , Op.def consInterp     "interp E"                       "-interp . -x?"
-    , Op.def consNumber     "number /N -order /N ..."        "-term . -order? -from?"
-    , Op.def consRank       "rank /N -order /N ..."          "-term . -order? -from? -dense?"
-    , Op.def consRepeat     "repeat N R"                     "-count -relmap/"
+    , Op.def consNumber     "number /N -order /P ..."        "-term . -order? -from?"
+    , Op.def consRank       "rank /N -order /P ..."          "-term . -order? -from? -dense?"
+    , Op.def consRepeat     "repeat I R"                     "-count -relmap/"
     ]
 
 
 -- ----------------------  const
 
--- $const
+-- | __const E__
 --
---  Same as relmap @dee@
---  
---    > const {= [] =}
+--   Output the constant relation E.
+--   Especially, @const {= [] =}@ is equivalent to @dee@,
+--   @const {= =}@ is equivalent to @dum@.
 --
---  Same as relmap @dum@
---  
---    > const {= =}
-
 consConst :: (D.CContent c) => C.RopCons c
 consConst med =
     do lit <- Op.getContent med "-lit"
@@ -188,6 +189,7 @@ interpMatch interp he = ns1 == ns2 where
 
 -- ----------------------  number
 
+-- | __number \/N -from I -order \/P ...__
 consNumber :: (Ord c, D.CContent c) => C.RopCons c
 consNumber med =
     do n    <- Op.getTerm                        med "-term"
@@ -218,6 +220,12 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
 
 -- ----------------------  rank
 
+-- | [rank \/N -from I -order \/P ...]
+--     Calculate standard competition ranking (like 1224).
+--
+--   [rank \/N -dense -from I -order \/P...]
+--     Calculate dense ranking (like 1223).
+--
 consRank :: (Ord c, D.CContent c) => C.RopCons c
 consRank med =
     do n     <- Op.getTerm               med "-term"
@@ -250,6 +258,7 @@ relkitGapRank = relkitRanking B.sortByNameGapRank
 
 -- ----------------------  repeat
 
+-- | __repeat I R__
 consRepeat :: (Ord c, D.CContent c) => C.RopCons c
 consRepeat med =
   do cnt  <- Op.getInt    med "-count"

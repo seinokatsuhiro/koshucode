@@ -1,20 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Generate range of contents.
+
 module Koshucode.Baala.Rop.Cox.Range
   ( ropsCoxRange,
     RangeAttr,
-  
     -- * range
     consRange, relmapRange,
-    -- $range
-  
     -- * range-year
     relmapRangeYear, relkitRangeYear,
     -- * range-month
     relmapRangeMonth, relkitRangeMonth,
     -- * range-day
     relmapRangeDay, relkitRangeDay,
-
     -- * range-hour
     relmapRangeHour, relkitRangeHour,
     -- * range-minute
@@ -48,12 +46,7 @@ ropsCoxRange = Op.ropList "cox-calc"
 
 -- ----------------------  range
 
--- $range
---
---  Add term @\/n@ @0@, @\/n@ @1@, ..., and @\/n@ @9@.
---  
---    > range /n -from 0 -to 9
-
+-- | Attribute for range operators.
 type RangeAttr c = (S.TermName, D.CopSet c, D.Cox c, D.Cox c)
 
 getRangeAttr :: (D.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
@@ -64,6 +57,7 @@ getRangeAttr med =
      let cops = C.globalCopset $ C.ropGlobal med
      Right (term, cops, coxLow, coxHigh)
 
+-- | __range \/N -from E -to E__
 consRange :: (D.CContent c) => C.RopCons c
 consRange med = Right . relmapRange med =<< getRangeAttr med
 
