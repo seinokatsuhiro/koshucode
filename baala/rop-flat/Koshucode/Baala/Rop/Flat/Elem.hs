@@ -85,9 +85,9 @@ relkitMember :: (Ord c, D.CSet c, D.CList c, D.CText c)
   => S.TermName2 -> C.RelkitFlow c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
-    kit2 | [xi, xsi] B.+- []   = relkitMemberCheck  xi xsi he1'
-         | [xsi]     B.+- [xi] = relkitMemberExpand x  xsi he1'
-         | otherwise            = Msg.unkTerm [x, xs] he1
+    kit2 | S.termsPN [xi, xsi] []   = relkitMemberCheck  xi xsi he1'
+         | S.termsPN [xsi]     [xi] = relkitMemberExpand x  xsi he1'
+         | otherwise                = Msg.unkTerm [x, xs] he1
     [xi, xsi] = headIndex he1 [x, xs]
 
 relkitMemberCheck :: (Eq c, D.CSet c, D.CList c)

@@ -15,7 +15,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName4, TermName5, TermName6,
 
     -- * Present or new term
-    termP, termN, --termPN,
+    termP, termN,
     termsP, termsN, termsPN,
   ) where
 
@@ -85,7 +85,7 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
 -- ----------------------  Present or new term
 
--- | Check present term.
+-- | Test present term.
 --
 --   >>> termP 2
 --   True
@@ -99,23 +99,30 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 termP :: O.Test Int
 termP = (>= 0)
 
--- | Check new term.
+-- | Test new term.
 termN :: O.Test Int
 termN = (< 0)
 
--- Check present and new terms.
---termPN :: O.Test2 Int Int
---termPN p n = termP p && termN n
-
--- | Check all terms are present.
+-- | Test all terms are present.
 termsP :: O.Test [Int]
 termsP = all termP
 
--- | Check all terms are new.
+-- | Test all terms are new.
+--
+--   >>> termsN [-1, -1]
+--   True
+--
 termsN :: O.Test [Int]
 termsN = all termN
 
--- | Check present terms and new terms.
+-- | Test present and new terms.
+--
+--   >>> termsPN [1,2] [-1]
+--   True
+--
+--   >>> termsPN [1,2] [-1,0]
+--   False
+--
 termsPN :: O.Test2 [Int] [Int]
 termsPN ps ns = termsP ps && termsN ns
 

@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.List.Snip
   
     -- * Index
     snipIndex, snipIndexFull, snipIndexBoth,
-    (+-),
   
     -- * Picking elements
     snipFrom, snipOff, snipBoth,
@@ -62,19 +61,6 @@ snipIndexBoth :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 snipIndexBoth xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
     ind = snipIndex xs1 xs2
     sh  = B.sort $ snipFrom ind xs2
-
--- | Test elements in the first list are non-negative,
---   and in the second are negative.
---
---   >>> [0, 1] +- [-1]
---   True
---
---   >>> [0] +- [1, -1]
---   False
---
-(+-) :: O.Test2 [Int] [Int]
-(+-) pos neg = all (>= 0) pos
-            && all (< 0)  neg
 
 
 -- --------------------------------------------  Picking elements
