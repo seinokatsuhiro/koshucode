@@ -192,6 +192,10 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 -- ----------------------  split
 
 -- | __split \/N E ...__
+--
+--   Split input relation by the boolean functions E ...,
+--   and add terms \/N ... which has the splitted relations.
+--
 consSplit :: (D.CContent c) => C.RopCons c
 consSplit med =
     do cops <- Op.getWhere med "-where"
@@ -206,18 +210,17 @@ relmapSplit med = C.relmapFlow med . relkitSplit
 relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
-    | null ind  = Right kit2
-    | otherwise = Msg.unexpTermName
+    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | D.preTermsExist pk  = Msg.reqNewTerm (D.ssLShareNames pk) he1
+    | otherwise           = Right kit2
     where
-      (ns, xs)    =  unzip cox               -- names and expressions
-      ns1         =  D.getTermNames he1      -- term names
-      ind         =  ns `B.snipIndex` ns1    -- shared indicies
-
-      he2         =  D.headNests ns he1
-      kit2        =  C.relkitJust he2 $ C.RelkitAbFull False kitf2 []
-      kitf2 _ bo1 =  do let fs2 = D.coxRunList cops he1 `map` xs
-                        cs2 <- split fs2 bo1
-                        Right [cs2]
+      (ns, xs)   = unzip cox               -- names and expressions
+      pk         = D.termPicker ns he1
+      he2        = D.headNests ns he1
+      kit2       = C.relkitJust he2 $ C.RelkitAbFull False f2 []
+      f2 _ bo1   = do let fs2 = D.coxRunList cops he1 `map` xs
+                      cs2 <- split fs2 bo1
+                      Right [cs2]
 
       split :: [D.RunList c] -> [[c]] -> B.Ab [c]
       split [] _ = Right []
