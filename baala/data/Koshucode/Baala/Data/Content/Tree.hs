@@ -12,9 +12,10 @@ module Koshucode.Baala.Data.Content.Tree
     treesToInterp,
 
     -- * Multiple contents
-    treeToFlatTerm,
-    treesToTerms,
-    treesToTerms1,
+    treeFlatName,
+    treesFlatNames,
+    treesTerms,
+    treesTerms1,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -256,31 +257,43 @@ treeToInterpWord (B.TreeL x) =
 
 -- ----------------------  Term
 
--- | Get flat term name from token tree.
+-- | Read flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
 --
---   >>> S.tt1 "/a" >>= treeToFlatTerm
+--   >>> S.tt1 "/a" >>= treeFlatName
 --   Right "a"
 --
---   >>> S.tt1 "/a/x" >>= treeToFlatTerm
+--   >>> S.tt1 "+/a" >>= treeFlatName
+--   Right "a"
+--
+--   >>> S.tt1 "/a/x" >>= treeFlatName
 --   Left ...
 --
-treeToFlatTerm :: S.TTreeToAb S.TermName
-treeToFlatTerm (L (S.TTermN _ _ n))  = Right n
-treeToFlatTerm (L t)                 = Msg.reqFlatName t
-treeToFlatTerm _                     = Msg.reqTermName
+treeFlatName :: S.TTree -> B.Ab S.TermName
+treeFlatName (L (S.TTermN _ _ n))  = Right n
+--treeFlatName (L (S.TTerm _ _ [n])) = Right n
+treeFlatName (L t)                 = Msg.reqFlatName t
+treeFlatName _                     = Msg.reqTermName
 
--- | Get list of named token trees from token trees.
+-- | Read flat term names.
 --
---   >>> S.tt "/a 'A3 /b 10" >>= treesToTerms
+--   >>> S.tt "/a /b" >>= treesFlatNames
+--   Right ["a","b"]
+--
+treesFlatNames :: [S.TTree] -> B.Ab [S.TermName]
+treesFlatNames = mapM treeFlatName
+
+-- | Read list of named token trees from token trees.
+--
+--   >>> S.tt "/a 'A3 /b 10" >>= treesTerms
 --   Right [("a", [TreeL ...]),
 --          ("b", [TreeL ...])]
 --
-treesToTerms :: S.TTreesToAb [S.NamedTrees]
-treesToTerms = name where
+treesTerms :: [S.TTree] -> B.Ab [S.NamedTrees]
+treesTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
-                       n    <- treeToFlatTerm x
+                       n    <- treeFlatName x
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
@@ -293,8 +306,8 @@ treesToTerms = name where
     isTermLeaf (L (S.TTerm _ S.TermTypePath _)) = True
     isTermLeaf _                                = False
 
--- | Get list of named token trees from token trees.
+-- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
-treesToTerms1 :: S.TTreesToAb [S.NamedTree]
-treesToTerms1 xs = do xs' <- treesToTerms xs
-                      Right $ B.mapSndTo S.ttreeGroup xs'
+treesTerms1 :: [S.TTree] -> B.Ab [S.NamedTree]
+treesTerms1 xs = do xs' <- treesTerms xs
+                    Right $ B.mapSndTo S.ttreeGroup xs'

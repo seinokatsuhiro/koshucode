@@ -37,6 +37,7 @@ import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 -- ----------------------  Datatype
 
+-- | Type for getting something from relmap intermidiate data.
 type RopGet c a
     = C.Intmed c    -- ^ Use of relmap operator
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
@@ -68,6 +69,7 @@ getAbortableOption y f med name =
 getPara :: C.Intmed c -> S.AttrPara
 getPara = C.lexAttr . C.medLexmap
 
+-- | Test usage tag.
 getTag :: C.Intmed c -> String -> Bool
 getTag med tag = tag `elem` getTags med
 
@@ -122,6 +124,7 @@ getTrees med name =
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
+-- | Get word-and-tree list.
 getWordTrees :: RopGet c [B.Named S.TTree]
 getWordTrees med name =
     case lookupTree name med of
@@ -140,6 +143,7 @@ word :: S.TTree -> B.Ab String
 word (S.TextLeaf _ _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
+-- | Get trees delimited by colon.
 getTreesByColon :: RopGet c [[S.TTree]]
 getTreesByColon med name =
     do trees <- getTrees med name
@@ -160,6 +164,7 @@ getRelmap med name =
       Nothing -> Msg.reqRelmap 1
       Just m  -> Right m
 
+-- | Get optional relmap.
 getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
 getOptRelmap rmap0 med = B.right rmap0 . getRelmap med
 
@@ -172,6 +177,7 @@ getTerm = getAbortable get where
     get [x] = Op.termName x
     get _   = Msg.unexpAttr "Require one term"
 
+-- | Get two term names.
 getTerm2 :: RopGet c (S.TermName, S.TermName)
 getTerm2 med n =
     do terms <- getTerms med n
@@ -179,6 +185,7 @@ getTerm2 med n =
          [x,y] -> Right (x, y)
          _     -> Msg.unexpAttr "Require two term"
 
+-- | Get optional term name.
 getTermOpt :: RopGet c (Maybe S.TermName)
 getTermOpt = getMaybe getTerm
 
@@ -186,6 +193,7 @@ getTermOpt = getMaybe getTerm
 getTerms :: RopGet c [S.TermName]
 getTerms = getAbortable Op.termNames
 
+-- | Get signed term names.
 getSignedTerms :: RopGet c [S.SignedTermName]
 getSignedTerms = getAbortable Op.signedTermNames
 
@@ -197,8 +205,10 @@ getTermsCo = getAbortable Op.termNamesCo
 getTermPairs :: RopGet c [S.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
+-- | Get term names groups delimited by colons.
 getTermsColon :: RopGet c [[S.TermName]]
 getTermsColon = getAbortable Op.termNamesColon
 
-getTermTrees :: RopGet c [B.Named S.TTree]
-getTermTrees = getAbortable D.treesToTerms1
+-- | Get list of tree terms.
+getTermTrees :: RopGet c [S.Term S.TTree]
+getTermTrees = getAbortable D.treesTerms1

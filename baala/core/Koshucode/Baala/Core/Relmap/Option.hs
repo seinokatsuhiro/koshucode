@@ -77,7 +77,7 @@ optionUpdate calc opt ((name, pt), trees) =
                                    [ch] | elem ch cs -> ins $ OptionChar cs ch
                                    _                 -> Msg.adlib "not one letter"
 
-      upd (OptionTerms _)   = do terms <- mapM D.treeToFlatTerm trees
+      upd (OptionTerms _)   = do terms <- D.treesFlatNames trees
                                  ins $ OptionTerms terms
                                                         
       ins oc = Right $ Map.insert name oc opt

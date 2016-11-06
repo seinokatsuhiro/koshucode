@@ -132,7 +132,7 @@ consAngle _ _ = Msg.adlib "unknown angle bracket"
 --      consTie
 
 consTie :: (D.CContent c) => ContentCons c -> S.TTreesToAb [S.Term c]
-consTie cons = mapM p B.<=< D.treesToTerms1 where
+consTie cons = mapM p B.<=< D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Convert token trees into a judge.
@@ -254,10 +254,10 @@ consType = gen where
     dispatch "set"   xs     = Right . D.TypeSet  =<< gen xs
     dispatch "tuple" xs     = do ts <- mapM (gen. B.li1) xs
                                  Right $ D.TypeTuple ts
-    dispatch "tie"   xs     = do ts1 <- D.treesToTerms xs
+    dispatch "tie"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
                                  Right $ D.TypeTie ts2
-    dispatch "rel"   xs     = do ts1 <- D.treesToTerms xs
+    dispatch "rel"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
                                  Right $ D.TypeRel ts2
     dispatch n _            = Msg.unkType n

@@ -129,20 +129,8 @@ optionBackward = optionToward False
 -- | Apply forward and backward option.
 optionToward :: (Ord c) => Bool -> [S.TTree] -> B.AbMap (D.Rel c)
 optionToward dir opt2 r1 =
-    do ns <- flatnames opt2
+    do ns <- D.treesFlatNames opt2
        towardRel dir ns r1
-
-flatnames :: [S.TTree] -> B.Ab [S.TermName]
-flatnames trees =
-    case mapM flatname trees of
-      Just ns -> Right ns
-      Nothing -> Msg.reqTermName
-
--- | Get term name as string only if term is flat.
-flatname :: S.TTree -> Maybe S.TermName
-flatname (S.TermLeafName _ _ n)  = Just n
-flatname (S.TermLeaf _ _ [n])    = Just n
-flatname _                       = Nothing
 
 towardRel :: (Ord c) => Bool -> [S.TermName] -> B.AbMap (D.Rel c)
 towardRel dir ns (D.Rel he1 bo1)
