@@ -6,13 +6,13 @@ module Koshucode.Baala.Base.List.Snip
   ( -- * Type
     Snip, Snip2,
   
-    -- * Basic functions
-    snipFull, snipIndex, snipPair,
-    snipFrom, snipOff, snipBoth,
+    -- * Index
+    snipIndex, snipIndexFull, snipIndexBoth,
+    (+-),
   
     -- * Picking elements
+    snipFrom, snipOff, snipBoth,
     snipShare, snipLeft, snipRight,
-    (+-),
 
     -- * Reorder elements
     snipForward, snipBackward, 
@@ -34,16 +34,7 @@ type Snip a = [Int] -> O.Map [a]
 type Snip2 a b = (Snip a, Snip b)
 
 
--- --------------------------------------------  Function
-
--- | Indicies of shared-and-unknown elements.
---
---   >>> snipFull "bcx" "abcdefg"
---   [1,2,-1]
---
-snipFull :: (Eq a) => [a] -> [a] -> [Int]
-snipFull ks xs = map ind ks where
-    ind k = maybe (-1) id $ List.elemIndex k xs
+-- --------------------------------------------  Index
 
 -- | Indices of shared elements.
 --
@@ -51,17 +42,42 @@ snipFull ks xs = map ind ks where
 --   [1,3]
 --
 snipIndex :: (Eq a) => [a] -> [a] -> [Int]
-snipIndex ks xs = filter (>= 0) $ snipFull ks xs
+snipIndex ks xs = filter (>= 0) $ snipIndexFull ks xs
+
+-- | Indicies of shared-and-unknown elements.
+--
+--   >>> snipIndexFull "bcx" "abcdefg"
+--   [1,2,-1]
+--
+snipIndexFull :: (Eq a) => [a] -> [a] -> [Int]
+snipIndexFull ks xs = map ind ks where
+    ind k = maybe (-1) id $ List.elemIndex k xs
 
 -- | Left-and-right indices of shared elements.
 --
---   >>> snipPair "abc" "bcd"
+--   >>> snipIndexBoth "abc" "bcd"
 --   ([1,2], [0,1])
 --
-snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
-snipPair xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
+snipIndexBoth :: (Ord a) => [a] -> [a] -> ([Int], [Int])
+snipIndexBoth xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
     ind = snipIndex xs1 xs2
     sh  = B.sort $ snipFrom ind xs2
+
+-- | Test elements in the first list are non-negative,
+--   and in the second are negative.
+--
+--   >>> [0, 1] +- [-1]
+--   True
+--
+--   >>> [0] +- [1, -1]
+--   False
+--
+(+-) :: O.Test2 [Int] [Int]
+(+-) pos neg = all (>= 0) pos
+            && all (< 0)  neg
+
+
+-- --------------------------------------------  Picking elements
 
 -- | Pick up indexed elements.
 --
@@ -108,9 +124,6 @@ snipOff ps xs = loop 0 xs where
 snipBoth :: [Int] -> [a] -> ([a], [a])
 snipBoth ps xs = (snipFrom ps xs, snipOff ps xs)
 
-
--- --------------------------------------------  Picking elements
-
 -- | Take shared elements.
 --
 --   >>> "abcd" `snipShare` "bcefg"
@@ -134,19 +147,6 @@ snipLeft xs ys = snipIndex ys xs `snipOff` xs
 --
 snipRight :: (Eq a) => O.Bin [a]
 snipRight xs ys = snipLeft ys xs
-
--- | Test elements in the first list are non-negative,
---   and in the second are negative.
---
---   >>> [0, 1] +- [-1]
---   True
---
---   >>> [0] +- [1, -1]
---   False
---
-(+-) :: O.Test2 [Int] [Int]
-(+-) pos neg = all (>= 0) pos
-            && all (< 0)  neg
 
 
 -- --------------------------------------------  Reorder elements

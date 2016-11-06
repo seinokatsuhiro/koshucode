@@ -138,7 +138,7 @@ relkitIndexElem from (i, x, xs) he1'@(Just he1) = kit2 where
     [ii, xi, xsi] = headIndex he1 [i, x, xs]
 
 headIndex :: D.Head -> [S.TermName] -> [Int]
-headIndex he ns = ns `B.snipFull` D.getTermNames he
+headIndex he ns = ns `B.snipIndexFull` D.getTermNames he
 
 relkitIndexElemExpand :: forall c. (Ord c, D.CContent c)
   => Int -> S.TermName -> S.TermName -> Int -> C.RelkitFlow c
