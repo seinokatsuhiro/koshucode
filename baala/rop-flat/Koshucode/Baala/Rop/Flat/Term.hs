@@ -143,7 +143,7 @@ relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
 relkitProject :: D.TermPick2 D.NamedType c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
 relkitProject (hePick, boPick) ns (Just he1)
-    | D.unkTermsExist pk  = Msg.unkTerm (D.unkTerms pk) he1
+    | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
     | otherwise           = Right kit2
     where
       pk    = D.termPicker ns he1

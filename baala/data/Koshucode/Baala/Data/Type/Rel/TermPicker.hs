@@ -7,8 +7,8 @@ module Koshucode.Baala.Data.Type.Rel.TermPicker
     TermPick,
     TermPick2,
     termPicker,
-    preTerms, unkTerms, 
-    preTermsExist, unkTermsExist,
+    preTerms, newTerms, 
+    preTermsExist, newTermsExist,
     towardTerms,
   ) where
 
@@ -140,7 +140,7 @@ termPickerBody (li, ri) (ln, rn) = ss where
          , ssRBackward    = rback
          }
 
--- | Extract present terms.
+-- | List of present terms.
 --
 --   >>> preTerms $ termPicker (words "a b c") (words "a b d e")
 --   ["a","b"]
@@ -148,13 +148,13 @@ termPickerBody (li, ri) (ln, rn) = ss where
 preTerms :: TermPicker c -> [S.TermName]
 preTerms = ssLShareNames
 
--- | Extract unknown terms.
+-- | List of new terms.
 --
---   >>> unkTerms $ termPicker (words "a b c") (words "a b d e")
+--   >>> newTerms $ termPicker (words "a b c") (words "a b d e")
 --   ["c"]
 --
-unkTerms :: TermPicker c -> [S.TermName]
-unkTerms = ssLSideNames
+newTerms :: TermPicker c -> [S.TermName]
+newTerms = ssLSideNames
 
 -- | Test present terms exist.
 --
@@ -167,18 +167,25 @@ unkTerms = ssLSideNames
 preTermsExist :: O.Test (TermPicker c)
 preTermsExist = B.notNull . preTerms
 
--- | Test unknown terms exist.
+-- | Test new terms exist.
 --
---   >>> unkTermsExist $ termPicker (words "a b c") (words "a b d e")
+--   >>> newTermsExist $ termPicker (words "a b c") (words "a b d e")
 --   True
 --
---   >>> unkTermsExist $ termPicker (words "a b") (words "a b d e")
+--   >>> newTermsExist $ termPicker (words "a b") (words "a b d e")
 --   False
 --
-unkTermsExist :: O.Test (TermPicker c)
-unkTermsExist = B.notNull . unkTerms
+newTermsExist :: O.Test (TermPicker c)
+newTermsExist = B.notNull . newTerms
 
--- | Move terms forward or backward when 'True' or 'False'.
+-- | Move terms forward ('True') or backward ('False').
+--
+--   >>> let pk = termPicker (words "c b") (words "a b c d")
+--   >>> towardTerms True pk (words "A B C D")
+--   ["C","B","A","D"]
+--   >>> towardTerms False pk (words "A B C D")
+--   ["A","D","C","B"]
+--
 towardTerms :: Bool -> TermPicker c -> O.Map [c]
 towardTerms True  = ssRForward
 towardTerms False = ssRBackward
