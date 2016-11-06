@@ -21,10 +21,11 @@ module Koshucode.Baala.Rop.Flat.Message
     unmatchShare,
   ) where
 
-import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Syntax as S
-import qualified Koshucode.Baala.Data   as D
-import qualified Koshucode.Baala.Core   as C
+import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Syntax         as S
+import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.Core           as C
+import qualified Koshucode.Baala.Data.Message   as Msg
 import Koshucode.Baala.Rop.Base.Message
 
 
@@ -81,10 +82,10 @@ reqInterp :: B.Ab a
 reqInterp = Left $ B.abortBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: [S.TermName] -> D.Head -> B.Ab a
-reqNewTerm ns he =
+reqNewTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
+reqNewTerm t1 t2 =
     Left $ B.abortLines "Require new term names"
-         $ detailTermRel "Known" ns he
+         $ Msg.msgTerms2 "Present" t1 "in the terms" t2
 
 -- | Require unary function
 reqUnaryFn :: B.Ab a

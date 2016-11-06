@@ -1,27 +1,22 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- | Relmap operator with content calculation.
+
 module Koshucode.Baala.Rop.Cox.Calc
   ( ropsCoxCalc,
-  
     -- * add
     consAdd, relmapAdd,
-  
-    -- * subst
+    -- * alt
     consSubst, relmapSubst,
-  
     -- * fill
     consFill, relmapFill,
-  
-    -- * replace
+    -- * map
     consReplace,
-  
     -- * replace-all
     consReplaceAll, relmapReplaceAll,
-  
     -- * split
     consSplit, relmapSplit, relkitSplit,
-  
     -- * unary
     consUnary, relmapUnary,
   ) where
@@ -57,6 +52,7 @@ ropsCoxCalc = Op.ropList "cox-calc"
 
 -- ----------------------  add
 
+-- | __add \/N E ...__
 consAdd :: (D.CContent c) => C.RopCons c
 consAdd med =
     do cops <- Op.getWhere med "-where"
@@ -71,31 +67,31 @@ relmapAdd med = C.relmapFlow med . relkitAdd
 relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
-    | null ind  = Right kit2
-    | otherwise = Msg.reqNewTerm ns he1
+    | D.preTermsExist pk = Msg.reqNewTerm (D.ssLShareNames pk) he1
+    | otherwise          = Right kit2
     where
-      (ns, xs)    =  unzip cox               -- names and expressions
-      ns1         =  D.getTermNames he1      -- term names of input relation
-      ind         =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
-      he2         =  ns `D.headAppend` he1
-      kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-      kitf2 _ cs1 =  do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
-                        Right $ cs2 ++ cs1
+      (ns, xs)    = unzip cox       -- names and expressions
+      pk          = D.termPicker ns he1
+      he2         = ns `D.headAppend` he1
+      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+      kitf2 _ cs1 = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
+                       Right $ cs2 ++ cs1
 
 
 -- ----------------------  subst
 
+-- | __alt \/P E ...__
 consSubst :: (D.CContent c) => C.RopCons c
 consSubst med =
     do cops <- Op.getWhere med "-where"
        cox <- Op.getTermCoxes med "-cox"
        Right $ relmapSubst med (cops, cox)
 
--- | Create @subst@ relmap.
+-- | Create @alt@ relmap.
 relmapSubst :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
 relmapSubst med = C.relmapFlow med . relkitSubst
 
--- | Create @subst@ relkit.
+-- | Create @alt@ relkit.
 relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
@@ -115,8 +111,7 @@ relkitSubst (cops, cox) (Just he1)
 
 -- ----------------------  fill
 
---    > fill /a /b -with 0
-
+-- | __fill \/P -with E__
 consFill :: (D.CContent c) => C.RopCons c
 consFill med =
   do ns    <- Op.getTerms med "-term"
@@ -147,8 +142,7 @@ relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
 
 -- ----------------------  replace
 
---    > replace /a /b -by (| x | if x < 0 -> 0 : x |)
-
+-- | __map \/P ... -by F__
 consReplace :: (D.CContent c) => C.RopCons c
 consReplace med =
     do ns     <- Op.getTerms med "-term"
@@ -162,8 +156,7 @@ consReplace med =
 
 -- ----------------------  replace-all
 
---    > replace-all -from () -to 0
-
+-- | __replace-all -from E -to E__
 consReplaceAll :: (D.CContent c) => C.RopCons c
 consReplaceAll med =
   do coxFrom <- Op.getCox med "-from"
@@ -189,6 +182,7 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 
 -- ----------------------  split
 
+-- | __split \/N E ...__
 consSplit :: (D.CContent c) => C.RopCons c
 consSplit med =
     do cops <- Op.getWhere med "-where"
@@ -235,8 +229,7 @@ relkitSplit (cops, cox) (Just he1)
 
 -- ----------------------  unary
 
---  > unary /n 1 : 2 : 3
-
+-- | __unary \/N E : ...__
 consUnary :: (D.CContent c) => C.RopCons c
 consUnary med =
     do n  <- Op.getTerm  med "-term"
@@ -258,8 +251,7 @@ relkitUnary (n, cs) _ = Right kit2 where
 
 -- ----------------------  dump-cox
 
---  > dump-cox /x >= 0
-
+-- | __dump-cox E__
 consDumpCox :: (D.CContent c) => C.RopCons c
 consDumpCox med =
     do cox <- Op.getCox med "-cox"

@@ -7,8 +7,8 @@ module Koshucode.Baala.Data.Type.Rel.TermPicker
     TermPick,
     TermPick2,
     termPicker,
-    unkTerms,
-    unkTermsExist,
+    preTerms, unkTerms, 
+    preTermsExist, unkTermsExist,
     towardTerms,
   ) where
 
@@ -140,6 +140,14 @@ termPickerBody (li, ri) (ln, rn) = ss where
          , ssRBackward    = rback
          }
 
+-- | Extract present terms.
+--
+--   >>> preTerms $ termPicker (words "a b c") (words "a b d e")
+--   ["a","b"]
+--
+preTerms :: TermPicker c -> [S.TermName]
+preTerms = ssLShareNames
+
 -- | Extract unknown terms.
 --
 --   >>> unkTerms $ termPicker (words "a b c") (words "a b d e")
@@ -147,6 +155,17 @@ termPickerBody (li, ri) (ln, rn) = ss where
 --
 unkTerms :: TermPicker c -> [S.TermName]
 unkTerms = ssLSideNames
+
+-- | Test present terms exist.
+--
+--   >>> preTermsExist $ termPicker (words "d e") (words "a b c")
+--   False
+--
+--   >>> preTermsExist $ termPicker (words "c d e") (words "a b c")
+--   True
+--
+preTermsExist :: O.Test (TermPicker c)
+preTermsExist = B.notNull . preTerms
 
 -- | Test unknown terms exist.
 --
