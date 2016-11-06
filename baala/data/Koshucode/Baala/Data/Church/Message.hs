@@ -12,6 +12,7 @@ module Koshucode.Baala.Data.Church.Message
     abCoxPrefix,
     abCoxReduce,
     abCoxSyntax,
+
     -- * Message
     ambInfixes,
     lackArg,
@@ -22,8 +23,10 @@ module Koshucode.Baala.Data.Church.Message
     unkShow,
     unkTerm,
     unmatchBlank,
+
     -- * Utility
     detailTermRel,
+    msgTerms2,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -100,10 +103,10 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: [S.TermName] -> D.Head -> B.Ab a
-unkTerm ns he1 =
+unkTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
+unkTerm t1 t2 =
     Left $ B.abortLines "Unknown term name"
-         $ detailTermRel "Unknown" ns he1
+         $ msgTerms2 "Unknown" t1 "in the terms" t2
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
@@ -111,6 +114,7 @@ unmatchBlank v k _ vs =
     Left $ B.abortLines "Unmatch blank (bug)"
            [ "look up " ++ var (v, k)
            , "in " ++ args vs ]
+
 
 -- ----------------------  Utility
 
@@ -123,8 +127,24 @@ args vs = unwords $ map var $ zip vs [1..]
 -- | Terms and input relation heading.
 detailTermRel :: String -> [S.TermName] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
-    detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
-    indent = map ("  " ++)
+    detail = [label] ++ indentLines ns' ++ ["Input relation"] ++ indentLines ns1
     ns'    = map S.showTermName ns
     ns1    = B.linesFrom $ D.headExplain he1
+
+-- | Create message lines from double term names.
+msgTerms2 :: (D.GetTermNames t1, D.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
+msgTerms2 s1 t1 s2 t2 = detail where
+    detail = [s1] ++ msg1 t1 ++ [s2] ++ msg2 t2
+    msg1 = indentLines . B.sort . showTermNames
+    msg2 = indentLines . B.sort . showTermNames
+
+-- | Indent message lines.
+indentLines :: [String] -> [String]
+indentLines = map ("  " ++)
+
+-- | Lines of term names.
+showTermNames :: (D.GetTermNames t) => t -> [String]
+showTermNames = msg . D.getTermNames where
+    msg [] = ["(no terms)"]
+    msg ns = map S.showTermName ns
 
