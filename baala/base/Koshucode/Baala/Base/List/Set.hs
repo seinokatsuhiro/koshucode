@@ -3,7 +3,8 @@
 -- | Set-like operation.
 
 module Koshucode.Baala.Base.List.Set
-  ( duplicates, unique,
+  ( duplicates, duplicated,
+    unique,
     unionUp, memberFilter,
     setList, setEq,
     disjoint, overlap,
@@ -11,12 +12,16 @@ module Koshucode.Baala.Base.List.Set
 
 import qualified Data.List                      as List
 import qualified Data.Set                       as Set
+import qualified Koshucode.Baala.Overture       as O
 
 
--- | Keep duplicate elements.
+-- | Extract duplicate elements.
 --
 --   >>> duplicates "banana"
 --   "ana"
+--
+--   >>> duplicates "grape"
+--   ""
 --
 duplicates :: (Ord a) => [a] -> [a]
 duplicates xs = loop xs Set.empty where
@@ -24,6 +29,17 @@ duplicates xs = loop xs Set.empty where
     loop (x:xs2) set
         | Set.member x set = x : loop xs2 set
         | otherwise        = loop xs2 (Set.insert x set)
+
+-- | Test list has duplicated elements.
+--
+--   >>> duplicated "banana"
+--   True
+--
+--   >>> duplicated "grape"
+--   False
+--
+duplicated :: (Ord a) => O.Test [a]
+duplicated = not . null . duplicates
 
 -- | Remove duplicate elements.
 --

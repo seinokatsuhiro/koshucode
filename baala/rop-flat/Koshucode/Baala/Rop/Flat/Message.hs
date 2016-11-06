@@ -56,10 +56,10 @@ dumpTrees trees = Left $ B.abortLines "Dump token trees"
                    $ lines $ show $ S.ttDoc trees
 
 -- | Duplicate term name
-dupTerm :: [S.TermName] -> D.Head -> B.Ab a
-dupTerm ns he =
+dupTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
+dupTerm t1 t2 =
     Left $ B.abortLines "Duplicate term name"
-         $ detailTermRel "Duplicated" ns he
+         $ msgTerms2 "Duplicate" t1 "in the terms" t2
 
 -- | Odd attribute
 oddAttr :: B.Ab a

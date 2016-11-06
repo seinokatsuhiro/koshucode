@@ -3,13 +3,17 @@
 -- | Term picker.
 
 module Koshucode.Baala.Data.Type.Rel.TermPicker
-  ( TermPicker (..),
+  ( -- * Construct
+    TermPicker (..),
     TermPick,
     TermPick2,
     termPicker,
+    -- * Pre & new terms
     preTerms, newTerms, 
     preTermsExist, newTermsExist,
-    towardTerms,
+    -- * Mapping
+    pickTerms, cutTerms,
+    forwardTerms, backwardTerms, towardTerms,
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
@@ -98,7 +102,7 @@ data TermPicker c = TermPicker
 --
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
 termPicker left right = termPickerBody (li, ri) (ln, rn) where
-    (ln, rn) = getTermNames2 left right
+    (ln, rn) = getTermNamesUnique2 left right
     (li, ri) = doubleIndex ln rn $ B.memberFilter rn ln
 
 doubleIndex :: (Ord a) => [a] -> [a] -> [a] -> Dbl [Int]
@@ -108,8 +112,8 @@ doubleIndex ln rn xn = (B.snipIndex xn ln, B.snipIndex xn rn)
 type Dbl a = (a, a)
 
 -- | Get pair of term names.
-getTermNames2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.TermName]
-getTermNames2 l r = (D.getTermNames l, D.getTermNames r)
+getTermNamesUnique2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.TermName]
+getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 
 termPickerBody :: Dbl [Int] -> Dbl [S.TermName] -> TermPicker a
 termPickerBody (li, ri) (ln, rn) = ss where
@@ -178,6 +182,22 @@ preTermsExist = B.notNull . preTerms
 newTermsExist :: O.Test (TermPicker c)
 newTermsExist = B.notNull . newTerms
 
+-- | Pick terms according to term picker.
+pickTerms :: TermPicker c -> O.Map [c]
+pickTerms = ssRShare
+
+-- | Cut terms according to term picker.
+cutTerms :: TermPicker c -> O.Map [c]
+cutTerms = ssRSide
+
+-- | Move terms forward.
+forwardTerms :: TermPicker c -> O.Map [c]
+forwardTerms = ssRForward
+
+-- | Move terms backward.
+backwardTerms :: TermPicker c -> O.Map [c]
+backwardTerms = ssRBackward
+
 -- | Move terms forward ('True') or backward ('False').
 --
 --   >>> let pk = termPicker (words "c b") (words "a b c d")
@@ -187,6 +207,6 @@ newTermsExist = B.notNull . newTerms
 --   ["A","D","C","B"]
 --
 towardTerms :: Bool -> TermPicker c -> O.Map [c]
-towardTerms True  = ssRForward
-towardTerms False = ssRBackward
+towardTerms True  = forwardTerms
+towardTerms False = backwardTerms
 

@@ -53,10 +53,13 @@ ropsCoxCalc = Op.ropList "cox-calc"
 -- ----------------------  add
 
 -- | __add \/N E ...__
+--
+--   Add new terms \/N which has the result of E.
+--
 consAdd :: (D.CContent c) => C.RopCons c
 consAdd med =
     do cops <- Op.getWhere med "-where"
-       cox <- Op.getTermCoxes med "-cox"
+       cox  <- Op.getTermCoxes med "-cox"
        Right $ relmapAdd med (cops, cox)
 
 -- | Create @add@ relmap.
@@ -67,24 +70,29 @@ relmapAdd med = C.relmapFlow med . relkitAdd
 relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
-    | D.preTermsExist pk = Msg.reqNewTerm (D.ssLShareNames pk) he1
-    | otherwise          = Right kit2
+    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | D.preTermsExist pk  = Msg.reqNewTerm (D.ssLShareNames pk) he1
+    | otherwise           = Right kit2
     where
-      (ns, xs)    = unzip cox       -- names and expressions
-      pk          = D.termPicker ns he1
-      he2         = ns `D.headAppend` he1
-      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-      kitf2 _ cs1 = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
-                       Right $ cs2 ++ cs1
+      (ns, xs)   = unzip cox       -- names and expressions
+      pk         = D.termPicker ns he1
+      he2        = ns `D.headAppend` he1
+      kit2       = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+      f2 _ cs1   = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
+                      Right $ cs2 ++ cs1
 
 
 -- ----------------------  subst
 
 -- | __alt \/P E ...__
+--
+--   Change present terms \/P whose content is altered
+--   to the result of E.
+--
 consSubst :: (D.CContent c) => C.RopCons c
 consSubst med =
     do cops <- Op.getWhere med "-where"
-       cox <- Op.getTermCoxes med "-cox"
+       cox  <- Op.getTermCoxes med "-cox"
        Right $ relmapSubst med (cops, cox)
 
 -- | Create @alt@ relmap.
@@ -95,23 +103,24 @@ relmapSubst med = C.relmapFlow med . relkitSubst
 relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
-    | B.sameLength ns ind = Right kit2
-    | otherwise           = Msg.unexpTermName
+    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
+    | otherwise           = Right kit2
     where
-      (ns, xs)  =  unzip cox               -- names and expressions
-      ns1       =  D.getTermNames he1      -- term names of input relation
-      ind       =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
-      cut       =  B.snipOff  ind          -- cutting-ns function
-      fore      =  B.snipForward ind       -- cutting-ns function
-      he2       =  D.headMap fore he1      -- heading of output relation
-      kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
-      f2 _ cs1  =  do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
-                      Right $ cs2 ++ cut cs1
+      (ns, xs)  = unzip cox               -- names and expressions
+      pk        = D.termPicker ns he1
+      he2       = D.forwardTerms pk `D.headMap` he1  -- heading of output relation
+      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
+      f2 _ cs1  = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
+                     Right $ cs2 ++ D.cutTerms pk cs1
 
 
 -- ----------------------  fill
 
--- | __fill \/P -with E__
+-- | __fill \/P ... -with E__
+--
+--   Fill terms \/P ... with the result of E.
+--
 consFill :: (D.CContent c) => C.RopCons c
 consFill med =
   do ns    <- Op.getTerms med "-term"

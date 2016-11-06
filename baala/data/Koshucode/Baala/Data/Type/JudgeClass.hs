@@ -8,8 +8,10 @@ module Koshucode.Baala.Data.Type.JudgeClass
     GetClass (..),
     GetTerms (..),
     GetTermNames (..),
+    getTermNamesUnique,
   ) where
 
+import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Syntax     as S
 
 -- | Name of judgement class, in other words, name of propositional function.
@@ -30,3 +32,5 @@ class GetTermNames a where
 instance GetTermNames [S.TermName] where
     getTermNames = id
 
+getTermNamesUnique :: (GetTermNames a) => a -> [S.TermName]
+getTermNamesUnique = B.unique . getTermNames
