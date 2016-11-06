@@ -122,16 +122,15 @@ optionComment sh p opt r =
 
 -- ---------------------------------  Option "forward" and "backward"
 
-type SnipRel c = B.Snip2 D.NamedType c
-
 optionForward, optionBackward :: (Ord c) => [S.TTree] -> B.AbMap (D.Rel c)
-optionForward  = optionToward B.snipForward2
-optionBackward = optionToward B.snipBackward2
+optionForward  = optionToward True
+optionBackward = optionToward False
 
-optionToward :: (Ord c) => SnipRel c -> [S.TTree] -> B.AbMap (D.Rel c)
-optionToward snip2 opt2 r1 =
+-- | Apply forward and backward option.
+optionToward :: (Ord c) => Bool -> [S.TTree] -> B.AbMap (D.Rel c)
+optionToward dir opt2 r1 =
     do ns <- flatnames opt2
-       snipRel snip2 ns r1
+       towardRel dir ns r1
 
 flatnames :: [S.TTree] -> B.Ab [S.TermName]
 flatnames trees =
@@ -145,24 +144,21 @@ flatname (S.TermLeafName _ _ n)  = Just n
 flatname (S.TermLeaf _ _ [n])    = Just n
 flatname _                       = Nothing
 
-snipRel :: (Ord c) => SnipRel c -> [S.TermName] -> B.AbMap (D.Rel c)
-snipRel (heSnip, boSnip) ns (D.Rel he1 bo1)
-    | null left  = Right r2
-    | otherwise  = Msg.unkTerm left he1
+towardRel :: (Ord c) => Bool -> [S.TermName] -> B.AbMap (D.Rel c)
+towardRel dir ns (D.Rel he1 bo1)
+    | D.unkTermsExist pk  = Msg.unkTerm (D.unkTerms pk) he1
+    | otherwise           = Right $ D.Rel he2 bo2
     where
-      ns1   = D.getTermNames he1
-      ind   = ns `B.snipIndex` ns1
-      left  = ns `B.snipLeft`  ns1
+      pk    = D.termPicker ns he1
+      he2   = D.towardTerms dir pk `D.headMap` he1
+      bo2   = D.towardTerms dir pk `map` bo1
 
-      r2    = D.Rel he2 bo2
-      he2   = heSnip ind `D.headMap` he1
-      bo2   = boSnip ind `map` bo1
-
+-- | lexical option.
 optionLexical :: (Ord c) => [S.TTree] -> B.AbMap (D.Rel c)
 optionLexical _ = lexicalOrderRel
 
 lexicalOrderRel :: (Ord c) => B.AbMap (D.Rel c)
-lexicalOrderRel rel@(D.Rel he1 _) = snipRel B.snipForward2 ns' rel where
+lexicalOrderRel rel@(D.Rel he1 _) = towardRel True ns' rel where
     ns' = B.sort $ D.getTermNames he1
 
 

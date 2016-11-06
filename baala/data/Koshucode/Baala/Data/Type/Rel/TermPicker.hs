@@ -9,6 +9,7 @@ module Koshucode.Baala.Data.Type.Rel.TermPicker
     termPicker,
     unkTerms,
     unkTermsExist,
+    towardTerms,
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
@@ -157,4 +158,9 @@ unkTerms = ssLSideNames
 --
 unkTermsExist :: O.Test (TermPicker c)
 unkTermsExist = B.notNull . unkTerms
+
+-- | Move terms forward or backward when 'True' or 'False'.
+towardTerms :: Bool -> TermPicker c -> O.Map [c]
+towardTerms True  = ssRForward
+towardTerms False = ssRBackward
 
