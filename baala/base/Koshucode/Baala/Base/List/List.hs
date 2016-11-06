@@ -1,12 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | List utilities.
+
 module Koshucode.Baala.Base.List.List
   ( -- * List
     tails,
-    isSingleton,
-    notNull,
     maybeEmpty,
     right,
+    isSingleton,
+    notNull,
+    sameLength, notSameLength,
 
     -- * Take
     takeFirst, takeLast,
@@ -39,21 +42,38 @@ tails = loop where
     loop [] = []
     loop xxs@(_:xs) = xxs : loop xs
 
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
+maybeEmpty m f = maybe [] f m
+
+-- | Replace 'Left' value to 'Right' value.
+right :: b -> O.Map (Either a b)
+right _ (Right x) = Right x
+right x (Left _)  = Right x
+
 -- | Test list has single element.
-isSingleton :: [a] -> Bool
+isSingleton :: O.Test [a]
 isSingleton [_] = True
 isSingleton  _  = False
 
 -- | Test list is not empty.
-notNull :: [a] -> Bool
+notNull :: O.Test [a]
 notNull = not . null
 
-maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
-maybeEmpty m f = maybe [] f m
+-- | Test lengths of two lists are same.
+--
+--   >>> sameLength "abc" "ABC"
+--   True
+--
+sameLength :: O.Test2 [a] [b]
+sameLength a b = length a == length b
 
-right :: b -> O.Map (Either a b)
-right _ (Right x) = Right x
-right x (Left _)  = Right x
+-- | Test lengths of two lists are not same.
+--
+--   >>> notSameLength "abc" "ABC"
+--   False
+--
+notSameLength :: O.Test2 [a] [b]
+notSameLength a b = not $ sameLength a b
 
 
 -- ----------------------  Take
@@ -125,12 +145,26 @@ takeTailFill fill n = reverseMap $ takeFill fill n
 -- ----------------------  Construct
 
 -- | Make singleton list.
+--
+--   >>> li1 'a'
+--   "a"
+--
 li1 :: a -> [a]
 li1 x = [x]
 
+-- | Make two-element list.
+--
+--   >>> li2 'a' 'b'
+--   "ab"
+--
 li2 :: a -> a -> [a]
 li2 x y = [x, y]
 
+-- | Make three-element list.
+--
+--   >>> li3 'a' 'b' 'c'
+--   "abc"
+--
 li3 :: a -> a -> a -> [a]
 li3 x y z = [x, y, z]
 
@@ -164,7 +198,12 @@ map2 = fmap . fmap
 -- map2 :: (a -> b) -> [[a]] -> [[b]]
 -- map2 = map . map
 
-mapAt :: (O.Map a) -> Int -> O.Map [a]
+-- | Apply function to specific element.
+--
+--   >>> mapAt (const '-') 3 "abcdefg"
+--   "abc-efg"
+--
+mapAt :: O.Map a -> Int -> O.Map [a]
 mapAt f = loop where
     loop 0 (x : xs) = f x : xs
     loop i (x : xs) = x : loop (i - 1) xs
@@ -176,6 +215,11 @@ mapWithLast f g = loop where
     loop [x] = [g x]
     loop (x:xs) = f x : loop xs
 
+-- | Omit elements, i.e., anti-'filter'.
+--
+--   >>> omit (`elem` "ae") "abcdefg"
+--   "bcdfg"
+--
 omit :: (a -> Bool) -> O.Map [a]
 omit f = filter $ not . f
 

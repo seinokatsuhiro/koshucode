@@ -6,20 +6,18 @@ module Koshucode.Baala.Base.List.Snip
   ( -- * Type
     Snip, Snip2,
   
-    -- * Function
+    -- * Basic functions
     snipFull, snipIndex, snipPair,
-    snipBoth, snipFrom, snipOff,
-    -- $FunctionExample
+    snipFrom, snipOff, snipBoth,
   
-    -- * Derivative
+    -- * Picking elements
+    snipShare, snipLeft, snipRight,
+    (+-),
+
+    -- * Reorder elements
     snipForward, snipBackward, 
     snipForward2, snipBackward2,
-    snipLeft, snipShare, snipRight,
     snipOrder,
-    sameLength, notSameLength,
-    (+-),
-    -- $DerivativeExample
-  
   ) where
 
 import qualified Data.List                           as List
@@ -38,51 +36,41 @@ type Snip2 a b = (Snip a, Snip b)
 
 -- --------------------------------------------  Function
 
--- $FunctionExample
+-- | Indicies of shared-and-unknown elements.
 --
---  /Examples/
+--   >>> snipFull "bcx" "abcdefg"
+--   [1,2,-1]
 --
---  Obtain indicies for snipping @\"bdk\"@ from @\"abcdefg\"@.
---  The element @\"k\"@ is ignored because it is not in  @\"abcdefg\"@.
---
---    >>> snipIndex "bdk" "abcdefg"
---    [1,3]
---
---  Pick up same-position elements.
---
---    >>> [1,3] `snipFrom` "abcdefg"
---    "bd"
---    >>> [1,3] `snipFrom` "ABCDEFG"
---    "BD"
---
---  Cut off same-position elements.
---
---    >>> (snipIndex "ce" "abcdefg") `snipOff` "ABCDEFG"
---    "ABDFG"
---
---  Get pick-up and cut-off elements.
---
---    >>> (snipIndex "ce" "abcdefg") `snipBoth` "ABCDEFG"
---    ("CE", "ABDFG")
-
 snipFull :: (Eq a) => [a] -> [a] -> [Int]
 snipFull ks xs = map ind ks where
     ind k = maybe (-1) id $ List.elemIndex k xs
 
 -- | Indices of shared elements.
+--
+--   >>> snipIndex "bdk" "abcdefg"
+--   [1,3]
+--
 snipIndex :: (Eq a) => [a] -> [a] -> [Int]
 snipIndex ks xs = filter (>= 0) $ snipFull ks xs
 
+-- | Left-and-right indices of shared elements.
+--
+--   >>> snipPair "abc" "bcd"
+--   ([1,2], [0,1])
+--
 snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 snipPair xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
     ind = snipIndex xs1 xs2
     sh  = B.sort $ snipFrom ind xs2
 
--- | Pair of picking-up and cutting-off elements.
-snipBoth :: [Int] -> [a] -> ([a], [a])
-snipBoth ps xs = (snipFrom ps xs, snipOff ps xs)
-
 -- | Pick up indexed elements.
+--
+--   >>> [1,3] `snipFrom` "abcdefg"
+--   "bd"
+--
+--   >>> [1,3] `snipFrom` "ABCDEFG"
+--   "BD"
+--
 snipFrom :: Snip a
 snipFrom ps xs = loop ps xs 0 where
     loop pps@(p:ps2) (x:xs2) i =
@@ -101,6 +89,10 @@ snipFrom ps xs = loop ps xs 0 where
 -- snipFrom ps xs = map (xs !!) ps
 
 -- | Cut off indexed elements.
+--
+--   >>> (snipIndex "ce" "abcdefg") `snipOff` "ABCDEFG"
+--   "ABDFG"
+--
 snipOff :: Snip a
 snipOff ps xs = loop 0 xs where
     loop _ [] = []
@@ -108,83 +100,89 @@ snipOff ps xs = loop 0 xs where
         | p `elem` ps  =     loop (p + 1) xs2
         | otherwise    = x : loop (p + 1) xs2
 
+-- | Pair of picking-up and cutting-off elements.
+--
+--   >>> (snipIndex "ce" "abcdefg") `snipBoth` "ABCDEFG"
+--   ("CE", "ABDFG")
+--
+snipBoth :: [Int] -> [a] -> ([a], [a])
+snipBoth ps xs = (snipFrom ps xs, snipOff ps xs)
 
--- --------------------------------------------  Derivative
 
--- $DerivativeExample
+-- --------------------------------------------  Picking elements
+
+-- | Take shared elements.
 --
--- /Examples/
+--   >>> "abcd" `snipShare` "bcefg"
+--   "bc"
 --
---  Move snipping elements to the front and rear.
+snipShare :: (Eq a) => O.Bin [a]
+snipShare xs ys = snipIndex xs ys `snipFrom` ys
+
+-- | Take left-side elements.
 --
---    >>> (snipIndex "cd" "abcdefg") `snipForward` "ABCDEFG"
---    "CDABEFG"
---    >>> (snipIndex "cd" "abcdefg") `snipBackward` "ABCDEFG"
---    "ABEFGCD"
+--   >>> "abcd" `snipLeft` "bcefg"
+--   "ad"
 --
---  Shared elements of @\"abcd\"@ and @\"bcefg\"@.
+snipLeft :: (Eq a) => O.Bin [a]
+snipLeft xs ys = snipIndex ys xs `snipOff` xs
+
+-- | Take right-side elements.
 --
---    >>> "abcd" `snipShare` "bcefg"
---    "bc"
+--   >>> "abcd" `snipRight` "bcefg"
+--   "efg"
 --
---  Left-side and right-side.
+snipRight :: (Eq a) => O.Bin [a]
+snipRight xs ys = snipLeft ys xs
+
+-- | Test elements in the first list are non-negative,
+--   and in the second are negative.
 --
---    >>> "abcd" `snipLeft` "bcefg"
---    "ad"
---    >>> "abcd" `snipRight` "bcefg"
---    "efg"
+--   >>> [0, 1] +- [-1]
+--   True
 --
---  Check elements in the first list are non-negative,
---  and second are negative.
+--   >>> [0] +- [1, -1]
+--   False
 --
---    >>> [0, 1] +- [-1]
---    True
---    >>> [0] +- [1, -1]
---    False
+(+-) :: O.Test2 [Int] [Int]
+(+-) pos neg = all (>= 0) pos
+            && all (< 0)  neg
+
+
+-- --------------------------------------------  Reorder elements
 
 -- | Move indexed elements to the front.
+--
+--   >>> (snipIndex "cd" "abcdefg") `snipForward` "ABCDEFG"
+--   "CDABEFG"
+--
 snipForward :: Snip a
 snipForward ps xs = case snipBoth ps xs of
                       (snip, rest) -> snip ++ rest
 
 -- | Move indexed elements to the rear.
+--
+--   >>> (snipIndex "cd" "abcdefg") `snipBackward` "ABCDEFG"
+--   "ABEFGCD"
+--
 snipBackward :: Snip a
 snipBackward ps xs = case snipBoth ps xs of
                        (snip, rest) -> rest ++ snip
 
+-- | Double forward.
 snipForward2 :: Snip2 a b
 snipForward2 = (snipForward, snipForward)
 
+-- | Double backward.
 snipBackward2 :: Snip2 a b
 snipBackward2 = (snipBackward, snipBackward)
 
--- | Take left-side elements.
-snipLeft :: (Eq a) => O.Bin [a]
-snipLeft xs ys = snipIndex ys xs `snipOff` xs
-
--- | Take shared elements.
-snipShare :: (Eq a) => O.Bin [a]
-snipShare xs ys = snipIndex xs ys `snipFrom` ys
-
--- | Take right-side elements.
-snipRight :: (Eq a) => O.Bin [a]
-snipRight xs ys = snipLeft ys xs
-
+-- | Reorder elements.
+--
+--   >>> snipOrder "bca" "abc" "ABC"
+--   "BCA"
+--
 snipOrder :: (Eq a) => [a] -> [a] -> O.Map [c]
 snipOrder to from
     | to == from = id
     | otherwise  = snipFrom $ snipIndex to from
-
--- | Check lengths of two lists are same.
-sameLength :: [a] -> [b] -> Bool
-sameLength a b = length a == length b
-
-notSameLength :: [a] -> [b] -> Bool
-notSameLength a b = not $ sameLength a b
-
--- | Check elements in the first list are non-negative,
---   and elements in the second are negative.
-(+-) :: [Int] -> [Int] -> Bool
-(+-) pos neg = all (>= 0) pos
-            && all (< 0)  neg
-

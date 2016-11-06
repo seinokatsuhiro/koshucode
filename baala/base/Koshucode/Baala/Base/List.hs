@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of list modules.
+
 module Koshucode.Baala.Base.List
   ( module Koshucode.Baala.Base.List.Assoc,
     module Koshucode.Baala.Base.List.Dots,
