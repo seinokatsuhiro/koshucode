@@ -135,18 +135,18 @@ relmapFill med = C.relmapFlow med . relkitFill
 -- | Create @fill@ relkit.
 relkitFill :: (D.CContent c) => ([S.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
-relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
-    ns1       =  D.getTermNames he1
-    ind       =  ns `B.snipIndex` ns1
-    pick      =  B.snipFrom ind
-    cut       =  B.snipOff  ind
-    fore      =  B.snipForward ind
-    he2       =  D.headMap fore he1
-    kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
-    f2 _ cs1  =  do cTo  <- D.coxRunCox cops he1 cs1 coxTo
-                    let fill c | D.isEmpty c = cTo
-                               | otherwise   = c
-                    Right $ map fill (pick cs1) ++ (cut cs1)
+relkitFill (ns, cops, coxTo) (Just he1)
+    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
+    | otherwise           = Right kit2
+    where
+      pk        = D.termPicker ns he1
+      he2       = D.forwardTerms pk `D.headMap` he1
+      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
+      f2 _ cs1  = do cTo  <- D.coxRunCox cops he1 cs1 coxTo
+                     let fill c | D.isEmpty c = cTo
+                                | otherwise   = c
+                     Right $ map fill (D.pickTerms pk cs1) ++ (D.cutTerms pk cs1)
 
 
 -- ----------------------  replace

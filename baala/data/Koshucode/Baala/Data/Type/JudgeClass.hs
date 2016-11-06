@@ -32,5 +32,6 @@ class GetTermNames a where
 instance GetTermNames [S.TermName] where
     getTermNames = id
 
+-- | Get unique list of term names.
 getTermNamesUnique :: (GetTermNames a) => a -> [S.TermName]
 getTermNamesUnique = B.unique . getTermNames
