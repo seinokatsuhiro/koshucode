@@ -114,7 +114,7 @@ data TermPicker c = TermPicker
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
 termPicker left right = termPickerBody (li, ri) (ln, rn) where
     (ln, rn) = getTermNamesUnique2 left right
-    (li, ri) = doubleIndex ln rn $ B.memberFilter rn ln
+    (li, ri) = doubleIndex ln rn $ B.keepMember rn ln
 
 doubleIndex :: (Ord a) => [a] -> [a] -> [a] -> Dbl [Int]
 doubleIndex ln rn xn = (B.snipIndex xn ln, B.snipIndex xn rn)

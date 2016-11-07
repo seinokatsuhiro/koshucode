@@ -65,7 +65,7 @@ instance B.MixEncode Head where
 --   >>> headExplain $ headFrom ["a", "b"]
 --   rel /a any
 --       /b any
-
+--
 headExplain :: Head -> B.Doc
 headExplain = D.typeExplain . headType
 
@@ -83,7 +83,7 @@ headOf ty = Head { headType = ty }
 --
 --   >>> B.mixEncode $ headFrom ["a", "b"]
 --   MixText "/a /b"
-
+--
 headFrom :: [S.TermName] -> Head
 headFrom = headOf . D.typeFlatRel
 
@@ -112,9 +112,9 @@ headEquiv he1 he2 = ts he1 == ts he2 where
 --   True
 --   >>> headFrom ["a", "e"] `isSubhead` headFrom ["a", "b", "c"]
 --   False
-
+--
 isSubhead :: Head -> Head -> Bool
-isSubhead he1 he2 = null $ D.getTermNames he1 `B.snipLeft` D.getTermNames he2 
+isSubhead he1 he2 = D.getTermNames he1 `B.sublist` D.getTermNames he2
 
 -- | Test heading is superset of another heading.
 isSuperhead :: Head -> Head -> Bool
@@ -124,7 +124,7 @@ isSuperhead he1 he2 = isSubhead he2 he1
 --
 --   >>> headDegree $ headFrom ["a", "b"]
 --   2
-
+--
 headDegree :: Head -> Int
 headDegree = D.typeRelDegree . headType
 

@@ -71,8 +71,8 @@ relmapSpecialize hook links = spec [] [] where
                          vars      = map fst heNest
                          p         = C.lexToken lx
                          tk (n,he) = ((p, S.LocalNest n), he)
-                         heInd     = vars `B.snipIndex` D.getTermNames heJust
-                         local'     = map tk heNest ++ local
+                         heInd     = D.pickTermsIndex $ D.termPicker vars heJust
+                         local'    = map tk heNest ++ local
                          nestInd   = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec local' keys kdef he1 rmap1
                      Right (kdef2, C.relkitNest p nestInd kit2)

@@ -5,7 +5,8 @@
 module Koshucode.Baala.Base.List.Set
   ( duplicates, duplicated,
     unique,
-    unionUp, memberFilter,
+    unionUp,
+    keepMember, omitMember, sublist,
     setList, setEq,
     disjoint, overlap,
   ) where
@@ -65,12 +66,41 @@ unionUp :: (Eq a) => [a] -> [a] -> [a]
 unionUp xs ys = (xs List.\\ ys) ++ ys
 
 -- | Filter by set membership.
+--   @keepMember@ /A/ /B/ is same to the intersection of /A/ and /B/,
+--   except for the ordering of /B/ is preserved.
 --
---   >>> memberFilter "abcd" "dxcy"
---   "dc"
+--   >>> keepMember "cba" "abcdefg"
+--   "abc"
 --
-memberFilter :: (Ord a) => [a] -> [a] -> [a]
-memberFilter xs = filter (`Set.member` Set.fromList xs)
+--   >>> keepMember "abcdefg" "cba"
+--   "cba"
+--
+keepMember :: (Ord a) => [a] -> [a] -> [a]
+keepMember xs = filter (`Set.member` Set.fromList xs)
+
+-- | Anti-filter by set membership.
+--   @omitMember@ /A/ /B/ is same to /B/ minus /f/A,
+--   except for the ordering of /B/ is preserved.
+--
+--   >>> omitMember "cba" "abcdefg"
+--   "defg"
+--
+--   >>> omitMember "abcdefg" "cba"
+--   ""
+--
+omitMember :: (Ord a) => [a] -> [a] -> [a]
+omitMember xs = filter (`Set.notMember` Set.fromList xs)
+
+-- | Test sublist.
+--
+--   >>> sublist "cab" "abcdefg"
+--   True
+--
+--   >>> sublist "cab" "dec"
+--   False
+--
+sublist :: (Ord a) => [a] -> [a] -> Bool
+sublist xs ys = null $ omitMember ys xs
 
 -- | Convert to set-like list, in other words,
 --   remove duplicate elements and sort list.
