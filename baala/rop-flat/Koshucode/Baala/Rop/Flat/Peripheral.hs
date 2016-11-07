@@ -72,7 +72,7 @@ relmapTie med = C.relmapFlow med . relkitTie
 relkitTie :: (D.CTie c) => ([S.TermName], S.TermName) -> C.RelkitFlow c
 relkitTie _ Nothing = Right C.relkitNothing
 relkitTie (ns, to) (Just he1) = Right kit2 where
-    pick      =  Op.picker he1 ns
+    pick      =  D.picker ns he1
     he2       =  D.headCons to he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
     f2 cs1    =  let tie = D.pTie $ zip ns $ pick cs1
@@ -96,7 +96,7 @@ relmapUntie med = C.relmapFlow med . relkitUntie
 relkitUntie :: (D.CTie c) => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
-    pick      =  Op.picker he1 [from]
+    pick      =  D.picker [from] he1
     he2       =  D.headAppend ns he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
     f2 _ cs1  =  do let [tie] = pick cs1

@@ -19,6 +19,7 @@ module Koshucode.Baala.Data.Type.Rel.TermPicker
     preTerms, newTerms, 
     preTermsExist, newTermsExist,
     -- * Mapping
+    picker,
     pickTermsIndex,
     pickTerms, cutTerms,
     forwardTerms, backwardTerms, towardTerms,
@@ -198,6 +199,14 @@ newTermsExist = B.notNull . newTerms
 
 
 --  ---------------------- * Mapping
+
+-- | Pick contents.
+--
+--   >>> picker (words "a c") (words "a b c") (words "1 2 3")
+--   ["1", "3"]
+--
+picker :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [c]
+picker t1 t2 = pickTerms $ termPicker t1 t2
 
 -- | Extract indices of terms.
 --

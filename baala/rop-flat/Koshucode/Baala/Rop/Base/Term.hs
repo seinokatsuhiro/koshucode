@@ -7,13 +7,10 @@ module Koshucode.Baala.Rop.Base.Term
   ( termName, termNames, termNamesCo,
     signedTermName, signedTermNames,
     termNamePairs, termNamesColon,
-    picker,
   ) where
 
-import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
-import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 -- | Extract a term name.
@@ -71,8 +68,4 @@ termNamesColon = loop [] [] where
     loop ret ns (S.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                          = Right $ reverse $ reverse ns : ret
     loop _ _ _                              = Msg.reqTermName
-
-picker :: D.Head -> [S.TermName] -> O.Map [c]
-picker he ts = B.snipFrom ind where
-    ind = ts `B.snipIndex` D.getTermNames he
 

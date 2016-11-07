@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Gadgets.
+
 module Koshucode.Baala.Rop.Flat.Gadget
   ( ropsGadget,
   
@@ -67,6 +69,10 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
 
 -- ----------------------  contents
 
+-- | __contents \/N__
+--
+--   Collect all contents in unary relation.
+--
 consContents :: (Ord c) => C.RopCons c
 consContents med =
     do n <- Op.getTerm med "-term"
@@ -88,9 +94,11 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 --  partial-order-height /x /y -to /z /ht
 --  partial-order-depth /x /y -to /z /dp
 
+-- | __partial-order-height \/P \/P -to \/N \/N__
 consPoHeight :: (Ord c, D.CDec c) => C.RopCons c
 consPoHeight = consPoScale Op.poScaleHeight
 
+-- | __partial-order-depth \/P \/P -to \/N \/N__
 consPoDepth :: (Ord c, D.CDec c) => C.RopCons c
 consPoDepth = consPoScale Op.poScaleDepth
 
@@ -111,7 +119,7 @@ relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = D.headFrom [z,r]
     kit2        = C.relkitJust he2 $ C.RelkitFull False f2
-    xyPick      = Op.picker he1 [x,y]
+    xyPick      = D.picker [x,y] he1
     f2 bo1      = map put $ scale $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  = [cx, D.pInt i]
@@ -234,6 +242,7 @@ insertPush k a = Map.insertWith push k [a] where
 --    > a | size /c
 --
 
+-- | __size \/N__
 consSize :: (D.CDec c) => C.RopCons c
 consSize med =
   do n <- Op.getTerm med "-term"
@@ -253,6 +262,7 @@ relkitSize n _ = Right kit2 where
 
 -- ----------------------  eqlize
 
+-- | __eqlize__
 consEqlize :: (Ord c) => C.RopCons c
 consEqlize med = Right $ relmapEqlize med
 
@@ -290,6 +300,7 @@ eqlizeBody = loop where
 
 -- ----------------------  dump-tree
 
+-- | __dump-tree E__
 consDumpTree :: (D.CDec c) => C.RopCons c
 consDumpTree med =
   do trees <- Op.getTrees med "-tree"
