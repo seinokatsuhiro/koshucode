@@ -179,27 +179,21 @@ relmapMove med = C.relmapFlow med . relkitMove
 relkitMove :: ([S.TermName], [S.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
-    | B.notSameLength ps ns = Msg.oddAttr
-    | psDup   /= []         = Msg.dupTerm psDup he1
-    | ns2Dup  /= []         = Msg.dupTerm ns2Dup he2
-    | psLeft  /= []         = Msg.unkTerm psLeft he1
-    | otherwise             = Right kit2
+    | B.notSameLength ps ns  = Msg.oddAttr
+    | B.duplicated ps        = Msg.dupTerm ps   -- from terms
+    | B.duplicated ns        = Msg.dupTerm ns   -- to terms
+    | B.duplicated ns2       = Msg.dupTerm ns2  -- output names
+    | D.newTermsExist pk     = Msg.unkTerm (D.newTerms pk) he1
+    | otherwise              = Right kit2
     where
-      ns1        =  D.getTermNames he1
-      ns2        =  D.getTermNames he2
-
-      ns2Dup     =  B.duplicates ns2
-      psDup      =  B.duplicates ps
-
-      psLeft     =  ps `B.snipLeft`  ns1
-      psIndex    =  ps `B.snipIndex` ns1
-
-      he2        =  D.headMap moveTerms he1
-      kit2       =  C.relkitJust he2 C.RelkitId
-
-      moveTerms ts       =  foldr moveTerm ts $ zip ns psIndex
-      moveTerm (n, i)    =  moveName n `B.mapAt` i
-      moveName n (_, t)  =  (n, t)
+      pk             = D.termPicker ps he1
+      he2            = D.headMap terms he1
+      ns2            = D.getTermNames he2
+      kit2           = C.relkitJust he2 C.RelkitId
+      ni             = zip ns $ D.pickTermsIndex pk
+      terms nt       = foldr term nt ni
+      term (n, i)    = move n `B.mapAt` i
+      move n (_, t)  = (n, t) -- name and type
 
 
 -- ----------------------  rename

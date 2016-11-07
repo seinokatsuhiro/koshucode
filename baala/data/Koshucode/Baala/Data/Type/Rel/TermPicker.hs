@@ -1,6 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Term picker.
+-- | Term picker is a data for picking target terms
+--   based on input heading terms.
+--   For example, when picking \/a \/b from \/a \/b \/c \/d \/e,
+--   use @termPicker@ like:
+--
+--   >>> let pk = termPicker ["a", "b"] ["a", "b", "c", "d", "e"]
+--   >>> pickTerms pk ["1", "2", "3", "4", "5"]
+--   ["1", "2"]
 
 module Koshucode.Baala.Data.Type.Rel.TermPicker
   ( -- * Construct
@@ -12,6 +19,7 @@ module Koshucode.Baala.Data.Type.Rel.TermPicker
     preTerms, newTerms, 
     preTermsExist, newTermsExist,
     -- * Mapping
+    pickTermsIndex,
     pickTerms, cutTerms,
     forwardTerms, backwardTerms, towardTerms,
   ) where
@@ -20,6 +28,9 @@ import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type.JudgeClass  as D
+
+
+-- ---------------------- * Construct
 
 -- | Type for picking terms.
 type TermPick c = TermPicker c -> [c] -> [c]
@@ -144,6 +155,9 @@ termPickerBody (li, ri) (ln, rn) = ss where
          , ssRBackward    = rback
          }
 
+
+-- ---------------------- * Pre & new terms
+
 -- | List of present terms.
 --
 --   >>> preTerms $ termPicker (words "a b c") (words "a b d e")
@@ -181,6 +195,17 @@ preTermsExist = B.notNull . preTerms
 --
 newTermsExist :: O.Test (TermPicker c)
 newTermsExist = B.notNull . newTerms
+
+
+--  ---------------------- * Mapping
+
+-- | Extract indices of terms.
+--
+--   >>> pickTermsIndex $ termPicker (words "b d") (words "a b d e")
+--   [1,2]
+--
+pickTermsIndex :: TermPicker c -> [Int]
+pickTermsIndex = ssRShareIndex
 
 -- | Pick terms according to term picker.
 pickTerms :: TermPicker c -> O.Map [c]

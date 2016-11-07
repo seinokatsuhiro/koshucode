@@ -70,7 +70,7 @@ relmapAdd med = C.relmapFlow med . relkitAdd
 relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
-    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | B.duplicated ns     = Msg.dupTerm ns
     | D.preTermsExist pk  = Msg.reqNewTerm (D.ssLShareNames pk) he1
     | otherwise           = Right kit2
     where
@@ -103,7 +103,7 @@ relmapSubst med = C.relmapFlow med . relkitSubst
 relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
-    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | B.duplicated ns     = Msg.dupTerm ns
     | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
     | otherwise           = Right kit2
     where
@@ -136,7 +136,7 @@ relmapFill med = C.relmapFlow med . relkitFill
 relkitFill :: (D.CContent c) => ([S.TermName], D.CopSet c, D.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
 relkitFill (ns, cops, coxTo) (Just he1)
-    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | B.duplicated ns     = Msg.dupTerm ns
     | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
     | otherwise           = Right kit2
     where
@@ -210,7 +210,7 @@ relmapSplit med = C.relmapFlow med . relkitSplit
 relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
-    | B.duplicated ns     = Msg.dupTerm (B.duplicates ns) ns
+    | B.duplicated ns     = Msg.dupTerm ns
     | D.preTermsExist pk  = Msg.reqNewTerm (D.ssLShareNames pk) he1
     | otherwise           = Right kit2
     where
