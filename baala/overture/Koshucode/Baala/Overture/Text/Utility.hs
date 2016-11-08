@@ -15,10 +15,12 @@ module Koshucode.Baala.Overture.Text.Utility
     putLines, hPutLines, hPutEmptyLine,
     -- * Read
     readInt, readInteger,
+    stringHex, stringHexInt, stringHexInteger,
   ) where
 
 import qualified Data.Char                      as Ch
 import qualified System.IO                      as IO
+import qualified Numeric                        as Num
 import qualified Koshucode.Baala.Overture.Type  as O
 
 
@@ -141,12 +143,15 @@ hPutEmptyLine h = IO.hPutStrLn h ""
 
 -- ----------------------  Read
 
-readJust :: (Read a) => String -> Maybe a
-readJust s = case reads s of
-              [(x, "")] -> Just x
-              _         -> Nothing
+readMaybe :: (String -> [(a, String)]) -> String -> Maybe a
+readMaybe f s = case f s of
+                  [(x, "")] -> Just x
+                  _         -> Nothing
 
--- | Read integer.
+readDec :: (Eq n, Num n) => String -> Maybe n
+readDec = readMaybe Num.readDec
+
+-- | Read decimal integer.
 --
 --   >>> readInt "12"
 --   Just 12
@@ -158,13 +163,32 @@ readJust s = case reads s of
 --   Just (-6101065172474983726)
 --
 readInt :: String -> Maybe Int
-readInt = readJust
+readInt = readDec
 
--- | Read integer.
+-- | Read decimal integer.
 --
 --   >>> readInteger "12345678901234567890"
 --   Just 12345678901234567890
 --
 readInteger :: String -> Maybe Integer
-readInteger = readJust
+readInteger = readDec
 
+-- | Read hexadecimal digits.
+stringHex :: (Eq n, Num n) => String -> Maybe n
+stringHex = readMaybe Num.readHex
+
+-- | Read hexadecimal digits as 'Int'.
+--
+--   >>> stringHexInt "0F"
+--   Just 15
+--
+stringHexInt :: String -> Maybe Int
+stringHexInt = stringHex
+
+-- | Read hexadecimal digits as 'Integer'.
+--
+--   >>> stringHexInteger "0F"
+--   Just 15
+--
+stringHexInteger :: String -> Maybe Integer
+stringHexInteger = stringHex
