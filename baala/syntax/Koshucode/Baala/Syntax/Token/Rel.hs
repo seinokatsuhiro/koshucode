@@ -51,7 +51,7 @@ uncons3 z f = first where
 --   Nothing
 --
 stringIntList :: S.InputText -> Maybe [Int]
-stringIntList = mapM O.readInt . B.omit null . B.divide '-'
+stringIntList = mapM O.stringInt . B.omit null . B.divide '-'
 
 -- | Convert hexadecimal string to integer.
 --

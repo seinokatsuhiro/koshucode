@@ -190,7 +190,7 @@ parseSubtext ns = trees False where
     times [ K a                ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
-    int s = case O.readInt s of
+    int s = case O.stringInt s of
               Just n   -> n
               Nothing  -> error "require integer"
 

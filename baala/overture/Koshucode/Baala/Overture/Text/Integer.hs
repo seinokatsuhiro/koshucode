@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Overture.Text.Integer
   ( -- * Decoder
-    readInt, readInteger,
+    stringDec, stringInt, stringInteger,
     stringHex, stringHexInt, stringHexInteger,
     -- * Encoder
     intLowerHexString, intUpperHexString,
@@ -16,40 +16,40 @@ import qualified Numeric                        as Num
 
 -- ----------------------  Decoder
 
-readMaybe :: (String -> [(a, String)]) -> String -> Maybe a
-readMaybe f s = case f s of
+stringMaybe :: (String -> [(a, String)]) -> String -> Maybe a
+stringMaybe f s = case f s of
                   [(x, "")] -> Just x
                   _         -> Nothing
 
 -- | Decode decimal integer.
-readDec :: (Eq n, Num n) => String -> Maybe n
-readDec = readMaybe Num.readDec
+stringDec :: (Eq n, Num n) => String -> Maybe n
+stringDec = stringMaybe Num.readDec
 
 -- | Decode decimal integer as 'Int'.
 --
---   >>> readInt "12"
+--   >>> stringInt "12"
 --   Just 12
 --
---   >>> readInt "12.3"
+--   >>> stringInt "12.3"
 --   Nothing
 --
---   >>> readInt "12345678901234567890"
+--   >>> stringInt "12345678901234567890"
 --   Just (-6101065172474983726)
 --
-readInt :: String -> Maybe Int
-readInt = readDec
+stringInt :: String -> Maybe Int
+stringInt = stringDec
 
 -- | Decode decimal integer as 'Integer'.
 --
---   >>> readInteger "12345678901234567890"
+--   >>> stringInteger "12345678901234567890"
 --   Just 12345678901234567890
 --
-readInteger :: String -> Maybe Integer
-readInteger = readDec
+stringInteger :: String -> Maybe Integer
+stringInteger = stringDec
 
 -- | Decode hexadecimal digits.
 stringHex :: (Eq n, Num n) => String -> Maybe n
-stringHex = readMaybe Num.readHex
+stringHex = stringMaybe Num.readHex
 
 -- | Decode hexadecimal digits as 'Int'.
 --
