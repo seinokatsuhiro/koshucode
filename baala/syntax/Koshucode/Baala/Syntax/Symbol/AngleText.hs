@@ -3,64 +3,64 @@
 -- | Text enclosed in angle brackets.
 
 module Koshucode.Baala.Syntax.Symbol.AngleText
-  ( 
-    -- ** Functions
+  ( -- * Functions
     angleQuote,
     angleTexts,
-  
-    -- ** Examples
-    -- $Angle
-  
-    -- ** Keyword table
+    appendSpace,
+    -- * Keyword table
     -- $Table
   ) where
 
 import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Overture     as O
 
--- $Angle
---
---  Simple word.
---
---    >>> putStrLn $ angleQuote "aaa"
---    "aaa"
---
---  Text contains line feed.
---
---    >>> putStrLn $ angleQuote "aaa\nbbb"
---    "aaa" #lf "bbb"
---
---  Lookup keyword table.
---
---    >>> lookup "lf" angleTexts
---    Just "\n"
---
-
 -- | Convert string into double-quoted and angle-quoted form.
-
+--
+--   >>> putStrLn $ angleQuote "aaa"
+--   "aaa"
+--
+--   >>> putStrLn $ angleQuote "\t"
+--   <tab>
+--
+--   >>> putStrLn $ angleQuote "aaa\nbbb\r\nccc\r\n\r\nddd"
+--   "aaa" <lf> "bbb" <crlf> "ccc" <crlf> <crlf> "ddd"
+--
 angleQuote :: O.Map String
 angleQuote = open . loop where
     loop "" = "\""
     loop ccs@(c : cs) =
         case angleSplit ccs of
           Nothing       -> c : loop cs
-          Just (w, cs2) -> "\" " ++ w ++ sp (open $ loop cs2)
+          Just (w, cs2) -> "\" " ++ w ++
+                           appendSpace (open $ loop cs2)
 
-    open ('"' : cs) = trim cs
-    open cs         = '"' : cs
+    open ('"' : cs)  = O.trimLeft cs   -- omit closing double quote
+    open cs          = '"' : cs        -- append opening double quote
 
-    sp ""           = ""
-    sp cs           = ' ' : cs
-
-    trim (' ' : cs) = trim cs
-    trim cs         = cs
-
---  >>> angleSplit "abc"
---  Nothing
+-- | Append space character if first character is non-space.
 --
---  >>> angleSplit "\nabc"
---  Just ("<lf>", "abc")
+--   >>> space "aaa"
+--   " aaa"
+--
+--   >>> space " bbb"
+--   " bbb"
+--
+--   >>> space ""
+--   ""
+--
+appendSpace :: O.Map String
+appendSpace cs@(c : _) | Ch.isSpace c  = cs
+                       | otherwise     = ' ' : cs
+appendSpace ""                         = ""
 
+-- | Split angle text.
+--
+--   >>> angleSplit "abc"
+--   Nothing
+--
+--   >>> angleSplit "\n\nabc"
+--   Just ("<lf>", "abc")
+--
 angleSplit :: String -> Maybe (String, String)
 angleSplit [] = Nothing
 angleSplit (c : cs)
@@ -69,23 +69,26 @@ angleSplit (c : cs)
         O.UnicodeOther       -> other c
         _                    -> Nothing
       where
-        just cs2 a           =  Just ("<" ++ a ++ ">", cs2)
+        just cs2 a           =  Just (a, cs2)
 
-        punct '"'            =  just cs "qq"
+        punct '"'            =  just cs "<qq>"
         punct _              =  Nothing
 
         other '\r'           =  cr cs
-        other '\n'           =  just cs "lf"
-        other '\t'           =  just cs "tab"
-        other _              =  just cs $ "c" ++ show code
+        other '\n'           =  just cs "<lf>"
+        other '\t'           =  just cs "<tab>"
+        other _              =  just cs $ "<c" ++ show code ++ ">"
 
-        cr ('\n' : cs2)      =  just cs2 "crlf"
-        cr _                 =  just cs  "cr"
+        cr ('\n' : cs2)      =  just cs2 "<crlf>"
+        cr _                 =  just cs  "<cr>"
 
         code                 =  Ch.ord c
 
 -- | Table of coresspondences of angle text and its replacement.
-
+--
+--   >>> lookup "lf" angleTexts
+--   Just "\n"
+--
 angleTexts :: [(String, String)]
 angleTexts =
     --  NAME         REPLACEMENT
