@@ -39,8 +39,27 @@ uncons3 z f = first where
     third a b bs cs@(c:ds)  = f 3 a b c bs cs ds
     third a b bs []         = f 2 a b z bs [] []
 
-charCodes :: S.InputText -> Maybe [Int]
-charCodes = mapM O.readInt . B.omit null . B.divide '-'
+-- | Convert decimal string to integer.
+--
+--   >>> stringIntList "50"
+--   Just [50]
+--
+--   >>> stringIntList "50-51"
+--   Just [50, 51]
+--
+--   >>> stringIntList "A"
+--   Nothing
+--
+stringIntList :: S.InputText -> Maybe [Int]
+stringIntList = mapM O.readInt . B.omit null . B.divide '-'
+
+-- | Convert hexadecimal string to integer.
+--
+--   >>> stringHexIntList "20+21"
+--   Just [32,33]
+--
+stringHexIntList :: S.InputText -> Maybe [Int]
+stringHexIntList = mapM O.stringHexInt . B.omit null . B.divide '+'
 
 rv :: O.Map [a]
 rv = reverse
@@ -54,11 +73,11 @@ isSingle   = ( `elem` ":|#"    )  -- Punctuation | Symbol
 isQ        = (    ==  '\''     )  -- Punctuation
 isPM a     = (a == '+' || a == '-')
 
-isFigure :: O.Test Char
-isFigure c     = c == '-' || Ch.isDigit c
+isCodePoint :: O.Test String
+isCodePoint = all isCodePointDigit
 
-isCharCode :: O.Test String
-isCharCode     = all isFigure
+isCodePointDigit :: O.Test Char
+isCodePointDigit c = isPM c || Ch.isDigit c
 
 
 -- ----------------------  Relational section
@@ -133,14 +152,17 @@ nipAngle cp = angle where
         | S.isSymbol c               = angleMid cs (c:w)
     angleMid cs w                    = (cs, S.TTextRaw cp $ '<' : rv w)
 
-    angleToken ""                    = S.TTextRaw cp "<>"
-    angleToken ('c' : s)
-        | isCharCode s  = case charCodes s of
-                            Just ns  -> S.TTextKey cp $ map Ch.chr ns
-                            Nothing  -> S.TTextUnk cp s
-    angleToken s        = case lookup s S.angleTexts of
-                            Just w   -> S.TTextKey cp w
-                            Nothing  -> S.TTextUnk cp s
+    angleToken ""                = S.TTextRaw cp "<>"
+    angleToken ('U' : '+' : s)   = fromCodePoint stringHexIntList s
+    angleToken ('c' : s) | isCodePoint s
+                                 = fromCodePoint stringIntList s
+    angleToken s                 = case lookup s S.angleTexts of
+                                     Just w   -> S.TTextKey cp w
+                                     Nothing  -> S.TTextUnk cp s
+
+    fromCodePoint f s = case f s of
+                          Just ns  -> S.TTextKey cp (toEnum <$> ns)
+                          Nothing  -> S.TTextUnk cp s
 
 -- | Nip off token beginning with "@".
 nipAt :: B.CodePt -> String -> Int -> S.TokenNipResult
