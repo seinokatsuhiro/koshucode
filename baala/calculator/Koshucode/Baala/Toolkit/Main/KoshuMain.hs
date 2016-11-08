@@ -102,7 +102,7 @@ initParam (Right (opts, args)) =
       oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimBegin xs)
       oneLiner (x : xs)         = x : oneLiner xs
 
-      currentTime = case D.ttTime $ unwords $ getReq "now" of
+      currentTime = case D.stringTime $ unwords $ getReq "now" of
                       Right t -> return t
                       Left _  -> D.nowZoned
 

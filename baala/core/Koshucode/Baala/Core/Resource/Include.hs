@@ -49,7 +49,7 @@ createJudges res = loop where
     loop ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
            trees <- S.ttrees toks
-           judge <- D.treesToJudge calc q cl trees
+           judge <- D.treesJudge calc q cl trees
            (js, cs') <- loop cs
            Right (judge : js, cs')
 

@@ -8,7 +8,7 @@
 module Koshucode.Baala.Data.Content.Decode
   ( -- * Functions
     ContentCons, ContentCalc, 
-    contentCons, treesToJudge,
+    contentCons, treesJudge,
 
     -- * Assert type
     AssertType (..),
@@ -53,8 +53,8 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     cons x@(L tok)
         = eithcon (eithcon (eithcon (token tok)
             D.putClock  $ D.tokenClock tok)
-            D.putTime   $ D.treesToTime   [x])
-            decimal     $ D.treesToDigits [x]
+            D.putTime   $ D.treesTime   [x])
+            decimal     $ D.treesDigits [x]
     cons g@(B b xs) = case b of
         S.BracketGroup   -> group g xs
         S.BracketList    -> D.putList   =<< consContents cons xs
@@ -62,7 +62,7 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
         S.BracketTie     ->                 consAngle    cons xs
         S.BracketRel     -> D.putRel    =<< consRel      cons xs
         S.BracketType    -> D.putType   =<< consType          xs
-        S.BracketInterp  -> D.putInterp =<< D.treesToInterp   xs
+        S.BracketInterp  -> D.putInterp =<< D.treesInterp     xs
         _                -> Msg.unkBracket
     cons _ = B.bug "contentCons"
 
@@ -77,8 +77,8 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
 
     group g xs@(LText f _ : _)
         | f == S.TextRaw   = eithcon (eith g
-                               D.putTime $ D.treesToTime   xs)
-                               decimal   $ D.treesToDigits xs
+                               D.putTime $ D.treesTime   xs)
+                               decimal   $ D.treesDigits xs
     group _ []             = Right D.empty
     group g _              = calc g
 
@@ -135,11 +135,11 @@ consTie :: (D.CContent c) => ContentCons c -> S.TTreesToAb [S.Term c]
 consTie cons = mapM p B.<=< D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
--- | Convert token trees into a judge.
+-- | Decode token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> S.TTreesToAb (D.Judge c)
-treesToJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
+treesJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> S.TTreesToAb (D.Judge c)
+treesJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
 
 
 -- ----------------------  Relation
@@ -245,8 +245,8 @@ consType = gen where
 
     dispatch "tag"   xs     = case xs of
                                 [tag, colon, typ]
-                                    | D.treeToText False colon == Right ":"
-                                      -> do tag' <- D.treeToText False tag
+                                    | D.treeText False colon == Right ":"
+                                      -> do tag' <- D.treeText False tag
                                             typ' <- gen [typ]
                                             Right $ D.TypeTag tag' typ'
                                 _   -> Msg.unkType "tag"

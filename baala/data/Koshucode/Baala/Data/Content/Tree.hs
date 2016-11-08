@@ -5,11 +5,11 @@
 
 module Koshucode.Baala.Data.Content.Tree
   ( -- * Single content
-    treeToText,
-    treesToDigits,
+    treeText,
+    treesDigits,
     tokenClock,
-    treesToTime, ttTime,
-    treesToInterp,
+    treesTime, stringTime,
+    treesInterp,
 
     -- * Multiple contents
     treeFlatName,
@@ -37,37 +37,37 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 --   Right "aabb"
 --
 -- treesToText :: Bool -> S.TTreesToAb String
--- treesToText q xs = do ss <- treesToTexts q xs
+-- treesToText q xs = do ss <- treesTexts q xs
 --                       Right $ concat ss
 --
-treesToTexts :: Bool -> S.TTreesToAb [String]
-treesToTexts q = mapM $ treeToText q
+treesTexts :: Bool -> S.TTreesToAb [String]
+treesTexts q = mapM $ treeText q
 
 -- | Get text from token tree.
 --
---   >>> S.tt1 "aa" >>= treeToText False
+--   >>> S.tt1 "aa" >>= treeText False
 --   Right "aa"
 --
-treeToText :: Bool -> S.TTreeToAb String
-treeToText q (L tok) = tokenToText q tok
-treeToText _ _ = Msg.nothing
+treeText :: Bool -> S.TTreeToAb String
+treeText q (L tok) = tokenString q tok
+treeText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
-tokenToText :: Bool -> S.Token -> B.Ab String
-tokenToText True  (S.TText _ q w) | q > S.TextRaw  = Right w
-tokenToText False (S.TTextRaw _ w)                 = Right w
-tokenToText _ _  =  Msg.nothing
+tokenString :: Bool -> S.Token -> B.Ab String
+tokenString True  (S.TText _ q w) | q > S.TextRaw  = Right w
+tokenString False (S.TTextRaw _ w)                 = Right w
+tokenString _ _  =  Msg.nothing
 
 
 -- ----------------------  Number
 
 -- | Get digits from token trees.
 --
---   >>> S.tt "-123 450.00" >>= treesToDigits
+--   >>> S.tt "-123 450.00" >>= treesDigits
 --   Right "-123450.00"
 --
-treesToDigits :: S.TTreesToAb String
-treesToDigits = concatDigits B.<=< treesToTexts False
+treesDigits :: S.TTreesToAb String
+treesDigits = concatDigits B.<=< treesTexts False
 
 concatDigits :: [String] -> B.Ab String
 concatDigits = first where
@@ -148,28 +148,28 @@ fromDigit _    =  Nothing
 
 -- | Get time from token trees.
 --
---   >>> S.tt "2013-04-18 12:00" >>= treesToTime
+--   >>> S.tt "2013-04-18 12:00" >>= treesTime
 --   Right 2013-04-18 12:00
 --
---   >>> S.tt "2013-04-18" >>= treesToTime
+--   >>> S.tt "2013-04-18" >>= treesTime
 --   Right 2013-04-18
 --
---   >>> S.tt "2013-#16" >>= treesToTime
+--   >>> S.tt "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
-treesToTime :: S.TTreesToAb D.Time
-treesToTime = concatTime B.<=< treesToTexts False
+treesTime :: S.TTreesToAb D.Time
+treesTime = stringsTime B.<=< treesTexts False
 
 -- | Get time from string.
 --
---   >>> ttTime "2013-04-18 12:00"
+--   >>> stringTime "2013-04-18 12:00"
 --   Right 2013-04-18 12:00
 --
-ttTime :: String -> B.Ab D.Time
-ttTime = S.tt B.>=> treesToTime
+stringTime :: String -> B.Ab D.Time
+stringTime = S.tt B.>=> treesTime
 
-concatTime :: [String] -> B.Ab D.Time
-concatTime = year where
+stringsTime :: [String] -> B.Ab D.Time
+stringsTime = year where
 
     year []             = Msg.nothing
     year (cs : xs)      = case getInt cs of
@@ -238,16 +238,16 @@ concatTime = year where
 
 -- | Get interpretation from token trees.
 --
---   >>> S.tt "term /a" >>= treesToInterp
+--   >>> S.tt "term /a" >>= treesInterp
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesToInterp :: S.TTreesToAb D.Interp
-treesToInterp = Right . D.interp B.<=< mapM treeToInterpWord
+treesInterp :: S.TTreesToAb D.Interp
+treesInterp = Right . D.interp B.<=< mapM treeInterpWord
 
-treeToInterpWord :: S.TTreeToAb D.InterpWord
-treeToInterpWord (B.TreeB _ _ _) = Msg.nothing
-treeToInterpWord (B.TreeL x) =
+treeInterpWord :: S.TTreeToAb D.InterpWord
+treeInterpWord (B.TreeB _ _ _) = Msg.nothing
+treeInterpWord (B.TreeL x) =
     case x of
       S.TText _ _ w    -> Right $ D.InterpText w
       S.TTermN _ _ n   -> Right $ D.InterpTerm n
