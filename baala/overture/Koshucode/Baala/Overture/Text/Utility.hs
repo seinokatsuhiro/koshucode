@@ -5,6 +5,7 @@
 module Koshucode.Baala.Overture.Text.Utility
   ( -- * Trim
     trimLeft, trimRight, trimBoth,
+    addSpace,
     -- * Padding
     padLeft, padRight, 
     padLeftWith, padRightWith,
@@ -42,6 +43,22 @@ trimRight (x : xs) =
 --   from the beginning and end of string.
 trimBoth :: O.Map String
 trimBoth = trimRight . trimLeft
+
+-- | Append space character if first character is non-space.
+--
+--   >>> addSpace "aaa"
+--   " aaa"
+--
+--   >>> addSpace " bbb"
+--   " bbb"
+--
+--   >>> addSpace ""
+--   ""
+--
+addSpace :: O.Map String
+addSpace cs@(c : _) | Ch.isSpace c  = cs
+                    | otherwise     = ' ' : cs
+addSpace ""                         = ""
 
 
 -- ----------------------  Padding

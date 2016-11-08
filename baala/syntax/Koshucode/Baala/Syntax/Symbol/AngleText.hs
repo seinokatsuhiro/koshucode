@@ -6,7 +6,6 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
   ( -- * Functions
     angleQuote,
     angleTexts,
-    appendSpace,
     -- * Keyword table
     -- $Table
   ) where
@@ -32,26 +31,10 @@ angleQuote = open . loop where
         case angleSplit ccs of
           Nothing       -> c : loop cs
           Just (w, cs2) -> "\" " ++ w ++
-                           appendSpace (open $ loop cs2)
+                           O.addSpace (open $ loop cs2)
 
     open ('"' : cs)  = O.trimLeft cs   -- omit closing double quote
     open cs          = '"' : cs        -- append opening double quote
-
--- | Append space character if first character is non-space.
---
---   >>> space "aaa"
---   " aaa"
---
---   >>> space " bbb"
---   " bbb"
---
---   >>> space ""
---   ""
---
-appendSpace :: O.Map String
-appendSpace cs@(c : _) | Ch.isSpace c  = cs
-                       | otherwise     = ' ' : cs
-appendSpace ""                         = ""
 
 -- | Split angle text.
 --
