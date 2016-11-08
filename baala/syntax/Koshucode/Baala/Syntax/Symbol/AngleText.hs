@@ -25,47 +25,57 @@ import qualified Koshucode.Baala.Overture     as O
 --   "aaa" <lf> "bbb" <crlf> "ccc" <crlf> <crlf> "ddd"
 --
 angleQuote :: O.Map String
-angleQuote = open . loop where
+angleQuote = openLoop where
+    openLoop = open . loop
+
+    loop (c : cs) = case angleSplit c cs of
+                      Nothing       -> c : loop cs
+                      Just (w, cs2) -> "\" " ++ w ++
+                                       O.addSpace (openLoop cs2)
     loop "" = "\""
-    loop ccs@(c : cs) =
-        case angleSplit ccs of
-          Nothing       -> c : loop cs
-          Just (w, cs2) -> "\" " ++ w ++
-                           O.addSpace (open $ loop cs2)
 
     open ('"' : cs)  = O.trimLeft cs   -- omit closing double quote
     open cs          = '"' : cs        -- append opening double quote
 
--- | Split angle text.
+-- | Split angle keyword.
 --
---   >>> angleSplit "abc"
+--   >>> let (c : cs) = "abc" in angleSplit c cs
 --   Nothing
 --
---   >>> angleSplit "\n\nabc"
+--   >>> let (c : cs) =  "\nabc" in angleSplit c cs
 --   Just ("<lf>", "abc")
 --
-angleSplit :: String -> Maybe (String, String)
-angleSplit [] = Nothing
-angleSplit (c : cs)
-    = case O.majorGeneralCategory c of
-        O.UnicodePunctuation -> punct c
-        O.UnicodeOther       -> other c
-        _                    -> Nothing
-      where
-        just cs2 a           =  Just (a, cs2)
+--   >>> let (c : cs) =  "\0abc" in angleSplit c cs
+--   Just ("<c0>", "abc")
+--
+angleSplit :: Char -> String -> Maybe (String, String)
+angleSplit c cs =
+    case O.majorGeneralCategory c of
+      O.UnicodePunctuation -> punct c
+      O.UnicodeOther       -> other c
+      _                    -> Nothing
+    where
+      just w               = Just (w, cs)
+      just2 w cs2          = Just (w, cs2)
 
-        punct '"'            =  just cs "<qq>"
-        punct _              =  Nothing
+      punct '"'            = just "<qq>"
+      punct _              = Nothing
 
-        other '\r'           =  cr cs
-        other '\n'           =  just cs "<lf>"
-        other '\t'           =  just cs "<tab>"
-        other _              =  just cs $ "<c" ++ show code ++ ">"
+      other '\r'           = cr cs
+      other '\n'           = just "<lf>"
+      other '\t'           = just "<tab>"
+      other _              = just (angleChar c)
 
-        cr ('\n' : cs2)      =  just cs2 "<crlf>"
-        cr _                 =  just cs  "<cr>"
+      cr ('\n' : cs2)      = just2 "<crlf>" cs2
+      cr _                 = just "<cr>"
 
-        code                 =  Ch.ord c
+-- | Angle text of char code.
+--
+--   >>> angleChar 'a'
+--   "<c97>"
+--
+angleChar :: Char -> String
+angleChar c = "<c" ++ show (Ch.ord c) ++ ">"
 
 -- | Table of coresspondences of angle text and its replacement.
 --
