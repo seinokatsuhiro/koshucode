@@ -10,7 +10,6 @@ module Koshucode.Baala.Syntax.Symbol.AngleText
     -- $Table
   ) where
 
-import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Overture     as O
 
 -- | Convert string into double-quoted and angle-quoted form.
@@ -69,13 +68,13 @@ angleSplit c cs =
       cr ('\n' : cs2)      = just2 "<crlf>" cs2
       cr _                 = just "<cr>"
 
--- | Angle text of char code.
+-- | Angle text of the Unicode code point.
 --
---   >>> angleChar 'a'
---   "<c97>"
+--   >>> angleChar 'K'
+--   "<U+4B>"
 --
 angleChar :: Char -> String
-angleChar c = "<c" ++ show (Ch.ord c) ++ ">"
+angleChar c = "<U+" ++ O.intUpperHexString (fromEnum c) ++ ">"
 
 -- | Table of coresspondences of angle text and its replacement.
 --
