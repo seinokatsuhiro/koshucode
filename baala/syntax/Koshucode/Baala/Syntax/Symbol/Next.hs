@@ -40,17 +40,38 @@ isQQ       = (== '"')
 isSpace    = Ch.isSpace
 
 -- | Get next spaces.
+--   Space character is decided by 'Ch.isSpace'.
+--
+--   >>> nextSpace " abc"
+--   ("abc", 1)
+--
+--   >>> nextSpace " \tabc"
+--   ("abc", 2)
+--
 nextSpace :: Next Int
 nextSpace = loop 0 where
     loop n (c:cs) | isSpace c   = loop (n + 1) cs
     loop n cs                   = (cs, n)
 
--- | Get next double-quoted text.
+-- | Get next double quoted text.
+--   A single double quote ends text.
+--   A double double quote does not end text,
+--   but it is converted to double quote.
+--
+--   >>> nextQQ "abc\" def"
+--   Right (" def","abc")
+--
+--   >>> nextQQ "abc\"\"def\" ghi"
+--   Right (" ghi","abc\"def")
+--
 nextQQ :: AbNext String
 nextQQ = loop "" where
-    loop w (c:cs) | isQQ c        = Right (cs, reverse w)
+    loop w (c:cs) | isQQ c        = qq w cs
                   | otherwise     = loop (c:w) cs
     loop _ _                      = Msg.quotNotEnd
+
+    qq w (c:cs)   | isQQ c        = loop (c:w) cs
+    qq w cs                       = Right (cs, reverse w)
 
 
 -- --------------------------------------------  Symbol
@@ -229,6 +250,7 @@ nextSymbol = symbolGpn "" where
         | isSymbolChar c      = symbolUnk (c:w) cs
     symbolUnk w cs        = done w cs SymbolUnknown
 
+-- | Get next plain symbol.
 nextSymbolPlain :: AbNext String
 nextSymbolPlain cs =
     case nextSymbol cs of
