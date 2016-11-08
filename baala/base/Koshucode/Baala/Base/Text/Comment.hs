@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Simple document used in comments.
+
 module Koshucode.Baala.Base.Text.Comment
   ( Texts (..),
     CommentDoc (..),
@@ -9,7 +11,8 @@ module Koshucode.Baala.Base.Text.Comment
     putCommentLines, hPutCommentLines,
   ) where
 
-import qualified System.IO as IO
+import qualified System.IO                 as IO
+import qualified Koshucode.Baala.Overture  as O
 
 -- | Something that can become a string list.
 class Texts a where
@@ -46,15 +49,28 @@ prepend :: [a] -> [a] -> [a] -> [a]
 prepend a _ [] = a
 prepend a b xs = a ++ b ++ xs
 
+-- | Comment string @-*- koshu -*-@ for The Emacs editor.
 emacsModeComment :: String
 emacsModeComment = "** -*- koshu -*-"
 
-commentLine :: String -> String
+-- | Wrap string in comment.
+--
+--   >>> commentLine "Hello Koshu"
+--   "**  Hello Koshu"
+--
+commentLine :: O.StringMap
 commentLine "" = "**"
 commentLine s  = "**  " ++ s
 
+-- | Print strings as comment lines.
+--
+--   >>> putCommentLines ["Hello", "Koshu"]
+--   **  Hello
+--   **  Koshu
+--
 putCommentLines :: [String] -> IO ()
-putCommentLines = putStr . unlines . map commentLine
+putCommentLines = O.putLines . map commentLine
 
+-- | Print strings as comment lines.
 hPutCommentLines :: IO.Handle -> [String] -> IO ()
-hPutCommentLines h = IO.hPutStr h . unlines . map commentLine
+hPutCommentLines h = O.hPutLines h . map commentLine

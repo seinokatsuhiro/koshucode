@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --   * __@-@Word__        — Normal attribute
 --   * __@-@Word@/@__     — Relmap attribute
 --   * __@-@Word@/^@__    — Local relmap attribute
-
+--
 parseAttrLayout :: String -> S.AttrLayout
 parseAttrLayout = S.AttrLayout . map (fmap branch) . parseParaSpec
 
@@ -35,7 +35,7 @@ attrName = name . reverse . unhyphen where
     name ('/' : n)       = S.AttrRelmapNormal $ reverse n
     name n               = S.AttrNormal       $ reverse n
 
-unhyphen :: String -> String
+unhyphen :: O.StringMap
 unhyphen ('-' : n) = n
 unhyphen n         = paraBug "no hyphen" n
 
@@ -98,7 +98,7 @@ unhyphen n         = paraBug "no hyphen" n
 --
 --    * __Empty__                     — Required parameter
 --    * __@?@__                       — Optional parameter
-
+--
 parseParaSpec :: String -> [(Maybe String, S.ParaSpec String)]
 parseParaSpec = multi where
     divide c  = B.divideBy (== c)

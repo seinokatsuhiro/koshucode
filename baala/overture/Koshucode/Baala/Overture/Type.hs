@@ -6,6 +6,7 @@ module Koshucode.Baala.Overture.Type
  ( Eith,
    uneith,
    Map, ManyMap,
+   StringMap,
    Test, Test2,
    Bin,
    int, integer,
@@ -28,6 +29,9 @@ type Map a = a -> a
 
 -- | Map from something to list of something.
 type ManyMap a = a -> [a]
+
+-- | Map from string to string.
+type StringMap = Map String
 
 -- | Boolean-valued function, also called predicate.
 type Test a = a -> Bool

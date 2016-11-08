@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Overture     as O
 --   >>> putStrLn $ angleQuote "aaa\nbbb\r\nccc\r\n\r\nddd"
 --   "aaa" <lf> "bbb" <crlf> "ccc" <crlf> <crlf> "ddd"
 --
-angleQuote :: O.Map String
+angleQuote :: O.StringMap
 angleQuote = openLoop where
     openLoop = open . loop
 

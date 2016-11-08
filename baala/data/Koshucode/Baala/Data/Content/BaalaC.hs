@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Content.BaalaC
   ) where
 
 import qualified Data.Set                                as Set
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
@@ -124,11 +125,11 @@ instance B.MixShortEncode BaalaC where
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
-quote :: Maybe String -> String -> String
+quote :: Maybe String -> O.StringMap
 quote (Nothing) s   = "'" ++ s
 quote (Just s)  _   = s
 
-qquote :: Maybe String -> String -> String
+qquote :: Maybe String -> O.StringMap
 qquote (Nothing) "" = "\"\""
 qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s

@@ -81,7 +81,7 @@ data XsvSetting = XsvSetting
     { xsvHead     :: Bool
     , xsvSep      :: String
     , xsvSubSep   :: String
-    , xsvQuote  :: String -> String
+    , xsvQuote    :: O.StringMap
     }
 
 csvSetting :: XsvSetting
@@ -102,13 +102,13 @@ csvHeadSetting = csvSetting { xsvHead = True }
 tabHeadSetting :: XsvSetting
 tabHeadSetting = tabSetting { xsvHead = True }
 
-enquote :: O.Map String
+enquote :: O.StringMap
 enquote str = '"' : q str where
     q ""          = ['"']
     q ('"' : xs)  = '"' : '"' : q xs
     q (x : xs)    =         x : q xs
 
-toSpace :: O.Map String
+toSpace :: O.StringMap
 toSpace ""           = ""
 toSpace (x : xs) | Ch.isControl x    = ' ' : xs'
                  | otherwise         =   x : xs'

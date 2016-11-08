@@ -65,7 +65,7 @@ contMap get put f = contAp get put $ fmap f
 --   >>> contApTextToText reverse (the $ pText "abc")
 --   Right (VText "cba")
 --
-contApTextToText :: (D.CText c) => O.Map String -> B.AbMap c
+contApTextToText :: (D.CText c) => O.StringMap -> B.AbMap c
 contApTextToText = contAp D.gText D.putText
 
 -- | Map function to characters of internal string of text content.

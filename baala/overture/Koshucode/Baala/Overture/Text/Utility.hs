@@ -32,7 +32,7 @@ isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
 --   >>> trimBegin "  abc  "
 --   "abc  "
 --
-trimBegin :: O.Map String
+trimBegin :: O.StringMap
 trimBegin = dropWhile isSpace
 
 -- | Remove space and space-like characters from the end of string.
@@ -40,7 +40,7 @@ trimBegin = dropWhile isSpace
 --   >>> trimEnd "  abc  "
 --   "  abc"
 --
-trimEnd :: O.Map String
+trimEnd :: O.StringMap
 trimEnd [] = []
 trimEnd (x : xs) =
     case x : trimEnd xs of
@@ -53,7 +53,7 @@ trimEnd (x : xs) =
 --   >>> trimBoth "  abc  "
 --   "abc"
 --
-trimBoth :: O.Map String
+trimBoth :: O.StringMap
 trimBoth = trimEnd . trimBegin
 
 
@@ -64,7 +64,7 @@ trimBoth = trimEnd . trimBegin
 --   >>> padBegin 10 "abc"
 --   "       abc"
 --
-padBegin :: Int -> O.Map String
+padBegin :: Int -> O.StringMap
 padBegin = padBeginWith ' '
 
 -- | Add spaces to the right.
@@ -72,7 +72,7 @@ padBegin = padBeginWith ' '
 --   >>> padEnd 10 "abc"
 --   "abc       "
 --
-padEnd :: Int -> O.Map String
+padEnd :: Int -> O.StringMap
 padEnd = padEndWith ' '
 
 -- | Add given character to the left.
@@ -80,12 +80,12 @@ padEnd = padEndWith ' '
 --   >>> padBeginWith '.' 10 "abc"
 --   ".......abc"
 --
-padBeginWith :: Char -> Int -> O.Map String
+padBeginWith :: Char -> Int -> O.StringMap
 padBeginWith p n s = replicate rest p ++ s where
     rest = max 0 (n - stringWidth s)
 
 -- | Add given character to the right.
-padEndWith :: Char -> Int -> O.Map String
+padEndWith :: Char -> Int -> O.StringMap
 padEndWith p n s = s ++ replicate rest p where
     rest = max 0 (n - stringWidth s)
 
@@ -110,7 +110,7 @@ charWidth c
 --   >>> addSpace ""
 --   ""
 --
-addSpace :: O.Map String
+addSpace :: O.StringMap
 addSpace cs@(c : _) | Ch.isSpace c  = cs
                     | otherwise     = ' ' : cs
 addSpace ""                         = ""

@@ -245,7 +245,7 @@ copTrimEnd = copTrimBy O.trimEnd
 copTrimBoth :: (D.CContent c) => D.CopCalc c
 copTrimBoth = copTrimBy O.trimBoth
 
-copTrimBy :: (D.CContent c) => O.Map String -> D.CopCalc c
+copTrimBy :: (D.CContent c) => O.StringMap -> D.CopCalc c
 copTrimBy f arg =
     do text <- D.getRightArg1 arg
        case D.isText text of

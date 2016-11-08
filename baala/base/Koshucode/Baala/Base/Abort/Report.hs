@@ -72,7 +72,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
               , B.textBlockCell B.Front codes
               , B.textBlockCell B.Front $ map dots tags ]]
 
-    dots :: O.Map String
+    dots :: O.StringMap
     dots ""   = ""
     dots text = ".. " ++ text
 

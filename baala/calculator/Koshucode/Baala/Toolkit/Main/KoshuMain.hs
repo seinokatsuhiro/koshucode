@@ -97,7 +97,7 @@ initParam (Right (opts, args)) =
              | otherwise                = W.resultKoshu
 
       -- replace "||" to "\n"
-      oneLiner :: O.Map String
+      oneLiner :: O.StringMap
       oneLiner []               = []
       oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimBegin xs)
       oneLiner (x : xs)         = x : oneLiner xs

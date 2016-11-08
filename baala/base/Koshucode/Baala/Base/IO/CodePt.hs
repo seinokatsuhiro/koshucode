@@ -1,6 +1,8 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Source code information.
+
 module Koshucode.Baala.Base.IO.CodePt
   ( -- * Code point
     CodePt (..),
@@ -55,6 +57,7 @@ codePtColumnNo :: CodePt -> Int
 codePtColumnNo CodePt { codePtLineText = line, codePtText = subline }
     = length line - length subline
 
+-- | Create position and line information.
 codePtDisplay :: (String, CodePt) -> [(String, String)]
 codePtDisplay (tag, p)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
@@ -66,17 +69,18 @@ codePtDisplay (tag, p)
       code      = B.ioPointText $ B.nioPoint $ codePtSource p
       text      = codePtText p
 
-      shorten :: O.Map String
+      shorten :: O.StringMap
       shorten s | length s > 48  = take 45 s ++ "..."
                 | otherwise      = s
 
 
 -- ----------------------  CodePtr
 
+-- | Type which has code points.
 class CodePtr a where
     codePtList :: a -> [CodePt]
 
-    codePt :: a ->  CodePt
+    codePt :: a -> CodePt
     codePt p = B.headNull B.def $ codePtList p
 
 instance CodePtr CodePt where
@@ -86,6 +90,7 @@ instance CodePtr CodePt where
 
 -- ----------------------  Sourced
 
+-- | Type with source code information.
 data Sourced a =
     Sourced { source    :: [CodePt]
             , unsourced :: a

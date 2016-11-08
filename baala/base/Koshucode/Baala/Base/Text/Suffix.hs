@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Base.List         as B
 --   >>> unprefix (`elem` "0123456789") '-' "12-foo"
 --   "foo"
 --
-unprefix :: O.Test Char -> Char -> O.Map String
+unprefix :: O.Test Char -> Char -> O.StringMap
 unprefix test del s = loop s where
     loop [] = s
     loop (c:cs) | test c      = loop cs
@@ -29,7 +29,7 @@ unprefix test del s = loop s where
 --   >>> unsuffix (`elem` "0123456789") '-' "foo-12"
 --   "foo"
 --
-unsuffix :: O.Test Char -> Char -> O.Map String
+unsuffix :: O.Test Char -> Char -> O.StringMap
 unsuffix test del = B.reverseMap $ unprefix test del
 
 -- | Two-argument function which returns a constant value.

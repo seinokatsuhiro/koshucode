@@ -151,7 +151,7 @@ ord = fromIntegral. Ch.ord
 
 -- ----------------------  Encode
 
-separator :: O.Map String
+separator :: O.StringMap
 separator ""            = ""
 separator [c]           = [c]
 separator cs@(' ' : _)  = cs
@@ -175,22 +175,22 @@ encodeDecimal = encodeDecimalWith separator
 encodeDecimalCompact :: D.Decimal -> String
 encodeDecimalCompact = encodeDecimalWith id
 
-encodeDecimalWith :: O.Map String -> D.Decimal -> String
+encodeDecimalWith :: O.StringMap -> D.Decimal -> String
 encodeDecimalWith sep = encode . D.decimalRoundOut where
     encode D.Decimal { D.decimalFracle = l, D.decimalRatio = r } =
         decimalSign r $ case ratioDigits sep l $ abs r of
                           (int, frac) | l > 0      -> int ++ "." ++ frac
                                       | otherwise  -> int
 
-decimalSign :: D.DecimalRatio -> O.Map String
+decimalSign :: D.DecimalRatio -> O.StringMap
 decimalSign r cs | r < 0      = '-' : cs
                  | otherwise  = cs
 
-ratioDigits :: (Integral n) => O.Map String -> D.DecimalFracle -> R.Ratio n -> (String, String)
+ratioDigits :: (Integral n) => O.StringMap -> D.DecimalFracle -> R.Ratio n -> (String, String)
 ratioDigits sep l r = case properFraction r of
                         (i, r') -> (integerDigits sep l i, fracDigits sep l r')
 
-integerDigits :: O.Map String -> D.DecimalFracle -> Integer -> String
+integerDigits :: O.StringMap -> D.DecimalFracle -> Integer -> String
 integerDigits sep = loop 0 "" where
     loop :: Int -> String -> D.DecimalFracle -> Integer -> String
     loop n cs l i
@@ -203,7 +203,7 @@ integerDigits sep = loop 0 "" where
     up l r | l < 0      = 'o'
            | otherwise  = Ch.intToDigit (fromInteger r)
 
-fracDigits :: (Integral n) => O.Map String -> D.DecimalFracle -> R.Ratio n -> String
+fracDigits :: (Integral n) => O.StringMap -> D.DecimalFracle -> R.Ratio n -> String
 fracDigits sep = loop (0 :: Int) where
     loop n l 0 = fill n l
     loop _ 0 _ = ""

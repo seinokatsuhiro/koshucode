@@ -44,7 +44,7 @@ unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
           indent    = ("  " ++)
           term      = ('/' :)
 
-quote :: O.Map String
+quote :: O.StringMap
 quote s = "'" ++ s ++ "'"
 
 tokenAtPoint :: S.Token -> String
