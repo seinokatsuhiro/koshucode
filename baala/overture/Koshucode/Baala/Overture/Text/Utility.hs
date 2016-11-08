@@ -16,6 +16,7 @@ module Koshucode.Baala.Overture.Text.Utility
     -- * Read
     readInt, readInteger,
     stringHex, stringHexInt, stringHexInteger,
+    intLowerHexString, intUpperHexString,
   ) where
 
 import qualified Data.Char                      as Ch
@@ -192,3 +193,25 @@ stringHexInt = stringHex
 --
 stringHexInteger :: String -> Maybe Integer
 stringHexInteger = stringHex
+
+integralLowerHexString :: (Integral n, Show n) => n -> String
+integralLowerHexString n = Num.showHex n ""
+
+integralUpperHexString :: (Integral n, Show n) => n -> String
+integralUpperHexString = map Ch.toUpper . integralLowerHexString
+
+-- | Convert integer to hexadecimal string.
+--
+--   >>> intHexString 15
+--   "f"
+--
+intLowerHexString :: Int -> String
+intLowerHexString = integralLowerHexString
+
+-- | Convert integer to hexadecimal string.
+--
+--   >>> intUpperHexString 15
+--   "F"
+--
+intUpperHexString :: Int -> String
+intUpperHexString = integralUpperHexString
