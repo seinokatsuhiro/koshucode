@@ -30,21 +30,21 @@ the = id
 
 -- | The Baala content type.
 data BaalaC
-    = VBool    Bool               -- ^ Boolean type
-    | VCode    String             -- ^ Code type
-    | VText    String             -- ^ String type
-    | VTerm    String             -- ^ Term name type
-    | VDec     D.Decimal          -- ^ Decimal number type
-    | VClock   D.Clock            -- ^ Clock type
-    | VTime    D.Time             -- ^ Time type
-    | VEmpty                      -- ^ Sign of no ordinary type
-    | VEnd                        -- ^ The end of everything
-    | VInterp  D.Interp           -- ^ Interpretation type
-    | VType    D.Type             -- ^ Type for type
-    | VList    [BaalaC]           -- ^ List type (objective collection)
-    | VSet     [BaalaC]           -- ^ Set type (informative collection)
-    | VTie     [B.Named BaalaC]   -- ^ Tie type (set of terms)
-    | VRel     (D.Rel BaalaC)     -- ^ Relation type
+    = VEmpty                      -- ^ /Singleton:/   Sign of no ordinary type
+    | VBool    Bool               -- ^ /Numeric:/     Boolean type
+    | VDec     D.Decimal          -- ^ /Numeric:/     Decimal number type
+    | VClock   D.Clock            -- ^ /Numeric:/     Clock type
+    | VTime    D.Time             -- ^ /Numeric:/     Time type
+    | VCode    String             -- ^ /Textual:/     Code type
+    | VTerm    String             -- ^ /Textual:/     Term name type
+    | VText    String             -- ^ /Textual:/     Text type
+    | VList    [BaalaC]           -- ^ /Collective:/  List type
+    | VSet     [BaalaC]           -- ^ /Collective:/  Set type
+    | VTie     [B.Named BaalaC]   -- ^ /Relational:/  Tie type (set of terms)
+    | VRel     (D.Rel BaalaC)     -- ^ /Relational:/  Relation type
+    | VInterp  D.Interp           -- ^ /Relational:/  Interpretation type
+    | VType    D.Type             -- ^ /Meta:/        Type for type
+    | VEnd                        -- ^ /Singleton:/   The end of everything
     deriving (Show)
 
 instance Eq BaalaC where
@@ -76,21 +76,21 @@ compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
 instance D.CTypeOf BaalaC where
+    typeOf (VEmpty    )  = D.TypeEmpty
     typeOf (VBool    _)  = D.TypeBool
-    typeOf (VCode    _)  = D.TypeCode
-    typeOf (VText    _)  = D.TypeText
-    typeOf (VTerm    _)  = D.TypeTerm
     typeOf (VDec     _)  = D.TypeDec
     typeOf (VClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
     typeOf (VTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
-    typeOf (VEmpty    )  = D.TypeEmpty
-    typeOf (VEnd      )  = D.TypeEnd
-    typeOf (VInterp  _)  = D.TypeInterp
-    typeOf (VType    _)  = D.TypeType
+    typeOf (VCode    _)  = D.TypeCode
+    typeOf (VTerm    _)  = D.TypeTerm
+    typeOf (VText    _)  = D.TypeText
     typeOf (VList   cs)  = D.TypeList $ typeSum cs
     typeOf (VSet    cs)  = D.TypeSet  $ typeSum cs
     typeOf (VTie    cs)  = D.TypeTie  $ B.mapSndTo D.typeOf cs
     typeOf (VRel     _)  = D.TypeRel []
+    typeOf (VInterp  _)  = D.TypeInterp
+    typeOf (VType    _)  = D.TypeType
+    typeOf (VEnd      )  = D.TypeEnd
 
 typeSum :: D.CTypeOf c => [c] -> D.Type
 typeSum cs = case B.unique $ map D.typeOf cs of
@@ -135,7 +135,17 @@ qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
 
 
--- ----------------------  haskell data
+-- ----------------------  Simple
+
+instance D.CEmpty BaalaC where
+    empty                    = VEmpty
+    isEmpty VEmpty           = True
+    isEmpty _                = False
+
+instance D.CEnd BaalaC where
+    end                      = VEnd
+    isEnd VEnd               = True
+    isEnd _                  = False
 
 instance D.CBool BaalaC where
     pBool                    = VBool
@@ -172,33 +182,6 @@ instance D.CCode BaalaC where
     isCode  (VCode _)        = True
     isCode  _                = False
 
-instance D.CText BaalaC where
-    pText                    = VText
-    gText (VText s)          = s
-    gText _                  = B.bug "gText"
-    isText  (VText _)        = True
-    isText  _                = False
-
-instance D.CList BaalaC where
-    pList                    = VList
-    gList (VList xs)         = xs
-    gList _                  = []
-    isList (VList _)         = True
-    isList _                 = False
-
-
--- ----------------------  koshu data
-
-instance D.CEmpty BaalaC where
-    empty                    = VEmpty
-    isEmpty VEmpty           = True
-    isEmpty _                = False
-
-instance D.CEnd BaalaC where
-    end                      = VEnd
-    isEnd VEnd               = True
-    isEnd _                  = False
-
 instance D.CTerm BaalaC where
     pTerm                    = VTerm
     gTerm (VTerm s)          = s
@@ -206,19 +189,21 @@ instance D.CTerm BaalaC where
     isTerm  (VTerm _)        = True
     isTerm  _                = False
 
-instance D.CInterp BaalaC where
-    pInterp                  = VInterp
-    gInterp (VInterp r)      = r
-    gInterp _                = B.bug "gInterp"
-    isInterp  (VInterp _)    = True
-    isInterp  _              = False
+instance D.CText BaalaC where
+    pText                    = VText
+    gText (VText s)          = s
+    gText _                  = B.bug "gText"
+    isText  (VText _)        = True
+    isText  _                = False
 
-instance D.CType BaalaC where
-    pType                    = VType
-    gType (VType r)          = r
-    gType _                  = B.bug "gType"
-    isType  (VType _)        = True
-    isType  _                = False
+-- ----------------------  Complex
+
+instance D.CList BaalaC where
+    pList                    = VList
+    gList (VList xs)         = xs
+    gList _                  = []
+    isList (VList _)         = True
+    isList _                 = False
 
 instance D.CSet BaalaC where
     pSet                     = VSet . B.omit D.isEmpty . B.unique
@@ -241,3 +226,16 @@ instance D.CRel BaalaC where
     isRel  (VRel _)          = True
     isRel  _                 = False
 
+instance D.CInterp BaalaC where
+    pInterp                  = VInterp
+    gInterp (VInterp r)      = r
+    gInterp _                = B.bug "gInterp"
+    isInterp  (VInterp _)    = True
+    isInterp  _              = False
+
+instance D.CType BaalaC where
+    pType                    = VType
+    gType (VType r)          = r
+    gType _                  = B.bug "gType"
+    isType  (VType _)        = True
+    isType  _                = False
