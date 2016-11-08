@@ -51,6 +51,7 @@ library
 
         Koshucode.Baala.Overture.Text
         Koshucode.Baala.Overture.Text.Category
+        Koshucode.Baala.Overture.Text.Integer
         Koshucode.Baala.Overture.Text.Unicode
         Koshucode.Baala.Overture.Text.Utility
 

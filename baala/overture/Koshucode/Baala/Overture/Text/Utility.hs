@@ -13,15 +13,10 @@ module Koshucode.Baala.Overture.Text.Utility
     -- * Put
     putShow, putShowLn,
     putLines, hPutLines, hPutEmptyLine,
-    -- * Read
-    readInt, readInteger,
-    stringHex, stringHexInt, stringHexInteger,
-    intLowerHexString, intUpperHexString,
   ) where
 
 import qualified Data.Char                      as Ch
 import qualified System.IO                      as IO
-import qualified Numeric                        as Num
 import qualified Koshucode.Baala.Overture.Type  as O
 
 
@@ -140,78 +135,3 @@ hPutLines h = (IO.hPutStrLn h `mapM_`)
 -- | Print empty line.
 hPutEmptyLine :: IO.Handle -> IO ()
 hPutEmptyLine h = IO.hPutStrLn h ""
-
-
--- ----------------------  Read
-
-readMaybe :: (String -> [(a, String)]) -> String -> Maybe a
-readMaybe f s = case f s of
-                  [(x, "")] -> Just x
-                  _         -> Nothing
-
-readDec :: (Eq n, Num n) => String -> Maybe n
-readDec = readMaybe Num.readDec
-
--- | Read decimal integer.
---
---   >>> readInt "12"
---   Just 12
---
---   >>> readInt "12.3"
---   Nothing
---
---   >>> readInt "12345678901234567890"
---   Just (-6101065172474983726)
---
-readInt :: String -> Maybe Int
-readInt = readDec
-
--- | Read decimal integer.
---
---   >>> readInteger "12345678901234567890"
---   Just 12345678901234567890
---
-readInteger :: String -> Maybe Integer
-readInteger = readDec
-
--- | Read hexadecimal digits.
-stringHex :: (Eq n, Num n) => String -> Maybe n
-stringHex = readMaybe Num.readHex
-
--- | Read hexadecimal digits as 'Int'.
---
---   >>> stringHexInt "0F"
---   Just 15
---
-stringHexInt :: String -> Maybe Int
-stringHexInt = stringHex
-
--- | Read hexadecimal digits as 'Integer'.
---
---   >>> stringHexInteger "0F"
---   Just 15
---
-stringHexInteger :: String -> Maybe Integer
-stringHexInteger = stringHex
-
-integralLowerHexString :: (Integral n, Show n) => n -> String
-integralLowerHexString n = Num.showHex n ""
-
-integralUpperHexString :: (Integral n, Show n) => n -> String
-integralUpperHexString = map Ch.toUpper . integralLowerHexString
-
--- | Convert integer to hexadecimal string.
---
---   >>> intHexString 15
---   "f"
---
-intLowerHexString :: Int -> String
-intLowerHexString = integralLowerHexString
-
--- | Convert integer to hexadecimal string.
---
---   >>> intUpperHexString 15
---   "F"
---
-intUpperHexString :: Int -> String
-intUpperHexString = integralUpperHexString
