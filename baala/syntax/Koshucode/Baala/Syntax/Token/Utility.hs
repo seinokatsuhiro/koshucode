@@ -98,6 +98,7 @@ slotTypeText 1   = "named"
 slotTypeText 2   = "global"
 slotTypeText _   = "unknown"
 
+-- | Get token parents from local token.
 tokenParents :: S.Token -> [S.Token]
 tokenParents (S.TLocal _ _ _ ps) = ps
 tokenParents _                   = []

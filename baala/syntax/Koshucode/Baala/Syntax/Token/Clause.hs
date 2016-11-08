@@ -1,4 +1,6 @@
 
+-- | Token clause.
+
 module Koshucode.Baala.Syntax.Token.Clause
   ( -- * Token clause
     TokenClause,
@@ -29,6 +31,7 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 
 -- --------------------------------------------  Token clause
 
+-- | Code clause of tokens.
 type TokenClause = B.CodeClause S.Token
 
 -- | Convert token lines into token clauses

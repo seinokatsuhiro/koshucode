@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Syntax for attributes.
+
 module Koshucode.Baala.Syntax.Attr
   ( module Koshucode.Baala.Syntax.Attr.Attr,
     module Koshucode.Baala.Syntax.Attr.AttrEd,

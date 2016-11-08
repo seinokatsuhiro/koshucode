@@ -53,9 +53,11 @@ type TTreesToAb a = [TTree] -> B.Ab a
 
 -- --------------------------------------------  Pattern
 
--- term leaf
+-- | Term leaf.
 pattern TermLeaf      cp q ws    = B.TreeL (S.TTerm   cp q ws)
+-- | Term leaf.
 pattern TermLeafName  cp sign w  = B.TreeL (S.TTermN  cp sign w)
+-- | Term leaf of 'S.TermTypePath'.
 pattern TermLeafPath  cp ws      = TermLeaf cp S.TermTypePath ws
 --pattern TermLeafLocal cp v e ps  = B.TreeL (S.TLocal cp v e ps)
 

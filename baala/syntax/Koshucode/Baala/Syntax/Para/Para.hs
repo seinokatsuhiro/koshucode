@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Base                  as B
 
 -- ----------------------  Parameter
 
+-- | Named and positional parameter.
 data Para n a
     = Para
       { paraTags  :: [String]       -- ^ Parameter tags.
@@ -63,7 +64,7 @@ type ParaName n a = a -> Maybe n
 -- Para { paraAll = ["a","b","-x","c"]
 --      , paraPos = ["a","b"]
 --      , paraName = fromList [("x",[["c","d"]])] }
-
+--
 para :: (Ord n) => ParaName n a -> [a] -> Para n a
 para name xxs = pos xxs [] where
     make ps            = B.def { paraAll = xxs, paraPos = reverse ps }
@@ -127,9 +128,18 @@ paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
 paraNameMapKeys f p@Para { paraName = m } =
     p { paraName = Map.mapKeys f m }
 
+-- | Take first element from multiply given named parameter.
+--
+--   >>> let p = para paraHyphen $ words "a -x 1 -x 2 -x 3"
+--   >>> p
+--   Para { ..., paraName = fromList [("x", [["1"],["2"],["3"]])] }
+--   >>> paraTakeFirst "x" p
+--   Para { ..., paraName = fromList [("x", [["1"]])] }
+--
 paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
 paraTakeFirst = paraAdjustName B.takeFirst
 
+-- | Take last element from multiply given named parameter.
 paraTakeLast :: (Ord n) => n -> Para n a -> Para n a
 paraTakeLast = paraAdjustName B.takeLast
 

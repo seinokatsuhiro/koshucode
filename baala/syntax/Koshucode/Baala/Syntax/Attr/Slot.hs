@@ -18,6 +18,7 @@ import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 -- | Attribute name and its contents.
 type AttrTree = (S.AttrName, [S.TTree])
 
+-- | Global slot name and its content.
 type GlobalSlot = S.NamedTrees
 
 -- | Substitute slots by global and attribute slots.

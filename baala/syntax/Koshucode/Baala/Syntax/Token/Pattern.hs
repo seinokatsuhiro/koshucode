@@ -55,6 +55,7 @@ pattern TTextBar cp w = S.TText cp S.TextBar  w
 -- | License text token.
 pattern TTextLicense cp w = S.TText cp S.TextLicense w
 
+-- | Section sign.
 pattern TTextSect cp = TTextRaw cp "==="
 
 

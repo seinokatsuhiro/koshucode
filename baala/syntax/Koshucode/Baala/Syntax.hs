@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Bundle of syntax modules.
+
 module Koshucode.Baala.Syntax
   ( module Koshucode.Baala.Syntax.Attr,
     module Koshucode.Baala.Syntax.Para,

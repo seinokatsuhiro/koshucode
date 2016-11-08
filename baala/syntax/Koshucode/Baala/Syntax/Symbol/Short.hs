@@ -8,7 +8,8 @@ module Koshucode.Baala.Syntax.Symbol.Short
     Short (..), ShortDef,
   
     -- * Utility
-    shortTrim, shortM, shortListM,
+    shortTrim, --shortM,
+    shortListM,
     shortGroup,
   
     -- * Shorten
@@ -26,10 +27,10 @@ import qualified Koshucode.Baala.Syntax.Symbol.Next       as S
 
 -- | Something with short definition.
 data Short a =
-    Short { shortSource :: [B.CodePt]
-          , shortHead   :: [ShortDef]
-          , shortBody   :: a }
-    deriving (Show, Ord, Eq)
+    Short { shortSource :: [B.CodePt]  -- ^ Source information
+          , shortHead   :: [ShortDef]  -- ^ Definition of short signs
+          , shortBody   :: a           -- ^ Body with short signs
+          } deriving (Show, Ord, Eq)
 
 -- | Short prefix and replacement.
 type ShortDef = B.Named String
@@ -37,15 +38,19 @@ type ShortDef = B.Named String
 instance Functor Short where
     fmap f (Short pt he bo) = Short pt he $ f bo
 
+-- | Omit empty body.
 shortTrim :: O.Map [Short [a]]
 shortTrim = B.omit $ null . shortBody
 
+-- | Evaluate body of short structure.
 shortM :: (Monad m) => Short (m a) -> m (Short a)
 shortM (Short pt he bo) = return . Short pt he =<< bo
 
+-- | Evaluate body of short structures.
 shortListM :: (Monad m) => [Short (m a)] -> m [Short a]
 shortListM = mapM shortM
 
+-- | Group short structures.
 shortGroup :: [Short a] -> [Short [a]]
 shortGroup [] = []
 shortGroup (Short cp1 sh1 a : xs) =
