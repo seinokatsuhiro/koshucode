@@ -34,12 +34,12 @@ undup k = loop where
 dotsStrings :: String -> [String]
 dotsStrings = begin where
     begin (Dots a s)
-        | Ch.isSpace a     = dots (mid "" $ O.trimLeft s)
+        | Ch.isSpace a     = dots (mid "" $ O.trimBegin s)
     begin s                = mid "" s
 
     mid w (b : Dots a s)
         | Ch.isSpace b &&
-          Ch.isSpace a     = revTrim w : dots (begin $ O.trimLeft s)
+          Ch.isSpace a     = revTrim w : dots (begin $ O.trimBegin s)
     mid w (c:s)            = mid (c:w) s
     mid w ""               = end w
 
@@ -50,7 +50,7 @@ dotsStrings = begin where
     dots pat@("..." : _)   = pat
     dots pat               = "..." : pat
 
-    revTrim                = reverse . O.trimLeft
+    revTrim                = reverse . O.trimBegin
 
 -- | Concatenate dots-pattern strings,
 --   inserting one space between dots and word.

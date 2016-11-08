@@ -46,7 +46,7 @@ abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> B.AbortReason -> [String]
-abortMessage cmd a = B.squeezeEmptyLines $ map O.trimRight texts where
+abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     texts  = sandwich "" "" $ B.renderTable " " tab ++ note
     tab    = B.alignTable $ title : rule : rows
     title  = [ B.textCell B.Front "ABORTED "

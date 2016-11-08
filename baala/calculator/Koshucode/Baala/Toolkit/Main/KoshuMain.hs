@@ -99,7 +99,7 @@ initParam (Right (opts, args)) =
       -- replace "||" to "\n"
       oneLiner :: O.Map String
       oneLiner []               = []
-      oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimLeft xs)
+      oneLiner ('|' : '|' : xs) = '\n' : oneLiner (O.trimBegin xs)
       oneLiner (x : xs)         = x : oneLiner xs
 
       currentTime = case D.ttTime $ unwords $ getReq "now" of

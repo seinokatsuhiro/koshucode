@@ -139,7 +139,7 @@ mixChar c = mixString [c]
 --   MixText "abc......."
 --
 mixLeft :: Char -> Int -> MixText -> MixText
-mixLeft c n mx = mixString $ O.padRightWith c n $ mixToStringDef mx
+mixLeft c n mx = mixString $ O.padEndWith c n $ mixToStringDef mx
 
 -- | Put mix text to right edge in given-length char sequence.
 --
@@ -147,7 +147,7 @@ mixLeft c n mx = mixString $ O.padRightWith c n $ mixToStringDef mx
 --   MixText ".......abc"
 --
 mixRight :: Char -> Int -> MixText -> MixText
-mixRight c n mx = mixString $ O.padLeftWith c n $ mixToStringDef mx
+mixRight c n mx = mixString $ O.padBeginWith c n $ mixToStringDef mx
 
 -- ----------------------  Space
 

@@ -121,7 +121,7 @@ judgeSummary status (_, tab) = B.texts sumDoc where
     sumOf :: Map.Map a Int -> Int
     sumOf = Map.foldr (+) 0
 
-    countPad = O.padLeft 11 . count
+    countPad = O.padBegin 11 . count
 
 count :: Int -> String
 count 0  = "no judges"

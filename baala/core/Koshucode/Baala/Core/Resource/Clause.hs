@@ -163,7 +163,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         | k == "****"               = clause    $ empty
     dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
     dispatch []                     = clause    $ empty
-    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ O.trimRight ln
+    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ O.trimEnd ln
     dispatch _                      = clause    $ CUnknown $ unkAtStart []
 
     -- Return form

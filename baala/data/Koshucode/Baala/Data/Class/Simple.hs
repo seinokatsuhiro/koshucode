@@ -161,6 +161,6 @@ class (D.CTypeOf c) => CText c where
 --   VEmpty
 --
 pMaybeText :: (CText c, D.CEmpty c) => String -> c
-pMaybeText s | O.trimLeft s == "" = D.empty
-             | otherwise          = pText s
+pMaybeText s | O.trimBegin s == "" = D.empty
+             | otherwise           = pText s
 

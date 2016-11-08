@@ -85,7 +85,7 @@ hPutShort h def =
        O.hPutEmptyLine h
     where
       shortLine :: (String, String) -> String
-      shortLine (a, b) = "  " ++ O.padRight width a ++
+      shortLine (a, b) = "  " ++ O.padEnd width a ++
                          " "  ++ show b
       width :: Int
       width = maximum $ map (length . fst) def

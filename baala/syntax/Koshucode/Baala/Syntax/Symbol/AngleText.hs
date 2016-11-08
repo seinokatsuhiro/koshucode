@@ -34,8 +34,8 @@ angleQuote = openLoop where
                                        O.addSpace (openLoop cs2)
     loop "" = "\""
 
-    open ('"' : cs)  = O.trimLeft cs   -- omit closing double quote
-    open cs          = '"' : cs        -- append opening double quote
+    open ('"' : cs)  = O.trimBegin cs   -- omit closing double quote
+    open cs          = '"' : cs         -- append opening double quote
 
 -- | Split angle keyword.
 --
