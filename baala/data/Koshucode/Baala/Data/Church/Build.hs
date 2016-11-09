@@ -132,7 +132,7 @@ construct calc = expr where
     calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
                      | otherwise      = calc tree'
 
-    untag :: S.TTreeTo (D.CoxTag, S.TTree)
+    untag :: S.TTree -> (D.CoxTag, S.TTree)
     untag (B.TreeB l p (S.TextLeafQ _ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)

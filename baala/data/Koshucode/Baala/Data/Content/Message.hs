@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Syntax.Message  as Msg
 
 -- | Abortable scope for literal.
-abLiteral :: S.TTreeTo (O.Map (B.Ab b))
+abLiteral :: S.TTree -> O.Map (B.Ab b)
 abLiteral = Msg.abortableTree "literal"
 
 -- | Nothing

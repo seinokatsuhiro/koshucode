@@ -293,7 +293,7 @@ treesTerms = name where
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
-    cont :: S.TTreesTo ([S.TTree], [S.TTree])
+    cont :: [S.TTree] -> ([S.TTree], [S.TTree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs

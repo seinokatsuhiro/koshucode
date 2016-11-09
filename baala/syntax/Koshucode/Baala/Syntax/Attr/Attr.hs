@@ -95,16 +95,16 @@ attrMatch (AttrLayout branches) p = loop [] branches where
 
 -- ----------------------  Name
 
-byHyphen :: S.TTreeTo (Maybe S.AttrName)
+byHyphen :: S.TTree -> Maybe S.AttrName
 byHyphen = fmap S.AttrNormal . maybeSingleHyphen
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
-maybeSingleHyphen :: S.TTreeTo (Maybe String)
+maybeSingleHyphen :: S.TTree -> Maybe String
 maybeSingleHyphen (S.TextLeafAttr _ n)      = Just n
 maybeSingleHyphen _                         = Nothing
 
 -- | Take out double-hyphened text (like @"--xyz"@) from token tree.
-maybeDoubleHyphen :: S.TTreeTo (Maybe String)
+maybeDoubleHyphen :: S.TTree -> Maybe String
 maybeDoubleHyphen (S.TextLeafAttr2 _ n)     = Just n
 maybeDoubleHyphen _                         = Nothing
 

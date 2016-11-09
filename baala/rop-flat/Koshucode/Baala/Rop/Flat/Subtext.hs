@@ -119,7 +119,7 @@ unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
 unknownCategory :: String -> B.Ab b
 unknownCategory n = Msg.adlib $ "subtext unknown general category " ++ n
 
-divide :: String -> S.TTreesTo [[S.TTree]]
+divide :: String -> [S.TTree] -> [[S.TTree]]
 divide s = S.divideTreesBy (== s)
 
 -- | Parse token trees into subtext bundle.

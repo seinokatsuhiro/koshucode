@@ -162,7 +162,7 @@ consRel cons xs =
       n          = length ns
       he         = D.headFrom ns
 
-consTermNames :: S.TTreesTo ([S.TermName], [S.TTree])
+consTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
 consTermNames = terms [] where
     terms ns (LName n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)

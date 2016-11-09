@@ -38,7 +38,7 @@ import qualified Koshucode.Baala.Syntax.Message       as Msg
 -- --------------------------------------------  Abortable scope
 
 -- | Abortable scope for cox building.
-abCoxBuild :: S.TTreeTo (B.MapAb b)
+abCoxBuild :: S.TTree -> B.MapAb b
 abCoxBuild = Msg.abortableTree "cox-build"
 
 -- | Abortable scope for cox calculation.
@@ -58,7 +58,7 @@ abCoxPosition :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxPosition = B.abortable "cox-position"
 
 -- | Abortable scope for cox prefix.
-abCoxPrefix :: S.TTreeTo (B.MapAb b)
+abCoxPrefix :: S.TTree -> B.MapAb b
 abCoxPrefix = Msg.abortableTree "cox-prefix"
 
 -- | Abortable scope for cox reduction.
@@ -66,7 +66,7 @@ abCoxReduce :: (B.CodePtr cp) => [cp] -> B.MapAb b
 abCoxReduce = B.abortable "cox-reduce"
 
 -- | Abortable scope for cox syntax.
-abCoxSyntax :: S.TTreeTo (B.MapAb b)
+abCoxSyntax :: S.TTree -> B.MapAb b
 abCoxSyntax = Msg.abortableTree "cox-syntax"
 
 

@@ -31,7 +31,7 @@ ttrees :: [S.Token] -> B.Ab [S.TTree]
 ttrees = B.trees S.getBracketType B.BracketNone . joinText
 
 -- | Wrap trees in group.
-ttreeGroup :: S.TTreesTo S.TTree
+ttreeGroup :: [S.TTree] -> S.TTree
 ttreeGroup = B.treeWrap S.BracketGroup
 
 -- | Join fragmented texts.
@@ -69,7 +69,7 @@ ttPrint s = case tt s of
                                 return ()
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
-ttDoc :: S.TTreesTo B.Doc
+ttDoc :: [S.TTree] -> B.Doc
 ttDoc = dv where
     dv = B.pprintV . map d
     d (B.TreeL x) = B.pprint "TreeL :" B.<+> B.pprint x
@@ -118,18 +118,18 @@ splitTreesBy :: O.Test String -> B.SplitList3e S.TTree
 splitTreesBy = B.splitBy . raw
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: O.Test String -> S.TTreesTo [[S.TTree]]
+divideTreesBy :: O.Test String -> [S.TTree] -> [[S.TTree]]
 divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.
-divideTreesByBar :: S.TTreesTo [[S.TTree]]
+divideTreesByBar :: [S.TTree] -> [[S.TTree]]
 divideTreesByBar = divideTreesBy (== "|")
 
 -- | Divide token trees by colon @\":\"@.
-divideTreesByColon :: S.TTreesTo [[S.TTree]]
+divideTreesByColon :: [S.TTree] -> [[S.TTree]]
 divideTreesByColon = divideTreesBy (== ":")
 
 -- | Divide token trees by equal sign @\"=\"@.
-divideTreesByEqual :: S.TTreesTo [[S.TTree]]
+divideTreesByEqual :: [S.TTree] -> [[S.TTree]]
 divideTreesByEqual = divideTreesBy (== "=")
 

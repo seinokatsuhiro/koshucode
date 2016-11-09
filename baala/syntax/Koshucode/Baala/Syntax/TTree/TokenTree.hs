@@ -5,10 +5,7 @@
 
 module Koshucode.Baala.Syntax.TTree.TokenTree
   ( -- * Type
-    -- ** Tree
     TTree, NamedTree, NamedTrees,
-    -- ** Conversion
-    TTreeTo, TTreesTo,
 
     -- * Pattern
     -- ** Term leaf
@@ -39,11 +36,6 @@ type TTree = B.CodeTree S.BracketType S.Token
 type NamedTrees = B.Named [TTree]
 -- | Pair of token tree and its name.
 type NamedTree = B.Named TTree
-
--- | Convert token tree to something.
-type TTreeTo a    = TTree -> a
--- | Convert list of token tree to sometning.
-type TTreesTo a   = [TTree] -> a
 
 
 -- --------------------------------------------  Pattern

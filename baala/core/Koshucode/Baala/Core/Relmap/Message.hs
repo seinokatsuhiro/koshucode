@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Data.Message  as Msg
 
 -- | Abortable scope for option.
-abOption :: S.TTreesTo (O.Map (B.Ab b))
+abOption :: [S.TTree] -> B.MapAb b
 abOption = Msg.abortableTrees "option"
 
 -- | Abortable scope for relmap.
