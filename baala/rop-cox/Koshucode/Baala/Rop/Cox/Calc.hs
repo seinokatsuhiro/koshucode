@@ -8,7 +8,7 @@ module Koshucode.Baala.Rop.Cox.Calc
     -- * add
     consAdd, relmapAdd,
     -- * alt
-    consSubst, relmapSubst,
+    consAlt, relmapAlt,
     -- * fill
     consFill, relmapFill,
     -- * map
@@ -40,11 +40,12 @@ ropsCoxCalc :: (D.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
     [ Op.def  consAdd           "add /N E ..."                 "-cox* . -where?"
+    , Op.def  consAlt           "alt /N E ..."                 "-cox* . -where?"
+    , Op.def  consAlt           "subst /N E ..."               "-cox* . -where?"
     , Op.def  consFill          "fill /P ... -with E"          "-term* . -with"
     , Op.def  consReplace       "replace /P ... -by F"         "-term* . -by"
     , Op.def  consReplaceAll    "replace-all -from E -to E"    ". -from -to"
     , Op.def  consSplit         "split /N E ..."               "-cox* . -where?"
-    , Op.def  consSubst         "subst /N E ..."               "-cox* . -where?"
     , Op.def  consUnary         "unary /N E ..."               "-term -expr*"
     , Op.def  consDumpCox       "dump-cox E"                   "-cox*"
     ]
@@ -82,27 +83,27 @@ relkitAdd (cops, cox) (Just he1)
                       Right $ cs2 ++ cs1
 
 
--- ----------------------  subst
+-- ----------------------  alt
 
 -- | __alt \/P E ...__
 --
 --   Change present terms \/P whose content is altered
 --   to the result of E.
 --
-consSubst :: (D.CContent c) => C.RopCons c
-consSubst med =
+consAlt :: (D.CContent c) => C.RopCons c
+consAlt med =
     do cops <- Op.getWhere med "-where"
        cox  <- Op.getTermCoxes med "-cox"
-       Right $ relmapSubst med (cops, cox)
+       Right $ relmapAlt med (cops, cox)
 
 -- | Create @alt@ relmap.
-relmapSubst :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
-relmapSubst med = C.relmapFlow med . relkitSubst
+relmapAlt :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapAlt med = C.relmapFlow med . relkitAlt
 
 -- | Create @alt@ relkit.
-relkitSubst :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
-relkitSubst _ Nothing = Right C.relkitNothing
-relkitSubst (cops, cox) (Just he1)
+relkitAlt :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitAlt _ Nothing = Right C.relkitNothing
+relkitAlt (cops, cox) (Just he1)
     | B.duplicated ns     = Msg.dupTerm ns
     | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
     | otherwise           = Right kit2
@@ -160,7 +161,7 @@ consReplace med =
          B.abortable "relmap-replace" [coxBy] Msg.reqUnaryFn
        let expr n = (n, D.CoxFill [] coxBy [D.CoxTerm [] [n] []])
            cops   = C.globalCopset $ C.ropGlobal med
-       Right $ relmapSubst med (cops, map expr ns)
+       Right $ relmapAlt med (cops, map expr ns)
 
 
 -- ----------------------  replace-all
