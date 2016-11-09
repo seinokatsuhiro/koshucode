@@ -8,8 +8,10 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.166.0.0
+@version 0.168.0.0
 
+
+-- | Simple document used in comments.
 module Koshucode.Baala.Base.Text.Comment
 
 -- | Something that can become a string list.
@@ -32,9 +34,28 @@ CommentDoc :: [CommentSec] -> CommentDoc
 -- | Section title and its contents.
 data CommentSec
 CommentSec :: String -> [String] -> CommentSec
+
+-- | Comment string <tt>-*- koshu -*-</tt> for The Emacs editor.
 emacsModeComment :: String
-commentLine :: String -> String
+
+-- | Wrap string in comment.
+--   
+--   <pre>
+--   &gt;&gt;&gt; commentLine "Hello Koshu"
+--   "**  Hello Koshu"
+--   </pre>
+commentLine :: StringMap
+
+-- | Print strings as comment lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; putCommentLines ["Hello", "Koshu"]
+--   **  Hello
+--   **  Koshu
+--   </pre>
 putCommentLines :: [String] -> IO ()
+
+-- | Print strings as comment lines.
 hPutCommentLines :: Handle -> [String] -> IO ()
 instance GHC.Classes.Ord Koshucode.Baala.Base.Text.Comment.CommentDoc
 instance GHC.Classes.Eq Koshucode.Baala.Base.Text.Comment.CommentDoc
@@ -1189,13 +1210,31 @@ wordsBy :: (a -> Bool) -> [a] -> [[a]]
 -- | Set-like operation.
 module Koshucode.Baala.Base.List.Set
 
--- | Keep duplicate elements.
+-- | Extract duplicate elements.
 --   
 --   <pre>
 --   &gt;&gt;&gt; duplicates "banana"
 --   "ana"
 --   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; duplicates "grape"
+--   ""
+--   </pre>
 duplicates :: (Ord a) => [a] -> [a]
+
+-- | Test list has duplicated elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; duplicated "banana"
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; duplicated "grape"
+--   False
+--   </pre>
+duplicated :: (Ord a) => Test [a]
 
 -- | Remove duplicate elements.
 --   
@@ -1218,13 +1257,48 @@ unique :: (Ord a) => [a] -> [a]
 --   </pre>
 unionUp :: (Eq a) => [a] -> [a] -> [a]
 
--- | Filter by set menbership.
+-- | Filter by set membership. <tt>keepMember</tt> <i>A</i> <i>B</i> is
+--   same to the intersection of <i>A</i> and <i>B</i>, except for the
+--   ordering of <i>B</i> is preserved.
 --   
 --   <pre>
---   &gt;&gt;&gt; intersectionFilter "abcd" "dxcy"
---   "dc"
+--   &gt;&gt;&gt; keepMember "cba" "abcdefg"
+--   "abc"
 --   </pre>
-intersectionFilter :: (Ord a) => [a] -> [a] -> [a]
+--   
+--   <pre>
+--   &gt;&gt;&gt; keepMember "abcdefg" "cba"
+--   "cba"
+--   </pre>
+keepMember :: (Ord a) => [a] -> [a] -> [a]
+
+-- | Anti-filter by set membership. <tt>omitMember</tt> <i>A</i> <i>B</i>
+--   is same to <i>B</i> minus <i>f</i>A, except for the ordering of
+--   <i>B</i> is preserved.
+--   
+--   <pre>
+--   &gt;&gt;&gt; omitMember "cba" "abcdefg"
+--   "defg"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; omitMember "abcdefg" "cba"
+--   ""
+--   </pre>
+omitMember :: (Ord a) => [a] -> [a] -> [a]
+
+-- | Test sublist.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sublist "cab" "abcdefg"
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; sublist "cab" "dec"
+--   False
+--   </pre>
+sublist :: (Ord a) => [a] -> [a] -> Bool
 
 -- | Convert to set-like list, in other words, remove duplicate elements
 --   and sort list.
@@ -1275,6 +1349,8 @@ disjoint :: (Eq a) => [a] -> [a] -> Bool
 --   </pre>
 overlap :: (Eq a) => [a] -> [a] -> Bool
 
+
+-- | List utilities.
 module Koshucode.Baala.Base.List.List
 
 -- | Tails of list.
@@ -1284,14 +1360,32 @@ module Koshucode.Baala.Base.List.List
 --   ["abc", "bc", "c"]
 --   </pre>
 tails :: [a] -> [[a]]
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
+
+-- | Replace <a>Left</a> value to <a>Right</a> value.
+right :: b -> Map (Either a b)
 
 -- | Test list has single element.
-isSingleton :: [a] -> Bool
+isSingleton :: Test [a]
 
 -- | Test list is not empty.
-notNull :: [a] -> Bool
-maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
-right :: b -> Map (Either a b)
+notNull :: Test [a]
+
+-- | Test lengths of two lists are same.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sameLength "abc" "ABC"
+--   True
+--   </pre>
+sameLength :: Test2 [a] [b]
+
+-- | Test lengths of two lists are not same.
+--   
+--   <pre>
+--   &gt;&gt;&gt; notSameLength "abc" "ABC"
+--   False
+--   </pre>
+notSameLength :: Test2 [a] [b]
 
 -- | Take first element; if empty list is given, returns empty list.
 --   
@@ -1357,8 +1451,27 @@ takeFill :: a -> Int -> [a] -> [a]
 takeTailFill :: a -> Int -> [a] -> [a]
 
 -- | Make singleton list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; li1 'a'
+--   "a"
+--   </pre>
 li1 :: a -> [a]
+
+-- | Make two-element list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; li2 'a' 'b'
+--   "ab"
+--   </pre>
 li2 :: a -> a -> [a]
+
+-- | Make three-element list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; li3 'a' 'b' 'c'
+--   "abc"
+--   </pre>
 li3 :: a -> a -> a -> [a]
 consIf :: Bool -> a -> [a] -> [a]
 type RangeBy a = a -> a -> [a]
@@ -1366,8 +1479,22 @@ rangeBy :: (Ord a) => Map a -> RangeBy a
 zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
 zipMaybe2 :: [Maybe a] -> [b] -> [b]
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-mapAt :: (Map a) -> Int -> Map [a]
+
+-- | Apply function to specific element.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapAt (const '-') 3 "abcdefg"
+--   "abc-efg"
+--   </pre>
+mapAt :: Map a -> Int -> Map [a]
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
+
+-- | Omit elements, i.e., anti-<a>filter</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; omit (`elem` "ae") "abcdefg"
+--   "bcdfg"
+--   </pre>
 omit :: (a -> Bool) -> Map [a]
 filterFst :: (a -> Bool) -> Map [(a, b)]
 squeeze :: (a -> Bool) -> Map [a]
@@ -1524,48 +1651,112 @@ type Snip a = [Int] -> Map [a]
 -- | Snip for differenct type values.
 type Snip2 a b = (Snip a, Snip b)
 
--- | Type for binary operators.
-type Bin a = a -> a -> a
-snipFull :: (Eq a) => [a] -> [a] -> [Int]
-
 -- | Indices of shared elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; snipIndex "bdk" "abcdefg"
+--   [1,3]
+--   </pre>
 snipIndex :: (Eq a) => [a] -> [a] -> [Int]
-snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 
--- | Pair of picking-up and cutting-off elements.
-snipBoth :: [Int] -> [a] -> ([a], [a])
+-- | Indicies of shared-and-unknown elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; snipIndexFull "bcx" "abcdefg"
+--   [1,2,-1]
+--   </pre>
+snipIndexFull :: (Eq a) => [a] -> [a] -> [Int]
+
+-- | Left-and-right indices of shared elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; snipIndexBoth "abc" "bcd"
+--   ([1,2], [0,1])
+--   </pre>
+snipIndexBoth :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 
 -- | Pick up indexed elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; [1,3] `snipFrom` "abcdefg"
+--   "bd"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; [1,3] `snipFrom` "ABCDEFG"
+--   "BD"
+--   </pre>
 snipFrom :: Snip a
 
 -- | Cut off indexed elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; (snipIndex "ce" "abcdefg") `snipOff` "ABCDEFG"
+--   "ABDFG"
+--   </pre>
 snipOff :: Snip a
 
+-- | Pair of picking-up and cutting-off elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; (snipIndex "ce" "abcdefg") `snipBoth` "ABCDEFG"
+--   ("CE", "ABDFG")
+--   </pre>
+snipBoth :: [Int] -> [a] -> ([a], [a])
+
+-- | Take shared elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "abcd" `snipShare` "bcefg"
+--   "bc"
+--   </pre>
+snipShare :: (Eq a) => Bin [a]
+
+-- | Take left-side elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "abcd" `snipLeft` "bcefg"
+--   "ad"
+--   </pre>
+snipLeft :: (Eq a) => Bin [a]
+
+-- | Take right-side elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "abcd" `snipRight` "bcefg"
+--   "efg"
+--   </pre>
+snipRight :: (Eq a) => Bin [a]
+
 -- | Move indexed elements to the front.
+--   
+--   <pre>
+--   &gt;&gt;&gt; (snipIndex "cd" "abcdefg") `snipForward` "ABCDEFG"
+--   "CDABEFG"
+--   </pre>
 snipForward :: Snip a
 
 -- | Move indexed elements to the rear.
+--   
+--   <pre>
+--   &gt;&gt;&gt; (snipIndex "cd" "abcdefg") `snipBackward` "ABCDEFG"
+--   "ABEFGCD"
+--   </pre>
 snipBackward :: Snip a
+
+-- | Double forward.
 snipForward2 :: Snip2 a b
+
+-- | Double backward.
 snipBackward2 :: Snip2 a b
 
--- | Take left-side elements.
-snipLeft :: (Eq a) => Bin [a]
-
--- | Take shared elements.
-snipShare :: (Eq a) => Bin [a]
-
--- | Take right-side elements.
-snipRight :: (Eq a) => Bin [a]
+-- | Reorder elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; snipOrder "bca" "abc" "ABC"
+--   "BCA"
+--   </pre>
 snipOrder :: (Eq a) => [a] -> [a] -> Map [c]
-
--- | Check lengths of two lists are same.
-sameLength :: [a] -> [b] -> Bool
-notSameLength :: [a] -> [b] -> Bool
-
--- | Check elements in the first list are non-negative, and elements in the
---   second are negative.
-(+-) :: [Int] -> [Int] -> Bool
 
 module Koshucode.Baala.Base.List.Order
 data OrderCap a
@@ -1696,9 +1887,48 @@ uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) Bz)
 httpExceptionSummary :: HttpException -> String
 
 
+-- | Convert to <a>Doc</a> pretty printer.
+module Koshucode.Baala.Base.Text.PPrint
+
+-- | Convert to <a>Doc</a> pretty printer.
+class PPrint a
+pprint :: PPrint a => a -> Doc
+
+-- | Concatenate docs horizontally with space, same as <a>hsep</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pprintH ["abc", "def"]
+--   abc def
+--   </pre>
+pprintH :: (PPrint a) => [a] -> Doc
+
+-- | Concatenate docs vertically, same as <a>vcat</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pprintV ["abc", "def"]
+--   abc
+--   def
+--   </pre>
+pprintV :: (PPrint a) => [a] -> Doc
+
+-- | Wrap doc with open and close docs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pprintWraps "(" ")" "abc"
+--   ( abc )
+--   </pre>
+pprintWraps :: (PPrint a, PPrint b) => a -> a -> b -> Doc
+instance Koshucode.Baala.Base.Text.PPrint.PPrint Text.PrettyPrint.HughesPJ.Doc
+instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Types.Int
+instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Integer.Type.Integer
+instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Base.String
+
+
 -- | Mix text.
 module Koshucode.Baala.Base.MixText
 
+
+-- | Bundle of list modules.
 module Koshucode.Baala.Base.List
 
 
@@ -1773,6 +2003,8 @@ instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 
+
+-- | Source code information.
 module Koshucode.Baala.Base.IO.CodePt
 
 -- | Point of input code.
@@ -1793,10 +2025,16 @@ CodePt :: NIOPoint -> Int -> String -> String -> CodePt
 
 -- | Column number at which code starts.
 codePtColumnNo :: CodePt -> Int
+
+-- | Create position and line information.
 codePtDisplay :: (String, CodePt) -> [(String, String)]
+
+-- | Type which has code points.
 class CodePtr a where codePt p = headNull def $ codePtList p
 codePtList :: CodePtr a => a -> [CodePt]
 codePt :: CodePtr a => a -> CodePt
+
+-- | Type with source code information.
 data Sourced a
 Sourced :: [CodePt] -> a -> Sourced a
 [source] :: Sourced a -> [CodePt]
@@ -1811,43 +2049,6 @@ instance Data.Default.Class.Default Koshucode.Baala.Base.IO.CodePt.CodePt
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Base.IO.CodePt.CodePt
 instance GHC.Base.Functor Koshucode.Baala.Base.IO.CodePt.Sourced
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.IO.CodePt.Sourced a)
-
-
--- | Convert to <a>Doc</a> pretty printer.
-module Koshucode.Baala.Base.Text.PPrint
-
--- | Convert to <a>Doc</a> pretty printer.
-class PPrint a
-pprint :: PPrint a => a -> Doc
-
--- | Concatenate docs horizontally with space, same as <a>hsep</a>.
---   
---   <pre>
---   &gt;&gt;&gt; pprintH ["abc", "def"]
---   abc def
---   </pre>
-pprintH :: (PPrint a) => [a] -> Doc
-
--- | Concatenate docs vertically, same as <a>vcat</a>.
---   
---   <pre>
---   &gt;&gt;&gt; pprintV ["abc", "def"]
---   abc
---   def
---   </pre>
-pprintV :: (PPrint a) => [a] -> Doc
-
--- | Wrap doc with open and close docs.
---   
---   <pre>
---   &gt;&gt;&gt; pprintWraps "(" ")" "abc"
---   ( abc )
---   </pre>
-pprintWraps :: (PPrint a, PPrint b) => a -> a -> b -> Doc
-instance Koshucode.Baala.Base.Text.PPrint.PPrint Text.PrettyPrint.HughesPJ.Doc
-instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Types.Int
-instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Integer.Type.Integer
-instance Koshucode.Baala.Base.Text.PPrint.PPrint GHC.Base.String
 
 
 -- | Text table
@@ -1889,7 +2090,7 @@ module Koshucode.Baala.Base.Text.Suffix
 --   &gt;&gt;&gt; unprefix (`elem` "0123456789") '-' "12-foo"
 --   "foo"
 --   </pre>
-unprefix :: Test Char -> Char -> Map String
+unprefix :: Test Char -> Char -> StringMap
 
 -- | Remove delimiter-characters suffix.
 --   
@@ -1897,7 +2098,7 @@ unprefix :: Test Char -> Char -> Map String
 --   &gt;&gt;&gt; unsuffix (`elem` "0123456789") '-' "foo-12"
 --   "foo"
 --   </pre>
-unsuffix :: Test Char -> Char -> Map String
+unsuffix :: Test Char -> Char -> StringMap
 
 -- | Make names unique by adding integer suffixes.
 --   

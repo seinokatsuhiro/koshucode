@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.166.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.168.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -340,7 +340,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get next spaces.</p
+	    >Get next spaces.
+   Space character is decided by <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#v:isSpace"
+		>isSpace</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nextSpace &quot; abc&quot;
+</code
+		></strong
+	      >(&quot;abc&quot;, 1)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nextSpace &quot; \tabc&quot;
+</code
+		></strong
+	      >(&quot;abc&quot;, 2)
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -356,7 +381,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get next double-quoted text.</p
+	    >Get next double quoted text.
+   A single double quote ends text.
+   A double double quote does not end text,
+   but it is converted to double quote.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nextQQ &quot;abc\&quot; def&quot;
+</code
+		></strong
+	      >Right (&quot; def&quot;,&quot;abc&quot;)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nextQQ &quot;abc\&quot;\&quot;def\&quot; ghi&quot;
+</code
+		></strong
+	      >Right (&quot; ghi&quot;,&quot;abc\&quot;def&quot;)
+</pre
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -510,7 +558,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
 		      >Symbol</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-98');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-119');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -524,7 +572,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
 		      >Symbol</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-98');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-119');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -538,7 +586,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:Symbol"
 		      >Symbol</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-98');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#line-119');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -744,6 +792,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Next.html#nextSymbolPlain');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get next plain symbol.</p
+	    ></div
 	  ></div
 	></div
       ></div

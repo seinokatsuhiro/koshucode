@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -135,10 +135,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >contApTextToText</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
 	    >CText</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
 	    > c</li
@@ -337,15 +335,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >contApTextToText</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Simple.html#t:CText"
 	    >CText</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contApTextToText');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to internal string of text content.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>contApTextToText reverse (the $ pText &quot;abc&quot;)
+</code
+		></strong
+	      >Right (VText &quot;cba&quot;)
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -362,6 +372,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Content-Utility.html#contMapTextToList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map function to characters of internal string of text content.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>contMapTextToList (\c -&gt; pText [c]) (the $ pText &quot;abc&quot;)
+</code
+		></strong
+	      >Right (VList [VText &quot;a&quot;,VText &quot;b&quot;,VText &quot;c&quot;])
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"

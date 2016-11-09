@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Term types and related functions.
@@ -65,7 +65,7 @@ type TermName5 = (TermName, TermName, TermName, TermName, TermName)
 -- | Tuple of 6 term names.
 type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
--- | Check present term.
+-- | Test present term.
 --   
 --   <pre>
 --   &gt;&gt;&gt; termP 2
@@ -83,16 +83,31 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 --   </pre>
 termP :: Test Int
 
--- | Check new term.
+-- | Test new term.
 termN :: Test Int
 
--- | Check all terms are present.
+-- | Test all terms are present.
 termsP :: Test [Int]
 
--- | Check all terms are new.
+-- | Test all terms are new.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termsN [-1, -1]
+--   True
+--   </pre>
 termsN :: Test [Int]
 
--- | Check present terms and new terms.
+-- | Test present and new terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termsPN [1,2] [-1]
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; termsPN [1,2] [-1,0]
+--   False
+--   </pre>
 termsPN :: Test2 [Int] [Int]
 
 
@@ -100,14 +115,36 @@ termsPN :: Test2 [Int] [Int]
 module Koshucode.Baala.Syntax.Symbol.AngleText
 
 -- | Convert string into double-quoted and angle-quoted form.
-angleQuote :: Map String
+--   
+--   <pre>
+--   &gt;&gt;&gt; putStrLn $ angleQuote "aaa"
+--   "aaa"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; putStrLn $ angleQuote "\t"
+--   &lt;tab&gt;
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; putStrLn $ angleQuote "aaa\nbbb\r\nccc\r\n\r\nddd"
+--   "aaa" &lt;lf&gt; "bbb" &lt;crlf&gt; "ccc" &lt;crlf&gt; &lt;crlf&gt; "ddd"
+--   </pre>
+angleQuote :: StringMap
 
 -- | Table of coresspondences of angle text and its replacement.
+--   
+--   <pre>
+--   &gt;&gt;&gt; lookup "lf" angleTexts
+--   Just "\n"
+--   </pre>
 angleTexts :: [(String, String)]
 
 
 -- | Parameter type.
 module Koshucode.Baala.Syntax.Para.Para
+
+-- | Named and positional parameter.
 data Para n a
 Para :: [String] -> [a] -> [a] -> ParaMap n a -> Para n a
 
@@ -167,7 +204,21 @@ paraNameAdd :: (Ord n) => n -> [a] -> Map (Para n a)
 
 -- | Map names of named parameters.
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
+
+-- | Take first element from multiply given named parameter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let p = para paraHyphen $ words "a -x 1 -x 2 -x 3"
+--   
+--   &gt;&gt;&gt; p
+--   Para { ..., paraName = fromList [("x", [["1"],["2"],["3"]])] }
+--   
+--   &gt;&gt;&gt; paraTakeFirst "x" p
+--   Para { ..., paraName = fromList [("x", [["1"]])] }
+--   </pre>
 paraTakeFirst :: (Ord n) => n -> Para n a -> Para n a
+
+-- | Take last element from multiply given named parameter.
 paraTakeLast :: (Ord n) => n -> Para n a -> Para n a
 
 -- | String-named parameter.
@@ -551,10 +602,31 @@ type Next a = InputText -> (InputText, a)
 -- | Split next character sequence from input text.
 type AbNext a = InputText -> Ab (InputText, a)
 
--- | Get next spaces.
+-- | Get next spaces. Space character is decided by <a>isSpace</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSpace " abc"
+--   ("abc", 1)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSpace " \tabc"
+--   ("abc", 2)
+--   </pre>
 nextSpace :: Next Int
 
--- | Get next double-quoted text.
+-- | Get next double quoted text. A single double quote ends text. A double
+--   double quote does not end text, but it is converted to double quote.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextQQ "abc\" def"
+--   Right (" def","abc")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextQQ "abc\"\"def\" ghi"
+--   Right (" ghi","abc\"def")
+--   </pre>
 nextQQ :: AbNext String
 
 -- | Symbol class.
@@ -641,6 +713,8 @@ isNumericChar :: Test Char
 
 -- | Get next symbol.
 nextSymbol :: Next Symbol
+
+-- | Get next plain symbol.
 nextSymbolPlain :: AbNext String
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Symbol.Next.Symbol
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Symbol.Next.Symbol
@@ -653,15 +727,26 @@ module Koshucode.Baala.Syntax.Symbol.Short
 -- | Something with short definition.
 data Short a
 Short :: [CodePt] -> [ShortDef] -> a -> Short a
+
+-- | Source information
 [shortSource] :: Short a -> [CodePt]
+
+-- | Definition of short signs
 [shortHead] :: Short a -> [ShortDef]
+
+-- | Body with short signs
 [shortBody] :: Short a -> a
 
 -- | Short prefix and replacement.
 type ShortDef = Named String
+
+-- | Omit empty body.
 shortTrim :: Map [Short [a]]
-shortM :: (Monad m) => Short (m a) -> m (Short a)
+
+-- | Evaluate body of short structures.
 shortListM :: (Monad m) => [Short (m a)] -> m [Short a]
+
+-- | Group short structures.
 shortGroup :: [Short a] -> [Short [a]]
 
 -- | String shortener.
@@ -837,6 +922,8 @@ module Koshucode.Baala.Syntax.Token.Pattern
 
 -- | License text token.
 
+-- | Section sign.
+
 -- | Term path token.
 --   
 --   <pre>
@@ -869,6 +956,8 @@ untoken :: Token -> String
 --   ("text", Just "raw")
 --   </pre>
 tokenDetailTypeString :: Token -> Maybe String
+
+-- | Get token parents from local token.
 tokenParents :: Token -> [Token]
 
 -- | Test token is blank, i.e., comment or space.
@@ -1015,7 +1104,11 @@ scanRel :: Scanner
 -- | Scan interpretation content between <tt>{|</tt> and <tt>|}</tt>.
 scanInterp :: Scanner
 
+
+-- | Token clause.
 module Koshucode.Baala.Syntax.Token.Clause
+
+-- | Code clause of tokens.
 type TokenClause = CodeClause Token
 
 -- | Convert token lines into token clauses
@@ -1139,17 +1232,11 @@ type NamedTree = Named TTree
 -- | Pair of token trees and its name.
 type NamedTrees = Named [TTree]
 
--- | Convert token tree to something.
-type TTreeTo a = TTree -> a
+-- | Term leaf.
 
--- | Convert list of token tree to sometning.
-type TTreesTo a = [TTree] -> a
+-- | Term leaf.
 
--- | Convert token tree to something, abortable.
-type TTreeToAb a = TTree -> Ab a
-
--- | Convert list of token tree to sometning, abortable.
-type TTreesToAb a = [TTree] -> Ab a
+-- | Term leaf of <a>TermTypePath</a>.
 
 -- | Text leaf.
 
@@ -1170,7 +1257,7 @@ module Koshucode.Baala.Syntax.TTree.Parse
 ttrees :: [Token] -> Ab [TTree]
 
 -- | Wrap trees in group.
-ttreeGroup :: TTreesTo TTree
+ttreeGroup :: [TTree] -> TTree
 
 -- | Convert string to token trees.
 tt :: String -> Ab [TTree]
@@ -1182,7 +1269,7 @@ tt1 :: String -> Ab TTree
 ttPrint :: String -> IO ()
 
 -- | Get <a>Doc</a> value of token trees for pretty printing.
-ttDoc :: TTreesTo Doc
+ttDoc :: [TTree] -> Doc
 
 -- | Split token list by unquoted word. If token list contains the word,
 --   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
@@ -1215,16 +1302,16 @@ splitTokensBy :: Test String -> SplitList3e Token
 splitTreesBy :: Test String -> SplitList3e TTree
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: Test String -> TTreesTo [[TTree]]
+divideTreesBy :: Test String -> [TTree] -> [[TTree]]
 
 -- | Divide token trees by vertical bar <tt>"|"</tt>.
-divideTreesByBar :: TTreesTo [[TTree]]
+divideTreesByBar :: [TTree] -> [[TTree]]
 
 -- | Divide token trees by colon <tt>":"</tt>.
-divideTreesByColon :: TTreesTo [[TTree]]
+divideTreesByColon :: [TTree] -> [[TTree]]
 
 -- | Divide token trees by equal sign <tt>"="</tt>.
-divideTreesByEqual :: TTreesTo [[TTree]]
+divideTreesByEqual :: [TTree] -> [[TTree]]
 
 
 -- | Token trees.
@@ -1244,6 +1331,8 @@ module Koshucode.Baala.Syntax.TTree.Pattern
 
 -- | Double-quoted text leaf.
 
+
+-- | Parameter.
 module Koshucode.Baala.Syntax.Para
 
 
@@ -1251,24 +1340,24 @@ module Koshucode.Baala.Syntax.Para
 module Koshucode.Baala.Syntax.Attr.Message
 
 -- | Abortable scope for attribute.
-abAttr :: (CodePtr cp) => [cp] -> Map (Ab b)
+abAttr :: (CodePtr cp) => [cp] -> MapAb b
 
 -- | Abortable scope for attribute.
-abAttrTrees :: TTreesTo (Map (Ab b))
+abAttrTrees :: [TTree] -> MapAb b
 
 -- | Abortable scope for slot.
-abSlot :: (CodePtr cp) => [cp] -> Map (Ab b)
+abSlot :: (CodePtr cp) => [cp] -> MapAb b
 
 -- | Abortable scope for slot.
-abSlotTree :: TTreeTo (Map (Ab b))
+abSlotTree :: TTree -> MapAb b
 
 -- | Same as <tt>abortable</tt> except for using <a>TTree</a> instead of
 --   list of <a>Token</a>.
-abortableTree :: String -> TTreeTo (Map (Ab b))
+abortableTree :: String -> TTree -> MapAb b
 
 -- | Same as <tt>abortable</tt> except for using list of <a>TTree</a>
 --   instead of list of <a>Token</a>.
-abortableTrees :: String -> TTreesTo (Map (Ab b))
+abortableTrees :: String -> [TTree] -> MapAb b
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> Ab a
@@ -1304,6 +1393,8 @@ module Koshucode.Baala.Syntax.Attr.Slot
 
 -- | Attribute name and its contents.
 type AttrTree = (AttrName, [TTree])
+
+-- | Global slot name and its content.
 type GlobalSlot = NamedTrees
 
 -- | Substitute slots by global and attribute slots.
@@ -1386,10 +1477,10 @@ attrPara :: AttrParaze
 attrParaBy :: AttrLayout -> AttrParaze
 
 -- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
-maybeSingleHyphen :: TTreeTo (Maybe String)
+maybeSingleHyphen :: TTree -> Maybe String
 
 -- | Take out double-hyphened text (like <tt>"--xyz"</tt>) from token tree.
-maybeDoubleHyphen :: TTreeTo (Maybe String)
+maybeDoubleHyphen :: TTree -> Maybe String
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
 
@@ -1505,6 +1596,10 @@ instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.Parse.Ror
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.Parse.Ror
 instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Parse.Ror
 
+
+-- | Syntax for attributes.
 module Koshucode.Baala.Syntax.Attr
 
+
+-- | Bundle of syntax modules.
 module Koshucode.Baala.Syntax

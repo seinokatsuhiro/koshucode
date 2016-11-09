@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -79,28 +79,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >BaalaC</a
 	    ><ul class="subs"
 	    ><li
-	      >= <a href="#v:VBool"
+	      >= <a href="#v:VEmpty"
+		>VEmpty</a
+		></li
+	      ><li
+	      >| <a href="#v:VBool"
 		>VBool</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
-		></li
-	      ><li
-	      >| <a href="#v:VCode"
-		>VCode</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      >| <a href="#v:VText"
-		>VText</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      >| <a href="#v:VTerm"
-		>VTerm</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
 		></li
 	      ><li
 	      >| <a href="#v:VDec"
@@ -121,24 +107,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		>Time</a
 		></li
 	      ><li
-	      >| <a href="#v:VEmpty"
-		>VEmpty</a
+	      >| <a href="#v:VCode"
+		>VCode</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
 		></li
 	      ><li
-	      >| <a href="#v:VEnd"
-		>VEnd</a
+	      >| <a href="#v:VTerm"
+		>VTerm</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
 		></li
 	      ><li
-	      >| <a href="#v:VInterp"
-		>VInterp</a
-		> <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
-		>Interp</a
-		></li
-	      ><li
-	      >| <a href="#v:VType"
-		>VType</a
-		> <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
-		>Type</a
+	      >| <a href="#v:VText"
+		>VText</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
 		></li
 	      ><li
 	      >| <a href="#v:VList"
@@ -168,6 +152,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		> <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		>BaalaC</a
 		>)</li
+	      ><li
+	      >| <a href="#v:VInterp"
+		>VInterp</a
+		> <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		>Interp</a
+		></li
+	      ><li
+	      >| <a href="#v:VType"
+		>VType</a
+		> <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		>Type</a
+		></li
+	      ><li
+	      >| <a href="#v:VEnd"
+		>VEnd</a
+		></li
 	      ></ul
 	    ></li
 	  ></ul
@@ -220,6 +220,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><table
 	    ><tr
 	      ><td class="src"
+		><a name="v:VEmpty" class="def"
+		  >VEmpty</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><em
+		    >Singleton:</em
+		    >   Sign of no ordinary type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
 		><a name="v:VBool" class="def"
 		  >VBool</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
@@ -227,43 +239,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  ></td
 		><td class="doc"
 		><p
-		  >Boolean type</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:VCode" class="def"
-		  >VCode</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Code type</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:VText" class="def"
-		  >VText</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >String type</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:VTerm" class="def"
-		  >VTerm</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Term name type</p
+		  ><em
+		    >Numeric:</em
+		    >     Boolean type</p
 		  ></td
 		></tr
 	      ><tr
@@ -275,7 +253,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  ></td
 		><td class="doc"
 		><p
-		  >Decimal number type</p
+		  ><em
+		    >Numeric:</em
+		    >     Decimal number type</p
 		  ></td
 		></tr
 	      ><tr
@@ -287,7 +267,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  ></td
 		><td class="doc"
 		><p
-		  >Clock type</p
+		  ><em
+		    >Numeric:</em
+		    >     Clock type</p
 		  ></td
 		></tr
 	      ><tr
@@ -299,51 +281,51 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  ></td
 		><td class="doc"
 		><p
-		  >Time type</p
+		  ><em
+		    >Numeric:</em
+		    >     Time type</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:VEmpty" class="def"
-		  >VEmpty</a
+		><a name="v:VCode" class="def"
+		  >VCode</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Sign of no ordinary type</p
+		  ><em
+		    >Textual:</em
+		    >     Code type</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:VEnd" class="def"
-		  >VEnd</a
+		><a name="v:VTerm" class="def"
+		  >VTerm</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >The end of everything</p
+		  ><em
+		    >Textual:</em
+		    >     Term name type</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:VInterp" class="def"
-		  >VInterp</a
-		  > <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
-		  >Interp</a
+		><a name="v:VText" class="def"
+		  >VText</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Interpretation type</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:VType" class="def"
-		  >VType</a
-		  > <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
-		  >Type</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Type for type</p
+		  ><em
+		    >Textual:</em
+		    >     Text type</p
 		  ></td
 		></tr
 	      ><tr
@@ -355,7 +337,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  >]</td
 		><td class="doc"
 		><p
-		  >List type (objective collection)</p
+		  ><em
+		    >Collective:</em
+		    >  List type</p
 		  ></td
 		></tr
 	      ><tr
@@ -367,7 +351,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  >]</td
 		><td class="doc"
 		><p
-		  >Set type (informative collection)</p
+		  ><em
+		    >Collective:</em
+		    >  Set type</p
 		  ></td
 		></tr
 	      ><tr
@@ -381,7 +367,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  >]</td
 		><td class="doc"
 		><p
-		  >Tie type (set of terms)</p
+		  ><em
+		    >Relational:</em
+		    >  Tie type (set of terms)</p
 		  ></td
 		></tr
 	      ><tr
@@ -395,7 +383,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		  >)</td
 		><td class="doc"
 		><p
-		  >Relation type</p
+		  ><em
+		    >Relational:</em
+		    >  Relation type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VInterp" class="def"
+		  >VInterp</a
+		  > <a href="Koshucode-Baala-Data-Type-Interp.html#t:Interp"
+		  >Interp</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><em
+		    >Relational:</em
+		    >  Interpretation type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VType" class="def"
+		  >VType</a
+		  > <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		  >Type</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><em
+		    >Meta:</em
+		    >        Type for type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VEnd" class="def"
+		  >VEnd</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><em
+		    >Singleton:</em
+		    >   The end of everything</p
 		  ></td
 		></tr
 	      ></table
@@ -413,7 +443,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-49');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -427,7 +457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-53');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-54');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -441,7 +471,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-47');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-48');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -455,7 +485,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-105');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-106');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -469,7 +499,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-196');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-145');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -483,7 +513,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-191');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-140');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -497,7 +527,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-77');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-78');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -511,7 +541,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-174');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-192');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -525,7 +555,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-201');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-185');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -539,7 +569,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-167');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-178');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -553,7 +583,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-160');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-171');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -567,7 +597,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-153');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-164');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -581,7 +611,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-146');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-157');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -595,7 +625,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-139');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-150');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -609,7 +639,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-215');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-236');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -623,7 +653,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-208');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-229');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -637,7 +667,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-236');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-222');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -651,7 +681,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-229');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-215');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -665,7 +695,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-222');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-208');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -679,7 +709,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-181');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-201');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -693,7 +723,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content-BaalaC.html#t:BaalaC"
 		      >BaalaC</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-99');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Content-BaalaC.html#line-100');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

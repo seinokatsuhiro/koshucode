@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -736,6 +736,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromYmd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time from year, month, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeFromYmd 2013 4 18
+</code
+		></strong
+	      >2013-04-18
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeFromYmd 2013 4 0
+</code
+		></strong
+	      >2013-04-01
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeFromYmd 2013 4 33
+</code
+		></strong
+	      >2013-04-30
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -748,6 +782,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Time-Time.html#timeFromYmdTuple');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Craete time from tuple of year, month, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>timeFromYmdTuple (2013, 4, 18)
+</code
+		></strong
+	      >2013-04-18
+</pre
+	    ></div
 	  ></div
 	><h1 id="g:3"
 	>Construction with I/O</h1

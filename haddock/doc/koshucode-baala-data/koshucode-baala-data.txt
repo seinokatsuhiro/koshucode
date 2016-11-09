@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Extra functions for rational numbers.
@@ -67,8 +67,29 @@ ratioCeilAt :: (Integral l, Integral n) => l -> Map (Ratio n)
 
 -- | Ceiling rational number per unit rational number.
 ratioCeilPer :: (Integral n) => Bin (Ratio n)
+
+-- | Quotient of two ratio numbers.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ratioQuo (5 %% 1) (2 %% 3)
+--   7 % 1
+--   </pre>
 ratioQuo :: (Integral n) => Bin (Ratio n)
+
+-- | Remainder of two ratio numbers.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ratioRem (5 %% 1) (2 %% 3)
+--   1 % 3
+--   </pre>
 ratioRem :: (Integral n) => Bin (Ratio n)
+
+-- | Quotient and remainder of two ratio numbers.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ratioQuoRem (5 %% 1) (2 %% 3)
+--   (7 % 1, 1 % 3)
+--   </pre>
 ratioQuoRem :: (Integral n) => Ratio n -> Ratio n -> (Ratio n, Ratio n)
 
 
@@ -157,11 +178,18 @@ instance GHC.Real.RealFrac Koshucode.Baala.Data.Type.Decimal.Decimal.Decimal
 -- | Decimal functions.
 module Koshucode.Baala.Data.Type.Decimal.Fraction
 
--- | Integer part of decimals.
+-- | Integer part of decimal.
 decimalIntPart :: Map Decimal
 
--- | Fractional part of decimals.
+-- | Fractional part of decimal.
 decimalFracPart :: Map Decimal
+
+-- | Integer and fractional parts of decimal.
+--   
+--   <pre>
+--   &gt;&gt;&gt; decimalIntFrac $ D.realDecimal 2 (4.5 :: Double)
+--   (Decimal (2) 4, Decimal (2) 0 + 1 % 2)
+--   </pre>
 decimalIntFrac :: Decimal -> (Decimal, Decimal)
 
 -- | Numerator part of decimal number.
@@ -241,6 +269,262 @@ chopDigitsRound :: (Integral d, Integral n) => d -> n -> n
 roundLastDigit :: (Integral n) => n -> n
 
 
+-- | Common properties of judgements and relations.
+module Koshucode.Baala.Data.Type.JudgeClass
+
+-- | Name of judgement class, in other words, name of propositional
+--   function.
+type JudgeClass = String
+
+-- | Get judge class.
+class GetClass a
+getClass :: GetClass a => a -> JudgeClass
+
+-- | Get term list.
+class GetTerms a
+getTerms :: GetTerms a => a c -> [Term c]
+
+-- | Get list of term names.
+class GetTermNames a
+getTermNames :: GetTermNames a => a -> [TermName]
+
+-- | Get unique list of term names.
+getTermNamesUnique :: (GetTermNames a) => a -> [TermName]
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
+
+
+-- | Term picker is a data for picking target terms based on input heading
+--   terms. For example, when picking /a /b from /a /b /c /d /e, use
+--   <tt>termPicker</tt> like:
+--   
+--   <pre>
+--   &gt;&gt;&gt; let pk = termPicker ["a", "b"] ["a", "b", "c", "d", "e"]
+--   
+--   &gt;&gt;&gt; pickTerms pk ["1", "2", "3", "4", "5"]
+--   ["1", "2"]
+--   </pre>
+module Koshucode.Baala.Data.Type.Rel.TermPicker
+
+-- | Data for picking terms.
+data TermPicker c
+TermPicker :: [Int] -> [Int] -> Bool -> [TermName] -> [TermName] -> [TermName] -> [TermName] -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> ([c], [c])) -> ([c] -> ([c], [c])) -> ([c] -> [c]) -> ([c] -> [c]) -> TermPicker c
+
+-- | Indicies of right-shared part
+[ssLShareIndex] :: TermPicker c -> [Int]
+
+-- | Indicies of left-shared part
+[ssRShareIndex] :: TermPicker c -> [Int]
+
+-- | Whether shared part is empty
+[ssDisjoint] :: TermPicker c -> Bool
+
+-- | Left-side term names
+[ssLSideNames] :: TermPicker c -> [TermName]
+
+-- | Left-shared term names
+[ssLShareNames] :: TermPicker c -> [TermName]
+
+-- | Right-shared term names
+[ssRShareNames] :: TermPicker c -> [TermName]
+
+-- | Right-side term names
+[ssRSideNames] :: TermPicker c -> [TermName]
+
+-- | Pick left-side part from left contents
+[ssLSide] :: TermPicker c -> [c] -> [c]
+
+-- | Pick left-shared part from left contents
+[ssLShare] :: TermPicker c -> [c] -> [c]
+
+-- | Pick right-shared part from right contents
+[ssRShare] :: TermPicker c -> [c] -> [c]
+
+-- | Pick right-side part from right contents
+[ssRSide] :: TermPicker c -> [c] -> [c]
+
+-- | Pick right-shared and right-side part
+[ssRSplit] :: TermPicker c -> [c] -> ([c], [c])
+
+-- | Pick right-shared part and right contents
+[ssRAssoc] :: TermPicker c -> [c] -> ([c], [c])
+
+-- | Move shared terms forward.
+[ssRForward] :: TermPicker c -> [c] -> [c]
+
+-- | Move shared terms backward.
+[ssRBackward] :: TermPicker c -> [c] -> [c]
+
+-- | Type for picking terms.
+type TermPick c = TermPicker c -> [c] -> [c]
+
+-- | Double picker.
+type TermPick2 a b = (TermPick a, TermPick b)
+
+-- | Create term picker from left and right term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let ss = termPicker ["a", "b", "c"] ["b", "c", "d", "e"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssDisjoint ss
+--   False
+--   </pre>
+--   
+--   Left terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssLShareIndex ss
+--   [1, 2]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssLShareNames ss
+--   ["b", "c"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssLSide ss "ABC"
+--   "A"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssLShare ss "ABC"
+--   "BC"
+--   </pre>
+--   
+--   Right terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRShareIndex ss
+--   [0, 1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRShareNames ss
+--   ["b", "c"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRSideNames ss
+--   ["d", "e"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRShare ss "BCDE"
+--   "BC"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRSide ss "BCDE"
+--   "DE"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRSplit ss "BCDE"
+--   ("BC", "DE")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRAssoc ss "BCDE"
+--   ("BC", "BCDE")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRForward ss "BCDE"
+--   "BCDE"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; ssRBackward ss "BCDE"
+--   "DEBC"
+--   </pre>
+termPicker :: (GetTermNames l, GetTermNames r) => l -> r -> TermPicker c
+
+-- | List of present terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; preTerms $ termPicker (words "a b c") (words "a b d e")
+--   ["a","b"]
+--   </pre>
+preTerms :: TermPicker c -> [TermName]
+
+-- | List of new terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; newTerms $ termPicker (words "a b c") (words "a b d e")
+--   ["c"]
+--   </pre>
+newTerms :: TermPicker c -> [TermName]
+
+-- | Test present terms exist.
+--   
+--   <pre>
+--   &gt;&gt;&gt; preTermsExist $ termPicker (words "d e") (words "a b c")
+--   False
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; preTermsExist $ termPicker (words "c d e") (words "a b c")
+--   True
+--   </pre>
+preTermsExist :: Test (TermPicker c)
+
+-- | Test new terms exist.
+--   
+--   <pre>
+--   &gt;&gt;&gt; newTermsExist $ termPicker (words "a b c") (words "a b d e")
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; newTermsExist $ termPicker (words "a b") (words "a b d e")
+--   False
+--   </pre>
+newTermsExist :: Test (TermPicker c)
+
+-- | Pick contents.
+--   
+--   <pre>
+--   &gt;&gt;&gt; picker (words "a c") (words "a b c") (words "1 2 3")
+--   ["1", "3"]
+--   </pre>
+picker :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Map [c]
+
+-- | Extract indices of terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pickTermsIndex $ termPicker (words "b d") (words "a b d e")
+--   [1,2]
+--   </pre>
+pickTermsIndex :: TermPicker c -> [Int]
+
+-- | Pick terms according to term picker.
+pickTerms :: TermPicker c -> Map [c]
+
+-- | Cut terms according to term picker.
+cutTerms :: TermPicker c -> Map [c]
+
+-- | Move terms forward.
+forwardTerms :: TermPicker c -> Map [c]
+
+-- | Move terms backward.
+backwardTerms :: TermPicker c -> Map [c]
+
+-- | Move terms forward (<a>True</a>) or backward (<a>False</a>).
+--   
+--   <pre>
+--   &gt;&gt;&gt; let pk = termPicker (words "c b") (words "a b c d")
+--   
+--   &gt;&gt;&gt; towardTerms True pk (words "A B C D")
+--   ["C","B","A","D"]
+--   
+--   &gt;&gt;&gt; towardTerms False pk (words "A B C D")
+--   ["A","D","C","B"]
+--   </pre>
+towardTerms :: Bool -> TermPicker c -> Map [c]
+
+
 -- | Judgements: a symbolic representations of affirmed or denied
 --   statements.
 module Koshucode.Baala.Data.Type.Judge
@@ -285,10 +569,6 @@ JudgeMultiChange :: JudgeClass -> [Term c] -> [Term c] -> Judge c
 --   </pre>
 JudgeViolate :: JudgeClass -> [Term c] -> Judge c
 
--- | Name of judgement class, in other words, name of propositional
---   function.
-type JudgeClass = String
-
 -- | Map function to terms.
 judgeTermsMap :: ([Term a] -> [Term b]) -> Judge a -> Judge b
 
@@ -319,23 +599,16 @@ isDenial :: Judge c -> Bool
 -- | Test which judgement is for violation.
 isViolative :: Judge c -> Bool
 
--- | Get judge class.
-class GetClass a
-getClass :: GetClass a => a -> JudgeClass
-
--- | Get list of term names.
-class GetTermNames a
-getTermNames :: GetTermNames a => a -> [TermName]
-
--- | Get term list.
-class GetTerms a
-getTerms :: GetTerms a => a c -> [Term c]
-
 -- | Conventional line-break setting for judges: 4-spaces indent and
 --   120-columns line.
 judgeBreak :: LineBreak
 
 -- | Encode term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNameToMix "foo"
+--   MixText "/foo"
+--   </pre>
 termNameToMix :: TermName -> MixText
 
 -- | Encode term list with one-space separator.
@@ -347,12 +620,13 @@ instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Judge.Judge
 instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Judge.Judge c)
 instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Judge.Judge c)
 instance GHC.Base.Functor Koshucode.Baala.Data.Type.Judge.Judge
-instance Koshucode.Baala.Data.Type.Judge.GetClass (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance Koshucode.Baala.Data.Type.Judge.GetTermNames (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance Koshucode.Baala.Data.Type.Judge.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
-instance Koshucode.Baala.Data.Type.Judge.GetTerms Koshucode.Baala.Data.Type.Judge.Judge
+instance Koshucode.Baala.Data.Type.JudgeClass.GetClass (Koshucode.Baala.Data.Type.Judge.Judge c)
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Judge.Judge c)
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTerms Koshucode.Baala.Data.Type.Judge.Judge
 instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Judge.Judge c)
 
+
+-- | Type for types.
 module Koshucode.Baala.Data.Type.Type
 
 -- | Type for types.
@@ -417,6 +691,8 @@ TypeTuple :: [Type] -> Type
 
 -- | Sum type
 TypeSum :: [Type] -> Type
+
+-- | Term type, i.e., term name and type of its content.
 type NamedType = Named Type
 
 -- | Print type as tree.
@@ -589,13 +865,26 @@ headMapName :: Map TermName -> Map Head
 -- | Move up nested relation.
 headUp :: Map Head
 
--- | Change order of terms.
-bodyAlign :: Head -> Head -> Map [[c]]
+-- | Move terms forward.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headForward ["c"] ["a", "b", "c"] ["x", "y", "z"]
+--   ["z", "y", "x"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; headForward (headFrom ["a", "b"]) (headFrom ["b", "a"]) ["x", "y"]
+--   ["y", "x"]
+--   </pre>
+headForward :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Map [c]
+
+-- | Move terms forward.
+bodyForward :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Map [[c]]
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Base.Monoid Koshucode.Baala.Data.Type.Rel.Head.Head
-instance Koshucode.Baala.Data.Type.Judge.GetTermNames Koshucode.Baala.Data.Type.Rel.Head.Head
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Rel.Head.Head
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Rel.Head.Head
 
 
@@ -656,7 +945,7 @@ instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Rel.Rel.Rel
 instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance GHC.Base.Functor Koshucode.Baala.Data.Type.Rel.Rel.Rel
-instance Koshucode.Baala.Data.Type.Judge.GetTermNames (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 
 
@@ -700,139 +989,6 @@ instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Rel.Mono
 instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Rel.Mono.Mono c)
 
 
--- | Shared and side terms.
-module Koshucode.Baala.Data.Type.Rel.ShareSide
-
--- | Shared and side terms.
-data ShareSide c
-ShareSide :: [Int] -> [Int] -> Bool -> [TermName] -> [TermName] -> [TermName] -> [TermName] -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> ([c], [c])) -> ([c] -> ([c], [c])) -> ([c] -> [c]) -> ([c] -> [c]) -> ShareSide c
-
--- | Indicies of right-shared part
-[ssLShareIndex] :: ShareSide c -> [Int]
-
--- | Indicies of left-shared part
-[ssRShareIndex] :: ShareSide c -> [Int]
-
--- | Whether shared part is empty
-[ssDisjoint] :: ShareSide c -> Bool
-
--- | Left-side term names
-[ssLSideNames] :: ShareSide c -> [TermName]
-
--- | Left-shared term names
-[ssLShareNames] :: ShareSide c -> [TermName]
-
--- | Right-shared term names
-[ssRShareNames] :: ShareSide c -> [TermName]
-
--- | Right-side term names
-[ssRSideNames] :: ShareSide c -> [TermName]
-
--- | Pick left-side part from left contents
-[ssLSide] :: ShareSide c -> [c] -> [c]
-
--- | Pick left-shared part from left contents
-[ssLShare] :: ShareSide c -> [c] -> [c]
-
--- | Pick right-shared part from right contents
-[ssRShare] :: ShareSide c -> [c] -> [c]
-
--- | Pick right-side part from right contents
-[ssRSide] :: ShareSide c -> [c] -> [c]
-
--- | Pick right-shared and right-side part
-[ssRSplit] :: ShareSide c -> [c] -> ([c], [c])
-
--- | Pick right-shared part and right contents
-[ssRAssoc] :: ShareSide c -> [c] -> ([c], [c])
-[ssRForward] :: ShareSide c -> [c] -> [c]
-[ssRBackward] :: ShareSide c -> [c] -> [c]
-type ShareSideMap c = ShareSide c -> [c] -> [c]
-type ShareSideMap2 a b = (ShareSideMap a, ShareSideMap b)
-
--- | Create share-side structure from left and right term names.
---   
---   <pre>
---   &gt;&gt;&gt; let ss = shareSide ["a", "b", "c"] ["b", "c", "d", "e"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssDisjoint ss
---   False
---   </pre>
---   
---   Left terms.
---   
---   <pre>
---   &gt;&gt;&gt; ssLShareIndex ss
---   [1, 2]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLShareNames ss
---   ["b", "c"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLSide ss "ABC"
---   "A"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLShare ss "ABC"
---   "BC"
---   </pre>
---   
---   Right terms.
---   
---   <pre>
---   &gt;&gt;&gt; ssRShareIndex ss
---   [0, 1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRShareNames ss
---   ["b", "c"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSideNames ss
---   ["d", "e"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRShare ss "BCDE"
---   "BC"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSide ss "BCDE"
---   "DE"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSplit ss "BCDE"
---   ("BC", "DE")
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRAssoc ss "BCDE"
---   ("BC", "BCDE")
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRForward ss "BCDE"
---   "BCDE"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRBackward ss "BCDE"
---   "DEBC"
---   </pre>
-shareSide :: (GetTermNames l, GetTermNames r) => l -> r -> ShareSide c
-shareSideOrd :: (GetTermNames l, GetTermNames r) => l -> r -> ShareSide c
-
-
 -- | Relation type.
 module Koshucode.Baala.Data.Type.Rel
 
@@ -849,9 +1005,17 @@ Interp :: [InterpWord] -> [TermName] -> Interp
 
 -- | Terms in sentence.
 [interpTerms] :: Interp -> [TermName]
+
+-- | Component of data interpretation.
 data InterpWord
+
+-- | Constant part of interpretation.
 InterpText :: String -> InterpWord
+
+-- | Variable part of interpretation.
 InterpTerm :: TermName -> InterpWord
+
+-- | Create data interpretation.
 interp :: [InterpWord] -> Interp
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Interp.Interp
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Interp.Interp
@@ -859,7 +1023,7 @@ instance GHC.Show.Show Koshucode.Baala.Data.Type.Interp.Interp
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Interp.InterpWord
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Interp.InterpWord
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Interp.InterpWord
-instance Koshucode.Baala.Data.Type.Judge.GetTermNames Koshucode.Baala.Data.Type.Interp.Interp
+instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Interp.Interp
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.Interp
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.InterpWord
 
@@ -957,18 +1121,20 @@ encodeDecimalCompact :: Decimal -> String
 
 -- | Arithmetics on decimals.
 module Koshucode.Baala.Data.Type.Decimal.BinaryAb
+
+-- | Fracle-selection mode in composing decimals.
 data FracleSide
 
--- | Select longer fracle
+-- | Select longer fracle (<tt>+</tt>)
 FracleLong :: FracleSide
 
--- | Select left fracle
+-- | Select left fracle (<tt>.+</tt>)
 FracleLeft :: FracleSide
 
--- | Select right fracle
+-- | Select right fracle (<tt>+.</tt>)
 FracleRight :: FracleSide
 
--- | Check same fracles
+-- | Check same fracles (<tt>.+.</tt>)
 FracleStrict :: FracleSide
 
 -- | Addition: <i>x</i> + <i>y</i>
@@ -995,6 +1161,8 @@ instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Decimal.BinaryAb.FracleSide
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Decimal.BinaryAb.FracleSide
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Decimal.BinaryAb.FracleSide
 
+
+-- | Decimal number type.
 module Koshucode.Baala.Data.Type.Decimal
 
 
@@ -1377,7 +1545,31 @@ timeFromYwAb :: Year -> Week -> Ab Time
 
 -- | Create time data from date, clock, and time zone.
 timeFromDczAb :: Date -> Clock -> Maybe Zone -> Ab Time
+
+-- | Create time from year, month, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFromYmd 2013 4 18
+--   2013-04-18
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFromYmd 2013 4 0
+--   2013-04-01
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFromYmd 2013 4 33
+--   2013-04-30
+--   </pre>
 timeFromYmd :: Year -> Month -> Day -> Time
+
+-- | Craete time from tuple of year, month, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; timeFromYmdTuple (2013, 4, 18)
+--   2013-04-18
+--   </pre>
 timeFromYmdTuple :: Ymd -> Time
 
 -- | Get UTC.
@@ -1533,7 +1725,7 @@ module Koshucode.Baala.Data.Type.Time
 module Koshucode.Baala.Data.Content.Message
 
 -- | Abortable scope for literal.
-abLiteral :: TTreeTo (Map (Ab b))
+abLiteral :: TTree -> Map (Ab b)
 
 -- | Nothing
 nothing :: Ab a
@@ -1569,6 +1761,50 @@ expectActual :: String -> String -> [String]
 expect2Actual :: String -> String -> String -> [String]
 
 
+-- | Decode term name.
+module Koshucode.Baala.Data.Content.Term
+
+-- | Read flat term name from token tree. If the token tree contains nested
+--   term name, this function failed.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "/a" &gt;&gt;= treeFlatName
+--   Right "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeFlatName
+--   Right "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "/a/x" &gt;&gt;= treeFlatName
+--   Left ...
+--   </pre>
+treeFlatName :: TTree -> Ab TermName
+
+-- | Read flat term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a /b" &gt;&gt;= treesFlatNames
+--   Right ["a","b"]
+--   </pre>
+treesFlatNames :: [TTree] -> Ab [TermName]
+
+-- | Read list of named token trees from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a 'A3 /b 10" &gt;&gt;= treesTerms
+--   Right [("a", [TreeL ...]),
+--          ("b", [TreeL ...])]
+--   </pre>
+treesTerms :: [TTree] -> Ab [NamedTrees]
+
+-- | Read list of named token trees from token trees. This function wraps
+--   long branches into group.
+treesTerms1 :: [TTree] -> Ab [NamedTree]
+
+
 -- | Message list.
 module Koshucode.Baala.Data.Class.Message
 
@@ -1584,7 +1820,7 @@ module Koshucode.Baala.Data.Type
 module Koshucode.Baala.Data.Church.Message
 
 -- | Abortable scope for cox building.
-abCoxBuild :: TTreeTo (MapAb b)
+abCoxBuild :: TTree -> MapAb b
 
 -- | Abortable scope for cox calculation.
 abCoxCalc :: (CodePtr cp) => [cp] -> MapAb b
@@ -1599,13 +1835,13 @@ abCoxIrrep :: (CodePtr cp) => [cp] -> MapAb b
 abCoxPosition :: (CodePtr cp) => [cp] -> MapAb b
 
 -- | Abortable scope for cox prefix.
-abCoxPrefix :: TTreeTo (MapAb b)
+abCoxPrefix :: TTree -> MapAb b
 
 -- | Abortable scope for cox reduction.
 abCoxReduce :: (CodePtr cp) => [cp] -> MapAb b
 
 -- | Abortable scope for cox syntax.
-abCoxSyntax :: TTreeTo (MapAb b)
+abCoxSyntax :: TTree -> MapAb b
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> Ab a
@@ -1629,13 +1865,16 @@ unkRefVar :: (String, Int) -> [String] -> Ab a
 unkShow :: (Show x) => x -> Ab a
 
 -- | Unknown term name
-unkTerm :: [TermName] -> Head -> Ab a
+unkTerm :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Ab a
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> Ab a
 
 -- | Terms and input relation heading.
 detailTermRel :: String -> [TermName] -> Head -> [String]
+
+-- | Create message lines from double term names.
+msgTerms2 :: (GetTermNames t1, GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
 
 
 -- | Bundle of message modules.
@@ -1778,24 +2017,46 @@ instance GHC.Show.Show (Koshucode.Baala.Data.Church.Cop.Cop c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Data.Church.Cop.Cop c)
 
 
--- | Term content parsers.
+-- | Decode specific content.
 module Koshucode.Baala.Data.Content.Tree
+
+-- | Get single text from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "'aa 'bb" &gt;&gt;= treesToText True
+--   Right "aabb"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "aa bb" &gt;&gt;= treesToText False
+--   Right "aabb"
+--   </pre>
+treesTexts :: Bool -> [TTree] -> Ab [String]
 
 -- | Get text from token tree.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt1 "aa" &gt;&gt;= treeToText False
+--   &gt;&gt;&gt; S.tt1 "aa" &gt;&gt;= treeText False
 --   Right "aa"
 --   </pre>
-treeToText :: Bool -> TTreeToAb String
+treeText :: Bool -> TTree -> Ab String
+
+-- | Get interpretation from token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "term /a" &gt;&gt;= treesInterp
+--   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
+--                   interpTerms = ["a"] })
+--   </pre>
+treesInterp :: [TTree] -> Ab Interp
 
 -- | Get digits from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "-123 450.00" &gt;&gt;= treesToDigits
+--   &gt;&gt;&gt; S.tt "-123 450.00" &gt;&gt;= treesDigits
 --   Right "-123450.00"
 --   </pre>
-treesToDigits :: TTreesToAb String
+treesDigits :: [TTree] -> Ab String
 
 -- | Get clock from token.
 --   
@@ -1808,64 +2069,28 @@ tokenClock :: Token -> Ab Clock
 -- | Get time from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-04-18 12:00" &gt;&gt;= treesToTime
+--   &gt;&gt;&gt; S.tt "2013-04-18 12:00" &gt;&gt;= treesTime
 --   Right 2013-04-18 12:00
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-04-18" &gt;&gt;= treesToTime
+--   &gt;&gt;&gt; S.tt "2013-04-18" &gt;&gt;= treesTime
 --   Right 2013-04-18
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-#16" &gt;&gt;= treesToTime
+--   &gt;&gt;&gt; S.tt "2013-#16" &gt;&gt;= treesTime
 --   Right 2013-#16
 --   </pre>
-treesToTime :: TTreesToAb Time
+treesTime :: [TTree] -> Ab Time
 
 -- | Get time from string.
 --   
 --   <pre>
---   &gt;&gt;&gt; ttTime "2013-04-18 12:00"
+--   &gt;&gt;&gt; stringTime "2013-04-18 12:00"
 --   Right 2013-04-18 12:00
 --   </pre>
-ttTime :: String -> Ab Time
-
--- | Get interpretation from token trees.
---   
---   <pre>
---   &gt;&gt;&gt; S.tt "term /a" &gt;&gt;= treesToInterp
---   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
---                   interpTerms = ["a"] })
---   </pre>
-treesToInterp :: TTreesToAb Interp
-
--- | Get flat term name from token tree. If the token tree contains nested
---   term name, this function failed.
---   
---   <pre>
---   &gt;&gt;&gt; S.tt1 "/a" &gt;&gt;= treeToFlatTerm
---   Right "a"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; S.tt1 "/a/x" &gt;&gt;= treeToFlatTerm
---   Left ...
---   </pre>
-treeToFlatTerm :: TTreeToAb TermName
-
--- | Get list of named token trees from token trees.
---   
---   <pre>
---   &gt;&gt;&gt; S.tt "/a 'A3 /b 10" &gt;&gt;= treesToTerms
---   Right [("a", [TreeL ...]),
---          ("b", [TreeL ...])]
---   </pre>
-treesToTerms :: TTreesToAb [NamedTrees]
-
--- | Get list of named token trees from token trees. This function wraps
---   long branches into group.
-treesToTerms1 :: TTreesToAb [NamedTree]
+stringTime :: String -> Ab Time
 
 
 -- | Singleton content type.
@@ -2090,17 +2315,17 @@ module Koshucode.Baala.Data.Class
 module Koshucode.Baala.Data.Content.Decode
 
 -- | Content constructor.
-type ContentCons c = TTreeToAb c
+type ContentCons c = TTree -> Ab c
 
 -- | Content calculator.
-type ContentCalc c = TTreeToAb c
+type ContentCalc c = TTree -> Ab c
 
 -- | Convert token tree into internal form of content.
 contentCons :: (CContent c) => ContentCalc c -> ContentCons c
 
--- | Convert token trees into a judge. Judges itself are not content type.
+-- | Decode token trees into a judge. Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (CContent c) => ContentCalc c -> AssertType -> JudgeClass -> TTreesToAb (Judge c)
+treesJudge :: (CContent c) => ContentCalc c -> AssertType -> JudgeClass -> [TTree] -> Ab (Judge c)
 
 -- | Type of assertions.
 data AssertType
@@ -2125,6 +2350,8 @@ AssertMultiChange :: AssertType
 
 -- | <tt>|=v</tt> <i>C</i> <tt>:</tt> <i>R</i> generates violation judges.
 AssertViolate :: AssertType
+
+-- | Create judgement corresponding to assertion type.
 assertAs :: AssertType -> JudgeOf c
 
 -- | Frege's stroke and various assertion lines.
@@ -2162,7 +2389,21 @@ contAp :: (a' -> a) -> (b -> b') -> (a -> b) -> a' -> b'
 
 -- | Map function to internal value of content.
 contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
-contApTextToText :: (CText c) => Map String -> AbMap c
+
+-- | Apply function to internal string of text content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contApTextToText reverse (the $ pText "abc")
+--   Right (VText "cba")
+--   </pre>
+contApTextToText :: (CText c) => StringMap -> AbMap c
+
+-- | Map function to characters of internal string of text content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contMapTextToList (\c -&gt; pText [c]) (the $ pText "abc")
+--   Right (VList [VText "a",VText "b",VText "c"])
+--   </pre>
 contMapTextToList :: (CList c, CText c) => (Char -> c) -> AbMap c
 
 -- | Convert term content to string value.
@@ -2207,74 +2448,74 @@ the :: BaalaC -> BaalaC
 -- | The Baala content type.
 data BaalaC
 
--- | Boolean type
-VBool :: Bool -> BaalaC
-
--- | Code type
-VCode :: String -> BaalaC
-
--- | String type
-VText :: String -> BaalaC
-
--- | Term name type
-VTerm :: String -> BaalaC
-
--- | Decimal number type
-VDec :: Decimal -> BaalaC
-
--- | Clock type
-VClock :: Clock -> BaalaC
-
--- | Time type
-VTime :: Time -> BaalaC
-
--- | Sign of no ordinary type
+-- | <i>Singleton:</i> Sign of no ordinary type
 VEmpty :: BaalaC
 
--- | The end of everything
-VEnd :: BaalaC
+-- | <i>Numeric:</i> Boolean type
+VBool :: Bool -> BaalaC
 
--- | Interpretation type
-VInterp :: Interp -> BaalaC
+-- | <i>Numeric:</i> Decimal number type
+VDec :: Decimal -> BaalaC
 
--- | Type for type
-VType :: Type -> BaalaC
+-- | <i>Numeric:</i> Clock type
+VClock :: Clock -> BaalaC
 
--- | List type (objective collection)
+-- | <i>Numeric:</i> Time type
+VTime :: Time -> BaalaC
+
+-- | <i>Textual:</i> Code type
+VCode :: String -> BaalaC
+
+-- | <i>Textual:</i> Term name type
+VTerm :: String -> BaalaC
+
+-- | <i>Textual:</i> Text type
+VText :: String -> BaalaC
+
+-- | <i>Collective:</i> List type
 VList :: [BaalaC] -> BaalaC
 
--- | Set type (informative collection)
+-- | <i>Collective:</i> Set type
 VSet :: [BaalaC] -> BaalaC
 
--- | Tie type (set of terms)
+-- | <i>Relational:</i> Tie type (set of terms)
 VTie :: [Named BaalaC] -> BaalaC
 
--- | Relation type
+-- | <i>Relational:</i> Relation type
 VRel :: (Rel BaalaC) -> BaalaC
+
+-- | <i>Relational:</i> Interpretation type
+VInterp :: Interp -> BaalaC
+
+-- | <i>Meta:</i> Type for type
+VType :: Type -> BaalaC
+
+-- | <i>Singleton:</i> The end of everything
+VEnd :: BaalaC
 instance GHC.Show.Show Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance GHC.Classes.Eq Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance GHC.Classes.Ord Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Singleton.CTypeOf Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Content.CContent Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Singleton.CEmpty Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Singleton.CEnd Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CBool Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CDec Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CClock Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CTime Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CCode Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Simple.CTerm Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Simple.CText Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Complex.CList Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Singleton.CEmpty Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Singleton.CEnd Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CTerm Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CInterp Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Complex.CSet Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Complex.CTie Koshucode.Baala.Data.Content.BaalaC.BaalaC
 instance Koshucode.Baala.Data.Class.Complex.CRel Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CInterp Koshucode.Baala.Data.Content.BaalaC.BaalaC
+instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.BaalaC.BaalaC
 
 
--- | Content of term in judgement.
+-- | Term content.
 module Koshucode.Baala.Data.Content
 
 
@@ -2282,7 +2523,7 @@ module Koshucode.Baala.Data.Content
 module Koshucode.Baala.Data.Church.Build
 
 -- | Construct content expression from token tree
-coxBuild :: (CContent c) => ContentCalc c -> CopSet c -> TTreeToAb (Cox c)
+coxBuild :: (CContent c) => ContentCalc c -> CopSet c -> TTree -> Ab (Cox c)
 
 -- | Insert fresh form into indexed expression.
 coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)

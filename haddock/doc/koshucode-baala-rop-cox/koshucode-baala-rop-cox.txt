@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -56,11 +56,17 @@ getOptContent :: (CContent c) => c -> RopGet c c
 getFiller :: (CContent c) => RopGet c c
 getInt :: (CContent c) => RopGet c DecimalInteger
 
+
+-- | Generate range of contents.
 module Koshucode.Baala.Rop.Cox.Range
 
 -- | Implementation of relational operators.
 ropsCoxRange :: (CContent c) => [Rop c]
+
+-- | Attribute for range operators.
 type RangeAttr c = (TermName, CopSet c, Cox c, Cox c)
+
+-- | <b>range /N -from E -to E</b>
 consRange :: (CContent c) => RopCons c
 
 -- | Create <tt>range</tt> relmap.
@@ -102,10 +108,27 @@ relmapRangeSecond :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
 -- | Create <tt>range-second</tt> relkit.
 relkitRangeSecond :: (CContent c) => RangeAttr c -> RelkitFlow c
 
+
+-- | Gadgets with content calculation.
 module Koshucode.Baala.Rop.Cox.Gadget
 
 -- | Implementation of relational operators.
 ropsCoxGadget :: (CContent c) => [Rop c]
+
+-- | <b>const E</b>
+--   
+--   Output the constant relation E. Especially, <tt>const {= [] =}</tt> is
+--   equivalent to <tt>dee</tt>, <tt>const {= =}</tt> is equivalent to
+--   <tt>dum</tt>.
+consConst :: (CContent c) => RopCons c
+
+-- | Create <tt>const</tt> relmap.
+relmapConst :: Intmed c -> Rel c -> Relmap c
+
+-- | Create <tt>const</tt> relkit.
+relkitConst :: Rel c -> RelkitFlow c
+
+-- | <b>number /N -from I -order /P ...</b>
 consNumber :: (Ord c, CContent c) => RopCons c
 
 -- | Create <tt>number</tt> relmap.
@@ -113,6 +136,13 @@ relmapNumber :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int)
 
 -- | Create <tt>number</tt> relkit.
 relkitNumber :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>rank /N -from I -order /P ...</i> Calculate standard
+--   competition ranking (like 1224).</li>
+--   <li><i>rank /N -dense -from I -order /P...</i> Calculate dense ranking
+--   (like 1223).</li>
+--   </ul>
 consRank :: (Ord c, CContent c) => RopCons c
 
 -- | Create <tt>rank</tt> relmap.
@@ -126,8 +156,12 @@ relmapDenseRank :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], I
 
 -- | Create <tt>rank -dense</tt> relkit.
 relkitDenseRank :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+
+-- | <b>repeat I R</b>
 consRepeat :: (Ord c, CContent c) => RopCons c
 
+
+-- | Relation filter.
 module Koshucode.Baala.Rop.Cox.Filter
 
 -- | Implementation of relational operators.
@@ -137,6 +171,12 @@ module Koshucode.Baala.Rop.Cox.Filter
 --   <li><i><tt>omit E</tt></i> Omit tuples <tt>E</tt> equals true.</li>
 --   </ul>
 ropsCoxFilter :: (CContent c) => [Rop c]
+
+-- | <ul>
+--   <li><i>keep E</i> Keep tuples which expression E is true.</li>
+--   <li><i>omit E</i> Omit tuples which expression E is true. <tt>omit
+--   E</tt> is equivalent to <tt>keep not E</tt>.</li>
+--   </ul>
 consFilter :: (CContent c) => Bool -> RopCons c
 
 -- | Create <tt>keep</tt> and <tt>omit</tt> relmap.
@@ -144,6 +184,10 @@ relmapFilter :: (CContent c) => Intmed c -> (Bool, CopSet c, Cox c) -> Relmap c
 
 -- | Create <tt>keep</tt> and <tt>omit</tt> relkit.
 relkitFilter :: (CContent c) => (Bool, CopSet c, Cox c) -> RelkitFlow c
+
+-- | <b>contain E</b>
+--   
+--   Keep tuples in which some terms has content E.
 consContain :: (CContent c) => RopCons c
 
 -- | Create <tt>contain</tt> relmap.
@@ -154,12 +198,14 @@ relkitContain :: (Eq c) => c -> RelkitFlow c
 
 -- | <b>omit-all</b>
 --   
---   Throw away all tuples in a relation.
+--   Throw away all tuples.
 consOmitAll :: RopCons c
 
 -- | Create <tt>omit-all</tt> relmap.
 relmapOmitAll :: Intmed c -> Relmap c
 
+
+-- | Relational compositions whose contents are maybe the empty.
 module Koshucode.Baala.Rop.Cox.Empty
 
 -- | Relmap operators that handles empties.
@@ -170,6 +216,8 @@ module Koshucode.Baala.Rop.Cox.Empty
 --   input tuples of which counterparts are totally negated.</li>
 --   </ul>
 ropsCoxEmpty :: (CContent c) => [Rop c]
+
+-- | <b>both R -share /P ... -fill E</b>
 consBoth :: (CContent c) => RopCons c
 
 -- | Create <tt>both</tt> relmap.
@@ -190,6 +238,8 @@ consComposeMaybe :: (CContent c) => RopCons c
 -- | Create <tt>compose-maybe</tt> relmap.
 relmapComposeMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
+
+-- | Relmap operator with content calculation.
 module Koshucode.Baala.Rop.Cox.Calc
 
 -- | Implementation of relational operators.
@@ -199,23 +249,44 @@ module Koshucode.Baala.Rop.Cox.Calc
 --   content <tt>E</tt> ...</li>
 --   </ul>
 ropsCoxCalc :: (CContent c) => [Rop c]
+
+-- | <b>add /N E ...</b>
+--   
+--   Add new terms /N which has the result of E.
 consAdd :: (CContent c) => RopCons c
 
 -- | Create <tt>add</tt> relmap.
 relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
-consSubst :: (CContent c) => RopCons c
 
--- | Create <tt>subst</tt> relmap.
-relmapSubst :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+-- | <b>alt /P E ...</b>
+--   
+--   Change present terms /P whose content is altered to the result of E.
+consAlt :: (CContent c) => RopCons c
+
+-- | Create <tt>alt</tt> relmap.
+relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+
+-- | <b>fill /P ... -with E</b>
+--   
+--   Fill terms /P ... with the result of E.
 consFill :: (CContent c) => RopCons c
 
 -- | Create <tt>fill</tt> relmap.
 relmapFill :: (CContent c) => Intmed c -> ([TermName], CopSet c, Cox c) -> Relmap c
+
+-- | <b>map /P ... -by F</b>
 consReplace :: (CContent c) => RopCons c
+
+-- | <b>replace-all -from E -to E</b>
 consReplaceAll :: (CContent c) => RopCons c
 
 -- | Create <tt>replace-all</tt> relmap.
 relmapReplaceAll :: (CContent c) => Intmed c -> (CopSet c, Cox c, Cox c) -> Relmap c
+
+-- | <b>split /N E ...</b>
+--   
+--   Split input relation by the boolean functions E ..., and add terms /N
+--   ... which has the splitted relations.
 consSplit :: (CContent c) => RopCons c
 
 -- | Create <tt>split</tt> relmap.
@@ -223,11 +294,15 @@ relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 
 -- | Create <tt>split</tt> relkit.
 relkitSplit :: (CContent c) => (CopSet c, [NamedCox c]) -> RelkitFlow c
+
+-- | <b>unary /N E : ...</b>
 consUnary :: (CContent c) => RopCons c
 
 -- | Create <tt>unary</tt> relmap.
 relmapUnary :: (CContent c) => Intmed c -> (TermName, [c]) -> Relmap c
 
+
+-- | Accessor relmap operators.
 module Koshucode.Baala.Rop.Cox.Accessor
 
 -- | Implementation of relational operators.
@@ -251,7 +326,11 @@ relmapClockAlter :: (CContent c) => Intmed c -> (CopSet c, TermName, (MaybeCox c
 -- | Create <tt>clock-alter</tt> relkit.
 relkitClockAlter :: (CContent c) => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
+
+-- | Relational operators with content calculation.
 module Koshucode.Baala.Rop.Cox.Bundle
+
+-- | Relational operators with content calculation.
 ropsCox :: (CContent c) => [Rop c]
 
 

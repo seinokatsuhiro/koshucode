@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.166.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.168.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,10 +62,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Examples</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
 	    >Keyword table</a
 	    ></li
 	  ></ul
@@ -85,10 +81,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><li class="src short"
 	  ><a href="#v:angleQuote"
 	    >angleQuote</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:angleTexts"
@@ -101,22 +95,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></ul
 	></div
       ><div id="interface"
-      ><h2 id="g:1"
-	>Functions</h2
+      ><h1 id="g:1"
+	>Functions</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:angleQuote" class="def"
 	    >angleQuote</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-AngleText.html#angleQuote');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Convert string into double-quoted and angle-quoted form.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>putStrLn $ angleQuote &quot;aaa&quot;
+</code
+		></strong
+	      >&quot;aaa&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>putStrLn $ angleQuote &quot;\t&quot;
+</code
+		></strong
+	      >&lt;tab&gt;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>putStrLn $ angleQuote &quot;aaa\nbbb\r\nccc\r\n\r\nddd&quot;
+</code
+		></strong
+	      >&quot;aaa&quot; &lt;lf&gt; &quot;bbb&quot; &lt;crlf&gt; &quot;ccc&quot; &lt;crlf&gt; &lt;crlf&gt; &quot;ddd&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -133,50 +155,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Table of coresspondences of angle text and its replacement.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>lookup &quot;lf&quot; angleTexts
+</code
+		></strong
+	      >Just &quot;\n&quot;
+</pre
 	    ></div
 	  ></div
-	><h2 id="g:2"
-	>Examples</h2
-	><div class="doc"
-	><p
-	  >Simple word.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >putStrLn $ angleQuote &quot;aaa&quot;
-</code
-	      ></strong
-	    >&quot;aaa&quot;
-</pre
-	  ><p
-	  >Text contains line feed.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >putStrLn $ angleQuote &quot;aaa\nbbb&quot;
-</code
-	      ></strong
-	    >&quot;aaa&quot; #lf &quot;bbb&quot;
-</pre
-	  ><p
-	  >Lookup keyword table.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lookup &quot;lf&quot; angleTexts
-</code
-	      ></strong
-	    >Just &quot;\n&quot;
-</pre
-	  ></div
-	><h2 id="g:3"
-	>Keyword table</h2
+	><h1 id="g:2"
+	>Keyword table</h1
 	><div class="doc"
 	><p
 	  >Some text literals are written

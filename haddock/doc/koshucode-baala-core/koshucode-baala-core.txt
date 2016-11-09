@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Result of relational calculation.
@@ -106,14 +106,24 @@ instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Re
 
 -- | Lexmap trees
 module Koshucode.Baala.Core.Lexmap.LexmapTrees
+
+-- | Tree representation of lexmap.
 data LexmapTrees
 LexmapTrees :: [TTree] -> TTreePara -> AttrEd -> LexmapTrees
+
+-- | Positional attribute.
 [lexmapTrees] :: LexmapTrees -> [TTree]
+
+-- | Parameter
 [lexmapPara] :: LexmapTrees -> TTreePara
+
+-- | Attribute editor
 [lexmapAttrEd] :: LexmapTrees -> AttrEd
+
+-- | Construct lexmap tree.
 consLexmapTrees :: TTreePara -> Ab LexmapTrees
 
--- | Token Tree parameter.
+-- | Token tree parameter.
 type TTreePara = SimplePara TTree
 
 -- | Make token tree parameter with single-hyphen names.
@@ -222,7 +232,7 @@ unresPrefix :: String -> Ab a
 module Koshucode.Baala.Core.Relmap.Message
 
 -- | Abortable scope for option.
-abOption :: TTreesTo (Map (Ab b))
+abOption :: [TTree] -> MapAb b
 
 -- | Abortable scope for relmap.
 abRelmap :: (CodePtr cp) => [cp] -> Map (Ab b)
@@ -269,7 +279,7 @@ unkNestRel :: Token -> String -> [String] -> Ab a
 module Koshucode.Baala.Core.Lexmap.Message
 
 -- | Abortable scope for lexmap.
-abLexmap :: TTreesTo (Map (Ab b))
+abLexmap :: [TTree] -> MapAb b
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> Ab a
@@ -1072,7 +1082,7 @@ module Koshucode.Baala.Core.Resource.Include
 
 -- | Include source code into resource.
 resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> NIOPoint -> Bz -> AbResource c
-coxBuildG :: (CContent c) => Global c -> TTreeToAb (Cox c)
+coxBuildG :: (CContent c) => Global c -> TTree -> Ab (Cox c)
 
 
 -- | Read data resource.

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.166.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.168.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -549,7 +549,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check present term.</p
+	    >Test present term.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -595,7 +595,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check new term.</p
+	    >Test new term.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -611,7 +611,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check all terms are present.</p
+	    >Test all terms are present.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -627,7 +627,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check all terms are new.</p
+	    >Test all terms are new.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termsN [-1, -1]
+</code
+		></strong
+	      >True
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -645,7 +655,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check present terms and new terms.</p
+	    >Test present and new terms.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termsPN [1,2] [-1]
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termsPN [1,2] [-1,0]
+</code
+		></strong
+	      >False
+</pre
 	    ></div
 	  ></div
 	></div

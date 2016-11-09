@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Partial-order scale.
@@ -55,7 +55,7 @@ checkTerm :: String -> [TermName] -> Head -> Ab a
 diffHead :: [Head] -> Ab a
 
 -- | Duplicate term name
-dupTerm :: [TermName] -> Head -> Ab a
+dupTerm :: (GetTermNames t) => t -> Ab a
 
 -- | Dump content expression
 dumpCox :: (Show c) => c -> Ab a
@@ -82,7 +82,7 @@ reqCollection :: Ab a
 reqInterp :: Ab a
 
 -- | Require new term names
-reqNewTerm :: [TermName] -> Head -> Ab a
+reqNewTerm :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Ab a
 
 -- | Require unary function
 reqUnaryFn :: Ab a
@@ -121,12 +121,15 @@ signedTermNames :: [TTree] -> Ab [SignedTermName]
 --   </pre>
 termNamePairs :: [TTree] -> Ab [TermName2]
 termNamesColon :: [TTree] -> Ab [[TermName]]
-picker :: Head -> [TermName] -> Map [c]
 
 
 -- | Attribute getters: Extract attribute from use of relmap.
 module Koshucode.Baala.Rop.Base.Get
+
+-- | Type for getting something from relmap intermidiate data.
 type RopGet c a = Intmed c  Use of relmap operator -> String  Name of keyword, e.g., @\"-term\"@ -> Ab a  Attribute of relmap
+
+-- | Test usage tag.
 getTag :: Intmed c -> String -> Bool
 
 -- | Get usage tags.
@@ -156,7 +159,11 @@ getTree :: RopGet c TTree
 
 -- | Get trees from parameter.
 getTrees :: RopGet c [TTree]
+
+-- | Get word-and-tree list.
 getWordTrees :: RopGet c [Named TTree]
+
+-- | Get trees delimited by colon.
 getTreesByColon :: RopGet c [[TTree]]
 
 -- | Get a relmap from operator use.
@@ -168,15 +175,23 @@ getTreesByColon :: RopGet c [[TTree]]
 --     Right $ relmapMeet med m
 --   </pre>
 getRelmap :: Intmed c -> String -> Ab (Relmap c)
+
+-- | Get optional relmap.
 getOptRelmap :: Relmap c -> Intmed c -> String -> Ab (Relmap c)
 
 -- | Get a term name from named attribute.
 getTerm :: RopGet c TermName
+
+-- | Get two term names.
 getTerm2 :: RopGet c (TermName, TermName)
+
+-- | Get optional term name.
 getTermOpt :: RopGet c (Maybe TermName)
 
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [TermName]
+
+-- | Get signed term names.
 getSignedTerms :: RopGet c [SignedTermName]
 
 -- | Get term names and complement sign (<tt>~</tt>) .
@@ -184,8 +199,12 @@ getTermsCo :: RopGet c (Bool, [TermName])
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [TermName2]
+
+-- | Get term names groups delimited by colons.
 getTermsColon :: RopGet c [[TermName]]
-getTermTrees :: RopGet c [Named TTree]
+
+-- | Get list of tree terms.
+getTermTrees :: RopGet c [Term TTree]
 
 
 -- | Definition of relmap operators.
@@ -632,6 +651,8 @@ relmapSubtext :: (CContent c) => Intmed c -> SubtextPara -> Relmap c
 -- | Create <tt>subtext</tt> relkit.
 relkitSubtext :: (CContent c) => SubtextPara -> Maybe Head -> Ab (Relkit c)
 
+
+-- | Gadgets.
 module Koshucode.Baala.Rop.Flat.Gadget
 
 -- | Gadgets
@@ -646,11 +667,19 @@ module Koshucode.Baala.Rop.Flat.Gadget
 --   relation.</li>
 --   </ul>
 ropsGadget :: (CContent c) => [Rop c]
+
+-- | <b>contents /N</b>
+--   
+--   Collect all contents in unary relation.
 consContents :: (Ord c) => RopCons c
 
 -- | Create <tt>contents</tt> relmap.
 relmapContents :: (Ord c) => Intmed c -> TermName -> Relmap c
+
+-- | <b>partial-order-height /P /P -to /N /N</b>
 consPoHeight :: (Ord c, CDec c) => RopCons c
+
+-- | <b>partial-order-depth /P /P -to /N /N</b>
 consPoDepth :: (Ord c, CDec c) => RopCons c
 consPoScale :: (Ord c, CDec c) => PoScaleCalc c -> RopCons c
 
@@ -665,6 +694,8 @@ consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
 
 -- | Create <tt>visit-distance</tt> relmap.
 relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
+
+-- | <b>size /N</b>
 consSize :: (CDec c) => RopCons c
 
 -- | Create <tt>size</tt> relmap.
@@ -672,6 +703,8 @@ relmapSize :: (CDec c) => Intmed c -> TermName -> Relmap c
 
 -- | Create <tt>size</tt> relkit.
 relkitSize :: (CDec c) => TermName -> RelkitFlow c
+
+-- | <b>eqlize</b>
 consEqlize :: (Ord c) => RopCons c
 
 -- | Create <tt>eqlize</tt> relmap.
@@ -679,6 +712,8 @@ relmapEqlize :: (Ord c) => Intmed c -> Relmap c
 
 -- | Create <tt>eqlize</tt> relkit.
 relkitEqlize :: (Ord c) => RelkitFlow c
+
+-- | <b>dump-tree E</b>
 consDumpTree :: (CDec c) => RopCons c
 
 
@@ -716,7 +751,7 @@ relkitJoin :: SharedTerms -> RelkitBinary c
 type SharedTerms = Maybe [TermName]
 
 -- | Calculate unmatch shared terms.
-unmatchShare :: SharedTerms -> ShareSide c -> Maybe ([TermName], [TermName])
+unmatchShare :: SharedTerms -> TermPicker c -> Maybe ([TermName], [TermName])
 
 
 -- | Restrict by relmap

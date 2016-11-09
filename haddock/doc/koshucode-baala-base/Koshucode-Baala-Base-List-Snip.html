@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,11 +62,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Function</a
+	    >Index</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Derivative</a
+	    >Picking elements</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Reorder elements</a
 	    ></li
 	  ></ul
 	></div
@@ -103,20 +107,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Snip</a
 	    > b)</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Bin"
-	    >Bin</a
-	    > a = a -&gt; a -&gt; a</li
-	  ><li class="src short"
-	  ><a href="#v:snipFull"
-	    >snipFull</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >]</li
-	  ><li class="src short"
 	  ><a href="#v:snipIndex"
 	    >snipIndex</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
@@ -125,8 +115,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Int</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:snipPair"
-	    >snipPair</a
+	  ><a href="#v:snipIndexFull"
+	    >snipIndexFull</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:snipIndexBoth"
+	    >snipIndexBoth</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a] -&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
@@ -134,12 +132,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    >])</li
-	  ><li class="src short"
-	  ><a href="#v:snipBoth"
-	    >snipBoth</a
-	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; [a] -&gt; ([a], [a])</li
 	  ><li class="src short"
 	  ><a href="#v:snipFrom"
 	    >snipFrom</a
@@ -152,6 +144,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > :: <a href="Koshucode-Baala-Base-List-Snip.html#t:Snip"
 	    >Snip</a
 	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:snipBoth"
+	    >snipBoth</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; ([a], [a])</li
+	  ><li class="src short"
+	  ><a href="#v:snipShare"
+	    >snipShare</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:snipLeft"
+	    >snipLeft</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:snipRight"
+	    >snipRight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
 	  ><li class="src short"
 	  ><a href="#v:snipForward"
 	    >snipForward</a
@@ -177,30 +199,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Snip2</a
 	    > a b</li
 	  ><li class="src short"
-	  ><a href="#v:snipLeft"
-	    >snipLeft</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a]</li
-	  ><li class="src short"
-	  ><a href="#v:snipShare"
-	    >snipShare</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a]</li
-	  ><li class="src short"
-	  ><a href="#v:snipRight"
-	    >snipRight</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a]</li
-	  ><li class="src short"
 	  ><a href="#v:snipOrder"
 	    >snipOrder</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
@@ -208,28 +206,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > [c]</li
-	  ><li class="src short"
-	  ><a href="#v:sameLength"
-	    >sameLength</a
-	    > :: [a] -&gt; [b] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:notSameLength"
-	    >notSameLength</a
-	    > :: [a] -&gt; [b] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:-43--45-"
-	    >(+-)</a
-	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -271,34 +247,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Snip for differenct type values.</p
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Bin" class="def"
-	    >Bin</a
-	    > a = a -&gt; a -&gt; a <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#Bin');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Type for binary operators.</p
-	    ></div
-	  ></div
 	><h1 id="g:2"
-	>Function</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:snipFull" class="def"
-	    >snipFull</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipFull');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
+	>Index</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:snipIndex" class="def"
@@ -313,36 +263,74 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Indices of shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>snipIndex &quot;bdk&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >[1,3]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:snipPair" class="def"
-	    >snipPair</a
+	  ><a name="v:snipIndexFull" class="def"
+	    >snipIndexFull</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipIndexFull');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Indicies of shared-and-unknown elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>snipIndexFull &quot;bcx&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >[1,2,-1]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipIndexBoth" class="def"
+	    >snipIndexBoth</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a] -&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    >]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipPair');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:snipBoth" class="def"
-	    >snipBoth</a
-	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; [a] -&gt; ([a], [a]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipBoth');" href="javascript:void(0);" class="link"
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipIndexBoth');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pair of picking-up and cutting-off elements.</p
+	    >Left-and-right indices of shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>snipIndexBoth &quot;abc&quot; &quot;bcd&quot;
+</code
+		></strong
+	      >([1,2], [0,1])
+</pre
 	    ></div
 	  ></div
+	><h1 id="g:3"
+	>Picking elements</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:snipFrom" class="def"
@@ -355,6 +343,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Pick up indexed elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[1,3] `snipFrom` &quot;abcdefg&quot;
+</code
+		></strong
+	      >&quot;bd&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[1,3] `snipFrom` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;BD&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -369,81 +377,122 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Cut off indexed elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(snipIndex &quot;ce&quot; &quot;abcdefg&quot;) `snipOff` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;ABDFG&quot;
+</pre
 	    ></div
 	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipBoth" class="def"
+	    >snipBoth</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; ([a], [a]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
 	    ></p
+	  ><div class="doc"
 	  ><p
-	  >Obtain indicies for snipping <code
-	    >&quot;bdk&quot;</code
-	    > from <code
-	    >&quot;abcdefg&quot;</code
-	    >.
-  The element <code
-	    >&quot;k&quot;</code
-	    > is ignored because it is not in  <code
-	    >&quot;abcdefg&quot;</code
-	    >.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >snipIndex &quot;bdk&quot; &quot;abcdefg&quot;
+	    >Pair of picking-up and cutting-off elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(snipIndex &quot;ce&quot; &quot;abcdefg&quot;) `snipBoth` &quot;ABCDEFG&quot;
 </code
-	      ></strong
-	    >[1,3]
+		></strong
+	      >(&quot;CE&quot;, &quot;ABDFG&quot;)
 </pre
-	  ><p
-	  >Pick up same-position elements.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >[1,3] `snipFrom` &quot;abcdefg&quot;
-</code
-	      ></strong
-	    >&quot;bd&quot;
-<code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >[1,3] `snipFrom` &quot;ABCDEFG&quot;
-</code
-	      ></strong
-	    >&quot;BD&quot;
-</pre
-	  ><p
-	  >Cut off same-position elements.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >(snipIndex &quot;ce&quot; &quot;abcdefg&quot;) `snipOff` &quot;ABCDEFG&quot;
-</code
-	      ></strong
-	    >&quot;ABDFG&quot;
-</pre
-	  ><p
-	  >Get pick-up and cut-off elements.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >(snipIndex &quot;ce&quot; &quot;abcdefg&quot;) `snipBoth` &quot;ABCDEFG&quot;
-</code
-	      ></strong
-	    >(&quot;CE&quot;, &quot;ABDFG&quot;)
-</pre
+	    ></div
 	  ></div
-	><h1 id="g:3"
-	>Derivative</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipShare" class="def"
+	    >snipShare</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipShare');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `snipShare` &quot;bcefg&quot;
+</code
+		></strong
+	      >&quot;bc&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipLeft" class="def"
+	    >snipLeft</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipLeft');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take left-side elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `snipLeft` &quot;bcefg&quot;
+</code
+		></strong
+	      >&quot;ad&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:snipRight" class="def"
+	    >snipRight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipRight');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take right-side elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `snipRight` &quot;bcefg&quot;
+</code
+		></strong
+	      >&quot;efg&quot;
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Reorder elements</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:snipForward" class="def"
@@ -456,6 +505,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Move indexed elements to the front.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipForward` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;CDABEFG&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -470,6 +529,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Move indexed elements to the rear.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipBackward` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;ABEFGCD&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -481,6 +550,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a b <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipForward2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double forward.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -491,53 +564,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a b <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipBackward2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:snipLeft" class="def"
-	    >snipLeft</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipLeft');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Take left-side elements.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:snipShare" class="def"
-	    >snipShare</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipShare');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Take shared elements.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:snipRight" class="def"
-	    >snipRight</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-	    >Eq</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-List-Snip.html#t:Bin"
-	    >Bin</a
-	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipRight');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Take right-side elements.</p
+	    >Double backward.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -551,132 +580,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > [c] <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#snipOrder');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:sameLength" class="def"
-	    >sameLength</a
-	    > :: [a] -&gt; [b] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#sameLength');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check lengths of two lists are same.</p
+	    >Reorder elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>snipOrder &quot;bca&quot; &quot;abc&quot; &quot;ABC&quot;
+</code
+		></strong
+	      >&quot;BCA&quot;
+</pre
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:notSameLength" class="def"
-	    >notSameLength</a
-	    > :: [a] -&gt; [b] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#notSameLength');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:-43--45-" class="def"
-	    >(+-)</a
-	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Snip.html#%2B-');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Check elements in the first list are non-negative,
-   and elements in the second are negative.</p
-	    ></div
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
-	    ></p
-	  ><p
-	  >Move snipping elements to the front and rear.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipForward` &quot;ABCDEFG&quot;
-</code
-	      ></strong
-	    >&quot;CDABEFG&quot;
-<code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >(snipIndex &quot;cd&quot; &quot;abcdefg&quot;) `snipBackward` &quot;ABCDEFG&quot;
-</code
-	      ></strong
-	    >&quot;ABEFGCD&quot;
-</pre
-	  ><p
-	  >Shared elements of <code
-	    >&quot;abcd&quot;</code
-	    > and <code
-	    >&quot;bcefg&quot;</code
-	    >.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >&quot;abcd&quot; `snipShare` &quot;bcefg&quot;
-</code
-	      ></strong
-	    >&quot;bc&quot;
-</pre
-	  ><p
-	  >Left-side and right-side.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >&quot;abcd&quot; `snipLeft` &quot;bcefg&quot;
-</code
-	      ></strong
-	    >&quot;ad&quot;
-<code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >&quot;abcd&quot; `snipRight` &quot;bcefg&quot;
-</code
-	      ></strong
-	    >&quot;efg&quot;
-</pre
-	  ><p
-	  >Check elements in the first list are non-negative,
-  and second are negative.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >[0, 1] +- [-1]
-</code
-	      ></strong
-	    >True
-<code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >[0] +- [1, -1]
-</code
-	      ></strong
-	    >False
-</pre
 	  ></div
 	></div
       ></div

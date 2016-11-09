@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -71,6 +71,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a]</li
 	  ><li class="src short"
+	  ><a href="#v:duplicated"
+	    >duplicated</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a]</li
+	  ><li class="src short"
 	  ><a href="#v:unique"
 	    >unique</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
@@ -83,11 +91,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Eq</a
 	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
 	  ><li class="src short"
-	  ><a href="#v:intersectionFilter"
-	    >intersectionFilter</a
+	  ><a href="#v:keepMember"
+	    >keepMember</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:omitMember"
+	    >omitMember</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:sublist"
+	    >sublist</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:setList"
 	    >setList</a
@@ -134,7 +156,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Keep duplicate elements.</p
+	    >Extract duplicate elements.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -144,6 +166,52 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 </code
 		></strong
 	      >&quot;ana&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>duplicates &quot;grape&quot;
+</code
+		></strong
+	      >&quot;&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:duplicated" class="def"
+	    >duplicated</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#duplicated');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test list has duplicated elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>duplicated &quot;banana&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>duplicated &quot;grape&quot;
+</code
+		></strong
+	      >False
 </pre
 	    ></div
 	  ></div
@@ -207,25 +275,133 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:intersectionFilter" class="def"
-	    >intersectionFilter</a
+	  ><a name="v:keepMember" class="def"
+	    >keepMember</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > a =&gt; [a] -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#intersectionFilter');" href="javascript:void(0);" class="link"
+	    > a =&gt; [a] -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#keepMember');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Filter by set menbership.</p
+	    >Filter by set membership.
+   <code
+	      >keepMember</code
+	      > <em
+	      >A</em
+	      > <em
+	      >B</em
+	      > is same to the intersection of <em
+	      >A</em
+	      > and <em
+	      >B</em
+	      >,
+   except for the ordering of <em
+	      >B</em
+	      > is preserved.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>intersectionFilter &quot;abcd&quot; &quot;dxcy&quot;
+		>keepMember &quot;cba&quot; &quot;abcdefg&quot;
 </code
 		></strong
-	      >&quot;dc&quot;
+	      >&quot;abc&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>keepMember &quot;abcdefg&quot; &quot;cba&quot;
+</code
+		></strong
+	      >&quot;cba&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:omitMember" class="def"
+	    >omitMember</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#omitMember');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Anti-filter by set membership.
+   <code
+	      >omitMember</code
+	      > <em
+	      >A</em
+	      > <em
+	      >B</em
+	      > is same to <em
+	      >B</em
+	      > minus <em
+	      >f</em
+	      >A,
+   except for the ordering of <em
+	      >B</em
+	      > is preserved.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>omitMember &quot;cba&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >&quot;defg&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>omitMember &quot;abcdefg&quot; &quot;cba&quot;
+</code
+		></strong
+	      >&quot;&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sublist" class="def"
+	    >sublist</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#sublist');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test sublist.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sublist &quot;cab&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sublist &quot;cab&quot; &quot;dec&quot;
+</code
+		></strong
+	      >False
 </pre
 	    ></div
 	  ></div

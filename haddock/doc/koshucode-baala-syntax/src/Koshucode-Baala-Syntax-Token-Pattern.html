@@ -64,19 +64,20 @@
 <a class="number" name="line-55">55</a><span class='hs-comment'>-- | License text token.</span>
 <a class="number" name="line-56">56</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTextLicense</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TText</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TextLicense</span> <span class='hs-varid'>w</span>
 <a class="number" name="line-57">57</a>
-<a class="number" name="line-58">58</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTextSect</span> <span class='hs-varid'>cp</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TTextRaw</span> <span class='hs-varid'>cp</span> <span class='hs-str'>"==="</span>
-<a class="number" name="line-59">59</a>
+<a class="number" name="line-58">58</a><span class='hs-comment'>-- | Section sign.</span>
+<a class="number" name="line-59">59</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTextSect</span> <span class='hs-varid'>cp</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TTextRaw</span> <span class='hs-varid'>cp</span> <span class='hs-str'>"==="</span>
 <a class="number" name="line-60">60</a>
-<a class="number" name="line-61">61</a><span class='hs-comment'>-- ----------------------  Term token</span>
-<a class="number" name="line-62">62</a>
-<a class="number" name="line-63">63</a><span class='hs-comment'>-- | Term path token.</span>
-<a class="number" name="line-64">64</a><span class='hs-comment'>--</span>
-<a class="number" name="line-65">65</a><span class='hs-comment'>--   &gt;&gt;&gt; TTermPath B.def ["a", "b"]   -- /a/b</span>
-<a class="number" name="line-66">66</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTermPath</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>ws</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermTypePath</span> <span class='hs-varid'>ws</span>
-<a class="number" name="line-67">67</a>
-<a class="number" name="line-68">68</a><span class='hs-comment'>-- | Quoted term path token.</span>
-<a class="number" name="line-69">69</a><span class='hs-comment'>--</span>
-<a class="number" name="line-70">70</a><span class='hs-comment'>--   &gt;&gt;&gt; TTermQ B.def ["a"]   -- '/a</span>
-<a class="number" name="line-71">71</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTermQ</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>ws</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermTypeQuoted</span> <span class='hs-varid'>ws</span>
+<a class="number" name="line-61">61</a>
+<a class="number" name="line-62">62</a><span class='hs-comment'>-- ----------------------  Term token</span>
+<a class="number" name="line-63">63</a>
+<a class="number" name="line-64">64</a><span class='hs-comment'>-- | Term path token.</span>
+<a class="number" name="line-65">65</a><span class='hs-comment'>--</span>
+<a class="number" name="line-66">66</a><span class='hs-comment'>--   &gt;&gt;&gt; TTermPath B.def ["a", "b"]   -- /a/b</span>
+<a class="number" name="line-67">67</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTermPath</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>ws</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermTypePath</span> <span class='hs-varid'>ws</span>
+<a class="number" name="line-68">68</a>
+<a class="number" name="line-69">69</a><span class='hs-comment'>-- | Quoted term path token.</span>
+<a class="number" name="line-70">70</a><span class='hs-comment'>--</span>
+<a class="number" name="line-71">71</a><span class='hs-comment'>--   &gt;&gt;&gt; TTermQ B.def ["a"]   -- '/a</span>
+<a class="number" name="line-72">72</a><span class='hs-definition'>pattern</span> <span class='hs-conid'>TTermQ</span> <span class='hs-varid'>cp</span> <span class='hs-varid'>ws</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-varid'>cp</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermTypeQuoted</span> <span class='hs-varid'>ws</span>
 </pre></body>
 </html>

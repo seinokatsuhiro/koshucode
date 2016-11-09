@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.166.0.0
+@version 0.168.0.0
 
 
 -- | Unicode general categories.
@@ -62,6 +62,74 @@ instance GHC.Enum.Bounded Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCate
 instance GHC.Classes.Ord Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
 instance GHC.Classes.Eq Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
 instance GHC.Show.Show Koshucode.Baala.Overture.Text.Unicode.MajorGeneralCategory
+
+
+-- | Encode and decode integers.
+module Koshucode.Baala.Overture.Text.Integer
+
+-- | Decode decimal integer.
+stringDec :: (Eq n, Num n) => String -> Maybe n
+
+-- | Decode decimal integer as <a>Int</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12"
+--   Just 12
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12.3"
+--   Nothing
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInt "12345678901234567890"
+--   Just (-6101065172474983726)
+--   </pre>
+stringInt :: String -> Maybe Int
+
+-- | Decode decimal integer as <a>Integer</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringInteger "12345678901234567890"
+--   Just 12345678901234567890
+--   </pre>
+stringInteger :: String -> Maybe Integer
+
+-- | Decode hexadecimal digits.
+stringHex :: (Eq n, Num n) => String -> Maybe n
+
+-- | Decode hexadecimal digits as <a>Int</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringHexInt "0F"
+--   Just 15
+--   </pre>
+stringHexInt :: String -> Maybe Int
+
+-- | Decode hexadecimal digits as <a>Integer</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringHexInteger "0F"
+--   Just 15
+--   </pre>
+stringHexInteger :: String -> Maybe Integer
+
+-- | Encode integer to hexadecimal string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intHexString 15
+--   "f"
+--   </pre>
+intLowerHexString :: Int -> String
+
+-- | Encode integer to hexadecimal string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intUpperHexString 15
+--   "F"
+--   </pre>
+intUpperHexString :: Int -> String
 
 
 -- | Unicode general category.
@@ -203,11 +271,17 @@ type Map a = a -> a
 -- | Map from something to list of something.
 type ManyMap a = a -> [a]
 
+-- | Map from string to string.
+type StringMap = Map String
+
 -- | Boolean-valued function, also called predicate.
 type Test a = a -> Bool
 
 -- | Boolean-valued function with 2 arguments.
 type Test2 a b = a -> b -> Bool
+
+-- | Type for binary operators.
+type Bin a = a -> a -> a
 
 -- | <a>Int</a> shorthand.
 --   
@@ -244,39 +318,77 @@ integer :: Map Integer
 module Koshucode.Baala.Overture.Text.Utility
 
 -- | Remove space and space-like characters from the beginning of string.
-trimLeft :: Map String
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimBegin "  abc  "
+--   "abc  "
+--   </pre>
+trimBegin :: StringMap
 
 -- | Remove space and space-like characters from the end of string.
-trimRight :: Map String
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimEnd "  abc  "
+--   "  abc"
+--   </pre>
+trimEnd :: StringMap
 
 -- | Remove space and space-like characters from the beginning and end of
 --   string.
-trimBoth :: Map String
+--   
+--   <pre>
+--   &gt;&gt;&gt; trimBoth "  abc  "
+--   "abc"
+--   </pre>
+trimBoth :: StringMap
 
 -- | Add spaces to the left.
 --   
 --   <pre>
---   &gt;&gt;&gt; padLeft 10 "abc"
+--   &gt;&gt;&gt; padBegin 10 "abc"
 --   "       abc"
 --   </pre>
-padLeft :: Int -> Map String
+padBegin :: Int -> StringMap
 
 -- | Add spaces to the right.
 --   
 --   <pre>
---   &gt;&gt;&gt; padRight 10 "abc"
+--   &gt;&gt;&gt; padEnd 10 "abc"
 --   "abc       "
 --   </pre>
-padRight :: Int -> Map String
+padEnd :: Int -> StringMap
 
 -- | Add given character to the left.
-padLeftWith :: Char -> Int -> Map String
+--   
+--   <pre>
+--   &gt;&gt;&gt; padBeginWith '.' 10 "abc"
+--   ".......abc"
+--   </pre>
+padBeginWith :: Char -> Int -> StringMap
 
 -- | Add given character to the right.
-padRightWith :: Char -> Int -> Map String
+padEndWith :: Char -> Int -> StringMap
 
 -- | Calculate width of string.
 stringWidth :: String -> Int
+
+-- | Add space character if first character is non-space.
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace "aaa"
+--   " aaa"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace " bbb"
+--   " bbb"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; addSpace ""
+--   ""
+--   </pre>
+addSpace :: StringMap
 
 -- | Print showing value.
 putShow :: (Show a) => a -> IO ()
@@ -292,32 +404,6 @@ hPutLines :: Handle -> [String] -> IO ()
 
 -- | Print empty line.
 hPutEmptyLine :: Handle -> IO ()
-
--- | Read integer.
---   
---   <pre>
---   &gt;&gt;&gt; readInt "12"
---   Just 12
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; readInt "12.3"
---   Nothing
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; readInt "12345678901234567890"
---   Just (-6101065172474983726)
---   </pre>
-readInt :: String -> Maybe Int
-
--- | Read integer.
---   
---   <pre>
---   &gt;&gt;&gt; readInteger "12345678901234567890"
---   Just 12345678901234567890
---   </pre>
-readInteger :: String -> Maybe Integer
 
 
 -- | Bundle of text modules.

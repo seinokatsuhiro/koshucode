@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.166.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.168.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,7 +62,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >subst</a
+	    >alt</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
@@ -70,7 +70,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >replace</a
+	    >map</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
@@ -85,6 +85,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >unary</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Relmap operator with content calculation.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -121,16 +129,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:consSubst"
-	    >consSubst</a
+	  ><a href="#v:consAlt"
+	    >consAlt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:relmapSubst"
-	    >relmapSubst</a
+	  ><a href="#v:relmapAlt"
+	    >relmapAlt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
@@ -300,6 +308,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consAdd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >add /N E ...</strong
+	      ></p
+	    ><p
+	    >Add new terms /N which has the result of E.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -326,23 +342,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>subst</h1
+	>alt</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:consSubst" class="def"
-	    >consSubst</a
+	  ><a name="v:consAlt" class="def"
+	    >consAlt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consSubst');" href="javascript:void(0);" class="link"
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consAlt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >alt /P E ...</strong
+	      ></p
+	    ><p
+	    >Change present terms /P whose content is altered
+   to the result of E.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relmapSubst" class="def"
-	    >relmapSubst</a
+	  ><a name="v:relmapAlt" class="def"
+	    >relmapAlt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
@@ -353,13 +378,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >NamedCox</a
 	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relmapSubst');" href="javascript:void(0);" class="link"
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relmapAlt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Create <code
-	      >subst</code
+	      >alt</code
 	      > relmap.</p
 	    ></div
 	  ></div
@@ -376,6 +401,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consFill');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >fill /P ... -with E</strong
+	      ></p
+	    ><p
+	    >Fill terms /P ... with the result of E.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -404,7 +437,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></div
 	  ></div
 	><h1 id="g:4"
-	>replace</h1
+	>map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consReplace" class="def"
@@ -416,6 +449,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consReplace');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >map /P ... -by F</strong
+	      ></p
+	    ></div
 	  ></div
 	><h1 id="g:5"
 	>replace-all</h1
@@ -430,6 +469,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consReplaceAll');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >replace-all -from E -to E</strong
+	      ></p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -470,6 +515,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consSplit');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >split /N E ...</strong
+	      ></p
+	    ><p
+	    >Split input relation by the boolean functions E ...,
+   and add terms /N ... which has the splitted relations.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -532,6 +586,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consUnary');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >unary /N E : ...</strong
+	      ></p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"

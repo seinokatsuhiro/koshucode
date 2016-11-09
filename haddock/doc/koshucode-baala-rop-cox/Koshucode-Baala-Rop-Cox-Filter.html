@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.166.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.168.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -69,6 +69,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >omit-all</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Relation filter.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -216,6 +224,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Filter.html#consFilter');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >keep E</dt
+	      ><dd
+	      >Keep tuples which expression E is true.</dd
+	      ><dt
+	      >omit E</dt
+	      ><dd
+	      >Omit tuples which expression E is true.
+     <code
+		>omit E</code
+		> is equivalent to <code
+		>keep not E</code
+		>.</dd
+	      ></dl
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -284,6 +309,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Filter.html#consContain');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >contain E</strong
+	      ></p
+	    ><p
+	    >Keep tuples in which some terms has content E.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -340,7 +373,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	      >omit-all</strong
 	      ></p
 	    ><p
-	    >Throw away all tuples in a relation.</p
+	    >Throw away all tuples.</p
 	    ></div
 	  ></div
 	><div class="top"

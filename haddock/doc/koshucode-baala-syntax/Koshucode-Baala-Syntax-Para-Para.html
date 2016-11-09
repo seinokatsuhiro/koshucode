@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.166.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.168.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -274,6 +274,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > n a <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#Para');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Named and positional parameter.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -353,7 +357,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
 		      >Para</a
 		      > n a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-34');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-35');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -371,7 +375,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
 		      >Para</a
 		      > n a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-34');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-35');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -389,7 +393,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
 		      >Para</a
 		      > n a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-34');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-35');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -405,7 +409,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
 		      >Para</a
 		      > n a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-46');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-47');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -419,7 +423,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > (<a href="Koshucode-Baala-Syntax-Para-Para.html#t:Para"
 		      >Para</a
 		      > n a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-40');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#line-41');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -650,6 +654,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > n a <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#paraTakeFirst');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take first element from multiply given named parameter.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let p = para paraHyphen $ words &quot;a -x 1 -x 2 -x 3&quot;
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>p
+</code
+		></strong
+	      >Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;1&quot;],[&quot;2&quot;],[&quot;3&quot;]])] }
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>paraTakeFirst &quot;x&quot; p
+</code
+		></strong
+	      >Para { ..., paraName = fromList [(&quot;x&quot;, [[&quot;1&quot;]])] }
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -664,6 +697,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > n a <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Para.html#paraTakeLast');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take last element from multiply given named parameter.</p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Simple parameter</h1

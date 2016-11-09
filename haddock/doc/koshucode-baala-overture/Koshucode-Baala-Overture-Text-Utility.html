@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.166.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.168.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -68,10 +68,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><a href="#g:3"
 	    >Put</a
 	    ></li
-	  ><li
-	  ><a href="#g:4"
-	    >Read</a
-	    ></li
 	  ></ul
 	></div
       ><div id="description"
@@ -87,72 +83,58 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:trimLeft"
-	    >trimLeft</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	  ><a href="#v:trimBegin"
+	    >trimBegin</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:trimRight"
-	    >trimRight</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	  ><a href="#v:trimEnd"
+	    >trimEnd</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:trimBoth"
 	    >trimBoth</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:padLeft"
-	    >padLeft</a
+	  ><a href="#v:padBegin"
+	    >padBegin</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:padRight"
-	    >padRight</a
+	  ><a href="#v:padEnd"
+	    >padEnd</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:padLeftWith"
-	    >padLeftWith</a
+	  ><a href="#v:padBeginWith"
+	    >padBeginWith</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:padRightWith"
-	    >padRightWith</a
+	  ><a href="#v:padEndWith"
+	    >padEndWith</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:stringWidth"
@@ -161,6 +143,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:addSpace"
+	    >addSpace</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:putShow"
@@ -204,26 +192,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
 	    > ()</li
-	  ><li class="src short"
-	  ><a href="#v:readInt"
-	    >readInt</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:readInteger"
-	    >readInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
-	    >Integer</a
-	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -231,44 +199,58 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Trim</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:trimLeft" class="def"
-	    >trimLeft</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#trimLeft');" href="javascript:void(0);" class="link"
+	  ><a name="v:trimBegin" class="def"
+	    >trimBegin</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#trimBegin');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Remove space and space-like characters from the beginning of string.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>trimBegin &quot;  abc  &quot;
+</code
+		></strong
+	      >&quot;abc  &quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:trimRight" class="def"
-	    >trimRight</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#trimRight');" href="javascript:void(0);" class="link"
+	  ><a name="v:trimEnd" class="def"
+	    >trimEnd</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#trimEnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Remove space and space-like characters from the end of string.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>trimEnd &quot;  abc  &quot;
+</code
+		></strong
+	      >&quot;  abc&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:trimBoth" class="def"
 	    >trimBoth</a
-	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#trimBoth');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -276,21 +258,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><p
 	    >Remove space and space-like characters
    from the beginning and end of string.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>trimBoth &quot;  abc  &quot;
+</code
+		></strong
+	      >&quot;abc&quot;
+</pre
 	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Padding</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:padLeft" class="def"
-	    >padLeft</a
+	  ><a name="v:padBegin" class="def"
+	    >padBegin</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padLeft');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padBegin');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -301,7 +291,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>padLeft 10 &quot;abc&quot;
+		>padBegin 10 &quot;abc&quot;
 </code
 		></strong
 	      >&quot;       abc&quot;
@@ -310,15 +300,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:padRight" class="def"
-	    >padRight</a
+	  ><a name="v:padEnd" class="def"
+	    >padEnd</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padRight');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padEnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -329,7 +317,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>padRight 10 &quot;abc&quot;
+		>padEnd 10 &quot;abc&quot;
 </code
 		></strong
 	      >&quot;abc       &quot;
@@ -338,37 +326,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:padLeftWith" class="def"
-	    >padLeftWith</a
+	  ><a name="v:padBeginWith" class="def"
+	    >padBeginWith</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padLeftWith');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padBeginWith');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Add given character to the left.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>padBeginWith '.' 10 &quot;abc&quot;
+</code
+		></strong
+	      >&quot;.......abc&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:padRightWith" class="def"
-	    >padRightWith</a
+	  ><a name="v:padEndWith" class="def"
+	    >padEndWith</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
 	    >Char</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padRightWith');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#padEndWith');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -390,6 +384,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><div class="doc"
 	  ><p
 	    >Calculate width of string.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:addSpace" class="def"
+	    >addSpace</a
+	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:StringMap"
+	    >StringMap</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#addSpace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add space character if first character is non-space.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>addSpace &quot;aaa&quot;
+</code
+		></strong
+	      >&quot; aaa&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>addSpace &quot; bbb&quot;
+</code
+		></strong
+	      >&quot; bbb&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>addSpace &quot;&quot;
+</code
+		></strong
+	      >&quot;&quot;
+</pre
 	    ></div
 	  ></div
 	><h1 id="g:3"
@@ -474,84 +512,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><div class="doc"
 	  ><p
 	    >Print empty line.</p
-	    ></div
-	  ></div
-	><h1 id="g:4"
-	>Read</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:readInt" class="def"
-	    >readInt</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#readInt');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Read integer.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>readInt &quot;12&quot;
-</code
-		></strong
-	      >Just 12
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>readInt &quot;12.3&quot;
-</code
-		></strong
-	      >Nothing
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>readInt &quot;12345678901234567890&quot;
-</code
-		></strong
-	      >Just (-6101065172474983726)
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:readInteger" class="def"
-	    >readInteger</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
-	    >Integer</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#readInteger');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Read integer.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>readInteger &quot;12345678901234567890&quot;
-</code
-		></strong
-	      >Just 12345678901234567890
-</pre
 	    ></div
 	  ></div
 	></div

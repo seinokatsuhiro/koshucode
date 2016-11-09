@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.166.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.168.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -74,6 +74,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    ></li
 	  ></ul
 	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >List utilities.</p
+	  ></div
+	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
@@ -82,18 +90,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><a href="#v:tails"
 	    >tails</a
 	    > :: [a] -&gt; [[a]]</li
-	  ><li class="src short"
-	  ><a href="#v:isSingleton"
-	    >isSingleton</a
-	    > :: [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:notNull"
-	    >notNull</a
-	    > :: [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
 	  ><li class="src short"
 	  ><a href="#v:maybeEmpty"
 	    >maybeEmpty</a
@@ -108,6 +104,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
 	    >Either</a
 	    > a b)</li
+	  ><li class="src short"
+	  ><a href="#v:isSingleton"
+	    >isSingleton</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:notNull"
+	    >notNull</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:sameLength"
+	    >sameLength</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
+	    >Test2</a
+	    > [a] [b]</li
+	  ><li class="src short"
+	  ><a href="#v:notSameLength"
+	    >notSameLength</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
+	    >Test2</a
+	    > [a] [b]</li
 	  ><li class="src short"
 	  ><a href="#v:takeFirst"
 	    >takeFirst</a
@@ -273,34 +293,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:isSingleton" class="def"
-	    >isSingleton</a
-	    > :: [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#isSingleton');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Test list has single element.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:notNull" class="def"
-	    >notNull</a
-	    > :: [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#notNull');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Test list is not empty.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:maybeEmpty" class="def"
 	    >maybeEmpty</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
@@ -320,6 +312,94 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a b) <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#right');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Replace <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#v:Left"
+		>Left</a
+		></code
+	      > value to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#v:Right"
+		>Right</a
+		></code
+	      > value.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSingleton" class="def"
+	    >isSingleton</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#isSingleton');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test list has single element.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:notNull" class="def"
+	    >notNull</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#notNull');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test list is not empty.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sameLength" class="def"
+	    >sameLength</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
+	    >Test2</a
+	    > [a] [b] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#sameLength');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test lengths of two lists are same.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sameLength &quot;abc&quot; &quot;ABC&quot;
+</code
+		></strong
+	      >True
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:notSameLength" class="def"
+	    >notSameLength</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
+	    >Test2</a
+	    > [a] [b] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#notSameLength');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test lengths of two lists are not same.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>notSameLength &quot;abc&quot; &quot;ABC&quot;
+</code
+		></strong
+	      >False
+</pre
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Take</h1
@@ -505,6 +585,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Make singleton list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>li1 'a'
+</code
+		></strong
+	      >&quot;a&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -514,6 +604,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > :: a -&gt; a -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#li2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Make two-element list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>li2 'a' 'b'
+</code
+		></strong
+	      >&quot;ab&quot;
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -522,6 +626,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > :: a -&gt; a -&gt; a -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#li3');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Make three-element list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>li3 'a' 'b' 'c'
+</code
+		></strong
+	      >&quot;abc&quot;
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -604,6 +722,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#mapAt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to specific element.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mapAt (const '-') 3 &quot;abcdefg&quot;
+</code
+		></strong
+	      >&quot;abc-efg&quot;
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -624,6 +756,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#omit');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Omit elements, i.e., anti-<code
+	      ><a href="http://hackage.haskell.org/package/base/docs/GHC-OldList.html#v:filter"
+		>filter</a
+		></code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>omit (`elem` &quot;ae&quot;) &quot;abcdefg&quot;
+</code
+		></strong
+	      >&quot;bcdfg&quot;
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
