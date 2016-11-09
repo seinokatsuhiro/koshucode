@@ -1,21 +1,16 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Term content parsers.
+-- | Decode specific content.
 
 module Koshucode.Baala.Data.Content.Tree
-  ( -- * Single content
-    treeText,
+  ( -- * Textual
+    treesTexts, treeText,
+    treesInterp,
+    -- * Numeric
     treesDigits,
     tokenClock,
     treesTime, stringTime,
-    treesInterp,
-
-    -- * Multiple contents
-    treeFlatName,
-    treesFlatNames,
-    treesTerms,
-    treesTerms1,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -53,6 +48,27 @@ tokenString :: Bool -> S.Token -> B.Ab String
 tokenString True  (S.TText _ q w) | q > S.TextRaw  = Right w
 tokenString False (S.TTextRaw _ w)                 = Right w
 tokenString _ _  =  Msg.nothing
+
+
+-- ----------------------  Interp
+
+-- | Get interpretation from token trees.
+--
+--   >>> S.tt "term /a" >>= treesInterp
+--   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
+--                   interpTerms = ["a"] })
+--
+treesInterp :: [S.TTree] -> B.Ab D.Interp
+treesInterp = Right . D.interp B.<=< mapM treeInterpWord
+
+treeInterpWord :: S.TTree -> B.Ab D.InterpWord
+treeInterpWord (B.TreeB _ _ _) = Msg.nothing
+treeInterpWord (B.TreeL x) =
+    case x of
+      S.TText _ _ w    -> Right $ D.InterpText w
+      S.TTermN _ _ n   -> Right $ D.InterpTerm n
+      S.TTerm _ _ [n]  -> Right $ D.InterpTerm n
+      _                -> Msg.nothing
 
 
 -- ----------------------  Number
@@ -229,81 +245,3 @@ stringsTime = year where
                               z = D.secFromHms (zh, zm, 0)
                           in k c $ Just z
 
-
--- ----------------------  Interp
-
--- | Get interpretation from token trees.
---
---   >>> S.tt "term /a" >>= treesInterp
---   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
---                   interpTerms = ["a"] })
---
-treesInterp :: [S.TTree] -> B.Ab D.Interp
-treesInterp = Right . D.interp B.<=< mapM treeInterpWord
-
-treeInterpWord :: S.TTree -> B.Ab D.InterpWord
-treeInterpWord (B.TreeB _ _ _) = Msg.nothing
-treeInterpWord (B.TreeL x) =
-    case x of
-      S.TText _ _ w    -> Right $ D.InterpText w
-      S.TTermN _ _ n   -> Right $ D.InterpTerm n
-      S.TTerm _ _ [n]  -> Right $ D.InterpTerm n
-      _                -> Msg.nothing
-
-
--- ----------------------  Term
-
--- | Read flat term name from token tree.
---   If the token tree contains nested term name, this function failed.
---
---   >>> S.tt1 "/a" >>= treeFlatName
---   Right "a"
---
---   >>> S.tt1 "+/a" >>= treeFlatName
---   Right "a"
---
---   >>> S.tt1 "/a/x" >>= treeFlatName
---   Left ...
---
-treeFlatName :: S.TTree -> B.Ab S.TermName
-treeFlatName (L (S.TTermN _ _ n))  = Right n
---treeFlatName (L (S.TTerm _ _ [n])) = Right n
-treeFlatName (L t)                 = Msg.reqFlatName t
-treeFlatName _                     = Msg.reqTermName
-
--- | Read flat term names.
---
---   >>> S.tt "/a /b" >>= treesFlatNames
---   Right ["a","b"]
---
-treesFlatNames :: [S.TTree] -> B.Ab [S.TermName]
-treesFlatNames = mapM treeFlatName
-
--- | Read list of named token trees from token trees.
---
---   >>> S.tt "/a 'A3 /b 10" >>= treesTerms
---   Right [("a", [TreeL ...]),
---          ("b", [TreeL ...])]
---
-treesTerms :: [S.TTree] -> B.Ab [S.NamedTrees]
-treesTerms = name where
-    name [] = Right []
-    name (x : xs) = do let (c, xs2) = cont xs
-                       n    <- treeFlatName x
-                       xs2' <- name xs2
-                       Right $ (n, c) : xs2'
-
-    cont :: [S.TTree] -> ([S.TTree], [S.TTree])
-    cont xs@(x : _) | isTermLeaf x  = ([], xs)
-    cont []                         = ([], [])
-    cont (x : xs)                   = B.consFst x $ cont xs
-
-    isTermLeaf (L (S.TTermN _ _ _))             = True
-    isTermLeaf (L (S.TTerm _ S.TermTypePath _)) = True
-    isTermLeaf _                                = False
-
--- | Read list of named token trees from token trees.
---   This function wraps long branches into group.
-treesTerms1 :: [S.TTree] -> B.Ab [S.NamedTree]
-treesTerms1 xs = do xs' <- treesTerms xs
-                    Right $ B.mapSndTo S.ttreeGroup xs'

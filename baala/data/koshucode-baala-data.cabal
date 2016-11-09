@@ -60,6 +60,7 @@ library
         Koshucode.Baala.Data.Content.BaalaC
         Koshucode.Baala.Data.Content.Decode
         Koshucode.Baala.Data.Content.Message
+        Koshucode.Baala.Data.Content.Term
         Koshucode.Baala.Data.Content.Tree
         Koshucode.Baala.Data.Content.Utility
 
