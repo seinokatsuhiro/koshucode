@@ -9,7 +9,6 @@ module Koshucode.Baala.Syntax.TTree.TokenTree
     TTree, NamedTree, NamedTrees,
     -- ** Conversion
     TTreeTo, TTreesTo,
-    TTreeToAb, TTreesToAb,
 
     -- * Pattern
     -- ** Term leaf
@@ -45,10 +44,6 @@ type NamedTree = B.Named TTree
 type TTreeTo a    = TTree -> a
 -- | Convert list of token tree to sometning.
 type TTreesTo a   = [TTree] -> a
--- | Convert token tree to something, abortable.
-type TTreeToAb a  = TTree -> B.Ab a
--- | Convert list of token tree to sometning, abortable.
-type TTreesToAb a = [TTree] -> B.Ab a
 
 
 -- --------------------------------------------  Pattern

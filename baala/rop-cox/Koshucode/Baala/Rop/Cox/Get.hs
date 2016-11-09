@@ -46,7 +46,7 @@ getNamedCoxes med = ropNamedAlphas med B.<=< Op.getWordTrees med
 getTermCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
 getTermCoxes med = ropNamedAlphas med B.<=< Op.getTermTrees med
 
-ropBuild :: (D.CContent c) => C.Intmed c -> S.TTreeToAb (D.Cox c)
+ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
 ropBuild = C.coxBuildG . C.ropGlobal
 
 ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [S.NamedTree] -> B.Ab [D.NamedCox c]

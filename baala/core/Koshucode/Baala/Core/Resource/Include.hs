@@ -133,7 +133,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       license line =
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
-coxBuildG :: (D.CContent c) => C.Global c -> S.TTreeToAb (D.Cox c)
+coxBuildG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
 coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
 
 calcContG :: (D.CContent c) => C.Global c -> D.ContentCalc c

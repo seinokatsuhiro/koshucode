@@ -36,11 +36,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 --   >>> S.tt "aa bb" >>= treesToText False
 --   Right "aabb"
 --
--- treesToText :: Bool -> S.TTreesToAb String
--- treesToText q xs = do ss <- treesTexts q xs
---                       Right $ concat ss
---
-treesTexts :: Bool -> S.TTreesToAb [String]
+treesTexts :: Bool -> [S.TTree] -> B.Ab [String]
 treesTexts q = mapM $ treeText q
 
 -- | Get text from token tree.
@@ -48,7 +44,7 @@ treesTexts q = mapM $ treeText q
 --   >>> S.tt1 "aa" >>= treeText False
 --   Right "aa"
 --
-treeText :: Bool -> S.TTreeToAb String
+treeText :: Bool -> S.TTree -> B.Ab String
 treeText q (L tok) = tokenString q tok
 treeText _ _ = Msg.nothing
 
@@ -66,7 +62,7 @@ tokenString _ _  =  Msg.nothing
 --   >>> S.tt "-123 450.00" >>= treesDigits
 --   Right "-123450.00"
 --
-treesDigits :: S.TTreesToAb String
+treesDigits :: [S.TTree] -> B.Ab String
 treesDigits = concatDigits B.<=< treesTexts False
 
 concatDigits :: [String] -> B.Ab String
@@ -157,7 +153,7 @@ fromDigit _    =  Nothing
 --   >>> S.tt "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
-treesTime :: S.TTreesToAb D.Time
+treesTime :: [S.TTree] -> B.Ab D.Time
 treesTime = stringsTime B.<=< treesTexts False
 
 -- | Get time from string.
@@ -242,10 +238,10 @@ stringsTime = year where
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesInterp :: S.TTreesToAb D.Interp
+treesInterp :: [S.TTree] -> B.Ab D.Interp
 treesInterp = Right . D.interp B.<=< mapM treeInterpWord
 
-treeInterpWord :: S.TTreeToAb D.InterpWord
+treeInterpWord :: S.TTree -> B.Ab D.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of

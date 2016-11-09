@@ -41,10 +41,10 @@ pattern LName s    <- L (S.TTermN _ _ s)
 pattern Text f s   <- S.TText _ f s
 
 -- | Content constructor.
-type ContentCons c = S.TTreeToAb c
+type ContentCons c = S.TTree -> B.Ab c
 
 -- | Content calculator.
-type ContentCalc c = S.TTreeToAb c
+type ContentCalc c = S.TTree -> B.Ab c
 
 -- | Convert token tree into internal form of content.
 contentCons :: forall c. (D.CContent c) => ContentCalc c -> ContentCons c
@@ -103,8 +103,8 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
 --     .........
 --     :
 --     consContents
-
-consContents :: (D.CContent c) => ContentCons c -> S.TTreesToAb [c]
+--
+consContents :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab [c]
 consContents _   [] = Right []
 consContents cons cs = lt `mapM` S.divideTreesByBar cs where
     lt []   = Right D.empty
@@ -117,8 +117,8 @@ consContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      ................         .............
 --      :                        :
 --      consAngle                consAngle
-
-consAngle :: (D.CContent c) => ContentCons c -> S.TTreesToAb c
+--
+consAngle :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab c
 consAngle cons xs@(LName _ : _) = D.putTie =<< consTie cons xs
 consAngle _ [] = D.putTie []
 consAngle _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
@@ -130,15 +130,15 @@ consAngle _ _ = Msg.adlib "unknown angle bracket"
 --      ................
 --      :
 --      consTie
-
-consTie :: (D.CContent c) => ContentCons c -> S.TTreesToAb [S.Term c]
+--
+consTie :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab [S.Term c]
 consTie cons = mapM p B.<=< D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Decode token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> S.TTreesToAb (D.Judge c)
+treesJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> [S.TTree] -> B.Ab (D.Judge c)
 treesJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
 
 
@@ -152,8 +152,8 @@ treesJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
 --        :         consRelTuple   consRelTuple
 --        consTermNames
 --
-
-consRel :: (D.CContent c) => ContentCons c -> S.TTreesToAb (D.Rel c)
+--
+consRel :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab (D.Rel c)
 consRel cons xs =
     do bo <- consRelTuple cons n `mapM` xs'
        Right $ D.Rel he $ B.unique bo
@@ -167,7 +167,7 @@ consTermNames = terms [] where
     terms ns (LName n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
-consRelTuple :: (D.CContent c) => ContentCons c -> Int -> S.TTreeToAb [c]
+consRelTuple :: (D.CContent c) => ContentCons c -> Int -> S.TTree -> B.Ab [c]
 consRelTuple cons n g@(B S.BracketList xs) =
     do cs <- consContents cons xs
        let n' = length cs
@@ -210,7 +210,7 @@ assertAs AssertViolate       = D.JudgeViolate
 -- ----------------------  Type
 
 -- | Literal reader for types.
-consType :: S.TTreesToAb D.Type
+consType :: [S.TTree] -> B.Ab D.Type
 consType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x
