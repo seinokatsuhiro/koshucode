@@ -5,6 +5,7 @@
 module Koshucode.Baala.Data.Content.BaalaC
   ( the,
     BaalaC (..),
+    TermC, JudgeC, RelC,
   ) where
 
 import qualified Data.Set                                as Set
@@ -133,6 +134,15 @@ qquote :: Maybe String -> O.StringMap
 qquote (Nothing) "" = "\"\""
 qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
+
+-- | @Judge@ for concrete baala content.
+type JudgeC = D.Judge BaalaC
+
+-- | @Term@ for concrete baala content.
+type TermC = S.Term BaalaC
+
+-- | @Rel@ for concrete baala content.
+type RelC = D.Rel BaalaC
 
 
 -- ----------------------  Simple

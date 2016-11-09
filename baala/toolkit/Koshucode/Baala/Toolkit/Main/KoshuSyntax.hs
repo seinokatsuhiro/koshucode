@@ -96,17 +96,17 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "   Type of the token is /token-type ."
              , "   Some tokens are classified into /token-subtype . |}" ]
 
-judgeClause :: Int -> C.Clause -> C.JudgeC
+judgeClause :: Int -> C.Clause -> D.JudgeC
 judgeClause clseq c = D.affirm "CLAUSE" args where
     args = [ ("clause"       , D.pInt clseq)
            , ("clause-type"  , D.pText $ C.clauseTypeText c)]
 
-judgeLine :: Int -> S.TokenLine -> C.JudgeC
+judgeLine :: Int -> S.TokenLine -> D.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
     args = [ ("line"         , D.pInt ln)
            , ("clause"       , D.pInt clseq) ]
 
-judgeToken :: Int -> S.Token -> C.JudgeC
+judgeToken :: Int -> S.Token -> D.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
     args = [ ("line"           , D.pInt ln)
            , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
@@ -177,15 +177,15 @@ descDict = B.CommentDoc [desc, js] where
              , "{| /clause-type is one of cluase types."
              , "   /token-type is one of token types. |}" ]
 
-judgeClauseType :: C.Clause -> C.JudgeC
+judgeClauseType :: C.Clause -> D.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
     args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
 
-judgeTokenType :: S.Token -> C.JudgeC
+judgeTokenType :: S.Token -> D.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
     args = [ ("token-type", D.pText $ S.subtypeName t) ]
 
-judgesClauseType :: [C.JudgeC]
+judgesClauseType :: [D.JudgeC]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause B.def x
     cs  = [ C.CRelmap "" []
@@ -194,7 +194,7 @@ judgesClauseType = map j cs where
           , C.CSlot "" []
           ]
 
-judgesTokenType :: [C.JudgeC]
+judgesTokenType :: [D.JudgeC]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ S.TTextRaw  B.def ""

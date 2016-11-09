@@ -12,6 +12,7 @@ module Koshucode.Baala.Toolkit.Library.Input
   ) where
 
 import qualified Koshucode.Baala.Base  as B
+import qualified Koshucode.Baala.Data  as D
 import qualified Koshucode.Baala.Core  as C
 
 -- | Input resource.
@@ -33,7 +34,7 @@ readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
 -- | Read input code and extract judges.
-readJudge :: String -> [C.JudgeC]
+readJudge :: String -> [D.JudgeC]
 readJudge code =
     case C.resReadString B.def code of
       Right res  -> C.resJudge res
