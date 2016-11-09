@@ -20,6 +20,7 @@ module Koshucode.Baala.Data.Type.Judge
 
     -- * Encode
     judgeBreak,
+    judgeMix, judgeMix2, judgeMixTab,
     termNameToMix,
     termsToMix1, termsToMix2,
   ) where
@@ -162,16 +163,28 @@ judgeTerms (JudgeViolate     _ xs)     = xs
 -- ----------------------  Encode
 
 instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
-    mixShortEncode sh j =
-        case j of
-          JudgeAffirm      c xs    -> judge "|--"  c xs
-          JudgeDeny        c xs    -> judge "|-X"  c xs
-          JudgeMultiDeny   c xs    -> judge "|-XX" c xs
-          JudgeChange      c xs _  -> judge "|-C"  c xs
-          JudgeMultiChange c xs _  -> judge "|-CC" c xs
-          JudgeViolate     c xs    -> judge "|-V"  c xs
-        where
-          judge sym c xs = B.mix sym `B.mixSep` B.mix c `B.mixSep2` termsToMix2 sh xs
+    mixShortEncode = judgeMix2
+
+-- | Encode judgement with term separator.
+judgeMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> Judge c -> B.MixText
+judgeMix sep sh j =
+    case j of
+      JudgeAffirm      c xs    -> judge "|--"  c xs
+      JudgeDeny        c xs    -> judge "|-X"  c xs
+      JudgeMultiDeny   c xs    -> judge "|-XX" c xs
+      JudgeChange      c xs _  -> judge "|-C"  c xs
+      JudgeMultiChange c xs _  -> judge "|-CC" c xs
+      JudgeViolate     c xs    -> judge "|-V"  c xs
+    where
+      judge sym c xs = B.mix sym `B.mixSep` B.mix c B.<> sep B.<> termsToMix sep sh xs
+
+-- | Encode judgement with two-spaces term separator.
+judgeMix2 :: (B.MixShortEncode c) => B.Shorten -> Judge c -> B.MixText
+judgeMix2 = judgeMix B.mix2
+
+-- | Encode judgement with tab term separator.
+judgeMixTab :: (B.MixShortEncode c) => B.Shorten -> Judge c -> B.MixText
+judgeMixTab = judgeMix B.mixTab
 
 -- | Conventional line-break setting for judges:
 --   4-spaces indent and 120-columns line.
