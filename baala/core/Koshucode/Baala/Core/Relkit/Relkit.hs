@@ -32,6 +32,7 @@ data Relkit c = Relkit
     , relkitBody   :: RelkitBody c     -- ^ Calculation function
     }
 
+-- | Body of relkit.
 type RelkitBody c = B.Sourced (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.

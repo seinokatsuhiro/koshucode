@@ -121,7 +121,9 @@ bmapAlign he1 he2 f = g where
                Right $ D.bodyForward he1 he2 bo2
 
 {-# WARNING Local, Lexical "This is only used in defined module." #-}
+-- | Local relations.
 type Local a = Lexical [B.Named a]
+-- | Local relation.
 type Lexical a = (S.Token, a)
 
 localsLines :: [Local a] -> [String]

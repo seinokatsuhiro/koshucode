@@ -37,6 +37,7 @@ instance B.Name (Rop' h c) where
 -- | Usage text of operator.
 type RopUsage = String
 
+-- | Find relmap operator based on its name.
 type FindRop' h c = C.RopName -> Maybe (Rop' h c)
 
 

@@ -93,6 +93,7 @@ lexId = B.def { C.lexToken = S.textToken "id" }
 
 -- ----------------------  Selector
 
+-- | Extract lexmap list from relmap.
 relmapLexmaps :: Relmap' h c -> [C.Lexmap]
 relmapLexmaps = collect where
     collect (RelmapConst   lx _)     = [lx]

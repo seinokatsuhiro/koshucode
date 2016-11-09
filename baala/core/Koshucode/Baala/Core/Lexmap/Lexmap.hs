@@ -30,6 +30,7 @@ data Lexmap = Lexmap
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord)
 
+-- | Type of lexmap.
 data LexmapType
     = LexmapBase         -- ^ Built-in relmap
     | LexmapDerived      -- ^ User-defined relmap
@@ -58,9 +59,11 @@ lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 lexName :: Lexmap -> RopName
 lexName = S.tokenContent . lexToken
 
+-- | Add message to lexmap.
 lexAddMessage :: String -> O.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
+-- | Get message list from lexmap.
 lexMessageList :: Lexmap -> [String]
 lexMessageList Lexmap { lexToken = tok, lexMessage = msg }
     | null msg  = []

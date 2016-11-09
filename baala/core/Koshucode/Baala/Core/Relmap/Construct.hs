@@ -51,6 +51,7 @@ relmapSource = C.RelmapSource . C.medLexmap
 relmapFlow :: C.Intmed' h c -> C.RelkitFlow c -> C.Relmap' h c
 relmapFlow use relkit = relmapConfl use (const relkit) []
 
+-- | Relmap with hook data.
 relmapHook :: C.Intmed' h c -> C.RelkitHook' h c -> C.Relmap' h c
 relmapHook = C.RelmapHook . C.medLexmap
 
@@ -71,15 +72,19 @@ relmapConfl = C.RelmapCalc . C.medLexmap
 relmapNest :: C.Intmed' h c -> O.Map (C.Relmap' h c)
 relmapNest = C.RelmapNest . C.medLexmap
 
+-- | Copy-of-input-relation relmap.
 relmapCopy :: C.Intmed' h c -> C.RopName -> O.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.medLexmap
 
+-- | Link-to-other relmap.
 relmapLink :: C.Intmed' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.medLexmap
 
+-- | Local relmap.
 relmapLocalSymbol :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalSymbol = relmapVar S.LocalSymbol
 
+-- | Relmap references local nested relation.
 relmapLocalNest :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalNest = relmapVar S.LocalNest
 

@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE PatternSynonyms #-}
 
--- | Options.
+-- | Assertion options.
 
 module Koshucode.Baala.Core.Relmap.Option
   ( Option,
@@ -19,28 +19,32 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
 
+-- | Option type.
 type Option c = Map.Map String (OptionContent c)
 
+-- | Content of assertion option.
 data OptionContent c
     = OptionBool Bool
     | OptionChar [Char] Char
     | OptionTerms [S.TermName]
       deriving (Show, Eq, Ord)
 
+-- | Option set.
 option :: (D.CBool c, D.CText c) => Option c
-option =
-    Map.fromList
-           [ ("order"    , OptionBool False)
-           , ("sep-char" , OptionChar ":|" ':')
-           , ("forward"  , OptionTerms [])
-           , ("backward" , OptionTerms []) ]
+option = Map.fromList
+         [ ("order"    , OptionBool False)
+         , ("sep-char" , OptionChar ":|" ':')
+         , ("forward"  , OptionTerms [])
+         , ("backward" , OptionTerms []) ]
 
+-- | Get boolean option value.
 optionBool :: String -> Option c -> Bool
 optionBool name opt =
     case Map.lookup name opt of
       Just (OptionBool b) -> b
       _                   -> B.bug "unknown option"
 
+-- | Parse assertion option.
 optionParse :: (Eq c, D.CBool c, D.CText c)
   => D.ContentCalc c -> [S.Token] -> B.AbMap (Option c)
 optionParse calc toks opt =
