@@ -14,9 +14,11 @@ module Koshucode.Baala.Data.Class.Simple
     -- ** Textual
     CCode (..),
     CTerm (..),
-    CText (..), pMaybeText,
+    CText (..), pMaybeText, pTx, pTz,
   ) where
 
+import qualified Data.Text                               as Tx
+import qualified Data.Text.Lazy                          as Tz
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type               as D
@@ -152,7 +154,7 @@ class (D.CTypeOf c) => CText c where
     putText     :: String -> B.Ab c
     putText      = Right . pText
 
--- | Create Text or empty content.
+-- | Create text or empty content.
 --
 --   >>> pMaybeText "a" :: BaalaC
 --   VText "a"
@@ -163,4 +165,12 @@ class (D.CTypeOf c) => CText c where
 pMaybeText :: (CText c, D.CEmpty c) => String -> c
 pMaybeText s | O.trimBegin s == "" = D.empty
              | otherwise           = pText s
+
+-- | Create text content from strict text.
+pTx :: (CText c) => Tx.Text -> c
+pTx = pText . Tx.unpack
+
+-- | Create text content from lazy text.
+pTz :: (CText c) => Tz.Text -> c
+pTz = pText . Tz.unpack
 

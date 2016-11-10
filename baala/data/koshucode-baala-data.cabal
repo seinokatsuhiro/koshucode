@@ -108,6 +108,7 @@ library
   build-depends:
          base                      == 4.*
        , containers                == 0.5.*
+       , text                      == 1.*
        , time                      == 1.*
        , koshucode-baala-overture  == 0.168.0.0
        , koshucode-baala-base      == 0.168.0.0
