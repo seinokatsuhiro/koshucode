@@ -25,7 +25,6 @@ module Koshucode.Baala.Base.Text.TextTable
 import qualified Data.Char                      as Ch
 import qualified Data.List                      as L
 import qualified Koshucode.Baala.Overture       as O
-import qualified Koshucode.Baala.Base.List      as B
 
 
 -- ---------------------------------  Position
@@ -148,7 +147,19 @@ renderRow :: String -> [Cell] -> [String]
 renderRow vrule =
     map (L.intercalate vrule)
      . L.transpose
-     . B.mapWithLast renderCell (renderCell . unpad)
+     . mapWithLast renderCell (renderCell . unpad)
+
+-- | Map function, but the only last element
+--   is passed to different function.
+--
+--   >>> mapWithLast id reverse (words "foo bar baz")
+--   ["foo", "bar", "zab"]
+--
+mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
+mapWithLast f g = loop where
+    loop [] = []
+    loop [x] = [g x]
+    loop (x:xs) = f x : loop xs
 
 renderCell :: Cell -> [String]
 renderCell (Cell texts wd ht pos pad) = map width $ height texts where

@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Syntax.Line
     LineNumber,
     NumberedLine,
     linesCrlfNumbered,
-    linesCrlf, linesFrom,
+    linesCrlf,
     linesCrlfBzNumbered,
     linesCrlfBz, linesCrlfBzString,
     dropBom,
@@ -29,6 +29,7 @@ import qualified Koshucode.Baala.Base.Prelude         as B
 
 -- | Line number.
 type LineNumber = Int
+
 -- | Line with number.
 type NumberedLine = (LineNumber, String)
 
@@ -51,18 +52,20 @@ linesCrlf s = ln : next s2 where
     next ('\n' : s3) = linesCrlf s3
     next s3          = linesCrlf s3
 
-linesFrom :: (Show a) => a -> [String]
-linesFrom = lines . show
-
+-- | Create numbered lines from lazy bytestring.
 linesCrlfBzNumbered :: B.Bz -> [NumberedLine]
 linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
 
+-- | Create string lines from lazy bytestring.
 linesCrlfBzString :: B.Bz -> [String]
 linesCrlfBzString = map Bu.toString . linesCrlfBz
 
+-- | Split lazy bytestring by newline character sequence.
+--   This function drops the BOM sequence.
 linesCrlfBz :: B.Bz -> [B.Bz]
 linesCrlfBz = linesCrlfBzRaw . dropBom
 
+-- | Split lazy bytestring by newline character sequence.
 linesCrlfBzRaw :: B.Bz -> [B.Bz]
 linesCrlfBzRaw = loop where
     loop bz
@@ -81,7 +84,7 @@ linesCrlfBzRaw = loop where
                       | c == lf   -> bz2'
                       | otherwise -> bz2
 
--- | Remove UTF-8 BOM (EF BB BF) from lazy ByteString.
+-- | Remove UTF-8 BOM (EF BB BF) from lazy bytestring.
 dropBom :: B.Bz -> B.Bz
 dropBom bz =
   case Bz.splitAt 3 bz of
@@ -101,8 +104,10 @@ data CodeLine a = CodeLine
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
     codePtList (CodeLine _ _ ts) = B.codePtList $ head ts
 
+-- | Type for indent size.
 type IndentSize = Int
 
+-- | Calculate indent of line and pairing it.
 lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
 lineIndentPair ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
 lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)

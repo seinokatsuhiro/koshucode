@@ -93,8 +93,8 @@ relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     he2   = D.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
     put (n, ih)  = [D.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
-    heightMaybe = B.maybeEmpty height
-    dirMaybe    = B.maybeEmpty dir
+    heightMaybe = maybeEmpty height
+    dirMaybe    = maybeEmpty dir
 
     heightTerm (Left  h) _ = [D.pInt h]
     heightTerm (Right h) _ = [D.pInt h]
@@ -102,6 +102,8 @@ relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     dirTerm    (Left  _) _ = [D.pText "left"]
     dirTerm    (Right _) _ = [D.pText "right"]
 
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
+maybeEmpty m f = maybe [] f m
 
 -- ----------------------  koshu-rop
 

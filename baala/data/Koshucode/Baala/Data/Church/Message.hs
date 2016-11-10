@@ -129,7 +129,10 @@ detailTermRel :: String -> [S.TermName] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indentLines ns' ++ ["Input relation"] ++ indentLines ns1
     ns'    = map S.showTermName ns
-    ns1    = B.linesFrom $ D.headExplain he1
+    ns1    = linesFrom $ D.headExplain he1
+
+linesFrom :: (Show a) => a -> [String]
+linesFrom = lines . show
 
 -- | Create message lines from double term names.
 msgTerms2 :: (D.GetTermNames t1, D.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]

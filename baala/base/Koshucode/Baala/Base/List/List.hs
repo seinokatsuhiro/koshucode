@@ -3,12 +3,8 @@
 -- | List utilities.
 
 module Koshucode.Baala.Base.List.List
-  ( -- * List
-    tails,
-    maybeEmpty,
-    right,
-    isSingleton,
-    notNull,
+  ( -- * Test
+    notNull, isSingleton,
     sameLength, notSameLength,
 
     -- * Take
@@ -23,9 +19,9 @@ module Koshucode.Baala.Base.List.List
     zipMaybe, zipMaybe2,
 
     -- * Map
-    map2, mapAt, mapWithLast,
-    omit, filterFst, squeeze, squeezeEmptyLines,
-    reverseMap,
+    map2, mapAt,
+    reverseMap, omit,
+    squeeze, squeezeEmptyLines,
   ) where
 
 import qualified Koshucode.Baala.Overture       as O
@@ -33,31 +29,14 @@ import qualified Koshucode.Baala.Overture       as O
 
 -- ----------------------  List
 
--- | Tails of list.
---
---   >>> tails "abc"
---   ["abc", "bc", "c"]
-tails :: [a] -> [[a]]
-tails = loop where
-    loop [] = []
-    loop xxs@(_:xs) = xxs : loop xs
-
-maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
-maybeEmpty m f = maybe [] f m
-
--- | Replace 'Left' value to 'Right' value.
-right :: b -> O.Map (Either a b)
-right _ (Right x) = Right x
-right x (Left _)  = Right x
+-- | Test list is not empty.
+notNull :: O.Test [a]
+notNull = not . null
 
 -- | Test list has single element.
 isSingleton :: O.Test [a]
 isSingleton [_] = True
 isSingleton  _  = False
-
--- | Test list is not empty.
-notNull :: O.Test [a]
-notNull = not . null
 
 -- | Test lengths of two lists are same.
 --
@@ -168,22 +147,39 @@ li2 x y = [x, y]
 li3 :: a -> a -> a -> [a]
 li3 x y z = [x, y, z]
 
+-- | Conditional cons up.
 consIf :: Bool -> a -> [a] -> [a]
 consIf True  x xs  = x : xs
 consIf False _ xs  = xs
 
+-- | Range generation
 type RangeBy a = a -> a -> [a]
 
+-- | Generate range of something.
+--
+--   >>> rangeBy (+ 3) 0 10
+--   [0,3,6,9]
+--
 rangeBy :: (Ord a) => O.Map a -> RangeBy a
 rangeBy step from to = loop from where
     loop f | f > to    = []
            | otherwise = f : loop (step f)
 
+-- | Zip optoinal elements.
+--
+--   >>> zipMaybe [Just 'a', Nothing] "AB"
+--   [('a','A')]
+--
 zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
 zipMaybe (Just a  : as) (b : bs)  = (a, b) : zipMaybe as bs
 zipMaybe (Nothing : as) (_ : bs)  =          zipMaybe as bs
 zipMaybe _  _                     = []
 
+-- | Zip filter.
+--
+--   >>> zipMaybe2 [Just 'a', Nothing] "AB"
+--   [('a','A')]
+--
 zipMaybe2 :: [Maybe a] -> [b] -> [b]
 zipMaybe2 (Just _  : as) (b : bs)  = b : zipMaybe2 as bs
 zipMaybe2 (Nothing : as) (_ : bs)  =     zipMaybe2 as bs
@@ -192,11 +188,9 @@ zipMaybe2 _  _                     = []
 
 -- ----------------------  Map
 
+-- | Double 'fmap'.
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 map2 = fmap . fmap
-
--- map2 :: (a -> b) -> [[a]] -> [[b]]
--- map2 = map . map
 
 -- | Apply function to specific element.
 --
@@ -209,11 +203,13 @@ mapAt f = loop where
     loop i (x : xs) = x : loop (i - 1) xs
     loop _ []       = []
 
-mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
-mapWithLast f g = loop where
-    loop [] = []
-    loop [x] = [g x]
-    loop (x:xs) = f x : loop xs
+-- | Apply function to reversed list.
+--
+--   >>> reverseMap (take 3) "abcdefg"
+--   "efg"
+--
+reverseMap :: O.Map [a] -> O.Map [a]
+reverseMap f = reverse . f . reverse
 
 -- | Omit elements, i.e., anti-'filter'.
 --
@@ -223,19 +219,23 @@ mapWithLast f g = loop where
 omit :: (a -> Bool) -> O.Map [a]
 omit f = filter $ not . f
 
-filterFst :: (a -> Bool) -> O.Map [(a, b)]
-filterFst p = filter (p . fst)
-
+-- | Compress continued multile elements into single elements.
+--
+--   >>> squeeze (== '?') "Koshu???"
+--   "Koshu?"
+--
 squeeze :: (a -> Bool) -> O.Map [a]
 squeeze p = loop where
-    loop (x1 : x2 : xs)
-        | p x1 && p x2 = x2 : squeeze p xs
-        | otherwise    = x1 : squeeze p (x2 : xs)
+    loop (x1 : xxs@(x2 : _))
+        | p x1 && p x2 = squeeze p xxs
+        | otherwise    = x1 : squeeze p xxs
     loop xs = xs
 
+-- | Compress continued white lines.
+--
+--   >>> squeezeEmptyLines ["a", "b", " ", "c", "", " ", "  ", "d"]
+--   ["a", "b", " ", "c", "  ", "d"]
+--
 squeezeEmptyLines :: O.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
-
-reverseMap :: O.Map [a] -> O.Map [a]
-reverseMap f = reverse . f . reverse
 

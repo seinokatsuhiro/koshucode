@@ -154,7 +154,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
         submap lx =
             let mark = markLocalToken $ C.lexToken lx
                 attr = C.lexAttrTree lx
-            in case markLocalRelmap mark <$> B.filterFst S.isAttrNameRelmap attr of
+            in case markLocalRelmap mark <$> filterFst S.isAttrNameRelmap attr of
                  []     -> Right (lx, [])  -- no submaps
                  locs   -> submap2 lx locs
 
@@ -178,6 +178,10 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
         markLocalRelmap :: O.Map S.Token -> O.Map (S.AttrName, [S.TTree])
         markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeLeafMap mark <$> ts)
         markLocalRelmap _ (n, ts) = (n, ts)
+
+-- | Filter by the first element of pairs.
+filterFst :: (a -> Bool) -> O.Map [(a, b)]
+filterFst p = filter (p . fst)
 
 
 -- ----------------------

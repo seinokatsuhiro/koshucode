@@ -27,6 +27,7 @@ module Koshucode.Baala.Rop.Base.Get
     getTermTrees,
   ) where
 
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
@@ -166,7 +167,12 @@ getRelmap med name =
 
 -- | Get optional relmap.
 getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
-getOptRelmap rmap0 med = B.right rmap0 . getRelmap med
+getOptRelmap rmap0 med = right rmap0 . getRelmap med
+
+-- | Replace 'Left' value to 'Right' value.
+right :: b -> O.Map (Either a b)
+right _ (Right x) = Right x
+right x (Left _)  = Right x
 
 
 -- ----------------------  Term
