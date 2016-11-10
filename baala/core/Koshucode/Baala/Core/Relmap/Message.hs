@@ -32,7 +32,7 @@ abSpecialize :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
 
 -- | Unknown nested relation reference.
-unkNestVar :: String -> [S.Token] -> [((S.Token, S.Local String), D.Head)] -> B.Ab a
+unkNestVar :: String -> [S.Token] -> [((S.Token, S.LocalRef String), D.Head)] -> B.Ab a
 unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
                            $ ("search" : map indent dynamic)
                           ++ ("for"    : map indent lexical)

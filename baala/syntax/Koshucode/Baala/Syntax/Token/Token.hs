@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
@@ -21,7 +20,7 @@ module Koshucode.Baala.Syntax.Token.Token
     TermType (..),
 
     -- ** Local
-    Local (..),
+    LocalRef (..),
     unlocal,
 
     -- ** Blank
@@ -55,7 +54,7 @@ data Token
                 -- ^ 4) Term name —  @\/@/name/
     | TTerm     B.CodePt TermType S.TermPath
                 -- ^ 5) Term path — @\/@/name/@\/@/name/
-    | TLocal    B.CodePt (Local String) Int [Token]
+    | TLocal    B.CodePt (LocalRef String) Int [Token]
                 -- ^ 6) Local name — @^\/@/name/
     | TOpen     B.CodePt String
                 -- ^ 7) Opening bracket — @(@, @{@, etc
@@ -166,6 +165,7 @@ instance SubtypeName TextForm where
 
 -- ----------------------  Term
 
+-- | Type of term name.
 data TermType
     = TermTypePath               -- ^ Normal term path
     | TermTypeQuoted             -- ^ Quoted term name
@@ -174,19 +174,21 @@ data TermType
 
 -- ----------------------  Local
 
--- | Local reference.
-data Local a
+-- | Local relation reference.
+data LocalRef a
     = LocalSymbol a        -- ^ Reference to local relation — @^r@
     | LocalNest a          -- ^ Reference to nested relation — @^/r@
       deriving (Show, Eq, Ord)
 
-unlocal :: Local a -> a
+-- | Get name of local relation reference.
+unlocal :: LocalRef a -> a
 unlocal (LocalNest   a) = a
 unlocal (LocalSymbol a) = a
 
 
 -- ----------------------  Blank
 
+-- | Blank in form.
 data BlankName
     = BlankNormal   String
     | BlankInternal String
