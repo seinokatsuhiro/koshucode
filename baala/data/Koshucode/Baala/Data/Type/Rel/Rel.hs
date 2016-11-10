@@ -18,9 +18,8 @@ module Koshucode.Baala.Data.Type.Rel.Rel
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data.Type.Rel.Head    as D
 import qualified Koshucode.Baala.Data.Type.Judge       as D
-import qualified Koshucode.Baala.Data.Type.JudgeClass  as D
+import qualified Koshucode.Baala.Data.Type.Rel.Head    as D
 
 
 -- ----------------------  Data

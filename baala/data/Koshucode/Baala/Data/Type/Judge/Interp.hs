@@ -2,16 +2,16 @@
 
 -- | Type for data interpretation.
 
-module Koshucode.Baala.Data.Type.Interp
+module Koshucode.Baala.Data.Type.Judge.Interp
   ( Interp (..),
     InterpWord (..),
     interp,
   ) where
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data.Type.Judge       as D
-import qualified Koshucode.Baala.Data.Type.JudgeClass  as D
+import qualified Koshucode.Baala.Base                        as B
+import qualified Koshucode.Baala.Syntax                      as S
+import qualified Koshucode.Baala.Data.Type.Judge.Judge       as D
+import qualified Koshucode.Baala.Data.Type.Judge.JudgeClass  as D
 
 -- | Data interpretation.
 data Interp = Interp

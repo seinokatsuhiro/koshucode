@@ -79,21 +79,26 @@ library
         Koshucode.Baala.Data.Type.Decimal.Fraction
         Koshucode.Baala.Data.Type.Decimal.Rational
 
-        Koshucode.Baala.Data.Type.Interp
         Koshucode.Baala.Data.Type.Judge
-        Koshucode.Baala.Data.Type.JudgeClass
+        Koshucode.Baala.Data.Type.Judge.Interp
+        Koshucode.Baala.Data.Type.Judge.Judge
+        Koshucode.Baala.Data.Type.Judge.JudgeClass
+
         Koshucode.Baala.Data.Type.Message
+
         Koshucode.Baala.Data.Type.Rel
         Koshucode.Baala.Data.Type.Rel.Head
         Koshucode.Baala.Data.Type.Rel.Mono
         Koshucode.Baala.Data.Type.Rel.Rel
         Koshucode.Baala.Data.Type.Rel.TermPicker
+
         Koshucode.Baala.Data.Type.Time
         Koshucode.Baala.Data.Type.Time.Clock
         Koshucode.Baala.Data.Type.Time.ClockCalc
         Koshucode.Baala.Data.Type.Time.Date
         Koshucode.Baala.Data.Type.Time.Time
         Koshucode.Baala.Data.Type.Time.TimeCalc
+
         Koshucode.Baala.Data.Type.Type
 
   -- Modules included in this library but not exported.

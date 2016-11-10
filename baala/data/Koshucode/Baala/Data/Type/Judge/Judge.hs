@@ -4,7 +4,7 @@
 -- | Judgements: a symbolic representations of
 --   affirmed or denied statements.
 
-module Koshucode.Baala.Data.Type.Judge
+module Koshucode.Baala.Data.Type.Judge.Judge
   (
     -- * Datatype
     Judge (..),
@@ -25,10 +25,10 @@ module Koshucode.Baala.Data.Type.Judge
     termsToMix1, termsToMix2,
   ) where
 
-import qualified Koshucode.Baala.Overture              as O
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data.Type.JudgeClass  as D
+import qualified Koshucode.Baala.Overture                    as O
+import qualified Koshucode.Baala.Base                        as B
+import qualified Koshucode.Baala.Syntax                      as S
+import qualified Koshucode.Baala.Data.Type.Judge.JudgeClass  as D
 
 
 -- ----------------------  Datatype

@@ -3,7 +3,7 @@
 
 -- | Common properties of judgements and relations.
 
-module Koshucode.Baala.Data.Type.JudgeClass
+module Koshucode.Baala.Data.Type.Judge.JudgeClass
   ( JudgeClass,
     GetClass (..),
     GetTerms (..),
