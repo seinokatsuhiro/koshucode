@@ -174,13 +174,14 @@ prefix htab tree =
       detailText tok dir n = S.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
 mapper :: B.InfixMapper S.BracketType S.Token
-mapper f = loop where
+mapper pre = loop where
     loop (B.TreeB S.BracketGroup p xs) =
-        do xs' <- f xs
-           Right $ B.TreeB S.BracketGroup p xs'
+        do preXs <- pre xs
+           Right $ B.TreeB S.BracketGroup p preXs
     loop (B.TreeB S.BracketForm p1 [vs, B.TreeB S.BracketGroup p2 body]) =
-        do body' <- f body
-           Right $ B.TreeB S.BracketForm p1 [vs, undoubleGroup $ B.TreeB S.BracketGroup p2 body']
+        do preBody <- pre body
+           let body' = undoubleGroup $ B.TreeB S.BracketGroup p2 preBody
+           Right $ B.TreeB S.BracketForm p1 [vs, body']
     loop tree = Right tree
 
 undoubleGroup :: O.Map (B.CodeTree S.BracketType a)

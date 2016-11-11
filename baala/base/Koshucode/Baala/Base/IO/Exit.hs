@@ -70,6 +70,7 @@ exitCode n = Exit.ExitFailure n
 putSuccess :: String -> IO a
 putSuccess msg = success $ putStr msg
 
+-- | Print message line and exit on 0.
 putSuccessLn :: String -> IO a
 putSuccessLn msg = success $ putStrLn msg
 
@@ -93,6 +94,7 @@ putAbortWith msg =
 putFailure :: String -> IO a
 putFailure msg = failure $ IO.hPutStr IO.stderr msg
 
+-- | Print error message line and exit on 1.
 putFailureLn :: String -> IO a
 putFailureLn msg = failure $ IO.hPutStrLn IO.stderr msg
 

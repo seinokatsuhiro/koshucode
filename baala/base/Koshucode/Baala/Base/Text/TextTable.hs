@@ -29,12 +29,18 @@ import qualified Koshucode.Baala.Overture       as O
 
 -- ---------------------------------  Position
 
+-- | Position in text table.
 data Position
     = Front | Middle | Rear
       deriving (Show, Eq, Ord)
 
 type Measure a = [a] -> Int
 
+-- | Convert position symbols to 'Position'.
+--
+--   >>> textPos "<->-"
+--   [Front,Middle,Rear,Middle]
+--
 textPos :: String -> [Position]
 textPos = map p where
     p c | c `elem` "<^" = Front
@@ -68,6 +74,7 @@ divideBy2 x
 
 -- ---------------------------------  Cell
 
+-- | Cell in text table.
 data Cell = Cell {
       cellText   :: [String]
     , cellWidth  :: Int
@@ -81,9 +88,11 @@ emptyCell = Cell [] 0 0 Front ' '
 
 -- constructor / text to cell
 
+-- | Create text table from cell strings.
 textTable :: [Position] -> [[String]] -> [[Cell]]
 textTable ps = map (textRow ps)
 
+-- | Create text table with table heading.
 textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
 textTableWithHead ps pad label body = h ++ r ++ b where
     h = textTable ps [label]
@@ -94,6 +103,7 @@ textRow :: [Position] -> [String] -> [Cell]
 textRow ps xs = map f $ zip ps xs where
     f (pos, text) = textCell pos text
 
+-- | Convert string to cell.
 textCell :: Position -> String -> Cell
 textCell pos s =
     Cell { cellText   = [s]
@@ -102,13 +112,16 @@ textCell pos s =
          , cellPos    = pos
          , cellPad    = ' ' }
 
+-- | Create rule cell.
 textRuleCell :: Char -> Cell
 textRuleCell c = cell { cellPad = c } where
     cell = textCell Front [c]
 
+-- | Create multi-line cell.
 textBlockCell :: Position -> [String] -> Cell
 textBlockCell = textBlockCellPlus 0
 
+-- | Create multi-line cell with padding line.
 textBlockCellPlus :: Int -> Position -> [String] -> Cell
 textBlockCellPlus n pos xs =
     Cell { cellText   = xs
@@ -122,6 +135,7 @@ textBlockCellPlus n pos xs =
 
 -- alignment / cell to cell
 
+-- | Align cells.
 alignTable :: [[Cell]] -> [[Cell]]
 alignTable =
     withTranspose (map alignWidth)
@@ -140,6 +154,7 @@ alignHeight cs = map reheight cs where
 
 -- render / cell to text
 
+-- | Render text table.
 renderTable :: String -> [[Cell]] -> [String]
 renderTable vrule = concatMap (renderRow vrule)
 

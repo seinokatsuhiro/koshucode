@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Reexport list.
+
 module Koshucode.Baala.Base.Prelude.Import
   ( -- * Control.Monad
     (Control.Monad.<=<),
@@ -10,7 +12,7 @@ module Koshucode.Baala.Base.Prelude.Import
     Control.Monad.when,
     Control.Monad.unless,
     Control.Monad.guard,
-    concatMapM,
+    --concatMapM,
   
     -- * Data.ByteString
     Bs,
@@ -81,8 +83,8 @@ import qualified Text.PrettyPrint
 
 -- ----------------------  Control
 
-concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
-concatMapM f = return . concat Control.Monad.<=< mapM f
+--concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+--concatMapM f = return . concat Control.Monad.<=< mapM f
 
 
 -- ----------------------  Data
@@ -104,11 +106,14 @@ lookupMap = Data.Map.lookup
 
 -- ----------------------  Text
 
+-- | Same as 'Text.PrettyPrint.empty'.
 docEmpty :: Text.PrettyPrint.Doc
 docEmpty = Text.PrettyPrint.empty
 
+-- | Same as 'Text.PrettyPrint.hang'.
 docHang :: Text.PrettyPrint.Doc -> Int -> Text.PrettyPrint.Doc -> Text.PrettyPrint.Doc
 docHang = Text.PrettyPrint.hang
 
+-- | Same as 'Text.PrettyPrint.zeroWidthText'.
 docZero :: String -> Text.PrettyPrint.Doc
 docZero = Text.PrettyPrint.zeroWidthText

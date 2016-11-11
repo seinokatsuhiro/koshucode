@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Abortable process
+-- | Abortable process.
 
 module Koshucode.Baala.Base.Abort.Abortable
   ( abortable,
-    abortableSourced,
+  --abortableSourced,
   ) where
 
 import qualified Koshucode.Baala.Overture            as O
@@ -26,9 +26,9 @@ push tag ps abort@B.AbortReason { B.abortPoint = src } =
        [p]     -> abort { B.abortPoint = (tag, p) : src }
        (p : _) -> push tag [p] abort
 
-abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
-abortableSourced tag f (B.Sourced pt x) =
-    abortable tag pt $ do
-      y <- f x
-      Right $ B.Sourced pt y
+-- abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
+-- abortableSourced tag f (B.Sourced pt x) =
+--     abortable tag pt $ do
+--       y <- f x
+--       Right $ B.Sourced pt y
 

@@ -34,6 +34,11 @@ instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
 codeClauseEmpty :: CodeClause a
 codeClauseEmpty = CodeClause [] []
 
+-- | Split lines into clause based on indent size.
+--
+--   >>> splitClause [(0, "a"), (2, "b"), (0, "c"), (1, "d")]
+--   (["a","b"], [(0,"c"),(1,"d")])
+--
 splitClause :: B.Gather [(B.IndentSize, a)] [a]
 splitClause = first where
     first    ((i, x) : xs)            = B.consFst x $ continue i xs

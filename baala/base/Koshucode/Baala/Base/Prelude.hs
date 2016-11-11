@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Additional prelude.
+
 module Koshucode.Baala.Base.Prelude
   ( module Koshucode.Baala.Base.Prelude.Case,
     module Koshucode.Baala.Base.Prelude.Class,

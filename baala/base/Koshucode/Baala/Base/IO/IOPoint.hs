@@ -42,6 +42,7 @@ instance Ord NamedHandle where
 
 -- ----------------------  IOPoint
 
+-- | I/O point: file, standard input, direct text, etc.
 data IOPoint
     = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
     | IOPointUri    String                  -- ^ Universal resource identifier

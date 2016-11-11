@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | I/O related modules.
+
 module Koshucode.Baala.Base.IO
   ( module Koshucode.Baala.Base.IO.BzFile,
     module Koshucode.Baala.Base.IO.CodePt,

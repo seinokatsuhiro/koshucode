@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Syntax.Infix
   ( InfixHeight,
     infixHeight,
     infixToPrefix,
-    InfixAb, InfixAbMap, InfixTree, InfixMapper,
+    InfixMapper,
+    InfixConv, InfixAmb, InfixTree,
   ) where
 
 import qualified Data.Map                          as Map
@@ -43,7 +44,14 @@ heightOf (Left  ht)  =  ht
 heightOf (Right ht)  =  ht
 
 -- | Make the height function from a height table of operators.
-infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
+--
+--   >>> infixHeight Just [('.', Right 3), (':', Right 5)] <$> "1.2:3"
+--   [Left 0, Right 3, Left 0, Right 5, Left 0]
+--
+infixHeight :: (Ord b)
+   => (a -> Maybe b)        -- ^ Connection function
+   -> [(b, InfixHeight)]    -- ^ Height table
+   -> (a -> InfixHeight)    -- ^ Height function
 infixHeight extract htab a = B.fromMaybe (Left 0) ht where
     hmap = Map.fromList htab
     ht   = case extract a of
@@ -53,42 +61,51 @@ infixHeight extract htab a = B.fromMaybe (Left 0) ht where
 
 -- ----------------------  Conversion
 
-type InfixAb a x      =  Either [(InfixHeight, a)] x
-type InfixAbMap a x   =  x -> InfixAb a x
-type InfixTree p a    =  B.CodeTree p (InfixHeight, a)  -- tree with height
-type InfixMapper p a  =  InfixAbMap a [InfixTree p a] -> InfixAbMap a (InfixTree p a)
+{-# WARNING InfixConv, InfixAmb, InfixTree "This is only used in defined module." #-}
+
+-- | Intermediate infix-to-prefix conversion.
+type InfixMapper p a = InfixConv a [InfixTree p a] -> InfixConv a (InfixTree p a)
+
+-- | Infix-to-prefix conversion.
+type InfixConv a tree = tree -> InfixAmb a tree
+
+-- | Code tree or ambiguous infix.
+type InfixAmb a tree = Either [(InfixHeight, a)] tree
+
+-- | Code tree with infix height.
+type InfixTree p a = B.CodeTree p (InfixHeight, a)
 
 -- | Split branches in a given tree at infixed binary operators.
 infixToPrefix :: forall p a.
-    (O.Map a, O.Map a, O.Map a)
-     -> (a -> InfixHeight)
-     -> B.Collect (InfixTree p a)
+    (O.Map a, O.Map a, O.Map a)       -- ^ Prefix\/infix\/postfix converters.
+     -> (a -> InfixHeight)            -- ^ Height function
+     -> B.Collect (InfixTree p a)     -- ^ Tree grouping function
      -> InfixMapper p a
-     -> InfixAbMap a (B.CodeTree p a)
-infixToPrefix (pre, inf, post) ht g mapper tree =
-    do let tree1 = fmap height tree
-       tree2 <- mapper binary tree1
-       Right $ fmap snd tree2
+     -> InfixConv a (B.CodeTree p a) -- ^ Infix-to-prefix conversion.
+infixToPrefix (pre, inf, post) ht group mapper tree =
+    do let tree1 :: InfixTree p a = fmap height tree
+       tree2     :: InfixTree p a <- mapper binary tree1
+       Right (fmap snd tree2 :: B.CodeTree p a)
     where
       height :: a -> (InfixHeight, a)
       height x = (ht x, x)
 
-      binary :: InfixAbMap a [InfixTree p a]
+      binary :: InfixConv a [InfixTree p a]
       binary xs = case infixPos $ map treeHeight xs of
-          Right xi
-              | xi < 0        ->  mapper binary `mapM` xs
-              | otherwise     ->  move $ splitAt xi xs
-          Left xi             ->  Left $ B.untrees $ map (xs !!) xi
+          Right xi | xi < 0    -> mapper binary `mapM` xs
+                   | otherwise -> move $ splitAt xi xs
+          Left xi              -> Left $ B.untrees $ map (xs !!) xi
 
-      move :: ([InfixTree p a], [InfixTree p a]) -> InfixAb a [InfixTree p a]
-      move ([], op : right)    =  do right' <- binary right
-                                     Right [conv pre op, g right']
-      move (left, op : [])     =  do left'  <- binary left
-                                     Right [conv post op, g left']
-      move (left, op : right)  =  do left'  <- binary left
-                                     right' <- binary right
-                                     Right [conv inf op, g left', g right']
-      move (_, _)              =  error "infixToPrefix"
+      -- move infix operator to front
+      move :: ([InfixTree p a], [InfixTree p a]) -> InfixAmb a [InfixTree p a]
+      move ([], op : right)    = do right' <- binary right
+                                    Right [conv pre op, group right']
+      move (left, op : [])     = do left'  <- binary left
+                                    Right [conv post op, group left']
+      move (left, op : right)  = do left'  <- binary left
+                                    right' <- binary right
+                                    Right [conv inf op, group left', group right']
+      move (_, _)              = error "infixToPrefix"
 
 conv :: O.Map a -> O.Map (InfixTree p a)
 conv = fmap . B.mapSnd
