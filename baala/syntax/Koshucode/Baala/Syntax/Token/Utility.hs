@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Syntax.Token.Utility
   ( -- * Selectors
-    tokenContent, untoken,
+    tokenContent,
     tokenDetailTypeString,
     tokenParents,
   
@@ -26,9 +26,9 @@ import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
 -- | Get the content of token.
 --
---   >>> let tok = S.TTermPath B.def ["r", "x"] in tokenContent tok
+--   >>> let tok = S.TTerm B.def S.TermTypePath ["r", "x"] in tokenContent tok
 --   "/r/x"
-
+--
 tokenContent :: S.Token -> String
 tokenContent tok =
     case tok of
@@ -45,37 +45,11 @@ tokenContent tok =
       S.TName     _ op     -> B.name op
       S.TUnknown  _ s _    -> s
 
-untoken :: S.Token -> String
-untoken = dispatch where
-    dispatch tok =
-        case tok of
-          S.TText     _ q s    -> text q s
-          S.TShort    _ a b    -> a ++ "." ++ b
-          S.TTermN    _ _ n    -> '/' : n
-          S.TTerm     _ _ ns   -> concatMap ('/' :) ns
-          S.TLocal    _ n _ _  -> S.unlocal n
-          S.TSlot     _ _ s    -> s
-          S.TOpen     _ s      -> s
-          S.TClose    _ s      -> s
-          S.TSpace    _ n      -> replicate n ' '
-          S.TComment  _ s      -> s
-          S.TName     _ op     -> B.name op
-          S.TUnknown  _ s _    -> s
-    text q s =
-        case q of
-          S.TextUnk            -> s
-          S.TextRaw            -> s
-          S.TextQ              -> "'" ++ s
-          S.TextQQ             -> "\"" ++ s ++ "\""
-          S.TextKey            -> s
-          S.TextBar            -> s
-          S.TextLicense        -> s
-
 -- | Get detail type string of token.
 --
 --   >>> let tok = S.textToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
-
+--
 tokenDetailTypeString :: S.Token -> Maybe String
 tokenDetailTypeString tok =
     case tok of
@@ -149,7 +123,7 @@ isCloseToken _                    = False
 --
 --   >>> let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
 --   False
-
+--
 isOpenTokenOf :: String -> O.Test S.Token
 isOpenTokenOf p1 (S.TOpen _ p2)   = p1 == p2
 isOpenTokenOf _ _                 = False
