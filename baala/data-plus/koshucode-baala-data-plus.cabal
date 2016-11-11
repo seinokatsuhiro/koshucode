@@ -1,0 +1,60 @@
+-- The name of the package.
+name:                koshucode-baala-data-plus
+
+-- The package version.  See the Haskell package versioning policy (PVP) 
+-- for standards guiding when and how versions should be incremented.
+-- http://www.haskell.org/haskellwiki/Package_versioning_policy
+-- PVP summary:      +-+------- breaking API changes
+--                   | | +----- non-breaking API additions
+--                   | | | +--- code changes with no API change
+version:             0.168.0.0
+
+-- A short (one-line) description of the package.
+synopsis:            Koshucode package bundle
+
+-- A longer description of the package.
+description:         This package bundles data and pre-data packages.
+
+-- The license under which the package is released.
+license:             BSD3
+
+-- The file containing the license text.
+license-file:        LICENSE
+
+-- The package author(s).
+author:              SEINO Katsuhiro
+
+-- An email address to which users can send suggestions, bug reports, and 
+-- patches.
+maintainer:
+
+-- A copyright notice.
+copyright:           2016, SEINO Katsuhiro
+
+category:            Data, Text
+
+build-type:          Simple
+
+-- Constraint on the version of Cabal needed to build this package.
+cabal-version:       >= 1.8
+
+extra-source-files:
+
+library
+  -- Modules exported by the library.
+  exposed-modules:
+        Koshucode.Baala.DataPlus
+
+  -- Modules included in this library but not exported.
+  --other-modules:       
+  
+  -- Other library packages from which modules are imported.
+  build-depends:
+         base                      == 4.*
+       , koshucode-baala-overture  == 0.168.0.0
+       , koshucode-baala-base      == 0.168.0.0
+       , koshucode-baala-syntax    == 0.168.0.0
+       , koshucode-baala-data      == 0.168.0.0
+
+  ghc-options:         -Wall
+
