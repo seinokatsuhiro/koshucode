@@ -50,7 +50,7 @@ copToDec = op where
 
 copToText :: (D.CContent c) => D.CopCalc c
 copToText = op where
-    op [Right c] = Right $ D.pText $ D.contString c
+    op [Right c] = Right $ D.pText $ D.contentString c
     op xs = typeUnmatch xs
 
 copToList :: (D.CContent c) => D.CopCalc c

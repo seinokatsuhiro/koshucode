@@ -293,7 +293,7 @@ copReplace :: (D.CContent c) => Cop.Replace Char -> D.CopCalc c
 copReplace rep = op where
     op [Right from, Right to, Right text]
         | D.isText from && D.isText to && D.isText text =
-            D.contApTextToText (D.gText from `rep` D.gText to) text
+            Right $ D.contentApText (D.gText from `rep` D.gText to) text
     op xs = typeUnmatch xs
 
 

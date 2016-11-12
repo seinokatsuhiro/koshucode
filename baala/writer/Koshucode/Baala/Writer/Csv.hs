@@ -65,7 +65,7 @@ csvContent setting@XsvSetting { xsvQuote = quote } c
 
     | D.isList   c  = csvSubContents setting $ D.gList c
     | D.isSet    c  = csvSubContents setting $ D.gSet c 
-    | otherwise     = D.contString c
+    | otherwise     = D.contentString c
 
 csvSubContents :: (D.CContent c) => XsvSetting -> [c] -> String
 csvSubContents setting@XsvSetting { xsvSubSep = sub } cs =

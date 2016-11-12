@@ -7,12 +7,13 @@ module Koshucode.Baala.Data.Content.Utility
     CGetPut,
     gpText, gpList, gpSet, gpSetSort,
 
-    -- * Utility
-    contAp, contMap,
-    contApTextToText,
-    contMapTextToList,
-    judgeContString,
-    contString,
+    -- * Conversion
+    contentAp, contentMap,
+    contentApText,
+    contentMapTextList,
+
+    -- * Encode
+    contentString,
     mixBracketList,
     mixBracketSet,
   ) where
@@ -30,7 +31,7 @@ import qualified Koshucode.Baala.Data.Class               as D
 type CGetPut a c = (c -> a, a -> c)
 
 -- | 'gText' and 'pText'.
-gpText :: (D.CText c) => CGetPut [Char] c
+gpText :: (D.CText c) => CGetPut String c
 gpText = (D.gText, D.pText)
 
 -- | 'gList' and 'pList'.
@@ -46,51 +47,50 @@ gpSetSort :: (Ord c, D.CSet c) => CGetPut [c] c
 gpSetSort = (D.gSetSort, D.pSet)
 
 
--- ----------------------  Utility
+-- ----------------------  Conversion
 
 -- | Apply function to internal value of content.
 --
---   >>> contAp gText pText reverse (pText "abc" :: BaalaC) :: BaalaC
+--   >>> contentAp gText pText reverse (the $ pText "abc") :: BaalaC
 --   VText "cba"
 --
-contAp :: (a' -> a) -> (b -> b') -> (a -> b) -> a' -> b'
-contAp get put f = put . f . get
+contentAp :: (c -> a) -> (b -> c') -> (a -> b) -> c -> c'
+contentAp get put f = put . f . get
 
 -- | Map function to internal value of content.
-contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
-contMap get put f = contAp get put $ fmap f
+contentMap :: (Functor f) => (c -> f a) -> (f b -> c') -> (a -> b) -> c -> c'
+contentMap get put f = contentAp get put $ fmap f
 
 -- | Apply function to internal string of text content.
 --
---   >>> contApTextToText reverse (the $ pText "abc")
---   Right (VText "cba")
+--   >>> contentApText reverse (the $ pText "abc")
+--   VText "cba"
 --
-contApTextToText :: (D.CText c) => O.StringMap -> B.AbMap c
-contApTextToText = contAp D.gText D.putText
+contentApText :: (D.CText c) => O.StringMap -> O.Map c
+contentApText = contentAp D.gText D.pText
 
 -- | Map function to characters of internal string of text content.
 --
---   >>> contMapTextToList (\c -> pText [c]) (the $ pText "abc")
---   Right (VList [VText "a",VText "b",VText "c"])
+--   >>> contentMapTextList (\c -> pText [c]) (the $ pText "abc")
+--   VList [VText "a",VText "b",VText "c"]
 --
-contMapTextToList :: (D.CList c, D.CText c) => (Char -> c) -> B.AbMap c
-contMapTextToList = contMap D.gText D.putList
+contentMapTextList :: (D.CList c, D.CText c) => (Char -> c) -> O.Map c
+contentMapTextList = contentMap D.gText D.pList
 
--- | Convert term content to string value.
-judgeContString :: (D.CContent c) => D.Judge c -> D.Judge String
-judgeContString = (contString <$>)
 
--- | Convert content to string value.
+-- ----------------------  Encode
+
+-- | Encode content to string.
 --
---   >>> contString (pText "a" :: BaalaC)
+--   >>> contentString (the $ pText "a")
 --   "a"
 --
-contString :: (D.CContent c) => c -> String
-contString = B.mixToFlatString. contStringMix
+contentString :: (D.CContent c) => c -> String
+contentString = B.mixToFlatString. contentStringMix
 
 -- | Convert content to pretty print doc.
-contStringMix :: (D.CContent c) => c -> B.MixText
-contStringMix c
+contentStringMix :: (D.CContent c) => c -> B.MixText
+contentStringMix c
     | D.isCode   c  = B.mixString $ D.gCode c
     | D.isText   c  = B.mixString $ D.gText c
     | D.isTerm   c  = B.mixString $ '/' : D.gTerm c
@@ -101,8 +101,8 @@ contStringMix c
     | D.isEmpty  c  = B.mixEmpty
     | D.isEnd    c  = B.mixString "(/)"
 
-    | D.isList   c  = mixBracketList $ B.mixJoinBar $ map contStringMix $ D.gList c
-    | D.isSet    c  = mixBracketSet  $ B.mixJoinBar $ map contStringMix $ D.gSet c 
+    | D.isList   c  = mixBracketList $ B.mixJoinBar $ map contentStringMix $ D.gList c
+    | D.isSet    c  = mixBracketSet  $ B.mixJoinBar $ map contentStringMix $ D.gSet c 
     | D.isTie    c  = B.mixString "<tie>"
     | D.isRel    c  = B.mixString "<rel>"
     | D.isInterp c  = B.mixString "<interp>"

@@ -113,7 +113,7 @@ copChar = op where
 -- code-list "abc" => [ 97 : 98 : 99 ]
 copCodeList :: (D.CContent c) => D.CopCalc c
 copCodeList = op where
-    op [Right t] | D.isText t = D.contMapTextToList contOrd t
+    op [Right t] | D.isText t = Right $ D.contentMapTextList contOrd t
     op xs = typeUnmatch xs
 
     contOrd :: (D.CDec c) => Char -> c
@@ -122,7 +122,7 @@ copCodeList = op where
 -- char-group "a!" => [ 'letter : 'punct ]
 copCharGroup :: (D.CContent c) => D.CopCalc c
 copCharGroup = op where
-    op [Right t] | D.isText t = D.contMapTextToList contGroup t
+    op [Right t] | D.isText t = Right $ D.contentMapTextList contGroup t
     op xs = typeUnmatch xs
 
     contGroup :: (D.CText c) => Char -> c
@@ -183,7 +183,7 @@ copDirBasePart :: (D.CContent c) => ((String, String) -> String) -> D.CopCalc c
 copDirBasePart part = op where
     op [Right sep, Right t]
         | D.isText sep && D.isText t =
-            D.contApTextToText (part . dirBasePart (head $ D.gText sep)) t
+            Right $ D.contentApText (part . dirBasePart (head $ D.gText sep)) t
     op xs = typeUnmatch xs
 
 dirBasePart :: Char -> String -> (String, String)
