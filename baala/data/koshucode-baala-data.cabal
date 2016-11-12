@@ -56,8 +56,9 @@ library
         Koshucode.Baala.Data.Church.Message
         Koshucode.Baala.Data.Church.Run
 
+        Koshucode.Baala.Data.Content
+
         Koshucode.Baala.Data.Decode
-        Koshucode.Baala.Data.Decode.BaalaC
         Koshucode.Baala.Data.Decode.Decode
         Koshucode.Baala.Data.Decode.Message
         Koshucode.Baala.Data.Decode.Numeric
