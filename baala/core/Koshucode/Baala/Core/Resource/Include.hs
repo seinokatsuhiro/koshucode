@@ -84,7 +84,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       feat e f msg | f feature = e
                    | otherwise = msg
 
-      calc :: D.ContentCalc c
+      calc :: D.CalcContent c
       calc = calcContG $ C.resGlobal res
 
       f << y  = y : f res
@@ -137,7 +137,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 coxBuildG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
 coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
 
-calcContG :: (D.CContent c) => C.Global c -> D.ContentCalc c
+calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c
 calcContG = D.calcContent . C.globalCopset
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint

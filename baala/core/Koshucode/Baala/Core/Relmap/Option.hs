@@ -46,7 +46,7 @@ optionBool name opt =
 
 -- | Parse assertion option.
 optionParse :: (Eq c, D.CBool c, D.CText c)
-  => D.ContentCalc c -> [S.Token] -> B.AbMap (Option c)
+  => D.CalcContent c -> [S.Token] -> B.AbMap (Option c)
 optionParse calc toks opt =
     do assn <- optionAssn toks
        B.foldM (optionUpdate calc) opt assn
@@ -64,7 +64,7 @@ optionAssn toks =
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)
-   => D.ContentCalc c -> Option c -> NamedT [S.TTree] -> B.Ab (Option c)
+   => D.CalcContent c -> Option c -> NamedT [S.TTree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
       case Map.lookup name opt of

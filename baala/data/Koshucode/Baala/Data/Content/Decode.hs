@@ -3,12 +3,12 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Decode token trees to contents.
+-- | Decode contents from token trees.
 
 module Koshucode.Baala.Data.Content.Decode
   ( -- * Functions
-    ContentCons, ContentCalc, 
-    contentCons, treesJudge,
+    DecodeContent, CalcContent, 
+    treeContent, treesJudge,
 
     -- * Assert type
     AssertType (..),
@@ -41,16 +41,16 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 pattern LName s    <- L (S.TTermN _ _ s)
 pattern Text f s   <- S.TText _ f s
 
--- | Content constructor.
-type ContentCons c = S.TTree -> B.Ab c
+-- | Content decoder.
+type DecodeContent c = S.TTree -> B.Ab c
 
 -- | Content calculator.
-type ContentCalc c = S.TTree -> B.Ab c
+type CalcContent c = S.TTree -> B.Ab c
 
--- | Convert token tree into internal form of content.
-contentCons :: forall c. (D.CContent c) => ContentCalc c -> ContentCons c
-contentCons calc tree = Msg.abLiteral tree $ cons tree where
-    cons :: ContentCons c
+-- | Decode content from token tree.
+treeContent :: forall c. (D.CContent c) => CalcContent c -> DecodeContent c
+treeContent calc tree = Msg.abLiteral tree $ cons tree where
+    cons :: DecodeContent c
     cons x@(L tok)
         = eithcon (eithcon (eithcon (token tok)
             D.putClock  $ D.tokenClock tok)
@@ -58,14 +58,14 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
             decimal     $ D.treesDigits [x]
     cons g@(B b xs) = case b of
         S.BracketGroup   -> group g xs
-        S.BracketList    -> D.putList   =<< consContents cons xs
-        S.BracketSet     -> D.putSet    =<< consContents cons xs
-        S.BracketTie     ->                 consAngle    cons xs
-        S.BracketRel     -> D.putRel    =<< consRel      cons xs
-        S.BracketType    -> D.putType   =<< consType          xs
-        S.BracketInterp  -> D.putInterp =<< D.treesInterp     xs
+        S.BracketList    -> D.putList   =<< treesContents cons xs
+        S.BracketSet     -> D.putSet    =<< treesContents cons xs
+        S.BracketTie     ->                 treesTie      cons xs
+        S.BracketRel     -> D.putRel    =<< treesRel      cons xs
+        S.BracketType    -> D.putType   =<< treesType          xs
+        S.BracketInterp  -> D.putInterp =<< D.treesInterp      xs
         _                -> Msg.unkBracket
-    cons _ = B.bug "contentCons"
+    cons _ = B.bug "treeContent"
 
     token :: S.Token -> B.Ab c
     token (Text n w)
@@ -103,78 +103,78 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
 --   [ 0 | 1 | 2 ]
 --     .........
 --     :
---     consContents
+--     treesContents
 --
-consContents :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab [c]
-consContents _   [] = Right []
-consContents cons cs = lt `mapM` S.divideTreesByBar cs where
+treesContents :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [c]
+treesContents _   [] = Right []
+treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
     lt []   = Right D.empty
     lt [x]  = cons x
     lt xs   = cons $ B.TreeB S.BracketGroup Nothing xs
 
 -- Contents enclosed in angle brackets
 --
---   << /a 1  /b 2  /c 3 >>   << words "a b c" >>
+--   {- /a 1  /b 2  /c 3 -}   << words "a b c" >>
 --      ................         .............
 --      :                        :
---      consAngle                consAngle
+--      treesTie                 treesTie
 --
-consAngle :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab c
-consAngle cons xs@(LName _ : _) = D.putTie =<< consTie cons xs
-consAngle _ [] = D.putTie []
-consAngle _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
-consAngle _ _ = Msg.adlib "unknown angle bracket"
+treesTie :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab c
+treesTie cons xs@(LName _ : _) = D.putTie =<< treesTerms cons xs
+treesTie _ [] = D.putTie []
+treesTie _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
+treesTie _ _ = Msg.adlib "unknown angle bracket"
 
--- Tie
+-- Terms
 --
---   {- /a 1  /b 2  /c 3 -}
---      ................
---      :
---      consTie
+--   /a 1  /b 2  /c 3
+--   ................
+--   :
+--   treesTerms
 --
-consTie :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab [S.Term c]
-consTie cons = mapM p B.<=< D.treesTerms1 where
+treesTerms :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [S.Term c]
+treesTerms cons = mapM p B.<=< D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Decode token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesJudge :: (D.CContent c) => ContentCalc c -> AssertType -> D.JudgeClass -> [S.TTree] -> B.Ab (D.Judge c)
-treesJudge calc q p = Right . assertAs q p B.<=< consTie (contentCons calc)
+treesJudge :: (D.CContent c) => CalcContent c -> AssertType -> D.JudgeClass -> [S.TTree] -> B.Ab (D.Judge c)
+treesJudge calc q p = Right . assertAs q p B.<=< treesTerms (treeContent calc)
 
 
 -- ----------------------  Relation
 --
---        .............  consRel  ..............
+--        .............  treesRel  .............
 --        :                                    :
 --     {= /a /b /c  [ 0 | 1 | 2 ]  [ 3 | 4 | 5 ] =}
 --        ........  .............  .............
 --        :         :              :
---        :         consRelTuple   consRelTuple
---        consTermNames
+--        :         treeTuple      treeTuple
+--        treesTermNames
 --
 --
-consRel :: (D.CContent c) => ContentCons c -> [S.TTree] -> B.Ab (D.Rel c)
-consRel cons xs =
-    do bo <- consRelTuple cons n `mapM` xs'
+treesRel :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab (D.Rel c)
+treesRel cons xs =
+    do bo <- treeTuple cons n `mapM` xs'
        Right $ D.Rel he $ B.unique bo
     where
-      (ns, xs')  = consTermNames xs
+      (ns, xs')  = treesTermNames xs
       n          = length ns
       he         = D.headFrom ns
 
-consTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
-consTermNames = terms [] where
+treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
+treesTermNames = terms [] where
     terms ns (LName n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
-consRelTuple :: (D.CContent c) => ContentCons c -> Int -> S.TTree -> B.Ab [c]
-consRelTuple cons n g@(B S.BracketList xs) =
-    do cs <- consContents cons xs
+treeTuple :: (D.CContent c) => DecodeContent c -> Int -> S.TTree -> B.Ab [c]
+treeTuple cons n g@(B S.BracketList xs) =
+    do cs <- treesContents cons xs
        let n' = length cs
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
        Right cs
-consRelTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
+treeTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
 
 
 -- ----------------------  Assert type
@@ -211,8 +211,8 @@ assertAs AssertViolate       = D.JudgeViolate
 -- ----------------------  Type
 
 -- | Literal reader for types.
-consType :: [S.TTree] -> B.Ab D.Type
-consType = gen where
+treesType :: [S.TTree] -> B.Ab D.Type
+treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x
                xs2 ->  Right . D.TypeSum =<< mapM gen xs2
@@ -271,8 +271,8 @@ consType = gen where
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.ttrees . B.tokens
---  >>> let lit  = contentCons [] :: S.TTree -> B.Ab BaalaC
---  >>> let lits = consContents lit . trees
+--  >>> let lit  = treeContent [] :: S.TTree -> B.Ab BaalaC
+--  >>> let lits = treesContents lit . trees
 --
 --  Boolean.
 --

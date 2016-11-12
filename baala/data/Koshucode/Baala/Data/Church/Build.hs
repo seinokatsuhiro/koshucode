@@ -21,7 +21,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (D.CContent c)
-  => D.ContentCalc c -> D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
+  => D.CalcContent c -> D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
 coxBuild calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
@@ -78,7 +78,7 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => D.ContentCalc c -> S.TTree -> B.Ab (D.Cox c)
+construct :: forall c. (D.CContent c) => D.CalcContent c -> S.TTree -> B.Ab (D.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePtList $ B.takeFirst $ B.untree tree
@@ -128,7 +128,7 @@ construct calc = expr where
            xs' <- expr `mapM` xs
            Right $ D.CoxFill cp f' xs'
 
-    lit cp tree  = fmap (D.CoxLit cp) $ D.contentCons (calc' tree) tree
+    lit cp tree  = fmap (D.CoxLit cp) $ D.treeContent (calc' tree) tree
     calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
                      | otherwise      = calc tree'
 

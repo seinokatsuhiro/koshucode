@@ -1,6 +1,6 @@
-{-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
+
+-- | Content expressions in relmap attributes.
 
 module Koshucode.Baala.Rop.Cox.Get
   ( -- * Cox
@@ -32,9 +32,11 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 getCox :: (D.CContent c) => Op.RopGet c (D.Cox c)
 getCox med = ropBuild med . S.ttreeGroup B.<=< Op.getTrees med
 
+-- | Get optional content expression with default content.
 getOptionCox :: (D.CContent c) => c -> Op.RopGet c (D.Cox c)
 getOptionCox c = Op.getOption (D.CoxLit [] c) getCox
 
+-- | Get optional content expression.
 getMaybeCox :: (D.CContent c) => Op.RopGet c (Maybe (D.Cox c))
 getMaybeCox = Op.getMaybe getCox
 
@@ -55,6 +57,7 @@ ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
 
 -- --------------------------------------------  Where
 
+-- | Get where attribute as operator set.
 getWhere :: (D.CContent c) => Op.RopGet c (D.CopSet c)
 getWhere u name =
     do wh <- Op.getOption [] getWhereBody u name
@@ -111,7 +114,7 @@ getContents med name =
        let trees2 = S.ttreeGroup `map` S.divideTreesByColon trees
        calcTree med `mapM` trees2
 
-calcTree :: (D.CContent c) => C.Intmed c -> D.ContentCalc c
+calcTree :: (D.CContent c) => C.Intmed c -> D.CalcContent c
 calcTree = D.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.
@@ -122,6 +125,7 @@ getOptContent opt = Op.getOption opt getContent
 getFiller :: (D.CContent c) => Op.RopGet c c
 getFiller = getOptContent D.empty
 
+-- | Get decimal integer content.
 getInt :: (D.CContent c) => Op.RopGet c D.DecimalInteger
 getInt med name =
     do dec <- D.getDec $ getContent med name

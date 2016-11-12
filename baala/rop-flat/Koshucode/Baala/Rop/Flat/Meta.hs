@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Relmap operators for retrieving meta information.
+
 module Koshucode.Baala.Rop.Flat.Meta
   ( ropsMeta,
     -- * koshu-cop
@@ -48,14 +50,15 @@ ropsMeta = Op.ropList "meta"
                                                              "-name . -height? -dir?"
     , Op.def  consKoshuSource    "koshu-source /N [-name /N][-type /N]"
                                                              "-number . -name? -type?"
-    , Op.def  consKoshuRop       "koshu-rop /N /N"           "-name* . -group? -usage?"
+    , Op.def  consKoshuRop       "koshu-rop /N"              "-name* . -group? -usage?"
     , Op.def  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
-    , Op.def  consKoshuVersion   "koshu-version /N"          "-term* . -version"
+    , Op.def  consKoshuVersion   "koshu-version /N"          "-term* . -version?"
     ]
 
 
 -- ----------------------  koshu-cop
 
+-- | __koshu-cop \/N__
 consKoshuCop :: D.CContent c => C.RopCons c
 consKoshuCop med =
   do name <- Op.getTerm med "-name"
@@ -74,6 +77,7 @@ relkitKoshuCop name res _ =
 
 -- ----------------------  koshu-cop-infix
 
+-- | __koshu-cop-infix \/N [ -height \/N ][ -dir \/N ]__
 consKoshuCopInfix :: (D.CContent c) => C.RopCons c
 consKoshuCopInfix med =
   do name   <- Op.getTerm med "-name"
@@ -107,6 +111,7 @@ maybeEmpty m f = maybe [] f m
 
 -- ----------------------  koshu-rop
 
+-- | __koshu-rop \/N [ -group \/N ][ -usage \/N ]__
 consKoshuRop :: (D.CContent c) => C.RopCons c
 consKoshuRop med =
   do name  <- Op.getTerm med "-name"
@@ -139,6 +144,7 @@ relkitKoshuRop (name, group, usage) res _ = Right kit2 where
 
 -- ----------------------  koshu-proxy
 
+-- | __koshu-proxy \/N \/N__
 consKoshuProxy :: (D.CContent c) => C.RopCons c
 consKoshuProxy med =
   do proto  <- Op.getTerm med "-proto"
@@ -173,19 +179,20 @@ relkitKoshuProxy (proto, uri) res _ = Right kit2 where
 --  koshu-version /ver [1:0]
 --  koshu-version /ver [1:0] [1:2]
 
+-- | __koshu-version \/N__
 consKoshuVersion :: (D.CContent c) => C.RopCons c
 consKoshuVersion med =
   do n   <- Op.getTerm  med "-term"
-     ver <- Op.getTrees med "-version"
+     ver <- Op.getMaybe Op.getTrees med "-version"
      case ver of
-       []      -> Right $ C.relmapHook med $ relkitKoshuVersion n
-       [f]     -> check n f f
-       [f, t]  -> check n f t
-       _       -> Msg.unexpAttr ""
+       Nothing      -> Right $ C.relmapHook med $ relkitKoshuVersion n
+       Just [f]     -> check n f f
+       Just [f, t]  -> check n f t
+       _            -> Msg.unexpAttr ""
   where
     check n f t = do
-      from <- D.contentCons undefined f
-      to   <- D.contentCons undefined t
+      from <- D.treeContent undefined f
+      to   <- D.treeContent undefined t
       Right $ C.relmapHook med $ relkitKoshuVersionCheck (from, to) n
 
 -- | Create @koshu-version@ relkit.
@@ -216,6 +223,7 @@ apiVersion V.Version { V.versionBranch = ver } =
 
 --  koshu-source /number -type /type -name /name
 
+-- | __koshu-source \/N [ -type \/N ][ -name \/N ]__
 consKoshuSource :: (D.CContent c) => C.RopCons c
 consKoshuSource med =
   do num  <- Op.getTerm med "-number"

@@ -150,7 +150,7 @@ coxRunList :: (D.CContent c) => D.CopSet c -> D.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 -- | Calculate content expression.
-calcContent :: (D.CContent c) => D.CopSet c -> D.ContentCalc c
+calcContent :: (D.CContent c) => D.CopSet c -> D.CalcContent c
 calcContent cops = calc where
     calc tree = coxRunPure cops =<< D.coxBuild calc cops tree
 
