@@ -8,6 +8,7 @@
 module Koshucode.Baala.Data.Content.Decode
   ( -- * Functions
     DecodeContent, CalcContent, 
+    stringContent,
     treeContent, treesJudge,
 
     -- * Assert type
@@ -46,6 +47,10 @@ type DecodeContent c = S.TTree -> B.Ab c
 
 -- | Content calculator.
 type CalcContent c = S.TTree -> B.Ab c
+
+-- | Decode content from string.
+stringContent :: (D.CContent c) => String -> B.Ab c
+stringContent = S.tt1 B.>=> treeContent undefined
 
 -- | Decode content from token tree.
 treeContent :: forall c. (D.CContent c) => CalcContent c -> DecodeContent c
@@ -136,10 +141,16 @@ treesTerms :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [S.Term c]
 treesTerms cons = mapM p B.<=< D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
--- | Decode token trees into a judge.
+-- | Decode judge from token trees.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesJudge :: (D.CContent c) => CalcContent c -> AssertType -> D.JudgeClass -> [S.TTree] -> B.Ab (D.Judge c)
+treesJudge ::
+    (D.CContent c)
+    => CalcContent c      -- ^ 
+    -> AssertType         -- ^ Assertion type
+    -> D.JudgeClass       -- ^ Judgement class
+    -> [S.TTree]          -- ^ Trees of terms
+    -> B.Ab (D.Judge c)   -- ^ Error or decoded judgement
 treesJudge calc q p = Right . assertAs q p B.<=< treesTerms (treeContent calc)
 
 

@@ -3,9 +3,9 @@
 -- | The Baala content type.
 
 module Koshucode.Baala.Data.Content.BaalaC
-  ( the,
-    BaalaC (..),
+  ( BaalaC (..),
     TermC, JudgeC, RelC,
+    the, stringC,
   ) where
 
 import qualified Data.Set                                as Set
@@ -15,19 +15,11 @@ import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Content.Utility    as D
+import qualified Koshucode.Baala.Data.Content.Decode     as D
 import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 
 -- ----------------------  Content type
-
--- | Shorthand function for the Baala content type.
---
---   >>> the $ D.pText "a"
---   VText "a"
---
-the :: BaalaC -> BaalaC
-{-# INLINE the #-}
-the = id
 
 -- | The Baala content type.
 data BaalaC
@@ -73,6 +65,7 @@ instance Ord BaalaC where
     -- others
     compare x y  = D.typeOrder x `compare` D.typeOrder y
 
+-- | Compare two lists as two sets.
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
@@ -134,15 +127,6 @@ qquote :: Maybe String -> O.StringMap
 qquote (Nothing) "" = "\"\""
 qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
-
--- | @Judge@ for concrete baala content.
-type JudgeC = D.Judge BaalaC
-
--- | @Term@ for concrete baala content.
-type TermC = S.Term BaalaC
-
--- | @Rel@ for concrete baala content.
-type RelC = D.Rel BaalaC
 
 
 -- ----------------------  Simple
@@ -249,3 +233,32 @@ instance D.CType BaalaC where
     gType _                  = B.bug "gType"
     isType  (VType _)        = True
     isType  _                = False
+
+
+-- ----------------------  Concrete type
+
+-- | @Judge@ for concrete baala content.
+type JudgeC = D.Judge BaalaC
+
+-- | @Term@ for concrete baala content.
+type TermC = S.Term BaalaC
+
+-- | @Rel@ for concrete baala content.
+type RelC = D.Rel BaalaC
+
+-- | Shorthand function for the Baala content type.
+--
+--   >>> the $ D.pText "a"
+--   VText "a"
+--
+the :: BaalaC -> BaalaC
+{-# INLINE the #-}
+the = id
+
+-- | Decode the Baala content from string.
+--
+--   >>> stringC "'a"
+--   Right (VCode "a")
+--
+stringC :: String -> B.Ab BaalaC
+stringC = D.stringContent
