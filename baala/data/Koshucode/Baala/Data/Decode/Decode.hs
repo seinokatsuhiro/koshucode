@@ -5,7 +5,7 @@
 
 -- | Decode contents from token trees.
 
-module Koshucode.Baala.Data.Content.Decode
+module Koshucode.Baala.Data.Decode.Decode
   ( -- * Functions
     DecodeContent, CalcContent, 
     stringContent,
@@ -29,11 +29,11 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class              as D
-import qualified Koshucode.Baala.Data.Content.Numeric    as D
-import qualified Koshucode.Baala.Data.Content.Term       as D
-import qualified Koshucode.Baala.Data.Content.Type       as D
+import qualified Koshucode.Baala.Data.Decode.Numeric     as D
+import qualified Koshucode.Baala.Data.Decode.Term        as D
+import qualified Koshucode.Baala.Data.Decode.Type        as D
 import qualified Koshucode.Baala.Base.Message            as Msg
-import qualified Koshucode.Baala.Data.Content.Message    as Msg
+import qualified Koshucode.Baala.Data.Decode.Message     as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
 

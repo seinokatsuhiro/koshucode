@@ -56,14 +56,14 @@ library
         Koshucode.Baala.Data.Church.Message
         Koshucode.Baala.Data.Church.Run
 
-        Koshucode.Baala.Data.Content
-        Koshucode.Baala.Data.Content.BaalaC
-        Koshucode.Baala.Data.Content.Decode
-        Koshucode.Baala.Data.Content.Message
-        Koshucode.Baala.Data.Content.Numeric
-        Koshucode.Baala.Data.Content.Term
-        Koshucode.Baala.Data.Content.Type
-        Koshucode.Baala.Data.Content.Utility
+        Koshucode.Baala.Data.Decode
+        Koshucode.Baala.Data.Decode.BaalaC
+        Koshucode.Baala.Data.Decode.Decode
+        Koshucode.Baala.Data.Decode.Message
+        Koshucode.Baala.Data.Decode.Numeric
+        Koshucode.Baala.Data.Decode.Term
+        Koshucode.Baala.Data.Decode.Type
+        Koshucode.Baala.Data.Decode.Utility
 
         Koshucode.Baala.Data.Class
         Koshucode.Baala.Data.Class.Complex

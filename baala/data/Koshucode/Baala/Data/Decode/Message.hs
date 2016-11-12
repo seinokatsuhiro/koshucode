@@ -2,7 +2,7 @@
 
 -- | Message list.
 
-module Koshucode.Baala.Data.Content.Message
+module Koshucode.Baala.Data.Decode.Message
   ( -- * Abortable
     abLiteral,
     -- * Message

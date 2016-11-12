@@ -3,7 +3,7 @@
 
 -- | Decode specific content.
 
-module Koshucode.Baala.Data.Content.Type
+module Koshucode.Baala.Data.Decode.Type
   ( treesTexts, treeText,
     treesInterp,
     treesType,
@@ -12,8 +12,8 @@ module Koshucode.Baala.Data.Content.Type
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
-import qualified Koshucode.Baala.Data.Content.Term     as D
-import qualified Koshucode.Baala.Data.Content.Message  as Msg
+import qualified Koshucode.Baala.Data.Decode.Term      as D
+import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
 

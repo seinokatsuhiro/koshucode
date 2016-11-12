@@ -2,7 +2,7 @@
 
 -- | Content encoder.
 
-module Koshucode.Baala.Data.Content.Utility
+module Koshucode.Baala.Data.Decode.Utility
   ( -- * Encode
     contentString,
     mixBracketList,

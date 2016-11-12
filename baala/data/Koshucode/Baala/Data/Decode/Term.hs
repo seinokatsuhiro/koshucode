@@ -3,7 +3,7 @@
 
 -- | Decode term name.
 
-module Koshucode.Baala.Data.Content.Term
+module Koshucode.Baala.Data.Decode.Term
   ( -- * Term name
     treeFlatName,
     treesFlatNames,
@@ -13,7 +13,7 @@ module Koshucode.Baala.Data.Content.Term
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data.Content.Message  as Msg
+import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
 
