@@ -5,7 +5,7 @@
 
 -- | Decode contents from token trees.
 
-module Koshucode.Baala.Data.Decode.Decode
+module Koshucode.Baala.Data.Decode.Content
   ( -- * Functions
     DecodeContent, CalcContent, 
     stringContent,

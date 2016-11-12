@@ -59,7 +59,7 @@ library
         Koshucode.Baala.Data.Content
 
         Koshucode.Baala.Data.Decode
-        Koshucode.Baala.Data.Decode.Decode
+        Koshucode.Baala.Data.Decode.Content
         Koshucode.Baala.Data.Decode.Message
         Koshucode.Baala.Data.Decode.Numeric
         Koshucode.Baala.Data.Decode.Term
