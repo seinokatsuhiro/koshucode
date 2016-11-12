@@ -3,7 +3,7 @@
 
 -- | Decode specific content.
 
-module Koshucode.Baala.Data.Content.Tree
+module Koshucode.Baala.Data.Content.Type
   ( treesTexts, treeText,
     treesInterp,
     treesType,
@@ -22,11 +22,11 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- | Get single text from token trees.
 --
---   >>> S.tt "'aa 'bb" >>= treesToText True
---   Right "aabb"
+--   >>> S.tt "'aa 'bb" >>= treesTexts True
+--   Right ["aa","bb"]
 --
---   >>> S.tt "aa bb" >>= treesToText False
---   Right "aabb"
+--   >>> S.tt "\"aa\" \"bb\"" >>= treesTexts True
+--   Right ["aabb"]
 --
 treesTexts :: Bool -> [S.TTree] -> B.Ab [String]
 treesTexts q = mapM $ treeText q

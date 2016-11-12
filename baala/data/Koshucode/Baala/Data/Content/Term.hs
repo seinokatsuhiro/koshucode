@@ -52,7 +52,7 @@ treesFlatNames = mapM treeFlatName
 --   Right [("a", [TreeL ...]),
 --          ("b", [TreeL ...])]
 --
-treesTerms :: [S.TTree] -> B.Ab [S.NamedTrees]
+treesTerms :: [S.TTree] -> B.Ab [S.Term [S.TTree]]
 treesTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -71,6 +71,6 @@ treesTerms = name where
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
-treesTerms1 :: [S.TTree] -> B.Ab [S.NamedTree]
+treesTerms1 :: [S.TTree] -> B.Ab [S.Term S.TTree]
 treesTerms1 xs = do xs' <- treesTerms xs
                     Right $ B.mapSndTo S.ttreeGroup xs'

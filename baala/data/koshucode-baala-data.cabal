@@ -62,7 +62,7 @@ library
         Koshucode.Baala.Data.Content.Message
         Koshucode.Baala.Data.Content.Numeric
         Koshucode.Baala.Data.Content.Term
-        Koshucode.Baala.Data.Content.Tree
+        Koshucode.Baala.Data.Content.Type
         Koshucode.Baala.Data.Content.Utility
 
         Koshucode.Baala.Data.Class
