@@ -32,7 +32,6 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Base.Term    as Op
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 
@@ -180,7 +179,7 @@ right x (Left _)  = Right x
 -- | Get a term name from named attribute.
 getTerm :: RopGet c S.TermName
 getTerm = getAbortable get where
-    get [x] = Op.termName x
+    get [x] = D.treeFlatName x
     get _   = Msg.unexpAttr "Require one term"
 
 -- | Get two term names.
@@ -197,23 +196,23 @@ getTermOpt = getMaybe getTerm
 
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [S.TermName]
-getTerms = getAbortable Op.termNames
+getTerms = getAbortable D.treesFlatNames
 
 -- | Get signed term names.
 getSignedTerms :: RopGet c [S.SignedTermName]
-getSignedTerms = getAbortable Op.signedTermNames
+getSignedTerms = getAbortable $ mapM D.treeSignedName
 
 -- | Get term names and complement sign (@~@) .
 getTermsCo :: RopGet c (Bool, [S.TermName])
-getTermsCo = getAbortable Op.termNamesCo
+getTermsCo = getAbortable D.treesFlatNamesCo
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [S.TermName2]
-getTermPairs = getAbortable Op.termNamePairs
+getTermPairs = getAbortable D.treesFlatNamePairs
 
 -- | Get term names groups delimited by colons.
 getTermsColon :: RopGet c [[S.TermName]]
-getTermsColon = getAbortable Op.termNamesColon
+getTermsColon = getAbortable D.treesNamesByColon
 
 -- | Get list of tree terms.
 getTermTrees :: RopGet c [S.Term S.TTree]
