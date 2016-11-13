@@ -25,6 +25,22 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 {-# DEPRECATED BaalaC "Use 'Content' instead" #-}
 type BaalaC = Content
 
+{-# WARNING VEmpty   "Use 'D.empty' instead." #-}
+{-# WARNING VBool    "Use 'D.pBool' instead." #-}
+{-# WARNING VDec     "Use 'D.pDec' instead." #-}
+{-# WARNING VClock   "Use 'D.pClock' instead." #-}
+{-# WARNING VTime    "Use 'D.pTime' instead." #-}
+{-# WARNING VCode    "Use 'D.pCode' instead." #-}
+{-# WARNING VTerm    "Use 'D.pTerm' instead." #-}
+{-# WARNING VText    "Use 'D.pText' instead." #-}
+{-# WARNING VList    "Use 'D.pList' instead." #-}
+{-# WARNING VSet     "Use 'D.pSet' instead." #-}
+{-# WARNING VTie     "Use 'D.pTie' instead." #-}
+{-# WARNING VRel     "Use 'D.pRel' instead." #-}
+{-# WARNING VInterp  "Use 'D.pInterp' instead." #-}
+{-# WARNING VType    "Use 'D.pType' instead." #-}
+{-# WARNING VEnd     "Use 'D.end' instead." #-}
+
 -- | The Baala content type.
 data Content
     = VEmpty                      -- ^ /Singleton:/   Sign of no ordinary type
