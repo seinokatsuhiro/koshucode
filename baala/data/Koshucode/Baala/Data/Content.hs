@@ -3,7 +3,8 @@
 -- | The Baala content type.
 
 module Koshucode.Baala.Data.Content
-  ( BaalaC (..),
+  ( Content (..),
+    BaalaC,
     TermC, JudgeC, RelC,
     the, stringC,
   ) where
@@ -21,7 +22,11 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 -- ----------------------  Content type
 
 -- | The Baala content type.
-data BaalaC
+{-# DEPRECATED BaalaC "Use 'Content' instead" #-}
+type BaalaC = Content
+
+-- | The Baala content type.
+data Content
     = VEmpty                      -- ^ /Singleton:/   Sign of no ordinary type
     | VBool    Bool               -- ^ /Numeric:/     Boolean type
     | VDec     D.Decimal          -- ^ /Numeric:/     Decimal number type
@@ -30,20 +35,20 @@ data BaalaC
     | VCode    String             -- ^ /Textual:/     Code type
     | VTerm    String             -- ^ /Textual:/     Term name type
     | VText    String             -- ^ /Textual:/     Text type
-    | VList    [BaalaC]           -- ^ /Collective:/  List type
-    | VSet     [BaalaC]           -- ^ /Collective:/  Set type
-    | VTie     [B.Named BaalaC]   -- ^ /Relational:/  Tie type (set of terms)
-    | VRel     (D.Rel BaalaC)     -- ^ /Relational:/  Relation type
+    | VList    [Content]           -- ^ /Collective:/  List type
+    | VSet     [Content]           -- ^ /Collective:/  Set type
+    | VTie     [B.Named Content]   -- ^ /Relational:/  Tie type (set of terms)
+    | VRel     (D.Rel Content)     -- ^ /Relational:/  Relation type
     | VInterp  D.Interp           -- ^ /Relational:/  Interpretation type
     | VType    D.Type             -- ^ /Meta:/        Type for type
     | VEnd                        -- ^ /Singleton:/   The end of everything
     deriving (Show)
 
-instance Eq BaalaC where
+instance Eq Content where
     x == y  = compare x y == EQ
     x /= y  = compare x y /= EQ
 
-instance Ord BaalaC where
+instance Ord Content where
     -- simple
     compare (VBool    x) (VBool    y)  = compare x y
     compare (VDec     x) (VDec     y)  = compare x y
@@ -68,7 +73,7 @@ instance Ord BaalaC where
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
-instance D.CTypeOf BaalaC where
+instance D.CTypeOf Content where
     typeOf (VEmpty    )  = D.TypeEmpty
     typeOf (VBool    _)  = D.TypeBool
     typeOf (VDec     _)  = D.TypeDec
@@ -90,13 +95,13 @@ typeSum cs = case B.unique $ map D.typeOf cs of
                [t] -> t
                ts  -> D.TypeSum ts
 
-instance D.CContent BaalaC where
+instance D.CContent Content where
     appendContent (VEmpty) x           = Right x
     appendContent x (VEmpty)           = Right x
     appendContent (VText x) (VText y)  = Right . VText $ x ++ y
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
-instance B.MixShortEncode BaalaC where
+instance B.MixShortEncode Content where
     mixShortEncode sh c =
         case c of
           VCode  s   -> B.mixString $ quote  (sh s) s
@@ -130,59 +135,59 @@ qquote (Just s)  _  = s
 
 -- ----------------------  Simple
 
-instance D.CEmpty BaalaC where
+instance D.CEmpty Content where
     empty                    = VEmpty
     isEmpty VEmpty           = True
     isEmpty _                = False
 
-instance D.CEnd BaalaC where
+instance D.CEnd Content where
     end                      = VEnd
     isEnd VEnd               = True
     isEnd _                  = False
 
-instance D.CBool BaalaC where
+instance D.CBool Content where
     pBool                    = VBool
     gBool (VBool x)          = x
     gBool _                  = B.bug "gBool"
     isBool  (VBool _)        = True
     isBool  _                = False
 
-instance D.CDec BaalaC where
+instance D.CDec Content where
     pDec                     = VDec
     gDec (VDec x)            = x
     gDec _                   = B.bug "gDec"
     isDec  (VDec _)          = True
     isDec  _                 = False
 
-instance D.CClock BaalaC where
+instance D.CClock Content where
     pClock                   = VClock
     gClock  (VClock x)       = x
     gClock  _                = B.bug "gClock"
     isClock (VClock _)       = True
     isClock _                = False
 
-instance D.CTime BaalaC where
+instance D.CTime Content where
     pTime                    = VTime
     gTime  (VTime x)         = x
     gTime  _                 = B.bug "gTime"
     isTime (VTime _)         = True
     isTime _                 = False
 
-instance D.CCode BaalaC where
+instance D.CCode Content where
     pCode                    = VCode
     gCode (VCode s)          = s
     gCode _                  = B.bug "gCode"
     isCode  (VCode _)        = True
     isCode  _                = False
 
-instance D.CTerm BaalaC where
+instance D.CTerm Content where
     pTerm                    = VTerm
     gTerm (VTerm s)          = s
     gTerm _                  = B.bug "gTerm"
     isTerm  (VTerm _)        = True
     isTerm  _                = False
 
-instance D.CText BaalaC where
+instance D.CText Content where
     pText                    = VText
     gText (VText s)          = s
     gText _                  = B.bug "gText"
@@ -191,42 +196,42 @@ instance D.CText BaalaC where
 
 -- ----------------------  Complex
 
-instance D.CList BaalaC where
+instance D.CList Content where
     pList                    = VList
     gList (VList xs)         = xs
     gList _                  = []
     isList (VList _)         = True
     isList _                 = False
 
-instance D.CSet BaalaC where
+instance D.CSet Content where
     pSet                     = VSet . B.omit D.isEmpty . B.unique
     gSet (VSet x)            = x
     gSet _                   = B.bug "gSet"
     isSet  (VSet _)          = True
     isSet  _                 = False
 
-instance D.CTie BaalaC where
+instance D.CTie Content where
     pTie                     = VTie 
     gTie (VTie x)            = x
     gTie _                   = B.bug "gTie"
     isTie  (VTie _)          = True
     isTie  _                 = False
 
-instance D.CRel BaalaC where
+instance D.CRel Content where
     pRel                     = VRel
     gRel (VRel r)            = r
     gRel _                   = B.bug "gRel"
     isRel  (VRel _)          = True
     isRel  _                 = False
 
-instance D.CInterp BaalaC where
+instance D.CInterp Content where
     pInterp                  = VInterp
     gInterp (VInterp r)      = r
     gInterp _                = B.bug "gInterp"
     isInterp  (VInterp _)    = True
     isInterp  _              = False
 
-instance D.CType BaalaC where
+instance D.CType Content where
     pType                    = VType
     gType (VType r)          = r
     gType _                  = B.bug "gType"
@@ -237,20 +242,20 @@ instance D.CType BaalaC where
 -- ----------------------  Concrete type
 
 -- | @Judge@ for concrete baala content.
-type JudgeC = D.Judge BaalaC
+type JudgeC = D.Judge Content
 
 -- | @Term@ for concrete baala content.
-type TermC = S.Term BaalaC
+type TermC = S.Term Content
 
 -- | @Rel@ for concrete baala content.
-type RelC = D.Rel BaalaC
+type RelC = D.Rel Content
 
 -- | Shorthand function for the Baala content type.
 --
 --   >>> the $ D.pText "a"
 --   VText "a"
 --
-the :: BaalaC -> BaalaC
+the :: Content -> Content
 {-# INLINE the #-}
 the = id
 
@@ -259,5 +264,5 @@ the = id
 --   >>> stringC "'a"
 --   Right (VCode "a")
 --
-stringC :: String -> B.Ab BaalaC
+stringC :: String -> B.Ab Content
 stringC = D.stringContent

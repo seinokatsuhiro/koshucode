@@ -29,20 +29,20 @@ type AboutJudges c = (Maybe (About c), [D.Judge c])
 -- --------------------------------------------  Concrete type
 
 -- | @About@ for concrete baala content.
-type AboutC = About D.BaalaC
+type AboutC = About D.Content
 
 -- | @AboutJudges@ for concrete baala content.
-type AboutJudgesC = AboutJudges D.BaalaC
+type AboutJudgesC = AboutJudges D.Content
 
 -- | @Global@ for concrete baala content.
-type GlobalC = C.Global D.BaalaC
+type GlobalC = C.Global D.Content
 
 -- | @Resource@ for concrete baala content.
-type ResourceC = C.Resource D.BaalaC
+type ResourceC = C.Resource D.Content
 
 -- | @Result@ for concrete baala content.
-type ResultC = C.Result D.BaalaC
+type ResultC = C.Result D.Content
 
 -- | @ResultWriter@ for concrete baala content.
-type ResultWriterC = C.ResultWriter D.BaalaC
+type ResultWriterC = C.ResultWriter D.Content
 

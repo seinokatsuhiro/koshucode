@@ -63,7 +63,7 @@ text s = s
 jsonNull :: A.Value
 jsonNull = A.Null
 
-instance A.ToJSON D.BaalaC where
+instance A.ToJSON D.Content where
     toJSON c = case c of
         D.VCode s      -> A.toJSON s
         D.VText s      -> A.toJSON s
