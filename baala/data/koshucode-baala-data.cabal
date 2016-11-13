@@ -64,11 +64,11 @@ library
         Koshucode.Baala.Data.Decode.Numeric
         Koshucode.Baala.Data.Decode.Term
         Koshucode.Baala.Data.Decode.Type
-        Koshucode.Baala.Data.Decode.Utility
 
         Koshucode.Baala.Data.Class
         Koshucode.Baala.Data.Class.Complex
         Koshucode.Baala.Data.Class.Content
+        Koshucode.Baala.Data.Class.Encode
         Koshucode.Baala.Data.Class.Map
         Koshucode.Baala.Data.Class.Message
         Koshucode.Baala.Data.Class.Simple

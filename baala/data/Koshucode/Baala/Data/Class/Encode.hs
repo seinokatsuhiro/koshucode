@@ -2,9 +2,8 @@
 
 -- | Content encoder.
 
-module Koshucode.Baala.Data.Decode.Utility
-  ( -- * Encode
-    contentString,
+module Koshucode.Baala.Data.Class.Encode
+  ( contentString,
     mixBracketList,
     mixBracketSet,
   ) where
@@ -12,7 +11,10 @@ module Koshucode.Baala.Data.Decode.Utility
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
 import qualified Koshucode.Baala.Data.Type                as D
-import qualified Koshucode.Baala.Data.Class               as D
+import qualified Koshucode.Baala.Data.Class.Complex       as D
+import qualified Koshucode.Baala.Data.Class.Content       as D
+import qualified Koshucode.Baala.Data.Class.Simple        as D
+import qualified Koshucode.Baala.Data.Class.Singleton     as D
 
 
 -- ----------------------  Encode
