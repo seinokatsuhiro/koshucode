@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -29,11 +29,17 @@ convRadian :: Int -> GeoPoint -> GeoPoint
 -- | Message list.
 module Koshucode.Baala.Rop.Cox.Message
 
+
+-- | Content expressions in relmap attributes.
 module Koshucode.Baala.Rop.Cox.Get
 
 -- | Get relmap attribute as single cox.
 getCox :: (CContent c) => RopGet c (Cox c)
+
+-- | Get optional content expression.
 getMaybeCox :: (CContent c) => RopGet c (Maybe (Cox c))
+
+-- | Get optional content expression with default content.
 getOptionCox :: (CContent c) => c -> RopGet c (Cox c)
 
 -- | Get relmap attribute as cox list with term name.
@@ -41,6 +47,8 @@ getTermCoxes :: (CContent c) => RopGet c [NamedCox c]
 
 -- | Get relmap attribute as cox list with name.
 getNamedCoxes :: (CContent c) => RopGet c [NamedCox c]
+
+-- | Get where attribute as operator set.
 getWhere :: (CContent c) => RopGet c (CopSet c)
 
 -- | Get relmap attribute as calculated content.
@@ -54,6 +62,8 @@ getOptContent :: (CContent c) => c -> RopGet c c
 
 -- | Get relmap attribute as filler content, i.e., given content or empty.
 getFiller :: (CContent c) => RopGet c c
+
+-- | Get decimal integer content.
 getInt :: (CContent c) => RopGet c DecimalInteger
 
 

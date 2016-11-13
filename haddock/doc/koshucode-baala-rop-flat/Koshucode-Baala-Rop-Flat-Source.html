@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.168.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.170.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -73,6 +73,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >source-term</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Data source.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -157,32 +165,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ><div class="doc"
 	  ><p
 	    >Implementation of relational operators.</p
-	    ><dl
-	    ><dt
-	      ><code
-		>dee</code
-		></dt
-	      ><dd
-	      >Nullary full relation.</dd
-	      ><dt
-	      ><code
-		>dum</code
-		></dt
-	      ><dd
-	      >Nullary empty relation.</dd
-	      ><dt
-	      ><code
-		>empty</code
-		></dt
-	      ><dd
-	      >Make empty relation.</dd
-	      ><dt
-	      ><code
-		>source</code
-		></dt
-	      ><dd
-	      >Read relation from data source.</dd
-	      ></dl
 	    ></div
 	  ></div
 	><h1 id="g:1"
@@ -196,6 +178,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Source.html#consDee');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >dee</strong
+	      ></p
+	    ><p
+	    >Output the nullary full relation.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -206,16 +196,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Source.html#consDum');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  >Nullary fullset relation.</p
-	  ><pre
-	  >dee</pre
+	  ><div class="doc"
 	  ><p
-	  >Nullary empty relation.</p
-	  ><pre
-	  >dum</pre
+	    ><strong
+	      >dum</strong
+	      ></p
+	    ><p
+	    >Output the nullary empty relation.</p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>empty</h1
@@ -228,6 +216,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Source.html#consEmpty');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >empty /N ...</strong
+	      ></p
+	    ><p
+	    >Output an empty relation which has terms <em
+	      >/N ...</em
+	      >.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -260,18 +258,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Source.html#consSource');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  >Read relation with term <code
-	    >/a</code
-	    > and <code
-	    >/b</code
-	    > constructed from judges of <code
-	    >P</code
-	    >.</p
-	  ><pre
-	  >source P /a /b</pre
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >source C /N...</strong
+	      ></p
+	    ><p
+	    >Read relation with terms <em
+	      >/N...</em
+	      > from judges of <em
+	      >C</em
+	      >.</p
+	    ></div
 	  ></div
 	><h1 id="g:4"
 	>source-term</h1
@@ -284,6 +282,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-Source.html#consSourceTerm');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><strong
+	      >source-term C R</strong
+	      ></p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -306,17 +310,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	      >source-term</code
 	      > relmap.</p
 	    ></div
-	  ></div
-	><div class="doc"
-	><p
-	  >Define relmap <code
-	    >p2</code
-	    > that has same terms as <code
-	    >p1</code
-	    >.</p
-	  ><pre
-	  >p1 : source P1 /a /b
-p2 : source-term P2 p2</pre
 	  ></div
 	></div
       ></div

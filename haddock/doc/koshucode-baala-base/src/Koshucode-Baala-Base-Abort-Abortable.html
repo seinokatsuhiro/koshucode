@@ -9,11 +9,11 @@
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a class="number" name="line-2">2</a>
-<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Abortable process</span>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Abortable process.</span>
 <a class="number" name="line-4">4</a>
 <a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Abort</span><span class='hs-varop'>.</span><span class='hs-conid'>Abortable</span>
 <a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-varid'>abortable</span><span class='hs-layout'>,</span>
-<a class="number" name="line-7">7</a>    <span class='hs-varid'>abortableSourced</span><span class='hs-layout'>,</span>
+<a class="number" name="line-7">7</a>  <span class='hs-varop'>--abortableSourced,</span>
 <a class="number" name="line-8">8</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-9">9</a>
 <a class="number" name="line-10">10</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
@@ -35,11 +35,11 @@
 <a class="number" name="line-26">26</a>       <span class='hs-keyglyph'>[</span><span class='hs-varid'>p</span><span class='hs-keyglyph'>]</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>abort</span> <span class='hs-layout'>{</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortPoint</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>tag</span><span class='hs-layout'>,</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>src</span> <span class='hs-layout'>}</span>
 <a class="number" name="line-27">27</a>       <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>push</span> <span class='hs-varid'>tag</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>p</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>abort</span>
 <a class="number" name="line-28">28</a>
-<a class="number" name="line-29">29</a><a name="abortableSourced"></a><span class='hs-definition'>abortableSourced</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Sourced</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Sourced</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
-<a class="number" name="line-30">30</a><span class='hs-definition'>abortableSourced</span> <span class='hs-varid'>tag</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Sourced</span> <span class='hs-varid'>pt</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-31">31</a>    <span class='hs-varid'>abortable</span> <span class='hs-varid'>tag</span> <span class='hs-varid'>pt</span> <span class='hs-varop'>$</span> <span class='hs-keyword'>do</span>
-<a class="number" name="line-32">32</a>      <span class='hs-varid'>y</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>f</span> <span class='hs-varid'>x</span>
-<a class="number" name="line-33">33</a>      <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Sourced</span> <span class='hs-varid'>pt</span> <span class='hs-varid'>y</span>
+<a class="number" name="line-29">29</a><span class='hs-comment'>-- abortableSourced :: String -&gt; (a -&gt; B.Ab b) -&gt; B.Sourced a -&gt; B.Ab (B.Sourced b)</span>
+<a class="number" name="line-30">30</a><span class='hs-comment'>-- abortableSourced tag f (B.Sourced pt x) =</span>
+<a class="number" name="line-31">31</a><span class='hs-comment'>--     abortable tag pt $ do</span>
+<a class="number" name="line-32">32</a><span class='hs-comment'>--       y &lt;- f x</span>
+<a class="number" name="line-33">33</a><span class='hs-comment'>--       Right $ B.Sourced pt y</span>
 <a class="number" name="line-34">34</a>
 </pre></body>
 </html>

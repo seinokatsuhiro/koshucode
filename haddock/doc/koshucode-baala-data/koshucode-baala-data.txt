@@ -8,7 +8,176 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.168.0.0
+@version 0.170.0.0
+
+
+-- | Common properties of judgements and relations.
+module Koshucode.Baala.Data.Type.Judge.JudgeClass
+
+-- | Name of judgement class, in other words, name of propositional
+--   function.
+type JudgeClass = String
+
+-- | Get judge class.
+class GetClass a
+getClass :: GetClass a => a -> JudgeClass
+
+-- | Get term list.
+class GetTerms a
+getTerms :: GetTerms a => a c -> [Term c]
+
+-- | Get list of term names.
+class GetTermNames a
+getTermNames :: GetTermNames a => a -> [TermName]
+
+-- | Get unique list of term names.
+getTermNamesUnique :: (GetTermNames a) => a -> [TermName]
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
+
+
+-- | Judgements: a symbolic representations of affirmed or denied
+--   statements.
+module Koshucode.Baala.Data.Type.Judge.Judge
+
+-- | Judgement on type <tt>c</tt>.
+--   
+--   Judgement (or judge for short) is divided into three parts: logical
+--   quality, name of class, and argument. Boolean values <a>True</a> or
+--   <a>False</a> of logical quality corresponds to affirmed or denied
+--   judge. A name of judgement class represents certain sentence class
+--   that gives intepretation of data. Sentence class has placeholders
+--   filled by <a>Named</a> <tt>c</tt> in argument.
+data Judge c
+
+-- | <pre>
+--   |-- P /x 10 /y 20
+--   </pre>
+JudgeAffirm :: JudgeClass -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-x P /x 10 /y 20
+--   </pre>
+JudgeDeny :: JudgeClass -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-xx P /x 10 /y 20
+--   </pre>
+JudgeMultiDeny :: JudgeClass -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-c P /x 10 +/y 20
+--   </pre>
+JudgeChange :: JudgeClass -> [Term c] -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-cc P /x 10 +/y 20
+--   </pre>
+JudgeMultiChange :: JudgeClass -> [Term c] -> [Term c] -> Judge c
+
+-- | <pre>
+--   |-v P /x 10 /y 20
+--   </pre>
+JudgeViolate :: JudgeClass -> [Term c] -> Judge c
+
+-- | Map function to terms.
+judgeTermsMap :: ([Term a] -> [Term b]) -> Judge a -> Judge b
+
+-- | Prepend a term into judgement.
+judgeCons :: Term c -> Map (Judge c)
+
+-- | Construct judgement from its class and terms.
+type JudgeOf c = JudgeClass -> [Term c] -> Judge c
+
+-- | Construct affirmative judgement.
+affirm :: JudgeOf c
+
+-- | Construct denial judgement.
+deny :: JudgeOf c
+
+-- | Affirm judgement, i.e., change logical quality to affirmative.
+affirmJudge :: Map (Judge c)
+
+-- | Deny judgement, i.e., change logical quality to denial.
+denyJudge :: Map (Judge c)
+
+-- | Test which judgement is affirmed.
+isAffirmative :: Judge c -> Bool
+
+-- | Test which judgement is denied.
+isDenial :: Judge c -> Bool
+
+-- | Test which judgement is for violation.
+isViolative :: Judge c -> Bool
+
+-- | Conventional line-break setting for judges: 4-spaces indent and
+--   120-columns line.
+judgeBreak :: LineBreak
+
+-- | Encode judgement with term separator.
+judgeMix :: (MixShortEncode c) => MixText -> Shorten -> Judge c -> MixText
+
+-- | Encode judgement with two-spaces term separator.
+judgeMix2 :: (MixShortEncode c) => Shorten -> Judge c -> MixText
+
+-- | Encode judgement with tab term separator.
+judgeMixTab :: (MixShortEncode c) => Shorten -> Judge c -> MixText
+
+-- | Encode term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNameToMix "foo"
+--   MixText "/foo"
+--   </pre>
+termNameToMix :: TermName -> MixText
+
+-- | Encode term list with one-space separator.
+termsToMix1 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
+
+-- | Encode term list with two-spaces separator.
+termsToMix2 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
+instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance GHC.Base.Functor Koshucode.Baala.Data.Type.Judge.Judge.Judge
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetClass (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTerms Koshucode.Baala.Data.Type.Judge.Judge.Judge
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+
+
+-- | Type for data interpretation.
+module Koshucode.Baala.Data.Type.Judge.Interp
+
+-- | Data interpretation.
+data Interp
+Interp :: [InterpWord] -> [TermName] -> Interp
+
+-- | Sentence which interpret data.
+[interpWords] :: Interp -> [InterpWord]
+
+-- | Terms in sentence.
+[interpTerms] :: Interp -> [TermName]
+
+-- | Component of data interpretation.
+data InterpWord
+
+-- | Constant part of interpretation.
+InterpText :: String -> InterpWord
+
+-- | Variable part of interpretation.
+InterpTerm :: TermName -> InterpWord
+
+-- | Create data interpretation.
+interp :: [InterpWord] -> Interp
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Judge.Interp.Interp
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Judge.Interp.Interp
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Judge.Interp.Interp
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Judge.Interp.InterpWord
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Judge.Interp.InterpWord
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Judge.Interp.InterpWord
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Judge.Interp.Interp
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Judge.Interp.Interp
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Judge.Interp.InterpWord
 
 
 -- | Extra functions for rational numbers.
@@ -165,6 +334,9 @@ realDecimal :: (Real n) => DecimalFracle -> n -> Decimal
 
 -- | Convert decimal number to fractional number.
 decimalFractional :: (Fractional n) => Decimal -> n
+
+-- | Convert decimal number to double.
+decimalDouble :: Decimal -> Double
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Decimal.Decimal.Decimal
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Decimal.Decimal.Decimal
 instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Decimal.Decimal.Decimal
@@ -269,28 +441,139 @@ chopDigitsRound :: (Integral d, Integral n) => d -> n -> n
 roundLastDigit :: (Integral n) => n -> n
 
 
--- | Common properties of judgements and relations.
-module Koshucode.Baala.Data.Type.JudgeClass
+-- | Judgement and related types.
+module Koshucode.Baala.Data.Type.Judge
 
--- | Name of judgement class, in other words, name of propositional
---   function.
-type JudgeClass = String
 
--- | Get judge class.
-class GetClass a
-getClass :: GetClass a => a -> JudgeClass
+-- | Type for types.
+module Koshucode.Baala.Data.Type.Type
 
--- | Get term list.
-class GetTerms a
-getTerms :: GetTerms a => a c -> [Term c]
+-- | Type for types.
+data Type
 
--- | Get list of term names.
-class GetTermNames a
-getTermNames :: GetTermNames a => a -> [TermName]
+-- | Everything
+TypeAny :: Type
 
--- | Get unique list of term names.
-getTermNamesUnique :: (GetTermNames a) => a -> [TermName]
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
+-- | Type of types
+TypeType :: Type
+
+-- | Term name
+TypeTerm :: Type
+
+-- | Data interpreation
+TypeInterp :: Type
+
+-- | Empty
+TypeEmpty :: Type
+
+-- | End
+TypeEnd :: Type
+
+-- | Boolean
+TypeBool :: Type
+
+-- | Text
+TypeText :: Type
+
+-- | Code
+TypeCode :: Type
+
+-- | Decimal
+TypeDec :: Type
+
+-- | Clock
+TypeClock :: (Maybe String) -> Type
+
+-- | Time
+TypeTime :: (Maybe String) -> Type
+
+-- | Binary data
+TypeBin :: Type
+
+-- | List
+TypeList :: Type -> Type
+
+-- | Set
+TypeSet :: Type -> Type
+
+-- | Tagged type
+TypeTag :: String -> Type -> Type
+
+-- | Tie
+TypeTie :: [NamedType] -> Type
+
+-- | Relation
+TypeRel :: [NamedType] -> Type
+
+-- | Tuple (Product type)
+TypeTuple :: [Type] -> Type
+
+-- | Sum type
+TypeSum :: [Type] -> Type
+
+-- | Term type, i.e., term name and type of its content.
+type NamedType = Named Type
+
+-- | Print type as tree.
+typeExplain :: Type -> Doc
+
+-- | Encode term types.
+typeTermMix :: Type -> MixText
+
+-- | Create relation type from term names.
+typeFlatRel :: [TermName] -> Type
+
+-- | Add term name to relation type.
+typeConsRel :: TermName -> Map Type
+
+-- | Add term name and type to relation type.
+typeConsNest :: TermName -> Type -> Map Type
+
+-- | Add term names to relation type.
+typeAppendRel :: [TermName] -> Map Type
+
+-- | Get term names from relation type.
+typeRelTermNames :: Type -> [TermName]
+
+-- | Get degree of relation type.
+typeRelDegree :: Type -> Int
+
+-- | Get named type from relation type or tie type.
+typeTerms :: Type -> [NamedType]
+
+-- | Test type is relational.
+isTypeRel :: Type -> Bool
+
+-- | Calculate term index.
+--   
+--   <pre>
+--   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["b"]
+--   [1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["e"]
+--   [-1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; typeRelIndex (typeConsNest "r" (typeFlatRel ["a", "b"]) (typeFlatRel [])) ["r", "b"]
+--   [0, 1]
+--   </pre>
+typeRelIndex :: Type -> TermPath -> [Int]
+
+-- | Modify terms of relation type.
+typeRelMapTerms :: Map [NamedType] -> Map Type
+
+-- | Modify term of relation type.
+typeRelMapTerm :: Map NamedType -> Map Type
+
+-- | Modify term name of relation type.
+typeRelMapName :: Map TermName -> Map Type
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Type.Type
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Type.Type
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Type.Type
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Type.Type
 
 
 -- | Term picker is a data for picking target terms based on input heading
@@ -525,238 +808,6 @@ backwardTerms :: TermPicker c -> Map [c]
 towardTerms :: Bool -> TermPicker c -> Map [c]
 
 
--- | Judgements: a symbolic representations of affirmed or denied
---   statements.
-module Koshucode.Baala.Data.Type.Judge
-
--- | Judgement on type <tt>c</tt>.
---   
---   Judgement (or judge for short) is divided into three parts: logical
---   quality, name of class, and argument. Boolean values <a>True</a> or
---   <a>False</a> of logical quality corresponds to affirmed or denied
---   judge. A name of judgement class represents certain sentence class
---   that gives intepretation of data. Sentence class has placeholders
---   filled by <a>Named</a> <tt>c</tt> in argument.
-data Judge c
-
--- | <pre>
---   |-- P /x 10 /y 20
---   </pre>
-JudgeAffirm :: JudgeClass -> [Term c] -> Judge c
-
--- | <pre>
---   |-x P /x 10 /y 20
---   </pre>
-JudgeDeny :: JudgeClass -> [Term c] -> Judge c
-
--- | <pre>
---   |-xx P /x 10 /y 20
---   </pre>
-JudgeMultiDeny :: JudgeClass -> [Term c] -> Judge c
-
--- | <pre>
---   |-c P /x 10 +/y 20
---   </pre>
-JudgeChange :: JudgeClass -> [Term c] -> [Term c] -> Judge c
-
--- | <pre>
---   |-cc P /x 10 +/y 20
---   </pre>
-JudgeMultiChange :: JudgeClass -> [Term c] -> [Term c] -> Judge c
-
--- | <pre>
---   |-v P /x 10 /y 20
---   </pre>
-JudgeViolate :: JudgeClass -> [Term c] -> Judge c
-
--- | Map function to terms.
-judgeTermsMap :: ([Term a] -> [Term b]) -> Judge a -> Judge b
-
--- | Prepend a term into judgement.
-judgeCons :: Term c -> Map (Judge c)
-
--- | Construct judgement from its class and terms.
-type JudgeOf c = JudgeClass -> [Term c] -> Judge c
-
--- | Construct affirmative judgement.
-affirm :: JudgeOf c
-
--- | Construct denial judgement.
-deny :: JudgeOf c
-
--- | Affirm judgement, i.e., change logical quality to affirmative.
-affirmJudge :: Map (Judge c)
-
--- | Deny judgement, i.e., change logical quality to denial.
-denyJudge :: Map (Judge c)
-
--- | Test which judgement is affirmed.
-isAffirmative :: Judge c -> Bool
-
--- | Test which judgement is denied.
-isDenial :: Judge c -> Bool
-
--- | Test which judgement is for violation.
-isViolative :: Judge c -> Bool
-
--- | Conventional line-break setting for judges: 4-spaces indent and
---   120-columns line.
-judgeBreak :: LineBreak
-
--- | Encode term name.
---   
---   <pre>
---   &gt;&gt;&gt; termNameToMix "foo"
---   MixText "/foo"
---   </pre>
-termNameToMix :: TermName -> MixText
-
--- | Encode term list with one-space separator.
-termsToMix1 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
-
--- | Encode term list with two-spaces separator.
-termsToMix2 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
-instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance GHC.Base.Functor Koshucode.Baala.Data.Type.Judge.Judge
-instance Koshucode.Baala.Data.Type.JudgeClass.GetClass (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTerms Koshucode.Baala.Data.Type.Judge.Judge
-instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Judge.Judge c)
-
-
--- | Type for types.
-module Koshucode.Baala.Data.Type.Type
-
--- | Type for types.
-data Type
-
--- | Everything
-TypeAny :: Type
-
--- | Type of types
-TypeType :: Type
-
--- | Term name
-TypeTerm :: Type
-
--- | Data interpreation
-TypeInterp :: Type
-
--- | Empty
-TypeEmpty :: Type
-
--- | End
-TypeEnd :: Type
-
--- | Boolean
-TypeBool :: Type
-
--- | Text
-TypeText :: Type
-
--- | Code
-TypeCode :: Type
-
--- | Decimal
-TypeDec :: Type
-
--- | Clock
-TypeClock :: (Maybe String) -> Type
-
--- | Time
-TypeTime :: (Maybe String) -> Type
-
--- | Binary data
-TypeBin :: Type
-
--- | List
-TypeList :: Type -> Type
-
--- | Set
-TypeSet :: Type -> Type
-
--- | Tagged type
-TypeTag :: String -> Type -> Type
-
--- | Tie
-TypeTie :: [NamedType] -> Type
-
--- | Relation
-TypeRel :: [NamedType] -> Type
-
--- | Tuple (Product type)
-TypeTuple :: [Type] -> Type
-
--- | Sum type
-TypeSum :: [Type] -> Type
-
--- | Term type, i.e., term name and type of its content.
-type NamedType = Named Type
-
--- | Print type as tree.
-typeExplain :: Type -> Doc
-
--- | Encode term types.
-typeTermMix :: Type -> MixText
-
--- | Create relation type from term names.
-typeFlatRel :: [TermName] -> Type
-
--- | Add term name to relation type.
-typeConsRel :: TermName -> Map Type
-
--- | Add term name and type to relation type.
-typeConsNest :: TermName -> Type -> Map Type
-
--- | Add term names to relation type.
-typeAppendRel :: [TermName] -> Map Type
-
--- | Get term names from relation type.
-typeRelTermNames :: Type -> [TermName]
-
--- | Get degree of relation type.
-typeRelDegree :: Type -> Int
-
--- | Get named type from relation type or tie type.
-typeTerms :: Type -> [NamedType]
-
--- | Test type is relational.
-isTypeRel :: Type -> Bool
-
--- | Calculate term index.
---   
---   <pre>
---   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["b"]
---   [1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["e"]
---   [-1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; typeRelIndex (typeConsNest "r" (typeFlatRel ["a", "b"]) (typeFlatRel [])) ["r", "b"]
---   [0, 1]
---   </pre>
-typeRelIndex :: Type -> TermPath -> [Int]
-
--- | Modify terms of relation type.
-typeRelMapTerms :: Map [NamedType] -> Map Type
-
--- | Modify term of relation type.
-typeRelMapTerm :: Map NamedType -> Map Type
-
--- | Modify term name of relation type.
-typeRelMapName :: Map TermName -> Map Type
-instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Type.Type
-instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Type.Type
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Type.Type
-instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Type.Type
-
-
 -- | Heading of relations
 module Koshucode.Baala.Data.Type.Rel.Head
 
@@ -884,7 +935,7 @@ instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Show.Show Koshucode.Baala.Data.Type.Rel.Head.Head
 instance GHC.Base.Monoid Koshucode.Baala.Data.Type.Rel.Head.Head
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Rel.Head.Head
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Rel.Head.Head
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Rel.Head.Head
 
 
@@ -945,7 +996,7 @@ instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Rel.Rel.Rel
 instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance GHC.Base.Functor Koshucode.Baala.Data.Type.Rel.Rel.Rel
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
+instance Koshucode.Baala.Data.Type.Judge.JudgeClass.GetTermNames (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode (Koshucode.Baala.Data.Type.Rel.Rel.Rel c)
 
 
@@ -991,41 +1042,6 @@ instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Rel.Mono.Mo
 
 -- | Relation type.
 module Koshucode.Baala.Data.Type.Rel
-
-
--- | Type for data interpretation.
-module Koshucode.Baala.Data.Type.Interp
-
--- | Data interpretation.
-data Interp
-Interp :: [InterpWord] -> [TermName] -> Interp
-
--- | Sentence which interpret data.
-[interpWords] :: Interp -> [InterpWord]
-
--- | Terms in sentence.
-[interpTerms] :: Interp -> [TermName]
-
--- | Component of data interpretation.
-data InterpWord
-
--- | Constant part of interpretation.
-InterpText :: String -> InterpWord
-
--- | Variable part of interpretation.
-InterpTerm :: TermName -> InterpWord
-
--- | Create data interpretation.
-interp :: [InterpWord] -> Interp
-instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Interp.Interp
-instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Interp.Interp
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Interp.Interp
-instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Interp.InterpWord
-instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Interp.InterpWord
-instance GHC.Show.Show Koshucode.Baala.Data.Type.Interp.InterpWord
-instance Koshucode.Baala.Data.Type.JudgeClass.GetTermNames Koshucode.Baala.Data.Type.Interp.Interp
-instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.Interp
-instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Type.Interp.InterpWord
 
 
 -- | Message list.
@@ -1722,7 +1738,7 @@ module Koshucode.Baala.Data.Type.Time
 
 
 -- | Message list.
-module Koshucode.Baala.Data.Content.Message
+module Koshucode.Baala.Data.Decode.Message
 
 -- | Abortable scope for literal.
 abLiteral :: TTree -> Map (Ab b)
@@ -1762,7 +1778,7 @@ expect2Actual :: String -> String -> String -> [String]
 
 
 -- | Decode term name.
-module Koshucode.Baala.Data.Content.Term
+module Koshucode.Baala.Data.Decode.Term
 
 -- | Read flat term name from token tree. If the token tree contains nested
 --   term name, this function failed.
@@ -1791,6 +1807,14 @@ treeFlatName :: TTree -> Ab TermName
 --   </pre>
 treesFlatNames :: [TTree] -> Ab [TermName]
 
+-- | Read signed term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeSignedName
+--   Right (GT, "a")
+--   </pre>
+treeSignedName :: TTree -> Ab SignedTermName
+
 -- | Read list of named token trees from token trees.
 --   
 --   <pre>
@@ -1798,11 +1822,40 @@ treesFlatNames :: [TTree] -> Ab [TermName]
 --   Right [("a", [TreeL ...]),
 --          ("b", [TreeL ...])]
 --   </pre>
-treesTerms :: [TTree] -> Ab [NamedTrees]
+treesTerms :: [TTree] -> Ab [Term [TTree]]
 
 -- | Read list of named token trees from token trees. This function wraps
 --   long branches into group.
-treesTerms1 :: [TTree] -> Ab [NamedTree]
+treesTerms1 :: [TTree] -> Ab [Term TTree]
+
+-- | Decode a list of name-and-name pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a /x /b /y" &gt;&gt;= treesFlatNamePairs
+--   Right [("/a", "/x"), ("/b", "/y")]
+--   </pre>
+treesFlatNamePairs :: [TTree] -> Ab [TermName2]
+
+-- | Decode term names grouped by colons.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a /b : /p /q : /x /y" &gt;&gt;= treesNamesByColon
+--   Right [["a","b"], ["p","q"], ["x","y"]]
+--   </pre>
+treesNamesByColon :: [TTree] -> Ab [[TermName]]
+
+-- | Decode term names with optional complement symbol.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "~ /a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (True, ["a","b"])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.tt "/a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (False, ["a","b"])
+--   </pre>
+treesFlatNamesCo :: [TTree] -> Ab (Bool, [TermName])
 
 
 -- | Message list.
@@ -2018,18 +2071,18 @@ instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Data.Church.Co
 
 
 -- | Decode specific content.
-module Koshucode.Baala.Data.Content.Tree
+module Koshucode.Baala.Data.Decode.Type
 
 -- | Get single text from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "'aa 'bb" &gt;&gt;= treesToText True
---   Right "aabb"
+--   &gt;&gt;&gt; S.tt "'aa 'bb" &gt;&gt;= treesTexts True
+--   Right ["aa","bb"]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "aa bb" &gt;&gt;= treesToText False
---   Right "aabb"
+--   &gt;&gt;&gt; S.tt "\"aa\" \"bb\"" &gt;&gt;= treesTexts True
+--   Right ["aabb"]
 --   </pre>
 treesTexts :: Bool -> [TTree] -> Ab [String]
 
@@ -2049,6 +2102,13 @@ treeText :: Bool -> TTree -> Ab String
 --                   interpTerms = ["a"] })
 --   </pre>
 treesInterp :: [TTree] -> Ab Interp
+
+-- | Decode type content.
+treesType :: [TTree] -> Ab Type
+
+
+-- | Decode numeric contents.
+module Koshucode.Baala.Data.Decode.Numeric
 
 -- | Get digits from token trees.
 --   
@@ -2097,10 +2157,13 @@ stringTime :: String -> Ab Time
 module Koshucode.Baala.Data.Class.Singleton
 
 -- | Classifiable into <a>Type</a>.
-class CTypeOf c
+class CTypeOf c where isA c t = typeOf c == t
 
 -- | Get type of content.
 typeOf :: CTypeOf c => c -> Type
+
+-- | Test content is a some type.
+isA :: CTypeOf c => Test2 c Type
 
 -- | Get content which may be aborted.
 getContent :: (CTypeOf c) => Test c -> (c -> b) -> Ab c -> Ab b
@@ -2208,7 +2271,7 @@ pText :: CText c => String -> c
 getText :: CText c => Ab c -> Ab String
 putText :: CText c => String -> Ab c
 
--- | Create Text or empty content.
+-- | Create text or empty content.
 --   
 --   <pre>
 --   &gt;&gt;&gt; pMaybeText "a" :: BaalaC
@@ -2220,6 +2283,12 @@ putText :: CText c => String -> Ab c
 --   VEmpty
 --   </pre>
 pMaybeText :: (CText c, CEmpty c) => String -> c
+
+-- | Create text content from strict text.
+pTx :: (CText c) => Text -> c
+
+-- | Create text content from lazy text.
+pTz :: (CText c) => Text -> c
 
 
 -- | Complex content type.
@@ -2307,25 +2376,102 @@ joinContent :: CContent c => [c] -> Ab c
 typeOrder :: (CContent c) => c -> Int
 
 
+-- | Content encoder.
+module Koshucode.Baala.Data.Class.Encode
+
+-- | Encode content to string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contentString (the $ pText "a")
+--   "a"
+--   </pre>
+contentString :: (CContent c) => c -> String
+
+-- | Enclose mix text in list brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBracketList $ B.mixString "a"
+--   MixText "[ a ]"
+--   </pre>
+mixBracketList :: MixText -> MixText
+
+-- | Enclose mix text in set brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mixBracketSet $ B.mixString "a"
+--   MixText "{ a }"
+--   </pre>
+mixBracketSet :: MixText -> MixText
+
+
+-- | Content map.
+module Koshucode.Baala.Data.Class.Map
+
+-- | Pair of get and put.
+type CGetPut a c = (c -> a, a -> c)
+
+-- | <tt>gText</tt> and <tt>pText</tt>.
+gpText :: (CText c) => CGetPut String c
+
+-- | <tt>gList</tt> and <tt>pList</tt>.
+gpList :: (CList c) => CGetPut [c] c
+
+-- | <tt>gSet</tt> and <tt>pSet</tt>.
+gpSet :: (CSet c) => CGetPut [c] c
+
+-- | <tt>gSetSort</tt> and <tt>pSet</tt>.
+gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
+
+-- | Apply function to internal value of content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contentAp gText pText reverse (the $ pText "abc") :: BaalaC
+--   VText "cba"
+--   </pre>
+contentAp :: (c -> a) -> (b -> c') -> (a -> b) -> c -> c'
+
+-- | Map function to internal value of content.
+contentMap :: (Functor f) => (c -> f a) -> (f b -> c') -> (a -> b) -> c -> c'
+
+-- | Apply function to internal string of text content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contentApText reverse (the $ pText "abc")
+--   VText "cba"
+--   </pre>
+contentApText :: (CText c) => StringMap -> Map c
+
+-- | Map function to characters of internal string of text content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; contentMapTextList (\c -&gt; pText [c]) (the $ pText "abc")
+--   VList [VText "a",VText "b",VText "c"]
+--   </pre>
+contentMapTextList :: (CList c, CText c) => (Char -> c) -> Map c
+
+
 -- | Classes for term contents.
 module Koshucode.Baala.Data.Class
 
 
--- | Decode token trees to contents.
-module Koshucode.Baala.Data.Content.Decode
+-- | Decode contents from token trees.
+module Koshucode.Baala.Data.Decode.Content
 
--- | Content constructor.
-type ContentCons c = TTree -> Ab c
+-- | Content decoder.
+type DecodeContent c = TTree -> Ab c
 
 -- | Content calculator.
-type ContentCalc c = TTree -> Ab c
+type CalcContent c = TTree -> Ab c
 
--- | Convert token tree into internal form of content.
-contentCons :: (CContent c) => ContentCalc c -> ContentCons c
+-- | Decode content from string.
+stringContent :: (CContent c) => String -> Ab c
 
--- | Decode token trees into a judge. Judges itself are not content type.
---   It can be only used in the top-level of resources.
-treesJudge :: (CContent c) => ContentCalc c -> AssertType -> JudgeClass -> [TTree] -> Ab (Judge c)
+-- | Decode content from token tree.
+treeContent :: (CContent c) => CalcContent c -> DecodeContent c
+
+-- | Decode judge from token trees. Judges itself are not content type. It
+--   can be only used in the top-level of resources.
+treesJudge :: (CContent c) => CalcContent c -> AssertType -> JudgeClass -> [TTree] -> Ab (Judge c)
 
 -- | Type of assertions.
 data AssertType
@@ -2356,86 +2502,109 @@ assertAs :: AssertType -> JudgeOf c
 
 -- | Frege's stroke and various assertion lines.
 assertSymbol :: AssertType -> String
-instance GHC.Classes.Ord Koshucode.Baala.Data.Content.Decode.AssertType
-instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Decode.AssertType
-instance GHC.Show.Show Koshucode.Baala.Data.Content.Decode.AssertType
+instance GHC.Classes.Ord Koshucode.Baala.Data.Decode.Content.AssertType
+instance GHC.Classes.Eq Koshucode.Baala.Data.Decode.Content.AssertType
+instance GHC.Show.Show Koshucode.Baala.Data.Decode.Content.AssertType
 
 
--- | Utilities for term contents.
-module Koshucode.Baala.Data.Content.Utility
-
--- | Pair of get and put.
-type CGetPut a c = (c -> a, a -> c)
-
--- | <tt>gText</tt> and <tt>pText</tt>.
-gpText :: (CText c) => CGetPut [Char] c
-
--- | <tt>gList</tt> and <tt>pList</tt>.
-gpList :: (CList c) => CGetPut [c] c
-
--- | <tt>gSet</tt> and <tt>pSet</tt>.
-gpSet :: (CSet c) => CGetPut [c] c
-
--- | <tt>gSetSort</tt> and <tt>pSet</tt>.
-gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
-
--- | Apply function to internal value of content.
---   
---   <pre>
---   &gt;&gt;&gt; contAp gText pText reverse (pText "abc" :: BaalaC) :: BaalaC
---   VText "cba"
---   </pre>
-contAp :: (a' -> a) -> (b -> b') -> (a -> b) -> a' -> b'
-
--- | Map function to internal value of content.
-contMap :: (Functor f) => (a' -> f a) -> (f b -> b') -> (a -> b) -> a' -> b'
-
--- | Apply function to internal string of text content.
---   
---   <pre>
---   &gt;&gt;&gt; contApTextToText reverse (the $ pText "abc")
---   Right (VText "cba")
---   </pre>
-contApTextToText :: (CText c) => StringMap -> AbMap c
-
--- | Map function to characters of internal string of text content.
---   
---   <pre>
---   &gt;&gt;&gt; contMapTextToList (\c -&gt; pText [c]) (the $ pText "abc")
---   Right (VList [VText "a",VText "b",VText "c"])
---   </pre>
-contMapTextToList :: (CList c, CText c) => (Char -> c) -> AbMap c
-
--- | Convert term content to string value.
-judgeContString :: (CContent c) => Judge c -> Judge String
-
--- | Convert content to string value.
---   
---   <pre>
---   &gt;&gt;&gt; contString (pText "a" :: BaalaC)
---   "a"
---   </pre>
-contString :: (CContent c) => c -> String
-
--- | Enclose mix text in list brackets.
---   
---   <pre>
---   &gt;&gt;&gt; mixBracketList $ B.mixString "a"
---   MixText "[ a ]"
---   </pre>
-mixBracketList :: MixText -> MixText
-
--- | Enclose mix text in set brackets.
---   
---   <pre>
---   &gt;&gt;&gt; mixBracketSet $ B.mixString "a"
---   MixText "{ a }"
---   </pre>
-mixBracketSet :: MixText -> MixText
+-- | Term content decoder.
+module Koshucode.Baala.Data.Decode
 
 
 -- | The Baala content type.
-module Koshucode.Baala.Data.Content.BaalaC
+module Koshucode.Baala.Data.Content
+
+-- | The Baala content type.
+data Content
+
+-- | <i>Singleton:</i> Sign of no ordinary type
+
+-- | <i>Warning: Use <a>empty</a> instead.</i>
+VEmpty :: Content
+
+-- | <i>Numeric:</i> Boolean type
+
+-- | <i>Warning: Use <a>pBool</a> instead.</i>
+VBool :: Bool -> Content
+
+-- | <i>Numeric:</i> Decimal number type
+
+-- | <i>Warning: Use <a>pDec</a> instead.</i>
+VDec :: Decimal -> Content
+
+-- | <i>Numeric:</i> Clock type
+
+-- | <i>Warning: Use <a>pClock</a> instead.</i>
+VClock :: Clock -> Content
+
+-- | <i>Numeric:</i> Time type
+
+-- | <i>Warning: Use <a>pTime</a> instead.</i>
+VTime :: Time -> Content
+
+-- | <i>Textual:</i> Code type
+
+-- | <i>Warning: Use <a>pCode</a> instead.</i>
+VCode :: String -> Content
+
+-- | <i>Textual:</i> Term name type
+
+-- | <i>Warning: Use <a>pTerm</a> instead.</i>
+VTerm :: String -> Content
+
+-- | <i>Textual:</i> Text type
+
+-- | <i>Warning: Use <a>pText</a> instead.</i>
+VText :: String -> Content
+
+-- | <i>Collective:</i> List type
+
+-- | <i>Warning: Use <a>pList</a> instead.</i>
+VList :: [Content] -> Content
+
+-- | <i>Collective:</i> Set type
+
+-- | <i>Warning: Use <a>pSet</a> instead.</i>
+VSet :: [Content] -> Content
+
+-- | <i>Relational:</i> Tie type (set of terms)
+
+-- | <i>Warning: Use <a>pTie</a> instead.</i>
+VTie :: [Named Content] -> Content
+
+-- | <i>Relational:</i> Relation type
+
+-- | <i>Warning: Use <a>pRel</a> instead.</i>
+VRel :: (Rel Content) -> Content
+
+-- | <i>Relational:</i> Interpretation type
+
+-- | <i>Warning: Use <a>pInterp</a> instead.</i>
+VInterp :: Interp -> Content
+
+-- | <i>Meta:</i> Type for type
+
+-- | <i>Warning: Use <a>pType</a> instead.</i>
+VType :: Type -> Content
+
+-- | <i>Singleton:</i> The end of everything
+
+-- | <i>Warning: Use <a>end</a> instead.</i>
+VEnd :: Content
+
+-- | The Baala content type.
+
+-- | <i>Deprecated: Use <a>Content</a> instead</i>
+type BaalaC = Content
+
+-- | <tt>Term</tt> for concrete baala content.
+type TermC = Term Content
+
+-- | <tt>Judge</tt> for concrete baala content.
+type JudgeC = Judge Content
+
+-- | <tt>Rel</tt> for concrete baala content.
+type RelC = Rel Content
 
 -- | Shorthand function for the Baala content type.
 --   
@@ -2443,87 +2612,43 @@ module Koshucode.Baala.Data.Content.BaalaC
 --   &gt;&gt;&gt; the $ D.pText "a"
 --   VText "a"
 --   </pre>
-the :: BaalaC -> BaalaC
+the :: Content -> Content
 
--- | The Baala content type.
-data BaalaC
-
--- | <i>Singleton:</i> Sign of no ordinary type
-VEmpty :: BaalaC
-
--- | <i>Numeric:</i> Boolean type
-VBool :: Bool -> BaalaC
-
--- | <i>Numeric:</i> Decimal number type
-VDec :: Decimal -> BaalaC
-
--- | <i>Numeric:</i> Clock type
-VClock :: Clock -> BaalaC
-
--- | <i>Numeric:</i> Time type
-VTime :: Time -> BaalaC
-
--- | <i>Textual:</i> Code type
-VCode :: String -> BaalaC
-
--- | <i>Textual:</i> Term name type
-VTerm :: String -> BaalaC
-
--- | <i>Textual:</i> Text type
-VText :: String -> BaalaC
-
--- | <i>Collective:</i> List type
-VList :: [BaalaC] -> BaalaC
-
--- | <i>Collective:</i> Set type
-VSet :: [BaalaC] -> BaalaC
-
--- | <i>Relational:</i> Tie type (set of terms)
-VTie :: [Named BaalaC] -> BaalaC
-
--- | <i>Relational:</i> Relation type
-VRel :: (Rel BaalaC) -> BaalaC
-
--- | <i>Relational:</i> Interpretation type
-VInterp :: Interp -> BaalaC
-
--- | <i>Meta:</i> Type for type
-VType :: Type -> BaalaC
-
--- | <i>Singleton:</i> The end of everything
-VEnd :: BaalaC
-instance GHC.Show.Show Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance GHC.Classes.Eq Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance GHC.Classes.Ord Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Singleton.CTypeOf Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Content.CContent Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Singleton.CEmpty Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Singleton.CEnd Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CBool Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CDec Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CClock Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CTime Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CCode Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CTerm Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Simple.CText Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CList Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CSet Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CTie Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CRel Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CInterp Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.BaalaC.BaalaC
-
-
--- | Term content.
-module Koshucode.Baala.Data.Content
+-- | Decode the Baala content from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "'a"
+--   Right (VCode "a")
+--   </pre>
+stringC :: String -> Ab Content
+instance GHC.Show.Show Koshucode.Baala.Data.Content.Content
+instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Content
+instance GHC.Classes.Ord Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Singleton.CTypeOf Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Content.CContent Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Singleton.CEmpty Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Singleton.CEnd Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CBool Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CDec Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CClock Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CTime Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CCode Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CTerm Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Simple.CText Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CList Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CSet Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CTie Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CRel Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CInterp Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.Content
 
 
 -- | Term-content calcutation.
 module Koshucode.Baala.Data.Church.Build
 
 -- | Construct content expression from token tree
-coxBuild :: (CContent c) => ContentCalc c -> CopSet c -> TTree -> Ab (Cox c)
+coxBuild :: (CContent c) => CalcContent c -> CopSet c -> TTree -> Ab (Cox c)
 
 -- | Insert fresh form into indexed expression.
 coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)
@@ -2542,7 +2667,7 @@ coxRunCox :: (CContent c) => CopSet c -> Head -> [c] -> Cox c -> Ab c
 coxRunList :: (CContent c) => CopSet c -> Head -> Cox c -> RunList c
 
 -- | Calculate content expression.
-calcContent :: (CContent c) => CopSet c -> ContentCalc c
+calcContent :: (CContent c) => CopSet c -> CalcContent c
 
 -- | Extract single argument.
 getArg1 :: [Ab c] -> Ab (Ab c)

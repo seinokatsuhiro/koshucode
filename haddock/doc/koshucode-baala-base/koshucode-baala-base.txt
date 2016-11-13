@@ -8,7 +8,64 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.168.0.0
+@version 0.170.0.0
+
+
+-- | Text table
+module Koshucode.Baala.Base.Text.TextTable
+
+-- | Position in text table.
+data Position
+Front :: Position
+Middle :: Position
+Rear :: Position
+
+-- | Convert position symbols to <a>Position</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; textPos "&lt;-&gt;-"
+--   [Front,Middle,Rear,Middle]
+--   </pre>
+textPos :: String -> [Position]
+
+-- | Cell in text table.
+data Cell
+Cell :: [String] -> Int -> Int -> Position -> Char -> Cell
+[cellText] :: Cell -> [String]
+[cellWidth] :: Cell -> Int
+[cellHeight] :: Cell -> Int
+[cellPos] :: Cell -> Position
+[cellPad] :: Cell -> Char
+
+-- | Create text table from cell strings.
+textTable :: [Position] -> [[String]] -> [[Cell]]
+
+-- | Create text table with table heading.
+textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
+
+-- | Convert string to cell.
+textCell :: Position -> String -> Cell
+
+-- | Create rule cell.
+textRuleCell :: Char -> Cell
+
+-- | Create multi-line cell.
+textBlockCell :: Position -> [String] -> Cell
+
+-- | Create multi-line cell with padding line.
+textBlockCellPlus :: Int -> Position -> [String] -> Cell
+
+-- | Align cells.
+alignTable :: [[Cell]] -> [[Cell]]
+
+-- | Render text table.
+renderTable :: String -> [[Cell]] -> [String]
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Cell
+instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Position
+instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Position
+instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Position
 
 
 -- | Simple document used in comments.
@@ -66,19 +123,75 @@ instance GHC.Show.Show Koshucode.Baala.Base.Text.Comment.CommentSec
 instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentDoc
 instance Koshucode.Baala.Base.Text.Comment.Texts Koshucode.Baala.Base.Text.Comment.CommentSec
 
+
+-- | Additional functions for pairs.
 module Koshucode.Baala.Base.Prelude.Pair
+
+-- | Apply function to <a>fst</a> element.
 mapFst :: (a -> c) -> (a, b) -> (c, b)
+
+-- | Apply function to <a>snd</a> element.
 mapSnd :: (b -> c) -> (a, b) -> (a, c)
+
+-- | Cons up an element to <a>fst</a> list.
 consFst :: a -> Map ([a], b)
+
+-- | Cons up an element to <a>snd</a> list.
 consSnd :: b -> Map (a, [b])
+
+-- | Apply function to <a>fst</a> element in functor data.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapFstTo length $ Just ("aa", "bbbb")
+--   Just (2, "bbbb")
+--   </pre>
 mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
+
+-- | Apply function to <a>snd</a> element in functor data.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapSndTo length $ Just ("aa", "bbbb")
+--   Just ("aa", 4)
+--   </pre>
 mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m (a, c)
+
+-- | Create right pair from either pair.
+--   
+--   <pre>
+--   &gt;&gt;&gt; right2 (Right 'a', Right 'b') :: Either Char (Char, Char)
+--   Right ('a','b')
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; right2 (Left 'a', Right 'b') :: Either Char (Char, Char)
+--   Left 'a'
+--   </pre>
 right2 :: (Either a b, Either a c) -> Either a (b, c)
+
+-- | Create right triple from either triple.
 right3 :: (Either a b, Either a c, Either a d) -> Either a (b, c, d)
+
+-- | Create right quadruple from either quadruple.
 right4 :: (Either a b, Either a c, Either a d, Either a e) -> Either a (b, c, d, e)
+
+-- | Monadic sequencing of <a>fst</a> elements.
 sequenceFst :: (Monad m) => [(m a, b)] -> m [(a, b)]
+
+-- | Monadic sequencing of <a>snd</a> elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sequenceSnd [("a", Just "x"), ("b", Just "y")]
+--   Just [("a","x"), ("b","y")]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; sequenceSnd [("a", Just "x"), ("b", Nothing)]
+--   Nothing
+--   </pre>
 sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 
+
+-- | Reexport list.
 module Koshucode.Baala.Base.Prelude.Import
 
 -- | Right-to-left Kleisli composition of monads.
@@ -138,7 +251,6 @@ unless :: Applicative f => Bool -> f () -> f ()
 -- | <tt><a>guard</a> b</tt> is <tt><a>pure</a> ()</tt> if <tt>b</tt> is
 --   <a>True</a>, and <a>empty</a> if <tt>b</tt> is <a>False</a>.
 guard :: Alternative f => Bool -> f ()
-concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
 
 -- | Strict bytestring.
 type Bs = ByteString
@@ -455,8 +567,14 @@ data Doc :: *
 --   The side condition on the last law is needed because <a>empty</a> is a
 --   left identity for <a>&lt;&gt;</a>.
 nest :: Int -> Doc -> Doc
+
+-- | Same as <a>empty</a>.
 docEmpty :: Doc
+
+-- | Same as <a>hang</a>.
 docHang :: Doc -> Int -> Doc -> Doc
+
+-- | Same as <a>zeroWidthText</a>.
 docZero :: String -> Doc
 
 
@@ -523,16 +641,6 @@ names :: Name a => [a] -> [String]
 -- | Entry in association list.
 type Named a = (String, a)
 named :: (Name a) => a -> Named a
-
--- | Map from something to same type.
-
--- | <i>Deprecated: Replaced by <a>Map</a>.</i>
-type Map a = a -> a
-
--- | Map from something to list of something.
-
--- | <i>Deprecated: Replaced by <a>ManyMap</a>.</i>
-type ManyMap a = a -> [a]
 
 -- | Type of value which is classified as yes or no.
 data YesNo a
@@ -1038,46 +1146,44 @@ type LongOption = String
 -- | Simple option.
 type SimpleOption = SimpleOption' LongOption
 
--- | Option list of simple option descriptions.
-type SimpleOptions = [SimpleOptionDescr]
-type SimpleOptionDescr = OptDescr SimpleOption
+-- | Simple option.
 data SimpleOption' a
 
--- | Describe option for flag (switch) type.
+-- | Option definition.
+type SimpleOptionDescr = OptDescr SimpleOption
+
+-- | Set of option definitions.
+type SimpleOptions = [SimpleOptionDescr]
+
+-- | Option definition for flag (switch) type.
+--   
+--   <pre>
+--   flag ['f'] ["foo"] "Echo foo"
+--   </pre>
 flag :: [ShortOption] -> [LongOption] -> String -> SimpleOptionDescr
 
--- | Describe option with optional one parameter.
+-- | Option definition with optional one parameter.
+--   
+--   <pre>
+--   opt [] ["bar"] "text" "Echo bar or text"
+--   </pre>
 opt :: [ShortOption] -> [LongOption] -> String -> String -> SimpleOptionDescr
 
--- | Describe option with required one parameter.
+-- | Option definition with required one parameter.
+--   
+--   <pre>
+--   req [] ["baz"] "text" "Echo baz and text"
+--   </pre>
 req :: [ShortOption] -> [LongOption] -> String -> String -> SimpleOptionDescr
 
--- | Get flag of flag-type option.
+-- | Get flag of <a>flag</a>-type option.
 getFlag :: [SimpleOption] -> LongOption -> Bool
 
--- | Get parameter list of opt-type option.
+-- | Get parameter list of <a>opt</a>-type option.
 getOpt :: [SimpleOption] -> LongOption -> [String]
 
--- | Get parameter list of req-type option.
+-- | Get parameter list of <a>req</a>-type option.
 getReq :: [SimpleOption] -> LongOption -> [String]
-
--- | Predefined <tt>-h</tt> or <tt>--help</tt> option.
-help :: SimpleOptionDescr
-
--- | Predefined <tt>-V</tt> or <tt>--version</tt> option.
-version :: SimpleOptionDescr
-
--- | Print help message.
-printHelp :: [String] -> SimpleOptions -> IO ()
-
--- | Create help message.
-helpMessage :: [String] -> SimpleOptions -> String
-
--- | Provides one possible concrete representation for <a>Version</a>. For
---   a version with <a>versionBranch</a> <tt>= [1,2,3]</tt> and
---   <a>versionTags</a> <tt>= ["tag1","tag2"]</tt>, the output will be
---   <tt>1.2.3-tag1-tag2</tt>.
-showVersion :: Version -> String
 
 -- | Result of parsing command-line parameters, consist of (1) error
 --   message or (2) options and non-option parameters.
@@ -1087,10 +1193,51 @@ type ParseResult' opt = Either [String] ([opt], [String])
 type ParseResult = ParseResult' SimpleOption
 
 -- | Parse parameters.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parse [help, version] ["-h", "foo", "bar"]
+--   Right ([SimpleFlag "help"],["foo","bar"])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; parse [opt [] ["a"] "text" "optional text"] ["--a", "--a=foo", "bar"]
+--   Right ([SimpleOpt "a" Nothing, SimpleOpt "a" (Just "foo")], ["bar"])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; parse [req [] ["a"] "text" "required text"] ["--a=foo", "bar"]
+--   Right ([SimpleReq "a" "foo"], ["bar"])
+--   </pre>
 parse :: SimpleOptions -> [String] -> ParseResult
 
 -- | Parse command-line parameters.
 parseCommand :: SimpleOptions -> IO ParseResult
+
+-- | Predefined <tt>-h</tt> or <tt>--help</tt> option.
+--   
+--   <pre>
+--   flag "h" ["help"] "Show help message"
+--   </pre>
+help :: SimpleOptionDescr
+
+-- | Create help message.
+helpMessage :: [String] -> SimpleOptions -> String
+
+-- | Print help message.
+printHelp :: [String] -> SimpleOptions -> IO ()
+
+-- | Predefined <tt>-V</tt> or <tt>--version</tt> option.
+--   
+--   <pre>
+--   flag "V" ["version"] "Show version number"
+--   </pre>
+version :: SimpleOptionDescr
+
+-- | Provides one possible concrete representation for <a>Version</a>. For
+--   a version with <a>versionBranch</a> <tt>= [1,2,3]</tt> and
+--   <a>versionTags</a> <tt>= ["tag1","tag2"]</tt>, the output will be
+--   <tt>1.2.3-tag1-tag2</tt>.
+showVersion :: Version -> String
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.IO.SimpleOption.SimpleOption' a)
@@ -1353,23 +1500,11 @@ overlap :: (Eq a) => [a] -> [a] -> Bool
 -- | List utilities.
 module Koshucode.Baala.Base.List.List
 
--- | Tails of list.
---   
---   <pre>
---   &gt;&gt;&gt; tails "abc"
---   ["abc", "bc", "c"]
---   </pre>
-tails :: [a] -> [[a]]
-maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
-
--- | Replace <a>Left</a> value to <a>Right</a> value.
-right :: b -> Map (Either a b)
+-- | Test list is not empty.
+notNull :: Test [a]
 
 -- | Test list has single element.
 isSingleton :: Test [a]
-
--- | Test list is not empty.
-notNull :: Test [a]
 
 -- | Test lengths of two lists are same.
 --   
@@ -1473,11 +1608,38 @@ li2 :: a -> a -> [a]
 --   "abc"
 --   </pre>
 li3 :: a -> a -> a -> [a]
+
+-- | Conditional cons up.
 consIf :: Bool -> a -> [a] -> [a]
+
+-- | Range generation
 type RangeBy a = a -> a -> [a]
+
+-- | Generate range of something.
+--   
+--   <pre>
+--   &gt;&gt;&gt; rangeBy (+ 3) 0 10
+--   [0,3,6,9]
+--   </pre>
 rangeBy :: (Ord a) => Map a -> RangeBy a
+
+-- | Zip optoinal elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipMaybe [Just 'a', Nothing] "AB"
+--   [('a','A')]
+--   </pre>
 zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
+
+-- | Zip filter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipMaybe2 [Just 'a', Nothing] "AB"
+--   [('a','A')]
+--   </pre>
 zipMaybe2 :: [Maybe a] -> [b] -> [b]
+
+-- | Double <a>fmap</a>.
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 
 -- | Apply function to specific element.
@@ -1487,7 +1649,14 @@ map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 --   "abc-efg"
 --   </pre>
 mapAt :: Map a -> Int -> Map [a]
-mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
+
+-- | Apply function to reversed list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; reverseMap (take 3) "abcdefg"
+--   "efg"
+--   </pre>
+reverseMap :: Map [a] -> Map [a]
 
 -- | Omit elements, i.e., anti-<a>filter</a>.
 --   
@@ -1496,10 +1665,22 @@ mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
 --   "bcdfg"
 --   </pre>
 omit :: (a -> Bool) -> Map [a]
-filterFst :: (a -> Bool) -> Map [(a, b)]
+
+-- | Compress continued multile elements into single elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; squeeze (== '?') "Koshu???"
+--   "Koshu?"
+--   </pre>
 squeeze :: (a -> Bool) -> Map [a]
+
+-- | Compress continued white lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; squeezeEmptyLines ["a", "b", " ", "c", "", " ", "  ", "d"]
+--   ["a", "b", " ", "c", "  ", "d"]
+--   </pre>
 squeezeEmptyLines :: Map [String]
-reverseMap :: Map [a] -> Map [a]
 
 
 -- | Dots pattern.
@@ -1639,6 +1820,8 @@ instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Assoc.O
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Assoc.OnceMore a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Assoc.OnceMore a)
 
+
+-- | Additional prelude.
 module Koshucode.Baala.Base.Prelude
 
 
@@ -1758,7 +1941,11 @@ snipBackward2 :: Snip2 a b
 --   </pre>
 snipOrder :: (Eq a) => [a] -> [a] -> Map [c]
 
+
+-- | Sort by ascending order or descending order.
 module Koshucode.Baala.Base.List.Order
+
+-- | Data for indicating order.
 data OrderCap a
 
 -- | Ascending order
@@ -1778,22 +1965,56 @@ orderingCap :: (Ordering, a) -> OrderCap a
 --   [[1,1,3], [1,2,3], [1,3,3]]
 --   </pre>
 sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> Map [[a]]
+
+-- | Sort elements by function result.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sortWith length $ words "aaa b ccc dd"
+--   ["b", "dd", "aaa", "ccc"]
+--   </pre>
 sortWith :: (Ord a, Ord b) => (a -> b) -> Map [a]
-type Ranking n a = Int -> [OrderCap n] -> [n] -> [[a]] -> ([Int], [[a]])
+
+-- | Ranking function.
+type Ranking n a = Int  Number of the top rank. -> [OrderCap n]  Ranking specification. -> [n]  Term names. -> [[a]]  List of tuples. -> ([Int], [[a]])  Ranks and sorted data.
 
 -- | Sort and numbering like 1234.
 sortByNameNumbering :: (Ord a, Eq n) => Ranking n a
 
 -- | Sort and rank like 1223.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sortByNameDenseRank 1 [Asc "a"] ["a", "b"] [["b", "y"], ["a", "x"], ["a", "y"]]
+--   ([1,1,2], [["a","x"], ["a","y"], ["b","y"]])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; sortByNameDenseRank 0 [Asc "b"] ["a", "b"] [["b", "y"], ["a", "x"], ["a", "y"]]
+--   ([0,1,1], [["a","x"], ["a","y"], ["b","y"]])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; sortByNameDenseRank 0 [Desc "a"] ["a", "b"] [["b", "y"], ["a", "x"], ["a", "y"]]
+--   ([0,1,1], [["b","y"], ["a","x"], ["a","y"]])
+--   </pre>
 sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
 
 -- | Sort and rank like 1224.
 sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
 
 -- | 1223 ranking start with given number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; denseRankFrom (1 :: Int) "abbc"
+--   [1,2,2,3]
+--   </pre>
 denseRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
 
 -- | 1224 ranking start with given number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; gapRankFrom (1 :: Int) "abbc"
+--   [1,2,2,4]
+--   </pre>
 gapRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Order.OrderCap a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Order.OrderCap a)
@@ -1853,6 +2074,8 @@ exitCode :: Int -> ExitCode
 
 -- | Print message and exit on 0.
 putSuccess :: String -> IO a
+
+-- | Print message line and exit on 0.
 putSuccessLn :: String -> IO a
 
 -- | Print abort message and exit on 1.
@@ -1868,6 +2091,8 @@ putAbortWith :: String -> IO a
 
 -- | Print error message and exit on 1.
 putFailure :: String -> IO a
+
+-- | Print error message line and exit on 1.
 putFailureLn :: String -> IO a
 
 
@@ -1944,6 +2169,8 @@ NamedHandle :: String -> Handle -> NamedHandle
 
 -- | I/O handle
 [handle] :: NamedHandle -> Handle
+
+-- | I/O point: file, standard input, direct text, etc.
 data IOPoint
 
 -- | Context directory and target path
@@ -2051,36 +2278,6 @@ instance GHC.Base.Functor Koshucode.Baala.Base.IO.CodePt.Sourced
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.IO.CodePt.Sourced a)
 
 
--- | Text table
-module Koshucode.Baala.Base.Text.TextTable
-data Position
-Front :: Position
-Middle :: Position
-Rear :: Position
-textPos :: String -> [Position]
-data Cell
-Cell :: [String] -> Int -> Int -> Position -> Char -> Cell
-[cellText] :: Cell -> [String]
-[cellWidth] :: Cell -> Int
-[cellHeight] :: Cell -> Int
-[cellPos] :: Cell -> Position
-[cellPad] :: Cell -> Char
-textTable :: [Position] -> [[String]] -> [[Cell]]
-textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
-textCell :: Position -> String -> Cell
-textRuleCell :: Char -> Cell
-textBlockCell :: Position -> [String] -> Cell
-textBlockCellPlus :: Int -> Position -> [String] -> Cell
-alignTable :: [[Cell]] -> [[Cell]]
-renderTable :: String -> [[Cell]] -> [String]
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Cell
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Cell
-instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Cell
-instance GHC.Classes.Ord Koshucode.Baala.Base.Text.TextTable.Position
-instance GHC.Classes.Eq Koshucode.Baala.Base.Text.TextTable.Position
-instance GHC.Show.Show Koshucode.Baala.Base.Text.TextTable.Position
-
-
 -- | Suffix and prefix.
 module Koshucode.Baala.Base.Text.Suffix
 
@@ -2112,6 +2309,8 @@ uniqueNames :: Char -> Map [String]
 -- | Bundle of text modules.
 module Koshucode.Baala.Base.Text
 
+
+-- | I/O related modules.
 module Koshucode.Baala.Base.IO
 
 
@@ -2171,12 +2370,11 @@ instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
 instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
--- | Abortable process
+-- | Abortable process.
 module Koshucode.Baala.Base.Abort.Abortable
 
 -- | Push source information when process is aborted.
 abortable :: (CodePtr p) => String -> [p] -> Map (Ab b)
-abortableSourced :: String -> (a -> Ab b) -> Sourced a -> Ab (Sourced b)
 
 
 -- | Reporting abort reasons.
@@ -2218,12 +2416,18 @@ linesCrlfNumbered :: String -> [NumberedLine]
 --   ["aaa","bbb","ccc","","ddd"]
 --   </pre>
 linesCrlf :: String -> [String]
-linesFrom :: (Show a) => a -> [String]
+
+-- | Create numbered lines from lazy bytestring.
 linesCrlfBzNumbered :: Bz -> [NumberedLine]
+
+-- | Split lazy bytestring by newline character sequence. This function
+--   drops the BOM sequence.
 linesCrlfBz :: Bz -> [Bz]
+
+-- | Create string lines from lazy bytestring.
 linesCrlfBzString :: Bz -> [String]
 
--- | Remove UTF-8 BOM (EF BB BF) from lazy ByteString.
+-- | Remove UTF-8 BOM (EF BB BF) from lazy bytestring.
 dropBom :: Bz -> Bz
 
 -- | Tokens in line.
@@ -2238,7 +2442,11 @@ CodeLine :: LineNumber -> String -> [a] -> CodeLine a
 
 -- | Tokens in the line.
 [lineTokens] :: CodeLine a -> [a]
+
+-- | Type for indent size.
 type IndentSize = Int
+
+-- | Calculate indent of line and pairing it.
 lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
@@ -2264,6 +2472,13 @@ CodeClause :: [CodeLine a] -> [a] -> CodeClause a
 
 -- | Clause with no tokens.
 codeClauseEmpty :: CodeClause a
+
+-- | Split lines into clause based on indent size.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitClause [(0, "a"), (2, "b"), (0, "c"), (1, "d")]
+--   (["a","b"], [(0,"c"),(1,"d")])
+--   </pre>
 splitClause :: Gather [(IndentSize, a)] [a]
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr a => Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
@@ -2485,14 +2700,33 @@ module Koshucode.Baala.Base.Syntax.Infix
 type InfixHeight = Either Int Int
 
 -- | Make the height function from a height table of operators.
-infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
+--   
+--   <pre>
+--   &gt;&gt;&gt; infixHeight Just [('.', Right 3), (':', Right 5)] &lt;$&gt; "1.2:3"
+--   [Left 0, Right 3, Left 0, Right 5, Left 0]
+--   </pre>
+infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> (a -> InfixHeight)
 
 -- | Split branches in a given tree at infixed binary operators.
-infixToPrefix :: (Map a, Map a, Map a) -> (a -> InfixHeight) -> Collect (InfixTree p a) -> InfixMapper p a -> InfixAbMap a (CodeTree p a)
-type InfixAb a x = Either [(InfixHeight, a)] x
-type InfixAbMap a x = x -> InfixAb a x
+infixToPrefix :: (Map a, Map a, Map a) -> (a -> InfixHeight) -> Collect (InfixTree p a) -> InfixMapper p a -> InfixConv a (CodeTree p a)
+
+-- | Intermediate infix-to-prefix conversion.
+type InfixMapper p a = InfixConv a [InfixTree p a] -> InfixConv a (InfixTree p a)
+
+-- | Infix-to-prefix conversion.
+
+-- | <i>Warning: This is only used in defined module.</i>
+type InfixConv a tree = tree -> InfixAmb a tree
+
+-- | Code tree or ambiguous infix.
+
+-- | <i>Warning: This is only used in defined module.</i>
+type InfixAmb a tree = Either [(InfixHeight, a)] tree
+
+-- | Code tree with infix height.
+
+-- | <i>Warning: This is only used in defined module.</i>
 type InfixTree p a = CodeTree p (InfixHeight, a)
-type InfixMapper p a = InfixAbMap a [InfixTree p a] -> InfixAbMap a (InfixTree p a)
 
 
 -- | Syntactic functions.

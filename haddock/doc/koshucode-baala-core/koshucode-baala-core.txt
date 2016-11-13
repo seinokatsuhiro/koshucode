@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Result of relational calculation.
@@ -159,6 +159,8 @@ Lexmap :: LexmapType -> Token -> AttrPara -> [(String, Lexmap)] -> [String] -> L
 
 -- | Messages on lexmap
 [lexMessage] :: Lexmap -> [String]
+
+-- | Type of lexmap.
 data LexmapType
 
 -- | Built-in relmap
@@ -175,7 +177,11 @@ type RopName = String
 
 -- | Name of relmap operator
 lexName :: Lexmap -> RopName
+
+-- | Add message to lexmap.
 lexAddMessage :: String -> Map Lexmap
+
+-- | Get message list from lexmap.
 lexMessageList :: Lexmap -> [String]
 
 -- | Attribute of relmap operation.
@@ -192,8 +198,14 @@ instance Data.Default.Class.Default Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 
 -- | Convert relation to text table.
 module Koshucode.Baala.Core.Assert.RelTable
+
+-- | Render relation in table layout.
 relTable :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> String
+
+-- | Render relation in table layout.
 relTableLines :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> [String]
+
+-- | Convert contents of relation into strings.
 relText :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> RelText
 
 
@@ -241,7 +253,7 @@ abRelmap :: (CodePtr cp) => [cp] -> Map (Ab b)
 abSpecialize :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Unknown nested relation reference.
-unkNestVar :: String -> [Token] -> [((Token, Local String), Head)] -> Ab a
+unkNestVar :: String -> [Token] -> [((Token, LocalRef String), Head)] -> Ab a
 
 -- | Disabled feature: input clause
 disabledInputClause :: Ab b
@@ -250,16 +262,26 @@ disabledInputClause :: Ab b
 disabledOutputClause :: Ab b
 
 
--- | Options.
+-- | Assertion options.
 module Koshucode.Baala.Core.Relmap.Option
+
+-- | Option type.
 type Option c = Map String (OptionContent c)
+
+-- | Content of assertion option.
 data OptionContent c
 OptionBool :: Bool -> OptionContent c
 OptionChar :: [Char] -> Char -> OptionContent c
 OptionTerms :: [TermName] -> OptionContent c
+
+-- | Option set.
 option :: (CBool c, CText c) => Option c
+
+-- | Get boolean option value.
 optionBool :: String -> Option c -> Bool
-optionParse :: (Eq c, CBool c, CText c) => ContentCalc c -> [Token] -> AbMap (Option c)
+
+-- | Parse assertion option.
+optionParse :: (Eq c, CBool c, CText c) => CalcContent c -> [Token] -> AbMap (Option c)
 instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
@@ -359,6 +381,8 @@ Relkit :: Maybe Head -> Maybe Head -> RelkitBody c -> Relkit c
 
 -- | Calculation function
 [relkitBody] :: Relkit c -> RelkitBody c
+
+-- | Body of relkit.
 type RelkitBody c = Sourced (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
@@ -467,8 +491,12 @@ fixedRelation :: (Ord c) => Map (AbMap [[c]])
 -- | Change term order.
 bmapAlign :: Head -> Head -> Map (AbMap [[c]])
 
+-- | Local relations.
+
 -- | <i>Warning: This is only used in defined module.</i>
 type Local a = Lexical [Named a]
+
+-- | Local relation.
 
 -- | <i>Warning: This is only used in defined module.</i>
 type Lexical a = (Token, a)
@@ -531,6 +559,8 @@ RelmapAppend :: (Relmap' h c) -> (Relmap' h c) -> Relmap' h c
 
 -- | Identity relmap.
 relmapId :: Relmap' h c
+
+-- | Extract lexmap list from relmap.
 relmapLexmaps :: Relmap' h c -> [Lexmap]
 
 -- | List of <a>RelmapSource</a>
@@ -573,6 +603,8 @@ Rop :: RopName -> String -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h c
 
 -- | Usage text of operator.
 type RopUsage = String
+
+-- | Find relmap operator based on its name.
 type FindRop' h c = RopName -> Maybe (Rop' h c)
 
 -- | Constructor of relmap operator, i.e., function from intermediate
@@ -606,6 +638,8 @@ relmapSource :: Intmed' h c -> JudgeClass -> [TermName] -> Relmap' h c
 
 -- | Make a flow relmap. Flow relmaps take no submaps.
 relmapFlow :: Intmed' h c -> RelkitFlow c -> Relmap' h c
+
+-- | Relmap with hook data.
 relmapHook :: Intmed' h c -> RelkitHook' h c -> Relmap' h c
 
 -- | Make a binary relmap. Binary relmaps take one submap.
@@ -616,9 +650,17 @@ relmapConfl :: Intmed' h c -> RelkitConfl c -> [Relmap' h c] -> Relmap' h c
 
 -- | Parent for nested relation references.
 relmapNest :: Intmed' h c -> Map (Relmap' h c)
+
+-- | Copy-of-input-relation relmap.
 relmapCopy :: Intmed' h c -> RopName -> Map (Relmap' h c)
+
+-- | Link-to-other relmap.
 relmapLink :: Intmed' h c -> Relmap' h c
+
+-- | Local relmap.
 relmapLocalSymbol :: Intmed' h c -> String -> Relmap' h c
+
+-- | Relmap references local nested relation.
 relmapLocalNest :: Intmed' h c -> String -> Relmap' h c
 
 -- | Second step of constructing relmap, make relmap from lexmap.
@@ -1049,31 +1091,27 @@ module Koshucode.Baala.Core.Resource.Concrete
 -- | <tt>about</tt> clause.
 data About c
 About :: [Term c] -> About c
+
+-- | Judges with about setting.
 type AboutJudges c = (Maybe (About c), [Judge c])
 
 -- | <tt>About</tt> for concrete baala content.
-type AboutC = About BaalaC
+type AboutC = About Content
 
 -- | <tt>AboutJudges</tt> for concrete baala content.
-type AboutJudgesC = AboutJudges BaalaC
+type AboutJudgesC = AboutJudges Content
 
 -- | <tt>Global</tt> for concrete baala content.
-type GlobalC = Global BaalaC
-
--- | <tt>Judge</tt> for concrete baala content.
-type JudgeC = Judge BaalaC
-
--- | <tt>Rel</tt> for concrete baala content.
-type RelC = Rel BaalaC
+type GlobalC = Global Content
 
 -- | <tt>Resource</tt> for concrete baala content.
-type ResourceC = Resource BaalaC
+type ResourceC = Resource Content
 
 -- | <tt>Result</tt> for concrete baala content.
-type ResultC = Result BaalaC
+type ResultC = Result Content
 
 -- | <tt>ResultWriter</tt> for concrete baala content.
-type ResultWriterC = ResultWriter BaalaC
+type ResultWriterC = ResultWriter Content
 instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Core.Resource.Concrete.About c)
 
 
@@ -1082,6 +1120,8 @@ module Koshucode.Baala.Core.Resource.Include
 
 -- | Include source code into resource.
 resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> NIOPoint -> Bz -> AbResource c
+
+-- | Build content expression with global parameter.
 coxBuildG :: (CContent c) => Global c -> TTree -> Ab (Cox c)
 
 

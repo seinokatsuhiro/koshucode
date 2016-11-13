@@ -21,32 +21,33 @@
 <a class="number" name="line-12">12</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-13">13</a>
 <a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a class="number" name="line-16">16</a>
-<a class="number" name="line-17">17</a><a name="Input"></a><span class='hs-comment'>-- | Input resource.</span>
-<a class="number" name="line-18">18</a><a name="Input"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Stdin</span> <span class='hs-keyglyph'>|</span> <span class='hs-conid'>File</span> <span class='hs-conid'>FilePath</span>
-<a class="number" name="line-19">19</a>             <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>)</span>
-<a class="number" name="line-20">20</a>
-<a class="number" name="line-21">21</a><a name="inputText"></a><span class='hs-comment'>-- | Input name.</span>
-<a class="number" name="line-22">22</a><span class='hs-definition'>inputText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-23">23</a><span class='hs-definition'>inputText</span> <span class='hs-layout'>(</span><span class='hs-conid'>Stdin</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"&lt;stdin&gt;"</span>
-<a class="number" name="line-24">24</a><span class='hs-definition'>inputText</span> <span class='hs-layout'>(</span><span class='hs-conid'>File</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>p</span>
-<a class="number" name="line-25">25</a>
-<a class="number" name="line-26">26</a><a name="readInput"></a><span class='hs-comment'>-- | Read input resource.</span>
-<a class="number" name="line-27">27</a><span class='hs-definition'>readInput</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-28">28</a><span class='hs-definition'>readInput</span> <span class='hs-layout'>(</span><span class='hs-conid'>Stdin</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>getContents</span>
-<a class="number" name="line-29">29</a><span class='hs-definition'>readInput</span> <span class='hs-layout'>(</span><span class='hs-conid'>File</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>readFile</span> <span class='hs-varid'>p</span>
-<a class="number" name="line-30">30</a>
-<a class="number" name="line-31">31</a><a name="readInputs"></a><span class='hs-comment'>-- | Read multiple input resources.</span>
-<a class="number" name="line-32">32</a><span class='hs-definition'>readInputs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Input</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-33">33</a><span class='hs-definition'>readInputs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>readInput</span>
-<a class="number" name="line-34">34</a>
-<a class="number" name="line-35">35</a><a name="readJudge"></a><span class='hs-comment'>-- | Read input code and extract judges.</span>
-<a class="number" name="line-36">36</a><span class='hs-definition'>readJudge</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgeC</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-37">37</a><span class='hs-definition'>readJudge</span> <span class='hs-varid'>code</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-38">38</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resReadString</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span> <span class='hs-varid'>code</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-39">39</a>      <span class='hs-conid'>Right</span> <span class='hs-varid'>res</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resJudge</span> <span class='hs-varid'>res</span>
-<a class="number" name="line-40">40</a>      <span class='hs-conid'>Left</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>[]</span>
-<a class="number" name="line-41">41</a>
+<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
+<a class="number" name="line-16">16</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a class="number" name="line-17">17</a>
+<a class="number" name="line-18">18</a><a name="Input"></a><span class='hs-comment'>-- | Input resource.</span>
+<a class="number" name="line-19">19</a><a name="Input"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Stdin</span> <span class='hs-keyglyph'>|</span> <span class='hs-conid'>File</span> <span class='hs-conid'>FilePath</span>
+<a class="number" name="line-20">20</a>             <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>)</span>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a><a name="inputText"></a><span class='hs-comment'>-- | Input name.</span>
+<a class="number" name="line-23">23</a><span class='hs-definition'>inputText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-24">24</a><span class='hs-definition'>inputText</span> <span class='hs-layout'>(</span><span class='hs-conid'>Stdin</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"&lt;stdin&gt;"</span>
+<a class="number" name="line-25">25</a><span class='hs-definition'>inputText</span> <span class='hs-layout'>(</span><span class='hs-conid'>File</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>p</span>
+<a class="number" name="line-26">26</a>
+<a class="number" name="line-27">27</a><a name="readInput"></a><span class='hs-comment'>-- | Read input resource.</span>
+<a class="number" name="line-28">28</a><span class='hs-definition'>readInput</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Input</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-29">29</a><span class='hs-definition'>readInput</span> <span class='hs-layout'>(</span><span class='hs-conid'>Stdin</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>getContents</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>readInput</span> <span class='hs-layout'>(</span><span class='hs-conid'>File</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>readFile</span> <span class='hs-varid'>p</span>
+<a class="number" name="line-31">31</a>
+<a class="number" name="line-32">32</a><a name="readInputs"></a><span class='hs-comment'>-- | Read multiple input resources.</span>
+<a class="number" name="line-33">33</a><span class='hs-definition'>readInputs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Input</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-34">34</a><span class='hs-definition'>readInputs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>readInput</span>
+<a class="number" name="line-35">35</a>
+<a class="number" name="line-36">36</a><a name="readJudge"></a><span class='hs-comment'>-- | Read input code and extract judges.</span>
+<a class="number" name="line-37">37</a><span class='hs-definition'>readJudge</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgeC</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-38">38</a><span class='hs-definition'>readJudge</span> <span class='hs-varid'>code</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-39">39</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resReadString</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span> <span class='hs-varid'>code</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-40">40</a>      <span class='hs-conid'>Right</span> <span class='hs-varid'>res</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>resJudge</span> <span class='hs-varid'>res</span>
+<a class="number" name="line-41">41</a>      <span class='hs-conid'>Left</span> <span class='hs-keyword'>_</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>[]</span>
+<a class="number" name="line-42">42</a>
 </pre></body>
 </html>

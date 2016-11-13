@@ -163,7 +163,7 @@
 <a class="number" name="line-154">154</a>        <span class='hs-varid'>submap</span> <span class='hs-varid'>lx</span> <span class='hs-keyglyph'>=</span>
 <a class="number" name="line-155">155</a>            <span class='hs-keyword'>let</span> <span class='hs-varid'>mark</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>markLocalToken</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>lexToken</span> <span class='hs-varid'>lx</span>
 <a class="number" name="line-156">156</a>                <span class='hs-varid'>attr</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>lexAttrTree</span> <span class='hs-varid'>lx</span>
-<a class="number" name="line-157">157</a>            <span class='hs-keyword'>in</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>markLocalRelmap</span> <span class='hs-varid'>mark</span> <span class='hs-varop'>&lt;$&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>filterFst</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>isAttrNameRelmap</span> <span class='hs-varid'>attr</span> <span class='hs-keyword'>of</span>
+<a class="number" name="line-157">157</a>            <span class='hs-keyword'>in</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>markLocalRelmap</span> <span class='hs-varid'>mark</span> <span class='hs-varop'>&lt;$&gt;</span> <span class='hs-varid'>filterFst</span> <span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-varid'>isAttrNameRelmap</span> <span class='hs-varid'>attr</span> <span class='hs-keyword'>of</span>
 <a class="number" name="line-158">158</a>                 <span class='hs-conid'>[]</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>lx</span><span class='hs-layout'>,</span> <span class='hs-conid'>[]</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- no submaps</span>
 <a class="number" name="line-159">159</a>                 <span class='hs-varid'>locs</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>submap2</span> <span class='hs-varid'>lx</span> <span class='hs-varid'>locs</span>
 <a class="number" name="line-160">160</a>
@@ -188,24 +188,28 @@
 <a class="number" name="line-179">179</a>        <span class='hs-varid'>markLocalRelmap</span> <span class='hs-varid'>mark</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>AttrRelmapLocal</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>treeLeafMap</span> <span class='hs-varid'>mark</span> <span class='hs-varop'>&lt;$&gt;</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span>
 <a class="number" name="line-180">180</a>        <span class='hs-varid'>markLocalRelmap</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span>
 <a class="number" name="line-181">181</a>
-<a class="number" name="line-182">182</a>
-<a class="number" name="line-183">183</a><span class='hs-comment'>-- ----------------------</span>
-<a class="number" name="line-184">184</a><span class='hs-comment'>-- $ConstructionProcess</span>
-<a class="number" name="line-185">185</a><span class='hs-comment'>--</span>
-<a class="number" name="line-186">186</a><span class='hs-comment'>--  Construction process of lex relmaps from source trees.</span>
-<a class="number" name="line-187">187</a><span class='hs-comment'>--</span>
-<a class="number" name="line-188">188</a><span class='hs-comment'>--  [@\[TTree\] -&gt; \[\[TTree\]\]@]</span>
-<a class="number" name="line-189">189</a><span class='hs-comment'>--     Divide list of 'B.TTree' by vertical bar (@|@).</span>
-<a class="number" name="line-190">190</a><span class='hs-comment'>--</span>
-<a class="number" name="line-191">191</a><span class='hs-comment'>--  [@\[\[TTree\]\] -&gt; \[Lexmap\]@]</span>
-<a class="number" name="line-192">192</a><span class='hs-comment'>--     Construct each 'C.Lexmap' from lists of 'B.TTree'.</span>
-<a class="number" name="line-193">193</a><span class='hs-comment'>--     When there are submaps in token trees,</span>
-<a class="number" name="line-194">194</a><span class='hs-comment'>--     constructs 'C.Lexmap' recursively.</span>
-<a class="number" name="line-195">195</a><span class='hs-comment'>--</span>
-<a class="number" name="line-196">196</a><span class='hs-comment'>--  [@\[Lexmap\] -&gt; Lexmap@]</span>
-<a class="number" name="line-197">197</a><span class='hs-comment'>--     Wrap list of 'C.Lexmap' into one 'C.Lexmap'</span>
-<a class="number" name="line-198">198</a><span class='hs-comment'>--     that has these relmaps in 'C.lexSubmap'.</span>
+<a class="number" name="line-182">182</a><a name="filterFst"></a><span class='hs-comment'>-- | Filter by the first element of pairs.</span>
+<a class="number" name="line-183">183</a><span class='hs-definition'>filterFst</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-184">184</a><span class='hs-definition'>filterFst</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>filter</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-varop'>.</span> <span class='hs-varid'>fst</span><span class='hs-layout'>)</span>
+<a class="number" name="line-185">185</a>
+<a class="number" name="line-186">186</a>
+<a class="number" name="line-187">187</a><span class='hs-comment'>-- ----------------------</span>
+<a class="number" name="line-188">188</a><span class='hs-comment'>-- $ConstructionProcess</span>
+<a class="number" name="line-189">189</a><span class='hs-comment'>--</span>
+<a class="number" name="line-190">190</a><span class='hs-comment'>--  Construction process of lex relmaps from source trees.</span>
+<a class="number" name="line-191">191</a><span class='hs-comment'>--</span>
+<a class="number" name="line-192">192</a><span class='hs-comment'>--  [@\[TTree\] -&gt; \[\[TTree\]\]@]</span>
+<a class="number" name="line-193">193</a><span class='hs-comment'>--     Divide list of 'B.TTree' by vertical bar (@|@).</span>
+<a class="number" name="line-194">194</a><span class='hs-comment'>--</span>
+<a class="number" name="line-195">195</a><span class='hs-comment'>--  [@\[\[TTree\]\] -&gt; \[Lexmap\]@]</span>
+<a class="number" name="line-196">196</a><span class='hs-comment'>--     Construct each 'C.Lexmap' from lists of 'B.TTree'.</span>
+<a class="number" name="line-197">197</a><span class='hs-comment'>--     When there are submaps in token trees,</span>
+<a class="number" name="line-198">198</a><span class='hs-comment'>--     constructs 'C.Lexmap' recursively.</span>
 <a class="number" name="line-199">199</a><span class='hs-comment'>--</span>
-<a class="number" name="line-200">200</a>
+<a class="number" name="line-200">200</a><span class='hs-comment'>--  [@\[Lexmap\] -&gt; Lexmap@]</span>
+<a class="number" name="line-201">201</a><span class='hs-comment'>--     Wrap list of 'C.Lexmap' into one 'C.Lexmap'</span>
+<a class="number" name="line-202">202</a><span class='hs-comment'>--     that has these relmaps in 'C.lexSubmap'.</span>
+<a class="number" name="line-203">203</a><span class='hs-comment'>--</span>
+<a class="number" name="line-204">204</a>
 </pre></body>
 </html>

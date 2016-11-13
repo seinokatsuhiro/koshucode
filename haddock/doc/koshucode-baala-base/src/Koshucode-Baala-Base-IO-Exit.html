@@ -79,37 +79,39 @@
 <a class="number" name="line-70">70</a><span class='hs-definition'>putSuccess</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
 <a class="number" name="line-71">71</a><span class='hs-definition'>putSuccess</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>success</span> <span class='hs-varop'>$</span> <span class='hs-varid'>putStr</span> <span class='hs-varid'>msg</span>
 <a class="number" name="line-72">72</a>
-<a class="number" name="line-73">73</a><a name="putSuccessLn"></a><span class='hs-definition'>putSuccessLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-74">74</a><span class='hs-definition'>putSuccessLn</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>success</span> <span class='hs-varop'>$</span> <span class='hs-varid'>putStrLn</span> <span class='hs-varid'>msg</span>
-<a class="number" name="line-75">75</a>
-<a class="number" name="line-76">76</a><span class='hs-comment'>-- | Print abort message and exit on 1.</span>
-<a class="number" name="line-77">77</a><span class='hs-comment'>--</span>
-<a class="number" name="line-78">78</a><span class='hs-comment'>--   &gt;&gt;&gt; putAbort</span>
-<a class="number" name="line-79">79</a><span class='hs-comment'>--   ABORT / &lt;interactive&gt; exits on 1</span>
-<a class="number" name="line-80">80</a>
-<a class="number" name="line-81">81</a><a name="putAbort"></a><span class='hs-definition'>putAbort</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-82">82</a><span class='hs-definition'>putAbort</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-83">83</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>prog</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getProgName</span>
-<a class="number" name="line-84">84</a>       <span class='hs-varid'>putFailureLn</span> <span class='hs-varop'>$</span> <span class='hs-str'>"ABORT / "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>prog</span> <span class='hs-varop'>++</span> <span class='hs-str'>" exits on 1"</span>
-<a class="number" name="line-85">85</a>
-<a class="number" name="line-86">86</a><a name="putAbortWith"></a><span class='hs-comment'>-- | Print error and abort message and exit on 1.</span>
-<a class="number" name="line-87">87</a><span class='hs-definition'>putAbortWith</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-88">88</a><span class='hs-definition'>putAbortWith</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-89">89</a>    <span class='hs-keyword'>do</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
-<a class="number" name="line-90">90</a>       <span class='hs-varid'>putAbort</span>
-<a class="number" name="line-91">91</a>
-<a class="number" name="line-92">92</a><a name="putFailure"></a><span class='hs-comment'>-- | Print error message and exit on 1.</span>
-<a class="number" name="line-93">93</a><span class='hs-definition'>putFailure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-94">94</a><span class='hs-definition'>putFailure</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>failure</span> <span class='hs-varop'>$</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStr</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
-<a class="number" name="line-95">95</a>
-<a class="number" name="line-96">96</a><a name="putFailureLn"></a><span class='hs-definition'>putFailureLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-97">97</a><span class='hs-definition'>putFailureLn</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>failure</span> <span class='hs-varop'>$</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
-<a class="number" name="line-98">98</a>
-<a class="number" name="line-99">99</a><a name="success"></a><span class='hs-definition'>success</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-100">100</a><span class='hs-definition'>success</span> <span class='hs-varid'>body</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>body</span> <span class='hs-varop'>&gt;&gt;</span> <span class='hs-varid'>exit</span> <span class='hs-num'>0</span>
-<a class="number" name="line-101">101</a>
-<a class="number" name="line-102">102</a><a name="failure"></a><span class='hs-definition'>failure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-103">103</a><span class='hs-definition'>failure</span> <span class='hs-varid'>body</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>body</span> <span class='hs-varop'>&gt;&gt;</span> <span class='hs-varid'>exit</span> <span class='hs-num'>1</span>
-<a class="number" name="line-104">104</a>
+<a class="number" name="line-73">73</a><a name="putSuccessLn"></a><span class='hs-comment'>-- | Print message line and exit on 0.</span>
+<a class="number" name="line-74">74</a><span class='hs-definition'>putSuccessLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-75">75</a><span class='hs-definition'>putSuccessLn</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>success</span> <span class='hs-varop'>$</span> <span class='hs-varid'>putStrLn</span> <span class='hs-varid'>msg</span>
+<a class="number" name="line-76">76</a>
+<a class="number" name="line-77">77</a><span class='hs-comment'>-- | Print abort message and exit on 1.</span>
+<a class="number" name="line-78">78</a><span class='hs-comment'>--</span>
+<a class="number" name="line-79">79</a><span class='hs-comment'>--   &gt;&gt;&gt; putAbort</span>
+<a class="number" name="line-80">80</a><span class='hs-comment'>--   ABORT / &lt;interactive&gt; exits on 1</span>
+<a class="number" name="line-81">81</a>
+<a class="number" name="line-82">82</a><a name="putAbort"></a><span class='hs-definition'>putAbort</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-83">83</a><span class='hs-definition'>putAbort</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-84">84</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>prog</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Sys</span><span class='hs-varop'>.</span><span class='hs-varid'>getProgName</span>
+<a class="number" name="line-85">85</a>       <span class='hs-varid'>putFailureLn</span> <span class='hs-varop'>$</span> <span class='hs-str'>"ABORT / "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>prog</span> <span class='hs-varop'>++</span> <span class='hs-str'>" exits on 1"</span>
+<a class="number" name="line-86">86</a>
+<a class="number" name="line-87">87</a><a name="putAbortWith"></a><span class='hs-comment'>-- | Print error and abort message and exit on 1.</span>
+<a class="number" name="line-88">88</a><span class='hs-definition'>putAbortWith</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-89">89</a><span class='hs-definition'>putAbortWith</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-90">90</a>    <span class='hs-keyword'>do</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
+<a class="number" name="line-91">91</a>       <span class='hs-varid'>putAbort</span>
+<a class="number" name="line-92">92</a>
+<a class="number" name="line-93">93</a><a name="putFailure"></a><span class='hs-comment'>-- | Print error message and exit on 1.</span>
+<a class="number" name="line-94">94</a><span class='hs-definition'>putFailure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-95">95</a><span class='hs-definition'>putFailure</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>failure</span> <span class='hs-varop'>$</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStr</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
+<a class="number" name="line-96">96</a>
+<a class="number" name="line-97">97</a><a name="putFailureLn"></a><span class='hs-comment'>-- | Print error message line and exit on 1.</span>
+<a class="number" name="line-98">98</a><span class='hs-definition'>putFailureLn</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-99">99</a><span class='hs-definition'>putFailureLn</span> <span class='hs-varid'>msg</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>failure</span> <span class='hs-varop'>$</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>hPutStrLn</span> <span class='hs-conid'>IO</span><span class='hs-varop'>.</span><span class='hs-varid'>stderr</span> <span class='hs-varid'>msg</span>
+<a class="number" name="line-100">100</a>
+<a class="number" name="line-101">101</a><a name="success"></a><span class='hs-definition'>success</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-102">102</a><span class='hs-definition'>success</span> <span class='hs-varid'>body</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>body</span> <span class='hs-varop'>&gt;&gt;</span> <span class='hs-varid'>exit</span> <span class='hs-num'>0</span>
+<a class="number" name="line-103">103</a>
+<a class="number" name="line-104">104</a><a name="failure"></a><span class='hs-definition'>failure</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>IO</span> <span class='hs-conid'>()</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>IO</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-105">105</a><span class='hs-definition'>failure</span> <span class='hs-varid'>body</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>body</span> <span class='hs-varop'>&gt;&gt;</span> <span class='hs-varid'>exit</span> <span class='hs-num'>1</span>
+<a class="number" name="line-106">106</a>
 </pre></body>
 </html>

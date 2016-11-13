@@ -9,7 +9,7 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Judgement writer.
@@ -71,7 +71,11 @@ module Koshucode.Baala.Writer.Json
 
 -- | JSON writer.
 resultJson :: (ToJSON c) => ResultWriter c
-termsToJSON :: (ToJSON c) => [Term c] -> Value
+
+-- | Encode term list into JSON.
+termsJson :: (ToJSON c) => [Term c] -> Value
+
+-- | JSON null.
 jsonNull :: Value
 class ToJSON a
 toJSON :: ToJSON a => a -> Value
@@ -79,11 +83,13 @@ toEncoding :: ToJSON a => a -> Encoding
 
 -- | GeoJSON writer.
 resultGeoJson :: (ToJSON c) => ResultWriter c
+
+-- | Convert to GeoJSON.
 class ToGeoJSON a
 toGeoJSON :: ToGeoJSON a => a -> Value
-instance Data.Aeson.Types.Class.ToJSON c => Data.Aeson.Types.Class.ToJSON (Koshucode.Baala.Data.Type.Judge.Judge c)
-instance Data.Aeson.Types.Class.ToJSON Koshucode.Baala.Data.Content.BaalaC.BaalaC
-instance Data.Aeson.Types.Class.ToJSON c => Koshucode.Baala.Writer.Json.ToGeoJSON (Koshucode.Baala.Data.Type.Judge.Judge c)
+instance Data.Aeson.Types.Class.ToJSON c => Data.Aeson.Types.Class.ToJSON (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance Data.Aeson.Types.Class.ToJSON Koshucode.Baala.Data.Content.Content
+instance Data.Aeson.Types.Class.ToJSON c => Koshucode.Baala.Writer.Json.ToGeoJSON (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
 
 
 -- | HTML output.

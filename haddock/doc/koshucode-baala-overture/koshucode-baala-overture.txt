@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Unicode general categories.
@@ -130,6 +130,22 @@ intLowerHexString :: Int -> String
 --   "F"
 --   </pre>
 intUpperHexString :: Int -> String
+
+-- | Encode integer to custome-digit string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; integralCustomString "OI" &lt;$&gt; [0..8 :: Int]
+--   ["O", "I", "IO", "II", "IOO", "IOI", "IIO", "III", "IOOO"]
+--   </pre>
+integralCustomString :: (Integral n) => String -> n -> String
+
+-- | Encode integer to reckoning string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; intReckonString ['A'..'Z'] &lt;$&gt; [0, 1, 2, 25, 26, 27, 52, 53, 100, 1000, 5303449]
+--   ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   </pre>
+integralReckonString :: (Integral n) => String -> n -> String
 
 
 -- | Unicode general category.

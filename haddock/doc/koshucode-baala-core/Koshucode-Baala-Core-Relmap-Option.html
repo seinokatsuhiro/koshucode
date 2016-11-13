@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.168.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.170.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,8 +57,92 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Options.</p
+	  >Assertion options.</p
 	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Option"
+	    >Option</a
+	    > c = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Option.html#t:OptionContent"
+	    >OptionContent</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:OptionContent"
+	    >OptionContent</a
+	    > c<ul class="subs"
+	    ><li
+	      >= <a href="#v:OptionBool"
+		>OptionBool</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      >| <a href="#v:OptionChar"
+		>OptionChar</a
+		> [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		>] <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+		>Char</a
+		></li
+	      ><li
+	      >| <a href="#v:OptionTerms"
+		>OptionTerms</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		>TermName</a
+		>]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:option"
+	    >option</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Option.html#t:Option"
+	    >Option</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:optionBool"
+	    >optionBool</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Option.html#t:Option"
+	    >Option</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:optionParse"
+	    >optionParse</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
+	    >CalcContent</a
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Option.html#t:Option"
+	    >Option</a
+	    > c)</li
+	  ></ul
 	></div
       ><div id="interface"
       ><h1
@@ -78,6 +162,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#Option');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option type.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -88,6 +176,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#OptionContent');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Content of assertion option.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -139,7 +231,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Option.html#t:OptionContent"
 		      >OptionContent</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-28');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-30');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -153,7 +245,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Option.html#t:OptionContent"
 		      >OptionContent</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-28');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-30');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -167,7 +259,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Option.html#t:OptionContent"
 		      >OptionContent</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-28');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#line-30');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -190,6 +282,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#option');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option set.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -204,6 +300,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#optionBool');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get boolean option value.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -215,8 +315,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >CBool</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CText"
 	    >CText</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Content-Decode.html#t:ContentCalc"
-	    >ContentCalc</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
+	    >CalcContent</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
@@ -226,6 +326,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Option.html#optionParse');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse assertion option.</p
+	    ></div
 	  ></div
 	></div
       ></div

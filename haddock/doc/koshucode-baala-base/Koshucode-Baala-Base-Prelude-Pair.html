@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.168.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.170.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -69,6 +69,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Monad</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Additional functions for pairs.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -166,6 +174,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: (a -&gt; c) -&gt; (a, b) -&gt; (c, b) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#mapFst');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:fst"
+		>fst</a
+		></code
+	      > element.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -174,6 +190,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: (b -&gt; c) -&gt; (a, b) -&gt; (a, c) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#mapSnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:snd"
+		>snd</a
+		></code
+	      > element.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -184,6 +208,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > ([a], b) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#consFst');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cons up an element to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:fst"
+		>fst</a
+		></code
+	      > list.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -194,6 +226,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > (a, [b]) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#consSnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cons up an element to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:snd"
+		>snd</a
+		></code
+	      > list.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -204,6 +244,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#mapFstTo');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:fst"
+		>fst</a
+		></code
+	      > element in functor data.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mapFstTo length $ Just (&quot;aa&quot;, &quot;bbbb&quot;)
+</code
+		></strong
+	      >Just (2, &quot;bbbb&quot;)
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -214,6 +272,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#mapSndTo');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Apply function to <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:snd"
+		>snd</a
+		></code
+	      > element in functor data.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mapSndTo length $ Just (&quot;aa&quot;, &quot;bbbb&quot;)
+</code
+		></strong
+	      >Just (&quot;aa&quot;, 4)
+</pre
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Either</h1
@@ -230,6 +306,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > a (b, c) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#right2');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create right pair from either pair.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>right2 (Right 'a', Right 'b') :: Either Char (Char, Char)
+</code
+		></strong
+	      >Right ('a','b')
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>right2 (Left 'a', Right 'b') :: Either Char (Char, Char)
+</code
+		></strong
+	      >Left 'a'
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -246,6 +346,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > a (b, c, d) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#right3');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create right triple from either triple.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -264,6 +368,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > a (b, c, d, e) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#right4');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create right quadruple from either quadruple.</p
+	    ></div
 	  ></div
 	><h1 id="g:3"
 	>Monad</h1
@@ -276,6 +384,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > m =&gt; [(m a, b)] -&gt; m [(a, b)] <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#sequenceFst');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Monadic sequencing of <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:fst"
+		>fst</a
+		></code
+	      > elements.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -286,6 +402,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > m =&gt; [(a, m b)] -&gt; m [(a, b)] <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#sequenceSnd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Monadic sequencing of <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:snd"
+		>snd</a
+		></code
+	      > elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sequenceSnd [(&quot;a&quot;, Just &quot;x&quot;), (&quot;b&quot;, Just &quot;y&quot;)]
+</code
+		></strong
+	      >Just [(&quot;a&quot;,&quot;x&quot;), (&quot;b&quot;,&quot;y&quot;)]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sequenceSnd [(&quot;a&quot;, Just &quot;x&quot;), (&quot;b&quot;, Nothing)]
+</code
+		></strong
+	      >Nothing
+</pre
+	    ></div
 	  ></div
 	></div
       ></div

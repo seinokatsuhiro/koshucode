@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Partial-order scale.
@@ -92,35 +92,6 @@ unexpTermName :: Ab a
 
 -- | Unmatch shared terms.
 unmatchShare :: [TermName] -> [TermName] -> Ab a
-
-
--- | Parsing list of terms.
-module Koshucode.Baala.Rop.Base.Term
-
--- | Extract a term name.
-termName :: TTree -> Ab TermName
-
--- | Extract a list of term names.
---   
---   <pre>
---   &gt;&gt;&gt; termNames B.&lt;=&lt; D.tt $ "/a /b /c"
---   Right ["a", "b", "c"]
---   </pre>
-termNames :: [TTree] -> Ab [TermName]
-termNamesCo :: [TTree] -> Ab (Bool, [TermName])
-
--- | Extract a signed term name.
-signedTermName :: TTree -> Ab SignedTermName
-signedTermNames :: [TTree] -> Ab [SignedTermName]
-
--- | Extract a list of name-and-name pairs.
---   
---   <pre>
---   &gt;&gt;&gt; termNamePairs =&lt;&lt; D.tt "/a /x /b /y"
---   Right [("/a", "/x"), ("/b", "/y")]
---   </pre>
-termNamePairs :: [TTree] -> Ab [TermName2]
-termNamesColon :: [TTree] -> Ab [[TermName]]
 
 
 -- | Attribute getters: Extract attribute from use of relmap.
@@ -230,6 +201,10 @@ module Koshucode.Baala.Rop.Base.Rop
 --   <li><i><tt>id</tt></i> Identity relmap</li>
 --   </ul>
 ropsBuiltin :: [Rop c]
+
+-- | <b>id</b>
+--   
+--   Identity relmap, i.e., output just input relation.
 consId :: RopCons c
 
 -- | Create <tt>id</tt> relmap.
@@ -242,6 +217,8 @@ consXxx :: RopCons c
 -- | Builtin relmap operator.
 module Koshucode.Baala.Rop.Base
 
+
+-- | Relmap operators for retrieving meta information.
 module Koshucode.Baala.Rop.Flat.Meta
 
 -- | Implementation of relational operators.
@@ -257,47 +234,73 @@ module Koshucode.Baala.Rop.Flat.Meta
 --   calculator.</li>
 --   </ul>
 ropsMeta :: (CContent c) => [Rop c]
+
+-- | <b>koshu-cop /N</b>
 consKoshuCop :: CContent c => RopCons c
 
 -- | Create <tt>koshu-cop</tt> relkit.
 relkitKoshuCop :: (CContent c) => TermName -> RelkitHook c
+
+-- | <b>koshu-cop-infix /N [ -height /N ][ -dir /N ]</b>
 consKoshuCopInfix :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-cop-infix</tt> relkit.
 relkitKoshuCopInfix :: (CContent c) => (TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
+
+-- | <b>koshu-source /N [ -type /N ][ -name /N ]</b>
 consKoshuSource :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-source</tt> relmap.
 relmapKoshuSource :: (CContent c) => Intmed c -> (TermName, Maybe TermName, Maybe TermName) -> Relmap c
+
+-- | <b>koshu-rop /N [ -group /N ][ -usage /N ]</b>
 consKoshuRop :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-rop</tt> relkit.
 relkitKoshuRop :: (CContent c) => (Maybe TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
+
+-- | <b>koshu-proxy /N /N</b>
 consKoshuProxy :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-proxy</tt> relkit.
 relkitKoshuProxy :: (CContent c) => (Maybe TermName, Maybe TermName) -> RelkitHook c
+
+-- | <b>koshu-version /N</b>
 consKoshuVersion :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-version</tt> relkit.
 relkitKoshuVersion :: (CContent c) => TermName -> RelkitHook c
 
+
+-- | Relmap operators which produce ordered relations.
 module Koshucode.Baala.Rop.Flat.Order
 
 -- | Pseudorelmap operators for term and tuple ordering.
 ropsOrder :: (Ord c) => [Rop c]
+
+-- | <b>forward /P ...</b>
+--   
+--   Move terms /P ... forward.
 consForward :: RopCons c
 
 -- | Create <tt>forward</tt> relmap.
 relmapForward :: Intmed c -> [TermName] -> Relmap c
+
+-- | <b>backward /P ...</b>
+--   
+--   Move terms /P ... backward.
 consBackward :: RopCons c
 
 -- | Create <tt>backward</tt> relmap.
 relmapBackward :: Intmed c -> [TermName] -> Relmap c
+
+-- | <b>lexical</b>
 consLexical :: RopCons c
 
 -- | Create <tt>lexical</tt> relmap.
 relmapLexical :: Intmed c -> Relmap c
+
+-- | <b>order /P ...</b>
 consOrder :: (Ord c) => RopCons c
 
 -- | Create <tt>order</tt> relmap.
@@ -306,48 +309,66 @@ relmapOrder :: (Ord c) => Intmed c -> [SignedTermName] -> Relmap c
 -- | Create <tt>order</tt> relkit.
 relkitOrder :: (Ord c) => [SignedTermName] -> RelkitFlow c
 
+
+-- | Operators on data resources.
 module Koshucode.Baala.Rop.Flat.Resource
 
 -- | Relmap operators about resources.
---   
---   <ul>
---   <li><i><tt>koshu-res-rop /N /N</tt></i> Derived relmap operators in
---   the current resource.</li>
---   <li><i><tt>koshu-res-sink /N /N</tt></i> Judgement patterns of sinks
---   in the current resource.</li>
---   </ul>
 ropsResource :: (CContent c) => [Rop c]
+
+-- | <b>koshu-res-rop /N /N</b>
+--   
+--   Derived relmap operators in the current resource.
 consKoshuResRop :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-res-rop</tt> relkit.
 relkitKoshuResRop :: (CContent c) => (TermName, TermName) -> RelkitHook c
+
+-- | <b>koshu-res-sink /N /N</b>
+--   
+--   Judgement class of sinks in the current resource.
 consKoshuResSink :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-res-sink</tt> relkit.
 relkitKoshuResSink :: (CContent c) => (TermName, TermName) -> RelkitHook c
+
+-- | <b>koshu-res-article /N</b>
 consKoshuResArticle :: (CContent c) => RopCons c
 
 -- | Create <tt>koshu-res-article</tt> relkit.
 relkitKoshuResArticle :: (CContent c) => TermName -> RelkitHook c
 
+
+-- | Data source.
 module Koshucode.Baala.Rop.Flat.Source
 
 -- | Implementation of relational operators.
---   
---   <ul>
---   <li><i><tt>dee</tt></i> Nullary full relation.</li>
---   <li><i><tt>dum</tt></i> Nullary empty relation.</li>
---   <li><i><tt>empty</tt></i> Make empty relation.</li>
---   <li><i><tt>source</tt></i> Read relation from data source.</li>
---   </ul>
 ropsSource :: (CContent c) => [Rop c]
+
+-- | <b>dee</b>
+--   
+--   Output the nullary full relation.
 consDee :: RopCons c
+
+-- | <b>dum</b>
+--   
+--   Output the nullary empty relation.
 consDum :: RopCons c
+
+-- | <b>empty /N ...</b>
+--   
+--   Output an empty relation which has terms <i>/N ...</i>.
 consEmpty :: RopCons c
 
 -- | Create <tt>empty</tt> relmap.
 relmapEmpty :: Intmed c -> [TermName] -> Relmap c
+
+-- | <b>source C /N...</b>
+--   
+--   Read relation with terms <i>/N...</i> from judges of <i>C</i>.
 consSource :: RopCons c
+
+-- | <b>source-term C R</b>
 consSourceTerm :: RopCons c
 
 -- | Create <tt>source-term</tt> relmap.
@@ -510,6 +531,8 @@ relmapAdd1 :: Term c -> Intmed c -> Relmap c
 -- | Create term-adding relkit.
 relkitAdd1 :: Term c -> Maybe Head -> Ab (Relkit c)
 
+
+-- | Operation for term names.
 module Koshucode.Baala.Rop.Flat.TermGadget
 
 -- | Relmap operators for manipulating term names.
@@ -551,6 +574,8 @@ relmapPrefixChange :: Intmed c -> (String, String) -> Relmap c
 
 -- | Create <tt>prefix-change</tt> relkit.
 relkitPrefixChange :: (String, String) -> RelkitFlow c
+
+-- | <b>wipe</b>
 consWipe :: RopCons c
 
 -- | Create <tt>wipe</tt> relmap.
@@ -559,6 +584,8 @@ relmapWipe :: Intmed c -> Relmap c
 -- | Create <tt>wipe</tt> relkit.
 relkitWipe :: RelkitFlow c
 
+
+-- | Operators on collection elements.
 module Koshucode.Baala.Rop.Flat.Elem
 
 -- | Implementation of relational operators.
@@ -617,6 +644,8 @@ consElemEnd :: (Ord c, CContent c) => RopCons c
 
 -- | Create <tt>elem-end</tt> relmap.
 relmapElemEnd :: (Ord c, CContent c) => Intmed c -> (TermName, [TermName]) -> Relmap c
+
+-- | <b>uncollect /P -to /N ...</b>
 consUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => RopCons c
 
 -- | Create <tt>uncollect</tt> relmap.
@@ -681,7 +710,6 @@ consPoHeight :: (Ord c, CDec c) => RopCons c
 
 -- | <b>partial-order-depth /P /P -to /N /N</b>
 consPoDepth :: (Ord c, CDec c) => RopCons c
-consPoScale :: (Ord c, CDec c) => PoScaleCalc c -> RopCons c
 
 -- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
 --   relmap.
@@ -690,6 +718,8 @@ relmapPoScale :: (Ord c, CDec c) => PoScaleCalc c -> Intmed c -> TermName4 -> Re
 -- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
 --   relkit.
 relkitPoScale :: (Ord c, CDec c) => PoScaleCalc c -> TermName4 -> RelkitFlow c
+
+-- | <b>visit-distance R -step /P ... -to /N -distance /N</b>
 consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
 
 -- | Create <tt>visit-distance</tt> relmap.
@@ -832,22 +862,41 @@ ropsLattice :: (Ord c) => [Rop c]
 -- | Lattice relmap operators.
 module Koshucode.Baala.Rop.Flat.Lattice
 
+
+-- | Check data property.
 module Koshucode.Baala.Rop.Flat.Check
 
 -- | Implementation of relational operators.
---   
---   <ul>
---   <li><i>@check-term [ -just /P ... | -has /P ... | -but /N ... \</i> @]
---   Check occurences of terms for input relation.</li>
---   <li><i><tt>duplicate /P ...</tt></i> Pass duplicate tuples on
---   <tt>/P</tt> ...</li>
---   </ul>
 ropsCheck :: (CContent c) => [Rop c]
 
+-- | <ul>
+--   <li><i>check-term -just /P ...</i></li>
+--   <li><i>check-term -has /P ...</i></li>
+--   <li><i>check-term -but /N ...</i></li>
+--   </ul>
+consCheckTerm :: RopCons c
+
+-- | <b>duplicate /P ...</b>
+--   
+--   Output tuples duplicate on terms <i>/P ...</i>.
+consDuplicate :: (Ord c) => RopCons c
+
+-- | <b>exclude /N ... -from R</b>
+consExclude :: (Ord c) => RopCons c
+
+-- | <b>dump</b>
+--   
+--   Dump input relation and abort.
+consDump :: (CRel c, MixShortEncode c) => RopCons c
+
+
+-- | Conditional relmaps.
 module Koshucode.Baala.Rop.Flat.Control
 
 -- | Implementation of relational operators.
 ropsControl :: (CContent c) => [Rop c]
+
+-- | <b>if T A B</b>
 consIf :: (Ord c) => RopCons c
 
 -- | Create <tt>if</tt> relmap.
@@ -855,10 +904,20 @@ relmapIf :: (Ord c) => Intmed c -> Relmap3 c -> Relmap c
 
 -- | Create <tt>if</tt> relkit.
 relkitIf :: (Ord c) => RelkitConfl c
+
+-- | <b>when T A</b>
 consWhen :: (Ord c) => RopCons c
+
+-- | <b>unless T B</b>
 consUnless :: (Ord c) => RopCons c
+
+-- | <b>fix R</b>
 consFix :: (Ord c) => RopCons c
+
+-- | <b>fix-join R</b>
 consFixJoin :: (Ord c) => RopCons c
+
+-- | <b>equal R</b>
 consEqual :: (Ord c) => RopCons c
 
 -- | Create <tt>equal</tt> relmap.
@@ -867,7 +926,11 @@ relmapEqual :: (Ord c) => Intmed c -> Map (Relmap c)
 -- | Create <tt>equal</tt> relkit.
 relkitEqual :: (Ord c) => RelkitBinary c
 
+
+-- | Basic relmap operators.
 module Koshucode.Baala.Rop.Flat.Bundle
+
+-- | Basic relmap operators.
 ropsFlat :: (CContent c) => [Rop c]
 
 

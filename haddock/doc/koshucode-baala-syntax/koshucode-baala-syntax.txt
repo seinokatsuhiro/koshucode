@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.168.0.0
+@version 0.170.0.0
 
 
 -- | Term types and related functions.
@@ -789,7 +789,7 @@ TTermN :: CodePt -> Ordering -> TermName -> Token
 TTerm :: CodePt -> TermType -> TermPath -> Token
 
 -- | 6) Local name — <tt>^/</tt><i>name</i>
-TLocal :: CodePt -> (Local String) -> Int -> [Token] -> Token
+TLocal :: CodePt -> (LocalRef String) -> Int -> [Token] -> Token
 
 -- | 7) Opening bracket — <tt>(</tt>, <tt>{</tt>, etc
 TOpen :: CodePt -> String -> Token
@@ -838,6 +838,8 @@ TextBar :: TextForm
 
 -- | Text in license section
 TextLicense :: TextForm
+
+-- | Type of term name.
 data TermType
 
 -- | Normal term path
@@ -846,15 +848,19 @@ TermTypePath :: TermType
 -- | Quoted term name
 TermTypeQuoted :: TermType
 
--- | Local reference.
-data Local a
+-- | Local relation reference.
+data LocalRef a
 
 -- | Reference to local relation — <tt>^r</tt>
-LocalSymbol :: a -> Local a
+LocalSymbol :: a -> LocalRef a
 
 -- | Reference to nested relation — <tt>^/r</tt>
-LocalNest :: a -> Local a
-unlocal :: Local a -> a
+LocalNest :: a -> LocalRef a
+
+-- | Get name of local relation reference.
+unlocal :: LocalRef a -> a
+
+-- | Blank in form.
 data BlankName
 BlankNormal :: String -> BlankName
 BlankInternal :: String -> BlankName
@@ -867,9 +873,9 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.BlankName
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.Local a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.Local a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.Local a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TermType
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TermType
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TermType
@@ -943,11 +949,10 @@ module Koshucode.Baala.Syntax.Token.Utility
 -- | Get the content of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; let tok = S.TTermPath B.def ["r", "x"] in tokenContent tok
+--   &gt;&gt;&gt; let tok = S.TTerm B.def S.TermTypePath ["r", "x"] in tokenContent tok
 --   "/r/x"
 --   </pre>
 tokenContent :: Token -> String
-untoken :: Token -> String
 
 -- | Get detail type string of token.
 --   

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.168.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.170.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -65,6 +65,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Rank</a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Sort by ascending order or descending order.</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -188,6 +196,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#OrderCap');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Data for indicating order.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -229,7 +241,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      > (<a href="Koshucode-Baala-Base-List-Order.html#t:OrderCap"
 		      >OrderCap</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-27');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-29');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -245,7 +257,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      > (<a href="Koshucode-Baala-Base-List-Order.html#t:OrderCap"
 		      >OrderCap</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-29');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-31');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -261,7 +273,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      > (<a href="Koshucode-Baala-Base-List-Order.html#t:OrderCap"
 		      >OrderCap</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-27');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#line-29');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -351,6 +363,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#sortWith');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sort elements by function result.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sortWith length $ words &quot;aaa b ccc dd&quot;
+</code
+		></strong
+	      >[&quot;b&quot;, &quot;dd&quot;, &quot;aaa&quot;, &quot;ccc&quot;]
+</pre
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Rank</h1
@@ -360,15 +386,65 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >type</span
 	    > <a name="t:Ranking" class="def"
 	    >Ranking</a
-	    > n a = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-List-Order.html#t:OrderCap"
-	    >OrderCap</a
-	    > n] -&gt; [n] -&gt; [[a]] -&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >], [[a]]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#Ranking');" href="javascript:void(0);" class="link"
+	    > n a <a onclick="showSource('src/Koshucode-Baala-Base-List-Order.html#Ranking');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>&nbsp;= <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Number of the top rank.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-List-Order.html#t:OrderCap"
+		  >OrderCap</a
+		  > n]</td
+		><td class="doc"
+		><p
+		  >Ranking specification.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [n]</td
+		><td class="doc"
+		><p
+		  >Term names.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [[a]]</td
+		><td class="doc"
+		><p
+		  >List of tuples.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		  >Int</a
+		  >], [[a]])</td
+		><td class="doc"
+		><p
+		  >Ranks and sorted data.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Ranking function.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -404,6 +480,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >Sort and rank like 1223.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sortByNameDenseRank 1 [Asc &quot;a&quot;] [&quot;a&quot;, &quot;b&quot;] [[&quot;b&quot;, &quot;y&quot;], [&quot;a&quot;, &quot;x&quot;], [&quot;a&quot;, &quot;y&quot;]]
+</code
+		></strong
+	      >([1,1,2], [[&quot;a&quot;,&quot;x&quot;], [&quot;a&quot;,&quot;y&quot;], [&quot;b&quot;,&quot;y&quot;]])
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sortByNameDenseRank 0 [Asc &quot;b&quot;] [&quot;a&quot;, &quot;b&quot;] [[&quot;b&quot;, &quot;y&quot;], [&quot;a&quot;, &quot;x&quot;], [&quot;a&quot;, &quot;y&quot;]]
+</code
+		></strong
+	      >([0,1,1], [[&quot;a&quot;,&quot;x&quot;], [&quot;a&quot;,&quot;y&quot;], [&quot;b&quot;,&quot;y&quot;]])
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>sortByNameDenseRank 0 [Desc &quot;a&quot;] [&quot;a&quot;, &quot;b&quot;] [[&quot;b&quot;, &quot;y&quot;], [&quot;a&quot;, &quot;x&quot;], [&quot;a&quot;, &quot;y&quot;]]
+</code
+		></strong
+	      >([0,1,1], [[&quot;b&quot;,&quot;y&quot;], [&quot;a&quot;,&quot;x&quot;], [&quot;a&quot;,&quot;y&quot;]])
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -438,6 +544,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >1223 ranking start with given number.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>denseRankFrom (1 :: Int) &quot;abbc&quot;
+</code
+		></strong
+	      >[1,2,2,3]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -454,6 +570,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ><div class="doc"
 	  ><p
 	    >1224 ranking start with given number.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>gapRankFrom (1 :: Int) &quot;abbc&quot;
+</code
+		></strong
+	      >[1,2,2,4]
+</pre
 	    ></div
 	  ></div
 	></div

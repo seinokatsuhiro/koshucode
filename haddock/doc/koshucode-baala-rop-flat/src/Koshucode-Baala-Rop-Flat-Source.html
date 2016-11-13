@@ -7,132 +7,111 @@
 <link type='text/css' rel='stylesheet' href='hscolour.css' />
 </head>
 <body>
-<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# LANGUAGE RankNTypes #-}</span>
-<a class="number" name="line-2">2</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
-<a class="number" name="line-3">3</a>
-<a class="number" name="line-4">4</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span><span class='hs-varop'>.</span><span class='hs-conid'>Flat</span><span class='hs-varop'>.</span><span class='hs-conid'>Source</span>
-<a class="number" name="line-5">5</a>  <span class='hs-layout'>(</span> <span class='hs-varid'>ropsSource</span><span class='hs-layout'>,</span>
-<a class="number" name="line-6">6</a>  
+<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
+<a class="number" name="line-2">2</a>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Data source.</span>
+<a class="number" name="line-4">4</a>
+<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span><span class='hs-varop'>.</span><span class='hs-conid'>Flat</span><span class='hs-varop'>.</span><span class='hs-conid'>Source</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-varid'>ropsSource</span><span class='hs-layout'>,</span>  
 <a class="number" name="line-7">7</a>    <span class='hs-comment'>-- * dee &amp; dum</span>
-<a class="number" name="line-8">8</a>    <span class='hs-varid'>consDee</span><span class='hs-layout'>,</span> <span class='hs-varid'>consDum</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-comment'>-- $deedum</span>
-<a class="number" name="line-10">10</a>  
-<a class="number" name="line-11">11</a>    <span class='hs-comment'>-- * empty</span>
-<a class="number" name="line-12">12</a>    <span class='hs-varid'>consEmpty</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapEmpty</span><span class='hs-layout'>,</span>
-<a class="number" name="line-13">13</a>  
-<a class="number" name="line-14">14</a>    <span class='hs-comment'>-- * source</span>
-<a class="number" name="line-15">15</a>    <span class='hs-varid'>consSource</span><span class='hs-layout'>,</span>
-<a class="number" name="line-16">16</a>    <span class='hs-comment'>-- $source</span>
-<a class="number" name="line-17">17</a>  
-<a class="number" name="line-18">18</a>    <span class='hs-comment'>-- * source-term</span>
-<a class="number" name="line-19">19</a>    <span class='hs-varid'>consSourceTerm</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapSourceTerm</span><span class='hs-layout'>,</span>
-<a class="number" name="line-20">20</a>    <span class='hs-comment'>-- $source-term</span>
-<a class="number" name="line-21">21</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-8">8</a>    <span class='hs-varid'>consDee</span><span class='hs-layout'>,</span> <span class='hs-varid'>consDum</span><span class='hs-layout'>,</span>  
+<a class="number" name="line-9">9</a>    <span class='hs-comment'>-- * empty</span>
+<a class="number" name="line-10">10</a>    <span class='hs-varid'>consEmpty</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapEmpty</span><span class='hs-layout'>,</span>  
+<a class="number" name="line-11">11</a>    <span class='hs-comment'>-- * source</span>
+<a class="number" name="line-12">12</a>    <span class='hs-varid'>consSource</span><span class='hs-layout'>,</span>  
+<a class="number" name="line-13">13</a>    <span class='hs-comment'>-- * source-term</span>
+<a class="number" name="line-14">14</a>    <span class='hs-varid'>consSourceTerm</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapSourceTerm</span><span class='hs-layout'>,</span>
+<a class="number" name="line-15">15</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-16">16</a>
+<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
+<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
+<a class="number" name="line-20">20</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a class="number" name="line-21">21</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>Op</span>
 <a class="number" name="line-22">22</a>
-<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>S</span>
-<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
-<a class="number" name="line-26">26</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a class="number" name="line-27">27</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>Op</span>
-<a class="number" name="line-28">28</a>
-<a class="number" name="line-29">29</a>
-<a class="number" name="line-30">30</a><a name="ropsSource"></a><span class='hs-comment'>-- | Implementation of relational operators.</span>
-<a class="number" name="line-31">31</a><span class='hs-comment'>--</span>
-<a class="number" name="line-32">32</a><span class='hs-comment'>--   [@dee@]        Nullary full relation.</span>
-<a class="number" name="line-33">33</a><span class='hs-comment'>--</span>
-<a class="number" name="line-34">34</a><span class='hs-comment'>--   [@dum@]        Nullary empty relation.</span>
-<a class="number" name="line-35">35</a><span class='hs-comment'>--</span>
-<a class="number" name="line-36">36</a><span class='hs-comment'>--   [@empty@]      Make empty relation.</span>
-<a class="number" name="line-37">37</a><span class='hs-comment'>--</span>
-<a class="number" name="line-38">38</a><span class='hs-comment'>--   [@source@]     Read relation from data source.</span>
+<a class="number" name="line-23">23</a>
+<a class="number" name="line-24">24</a><a name="ropsSource"></a><span class='hs-comment'>-- | Implementation of relational operators.</span>
+<a class="number" name="line-25">25</a><span class='hs-definition'>ropsSource</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-26">26</a><span class='hs-definition'>ropsSource</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>ropList</span> <span class='hs-str'>"source"</span>
+<a class="number" name="line-27">27</a>    <span class='hs-comment'>--        CONSTRUCTOR     USAGE               ATTRIBUTE</span>
+<a class="number" name="line-28">28</a>    <span class='hs-keyglyph'>[</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consDee</span>         <span class='hs-str'>"dee"</span>               <span class='hs-str'>""</span>
+<a class="number" name="line-29">29</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consDum</span>         <span class='hs-str'>"dum"</span>               <span class='hs-str'>""</span>
+<a class="number" name="line-30">30</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consEmpty</span>       <span class='hs-str'>"empty /N ..."</span>      <span class='hs-str'>"-term*"</span>
+<a class="number" name="line-31">31</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consSource</span>      <span class='hs-str'>"source P /N ..."</span>   <span class='hs-str'>"-pattern -term*"</span>
+<a class="number" name="line-32">32</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consSourceTerm</span>  <span class='hs-str'>"source-term P R"</span>   <span class='hs-str'>"-pattern -relmap/"</span>
+<a class="number" name="line-33">33</a>    <span class='hs-keyglyph'>]</span>
+<a class="number" name="line-34">34</a>
+<a class="number" name="line-35">35</a>
+<a class="number" name="line-36">36</a><span class='hs-comment'>-- ----------------------  empty</span>
+<a class="number" name="line-37">37</a>
+<a class="number" name="line-38">38</a><a name="consEmpty"></a><span class='hs-comment'>-- | __empty \/N ...__</span>
 <a class="number" name="line-39">39</a><span class='hs-comment'>--</span>
-<a class="number" name="line-40">40</a><span class='hs-definition'>ropsSource</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-41">41</a><span class='hs-definition'>ropsSource</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>ropList</span> <span class='hs-str'>"source"</span>
-<a class="number" name="line-42">42</a>    <span class='hs-comment'>--        CONSTRUCTOR     USAGE               ATTRIBUTE</span>
-<a class="number" name="line-43">43</a>    <span class='hs-keyglyph'>[</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consDee</span>         <span class='hs-str'>"dee"</span>               <span class='hs-str'>""</span>
-<a class="number" name="line-44">44</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consDum</span>         <span class='hs-str'>"dum"</span>               <span class='hs-str'>""</span>
-<a class="number" name="line-45">45</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consEmpty</span>       <span class='hs-str'>"empty /N ..."</span>      <span class='hs-str'>"-term*"</span>
-<a class="number" name="line-46">46</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consSource</span>      <span class='hs-str'>"source P /N ..."</span>   <span class='hs-str'>"-pattern -term*"</span>
-<a class="number" name="line-47">47</a>    <span class='hs-layout'>,</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>def</span>  <span class='hs-varid'>consSourceTerm</span>  <span class='hs-str'>"source-term P R"</span>   <span class='hs-str'>"-pattern -relmap/"</span>
-<a class="number" name="line-48">48</a>    <span class='hs-keyglyph'>]</span>
-<a class="number" name="line-49">49</a>
+<a class="number" name="line-40">40</a><span class='hs-comment'>--   Output an empty relation which has terms /\/N .../.</span>
+<a class="number" name="line-41">41</a><span class='hs-comment'>--</span>
+<a class="number" name="line-42">42</a><span class='hs-definition'>consEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-43">43</a><span class='hs-definition'>consEmpty</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-44">44</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-term"</span>
+<a class="number" name="line-45">45</a>       <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapEmpty</span> <span class='hs-varid'>med</span> <span class='hs-varid'>ns</span>
+<a class="number" name="line-46">46</a>
+<a class="number" name="line-47">47</a><a name="relmapEmpty"></a><span class='hs-comment'>-- | Create @empty@ relmap.</span>
+<a class="number" name="line-48">48</a><span class='hs-definition'>relmapEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Intmed</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-49">49</a><span class='hs-definition'>relmapEmpty</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapFlow</span> <span class='hs-varid'>med</span> <span class='hs-varop'>.</span> <span class='hs-varid'>relkitEmpty</span>
 <a class="number" name="line-50">50</a>
-<a class="number" name="line-51">51</a><span class='hs-comment'>-- ----------------------  empty</span>
-<a class="number" name="line-52">52</a>
-<a class="number" name="line-53">53</a><a name="consEmpty"></a><span class='hs-definition'>consEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-54">54</a><span class='hs-definition'>consEmpty</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-55">55</a>    <span class='hs-keyword'>do</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-term"</span>
-<a class="number" name="line-56">56</a>       <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapEmpty</span> <span class='hs-varid'>med</span> <span class='hs-varid'>ns</span>
-<a class="number" name="line-57">57</a>
-<a class="number" name="line-58">58</a><a name="relmapEmpty"></a><span class='hs-comment'>-- | Create @empty@ relmap.</span>
-<a class="number" name="line-59">59</a><span class='hs-definition'>relmapEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Intmed</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-60">60</a><span class='hs-definition'>relmapEmpty</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapFlow</span> <span class='hs-varid'>med</span> <span class='hs-varop'>.</span> <span class='hs-varid'>relkitEmpty</span>
-<a class="number" name="line-61">61</a>
-<a class="number" name="line-62">62</a><a name="relkitEmpty"></a><span class='hs-comment'>-- | Create @empty@ relkit.</span>
-<a class="number" name="line-63">63</a><span class='hs-definition'>relkitEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitFlow</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-64">64</a><span class='hs-definition'>relkitEmpty</span> <span class='hs-varid'>ns</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkit</span> <span class='hs-varid'>he2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitConst</span> <span class='hs-conid'>[]</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-65">65</a>    <span class='hs-varid'>he2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Just</span> <span class='hs-varop'>$</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>headFrom</span> <span class='hs-varid'>ns</span>
-<a class="number" name="line-66">66</a>
-<a class="number" name="line-67">67</a>
-<a class="number" name="line-68">68</a><span class='hs-comment'>-- ----------------------  source</span>
+<a class="number" name="line-51">51</a><a name="relkitEmpty"></a><span class='hs-comment'>-- | Create @empty@ relkit.</span>
+<a class="number" name="line-52">52</a><span class='hs-definition'>relkitEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitFlow</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-53">53</a><span class='hs-definition'>relkitEmpty</span> <span class='hs-varid'>ns</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkit</span> <span class='hs-varid'>he2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitConst</span> <span class='hs-conid'>[]</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-54">54</a>    <span class='hs-varid'>he2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Just</span> <span class='hs-varop'>$</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>headFrom</span> <span class='hs-varid'>ns</span>
+<a class="number" name="line-55">55</a>
+<a class="number" name="line-56">56</a>
+<a class="number" name="line-57">57</a><span class='hs-comment'>-- ----------------------  source</span>
+<a class="number" name="line-58">58</a>
+<a class="number" name="line-59">59</a><a name="consSource"></a><span class='hs-comment'>-- | __source C \/N...__</span>
+<a class="number" name="line-60">60</a><span class='hs-comment'>--</span>
+<a class="number" name="line-61">61</a><span class='hs-comment'>--   Read relation with terms /\/N.../ from judges of /C/.</span>
+<a class="number" name="line-62">62</a><span class='hs-comment'>--</span>
+<a class="number" name="line-63">63</a><span class='hs-definition'>consSource</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-64">64</a><span class='hs-definition'>consSource</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-65">65</a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>pattern</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>  <span class='hs-varid'>med</span> <span class='hs-str'>"-pattern"</span>
+<a class="number" name="line-66">66</a>     <span class='hs-varid'>terms</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-term"</span>
+<a class="number" name="line-67">67</a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapSource</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pattern</span> <span class='hs-varid'>terms</span>
+<a class="number" name="line-68">68</a>
 <a class="number" name="line-69">69</a>
-<a class="number" name="line-70">70</a><span class='hs-comment'>-- $source</span>
-<a class="number" name="line-71">71</a><span class='hs-comment'>-- </span>
-<a class="number" name="line-72">72</a><span class='hs-comment'>--  Read relation with term @\/a@ and @\/b@ constructed from judges of @P@.</span>
-<a class="number" name="line-73">73</a><span class='hs-comment'>-- </span>
-<a class="number" name="line-74">74</a><span class='hs-comment'>--    &gt; source P /a /b</span>
-<a class="number" name="line-75">75</a>
-<a class="number" name="line-76">76</a><a name="consSource"></a><span class='hs-definition'>consSource</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-77">77</a><span class='hs-definition'>consSource</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-78">78</a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>pattern</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>  <span class='hs-varid'>med</span> <span class='hs-str'>"-pattern"</span>
-<a class="number" name="line-79">79</a>     <span class='hs-varid'>terms</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-term"</span>
-<a class="number" name="line-80">80</a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapSource</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pattern</span> <span class='hs-varid'>terms</span>
-<a class="number" name="line-81">81</a>
+<a class="number" name="line-70">70</a><span class='hs-comment'>-- ----------------------  source-term</span>
+<a class="number" name="line-71">71</a>
+<a class="number" name="line-72">72</a><a name="consSourceTerm"></a><span class='hs-comment'>-- | __source-term C R__</span>
+<a class="number" name="line-73">73</a><span class='hs-definition'>consSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-74">74</a><span class='hs-definition'>consSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
+<a class="number" name="line-75">75</a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>pat</span>   <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>   <span class='hs-varid'>med</span> <span class='hs-str'>"-pattern"</span>
+<a class="number" name="line-76">76</a>     <span class='hs-varid'>rmap</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getRelmap</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-relmap"</span>
+<a class="number" name="line-77">77</a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>rmap</span>
+<a class="number" name="line-78">78</a>
+<a class="number" name="line-79">79</a><a name="relmapSourceTerm"></a><span class='hs-comment'>-- | Create @source-term@ relmap.</span>
+<a class="number" name="line-80">80</a><span class='hs-definition'>relmapSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Intmed</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
+<a class="number" name="line-81">81</a><span class='hs-definition'>relmapSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pat</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapBinary</span> <span class='hs-varid'>med</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relkitSourceTerm</span> <span class='hs-varid'>pat</span>
 <a class="number" name="line-82">82</a>
-<a class="number" name="line-83">83</a><span class='hs-comment'>-- ----------------------  source-term</span>
-<a class="number" name="line-84">84</a>
-<a class="number" name="line-85">85</a><span class='hs-comment'>-- $source-term</span>
-<a class="number" name="line-86">86</a><span class='hs-comment'>-- </span>
-<a class="number" name="line-87">87</a><span class='hs-comment'>--  Define relmap @p2@ that has same terms as @p1@.</span>
-<a class="number" name="line-88">88</a><span class='hs-comment'>-- </span>
-<a class="number" name="line-89">89</a><span class='hs-comment'>--    &gt; p1 : source P1 /a /b</span>
-<a class="number" name="line-90">90</a><span class='hs-comment'>--    &gt; p2 : source-term P2 p2</span>
-<a class="number" name="line-91">91</a>
-<a class="number" name="line-92">92</a><a name="consSourceTerm"></a><span class='hs-definition'>consSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-93">93</a><span class='hs-definition'>consSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-94">94</a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>pat</span>   <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>   <span class='hs-varid'>med</span> <span class='hs-str'>"-pattern"</span>
-<a class="number" name="line-95">95</a>     <span class='hs-varid'>rmap</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>getRelmap</span> <span class='hs-varid'>med</span> <span class='hs-str'>"-relmap"</span>
-<a class="number" name="line-96">96</a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>rmap</span>
-<a class="number" name="line-97">97</a>
-<a class="number" name="line-98">98</a><a name="relmapSourceTerm"></a><span class='hs-comment'>-- | Create @source-term@ relmap.</span>
-<a class="number" name="line-99">99</a><span class='hs-definition'>relmapSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Intmed</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
-<a class="number" name="line-100">100</a><span class='hs-definition'>relmapSourceTerm</span> <span class='hs-varid'>med</span> <span class='hs-varid'>pat</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapBinary</span> <span class='hs-varid'>med</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relkitSourceTerm</span> <span class='hs-varid'>pat</span>
-<a class="number" name="line-101">101</a>
-<a class="number" name="line-102">102</a><a name="relkitSourceTerm"></a><span class='hs-comment'>-- | Create @source-term@ relkit.</span>
-<a class="number" name="line-103">103</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitBinary</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-104">104</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyword'>_</span>   <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>Nothing</span>    <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitNothing</span>
-<a class="number" name="line-105">105</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-varid'>pat</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-varid'>he2</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>kit3</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-106">106</a>    <span class='hs-varid'>kit3</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitJust</span> <span class='hs-varid'>he2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitSource</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>ns2</span>
-<a class="number" name="line-107">107</a>    <span class='hs-varid'>ns2</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>getTermNames</span> <span class='hs-varid'>he2</span>
-<a class="number" name="line-108">108</a>
-<a class="number" name="line-109">109</a>
-<a class="number" name="line-110">110</a><span class='hs-comment'>-- ----------------------  dee &amp; dum</span>
-<a class="number" name="line-111">111</a>
-<a class="number" name="line-112">112</a><span class='hs-comment'>-- $deedum</span>
-<a class="number" name="line-113">113</a><span class='hs-comment'>--</span>
-<a class="number" name="line-114">114</a><span class='hs-comment'>--  Nullary fullset relation.</span>
-<a class="number" name="line-115">115</a><span class='hs-comment'>--</span>
-<a class="number" name="line-116">116</a><span class='hs-comment'>--    &gt; dee</span>
-<a class="number" name="line-117">117</a><span class='hs-comment'>--</span>
-<a class="number" name="line-118">118</a><span class='hs-comment'>--  Nullary empty relation.</span>
-<a class="number" name="line-119">119</a><span class='hs-comment'>--</span>
-<a class="number" name="line-120">120</a><span class='hs-comment'>--    &gt; dum</span>
-<a class="number" name="line-121">121</a>
-<a class="number" name="line-122">122</a><a name="consDee"></a><span class='hs-definition'>consDee</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-123">123</a><span class='hs-definition'>consDee</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>reldee</span>
-<a class="number" name="line-124">124</a>
-<a class="number" name="line-125">125</a><a name="consDum"></a><span class='hs-definition'>consDum</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-126">126</a><span class='hs-definition'>consDum</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>reldum</span>
-<a class="number" name="line-127">127</a>
+<a class="number" name="line-83">83</a><a name="relkitSourceTerm"></a><span class='hs-comment'>-- | Create @source-term@ relkit.</span>
+<a class="number" name="line-84">84</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitBinary</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-85">85</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyword'>_</span>   <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>Nothing</span>    <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitNothing</span>
+<a class="number" name="line-86">86</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-varid'>pat</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relkit</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-varid'>he2</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>kit3</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-87">87</a>    <span class='hs-varid'>kit3</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitJust</span> <span class='hs-varid'>he2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitSource</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>ns2</span>
+<a class="number" name="line-88">88</a>    <span class='hs-varid'>ns2</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>getTermNames</span> <span class='hs-varid'>he2</span>
+<a class="number" name="line-89">89</a>
+<a class="number" name="line-90">90</a>
+<a class="number" name="line-91">91</a><span class='hs-comment'>-- ----------------------  dee &amp; dum</span>
+<a class="number" name="line-92">92</a>
+<a class="number" name="line-93">93</a><a name="consDee"></a><span class='hs-comment'>-- | __dee__</span>
+<a class="number" name="line-94">94</a><span class='hs-comment'>--</span>
+<a class="number" name="line-95">95</a><span class='hs-comment'>--   Output the nullary full relation.</span>
+<a class="number" name="line-96">96</a><span class='hs-comment'>--</span>
+<a class="number" name="line-97">97</a><span class='hs-definition'>consDee</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-98">98</a><span class='hs-definition'>consDee</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>reldee</span>
+<a class="number" name="line-99">99</a>
+<a class="number" name="line-100">100</a><a name="consDum"></a><span class='hs-comment'>-- | __dum__</span>
+<a class="number" name="line-101">101</a><span class='hs-comment'>--</span>
+<a class="number" name="line-102">102</a><span class='hs-comment'>--   Output the nullary empty relation.</span>
+<a class="number" name="line-103">103</a><span class='hs-comment'>--</span>
+<a class="number" name="line-104">104</a><span class='hs-definition'>consDum</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-105">105</a><span class='hs-definition'>consDum</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>reldum</span>
+<a class="number" name="line-106">106</a>
 </pre></body>
 </html>
