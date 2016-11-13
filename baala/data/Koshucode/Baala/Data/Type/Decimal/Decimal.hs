@@ -37,6 +37,7 @@ module Koshucode.Baala.Data.Type.Decimal.Decimal
     integralDecimal,
     realDecimal,
     decimalFractional,
+    decimalDouble,
   ) where
 
 import qualified Data.Ratio                        as R
@@ -118,6 +119,10 @@ realDecimal f n = Decimal { decimalFracle = f
 -- | Convert decimal number to fractional number.
 decimalFractional :: (Fractional n) => Decimal -> n
 decimalFractional = fromRational . decimalRatio
+
+-- | Convert decimal number to double.
+decimalDouble :: Decimal -> Double
+decimalDouble = decimalFractional
 
 
 -- --------------------------------------------  Instance

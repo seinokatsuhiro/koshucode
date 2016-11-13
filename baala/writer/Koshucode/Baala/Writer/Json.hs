@@ -7,7 +7,7 @@
 module Koshucode.Baala.Writer.Json
   ( -- * JSON
     resultJson,
-    termsToJSON,
+    termsJson,
     jsonNull,
     A.ToJSON (..),
 
@@ -48,39 +48,43 @@ hPutJSON h _ status (j1:js) =
 
 instance (A.ToJSON c) => A.ToJSON (D.Judge c) where
     toJSON (D.JudgeAffirm p xs) =
-        A.object [ "judge" .= text "|--"
+        A.object [ "judge" .= ("|--" :: T.Text)
                  , "name"  .= p
-                 , "args"  .= termsToJSON xs ]
+                 , "args"  .= termsJson xs ]
     toJSON _ = undefined
 
-termsToJSON :: (A.ToJSON c) => [S.Term c] -> A.Value
-termsToJSON xs = A.object $ map json xs where
+-- | Encode term list into JSON.
+termsJson :: (A.ToJSON c) => [S.Term c] -> A.Value
+termsJson xs = A.object $ map json xs where
     json (n, c) = (T.pack n, A.toJSON c)
 
-text :: T.Text -> T.Text
-text s = s
-
+-- | JSON null.
 jsonNull :: A.Value
 jsonNull = A.Null
 
+-- | Convert content to JSON.
+contentJson :: (A.ToJSON c, D.CContent c) => c -> A.Value
+contentJson c
+    | D.isCode    c = A.toJSON    $ D.gCode c
+    | D.isText    c = A.toJSON    $ D.gText c
+    | D.isTerm    c = A.toJSON    $ S.showTermName $ D.gTerm c
+    | D.isDec     c = A.toJSON    $ D.decimalDouble $ D.gDec c
+    | D.isClock   c = unimpl      $ D.gClock c
+    | D.isTime    c = unimpl      $ D.gTime c
+    | D.isBool    c = A.toJSON    $ D.gBool c
+    | D.isEmpty   c = jsonNull
+    | D.isEnd     c = jsonNull
+    | D.isList    c = A.toJSON    $ D.gList c
+    | D.isSet     c = A.toJSON    $ D.gSet c
+    | D.isTie     c = termsJson   $ D.gTie c
+    | D.isRel     c = unimpl      $ D.gRel c
+    | D.isInterp  c = unimpl      $ D.gInterp c
+    | D.isType    c = unimpl      $ D.gType c
+    | otherwise     = unimpl c
+    where unimpl  x = A.toJSON $ "<unimplemented>" ++ show x
+
 instance A.ToJSON D.Content where
-    toJSON c = case c of
-        D.VCode s      -> A.toJSON s
-        D.VText s      -> A.toJSON s
-        D.VTerm s      -> A.toJSON $ '/' : s
-        D.VDec  n      -> A.toJSON (D.decimalFractional n :: Double)
-        D.VClock t     -> unimplemented t
-        D.VTime t      -> unimplemented t
-        D.VBool b      -> A.toJSON b
-        D.VEmpty       -> jsonNull
-        D.VEnd         -> jsonNull
-        D.VInterp i    -> unimplemented i
-        D.VType t      -> unimplemented t
-        D.VList xs     -> A.toJSON xs
-        D.VSet  xs     -> A.toJSON xs
-        D.VTie  xs     -> termsToJSON xs
-        D.VRel r       -> unimplemented r
-        where unimplemented x = A.toJSON $ "<unimplemented>" ++ show x
+    toJSON = contentJson
 
 
 -- --------------------------------------------  GeoJSON
@@ -106,18 +110,19 @@ hPutGeoJson h _ status (j1:js) =
       cput j = do IO.hPutStr h ", "
                   put j
 
+-- | Convert to GeoJSON.
 class ToGeoJSON a where
     toGeoJSON :: a -> A.Value
 
 instance (A.ToJSON c) => ToGeoJSON (D.Judge c) where
     toGeoJSON (D.JudgeAffirm _ xs) =
-        A.object [ "type"       .= text "Feature"
+        A.object [ "type"       .= ("Feature" :: T.Text)
                  , "properties" .= A.object [ "name" .= name ]
                  , "geometry"   .= geo ]
             where name   = lookup "name" xs
                   lat    = lookup "lat"  xs
                   long   = lookup "long" xs
-                  geo    = A.object [ "type"        .= text "Point"
+                  geo    = A.object [ "type"        .= ("Point" :: T.Text)
                                     , "coordinates" .= [long, lat]]
     toGeoJSON _ = undefined
 
