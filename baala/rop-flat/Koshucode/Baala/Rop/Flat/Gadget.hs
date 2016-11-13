@@ -11,7 +11,7 @@ module Koshucode.Baala.Rop.Flat.Gadget
     -- * partial-order
     consPoHeight,
     consPoDepth,
-    consPoScale, relmapPoScale, relkitPoScale,
+    relmapPoScale, relkitPoScale,
   
     -- * visit-distance
     consVisitDistance, relmapVisitDistance,
@@ -129,6 +129,7 @@ relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
 
 --  visit-distance r -step /a /b : /c /d -to /v -distance /n
 
+-- | __visit-distance R -step \/P ... -to \/N -distance \/N__
 consVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.RopCons c
 consVisitDistance med =
     do rmap  <- Op.getRelmap med "-relmap"

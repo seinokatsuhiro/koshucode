@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Operation for term names.
+
 module Koshucode.Baala.Rop.Flat.TermGadget
   ( ropsTermGadget,
     -- * prefix
@@ -124,6 +126,7 @@ relkitPrefixChange (new, old) (Just he1) = Right kit2 where
 
 -- ----------------------  wipe
 
+-- | __wipe__
 consWipe :: C.RopCons c
 consWipe = Right . relmapWipe
 

@@ -1,18 +1,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Conditional relmaps.
+
 module Koshucode.Baala.Rop.Flat.Control
   ( ropsControl,
-  
     -- * if
     consIf, relmapIf, relkitIf,
-  
     -- * when & unless
     consWhen, consUnless,
-  
     -- * fix & fix-join
     consFix, consFixJoin,
-  
     -- * equal
     consEqual, relmapEqual, relkitEqual,
   ) where
@@ -44,6 +42,7 @@ ropsControl = Op.ropList "control"
 --  'if T A B' is same as 'A' when T is an empty relation
 --  or same as 'B' when T is not an empty relation.
 
+-- | __if T A B__
 consIf :: (Ord c) => C.RopCons c
 consIf med =
   do mt <- Op.getRelmap med "-test"
@@ -89,12 +88,14 @@ isNothing2 a b = isNothing a && isNothing b
 
 -- ----------------------  when & unless
 
+-- | __when T A__
 consWhen :: (Ord c) => C.RopCons c
 consWhen med =
   do rt <- Op.getRelmap med "-test"
      ra <- Op.getRelmap med "-then"
      Right $ relmapIf med (rt, ra, C.relmapId)
 
+-- | __unless T B__
 consUnless :: (Ord c) => C.RopCons c
 consUnless med =
   do rt <- Op.getRelmap med "-test"
@@ -105,11 +106,13 @@ consUnless med =
 
 -- ----------------------  fix & fix-join
 
+-- | __fix R__
 consFix :: (Ord c) => C.RopCons c
 consFix med =
   do rmap <- Op.getRelmap med "-relmap"
      Right $ relmapFix med rmap
 
+-- | __fix-join R__
 consFixJoin :: (Ord c) => C.RopCons c
 consFixJoin med =
   do rmap <- Op.getRelmap med "-relmap"
@@ -134,6 +137,7 @@ relkitFix _ _ = Right C.relkitNothing
 
 -- ----------------------  equal
 
+-- | __equal R__
 consEqual :: (Ord c) => C.RopCons c
 consEqual med =
     do rmap <- Op.getRelmap med "-relmap"

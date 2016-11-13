@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Operators on collection elements.
+
 module Koshucode.Baala.Rop.Flat.Elem
   ( ropsElem,
   
@@ -244,6 +246,7 @@ relkitElemBy f (coll, to) (Just he1) = kit2 where
 
 -- ----------------------  uncollect
 
+-- | __uncollect \/P -to \/N ...__
 consUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c) => C.RopCons c
 consUncollect med =
   do coll  <- Op.getTerm  med "-coll"

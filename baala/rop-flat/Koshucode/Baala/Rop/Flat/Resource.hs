@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Operators on data resources.
+
 module Koshucode.Baala.Rop.Flat.Resource
   ( ropsResource,
     -- * koshu-res-rop
@@ -18,13 +20,6 @@ import qualified Koshucode.Baala.Rop.Base       as Op
 
 
 -- | Relmap operators about resources.
---
---   [@koshu-res-rop \/N \/N@]
---     Derived relmap operators in the current resource.
--- 
---   [@koshu-res-sink \/N \/N@]
---     Judgement patterns of sinks in the current resource.
--- 
 ropsResource :: (D.CContent c) => [C.Rop c]
 ropsResource = Op.ropList "resource"
     --        CONSTRUCTOR          USAGE                   ATTRIBUTE
@@ -38,6 +33,10 @@ ropsResource = Op.ropList "resource"
 
 -- ----------------------  koshu-res-rop
 
+-- | __koshu-res-rop \/N \/N__
+--
+--   Derived relmap operators in the current resource.
+--
 consKoshuResRop :: (D.CContent c) => C.RopCons c
 consKoshuResRop med =
   do sec   <- Op.getTerm med "-sec"
@@ -63,6 +62,10 @@ relkitKoshuResRop (sec, name) res _ = Right kit2 where
 
 -- ----------------------  koshu-res-sink
 
+-- | __koshu-res-sink \/N \/N__
+--
+--   Judgement class of sinks in the current resource.
+--
 consKoshuResSink :: (D.CContent c) => C.RopCons c
 consKoshuResSink med =
   do sec   <- Op.getTerm med "-sec"
@@ -89,6 +92,7 @@ relkitKoshuResSink (sec, pat) res _ = Right kit2 where
 
 -- ----------------------  koshu-res-article
 
+-- | __koshu-res-article \/N__
 consKoshuResArticle :: (D.CContent c) => C.RopCons c
 consKoshuResArticle med =
   do name <- Op.getTerm med "-name"

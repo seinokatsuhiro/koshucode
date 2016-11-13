@@ -1,23 +1,17 @@
-{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Data source.
+
 module Koshucode.Baala.Rop.Flat.Source
-  ( ropsSource,
-  
+  ( ropsSource,  
     -- * dee & dum
-    consDee, consDum,
-    -- $deedum
-  
+    consDee, consDum,  
     -- * empty
-    consEmpty, relmapEmpty,
-  
+    consEmpty, relmapEmpty,  
     -- * source
-    consSource,
-    -- $source
-  
+    consSource,  
     -- * source-term
     consSourceTerm, relmapSourceTerm,
-    -- $source-term
   ) where
 
 import qualified Koshucode.Baala.Overture     as O
@@ -28,15 +22,6 @@ import qualified Koshucode.Baala.Rop.Base     as Op
 
 
 -- | Implementation of relational operators.
---
---   [@dee@]        Nullary full relation.
---
---   [@dum@]        Nullary empty relation.
---
---   [@empty@]      Make empty relation.
---
---   [@source@]     Read relation from data source.
---
 ropsSource :: (D.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
     --        CONSTRUCTOR     USAGE               ATTRIBUTE
@@ -50,6 +35,10 @@ ropsSource = Op.ropList "source"
 
 -- ----------------------  empty
 
+-- | __empty \/N ...__
+--
+--   Output an empty relation which has terms /\/N .../.
+--
 consEmpty :: C.RopCons c
 consEmpty med =
     do ns <- Op.getTerms med "-term"
@@ -67,12 +56,10 @@ relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
 
 -- ----------------------  source
 
--- $source
--- 
---  Read relation with term @\/a@ and @\/b@ constructed from judges of @P@.
--- 
---    > source P /a /b
-
+-- | __source C \/N...__
+--
+--   Read relation with terms /\/N.../ from judges of /C/.
+--
 consSource :: C.RopCons c
 consSource med =
   do pattern  <- Op.getWord  med "-pattern"
@@ -82,13 +69,7 @@ consSource med =
 
 -- ----------------------  source-term
 
--- $source-term
--- 
---  Define relmap @p2@ that has same terms as @p1@.
--- 
---    > p1 : source P1 /a /b
---    > p2 : source-term P2 p2
-
+-- | __source-term C R__
 consSourceTerm :: C.RopCons c
 consSourceTerm med =
   do pat   <- Op.getWord   med "-pattern"
@@ -109,19 +90,17 @@ relkitSourceTerm pat (C.Relkit _ (Just he2) _) _ = Right kit3 where
 
 -- ----------------------  dee & dum
 
--- $deedum
+-- | __dee__
 --
---  Nullary fullset relation.
+--   Output the nullary full relation.
 --
---    > dee
---
---  Nullary empty relation.
---
---    > dum
-
 consDee :: C.RopCons c
 consDee med = Right $ C.relmapConst med D.reldee
 
+-- | __dum__
+--
+--   Output the nullary empty relation.
+--
 consDum :: C.RopCons c
 consDum med = Right $ C.relmapConst med D.reldum
 

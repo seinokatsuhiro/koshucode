@@ -1,7 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Check data property.
+
 module Koshucode.Baala.Rop.Flat.Check
   ( ropsCheck,
+    consCheckTerm,
+    consDuplicate,
+    consExclude,
+    consDump,
   ) where
 
 import qualified Data.Map                          as Map
@@ -14,15 +20,7 @@ import qualified Koshucode.Baala.Rop.Flat.Lattice  as Op
 import qualified Koshucode.Baala.Rop.Flat.Term     as Op
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
-
 -- | Implementation of relational operators.
---
---   [@check-term \[ -just \/P ... | -has \/P ... | -but \/N ... \]@]
---     Check occurences of terms for input relation.
---
---   [@duplicate \/P ...@]
---     Pass duplicate tuples on @\/P@ ...
-
 ropsCheck :: (D.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
     [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
@@ -35,6 +33,9 @@ ropsCheck = Op.ropList "check"
 
 -- ----------------------  check-term
 
+-- | [check-term -just \/P ...]
+--   [check-term -has \/P ...]
+--   [check-term -but \/N ...]
 consCheckTerm :: C.RopCons c
 consCheckTerm med =
   case Op.getTag med of
@@ -66,7 +67,6 @@ checkTerm opt check ns (Just he1)
     | otherwise    = Msg.checkTerm opt ns he1
 
 
-
 -- ----------------------  duplicate
 
 -- $duplicate
@@ -76,6 +76,10 @@ checkTerm opt check ns (Just he1)
 --  if set of terms @\/x@ and @\/y@ is a key of relation,
 --  there are another tuples that has the same key.
 
+-- | __duplicate \/P ...__
+--
+--   Output tuples duplicate on terms /\/P .../.
+--
 consDuplicate :: (Ord c) => C.RopCons c
 consDuplicate med =
   do ns <- Op.getTerms med "-term"
@@ -99,11 +103,11 @@ relkitDuplicate ns (Just he1)
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 
-
 -- ----------------------  exclude
 
 -- exclude : none ( pick @'all | meet ( @from | pick @'all ))
 
+-- | __exclude \/N ... -from R__
 consExclude :: (Ord c) => C.RopCons c
 consExclude med =
   do ns <- Op.getTerms  med "-term"
@@ -119,6 +123,10 @@ relmapExclude med (ns, m) = excl where
 
 -- ----------------------  dump
 
+-- | __dump__
+--
+--   Dump input relation and abort.
+--
 consDump :: (D.CRel c, B.MixShortEncode c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 

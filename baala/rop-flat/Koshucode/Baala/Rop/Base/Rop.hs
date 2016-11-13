@@ -6,8 +6,6 @@ module Koshucode.Baala.Rop.Base.Rop
   ( ropsBuiltin,
     -- * id
     consId, relmapId,
-    -- $id
-
     -- * xxx
     consXxx
   ) where
@@ -16,7 +14,6 @@ import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base.Define    as Op
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
-
 
 -- | Built-in relmap operator.
 --
@@ -31,32 +28,22 @@ ropsBuiltin = Op.ropList "builtin"
     , Op.def consId       "id"             ""
     ]
 
-
--- ----------------------  append
-
+-- | Append relmaps.
 consAppend :: C.RopCons c
 consAppend = app . map snd . C.medSubmap where
     app [a,b] = Right (a B.<> b)
     app _     = Msg.reqRelmap 2
 
-
--- ----------------------  id
-
--- $id
+-- | __id__
 --
---  Identity mapping, i.e., do nothing.
+--   Identity relmap, i.e., output just input relation.
 --
---    > pick /a /b | id
-
 consId :: C.RopCons c
 consId med = Right $ relmapId med
 
 -- | Create @id@ relmap.
 relmapId :: C.Intmed c -> C.Relmap c
 relmapId med = C.relmapFlow med $ Right . C.relkitId
-
-
--- ---------------------- xxx
 
 -- | Placeholder for unimplemented operator.
 consXxx :: C.RopCons c

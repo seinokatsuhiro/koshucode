@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Relmap operators which produce ordered relations.
+
 module Koshucode.Baala.Rop.Flat.Order
   ( ropsOrder,
     -- * forward
@@ -33,6 +35,10 @@ ropsOrder = Op.ropList "order"  -- GROUP
 
 -- ----------------------  forward & backward
 
+-- | __forward \/P ...__
+--
+--   Move terms \/P ... forward.
+--
 consForward :: C.RopCons c
 consForward med =
   do ns <- Op.getTerms med "-term"
@@ -42,6 +48,10 @@ consForward med =
 relmapForward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapForward med = C.relmapFlow med . relkitToward (D.ssRForward, D.ssRForward)
 
+-- | __backward \/P ...__
+--
+--   Move terms \/P ... backward.
+--
 consBackward :: C.RopCons c
 consBackward med =
   do ns <- Op.getTerms med "-term"
@@ -65,6 +75,7 @@ relkitToward (hePick, boPick) ns (Just he1)
 
 -- ----------------------  lexical
 
+-- | __lexical__
 consLexical :: C.RopCons c
 consLexical med = Right $ relmapLexical med
 
@@ -84,6 +95,7 @@ relkitLexical (Just he1) = Right kit2 where
 
 -- ----------------------  order
 
+-- | __order \/P ...__
 consOrder :: (Ord c) => C.RopCons c
 consOrder med =
     do ns <- Op.getOption [] Op.getSignedTerms med "-term"

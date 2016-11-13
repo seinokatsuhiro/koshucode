@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Basic relmap operators.
+
 module Koshucode.Baala.Rop.Flat.Bundle
   ( ropsFlat,
   ) where
@@ -20,6 +22,7 @@ import qualified Koshucode.Baala.Rop.Flat.Source      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Term        as Rop
 import qualified Koshucode.Baala.Rop.Flat.TermGadget  as Rop
 
+-- | Basic relmap operators.
 ropsFlat :: (D.CContent c) => [C.Rop c]
 ropsFlat = Rop.ropsMeta
         ++ Rop.ropsResource
