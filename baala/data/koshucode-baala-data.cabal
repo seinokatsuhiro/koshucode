@@ -103,6 +103,7 @@ library
         Koshucode.Baala.Data.Type.Time.TimeCalc
 
         Koshucode.Baala.Data.Type.Type
+        Koshucode.Baala.Data.Type.Type.Genus
 
   -- Modules included in this library but not exported.
   --other-modules:       
