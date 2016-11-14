@@ -26,6 +26,14 @@ class CTypeOf c where
     -- | Get type of content.
     typeOf :: c -> D.Type
 
+    -- | Test content is a some type.
+    isA :: O.Test2 c D.Type
+    isA c t = typeOf c == t
+
+    -- | Test two contents are same type.
+    sameType :: O.Test2 c c
+    sameType c1 c2 = typeOf c1 == typeOf c2
+
 -- | Get content which may be aborted.
 getContent :: (CTypeOf c) => O.Test c -> (c -> b) -> B.Ab c -> B.Ab b
 getContent _ _    (Left a) = Left a
