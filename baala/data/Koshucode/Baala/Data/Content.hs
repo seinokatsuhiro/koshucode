@@ -55,21 +55,21 @@ type BaalaC = Content
 
 -- | The Baala content type.
 data Content
-    = VEmpty                      -- ^ /Singleton:/   Sign of no ordinary type
-    | VBool    Bool               -- ^ /Numeric:/     Boolean type
-    | VDec     D.Decimal          -- ^ /Numeric:/     Decimal number type
-    | VClock   D.Clock            -- ^ /Numeric:/     Clock type
-    | VTime    D.Time             -- ^ /Numeric:/     Time type
-    | VCode    String             -- ^ /Textual:/     Code type
-    | VTerm    String             -- ^ /Textual:/     Term name type
-    | VText    String             -- ^ /Textual:/     Text type
-    | VList    [Content]           -- ^ /Collective:/  List type
-    | VSet     [Content]           -- ^ /Collective:/  Set type
-    | VTie     [B.Named Content]   -- ^ /Relational:/  Tie type (set of terms)
-    | VRel     (D.Rel Content)     -- ^ /Relational:/  Relation type
-    | VInterp  D.Interp           -- ^ /Relational:/  Interpretation type
-    | VType    D.Type             -- ^ /Meta:/        Type for type
-    | VEnd                        -- ^ /Singleton:/   The end of everything
+    = VEmpty                -- ^ /Singleton:/   Sign of no ordinary type
+    | VBool    Bool         -- ^ /Numeric:/     Boolean type
+    | VDec     D.Decimal    -- ^ /Numeric:/     Decimal number type
+    | VClock   D.Clock      -- ^ /Numeric:/     Clock type
+    | VTime    D.Time       -- ^ /Numeric:/     Time type
+    | VCode    String       -- ^ /Textual:/     Code type
+    | VTerm    S.TermName   -- ^ /Textual:/     Term name type
+    | VText    String       -- ^ /Textual:/     Text type
+    | VList    [Content]    -- ^ /Collective:/  List type
+    | VSet     [Content]    -- ^ /Collective:/  Set type
+    | VTie     [TermC]      -- ^ /Relational:/  Tie type (set of terms)
+    | VRel     RelC         -- ^ /Relational:/  Relation type
+    | VInterp  D.Interp     -- ^ /Relational:/  Interpretation type
+    | VType    D.Type       -- ^ /Meta:/        Type for type
+    | VEnd                  -- ^ /Singleton:/   The end of everything
     deriving (Show)
 
 instance Eq Content where
@@ -161,7 +161,7 @@ qquote (Nothing) s  = S.angleQuote s
 qquote (Just s)  _  = s
 
 
--- ----------------------  Simple
+-- ----------------------  Edge
 
 instance D.CEmpty Content where
     empty                    = VEmpty
@@ -172,6 +172,8 @@ instance D.CEnd Content where
     end                      = VEnd
     isEnd VEnd               = True
     isEnd _                  = False
+
+-- ----------------------  Simple
 
 instance D.CBool Content where
     pBool                    = VBool
@@ -279,7 +281,7 @@ type DispatchSimple a =
     , D.Clock     -> a
     , D.Time      -> a
     , String      -> a
-    , String      -> a
+    , S.TermName  -> a
     , String      -> a
     )
 
@@ -288,8 +290,8 @@ type DispatchSimple a =
 type DispatchComplex a =
     ( [Content]         -> a
     , [Content]         -> a
-    , [B.Named Content] -> a
-    , D.Rel Content     -> a
+    , [TermC]           -> a
+    , RelC              -> a
     , D.Interp          -> a
     , D.Type            -> a
     )
