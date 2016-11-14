@@ -3,7 +3,19 @@
 -- | The Baala content type.
 
 module Koshucode.Baala.Data.Content
-  ( Content (..),
+  ( -- * Type
+    Content (..),
+
+    -- * Dispatcher
+    DispatchEdge,
+    DispatchSimple,
+    DispatchComplex,
+    dispatchEdge,
+    dispatchSimple,
+    dispatchComplex,
+    dispatchContent,
+
+    -- * Concrete type
     BaalaC,
     TermC, JudgeC, RelC,
     the, stringC,
@@ -253,6 +265,75 @@ instance D.CType Content where
     gType _                  = B.bug "gType"
     isType  (VType _)        = True
     isType  _                = False
+
+-- ----------------------  Dispatch
+
+-- | Constants for edge content, i.e., empty and end.
+type DispatchEdge a = ( a, a )
+
+-- | Functions for simple content, i.e.,
+--   boolean, decimal, clock, time, code, term, and text.
+type DispatchSimple a =
+    ( Bool        -> a
+    , D.Decimal   -> a
+    , D.Clock     -> a
+    , D.Time      -> a
+    , String      -> a
+    , String      -> a
+    , String      -> a
+    )
+
+-- | Functions for complex content, i.e.,
+--   list, set, tie, relation, interp, and type.
+type DispatchComplex a =
+    ( [Content]         -> a
+    , [Content]         -> a
+    , [B.Named Content] -> a
+    , D.Rel Content     -> a
+    , D.Interp          -> a
+    , D.Type            -> a
+    )
+
+-- | Call type-specific functions on empty or end content.
+dispatchEdge :: DispatchEdge a -> (Content -> a) -> (Content -> a)
+dispatchEdge (empty, end) other c =
+    case c of
+      VEmpty    -> empty
+      VEnd      -> end
+      _         -> other c
+
+-- | Call type-specific functions on simple content.
+dispatchSimple :: DispatchSimple a -> (Content -> a) -> (Content -> a)
+dispatchSimple (bool, dec, clock, time, code, term, text) other c =
+    case c of
+      VBool   b -> bool  b
+      VDec    n -> dec   n
+      VClock  t -> clock t
+      VTime   t -> time  t
+      VCode   s -> code  s
+      VTerm   s -> term  s
+      VText   s -> text  s
+      _         -> other c
+
+-- | Call type-specific functions on complex content.
+dispatchComplex :: DispatchComplex a -> (Content -> a) -> (Content -> a)
+dispatchComplex (list, set, tie, rel, interp, type_) other c =
+    case c of
+      VList   cs -> list   cs
+      VSet    cs -> set    cs
+      VTie    ts -> tie    ts
+      VRel     r -> rel    r
+      VInterp  i -> interp i
+      VType    t -> type_  t
+      _          -> other  c
+
+-- | Call type-specific functions on content.
+dispatchContent :: DispatchEdge a -> DispatchSimple a -> DispatchComplex a -> (Content -> a)
+dispatchContent e s c = simple where
+    simple  = dispatchSimple s edge
+    edge    = dispatchEdge e complex
+    complex = dispatchComplex c other
+    other   = B.bug "dispatchContent"
 
 
 -- ----------------------  Concrete type
