@@ -5,13 +5,15 @@
 module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
-    typeOrder,
   ) where
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Data.Class.Singleton     as D
 import qualified Koshucode.Baala.Data.Class.Simple        as D
 import qualified Koshucode.Baala.Data.Class.Complex       as D
+
+{-# DEPRECATED appendContent "Do not use it." #-}
+{-# DEPRECATED joinContent "Do not use it." #-}
 
 -- | Generic content class.
 class (Ord c, Show c, B.MixShortEncode c, D.CTypeOf c,
@@ -26,30 +28,32 @@ class (Ord c, Show c, B.MixShortEncode c, D.CTypeOf c,
     joinContent :: [c] -> B.Ab c
     joinContent = B.foldM appendContent D.empty
 
--- | Order of type.
-typeOrder :: (CContent c) => c -> Int
-typeOrder c
-    -- empty
-    | D.isEmpty    c = 1
+    -- | Order of content type.
+    typeOrder :: c -> Int
+    typeOrder c
+        -- empty
+        | D.isEmpty    c = 1
 
-    -- simple
-    | D.isBool     c = 11
-    | D.isDec      c = 12
-    | D.isClock    c = 13
-    | D.isTime     c = 14
-    | D.isCode     c = 15
-    | D.isTerm     c = 16
-    | D.isText     c = 17
+        -- simple numeric
+        | D.isBool     c = 11
+        | D.isDec      c = 12
+        | D.isClock    c = 13
+        | D.isTime     c = 14
 
-    -- complex
-    | D.isList     c = 21
-    | D.isSet      c = 22
-    | D.isTie      c = 23
-    | D.isRel      c = 24
-    | D.isInterp   c = 25
-    | D.isType     c = 27
+        -- simple textual
+        | D.isCode     c = 15
+        | D.isTerm     c = 16
+        | D.isText     c = 17
 
-    -- end
-    | D.isEnd      c = 31
-    | otherwise      = error "unknown content"
+        -- complex
+        | D.isList     c = 21
+        | D.isSet      c = 22
+        | D.isTie      c = 23
+        | D.isRel      c = 24
+        | D.isInterp   c = 25
+        | D.isType     c = 27
+
+        -- end
+        | D.isEnd      c = 31
+        | otherwise      = error "unknown content"
 
