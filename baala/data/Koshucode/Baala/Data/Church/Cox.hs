@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term-content expression.
@@ -80,7 +79,7 @@ coxToDoc sh = d (0 :: Int) . coxFold where
     d 10 _ = B.pprint "..."
     d n e  = case e of
         CoxLit    _ c          -> B.pprint "lit"    B.<+> encode c
-        CoxTerm   _ ns _       -> B.pprint $ concatMap S.showTermName ns
+        CoxTerm   _ ns _       -> B.pprint $ S.termPathString ns
         CoxCalc   _ op _       -> B.pprint "calc"   B.<+> blankNameToDoc op
         CoxLocal  _ v i        -> B.pprint "local"  B.<+> (B.pprint v B.<> B.pprint "/" B.<> B.pprint i)
         CoxBlank  _ v          -> B.pprint "global" B.<+> blankNameToDoc v

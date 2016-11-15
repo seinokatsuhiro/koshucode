@@ -42,7 +42,7 @@ unkNestVar n ls ds = left where
     dynamic = map f ds
     f ((tk, k), _) = text k tk
     text (S.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
-    text (S.LocalNest   k) tk = unwords ["nested relation", S.showTermName k, "in", tokenAtPoint tk]
+    text (S.LocalNest   k) tk = unwords ["nested relation", S.termNameString k, "in", tokenAtPoint tk]
 
 quote :: O.StringMap
 quote s = "'" ++ s ++ "'"

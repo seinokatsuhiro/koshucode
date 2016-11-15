@@ -124,14 +124,14 @@ typeExplain ty =
       TypeSum     ts  -> B.pprint "sum"    B.<+> vmap (item "|") ts
       _               -> B.pprint $ B.mixToFlatString $ B.mixEncode ty
     where
-      term (n,t)  =  B.pprint (S.showTermName n) B.<+> typeExplain t
+      term (n,t)  =  B.pprint (S.termNameString n) B.<+> typeExplain t
       item i t    =  B.pprint i B.<+> typeExplain t
       vmap f      =  B.pprintV . map f
 
 -- | Encode term types.
 typeTermMix :: Type -> B.MixText
 typeTermMix (TypeRel ts) = B.mixJoin1 $ map name ts where
-    name (n, _) = B.mix $ S.showTermName n
+    name (n, _) = B.mix $ S.termNameString n
 typeTermMix _ = B.mixEmpty
 
 

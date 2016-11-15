@@ -124,7 +124,7 @@ position he = spos where
         let index = D.headIndex1 he ns
         in if all (>= 0) index
            then Right $ D.CoxTerm cp ns index
-           else Msg.unkTerm [S.showTermPath ns] he
+           else Msg.unkTerm [S.termPathString ns] he
     pos (D.CoxFill cp  f xs)    = do f'  <- spos f
                                      xs' <- mapM spos xs
                                      Right $ D.CoxFill cp f' xs'

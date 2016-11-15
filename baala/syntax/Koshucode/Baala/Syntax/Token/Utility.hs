@@ -35,8 +35,8 @@ tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
       S.TShort    _ a b    -> a ++ "." ++ b
-      S.TTermN    _ _ n    -> S.showTermName n
-      S.TTerm     _ _ ns   -> concatMap S.showTermName ns
+      S.TTermN    _ _ n    -> S.termNameString n
+      S.TTerm     _ _ ns   -> S.termPathString ns
       S.TLocal    _ n _ _  -> S.unlocal n
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s

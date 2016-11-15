@@ -8,7 +8,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
 
     -- * Term name
     TermName, TermPath, SignedTermName,
-    showTermName, showTermPath,
+    termNameString, termPathString,
 
     -- * Term name tuple
     TermName2, TermName3,
@@ -50,19 +50,19 @@ type SignedTermName = (Ordering, TermName)
 
 -- | Encode term name into string.
 --
---   >>> showTermName "size"
+--   >>> termNameString "size"
 --   "/size"
 --
-showTermName :: TermName -> String
-showTermName n = '/' : n
+termNameString :: TermName -> String
+termNameString n = '/' : n
 
 -- | Encode term path into string.
 --
---   >>> showTermPath ["r", "x"]
+--   >>> termPathString ["r", "x"]
 --   "/r/x"
 --
-showTermPath :: TermPath -> String
-showTermPath = concatMap showTermName
+termPathString :: TermPath -> String
+termPathString = concatMap termNameString
 
 
 -- ----------------------  Term name tuple

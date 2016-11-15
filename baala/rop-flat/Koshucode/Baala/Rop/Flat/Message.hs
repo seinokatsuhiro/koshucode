@@ -104,5 +104,5 @@ unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a
 unmatchShare e a =
     Left $ B.abortLines "Unmatch shared terms"
          $ expectActual (ts e) (ts a)
-    where ts xs = unwords $ S.showTermName <$> xs
+    where ts xs = unwords $ S.termNameString <$> xs
 

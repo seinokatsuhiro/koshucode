@@ -58,7 +58,7 @@ contToHtml sh = content where
 
     row cs = H.tr ! class_ "tuple" $ mapM_ col cs
     col c  = H.td $ contToHtml sh c
-    term   = (H.span ! class_ "termname") . H.toMarkup . S.showTermName
+    term   = (H.span ! class_ "termname") . H.toMarkup . S.termNameString
 
 --  HTML
 --

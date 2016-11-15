@@ -20,5 +20,5 @@ abRun = B.abortable "run"
 -- | Unknown nested relation
 unkNestRel :: S.Token -> String -> [String] -> B.Ab a
 unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
-    where ref = S.showTermName n ++ " in " ++ S.tokenContent p
+    where ref = S.termNameString n ++ " in " ++ S.tokenContent p
 

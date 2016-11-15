@@ -128,7 +128,7 @@ args vs = unwords $ map var $ zip vs [1..]
 detailTermRel :: String -> [S.TermName] -> D.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indentLines ns' ++ ["Input relation"] ++ indentLines ns1
-    ns'    = map S.showTermName ns
+    ns'    = map S.termNameString ns
     ns1    = linesFrom $ D.headExplain he1
 
 linesFrom :: (Show a) => a -> [String]
@@ -138,16 +138,16 @@ linesFrom = lines . show
 msgTerms2 :: (D.GetTermNames t1, D.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
 msgTerms2 s1 t1 s2 t2 = detail where
     detail = [s1] ++ msg1 t1 ++ [s2] ++ msg2 t2
-    msg1 = indentLines . B.sort . showTermNames
-    msg2 = indentLines . B.sort . showTermNames
+    msg1 = indentLines . B.sort . termNameStrings
+    msg2 = indentLines . B.sort . termNameStrings
 
 -- | Indent message lines.
 indentLines :: [String] -> [String]
 indentLines = map ("  " ++)
 
 -- | Lines of term names.
-showTermNames :: (D.GetTermNames t) => t -> [String]
-showTermNames = msg . D.getTermNames where
+termNameStrings :: (D.GetTermNames t) => t -> [String]
+termNameStrings = msg . D.getTermNames where
     msg [] = ["(no terms)"]
-    msg ns = map S.showTermName ns
+    msg ns = map S.termNameString ns
 
