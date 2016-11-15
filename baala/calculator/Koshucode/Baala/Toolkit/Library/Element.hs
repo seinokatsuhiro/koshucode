@@ -49,7 +49,7 @@ infixr 0 -:-
 --
 resourceElem :: (D.CContent c) => C.Resource c -> [D.Judge c]
 resourceElem res = map art js where
-    art  = D.judgeCons ("point" -:- path)
+    art  = D.judgeAdd ("point" -:- path)
     path = D.pText $ B.ioPointText $ B.nioPoint $ head $ C.resIncluded res
     ass  = map S.shortBody $ C.resAssert res
     js   = concat [ elemJudge       $ C.resJudge res
@@ -70,7 +70,7 @@ elemAssert = B.unique . concatMap f where
     f (C.Assert _ t pat _ _ (Just r) _) =
         let p     = "name" -:- D.pText pat
             ass   = D.affirm (quality t) [p]
-            rmaps = D.judgeCons p `map` elemRelmap r
+            rmaps = D.judgeAdd p `map` elemRelmap r
         in ass : rmaps
 
     quality D.AssertAffirm       = "KOSHU-AFFIRM"
@@ -82,7 +82,7 @@ elemAssert = B.unique . concatMap f where
 
 elemNamedRelmap :: (D.CContent c) => C.RelmapLinkTable c -> [D.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f (lx, relmap) = D.judgeCons ("name" -:- D.pText $ C.lexName lx)
+    f (lx, relmap) = D.judgeAdd ("name" -:- D.pText $ C.lexName lx)
                         `map` elemRelmap relmap
 
 elemRelmap :: (D.CContent c) => C.Relmap c -> [D.Judge c]

@@ -9,8 +9,7 @@ module Koshucode.Baala.Data.Type.Judge.Judge
     -- * Datatype
     Judge (..),
     judgeTermsMap,
-    judgeCons,
-    --sortJudgeTerms, 
+    judgeAdd,
 
     -- * Logical quality
     JudgeOf,
@@ -62,8 +61,8 @@ instance (Ord c) => Eq (Judge c) where
 
 instance (Ord c) => Ord (Judge c) where
     compare j1 j2 =
-        let j1'  = sortJudgeTerms j1
-            j2'  = sortJudgeTerms j2
+        let j1'  = judgeNormalize j1
+            j2'  = judgeNormalize j2
             p1   = judgeClass j1'
             p2   = judgeClass j2'
             xs1  = judgeTerms j1'
@@ -84,13 +83,13 @@ judgeTermsMap f (JudgeChange      c xs xs')  = JudgeChange    c (f xs) (f xs')
 judgeTermsMap f (JudgeMultiChange c xs xs')  = JudgeChange    c (f xs) (f xs')
 judgeTermsMap f (JudgeViolate     c xs)      = JudgeViolate   c (f xs)
 
--- | Prepend a term into judgement.
-judgeCons :: S.Term c -> O.Map (Judge c)
-judgeCons x = judgeTermsMap (x :)
+-- | Add a term into judgement.
+judgeAdd :: S.Term c -> O.Map (Judge c)
+judgeAdd x = judgeTermsMap (x :)
 
--- | Sort terms in alphabetical order.
-sortJudgeTerms :: (Ord c) => O.Map (Judge c)
-sortJudgeTerms = judgeTermsMap B.sort
+-- | Normalize judgement, i.e., sort terms in alphabetical order.
+judgeNormalize :: (Ord c) => O.Map (Judge c)
+judgeNormalize = judgeTermsMap B.sort
 
 
 -- ----------------------  Logical quality
@@ -100,8 +99,8 @@ type JudgeOf c = D.JudgeClass -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 --
---   >>> affirm "A" [("x", 1), ("y", 2)] :: Judge Int
---   JudgeAffirm "A" [("x",1), ("y",2)]
+--   >>> affirm "P" [("x",10), ("y",20)] :: Judge Int
+--   JudgeAffirm "P" [("x",10), ("y",20)]
 --
 affirm :: JudgeOf c
 affirm = JudgeAffirm
@@ -113,16 +112,16 @@ deny = JudgeDeny
 -- | Affirm judgement, i.e., change logical quality to affirmative.
 affirmJudge :: O.Map (Judge c)
 affirmJudge (JudgeDeny p xs) = JudgeAffirm p xs
-affirmJudge _ = B.bug "affirmJudge"
+affirmJudge j = j
 
 -- | Deny judgement, i.e., change logical quality to denial.
 --
---   >>> denyJudge $ affirm "A" [("x", 1), ("y", 2)] :: Judge Int
---   JudgeDeny "A" [("x",1), ("y",2)]
+--   >>> denyJudge $ affirm "P" [("x",10), ("y",20)] :: Judge Int
+--   JudgeDeny "P" [("x",10), ("y",20)]
 --
 denyJudge :: O.Map (Judge c)
 denyJudge (JudgeAffirm p xs) = JudgeDeny p xs
-denyJudge _ = B.bug "denyJudge"
+denyJudge j = j
 
 -- | Test which judgement is affirmed.
 isAffirmative :: O.Test (Judge c)
