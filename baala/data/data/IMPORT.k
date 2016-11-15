@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    234 judges
+**    239 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -273,7 +273,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Time"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.TimeCalc"
 
-|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.TypeCalc"   /import "Koshucode.Baala.Data.Type.Type"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Genus"      /import "Data.Set"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Genus"      /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Genus"      /import "Koshucode.Baala.Data.Class"
+
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Class"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Predefined where"  /import "Koshucode.Baala.Data.Type.Type.Genus"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Type.Predefined where"  /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Type"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Type"            /import "Koshucode.Baala.Base"

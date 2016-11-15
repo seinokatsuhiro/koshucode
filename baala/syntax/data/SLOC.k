@@ -8,9 +8,9 @@ about /package 'syntax
 |-- DIR  /code 346  /comment 285  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /code 273  /comment 340  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /code 170  /comment 165  /dir "syntax/Koshucode/Baala/Syntax/TTree"
-|-- DIR  /code 682  /comment 545  /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- DIR  /code 683  /comment 545  /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- DIR-TOTAL  /code 1901  /comment 1622
+|-- DIR-TOTAL  /code 1902  /comment 1622
 
 |-- FILE  /code 12   /comment 6    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
@@ -44,6 +44,6 @@ about /package 'syntax
 |-- FILE  /code 133  /comment 138  /file "Rel.hs"         /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 95   /comment 36   /file "Section.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 133  /comment 81   /file "Token.hs"       /dir "syntax/Koshucode/Baala/Syntax/Token"
-|-- FILE  /code 80   /comment 55   /file "Utility.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- FILE  /code 81   /comment 55   /file "Utility.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- FILE-TOTAL  /code 1901  /comment 1622
+|-- FILE-TOTAL  /code 1902  /comment 1622
