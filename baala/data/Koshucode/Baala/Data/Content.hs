@@ -37,39 +37,39 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 {-# DEPRECATED BaalaC "Use 'Content' instead" #-}
 type BaalaC = Content
 
-{-# WARNING VEmpty   "Use 'D.empty' instead." #-}
-{-# WARNING VBool    "Use 'D.pBool' instead." #-}
-{-# WARNING VDec     "Use 'D.pDec' instead." #-}
-{-# WARNING VClock   "Use 'D.pClock' instead." #-}
-{-# WARNING VTime    "Use 'D.pTime' instead." #-}
-{-# WARNING VCode    "Use 'D.pCode' instead." #-}
-{-# WARNING VTerm    "Use 'D.pTerm' instead." #-}
-{-# WARNING VText    "Use 'D.pText' instead." #-}
-{-# WARNING VList    "Use 'D.pList' instead." #-}
-{-# WARNING VSet     "Use 'D.pSet' instead." #-}
-{-# WARNING VTie     "Use 'D.pTie' instead." #-}
-{-# WARNING VRel     "Use 'D.pRel' instead." #-}
-{-# WARNING VInterp  "Use 'D.pInterp' instead." #-}
-{-# WARNING VType    "Use 'D.pType' instead." #-}
-{-# WARNING VEnd     "Use 'D.end' instead." #-}
+{-# WARNING ContentEmpty   "Use 'D.empty' instead." #-}
+{-# WARNING ContentBool    "Use 'D.pBool' instead." #-}
+{-# WARNING ContentDec     "Use 'D.pDec' instead." #-}
+{-# WARNING ContentClock   "Use 'D.pClock' instead." #-}
+{-# WARNING ContentTime    "Use 'D.pTime' instead." #-}
+{-# WARNING ContentCode    "Use 'D.pCode' instead." #-}
+{-# WARNING ContentTerm    "Use 'D.pTerm' instead." #-}
+{-# WARNING ContentText    "Use 'D.pText' instead." #-}
+{-# WARNING ContentList    "Use 'D.pList' instead." #-}
+{-# WARNING ContentSet     "Use 'D.pSet' instead." #-}
+{-# WARNING ContentTie     "Use 'D.pTie' instead." #-}
+{-# WARNING ContentRel     "Use 'D.pRel' instead." #-}
+{-# WARNING ContentInterp  "Use 'D.pInterp' instead." #-}
+{-# WARNING ContentType    "Use 'D.pType' instead." #-}
+{-# WARNING ContentEnd     "Use 'D.end' instead." #-}
 
 -- | The Baala content type.
 data Content
-    = VEmpty                -- ^ /Singleton:/   Sign of no ordinary type
-    | VBool    Bool         -- ^ /Numeric:/     Boolean type
-    | VDec     D.Decimal    -- ^ /Numeric:/     Decimal number type
-    | VClock   D.Clock      -- ^ /Numeric:/     Clock type
-    | VTime    D.Time       -- ^ /Numeric:/     Time type
-    | VCode    String       -- ^ /Textual:/     Code type
-    | VTerm    S.TermName   -- ^ /Textual:/     Term name type
-    | VText    String       -- ^ /Textual:/     Text type
-    | VList    [Content]    -- ^ /Collective:/  List type
-    | VSet     [Content]    -- ^ /Collective:/  Set type
-    | VTie     [TermC]      -- ^ /Relational:/  Tie type (set of terms)
-    | VRel     RelC         -- ^ /Relational:/  Relation type
-    | VInterp  D.Interp     -- ^ /Relational:/  Interpretation type
-    | VType    D.Type       -- ^ /Meta:/        Type for type
-    | VEnd                  -- ^ /Singleton:/   The end of everything
+    = ContentEmpty                -- ^ /Edge:/        Sign of no ordinary type
+    | ContentBool    Bool         -- ^ /Numeric:/     Boolean type
+    | ContentDec     D.Decimal    -- ^ /Numeric:/     Decimal number type
+    | ContentClock   D.Clock      -- ^ /Numeric:/     Clock type
+    | ContentTime    D.Time       -- ^ /Numeric:/     Time type
+    | ContentCode    String       -- ^ /Textual:/     Code type
+    | ContentTerm    S.TermName   -- ^ /Textual:/     Term name type
+    | ContentText    String       -- ^ /Textual:/     Text type
+    | ContentList    [Content]    -- ^ /Recursive, Collective:/  List type
+    | ContentSet     [Content]    -- ^ /Recursive, Collective:/  Set type
+    | ContentTie     [TermC]      -- ^ /Recursive, Relational:/  Tie type (set of terms)
+    | ContentRel     RelC         -- ^ /Recursive, Relational:/  Relation type
+    | ContentInterp  D.Interp     -- ^ /Meta, Relational:/  Interpretation type
+    | ContentType    D.Type       -- ^ /Meta:/        Type for type
+    | ContentEnd                  -- ^ /Edge:/        The end of everything
     deriving (Show)
 
 instance Eq Content where
@@ -78,21 +78,21 @@ instance Eq Content where
 
 instance Ord Content where
     -- simple
-    compare (VBool    x) (VBool    y)  = compare x y
-    compare (VDec     x) (VDec     y)  = compare x y
-    compare (VClock   x) (VClock   y)  = compare x y
-    compare (VTime    x) (VTime    y)  = compare x y
-    compare (VCode    x) (VCode    y)  = compare x y
-    compare (VTerm    x) (VTerm    y)  = compare x y
-    compare (VText    x) (VText    y)  = compare x y
+    compare (ContentBool    x) (ContentBool    y)  = compare x y
+    compare (ContentDec     x) (ContentDec     y)  = compare x y
+    compare (ContentClock   x) (ContentClock   y)  = compare x y
+    compare (ContentTime    x) (ContentTime    y)  = compare x y
+    compare (ContentCode    x) (ContentCode    y)  = compare x y
+    compare (ContentTerm    x) (ContentTerm    y)  = compare x y
+    compare (ContentText    x) (ContentText    y)  = compare x y
 
     -- complex
-    compare (VList    x) (VList    y)  = compare x y
-    compare (VSet     x) (VSet     y)  = compareAsSet x y
-    compare (VTie     x) (VTie     y)  = compareAsSet x y
-    compare (VRel     x) (VRel     y)  = compare x y
-    compare (VInterp  x) (VInterp  y)  = compare x y
-    compare (VType    x) (VType    y)  = compare x y
+    compare (ContentList    x) (ContentList    y)  = compare x y
+    compare (ContentSet     x) (ContentSet     y)  = compareAsSet x y
+    compare (ContentTie     x) (ContentTie     y)  = compareAsSet x y
+    compare (ContentRel     x) (ContentRel     y)  = compare x y
+    compare (ContentInterp  x) (ContentInterp  y)  = compare x y
+    compare (ContentType    x) (ContentType    y)  = compare x y
 
     -- others
     compare x y  = D.typeOrder x `compare` D.typeOrder y
@@ -102,21 +102,21 @@ compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
 instance D.CTypeOf Content where
-    typeOf (VEmpty    )  = D.TypeEmpty
-    typeOf (VBool    _)  = D.TypeBool
-    typeOf (VDec     _)  = D.TypeDec
-    typeOf (VClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
-    typeOf (VTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
-    typeOf (VCode    _)  = D.TypeCode
-    typeOf (VTerm    _)  = D.TypeTerm
-    typeOf (VText    _)  = D.TypeText
-    typeOf (VList   cs)  = D.TypeList $ typeSum cs
-    typeOf (VSet    cs)  = D.TypeSet  $ typeSum cs
-    typeOf (VTie    cs)  = D.TypeTie  $ B.mapSndTo D.typeOf cs
-    typeOf (VRel     _)  = D.TypeRel []
-    typeOf (VInterp  _)  = D.TypeInterp
-    typeOf (VType    _)  = D.TypeType
-    typeOf (VEnd      )  = D.TypeEnd
+    typeOf (ContentEmpty    )  = D.TypeEmpty
+    typeOf (ContentBool    _)  = D.TypeBool
+    typeOf (ContentDec     _)  = D.TypeDec
+    typeOf (ContentClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
+    typeOf (ContentTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
+    typeOf (ContentCode    _)  = D.TypeCode
+    typeOf (ContentTerm    _)  = D.TypeTerm
+    typeOf (ContentText    _)  = D.TypeText
+    typeOf (ContentList   cs)  = D.TypeList $ typeSum cs
+    typeOf (ContentSet    cs)  = D.TypeSet  $ typeSum cs
+    typeOf (ContentTie    cs)  = D.TypeTie  $ B.mapSndTo D.typeOf cs
+    typeOf (ContentRel     _)  = D.TypeRel []
+    typeOf (ContentInterp  _)  = D.TypeInterp
+    typeOf (ContentType    _)  = D.TypeType
+    typeOf (ContentEnd      )  = D.TypeEnd
 
 typeSum :: D.CTypeOf c => [c] -> D.Type
 typeSum cs = case B.unique $ map D.typeOf cs of
@@ -124,30 +124,30 @@ typeSum cs = case B.unique $ map D.typeOf cs of
                ts  -> D.TypeSum ts
 
 instance D.CContent Content where
-    appendContent (VEmpty) x           = Right x
-    appendContent x (VEmpty)           = Right x
-    appendContent (VText x) (VText y)  = Right . VText $ x ++ y
+    appendContent (ContentEmpty) x     = Right x
+    appendContent x (ContentEmpty)     = Right x
+    appendContent (ContentText x) (ContentText y) = Right . ContentText $ x ++ y
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
 instance B.MixShortEncode Content where
     mixShortEncode sh c =
         case c of
-          VCode  s   -> B.mixString $ quote  (sh s) s
-          VText  s   -> B.mixString $ qquote (sh s) s
-          VTerm  s   -> B.mixString $ "'/" ++ s
-          VDec   n   -> B.mixString $ D.encodeDecimal n
-          VClock t   -> B.mixEncode t
-          VTime  t   -> B.mixEncode t
-          VBool  b   -> B.mixEncode b
-          VEmpty     -> B.mixString "()"
-          VEnd       -> B.mixString "(/)"
+          ContentCode  s   -> B.mixString $ quote  (sh s) s
+          ContentText  s   -> B.mixString $ qquote (sh s) s
+          ContentTerm  s   -> B.mixString $ "'/" ++ s
+          ContentDec   n   -> B.mixString $ D.encodeDecimal n
+          ContentClock t   -> B.mixEncode t
+          ContentTime  t   -> B.mixEncode t
+          ContentBool  b   -> B.mixEncode b
+          ContentEmpty     -> B.mixString "()"
+          ContentEnd       -> B.mixString "(/)"
 
-          VList cs   -> D.mixBracketList $ mixBar cs
-          VSet  cs   -> D.mixBracketSet  $ mixBar cs
-          VTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.termsToMix1 sh ts
-          VRel  r    -> B.mixShortEncode sh r
-          VInterp i  -> B.mixEncode i
-          VType t    -> B.mixBracketS S.typeOpen S.typeClose $ B.mixEncode t
+          ContentList cs   -> D.mixBracketList $ mixBar cs
+          ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
+          ContentTie  ts   -> B.mixBracketS S.tieOpen  S.tieClose  $ D.termsToMix1 sh ts
+          ContentRel  r    -> B.mixShortEncode sh r
+          ContentInterp i  -> B.mixEncode i
+          ContentType t    -> B.mixBracketS S.typeOpen S.typeClose $ B.mixEncode t
         where
           mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
@@ -164,109 +164,109 @@ qquote (Just s)  _  = s
 -- ----------------------  Edge
 
 instance D.CEmpty Content where
-    empty                    = VEmpty
-    isEmpty VEmpty           = True
-    isEmpty _                = False
+    empty                       = ContentEmpty
+    isEmpty ContentEmpty        = True
+    isEmpty _                   = False
 
 instance D.CEnd Content where
-    end                      = VEnd
-    isEnd VEnd               = True
-    isEnd _                  = False
+    end                         = ContentEnd
+    isEnd ContentEnd            = True
+    isEnd _                     = False
 
 -- ----------------------  Simple
 
 instance D.CBool Content where
-    pBool                    = VBool
-    gBool (VBool x)          = x
-    gBool _                  = B.bug "gBool"
-    isBool  (VBool _)        = True
-    isBool  _                = False
+    pBool                       = ContentBool
+    gBool  (ContentBool x)      = x
+    gBool  _                    = B.bug "gBool"
+    isBool (ContentBool _)      = True
+    isBool _                    = False
 
 instance D.CDec Content where
-    pDec                     = VDec
-    gDec (VDec x)            = x
-    gDec _                   = B.bug "gDec"
-    isDec  (VDec _)          = True
-    isDec  _                 = False
+    pDec                        = ContentDec
+    gDec  (ContentDec x)        = x
+    gDec  _                     = B.bug "gDec"
+    isDec (ContentDec _)        = True
+    isDec _                     = False
 
 instance D.CClock Content where
-    pClock                   = VClock
-    gClock  (VClock x)       = x
-    gClock  _                = B.bug "gClock"
-    isClock (VClock _)       = True
-    isClock _                = False
+    pClock                      = ContentClock
+    gClock  (ContentClock x)    = x
+    gClock  _                   = B.bug "gClock"
+    isClock (ContentClock _)    = True
+    isClock _                   = False
 
 instance D.CTime Content where
-    pTime                    = VTime
-    gTime  (VTime x)         = x
-    gTime  _                 = B.bug "gTime"
-    isTime (VTime _)         = True
-    isTime _                 = False
+    pTime                       = ContentTime
+    gTime  (ContentTime x)      = x
+    gTime  _                    = B.bug "gTime"
+    isTime (ContentTime _)      = True
+    isTime _                    = False
 
 instance D.CCode Content where
-    pCode                    = VCode
-    gCode (VCode s)          = s
-    gCode _                  = B.bug "gCode"
-    isCode  (VCode _)        = True
-    isCode  _                = False
+    pCode                       = ContentCode
+    gCode  (ContentCode s)      = s
+    gCode  _                    = B.bug "gCode"
+    isCode (ContentCode _)      = True
+    isCode _                    = False
 
 instance D.CTerm Content where
-    pTerm                    = VTerm
-    gTerm (VTerm s)          = s
-    gTerm _                  = B.bug "gTerm"
-    isTerm  (VTerm _)        = True
-    isTerm  _                = False
+    pTerm                       = ContentTerm
+    gTerm  (ContentTerm s)      = s
+    gTerm  _                    = B.bug "gTerm"
+    isTerm (ContentTerm _)      = True
+    isTerm _                    = False
 
 instance D.CText Content where
-    pText                    = VText
-    gText (VText s)          = s
-    gText _                  = B.bug "gText"
-    isText  (VText _)        = True
-    isText  _                = False
+    pText                       = ContentText
+    gText  (ContentText s)      = s
+    gText  _                    = B.bug "gText"
+    isText (ContentText _)      = True
+    isText _                    = False
 
 -- ----------------------  Complex
 
 instance D.CList Content where
-    pList                    = VList
-    gList (VList xs)         = xs
-    gList _                  = []
-    isList (VList _)         = True
-    isList _                 = False
+    pList                       = ContentList
+    gList  (ContentList cs)     = cs
+    gList  _                    = []
+    isList (ContentList _)      = True
+    isList _                    = False
 
 instance D.CSet Content where
-    pSet                     = VSet . B.omit D.isEmpty . B.unique
-    gSet (VSet x)            = x
-    gSet _                   = B.bug "gSet"
-    isSet  (VSet _)          = True
-    isSet  _                 = False
+    pSet                        = ContentSet . B.omit D.isEmpty . B.unique
+    gSet  (ContentSet x)        = x
+    gSet  _                     = B.bug "gSet"
+    isSet (ContentSet _)        = True
+    isSet _                     = False
 
 instance D.CTie Content where
-    pTie                     = VTie 
-    gTie (VTie x)            = x
-    gTie _                   = B.bug "gTie"
-    isTie  (VTie _)          = True
-    isTie  _                 = False
+    pTie                        = ContentTie 
+    gTie  (ContentTie ts)       = ts
+    gTie  _                     = B.bug "gTie"
+    isTie (ContentTie _)        = True
+    isTie _                     = False
 
 instance D.CRel Content where
-    pRel                     = VRel
-    gRel (VRel r)            = r
-    gRel _                   = B.bug "gRel"
-    isRel  (VRel _)          = True
-    isRel  _                 = False
+    pRel                        = ContentRel
+    gRel  (ContentRel r)        = r
+    gRel  _                     = B.bug "gRel"
+    isRel (ContentRel _)        = True
+    isRel _                     = False
 
 instance D.CInterp Content where
-    pInterp                  = VInterp
-    gInterp (VInterp r)      = r
-    gInterp _                = B.bug "gInterp"
-    isInterp  (VInterp _)    = True
-    isInterp  _              = False
+    pInterp                     = ContentInterp
+    gInterp  (ContentInterp r)  = r
+    gInterp  _                  = B.bug "gInterp"
+    isInterp (ContentInterp _)  = True
+    isInterp _                  = False
 
 instance D.CType Content where
-    pType                    = VType
-    gType (VType r)          = r
-    gType _                  = B.bug "gType"
-    isType  (VType _)        = True
-    isType  _                = False
+    pType                       = ContentType
+    gType  (ContentType t)      = t
+    gType  _                    = B.bug "gType"
+    isType (ContentType _)      = True
+    isType _                    = False
 
 -- ----------------------  Dispatch
 
@@ -288,46 +288,46 @@ type DispatchSimple a =
 -- | Functions for complex content, i.e.,
 --   list, set, tie, relation, interp, and type.
 type DispatchComplex a =
-    ( [Content]         -> a
-    , [Content]         -> a
-    , [TermC]           -> a
-    , RelC              -> a
-    , D.Interp          -> a
-    , D.Type            -> a
+    ( [Content]   -> a
+    , [Content]   -> a
+    , [TermC]     -> a
+    , RelC        -> a
+    , D.Interp    -> a
+    , D.Type      -> a
     )
 
 -- | Call type-specific functions on empty or end content.
 dispatchEdge :: DispatchEdge a -> (Content -> a) -> (Content -> a)
 dispatchEdge (empty, end) other c =
     case c of
-      VEmpty    -> empty
-      VEnd      -> end
-      _         -> other c
+      ContentEmpty    -> empty
+      ContentEnd      -> end
+      _               -> other c
 
 -- | Call type-specific functions on simple content.
 dispatchSimple :: DispatchSimple a -> (Content -> a) -> (Content -> a)
 dispatchSimple (bool, dec, clock, time, code, term, text) other c =
     case c of
-      VBool   b -> bool  b
-      VDec    n -> dec   n
-      VClock  t -> clock t
-      VTime   t -> time  t
-      VCode   s -> code  s
-      VTerm   s -> term  s
-      VText   s -> text  s
-      _         -> other c
+      ContentBool   b -> bool  b
+      ContentDec    n -> dec   n
+      ContentClock  t -> clock t
+      ContentTime   t -> time  t
+      ContentCode   s -> code  s
+      ContentTerm   s -> term  s
+      ContentText   s -> text  s
+      _               -> other c
 
 -- | Call type-specific functions on complex content.
 dispatchComplex :: DispatchComplex a -> (Content -> a) -> (Content -> a)
 dispatchComplex (list, set, tie, rel, interp, type_) other c =
     case c of
-      VList   cs -> list   cs
-      VSet    cs -> set    cs
-      VTie    ts -> tie    ts
-      VRel     r -> rel    r
-      VInterp  i -> interp i
-      VType    t -> type_  t
-      _          -> other  c
+      ContentList   cs -> list   cs
+      ContentSet    cs -> set    cs
+      ContentTie    ts -> tie    ts
+      ContentRel     r -> rel    r
+      ContentInterp  i -> interp i
+      ContentType    t -> type_  t
+      _                -> other  c
 
 -- | Call type-specific functions on content.
 dispatchContent :: DispatchEdge a -> DispatchSimple a -> DispatchComplex a -> (Content -> a)
@@ -352,7 +352,7 @@ type RelC = D.Rel Content
 -- | Shorthand function for the Baala content type.
 --
 --   >>> the $ D.pText "a"
---   VText "a"
+--   ContentText "a"
 --
 the :: Content -> Content
 {-# INLINE the #-}
@@ -361,7 +361,7 @@ the = id
 -- | Decode the Baala content from string.
 --
 --   >>> stringC "'a"
---   Right (VCode "a")
+--   Right (ContentCode "a")
 --
 stringC :: String -> B.Ab Content
 stringC = D.stringContent
