@@ -33,16 +33,16 @@ abSpecialize = B.abortable "specialize"
 
 -- | Unknown nested relation reference.
 unkNestVar :: String -> [S.Token] -> [((S.Token, S.LocalRef String), D.Head)] -> B.Ab a
-unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
-                           $ ("search" : map indent dynamic)
-                          ++ ("for"    : map indent lexical)
-    where lexical = map (text $ S.LocalSymbol n) ls
-          dynamic = map f ds
-          f ((tk, k), _) = text k tk
-          text (S.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
-          text (S.LocalNest   k) tk = unwords ["nested relation", term  k, "in", tokenAtPoint tk]
-          indent    = ("  " ++)
-          term      = ('/' :)
+unkNestVar n ls ds = left where
+    left = Left $ B.abortLines "Unknown nested relation reference"
+           $ ("search" : map indent dynamic)
+          ++ ("for"    : map indent lexical)
+    indent  = ("  " ++)
+    lexical = map (text $ S.LocalSymbol n) ls
+    dynamic = map f ds
+    f ((tk, k), _) = text k tk
+    text (S.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
+    text (S.LocalNest   k) tk = unwords ["nested relation", S.showTermName k, "in", tokenAtPoint tk]
 
 quote :: O.StringMap
 quote s = "'" ++ s ++ "'"

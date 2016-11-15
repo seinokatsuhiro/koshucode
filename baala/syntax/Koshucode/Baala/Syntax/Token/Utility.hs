@@ -19,6 +19,7 @@ module Koshucode.Baala.Syntax.Token.Utility
 
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Syntax.Symbol       as S
 import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
 
@@ -34,8 +35,8 @@ tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
       S.TShort    _ a b    -> a ++ "." ++ b
-      S.TTermN    _ _ n    -> '/' : n
-      S.TTerm     _ _ ns   -> concatMap ('/' :) ns
+      S.TTermN    _ _ n    -> S.showTermName n
+      S.TTerm     _ _ ns   -> concatMap S.showTermName ns
       S.TLocal    _ n _ _  -> S.unlocal n
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s

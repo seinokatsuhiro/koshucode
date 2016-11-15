@@ -124,7 +124,7 @@ typeExplain ty =
       TypeSum     ts  -> B.pprint "sum"    B.<+> vmap (item "|") ts
       _               -> B.pprint $ B.mixToFlatString $ B.mixEncode ty
     where
-      term (n,t)  =  B.pprint ('/' : n) B.<+> typeExplain t
+      term (n,t)  =  B.pprint (S.showTermName n) B.<+> typeExplain t
       item i t    =  B.pprint i B.<+> typeExplain t
       vmap f      =  B.pprintV . map f
 
