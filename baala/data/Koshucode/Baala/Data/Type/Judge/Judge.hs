@@ -17,6 +17,9 @@ module Koshucode.Baala.Data.Type.Judge.Judge
     affirm, deny,
     affirmJudge, denyJudge,
     isAffirmative, isDenial, isViolative,
+    AssertType (..),
+    assertAs,
+    assertSymbol,
 
     -- * Encode
     judgeBreak,
@@ -54,8 +57,8 @@ data Judge c
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
-    j1 == j2  =  compare j1 j2 == EQ
-    j1 /= j2  =  compare j1 j2 /= EQ
+    j1 == j2  = compare j1 j2 == EQ
+    j1 /= j2  = compare j1 j2 /= EQ
 
 instance (Ord c) => Ord (Judge c) where
     compare j1 j2 =
@@ -96,6 +99,10 @@ sortJudgeTerms = judgeTermsMap B.sort
 type JudgeOf c = D.JudgeClass -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
+--
+--   >>> affirm "A" [("x", 1), ("y", 2)] :: Judge Int
+--   JudgeAffirm "A" [("x",1), ("y",2)]
+--
 affirm :: JudgeOf c
 affirm = JudgeAffirm
 
@@ -109,25 +116,61 @@ affirmJudge (JudgeDeny p xs) = JudgeAffirm p xs
 affirmJudge _ = B.bug "affirmJudge"
 
 -- | Deny judgement, i.e., change logical quality to denial.
+--
+--   >>> denyJudge $ affirm "A" [("x", 1), ("y", 2)] :: Judge Int
+--   JudgeDeny "A" [("x",1), ("y",2)]
+--
 denyJudge :: O.Map (Judge c)
 denyJudge (JudgeAffirm p xs) = JudgeDeny p xs
 denyJudge _ = B.bug "denyJudge"
 
 -- | Test which judgement is affirmed.
-isAffirmative :: Judge c -> Bool
+isAffirmative :: O.Test (Judge c)
 isAffirmative (JudgeAffirm _ _) = True
 isAffirmative _                 = False
 
 -- | Test which judgement is denied.
-isDenial :: Judge c -> Bool
+isDenial :: O.Test (Judge c)
 isDenial (JudgeDeny _ _)        = True
 isDenial (JudgeMultiDeny _ _)   = True
 isDenial _                      = False
 
 -- | Test which judgement is for violation.
-isViolative :: Judge c -> Bool
+isViolative :: O.Test (Judge c)
 isViolative (JudgeViolate _ _)  = True
 isViolative _                   = False
+
+-- | Type of assertions.
+data AssertType
+    = AssertAffirm       -- ^ @|==@ /C/ @:@ /R/ generates affirmative judges.
+    | AssertDeny         -- ^ @|=x@ /C/ @:@ /R/ generates denial judges.
+    | AssertMultiDeny    -- ^ @|=xx@ /C/ @:@ /R/ generates multiple-denial judges.
+    | AssertChange       -- ^ @|=c@ /C/ @:@ /R/ generates changement judges.
+    | AssertMultiChange  -- ^ @|=cc@ /C/ @:@ /R/ generates multiple-changement judges.
+    | AssertViolate      -- ^ @|=v@ /C/ @:@ /R/ generates violation judges.
+      deriving (Show, Eq, Ord)
+
+-- | Frege's stroke and various assertion lines.
+--
+--   >>> assertSymbol AssertAffirm
+--   "|=="
+--
+assertSymbol :: AssertType -> String
+assertSymbol AssertAffirm       = "|=="
+assertSymbol AssertDeny         = "|=X"
+assertSymbol AssertMultiDeny    = "|=XX"
+assertSymbol AssertChange       = "|=C"
+assertSymbol AssertMultiChange  = "|=CC"
+assertSymbol AssertViolate      = "|=V"
+
+-- | Create judgement corresponding to assertion type.
+assertAs :: AssertType -> JudgeOf c
+assertAs AssertAffirm        = JudgeAffirm
+assertAs AssertDeny          = JudgeDeny
+assertAs AssertMultiDeny     = JudgeMultiDeny
+-- assertAs AssertChange        = JudgeChange
+-- assertAs AssertMultiChange   = JudgeMultiChange
+assertAs AssertViolate       = JudgeViolate
 
 
 -- ----------------------  Class

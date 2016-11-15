@@ -10,11 +10,6 @@ module Koshucode.Baala.Data.Decode.Content
     DecodeContent, CalcContent, 
     stringContent,
     treeContent, treesJudge,
-
-    -- * Assert type
-    AssertType (..),
-    assertAs,
-    assertSymbol,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -140,11 +135,11 @@ treesTerms cons = mapM p B.<=< D.treesTerms1 where
 treesJudge ::
     (D.CContent c)
     => CalcContent c      -- ^ 
-    -> AssertType         -- ^ Assertion type
+    -> D.AssertType       -- ^ Assertion type
     -> D.JudgeClass       -- ^ Judgement class
     -> [S.TTree]          -- ^ Trees of terms
     -> B.Ab (D.Judge c)   -- ^ Error or decoded judgement
-treesJudge calc q p = Right . assertAs q p B.<=< treesTerms (treeContent calc)
+treesJudge calc q p = Right . D.assertAs q p B.<=< treesTerms (treeContent calc)
 
 
 -- ----------------------  Relation
@@ -181,39 +176,4 @@ treeTuple cons n g@(B S.BracketList xs) =
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
        Right cs
 treeTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
-
-
--- ----------------------  Assert type
-
--- | Type of assertions.
-data AssertType
-    = AssertAffirm       -- ^ @|==@ /C/ @:@ /R/ generates affirmative judges.
-    | AssertDeny         -- ^ @|=x@ /C/ @:@ /R/ generates denial judges.
-    | AssertMultiDeny    -- ^ @|=xx@ /C/ @:@ /R/ generates multiple-denial judges.
-    | AssertChange       -- ^ @|=c@ /C/ @:@ /R/ generates changement judges.
-    | AssertMultiChange  -- ^ @|=cc@ /C/ @:@ /R/ generates multiple-changement judges.
-    | AssertViolate      -- ^ @|=v@ /C/ @:@ /R/ generates violation judges.
-      deriving (Show, Eq, Ord)
-
--- | Frege's stroke and various assertion lines.
---
---   >>> assertSymbol AssertAffirm
---   "|=="
---
-assertSymbol :: AssertType -> String
-assertSymbol AssertAffirm       = "|=="
-assertSymbol AssertDeny         = "|=X"
-assertSymbol AssertMultiDeny    = "|=XX"
-assertSymbol AssertChange       = "|=C"
-assertSymbol AssertMultiChange  = "|=CC"
-assertSymbol AssertViolate      = "|=V"
-
--- | Create judgement corresponding to assertion type.
-assertAs :: AssertType -> D.JudgeOf c
-assertAs AssertAffirm        = D.JudgeAffirm
-assertAs AssertDeny          = D.JudgeDeny
-assertAs AssertMultiDeny     = D.JudgeMultiDeny
--- assertAs AssertChange        = D.JudgeChange
--- assertAs AssertMultiChange   = D.JudgeMultiChange
-assertAs AssertViolate       = D.JudgeViolate
 
