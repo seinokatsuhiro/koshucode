@@ -15,14 +15,6 @@ module Koshucode.Baala.Data.Decode.Content
     AssertType (..),
     assertAs,
     assertSymbol,
-
-    -- * Document
-  
-    -- ** Simple data
-    -- $SimpleData
-  
-    -- ** Compound data
-    -- $CompoundData
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -175,11 +167,13 @@ treesRel cons xs =
       n          = length ns
       he         = D.headFrom ns
 
+-- | Split term names.
 treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
 treesTermNames = terms [] where
     terms ns (LName n : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
+-- | Decode specific number of contents.
 treeTuple :: (D.CContent c) => DecodeContent c -> Int -> S.TTree -> B.Ab [c]
 treeTuple cons n g@(B S.BracketList xs) =
     do cs <- treesContents cons xs
@@ -202,6 +196,10 @@ data AssertType
       deriving (Show, Eq, Ord)
 
 -- | Frege's stroke and various assertion lines.
+--
+--   >>> assertSymbol AssertAffirm
+--   "|=="
+--
 assertSymbol :: AssertType -> String
 assertSymbol AssertAffirm       = "|=="
 assertSymbol AssertDeny         = "|=X"
@@ -218,66 +216,4 @@ assertAs AssertMultiDeny     = D.JudgeMultiDeny
 -- assertAs AssertChange        = D.JudgeChange
 -- assertAs AssertMultiChange   = D.JudgeMultiChange
 assertAs AssertViolate       = D.JudgeViolate
-
-
--- ------------------------------------------------------------------
--- $SimpleData
---
---  Prepere some definitions.
---
---  >>> :m +Koshucode.Baala.Op.Vanilla.Type
---  >>> let trees = B.ttrees . B.tokens
---  >>> let lit  = treeContent [] :: S.TTree -> B.Ab BaalaC
---  >>> let lits = treesContents lit . trees
---
---  Boolean.
---
---    >>> lits "#true : #false"
---    Right [VBool True, VBool False]
---
---  Words.
---
---    >>> lits "'a : 'b #sp 'c"
---    Right [VText "a", VText "b c"]
---
---  Decimal.
---
---    >>> lits "12.0"
---    Right [VDec (Decimal (120, 10), 1, False)]
---
---  Empty as no ordinary value.
---
---    >>> lits "()"
---    Right [VEmpty]
---
-
--- ------------------------------------------------------------------
--- $CompoundData
---
---  Set.
---
---    >>> lits "{ 'b | 'a | 'a | 'c | 'a }"
---    Right [VSet [VText "b", VText "a", VText "c"]]
---
---  List.
---
---    >>> lits "[ 'a | '10 | 20 ]"
---    Right [VList [VText "a", VText "10", VDec (Decimal (20, 1), 0, False)]]
---
---  Tie.
---
---    >>> lits "{- /a 'x  /b { 'y | 'z } -}"
---    Right [VTie 
---      [ ("/a", VText "x")
---      , ("/b", VSet [VText "y", VText "z"])]]
---
---  Relation.
---
---    >>> lits "{= /a /x [ 'A1 | 20 ][ 'A3 | 40 ][ 'A4 | 60 ] =}"
---    Right [VRel (Rel
---      (Relhead [Term "/a", Term "/x"]),
---      [ [VText "A1", VDec (Decimal (20,1), 0, False)]
---      , [VText "A3", VDec (Decimal (40,1), 0, False)]
---      , [VText "A4", VDec (Decimal (60,1), 0, False)] ])]
---
 
