@@ -360,8 +360,61 @@ the = id
 
 -- | Decode the Baala content from string.
 --
---   >>> stringC "'a"
---   Right (ContentCode "a")
+--   Edge contents.
+--
+--     >>> stringC "()"
+--     Right ContentEmpty
+--
+--     >>> stringC "(/)"
+--     Right ContentEnd
+--
+--   Numeric contents.
+--
+--     >>> stringC "(+)"
+--     Right (ContentBool True)
+--
+--     >>> stringC "12.00"
+--     Right (ContentDec Decimal (2) 12)
+--
+--     >>> stringC "|02:30:00|"
+--     Right (ContentClock |02:30:00|)
+--
+--     >>> stringC "2013-04-18"
+--     Right (ContentTime 2013-04-18)
+--
+--   Textual contents.
+--
+--     >>> stringC "'foo"
+--     Right (ContentCode "foo")
+--
+--     >>> stringC "'/foo"
+--     Right (ContentTerm "foo")
+--
+--     >>> stringC "\"foo\""
+--     Right (ContentText "foo")
+--
+--   Metadata contents.
+--
+--     >>> stringC "{| Aaa /x bbb /y ccc. |}"
+--     Right (ContentInterp (Interp { interpWords = ..., interpTerms = ... }))
+--
+--     >>> stringC "[- text -]"
+--     Right (ContentType TypeText)
+--
+--   Recursive contents.
+--
+--     >>> stringC "[ 'foo | 'bar ]"
+--     Right (ContentList [ContentCode "foo", ContentCode "bar"])
+--
+--     >>> stringC "{ 'foo | 'bar }"
+--     Right (ContentSet [ContentCode "foo", ContentCode "bar"])
+--
+--     >>> stringC "{- /x 'foo /y 'bar -}"
+--     Right (ContentTie [("x", ContentCode "foo"), ("y", ContentCode "bar")])
+--
+--     >>> stringC "{= /x /y [ 'foo | 'bar ][ 'baz | 'qux ] =}"
+--     Right (ContentRel (Rel { relHead = ..., relBody = ... }))
 --
 stringC :: String -> B.Ab Content
 stringC = D.stringContent
+
