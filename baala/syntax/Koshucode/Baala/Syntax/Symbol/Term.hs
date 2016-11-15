@@ -8,6 +8,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
 
     -- * Term name
     TermName, TermPath, SignedTermName,
+    stringTermName,
     termNameString, termPathString,
 
     -- * Term name tuple
@@ -47,6 +48,15 @@ type TermPath = [TermName]
 
 -- | Term name with plus-minus sign, e.g., @+\/size@, @-\/size@, or @\/size@.
 type SignedTermName = (Ordering, TermName)
+
+-- | Decode term name from string.
+--
+--   >>> stringTermName "/a"
+--   "a"
+-- 
+stringTermName :: String -> TermName
+stringTermName ('/' : n) = n
+stringTermName n         = n
 
 -- | Encode term name into string.
 --

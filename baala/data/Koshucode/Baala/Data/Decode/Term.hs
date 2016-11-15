@@ -15,6 +15,7 @@ module Koshucode.Baala.Data.Decode.Term
     treesFlatNamesCo,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
@@ -37,8 +38,8 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 --   Left ...
 --
 treeFlatName :: S.TTree -> B.Ab S.TermName
-treeFlatName (L (S.TTermN _ _ n))  = Right n
---treeFlatName (L (S.TTerm _ _ [n])) = Right n
+treeFlatName (L (S.TTermN _ _ n))  = Right $ S.stringTermName n
+--treeFlatName (L (S.TTerm _ _ [n])) = Right $ S.stringTermName n
 treeFlatName (L t)                 = Msg.reqFlatName t
 treeFlatName _                     = Msg.reqTermName
 
@@ -56,8 +57,8 @@ treesFlatNames = mapM treeFlatName
 --   Right (GT, "a")
 --
 treeSignedName :: S.TTree -> B.Ab S.SignedTermName
-treeSignedName (S.TermLeafName _ sign n) = Right (sign, n)
-treeSignedName _                         = Msg.reqTermName
+treeSignedName (L (S.TTermN _ sign n))  = Right (sign, S.stringTermName n)
+treeSignedName _                        = Msg.reqTermName
 
 -- | Read list of named token trees from token trees.
 --
@@ -78,9 +79,11 @@ treesTerms = name where
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
-    isTermLeaf (L (S.TTermN _ _ _))             = True
-    isTermLeaf (L (S.TTerm _ S.TermTypePath _)) = True
-    isTermLeaf _                                = False
+-- | Test token tree is term leaf.
+isTermLeaf :: O.Test S.TTree
+isTermLeaf (L (S.TTermN _ _ _))              = True
+isTermLeaf (L (S.TTerm _ S.TermTypePath _))  = True
+isTermLeaf _                                 = False
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
@@ -110,11 +113,11 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (S.TermLeafName _ _ n : ts) = loop ret (n : ns) ts
-    loop ret ns (S.TermLeaf _ _ [n] : ts)   = loop ret (n : ns) ts
-    loop ret ns (S.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
-    loop ret ns []                          = Right $ reverse $ reverse ns : ret
-    loop _ _ _                              = Msg.reqTermName
+    loop ret ns (L (S.TTermN _ _ n)   : ts)  = loop ret (S.stringTermName n : ns) ts
+    loop ret ns (L (S.TTerm _ _ [n])  : ts)  = loop ret (S.stringTermName n : ns) ts
+    loop ret ns (L (S.TTextRaw _ ":") : ts)  = loop (reverse ns : ret) [] ts
+    loop ret ns []                           = Right $ reverse $ reverse ns : ret
+    loop _ _ _                               = Msg.reqTermName
 
 -- | Decode term names with optional complement symbol.
 -- 
@@ -130,8 +133,8 @@ treesFlatNamesCo trees =
        ns <- mapM treeFlatName trees2
        Right (co, ns)
 
--- Term complement symbol
+-- | Term complement symbol.
 treesTermCo :: [S.TTree] -> B.Ab (Bool, [S.TTree])
-treesTermCo (S.TextLeafRaw _ "~" : trees)  = Right (True,  trees)
-treesTermCo trees                          = Right (False, trees)
+treesTermCo (L (S.TTextRaw _ "~") : trees)  = Right (True,  trees)
+treesTermCo trees                           = Right (False, trees)
 
