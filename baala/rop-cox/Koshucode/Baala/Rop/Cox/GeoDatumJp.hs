@@ -1,4 +1,6 @@
---
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall #-}
+
 -- | Conversion geographic point
 --   from the plane rectangular coordinates @\/n@ @\/x@ @\/y@
 --   to the geographic coordinates @\/latitude@ @\/longtitude@.
@@ -9,26 +11,35 @@
 --   /Coordinates on the Gauss-Krüger Projection,/
 --   /Bulletin of the Geospatial Information Authority of Japan, 121/.
 --
-
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# OPTIONS_GHC -Wall #-}
-
 module Koshucode.Baala.Rop.Cox.GeoDatumJp
  ( GeoPoint,
    convDegree, convRadian,
  ) where
 
+-- | Point in geographic coordinate system.
 type GeoPoint = (Double, Double)
 
 theLat, theLong :: GeoPoint -> Double
 theLat  = fst
 theLong = snd
 
+-- | Convert point in plane rectangular coordinates
+--   to degrees of latitude and longitude.
+--
+--   >>> convDegree 8 (0.0, 0.0)
+--   (35.99999999999999, 138.5)
+--
 convDegree :: Int -> GeoPoint -> GeoPoint
 convDegree coord (x, y) =
     case convRadian coord (x, y) of
       (lat, long) -> (lat / s2r / 3600, long / 3600)
 
+-- | Convert point in plane rectangular coordinates
+--   to geographic latitude and longitude.
+--
+--   >>> convRadian 8 (0.0, 0.0)
+--   (0.6283185307179585, 498600.0)
+--
 convRadian :: Int -> GeoPoint -> GeoPoint
 convRadian coord (x, y) = (lat, long) where
 

@@ -41,6 +41,7 @@ f3 = f ["#1", "#2", "#3"]
 i :: String -> [D.Cox c] -> D.Cox c
 i = ix . b
 
+-- | Fill blanks.
 ib :: S.BlankName -> [D.Cox c] -> D.Cox c
 ib = ix . D.CoxBlank []
 

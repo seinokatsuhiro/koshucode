@@ -1,5 +1,4 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Partial-order scale.
@@ -21,17 +20,28 @@ import qualified Koshucode.Baala.Base      as B
 --   If elements are cyclic, scales of these elements are -1.
 type PoScale a = Map.Map a ([a], Maybe Int)
 
+-- | Calculate partial-order scale.
 type PoScaleCalc a = [(a, a)] -> [(a, Int)]
 
--- | Extract partial-order scales.
+-- | Extract partial-order scale.
 poScale :: PoScale a -> [(a, Int)]
 poScale m = B.mapMaybe f $ Map.assocs m where
     f (x, (_, Just r))  = Just (x, r)
     f (_, (_, Nothing)) = Nothing
 
+-- | Calculate upward partial-order scale.
+--
+--   >>> poScaleHeight [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",0), ("b",1), ("c",1), ("d",2)]
+--
 poScaleHeight :: (Ord a) => PoScaleCalc a
 poScaleHeight = poScale . poHeight
 
+-- | Calculate downward partial-order scale.
+--
+--   >>> poScaleDepth [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",2), ("b",1), ("c",1), ("d",0)]
+--
 poScaleDepth :: (Ord a) => PoScaleCalc a
 poScaleDepth = poScale . poDepth
 
