@@ -18,13 +18,13 @@ module Koshucode.Baala.Rop.Flat.Meta
     consKoshuVersion, relkitKoshuVersion,
   ) where
 
-import qualified Data.Version                   as V
-import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
-import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Rop.Base       as Op
-import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
+import qualified Data.Version                      as V
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Implementation of relational operators.
@@ -42,17 +42,17 @@ import qualified Koshucode.Baala.Rop.Flat.Message    as Msg
 --     Get version number of the koshu calculator.
 -- 
 ropsMeta :: (D.CContent c) => [C.Rop c]
-ropsMeta = Op.ropList "meta"
-    --        CONSTRUCTOR        USAGE                       ATTRIBUTE
-    [ Op.def  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text?"
-    , Op.def  consKoshuCop       "koshu-cop /N"              "-name*"
-    , Op.def  consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
+ropsMeta = Rop.ropList "meta"
+    --         CONSTRUCTOR        USAGE                       ATTRIBUTE
+    [ Rop.def  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text?"
+    , Rop.def  consKoshuCop       "koshu-cop /N"              "-name*"
+    , Rop.def  consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
                                                              "-name . -height? -dir?"
-    , Op.def  consKoshuSource    "koshu-source /N [-name /N][-type /N]"
+    , Rop.def  consKoshuSource    "koshu-source /N [-name /N][-type /N]"
                                                              "-number . -name? -type?"
-    , Op.def  consKoshuRop       "koshu-rop /N"              "-name* . -group? -usage?"
-    , Op.def  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
-    , Op.def  consKoshuVersion   "koshu-version /N"          "-term* . -version?"
+    , Rop.def  consKoshuRop       "koshu-rop /N"              "-name* . -group? -usage?"
+    , Rop.def  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
+    , Rop.def  consKoshuVersion   "koshu-version /N"          "-term* . -version?"
     ]
 
 
@@ -61,7 +61,7 @@ ropsMeta = Op.ropList "meta"
 -- | __koshu-cop \/N__
 consKoshuCop :: D.CContent c => C.RopCons c
 consKoshuCop med =
-  do name <- Op.getTerm med "-name"
+  do name <- Rop.getTerm med "-name"
      Right $ relmapKoshuCop med name
 
 -- | Create @koshu-cop@ relmap.
@@ -80,9 +80,9 @@ relkitKoshuCop name res _ =
 -- | __koshu-cop-infix \/N [ -height \/N ][ -dir \/N ]__
 consKoshuCopInfix :: (D.CContent c) => C.RopCons c
 consKoshuCopInfix med =
-  do name   <- Op.getTerm med "-name"
-     height <- Op.getMaybe Op.getTerm med "-height"
-     dir    <- Op.getMaybe Op.getTerm med "-dir"
+  do name   <- Rop.getTerm med "-name"
+     height <- Rop.getMaybe Rop.getTerm med "-height"
+     dir    <- Rop.getMaybe Rop.getTerm med "-dir"
      Right $ relmapKoshuCopInfix med (name, height, dir)
 
 -- | Create @koshu-cop-infix@ relmap.
@@ -114,9 +114,9 @@ maybeEmpty m f = maybe [] f m
 -- | __koshu-rop \/N [ -group \/N ][ -usage \/N ]__
 consKoshuRop :: (D.CContent c) => C.RopCons c
 consKoshuRop med =
-  do name  <- Op.getTerm med "-name"
-     group <- Op.getMaybe Op.getTerm med "-group"
-     usage <- Op.getMaybe Op.getTerm med "-usage"
+  do name  <- Rop.getTerm med "-name"
+     group <- Rop.getMaybe Rop.getTerm med "-group"
+     usage <- Rop.getMaybe Rop.getTerm med "-usage"
      Right $ relmapKoshuRop med (Just name, group, usage)
 
 -- | Create @koshu-rop@ relmap.
@@ -147,8 +147,8 @@ relkitKoshuRop (name, group, usage) res _ = Right kit2 where
 -- | __koshu-proxy \/N \/N__
 consKoshuProxy :: (D.CContent c) => C.RopCons c
 consKoshuProxy med =
-  do proto  <- Op.getTerm med "-proto"
-     uri    <- Op.getTerm med "-uri"
+  do proto  <- Rop.getTerm med "-proto"
+     uri    <- Rop.getTerm med "-uri"
      Right $ relmapKoshuProxy med (Just proto, Just uri)
 
 -- | Create @koshu-proxy@ relmap.
@@ -182,8 +182,8 @@ relkitKoshuProxy (proto, uri) res _ = Right kit2 where
 -- | __koshu-version \/N__
 consKoshuVersion :: (D.CContent c) => C.RopCons c
 consKoshuVersion med =
-  do n   <- Op.getTerm  med "-term"
-     ver <- Op.getMaybe Op.getTrees med "-version"
+  do n   <- Rop.getTerm  med "-term"
+     ver <- Rop.getMaybe Rop.getTrees med "-version"
      case ver of
        Nothing      -> Right $ C.relmapHook med $ relkitKoshuVersion n
        Just [f]     -> check n f f
@@ -226,9 +226,9 @@ apiVersion V.Version { V.versionBranch = ver } =
 -- | __koshu-source \/N [ -type \/N ][ -name \/N ]__
 consKoshuSource :: (D.CContent c) => C.RopCons c
 consKoshuSource med =
-  do num  <- Op.getTerm med "-number"
-     ty   <- Op.getMaybe Op.getTerm med "-type"
-     name <- Op.getMaybe Op.getTerm med "-name"
+  do num  <- Rop.getTerm med "-number"
+     ty   <- Rop.getMaybe Rop.getTerm med "-type"
+     name <- Rop.getMaybe Rop.getTerm med "-name"
      Right $ relmapKoshuSource med (num, ty, name)
 
 -- | Create @koshu-source@ relmap.
@@ -259,8 +259,8 @@ maybeAs (Nothing) _  =  Nothing
 
 consKoshuAngleText :: (Ord c, D.CText c) => C.RopCons c
 consKoshuAngleText med =
-  do n <- Op.getTerm med "-name"
-     c <- Op.getMaybe Op.getTerm med "-text"
+  do n <- Rop.getTerm med "-name"
+     c <- Rop.getMaybe Rop.getTerm med "-text"
      Right $ relmapKoshuAngleText med (n, c)
 
 -- | Create @koshu-angle-text@ relmap.

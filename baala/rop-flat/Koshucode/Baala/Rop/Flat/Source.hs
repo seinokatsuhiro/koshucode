@@ -18,18 +18,18 @@ import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Op
+import qualified Koshucode.Baala.Rop.Base     as Rop
 
 
 -- | Implementation of relational operators.
 ropsSource :: (D.CContent c) => [C.Rop c]
-ropsSource = Op.ropList "source"
-    --        CONSTRUCTOR     USAGE               ATTRIBUTE
-    [ Op.def  consDee         "dee"               ""
-    , Op.def  consDum         "dum"               ""
-    , Op.def  consEmpty       "empty /N ..."      "-term*"
-    , Op.def  consSource      "source P /N ..."   "-pattern -term*"
-    , Op.def  consSourceTerm  "source-term P R"   "-pattern -relmap/"
+ropsSource = Rop.ropList "source"
+    --         CONSTRUCTOR     USAGE               ATTRIBUTE
+    [ Rop.def  consDee         "dee"               ""
+    , Rop.def  consDum         "dum"               ""
+    , Rop.def  consEmpty       "empty /N ..."      "-term*"
+    , Rop.def  consSource      "source P /N ..."   "-pattern -term*"
+    , Rop.def  consSourceTerm  "source-term P R"   "-pattern -relmap/"
     ]
 
 
@@ -41,7 +41,7 @@ ropsSource = Op.ropList "source"
 --
 consEmpty :: C.RopCons c
 consEmpty med =
-    do ns <- Op.getTerms med "-term"
+    do ns <- Rop.getTerms med "-term"
        Right $ relmapEmpty med ns
 
 -- | Create @empty@ relmap.
@@ -62,8 +62,8 @@ relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
 --
 consSource :: C.RopCons c
 consSource med =
-  do pattern  <- Op.getWord  med "-pattern"
-     terms    <- Op.getTerms med "-term"
+  do pattern  <- Rop.getWord  med "-pattern"
+     terms    <- Rop.getTerms med "-term"
      Right $ C.relmapSource med pattern terms
 
 
@@ -72,8 +72,8 @@ consSource med =
 -- | __source-term C R__
 consSourceTerm :: C.RopCons c
 consSourceTerm med =
-  do pat   <- Op.getWord   med "-pattern"
-     rmap  <- Op.getRelmap med "-relmap"
+  do pat   <- Rop.getWord   med "-pattern"
+     rmap  <- Rop.getRelmap med "-relmap"
      Right $ relmapSourceTerm med pat rmap
 
 -- | Create @source-term@ relmap.

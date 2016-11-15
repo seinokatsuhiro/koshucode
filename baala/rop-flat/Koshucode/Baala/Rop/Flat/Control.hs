@@ -15,25 +15,25 @@ module Koshucode.Baala.Rop.Flat.Control
     consEqual, relmapEqual, relkitEqual,
   ) where
 
-import qualified Koshucode.Baala.Overture    as O
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Base    as Op
-import qualified Koshucode.Baala.Rop.Flat.Lattice as Op
+import qualified Koshucode.Baala.Overture         as O
+import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.Core             as C
+import qualified Koshucode.Baala.Rop.Base         as Rop
+import qualified Koshucode.Baala.Rop.Flat.Lattice as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
 -- | Implementation of relational operators.
 ropsControl :: (D.CContent c) => [C.Rop c]
-ropsControl = Op.ropList "control"
-    --        CONSTRUCTOR   USAGE          ATTRIBUTE
-    [ Op.def  consEqual     "equal"        "-relmap/"
-    , Op.def  consFix       "fix R"        "-relmap/"
-    , Op.def  consFixJoin   "fix-join R"   "-relmap/"
-    , Op.def  consIf        "if T A B"     "-test/ -then/ -else/"
-    , Op.def  consUnless    "unless T B"   "-test/ -else/"
-    , Op.def  consWhen      "when T A"     "-test/ -then/"
+ropsControl = Rop.ropList "control"
+    --         CONSTRUCTOR   USAGE          ATTRIBUTE
+    [ Rop.def  consEqual     "equal"        "-relmap/"
+    , Rop.def  consFix       "fix R"        "-relmap/"
+    , Rop.def  consFixJoin   "fix-join R"   "-relmap/"
+    , Rop.def  consIf        "if T A B"     "-test/ -then/ -else/"
+    , Rop.def  consUnless    "unless T B"   "-test/ -else/"
+    , Rop.def  consWhen      "when T A"     "-test/ -then/"
     ]
 
 
@@ -45,9 +45,9 @@ ropsControl = Op.ropList "control"
 -- | __if T A B__
 consIf :: (Ord c) => C.RopCons c
 consIf med =
-  do mt <- Op.getRelmap med "-test"
-     ma <- Op.getRelmap med "-then"
-     mb <- Op.getRelmap med "-else"
+  do mt <- Rop.getRelmap med "-test"
+     ma <- Rop.getRelmap med "-then"
+     mb <- Rop.getRelmap med "-else"
      Right $ relmapIf med (mt, ma, mb)
 
 type Relmap3 c = (C.Relmap c, C.Relmap c, C.Relmap c)
@@ -91,15 +91,15 @@ isNothing2 a b = isNothing a && isNothing b
 -- | __when T A__
 consWhen :: (Ord c) => C.RopCons c
 consWhen med =
-  do rt <- Op.getRelmap med "-test"
-     ra <- Op.getRelmap med "-then"
+  do rt <- Rop.getRelmap med "-test"
+     ra <- Rop.getRelmap med "-then"
      Right $ relmapIf med (rt, ra, C.relmapId)
 
 -- | __unless T B__
 consUnless :: (Ord c) => C.RopCons c
 consUnless med =
-  do rt <- Op.getRelmap med "-test"
-     rb <- Op.getRelmap med "-else"
+  do rt <- Rop.getRelmap med "-test"
+     rb <- Rop.getRelmap med "-else"
      Right $ relmapIf med (rt, C.relmapId, rb)
 
 
@@ -109,14 +109,14 @@ consUnless med =
 -- | __fix R__
 consFix :: (Ord c) => C.RopCons c
 consFix med =
-  do rmap <- Op.getRelmap med "-relmap"
+  do rmap <- Rop.getRelmap med "-relmap"
      Right $ relmapFix med rmap
 
 -- | __fix-join R__
 consFixJoin :: (Ord c) => C.RopCons c
 consFixJoin med =
-  do rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapFix med (Op.relmapJoin med Nothing rmap)
+  do rmap <- Rop.getRelmap med "-relmap"
+     Right $ relmapFix med (Rop.relmapJoin med Nothing rmap)
 
 -- | Create @fix@ relmap.
 relmapFix :: (Ord c) => C.Intmed c -> O.Map (C.Relmap c)
@@ -140,7 +140,7 @@ relkitFix _ _ = Right C.relkitNothing
 -- | __equal R__
 consEqual :: (Ord c) => C.RopCons c
 consEqual med =
-    do rmap <- Op.getRelmap med "-relmap"
+    do rmap <- Rop.getRelmap med "-relmap"
        Right $ relmapEqual med rmap
 
 -- | Create @equal@ relmap.

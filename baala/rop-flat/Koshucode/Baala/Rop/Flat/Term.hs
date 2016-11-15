@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Base         as Op
+import qualified Koshucode.Baala.Rop.Base         as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
@@ -41,14 +41,14 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 --   [@move@]       Change heading.
 --
 ropsTerm :: (Ord c) => [C.Rop c]
-ropsTerm = Op.ropList "term"  -- GROUP
+ropsTerm = Rop.ropList "term"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def   consCut            "cut /P ..."               "-term*"
-    , Op.def   consCutTerm        "cut-term /R"              "-relmap/"
-    , Op.def   consPick           "pick /P ..."              "-term*"
-    , Op.def   consPickTerm       "pick-term /R"             "-relmap/"
-    , Op.def   consRename         "rename /N /P ..."         "-term*"
-    , Op.def   consMove           "move /P ... -to /N ..."   "-from* . -to"
+    [ Rop.def  consCut            "cut /P ..."               "-term*"
+    , Rop.def  consCutTerm        "cut-term /R"              "-relmap/"
+    , Rop.def  consPick           "pick /P ..."              "-term*"
+    , Rop.def  consPickTerm       "pick-term /R"             "-relmap/"
+    , Rop.def  consRename         "rename /N /P ..."         "-term*"
+    , Rop.def  consMove           "move /P ... -to /N ..."   "-from* . -to"
     ]
 
 
@@ -61,7 +61,7 @@ ropsTerm = Op.ropList "term"  -- GROUP
 --
 consPick :: C.RopCons c
 consPick med =
-  do ns <- Op.getTerms med "-term"
+  do ns <- Rop.getTerms med "-term"
      Right $ relmapPick med ns
 
 -- | Create @pick@ relmap.
@@ -80,7 +80,7 @@ relkitPick = relkitProject (D.ssRShare, D.ssRShare)
 --
 consCut :: C.RopCons c
 consCut med =
-  do ns <- Op.getTerms med "-term"
+  do ns <- Rop.getTerms med "-term"
      Right $ relmapCut med ns
 
 -- | Create @cut@ relmap.
@@ -102,7 +102,7 @@ relkitCut = relkitProject (D.ssRSide, D.ssRSide)
 --
 consPickTerm :: C.RopCons c
 consPickTerm med =
-  do rmap <- Op.getRelmap med "-relmap"
+  do rmap <- Rop.getRelmap med "-relmap"
      Right $ relmapPickTerm med rmap
 
 -- | Create @pick-term@ relmap.
@@ -121,7 +121,7 @@ relkitPickTerm = relkitProjectTerm (D.ssRShare, D.ssRShare)
 --
 consCutTerm :: C.RopCons c
 consCutTerm med =
-  do rmap <- Op.getRelmap med "-relmap"
+  do rmap <- Rop.getRelmap med "-relmap"
      Right $ relmapCutTerm med rmap
 
 -- | Create @cut-term@ relmap.
@@ -167,8 +167,8 @@ relkitProject (hePick, boPick) ns (Just he1)
 --
 consMove :: C.RopCons c
 consMove med =
-  do ps <- Op.getTerms med "-from"
-     ns <- Op.getTerms med "-to"
+  do ps <- Rop.getTerms med "-from"
+     ns <- Rop.getTerms med "-to"
      Right $ relmapMove med (ps, ns)
 
 -- | Create @move@ relmap.
@@ -206,7 +206,7 @@ relkitMove (ps, ns) (Just he1)
 --
 consRename :: C.RopCons c
 consRename med =
-  do np <- Op.getTermPairs med "-term"
+  do np <- Rop.getTermPairs med "-term"
      Right $ relmapRename med np
 
 -- | Create @rename@ relmap.

@@ -24,9 +24,9 @@ import qualified Koshucode.Baala.Base                       as B
 import qualified Koshucode.Baala.Syntax                     as S
 import qualified Koshucode.Baala.Data                       as D
 import qualified Koshucode.Baala.Core                       as C
-import qualified Koshucode.Baala.Rop.Base                   as Op
-import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
-import qualified Koshucode.Baala.Rop.Flat.Term              as Op
+import qualified Koshucode.Baala.Rop.Base                   as Rop
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Rop
+import qualified Koshucode.Baala.Rop.Flat.Term              as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message           as Msg
 
 
@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message           as Msg
 -- | Construct relmap of existential filter.
 consSome :: (Ord c) => C.RopCons c
 consSome med = 
-    do rmap <- Op.getRelmap med "-relmap"
+    do rmap <- Rop.getRelmap med "-relmap"
        Right $ relmapSome med rmap
 
 -- | Relmap of existential filter.
@@ -58,7 +58,7 @@ relkitSemi isEmpty (C.Relkit _ _ kitb2) he1 =
 -- | Construct relmap of non-existential filter.
 consNone :: (Ord c) => C.RopCons c
 consNone med =
-    do rmap <- Op.getRelmap med "-relmap"
+    do rmap <- Rop.getRelmap med "-relmap"
        Right $ relmapNone med rmap
 
 -- | Relmap of non-existential filter.
@@ -76,33 +76,33 @@ relkitNone = relkitSemi True
 -- | Construct some-and-meet relmap.
 consSomeMeet :: (Ord c) => C.RopCons c
 consSomeMeet med =
-    do rmap <- Op.getRelmap med "-relmap"
-       sh   <- Op.getMaybe Op.getTerms med "-share"
+    do rmap <- Rop.getRelmap med "-relmap"
+       sh   <- Rop.getMaybe Rop.getTerms med "-share"
        Right $ relmapSomeMeet med sh rmap
 
 -- | Some-and-meet relmap.
 --
 --   @some-meet R == some ( meet R )@
-relmapSomeMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
+relmapSomeMeet :: (Ord c) => C.Intmed c -> Rop.SharedTerms -> C.Relmap c -> C.Relmap c
 relmapSomeMeet med sh = C.relmapBinary med $ relkitFilterMeet True sh
 
 -- | Construct none-and-meet relmap.
 consNoneMeet :: (Ord c) => C.RopCons c
 consNoneMeet med =
-    do rmap <- Op.getRelmap med "-relmap"
-       sh   <- Op.getMaybe Op.getTerms med "-share"
+    do rmap <- Rop.getRelmap med "-relmap"
+       sh   <- Rop.getMaybe Rop.getTerms med "-share"
        Right $ relmapNoneMeet med sh rmap
 
 -- | None-and-meet relmap.
 --
 --   @ none-meet R == none ( meet R ) @
-relmapNoneMeet :: (Ord c) => C.Intmed c -> Op.SharedTerms -> C.Relmap c -> C.Relmap c
+relmapNoneMeet :: (Ord c) => C.Intmed c -> Rop.SharedTerms -> C.Relmap c -> C.Relmap c
 relmapNoneMeet med sh = C.relmapBinary med $ relkitFilterMeet False sh
 
-relkitFilterMeet :: forall c. (Ord c) => Bool -> Op.SharedTerms -> C.RelkitBinary c
+relkitFilterMeet :: forall c. (Ord c) => Bool -> Rop.SharedTerms -> C.RelkitBinary c
 relkitFilterMeet which sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr     = D.termPicker he1 he2
-    kit3   = case Op.unmatchShare sh lr of
+    kit3   = case Rop.unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
@@ -123,19 +123,19 @@ relkitFilterMeet _ _ _ _ = Right C.relkitNothing
 -- | Construct relmap for subrelation filter.
 consSub :: (Ord c) => C.RopCons c
 consSub med =
-    do rmap <- Op.getRelmap med "-relmap"
-       sh   <- Op.getMaybe Op.getTerms med "-share"
+    do rmap <- Rop.getRelmap med "-relmap"
+       sh   <- Rop.getMaybe Rop.getTerms med "-share"
        Right $ relmapSub med sh rmap
 
 -- | Relmap for subrelation filter.
-relmapSub :: (Ord c) => C.Intmed c -> Op.SharedTerms -> O.Map (C.Relmap c)
+relmapSub :: (Ord c) => C.Intmed c -> Rop.SharedTerms -> O.Map (C.Relmap c)
 relmapSub med sh = C.relmapBinary med $ relkitSub sh
 
 -- | Calculate subrelation filter.
-relkitSub :: (Ord c) => Op.SharedTerms -> C.RelkitBinary c
+relkitSub :: (Ord c) => Rop.SharedTerms -> C.RelkitBinary c
 relkitSub sh kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
     | he1 `D.isSuperhead` he2 = kit
-    | otherwise = case Op.unmatchShare sh lr of
+    | otherwise = case Rop.unmatchShare sh lr of
                     Nothing     -> Right $ C.relkitJust he1 $ C.RelkitConst []
                     Just (e, a) -> Msg.unmatchShare e a
     where
@@ -151,19 +151,19 @@ relkitSub _ _ _ = Right C.relkitNothing
 -- | Construct relmap for relational composition.
 consCompose :: (Ord c) => C.RopCons c
 consCompose med =
-    do rmap <- Op.getRelmap med "-relmap"
-       sh   <- Op.getMaybe Op.getTerms med "-share"
+    do rmap <- Rop.getRelmap med "-relmap"
+       sh   <- Rop.getMaybe Rop.getTerms med "-share"
        Right $ relmapCompose med sh rmap
 
 -- | Relational composition.
-relmapCompose :: (Ord c) => C.Intmed c -> Op.SharedTerms -> O.Map (C.Relmap c)
-relmapCompose med sh = C.relmapBinary med $ relkitCompose Op.relkitMeet sh
+relmapCompose :: (Ord c) => C.Intmed c -> Rop.SharedTerms -> O.Map (C.Relmap c)
+relmapCompose med sh = C.relmapBinary med $ relkitCompose Rop.relkitMeet sh
 
 -- | Calculate relational composition.
-relkitCompose :: forall c. (Ord c) => (Op.SharedTerms -> C.RelkitBinary c) -> Op.SharedTerms -> C.RelkitBinary c
+relkitCompose :: forall c. (Ord c) => (Rop.SharedTerms -> C.RelkitBinary c) -> Rop.SharedTerms -> C.RelkitBinary c
 relkitCompose m sh kit2@(C.Relkit _ (Just he2) _) (Just he1) =
     do kitMeet <- m sh kit2 (Just he1)
-       kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
+       kitCut  <- Rop.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
        Right (kitMeet B.<> kitCut)
 relkitCompose _ _ _ _ = Right C.relkitNothing
 

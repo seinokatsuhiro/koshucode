@@ -15,19 +15,19 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Op
-import qualified Koshucode.Baala.Rop.Flat.Lattice  as Op
-import qualified Koshucode.Baala.Rop.Flat.Term     as Op
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Flat.Lattice  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Term     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsCheck :: (D.CContent c) => [C.Rop c]
-ropsCheck = Op.ropList "check"
-    [ Op.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
-                            "just : . -just | has : . -has | but : . -but"
-    , Op.def consDump       "dump"                    ""
-    , Op.def consDuplicate  "duplicate /N ..."        "-term*"
-    , Op.def consExclude    "exclude /N ... -from R"  "-term* . -from/"
+ropsCheck = Rop.ropList "check"
+    [ Rop.def consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
+                             "just : . -just | has : . -has | but : . -but"
+    , Rop.def consDump       "dump"                    ""
+    , Rop.def consDuplicate  "duplicate /N ..."        "-term*"
+    , Rop.def consExclude    "exclude /N ... -from R"  "-term* . -from/"
     ]
 
 
@@ -38,12 +38,12 @@ ropsCheck = Op.ropList "check"
 --   [check-term -but \/N ...]
 consCheckTerm :: C.RopCons c
 consCheckTerm med =
-  case Op.getTag med of
+  case Rop.getTag med of
     tag | tag "just" -> call relmapCheckTermJust "-just"
         | tag "has"  -> call relmapCheckTermHas  "-has"
         | tag "but"  -> call relmapCheckTermBut  "-but"
         | otherwise  -> B.bug "check-term"
-    where call f a = do ns <- Op.getTerms med a
+    where call f a = do ns <- Rop.getTerms med a
                         Right $ f med ns
 
 relmapCheckTermJust :: C.Intmed c -> [S.TermName] -> C.Relmap c
@@ -82,7 +82,7 @@ checkTerm opt check ns (Just he1)
 --
 consDuplicate :: (Ord c) => C.RopCons c
 consDuplicate med =
-  do ns <- Op.getTerms med "-term"
+  do ns <- Rop.getTerms med "-term"
      Right $ relmapDuplicate med ns
 
 relmapDuplicate :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
@@ -110,15 +110,15 @@ relkitDuplicate ns (Just he1)
 -- | __exclude \/N ... -from R__
 consExclude :: (Ord c) => C.RopCons c
 consExclude med =
-  do ns <- Op.getTerms  med "-term"
-     m  <- Op.getRelmap med "-from"
+  do ns <- Rop.getTerms  med "-term"
+     m  <- Rop.getRelmap med "-from"
      Right $ relmapExclude med (ns, m)
 
 relmapExclude :: (Ord c) => C.Intmed c -> ([S.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
-    excl = Op.relmapNone med (pick B.<> meet)
-    pick = Op.relmapPick med ns
-    meet = Op.relmapMeet med Nothing (m B.<> pick)
+    excl = Rop.relmapNone med (pick B.<> meet)
+    pick = Rop.relmapPick med ns
+    meet = Rop.relmapMeet med Nothing (m B.<> pick)
 
 
 -- ----------------------  dump

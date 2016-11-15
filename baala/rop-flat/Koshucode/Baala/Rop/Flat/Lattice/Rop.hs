@@ -6,10 +6,10 @@ module Koshucode.Baala.Rop.Flat.Lattice.Rop
   ( ropsLattice,
   ) where
 
-import qualified Koshucode.Baala.Core                  as C
-import qualified Koshucode.Baala.Rop.Base              as Op
-import qualified Koshucode.Baala.Rop.Flat.Lattice.Restrict  as Op
-import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
+import qualified Koshucode.Baala.Core                       as C
+import qualified Koshucode.Baala.Rop.Base                   as Rop
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Restrict  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Rop
 
 
 -- | Lattice implementations of relmap operators.
@@ -25,15 +25,15 @@ import qualified Koshucode.Baala.Rop.Flat.Lattice.Tropashko as Op
 --   [@sub@]     Restriction to subrelation.
 --
 ropsLattice :: (Ord c) => [C.Rop c]
-ropsLattice = Op.ropList "lattice"  -- GROUP
-    --       CONSTRUCTOR      USAGE                          ATTRIBUTE
-    [ Op.def Op.consCompose   "compose R [-share /P ...]"    "-relmap/ . -share?"
-    , Op.def Op.consJoin      "join R [-share /P ...]"       "-relmap/ . -share?"
-    , Op.def Op.consMeet      "meet R [-share /P ...]"       "-relmap/ . -share?"
-    , Op.def Op.consNone      "none R"                       "-relmap/"
-    , Op.def Op.consNoneMeet  "none-meet R [-share /P ...]"  "-relmap/ . -share?"
-    , Op.def Op.consSome      "some R"                       "-relmap/"
-    , Op.def Op.consSomeMeet  "some-meet R [-share /P ...]"  "-relmap/ . -share?"
-    , Op.def Op.consSub       "sub R [-share /P ...]"        "-relmap/ . -share?"
+ropsLattice = Rop.ropList "lattice"  -- GROUP
+    --        CONSTRUCTOR       USAGE                          ATTRIBUTE
+    [ Rop.def Rop.consCompose   "compose R [-share /P ...]"    "-relmap/ . -share?"
+    , Rop.def Rop.consJoin      "join R [-share /P ...]"       "-relmap/ . -share?"
+    , Rop.def Rop.consMeet      "meet R [-share /P ...]"       "-relmap/ . -share?"
+    , Rop.def Rop.consNone      "none R"                       "-relmap/"
+    , Rop.def Rop.consNoneMeet  "none-meet R [-share /P ...]"  "-relmap/ . -share?"
+    , Rop.def Rop.consSome      "some R"                       "-relmap/"
+    , Rop.def Rop.consSomeMeet  "some-meet R [-share /P ...]"  "-relmap/ . -share?"
+    , Rop.def Rop.consSub       "sub R [-share /P ...]"        "-relmap/ . -share?"
     ]
 

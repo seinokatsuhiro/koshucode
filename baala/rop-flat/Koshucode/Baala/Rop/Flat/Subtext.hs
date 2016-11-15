@@ -11,12 +11,12 @@ module Koshucode.Baala.Rop.Flat.Subtext
   ) where
 
 import qualified Koshucode.Baala.Overture           as O
+import qualified Koshucode.Baala.Subtext            as T
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
-import qualified Koshucode.Baala.Subtext            as T
+import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
@@ -43,9 +43,9 @@ type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
 --
 consSubtext :: (D.CContent c) => C.RopCons c
 consSubtext med =
-  do term  <- Op.getTerm   med "-term"
-     sub   <- Op.getTrees  med "-subtext"
-     trim  <- Op.getSwitch med "-trim"
+  do term  <- Rop.getTerm   med "-term"
+     sub   <- Rop.getTrees  med "-subtext"
+     trim  <- Rop.getSwitch med "-trim"
      b     <- parseBundle sub
      let ns    = T.bundleSubmatch b
          match = T.matchBundle b

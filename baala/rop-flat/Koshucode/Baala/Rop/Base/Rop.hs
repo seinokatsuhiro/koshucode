@@ -12,7 +12,7 @@ module Koshucode.Baala.Rop.Base.Rop
 
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base.Define    as Op
+import qualified Koshucode.Baala.Rop.Base.Define    as Rop
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 
 -- | Built-in relmap operator.
@@ -22,10 +22,10 @@ import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 --   [@id@]          Identity relmap
 --
 ropsBuiltin :: [C.Rop c]
-ropsBuiltin = Op.ropList "builtin"
-    --       CONSTRUCTOR  USAGE            ATTRIBUTE
-    [ Op.def consAppend   "append R R"     "-left/ -right/"
-    , Op.def consId       "id"             ""
+ropsBuiltin = Rop.ropList "builtin"
+    --        CONSTRUCTOR  USAGE            ATTRIBUTE
+    [ Rop.def consAppend   "append R R"     "-left/ -right/"
+    , Rop.def consId       "id"             ""
     ]
 
 -- | Append relmaps.

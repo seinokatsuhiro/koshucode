@@ -23,23 +23,23 @@ import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
-import qualified Koshucode.Baala.Rop.Flat.Term      as Op
+import qualified Koshucode.Baala.Rop.Base           as Rop
+import qualified Koshucode.Baala.Rop.Flat.Term      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- | Implementation of relational operators.
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
-ropsPeripheral = Op.ropList "peripheral"
-    --       CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def consNow           "now /N"                 $ unwords
+ropsPeripheral = Rop.ropList "peripheral"
+    --        CONSTRUCTOR       USAGE                      ATTRIBUTE
+    [ Rop.def consNow           "now /N"                 $ unwords
                                                         [ "local : -term"
                                                         , "| utc : -term . -utc"
                                                         , "| zoned : -term . -zoned" ]
-    , Op.def consRdf           "rdf P /S /O"              " -pattern -term*"
-    , Op.def consTermName      "term-name /N"             "-term"
-    , Op.def consTie           "tie /P ... -to N"         "-term* . -to"
-    , Op.def consToday         "today /N"                 "-term"
-    , Op.def consUntie         "untie /P -only /P ..."    "-from . -only"
+    , Rop.def consRdf           "rdf P /S /O"              " -pattern -term*"
+    , Rop.def consTermName      "term-name /N"             "-term"
+    , Rop.def consTie           "tie /P ... -to N"         "-term* . -to"
+    , Rop.def consToday         "today /N"                 "-term"
+    , Rop.def consUntie         "untie /P -only /P ..."    "-from . -only"
     ]
 
 
@@ -48,10 +48,10 @@ ropsPeripheral = Op.ropList "peripheral"
 -- | __rdf P \/S \/O__
 consRdf :: C.RopCons c
 consRdf med =
-    do sign  <- Op.getWord  med "-pattern"
-       [s,o] <- Op.getTerms med "-term"
+    do sign  <- Rop.getWord  med "-pattern"
+       [s,o] <- Rop.getTerms med "-term"
        Right $ C.relmapSource med sign ["/s", "/o"] B.<>
-               Op.relmapRename med [(s,"/s"), (o,"/o")]
+               Rop.relmapRename med [(s,"/s"), (o,"/o")]
 
 
 
@@ -60,8 +60,8 @@ consRdf med =
 -- | __tie \/P ... -to \/N__
 consTie :: (D.CTie c) => C.RopCons c
 consTie med =
-  do ns <- Op.getTerms med "-term"
-     to <- Op.getTerm  med "-to"
+  do ns <- Rop.getTerms med "-term"
+     to <- Rop.getTerm  med "-to"
      Right $ relmapTie med (ns, to)
 
 -- | Create @tie@ relmap.
@@ -84,8 +84,8 @@ relkitTie (ns, to) (Just he1) = Right kit2 where
 -- | __untie \/P -to \/N ...__
 consUntie :: (D.CTie c) => C.RopCons c
 consUntie med =
-  do from <- Op.getTerm  med "-from"
-     ns   <- Op.getTerms med "-only"
+  do from <- Rop.getTerm  med "-from"
+     ns   <- Rop.getTerms med "-only"
      Right $ relmapUntie med (from, ns)
 
 -- | Create @untie@ relmap.
@@ -115,7 +115,7 @@ tiePick ns tie = mapM pick ns where
 -- | __term-name \/N__
 consTermName :: (D.CTerm c) => C.RopCons c
 consTermName med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      Right $ relmapTermName med n
 
 -- | Create @term-name@ relmap.
@@ -140,7 +140,7 @@ relkitTermName n (Just he1) = Right kit2 where
 --
 consToday :: (D.CTime c) => C.RopCons c
 consToday med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      let t = C.globalTime $ C.ropGlobal med
      consAdd1 (n, D.pTime $ D.timeCutClock t) med
 
@@ -150,9 +150,9 @@ consToday med =
 --
 consNow :: (D.CTime c) => C.RopCons c
 consNow med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      let tim    = C.globalTime $ C.ropGlobal med
-         tag    = (`elem` Op.getTags med)
+         tag    = (`elem` Rop.getTags med)
          cons f = consAdd1 (n, D.pTime $ f tim) med
      case () of
        _ | tag "local"  -> cons D.timeLocalize

@@ -28,21 +28,21 @@ import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
+import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- | Implementation of relational operators.
 ropsElem :: (D.CContent c) => [C.Rop c]
-ropsElem = Op.ropList "elem"
-    --       CONSTRUCTOR       USAGE                        ATTRIBUTE
-    [ Op.def consElem          "elem /P -to /N"             "-coll . -to"
-    , Op.def consElemBegin     "elem-begin /P -to /N ..."   "-coll . -to"
-    , Op.def consElemEnd       "elem-end /P -to /N ..."     "-coll . -to"
-    , Op.def (consIndexElem 1) "ix-elem /P -to /N /N"       "-coll . -to"
-    , Op.def (consIndexElem 0) "iz-elem /P -to /N /N"       "-coll . -to"
-    , Op.def consMember        "member /N /N"               "-elem -set"
-    , Op.def consUncollect     "uncollect /P -to /N ..."    "-coll . -to"
-    , Op.def consUnroll        "unroll /N /N -from /P ..."  "-term -content . -from"
+ropsElem = Rop.ropList "elem"
+    --        CONSTRUCTOR       USAGE                        ATTRIBUTE
+    [ Rop.def consElem          "elem /P -to /N"             "-coll . -to"
+    , Rop.def consElemBegin     "elem-begin /P -to /N ..."   "-coll . -to"
+    , Rop.def consElemEnd       "elem-end /P -to /N ..."     "-coll . -to"
+    , Rop.def (consIndexElem 1) "ix-elem /P -to /N /N"       "-coll . -to"
+    , Rop.def (consIndexElem 0) "iz-elem /P -to /N /N"       "-coll . -to"
+    , Rop.def consMember        "member /N /N"               "-elem -set"
+    , Rop.def consUncollect     "uncollect /P -to /N ..."    "-coll . -to"
+    , Rop.def consUnroll        "unroll /N /N -from /P ..."  "-term -content . -from"
     ]
 
 -- ----------------------  member
@@ -66,15 +66,15 @@ ropsElem = Op.ropList "elem"
 
 consElem :: (Ord c, D.CSet c, D.CList c, D.CText c) => C.RopCons c
 consElem med =
-  do xs   <- Op.getTerm med "-coll"
-     x    <- Op.getTerm med "-to"
+  do xs   <- Rop.getTerm med "-coll"
+     x    <- Rop.getTerm med "-to"
      Right $ relmapMember med (x, xs)
 
 -- | Expand elements from collection.
 consMember :: (Ord c, D.CSet c, D.CList c, D.CText c) => C.RopCons c
 consMember med =
-  do x    <- Op.getTerm med "-elem"
-     xs   <- Op.getTerm med "-set"
+  do x    <- Rop.getTerm med "-elem"
+     xs   <- Rop.getTerm med "-set"
      Right $ relmapMember med (x, xs)
 
 -- | Create @member@ relmap.
@@ -123,8 +123,8 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
 --
 consIndexElem :: (Ord c, D.CContent c) => Int -> C.RopCons c
 consIndexElem from med =
-  do xs     <- Op.getTerm  med "-coll"
-     (i, x) <- Op.getTerm2 med "-to"
+  do xs     <- Rop.getTerm  med "-coll"
+     (i, x) <- Rop.getTerm2 med "-to"
      Right $ relmapIndexElem from med (i, x, xs)
 
 -- | Create @ix-elem@ or @iz-elem@ relmap.
@@ -174,9 +174,9 @@ relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
 
 consUnroll :: (D.CTerm c) => C.RopCons c
 consUnroll med =
-  do t   <- Op.getTerm  med "-term"
-     c   <- Op.getTerm  med "-content"
-     xs  <- Op.getTerms med "-from"
+  do t   <- Rop.getTerm  med "-term"
+     c   <- Rop.getTerm  med "-content"
+     xs  <- Rop.getTerms med "-from"
      Right $ relmapUnroll med (t, c, xs)
 
 -- | Create @unroll@ relmap.
@@ -205,8 +205,8 @@ relkitUnroll (t, c, from) (Just he1) = kit2 where
 
 consElemBegin :: (Ord c, D.CContent c) => C.RopCons c
 consElemBegin med =
-  do coll <- Op.getTerm  med "-coll"
-     to   <- Op.getTerms med "-to"
+  do coll <- Rop.getTerm  med "-coll"
+     to   <- Rop.getTerms med "-to"
      Right $ relmapElemBegin med (coll, to)
 
 -- | Create @elem-begin@ relmap.
@@ -219,8 +219,8 @@ relmapElemBegin med = C.relmapFlow med . relkitElemBy B.takeFill
 
 consElemEnd :: (Ord c, D.CContent c) => C.RopCons c
 consElemEnd med =
-  do coll <- Op.getTerm  med "-coll"
-     to   <- Op.getTerms med "-to"
+  do coll <- Rop.getTerm  med "-coll"
+     to   <- Rop.getTerms med "-to"
      Right $ relmapElemEnd med (coll, to)
 
 -- | Create @elem-end@ relmap.
@@ -249,8 +249,8 @@ relkitElemBy f (coll, to) (Just he1) = kit2 where
 -- | __uncollect \/P -to \/N ...__
 consUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c) => C.RopCons c
 consUncollect med =
-  do coll  <- Op.getTerm  med "-coll"
-     to    <- Op.getTerms med "-to"
+  do coll  <- Rop.getTerm  med "-coll"
+     to    <- Rop.getTerms med "-to"
      Right $ relmapUncollect med (coll, to)
 
 -- | Create @uncollect@ relmap.

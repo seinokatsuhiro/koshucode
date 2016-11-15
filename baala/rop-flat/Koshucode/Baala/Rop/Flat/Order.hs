@@ -18,18 +18,18 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Op
+import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Pseudorelmap operators for term and tuple ordering.
 ropsOrder :: (Ord c) => [C.Rop c]
-ropsOrder = Op.ropList "order"  -- GROUP
+ropsOrder = Rop.ropList "order"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def   consBackward       "backward /P ..."          "-term*"
-    , Op.def   consForward        "forward /P ..."           "-term*"
-    , Op.def   consLexical        "lexical"                  ""
-    , Op.def   consOrder          "order /P ..."             "-term*"
+    [ Rop.def  consBackward       "backward /P ..."          "-term*"
+    , Rop.def  consForward        "forward /P ..."           "-term*"
+    , Rop.def  consLexical        "lexical"                  ""
+    , Rop.def  consOrder          "order /P ..."             "-term*"
     ]
 
 
@@ -41,7 +41,7 @@ ropsOrder = Op.ropList "order"  -- GROUP
 --
 consForward :: C.RopCons c
 consForward med =
-  do ns <- Op.getTerms med "-term"
+  do ns <- Rop.getTerms med "-term"
      Right $ relmapForward med ns
 
 -- | Create @forward@ relmap.
@@ -54,7 +54,7 @@ relmapForward med = C.relmapFlow med . relkitToward (D.ssRForward, D.ssRForward)
 --
 consBackward :: C.RopCons c
 consBackward med =
-  do ns <- Op.getTerms med "-term"
+  do ns <- Rop.getTerms med "-term"
      Right $ relmapBackward med ns
 
 -- | Create @backward@ relmap.
@@ -98,7 +98,7 @@ relkitLexical (Just he1) = Right kit2 where
 -- | __order \/P ...__
 consOrder :: (Ord c) => C.RopCons c
 consOrder med =
-    do ns <- Op.getOption [] Op.getSignedTerms med "-term"
+    do ns <- Rop.getOption [] Rop.getSignedTerms med "-term"
        Right $ relmapOrder med ns
 
 -- | Create @order@ relmap.

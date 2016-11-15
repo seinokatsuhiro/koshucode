@@ -14,11 +14,11 @@ module Koshucode.Baala.Rop.Flat.TermGadget
     consWipe, relmapWipe, relkitWipe,
   ) where
 
-import qualified Data.List                   as List
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Core        as C
-import qualified Koshucode.Baala.Rop.Base    as Op
-import qualified Koshucode.Baala.Rop.Flat.Term    as Op
+import qualified Data.List                      as List
+import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.Core           as C
+import qualified Koshucode.Baala.Rop.Base       as Rop
+import qualified Koshucode.Baala.Rop.Flat.Term  as Rop
 
 
 -- | Relmap operators for manipulating term names.
@@ -36,12 +36,12 @@ import qualified Koshucode.Baala.Rop.Flat.Term    as Op
 --     Cut working terms.
 -- 
 ropsTermGadget :: (Ord c) => [C.Rop c]
-ropsTermGadget = Op.ropList "term"  -- GROUP
+ropsTermGadget = Rop.ropList "term"  -- GROUP
     --        CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def  consPrefix         "prefix /N -to /P ..."     "pos : -prefix -term* | to : -prefix . -to"
-    , Op.def  consPrefixChange   "prefix-change /P /Q"      "-new -old"
-    , Op.def  consUnprefix       "unprefix /P"              "-prefix"
-    , Op.def  consWipe           "wipe"                     ""
+    [ Rop.def consPrefix         "prefix /N -to /P ..."     "pos : -prefix -term* | to : -prefix . -to"
+    , Rop.def consPrefixChange   "prefix-change /P /Q"      "-new -old"
+    , Rop.def consUnprefix       "unprefix /P"              "-prefix"
+    , Rop.def consWipe           "wipe"                     ""
     ]
 
 
@@ -50,9 +50,9 @@ ropsTermGadget = Op.ropList "term"  -- GROUP
 -- | Add prefix to specified terms.
 consPrefix :: C.RopCons c
 consPrefix med =
-    do let tag = Op.getTag med "to"
-       pre <- Op.getTerm  med "-prefix"
-       to  <- Op.getTerms med $ if tag then "-to" else "-term"
+    do let tag = Rop.getTag med "to"
+       pre <- Rop.getTerm  med "-prefix"
+       to  <- Rop.getTerms med $ if tag then "-to" else "-term"
        Right $ relmapPrefix med pre to
 
 -- | Create @prefix@ relmap.
@@ -77,7 +77,7 @@ prefixName pre ns = pre ++ "-" ++ ns
 -- | Remove prefix.
 consUnprefix :: C.RopCons c
 consUnprefix med =
-    do pre <- Op.getTerm med "-prefix"
+    do pre <- Rop.getTerm med "-prefix"
        Right $ relmapUnprefix med pre
 
 -- | Create @unprefix@ relmap.
@@ -103,8 +103,8 @@ unprefixName pre n =
 -- | Change prefix.
 consPrefixChange :: C.RopCons c
 consPrefixChange med =
-    do new <- Op.getTerm med "-new"
-       old <- Op.getTerm med "-old"
+    do new <- Rop.getTerm med "-new"
+       old <- Rop.getTerm med "-old"
        Right $ relmapPrefixChange med (new, old)
 
 -- | Create @prefix-change@ relmap.
@@ -137,5 +137,5 @@ relmapWipe med = C.relmapFlow med relkitWipe
 -- | Create @wipe@ relkit.
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing
-relkitWipe (Just he1) = Op.relkitCut ns1 (Just he1) where
+relkitWipe (Just he1) = Rop.relkitCut ns1 (Just he1) where
     ns1 = filter (elem '=') $ D.getTermNames he1

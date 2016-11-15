@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
+import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 
@@ -44,8 +44,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Construct relmap to meet relation.
 consMeet :: (Ord c) => C.RopCons c
 consMeet med =
-  do rmap <- Op.getRelmap med "-relmap"
-     sh   <- Op.getMaybe Op.getTerms med "-share"
+  do rmap <- Rop.getRelmap med "-relmap"
+     sh   <- Rop.getMaybe Rop.getTerms med "-share"
      Right $ relmapMeet med sh rmap
 
 -- | Meet two relations.
@@ -92,8 +92,8 @@ cartesian bo1 bo2 =
 -- | Construct relmap to join relation.
 consJoin :: (Ord c) => C.RopCons c
 consJoin med =
-    do rmap <- Op.getRelmap med "-relmap"
-       sh   <- Op.getMaybe Op.getTerms med "-share"
+    do rmap <- Rop.getRelmap med "-relmap"
+       sh   <- Rop.getMaybe Rop.getTerms med "-share"
        Right $ relmapJoin med sh rmap
 
 -- | Join two relations.

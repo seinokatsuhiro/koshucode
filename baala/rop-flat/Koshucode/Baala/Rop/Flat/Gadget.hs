@@ -4,25 +4,18 @@
 
 module Koshucode.Baala.Rop.Flat.Gadget
   ( ropsGadget,
-  
     -- * contents
     consContents, relmapContents,
-  
     -- * partial-order
     consPoHeight,
     consPoDepth,
     relmapPoScale, relkitPoScale,
-  
     -- * visit-distance
     consVisitDistance, relmapVisitDistance,
-  
     -- * size
     consSize, relmapSize, relkitSize,
-    -- $size
-  
     -- * eqlize
     consEqlize, relmapEqlize, relkitEqlize,
-
     -- * dump-tree
     consDumpTree,
   ) where
@@ -33,37 +26,24 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Op
-import qualified Koshucode.Baala.Rop.Flat.PoScale  as Op
-import qualified Koshucode.Baala.Rop.Flat.Subtext  as Op
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Flat.PoScale  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Subtext  as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Gadgets
---
---   [@contents@]
---     Make nary relation of all contetnts.
---
---   [@number \/N \[ -order \/P ... \]@]
---     Add numbering term @\/N@ ordered by @\/P@ ...
--- 
---   [@rank \/N -order \/P ... \[ -dense \]@]
---     Add term @\/N@ for ranking ordered by @\/P@ ...
--- 
---   [@size \/N@]
---     Calculate cardinality of input relation.
---
 ropsGadget :: (D.CContent c) => [C.Rop c]
-ropsGadget = Op.ropList "gadget"  -- GROUP
-    --        CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Op.def  consContents      "contents /N"              "-term*"
-    , Op.def  consDumpTree      "dump-tree X"              "-tree*"
-    , Op.def  consEqlize        "eqlize"                   ""
-    , Op.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "-x -y . -to"
-    , Op.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "-x -y . -to"
-    , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "-relmap/ . -step -to -distance"
-    , Op.def  consSize          "size /N"                  "-term"
-    , Op.def  Op.consSubtext    "subtext /N E"             "-term -subtext . -trim?"
+ropsGadget = Rop.ropList "gadget"  -- GROUP
+    --         CONSTRUCTOR       USAGE                      ATTRIBUTE
+    [ Rop.def  consContents      "contents /N"              "-term*"
+    , Rop.def  consDumpTree      "dump-tree X"              "-tree*"
+    , Rop.def  consEqlize        "eqlize"                   ""
+    , Rop.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "-x -y . -to"
+    , Rop.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "-x -y . -to"
+    , Rop.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "-relmap/ . -step -to -distance"
+    , Rop.def  consSize          "size /N"                  "-term"
+    , Rop.def  Rop.consSubtext   "subtext /N E"             "-term -subtext . -trim?"
     ]
 
 
@@ -75,7 +55,7 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
 --
 consContents :: (Ord c) => C.RopCons c
 consContents med =
-    do n <- Op.getTerm med "-term"
+    do n <- Rop.getTerm med "-term"
        Right $ relmapContents med n
 
 -- | Create @contents@ relmap.
@@ -96,25 +76,25 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 
 -- | __partial-order-height \/P \/P -to \/N \/N__
 consPoHeight :: (Ord c, D.CDec c) => C.RopCons c
-consPoHeight = consPoScale Op.poScaleHeight
+consPoHeight = consPoScale Rop.poScaleHeight
 
 -- | __partial-order-depth \/P \/P -to \/N \/N__
 consPoDepth :: (Ord c, D.CDec c) => C.RopCons c
-consPoDepth = consPoScale Op.poScaleDepth
+consPoDepth = consPoScale Rop.poScaleDepth
 
-consPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.RopCons c
+consPoScale :: (Ord c, D.CDec c) => Rop.PoScaleCalc c -> C.RopCons c
 consPoScale scale med =
-    do x <- Op.getTerm med "-x"
-       y <- Op.getTerm med "-y"
-       (z,r) <- Op.getTerm2 med "-to"
+    do x <- Rop.getTerm med "-x"
+       y <- Rop.getTerm med "-y"
+       (z,r) <- Rop.getTerm2 med "-to"
        Right $ relmapPoScale scale med (x,y,z,r)
 
 -- | Create @partial-order-height@ or @partial-order-depth@ relmap.
-relmapPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> C.Intmed c -> S.TermName4 -> C.Relmap c
+relmapPoScale :: (Ord c, D.CDec c) => Rop.PoScaleCalc c -> C.Intmed c -> S.TermName4 -> C.Relmap c
 relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
 -- | Create @partial-order-height@ or @partial-order-depth@ relkit.
-relkitPoScale :: (Ord c, D.CDec c) => Op.PoScaleCalc c -> S.TermName4 -> C.RelkitFlow c
+relkitPoScale :: (Ord c, D.CDec c) => Rop.PoScaleCalc c -> S.TermName4 -> C.RelkitFlow c
 relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = D.headFrom [z,r]
@@ -132,10 +112,10 @@ relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
 -- | __visit-distance R -step \/P ... -to \/N -distance \/N__
 consVisitDistance :: (Ord c, D.CDec c, D.CRel c) => C.RopCons c
 consVisitDistance med =
-    do rmap  <- Op.getRelmap med "-relmap"
-       to    <- Op.getTerm   med "-to"
-       dist  <- Op.getTerm   med "-distance"
-       steps <- Op.getTermsColon med "-step"
+    do rmap  <- Rop.getRelmap med "-relmap"
+       to    <- Rop.getTerm   med "-to"
+       dist  <- Rop.getTerm   med "-distance"
+       steps <- Rop.getTermsColon med "-step"
        case steps of
          [step1, step2] -> Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
          _              -> Msg.adlib "Require two sets of terms"
@@ -236,17 +216,13 @@ insertPush k a = Map.insertWith push k [a] where
 
 -- ----------------------  size
 
--- $size
---
---  Count number of tuples in the output of relmap @a@.
---  
---    > a | size /c
---
-
 -- | __size \/N__
+--
+--  Count number of tuples.
+--
 consSize :: (D.CDec c) => C.RopCons c
 consSize med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      Right $ relmapSize med n
 
 -- | Create @size@ relmap.
@@ -304,6 +280,6 @@ eqlizeBody = loop where
 -- | __dump-tree E__
 consDumpTree :: (D.CDec c) => C.RopCons c
 consDumpTree med =
-  do trees <- Op.getTrees med "-tree"
+  do trees <- Rop.getTrees med "-tree"
      Msg.dumpTrees trees
 

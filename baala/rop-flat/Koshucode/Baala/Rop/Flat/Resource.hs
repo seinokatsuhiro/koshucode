@@ -16,18 +16,18 @@ import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Rop.Base       as Op
+import qualified Koshucode.Baala.Rop.Base       as Rop
 
 
 -- | Relmap operators about resources.
 ropsResource :: (D.CContent c) => [C.Rop c]
-ropsResource = Op.ropList "resource"
-    --        CONSTRUCTOR          USAGE                   ATTRIBUTE
-    [ Op.def  consKoshuResArticle  "koshu-res-article /N"  "-name"
-    , Op.def  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
-    , Op.def  consKoshuResSink     "koshu-res-sink /N /N"  "-sec -pat"
-    , Op.def  Op.consXxx           "koshu-res-source /N"   "-pat"
-    , Op.def  Op.consXxx           "koshu-res-sink-source /N /N" "-sink -source"
+ropsResource = Rop.ropList "resource"
+    --         CONSTRUCTOR          USAGE                   ATTRIBUTE
+    [ Rop.def  consKoshuResArticle  "koshu-res-article /N"  "-name"
+    , Rop.def  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
+    , Rop.def  consKoshuResSink     "koshu-res-sink /N /N"  "-sec -pat"
+    , Rop.def  Rop.consXxx          "koshu-res-source /N"   "-pat"
+    , Rop.def  Rop.consXxx          "koshu-res-sink-source /N /N" "-sink -source"
     ]
 
 
@@ -39,8 +39,8 @@ ropsResource = Op.ropList "resource"
 --
 consKoshuResRop :: (D.CContent c) => C.RopCons c
 consKoshuResRop med =
-  do sec   <- Op.getTerm med "-sec"
-     name  <- Op.getTerm med "-name"
+  do sec   <- Rop.getTerm med "-sec"
+     name  <- Rop.getTerm med "-name"
      Right $ relmapKoshuResRop med (sec, name)
 
 -- | Create @koshu-res-rop@ relmap.
@@ -68,8 +68,8 @@ relkitKoshuResRop (sec, name) res _ = Right kit2 where
 --
 consKoshuResSink :: (D.CContent c) => C.RopCons c
 consKoshuResSink med =
-  do sec   <- Op.getTerm med "-sec"
-     pat   <- Op.getTerm med "-pat"
+  do sec   <- Rop.getTerm med "-sec"
+     pat   <- Rop.getTerm med "-pat"
      Right $ relmapKoshuResSink med (sec, pat)
 
 -- | Create @koshu-res-sink@ relmap.
@@ -95,7 +95,7 @@ relkitKoshuResSink (sec, pat) res _ = Right kit2 where
 -- | __koshu-res-article \/N__
 consKoshuResArticle :: (D.CContent c) => C.RopCons c
 consKoshuResArticle med =
-  do name <- Op.getTerm med "-name"
+  do name <- Rop.getTerm med "-name"
      Right $ relmapKoshuResArticle med name
 
 -- | Create @koshu-res-article@ relmap.
