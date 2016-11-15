@@ -37,21 +37,21 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 {-# DEPRECATED BaalaC "Use 'Content' instead" #-}
 type BaalaC = Content
 
-{-# WARNING ContentEmpty   "Use 'D.empty' instead." #-}
-{-# WARNING ContentBool    "Use 'D.pBool' instead." #-}
-{-# WARNING ContentDec     "Use 'D.pDec' instead." #-}
-{-# WARNING ContentClock   "Use 'D.pClock' instead." #-}
-{-# WARNING ContentTime    "Use 'D.pTime' instead." #-}
-{-# WARNING ContentCode    "Use 'D.pCode' instead." #-}
-{-# WARNING ContentTerm    "Use 'D.pTerm' instead." #-}
-{-# WARNING ContentText    "Use 'D.pText' instead." #-}
-{-# WARNING ContentList    "Use 'D.pList' instead." #-}
-{-# WARNING ContentSet     "Use 'D.pSet' instead." #-}
-{-# WARNING ContentTie     "Use 'D.pTie' instead." #-}
-{-# WARNING ContentRel     "Use 'D.pRel' instead." #-}
-{-# WARNING ContentInterp  "Use 'D.pInterp' instead." #-}
-{-# WARNING ContentType    "Use 'D.pType' instead." #-}
-{-# WARNING ContentEnd     "Use 'D.end' instead." #-}
+{-# WARNING ContentEmpty   "Use 'empty' instead." #-}
+{-# WARNING ContentBool    "Use 'pBool' instead." #-}
+{-# WARNING ContentDec     "Use 'pDec' instead." #-}
+{-# WARNING ContentClock   "Use 'pClock' instead." #-}
+{-# WARNING ContentTime    "Use 'pTime' instead." #-}
+{-# WARNING ContentCode    "Use 'pCode' instead." #-}
+{-# WARNING ContentTerm    "Use 'pTerm' instead." #-}
+{-# WARNING ContentText    "Use 'pText' instead." #-}
+{-# WARNING ContentList    "Use 'pList' instead." #-}
+{-# WARNING ContentSet     "Use 'pSet' instead." #-}
+{-# WARNING ContentTie     "Use 'pTie' instead." #-}
+{-# WARNING ContentRel     "Use 'pRel' instead." #-}
+{-# WARNING ContentInterp  "Use 'pInterp' instead." #-}
+{-# WARNING ContentType    "Use 'pType' instead." #-}
+{-# WARNING ContentEnd     "Use 'end' instead." #-}
 
 -- | The Baala content type.
 data Content
