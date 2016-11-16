@@ -44,8 +44,8 @@ gpSetSort = (D.gSetSort, D.pSet)
 
 -- | Apply function to internal value of content.
 --
---   >>> contentAp gText pText reverse (the $ pText "abc") :: BaalaC
---   VText "cba"
+--   >>> contentAp gText pText reverse (the $ pText "abc") :: Content
+--   ContentText "cba"
 --
 contentAp :: (c -> a) -> (b -> c') -> (a -> b) -> c -> c'
 contentAp get put f = put . f . get

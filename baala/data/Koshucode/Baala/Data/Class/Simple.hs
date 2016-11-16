@@ -156,11 +156,11 @@ class (D.CTypeOf c) => CText c where
 
 -- | Create text or empty content.
 --
---   >>> pMaybeText "a" :: BaalaC
---   VText "a"
+--   >>> pMaybeText "a" :: Content
+--   ContentText "a"
 --
---   >>> pMaybeText "" :: BaalaC
---   VEmpty
+--   >>> pMaybeText "" :: Content
+--   ContentEmpty
 --
 pMaybeText :: (CText c, D.CEmpty c) => String -> c
 pMaybeText s | O.trimBegin s == "" = D.empty

@@ -16,7 +16,6 @@ module Koshucode.Baala.Data.Content
     dispatchContent,
 
     -- * Concrete type
-    BaalaC,
     TermC, JudgeC, RelC,
     the, stringC,
   ) where
@@ -32,10 +31,6 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 
 -- ----------------------  Content type
-
--- | The Baala content type.
-{-# DEPRECATED BaalaC "Use 'Content' instead" #-}
-type BaalaC = Content
 
 {-# WARNING ContentEmpty   "Use 'empty' instead." #-}
 {-# WARNING ContentBool    "Use 'pBool' instead." #-}
