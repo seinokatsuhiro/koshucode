@@ -182,7 +182,7 @@ data LocalRef
 
 -- | Get name of local relation reference.
 unlocal :: LocalRef -> String
-unlocal (LocalNest   n) = n
+unlocal (LocalNest   n) = S.termNameContent n
 unlocal (LocalSymbol n) = n
 
 

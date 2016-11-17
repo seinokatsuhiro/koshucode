@@ -174,7 +174,7 @@ nipAt cp = at where
 -- | Nip off local reference token, like @^/g@.
 nipHat :: B.CodePt -> String -> S.TokenNipResult
 nipHat cp = hat where
-    hat ('/' : cs)                   = localToken cs S.LocalNest
+    hat ('/' : cs)                   = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
     hat cs                           = ([], S.unknownToken cp cs $ Msg.adlib "local")
 

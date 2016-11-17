@@ -12,6 +12,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     ToTermName (..),
     stringTermName,
     termNameString, termPathString,
+    termNameContent,
 
     -- * Term name tuple
     TermName2, TermName3,
@@ -90,6 +91,11 @@ stringTermName n         = n
 termNameString :: TermName -> String
 termNameString n = '/' : n
 --termNameString (TermName n) = '/' : n
+
+-- | Extract internal name.
+termNameContent :: TermName -> String
+termNameContent n = n
+--termNameContent (TermName n) = n
 
 -- | Encode term path into string.
 --
