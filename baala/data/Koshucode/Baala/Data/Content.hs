@@ -129,7 +129,7 @@ instance B.MixShortEncode Content where
         case c of
           ContentCode  s   -> B.mixString $ quote  (sh s) s
           ContentText  s   -> B.mixString $ qquote (sh s) s
-          ContentTerm  s   -> B.mixString $ "'/" ++ s
+          ContentTerm  s   -> B.mixString $ "'" ++ S.termNameString s
           ContentDec   n   -> B.mixString $ D.encodeDecimal n
           ContentClock t   -> B.mixEncode t
           ContentTime  t   -> B.mixEncode t

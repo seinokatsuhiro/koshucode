@@ -57,7 +57,7 @@ class (D.CTypeOf c) => CSet c where
     putSet      =       Right . pSet
 
 -- | Create set of term contents.
-pTermSet :: (D.CTerm c, CSet c) => [String] -> c
+pTermSet :: (D.CTerm c, CSet c) => [S.TermName] -> c
 pTermSet = pSet . map D.pTerm
 
 -- | Create set of text contents.

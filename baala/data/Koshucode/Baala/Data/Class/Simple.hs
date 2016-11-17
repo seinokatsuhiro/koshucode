@@ -21,6 +21,7 @@ import qualified Data.Text                               as Tx
 import qualified Data.Text.Lazy                          as Tz
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class.Singleton    as D
 
@@ -130,13 +131,13 @@ class (D.CTypeOf c) => CCode c where
 -- | Term name.
 class (D.CTypeOf c) => CTerm c where
     isTerm       ::           c -> Bool
-    gTerm        ::           c -> String
-    pTerm        ::      String -> c
+    gTerm        ::           c -> S.TermName
+    pTerm        ::  S.TermName -> c
 
-    getTerm      ::      B.Ab c -> B.Ab String
+    getTerm      ::      B.Ab c -> B.Ab S.TermName
     getTerm      =       D.getContent isTerm gTerm
 
-    putTerm      ::      String -> B.Ab c
+    putTerm      ::  S.TermName -> B.Ab c
     putTerm      =       Right . pTerm
 
 
