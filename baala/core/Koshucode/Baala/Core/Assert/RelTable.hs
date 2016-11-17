@@ -71,10 +71,10 @@ termMap gRel from f (D.Rel he bo) = accum [] ts bo Map.empty where
 
     ts = D.typeTerms $ D.headType he
 
-    accum :: S.TermPath -> [D.NamedType] -> [[c]] -> O.Map (TermMap a)
+    accum :: S.TermPath -> [S.Term Type] -> [[c]] -> O.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
 
-    column :: S.TermPath -> (D.NamedType, [c]) -> O.Map (TermMap a)
+    column :: S.TermPath -> (S.Term Type, [c]) -> O.Map (TermMap a)
     column path ((n, D.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
     column path ((n, _)            , cs2) m = foldr (add $ n : path) m cs2
 

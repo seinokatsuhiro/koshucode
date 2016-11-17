@@ -58,8 +58,8 @@ data Type
     | TypeList    Type            -- ^ List
     | TypeSet     Type            -- ^ Set
     | TypeTag     String Type     -- ^ Tagged type
-    | TypeTie     [NamedType]     -- ^ Tie
-    | TypeRel     [NamedType]     -- ^ Relation
+    | TypeTie     [S.Term Type]   -- ^ Tie
+    | TypeRel     [S.Term Type]   -- ^ Relation
 
     | TypeTuple   [Type]          -- ^ Tuple (Product type)
     | TypeSum     [Type]          -- ^ Sum type
@@ -108,7 +108,7 @@ typeToMix = wf where
 
     termTypes = B.mixJoin1 . map termType
 
-    termType :: NamedType -> B.MixText
+    termType :: S.Term Type -> B.MixText
     termType (n, t) = D.termNameToMix n `B.mixSep` wt t
 
 -- | Print type as tree.
@@ -171,7 +171,7 @@ typeRelDegree (TypeRel ts) = length ts
 typeRelDegree _ = 0
 
 -- | Get named type from relation type or tie type.
-typeTerms :: Type -> [NamedType]
+typeTerms :: Type -> [S.Term Type]
 typeTerms (TypeRel ts) = ts
 typeTerms (TypeTie ts) = ts
 typeTerms _            = []
@@ -212,12 +212,12 @@ typeRelIndex _ _ = []
 -- ----------------------  Modify
 
 -- | Modify terms of relation type.
-typeRelMapTerms :: O.Map [NamedType] -> O.Map Type
+typeRelMapTerms :: O.Map [S.Term Type] -> O.Map Type
 typeRelMapTerms f (TypeRel ts) = TypeRel $ f ts
 typeRelMapTerms _ t = t
 
 -- | Modify term of relation type.
-typeRelMapTerm :: O.Map NamedType -> O.Map Type
+typeRelMapTerm :: O.Map (S.Term Type) -> O.Map Type
 typeRelMapTerm f t = typeRelMapTerms (map f) t
 
 -- | Modify term name of relation type.

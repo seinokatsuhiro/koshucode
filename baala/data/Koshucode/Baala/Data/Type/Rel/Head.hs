@@ -181,7 +181,7 @@ headNests ns1 Head { headType = t } =
 --   >>> headMap reverse $ headFrom ["a", "b"]
 --   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
 --
-headMap :: O.Map [D.NamedType] -> O.Map Head
+headMap :: O.Map [S.Term D.Type] -> O.Map Head
 headMap = headMapBy D.typeRelMapTerms
 
 -- | Convert term names.
