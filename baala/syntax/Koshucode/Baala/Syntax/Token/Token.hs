@@ -86,7 +86,7 @@ instance SubtypeName Token where
      subtypeName (TUnknown  _ _ _  ) = "unknown"
 
 instance B.Name Token where
-    name (TTerm     _ _ ns)  = concat ns
+    name (TTerm     _ _ ns)  = S.termPathString ns
     name (TSlot      _ _ s)  = s
     name (TText      _ _ s)  = s
     name (TOpen        _ s)  = s

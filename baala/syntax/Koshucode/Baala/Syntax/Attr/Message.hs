@@ -53,7 +53,7 @@ abortableTrees :: String -> [S.TTree] -> B.MapAb b
 abortableTrees tag = B.abortable tag . B.untrees
 
 -- | Unexpected attribute / Duplicate
-dupAttr :: [String] -> B.Ab a
+dupAttr :: [S.TermName] -> B.Ab a
 dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map S.termNameString ns)
 
 -- | Extra attribute

@@ -8,6 +8,7 @@ module Koshucode.Baala.Syntax.Attr.AttrEd
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.TTree           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
@@ -122,7 +123,9 @@ termPath = loop [] where
     loop _ _                               = Msg.adlib "require term name"
 
 nestName :: B.AbMap [S.TTree]
-nestName [S.TermLeafName _ _ p] = Right [B.TreeL $ S.TLocal B.def (S.LocalNest p) (-1) []]
-nestName [S.TermLeafPath _ [p]] = Right [B.TreeL $ S.TLocal B.def (S.LocalNest p) (-1) []]
+nestName [S.TermLeafName _ _ n] = Right $ localNest n
+nestName [S.TermLeafPath _ [n]] = Right $ localNest n
 nestName _ = Msg.adlib "require term name"
 
+localNest :: S.TermName -> [S.TTree]
+localNest n = [B.TreeL $ S.TLocal B.def (S.LocalNest n) (-1) []]

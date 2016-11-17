@@ -184,10 +184,10 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == S.TermTypePath
                        = case Map.lookup n wtab of
-                           Just n' -> (wtab, cs, S.TTermN cp sign n')
+                           Just n' -> (wtab, cs, S.TTermN cp sign $ S.toTermName n')
                            Nothing -> let wtab' = Map.insert n n wtab
-                                      in (wtab', cs, S.TTermN cp sign n)
-    term ns cs         = (wtab, cs, S.TTerm cp q $ reverse ns)
+                                      in (wtab', cs, S.TTermN cp sign $ S.toTermName n)
+    term ns cs         = (wtab, cs, S.TTerm cp q $ reverse (S.toTermName <$> ns))
 
 -- ----------------------  Symbol
 

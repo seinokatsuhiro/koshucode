@@ -46,6 +46,10 @@ term n c = (toTermName n, c)
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
 type TermName = String
 
+-- data TermName =
+--     TermName String
+--     deriving (Show, Eq, Ord)
+
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
 type TermPath = [TermName]
@@ -75,6 +79,8 @@ instance ToTermName Tz.Text where
 stringTermName :: String -> TermName
 stringTermName ('/' : n) = n
 stringTermName n         = n
+--stringTermName ('/' : n) = TermName n
+--stringTermName n         = TermName n
 
 -- | Encode term name into string.
 --
@@ -83,6 +89,7 @@ stringTermName n         = n
 --
 termNameString :: TermName -> String
 termNameString n = '/' : n
+--termNameString (TermName n) = '/' : n
 
 -- | Encode term path into string.
 --
