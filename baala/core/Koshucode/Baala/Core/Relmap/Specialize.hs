@@ -31,7 +31,7 @@ relmapSpecialize :: forall h. forall c.
     h c -> RelmapLinkTable' h c -> C.RelkitTable c
     -> Maybe D.Head -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [((S.Token, S.LocalRef String), D.Head)]  -- name of local relation, and its heading
+    spec :: [((S.Token, S.LocalRef), D.Head)]  -- name of local relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> C.RelkitTable c      -- list of known specialized relkits
          -> Maybe D.Head         -- input head feeding into generic relmap

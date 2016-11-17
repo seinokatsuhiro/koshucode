@@ -88,7 +88,7 @@ relmapLocalSymbol = relmapVar S.LocalSymbol
 relmapLocalNest :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalNest = relmapVar S.LocalNest
 
-relmapVar :: (String -> S.LocalRef String) -> C.Intmed' h c -> String -> C.Relmap' h c
+relmapVar :: (String -> S.LocalRef) -> C.Intmed' h c -> String -> C.Relmap' h c
 relmapVar k use n = relmapLink use' where
     lx    = C.medLexmap use
     cp    = B.codePt lx

@@ -54,7 +54,7 @@ data Token
                 -- ^ 4) Term name —  @\/@/name/
     | TTerm     B.CodePt TermType S.TermPath
                 -- ^ 5) Term path — @\/@/name/@\/@/name/
-    | TLocal    B.CodePt (LocalRef String) Int [Token]
+    | TLocal    B.CodePt LocalRef Int [Token]
                 -- ^ 6) Local name — @^\/@/name/
     | TOpen     B.CodePt String
                 -- ^ 7) Opening bracket — @(@, @{@, etc
@@ -175,15 +175,15 @@ data TermType
 -- ----------------------  Local
 
 -- | Local relation reference.
-data LocalRef a
-    = LocalSymbol a        -- ^ Reference to local relation — @^r@
-    | LocalNest a          -- ^ Reference to nested relation — @^/r@
+data LocalRef
+    = LocalSymbol String     -- ^ Reference to local relation — @^r@
+    | LocalNest S.TermName   -- ^ Reference to nested relation — @^/r@
       deriving (Show, Eq, Ord)
 
 -- | Get name of local relation reference.
-unlocal :: LocalRef a -> a
-unlocal (LocalNest   a) = a
-unlocal (LocalSymbol a) = a
+unlocal :: LocalRef -> String
+unlocal (LocalNest   n) = n
+unlocal (LocalSymbol n) = n
 
 
 -- ----------------------  Blank
