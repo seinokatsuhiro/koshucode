@@ -38,8 +38,8 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 --   Left ...
 --
 treeFlatName :: S.TTree -> B.Ab S.TermName
-treeFlatName (L (S.TTermN _ _ n))  = Right $ S.stringTermName n
---treeFlatName (L (S.TTerm _ _ [n])) = Right $ S.stringTermName n
+treeFlatName (L (S.TTermN _ _ n))  = Right $ S.toTermName n
+--treeFlatName (L (S.TTerm _ _ [n])) = Right $ S.toTermName n
 treeFlatName (L t)                 = Msg.reqFlatName t
 treeFlatName _                     = Msg.reqTermName
 
@@ -57,7 +57,7 @@ treesFlatNames = mapM treeFlatName
 --   Right (GT, "a")
 --
 treeSignedName :: S.TTree -> B.Ab S.SignedTermName
-treeSignedName (L (S.TTermN _ sign n))  = Right (sign, S.stringTermName n)
+treeSignedName (L (S.TTermN _ sign n))  = Right (sign, S.toTermName n)
 treeSignedName _                        = Msg.reqTermName
 
 -- | Read list of named token trees from token trees.
@@ -113,8 +113,8 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (L (S.TTermN _ _ n)   : ts)  = loop ret (S.stringTermName n : ns) ts
-    loop ret ns (L (S.TTerm _ _ [n])  : ts)  = loop ret (S.stringTermName n : ns) ts
+    loop ret ns (L (S.TTermN _ _ n)   : ts)  = loop ret (S.toTermName n : ns) ts
+    loop ret ns (L (S.TTerm _ _ [n])  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (L (S.TTextRaw _ ":") : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                           = Right $ reverse $ reverse ns : ret
     loop _ _ _                               = Msg.reqTermName

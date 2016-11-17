@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term types and related functions.
@@ -8,6 +9,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
 
     -- * Term name
     TermName, TermPath, SignedTermName,
+    ToTermName (..),
     stringTermName,
     termNameString, termPathString,
 
@@ -20,6 +22,8 @@ module Koshucode.Baala.Syntax.Symbol.Term
     termsP, termsN, termsPN,
   ) where
 
+import qualified Data.Text                  as Tx
+import qualified Data.Text.Lazy             as Tz
 import qualified Koshucode.Baala.Overture   as O
 
 
@@ -33,8 +37,8 @@ type Term c = (TermName, c)
 --   >>> term "size" 10 :: Term Int
 --   ("size", 10)
 --
-term :: TermName -> c -> Term c
-term n c = (n, c)
+term :: (ToTermName n) => n -> c -> Term c
+term n c = (toTermName n, c)
 
 
 -- ----------------------  Term name
@@ -48,6 +52,20 @@ type TermPath = [TermName]
 
 -- | Term name with plus-minus sign, e.g., @+\/size@, @-\/size@, or @\/size@.
 type SignedTermName = (Ordering, TermName)
+
+-- | Convert to term name.
+class ToTermName a where
+    toTermName :: a -> TermName
+
+-- | Remove leading slash character.
+instance ToTermName String where
+    toTermName = stringTermName
+
+instance ToTermName Tx.Text where
+    toTermName = toTermName . Tx.unpack
+
+instance ToTermName Tz.Text where
+    toTermName = toTermName . Tz.unpack
 
 -- | Decode term name from string.
 --
