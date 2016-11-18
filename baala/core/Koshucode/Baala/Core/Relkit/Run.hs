@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Relkit.Run
     relkitRun,
     fixedRelation,
     bmapAlign,
-    Local, Lexical,
+    LocalTable,
   ) where
 
 import qualified Koshucode.Baala.Overture               as O
@@ -48,7 +48,7 @@ relkitLink kits = linkKit where
 -- todo: optimization
 -- | Run relkit.
 relkitRun :: forall h. forall c. (Ord c, D.CRel c, D.SelectRel h)
-    => h c -> [Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
+    => h c -> [LocalTable c] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
      case core of
@@ -76,13 +76,13 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
-                                         right True $ concat bo2
-       C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
-                                         right True $ bo2
-       C.RelkitLocal p n           -> case lookup2 p n rs of
-                                        Just bo2 -> Right bo2
-                                        Nothing  -> Msg.unkLocalRel p n $ localsLines rs
+       C.RelkitNest p nest b  -> do bo2 <- nestRel p nest b `mapM` bo1
+                                    right True $ concat bo2
+       C.RelkitCopy p n b     -> do bo2 <- relkitRun hook ((p, [(S.LocalSymbol n, bo1)]) : rs) b bo1
+                                    right True $ bo2
+       C.RelkitLocal p n      -> case lookup2 p n rs of
+                                   Just bo2 -> Right bo2
+                                   Nothing  -> Msg.unkLocalRel p (S.localRefString n) $ localsLines rs
     where
       run    = relkitRun hook rs
       mrun   = map run
@@ -102,11 +102,11 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
 
       nestRel :: S.Token -> [S.TermIndex] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel p nest b cs =
-          let cs2 = pickup cs `map` nest
+          let cs2 = pickup cs <$> nest
           in relkitRun hook ((p, cs2) : rs) b [cs]
 
-      pickup :: [c] -> (String, Int) -> B.Named [[c]]
-      pickup cs (name, ind) = (name, D.relBody $ D.gRel $ cs !! ind)
+      pickup :: [c] -> S.TermIndex -> (S.LocalRef, [[c]])
+      pickup cs (n, i) = (S.LocalNest n, D.relBody $ D.gRel $ cs !! i)
 
 -- | Calculate fixed relation.
 fixedRelation :: (Ord c) => O.Map (B.AbMap [[c]])
@@ -120,16 +120,13 @@ bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
                Right $ D.bodyForward he1 he2 bo2
 
-{-# WARNING Local, Lexical "This is only used in defined module." #-}
--- | Local relations.
-type Local a = Lexical [B.Named a]
+{-# WARNING LocalTable "This is only used in defined module." #-}
+-- | Lexical point and table of local relations.
+type LocalTable c = (S.Token, [(S.LocalRef, [[c]])])
 
--- | Local relation.
-type Lexical a = (S.Token, a)
-
-localsLines :: [Local a] -> [String]
+localsLines :: [LocalTable c] -> [String]
 localsLines xs = map desc $ keys xs where
-    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords bs
+    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords (S.localRefString <$> bs)
 
 -- | Kye list of double associations.
 keys :: [(a, [(b, c)])] -> [(a, [b])]

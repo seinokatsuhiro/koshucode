@@ -37,7 +37,7 @@ tokenContent tok =
       S.TShort    _ a b    -> a ++ "." ++ b
       S.TTermN    _ _ n    -> S.termNameString n
       S.TTerm     _ _ ns   -> S.termPathString ns
-      S.TLocal    _ n _ _  -> S.unlocal n
+      S.TLocal    _ n _ _  -> S.localRefString n
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s
       S.TClose    _ s      -> s

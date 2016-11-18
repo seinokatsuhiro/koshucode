@@ -73,7 +73,7 @@ data RelkitCore c
       -- ^ /Reference:/ Give indecies to nested relations.
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
       -- ^ /Reference:/ Give a name to input relation.
-    | RelkitLocal        S.Token C.RopName
+    | RelkitLocal        S.Token S.LocalRef
       -- ^ /Reference:/ Local relation reference, i.e., @^/r@ or @^r@.
 
 instance Show (RelkitCore c) where
@@ -95,7 +95,7 @@ instance Show (RelkitCore c) where
     show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
     show (RelkitLink      n _ _)   = "RelkitLink " ++ n
     show (RelkitCopy      _ _ _)   = "RelkitCopy "
-    show (RelkitLocal       _ n)   = "RelkitLocal " ++ n
+    show (RelkitLocal       _ n)   = "RelkitLocal " ++ S.localRefString n
     show (RelkitNest      _ _ _)   = "RelkitNest "
 
 -- | Relkit search table.

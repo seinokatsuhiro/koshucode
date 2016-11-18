@@ -92,6 +92,6 @@ relkitCopy :: S.Token -> String -> O.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
 -- | Relkit for local relation reference.
-relkitLocal :: S.Token -> String -> D.Head -> C.Relkit c
+relkitLocal :: S.Token -> S.LocalRef -> D.Head -> C.Relkit c
 relkitLocal p n he = relkitJust he $ C.RelkitLocal p n
 

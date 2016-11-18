@@ -21,7 +21,7 @@ module Koshucode.Baala.Syntax.Token.Token
 
     -- ** Local
     LocalRef (..),
-    unlocal,
+    localRefString,
 
     -- ** Blank
     BlankName (..),
@@ -40,34 +40,38 @@ class SubtypeName a where
 -- | There are eleven types of tokens.
 data Token
     = TText     B.CodePt TextForm String
-                -- ^ 1) Text.
-    | TSlot     B.CodePt Int String
-                -- ^ 2) Slot name.
-                --      'Int' represents slot level, i.e.,
-                --      0 for local positional slots,
-                --      1 for local named slots,
-                --      2 for global slots
-                --      —  @\@@/name/
+                -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
     | TShort    B.CodePt String String
-                -- ^ 3) Prefixed shorten text — /short/@.@/proper/
+                -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
     | TTermN    B.CodePt Ordering S.TermName
-                -- ^ 4) Term name —  @\/@/name/
+                -- ^ __3 Textual:__ Term name — @\/term@
     | TTerm     B.CodePt TermType S.TermPath
-                -- ^ 5) Term path — @\/@/name/@\/@/name/
+                -- ^ __4 Textual:__ Term path — @\/r\/term@
+
     | TLocal    B.CodePt LocalRef Int [Token]
-                -- ^ 6) Local name — @^\/@/name/
-    | TOpen     B.CodePt String
-                -- ^ 7) Opening bracket — @(@, @{@, etc
-    | TClose    B.CodePt String
-                -- ^ 8) Closing bracket — @}@, @)@, etc
-    | TSpace    B.CodePt Int
-                -- ^ 9) /N/ space characters.
-    | TComment  B.CodePt String
-                -- ^ 10) Comment — @**@/text/
+                -- ^ __5 Symbolic:__ Local name — @^r@, @^\/r@
+    | TSlot     B.CodePt Int String
+                -- ^ __6 Symbolic:__ Slot name.
+                --   'Int' represents slot level, i.e.,
+                --   0 for local positional slots,
+                --   1 for local named slots,
+                --   2 for global slots
+                --   —  @\@slot@, @\@\@global@
     | TName     B.CodePt BlankName
-                -- ^ 11) Blank name. (This is used in building content expression)
+                -- ^ __7 Symbolic:__ Blank name.
+                --   (This is only used in building content expression)
+
+    | TOpen     B.CodePt String
+                -- ^ __8 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
+    | TClose    B.CodePt String
+                -- ^ __9 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
+    | TSpace    B.CodePt Int
+                -- ^ __10 Punctuational:__ /N/ space characters
+    | TComment  B.CodePt String
+                -- ^ __11 Punctuational:__ Comment — @** comment line@
     | TUnknown  B.CodePt String B.AbortReason
-                -- ^ 12) Unknown token.
+                -- ^ __12 Other:__ Unknown token
+
       deriving (Show, Eq, Ord)
 
 -- | @\"text\"@, @\"open\"@, ...
@@ -181,9 +185,9 @@ data LocalRef
       deriving (Show, Eq, Ord)
 
 -- | Get name of local relation reference.
-unlocal :: LocalRef -> String
-unlocal (LocalNest   n) = S.termNameContent n
-unlocal (LocalSymbol n) = n
+localRefString :: LocalRef -> String
+localRefString (LocalNest   n) = S.termNameContent n
+localRefString (LocalSymbol n) = n
 
 
 -- ----------------------  Blank

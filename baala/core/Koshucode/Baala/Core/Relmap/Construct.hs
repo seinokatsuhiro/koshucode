@@ -80,22 +80,22 @@ relmapCopy = C.RelmapCopy . C.medLexmap
 relmapLink :: C.Intmed' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.medLexmap
 
--- | Local relmap.
-relmapLocalSymbol :: C.Intmed' h c -> String -> C.Relmap' h c
-relmapLocalSymbol = relmapVar S.LocalSymbol
+-- | Relmap reference of local symbolic relation.
+relmapLocalSymbol :: C.Intmed' h c -> C.RopName -> C.Relmap' h c
+relmapLocalSymbol med n = relmapLocal med $ S.LocalSymbol n
 
--- | Relmap references local nested relation.
-relmapLocalNest :: C.Intmed' h c -> String -> C.Relmap' h c
-relmapLocalNest = relmapVar S.LocalNest
+-- | Relmap reference of local nested relation.
+relmapLocalNest :: C.Intmed' h c -> S.TermName -> C.Relmap' h c
+relmapLocalNest med n = relmapLocal med $ S.LocalNest n
 
-relmapVar :: (String -> S.LocalRef) -> C.Intmed' h c -> String -> C.Relmap' h c
-relmapVar k use n = relmapLink use' where
+relmapLocal :: C.Intmed' h c -> S.LocalRef -> C.Relmap' h c
+relmapLocal use ref = relmapLink use' where
     lx    = C.medLexmap use
     cp    = B.codePt lx
     tok   = C.lexToken lx
     use'  = use { C.medLexmap = lx' }
     lx'   = lx  { C.lexType   = C.LexmapLocal
-                , C.lexToken  = S.TLocal cp (k n) (-1) [tok] }
+                , C.lexToken  = S.TLocal cp ref (-1) [tok] }
 
 -- ----------------------
 -- $AppendRelmaps

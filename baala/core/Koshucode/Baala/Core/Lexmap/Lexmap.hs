@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     RopName,
 
     -- * Functions
-    lexName,
+    lexName, lexLocalRef,
     lexAddMessage,
     lexMessageList,
     lexAttrTree,
@@ -58,6 +58,12 @@ lexAttrTree = map (B.mapSnd head) . S.paraNameList . lexAttr
 -- | Name of relmap operator
 lexName :: Lexmap -> RopName
 lexName = S.tokenContent . lexToken
+
+-- | Lexmap local reference.
+lexLocalRef :: Lexmap -> Maybe S.LocalRef
+lexLocalRef lx = case lexToken lx of
+                   S.TLocal _ ref _ _ -> Just ref
+                   _                  -> Nothing
 
 -- | Add message to lexmap.
 lexAddMessage :: String -> O.Map Lexmap

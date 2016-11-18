@@ -79,9 +79,9 @@ relmapSpecialize hook links = spec [] [] where
 
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ->
-                      post lx $ case find tok of
-                           Just (p,he)  -> Right (kdef, C.relkitLocal p n he)
-                           Nothing      -> Msg.unkNestVar n ps local
+                      post lx $ case loc of
+                           Just (p,he,ref) -> Right (kdef, C.relkitLocal p ref he)
+                           Nothing         -> Msg.unkNestVar n ps local
                   | otherwise ->
                       post lx $ case lookup lx links of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
@@ -90,6 +90,9 @@ relmapSpecialize hook links = spec [] [] where
                     tok = C.lexToken  lx
                     n   = C.lexName   lx
                     ps  = S.tokenParents tok
+                    loc = do (p, he) <- find tok
+                             ref     <- C.lexLocalRef lx
+                             Just (p,he,ref)
 
         post :: C.Lexmap -> O.Map (B.Ab (C.RelkitTable c, C.Relkit c))
         post lx result =

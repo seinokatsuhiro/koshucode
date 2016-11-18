@@ -49,7 +49,7 @@ data Head =
          } deriving (Show, Eq, Ord)
 
 instance Monoid Head where
-    mempty = headFrom []
+    mempty = headFrom ([] :: [String])
     mappend he1 he2 = headOf $ headType he1 `a` headType he2
         where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2
               a _ _ = D.TypeAny
@@ -84,8 +84,8 @@ headOf ty = Head { headType = ty }
 --   >>> B.mixEncode $ headFrom ["a", "b"]
 --   MixText "/a /b"
 --
-headFrom :: [S.TermName] -> Head
-headFrom = headOf . D.typeFlatRel
+headFrom :: (S.ToTermName n) => [n] -> Head
+headFrom = headOf . D.typeFlatRel . map S.toTermName
 
 
 -- ----------------------  Selector
