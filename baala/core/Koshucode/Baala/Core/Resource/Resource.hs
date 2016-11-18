@@ -56,7 +56,7 @@ data Resource c = Resource
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
-    , resSelect     :: C.RelSelect c       -- ^ Relation selector
+    , resSelect     :: D.RelSelect c       -- ^ Relation selector
     }
 
 instance Show (Resource c) where

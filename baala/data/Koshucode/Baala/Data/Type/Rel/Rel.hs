@@ -12,6 +12,7 @@ module Koshucode.Baala.Data.Type.Rel.Rel
 
     -- * Converter
     SelectRel (..),
+    RelSelect,
     judgesFromRel,
   ) where
 
@@ -88,7 +89,6 @@ relBodyOrder ns he = ed where
     ords  = map B.orderingCap ns
 
 
-
 -- ----------------------  Constant
 
 -- | The nullary empty relation.
@@ -122,10 +122,13 @@ reldau = Rel mempty []
 -- | Type for having relations.
 class SelectRel r where
     -- | Convert judges to relation.
-    selectRel :: r c -> D.JudgeClass -> [S.TermName] -> Rel c
+    selectRel :: r c -> RelSelect c
+
+-- | Select relation.
+type RelSelect c = D.JudgeClass -> [S.TermName] -> Rel c
 
 -- | Convert relation to list of judges.
 judgesFromRel :: D.JudgeOf c -> D.JudgeClass -> Rel c -> [D.Judge c]
-judgesFromRel judgeOf pat (Rel he bo) = map judge bo where
-    judge = judgeOf pat . zip names
+judgesFromRel jof cl (Rel he bo) = map judge bo where
+    judge = jof cl . zip names
     names = D.getTermNames he

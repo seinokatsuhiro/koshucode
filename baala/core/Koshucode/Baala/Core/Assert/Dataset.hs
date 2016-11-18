@@ -15,10 +15,10 @@ module Koshucode.Baala.Core.Assert.Dataset
 
 import qualified Data.Map                     as Map
 import qualified Data.Maybe                   as Maybe
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
-import qualified Koshucode.Baala.Core.Relkit  as C
 
 
 -- | Dataset is a set of judges.
@@ -33,13 +33,13 @@ dataset :: [D.Judge c] -> Dataset c
 dataset js = datasetAdd js B.def
 
 -- | Add judges to dataset.
-datasetAdd :: [D.Judge c] -> Dataset c -> Dataset c
-datasetAdd js ds1 = foldr addJudge ds1 js
+datasetAdd :: [D.Judge c] -> O.Map (Dataset c)
+datasetAdd js ds = foldr addJudge ds js
 
 -- | Add a judge to dataset.
-addJudge :: D.Judge c -> Dataset c -> Dataset c
-addJudge (D.JudgeAffirm sign xs) (Dataset ds1) = Dataset ds2 where
-    ds2 = Map.insertWith add sign [xs] ds1
+addJudge :: D.Judge c -> O.Map (Dataset c)
+addJudge (D.JudgeAffirm cl xs) (Dataset ds1) = Dataset ds2 where
+    ds2 = Map.insertWith add cl [xs] ds1
     add new old = new ++ old
 addJudge _ _ = undefined
 
@@ -48,14 +48,14 @@ addJudge _ _ = undefined
 datasetSelect
     :: (Ord c, D.CEmpty c)
     => Dataset c       -- ^ Dataset
-    -> C.RelSelect c   -- ^ Relation selector
-datasetSelect (Dataset m) sign ns = D.Rel h1 b1 where
-    h1 = D.headFrom ns
-    b1 = case Map.lookup sign m of
-      Just args -> B.unique $ map (subarg ns) args
-      Nothing   -> []
+    -> D.RelSelect c   -- ^ Relation selector
+datasetSelect (Dataset ds) cl ns = D.Rel he bo where
+    he = D.headFrom ns
+    bo = case Map.lookup cl ds of
+           Just set -> B.unique (selectTuple ns <$> set)
+           Nothing     -> []
 
-subarg :: (D.CEmpty c) => [String] -> [S.Term c] -> [c]
-subarg ns arg = map pick ns where
-    pick n = Maybe.fromMaybe D.empty $ lookup n arg
+selectTuple :: (D.CEmpty c) => [S.TermName] -> [S.Term c] -> [c]
+selectTuple ns ts = map pick ns where
+    pick n = Maybe.fromMaybe D.empty $ lookup n ts
 

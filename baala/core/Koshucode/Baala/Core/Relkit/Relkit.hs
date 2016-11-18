@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
   
     -- * Derived types
     RelkitTable, RelkitKey,
-    BodyMap, RelSelect,
+    BodyMap,
 
     -- * Calculation type
     RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
@@ -57,7 +57,7 @@ data RelkitCore c
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
     | RelkitNestVar      S.Token C.RopName
-    | RelkitNest         S.Token [(String, Int)] (RelkitBody c)
+    | RelkitNest         S.Token [(S.TermName, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
@@ -86,9 +86,6 @@ type RelkitTable c = [(RelkitKey, Relkit c)]
 
 -- | Search key of relkit.
 type RelkitKey = (Maybe D.Head, [C.Lexmap])
-
--- | Relation selector
-type RelSelect c = D.JudgeClass -> [String] -> D.Rel c
 
 -- | Mapping for body of relation.
 type BodyMap c = B.AbMap [[c]]
