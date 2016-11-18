@@ -76,13 +76,13 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNestVar p n         -> case lookup2 p n rs of
-                                        Just bo2  -> Right bo2
-                                        Nothing   -> Msg.unkNestRel p n $ localsLines rs
-       C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
-                                         right True $ bo2
        C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
                                          right True $ concat bo2
+       C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
+                                         right True $ bo2
+       C.RelkitLocal p n           -> case lookup2 p n rs of
+                                        Just bo2 -> Right bo2
+                                        Nothing  -> Msg.unkLocalRel p n $ localsLines rs
     where
       run    = relkitRun hook rs
       mrun   = map run

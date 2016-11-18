@@ -32,9 +32,9 @@ data Lexmap = Lexmap
 
 -- | Type of lexmap.
 data LexmapType
-    = LexmapBase         -- ^ Built-in relmap
-    | LexmapDerived      -- ^ User-defined relmap
-    | LexmapLocal        -- ^ Local relation reference
+    = LexmapBase      -- ^ Relmap of built-in operator
+    | LexmapDerived   -- ^ Derived or user-defined relmap
+    | LexmapLocal     -- ^ Local relation reference like @^/r@ or @^r@
       deriving (Show, Eq, Ord)
 
 instance B.CodePtr Lexmap where

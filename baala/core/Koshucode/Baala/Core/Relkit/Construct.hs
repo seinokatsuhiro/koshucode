@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkitSource,
 
     -- * Relation reference
-    relkitCopy, relkitNest, relkitNestVar,
+    relkitNest, relkitCopy, relkitLocal,
   ) where
 
 import qualified Koshucode.Baala.Overture            as O
@@ -83,15 +83,15 @@ relkitSource p ns = relkitJust he kit where
 
 -- ----------------------  Relation reference
 
+-- | Relkit with nested relation index.
+relkitNest :: S.Token -> [S.TermIndex] -> O.Map (C.Relkit c)
+relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
+
 -- | Relkit for copy relmap.
 relkitCopy :: S.Token -> String -> O.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
--- | Relkit for self-group relmap.
-relkitNest :: S.Token -> [S.TermIndex] -> O.Map (C.Relkit c)
-relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
-
 -- | Relkit for local relation reference.
-relkitNestVar :: S.Token -> String -> D.Head -> C.Relkit c
-relkitNestVar p n he = relkitJust he $ C.RelkitNestVar p n
+relkitLocal :: S.Token -> String -> D.Head -> C.Relkit c
+relkitLocal p n he = relkitJust he $ C.RelkitLocal p n
 

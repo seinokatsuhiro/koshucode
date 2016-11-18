@@ -80,7 +80,7 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ->
                       post lx $ case find tok of
-                           Just (p,he)  -> Right (kdef, C.relkitNestVar p n he)
+                           Just (p,he)  -> Right (kdef, C.relkitLocal p n he)
                            Nothing      -> Msg.unkNestVar n ps local
                   | otherwise ->
                       post lx $ case lookup lx links of

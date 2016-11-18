@@ -56,7 +56,7 @@ data RelkitCore c
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
-    | RelkitNestVar      S.Token C.RopName
+    | RelkitLocal        S.Token C.RopName
     | RelkitNest         S.Token [S.TermIndex] (RelkitBody c)
 
 instance Show (RelkitCore c) where
@@ -78,7 +78,7 @@ instance Show (RelkitCore c) where
     show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
     show (RelkitLink      n _ _)   = "RelkitLink " ++ n
     show (RelkitCopy      _ _ _)   = "RelkitCopy "
-    show (RelkitNestVar     _ n)   = "RelkitNestVar " ++ n
+    show (RelkitLocal       _ n)   = "RelkitLocal " ++ n
     show (RelkitNest      _ _ _)   = "RelkitNest "
 
 -- | Relkit search table.
