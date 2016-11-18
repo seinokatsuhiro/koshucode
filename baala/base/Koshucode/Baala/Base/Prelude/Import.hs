@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Prelude.Import
   ( -- * Control.Monad
+    (<.>),
     (Control.Monad.<=<),
     (Control.Monad.>=>),
     Control.Monad.sequence,
@@ -82,6 +83,10 @@ import qualified Text.PrettyPrint
 
 
 -- ----------------------  Control
+
+-- | Composition of monadic functions.
+(<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
+(<.>) = (Control.Monad.<=<)
 
 --concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
 --concatMapM f = return . concat Control.Monad.<=< mapM f
