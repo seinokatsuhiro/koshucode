@@ -64,11 +64,11 @@ consAdd med =
        Right $ relmapAdd med (cops, cox)
 
 -- | Create @add@ relmap.
-relmapAdd :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapAdd :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [S.Term (D.Cox c)]) -> C.Relmap c
 relmapAdd med = C.relmapFlow med . relkitAdd
 
 -- | Create @add@ relkit.
-relkitAdd :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitAdd :: (D.CContent c) => (D.CopSet c, [S.Term (D.Cox c)]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
     | B.duplicated ns     = Msg.dupTerm ns
@@ -97,11 +97,11 @@ consAlt med =
        Right $ relmapAlt med (cops, cox)
 
 -- | Create @alt@ relmap.
-relmapAlt :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapAlt :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [S.Term (D.Cox c)]) -> C.Relmap c
 relmapAlt med = C.relmapFlow med . relkitAlt
 
 -- | Create @alt@ relkit.
-relkitAlt :: (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitAlt :: (D.CContent c) => (D.CopSet c, [S.Term (D.Cox c)]) -> C.RelkitFlow c
 relkitAlt _ Nothing = Right C.relkitNothing
 relkitAlt (cops, cox) (Just he1)
     | B.duplicated ns     = Msg.dupTerm ns
@@ -204,11 +204,11 @@ consSplit med =
        Right $ relmapSplit med (cops, cox)
 
 -- | Create @split@ relmap.
-relmapSplit :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [D.NamedCox c]) -> C.Relmap c
+relmapSplit :: (D.CContent c) => C.Intmed c -> (D.CopSet c, [S.Term (D.Cox c)]) -> C.Relmap c
 relmapSplit med = C.relmapFlow med . relkitSplit
 
 -- | Create @split@ relkit.
-relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [D.NamedCox c]) -> C.RelkitFlow c
+relkitSplit :: forall c. (D.CContent c) => (D.CopSet c, [S.Term (D.Cox c)]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
     | B.duplicated ns     = Msg.dupTerm ns

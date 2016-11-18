@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -124,7 +125,7 @@ relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
 -- | Create @term-name@ relkit.
 relkitTermName :: (D.CTerm c) => S.TermName -> C.RelkitFlow c
-relkitTermName n Nothing    = Msg.noAttr n
+relkitTermName n Nothing    = Msg.noAttr $ S.termNameString n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = D.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2

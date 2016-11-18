@@ -56,7 +56,7 @@ instance (A.ToJSON c) => A.ToJSON (D.Judge c) where
 -- | Encode term list into JSON.
 termsJson :: (A.ToJSON c) => [S.Term c] -> A.Value
 termsJson xs = A.object $ map json xs where
-    json (n, c) = (T.pack n, A.toJSON c)
+    json (n, c) = (T.pack $ S.termNameContent n, A.toJSON c)
 
 -- | JSON null.
 jsonNull :: A.Value

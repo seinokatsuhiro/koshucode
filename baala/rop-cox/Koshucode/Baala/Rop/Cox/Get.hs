@@ -45,13 +45,13 @@ getNamedCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
 getNamedCoxes med = ropNamedAlphas med B.<=< Op.getWordTrees med 
 
 -- | Get relmap attribute as cox list with term name.
-getTermCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
+getTermCoxes :: (D.CContent c) => Op.RopGet c [S.Term (D.Cox c)]
 getTermCoxes med = ropNamedAlphas med B.<=< Op.getTermTrees med
 
 ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
 ropBuild = C.coxBuildG . C.ropGlobal
 
-ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [S.NamedTree] -> B.Ab [D.NamedCox c]
+ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [(n, S.TTree)] -> B.Ab [(n, D.Cox c)]
 ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
 
 

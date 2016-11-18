@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Koshucode syntactic tool.
@@ -16,6 +17,9 @@ import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
+infixr 0 //
+(//) :: n -> c -> (n, c)
+(//) n c = (n, c)
 
 -- ----------------------  Option
 
@@ -98,21 +102,21 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
 
 judgeClause :: Int -> C.Clause -> D.JudgeC
 judgeClause clseq c = D.affirm "CLAUSE" args where
-    args = [ ("clause"       , D.pInt clseq)
-           , ("clause-type"  , D.pText $ C.clauseTypeText c)]
+    args = [ "clause"       // D.pInt clseq
+           , "clause-type"  // D.pText $ C.clauseTypeText c ]
 
 judgeLine :: Int -> S.TokenLine -> D.JudgeC
 judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
-    args = [ ("line"         , D.pInt ln)
-           , ("clause"       , D.pInt clseq) ]
+    args = [ "line"         // D.pInt ln
+           , "clause"       // D.pInt clseq ]
 
 judgeToken :: Int -> S.Token -> D.JudgeC
 judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
-    args = [ ("line"           , D.pInt ln)
-           , ("column"         , D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
-           , ("token-type"     , D.pText $ S.subtypeName tok)
-           , ("token-subtype"  , D.maybeEmpty D.pText $ S.tokenDetailTypeString tok)
-           , ("cont"           , D.pText $ S.tokenContent  tok) ]
+    args = [ "line"           // D.pInt ln
+           , "column"         // D.pInt $ B.codePtColumnNo $ head $ B.codePtList tok
+           , "token-type"     // D.pText $ S.subtypeName tok
+           , "token-subtype"  // D.maybeEmpty D.pText $ S.tokenDetailTypeString tok
+           , "cont"           // D.pText $ S.tokenContent tok ]
 
 dumpFile :: Bool -> FilePath -> IO ()
 dumpFile omit path = dumpCode omit path =<< readFile path
@@ -179,11 +183,11 @@ descDict = B.CommentDoc [desc, js] where
 
 judgeClauseType :: C.Clause -> D.JudgeC
 judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
-    args = [ ("clause-type", D.pText $ C.clauseTypeText c) ]
+    args = [ "clause-type" // D.pText $ C.clauseTypeText c ]
 
 judgeTokenType :: S.Token -> D.JudgeC
 judgeTokenType t = D.affirm "TOKEN-TYPE" args where
-    args = [ ("token-type", D.pText $ S.subtypeName t) ]
+    args = [ "token-type" // D.pText $ S.subtypeName t ]
 
 judgesClauseType :: [D.JudgeC]
 judgesClauseType = map j cs where

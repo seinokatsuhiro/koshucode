@@ -38,9 +38,10 @@ consOppGroup med =
 
 -- | Create @odd-group@ relmap.
 relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
-relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
+relmapOppGroup med sh n rmap = C.relmapCopy med n' rmapGroup where
     rmapGroup  = rmap B.<> Op.relmapGroup med sh n rmapLocal
-    rmapLocal  = C.relmapLocalSymbol med n
+    rmapLocal  = C.relmapLocalSymbol med n'
+    n'         = S.termNameContent n
 
 
 -- ----------------------  self-group

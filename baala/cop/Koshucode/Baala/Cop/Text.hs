@@ -389,7 +389,7 @@ extractText :: (D.CContent c) => c -> Maybe String
 extractText c
     | D.isCode c  = Just $ D.gCode c
     | D.isText c  = Just $ D.gText c
-    | D.isTerm c  = Just $ D.gTerm c
+    | D.isTerm c  = Just $ S.termNameContent $ D.gTerm c
     | otherwise   = Nothing
 
 

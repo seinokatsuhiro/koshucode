@@ -50,7 +50,7 @@ hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } 
       line = join . map (csvContent setting)
 
       appendHead he xs
-          | isHead    = join (map quote $ D.getTermNames he) : xs
+          | isHead    = join ((quote . S.termNameContent) <$> D.getTermNames he) : xs
           | otherwise = xs
 
 csvContent :: (D.CContent c) => XsvSetting -> c -> String

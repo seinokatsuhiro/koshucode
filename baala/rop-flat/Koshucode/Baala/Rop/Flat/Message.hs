@@ -97,7 +97,7 @@ unexpTermName :: B.Ab a
 unexpTermName = Left $ B.abortBecause "Unexpected term names"
 
 showHead :: D.Head -> String
-showHead = unwords . D.getTermNames
+showHead = unwords . map S.termNameString . D.getTermNames
 
 -- | Unmatch shared terms.
 unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a

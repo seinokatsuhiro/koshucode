@@ -60,7 +60,7 @@ relkitSubtext :: (D.CContent c) => SubtextPara -> Maybe D.Head -> B.Ab (C.Relkit
 relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
     pick    = D.picker [n] he1
-    he2     = D.headAppend (fst <$> ns) he1
+    he2     = D.headAppend ((S.toTermName . fst) <$> ns) he1
     kit2    = C.relkitJust he2 $ C.RelkitOneToOne False f2
     result  = subtextResult trim ns
     f2 cs   = case pick cs of
@@ -71,7 +71,7 @@ relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
                _ -> result [] ++ cs
 
 subtextResult :: (D.CEmpty c, D.CText c, D.CList c) =>
-    Bool -> [T.NameDepth] -> [(S.TermName, String)] -> [c]
+    Bool -> [T.NameDepth] -> [(String, String)] -> [c]
 subtextResult trim ns rs = result <$> ns where
     text = D.pText . trimIf trim
     result (n, depth) =
@@ -153,8 +153,8 @@ parseSubtext ns = trees False where
     trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
     trees False xs              = opTop xs
     trees True (K n : xs)       = pre n xs
-    trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
-    trees True [L (Term n)]     = Right $ T.sub n T.what      -- /N
+    trees True [L (Term n), x]  = Right . T.sub (S.termNameContent n) =<< tree x  -- /N E
+    trees True [L (Term n)]     = Right $ T.sub (S.termNameContent n) T.what      -- /N
     trees True []               = Right T.succ                -- ()
     trees True [x]              = tree x
     trees True  xs              = unknownSyntax $ show xs
