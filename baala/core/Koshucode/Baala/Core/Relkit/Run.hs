@@ -55,7 +55,7 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitFull        u f     -> right u $ f             bo1
        C.RelkitOneToMany   u f     -> right u $ f `concatMap` bo1
        C.RelkitOneToOne    u f     -> right u $ f `map`       bo1
-       C.RelkitPred          f     -> Right   $ filter f      bo1
+       C.RelkitTest          f     -> Right   $ filter f      bo1
 
        C.RelkitAbFull      u f bs  -> monad u $            f (mrun bs)        bo1
        C.RelkitOneToAbOne  u f bs  -> monad u $            f (mrun bs) `mapM` bo1

@@ -95,7 +95,7 @@ relkitMember (x, xs) he1'@(Just he1) = kit2 where
 relkitMemberCheck :: (Eq c, D.CSet c, D.CList c)
   => Int -> Int -> C.RelkitFlow c
 relkitMemberCheck xi xsi he1' = Right kit2 where
-    kit2 = C.relkit he1' $ C.RelkitPred kitf2
+    kit2 = C.relkit he1' $ C.RelkitTest kitf2
     kitf2 cs = let [xc, xsc] = [xi, xsi] `B.snipFrom` cs
                in xc `D.isMember` xsc
 
