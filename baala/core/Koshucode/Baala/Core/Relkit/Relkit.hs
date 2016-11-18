@@ -95,7 +95,7 @@ instance Show (RelkitCore c) where
     show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
     show (RelkitLink      n _ _)   = "RelkitLink " ++ n
     show (RelkitCopy      _ _ _)   = "RelkitCopy "
-    show (RelkitLocal       _ n)   = "RelkitLocal " ++ S.localRefString n
+    show (RelkitLocal       _ n)   = "RelkitLocal " ++ B.name n
     show (RelkitNest      _ _ _)   = "RelkitNest "
 
 -- | Relkit search table.

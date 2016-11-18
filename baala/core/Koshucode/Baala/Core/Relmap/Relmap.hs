@@ -88,7 +88,7 @@ relmapId :: Relmap' h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = B.def { C.lexToken = S.textToken "id" }
+lexId = B.def { C.lexToken = S.rawTextToken "id" }
 
 
 -- ----------------------  Selector

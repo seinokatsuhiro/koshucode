@@ -9,20 +9,16 @@ module Koshucode.Baala.Syntax.Token.Token
 
     -- * Token
     Token (..),
-    textToken,
+    rawTextToken,
     unknownToken,
 
     -- * Subtype
     -- ** Text
     TextForm (..),
-
     -- ** Term
     TermType (..),
-
     -- ** Local
     LocalRef (..),
-    localRefString,
-
     -- ** Blank
     BlankName (..),
   ) where
@@ -132,8 +128,8 @@ instance B.PPrint Token where
                                  ++ "." ++ (show $ B.codePtColumnNo cp)
 
 -- | Create raw text token.
-textToken :: String -> Token
-textToken = TText B.def TextRaw
+rawTextToken :: String -> Token
+rawTextToken = TText B.def TextRaw
 
 -- | Create unknown token.
 unknownToken :: B.CodePt -> String -> B.Ab a -> Token
@@ -147,13 +143,13 @@ unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 
 -- | Subtype of text token.
 data TextForm
-    = TextUnk      -- ^ Unknown keyword
-    | TextRaw      -- ^ Naked text
-    | TextQ        -- ^ Single-quoted text — @\'@/code/
-    | TextQQ       -- ^ Double-quoted text — @\"@/text/@\"@
-    | TextKey      -- ^ Keyword literal — @<@/keyword/@>@
-    | TextBar      -- ^ Text enclosed in bars — @|@/text/@|@
-    | TextLicense  -- ^ Text in license section
+    = TextUnk      -- ^ __1.__ Unknown keyword — @\<unknown\>@
+    | TextRaw      -- ^ __2.__ Naked text — @raw@
+    | TextQ        -- ^ __3.__ Single-quoted text — @\'code@
+    | TextQQ       -- ^ __4.__ Double-quoted text — @\"text\"@
+    | TextKey      -- ^ __5.__ Keyword literal — @\<crlf\>@
+    | TextBar      -- ^ __6.__ Text enclosed in bars — @|9:30|@
+    | TextLicense  -- ^ __7.__ Text in license section
       deriving (Show, Eq, Ord)
 
 -- | @\"raw\"@, @\"q\"@, ...
@@ -185,9 +181,9 @@ data LocalRef
       deriving (Show, Eq, Ord)
 
 -- | Get name of local relation reference.
-localRefString :: LocalRef -> String
-localRefString (LocalNest   n) = S.termNameContent n
-localRefString (LocalSymbol n) = n
+instance B.Name LocalRef where
+    name (LocalNest   n) = S.termNameContent n
+    name (LocalSymbol n) = n
 
 
 -- ----------------------  Blank

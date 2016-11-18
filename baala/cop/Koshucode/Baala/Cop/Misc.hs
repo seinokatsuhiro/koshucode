@@ -101,7 +101,7 @@ copFunIf arg =
 copTreeIf :: D.CopTree
 copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) trees where
     folding :: [[S.TTree]] -> B.Ab S.TTree
-    folding []        = Right $ B.TreeL $ S.textToken "()"
+    folding []        = Right $ B.TreeL $ S.rawTextToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
     fore :: [S.TTree] -> B.AbMap S.TTree

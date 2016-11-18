@@ -122,7 +122,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
               Right $ (lx, lx2) : tab
 
         baseOf :: C.RopName -> ConsLexmapBody
-        baseOf n = base n $ S.textToken n
+        baseOf n = base n $ S.rawTextToken n
 
         base :: C.RopName -> S.Token -> ConsLexmapBody
         base n tok ts =

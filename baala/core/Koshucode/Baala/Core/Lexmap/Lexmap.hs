@@ -43,7 +43,7 @@ instance B.CodePtr Lexmap where
 -- | Empty base lexmap.
 instance B.Default Lexmap where
     def = Lexmap { lexType     = LexmapBase
-                 , lexToken    = S.textToken ""
+                 , lexToken    = S.rawTextToken ""
                  , lexAttr     = B.def
                  , lexSubmap   = []
                  , lexMessage  = [] }

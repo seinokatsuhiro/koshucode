@@ -82,7 +82,7 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
                                     right True $ bo2
        C.RelkitLocal p n      -> case lookup2 p n rs of
                                    Just bo2 -> Right bo2
-                                   Nothing  -> Msg.unkLocalRel p (S.localRefString n) $ localsLines rs
+                                   Nothing  -> Msg.unkLocalRel p (B.name n) $ localsLines rs
     where
       run    = relkitRun hook rs
       mrun   = map run
@@ -126,7 +126,7 @@ type LocalTable c = (S.Token, [(S.LocalRef, [[c]])])
 
 localsLines :: [LocalTable c] -> [String]
 localsLines xs = map desc $ keys xs where
-    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords (S.localRefString <$> bs)
+    desc (a, bs) = S.tokenContent a ++ " / " ++ unwords (B.name <$> bs)
 
 -- | Kye list of double associations.
 keys :: [(a, [(b, c)])] -> [(a, [b])]

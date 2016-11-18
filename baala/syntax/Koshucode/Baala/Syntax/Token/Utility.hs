@@ -37,7 +37,7 @@ tokenContent tok =
       S.TShort    _ a b    -> a ++ "." ++ b
       S.TTermN    _ _ n    -> S.termNameString n
       S.TTerm     _ _ ns   -> S.termPathString ns
-      S.TLocal    _ n _ _  -> S.localRefString n
+      S.TLocal    _ n _ _  -> B.name n
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s
       S.TClose    _ s      -> s
@@ -48,7 +48,7 @@ tokenContent tok =
 
 -- | Get detail type string of token.
 --
---   >>> let tok = S.textToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
+--   >>> let tok = S.rawTextToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 --
 tokenDetailTypeString :: S.Token -> Maybe String
