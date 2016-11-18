@@ -88,7 +88,7 @@ relkitCopy :: S.Token -> String -> O.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
 -- | Relkit for self-group relmap.
-relkitNest :: S.Token -> [(String, Int)] -> O.Map (C.Relkit c)
+relkitNest :: S.Token -> [S.TermIndex] -> O.Map (C.Relkit c)
 relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 
 -- | Relkit for local relation reference.

@@ -57,7 +57,7 @@ data RelkitCore c
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
     | RelkitNestVar      S.Token C.RopName
-    | RelkitNest         S.Token [(S.TermName, Int)] (RelkitBody c)
+    | RelkitNest         S.Token [S.TermIndex] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"

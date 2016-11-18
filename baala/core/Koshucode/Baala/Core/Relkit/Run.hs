@@ -76,13 +76,13 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNestVar p n         -> case a2lookup p n rs of
+       C.RelkitNestVar p n         -> case lookup2 p n rs of
                                         Just bo2  -> Right bo2
                                         Nothing   -> Msg.unkNestRel p n $ localsLines rs
-       C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
-                                         right True $ concat bo2
        C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
                                          right True $ bo2
+       C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
+                                         right True $ concat bo2
     where
       run    = relkitRun hook rs
       mrun   = map run
@@ -100,7 +100,7 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: S.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel :: S.Token -> [S.TermIndex] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel p nest b cs =
           let cs2 = pickup cs `map` nest
           in relkitRun hook ((p, cs2) : rs) b [cs]
@@ -123,21 +123,19 @@ bmapAlign he1 he2 f = g where
 {-# WARNING Local, Lexical "This is only used in defined module." #-}
 -- | Local relations.
 type Local a = Lexical [B.Named a]
+
 -- | Local relation.
 type Lexical a = (S.Token, a)
 
 localsLines :: [Local a] -> [String]
-localsLines xs = map desc $ a2keys xs where
+localsLines xs = map desc $ keys xs where
     desc (a, bs) = S.tokenContent a ++ " / " ++ unwords bs
 
-a2keys :: [(a, [(b, c)])] -> [(a, [b])]
-a2keys = B.mapSndTo (map fst)
+-- | Kye list of double associations.
+keys :: [(a, [(b, c)])] -> [(a, [b])]
+keys = B.mapSndTo (map fst)
 
--- a2expand :: [(a, [(b, c)])] -> [((a, b), c)]
--- a2expand = concatMap f where
---     f (a, bc)   = map (g a) bc
---     g a (b, c)  = ((a, b), c)
-
-a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
-a2lookup a b = lookup a B.>=> lookup b
+-- | Double lookup.
+lookup2 :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
+lookup2 a b = lookup b B.<.> lookup a
 

@@ -19,6 +19,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName4, TermName5, TermName6,
 
     -- * Present or new term
+    TermIndex,
     termP, termN,
     termsP, termsN, termsPN,
   ) where
@@ -61,6 +62,9 @@ type SignedTermName = (Ordering, TermName)
 -- | Convert to term name.
 class ToTermName a where
     toTermName :: a -> TermName
+
+--instance ToTermName TermName where
+--    toTermName = id
 
 -- | Remove leading slash character.
 instance ToTermName String where
@@ -125,6 +129,9 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
 
 -- ----------------------  Present or new term
+
+-- | Term name and index.
+type TermIndex = (TermName, Int)
 
 -- | Test present term.
 --
