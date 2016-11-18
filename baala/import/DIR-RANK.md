@@ -444,7 +444,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    134 judges
+**    137 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Overture"
@@ -455,6 +455,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Syntax.Attr.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.TTree"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.Attr.AttrName"
@@ -522,6 +523,8 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Syntax.Symbol.AngleText"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Syntax.Symbol.Next"
 
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.Text"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.AngleText"
@@ -643,7 +646,7 @@ Command `./dir-rank.k ../syntax/data/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
     [ ] ] [ 16 | "Message" | [ "Para" | "Symbol" | "TTree" ] ] [ 17 | "Attr" | [ "Para" | "TTree" ] ] [ 17 | "Slot" | [
-    "TTree" | "Token" ] ] [ 18 | "AttrEd" | [ "TTree" | "Token" ] ] [ 18 | "Parse" | [ "Para" ] ] =}
+    "TTree" | "Token" ] ] [ 18 | "AttrEd" | [ "Symbol" | "TTree" | "Token" ] ] [ 18 | "Parse" | [ "Para" ] ] =}
 |-- DIR-RANK  /dir-rank 19  /dir "Koshucode.Baala.Syntax"  /base-rank {= /rank /base /import-dir [ 3 | "Para" | [ ] ] [
     4 | "Symbol" | [ ] ] [ 11 | "Token" | [ ] ] [ 15 | "TTree" | [ ] ] [ 17 | "Message" | [ ] ] [ 19 | "Attr" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 20  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
@@ -699,7 +702,7 @@ TABLE : DIR-RANK
                                               16    "Message"     [ "Para" | "Symbol" | "TTree" ]
                                               17    "Attr"        [ "Para" | "TTree" ]
                                               17    "Slot"        [ "TTree" | "Token" ]
-                                              18    "AttrEd"      [ "TTree" | "Token" ]
+                                              18    "AttrEd"      [ "Symbol" | "TTree" | "Token" ]
                                               18    "Parse"       [ "Para" ]
                                               
   19        "Koshucode.Baala.Syntax"          /rank /base         /import-dir
@@ -741,7 +744,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    239 judges
+**    241 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -816,6 +819,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Data.Text.Lazy"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Data.Type"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Data.Class.Singleton"
 
@@ -863,6 +867,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Data.Decode.Type"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Data.Decode.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Data.Decode.Message"
@@ -1225,10 +1230,10 @@ TABLE : DIR-RANK
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Data.Maybe"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Core.Relkit"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Message"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Message"       /import "Koshucode.Baala.Base"
@@ -1491,9 +1496,9 @@ Command `./dir-rank.k ../core/data/IMPORT.k` produces:
     ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 7 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 8 | "Rop" | [
     "Lexmap" ] ] [ 8 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 9 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 9 |
     "Global" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
-    [ ] ] [ 1 | "RelTable" | [ ] ] [ 7 | "Dataset" | [ "Relkit" ] ] [ 11 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 12 |
-    "Run" | [ "Lexmap" | "Relkit" | "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Dataset" |
+    [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "RelTable" | [ ] ] [ 11 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 12 | "Run" | [
+    "Lexmap" | "Relkit" | "Relmap" ] ] =}
 |-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message"
     | [ ] ] [ 4 | "Clause" | [ "Lexmap" ] ] [ 14 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 15 |
     "Concrete" | [ "Relmap" ] ] [ 15 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 15 | "Run" | [ "Assert" |
@@ -1552,9 +1557,9 @@ TABLE : DIR-RANK
                                               
   12        "Koshucode.Baala.Core.Assert"     /rank /base           /import-dir
                                               ----- --------------- ------------------------------------------------------------
+                                              1     "Dataset"       [ ]
                                               1     "Message"       [ ]
                                               1     "RelTable"      [ ]
-                                              7     "Dataset"       [ "Relkit" ]
                                               11    "Assert"        [ "Lexmap" | "Relmap" ]
                                               12    "Run"           [ "Lexmap" | "Relkit" | "Relmap" ]
                                               
@@ -1731,7 +1736,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    160 judges
+**    161 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Syntax"
@@ -1900,6 +1905,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Term"             /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.TermGadget"       /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.TermGadget"       /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.TermGadget"       /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.TermGadget"       /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.TermGadget"       /import "Koshucode.Baala.Rop.Base"
