@@ -30,20 +30,8 @@ import qualified Koshucode.Baala.Rop.Nest.Flow      as Op
 --  [@group \/N R@]
 --    Group tuples in @R@ by input relation.
 --
---  [@group-by \/N R@]
---    Group input relation by output of @R@.
---
 --  [@hang \/N -on \/P ...@]
 --    Hang nested relation @\/N@ on @\/P@ ....
---
---  [@join-up \/P ...@]
---    Join @\/P@ ... and up the result relation.
---
---  [@nest \/P ... -to \/N@]
---    Nest terms @\/P@ ... into nested relation.
---
---  [@unnest \/P@]
---    Unnest nested relation @\/P@.
 --
 --  [@slice \/N \[R\]@]
 --    Add nested relation as output of relmap @R@.
@@ -68,8 +56,9 @@ ropsNest = Op.ropList "nest"
     , Op.def  Op.consNest       "nest [~] /P ... -to /N"    "-term* . -to"
     , Op.def  Op.consOppGroup   "opp-group R -to /N [-share /P ...]"
                                                             "-relmap/ . -to -share?"
-    , Op.def  Op.consPickGroup  "pick-group /P ... -to /N"  "-term* . -to"
-    , Op.def  Op.consPickGroup  "hier /P ... -to /N"        "-term* . -to"
+    , Op.def  Op.consSelfGroup  "self-group /P ... -to /N"  "-term* . -to"
+    , Op.def  Op.consSelfGroup  "sg /P ... -to /N"          "-term* . -to"
+    , Op.def  Op.consSelfGroup  "hier /P ... -to /N"        "-term* . -to"
     , Op.def  Op.consSlice      "slice /N [R]"              "-term -relmap/^?"
     , Op.def  Op.consSliceUp    "slice-up R"                "-relmap/^"
     , Op.def  Op.consUngroup    "ungroup /P"                "-term"

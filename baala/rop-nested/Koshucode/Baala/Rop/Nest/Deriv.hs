@@ -5,12 +5,12 @@
 module Koshucode.Baala.Rop.Nest.Deriv
   ( -- * opp-group
     consOppGroup,
-    -- * join-up
-    consJoinUp, relmapJoinUp,
-    -- * nest / pick-group
-    consPickGroup, consNest, relmapNest,
+    -- * self-group
+    consSelfGroup, consNest, relmapSelfGroup,
     -- * ungroup
     consUngroup, relmapUngroup,
+    -- * join-up
+    consJoinUp, relmapJoinUp,
   ) where
 
 import qualified Koshucode.Baala.Overture        as O
@@ -21,7 +21,6 @@ import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Rop.Base        as Op
 import qualified Koshucode.Baala.Rop.Flat        as Op
 import qualified Koshucode.Baala.Rop.Nest.Confl  as Op
-
 
 
 -- ----------------------  opp-group
@@ -44,43 +43,28 @@ relmapOppGroup med sh n rmap = C.relmapCopy med n rmapGroup where
     rmapLocal  = C.relmapLocalSymbol med n
 
 
--- ----------------------  join-up
-
--- | __join-up \/P ...__
-consJoinUp :: (Ord c) => C.RopCons c
-consJoinUp med =
-  do nest <- Op.getTerms med "-term"
-     Right $ relmapJoinUp med nest
-
--- | Create @join-up@ relmap.
-relmapJoinUp :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
-    rmaps   = link `map` nest
-    link n  = C.relmapLocalNest med n
-
-
--- ----------------------  nest / pick-group
+-- ----------------------  self-group
 
 -- | __nest [~] \/P ... -to \/N__
 consNest :: (Ord c, D.CRel c) => C.RopCons c
 consNest med =
   do (co, ns) <- Op.getTermsCo med "-term"
      to       <- Op.getTerm    med "-to"
-     Right $ relmapNest med (co, ns, to)
+     Right $ relmapSelfGroup med (co, ns, to)
 
 -- | __self-group \/P ... -to \/N__
 --
---   Nest down terms \/P ... at term \/N.
+--   Group input relation into the term \/N per \/P ....
 --
-consPickGroup :: (Ord c, D.CRel c) => C.RopCons c
-consPickGroup med =
+consSelfGroup :: (Ord c, D.CRel c) => C.RopCons c
+consSelfGroup med =
   do ns <- Op.getTerms med "-term"
      to <- Op.getTerm  med "-to"
-     Right $ relmapNest med (True, ns, to)
+     Right $ relmapSelfGroup med (True, ns, to)
 
 -- | Create @self-group@ relmap.
-relmapNest :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
-relmapNest med (co, ns, to) = group B.<> for where
+relmapSelfGroup :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
+relmapSelfGroup med (co, ns, to) = group B.<> for where
     group  = relmapOppGroup med Nothing to key
     for    = Op.relmapFor med to nest
     key    = if co then pick else cut
@@ -108,3 +92,20 @@ relmapUngroup med n = ungroup where
     meet    = Op.relmapMeet med Nothing $ C.relmapLocalNest med n
     cut     = Op.relmapCut  med [n]
 
+
+-- ----------------------  join-up
+
+-- | __join-up \/P ...__
+--
+--   Join nested relations \/P ... and up to output relation.
+--
+consJoinUp :: (Ord c) => C.RopCons c
+consJoinUp med =
+  do nest <- Op.getTerms med "-term"
+     Right $ relmapJoinUp med nest
+
+-- | Create @join-up@ relmap.
+relmapJoinUp :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
+    rmaps   = link `map` nest
+    link n  = C.relmapLocalNest med n
