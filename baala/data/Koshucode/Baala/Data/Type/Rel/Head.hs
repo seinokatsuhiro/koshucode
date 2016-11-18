@@ -26,6 +26,7 @@ module Koshucode.Baala.Data.Type.Rel.Head
     headNests,
   
     -- * Mapping
+    TermType,
     headMap,
     headMapName,
     headUp,
@@ -176,12 +177,15 @@ headNests ns1 Head { headType = t } =
 
 -- ----------------------  Mapping
 
+-- | Term whose content is type.
+type TermType = S.Term D.Type
+
 -- | Reconstruct head.
 --
 --   >>> headMap reverse $ headFrom ["a", "b"]
 --   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
 --
-headMap :: O.Map [S.Term D.Type] -> O.Map Head
+headMap :: O.Map [TermType] -> O.Map Head
 headMap = headMapBy D.typeRelMapTerms
 
 -- | Convert term names.

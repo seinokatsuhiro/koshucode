@@ -62,7 +62,7 @@ relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
 
 -- | Create @forward@ or @backward@ relkit.
-relkitToward :: D.TermPick2 (S.Term D.Type) c -> [S.TermName] -> C.RelkitFlow c
+relkitToward :: D.TermPick2 D.TermType c -> [S.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (hePick, boPick) ns (Just he1)
     | D.newTermsExist pk   = Msg.unkTerm (D.newTerms pk) he1
