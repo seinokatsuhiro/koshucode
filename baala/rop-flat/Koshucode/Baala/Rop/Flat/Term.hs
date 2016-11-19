@@ -135,12 +135,12 @@ relkitCutTerm = relkitProjectTerm (D.ssRSide, D.ssRSide)
 
 -- ----------------------  project
 
-relkitProjectTerm :: D.TermPick2 D.TermType c -> C.RelkitBinary c
+relkitProjectTerm :: D.TermPick2 D.TypeTerm c -> C.RelkitBinary c
 relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
 relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
     relkitProject lrMap $ D.getTermNames he2
 
-relkitProject :: D.TermPick2 D.TermType c -> [S.TermName] -> C.RelkitFlow c
+relkitProject :: D.TermPick2 D.TypeTerm c -> [S.TermName] -> C.RelkitFlow c
 relkitProject _ _ Nothing = Right C.relkitNothing
 relkitProject (hePick, boPick) ns (Just he1)
     | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
