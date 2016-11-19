@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Resource.Include
   ( resInclude, coxBuildG,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -19,7 +20,6 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Data.Message            as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
-
 
 -- | Include source code into resource.
 resInclude :: forall c. (D.CContent c)
@@ -43,19 +43,19 @@ resInclude resAbout cd base nio code =
                  , C.resSelect    = C.datasetSelect $ C.dataset js }
 
 createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab ([D.Judge c], [C.Clause])
-createJudges res = loop where
+createJudges res = loop D.cacheT where
     calc = calcContG $ C.resGlobal res
 
-    loop ((C.Clause h (C.CJudge q cl toks)) : cs) =
+    loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
-           trees <- S.ttrees toks
-           judge <- D.treesJudge calc q cl trees
-           (js, cs') <- loop cs
+           trees        <- S.ttrees toks
+           (cc', judge) <- D.treesJudge calc cc q cl trees
+           (js, cs')    <- loop cc' cs
            Right (judge : js, cs')
 
-    loop (c : cs) = do (js, cs') <- loop cs
-                       Right (js, c : cs')
-    loop []       = Right (C.resJudge res, [])
+    loop cc (c : cs) = do (js, cs') <- loop cc cs
+                          Right (js, c : cs')
+    loop _ []        = Right (C.resJudge res, [])
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c

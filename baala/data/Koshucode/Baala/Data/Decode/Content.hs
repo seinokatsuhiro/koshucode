@@ -9,7 +9,8 @@ module Koshucode.Baala.Data.Decode.Content
   ( -- * Functions
     DecodeContent, CalcContent, 
     stringContent,
-    treeContent, treesJudge,
+    treeContent,
+    treesJudge,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -135,11 +136,18 @@ treesTerms cons = mapM p B.<=< D.treesTerms1 where
 treesJudge ::
     (D.CContent c)
     => CalcContent c      -- ^ 
+    -> D.CacheT           -- ^ Term name cache
     -> D.AssertType       -- ^ Assertion type
     -> D.JudgeClass       -- ^ Judgement class
     -> [S.TTree]          -- ^ Trees of terms
-    -> B.Ab (D.Judge c)   -- ^ Error or decoded judgement
-treesJudge calc q p = Right . D.assertAs q p B.<=< treesTerms (treeContent calc)
+    -> B.Ab (D.CacheT, D.Judge c)   -- ^ Error or decoded judgement
+treesJudge calc cc q cl trees =
+    do (cc', ts) <- D.treesTermsCached cc trees
+       terms <- mapM term ts
+       Right (cc', D.assertAs q cl terms)
+    where
+      term (n, ts) = do c <- treeContent calc $ S.ttreeGroup ts
+                        Right (n, c)
 
 
 -- ----------------------  Relation

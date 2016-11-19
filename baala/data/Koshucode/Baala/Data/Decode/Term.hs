@@ -5,10 +5,12 @@
 
 module Koshucode.Baala.Data.Decode.Term
   ( -- * Term name
-    treeFlatName,
+    CacheT, cacheT,
+    treeFlatName, treeFlatNameCached,
     treesFlatNames,
     treeSignedName,
     treesTerms,
+    treesTermsCached,
     treesTerms1,
     treesFlatNamePairs,
     treesNamesByColon,
@@ -25,23 +27,33 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- ----------------------  Term
 
+-- | Term name cache.
+type CacheT = O.CacheS S.TermName
+
+-- | Empty term name cache.
+cacheT :: CacheT
+cacheT = O.cache [] S.stringTermName
+
 -- | Read flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
 --
 --   >>> S.tt1 "/a" >>= treeFlatName
---   Right "a"
+--   Right (TermName "a")
 --
 --   >>> S.tt1 "+/a" >>= treeFlatName
---   Right "a"
+--   Right (TermName "a")
 --
 --   >>> S.tt1 "/a/x" >>= treeFlatName
 --   Left ...
 --
 treeFlatName :: S.TTree -> B.Ab S.TermName
-treeFlatName (L (S.TTermN _ _ n))  = Right $ S.toTermName n
---treeFlatName (L (S.TTerm _ _ [n])) = Right $ S.toTermName n
-treeFlatName (L t)                 = Msg.reqFlatName t
-treeFlatName _                     = Msg.reqTermName
+treeFlatName = fmap snd . treeFlatNameCached cacheT
+
+-- | Cached version of 'treeFlatName'.
+treeFlatNameCached :: CacheT -> S.TTree -> B.Ab (CacheT, S.TermName)
+treeFlatNameCached cc (L (S.TTermN _ _ n))  = Right $ O.cacheGet cc n
+treeFlatNameCached _  (L t)                 = Msg.reqFlatName t
+treeFlatNameCached _  _                     = Msg.reqTermName
 
 -- | Read flat term names.
 --
@@ -73,6 +85,21 @@ treesTerms = name where
                        n    <- treeFlatName x
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
+
+    cont :: [S.TTree] -> ([S.TTree], [S.TTree])
+    cont xs@(x : _) | isTermLeaf x  = ([], xs)
+    cont []                         = ([], [])
+    cont (x : xs)                   = B.consFst x $ cont xs
+
+-- | Cached version of 'treesTerms'.
+treesTermsCached :: CacheT -> [S.TTree] -> B.Ab (CacheT, [S.Term [S.TTree]])
+treesTermsCached = name where
+    name cc [] = Right (cc, [])
+    name cc (x : xs) =
+        do let (c, xs2) = cont xs
+           (cc1, n)    <- treeFlatNameCached cc x
+           (cc2, xs2') <- name cc1 xs2
+           Right (cc2, (n, c) : xs2')
 
     cont :: [S.TTree] -> ([S.TTree], [S.TTree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
