@@ -8,7 +8,6 @@ module Koshucode.Baala.Core.Resource.Include
   ( resInclude, coxBuildG,
   ) where
 
-import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -33,29 +32,30 @@ resInclude resAbout cd base nio code =
     do let ls   = S.tokenLinesBz nio code
            sec  = C.resLastSecNo base + 1
            cs   = C.consClause resAbout sec ls
-       (js, cs2) <- createJudges base cs
+       (cc, js, cs2) <- createJudges base cs
        let cs2' = reverse cs2
            sec' | null cs   = sec
                 | otherwise = C.clauseSecNo $ C.clauseHead $ last cs
        res <- B.foldM (resIncludeBody cd) base cs2'
        Right res { C.resLastSecNo = sec'
+                 , C.resCacheT    = cc
                  , C.resJudge     = js
                  , C.resSelect    = C.datasetSelect $ C.dataset js }
 
-createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab ([D.Judge c], [C.Clause])
-createJudges res = loop D.cacheT where
+createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [D.Judge c], [C.Clause])
+createJudges res = loop $ C.resCacheT res where
     calc = calcContG $ C.resGlobal res
 
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
-           trees        <- S.ttrees toks
-           (cc', judge) <- D.treesJudge calc cc q cl trees
-           (js, cs')    <- loop cc' cs
-           Right (judge : js, cs')
+           trees          <- S.ttrees toks
+           (cc1, judge)   <- D.treesJudge calc cc q cl trees
+           (cc2, js, cs') <- loop cc1 cs
+           Right (cc2, judge : js, cs')
 
-    loop cc (c : cs) = do (js, cs') <- loop cc cs
-                          Right (js, c : cs')
-    loop _ []        = Right (C.resJudge res, [])
+    loop cc (c : cs) = do (cc', js, cs') <- loop cc cs
+                          Right (cc', js, c : cs')
+    loop cc []        = Right (cc, C.resJudge res, [])
 
 resIncludeBody :: forall c. (D.CContent c) =>
     FilePath -> C.Resource c -> C.Clause -> C.AbResource c

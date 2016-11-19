@@ -56,6 +56,7 @@ data Resource c = Resource
     , resLicense    :: [(C.SecNo, String)] -- ^ License text
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
+    , resCacheT     :: D.CacheT            -- ^ Term name cache
     , resSelect     :: D.RelSelect c       -- ^ Relation selector
     }
 
@@ -86,6 +87,7 @@ instance (D.CContent c) => B.Default (Resource c) where
            , resLicense    = []
            , resMessage    = []
            , resLastSecNo  = 0
+           , resCacheT     = D.cacheT
            , resSelect     = \_ _ -> D.reldee
            }
 
