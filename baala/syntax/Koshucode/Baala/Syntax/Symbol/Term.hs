@@ -18,12 +18,13 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName2, TermName3,
     TermName4, TermName5, TermName6,
 
-    -- * Present or new term
+    -- * Term index
     TermIndex,
     termP, termN,
     termsP, termsN, termsPN,
   ) where
 
+import qualified Data.String                as S
 import qualified Data.Text                  as Tx
 import qualified Data.Text.Lazy             as Tz
 import qualified Koshucode.Baala.Overture   as O
@@ -37,7 +38,7 @@ type Term c = (TermName, c)
 -- | Create term.
 --
 --   >>> term "size" 10 :: Term Int
---   ("size", 10)
+--   (TermName "size", 10)
 --
 term :: (ToTermName n) => n -> c -> Term c
 term n c = (toTermName n, c)
@@ -46,11 +47,12 @@ term n c = (toTermName n, c)
 -- ----------------------  Term name
 
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
-type TermName = String
+data TermName =
+    TermName String
+    deriving (Show, Eq, Ord)
 
--- data TermName =
---     TermName String
---     deriving (Show, Eq, Ord)
+instance S.IsString TermName where
+    fromString = toTermName
 
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
@@ -63,8 +65,8 @@ type SignedTermName = (Ordering, TermName)
 class ToTermName a where
     toTermName :: a -> TermName
 
---instance ToTermName TermName where
---    toTermName = id
+instance ToTermName TermName where
+    toTermName = id
 
 -- | Remove leading slash character.
 instance ToTermName String where
@@ -79,31 +81,31 @@ instance ToTermName Tz.Text where
 -- | Decode term name from string.
 --
 --   >>> stringTermName "/a"
---   "a"
+--   TermName "a"
 -- 
 stringTermName :: String -> TermName
-stringTermName ('/' : n) = n
-stringTermName n         = n
---stringTermName ('/' : n) = TermName n
---stringTermName n         = TermName n
+stringTermName ('/' : n) = TermName n
+stringTermName n         = TermName n
 
 -- | Encode term name into string.
 --
---   >>> termNameString "size"
+--   >>> termNameString $ stringTermName "/size"
 --   "/size"
 --
 termNameString :: TermName -> String
-termNameString n = '/' : n
---termNameString (TermName n) = '/' : n
+termNameString (TermName n) = '/' : n
 
 -- | Extract internal name.
+--
+--   >>> termNameContent $ stringTermName "/size"
+--   "size"
+--
 termNameContent :: TermName -> String
-termNameContent n = n
---termNameContent (TermName n) = n
+termNameContent (TermName n) = n
 
 -- | Encode term path into string.
 --
---   >>> termPathString ["r", "x"]
+--   >>> termPathString [stringTermName "r", stringTermName "x"]
 --   "/r/x"
 --
 termPathString :: TermPath -> String
