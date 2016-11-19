@@ -102,11 +102,11 @@ consOrder med =
        Right $ relmapOrder med ns
 
 -- | Create @order@ relmap.
-relmapOrder :: (Ord c) => C.Intmed c -> [S.SignedTermName] -> C.Relmap c
+relmapOrder :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 
 -- | Create @order@ relkit.
-relkitOrder :: (Ord c) => [S.SignedTermName] -> C.RelkitFlow c
+relkitOrder :: (Ord c) => [S.TermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2

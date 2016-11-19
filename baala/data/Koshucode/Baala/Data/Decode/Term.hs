@@ -68,8 +68,8 @@ treesFlatNames = mapM treeFlatName
 --   >>> S.tt1 "+/a" >>= treeSignedName
 --   Right (GT, "a")
 --
-treeSignedName :: S.TTree -> B.Ab S.SignedTermName
-treeSignedName (L (S.TTermN _ sign n))  = Right (sign, S.toTermName n)
+treeSignedName :: S.TTree -> B.Ab S.TermName
+treeSignedName (L (S.TTermN _ sign n))  = Right $ S.termNameAltSign sign $ S.toTermName n
 treeSignedName _                        = Msg.reqTermName
 
 -- | Read list of named token trees from token trees.

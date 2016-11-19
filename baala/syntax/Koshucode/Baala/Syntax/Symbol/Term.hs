@@ -8,11 +8,13 @@ module Koshucode.Baala.Syntax.Symbol.Term
     Term, term,
 
     -- * Term name
-    TermName, TermPath, SignedTermName,
+    TermName, TermPath,
     ToTermName (..),
     stringTermName,
     termNameString, termPathString,
     termNameContent,
+    termNameSign, termNameAltSign,
+    orderingTermName,
 
     -- * Term name tuple
     TermName2, TermName3,
@@ -48,7 +50,7 @@ term n c = (toTermName n, c)
 
 -- | Name of term, e.g., @\"size\"@ for the term name @\/size@.
 data TermName =
-    TermName String
+    TermName Ordering String
     deriving (Show, Eq, Ord)
 
 instance S.IsString TermName where
@@ -57,9 +59,6 @@ instance S.IsString TermName where
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
 type TermPath = [TermName]
-
--- | Term name with plus-minus sign, e.g., @+\/size@, @-\/size@, or @\/size@.
-type SignedTermName = (Ordering, TermName)
 
 -- | Convert to term name.
 class ToTermName a where
@@ -72,9 +71,11 @@ instance ToTermName TermName where
 instance ToTermName String where
     toTermName = stringTermName
 
+-- | Strict text.
 instance ToTermName Tx.Text where
     toTermName = toTermName . Tx.unpack
 
+-- | Lazy text.
 instance ToTermName Tz.Text where
     toTermName = toTermName . Tz.unpack
 
@@ -84,8 +85,8 @@ instance ToTermName Tz.Text where
 --   TermName "a"
 -- 
 stringTermName :: String -> TermName
-stringTermName ('/' : n) = TermName n
-stringTermName n         = TermName n
+stringTermName ('/' : n) = TermName EQ n
+stringTermName n         = TermName EQ n
 
 -- | Encode term name into string.
 --
@@ -93,7 +94,9 @@ stringTermName n         = TermName n
 --   "/size"
 --
 termNameString :: TermName -> String
-termNameString (TermName n) = '/' : n
+termNameString (TermName EQ n) = '/' : n
+termNameString (TermName GT n) = '+' : '/' : n
+termNameString (TermName LT n) = '-' : '/' : n
 
 -- | Extract internal name.
 --
@@ -101,7 +104,7 @@ termNameString (TermName n) = '/' : n
 --   "size"
 --
 termNameContent :: TermName -> String
-termNameContent (TermName n) = n
+termNameContent (TermName _ n) = n
 
 -- | Encode term path into string.
 --
@@ -110,6 +113,18 @@ termNameContent (TermName n) = n
 --
 termPathString :: TermPath -> String
 termPathString = concatMap termNameString
+
+-- | Sign of term name.
+termNameSign :: TermName -> Ordering
+termNameSign (TermName sign _) = sign
+
+-- | Alter sign of term name.
+termNameAltSign :: Ordering -> O.Map TermName
+termNameAltSign sign (TermName _ n) = TermName sign n
+
+-- | Convert to ordering pair.
+orderingTermName :: TermName -> (Ordering, TermName)
+orderingTermName n@(TermName sign _) = (sign, n)
 
 
 -- ----------------------  Term name tuple

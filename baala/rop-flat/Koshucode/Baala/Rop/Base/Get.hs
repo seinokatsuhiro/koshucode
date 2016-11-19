@@ -199,7 +199,7 @@ getTerms :: RopGet c [S.TermName]
 getTerms = getAbortable D.treesFlatNames
 
 -- | Get signed term names.
-getSignedTerms :: RopGet c [S.SignedTermName]
+getSignedTerms :: RopGet c [S.TermName]
 getSignedTerms = getAbortable $ mapM D.treeSignedName
 
 -- | Get term names and complement sign (@~@) .

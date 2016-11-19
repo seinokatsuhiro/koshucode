@@ -83,10 +83,10 @@ relSortBody :: (Ord c) => O.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
 -- | Sort relation body according to order specification.
-relBodyOrder :: (Ord c) => [S.SignedTermName] -> D.Head -> O.Map [[c]]
+relBodyOrder :: (Ord c) => [S.TermName] -> D.Head -> O.Map [[c]]
 relBodyOrder ns he = ed where
     ed    = B.sortByName ords $ D.getTermNames he
-    ords  = map B.orderingCap ns
+    ords  = (B.orderingCap . S.orderingTermName) <$> ns
 
 
 -- ----------------------  Constant

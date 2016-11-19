@@ -198,24 +198,24 @@ consNumber med =
        Right $ relmapNumber med (n, ns, fromInteger from)
 
 -- | Create @number@ relmap.
-relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
+relmapNumber :: (D.CDec c, Ord c) => C.Intmed c -> (S.TermName, [S.TermName], Int) -> C.Relmap c
 relmapNumber med = C.relmapFlow med . relkitNumber
 
 -- | Create @number@ relkit.
-relkitNumber :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
+relkitNumber :: (Ord c, D.CDec c) => (S.TermName, [S.TermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, D.CDec c)
     => B.Ranking S.TermName c
-    -> (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
+    -> (S.TermName, [S.TermName], Int) -> C.RelkitFlow c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = let (rank, bo2) = ranking from ords (D.getTermNames he1) bo1
                 in zipWith (:) (map D.pInt rank) bo2
-    ords  = map B.orderingCap ns
+    ords  = (B.orderingCap . S.orderingTermName) <$> ns
 
 
 -- ----------------------  rank
@@ -239,20 +239,20 @@ consRank med =
 
 -- | Create @rank -dense@ relmap.
 relmapDenseRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
+   C.Intmed c -> (S.TermName, [S.TermName], Int) -> C.Relmap c
 relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
 -- | Create @rank -dense@ relkit.
-relkitDenseRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
+relkitDenseRank :: (Ord c, D.CDec c) => (S.TermName, [S.TermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 -- | Create @rank@ relmap.
 relmapGapRank :: (D.CDec c, Ord c) =>
-   C.Intmed c -> (S.TermName, [S.SignedTermName], Int) -> C.Relmap c
+   C.Intmed c -> (S.TermName, [S.TermName], Int) -> C.Relmap c
 relmapGapRank med = C.relmapFlow med . relkitGapRank
 
 -- | Create @rank@ relkit.
-relkitGapRank :: (Ord c, D.CDec c) => (S.TermName, [S.SignedTermName], Int) -> C.RelkitFlow c
+relkitGapRank :: (Ord c, D.CDec c) => (S.TermName, [S.TermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
 
