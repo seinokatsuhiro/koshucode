@@ -44,6 +44,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Overture
+        Koshucode.Baala.Overture.Cache
         Koshucode.Baala.Overture.Fn
         Koshucode.Baala.Overture.Name.IntString
         Koshucode.Baala.Overture.Name.String
