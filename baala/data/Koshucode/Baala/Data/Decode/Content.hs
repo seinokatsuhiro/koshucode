@@ -65,7 +65,7 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
         | n <= S.TextRaw     = keyword w
         | n == S.TextQ       = D.putCode w
         | otherwise          = D.putText w
-    token (S.TTermN _ _ n)   = D.putTerm n
+    token (S.TTermN _ _ n)   = D.putTerm $ S.toTermName n
     token (S.TTerm _ _ [n])  = D.putTerm n
     token t                  = Msg.unkWord $ S.tokenContent t
 
@@ -165,7 +165,7 @@ treesRel cons xs =
 -- | Split term names.
 treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
 treesTermNames = terms [] where
-    terms ns (LName n : xs) = terms (n : ns) xs
+    terms ns (LName n : xs) = terms (S.toTermName n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 -- | Decode specific number of contents.

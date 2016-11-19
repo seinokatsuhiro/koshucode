@@ -153,8 +153,8 @@ parseSubtext ns = trees False where
     trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
     trees False xs              = opTop xs
     trees True (K n : xs)       = pre n xs
-    trees True [L (Term n), x]  = Right . T.sub (S.termNameContent n) =<< tree x  -- /N E
-    trees True [L (Term n)]     = Right $ T.sub (S.termNameContent n) T.what      -- /N
+    trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
+    trees True [L (Term n)]     = Right $ T.sub n T.what      -- /N
     trees True []               = Right T.succ                -- ()
     trees True [x]              = tree x
     trees True  xs              = unknownSyntax $ show xs

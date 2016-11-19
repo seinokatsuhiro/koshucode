@@ -35,7 +35,7 @@ tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
       S.TShort    _ a b    -> a ++ "." ++ b
-      S.TTermN    _ _ n    -> S.termNameString n
+      S.TTermN    _ _ n    -> '/' : n
       S.TTerm     _ _ ns   -> S.termPathString ns
       S.TLocal    _ n _ _  -> B.name n
       S.TSlot     _ _ s    -> s

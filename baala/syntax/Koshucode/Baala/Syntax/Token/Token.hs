@@ -39,7 +39,7 @@ data Token
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
     | TShort    B.CodePt String String
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTermN    B.CodePt Ordering S.TermName
+    | TTermN    B.CodePt Ordering String
                 -- ^ __3 Textual:__ Term name — @\/term@
     | TTerm     B.CodePt TermType S.TermPath
                 -- ^ __4 Textual:__ Term path — @\/r\/term@
