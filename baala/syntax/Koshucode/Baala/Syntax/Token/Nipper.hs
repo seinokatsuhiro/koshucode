@@ -5,8 +5,8 @@
 module Koshucode.Baala.Syntax.Token.Nipper
   ( -- * Type
     TokenScan, TokenScanMap,
-    TokenNip, TokenNipW,
-    TokenNipResult, TokenNipWResult,
+    TokenNip, TokenNipW, TokenNipLW,
+    TokenNipResult, TokenNipWResult, TokenNipLWResult,
 
     -- * Utility
     isSymbol,
@@ -18,7 +18,7 @@ module Koshucode.Baala.Syntax.Token.Nipper
 
     -- * Nipper
     -- ** Updater
-    nipUpdate, nipUpdateW,
+    nipUpdate, nipUpdateW, nipUpdateLW,
     -- ** Textual
     nipSpace,
     nipQ, nipQQ,
@@ -59,11 +59,17 @@ type TokenNipResult = (S.InputText, S.Token)
 -- | Nip result with word table.
 type TokenNipWResult = (B.WordTable, S.InputText, S.Token)
 
+-- | Nip result with word table.
+type TokenNipLWResult = (B.WordTable, S.InputText, [S.Token])
+
 -- | Nip off a next token.
 type TokenNip = B.CodePt -> S.InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
 type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipWResult
+
+-- | Nip off a next token with word table.
+type TokenNipLW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipLWResult
 
 
 -- --------------------------------------------  Utility
@@ -101,6 +107,10 @@ nipUpdate r (cs, tok) = B.codeUpdate cs tok r
 -- | Update token scanner by nipper result with word table.
 nipUpdateW :: TokenScan -> TokenNipWResult -> TokenScan
 nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
+
+-- | Update token scanner by nipper result with word table.
+nipUpdateLW :: TokenScan -> TokenNipLWResult -> TokenScan
+nipUpdateLW r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 
 -- ----------------------  Textual
 
@@ -179,7 +189,7 @@ nipSlot n cp cs =
 --   >>> nipTermSign EQ B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
 --
-nipTermSign :: Ordering -> TokenNipW
+nipTermSign :: Ordering -> TokenNipLW
 nipTermSign = nipTerm S.TermTypePath
 
 -- | Nip off a term name.
@@ -187,7 +197,7 @@ nipTermSign = nipTerm S.TermTypePath
 --   >>> nipTermPath B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
 --
-nipTermPath :: TokenNipW
+nipTermPath :: TokenNipLW
 nipTermPath = nipTerm S.TermTypePath EQ
 
 -- | Nip off a quoted term.
@@ -195,20 +205,20 @@ nipTermPath = nipTerm S.TermTypePath EQ
 --   >>> nipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", TTerm <I0-L0-C0> TermTypeQuoted [TermName EQ "foo"])
 --
-nipTermQ :: TokenNipW
+nipTermQ :: TokenNipLW
 nipTermQ = nipTerm S.TermTypeQuoted EQ
 
 -- | Nip off a term name or a term path.
-nipTerm :: S.TermType -> Ordering -> TokenNipW
+nipTerm :: S.TermType -> Ordering -> TokenNipLW
 nipTerm q sign cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | isSymbol c    = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
         | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _            = (wtab, [], S.unknownToken cp cs0 Msg.expOrdSym)
+    word _ _            = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
     call e f            = case e of
                             Right (cs', w) -> f w cs'
-                            Left a         -> (wtab, [], S.TUnknown cp cs0 a)
+                            Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
     nterm ns w cs'      = let n  = B.nioNumber $ B.codePtSource cp
                               w' = show n ++ ('=' : w)
@@ -217,10 +227,15 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | q == S.TermTypePath
                        = case Map.lookup n wtab of
-                           Just n' -> (wtab, cs, S.TTermN cp $ signed sign n')
+                           Just n' -> (wtab, cs, [S.TTermN cp $ signed sign n'])
                            Nothing -> let wtab' = Map.insert n n wtab
-                                      in (wtab', cs, S.TTermN cp $ signed sign n)
-    term ns cs         = (wtab, cs, S.TTerm cp q $ reverse (S.toTermName <$> ns))
+                                      in (wtab', cs, [S.TTermN cp $ signed sign n])
+    term ns cs | q == S.TermTypePath
+                            = (wtab, cs, termPath (S.TTermN cp <$> ns))
+               | otherwise  = (wtab, cs, [S.TTerm cp q $ reverse (S.toTermName <$> ns)])
+
+    termPath [t]       = [t]
+    termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]
 
     signed EQ          = (  "/" ++ )
     signed GT          = ( "+/" ++ )

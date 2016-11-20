@@ -108,6 +108,11 @@ construct calc = expr where
     cons _ (B S.BracketForm trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
+    -- term path
+    cons cp (B S.BracketTerm trees) =
+        do ns <- D.treesFlatNames trees
+           Right $ D.CoxTerm cp ns []
+
     -- compound literal
     cons cp tree@(B _ _) = lit cp tree
 

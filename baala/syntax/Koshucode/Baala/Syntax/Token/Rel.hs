@@ -86,8 +86,9 @@ isCodePointDigit c = isPM c || Ch.isDigit c
 scanRel :: S.Scanner
 scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
-    nip            = S.nipUpdate  sc
-    nipw           = S.nipUpdateW sc
+    nip            = S.nipUpdate   sc
+    nipw           = S.nipUpdateW  sc
+    niplw          = S.nipUpdateLW sc
     upd cs tok     = B.codeUpdate cs tok sc
     updEnd         = upd ""
     int cs tok     = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
@@ -101,10 +102,10 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 
     dispatch n a b c bs cs ds
         | S.isSpace a            = nip             $ S.nipSpace    cp bs
-        | S.isTerm a             = nipw            $ S.nipTermPath cp wtab bs
-        | isPM a && S.isTerm b   = nipw            $ S.nipTermSign (sign a) cp wtab cs
+        | S.isTerm a             = niplw           $ S.nipTermPath cp wtab bs
+        | isPM a && S.isTerm b   = niplw           $ S.nipTermSign (sign a) cp wtab cs
         | S.isQQ a               = nip             $ S.nipQQ       cp bs
-        | isQ a && S.isTerm b    = nipw            $ S.nipTermQ    cp wtab cs
+        | isQ a && S.isTerm b    = niplw           $ S.nipTermQ    cp wtab cs
         | isQ a                  = nipw            $ S.nipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
@@ -189,14 +190,14 @@ nipHat cp = hat where
 scanInterp :: S.Scanner
 scanInterp change sc@B.CodeScan { B.codeInputPt = cp
                             , B.codeWords = wtab } = S.section change int sc where
-    nip         = S.nipUpdate  sc
-    nipw        = S.nipUpdateW sc
+    nip         = S.nipUpdate   sc
+    niplw       = S.nipUpdateLW sc
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
 
     int ""                           = sc
     int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
-                  | S.isTerm c       = nipw        $ S.nipTermPath cp wtab cs
+                  | S.isTerm c       = niplw       $ S.nipTermPath cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w

@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Syntax.Scan
     codeScanSave, codeScanRestore,
     codeScanUp, codeScanUpBz,
     codeUpdate, codeUpdateWords,
+    codeUpdateList, codeUpdateListWords,
     codeChange,
   ) where
 
@@ -44,7 +45,7 @@ type CodeScanMap i o = O.Map (CodeScan i o)
 type WordTable = Map.Map String String
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
-isBol :: CodeScan i o -> Bool
+isBol :: O.Test (CodeScan i o)
 isBol CodeScan {..} = null codeOutput
 
 -- | Save current updater.
@@ -70,7 +71,7 @@ codeScanRestore sc =
 --
 --   3. Tokenize each lines,
 --      and put tokens together in 'B.CodeLine'.
-
+--
 codeScanUp :: CodeScanMap String o -> B.NIOPoint -> String -> [B.CodeLine o]
 codeScanUp f nio = codeScanUpLines f nio . B.linesCrlfNumbered
 
@@ -124,7 +125,20 @@ codeUpdateWords ws cs tok sc =
        , codeOutput = tok : codeOutput sc
        , codeWords  = ws }
 
+-- | Multi-element version of 'codeUpdate'.
+codeUpdateList :: i -> [o] -> CodeScanMap i o
+codeUpdateList cs toks sc =
+    sc { codeInput  = cs
+       , codeOutput = toks ++ codeOutput sc }
+
+-- | Multi-element and cached version of 'codeUpdate'.
+codeUpdateListWords :: WordTable -> i -> [o] -> CodeScanMap i o
+codeUpdateListWords ws cs toks sc =
+    sc { codeInput  = cs
+       , codeOutput = toks ++ codeOutput sc
+       , codeWords  = ws }
+
 -- | Change mapper of code sc.
-codeChange :: CodeScanMap i o -> CodeScanMap i o
+codeChange :: O.Map (CodeScanMap i o)
 codeChange f sc = sc { codeMap = f }
 
