@@ -24,12 +24,11 @@ type AttrEd = B.Sourced AttrEdBody
 
 -- | Operators for attribute editors.
 data AttrEdBody
-    = AttrEdId                             -- ^ Identity editor
-    | AttrEdAdd     Bool String [S.TTree]  -- ^ Add attribute
-    | AttrEdRename  (String, String)       -- ^ Rename attribute keyword
-    | AttrEdFill    [Maybe S.TTree]        -- ^ Fill positional attributes
-    | AttrEdTerm    String [S.TTree]       -- ^ Make term name
-    | AttrEdNest    String [S.TTree]       -- ^ Nested relation reference
+    = AttrEdId                             -- ^ __id:__ Identity editor
+    | AttrEdAdd     Bool String [S.TTree]  -- ^ __add:__ Add attribute
+    | AttrEdRename  (String, String)       -- ^ __rename:__ Rename attribute keyword
+    | AttrEdFill    [Maybe S.TTree]        -- ^ __fill:__ Fill positional attributes
+    | AttrEdNest    String [S.TTree]       -- ^ __nest:__ Nested relation reference
     | AttrEdAppend  [AttrEd]               -- ^ Append editors
       deriving (Show, Eq, Ord)
 
@@ -58,7 +57,6 @@ consAttrEd = loop where
           [ S.TextLeafRaw _ op : S.TextLeafRaw _ ('-' : k) : xs ]
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
-            | op == "term"      -> right trees $ AttrEdTerm k xs
             | op == "nest"      -> right trees $ AttrEdNest k xs
 
           [ S.TextLeafRaw _ op : S.TextLeafRaw _ k'
@@ -83,7 +81,6 @@ runAttrEd (B.Sourced toks edit) attr = run where
             AttrEdRename (k', k)    -> rename (S.AttrNormal k') (S.AttrNormal k)
             AttrEdFill xs           -> do xs2 <- fill pos xs
                                           Right $ (S.attrNameTrunk, xs2) : attr
-            AttrEdTerm  k xs        -> term (S.AttrNormal k) xs
             AttrEdNest  k xs        -> nest (S.AttrNormal k) xs
             AttrEdAppend rs         -> B.foldM (flip runAttrEd) attr rs
 
@@ -94,10 +91,6 @@ runAttrEd (B.Sourced toks edit) attr = run where
                             | otherwise     -> Msg.extraAttr
                      Nothing                -> do xs' <- S.substSlot [] attr xs
                                                   Right $ (k, xs') : attr
-
-    term k xs = do xs' <- S.substSlot [] attr xs
-                   n   <- termPath xs'
-                   Right $ (k, n) : attr
 
     nest k xs = do xs' <- S.substSlot [] attr xs
                    n   <- nestName xs'
@@ -114,12 +107,6 @@ runAttrEd (B.Sourced toks edit) attr = run where
     fill []       (Just x  : xs)   = Right . (x:) =<< fill [] xs
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
-
-termPath :: B.AbMap [S.TTree]
-termPath = loop [] where
-    loop path [] = Right [B.TreeL $ S.TTermPath B.def $ reverse path]
-    loop path (S.TermLeafName _ p : xs)    = loop (S.toTermName p : path) xs
-    loop _ _                               = Msg.adlib "require term name"
 
 nestName :: B.AbMap [S.TTree]
 nestName [S.TermLeafName _ n]   = Right $ localNest $ S.toTermName n
