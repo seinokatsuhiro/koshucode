@@ -6,8 +6,10 @@ module Koshucode.Baala.Syntax.TTree.Bracket
   ( -- * Bracket type
     BracketType (..),
     getBracketType,
+
     -- * Open and close
     groupOpen,  groupClose,
+    openTerm,   closeTerm,
     listOpen,   listClose,
     setOpen,    setClose,
     tieOpen,    tieClose,
@@ -21,21 +23,32 @@ import qualified Koshucode.Baala.Syntax.Token          as S
 
 -- | Type of bracket.
 data BracketType
-    = BracketGroup    -- ^ Round brackets for grouping: @( E ... )@
-    | BracketList     -- ^ Square brackets for lists: @[ C | ... ]@
-    | BracketSet      -- ^ Curely braces for sets: @{ C | .... }@
-    | BracketTie      -- ^ Curely-single braces for ties: @{- /N C ... -}@
-    | BracketRel      -- ^ Curely-double braces for relations: @{= /N ... [ C | ... ][ C | ... ] =}@
-    | BracketInterp   -- ^ Curely-bar braces for data interpretation: @{| ... /N ... |}@
-    | BracketType     -- ^ Square-single brackets for type: @[- ... -]@
-    | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
-    | BracketUnknown  -- ^ Unknown bracket
+    = BracketGroup    -- ^ __1.__ Round brackets for grouping:
+                      --   @( E ... )@
+    | BracketTerm     -- ^ __2.__ Round-single brackets for term path:
+                      --   @(- \/P ... -)@
+    | BracketList     -- ^ __3.__ Square brackets for lists:
+                      --   @[ C | ... ]@
+    | BracketSet      -- ^ __4.__ Curely braces for sets:
+                      --   @{ C | ... }@
+    | BracketTie      -- ^ __5.__ Curely-single braces for ties:
+                      --   @{- /N C ... -}@
+    | BracketRel      -- ^ __6.__ Curely-double braces for relations:
+                      --   @{= /N ... [ C | ... ][ C | ... ] =}@
+    | BracketInterp   -- ^ __7.__ Curely-bar braces for data interpretation:
+                      --   @{| ... /N ... |}@
+    | BracketType     -- ^ __8.__ Square-single brackets for type:
+                      --   @[- ... -]@
+    | BracketForm     -- ^ __9.__ Round-bar brackets for calculation form:
+                      --   @(| V ... | E ... |)@
+    | BracketUnknown  -- ^ __10.__ Unknown bracket
       deriving (Show, Eq, Ord)
 
 -- | Bracket type of token.
 getBracketType :: B.GetBracketType BracketType S.Token
 getBracketType = B.bracketTable
     [ o BracketGroup   groupOpen  groupClose
+    , o BracketTerm    openTerm   closeTerm
     , o BracketList    listOpen   listClose
     , o BracketSet     setOpen    setClose
     , o BracketTie     tieOpen    tieClose
@@ -53,6 +66,14 @@ groupOpen = "("
 -- | Close group: @")"@
 groupClose :: String
 groupClose = ")"
+
+-- | Open term path: @"(-"@
+openTerm :: String
+openTerm = "(-"
+
+-- | Close term path: @"-)"@
+closeTerm :: String
+closeTerm = "-)"
 
 -- | Open list: @"["@
 listOpen :: String
