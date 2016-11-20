@@ -27,8 +27,8 @@ import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
 -- | Get the content of token.
 --
---   >>> let tok = S.TTerm B.def S.TermTypePath ["r", "x"] in tokenContent tok
---   "/r/x"
+--   >>> tokenContent $ S.TOpen B.def "("
+--   "("
 --
 tokenContent :: S.Token -> String
 tokenContent tok =
@@ -36,7 +36,6 @@ tokenContent tok =
       S.TText     _ _ s    -> s
       S.TShort    _ a b    -> a ++ "." ++ b
       S.TTermN    _ n      -> S.enslash n
-      S.TTerm     _ _ ns   -> S.termPathString ns
       S.TLocal    _ n _ _  -> B.name n
       S.TSlot     _ _ s    -> s
       S.TOpen     _ s      -> s
@@ -57,7 +56,6 @@ tokenDetailTypeString tok =
       S.TText     _ f _    -> Just $ S.subtypeName f
       S.TShort    _ _ _    -> Nothing
       S.TTermN    _ _      -> Nothing
-      S.TTerm     _ _ _    -> Nothing
       S.TLocal    _ _ _ _  -> Nothing
       S.TSlot     _ n _    -> Just $ slotTypeText n
       S.TOpen     _ _      -> Nothing

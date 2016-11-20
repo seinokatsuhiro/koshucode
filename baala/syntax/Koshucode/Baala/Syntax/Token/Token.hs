@@ -39,32 +39,30 @@ data Token
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
     | TTermN    B.CodePt String
                 -- ^ __3 Textual:__ Term name — @\/term@
-    | TTerm     B.CodePt () S.TermPath
-                -- ^ __4 Textual:__ Term path — @\/r\/term@
 
     | TLocal    B.CodePt LocalRef Int [Token]
-                -- ^ __5 Symbolic:__ Local name — @^r@, @^\/r@
+                -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
     | TSlot     B.CodePt Int String
-                -- ^ __6 Symbolic:__ Slot name.
+                -- ^ __5 Symbolic:__ Slot name.
                 --   'Int' represents slot level, i.e.,
                 --   0 for local positional slots,
                 --   1 for local named slots,
                 --   2 for global slots
                 --   —  @\@slot@, @\@\@global@
     | TName     B.CodePt BlankName
-                -- ^ __7 Symbolic:__ Blank name.
+                -- ^ __6 Symbolic:__ Blank name.
                 --   (This is only used in building content expression)
 
     | TOpen     B.CodePt String
-                -- ^ __8 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
+                -- ^ __7 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
     | TClose    B.CodePt String
-                -- ^ __9 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
+                -- ^ __8 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
     | TSpace    B.CodePt Int
-                -- ^ __10 Punctuational:__ /N/ space characters
+                -- ^ __9 Punctuational:__ /N/ space characters
     | TComment  B.CodePt String
-                -- ^ __11 Punctuational:__ Comment — @** comment line@
+                -- ^ __10 Punctuational:__ Comment — @** comment line@
     | TUnknown  B.CodePt String B.AbortReason
-                -- ^ __12 Other:__ Unknown token
+                -- ^ __11 Other:__ Unknown token
 
       deriving (Show, Eq, Ord)
 
@@ -73,7 +71,6 @@ instance SubtypeName Token where
      subtypeName (TText     _ _ _  ) = "text"
      subtypeName (TShort    _ _ _  ) = "short"
      subtypeName (TTermN    _ _    ) = "term"
-     subtypeName (TTerm     _ _ _  ) = "term"
      subtypeName (TLocal    _ _ _ _) = "local"
      subtypeName (TSlot     _ _ _  ) = "slot"
      subtypeName (TOpen     _ _    ) = "open"
@@ -84,7 +81,6 @@ instance SubtypeName Token where
      subtypeName (TUnknown  _ _ _  ) = "unknown"
 
 instance B.Name Token where
-    name (TTerm     _ _ ns)  = S.termPathString ns
     name (TSlot      _ _ s)  = s
     name (TText      _ _ s)  = s
     name (TOpen        _ s)  = s
@@ -96,7 +92,6 @@ instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
     codePtList (TShort   cp _ _)    = [cp]
     codePtList (TTermN   cp _)      = [cp]
-    codePtList (TTerm    cp _ _)    = [cp]
     codePtList (TLocal   cp _ _ _)  = [cp]
     codePtList (TSlot    cp _ _)    = [cp]
     codePtList (TOpen    cp _)      = [cp]
@@ -111,7 +106,6 @@ instance B.PPrint Token where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
         d (TTermN     cp n)      = pretty "TTermN"   cp [show n]
-        d (TTerm      cp q ns)   = pretty "TTerm"    cp [show q, show ns]
         d (TLocal     cp n _ _)  = pretty "TLocal"   cp [show n]
         d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
         d (TOpen      cp p)      = pretty "TOpen"    cp [show p]

@@ -9,7 +9,6 @@ module Koshucode.Baala.Syntax.TTree.TokenTree
 
     -- * Pattern
     -- ** Term leaf
-    pattern TermLeaf,
     pattern TermLeafName,
     -- ** Text leaf
     pattern TextLeaf,
@@ -39,9 +38,7 @@ type NamedTree = B.Named TTree
 -- --------------------------------------------  Pattern
 
 -- | Term leaf.
-pattern TermLeaf      cp q ws    = B.TreeL (S.TTerm   cp q ws)
--- | Term leaf.
-pattern TermLeafName  cp w       = B.TreeL (S.TTermN  cp w)
+pattern TermLeafName  cp w  = B.TreeL (S.TTermN  cp w)
 
 -- | Text leaf.
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
