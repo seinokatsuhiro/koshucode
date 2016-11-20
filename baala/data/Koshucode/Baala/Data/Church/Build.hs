@@ -91,10 +91,6 @@ construct calc = expr where
                  | q == S.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
-             -- term with options (experimental)
-             (L (S.TTermPath _ ns)) : _
-                 -> Right $ D.CoxTerm cp ns []
-
              -- fill args in the blanks (application)
              f : xs -> fill cp f xs
              []     -> lit cp tree
@@ -119,11 +115,9 @@ construct calc = expr where
     -- literal or variable
     cons cp tree@(L tok) = case tok of
         S.TTermN _ n               -> Right $ D.CoxTerm  cp [S.toTermName n] []
-        S.TTermPath _ ns           -> Right $ D.CoxTerm  cp ns []
         S.TName _ op               -> Right $ D.CoxBlank cp op
         S.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
         S.TText _ _ _              -> lit cp tree
-        S.TTermQ _ _               -> lit cp tree
         _                          -> B.bug "core/leaf"
 
     cons _ _ = B.bug "core"

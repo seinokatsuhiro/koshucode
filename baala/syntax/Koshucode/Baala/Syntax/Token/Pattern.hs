@@ -13,10 +13,6 @@ module Koshucode.Baala.Syntax.Token.Pattern
     pattern TTextBar,
     pattern TTextLicense,
     pattern TTextSect,
-
-    -- * Term token
-    pattern TTermPath,
-    pattern TTermQ,
   ) where
 
 import qualified Koshucode.Baala.Syntax.Token.Token  as S
@@ -58,15 +54,3 @@ pattern TTextLicense cp w = S.TText cp S.TextLicense w
 -- | Section sign.
 pattern TTextSect cp = TTextRaw cp "==="
 
-
--- ----------------------  Term token
-
--- | Term path token.
---
---   >>> TTermPath B.def ["a", "b"]   -- /a/b
-pattern TTermPath cp ws = S.TTerm cp S.TermTypePath ws
-
--- | Quoted term path token.
---
---   >>> TTermQ B.def ["a"]   -- '/a
-pattern TTermQ cp ws = S.TTerm cp S.TermTypeQuoted ws

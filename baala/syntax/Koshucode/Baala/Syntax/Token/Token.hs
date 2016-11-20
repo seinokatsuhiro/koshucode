@@ -15,8 +15,6 @@ module Koshucode.Baala.Syntax.Token.Token
     -- * Subtype
     -- ** Text
     TextForm (..),
-    -- ** Term
-    TermType (..),
     -- ** Local
     LocalRef (..),
     -- ** Blank
@@ -41,7 +39,7 @@ data Token
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
     | TTermN    B.CodePt String
                 -- ^ __3 Textual:__ Term name — @\/term@
-    | TTerm     B.CodePt TermType S.TermPath
+    | TTerm     B.CodePt () S.TermPath
                 -- ^ __4 Textual:__ Term path — @\/r\/term@
 
     | TLocal    B.CodePt LocalRef Int [Token]
@@ -163,15 +161,6 @@ instance SubtypeName TextForm where
     subtypeName TextTerm     = "term"
     subtypeName TextBar      = "bar"
     subtypeName TextLicense  = "license"
-
-
--- ----------------------  Term
-
--- | Type of term name.
-data TermType
-    = TermTypePath               -- ^ Normal term path
-    | TermTypeQuoted             -- ^ Quoted term name
-      deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Local

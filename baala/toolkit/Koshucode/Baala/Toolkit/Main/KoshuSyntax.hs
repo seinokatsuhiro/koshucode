@@ -203,7 +203,7 @@ judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ S.TTextRaw  B.def ""
           , S.TSlot     B.def 0 ""
-          , S.TTermPath B.def []
+          , S.TTermN    B.def ""
           , S.TOpen     B.def ""
           , S.TClose    B.def ""
           , S.TSpace    B.def 0
