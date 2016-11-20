@@ -5,7 +5,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Data.Church.Build
-  ( coxBuild, coxForm,
+  ( treeCox, coxForm,
   ) where
 
 import qualified Koshucode.Baala.Overture               as O
@@ -19,10 +19,10 @@ import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
 
--- | Construct content expression from token tree
-coxBuild :: forall c. (D.CContent c)
+-- | Construct content expression from token tree.
+treeCox :: forall c. (D.CContent c)
   => D.CalcContent c -> D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
-coxBuild calc copset =
+treeCox calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
       . debruijn               -- attach De Bruijn indicies

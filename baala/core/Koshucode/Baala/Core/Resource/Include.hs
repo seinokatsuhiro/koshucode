@@ -5,7 +5,7 @@
 -- | Resource as bundle of relational expressions.
 
 module Koshucode.Baala.Core.Resource.Include
-  ( resInclude, coxBuildG,
+  ( resInclude, treeCoxG,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -134,8 +134,8 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 -- | Build content expression with global parameter.
-coxBuildG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
-coxBuildG g = D.coxBuild (calcContG g) (C.globalCopset g)
+treeCoxG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
+treeCoxG g = D.treeCox (calcContG g) (C.globalCopset g)
 
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c
 calcContG = D.calcContent . C.globalCopset
