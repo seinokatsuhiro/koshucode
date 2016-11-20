@@ -15,8 +15,8 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
     paraMinLength,
 
     -- * Unmatch reason
-    ParaUnmatch (..), paraMatch, 
-    ParaTo, paraSelect, paraChoose,
+    ParaUnmatch (..), ParaOr, paraMatch, 
+    paraSelect, paraChoose,
 
     -- * Construction
     ParaSpecMap, paraSpec,
@@ -43,14 +43,14 @@ import qualified Koshucode.Baala.Syntax.Para.Para  as S
 -- | Parameter specification.
 data ParaSpec n
     = ParaSpec
-      { paraSpecPos    :: ParaSpecPos n -- ^ Positional parameter
-      , paraSpecReqP   :: [n]  -- ^ Positional required parameters
-      , paraSpecOptP   :: [n]  -- ^ Positional optional parameters
-      , paraSpecReqN   :: [n]  -- ^ Explicitly-named required parameters
-      , paraSpecOptN   :: [n]  -- ^ Explicitly-named optional parameters
-      , paraSpecFirst  :: [n]  -- ^ Allow multiple-occurence, use first parameters
-      , paraSpecLast   :: [n]  -- ^ Allow multiple-occurence, use last parameters
-      , paraSpecMulti  :: [n]  -- ^ Allow multiple-occurence, use all parameters
+      { paraSpecPos    :: ParaSpecPos n -- ^ __Positional:__ Positional parameter
+      , paraSpecReqP   :: [n]  -- ^ __Positional:__ Positional required parameters
+      , paraSpecOptP   :: [n]  -- ^ __Positional:__ Positional optional parameters
+      , paraSpecReqN   :: [n]  -- ^ __Named:__ Explicitly-named required parameters
+      , paraSpecOptN   :: [n]  -- ^ __Named:__ Explicitly-named optional parameters
+      , paraSpecFirst  :: [n]  -- ^ __Named:__ Allow multiple-occurence, use first parameters
+      , paraSpecLast   :: [n]  -- ^ __Named:__ Allow multiple-occurence, use last parameters
+      , paraSpecMulti  :: [n]  -- ^ __Named:__ Allow multiple-occurence, use all parameters
       } deriving (Show, Eq, Ord)
 
 -- | No parameters
@@ -130,15 +130,17 @@ instance Functor ParaUnmatch where
     fmap f (ParaMissing  ns)      = ParaMissing      (fmap f ns)
     fmap f (ParaMultiple ns)      = ParaMultiple     (fmap f ns)
 
--- | Test and revise parameter to satisfy specification.
+-- | Either something or parameter.
+type ParaOr left n a = Either left (S.Para n a)
 
-paraMatch :: (Eq n, Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
+-- | Test and revise parameter to satisfy specification.
+paraMatch :: (Eq n, Ord n) => ParaSpec n -> S.Para n a -> ParaOr (ParaUnmatch n) n a
 paraMatch spec p =
     case paraMatchPos spec p of
       Left u   -> Left u
       Right p' -> paraMatchNamed spec $ paraReviseNamed spec p'
 
-paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
+paraMatchPos :: (Ord n) => ParaSpec n -> S.Para n a -> ParaOr (ParaUnmatch n) n a
 paraMatchPos spec p = m pos where
     m (ParaItem a ns)        | l == a      = Right $ paraAdd ns ps p
     m (ParaItemOpt a ns opt) | l == a      = Right $ paraAdd ns ps p
@@ -169,7 +171,7 @@ paraReviseNamed ParaSpec {..} p = p3 where
     p2 = foldr S.paraTakeFirst p paraSpecFirst
     p3 = foldr S.paraTakeLast p2 paraSpecLast
 
-paraMatchNamed :: (Eq n) => ParaSpec n -> S.Para n a -> Either (ParaUnmatch n) (S.Para n a)
+paraMatchNamed :: (Eq n) => ParaSpec n -> S.Para n a -> ParaOr (ParaUnmatch n) n a
 paraMatchNamed spec@ParaSpec {..} p
     | unknowns  /= []  = Left $ ParaUnknown  unknowns
     | missings  /= []  = Left $ ParaMissing  missings
@@ -183,19 +185,23 @@ paraMatchNamed spec@ParaSpec {..} p
       missings    = paraSpecReqN B.\\ ns
       multiples   = ns2 B.\\ paraSpecMulti
 
--- | Map parameter to some value.
-type ParaTo n a b = S.Para n a -> b
-
--- | Select matched specification and apply 'ParaTo' function.
-paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
-paraSelect b specs p = loop specs where
-    loop [] = b
-    loop ((spec, paraTo) : specs2) =
+-- | Select matched specification and apply parameter value function.
+paraSelect ::
+    (Eq n, Ord n)
+    => b                                -- ^ Default value when all unmatched.
+    -> [(ParaSpec n, S.Para n a -> b)]  -- ^ Parameter handlers
+    -> S.Para n a                       -- ^ Target parameter
+    -> b                                -- ^ Result value
+paraSelect def hs p = loop hs where
+    loop [] = def
+    loop ((spec, handler) : hs2) =
         case paraMatch spec p of
-          Right p' -> paraTo p'
-          Left _   -> loop specs2
+          Right p' -> handler p'
+          Left _   -> loop hs2
 
-paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)] -> S.Para n a -> Either [ParaUnmatch n] (S.Para n a)
+-- | Collect parameter tags.
+paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)]
+           -> S.Para n a -> ParaOr [ParaUnmatch n] n a
 paraChoose specs p = loop [] specs where
     loop us [] = Left $ reverse us
     loop us ((tag, spec) : rest) =
@@ -208,8 +214,10 @@ paraChoose specs p = loop [] specs where
 
 -- --------------------------------------------  Construct
 
+-- | Mapping of parameter specification.
 type ParaSpecMap n = O.Map (ParaSpec n)
 
+-- | Create parameter specification.
 paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
 paraSpec edit = paraCheck $ edit B.def
 
@@ -228,7 +236,9 @@ paraCheck spec@ParaSpec {..}
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen ""
 -- Left ParaOutOfRange ...
+--
 paraMin :: Int -> ParaSpecMap n
+paraMin n = paraPos $ ParaMin n
 
 -- | Upper bound of length of positional parameter.
 --
@@ -237,7 +247,9 @@ paraMin :: Int -> ParaSpecMap n
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
 -- Left ParaOutOfRange ...
+--
 paraMax :: Int -> ParaSpecMap n
+paraMax n = paraPos $ ParaRange 0 n
 
 -- | Fixed-length positional parameter.
 --
@@ -246,7 +258,9 @@ paraMax :: Int -> ParaSpecMap n
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen ""
 -- Left ParaOutOfRange ...
+--
 paraJust :: Int -> ParaSpecMap n
+paraJust n = paraPos $ ParaRange n n
 
 -- | Lower and upper bound of length of positional parameter.
 --
@@ -255,11 +269,8 @@ paraJust :: Int -> ParaSpecMap n
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c"
 -- Left ParaOutOfRange ...
+--
 paraRange :: Int -> Int -> ParaSpecMap n
-
-paraMin   n   = paraPos $ ParaMin   n
-paraMax   n   = paraPos $ ParaRange 0 n
-paraJust  n   = paraPos $ ParaRange n n
 paraRange m n = paraPos $ ParaRange m n
 
 paraPos :: ParaSpecPos n -> ParaSpecMap n
