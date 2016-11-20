@@ -3,9 +3,9 @@
 about /package 'cop
 
 |-- DIR  /code 18   /comment 6    /dir "cop/Koshucode/Baala"
-|-- DIR  /code 1048  /comment 683  /dir "cop/Koshucode/Baala/Cop"
+|-- DIR  /code 1048  /comment 682  /dir "cop/Koshucode/Baala/Cop"
 
-|-- DIR-TOTAL  /code 1066  /comment 689
+|-- DIR-TOTAL  /code 1066  /comment 688
 
 |-- FILE  /code 18   /comment 6    /file "Cop.hs"         /dir "cop/Koshucode/Baala"
 |-- FILE  /code 196  /comment 89   /file "Arith.hs"       /dir "cop/Koshucode/Baala/Cop"
@@ -16,9 +16,9 @@ about /package 'cop
 |-- FILE  /code 4    /comment 6    /file "Message.hs"     /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 81   /comment 56   /file "Misc.hs"        /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 50   /comment 35   /file "Order.hs"       /dir "cop/Koshucode/Baala/Cop"
-|-- FILE  /code 40   /comment 75   /file "Replace.hs"     /dir "cop/Koshucode/Baala/Cop"
+|-- FILE  /code 40   /comment 74   /file "Replace.hs"     /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 259  /comment 158  /file "Text.hs"        /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 31   /comment 28   /file "Time.hs"        /dir "cop/Koshucode/Baala/Cop"
 |-- FILE  /code 39   /comment 28   /file "Type.hs"        /dir "cop/Koshucode/Baala/Cop"
 
-|-- FILE-TOTAL  /code 1066  /comment 689
+|-- FILE-TOTAL  /code 1066  /comment 688
