@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -82,13 +82,18 @@ JudgeViolate :: JudgeClass -> [Term c] -> Judge c
 -- | Map function to terms.
 judgeTermsMap :: ([Term a] -> [Term b]) -> Judge a -> Judge b
 
--- | Prepend a term into judgement.
-judgeCons :: Term c -> Map (Judge c)
+-- | Add a term into judgement.
+judgeAdd :: Term c -> Map (Judge c)
 
 -- | Construct judgement from its class and terms.
 type JudgeOf c = JudgeClass -> [Term c] -> Judge c
 
 -- | Construct affirmative judgement.
+--   
+--   <pre>
+--   &gt;&gt;&gt; affirm "P" [("x",10), ("y",20)] :: Judge Int
+--   JudgeAffirm "P" [("x",10), ("y",20)]
+--   </pre>
 affirm :: JudgeOf c
 
 -- | Construct denial judgement.
@@ -98,16 +103,56 @@ deny :: JudgeOf c
 affirmJudge :: Map (Judge c)
 
 -- | Deny judgement, i.e., change logical quality to denial.
+--   
+--   <pre>
+--   &gt;&gt;&gt; denyJudge $ affirm "P" [("x",10), ("y",20)] :: Judge Int
+--   JudgeDeny "P" [("x",10), ("y",20)]
+--   </pre>
 denyJudge :: Map (Judge c)
 
 -- | Test which judgement is affirmed.
-isAffirmative :: Judge c -> Bool
+isAffirmative :: Test (Judge c)
 
 -- | Test which judgement is denied.
-isDenial :: Judge c -> Bool
+isDenial :: Test (Judge c)
 
 -- | Test which judgement is for violation.
-isViolative :: Judge c -> Bool
+isViolative :: Test (Judge c)
+
+-- | Type of assertions.
+data AssertType
+
+-- | <tt>|==</tt> <i>C</i> <tt>:</tt> <i>R</i> generates affirmative
+--   judges.
+AssertAffirm :: AssertType
+
+-- | <tt>|=x</tt> <i>C</i> <tt>:</tt> <i>R</i> generates denial judges.
+AssertDeny :: AssertType
+
+-- | <tt>|=xx</tt> <i>C</i> <tt>:</tt> <i>R</i> generates multiple-denial
+--   judges.
+AssertMultiDeny :: AssertType
+
+-- | <tt>|=c</tt> <i>C</i> <tt>:</tt> <i>R</i> generates changement judges.
+AssertChange :: AssertType
+
+-- | <tt>|=cc</tt> <i>C</i> <tt>:</tt> <i>R</i> generates
+--   multiple-changement judges.
+AssertMultiChange :: AssertType
+
+-- | <tt>|=v</tt> <i>C</i> <tt>:</tt> <i>R</i> generates violation judges.
+AssertViolate :: AssertType
+
+-- | Create judgement corresponding to assertion type.
+assertAs :: AssertType -> JudgeOf c
+
+-- | Frege's stroke and various assertion lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assertSymbol AssertAffirm
+--   "|=="
+--   </pre>
+assertSymbol :: AssertType -> String
 
 -- | Conventional line-break setting for judges: 4-spaces indent and
 --   120-columns line.
@@ -135,6 +180,9 @@ termsToMix1 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
 
 -- | Encode term list with two-spaces separator.
 termsToMix2 :: (MixShortEncode c) => Shorten -> [Term c] -> MixText
+instance GHC.Classes.Ord Koshucode.Baala.Data.Type.Judge.Judge.AssertType
+instance GHC.Classes.Eq Koshucode.Baala.Data.Type.Judge.Judge.AssertType
+instance GHC.Show.Show Koshucode.Baala.Data.Type.Judge.Judge.AssertType
 instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
 instance GHC.Classes.Ord c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
 instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
@@ -500,10 +548,10 @@ TypeSet :: Type -> Type
 TypeTag :: String -> Type -> Type
 
 -- | Tie
-TypeTie :: [NamedType] -> Type
+TypeTie :: [Term Type] -> Type
 
 -- | Relation
-TypeRel :: [NamedType] -> Type
+TypeRel :: [Term Type] -> Type
 
 -- | Tuple (Product type)
 TypeTuple :: [Type] -> Type
@@ -539,7 +587,7 @@ typeRelTermNames :: Type -> [TermName]
 typeRelDegree :: Type -> Int
 
 -- | Get named type from relation type or tie type.
-typeTerms :: Type -> [NamedType]
+typeTerms :: Type -> [Term Type]
 
 -- | Test type is relational.
 isTypeRel :: Type -> Bool
@@ -563,10 +611,10 @@ isTypeRel :: Type -> Bool
 typeRelIndex :: Type -> TermPath -> [Int]
 
 -- | Modify terms of relation type.
-typeRelMapTerms :: Map [NamedType] -> Map Type
+typeRelMapTerms :: Map [Term Type] -> Map Type
 
 -- | Modify term of relation type.
-typeRelMapTerm :: Map NamedType -> Map Type
+typeRelMapTerm :: Map (Term Type) -> Map Type
 
 -- | Modify term name of relation type.
 typeRelMapName :: Map TermName -> Map Type
@@ -839,7 +887,7 @@ headOf :: Type -> Head
 --   &gt;&gt;&gt; B.mixEncode $ headFrom ["a", "b"]
 --   MixText "/a /b"
 --   </pre>
-headFrom :: [TermName] -> Head
+headFrom :: (ToTermName n) => [n] -> Head
 
 -- | Test two heads are equivalent.
 headEquiv :: Head -> Head -> Bool
@@ -897,13 +945,16 @@ headConsNest :: TermName -> Head -> Map Head
 --   </pre>
 headNests :: [TermName] -> Map Head
 
+-- | Term whose content is type.
+type TypeTerm = Term Type
+
 -- | Reconstruct head.
 --   
 --   <pre>
 --   &gt;&gt;&gt; headMap reverse $ headFrom ["a", "b"]
 --   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
 --   </pre>
-headMap :: Map [NamedType] -> Map Head
+headMap :: Map [TypeTerm] -> Map Head
 
 -- | Convert term names.
 --   
@@ -961,7 +1012,7 @@ type Body c = [[c]]
 relSort :: (Ord c) => Map (Rel c)
 
 -- | Sort relation body according to order specification.
-relBodyOrder :: (Ord c) => [SignedTermName] -> Head -> Map [[c]]
+relBodyOrder :: (Ord c) => [TermName] -> Head -> Map [[c]]
 
 -- | The nullary empty relation. In other words, relational constant that
 --   has no terms and no tuples.
@@ -988,7 +1039,10 @@ reldau :: Rel c
 class SelectRel r
 
 -- | Convert judges to relation.
-selectRel :: SelectRel r => r c -> JudgeClass -> [TermName] -> Rel c
+selectRel :: SelectRel r => r c -> RelSelect c
+
+-- | Select relation.
+type RelSelect c = JudgeClass -> [TermName] -> Rel c
 
 -- | Convert relation to list of judges.
 judgesFromRel :: JudgeOf c -> JudgeClass -> Rel c -> [Judge c]
@@ -1780,17 +1834,23 @@ expect2Actual :: String -> String -> String -> [String]
 -- | Decode term name.
 module Koshucode.Baala.Data.Decode.Term
 
+-- | Term name cache.
+type CacheT = CacheS TermName
+
+-- | Empty term name cache.
+cacheT :: CacheT
+
 -- | Read flat term name from token tree. If the token tree contains nested
 --   term name, this function failed.
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.tt1 "/a" &gt;&gt;= treeFlatName
---   Right "a"
+--   Right (TermName "a")
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeFlatName
---   Right "a"
+--   Right (TermName "a")
 --   </pre>
 --   
 --   <pre>
@@ -1798,6 +1858,9 @@ module Koshucode.Baala.Data.Decode.Term
 --   Left ...
 --   </pre>
 treeFlatName :: TTree -> Ab TermName
+
+-- | Cached version of <a>treeFlatName</a>.
+treeFlatNameCached :: CacheT -> TTree -> Ab (CacheT, TermName)
 
 -- | Read flat term names.
 --   
@@ -1813,7 +1876,7 @@ treesFlatNames :: [TTree] -> Ab [TermName]
 --   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeSignedName
 --   Right (GT, "a")
 --   </pre>
-treeSignedName :: TTree -> Ab SignedTermName
+treeSignedName :: TTree -> Ab TermName
 
 -- | Read list of named token trees from token trees.
 --   
@@ -1823,6 +1886,9 @@ treeSignedName :: TTree -> Ab SignedTermName
 --          ("b", [TreeL ...])]
 --   </pre>
 treesTerms :: [TTree] -> Ab [Term [TTree]]
+
+-- | Cached version of <a>treesTerms</a>.
+treesTermsCached :: CacheT -> [TTree] -> Ab (CacheT, [Term [TTree]])
 
 -- | Read list of named token trees from token trees. This function wraps
 --   long branches into group.
@@ -1940,31 +2006,31 @@ module Koshucode.Baala.Data.Church.Cox
 -- | Term-content expressions.
 data Cox c
 
--- | Literal content
+-- | <b>1.</b> Literal content
 CoxLit :: [CodePt] -> c -> Cox c
 
--- | Term reference, its name and position
-CoxTerm :: [CodePt] -> [TermName] -> [Int] -> Cox c
+-- | <b>2.</b> Term reference, its name and index
+CoxTerm :: [CodePt] -> [TermName] -> [TermIndex] -> Cox c
 
--- | Content calculator
+-- | <b>3.</b> Content calculator
 CoxCalc :: [CodePt] -> BlankName -> (CopCalc c) -> Cox c
 
--- | Local blank, its name and De Bruijn index
+-- | <b>4.</b> Local blank, its name and De Bruijn index
 CoxLocal :: [CodePt] -> String -> Int -> Cox c
 
--- | Blank in form
+-- | <b>5.</b> Blank in form
 CoxBlank :: [CodePt] -> BlankName -> Cox c
 
--- | Fill args in a form
+-- | <b>6.</b> Fill args in a form
 CoxFill :: [CodePt] -> (Cox c) -> [Cox c] -> Cox c
 
--- | Form with single blank
+-- | <b>7.</b> Form with single blank
 CoxForm1 :: [CodePt] -> CoxTag -> String -> (Cox c) -> Cox c
 
--- | Form with multiple blanks
+-- | <b>8.</b> Form with multiple blanks
 CoxForm :: [CodePt] -> CoxTag -> [String] -> (Cox c) -> Cox c
 
--- | Cox with outside arguments
+-- | <b>9.</b> Cox with outside arguments
 CoxWith :: [CodePt] -> [NamedCox c] -> (Cox c) -> Cox c
 
 -- | Expression pair.
@@ -2050,11 +2116,23 @@ data CopSet c
 CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -> [Named (Cop c)] -> CopFind (Cox c) -> CopFind (CopCox c) -> CopFind CopTree -> [NamedCox c] -> CopSet c
 [copsetCopList] :: CopSet c -> [Cop c]
 [copsetInfixList] :: CopSet c -> [Named InfixHeight]
+
+-- | CopCalc
 [copsetCalcList] :: CopSet c -> [Named (Cop c)]
+
+-- | CopCox
 [copsetCoxList] :: CopSet c -> [Named (Cop c)]
+
+-- | CopTree
 [copsetTreeList] :: CopSet c -> [Named (Cop c)]
+
+-- | This is created by <a>copsetFill</a>.
 [copsetFindCalc] :: CopSet c -> CopFind (Cox c)
+
+-- | This is created by <a>copsetFill</a>.
 [copsetFindCox] :: CopSet c -> CopFind (CopCox c)
+
+-- | This is created by <a>copsetFill</a>.
 [copsetFindTree] :: CopSet c -> CopFind CopTree
 [copsetDerived] :: CopSet c -> [NamedCox c]
 
@@ -2062,12 +2140,15 @@ CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -
 type CopFind f = BlankName -> Maybe f
 
 -- | Empty operator set.
+
+-- | <i>Deprecated: Use <tt>def</tt> instead.</i>
 copset :: CopSet c
 
 -- | Complete operator set.
 copsetFill :: Map (CopSet c)
 instance GHC.Show.Show (Koshucode.Baala.Data.Church.Cop.Cop c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Data.Church.Cop.Cop c)
+instance Data.Default.Class.Default (Koshucode.Baala.Data.Church.Cop.CopSet c)
 
 
 -- | Decode specific content.
@@ -2157,13 +2238,16 @@ stringTime :: String -> Ab Time
 module Koshucode.Baala.Data.Class.Singleton
 
 -- | Classifiable into <a>Type</a>.
-class CTypeOf c where isA c t = typeOf c == t
+class CTypeOf c where isA c t = typeOf c == t sameType c1 c2 = typeOf c1 == typeOf c2
 
 -- | Get type of content.
 typeOf :: CTypeOf c => c -> Type
 
 -- | Test content is a some type.
 isA :: CTypeOf c => Test2 c Type
+
+-- | Test two contents are same type.
+sameType :: CTypeOf c => Test2 c c
 
 -- | Get content which may be aborted.
 getContent :: (CTypeOf c) => Test c -> (c -> b) -> Ab c -> Ab b
@@ -2258,10 +2342,10 @@ putCode :: CCode c => String -> Ab c
 -- | Term name.
 class (CTypeOf c) => CTerm c where getTerm = getContent isTerm gTerm putTerm = Right . pTerm
 isTerm :: CTerm c => c -> Bool
-gTerm :: CTerm c => c -> String
-pTerm :: CTerm c => String -> c
-getTerm :: CTerm c => Ab c -> Ab String
-putTerm :: CTerm c => String -> Ab c
+gTerm :: CTerm c => c -> TermName
+pTerm :: CTerm c => TermName -> c
+getTerm :: CTerm c => Ab c -> Ab TermName
+putTerm :: CTerm c => TermName -> Ab c
 
 -- | Double-quoted text content.
 class (CTypeOf c) => CText c where getText = getContent isText gText putText = Right . pText
@@ -2274,13 +2358,13 @@ putText :: CText c => String -> Ab c
 -- | Create text or empty content.
 --   
 --   <pre>
---   &gt;&gt;&gt; pMaybeText "a" :: BaalaC
---   VText "a"
+--   &gt;&gt;&gt; pMaybeText "a" :: Content
+--   ContentText "a"
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; pMaybeText "" :: BaalaC
---   VEmpty
+--   &gt;&gt;&gt; pMaybeText "" :: Content
+--   ContentEmpty
 --   </pre>
 pMaybeText :: (CText c, CEmpty c) => String -> c
 
@@ -2314,7 +2398,7 @@ getSet :: CSet c => Ab c -> Ab [c]
 putSet :: CSet c => [c] -> Ab c
 
 -- | Create set of term contents.
-pTermSet :: (CTerm c, CSet c) => [String] -> c
+pTermSet :: (CTerm c, CSet c) => [TermName] -> c
 
 -- | Create set of text contents.
 pTextSet :: (CText c, CSet c) => [String] -> c
@@ -2368,12 +2452,16 @@ putType :: CType c => Type -> Ab c
 module Koshucode.Baala.Data.Class.Content
 
 -- | Generic content class.
-class (Ord c, Show c, MixShortEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty
+class (Ord c, Show c, MixShortEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty typeOrder c | isEmpty c = 1 | isBool c = 11 | isDec c = 12 | isClock c = 13 | isTime c = 14 | isCode c = 15 | isTerm c = 16 | isText c = 17 | isList c = 21 | isSet c = 22 | isTie c = 23 | isRel c = 24 | isInterp c = 25 | isType c = 27 | isEnd c = 31 | otherwise = error "unknown content"
+
+-- | <i>Deprecated: Do not use it.</i>
 appendContent :: CContent c => c -> c -> Ab c
+
+-- | <i>Deprecated: Do not use it.</i>
 joinContent :: CContent c => [c] -> Ab c
 
--- | Order of type.
-typeOrder :: (CContent c) => c -> Int
+-- | Order of content type.
+typeOrder :: CContent c => c -> Int
 
 
 -- | Content encoder.
@@ -2425,8 +2513,8 @@ gpSetSort :: (Ord c, CSet c) => CGetPut [c] c
 -- | Apply function to internal value of content.
 --   
 --   <pre>
---   &gt;&gt;&gt; contentAp gText pText reverse (the $ pText "abc") :: BaalaC
---   VText "cba"
+--   &gt;&gt;&gt; contentAp gText pText reverse (the $ pText "abc") :: Content
+--   ContentText "cba"
 --   </pre>
 contentAp :: (c -> a) -> (b -> c') -> (a -> b) -> c -> c'
 
@@ -2471,40 +2559,7 @@ treeContent :: (CContent c) => CalcContent c -> DecodeContent c
 
 -- | Decode judge from token trees. Judges itself are not content type. It
 --   can be only used in the top-level of resources.
-treesJudge :: (CContent c) => CalcContent c -> AssertType -> JudgeClass -> [TTree] -> Ab (Judge c)
-
--- | Type of assertions.
-data AssertType
-
--- | <tt>|==</tt> <i>C</i> <tt>:</tt> <i>R</i> generates affirmative
---   judges.
-AssertAffirm :: AssertType
-
--- | <tt>|=x</tt> <i>C</i> <tt>:</tt> <i>R</i> generates denial judges.
-AssertDeny :: AssertType
-
--- | <tt>|=xx</tt> <i>C</i> <tt>:</tt> <i>R</i> generates multiple-denial
---   judges.
-AssertMultiDeny :: AssertType
-
--- | <tt>|=c</tt> <i>C</i> <tt>:</tt> <i>R</i> generates changement judges.
-AssertChange :: AssertType
-
--- | <tt>|=cc</tt> <i>C</i> <tt>:</tt> <i>R</i> generates
---   multiple-changement judges.
-AssertMultiChange :: AssertType
-
--- | <tt>|=v</tt> <i>C</i> <tt>:</tt> <i>R</i> generates violation judges.
-AssertViolate :: AssertType
-
--- | Create judgement corresponding to assertion type.
-assertAs :: AssertType -> JudgeOf c
-
--- | Frege's stroke and various assertion lines.
-assertSymbol :: AssertType -> String
-instance GHC.Classes.Ord Koshucode.Baala.Data.Decode.Content.AssertType
-instance GHC.Classes.Eq Koshucode.Baala.Data.Decode.Content.AssertType
-instance GHC.Show.Show Koshucode.Baala.Data.Decode.Content.AssertType
+treesJudge :: (CContent c) => CalcContent c -> CacheT -> AssertType -> JudgeClass -> [TTree] -> Ab (CacheT, Judge c)
 
 
 -- | Term content decoder.
@@ -2517,85 +2572,103 @@ module Koshucode.Baala.Data.Content
 -- | The Baala content type.
 data Content
 
--- | <i>Singleton:</i> Sign of no ordinary type
+-- | <i>Edge:</i> Sign of no ordinary type
 
--- | <i>Warning: Use <a>empty</a> instead.</i>
-VEmpty :: Content
+-- | <i>Warning: Use <tt>empty</tt> instead.</i>
+ContentEmpty :: Content
 
 -- | <i>Numeric:</i> Boolean type
 
--- | <i>Warning: Use <a>pBool</a> instead.</i>
-VBool :: Bool -> Content
+-- | <i>Warning: Use <tt>pBool</tt> instead.</i>
+ContentBool :: Bool -> Content
 
 -- | <i>Numeric:</i> Decimal number type
 
--- | <i>Warning: Use <a>pDec</a> instead.</i>
-VDec :: Decimal -> Content
+-- | <i>Warning: Use <tt>pDec</tt> instead.</i>
+ContentDec :: Decimal -> Content
 
 -- | <i>Numeric:</i> Clock type
 
--- | <i>Warning: Use <a>pClock</a> instead.</i>
-VClock :: Clock -> Content
+-- | <i>Warning: Use <tt>pClock</tt> instead.</i>
+ContentClock :: Clock -> Content
 
 -- | <i>Numeric:</i> Time type
 
--- | <i>Warning: Use <a>pTime</a> instead.</i>
-VTime :: Time -> Content
+-- | <i>Warning: Use <tt>pTime</tt> instead.</i>
+ContentTime :: Time -> Content
 
 -- | <i>Textual:</i> Code type
 
--- | <i>Warning: Use <a>pCode</a> instead.</i>
-VCode :: String -> Content
+-- | <i>Warning: Use <tt>pCode</tt> instead.</i>
+ContentCode :: String -> Content
 
 -- | <i>Textual:</i> Term name type
 
--- | <i>Warning: Use <a>pTerm</a> instead.</i>
-VTerm :: String -> Content
+-- | <i>Warning: Use <tt>pTerm</tt> instead.</i>
+ContentTerm :: TermName -> Content
 
 -- | <i>Textual:</i> Text type
 
--- | <i>Warning: Use <a>pText</a> instead.</i>
-VText :: String -> Content
+-- | <i>Warning: Use <tt>pText</tt> instead.</i>
+ContentText :: String -> Content
 
--- | <i>Collective:</i> List type
+-- | <i>Recursive, Collective:</i> List type
 
--- | <i>Warning: Use <a>pList</a> instead.</i>
-VList :: [Content] -> Content
+-- | <i>Warning: Use <tt>pList</tt> instead.</i>
+ContentList :: [Content] -> Content
 
--- | <i>Collective:</i> Set type
+-- | <i>Recursive, Collective:</i> Set type
 
--- | <i>Warning: Use <a>pSet</a> instead.</i>
-VSet :: [Content] -> Content
+-- | <i>Warning: Use <tt>pSet</tt> instead.</i>
+ContentSet :: [Content] -> Content
 
--- | <i>Relational:</i> Tie type (set of terms)
+-- | <i>Recursive, Relational:</i> Tie type (set of terms)
 
--- | <i>Warning: Use <a>pTie</a> instead.</i>
-VTie :: [Named Content] -> Content
+-- | <i>Warning: Use <tt>pTie</tt> instead.</i>
+ContentTie :: [TermC] -> Content
 
--- | <i>Relational:</i> Relation type
+-- | <i>Recursive, Relational:</i> Relation type
 
--- | <i>Warning: Use <a>pRel</a> instead.</i>
-VRel :: (Rel Content) -> Content
+-- | <i>Warning: Use <tt>pRel</tt> instead.</i>
+ContentRel :: RelC -> Content
 
--- | <i>Relational:</i> Interpretation type
+-- | <i>Meta, Relational:</i> Interpretation type
 
--- | <i>Warning: Use <a>pInterp</a> instead.</i>
-VInterp :: Interp -> Content
+-- | <i>Warning: Use <tt>pInterp</tt> instead.</i>
+ContentInterp :: Interp -> Content
 
 -- | <i>Meta:</i> Type for type
 
--- | <i>Warning: Use <a>pType</a> instead.</i>
-VType :: Type -> Content
+-- | <i>Warning: Use <tt>pType</tt> instead.</i>
+ContentType :: Type -> Content
 
--- | <i>Singleton:</i> The end of everything
+-- | <i>Edge:</i> The end of everything
 
--- | <i>Warning: Use <a>end</a> instead.</i>
-VEnd :: Content
+-- | <i>Warning: Use <tt>end</tt> instead.</i>
+ContentEnd :: Content
 
--- | The Baala content type.
+-- | Constants for edge content, i.e., empty and end.
+type DispatchEdge a = (a, a)
 
--- | <i>Deprecated: Use <a>Content</a> instead</i>
-type BaalaC = Content
+-- | Functions for simple content, i.e., boolean, decimal, clock, time,
+--   code, term, and text.
+type DispatchSimple a = (Bool -> a, Decimal -> a, Clock -> a, Time -> a, String -> a, TermName -> a, String -> a)
+
+-- | Functions for complex content, i.e., list, set, tie, relation, interp,
+--   and type.
+type DispatchComplex a = ([Content] -> a, [Content] -> a, [TermC] -> a, RelC -> a, Interp -> a, Type -> a)
+
+-- | Call type-specific functions on empty or end content.
+dispatchEdge :: DispatchEdge a -> (Content -> a) -> (Content -> a)
+
+-- | Call type-specific functions on simple content.
+dispatchSimple :: DispatchSimple a -> (Content -> a) -> (Content -> a)
+
+-- | Call type-specific functions on complex content.
+dispatchComplex :: DispatchComplex a -> (Content -> a) -> (Content -> a)
+
+-- | Call type-specific functions on content.
+dispatchContent :: DispatchEdge a -> DispatchSimple a -> DispatchComplex a -> (Content -> a)
 
 -- | <tt>Term</tt> for concrete baala content.
 type TermC = Term Content
@@ -2610,15 +2683,95 @@ type RelC = Rel Content
 --   
 --   <pre>
 --   &gt;&gt;&gt; the $ D.pText "a"
---   VText "a"
+--   ContentText "a"
 --   </pre>
 the :: Content -> Content
 
 -- | Decode the Baala content from string.
 --   
+--   Edge contents.
+--   
 --   <pre>
---   &gt;&gt;&gt; stringC "'a"
---   Right (VCode "a")
+--   &gt;&gt;&gt; stringC "()"
+--   Right ContentEmpty
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "(/)"
+--   Right ContentEnd
+--   </pre>
+--   
+--   Numeric contents.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "(+)"
+--   Right (ContentBool True)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "12.00"
+--   Right (ContentDec Decimal (2) 12)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "|02:30:00|"
+--   Right (ContentClock |02:30:00|)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "2013-04-18"
+--   Right (ContentTime 2013-04-18)
+--   </pre>
+--   
+--   Textual contents.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "'foo"
+--   Right (ContentCode "foo")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "'/foo"
+--   Right (ContentTerm "foo")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "\"foo\""
+--   Right (ContentText "foo")
+--   </pre>
+--   
+--   Metadata contents.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "{| Aaa /x bbb /y ccc. |}"
+--   Right (ContentInterp (Interp { interpWords = ..., interpTerms = ... }))
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "[- text -]"
+--   Right (ContentType TypeText)
+--   </pre>
+--   
+--   Recursive contents.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "[ 'foo | 'bar ]"
+--   Right (ContentList [ContentCode "foo", ContentCode "bar"])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "{ 'foo | 'bar }"
+--   Right (ContentSet [ContentCode "foo", ContentCode "bar"])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "{- /x 'foo /y 'bar -}"
+--   Right (ContentTie [("x", ContentCode "foo"), ("y", ContentCode "bar")])
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringC "{= /x /y [ 'foo | 'bar ][ 'baz | 'qux ] =}"
+--   Right (ContentRel (Rel { relHead = ..., relBody = ... }))
 --   </pre>
 stringC :: String -> Ab Content
 instance GHC.Show.Show Koshucode.Baala.Data.Content.Content
@@ -2647,8 +2800,8 @@ instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.C
 -- | Term-content calcutation.
 module Koshucode.Baala.Data.Church.Build
 
--- | Construct content expression from token tree
-coxBuild :: (CContent c) => CalcContent c -> CopSet c -> TTree -> Ab (Cox c)
+-- | Construct content expression from token tree.
+treeCox :: (CContent c) => CalcContent c -> CopSet c -> TTree -> Ab (Cox c)
 
 -- | Insert fresh form into indexed expression.
 coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)
@@ -2687,6 +2840,165 @@ getRightArg2 :: [Ab c] -> Ab (c, c)
 -- | Extract three non-abortable arguments.
 getRightArg3 :: [Ab c] -> Ab (c, c, c)
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Data.Church.Run.Beta c)
+
+
+-- | Genus of contents.
+module Koshucode.Baala.Data.Type.Type.Genus
+
+-- | Set of various contents. A genus <i>C</i> - <i>X</i> + <i>Y</i> has
+--   (1) <i>C</i> is a set of types as representative contents, (2)
+--   <i>X</i> is exclusive contents from the set, and (3) <i>Y</i> is
+--   inclusive contents to the set.
+--   
+--   Contents in <i>X</i> must be in <i>C</i>, contents in <i>Y</i> must
+--   not be in <i>C</i>. Internal function <a>genusFrom</a> trims
+--   unnecessary contents according to this conditions.
+--   
+--   Diagram of genus <i>G</i> = <i>C</i> - <i>X</i> + <i>Y</i>:
+--   
+--   <pre>
+--   G -------$$$-$$$$$$------$-$$$-$$$$---------$--$----
+--               :             :   :             :  :
+--   C    T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|        :  :
+--   X           x             x   x             :  :
+--   Y                                           y  y
+--   </pre>
+data Genus c
+Genus :: Set c -> Set c -> Set c -> Genus c
+
+-- | Representative contents.
+[genusTypes] :: Genus c -> Set c
+
+-- | Particular exclusive contents.
+[genusExclusive] :: Genus c -> Set c
+
+-- | Particular inclusive contents.
+[genusInclusive] :: Genus c -> Set c
+
+-- | Completely empty genus.
+genusVoid :: Genus c
+
+-- | Create genus of single type.
+genusType :: (Ord c, CTypeOf c) => c -> Genus c
+
+-- | Create genus of single inclusives content.
+genusOf :: (Ord c, CTypeOf c) => c -> Genus c
+
+-- | Test membership of content to genus.
+genusMember :: (Ord c, CTypeOf c) => c -> Genus c -> Bool
+
+-- | Meet of two genera.
+--   
+--   Meet of <i>A</i> - <i>X1</i> + <i>Y1</i>
+--   
+--   <pre>
+--   -------$$-$$$$$$$------$-$$$$$-$$--------$---$-----------
+--            :              :     :          :   :
+--   A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :   :
+--   X1       x1             x1    x1         :   :
+--   Y1                                       y1  y1
+--   </pre>
+--   
+--   and <i>B</i> - <i>X2</i> + <i>Y2</i>
+--   
+--   <pre>
+--   -------------$---------$$$$-$$$$$------$$-$$$$$$$---$----
+--                :             :             :          :
+--   B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+--   X2           :             x2            x2         :
+--   Y2           y2                                     y2
+--   </pre>
+--   
+--   is:
+--   
+--   <pre>
+--   -------------$---------$-$$-$$-$$------------$-----------
+--                :          :  :  :              :
+--   C            :     T2 |$$$$$$$$$$|           :
+--   X3      (x1) :          x1 x2 x1        (x2) :
+--   Y3           y2                              y1
+--           &lt;A * Y2 - X1&gt;                   &lt;B * Y1 - X2&gt;
+--   </pre>
+genusMeet :: (Ord c, CTypeOf c) => Bin (Genus c)
+
+-- | Difference of two genera.
+--   
+--   Difference of <i>A</i> - <i>X1</i> + <i>Y1</i>
+--   
+--   <pre>
+--   -------$$$-$$$$$$------$-$$$$$-$$--------$--$-----------$----
+--             :             :     :          :  :           :
+--   A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :  :           :
+--   X1        x1            x1    x1         :  :           :
+--   Y1                                       y1 y1          y1
+--   </pre>
+--   
+--   and <i>B</i> - <i>X2</i> + <i>Y2</i>
+--   
+--   <pre>
+--   -------------$---------$$$$-$$$$$------$$-$$$$$$$---$--------
+--                :             :             :          :
+--   B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+--   X2           :             x2            x2         :
+--   Y2           y2                                     y2
+--   </pre>
+--   
+--   is:
+--   
+--   <pre>
+--   -------$$$-$$-$$$----------$-------------$--------------$----
+--             :  :             :             :              :
+--   C  T1 |$$$$$$$$$$|         :             :              :
+--   X3        x1 y2       (x1) : (x1)        :         (y2) :
+--   Y3                         x2            y1             y1
+--   </pre>
+genusDiff :: (Ord c, CTypeOf c) => Bin (Genus c)
+
+-- | Join of two genera.
+--   
+--   Join of <i>A</i> - <i>X1</i> + <i>Y1</i>
+--   
+--   <pre>
+--   -------$$$-$$$$$$------$-$$$$-$$$--------$---------------
+--             :             :    :           :
+--   A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :
+--   X1        x1            x1   x1          :
+--   Y1                                       y1
+--   </pre>
+--   
+--   and <i>B</i> - <i>X2</i> + <i>Y2</i>
+--   
+--   <pre>
+--   -------------$---------$-$$$$$$$$------$$-$$$$$$$---$----
+--                :          :                :          :
+--   B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+--   X2           :          x2               x2         :
+--   Y2           y2                                     y2
+--   </pre>
+--   
+--   is:
+--   
+--   <pre>
+--   -------$$$-$$$$$$------$-$$$$$$$$------$$$$$$$$$$---$----
+--             :             :                           :
+--   C  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+--   X3        x1            x1 = x2                     :
+--         &lt;X1 - B - Y2&gt;    &lt;X1 * X2&gt;      &lt;X2 - A - Y1&gt; :
+--   Y3          (y2)                                    y2
+--   </pre>
+genusJoin :: (Ord c, CTypeOf c) => Bin (Genus c)
+
+-- | Split acceptable genus by actual genus.
+genusSplit :: (Ord c, CTypeOf c) => Genus c -> Genus c -> (Genus c, Genus c)
+
+-- | Include specific contents.
+genusInclude :: (Ord c, CTypeOf c) => Genus c -> [c] -> Genus c
+
+-- | Exclude specific contents.
+genusExclude :: (Ord c, CTypeOf c) => Genus c -> [c] -> Genus c
+instance GHC.Classes.Ord c => GHC.Classes.Ord (Koshucode.Baala.Data.Type.Type.Genus.Genus c)
+instance GHC.Classes.Eq c => GHC.Classes.Eq (Koshucode.Baala.Data.Type.Type.Genus.Genus c)
+instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Data.Type.Type.Genus.Genus c)
 
 
 -- | Content calculation.

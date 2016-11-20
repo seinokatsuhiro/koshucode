@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Result of relational calculation.
@@ -163,13 +163,13 @@ Lexmap :: LexmapType -> Token -> AttrPara -> [(String, Lexmap)] -> [String] -> L
 -- | Type of lexmap.
 data LexmapType
 
--- | Built-in relmap
+-- | Relmap of built-in operator
 LexmapBase :: LexmapType
 
--- | User-defined relmap
+-- | Derived or user-defined relmap
 LexmapDerived :: LexmapType
 
--- | Local relation reference
+-- | Local relation reference like <tt>^/r</tt> or <tt>^r</tt>
 LexmapLocal :: LexmapType
 
 -- | Name of relmap operator.
@@ -177,6 +177,9 @@ type RopName = String
 
 -- | Name of relmap operator
 lexName :: Lexmap -> RopName
+
+-- | Lexmap local reference.
+lexLocalRef :: Lexmap -> Maybe LocalRef
 
 -- | Add message to lexmap.
 lexAddMessage :: String -> Map Lexmap
@@ -207,6 +210,27 @@ relTableLines :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> [String]
 
 -- | Convert contents of relation into strings.
 relText :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> RelText
+
+
+-- | Dataset as a set of judges.
+--   
+--   Dataset is like a bridge of judges and relations. We can get a
+--   relation from a dataset, that dataset is build from judges.
+module Koshucode.Baala.Core.Assert.Dataset
+
+-- | Dataset is a set of judges.
+data Dataset c
+
+-- | Gather judges into a dataset.
+dataset :: [Judge c] -> Dataset c
+
+-- | Add judges to dataset.
+datasetAdd :: [Judge c] -> Map (Dataset c)
+
+-- | Select relation from dataset. If a giving term is not in judges,
+--   <tt>CEmpty</tt> sign is used.
+datasetSelect :: (Ord c, CEmpty c) => Dataset c -> RelSelect c
+instance Data.Default.Class.Default (Koshucode.Baala.Core.Assert.Dataset.Dataset c)
 
 
 -- | Message list.
@@ -253,7 +277,7 @@ abRelmap :: (CodePtr cp) => [cp] -> Map (Ab b)
 abSpecialize :: (CodePtr cp) => [cp] -> Map (Ab b)
 
 -- | Unknown nested relation reference.
-unkNestVar :: String -> [Token] -> [((Token, LocalRef String), Head)] -> Ab a
+unkNestVar :: String -> [Token] -> [((Token, LocalRef), Head)] -> Ab a
 
 -- | Disabled feature: input clause
 disabledInputClause :: Ab b
@@ -293,8 +317,8 @@ module Koshucode.Baala.Core.Relkit.Message
 -- | Abortable scope for running relkit.
 abRun :: (CodePtr cp) => [cp] -> Map (Ab b)
 
--- | Unknown nested relation
-unkNestRel :: Token -> String -> [String] -> Ab a
+-- | Unknown local relation
+unkLocalRel :: Token -> String -> [String] -> Ab a
 
 
 -- | Message list.
@@ -387,23 +411,61 @@ type RelkitBody c = Sourced (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
+
+-- | <i>Safe flow:</i> Arbitrary relation mapping, i.e., mapping from
+--   multiple tuples to multiple tuples.
 RelkitFull :: Bool -> (Map [[c]]) -> RelkitCore c
+
+-- | <i>Safe flow:</i> Mapping from single tuple to multiple tuples,
+--   include no tuples.
 RelkitOneToMany :: Bool -> (ManyMap [c]) -> RelkitCore c
+
+-- | <i>Safe flow:</i> Mapping from single tuple to single tuple.
 RelkitOneToOne :: Bool -> (Map [c]) -> RelkitCore c
-RelkitPred :: (Test [c]) -> RelkitCore c
-RelkitAbFull :: Bool -> ([BodyMap c] -> AbMap [[c]]) -> [RelkitBody c] -> RelkitCore c
-RelkitOneToAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
-RelkitOneToAbOne :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
-RelkitAbSemi :: (AbTest [[c]]) -> (RelkitBody c) -> RelkitCore c
+
+-- | <i>Safe flow:</i> Filter tuples
+RelkitTest :: (Test [c]) -> RelkitCore c
+
+-- | <i>Abortable flow:</i> Filter by calculation.
 RelkitAbTest :: (AbTest [c]) -> RelkitCore c
+
+-- | <i>Abortable flow:</i> Filter by data.
+RelkitAbSemi :: (AbTest [[c]]) -> (RelkitBody c) -> RelkitCore c
+
+-- | <i>Abortable confluence:</i> Multiple to multiple.
+RelkitAbFull :: Bool -> ([BodyMap c] -> AbMap [[c]]) -> [RelkitBody c] -> RelkitCore c
+
+-- | <i>Abortable confluence:</i> Single to multiple.
+RelkitOneToAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
+
+-- | <i>Abortable confluence:</i> Single to single.
+RelkitOneToAbOne :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
+
+-- | <i>Connection:</i> Append two mapping.
 RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
-RelkitConst :: [[c]] -> RelkitCore c
+
+-- | <i>Connection:</i> Identity mapping, i.e., output input relation
+--   without modification.
 RelkitId :: RelkitCore c
+
+-- | <i>Source:</i> Ignore input, and output constant relation.
+RelkitConst :: [[c]] -> RelkitCore c
+
+-- | <i>Source:</i> Ignore input, and output relation from data source.
 RelkitSource :: JudgeClass -> [TermName] -> RelkitCore c
+
+-- | <i>Reference:</i> Link point to other relmap.
 RelkitLink :: RopName -> RelkitKey -> (Maybe (RelkitBody c)) -> RelkitCore c
+
+-- | <i>Reference:</i> Give indecies to nested relations.
+RelkitNest :: Token -> [IndexTerm] -> (RelkitBody c) -> RelkitCore c
+
+-- | <i>Reference:</i> Give a name to input relation.
 RelkitCopy :: Token -> RopName -> (RelkitBody c) -> RelkitCore c
-RelkitNestVar :: Token -> RopName -> RelkitCore c
-RelkitNest :: Token -> [(String, Int)] -> (RelkitBody c) -> RelkitCore c
+
+-- | <i>Reference:</i> Local relation reference, i.e., <tt>^/r</tt> or
+--   <tt>^r</tt>.
+RelkitLocal :: Token -> LocalRef -> RelkitCore c
 
 -- | Relkit search table.
 type RelkitTable c = [(RelkitKey, Relkit c)]
@@ -413,9 +475,6 @@ type RelkitKey = (Maybe Head, [Lexmap])
 
 -- | Mapping for body of relation.
 type BodyMap c = AbMap [[c]]
-
--- | Relation selector
-type RelSelect c = JudgeClass -> [String] -> Rel c
 
 -- | Make <a>Relkit</a> from heading of input relation.
 type RelkitFlow c = Maybe Head -> Ab (Relkit c)
@@ -465,14 +524,14 @@ relkitConstBody :: [TermName] -> [[c]] -> Relkit c
 -- | Relkit for source relmap.
 relkitSource :: JudgeClass -> [TermName] -> Relkit c
 
+-- | Relkit with nested relation index.
+relkitNest :: Token -> [IndexTerm] -> Map (Relkit c)
+
 -- | Relkit for copy relmap.
 relkitCopy :: Token -> String -> Map (Relkit c)
 
--- | Relkit for self-group relmap.
-relkitNest :: Token -> [(String, Int)] -> Map (Relkit c)
-
 -- | Relkit for local relation reference.
-relkitNestVar :: Token -> String -> Head -> Relkit c
+relkitLocal :: Token -> LocalRef -> Head -> Relkit c
 instance GHC.Base.Monoid (Koshucode.Baala.Core.Relkit.Relkit.Relkit c)
 
 
@@ -483,7 +542,7 @@ module Koshucode.Baala.Core.Relkit.Run
 relkitLink :: (Ord c) => RelkitTable c -> Map (Relkit c)
 
 -- | Run relkit.
-relkitRun :: (Ord c, CRel c, SelectRel h) => h c -> [Local [[c]]] -> RelkitBody c -> AbMap [[c]]
+relkitRun :: (Ord c, CRel c, SelectRel h) => h c -> [LocalTable c] -> RelkitBody c -> AbMap [[c]]
 
 -- | Calculate fixed relation.
 fixedRelation :: (Ord c) => Map (AbMap [[c]])
@@ -491,40 +550,14 @@ fixedRelation :: (Ord c) => Map (AbMap [[c]])
 -- | Change term order.
 bmapAlign :: Head -> Head -> Map (AbMap [[c]])
 
--- | Local relations.
+-- | Lexical point and table of local relations.
 
 -- | <i>Warning: This is only used in defined module.</i>
-type Local a = Lexical [Named a]
-
--- | Local relation.
-
--- | <i>Warning: This is only used in defined module.</i>
-type Lexical a = (Token, a)
+type LocalTable c = (Token, [(LocalRef, [[c]])])
 
 
 -- | Relation-to-relation mapping.
 module Koshucode.Baala.Core.Relkit
-
-
--- | Dataset as a set of judges.
---   
---   Dataset is like a bridge of judges and relations. We can get a
---   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Core.Assert.Dataset
-
--- | Dataset is a set of judges.
-data Dataset c
-
--- | Gather judges into a dataset.
-dataset :: [Judge c] -> Dataset c
-
--- | Add judges to dataset.
-datasetAdd :: [Judge c] -> Dataset c -> Dataset c
-
--- | Select relation from dataset. If a giving term is not in judges,
---   <tt>CEmpty</tt> sign is used.
-datasetSelect :: (Ord c, CEmpty c) => Dataset c -> RelSelect c
-instance Data.Default.Class.Default (Koshucode.Baala.Core.Assert.Dataset.Dataset c)
 
 
 -- | Generic relmap.
@@ -657,11 +690,11 @@ relmapCopy :: Intmed' h c -> RopName -> Map (Relmap' h c)
 -- | Link-to-other relmap.
 relmapLink :: Intmed' h c -> Relmap' h c
 
--- | Local relmap.
-relmapLocalSymbol :: Intmed' h c -> String -> Relmap' h c
+-- | Relmap reference of local symbolic relation.
+relmapLocalSymbol :: Intmed' h c -> RopName -> Relmap' h c
 
--- | Relmap references local nested relation.
-relmapLocalNest :: Intmed' h c -> String -> Relmap' h c
+-- | Relmap reference of local nested relation.
+relmapLocalNest :: Intmed' h c -> TermName -> Relmap' h c
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap' h c = Lexmap -> Ab (Relmap' h c)
@@ -967,7 +1000,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
 -- | Relational data resource
 data Resource c
-Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> [Judge c] -> InputQueue -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> SecNo -> RelSelect c -> Resource c
+Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> [Judge c] -> InputQueue -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> SecNo -> CacheT -> RelSelect c -> Resource c
 
 -- | Global parameter
 [resGlobal] :: Resource c -> Global c
@@ -1010,6 +1043,9 @@ Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> 
 
 -- | Last section number
 [resLastSecNo] :: Resource c -> SecNo
+
+-- | Term name cache
+[resCacheT] :: Resource c -> CacheT
 
 -- | Relation selector
 [resSelect] :: Resource c -> RelSelect c
@@ -1122,7 +1158,7 @@ module Koshucode.Baala.Core.Resource.Include
 resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> NIOPoint -> Bz -> AbResource c
 
 -- | Build content expression with global parameter.
-coxBuildG :: (CContent c) => Global c -> TTree -> Ab (Cox c)
+treeCoxG :: (CContent c) => Global c -> TTree -> Ab (Cox c)
 
 
 -- | Read data resource.

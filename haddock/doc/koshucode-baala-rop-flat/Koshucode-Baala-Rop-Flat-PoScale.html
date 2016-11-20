@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.170.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.174.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -163,6 +163,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >)] <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-PoScale.html#PoScaleCalc');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate partial-order scale.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -177,7 +181,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Extract partial-order scales.</p
+	    >Extract partial-order scale.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -191,6 +195,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-PoScale.html#poScaleHeight');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate upward partial-order scale.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>poScaleHeight [(&quot;a&quot;,&quot;b&quot;), (&quot;a&quot;,&quot;c&quot;), (&quot;b&quot;,&quot;d&quot;), (&quot;c&quot;,&quot;d&quot;)]
+</code
+		></strong
+	      >[(&quot;a&quot;,0), (&quot;b&quot;,1), (&quot;c&quot;,1), (&quot;d&quot;,2)]
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -203,6 +221,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Flat-PoScale.html#poScaleDepth');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate downward partial-order scale.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>poScaleDepth [(&quot;a&quot;,&quot;b&quot;), (&quot;a&quot;,&quot;c&quot;), (&quot;b&quot;,&quot;d&quot;), (&quot;c&quot;,&quot;d&quot;)]
+</code
+		></strong
+	      >[(&quot;a&quot;,2), (&quot;b&quot;,1), (&quot;c&quot;,1), (&quot;d&quot;,0)]
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"

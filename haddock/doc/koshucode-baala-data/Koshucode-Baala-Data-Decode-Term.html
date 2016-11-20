@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -75,6 +75,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CacheT"
+	    >CacheT</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:CacheS"
+	    >CacheS</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:cacheT"
+	    >cacheT</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:treeFlatName"
 	    >treeFlatName</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
@@ -84,6 +100,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:treeFlatNameCached"
+	    >treeFlatNameCached</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:treesFlatNames"
 	    >treesFlatNames</a
@@ -101,8 +131,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >TTree</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:SignedTermName"
-	    >SignedTermName</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:treesTerms"
@@ -116,6 +146,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
 	    >TTree</a
 	    >]]</li
+	  ><li class="src short"
+	  ><a href="#v:treesTermsCached"
+	    >treesTermsCached</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >]])</li
 	  ><li class="src short"
 	  ><a href="#v:treesTerms1"
 	    >treesTerms1</a
@@ -167,6 +213,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	>Term name</h1
 	><div class="top"
 	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CacheT" class="def"
+	    >CacheT</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Cache.html#t:CacheS"
+	    >CacheS</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#CacheT');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term name cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cacheT" class="def"
+	    >cacheT</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#cacheT');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Empty term name cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:treeFlatName" class="def"
 	    >treeFlatName</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
@@ -190,7 +268,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 		>S.tt1 &quot;/a&quot; &gt;&gt;= treeFlatName
 </code
 		></strong
-	      >Right &quot;a&quot;
+	      >Right (TermName &quot;a&quot;)
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -200,7 +278,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 		>S.tt1 &quot;+/a&quot; &gt;&gt;= treeFlatName
 </code
 		></strong
-	      >Right &quot;a&quot;
+	      >Right (TermName &quot;a&quot;)
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -212,6 +290,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 		></strong
 	      >Left ...
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:treeFlatNameCached" class="def"
+	    >treeFlatNameCached</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treeFlatNameCached');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cached version of <code
+	      ><a href="Koshucode-Baala-Data-Decode-Term.html#v:treeFlatName"
+		>treeFlatName</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -250,8 +354,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >TTree</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:SignedTermName"
-	    >SignedTermName</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treeSignedName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -299,6 +403,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >Right [(&quot;a&quot;, [TreeL ...]),
        (&quot;b&quot;, [TreeL ...])]
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:treesTermsCached" class="def"
+	    >treesTermsCached</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >]]) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesTermsCached');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cached version of <code
+	      ><a href="Koshucode-Baala-Data-Decode-Term.html#v:treesTerms"
+		>treesTerms</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"

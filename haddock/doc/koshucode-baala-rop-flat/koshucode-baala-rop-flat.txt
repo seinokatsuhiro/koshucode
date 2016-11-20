@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Partial-order scale.
@@ -18,11 +18,27 @@ module Koshucode.Baala.Rop.Flat.PoScale
 --   defined by 1 + the maximum scale of subelements. If elements are
 --   cyclic, scales of these elements are -1.
 type PoScale a = Map a ([a], Maybe Int)
+
+-- | Calculate partial-order scale.
 type PoScaleCalc a = [(a, a)] -> [(a, Int)]
 
--- | Extract partial-order scales.
+-- | Extract partial-order scale.
 poScale :: PoScale a -> [(a, Int)]
+
+-- | Calculate upward partial-order scale.
+--   
+--   <pre>
+--   &gt;&gt;&gt; poScaleHeight [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",0), ("b",1), ("c",1), ("d",2)]
+--   </pre>
 poScaleHeight :: (Ord a) => PoScaleCalc a
+
+-- | Calculate downward partial-order scale.
+--   
+--   <pre>
+--   &gt;&gt;&gt; poScaleDepth [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",2), ("b",1), ("c",1), ("d",0)]
+--   </pre>
 poScaleDepth :: (Ord a) => PoScaleCalc a
 
 -- | Calculate partial-order height.
@@ -163,7 +179,7 @@ getTermOpt :: RopGet c (Maybe TermName)
 getTerms :: RopGet c [TermName]
 
 -- | Get signed term names.
-getSignedTerms :: RopGet c [SignedTermName]
+getSignedTerms :: RopGet c [TermName]
 
 -- | Get term names and complement sign (<tt>~</tt>) .
 getTermsCo :: RopGet c (Bool, [TermName])
@@ -304,10 +320,10 @@ relmapLexical :: Intmed c -> Relmap c
 consOrder :: (Ord c) => RopCons c
 
 -- | Create <tt>order</tt> relmap.
-relmapOrder :: (Ord c) => Intmed c -> [SignedTermName] -> Relmap c
+relmapOrder :: (Ord c) => Intmed c -> [TermName] -> Relmap c
 
 -- | Create <tt>order</tt> relkit.
-relkitOrder :: (Ord c) => [SignedTermName] -> RelkitFlow c
+relkitOrder :: (Ord c) => [TermName] -> RelkitFlow c
 
 
 -- | Operators on data resources.
@@ -552,28 +568,28 @@ ropsTermGadget :: (Ord c) => [Rop c]
 consPrefix :: RopCons c
 
 -- | Create <tt>prefix</tt> relmap.
-relmapPrefix :: Intmed c -> String -> [String] -> Relmap c
+relmapPrefix :: Intmed c -> TermName -> [TermName] -> Relmap c
 
 -- | Create <tt>prefix</tt> relkit.
-relkitPrefix :: String -> [String] -> RelkitFlow c
+relkitPrefix :: TermName -> [TermName] -> RelkitFlow c
 
 -- | Remove prefix.
 consUnprefix :: RopCons c
 
 -- | Create <tt>unprefix</tt> relmap.
-relmapUnprefix :: Intmed c -> String -> Relmap c
+relmapUnprefix :: Intmed c -> TermName -> Relmap c
 
 -- | Create <tt>unprefix</tt> relkit.
-relkitUnprefix :: String -> RelkitFlow c
+relkitUnprefix :: TermName -> RelkitFlow c
 
 -- | Change prefix.
 consPrefixChange :: RopCons c
 
 -- | Create <tt>prefix-change</tt> relmap.
-relmapPrefixChange :: Intmed c -> (String, String) -> Relmap c
+relmapPrefixChange :: Intmed c -> TermName2 -> Relmap c
 
 -- | Create <tt>prefix-change</tt> relkit.
-relkitPrefixChange :: (String, String) -> RelkitFlow c
+relkitPrefixChange :: TermName2 -> RelkitFlow c
 
 -- | <b>wipe</b>
 consWipe :: RopCons c
@@ -685,16 +701,6 @@ relkitSubtext :: (CContent c) => SubtextPara -> Maybe Head -> Ab (Relkit c)
 module Koshucode.Baala.Rop.Flat.Gadget
 
 -- | Gadgets
---   
---   <ul>
---   <li><i><tt>contents</tt></i> Make nary relation of all contetnts.</li>
---   <li><i>@number /N [ -order /P ... \</i> <tt>] Add numbering term
---   </tt>/N<tt> ordered by </tt>/P@ ...</li>
---   <li><i>@rank /N -order /P ... [ -dense \</i> <tt>] Add term
---   </tt>/N<tt> for ranking ordered by </tt>/P@ ...</li>
---   <li><i><tt>size /N</tt></i> Calculate cardinality of input
---   relation.</li>
---   </ul>
 ropsGadget :: (CContent c) => [Rop c]
 
 -- | <b>contents /N</b>
@@ -726,6 +732,8 @@ consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
 relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
 
 -- | <b>size /N</b>
+--   
+--   Count number of tuples.
 consSize :: (CDec c) => RopCons c
 
 -- | Create <tt>size</tt> relmap.

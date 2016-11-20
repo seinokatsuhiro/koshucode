@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -59,24 +59,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	><li
 	  ><a href="#g:1"
 	    >Functions</a
-	    ></li
-	  ><li
-	  ><a href="#g:2"
-	    >Assert type</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Document</a
-	    ><ul
-	    ><li
-	      ><a href="#g:4"
-		>Simple data</a
-		></li
-	      ><li
-	      ><a href="#g:5"
-		>Compound data</a
-		></li
-	      ></ul
 	    ></li
 	  ></ul
 	></div
@@ -141,7 +123,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
 	    >CalcContent</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
+	    > c -&gt; <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
 	    >AssertType</a
 	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
 	    >JudgeClass</a
@@ -149,57 +133,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >TTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+	    >CacheT</a
+	    >, <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
 	    > c)</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    > <a href="#t:AssertType"
-	    >AssertType</a
-	    ><ul class="subs"
-	    ><li
-	      >= <a href="#v:AssertAffirm"
-		>AssertAffirm</a
-		></li
-	      ><li
-	      >| <a href="#v:AssertDeny"
-		>AssertDeny</a
-		></li
-	      ><li
-	      >| <a href="#v:AssertMultiDeny"
-		>AssertMultiDeny</a
-		></li
-	      ><li
-	      >| <a href="#v:AssertChange"
-		>AssertChange</a
-		></li
-	      ><li
-	      >| <a href="#v:AssertMultiChange"
-		>AssertMultiChange</a
-		></li
-	      ><li
-	      >| <a href="#v:AssertViolate"
-		>AssertViolate</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:assertAs"
-	    >assertAs</a
-	    > :: <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-	    >AssertType</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:JudgeOf"
-	    >JudgeOf</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:assertSymbol"
-	    >assertSymbol</a
-	    > :: <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-	    >AssertType</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -308,7 +246,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
+		>-&gt; <a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+		  >CacheT</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Term name cache</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
 		  >AssertType</a
 		  ></td
 		><td class="doc"
@@ -340,7 +288,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      ><td class="src"
 		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		  >Ab</a
-		  > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+		  > (<a href="Koshucode-Baala-Data-Decode-Term.html#t:CacheT"
+		  >CacheT</a
+		  >, <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		  >Judge</a
 		  > c)</td
 		><td class="doc"
@@ -356,362 +306,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
    Judges itself are not content type.
    It can be only used in the top-level of resources.</p
 	    ></div
-	  ></div
-	><h1 id="g:2"
-	>Assert type</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    > <a name="t:AssertType" class="def"
-	    >AssertType</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#AssertType');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Type of assertions.</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:AssertAffirm" class="def"
-		  >AssertAffirm</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|==</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates affirmative judges.</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AssertDeny" class="def"
-		  >AssertDeny</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|=x</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates denial judges.</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AssertMultiDeny" class="def"
-		  >AssertMultiDeny</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|=xx</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates multiple-denial judges.</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AssertChange" class="def"
-		  >AssertChange</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|=c</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates changement judges.</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AssertMultiChange" class="def"
-		  >AssertMultiChange</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|=cc</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates multiple-changement judges.</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AssertViolate" class="def"
-		  >AssertViolate</a
-		  ></td
-		><td class="doc"
-		><p
-		  ><code
-		    >|=v</code
-		    > <em
-		    >C</em
-		    > <code
-		    >:</code
-		    > <em
-		    >R</em
-		    > generates violation judges.</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:AssertType" class="caption collapser" onclick="toggleSection('i:AssertType')"
-	    >Instances</p
-	    ><div id="section.i:AssertType" class="show"
-	    ><table
-	      ><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
-		      >Eq</a
-		      > <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-		      >AssertType</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#line-202');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
-		      >Ord</a
-		      > <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-		      >AssertType</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#line-202');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src clearfix"
-		  ><span class="inst-left"
-		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
-		      >Show</a
-		      > <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-		      >AssertType</a
-		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#line-202');" href="javascript:void(0);" class="link"
-		    >Source</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:assertAs" class="def"
-	    >assertAs</a
-	    > :: <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-	    >AssertType</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:JudgeOf"
-	    >JudgeOf</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#assertAs');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Create judgement corresponding to assertion type.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:assertSymbol" class="def"
-	    >assertSymbol</a
-	    > :: <a href="Koshucode-Baala-Data-Decode-Content.html#t:AssertType"
-	    >AssertType</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Content.html#assertSymbol');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Frege's stroke and various assertion lines.</p
-	    ></div
-	  ></div
-	><h1 id="g:3"
-	>Document</h1
-	><h2 id="g:4"
-	>Simple data</h2
-	><div class="doc"
-	><p
-	  >Prepere some definitions.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >:m +Koshucode.Baala.Op.Vanilla.Type
-</code
-	      ></strong
-	    ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let trees = B.ttrees . B.tokens
-</code
-	      ></strong
-	    ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let lit  = treeContent [] :: S.TTree -&gt; B.Ab BaalaC
-</code
-	      ></strong
-	    ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let lits = treesContents lit . trees
-</code
-	      ></strong
-	    ></pre
-	  ><p
-	  >Boolean.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;#true : #false&quot;
-</code
-	      ></strong
-	    >Right [VBool True, VBool False]
-</pre
-	  ><p
-	  >Words.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;'a : 'b #sp 'c&quot;
-</code
-	      ></strong
-	    >Right [VText &quot;a&quot;, VText &quot;b c&quot;]
-</pre
-	  ><p
-	  >Decimal.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;12.0&quot;
-</code
-	      ></strong
-	    >Right [VDec (Decimal (120, 10), 1, False)]
-</pre
-	  ><p
-	  >Empty as no ordinary value.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;()&quot;
-</code
-	      ></strong
-	    >Right [VEmpty]
-</pre
-	  ></div
-	><h2 id="g:5"
-	>Compound data</h2
-	><div class="doc"
-	><p
-	  >Set.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;{ 'b | 'a | 'a | 'c | 'a }&quot;
-</code
-	      ></strong
-	    >Right [VSet [VText &quot;b&quot;, VText &quot;a&quot;, VText &quot;c&quot;]]
-</pre
-	  ><p
-	  >List.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;[ 'a | '10 | 20 ]&quot;
-</code
-	      ></strong
-	    >Right [VList [VText &quot;a&quot;, VText &quot;10&quot;, VDec (Decimal (20, 1), 0, False)]]
-</pre
-	  ><p
-	  >Tie.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;{- /a 'x  /b { 'y | 'z } -}&quot;
-</code
-	      ></strong
-	    >Right [VTie 
-  [ (&quot;/a&quot;, VText &quot;x&quot;)
-  , (&quot;/b&quot;, VSet [VText &quot;y&quot;, VText &quot;z&quot;])]]
-</pre
-	  ><p
-	  >Relation.</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >lits &quot;{= /a /x [ 'A1 | 20 ][ 'A3 | 40 ][ 'A4 | 60 ] =}&quot;
-</code
-	      ></strong
-	    >Right [VRel (Rel
-  (Relhead [Term &quot;/a&quot;, Term &quot;/x&quot;]),
-  [ [VText &quot;A1&quot;, VDec (Decimal (20,1), 0, False)]
-  , [VText &quot;A3&quot;, VDec (Decimal (40,1), 0, False)]
-  , [VText &quot;A4&quot;, VDec (Decimal (60,1), 0, False)] ])]
-</pre
 	  ></div
 	></div
       ></div

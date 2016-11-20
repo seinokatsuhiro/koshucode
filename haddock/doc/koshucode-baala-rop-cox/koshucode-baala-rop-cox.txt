@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -21,8 +21,26 @@
 --   Gauss-Krüger Projection,</i> <i>Bulletin of the Geospatial
 --   Information Authority of Japan, 121</i>.
 module Koshucode.Baala.Rop.Cox.GeoDatumJp
+
+-- | Point in geographic coordinate system.
 type GeoPoint = (Double, Double)
+
+-- | Convert point in plane rectangular coordinates to degrees of latitude
+--   and longitude.
+--   
+--   <pre>
+--   &gt;&gt;&gt; convDegree 8 (0.0, 0.0)
+--   (35.99999999999999, 138.5)
+--   </pre>
 convDegree :: Int -> GeoPoint -> GeoPoint
+
+-- | Convert point in plane rectangular coordinates to geographic latitude
+--   and longitude.
+--   
+--   <pre>
+--   &gt;&gt;&gt; convRadian 8 (0.0, 0.0)
+--   (0.6283185307179585, 498600.0)
+--   </pre>
 convRadian :: Int -> GeoPoint -> GeoPoint
 
 
@@ -43,7 +61,7 @@ getMaybeCox :: (CContent c) => RopGet c (Maybe (Cox c))
 getOptionCox :: (CContent c) => c -> RopGet c (Cox c)
 
 -- | Get relmap attribute as cox list with term name.
-getTermCoxes :: (CContent c) => RopGet c [NamedCox c]
+getTermCoxes :: (CContent c) => RopGet c [Term (Cox c)]
 
 -- | Get relmap attribute as cox list with name.
 getNamedCoxes :: (CContent c) => RopGet c [NamedCox c]
@@ -142,10 +160,10 @@ relkitConst :: Rel c -> RelkitFlow c
 consNumber :: (Ord c, CContent c) => RopCons c
 
 -- | Create <tt>number</tt> relmap.
-relmapNumber :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+relmapNumber :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 
 -- | Create <tt>number</tt> relkit.
-relkitNumber :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+relkitNumber :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
 
 -- | <ul>
 --   <li><i>rank /N -from I -order /P ...</i> Calculate standard
@@ -156,16 +174,16 @@ relkitNumber :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFl
 consRank :: (Ord c, CContent c) => RopCons c
 
 -- | Create <tt>rank</tt> relmap.
-relmapGapRank :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+relmapGapRank :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 
 -- | Create <tt>rank</tt> relkit.
-relkitGapRank :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+relkitGapRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
 
 -- | Create <tt>rank -dense</tt> relmap.
-relmapDenseRank :: (CDec c, Ord c) => Intmed c -> (TermName, [SignedTermName], Int) -> Relmap c
+relmapDenseRank :: (CDec c, Ord c) => Intmed c -> (TermName, [TermName], Int) -> Relmap c
 
 -- | Create <tt>rank -dense</tt> relkit.
-relkitDenseRank :: (Ord c, CDec c) => (TermName, [SignedTermName], Int) -> RelkitFlow c
+relkitDenseRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
 
 -- | <b>repeat I R</b>
 consRepeat :: (Ord c, CContent c) => RopCons c
@@ -266,7 +284,7 @@ ropsCoxCalc :: (CContent c) => [Rop c]
 consAdd :: (CContent c) => RopCons c
 
 -- | Create <tt>add</tt> relmap.
-relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
 
 -- | <b>alt /P E ...</b>
 --   
@@ -274,7 +292,7 @@ relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
 consAlt :: (CContent c) => RopCons c
 
 -- | Create <tt>alt</tt> relmap.
-relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
 
 -- | <b>fill /P ... -with E</b>
 --   
@@ -300,10 +318,10 @@ relmapReplaceAll :: (CContent c) => Intmed c -> (CopSet c, Cox c, Cox c) -> Relm
 consSplit :: (CContent c) => RopCons c
 
 -- | Create <tt>split</tt> relmap.
-relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [NamedCox c]) -> Relmap c
+relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
 
 -- | Create <tt>split</tt> relkit.
-relkitSplit :: (CContent c) => (CopSet c, [NamedCox c]) -> RelkitFlow c
+relkitSplit :: (CContent c) => (CopSet c, [Term (Cox c)]) -> RelkitFlow c
 
 -- | <b>unary /N E : ...</b>
 consUnary :: (CContent c) => RopCons c

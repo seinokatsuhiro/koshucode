@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Overture.Cache</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('overture', 'koshucode-baala-overture', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overture-Cache.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-overture-0.174.0.0: Preliminary library for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Overture.Cache</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Example</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Library</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Cache.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Cache"
+	    >Cache</a
+	    > k v</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CacheS"
+	    >CacheS</a
+	    > v = <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > v</li
+	  ><li class="src short"
+	  ><a href="#v:cache"
+	    >cache</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; (k -&gt; v) -&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v</li
+	  ><li class="src short"
+	  ><a href="#v:cacheGet"
+	    >cacheGet</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v -&gt; k -&gt; (<a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v, v)</li
+	  ><li class="src short"
+	  ><a href="#v:cacheGetList"
+	    >cacheGetList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v -&gt; [k] -&gt; (<a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v, [v])</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Example</h1
+	><div class="doc"
+	><p
+	  >Create cache data with limit upto 3 elements
+ and identity value function.</p
+	  ><pre
+	  >let cc0 = cache [3] id :: Cache String String</pre
+	  ><p
+	  >Get cached values.</p
+	  ><pre
+	  >let (cc1, v1) = cacheGet cc0 &quot;a&quot;
+let (cc2, v2) = cacheGet cc1 &quot;b&quot;
+let (cc3, v3) = cacheGet cc2 &quot;a&quot;
+let (cc4, v4) = cacheGet cc3 &quot;c&quot;
+let (cc5, v5) = cacheGet cc4 &quot;d&quot;
+let (cc6, v6) = cacheGet cc5 &quot;b&quot;</pre
+	  ><p
+	  >Show the values.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >[v1,v2,v3,v4,v5,v6]
+</code
+	      ></strong
+	    >[&quot;a&quot;,&quot;b&quot;,&quot;a&quot;,&quot;c&quot;,&quot;d&quot;,&quot;b&quot;]
+</pre
+	  ><p
+	  >Show the caches.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc0
+</code
+	      ></strong
+	    >Cache 3 [][]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc1
+</code
+	      ></strong
+	    >Cache 3 [&quot;a&quot;][]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc2
+</code
+	      ></strong
+	    >Cache 3 [&quot;a&quot;,&quot;b&quot;][]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc3
+</code
+	      ></strong
+	    >Cache 3 [&quot;a&quot;,&quot;b&quot;][]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc4
+</code
+	      ></strong
+	    >Cache 3 [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;][]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc5
+</code
+	      ></strong
+	    >Cache 3 [&quot;d&quot;][&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+<code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >cc6
+</code
+	      ></strong
+	    >Cache 3 [&quot;b&quot;,&quot;d&quot;][&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+</pre
+	  ></div
+	><h1 id="g:2"
+	>Library</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Cache" class="def"
+	    >Cache</a
+	    > k v <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#Cache');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cache data.</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Cache" class="caption collapser" onclick="toggleSection('i:Cache')"
+	    >Instances</p
+	    ><div id="section.i:Cache" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > k =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+		      >Cache</a
+		      > k v)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#line-67');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CacheS" class="def"
+	    >CacheS</a
+	    > v = <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > v <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#CacheS');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cache" class="def"
+	    >cache</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; (k -&gt; v) -&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#cache');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create empty cache of given limits and value function.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cacheGet" class="def"
+	    >cacheGet</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v -&gt; k -&gt; (<a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v, v) <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#cacheGet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get cached value.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cacheGetList" class="def"
+	    >cacheGetList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > k =&gt; <a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v -&gt; [k] -&gt; (<a href="Koshucode-Baala-Overture-Cache.html#t:Cache"
+	    >Cache</a
+	    > k v, [v]) <a onclick="showSource('src/Koshucode-Baala-Overture-Cache.html#cacheGetList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get cached values.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>cacheGetList (cache [] id :: Cache Char Char) ['A' .. 'Z']
+</code
+		></strong
+	      >(Cache 27 &quot;ABCDEFGHIJKLMNOPQR&quot; &quot;STUVWXYZ&quot;, &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;)
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -156,8 +156,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >Judge</a
 	    > b</li
 	  ><li class="src short"
-	  ><a href="#v:judgeCons"
-	    >judgeCons</a
+	  ><a href="#v:judgeAdd"
+	    >judgeAdd</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -208,26 +208,74 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><li class="src short"
 	  ><a href="#v:isAffirmative"
 	    >isAffirmative</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:isDenial"
 	    >isDenial</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:isViolative"
 	    >isViolative</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:AssertType"
+	    >AssertType</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:AssertAffirm"
+		>AssertAffirm</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertDeny"
+		>AssertDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertMultiDeny"
+		>AssertMultiDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertChange"
+		>AssertChange</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertMultiChange"
+		>AssertMultiChange</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertViolate"
+		>AssertViolate</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:assertAs"
+	    >assertAs</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:assertSymbol"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:judgeBreak"
@@ -455,7 +503,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-71');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-73');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -469,7 +517,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-141');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-183');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -485,7 +533,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-56');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-58');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -501,7 +549,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-60');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-62');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -517,7 +565,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-54');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-56');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -533,7 +581,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-165');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-207');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -547,7 +595,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-138');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-180');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -561,7 +609,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 		      >Judge</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-135');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-177');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -593,20 +641,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:judgeCons" class="def"
-	    >judgeCons</a
+	  ><a name="v:judgeAdd" class="def"
+	    >judgeAdd</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#judgeCons');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#judgeAdd');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Prepend a term into judgement.</p
+	    >Add a term into judgement.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -643,6 +691,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Construct affirmative judgement.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>affirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)] :: Judge Int
+</code
+		></strong
+	      >JudgeAffirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -689,17 +747,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ><div class="doc"
 	  ><p
 	    >Deny judgement, i.e., change logical quality to denial.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>denyJudge $ affirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)] :: Judge Int
+</code
+		></strong
+	      >JudgeDeny &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:isAffirmative" class="def"
 	    >isAffirmative</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isAffirmative');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isAffirmative');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -711,11 +779,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:isDenial" class="def"
 	    >isDenial</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isDenial');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isDenial');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -727,16 +795,236 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	><p class="src"
 	  ><a name="v:isViolative" class="def"
 	    >isViolative</a
-	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:Judge"
 	    >Judge</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isViolative');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#isViolative');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Test which judgement is for violation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:AssertType" class="def"
+	    >AssertType</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#AssertType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type of assertions.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:AssertAffirm" class="def"
+		  >AssertAffirm</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|==</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates affirmative judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertDeny" class="def"
+		  >AssertDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=x</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates denial judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiDeny" class="def"
+		  >AssertMultiDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=xx</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates multiple-denial judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertChange" class="def"
+		  >AssertChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=c</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates changement judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiChange" class="def"
+		  >AssertMultiChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=cc</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates multiple-changement judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertViolate" class="def"
+		  >AssertViolate</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=v</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates violation judges.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:AssertType" class="caption collapser" onclick="toggleSection('i:AssertType')"
+	    >Instances</p
+	    ><div id="section.i:AssertType" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-150');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-150');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#line-150');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertAs" class="def"
+	    >assertAs</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#assertAs');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create judgement corresponding to assertion type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertSymbol" class="def"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Judge-Judge.html#assertSymbol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Frege's stroke and various assertion lines.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>assertSymbol AssertAffirm
+</code
+		></strong
+	      >&quot;|==&quot;
+</pre
 	    ></div
 	  ></div
 	><h1 id="g:3"

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -89,9 +89,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >CRel</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Rel.html#t:SelectRel"
 	    >SelectRel</a
-	    > h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Run.html#t:Local"
-	    >Local</a
-	    > [[c]]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    > h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Run.html#t:LocalTable"
+	    >LocalTable</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
 	    >RelkitBody</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
@@ -121,21 +121,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:Local"
-	    >Local</a
-	    > a = <a href="Koshucode-Baala-Core-Relkit-Run.html#t:Lexical"
-	    >Lexical</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > a]</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Lexical"
-	    >Lexical</a
-	    > a = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    > <a href="#t:LocalTable"
+	    >LocalTable</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    >, a)</li
+	    >, [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
+	    >LocalRef</a
+	    >, [[c]])])</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -175,9 +167,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >CRel</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Rel.html#t:SelectRel"
 	    >SelectRel</a
-	    > h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Run.html#t:Local"
-	    >Local</a
-	    > [[c]]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    > h) =&gt; h c -&gt; [<a href="Koshucode-Baala-Core-Relkit-Run.html#t:LocalTable"
+	    >LocalTable</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
 	    >RelkitBody</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
@@ -231,33 +223,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:Local" class="def"
-	    >Local</a
-	    > a = <a href="Koshucode-Baala-Core-Relkit-Run.html#t:Lexical"
-	    >Lexical</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > a] <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#Local');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><div class="warning"
-	    ><p
-	      >Warning: This is only used in defined module.</p
-	      ></div
-	    ><p
-	    >Local relations.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Lexical" class="def"
-	    >Lexical</a
-	    > a = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    > <a name="t:LocalTable" class="def"
+	    >LocalTable</a
+	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    >, a) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#Lexical');" href="javascript:void(0);" class="link"
+	    >, [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
+	    >LocalRef</a
+	    >, [[c]])]) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Run.html#LocalTable');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -266,7 +238,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      >Warning: This is only used in defined module.</p
 	      ></div
 	    ><p
-	    >Local relation.</p
+	    >Lexical point and table of local relations.</p
 	    ></div
 	  ></div
 	></div

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.170.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -155,6 +155,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
+	    > <a href="#t:TokenNipLW"
+	    >TokenNipLW</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLWResult"
+	    >TokenNipLWResult</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
 	    > <a href="#t:TokenNipResult"
 	    >TokenNipResult</a
 	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
@@ -174,6 +188,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
 	    >)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TokenNipLWResult"
+	    >TokenNipLWResult</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >])</li
 	  ><li class="src short"
 	  ><a href="#v:isSymbol"
 	    >isSymbol</a
@@ -243,6 +269,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >TokenScan</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:nipUpdateLW"
+	    >nipUpdateLW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLWResult"
+	    >TokenNipLWResult</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    >TokenScan</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:nipSpace"
 	    >nipSpace</a
 	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNip"
@@ -267,20 +303,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >TokenNipW</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:symbolToken"
-	    >symbolToken</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
-	    >CodePt</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
-	    ></li
-	  ><li class="src short"
 	  ><a href="#v:nipSlot"
 	    >nipSlot</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
@@ -293,20 +315,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >nipTermSign</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
 	    >Ordering</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:nipTermPath"
 	    >nipTermPath</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:nipTermQ"
 	    >nipTermQ</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:nipBar"
@@ -409,6 +431,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
+	    > <a name="t:TokenNipLW" class="def"
+	    >TokenNipLW</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLWResult"
+	    >TokenNipLWResult</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#TokenNipLW');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nip off a next token with word table.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
 	    > <a name="t:TokenNipResult" class="def"
 	    >TokenNipResult</a
 	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
@@ -418,6 +462,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#TokenNipResult');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nip result.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -434,6 +482,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#TokenNipWResult');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nip result with word table.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TokenNipLWResult" class="def"
+	    >TokenNipLWResult</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Scan.html#t:WordTable"
+	    >WordTable</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#TokenNipLWResult');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nip result with word table.</p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Utility</h1
@@ -577,6 +649,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Update token scanner by nipper result with word table.</p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nipUpdateLW" class="def"
+	    >nipUpdateLW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLWResult"
+	    >TokenNipLWResult</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenScan"
+	    >TokenScan</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#nipUpdateLW');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update token scanner by nipper result with word table.</p
+	    ></div
+	  ></div
 	><h2 id="g:5"
 	>Textual</h2
 	><div class="top"
@@ -591,6 +681,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Nip off space token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipSpace B.def &quot;  foo bar baz&quot;
+</code
+		></strong
+	      >(&quot;foo bar baz&quot;, TSpace &lt;I0-L0-C0&gt; 3)
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -605,6 +705,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Nip off a single-quoted text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipQ B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, TText &lt;I0-L0-C0&gt; TextQ &quot;foo&quot;)
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -619,6 +729,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Nip off a double-quoted text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipQQ B.def &quot;foo\&quot; bar baz&quot;
+</code
+		></strong
+	      >(&quot; bar baz&quot;, TText &lt;I0-L0-C0&gt; TextQQ &quot;foo&quot;)
+</pre
 	    ></div
 	  ></div
 	><h2 id="g:6"
@@ -635,28 +755,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Nip off symbolic token.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:symbolToken" class="def"
-	    >symbolToken</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePt"
-	    >CodePt</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    >) -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#symbolToken');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Create symbolic token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipSymbol B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, TText &lt;I0-L0-C0&gt; TextRaw &quot;foo&quot;)
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -675,6 +783,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Nip off a slot name, like <code
 	      >@foo</code
 	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipSlot 1 B.def &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(&quot; bar baz&quot;, TSlot &lt;I0-L0-C0&gt; 1 &quot;foo&quot;)
+</pre
 	    ></div
 	  ></div
 	><h2 id="g:7"
@@ -685,42 +803,72 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >nipTermSign</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
 	    >Ordering</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#nipTermSign');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Nip off a signed term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipTermSign EQ B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, [TTerm &lt;I0-L0-C0&gt; &quot;/foo&quot;])
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:nipTermPath" class="def"
 	    >nipTermPath</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#nipTermPath');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Nip off a term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipTermPath B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, [TTerm &lt;I0-L0-C0&gt; &quot;/foo&quot;])
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:nipTermQ" class="def"
 	    >nipTermQ</a
-	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipW"
-	    >TokenNipW</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Nipper.html#t:TokenNipLW"
+	    >TokenNipLW</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Nipper.html#nipTermQ');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Nip off a quoted term.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nipTermQ B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [], &quot; bar baz&quot;, [TText &lt;I0-L0-C0&gt; TextTerm &quot;foo&quot;])
+</pre
 	    ></div
 	  ></div
 	><h2 id="g:8"

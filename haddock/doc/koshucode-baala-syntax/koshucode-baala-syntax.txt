@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Term types and related functions.
@@ -19,36 +19,74 @@ type Term c = (TermName, c)
 --   
 --   <pre>
 --   &gt;&gt;&gt; term "size" 10 :: Term Int
---   ("size", 10)
+--   (TermName "size", 10)
 --   </pre>
-term :: TermName -> c -> Term c
+term :: (ToTermName n) => n -> c -> Term c
 
 -- | Name of term, e.g., <tt>"size"</tt> for the term name <tt>/size</tt>.
-type TermName = String
+data TermName
 
 -- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
 --   path <tt>["r", "x"]</tt>.
 type TermPath = [TermName]
 
--- | Term name with plus-minus sign, e.g., <tt>+/size</tt>,
---   <tt>-/size</tt>, or <tt>/size</tt>.
-type SignedTermName = (Ordering, TermName)
+-- | Convert to term name.
+class ToTermName a
+toTermName :: ToTermName a => a -> TermName
+
+-- | Add necessary slash character indicating term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; enslash &lt;$&gt; ["foo", "/bar", "+/baz", "-/qux"]
+--   ["/foo", "/bar", "+/baz", "-/qux"]
+--   </pre>
+enslash :: Map String
+
+-- | Decode term name from string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringTermName "/a"
+--   TermName EQ "a"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringTermName "+/a"
+--   TermName GT "a"
+--   </pre>
+stringTermName :: String -> TermName
 
 -- | Encode term name into string.
 --   
 --   <pre>
---   &gt;&gt;&gt; showTermName "size"
+--   &gt;&gt;&gt; termNameString $ stringTermName "/size"
 --   "/size"
 --   </pre>
-showTermName :: TermName -> String
+termNameString :: TermName -> String
 
 -- | Encode term path into string.
 --   
 --   <pre>
---   &gt;&gt;&gt; showTermPath ["r", "x"]
+--   &gt;&gt;&gt; termPathString [stringTermName "r", stringTermName "x"]
 --   "/r/x"
 --   </pre>
-showTermPath :: TermPath -> String
+termPathString :: TermPath -> String
+
+-- | Extract internal name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNameContent $ stringTermName "/size"
+--   "size"
+--   </pre>
+termNameContent :: TermName -> String
+
+-- | Sign of term name.
+termNameSign :: TermName -> Ordering
+
+-- | Alter sign of term name.
+termNameAltSign :: Ordering -> Map TermName
+
+-- | Convert to ordering pair.
+orderingTermName :: TermName -> (Ordering, TermName)
 
 -- | Tuple of 2 term names.
 type TermName2 = (TermName, TermName)
@@ -64,6 +102,12 @@ type TermName5 = (TermName, TermName, TermName, TermName, TermName)
 
 -- | Tuple of 6 term names.
 type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
+
+-- | Term index.
+type TermIndex = Int
+
+-- | Term name and index.
+type IndexTerm = (TermName, TermIndex)
 
 -- | Test present term.
 --   
@@ -81,13 +125,13 @@ type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 --   &gt;&gt;&gt; termP (-1)
 --   False
 --   </pre>
-termP :: Test Int
+termP :: Test TermIndex
 
 -- | Test new term.
-termN :: Test Int
+termN :: Test TermIndex
 
 -- | Test all terms are present.
-termsP :: Test [Int]
+termsP :: Test [TermIndex]
 
 -- | Test all terms are new.
 --   
@@ -95,7 +139,7 @@ termsP :: Test [Int]
 --   &gt;&gt;&gt; termsN [-1, -1]
 --   True
 --   </pre>
-termsN :: Test [Int]
+termsN :: Test [TermIndex]
 
 -- | Test present and new terms.
 --   
@@ -108,7 +152,15 @@ termsN :: Test [Int]
 --   &gt;&gt;&gt; termsPN [1,2] [-1,0]
 --   False
 --   </pre>
-termsPN :: Test2 [Int] [Int]
+termsPN :: Test2 [TermIndex] [TermIndex]
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Symbol.Term.TermName
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Symbol.Term.TermName
+instance GHC.Show.Show Koshucode.Baala.Syntax.Symbol.Term.TermName
+instance Data.String.IsString Koshucode.Baala.Syntax.Symbol.Term.TermName
+instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Koshucode.Baala.Syntax.Symbol.Term.TermName
+instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName GHC.Base.String
+instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Data.Text.Internal.Text
+instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Data.Text.Internal.Lazy.Text
 
 
 -- | Text enclosed in angle brackets.
@@ -253,28 +305,28 @@ module Koshucode.Baala.Syntax.Para.ParaSpec
 data ParaSpec n
 ParaSpec :: ParaSpecPos n -> [n] -> [n] -> [n] -> [n] -> [n] -> [n] -> [n] -> ParaSpec n
 
--- | Positional parameter
+-- | <b>Positional:</b> Positional parameter
 [paraSpecPos] :: ParaSpec n -> ParaSpecPos n
 
--- | Positional required parameters
+-- | <b>Positional:</b> Positional required parameters
 [paraSpecReqP] :: ParaSpec n -> [n]
 
--- | Positional optional parameters
+-- | <b>Positional:</b> Positional optional parameters
 [paraSpecOptP] :: ParaSpec n -> [n]
 
--- | Explicitly-named required parameters
+-- | <b>Named:</b> Explicitly-named required parameters
 [paraSpecReqN] :: ParaSpec n -> [n]
 
--- | Explicitly-named optional parameters
+-- | <b>Named:</b> Explicitly-named optional parameters
 [paraSpecOptN] :: ParaSpec n -> [n]
 
--- | Allow multiple-occurence, use first parameters
+-- | <b>Named:</b> Allow multiple-occurence, use first parameters
 [paraSpecFirst] :: ParaSpec n -> [n]
 
--- | Allow multiple-occurence, use last parameters
+-- | <b>Named:</b> Allow multiple-occurence, use last parameters
 [paraSpecLast] :: ParaSpec n -> [n]
 
--- | Allow multiple-occurence, use all parameters
+-- | <b>Named:</b> Allow multiple-occurence, use all parameters
 [paraSpecMulti] :: ParaSpec n -> [n]
 
 -- | Name list of all parameters.
@@ -322,16 +374,22 @@ ParaMissing :: [n] -> ParaUnmatch n
 -- | Parameter occurs more than once.
 ParaMultiple :: [n] -> ParaUnmatch n
 
+-- | Either something or parameter.
+type ParaOr left n a = Either left (Para n a)
+
 -- | Test and revise parameter to satisfy specification.
-paraMatch :: (Eq n, Ord n) => ParaSpec n -> Para n a -> Either (ParaUnmatch n) (Para n a)
+paraMatch :: (Eq n, Ord n) => ParaSpec n -> Para n a -> ParaOr (ParaUnmatch n) n a
 
--- | Map parameter to some value.
-type ParaTo n a b = Para n a -> b
+-- | Select matched specification and apply parameter value function.
+paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, Para n a -> b)] -> Para n a -> b
 
--- | Select matched specification and apply <a>ParaTo</a> function.
-paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, ParaTo n a b)] -> ParaTo n a b
-paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)] -> Para n a -> Either [ParaUnmatch n] (Para n a)
+-- | Collect parameter tags.
+paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)] -> Para n a -> ParaOr [ParaUnmatch n] n a
+
+-- | Mapping of parameter specification.
 type ParaSpecMap n = Map (ParaSpec n)
+
+-- | Create parameter specification.
 paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
 
 -- | Lower bound of length of positional parameter.
@@ -771,46 +829,46 @@ subtypeName :: SubtypeName a => a -> String
 -- | There are eleven types of tokens.
 data Token
 
--- | 1) Text.
+-- | <b>1 Textual:</b> Text — <tt>'code</tt>, <tt>"text"</tt>, etc
 TText :: CodePt -> TextForm -> String -> Token
 
--- | 2) Slot name. <a>Int</a> represents slot level, i.e., 0 for local
---   positional slots, 1 for local named slots, 2 for global slots —
---   <tt>@</tt><i>name</i>
-TSlot :: CodePt -> Int -> String -> Token
-
--- | 3) Prefixed shorten text — <i>short</i><tt>.</tt><i>proper</i>
+-- | <b>2 Textual:</b> Prefixed shorten text — <tt>short.proper</tt>
 TShort :: CodePt -> String -> String -> Token
 
--- | 4) Term name — <tt>/</tt><i>name</i>
-TTermN :: CodePt -> Ordering -> TermName -> Token
+-- | <b>3 Textual:</b> Term name — <tt>/term</tt>
+TTerm :: CodePt -> String -> Token
 
--- | 5) Term path — <tt>/</tt><i>name</i><tt>/</tt><i>name</i>
-TTerm :: CodePt -> TermType -> TermPath -> Token
+-- | <b>4 Symbolic:</b> Local name — <tt>^r</tt>, <tt>^/r</tt>
+TLocal :: CodePt -> LocalRef -> Int -> [Token] -> Token
 
--- | 6) Local name — <tt>^/</tt><i>name</i>
-TLocal :: CodePt -> (LocalRef String) -> Int -> [Token] -> Token
+-- | <b>5 Symbolic:</b> Slot name. <a>Int</a> represents slot level, i.e.,
+--   0 for local positional slots, 1 for local named slots, 2 for global
+--   slots — <tt>@slot</tt>, <tt>@@global</tt>
+TSlot :: CodePt -> Int -> String -> Token
 
--- | 7) Opening bracket — <tt>(</tt>, <tt>{</tt>, etc
-TOpen :: CodePt -> String -> Token
-
--- | 8) Closing bracket — <tt>}</tt>, <tt>)</tt>, etc
-TClose :: CodePt -> String -> Token
-
--- | 9) <i>N</i> space characters.
-TSpace :: CodePt -> Int -> Token
-
--- | 10) Comment — <tt>**</tt><i>text</i>
-TComment :: CodePt -> String -> Token
-
--- | 11) Blank name. (This is used in building content expression)
+-- | <b>6 Symbolic:</b> Blank name. (This is only used in building content
+--   expression)
 TName :: CodePt -> BlankName -> Token
 
--- | 12) Unknown token.
+-- | <b>7 Punctuational:</b> Opening bracket — <tt>(</tt>, <tt>{</tt>,
+--   <tt>{=</tt>, etc
+TOpen :: CodePt -> String -> Token
+
+-- | <b>8 Punctuational:</b> Closing bracket — <tt>=}</tt>, <tt>}</tt>,
+--   <tt>)</tt>, etc
+TClose :: CodePt -> String -> Token
+
+-- | <b>9 Punctuational:</b> <i>N</i> space characters
+TSpace :: CodePt -> Int -> Token
+
+-- | <b>10 Punctuational:</b> Comment — <tt>** comment line</tt>
+TComment :: CodePt -> String -> Token
+
+-- | <b>11 Other:</b> Unknown token
 TUnknown :: CodePt -> String -> AbortReason -> Token
 
 -- | Create raw text token.
-textToken :: String -> Token
+rawTextToken :: String -> Token
 
 -- | Create unknown token.
 unknownToken :: CodePt -> String -> Ab a -> Token
@@ -818,47 +876,38 @@ unknownToken :: CodePt -> String -> Ab a -> Token
 -- | Subtype of text token.
 data TextForm
 
--- | Unknown keyword
+-- | <b>1.</b> Unknown keyword — <tt>&lt;unknown&gt;</tt>
 TextUnk :: TextForm
 
--- | Naked text
+-- | <b>2.</b> Naked text — <tt>raw</tt>
 TextRaw :: TextForm
 
--- | Single-quoted text — <tt>'</tt><i>code</i>
+-- | <b>3.</b> Single-quoted text — <tt>'code</tt>
 TextQ :: TextForm
 
--- | Double-quoted text — <tt>"</tt><i>text</i><tt>"</tt>
+-- | <b>4.</b> Double-quoted text — <tt>"text"</tt>
 TextQQ :: TextForm
 
--- | Keyword literal — <tt>&lt;</tt><i>keyword</i><tt>&gt;</tt>
+-- | <b>5.</b> Keyword literal — <tt>&lt;crlf&gt;</tt>
 TextKey :: TextForm
 
--- | Text enclosed in bars — <tt>|</tt><i>text</i><tt>|</tt>
+-- | <b>6.</b> Quoted term name — <tt>'/term</tt>
+TextTerm :: TextForm
+
+-- | <b>7.</b> Text enclosed in bars — <tt>|9:30|</tt>
 TextBar :: TextForm
 
--- | Text in license section
+-- | <b>8.</b> Text in license section — <tt>=== license</tt>
 TextLicense :: TextForm
 
--- | Type of term name.
-data TermType
-
--- | Normal term path
-TermTypePath :: TermType
-
--- | Quoted term name
-TermTypeQuoted :: TermType
-
 -- | Local relation reference.
-data LocalRef a
+data LocalRef
 
 -- | Reference to local relation — <tt>^r</tt>
-LocalSymbol :: a -> LocalRef a
+LocalSymbol :: String -> LocalRef
 
 -- | Reference to nested relation — <tt>^/r</tt>
-LocalNest :: a -> LocalRef a
-
--- | Get name of local relation reference.
-unlocal :: LocalRef a -> a
+LocalNest :: TermName -> LocalRef
 
 -- | Blank in form.
 data BlankName
@@ -873,12 +922,9 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.BlankName
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.BlankName
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Token.Token.LocalRef a)
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TermType
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TermType
-instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TermType
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.LocalRef
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.LocalRef
+instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
@@ -887,6 +933,7 @@ instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.To
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
+instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.BlankName
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.BlankName
 
@@ -930,18 +977,6 @@ module Koshucode.Baala.Syntax.Token.Pattern
 
 -- | Section sign.
 
--- | Term path token.
---   
---   <pre>
---   &gt;&gt;&gt; TTermPath B.def ["a", "b"]   -- /a/b
---   </pre>
-
--- | Quoted term path token.
---   
---   <pre>
---   &gt;&gt;&gt; TTermQ B.def ["a"]   -- '/a
---   </pre>
-
 
 -- | Token utilities.
 module Koshucode.Baala.Syntax.Token.Utility
@@ -949,15 +984,15 @@ module Koshucode.Baala.Syntax.Token.Utility
 -- | Get the content of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; let tok = S.TTerm B.def S.TermTypePath ["r", "x"] in tokenContent tok
---   "/r/x"
+--   &gt;&gt;&gt; tokenContent $ S.TOpen B.def "("
+--   "("
 --   </pre>
 tokenContent :: Token -> String
 
 -- | Get detail type string of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; let tok = S.textToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
+--   &gt;&gt;&gt; let tok = S.rawTextToken "flower" in (S.subtypeName tok, tokenDetailTypeString tok)
 --   ("text", Just "raw")
 --   </pre>
 tokenDetailTypeString :: Token -> Maybe String
@@ -1017,8 +1052,18 @@ type TokenNip = CodePt -> InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
 type TokenNipW = CodePt -> WordTable -> InputText -> TokenNipWResult
+
+-- | Nip off a next token with word table.
+type TokenNipLW = CodePt -> WordTable -> InputText -> TokenNipLWResult
+
+-- | Nip result.
 type TokenNipResult = (InputText, Token)
+
+-- | Nip result with word table.
 type TokenNipWResult = (WordTable, InputText, Token)
+
+-- | Nip result with word table.
+type TokenNipLWResult = (WordTable, InputText, [Token])
 
 -- | Test character is symbolic.
 isSymbol :: Test Char
@@ -1044,32 +1089,72 @@ nipUpdate :: TokenScan -> TokenNipResult -> TokenScan
 -- | Update token scanner by nipper result with word table.
 nipUpdateW :: TokenScan -> TokenNipWResult -> TokenScan
 
+-- | Update token scanner by nipper result with word table.
+nipUpdateLW :: TokenScan -> TokenNipLWResult -> TokenScan
+
 -- | Nip off space token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipSpace B.def "  foo bar baz"
+--   ("foo bar baz", TSpace &lt;I0-L0-C0&gt; 3)
+--   </pre>
 nipSpace :: TokenNip
 
 -- | Nip off a single-quoted text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipQ B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TText &lt;I0-L0-C0&gt; TextQ "foo")
+--   </pre>
 nipQ :: TokenNipW
 
 -- | Nip off a double-quoted text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipQQ B.def "foo\" bar baz"
+--   (" bar baz", TText &lt;I0-L0-C0&gt; TextQQ "foo")
+--   </pre>
 nipQQ :: TokenNip
 
 -- | Nip off symbolic token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipSymbol B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TText &lt;I0-L0-C0&gt; TextRaw "foo")
+--   </pre>
 nipSymbol :: TokenNipW
 
--- | Create symbolic token.
-symbolToken :: (CodePt -> String -> Token) -> String -> TokenNipW
-
 -- | Nip off a slot name, like <tt>@foo</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipSlot 1 B.def "foo bar baz"
+--   (" bar baz", TSlot &lt;I0-L0-C0&gt; 1 "foo")
+--   </pre>
 nipSlot :: Int -> TokenNip
 
 -- | Nip off a signed term name.
-nipTermSign :: Ordering -> TokenNipW
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipTermSign EQ B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
+--   </pre>
+nipTermSign :: Ordering -> TokenNipLW
 
 -- | Nip off a term name.
-nipTermPath :: TokenNipW
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipTermPath B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
+--   </pre>
+nipTermPath :: TokenNipLW
 
 -- | Nip off a quoted term.
-nipTermQ :: TokenNipW
+--   
+--   <pre>
+--   &gt;&gt;&gt; nipTermQ B.def Map.empty "foo bar baz"
+--   (fromList [], " bar baz", [TText &lt;I0-L0-C0&gt; TextTerm "foo"])
+--   </pre>
+nipTermQ :: TokenNipLW
 
 -- | Nip off token beginning with <tt>"|"</tt>.
 nipBar :: CodePt -> String -> String -> TokenNipResult
@@ -1080,6 +1165,8 @@ module Koshucode.Baala.Syntax.Token.Section
 
 -- | Select scanner based on section name.
 type ChangeSection = String -> Maybe TokenScanMap
+
+-- | Line begins with triple equal signs is treated as section delimter.
 section :: ChangeSection -> (InputText -> TokenScan) -> TokenScanMap
 
 -- | Token scanner.
@@ -1096,7 +1183,8 @@ scanLicense :: Scanner
 
 -- | Scan entire line as text.
 scanLine :: TextForm -> Scanner
-scanLineInClause :: TextForm -> Scanner
+
+-- | Section for <tt>koshu-text-assert</tt> command.
 scanTextAssert :: Scanner
 
 
@@ -1148,78 +1236,89 @@ module Koshucode.Baala.Syntax.TTree.Bracket
 -- | Type of bracket.
 data BracketType
 
--- | Round brackets for grouping: <tt>( E ... )</tt>
+-- | <b>1.</b> Round brackets for grouping: <tt>( E ... )</tt>
 BracketGroup :: BracketType
 
--- | Square brackets for lists: <tt>[ C | ... ]</tt>
+-- | <b>2.</b> Round-single brackets for term path: <tt>(- /P ... -)</tt>
+BracketTerm :: BracketType
+
+-- | <b>3.</b> Square brackets for lists: <tt>[ C | ... ]</tt>
 BracketList :: BracketType
 
--- | Curely braces for sets: <tt>{ C | .... }</tt>
+-- | <b>4.</b> Curely braces for sets: <tt>{ C | ... }</tt>
 BracketSet :: BracketType
 
--- | Curely-single braces for ties: <tt>{- /N C ... -}</tt>
+-- | <b>5.</b> Curely-single braces for ties: <tt>{- /N C ... -}</tt>
 BracketTie :: BracketType
 
--- | Curely-double braces for relations: <tt>{= /N ... [ C | ... ][ C | ...
---   ] =}</tt>
+-- | <b>6.</b> Curely-double braces for relations: <tt>{= /N ... [ C | ...
+--   ][ C | ... ] =}</tt>
 BracketRel :: BracketType
 
--- | Curely-bar braces for data interpretation: <tt>{| ... /N ... |}</tt>
+-- | <b>7.</b> Curely-bar braces for data interpretation: <tt>{| ... /N ...
+--   |}</tt>
 BracketInterp :: BracketType
 
--- | Square-single brackets for type: <tt>[- ... -]</tt>
+-- | <b>8.</b> Square-single brackets for type: <tt>[- ... -]</tt>
 BracketType :: BracketType
 
--- | Round-bar brackets for form with blanks: <tt>(| V ... | E ... |)</tt>
+-- | <b>9.</b> Round-bar brackets for calculation form: <tt>(| V ... | E
+--   ... |)</tt>
 BracketForm :: BracketType
 
--- | Unknown bracket
+-- | <b>10.</b> Unknown bracket
 BracketUnknown :: BracketType
 
 -- | Bracket type of token.
 getBracketType :: GetBracketType BracketType Token
 
 -- | Open group: <tt>"("</tt>
-groupOpen :: String
+openGroup :: String
 
 -- | Close group: <tt>")"</tt>
-groupClose :: String
+closeGroup :: String
+
+-- | Open term path: <tt>"(-"</tt>
+openTerm :: String
+
+-- | Close term path: <tt>"-)"</tt>
+closeTerm :: String
 
 -- | Open list: <tt>"["</tt>
-listOpen :: String
+openList :: String
 
 -- | Close list: <tt>"]"</tt>
-listClose :: String
+closeList :: String
 
 -- | Open set: <tt>"{"</tt>
-setOpen :: String
+openSet :: String
 
 -- | Close set: <tt>"}"</tt>
-setClose :: String
+closeSet :: String
 
 -- | Open tie: <tt>"{-"</tt>
-tieOpen :: String
+openTie :: String
 
 -- | Close tie: <tt>"-}"</tt>
-tieClose :: String
+closeTie :: String
 
 -- | Open relation: <tt>"{="</tt>
-relOpen :: String
+openRel :: String
 
 -- | Close relation: <tt>"=}"</tt>
-relClose :: String
+closeRel :: String
 
 -- | Open interpreation: <tt>"{|"</tt>
-interpOpen :: String
+openInterp :: String
 
 -- | Close interpreation: <tt>"|}"</tt>
-interpClose :: String
+closeInterp :: String
 
 -- | Open type: <tt>"[-"</tt>
-typeOpen :: String
+openType :: String
 
 -- | Close type: <tt>"-]"</tt>
-typeClose :: String
+closeType :: String
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.TTree.Bracket.BracketType
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.TTree.Bracket.BracketType
 instance GHC.Show.Show Koshucode.Baala.Syntax.TTree.Bracket.BracketType
@@ -1238,10 +1337,6 @@ type NamedTree = Named TTree
 type NamedTrees = Named [TTree]
 
 -- | Term leaf.
-
--- | Term leaf.
-
--- | Term leaf of <a>TermTypePath</a>.
 
 -- | Text leaf.
 
@@ -1365,7 +1460,7 @@ abortableTree :: String -> TTree -> MapAb b
 abortableTrees :: String -> [TTree] -> MapAb b
 
 -- | Unexpected attribute / Duplicate
-dupAttr :: [String] -> Ab a
+dupAttr :: [TermName] -> Ab a
 
 -- | Extra attribute
 extraAttr :: Ab a
@@ -1415,22 +1510,19 @@ type AttrEd = Sourced AttrEdBody
 -- | Operators for attribute editors.
 data AttrEdBody
 
--- | Identity editor
+-- | <b>id:</b> Identity editor
 AttrEdId :: AttrEdBody
 
--- | Add attribute
+-- | <b>add:</b> Add attribute
 AttrEdAdd :: Bool -> String -> [TTree] -> AttrEdBody
 
--- | Rename attribute keyword
+-- | <b>rename:</b> Rename attribute keyword
 AttrEdRename :: (String, String) -> AttrEdBody
 
--- | Fill positional attributes
+-- | <b>fill:</b> Fill positional attributes
 AttrEdFill :: [Maybe TTree] -> AttrEdBody
 
--- | Make term name
-AttrEdTerm :: String -> [TTree] -> AttrEdBody
-
--- | Nested relation reference
+-- | <b>nest:</b> Nested relation reference
 AttrEdNest :: String -> [TTree] -> AttrEdBody
 
 -- | Append editors

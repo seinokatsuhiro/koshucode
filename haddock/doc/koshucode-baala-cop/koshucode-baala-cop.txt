@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Replace sublists.
@@ -126,6 +126,8 @@ f3 :: Map (Cox c)
 
 -- | Fill blanks in a named form.
 i :: String -> [Cox c] -> Cox c
+
+-- | Fill blanks.
 ib :: BlankName -> [Cox c] -> Cox c
 
 -- | Fill blanks in the given form.

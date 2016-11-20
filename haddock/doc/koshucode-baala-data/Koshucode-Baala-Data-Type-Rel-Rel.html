@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -125,8 +125,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >relBodyOrder</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:SignedTermName"
-	    >SignedTermName</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -161,15 +161,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    ><li
 	      ><a href="#v:selectRel"
 		>selectRel</a
-		> :: r c -&gt; <a href="Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
-		>JudgeClass</a
-		> -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-		>TermName</a
-		>] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
-		>Rel</a
+		> :: r c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:RelSelect"
+		>RelSelect</a
 		> c</li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelSelect"
+	    >RelSelect</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:judgesFromRel"
 	    >judgesFromRel</a
@@ -264,7 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-52');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-53');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -280,7 +288,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-49');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-50');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -296,7 +304,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-44');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -312,7 +320,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-34');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-35');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -328,7 +336,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-60');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -342,7 +350,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 		      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
 		      >Rel</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-56');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#line-57');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -391,8 +399,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    >relBodyOrder</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:SignedTermName"
-	    >SignedTermName</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -497,12 +505,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    ><p class="src"
 	    ><a name="v:selectRel" class="def"
 	      >selectRel</a
-	      > :: r c -&gt; <a href="Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
-	      >JudgeClass</a
-	      > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	      >TermName</a
-	      >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
-	      >Rel</a
+	      > :: r c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:RelSelect"
+	      >RelSelect</a
 	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#selectRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
@@ -510,6 +514,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-T
 	    ><p
 	      >Convert judges to relation.</p
 	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelSelect" class="def"
+	    >RelSelect</a
+	    > c = <a href="Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Rel-Rel.html#RelSelect');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Select relation.</p
 	    ></div
 	  ></div
 	><div class="top"

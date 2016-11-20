@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Unicode general categories.
@@ -299,36 +299,6 @@ type Test2 a b = a -> b -> Bool
 -- | Type for binary operators.
 type Bin a = a -> a -> a
 
--- | <a>Int</a> shorthand.
---   
---   <pre>
---   &gt;&gt;&gt; int 12
---   12
---   </pre>
---   
---   This is same as:
---   
---   <pre>
---   &gt;&gt;&gt; 12 :: Int
---   12
---   </pre>
-int :: Map Int
-
--- | <a>Integer</a> shorthand.
---   
---   <pre>
---   &gt;&gt;&gt; integer 12
---   12
---   </pre>
---   
---   This is same as:
---   
---   <pre>
---   &gt;&gt;&gt; 12 :: Integer
---   12
---   </pre>
-integer :: Map Integer
-
 
 -- | String utility.
 module Koshucode.Baala.Overture.Text.Utility
@@ -424,6 +394,73 @@ hPutEmptyLine :: Handle -> IO ()
 
 -- | Bundle of text modules.
 module Koshucode.Baala.Overture.Text
+
+
+-- | Shorthand functions.
+module Koshucode.Baala.Overture.Shorthand
+
+-- | <a>Int</a> shorthand.
+--   
+--   <pre>
+--   &gt;&gt;&gt; int 12
+--   12
+--   </pre>
+--   
+--   This is same as:
+--   
+--   <pre>
+--   &gt;&gt;&gt; 12 :: Int
+--   12
+--   </pre>
+int :: Map Int
+
+-- | <a>Integer</a> shorthand.
+--   
+--   <pre>
+--   &gt;&gt;&gt; integer 12
+--   12
+--   </pre>
+--   
+--   This is same as:
+--   
+--   <pre>
+--   &gt;&gt;&gt; 12 :: Integer
+--   12
+--   </pre>
+integer :: Map Integer
+
+-- | Function which always returns <a>Nothing</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nothing True :: Maybe String
+--   Nothing
+--   </pre>
+nothing :: a -> Maybe b
+
+
+-- | Cache.
+module Koshucode.Baala.Overture.Cache
+
+-- | Cache data.
+data Cache k v
+
+-- | String cache.
+type CacheS v = Cache String v
+
+-- | Create empty cache of given limits and value function.
+cache :: [Int] -> (k -> v) -> Cache k v
+
+-- | Get cached value.
+cacheGet :: (Ord k) => Cache k v -> k -> (Cache k v, v)
+
+-- | Get cached values.
+--   
+--   <pre>
+--   &gt;&gt;&gt; cacheGetList (cache [] id :: Cache Char Char) ['A' .. 'Z']
+--   (Cache 27 "ABCDEFGHIJKLMNOPQR" "STUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+--   </pre>
+cacheGetList :: (Ord k) => Cache k v -> [k] -> (Cache k v, [v])
+instance GHC.Show.Show k => GHC.Show.Show (Koshucode.Baala.Overture.Cache.Cache k v)
 
 
 -- | Bundle of overture modules.

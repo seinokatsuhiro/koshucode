@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.170.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.174.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -155,6 +155,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >Lexmap</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 	    >RopName</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:lexLocalRef"
+	    >lexLocalRef</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
+	    >LocalRef</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:lexAddMessage"
@@ -389,7 +399,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		  ></td
 		><td class="doc"
 		><p
-		  >Built-in relmap</p
+		  >Relmap of built-in operator</p
 		  ></td
 		></tr
 	      ><tr
@@ -399,7 +409,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		  ></td
 		><td class="doc"
 		><p
-		  >User-defined relmap</p
+		  >Derived or user-defined relmap</p
 		  ></td
 		></tr
 	      ><tr
@@ -409,7 +419,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		  ></td
 		><td class="doc"
 		><p
-		  >Local relation reference</p
+		  >Local relation reference like <code
+		    >^/r</code
+		    > or <code
+		    >^r</code
+		    ></p
 		  ></td
 		></tr
 	      ></table
@@ -497,6 +511,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ><div class="doc"
 	  ><p
 	    >Name of relmap operator</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:lexLocalRef" class="def"
+	    >lexLocalRef</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:LocalRef"
+	    >LocalRef</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexLocalRef');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lexmap local reference.</p
 	    ></div
 	  ></div
 	><div class="top"

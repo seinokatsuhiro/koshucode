@@ -1,0 +1,717 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Type.Type.Genus</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Type-Type-Genus.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Type.Type.Genus</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Constructor</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Operator</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Genus of contents.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Genus"
+	    >Genus</a
+	    > c = <a href="#v:Genus"
+	    >Genus</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:genusTypes"
+		>genusTypes</a
+		> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+		>Set</a
+		> c</li
+	      ><li
+	      ><a href="#v:genusExclusive"
+		>genusExclusive</a
+		> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+		>Set</a
+		> c</li
+	      ><li
+	      ><a href="#v:genusInclusive"
+		>genusInclusive</a
+		> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+		>Set</a
+		> c</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:genusVoid"
+	    >genusVoid</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:genusType"
+	    >genusType</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:genusOf"
+	    >genusOf</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:genusMember"
+	    >genusMember</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:genusMeet"
+	    >genusMeet</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:genusDiff"
+	    >genusDiff</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:genusJoin"
+	    >genusJoin</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:genusSplit"
+	    >genusSplit</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c, <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:genusInclude"
+	    >genusInclude</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:genusExclude"
+	    >genusExclude</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Constructor</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Genus" class="def"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#Genus');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set of various contents.
+   A genus <em
+	      >C</em
+	      > - <em
+	      >X</em
+	      > + <em
+	      >Y</em
+	      > has
+   (1) <em
+	      >C</em
+	      > is a set of types as representative contents,
+   (2) <em
+	      >X</em
+	      > is exclusive contents from the set, and
+   (3) <em
+	      >Y</em
+	      > is inclusive contents to the set.</p
+	    ><p
+	    >Contents in <em
+	      >X</em
+	      > must be in <em
+	      >C</em
+	      >,
+   contents in <em
+	      >Y</em
+	      > must not be in <em
+	      >C</em
+	      >.
+   Internal function <code
+	      >genusFrom</code
+	      > trims unnecessary contents
+   according to this conditions.</p
+	    ><p
+	    >Diagram of genus <em
+	      >G</em
+	      > = <em
+	      >C</em
+	      > - <em
+	      >X</em
+	      > + <em
+	      >Y</em
+	      >:</p
+	    ><pre
+	    >G -------$$$-$$$$$$------$-$$$-$$$$---------$--$----
+            :             :   :             :  :
+C    T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|        :  :
+X           x             x   x             :  :
+Y                                           y  y</pre
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Genus" class="def"
+		  >Genus</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:genusTypes" class="def"
+			>genusTypes</a
+			> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+			>Set</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Representative contents.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:genusExclusive" class="def"
+			>genusExclusive</a
+			> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+			>Set</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Particular exclusive contents.</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:genusInclusive" class="def"
+			>genusInclusive</a
+			> :: <a href="http://hackage.haskell.org/package/containers/docs/Data-Set.html#t:Set"
+			>Set</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Particular inclusive contents.</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Genus" class="caption collapser" onclick="toggleSection('i:Genus')"
+	    >Instances</p
+	    ><div id="section.i:Genus" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+		      >Genus</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#line-46');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+		      >Genus</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#line-46');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+		      >Genus</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#line-48');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusVoid" class="def"
+	    >genusVoid</a
+	    > :: <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusVoid');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Completely empty genus.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusType" class="def"
+	    >genusType</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create genus of single type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusOf" class="def"
+	    >genusOf</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusOf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create genus of single inclusives content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusMember" class="def"
+	    >genusMember</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusMember');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test membership of content to genus.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Operator</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusMeet" class="def"
+	    >genusMeet</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusMeet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Meet of two genera.</p
+	    ><p
+	    >Meet of <em
+	      >A</em
+	      > - <em
+	      >X1</em
+	      > + <em
+	      >Y1</em
+	      ></p
+	    ><pre
+	    >-------$$-$$$$$$$------$-$$$$$-$$--------$---$-----------
+         :              :     :          :   :
+A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :   :
+X1       x1             x1    x1         :   :
+Y1                                       y1  y1</pre
+	    ><p
+	    >and <em
+	      >B</em
+	      > - <em
+	      >X2</em
+	      > + <em
+	      >Y2</em
+	      ></p
+	    ><pre
+	    >-------------$---------$$$$-$$$$$------$$-$$$$$$$---$----
+             :             :             :          :
+B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+X2           :             x2            x2         :
+Y2           y2                                     y2</pre
+	    ><p
+	    >is:</p
+	    ><pre
+	    >-------------$---------$-$$-$$-$$------------$-----------
+             :          :  :  :              :
+C            :     T2 |$$$$$$$$$$|           :
+X3      (x1) :          x1 x2 x1        (x2) :
+Y3           y2                              y1
+        &lt;A * Y2 - X1&gt;                   &lt;B * Y1 - X2&gt;</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusDiff" class="def"
+	    >genusDiff</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusDiff');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Difference of two genera.</p
+	    ><p
+	    >Difference of <em
+	      >A</em
+	      > - <em
+	      >X1</em
+	      > + <em
+	      >Y1</em
+	      ></p
+	    ><pre
+	    >-------$$$-$$$$$$------$-$$$$$-$$--------$--$-----------$----
+          :             :     :          :  :           :
+A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :  :           :
+X1        x1            x1    x1         :  :           :
+Y1                                       y1 y1          y1</pre
+	    ><p
+	    >and <em
+	      >B</em
+	      > - <em
+	      >X2</em
+	      > + <em
+	      >Y2</em
+	      ></p
+	    ><pre
+	    >-------------$---------$$$$-$$$$$------$$-$$$$$$$---$--------
+             :             :             :          :
+B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+X2           :             x2            x2         :
+Y2           y2                                     y2</pre
+	    ><p
+	    >is:</p
+	    ><pre
+	    >-------$$$-$$-$$$----------$-------------$--------------$----
+          :  :             :             :              :
+C  T1 |$$$$$$$$$$|         :             :              :
+X3        x1 y2       (x1) : (x1)        :         (y2) :
+Y3                         x2            y1             y1</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusJoin" class="def"
+	    >genusJoin</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusJoin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Join of two genera.</p
+	    ><p
+	    >Join of <em
+	      >A</em
+	      > - <em
+	      >X1</em
+	      > + <em
+	      >Y1</em
+	      ></p
+	    ><pre
+	    >-------$$$-$$$$$$------$-$$$$-$$$--------$---------------
+          :             :    :           :
+A  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$|       :
+X1        x1            x1   x1          :
+Y1                                       y1</pre
+	    ><p
+	    >and <em
+	      >B</em
+	      > - <em
+	      >X2</em
+	      > + <em
+	      >Y2</em
+	      ></p
+	    ><pre
+	    >-------------$---------$-$$$$$$$$------$$-$$$$$$$---$----
+             :          :                :          :
+B            :     T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+X2           :          x2               x2         :
+Y2           y2                                     y2</pre
+	    ><p
+	    >is:</p
+	    ><pre
+	    >-------$$$-$$$$$$------$-$$$$$$$$------$$$$$$$$$$---$----
+          :             :                           :
+C  T1 |$$$$$$$$$$| T2 |$$$$$$$$$$| T3 |$$$$$$$$$$|  :
+X3        x1            x1 = x2                     :
+      &lt;X1 - B - Y2&gt;    &lt;X1 * X2&gt;      &lt;X2 - A - Y1&gt; :
+Y3          (y2)                                    y2</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusSplit" class="def"
+	    >genusSplit</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; (<a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c, <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusSplit');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split acceptable genus by actual genus.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusInclude" class="def"
+	    >genusInclude</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusInclude');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Include specific contents.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:genusExclude" class="def"
+	    >genusExclude</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    >CTypeOf</a
+	    > c) =&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Type-Type-Genus.html#t:Genus"
+	    >Genus</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Type-Type-Genus.html#genusExclude');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Exclude specific contents.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Text table
@@ -194,9 +194,8 @@ sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 -- | Reexport list.
 module Koshucode.Baala.Base.Prelude.Import
 
--- | Right-to-left Kleisli composition of monads.
---   <tt>(<a>&gt;=&gt;</a>)</tt>, with the arguments flipped
-(<=<) :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
+-- | Composition of monadic functions.
+(<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c
 
 -- | Left-to-right Kleisli composition of monads.
 (>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
@@ -2516,7 +2515,7 @@ type CodeScanMap i o = Map (CodeScan i o)
 type WordTable = Map String String
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
-isBol :: CodeScan i o -> Bool
+isBol :: Test (CodeScan i o)
 
 -- | Save current updater.
 codeScanSave :: CodeScanMap i o
@@ -2546,8 +2545,14 @@ codeUpdate :: i -> o -> CodeScanMap i o
 -- | Update code scanner with word table.
 codeUpdateWords :: WordTable -> i -> o -> CodeScanMap i o
 
+-- | Multi-element version of <a>codeUpdate</a>.
+codeUpdateList :: i -> [o] -> CodeScanMap i o
+
+-- | Multi-element and cached version of <a>codeUpdate</a>.
+codeUpdateListWords :: WordTable -> i -> [o] -> CodeScanMap i o
+
 -- | Change mapper of code sc.
-codeChange :: CodeScanMap i o -> CodeScanMap i o
+codeChange :: Map (CodeScanMap i o)
 instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Scan.CodeScan i o)
 
 

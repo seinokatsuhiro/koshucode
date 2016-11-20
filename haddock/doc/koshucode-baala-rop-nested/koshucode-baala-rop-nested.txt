@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-nested
-@version 0.170.0.0
+@version 0.174.0.0
 
 
 -- | Messages for relmap operators on nested relations.
@@ -127,22 +127,16 @@ module Koshucode.Baala.Rop.Nest.Deriv
 --   relmap output.
 consOppGroup :: (Ord c, CRel c) => RopCons c
 
--- | <b>join-up /P ...</b>
-consJoinUp :: (Ord c) => RopCons c
-
--- | Create <tt>join-up</tt> relmap.
-relmapJoinUp :: (Ord c) => Intmed c -> [TermName] -> Relmap c
-
 -- | <b>self-group /P ... -to /N</b>
 --   
---   Nest down terms /P ... at term /N.
-consPickGroup :: (Ord c, CRel c) => RopCons c
+--   Group input relation into the term /N per /P ....
+consSelfGroup :: (Ord c, CRel c) => RopCons c
 
 -- | <b>nest [~] /P ... -to /N</b>
 consNest :: (Ord c, CRel c) => RopCons c
 
 -- | Create <tt>self-group</tt> relmap.
-relmapNest :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
+relmapSelfGroup :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
 
 -- | <b>ungroup /P</b>
 --   
@@ -151,6 +145,14 @@ consUngroup :: (Ord c, CRel c) => RopCons c
 
 -- | Create <tt>ungroup</tt> relmap.
 relmapUngroup :: (Ord c, CRel c) => Intmed c -> TermName -> Relmap c
+
+-- | <b>join-up /P ...</b>
+--   
+--   Join nested relations /P ... and up to output relation.
+consJoinUp :: (Ord c) => RopCons c
+
+-- | Create <tt>join-up</tt> relmap.
+relmapJoinUp :: (Ord c) => Intmed c -> [TermName] -> Relmap c
 
 
 -- | Relational operators for nested relations.
@@ -169,15 +171,8 @@ module Koshucode.Baala.Rop.Nest.Rop
 --   relmap <tt>R</tt>.</li>
 --   <li><i><tt>group /N R</tt></i> Group tuples in <tt>R</tt> by input
 --   relation.</li>
---   <li><i><tt>group-by /N R</tt></i> Group input relation by output of
---   <tt>R</tt>.</li>
 --   <li><i><tt>hang /N -on /P ...</tt></i> Hang nested relation
 --   <tt>/N</tt> on <tt>/P</tt> ....</li>
---   <li><i><tt>join-up /P ...</tt></i> Join <tt>/P</tt> ... and up the
---   result relation.</li>
---   <li><i><tt>nest /P ... -to /N</tt></i> Nest terms <tt>/P</tt> ... into
---   nested relation.</li>
---   <li><i><tt>unnest /P</tt></i> Unnest nested relation <tt>/P</tt>.</li>
 --   <li><i>@slice /N [R\</i> <tt>] Add nested relation as output of relmap
 --   </tt>R@.</li>
 --   <li><i><tt>slice-up R</tt></i> Slice, nested map, and lift up.</li>

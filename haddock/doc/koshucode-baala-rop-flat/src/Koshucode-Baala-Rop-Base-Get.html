@@ -208,7 +208,7 @@
 <a class="number" name="line-199">199</a><span class='hs-definition'>getTerms</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>getAbortable</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>treesFlatNames</span>
 <a class="number" name="line-200">200</a>
 <a class="number" name="line-201">201</a><a name="getSignedTerms"></a><span class='hs-comment'>-- | Get signed term names.</span>
-<a class="number" name="line-202">202</a><span class='hs-definition'>getSignedTerms</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>RopGet</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>SignedTermName</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-202">202</a><span class='hs-definition'>getSignedTerms</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>RopGet</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>S</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span>
 <a class="number" name="line-203">203</a><span class='hs-definition'>getSignedTerms</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>getAbortable</span> <span class='hs-varop'>$</span> <span class='hs-varid'>mapM</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-varid'>treeSignedName</span>
 <a class="number" name="line-204">204</a>
 <a class="number" name="line-205">205</a><a name="getTermsCo"></a><span class='hs-comment'>-- | Get term names and complement sign (@~@) .</span>

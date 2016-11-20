@@ -13,7 +13,7 @@
 <a class="number" name="line-4">4</a>
 <a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span><span class='hs-varop'>.</span><span class='hs-conid'>Import</span>
 <a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Control.Monad</span>
-<a class="number" name="line-7">7</a>    <span class='hs-layout'>(</span><span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span><span class='hs-varop'>.&lt;=&lt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-7">7</a>    <span class='hs-layout'>(</span><span class='hs-varop'>&lt;.&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
 <a class="number" name="line-8">8</a>    <span class='hs-layout'>(</span><span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span><span class='hs-varop'>.&gt;=&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
 <a class="number" name="line-9">9</a>    <span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span><span class='hs-varop'>.</span><span class='hs-varid'>sequence</span><span class='hs-layout'>,</span>
 <a class="number" name="line-10">10</a>    <span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span><span class='hs-varop'>.</span><span class='hs-varid'>filterM</span><span class='hs-layout'>,</span>
@@ -92,39 +92,45 @@
 <a class="number" name="line-83">83</a>
 <a class="number" name="line-84">84</a><span class='hs-comment'>-- ----------------------  Control</span>
 <a class="number" name="line-85">85</a>
-<a class="number" name="line-86">86</a><span class='hs-comment'>--concatMapM :: (Monad m) =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]</span>
-<a class="number" name="line-87">87</a><span class='hs-comment'>--concatMapM f = return . concat Control.Monad.&lt;=&lt; mapM f</span>
-<a class="number" name="line-88">88</a>
-<a class="number" name="line-89">89</a>
-<a class="number" name="line-90">90</a><span class='hs-comment'>-- ----------------------  Data</span>
+<a class="number" name="line-86">86</a><span class='hs-keyword'>infixr</span> <span class='hs-num'>1</span> <span class='hs-varop'>&lt;.&gt;</span>
+<a class="number" name="line-87">87</a>
+<a class="number" name="line-88">88</a><a name="%3c.%3e"></a><span class='hs-comment'>-- | Composition of monadic functions.</span>
+<a class="number" name="line-89">89</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;.&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monad</span> <span class='hs-varid'>m</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>b</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-90">90</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;.&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span><span class='hs-varop'>.&lt;=&lt;</span><span class='hs-layout'>)</span>
 <a class="number" name="line-91">91</a>
-<a class="number" name="line-92">92</a><a name="Bs"></a><span class='hs-comment'>-- | Strict bytestring.</span>
-<a class="number" name="line-93">93</a><a name="Bs"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Bs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span>
+<a class="number" name="line-92">92</a><span class='hs-comment'>--concatMapM :: (Monad m) =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]</span>
+<a class="number" name="line-93">93</a><span class='hs-comment'>--concatMapM f = return . concat Control.Monad.&lt;=&lt; mapM f</span>
 <a class="number" name="line-94">94</a>
-<a class="number" name="line-95">95</a><a name="Bz"></a><span class='hs-comment'>-- | Lazy bytestring.</span>
-<a class="number" name="line-96">96</a><a name="Bz"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Bz</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span>
+<a class="number" name="line-95">95</a>
+<a class="number" name="line-96">96</a><span class='hs-comment'>-- ----------------------  Data</span>
 <a class="number" name="line-97">97</a>
-<a class="number" name="line-98">98</a><a name="stringBz"></a><span class='hs-comment'>-- | Convert string into lazy bytestring.</span>
-<a class="number" name="line-99">99</a><span class='hs-definition'>stringBz</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bz</span>
-<a class="number" name="line-100">100</a><span class='hs-definition'>stringBz</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span><span class='hs-varop'>.</span><span class='hs-varid'>fromString</span>
-<a class="number" name="line-101">101</a>
-<a class="number" name="line-102">102</a><a name="lookupMap"></a><span class='hs-comment'>-- | Same as 'Map.lookup' in @Data.Map@ module.</span>
-<a class="number" name="line-103">103</a><span class='hs-definition'>lookupMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>k</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>k</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-varid'>k</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-104">104</a><span class='hs-definition'>lookupMap</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-varid'>lookup</span>
-<a class="number" name="line-105">105</a>
-<a class="number" name="line-106">106</a>
-<a class="number" name="line-107">107</a><span class='hs-comment'>-- ----------------------  Text</span>
-<a class="number" name="line-108">108</a>
-<a class="number" name="line-109">109</a><a name="docEmpty"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.empty'.</span>
-<a class="number" name="line-110">110</a><span class='hs-definition'>docEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
-<a class="number" name="line-111">111</a><span class='hs-definition'>docEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
+<a class="number" name="line-98">98</a><a name="Bs"></a><span class='hs-comment'>-- | Strict bytestring.</span>
+<a class="number" name="line-99">99</a><a name="Bs"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Bs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span>
+<a class="number" name="line-100">100</a>
+<a class="number" name="line-101">101</a><a name="Bz"></a><span class='hs-comment'>-- | Lazy bytestring.</span>
+<a class="number" name="line-102">102</a><a name="Bz"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Bz</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span>
+<a class="number" name="line-103">103</a>
+<a class="number" name="line-104">104</a><a name="stringBz"></a><span class='hs-comment'>-- | Convert string into lazy bytestring.</span>
+<a class="number" name="line-105">105</a><span class='hs-definition'>stringBz</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bz</span>
+<a class="number" name="line-106">106</a><span class='hs-definition'>stringBz</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>ByteString</span><span class='hs-varop'>.</span><span class='hs-conid'>Lazy</span><span class='hs-varop'>.</span><span class='hs-conid'>UTF8</span><span class='hs-varop'>.</span><span class='hs-varid'>fromString</span>
+<a class="number" name="line-107">107</a>
+<a class="number" name="line-108">108</a><a name="lookupMap"></a><span class='hs-comment'>-- | Same as 'Map.lookup' in @Data.Map@ module.</span>
+<a class="number" name="line-109">109</a><span class='hs-definition'>lookupMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>k</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>k</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-varid'>k</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-110">110</a><span class='hs-definition'>lookupMap</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-varid'>lookup</span>
+<a class="number" name="line-111">111</a>
 <a class="number" name="line-112">112</a>
-<a class="number" name="line-113">113</a><a name="docHang"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.hang'.</span>
-<a class="number" name="line-114">114</a><span class='hs-definition'>docHang</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
-<a class="number" name="line-115">115</a><span class='hs-definition'>docHang</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>hang</span>
-<a class="number" name="line-116">116</a>
-<a class="number" name="line-117">117</a><a name="docZero"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.zeroWidthText'.</span>
-<a class="number" name="line-118">118</a><span class='hs-definition'>docZero</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
-<a class="number" name="line-119">119</a><span class='hs-definition'>docZero</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>zeroWidthText</span>
+<a class="number" name="line-113">113</a><span class='hs-comment'>-- ----------------------  Text</span>
+<a class="number" name="line-114">114</a>
+<a class="number" name="line-115">115</a><a name="docEmpty"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.empty'.</span>
+<a class="number" name="line-116">116</a><span class='hs-definition'>docEmpty</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
+<a class="number" name="line-117">117</a><span class='hs-definition'>docEmpty</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
+<a class="number" name="line-118">118</a>
+<a class="number" name="line-119">119</a><a name="docHang"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.hang'.</span>
+<a class="number" name="line-120">120</a><span class='hs-definition'>docHang</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
+<a class="number" name="line-121">121</a><span class='hs-definition'>docHang</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>hang</span>
+<a class="number" name="line-122">122</a>
+<a class="number" name="line-123">123</a><a name="docZero"></a><span class='hs-comment'>-- | Same as 'Text.PrettyPrint.zeroWidthText'.</span>
+<a class="number" name="line-124">124</a><span class='hs-definition'>docZero</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
+<a class="number" name="line-125">125</a><span class='hs-definition'>docZero</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span><span class='hs-varop'>.</span><span class='hs-varid'>zeroWidthText</span>
 </pre></body>
 </html>

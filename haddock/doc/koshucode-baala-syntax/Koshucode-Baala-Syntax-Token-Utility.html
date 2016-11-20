@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.170.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -204,10 +204,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let tok = S.TTerm B.def S.TermTypePath [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
+		>tokenContent $ S.TOpen B.def &quot;(&quot;
 </code
 		></strong
-	      >&quot;/r/x&quot;
+	      >&quot;(&quot;
 </pre
 	    ></div
 	  ></div
@@ -232,7 +232,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let tok = S.textToken &quot;flower&quot; in (S.subtypeName tok, tokenDetailTypeString tok)
+		>let tok = S.rawTextToken &quot;flower&quot; in (S.subtypeName tok, tokenDetailTypeString tok)
 </code
 		></strong
 	      >(&quot;text&quot;, Just &quot;raw&quot;)

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.170.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.174.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -88,6 +88,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >.</p
 	  ></div
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:GeoPoint"
+	    >GeoPoint</a
+	    > = (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Double"
+	    >Double</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Double"
+	    >Double</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:convDegree"
+	    >convDegree</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Rop-Cox-GeoDatumJp.html#t:GeoPoint"
+	    >GeoPoint</a
+	    > -&gt; <a href="Koshucode-Baala-Rop-Cox-GeoDatumJp.html#t:GeoPoint"
+	    >GeoPoint</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:convRadian"
+	    >convRadian</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Rop-Cox-GeoDatumJp.html#t:GeoPoint"
+	    >GeoPoint</a
+	    > -&gt; <a href="Koshucode-Baala-Rop-Cox-GeoDatumJp.html#t:GeoPoint"
+	    >GeoPoint</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
       ><h1
 	>Documentation</h1
@@ -104,6 +140,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >) <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-GeoDatumJp.html#GeoPoint');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Point in geographic coordinate system.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -118,6 +158,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-GeoDatumJp.html#convDegree');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert point in plane rectangular coordinates
+   to degrees of latitude and longitude.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>convDegree 8 (0.0, 0.0)
+</code
+		></strong
+	      >(35.99999999999999, 138.5)
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -132,6 +187,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-GeoDatumJp.html#convRadian');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert point in plane rectangular coordinates
+   to geographic latitude and longitude.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>convRadian 8 (0.0, 0.0)
+</code
+		></strong
+	      >(0.6283185307179585, 498600.0)
+</pre
+	    ></div
 	  ></div
 	></div
       ></div

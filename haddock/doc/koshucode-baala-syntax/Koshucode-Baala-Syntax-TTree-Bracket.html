@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.170.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -89,6 +89,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>BracketGroup</a
 		></li
 	      ><li
+	      >| <a href="#v:BracketTerm"
+		>BracketTerm</a
+		></li
+	      ><li
 	      >| <a href="#v:BracketList"
 		>BracketList</a
 		></li
@@ -133,86 +137,98 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Token</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:groupOpen"
-	    >groupOpen</a
+	  ><a href="#v:openGroup"
+	    >openGroup</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:groupClose"
-	    >groupClose</a
+	  ><a href="#v:closeGroup"
+	    >closeGroup</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:listOpen"
-	    >listOpen</a
+	  ><a href="#v:openTerm"
+	    >openTerm</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:listClose"
-	    >listClose</a
+	  ><a href="#v:closeTerm"
+	    >closeTerm</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:setOpen"
-	    >setOpen</a
+	  ><a href="#v:openList"
+	    >openList</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:setClose"
-	    >setClose</a
+	  ><a href="#v:closeList"
+	    >closeList</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:tieOpen"
-	    >tieOpen</a
+	  ><a href="#v:openSet"
+	    >openSet</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:tieClose"
-	    >tieClose</a
+	  ><a href="#v:closeSet"
+	    >closeSet</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:relOpen"
-	    >relOpen</a
+	  ><a href="#v:openTie"
+	    >openTie</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:relClose"
-	    >relClose</a
+	  ><a href="#v:closeTie"
+	    >closeTie</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:interpOpen"
-	    >interpOpen</a
+	  ><a href="#v:openRel"
+	    >openRel</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:interpClose"
-	    >interpClose</a
+	  ><a href="#v:closeRel"
+	    >closeRel</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:typeOpen"
-	    >typeOpen</a
+	  ><a href="#v:openInterp"
+	    >openInterp</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:typeClose"
-	    >typeClose</a
+	  ><a href="#v:closeInterp"
+	    >closeInterp</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:openType"
+	    >openType</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:closeType"
+	    >closeType</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
@@ -245,8 +261,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Round brackets for grouping: <code
+		  ><strong
+		    >1.</strong
+		    > Round brackets for grouping:
+   <code
 		    >( E ... )</code
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:BracketTerm" class="def"
+		  >BracketTerm</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><strong
+		    >2.</strong
+		    > Round-single brackets for term path:
+   <code
+		    >(- /P ... -)</code
 		    ></p
 		  ></td
 		></tr
@@ -257,7 +291,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Square brackets for lists: <code
+		  ><strong
+		    >3.</strong
+		    > Square brackets for lists:
+   <code
 		    >[ C | ... ]</code
 		    ></p
 		  ></td
@@ -269,8 +306,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Curely braces for sets: <code
-		    >{ C | .... }</code
+		  ><strong
+		    >4.</strong
+		    > Curely braces for sets:
+   <code
+		    >{ C | ... }</code
 		    ></p
 		  ></td
 		></tr
@@ -281,7 +321,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Curely-single braces for ties: <code
+		  ><strong
+		    >5.</strong
+		    > Curely-single braces for ties:
+   <code
 		    >{- /N C ... -}</code
 		    ></p
 		  ></td
@@ -293,7 +336,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Curely-double braces for relations: <code
+		  ><strong
+		    >6.</strong
+		    > Curely-double braces for relations:
+   <code
 		    >{= /N ... [ C | ... ][ C | ... ] =}</code
 		    ></p
 		  ></td
@@ -305,7 +351,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Curely-bar braces for data interpretation: <code
+		  ><strong
+		    >7.</strong
+		    > Curely-bar braces for data interpretation:
+   <code
 		    >{| ... /N ... |}</code
 		    ></p
 		  ></td
@@ -317,7 +366,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Square-single brackets for type: <code
+		  ><strong
+		    >8.</strong
+		    > Square-single brackets for type:
+   <code
 		    >[- ... -]</code
 		    ></p
 		  ></td
@@ -329,7 +381,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Round-bar brackets for form with blanks: <code
+		  ><strong
+		    >9.</strong
+		    > Round-bar brackets for calculation form:
+   <code
 		    >(| V ... | E ... |)</code
 		    ></p
 		  ></td
@@ -341,7 +396,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  ></td
 		><td class="doc"
 		><p
-		  >Unknown bracket</p
+		  ><strong
+		    >10.</strong
+		    > Unknown bracket</p
 		  ></td
 		></tr
 	      ></table
@@ -359,7 +416,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
 		      >BracketType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-33');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -373,7 +430,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
 		      >BracketType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-33');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -387,7 +444,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
 		      >BracketType</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-33');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#line-45');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -419,11 +476,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Open and close</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:groupOpen" class="def"
-	    >groupOpen</a
+	  ><a name="v:openGroup" class="def"
+	    >openGroup</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#groupOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openGroup');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -435,11 +492,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:groupClose" class="def"
-	    >groupClose</a
+	  ><a name="v:closeGroup" class="def"
+	    >closeGroup</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#groupClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeGroup');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -451,11 +508,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:listOpen" class="def"
-	    >listOpen</a
+	  ><a name="v:openTerm" class="def"
+	    >openTerm</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#listOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Open term path: <code
+	      >&quot;(-&quot;</code
+	      ></p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:closeTerm" class="def"
+	    >closeTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Close term path: <code
+	      >&quot;-)&quot;</code
+	      ></p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:openList" class="def"
+	    >openList</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -467,11 +556,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:listClose" class="def"
-	    >listClose</a
+	  ><a name="v:closeList" class="def"
+	    >closeList</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#listClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeList');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -483,11 +572,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:setOpen" class="def"
-	    >setOpen</a
+	  ><a name="v:openSet" class="def"
+	    >openSet</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#setOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openSet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -499,11 +588,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:setClose" class="def"
-	    >setClose</a
+	  ><a name="v:closeSet" class="def"
+	    >closeSet</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#setClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeSet');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -515,11 +604,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:tieOpen" class="def"
-	    >tieOpen</a
+	  ><a name="v:openTie" class="def"
+	    >openTie</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#tieOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -531,11 +620,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:tieClose" class="def"
-	    >tieClose</a
+	  ><a name="v:closeTie" class="def"
+	    >closeTie</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#tieClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeTie');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -547,11 +636,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relOpen" class="def"
-	    >relOpen</a
+	  ><a name="v:openRel" class="def"
+	    >openRel</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#relOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openRel');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -563,11 +652,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relClose" class="def"
-	    >relClose</a
+	  ><a name="v:closeRel" class="def"
+	    >closeRel</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#relClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeRel');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -579,11 +668,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:interpOpen" class="def"
-	    >interpOpen</a
+	  ><a name="v:openInterp" class="def"
+	    >openInterp</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#interpOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openInterp');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -595,11 +684,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:interpClose" class="def"
-	    >interpClose</a
+	  ><a name="v:closeInterp" class="def"
+	    >closeInterp</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#interpClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeInterp');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -611,11 +700,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:typeOpen" class="def"
-	    >typeOpen</a
+	  ><a name="v:openType" class="def"
+	    >openType</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#typeOpen');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#openType');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -627,11 +716,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:typeClose" class="def"
-	    >typeClose</a
+	  ><a name="v:closeType" class="def"
+	    >closeType</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#typeClose');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Bracket.html#closeType');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

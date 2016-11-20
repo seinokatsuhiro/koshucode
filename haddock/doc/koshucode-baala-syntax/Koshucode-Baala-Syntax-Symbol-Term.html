@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.170.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -70,7 +70,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Present or new term</a
+	    >Term index</a
 	    ></li
 	  ></ul
 	></div
@@ -97,18 +97,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:term"
 	    >term</a
-	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    > -&gt; c -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+	    >ToTermName</a
+	    > n =&gt; n -&gt; c -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
 	    > c</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >type</span
+	    >data</span
 	    > <a href="#t:TermName"
 	    >TermName</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -120,30 +118,88 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >]</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:SignedTermName"
-	    >SignedTermName</a
-	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
-	    >Ordering</a
-	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >)</li
+	    >class</span
+	    > <a href="#t:ToTermName"
+	    >ToTermName</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toTermName"
+		>toTermName</a
+		> :: a -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		>TermName</a
+		></li
+	      ></ul
+	    ></li
 	  ><li class="src short"
-	  ><a href="#v:showTermName"
-	    >showTermName</a
+	  ><a href="#v:enslash"
+	    >enslash</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringTermName"
+	    >stringTermName</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termNameString"
+	    >termNameString</a
 	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:showTermPath"
-	    >showTermPath</a
+	  ><a href="#v:termPathString"
+	    >termPathString</a
 	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termNameContent"
+	    >termNameContent</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termNameSign"
+	    >termNameSign</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termNameAltSign"
+	    >termNameAltSign</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:orderingTermName"
+	    >orderingTermName</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -215,46 +271,64 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >TermName</a
 	    >)</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TermIndex"
+	    >TermIndex</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:IndexTerm"
+	    >IndexTerm</a
+	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
+	    >)</li
+	  ><li class="src short"
 	  ><a href="#v:termP"
 	    >termP</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:termN"
 	    >termN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:termsP"
 	    >termsP</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:termsN"
 	    >termsN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:termsPN"
 	    >termsPN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
 	    >Test2</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
+	    >] [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >]</li
 	  ></ul
 	></div
@@ -281,9 +355,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:term" class="def"
 	    >term</a
-	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    > -&gt; c -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+	    >ToTermName</a
+	    > n =&gt; n -&gt; c -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#term');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -299,7 +373,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>term &quot;size&quot; 10 :: Term Int
 </code
 		></strong
-	      >(&quot;size&quot;, 10)
+	      >(TermName &quot;size&quot;, 10)
 </pre
 	    ></div
 	  ></div
@@ -308,11 +382,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >type</span
+	    >data</span
 	    > <a name="t:TermName" class="def"
 	    >TermName</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#TermName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -323,6 +395,84 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      > for the term name <code
 	      >/size</code
 	      >.</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:TermName" class="caption collapser" onclick="toggleSection('i:TermName')"
+	    >Instances</p
+	    ><div id="section.i:TermName" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-55');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-55');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-55');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:IsString"
+		      >IsString</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-57');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+		      >ToTermName</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-68');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
@@ -349,36 +499,168 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:SignedTermName" class="def"
-	    >SignedTermName</a
-	    > = (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
-	    >Ordering</a
-	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#SignedTermName');" href="javascript:void(0);" class="link"
+	    >class</span
+	    > <a name="t:ToTermName" class="def"
+	    >ToTermName</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#ToTermName');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Term name with plus-minus sign, e.g., <code
-	      >+/size</code
-	      >, <code
-	      >-/size</code
-	      >, or <code
-	      >/size</code
-	      >.</p
+	    >Convert to term name.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toTermName" class="def"
+	      >toTermName</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	      >TermName</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#toTermName');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToTermName" class="caption collapser" onclick="toggleSection('i:ToTermName')"
+	    >Instances</p
+	    ><div id="section.i:ToTermName" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+		      >ToTermName</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-72');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Remove leading slash character.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+		      >ToTermName</a
+		      > Text</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-76');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Strict text.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+		      >ToTermName</a
+		      > Text</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-80');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Lazy text.</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:ToTermName"
+		      >ToTermName</a
+		      > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+		      >TermName</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#line-68');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:showTermName" class="def"
-	    >showTermName</a
+	  ><a name="v:enslash" class="def"
+	    >enslash</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#enslash');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add necessary slash character indicating term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>enslash &lt;$&gt; [&quot;foo&quot;, &quot;/bar&quot;, &quot;+/baz&quot;, &quot;-/qux&quot;]
+</code
+		></strong
+	      >[&quot;/foo&quot;, &quot;/bar&quot;, &quot;+/baz&quot;, &quot;-/qux&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringTermName" class="def"
+	    >stringTermName</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#stringTermName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode term name from string.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>stringTermName &quot;/a&quot;
+</code
+		></strong
+	      >TermName EQ &quot;a&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>stringTermName &quot;+/a&quot;
+</code
+		></strong
+	      >TermName GT &quot;a&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameString" class="def"
+	    >termNameString</a
 	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#showTermName');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termNameString');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -389,7 +671,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>showTermName &quot;size&quot;
+		>termNameString $ stringTermName &quot;/size&quot;
 </code
 		></strong
 	      >&quot;/size&quot;
@@ -398,13 +680,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:showTermPath" class="def"
-	    >showTermPath</a
+	  ><a name="v:termPathString" class="def"
+	    >termPathString</a
 	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermPath"
 	    >TermPath</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#showTermPath');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termPathString');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -415,11 +697,89 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>showTermPath [&quot;r&quot;, &quot;x&quot;]
+		>termPathString [stringTermName &quot;r&quot;, stringTermName &quot;x&quot;]
 </code
 		></strong
 	      >&quot;/r/x&quot;
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameContent" class="def"
+	    >termNameContent</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termNameContent');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Extract internal name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termNameContent $ stringTermName &quot;/size&quot;
+</code
+		></strong
+	      >&quot;size&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameSign" class="def"
+	    >termNameSign</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termNameSign');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sign of term name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameAltSign" class="def"
+	    >termNameAltSign</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termNameAltSign');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Alter sign of term name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:orderingTermName" class="def"
+	    >orderingTermName</a
+	    > :: <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#orderingTermName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to ordering pair.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
@@ -535,15 +895,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    ></div
 	  ></div
 	><h1 id="g:4"
-	>Present or new term</h1
+	>Term index</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TermIndex" class="def"
+	    >TermIndex</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#TermIndex');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term index.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:IndexTerm" class="def"
+	    >IndexTerm</a
+	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#IndexTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term name and index.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:termP" class="def"
 	    >termP</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termP');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -588,8 +982,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >termN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termN');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -604,8 +998,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >termsP</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termsP');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -620,8 +1014,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >termsN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termsN');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -646,10 +1040,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >termsPN</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test2"
 	    >Test2</a
-	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
+	    > [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
+	    >] [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermIndex"
+	    >TermIndex</a
 	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#termsPN');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
