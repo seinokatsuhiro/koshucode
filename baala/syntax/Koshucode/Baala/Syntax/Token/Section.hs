@@ -13,7 +13,7 @@ module Koshucode.Baala.Syntax.Token.Section
     scanNote,
     scanLicense,
     scanLine,
-    scanLineInClause,
+    --scanLineInClause,
     scanTextAssert,
   ) where
 
@@ -31,7 +31,7 @@ import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 -- | Select scanner based on section name.
 type ChangeSection = String -> Maybe S.TokenScanMap
 
--- Line begins with the equal sign is treated as section delimter.
+-- | Line begins with triple equal signs is treated as section delimter.
 section :: ChangeSection -> (S.InputText -> S.TokenScan) -> S.TokenScanMap
 section change f
         sc@B.CodeScan { B.codeMap    = prev
@@ -115,6 +115,7 @@ scanLineInClause form change sc = section change text sc where
         | otherwise   = let tok = S.TText (B.codePt sc) form cs
                         in B.codeUpdate "" tok sc
 
+-- | Section for @koshu-text-assert@ command.
 scanTextAssert :: Scanner
 scanTextAssert change sc = section change text sc where
     cp = B.codePt sc

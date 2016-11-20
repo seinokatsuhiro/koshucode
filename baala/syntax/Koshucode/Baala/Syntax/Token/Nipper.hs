@@ -24,7 +24,7 @@ module Koshucode.Baala.Syntax.Token.Nipper
     nipQ, nipQQ,
     -- ** Identifier
     nipSymbol,
-    symbolToken,
+    --symbolToken,
     nipSlot,
     -- ** Term name
     nipTermSign,
@@ -53,8 +53,10 @@ type TokenScan = B.CodeScan String S.Token
 -- | Read single token.
 type TokenScanMap = O.Map TokenScan
 
+-- | Nip result.
 type TokenNipResult = (S.InputText, S.Token)
 
+-- | Nip result with word table.
 type TokenNipWResult = (B.WordTable, S.InputText, S.Token)
 
 -- | Nip off a next token.
@@ -103,20 +105,31 @@ nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
 -- ----------------------  Textual
 
 -- | Nip off space token.
+--
+--   >>> nipSpace B.def "  foo bar baz"
+--   ("foo bar baz", TSpace <I0-L0-C0> 3)
+--
 nipSpace :: TokenNip
 nipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
 
 -- | Nip off a single-quoted text.
+--
+--   >>> nipQ B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TText <I0-L0-C0> TextQ "foo")
+--
 nipQ :: TokenNipW
 nipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken S.TTextQ w cp wtab cs'
       Left a         -> (wtab, [], S.TUnknown cp cs a)
-          
 
 -- | Nip off a double-quoted text.
+--
+--   >>> nipQQ B.def "foo\" bar baz"
+--   (" bar baz", TText <I0-L0-C0> TextQQ "foo")
+--
 nipQQ :: TokenNip
 nipQQ cp cs = case S.nextQQ cs of
                 Right (cs', w) -> (cs', S.TTextQQ cp w)
@@ -125,6 +138,10 @@ nipQQ cp cs = case S.nextQQ cs of
 -- ----------------------  Identifier
 
 -- | Nip off symbolic token.
+--
+--   >>> nipSymbol B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TText <I0-L0-C0> TextRaw "foo")
+--
 nipSymbol :: TokenNipW
 nipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
@@ -145,6 +162,10 @@ symbolToken k w cp wtab cs =
                     in (wtab', cs, k cp w)
 
 -- | Nip off a slot name, like @\@foo@.
+--
+--   >>> nipSlot 1 B.def "foo bar baz"
+--   (" bar baz", TSlot <I0-L0-C0> 1 "foo")
+--
 nipSlot :: Int -> TokenNip
 nipSlot n cp cs =
     case S.nextSymbolPlain cs of
@@ -154,14 +175,26 @@ nipSlot n cp cs =
 -- ----------------------  Term
 
 -- | Nip off a signed term name.
+--
+--   >>> nipTermSign EQ B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
+--
 nipTermSign :: Ordering -> TokenNipW
 nipTermSign = nipTerm S.TermTypePath
 
 -- | Nip off a term name.
+--
+--   >>> nipTermPath B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
+--
 nipTermPath :: TokenNipW
 nipTermPath = nipTerm S.TermTypePath EQ
 
 -- | Nip off a quoted term.
+--
+--   >>> nipTermQ B.def Map.empty "foo bar baz"
+--   (fromList [], " bar baz", TTerm <I0-L0-C0> TermTypeQuoted [TermName EQ "foo"])
+--
 nipTermQ :: TokenNipW
 nipTermQ = nipTerm S.TermTypeQuoted EQ
 

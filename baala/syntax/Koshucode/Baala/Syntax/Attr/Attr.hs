@@ -79,6 +79,7 @@ attrParaBy :: AttrLayout -> AttrParaze
 attrParaBy lay = attrPara B.>=> attrMatch lay
 
 -- | Match parameter with its layout.
+--   See 'paraChoose' in ParaSpec module.
 attrMatch :: AttrLayout -> B.AbMap AttrPara
 attrMatch (AttrLayout branches) p = loop [] branches where
     loop us [] = Msg.unexpAttrMulti $ map (fmap S.attrNameCode) $ reverse us
