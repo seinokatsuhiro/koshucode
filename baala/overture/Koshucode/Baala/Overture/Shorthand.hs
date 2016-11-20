@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Overture.Shorthand
  ( int, integer,
+   nothing,
  ) where
 
 import qualified Koshucode.Baala.Overture.Type as O
@@ -35,3 +36,11 @@ int = id
 integer :: O.Map Integer
 {-# INLINE integer #-}
 integer = id
+
+-- | Function which always returns 'Nothing'.
+--
+--   >>> nothing True :: Maybe String
+--   Nothing
+--
+nothing :: a -> Maybe b
+nothing _ = Nothing
