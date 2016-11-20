@@ -8,14 +8,14 @@ module Koshucode.Baala.Syntax.TTree.Bracket
     getBracketType,
 
     -- * Open and close
-    groupOpen,  groupClose,
+    openGroup,  closeGroup,
     openTerm,   closeTerm,
-    listOpen,   listClose,
-    setOpen,    setClose,
-    tieOpen,    tieClose,
-    relOpen,    relClose,
-    interpOpen, interpClose,
-    typeOpen,   typeClose,
+    openList,   closeList,
+    openSet,    closeSet,
+    openTie,    closeTie,
+    openRel,    closeRel,
+    openInterp, closeInterp,
+    openType,   closeType,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -47,25 +47,25 @@ data BracketType
 -- | Bracket type of token.
 getBracketType :: B.GetBracketType BracketType S.Token
 getBracketType = B.bracketTable
-    [ o BracketGroup   groupOpen  groupClose
+    [ o BracketGroup   openGroup  closeGroup
     , o BracketTerm    openTerm   closeTerm
-    , o BracketList    listOpen   listClose
-    , o BracketSet     setOpen    setClose
-    , o BracketTie     tieOpen    tieClose
-    , o BracketRel     relOpen    relClose
-    , o BracketInterp  interpOpen interpClose
-    , o BracketType    typeOpen   typeClose
+    , o BracketList    openList   closeList
+    , o BracketSet     openSet    closeSet
+    , o BracketTie     openTie    closeTie
+    , o BracketRel     openRel    closeRel
+    , o BracketInterp  openInterp closeInterp
+    , o BracketType    openType   closeType
     , o BracketForm    "(|"       "|)"
     , (BracketUnknown, S.isOpenToken, S.isCloseToken)
     ] where o t a b = (t, S.isOpenTokenOf a, S.isCloseTokenOf b)
 
 -- | Open group: @"("@
-groupOpen :: String
-groupOpen = "("
+openGroup :: String
+openGroup = "("
 
 -- | Close group: @")"@
-groupClose :: String
-groupClose = ")"
+closeGroup :: String
+closeGroup = ")"
 
 -- | Open term path: @"(-"@
 openTerm :: String
@@ -76,50 +76,50 @@ closeTerm :: String
 closeTerm = "-)"
 
 -- | Open list: @"["@
-listOpen :: String
-listOpen = "["
+openList :: String
+openList = "["
 
 -- | Close list: @"]"@
-listClose :: String
-listClose = "]"
+closeList :: String
+closeList = "]"
 
 -- | Open set: @"{"@
-setOpen :: String
-setOpen = "{"
+openSet :: String
+openSet = "{"
 
 -- | Close set: @"}"@
-setClose :: String
-setClose = "}"
+closeSet :: String
+closeSet = "}"
 
 -- | Open tie: @"{-"@
-tieOpen :: String
-tieOpen = "{-"
+openTie :: String
+openTie = "{-"
 
 -- | Close tie: @"-}"@
-tieClose :: String
-tieClose = "-}"
+closeTie :: String
+closeTie = "-}"
 
 -- | Open relation: @"{="@
-relOpen :: String
-relOpen = "{="
+openRel :: String
+openRel = "{="
 
 -- | Close relation: @"=}"@
-relClose :: String
-relClose = "=}"
+closeRel :: String
+closeRel = "=}"
 
 -- | Open interpreation: @"{|"@
-interpOpen :: String
-interpOpen = "{|"
+openInterp :: String
+openInterp = "{|"
 
 -- | Close interpreation: @"|}"@
-interpClose :: String
-interpClose = "|}"
+closeInterp :: String
+closeInterp = "|}"
 
 -- | Open type: @"[-"@
-typeOpen :: String
-typeOpen = "[-"
+openType :: String
+openType = "[-"
 
 -- | Close type: @"-]"@
-typeClose :: String
-typeClose = "-]"
+closeType :: String
+closeType = "-]"
 

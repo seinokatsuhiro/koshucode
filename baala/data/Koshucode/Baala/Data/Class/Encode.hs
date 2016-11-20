@@ -54,7 +54,7 @@ contentStringMix c
 --   MixText "[ a ]"
 --
 mixBracketList :: B.MixText -> B.MixText
-mixBracketList = B.mixBracketS S.listOpen S.listClose
+mixBracketList = B.mixBracketS S.openList S.closeList
 
 -- | Enclose mix text in set brackets.
 --
@@ -62,5 +62,5 @@ mixBracketList = B.mixBracketS S.listOpen S.listClose
 --   MixText "{ a }"
 --
 mixBracketSet :: B.MixText -> B.MixText
-mixBracketSet = B.mixBracketS S.setOpen S.setClose
+mixBracketSet = B.mixBracketS S.openSet S.closeSet
 
