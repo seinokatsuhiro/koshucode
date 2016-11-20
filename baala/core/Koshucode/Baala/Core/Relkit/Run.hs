@@ -100,12 +100,12 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: S.Token -> [S.TermIndex] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel :: S.Token -> [S.IndexTerm] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel p nest b cs =
           let cs2 = pickup cs <$> nest
           in relkitRun hook ((p, cs2) : rs) b [cs]
 
-      pickup :: [c] -> S.TermIndex -> (S.LocalRef, [[c]])
+      pickup :: [c] -> S.IndexTerm -> (S.LocalRef, [[c]])
       pickup cs (n, i) = (S.LocalNest n, D.relBody $ D.gRel $ cs !! i)
 
 -- | Calculate fixed relation.

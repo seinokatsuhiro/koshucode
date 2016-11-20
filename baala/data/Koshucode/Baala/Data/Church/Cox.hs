@@ -27,15 +27,24 @@ import qualified Koshucode.Baala.Data.Church.Message  as Msg
 
 -- | Term-content expressions.
 data Cox c
-    = CoxLit   [B.CodePt] c                        -- ^ Literal content
-    | CoxTerm  [B.CodePt] [S.TermName] [Int]       -- ^ Term reference, its name and position
-    | CoxCalc  [B.CodePt] S.BlankName (CopCalc c)  -- ^ Content calculator
-    | CoxLocal [B.CodePt] String Int               -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank [B.CodePt] S.BlankName              -- ^ Blank in form
-    | CoxFill  [B.CodePt] (Cox c) [Cox c]          -- ^ Fill args in a form
-    | CoxForm1 [B.CodePt] CoxTag  String  (Cox c)  -- ^ Form with single blank
-    | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks
-    | CoxWith  [B.CodePt] [NamedCox c] (Cox c)     -- ^ Cox with outside arguments
+    = CoxLit   [B.CodePt] c
+      -- ^ __1.__ Literal content
+    | CoxTerm  [B.CodePt] [S.TermName] [S.TermIndex]
+      -- ^ __2.__ Term reference, its name and index
+    | CoxCalc  [B.CodePt] S.BlankName (CopCalc c)
+      -- ^ __3.__ Content calculator
+    | CoxLocal [B.CodePt] String Int
+      -- ^ __4.__ Local blank, its name and De Bruijn index
+    | CoxBlank [B.CodePt] S.BlankName
+      -- ^ __5.__ Blank in form
+    | CoxFill  [B.CodePt] (Cox c) [Cox c]
+      -- ^ __6.__ Fill args in a form
+    | CoxForm1 [B.CodePt] CoxTag  String  (Cox c)
+      -- ^ __7.__ Form with single blank
+    | CoxForm  [B.CodePt] CoxTag [String] (Cox c)
+      -- ^ __8.__ Form with multiple blanks
+    | CoxWith  [B.CodePt] [NamedCox c] (Cox c)
+      -- ^ __9.__ Cox with outside arguments
 
 -- | Expression pair.
 type Cox2 c = (Cox c, Cox c)

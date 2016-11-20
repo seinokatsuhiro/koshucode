@@ -84,7 +84,7 @@ relkitSource p ns = relkitJust he kit where
 -- ----------------------  Relation reference
 
 -- | Relkit with nested relation index.
-relkitNest :: S.Token -> [S.TermIndex] -> O.Map (C.Relkit c)
+relkitNest :: S.Token -> [S.IndexTerm] -> O.Map (C.Relkit c)
 relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 
 -- | Relkit for copy relmap.

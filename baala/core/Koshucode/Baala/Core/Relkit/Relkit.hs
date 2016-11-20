@@ -69,7 +69,7 @@ data RelkitCore c
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
       -- ^ /Reference:/ Link point to other relmap.
-    | RelkitNest         S.Token [S.TermIndex] (RelkitBody c)
+    | RelkitNest         S.Token [S.IndexTerm] (RelkitBody c)
       -- ^ /Reference:/ Give indecies to nested relations.
     | RelkitCopy         S.Token C.RopName (RelkitBody c)
       -- ^ /Reference:/ Give a name to input relation.

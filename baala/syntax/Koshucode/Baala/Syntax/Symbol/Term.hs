@@ -22,7 +22,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName4, TermName5, TermName6,
 
     -- * Term index
-    TermIndex,
+    TermIndex, IndexTerm,
     termP, termN,
     termsP, termsN, termsPN,
   ) where
@@ -162,10 +162,13 @@ type TermName5 = (TermName, TermName, TermName, TermName, TermName)
 type TermName6 = (TermName, TermName, TermName, TermName, TermName, TermName)
 
 
--- ----------------------  Present or new term
+-- ----------------------  Term index
+
+-- | Term index.
+type TermIndex = Int
 
 -- | Term name and index.
-type TermIndex = (TermName, Int)
+type IndexTerm = (TermName, TermIndex)
 
 -- | Test present term.
 --
@@ -178,15 +181,15 @@ type TermIndex = (TermName, Int)
 --   >>> termP (-1)
 --   False
 --
-termP :: O.Test Int
+termP :: O.Test TermIndex
 termP = (>= 0)
 
 -- | Test new term.
-termN :: O.Test Int
+termN :: O.Test TermIndex
 termN = (< 0)
 
 -- | Test all terms are present.
-termsP :: O.Test [Int]
+termsP :: O.Test [TermIndex]
 termsP = all termP
 
 -- | Test all terms are new.
@@ -194,7 +197,7 @@ termsP = all termP
 --   >>> termsN [-1, -1]
 --   True
 --
-termsN :: O.Test [Int]
+termsN :: O.Test [TermIndex]
 termsN = all termN
 
 -- | Test present and new terms.
@@ -205,6 +208,6 @@ termsN = all termN
 --   >>> termsPN [1,2] [-1,0]
 --   False
 --
-termsPN :: O.Test2 [Int] [Int]
+termsPN :: O.Test2 [TermIndex] [TermIndex]
 termsPN ps ns = termsP ps && termsN ns
 

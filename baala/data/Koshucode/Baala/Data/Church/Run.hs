@@ -30,9 +30,12 @@ import qualified Koshucode.Baala.Data.Church.Message    as Msg
 -- --------------------------------------------  Beta reduction
 
 data Beta c
-    = BetaLit  [B.CodePt] c                     -- ^ Literal content
-    | BetaTerm [B.CodePt] [S.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePt] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]  -- ^ Function application
+    = BetaLit  [B.CodePt] c
+      -- ^ Literal content
+    | BetaTerm [B.CodePt] [S.TermName] [S.TermIndex]
+      -- ^ Term reference, its name and position
+    | BetaCall [B.CodePt] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
+      -- ^ Function application
 
 instance B.CodePtr (Beta c) where
     codePtList (BetaLit  cp _)      = cp
@@ -171,7 +174,7 @@ coxRun args = run 0 where
              BetaTerm _ _ ps    -> term ps args
              BetaCall _ _ f xs  -> f . map run' =<< sequence xs
 
-    term :: [Int] -> [c] -> B.Ab c
+    term :: [S.TermIndex] -> [c] -> B.Ab c
     term []       _ = Msg.adlib "empty term"
     term (-1 : _) _ = Msg.adlib "negative term"
     term (p : ps) args2 =
@@ -180,11 +183,11 @@ coxRun args = run 0 where
            then rel ps $ D.gRel c
            else Right c
 
-    rel :: [Int] -> D.Rel c -> B.Ab c
+    rel :: [S.TermIndex] -> D.Rel c -> B.Ab c
     rel ps (D.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
-(!!!) :: (B.MixShortEncode c) => [c] -> Int -> c
+(!!!) :: (B.MixShortEncode c) => [c] -> S.TermIndex -> c
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs
