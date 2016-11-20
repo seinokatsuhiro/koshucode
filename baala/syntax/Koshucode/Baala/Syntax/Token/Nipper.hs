@@ -187,7 +187,7 @@ nipSlot n cp cs =
 -- | Nip off a signed term name.
 --
 --   >>> nipTermSign EQ B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
+--   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
 nipTermSign :: Ordering -> TokenNipLW
 nipTermSign = nipTerm False
@@ -195,7 +195,7 @@ nipTermSign = nipTerm False
 -- | Nip off a term name.
 --
 --   >>> nipTermPath B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
+--   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
 nipTermPath :: TokenNipLW
 nipTermPath = nipTerm False EQ
@@ -203,7 +203,7 @@ nipTermPath = nipTerm False EQ
 -- | Nip off a quoted term.
 --
 --   >>> nipTermQ B.def Map.empty "foo bar baz"
---   (fromList [], " bar baz", TTerm <I0-L0-C0> TermTypeQuoted [TermName EQ "foo"])
+--   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
 nipTermQ :: TokenNipLW
 nipTermQ = nipTerm True EQ
@@ -227,13 +227,13 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs | not q
                            = case Map.lookup n wtab of
-                               Just n' -> (wtab, cs, [S.TTermN cp $ signed sign n'])
+                               Just n' -> (wtab, cs, [S.TTerm cp $ signed sign n'])
                                Nothing -> let wtab' = Map.insert n n wtab
-                                          in (wtab', cs, [S.TTermN cp $ signed sign n])
+                                          in (wtab', cs, [S.TTerm cp $ signed sign n])
     term ns cs | q         = case ns of
                                [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
                                _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
-               | otherwise = (wtab, cs, termPath (S.TTermN cp <$> ns))
+               | otherwise = (wtab, cs, termPath (S.TTerm cp <$> ns))
 
     termPath [t]       = [t]
     termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]

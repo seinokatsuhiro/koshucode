@@ -38,7 +38,7 @@ type NamedTree = B.Named TTree
 -- --------------------------------------------  Pattern
 
 -- | Term leaf.
-pattern TermLeafName  cp w  = B.TreeL (S.TTermN  cp w)
+pattern TermLeafName  cp w  = B.TreeL (S.TTerm  cp w)
 
 -- | Text leaf.
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)

@@ -131,11 +131,11 @@ isShortPrefix  = all Ch.isAlpha
 --  >>> toks "|-- R  /a A0 /b 31"
 --  [ TText <I0-L1-C0> TextBar "|--", TSpace <I0-L1-C3> 1
 --  , TText <I0-L1-C4> TextRaw "R", TSpace <I0-L1-C5> 2
---  , TTermN <I0-L1-C7> EQ "a", TSpace <I0-L1-C9> 1
+--  , TTerm <I0-L1-C7> "/a", TSpace <I0-L1-C9> 1
 --  , TText <I0-L1-C10> TextRaw "A0", TSpace <I0-L1-C12> 1
---  , TTermN <I0-L1-C13> EQ "b", TSpace <I0-L1-C15> 1
+--  , TTerm <I0-L1-C13> "/b", TSpace <I0-L1-C15> 1
 --  , TText <I0-L1-C16> TextRaw "31" ]
---
+--  
 --  Brackets.
 --
 --  >>> toks "aa (bb x y (z))"

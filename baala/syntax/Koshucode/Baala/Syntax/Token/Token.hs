@@ -37,7 +37,7 @@ data Token
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
     | TShort    B.CodePt String String
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTermN    B.CodePt String
+    | TTerm     B.CodePt String
                 -- ^ __3 Textual:__ Term name — @\/term@
 
     | TLocal    B.CodePt LocalRef Int [Token]
@@ -70,7 +70,7 @@ data Token
 instance SubtypeName Token where
      subtypeName (TText     _ _ _  ) = "text"
      subtypeName (TShort    _ _ _  ) = "short"
-     subtypeName (TTermN    _ _    ) = "term"
+     subtypeName (TTerm     _ _    ) = "term"
      subtypeName (TLocal    _ _ _ _) = "local"
      subtypeName (TSlot     _ _ _  ) = "slot"
      subtypeName (TOpen     _ _    ) = "open"
@@ -91,7 +91,7 @@ instance B.Name Token where
 instance B.CodePtr Token where
     codePtList (TText    cp _ _)    = [cp]
     codePtList (TShort   cp _ _)    = [cp]
-    codePtList (TTermN   cp _)      = [cp]
+    codePtList (TTerm    cp _)      = [cp]
     codePtList (TLocal   cp _ _ _)  = [cp]
     codePtList (TSlot    cp _ _)    = [cp]
     codePtList (TOpen    cp _)      = [cp]
@@ -105,7 +105,7 @@ instance B.PPrint Token where
     pprint = d where
         d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
-        d (TTermN     cp n)      = pretty "TTermN"   cp [show n]
+        d (TTerm      cp n)      = pretty "TTerm"    cp [show n]
         d (TLocal     cp n _ _)  = pretty "TLocal"   cp [show n]
         d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
         d (TOpen      cp p)      = pretty "TOpen"    cp [show p]

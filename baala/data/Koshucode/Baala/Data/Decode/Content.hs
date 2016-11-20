@@ -28,7 +28,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- ----------------------  General content
 
-pattern LName s    <- L (S.TTermN _ s)
+pattern LName s    <- L (S.TTerm _ s)
 pattern Text f s   <- S.TText _ f s
 
 -- | Content decoder.

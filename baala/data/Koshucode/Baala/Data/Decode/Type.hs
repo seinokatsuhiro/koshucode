@@ -62,9 +62,9 @@ treeInterpWord :: S.TTree -> B.Ab D.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
-      S.TText _ _ w    -> Right $ D.InterpText w
-      S.TTermN _ n     -> Right $ D.InterpTerm $ S.toTermName n
-      _                -> Msg.nothing
+      S.TText _ _ w   -> Right $ D.InterpText w
+      S.TTerm _ n     -> Right $ D.InterpTerm $ S.toTermName n
+      _               -> Msg.nothing
 
 
 -- ----------------------  Type

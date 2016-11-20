@@ -114,7 +114,7 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(L tok) = case tok of
-        S.TTermN _ n               -> Right $ D.CoxTerm  cp [S.toTermName n] []
+        S.TTerm _ n                -> Right $ D.CoxTerm  cp [S.toTermName n] []
         S.TName _ op               -> Right $ D.CoxBlank cp op
         S.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
         S.TText _ _ _              -> lit cp tree

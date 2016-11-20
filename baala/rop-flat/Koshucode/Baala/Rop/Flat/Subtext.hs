@@ -105,7 +105,7 @@ pattern Empty   <- G []
 pattern Key  n  <- S.TTextRaw _ n
 pattern Text t  <- S.TTextQQ  _ t
 pattern Char c  <- S.TTextQQ  _ [c]
-pattern Term n  <- S.TTermN _ n
+pattern Term n  <- S.TTerm    _ n
 
 unknownSyntax :: (Show a) => a -> B.Ab b
 unknownSyntax x = Msg.adlib $ "subtext syntax error " ++ show x
