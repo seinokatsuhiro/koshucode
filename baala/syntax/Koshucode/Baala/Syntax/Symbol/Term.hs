@@ -10,6 +10,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     -- * Term name
     TermName, TermPath,
     ToTermName (..),
+    enslash,
     stringTermName,
     termNameString, termPathString,
     termNameContent,
@@ -79,14 +80,30 @@ instance ToTermName Tx.Text where
 instance ToTermName Tz.Text where
     toTermName = toTermName . Tz.unpack
 
+-- | Add necessary slash character indicating term name.
+--
+--   >>> enslash <$> ["foo", "/bar", "+/baz", "-/qux"]
+--   ["/foo", "/bar", "+/baz", "-/qux"]
+--
+enslash :: O.Map String
+enslash n@('/' : _)        = n
+enslash n@('+' : '/' : _)  = n
+enslash n@('-' : '/' : _)  = n
+enslash n                  = '/' : n
+
 -- | Decode term name from string.
 --
 --   >>> stringTermName "/a"
---   TermName "a"
+--   TermName EQ "a"
+--
+--   >>> stringTermName "+/a"
+--   TermName GT "a"
 -- 
 stringTermName :: String -> TermName
-stringTermName ('/' : n) = TermName EQ n
-stringTermName n         = TermName EQ n
+stringTermName ('/' : n)        = TermName EQ n
+stringTermName ('+' : '/' : n)  = TermName GT n
+stringTermName ('-' : '/' : n)  = TermName LT n
+stringTermName n                = TermName EQ n
 
 -- | Encode term name into string.
 --
@@ -94,9 +111,9 @@ stringTermName n         = TermName EQ n
 --   "/size"
 --
 termNameString :: TermName -> String
-termNameString (TermName EQ n) = '/' : n
-termNameString (TermName GT n) = '+' : '/' : n
-termNameString (TermName LT n) = '-' : '/' : n
+termNameString (TermName EQ n) = enslash n
+termNameString (TermName GT n) = '+' : enslash n
+termNameString (TermName LT n) = '-' : enslash n
 
 -- | Extract internal name.
 --
