@@ -49,6 +49,7 @@ library
         Koshucode.Baala.Overture.Name.IntString
         Koshucode.Baala.Overture.Name.String
         Koshucode.Baala.Overture.Name.Text
+        Koshucode.Baala.Overture.Shorthand
 
         Koshucode.Baala.Overture.Text
         Koshucode.Baala.Overture.Text.Category

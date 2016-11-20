@@ -9,7 +9,6 @@ module Koshucode.Baala.Overture.Type
    StringMap,
    Test, Test2,
    Bin,
-   int, integer,
  ) where
 
 -- | Homotype 'Either'.
@@ -42,30 +41,3 @@ type Test2 a b = a -> b -> Bool
 -- | Type for binary operators.
 type Bin a = a -> a -> a
 
--- | 'Int' shorthand.
---
---   >>> int 12
---   12
---
---   This is same as:
---
---   >>> 12 :: Int
---   12
---
-int :: Map Int
-{-# INLINE int #-}
-int = id
-
--- | 'Integer' shorthand.
---
---   >>> integer 12
---   12
---
---   This is same as:
---
---   >>> 12 :: Integer
---   12
---
-integer :: Map Integer
-{-# INLINE integer #-}
-integer = id
