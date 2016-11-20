@@ -21,7 +21,7 @@ baalaGlobal = global where
     global    = C.global { C.globalOpset     = C.opsetFill opset }
     opset     = B.def    { C.opsetRopList    = baalaRops
                          , C.opsetCop        = copset }
-    copset    = D.copset { D.copsetCopList   = Cop.baalaCops
+    copset    = B.def    { D.copsetCopList   = Cop.baalaCops
                          , D.copsetInfixList = Cop.baalaInfix }
 
 -- | Relmap operators

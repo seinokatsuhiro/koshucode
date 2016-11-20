@@ -148,7 +148,7 @@ data OpSet' h c = OpSet
 instance B.Default (OpSet' h c) where
     def = OpSet { opsetRopList = []
                 , opsetFindRop = const Nothing
-                , opsetCop     = D.copset }
+                , opsetCop     = B.def }
 
 -- | Make complete operator set by filling auto-generated part.
 opsetFill :: O.Map (OpSet' h c)

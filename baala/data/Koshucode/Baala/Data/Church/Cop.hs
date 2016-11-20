@@ -11,7 +11,8 @@ module Koshucode.Baala.Data.Church.Cop
     copNormal, copInternal, copPrefix, copInfix, copPostfix,
   
     -- * Operator set
-    CopSet (..), CopFind, copset, copsetFill,
+    CopSet (..), CopFind, copset,
+    copsetFill,
   ) where
 
 import qualified Koshucode.Baala.Overture         as O
@@ -79,24 +80,28 @@ data CopSet c = CopSet
     { copsetCopList    :: [Cop c]
     , copsetInfixList  :: [B.Named B.InfixHeight]
 
-    , copsetCalcList   :: [B.Named (Cop c)]  -- CopCalc
-    , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
-    , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
+    , copsetCalcList   :: [B.Named (Cop c)]  -- ^ CopCalc
+    , copsetCoxList    :: [B.Named (Cop c)]  -- ^ CopCox
+    , copsetTreeList   :: [B.Named (Cop c)]  -- ^ CopTree
 
-    , copsetFindCalc   :: CopFind (D.Cox c)
-    , copsetFindCox    :: CopFind (CopCox c)
-    , copsetFindTree   :: CopFind CopTree
+    , copsetFindCalc   :: CopFind (D.Cox c)   -- ^ This is created by 'copsetFill'.
+    , copsetFindCox    :: CopFind (CopCox c)  -- ^ This is created by 'copsetFill'.
+    , copsetFindTree   :: CopFind CopTree     -- ^ This is created by 'copsetFill'.
 
     , copsetDerived    :: [D.NamedCox c]
     }
+
+-- | Empty operator set.
+instance B.Default (CopSet c) where
+    def = CopSet [] [] [] [] [] O.nothing O.nothing O.nothing []
 
 -- | Find content operator from its name.
 type CopFind f = S.BlankName -> Maybe f
 
 -- | Empty operator set.
+{-# DEPRECATED copset "Use 'def' instead." #-}
 copset :: CopSet c
-copset = CopSet [] [] [] [] [] find find find [] where
-    find _ = Nothing
+copset = B.def
 
 -- | Complete operator set.
 copsetFill :: O.Map (CopSet c)
