@@ -93,17 +93,14 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     updEnd         = upd ""
     int cs tok     = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
 
-    sign '+'       = GT
-    sign  _        = LT
-
     -- ----------------------  dispatch
 
     sc' = S.section change (uncons3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
         | S.isSpace a            = nip             $ S.nipSpace    cp bs
-        | S.isTerm a             = niplw           $ S.nipTermPath cp wtab bs
-        | isPM a && S.isTerm b   = niplw           $ S.nipTermSign (sign a) cp wtab cs
+        | S.isTerm a             = niplw           $ S.nipTermName cp wtab bs
+        | isPM a && S.isTerm b   = niplw           $ S.nipTermSign [a,b] cp wtab cs
         | S.isQQ a               = nip             $ S.nipQQ       cp bs
         | isQ a && S.isTerm b    = niplw           $ S.nipTermQ    cp wtab cs
         | isQ a                  = nipw            $ S.nipQ        cp wtab bs
@@ -197,7 +194,7 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
 
     int ""                           = sc
     int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
-                  | S.isTerm c       = niplw       $ S.nipTermPath cp wtab cs
+                  | S.isTerm c       = niplw       $ S.nipTermName cp wtab cs
                   | otherwise        = word (c:cs) ""
 
     word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w

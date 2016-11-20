@@ -28,7 +28,7 @@ module Koshucode.Baala.Syntax.Token.Nipper
     nipSlot,
     -- ** Term name
     nipTermSign,
-    nipTermPath,
+    nipTermName,
     nipTermQ,
     -- ** Symbol
     nipBar,
@@ -186,19 +186,19 @@ nipSlot n cp cs =
 
 -- | Nip off a signed term name.
 --
---   >>> nipTermSign EQ B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
+--   >>> nipTermSign "+/" B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "+/foo"])
 --
-nipTermSign :: Ordering -> TokenNipLW
+nipTermSign :: String -> TokenNipLW
 nipTermSign = nipTerm False
 
 -- | Nip off a term name.
 --
---   >>> nipTermPath B.def Map.empty "foo bar baz"
+--   >>> nipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
-nipTermPath :: TokenNipLW
-nipTermPath = nipTerm False EQ
+nipTermName :: TokenNipLW
+nipTermName = nipTerm False "/"
 
 -- | Nip off a quoted term.
 --
@@ -206,41 +206,39 @@ nipTermPath = nipTerm False EQ
 --   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
 nipTermQ :: TokenNipLW
-nipTermQ = nipTerm True EQ
+nipTermQ = nipTerm True "/"
 
 -- | Nip off a term name or a term path.
-nipTerm :: Bool -> Ordering -> TokenNipLW
-nipTerm q sign cp wtab cs0 = word [] cs0 where
+nipTerm :: Bool -> String -> TokenNipLW
+nipTerm q slash cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
-        | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
-        | isSymbol c    = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
-        | isQQ c        = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _            = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
-    call e f            = case e of
-                            Right (cs', w) -> f w cs'
-                            Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
+        | c == '='     = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
+        | isSymbol c   = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
+        | isQQ c       = call (S.nextQQ cs)           (\w -> term (w : ns))
+    word _ _           = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
+    call e f           = case e of
+                           Right (cs', w) -> f w cs'
+                           Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'      = let n  = B.nioNumber $ B.codePtSource cp
-                              w' = show n ++ ('=' : w)
-                          in term (w' : ns) cs'
+    nterm ns w cs'     = let n  = B.nioNumber $ B.codePtSource cp
+                             w' = show n ++ ('=' : w)
+                         in term (w' : ns) cs'
 
-    term ns (c:cs) | isTerm c   = word ns cs
-    term [n] cs | not q
-                           = case Map.lookup n wtab of
-                               Just n' -> (wtab, cs, [S.TTerm cp $ signed sign n'])
-                               Nothing -> let wtab' = Map.insert n n wtab
-                                          in (wtab', cs, [S.TTerm cp $ signed sign n])
-    term ns cs | q         = case ns of
-                               [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
-                               _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
-               | otherwise = (wtab, cs, termPath (S.TTerm cp <$> ns))
+    term ns (c:cs) | isTerm c = word ns cs
+    term [n] cs
+        | not q        = case Map.lookup n wtab of
+                           Just n' -> (wtab, cs, [S.TTerm cp $ slash ++ n'])
+                           Nothing -> let wtab' = Map.insert n n wtab
+                                      in (wtab', cs, [S.TTerm cp $ slash ++ n])
+    term ns cs
+        | q            = case ns of
+                           [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
+                           _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
+        | otherwise    = (wtab, cs, termPath (S.TTerm cp <$> ns))
 
     termPath [t]       = [t]
     termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]
 
-    signed EQ          = (  "/" ++ )
-    signed GT          = ( "+/" ++ )
-    signed LT          = ( "-/" ++ )
 
 -- ----------------------  Symbol
 
