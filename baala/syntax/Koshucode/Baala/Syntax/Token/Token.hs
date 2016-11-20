@@ -148,8 +148,9 @@ data TextForm
     | TextQ        -- ^ __3.__ Single-quoted text — @\'code@
     | TextQQ       -- ^ __4.__ Double-quoted text — @\"text\"@
     | TextKey      -- ^ __5.__ Keyword literal — @\<crlf\>@
-    | TextBar      -- ^ __6.__ Text enclosed in bars — @|9:30|@
-    | TextLicense  -- ^ __7.__ Text in license section
+    | TextTerm     -- ^ __6.__ Quoted term name — @'/term@
+    | TextBar      -- ^ __7.__ Text enclosed in bars — @|9:30|@
+    | TextLicense  -- ^ __8.__ Text in license section — @=== license@
       deriving (Show, Eq, Ord)
 
 -- | @\"raw\"@, @\"q\"@, ...
@@ -159,6 +160,7 @@ instance SubtypeName TextForm where
     subtypeName TextQ        = "q"
     subtypeName TextQQ       = "qq"
     subtypeName TextKey      = "key"
+    subtypeName TextTerm     = "term"
     subtypeName TextBar      = "bar"
     subtypeName TextLicense  = "license"
 

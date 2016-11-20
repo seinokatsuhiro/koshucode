@@ -11,8 +11,6 @@ module Koshucode.Baala.Syntax.TTree.TokenTree
     -- ** Term leaf
     pattern TermLeaf,
     pattern TermLeafName,
-    pattern TermLeafPath,
-    --pattern TermLeafLocal,
     -- ** Text leaf
     pattern TextLeaf,
     pattern TextLeafRaw,
@@ -44,9 +42,6 @@ type NamedTree = B.Named TTree
 pattern TermLeaf      cp q ws    = B.TreeL (S.TTerm   cp q ws)
 -- | Term leaf.
 pattern TermLeafName  cp w       = B.TreeL (S.TTermN  cp w)
--- | Term leaf of 'S.TermTypePath'.
-pattern TermLeafPath  cp ws      = TermLeaf cp S.TermTypePath ws
---pattern TermLeafLocal cp v e ps  = B.TreeL (S.TLocal cp v e ps)
 
 -- | Text leaf.
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)

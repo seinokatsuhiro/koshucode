@@ -65,9 +65,8 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
     token (Text n w)
         | n <= S.TextRaw     = keyword w
         | n == S.TextQ       = D.putCode w
+        | n == S.TextTerm    = D.putTerm $ S.toTermName w
         | otherwise          = D.putText w
-    token (S.TTermN _ n)     = D.putTerm $ S.toTermName n
-    token (S.TTerm _ _ [n])  = D.putTerm n
     token t                  = Msg.unkWord $ S.tokenContent t
 
     group g xs@(LText f _ : _)

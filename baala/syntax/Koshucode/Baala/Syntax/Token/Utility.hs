@@ -104,7 +104,6 @@ isShortToken _                    = False
 -- | Test token is term-type token.
 isTermToken :: O.Test S.Token
 isTermToken (S.TTermN _ _)        = True
-isTermToken (S.TTerm _ _ _)       = True
 isTermToken _                     = False
 
 -- | Test token is open-type token.

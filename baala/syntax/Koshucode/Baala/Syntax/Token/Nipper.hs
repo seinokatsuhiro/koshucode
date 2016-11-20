@@ -190,7 +190,7 @@ nipSlot n cp cs =
 --   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
 --
 nipTermSign :: Ordering -> TokenNipLW
-nipTermSign = nipTerm S.TermTypePath
+nipTermSign = nipTerm False
 
 -- | Nip off a term name.
 --
@@ -198,7 +198,7 @@ nipTermSign = nipTerm S.TermTypePath
 --   (fromList [("foo","foo")], " bar baz", TTermN <I0-L0-C0> EQ "foo")
 --
 nipTermPath :: TokenNipLW
-nipTermPath = nipTerm S.TermTypePath EQ
+nipTermPath = nipTerm False EQ
 
 -- | Nip off a quoted term.
 --
@@ -206,10 +206,10 @@ nipTermPath = nipTerm S.TermTypePath EQ
 --   (fromList [], " bar baz", TTerm <I0-L0-C0> TermTypeQuoted [TermName EQ "foo"])
 --
 nipTermQ :: TokenNipLW
-nipTermQ = nipTerm S.TermTypeQuoted EQ
+nipTermQ = nipTerm True EQ
 
 -- | Nip off a term name or a term path.
-nipTerm :: S.TermType -> Ordering -> TokenNipLW
+nipTerm :: Bool -> Ordering -> TokenNipLW
 nipTerm q sign cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='      = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
@@ -225,14 +225,15 @@ nipTerm q sign cp wtab cs0 = word [] cs0 where
                           in term (w' : ns) cs'
 
     term ns (c:cs) | isTerm c   = word ns cs
-    term [n] cs | q == S.TermTypePath
-                       = case Map.lookup n wtab of
-                           Just n' -> (wtab, cs, [S.TTermN cp $ signed sign n'])
-                           Nothing -> let wtab' = Map.insert n n wtab
-                                      in (wtab', cs, [S.TTermN cp $ signed sign n])
-    term ns cs | q == S.TermTypePath
-                            = (wtab, cs, termPath (S.TTermN cp <$> ns))
-               | otherwise  = (wtab, cs, [S.TTerm cp q $ reverse (S.toTermName <$> ns)])
+    term [n] cs | not q
+                           = case Map.lookup n wtab of
+                               Just n' -> (wtab, cs, [S.TTermN cp $ signed sign n'])
+                               Nothing -> let wtab' = Map.insert n n wtab
+                                          in (wtab', cs, [S.TTermN cp $ signed sign n])
+    term ns cs | q         = case ns of
+                               [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
+                               _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
+               | otherwise = (wtab, cs, termPath (S.TTermN cp <$> ns))
 
     termPath [t]       = [t]
     termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]

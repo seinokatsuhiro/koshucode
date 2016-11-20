@@ -108,9 +108,8 @@ treesTermsCached = name where
 
 -- | Test token tree is term leaf.
 isTermLeaf :: O.Test S.TTree
-isTermLeaf (L (S.TTermN _ _))                = True
-isTermLeaf (L (S.TTerm _ S.TermTypePath _))  = True
-isTermLeaf _                                 = False
+isTermLeaf (L (S.TTermN _ _))  = True
+isTermLeaf _                   = False
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
@@ -141,7 +140,6 @@ treesFlatNamePairs = loop where
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
     loop ret ns (L (S.TTermN _ n)     : ts)  = loop ret (S.toTermName n : ns) ts
-    loop ret ns (L (S.TTerm _ _ [n])  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (L (S.TTextRaw _ ":") : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                           = Right $ reverse $ reverse ns : ret
     loop _ _ _                               = Msg.reqTermName
