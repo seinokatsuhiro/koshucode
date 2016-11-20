@@ -30,7 +30,7 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 -- | Get relmap attribute as single cox.
 getCox :: (D.CContent c) => Op.RopGet c (D.Cox c)
-getCox med = ropBuild med . S.ttreeGroup B.<=< Op.getTrees med
+getCox med = ropBuild med . S.ttreeGroup B.<.> Op.getTrees med
 
 -- | Get optional content expression with default content.
 getOptionCox :: (D.CContent c) => c -> Op.RopGet c (D.Cox c)
@@ -42,11 +42,11 @@ getMaybeCox = Op.getMaybe getCox
 
 -- | Get relmap attribute as cox list with name.
 getNamedCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
-getNamedCoxes med = ropNamedAlphas med B.<=< Op.getWordTrees med 
+getNamedCoxes med = ropNamedAlphas med B.<.> Op.getWordTrees med 
 
 -- | Get relmap attribute as cox list with term name.
 getTermCoxes :: (D.CContent c) => Op.RopGet c [S.Term (D.Cox c)]
-getTermCoxes med = ropNamedAlphas med B.<=< Op.getTermTrees med
+getTermCoxes med = ropNamedAlphas med B.<.> Op.getTermTrees med
 
 ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
 ropBuild = C.treeCoxG . C.ropGlobal

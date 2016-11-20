@@ -79,7 +79,7 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
 
     eithcon f      = either (const f)
     eith g         = either (const $ calc g)
-    decimal        = D.putDec B.<=< D.decodeDecimal
+    decimal        = D.putDec B.<.> D.decodeDecimal
 
     keyword :: String -> B.Ab c
     keyword "(+)"  = Right D.true
@@ -127,7 +127,7 @@ treesTie _ _ = Msg.adlib "unknown angle bracket"
 --   treesTerms
 --
 treesTerms :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [S.Term c]
-treesTerms cons = mapM p B.<=< D.treesTerms1 where
+treesTerms cons = mapM p B.<.> D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Decode judge from token trees.

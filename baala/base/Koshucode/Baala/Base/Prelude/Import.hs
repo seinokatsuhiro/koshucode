@@ -5,7 +5,6 @@
 module Koshucode.Baala.Base.Prelude.Import
   ( -- * Control.Monad
     (<.>),
-    (Control.Monad.<=<),
     (Control.Monad.>=>),
     Control.Monad.sequence,
     Control.Monad.filterM,
@@ -83,6 +82,8 @@ import qualified Text.PrettyPrint
 
 
 -- ----------------------  Control
+
+infixr 1 <.>
 
 -- | Composition of monadic functions.
 (<.>) :: (Monad m) => (b -> m c) -> (a -> m b) -> a -> m c

@@ -56,7 +56,7 @@ tokenString _ _  =  Msg.nothing
 --                   interpTerms = ["a"] })
 --
 treesInterp :: [S.TTree] -> B.Ab D.Interp
-treesInterp = Right . D.interp B.<=< mapM treeInterpWord
+treesInterp = Right . D.interp B.<.> mapM treeInterpWord
 
 treeInterpWord :: S.TTree -> B.Ab D.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing

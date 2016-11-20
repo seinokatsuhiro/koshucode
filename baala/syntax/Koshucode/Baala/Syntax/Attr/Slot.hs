@@ -23,7 +23,7 @@ type GlobalSlot = S.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
 substSlot :: [GlobalSlot] -> [AttrTree] -> B.AbMap [S.TTree]
-substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
+substSlot gslot attr = Right . concat B.<.> mapM (substTree gslot attr)
 
 substTree :: [GlobalSlot] -> [AttrTree] -> S.TTree -> B.Ab [S.TTree]
 substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where

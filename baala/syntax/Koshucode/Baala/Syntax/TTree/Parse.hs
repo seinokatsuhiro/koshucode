@@ -59,7 +59,7 @@ tt s = ttrees $ S.sweepToken $ S.toks s
 
 -- | Parse string and group it.
 tt1 :: String -> B.Ab S.TTree
-tt1 = Right . ttreeGroup B.<=< tt
+tt1 = Right . ttreeGroup B.<.> tt
 
 -- | Parse string and print it.
 ttPrint :: String -> IO ()

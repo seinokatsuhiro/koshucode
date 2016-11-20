@@ -24,12 +24,12 @@ treeCox :: forall c. (D.CContent c)
   => D.CalcContent c -> D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
 treeCox calc copset =
     convCox findCox            -- convert cox to cox
-      B.<=< Right
+      B.<.> Right
       . debruijn               -- attach De Bruijn indicies
       . coxUnfold              -- expand multiple-blank form
-      B.<=< construct calc     -- construct content expression from token tree
-      B.<=< prefix htab        -- convert infix operator to prefix
-      B.<=< convTree findTree  -- convert token tree to token tree
+      B.<.> construct calc     -- construct content expression from token tree
+      B.<.> prefix htab        -- convert infix operator to prefix
+      B.<.> convTree findTree  -- convert token tree to token tree
     where
       findCox  = D.copsetFindCox   copset
       findTree = D.copsetFindTree  copset
