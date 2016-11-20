@@ -26,7 +26,7 @@
 |-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Overture.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Category"
     | [ ] ] [ 0 | "Integer" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 1 | "Utility" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Overture"  /base-rank {= /rank /base /import-dir [ 0 | "Cache" | [ ] ]
-    [ 0 | "Type" | [ ] ] [ 1 | "Fn" | [ ] ] [ 2 | "Text" | [ ] ] =}
+    [ 0 | "Type" | [ ] ] [ 1 | "Fn" | [ ] ] [ 1 | "Shorthand" | [ ] ] [ 2 | "Text" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Base.Prelude"  /base-rank {= /rank /base /import-dir [ 0 | "Case" | [ ]
     ] [ 0 | "Class" | [ ] ] [ 0 | "Import" | [ ] ] [ 1 | "Queue" | [ ] ] [ 4 | "Pair" | [ "Overture" ] ] =}
 |-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Base.MixText"  /base-rank {= /rank /base /import-dir [ 0 | "LineBreak"
@@ -224,6 +224,7 @@ TABLE : DIR-RANK
                                                   0     "Cache"              [ ]
                                                   0     "Type"               [ ]
                                                   1     "Fn"                 [ ]
+                                                  1     "Shorthand"          [ ]
                                                   2     "Text"               [ ]
                                                   
   4         "Koshucode.Baala.Base.Prelude"        /rank /base                /import-dir
