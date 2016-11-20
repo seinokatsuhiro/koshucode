@@ -59,6 +59,8 @@ library
 
         Koshucode.Baala.Overture.Type
 
+        Koshucode.Baala.System.CliParser
+
   -- Modules included in this library but not exported.
   --other-modules:       
   
