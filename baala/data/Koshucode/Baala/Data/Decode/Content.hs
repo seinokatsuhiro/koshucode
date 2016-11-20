@@ -28,7 +28,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- ----------------------  General content
 
-pattern LName s    <- L (S.TTermN _ _ s)
+pattern LName s    <- L (S.TTermN _ s)
 pattern Text f s   <- S.TText _ f s
 
 -- | Content decoder.
@@ -66,7 +66,7 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
         | n <= S.TextRaw     = keyword w
         | n == S.TextQ       = D.putCode w
         | otherwise          = D.putText w
-    token (S.TTermN _ _ n)   = D.putTerm $ S.toTermName n
+    token (S.TTermN _ n)     = D.putTerm $ S.toTermName n
     token (S.TTerm _ _ [n])  = D.putTerm n
     token t                  = Msg.unkWord $ S.tokenContent t
 

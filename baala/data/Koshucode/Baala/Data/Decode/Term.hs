@@ -51,9 +51,9 @@ treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
 treeFlatNameCached :: CacheT -> S.TTree -> B.Ab (CacheT, S.TermName)
-treeFlatNameCached cc (L (S.TTermN _ _ n))  = Right $ O.cacheGet cc n
-treeFlatNameCached _  (L t)                 = Msg.reqFlatName t
-treeFlatNameCached _  _                     = Msg.reqTermName
+treeFlatNameCached cc (L (S.TTermN _ n))  = Right $ O.cacheGet cc n
+treeFlatNameCached _  (L t)               = Msg.reqFlatName t
+treeFlatNameCached _  _                   = Msg.reqTermName
 
 -- | Read flat term names.
 --
@@ -69,8 +69,8 @@ treesFlatNames = mapM treeFlatName
 --   Right (GT, "a")
 --
 treeSignedName :: S.TTree -> B.Ab S.TermName
-treeSignedName (L (S.TTermN _ sign n))  = Right $ S.termNameAltSign sign $ S.toTermName n
-treeSignedName _                        = Msg.reqTermName
+treeSignedName (L (S.TTermN _ n))  = Right $ S.toTermName n
+treeSignedName _                   = Msg.reqTermName
 
 -- | Read list of named token trees from token trees.
 --
@@ -108,7 +108,7 @@ treesTermsCached = name where
 
 -- | Test token tree is term leaf.
 isTermLeaf :: O.Test S.TTree
-isTermLeaf (L (S.TTermN _ _ _))              = True
+isTermLeaf (L (S.TTermN _ _))                = True
 isTermLeaf (L (S.TTerm _ S.TermTypePath _))  = True
 isTermLeaf _                                 = False
 
@@ -140,7 +140,7 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (L (S.TTermN _ _ n)   : ts)  = loop ret (S.toTermName n : ns) ts
+    loop ret ns (L (S.TTermN _ n)     : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (L (S.TTerm _ _ [n])  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (L (S.TTextRaw _ ":") : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                           = Right $ reverse $ reverse ns : ret

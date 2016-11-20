@@ -35,7 +35,7 @@ tokenContent tok =
     case tok of
       S.TText     _ _ s    -> s
       S.TShort    _ a b    -> a ++ "." ++ b
-      S.TTermN    _ _ n    -> S.enslash n
+      S.TTermN    _ n      -> S.enslash n
       S.TTerm     _ _ ns   -> S.termPathString ns
       S.TLocal    _ n _ _  -> B.name n
       S.TSlot     _ _ s    -> s
@@ -56,7 +56,7 @@ tokenDetailTypeString tok =
     case tok of
       S.TText     _ f _    -> Just $ S.subtypeName f
       S.TShort    _ _ _    -> Nothing
-      S.TTermN    _ _ _    -> Nothing
+      S.TTermN    _ _      -> Nothing
       S.TTerm     _ _ _    -> Nothing
       S.TLocal    _ _ _ _  -> Nothing
       S.TSlot     _ n _    -> Just $ slotTypeText n
@@ -103,7 +103,7 @@ isShortToken _                    = False
 
 -- | Test token is term-type token.
 isTermToken :: O.Test S.Token
-isTermToken (S.TTermN _ _ _)      = True
+isTermToken (S.TTermN _ _)        = True
 isTermToken (S.TTerm _ _ _)       = True
 isTermToken _                     = False
 
