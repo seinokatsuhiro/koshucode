@@ -3,11 +3,25 @@
 -- | Shorthand functions.
 
 module Koshucode.Baala.Overture.Shorthand
- ( int, integer,
+ ( (&),
+   int, integer,
    nothing,
  ) where
 
 import qualified Koshucode.Baala.Overture.Type as O
+
+infixr 0 &
+
+-- | Pairing operator.
+--
+--   >>> "a" & "b"
+--   ("a", "b")
+--
+--   >>> "a" & "b" & "c"
+--   ("a", ("b", "c"))
+--
+(&) :: a -> b -> (a, b)
+a & b = (a, b)
 
 -- | 'Int' shorthand.
 --
