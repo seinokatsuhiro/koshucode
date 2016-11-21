@@ -22,8 +22,8 @@ pkg_help () {
     echo
     echo "COMMAND for executing"
     echo "  clean            Clean up build result"
-    echo "  doc0             Generate Haddock documents less verbosely"
-    echo "  doc              Generate Haddock documents with default verbosity"
+    echo "  doc0 [DIR]       Generate Haddock documents less verbosely"
+    echo "  doc [DIR]        Generate Haddock documents with default verbosity"
     echo "  doc2             Regenerate Haddock documents"
     echo "  exec C           Execute C in each package directories"
     echo "  exec-all C       Same as exec except for ignoring exit status"
@@ -56,6 +56,14 @@ pkg_dirs () {
 pkg_dirs_rev () {
     echo toolkit calculator cop rop-cox rop-nested rop-flat \
         writer core data-plus data syntax base subtext overture
+}
+
+pkg_dirs_or () {
+    if [ -z "$1" ]; then
+        pkg_dirs
+    else
+        echo "$1" | sed 's:/$::'
+    fi
 }
 
 pkg_cabal () {
@@ -120,7 +128,7 @@ pkg_exec_all () {
 }
 
 pkg_haddock () {
-    for pkg in `pkg_dirs`; do
+    for pkg in `pkg_dirs_or $1`; do
         ( cd "$pkg"
           pkg_section "haddock (in $pkg)"
           cabal haddock \
@@ -278,9 +286,9 @@ case "$1" in
         pkg_toolkit pkg_installed "koshu*" ;;
     doc0)
         pkg_doc_verbose=0
-        pkg_haddock 2> /dev/null ;;
+        pkg_haddock "$2" 2> /dev/null ;;
     doc)
-        pkg_haddock ;;
+        pkg_haddock "$2" ;;
     doc2)
         pkg_exec cabal configure
         pkg_exec cabal build
