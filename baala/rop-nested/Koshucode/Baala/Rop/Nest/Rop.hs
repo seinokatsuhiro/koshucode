@@ -6,6 +6,7 @@ module Koshucode.Baala.Rop.Nest.Rop
   ( ropsNest,
   ) where
 
+import Koshucode.Baala.Overture ((&))
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
@@ -43,7 +44,10 @@ import qualified Koshucode.Baala.Rop.Nest.Flow      as Rop
 --    Lift up nested relation.
 
 ropsNest :: (D.CContent c) => [C.Rop c]
-ropsNest = Rop.ropList "nest"
+ropsNest = Rop.ropAlias
+    [ "sg"   & "self-group"
+    , "hier" & "self-group"
+    ] $ Rop.ropList "nest"
     --        CONSTRUCTOR        USAGE                       ATTRIBUTE
     [ Rop.def Rop.consChunk      "chunk /T ... [-order /P ...]"
                                                              "-term* . -order"
@@ -57,8 +61,6 @@ ropsNest = Rop.ropList "nest"
     , Rop.def Rop.consOppGroup   "opp-group R -to /N [-share /P ...]"
                                                              "-relmap/ . -to -share?"
     , Rop.def Rop.consSelfGroup  "self-group /P ... -to /N"  "-term* . -to"
-    , Rop.def Rop.consSelfGroup  "sg /P ... -to /N"          "-term* . -to"
-    , Rop.def Rop.consSelfGroup  "hier /P ... -to /N"        "-term* . -to"
     , Rop.def Rop.consSlice      "slice /N [R]"              "-term -relmap/^?"
     , Rop.def Rop.consSliceUp    "slice-up R"                "-relmap/^"
     , Rop.def Rop.consUngroup    "ungroup /P"                "-term"
