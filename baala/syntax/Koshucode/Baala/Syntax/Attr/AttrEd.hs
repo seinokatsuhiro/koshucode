@@ -16,6 +16,8 @@ import qualified Koshucode.Baala.Syntax.Attr.Slot       as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 
 -- ----------------------  Data type
 
@@ -109,7 +111,7 @@ runAttrEd (B.Sourced toks edit) attr = run where
     fill ps       []               = Right $ ps
 
 nestName :: B.AbMap [S.TTree]
-nestName [S.TermLeafName _ n]   = Right $ localNest $ S.toTermName n
+nestName [L (S.TTerm _ n)] = Right $ localNest $ S.toTermName n
 nestName _ = Msg.adlib "require term name"
 
 localNest :: S.TermName -> [S.TTree]
