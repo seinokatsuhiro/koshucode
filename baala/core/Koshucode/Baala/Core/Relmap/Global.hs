@@ -139,15 +139,15 @@ global' h = Global
 
 -- | Set of relmap and content operators.
 data OpSet' h c = OpSet
-    { opsetRopList     :: [C.Rop' h c]
-    , opsetFindRop     :: C.FindRop' h c
-    , opsetCop         :: D.CopSet c
+    { opsetRopList  :: [C.Rop' h c]     -- ^ Relmap operators.
+    , opsetFindRop  :: C.FindRop' h c   -- ^ Operator finder.
+    , opsetCop      :: D.CopSet c       -- ^ Content operators.
     }
 
 -- | Empty operator set.
 instance B.Default (OpSet' h c) where
     def = OpSet { opsetRopList = []
-                , opsetFindRop = const Nothing
+                , opsetFindRop = O.nothing
                 , opsetCop     = B.def }
 
 -- | Make complete operator set by filling auto-generated part.

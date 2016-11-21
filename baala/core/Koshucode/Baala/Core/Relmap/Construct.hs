@@ -11,8 +11,9 @@ module Koshucode.Baala.Core.Relmap.Construct
     relmapBinary, relmapConfl,
 
     -- * Variable
-    relmapNest, relmapCopy,
-    relmapLink, relmapLocalSymbol, relmapLocalNest,
+    relmapLink,
+    relmapNest, relmapLocalNest,
+    relmapCopy, relmapLocalSymbol, 
 
     -- * Append relmaps
     -- $AppendRelmaps
@@ -68,25 +69,27 @@ relmapConfl = C.RelmapCalc . C.medLexmap
 
 -- ----------------------  Variable
 
--- | Parent for nested relation references.
-relmapNest :: C.Intmed' h c -> O.Map (C.Relmap' h c)
-relmapNest = C.RelmapNest . C.medLexmap
-
--- | Copy-of-input-relation relmap.
-relmapCopy :: C.Intmed' h c -> C.RopName -> O.Map (C.Relmap' h c)
-relmapCopy = C.RelmapCopy . C.medLexmap
-
 -- | Link-to-other relmap.
 relmapLink :: C.Intmed' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.medLexmap
 
--- | Relmap reference of local symbolic relation.
-relmapLocalSymbol :: C.Intmed' h c -> C.RopName -> C.Relmap' h c
-relmapLocalSymbol med n = relmapLocal med $ S.LocalSymbol n
+-- | Reference base of nested relation references.
+--   This base is refered by 'relmapLocalNest'.
+relmapNest :: C.Intmed' h c -> O.Map (C.Relmap' h c)
+relmapNest = C.RelmapNest . C.medLexmap
 
--- | Relmap reference of local nested relation.
+-- | Relation reference for nested relation.
 relmapLocalNest :: C.Intmed' h c -> S.TermName -> C.Relmap' h c
 relmapLocalNest med n = relmapLocal med $ S.LocalNest n
+
+-- | Reference base of copy-of-input relation reference.
+--   This base is refered by 'relmapLocalSymbol'.
+relmapCopy :: C.Intmed' h c -> C.RopName -> O.Map (C.Relmap' h c)
+relmapCopy = C.RelmapCopy . C.medLexmap
+
+-- | Relation reference for locally introduced relation.
+relmapLocalSymbol :: C.Intmed' h c -> C.RopName -> C.Relmap' h c
+relmapLocalSymbol med n = relmapLocal med $ S.LocalSymbol n
 
 relmapLocal :: C.Intmed' h c -> S.LocalRef -> C.Relmap' h c
 relmapLocal use ref = relmapLink use' where
