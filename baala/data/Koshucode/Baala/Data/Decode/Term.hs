@@ -8,7 +8,6 @@ module Koshucode.Baala.Data.Decode.Term
     CacheT, cacheT,
     treeFlatName, treeFlatNameCached,
     treesFlatNames,
-    treeSignedName,
     treesTerms,
     treesTermsCached,
     treesTerms1,
@@ -62,15 +61,6 @@ treeFlatNameCached _  _                   = Msg.reqTermName
 --
 treesFlatNames :: [S.TTree] -> B.Ab [S.TermName]
 treesFlatNames = mapM treeFlatName
-
--- | Read signed term name.
---
---   >>> S.tt1 "+/a" >>= treeSignedName
---   Right (TermName GT "a")
---
-treeSignedName :: S.TTree -> B.Ab S.TermName
-treeSignedName (L (S.TTerm _ n))   = Right $ S.toTermName n
-treeSignedName _                   = Msg.reqTermName
 
 -- | Read list of named token trees from token trees.
 --

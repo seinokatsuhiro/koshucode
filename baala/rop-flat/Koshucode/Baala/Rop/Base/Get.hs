@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attribute getters: Extract attribute from use of relmap.
@@ -12,7 +11,7 @@ module Koshucode.Baala.Rop.Base.Get
     getOption, getMaybe,
     getSwitch, getWord,
   
-    -- * Tree
+    -- * Token tree
     getTree, getTrees,
     getWordTrees,
     getTreesByColon,
@@ -22,7 +21,7 @@ module Koshucode.Baala.Rop.Base.Get
   
     -- * Term
     getTerm, getTerm2, getTermOpt,
-    getTerms, getSignedTerms, getTermsCo,
+    getTerms, getTermsCo,
     getTermPairs, getTermsColon,
     getTermTrees,
   ) where
@@ -158,14 +157,15 @@ getTreesByColon med name =
 --   > consMeet med = do
 --   >   m <- getRelmap med "-relmap"
 --   >   Right $ relmapMeet med m
-getRelmap :: C.Intmed c -> String -> B.Ab (C.Relmap c)
+--
+getRelmap :: RopGet c (C.Relmap c)
 getRelmap med name =
     case lookup name $ C.medSubmap med of
       Nothing -> Msg.reqRelmap 1
       Just m  -> Right m
 
 -- | Get optional relmap.
-getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
+getOptRelmap :: C.Relmap c -> RopGet c (C.Relmap c)
 getOptRelmap rmap0 med = right rmap0 . getRelmap med
 
 -- | Replace 'Left' value to 'Right' value.
@@ -197,10 +197,6 @@ getTermOpt = getMaybe getTerm
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [S.TermName]
 getTerms = getAbortable D.treesFlatNames
-
--- | Get signed term names.
-getSignedTerms :: RopGet c [S.TermName]
-getSignedTerms = getAbortable $ mapM D.treeSignedName
 
 -- | Get term names and complement sign (@~@) .
 getTermsCo :: RopGet c (Bool, [S.TermName])

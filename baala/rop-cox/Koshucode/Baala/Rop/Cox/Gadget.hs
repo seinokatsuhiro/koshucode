@@ -192,9 +192,9 @@ interpMatch interp he = ns1 == ns2 where
 -- | __number \/N -from I -order \/P ...__
 consNumber :: (Ord c, D.CContent c) => C.RopCons c
 consNumber med =
-    do n    <- Op.getTerm                        med "-term"
-       ns   <- Op.getOption [] Op.getSignedTerms med "-order"
-       from <- Op.getOption 0  Op.getInt         med "-from"
+    do n    <- Op.getTerm                  med "-term"
+       ns   <- Op.getOption [] Op.getTerms med "-order"
+       from <- Op.getOption 0  Op.getInt   med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
 -- | Create @number@ relmap.
@@ -229,7 +229,7 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
 consRank :: (Ord c, D.CContent c) => C.RopCons c
 consRank med =
     do n     <- Op.getTerm               med "-term"
-       ns    <- Op.getSignedTerms        med "-order"
+       ns    <- Op.getTerms              med "-order"
        from  <- Op.getOption 0 Op.getInt med "-from"
        dense <- Op.getSwitch             med "-dense"
        let relmapRank = if dense

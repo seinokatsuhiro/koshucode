@@ -98,7 +98,7 @@ relkitLexical (Just he1) = Right kit2 where
 -- | __order \/P ...__
 consOrder :: (Ord c) => C.RopCons c
 consOrder med =
-    do ns <- Rop.getOption [] Rop.getSignedTerms med "-term"
+    do ns <- Rop.getOption [] Rop.getTerms med "-term"
        Right $ relmapOrder med ns
 
 -- | Create @order@ relmap.
