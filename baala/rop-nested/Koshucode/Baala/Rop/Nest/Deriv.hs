@@ -18,9 +18,9 @@ import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
-import qualified Koshucode.Baala.Rop.Base        as Op
-import qualified Koshucode.Baala.Rop.Flat        as Op
-import qualified Koshucode.Baala.Rop.Nest.Confl  as Op
+import qualified Koshucode.Baala.Rop.Base        as Rop
+import qualified Koshucode.Baala.Rop.Flat        as Rop
+import qualified Koshucode.Baala.Rop.Nest.Confl  as Rop
 
 
 -- ----------------------  opp-group
@@ -31,15 +31,15 @@ import qualified Koshucode.Baala.Rop.Nest.Confl  as Op
 --
 consOppGroup :: (Ord c, D.CRel c) => C.RopCons c
 consOppGroup med =
-  do rmap <- Op.getRelmap med "-relmap"
-     n    <- Op.getTerm   med "-to"
-     sh   <- Op.getMaybe Op.getTerms med "-share"
+  do rmap <- Rop.getRelmap med "-relmap"
+     n    <- Rop.getTerm   med "-to"
+     sh   <- Rop.getMaybe Rop.getTerms med "-share"
      Right $ relmapOppGroup med sh n rmap
 
 -- | Create @odd-group@ relmap.
-relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
+relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Rop.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
 relmapOppGroup med sh n rmap = C.relmapCopy med n' rmapGroup where
-    rmapGroup  = rmap B.<> Op.relmapGroup med sh n rmapLocal
+    rmapGroup  = rmap B.<> Rop.relmapGroup med sh n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n'
     n'         = S.termNameContent n
 
@@ -49,8 +49,8 @@ relmapOppGroup med sh n rmap = C.relmapCopy med n' rmapGroup where
 -- | __nest [~] \/P ... -to \/N__
 consNest :: (Ord c, D.CRel c) => C.RopCons c
 consNest med =
-  do (co, ns) <- Op.getTermsCo med "-term"
-     to       <- Op.getTerm    med "-to"
+  do (co, ns) <- Rop.getTermsCo med "-term"
+     to       <- Rop.getTerm    med "-to"
      Right $ relmapSelfGroup med (co, ns, to)
 
 -- | __self-group \/P ... -to \/N__
@@ -59,19 +59,19 @@ consNest med =
 --
 consSelfGroup :: (Ord c, D.CRel c) => C.RopCons c
 consSelfGroup med =
-  do ns <- Op.getTerms med "-term"
-     to <- Op.getTerm  med "-to"
+  do ns <- Rop.getTerms med "-term"
+     to <- Rop.getTerm  med "-to"
      Right $ relmapSelfGroup med (True, ns, to)
 
 -- | Create @self-group@ relmap.
 relmapSelfGroup :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
 relmapSelfGroup med (co, ns, to) = group B.<> for where
     group  = relmapOppGroup med Nothing to key
-    for    = Op.relmapFor med to nest
+    for    = Rop.relmapFor med to nest
     key    = if co then pick else cut
     nest   = if co then cut  else pick
-    pick   = Op.relmapPick med ns
-    cut    = Op.relmapCut  med ns
+    pick   = Rop.relmapPick med ns
+    cut    = Rop.relmapCut  med ns
 
 
 -- ----------------------  ungroup
@@ -82,16 +82,16 @@ relmapSelfGroup med (co, ns, to) = group B.<> for where
 --
 consUngroup :: (Ord c, D.CRel c) => C.RopCons c
 consUngroup med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      Right $ relmapUngroup med n
 
 -- | Create @ungroup@ relmap.
 relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
     ungroup = slice B.<> cut
-    slice   = Op.relmapSliceUp med meet
-    meet    = Op.relmapMeet med Nothing $ C.relmapLocalNest med n
-    cut     = Op.relmapCut  med [n]
+    slice   = Rop.relmapSliceUp med meet
+    meet    = Rop.relmapMeet med Nothing $ C.relmapLocalNest med n
+    cut     = Rop.relmapCut  med [n]
 
 
 -- ----------------------  join-up
@@ -102,11 +102,11 @@ relmapUngroup med n = ungroup where
 --
 consJoinUp :: (Ord c) => C.RopCons c
 consJoinUp med =
-  do nest <- Op.getTerms med "-term"
+  do nest <- Rop.getTerms med "-term"
      Right $ relmapJoinUp med nest
 
 -- | Create @join-up@ relmap.
 relmapJoinUp :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
+relmapJoinUp med nest = C.relmapNest med $ Rop.relmapJoinList med rmaps where
     rmaps   = link `map` nest
     link n  = C.relmapLocalNest med n

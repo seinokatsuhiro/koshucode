@@ -21,9 +21,9 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Op
-import qualified Koshucode.Baala.Rop.Flat          as Op
-import qualified Koshucode.Baala.Rop.Nest.Flow     as Op
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Flat          as Rop
+import qualified Koshucode.Baala.Rop.Nest.Flow     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
@@ -38,8 +38,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 --
 consCopy :: C.RopCons c
 consCopy med =
-  do n    <- Op.getWord   med "-var"
-     rmap <- Op.getRelmap med "-relmap"
+  do n    <- Rop.getWord   med "-var"
+     rmap <- Rop.getRelmap med "-relmap"
      Right $ C.relmapCopy med n rmap
 
 
@@ -54,13 +54,13 @@ consCopy med =
 --
 consFor :: (D.CRel c) => C.RopCons c
 consFor med =
-    do n    <- Op.getTerm   med "-term"
-       rmap <- Op.getRelmap med "-relmap"
+    do n    <- Rop.getTerm   med "-term"
+       rmap <- Rop.getRelmap med "-relmap"
        Right $ relmapFor med n rmap
 
 -- | Create @for@ relmap.
 relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
-relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n B.<> rmap)
+relmapFor med n rmap = relmapForInner med n (Rop.relmapUp med n B.<> rmap)
 
 relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where
@@ -94,22 +94,22 @@ relkitFor _ _ _ = Right C.relkitNothing
 --
 consGroup :: (Ord c, D.CRel c) => C.RopCons c
 consGroup med =
-  do rmap <- Op.getRelmap med "-relmap"
-     n    <- Op.getTerm   med "-to"
-     sh   <- Op.getMaybe Op.getTerms med "-share"
+  do rmap <- Rop.getRelmap med "-relmap"
+     n    <- Rop.getTerm   med "-to"
+     sh   <- Rop.getMaybe Rop.getTerms med "-share"
      Right $ relmapGroup med sh n rmap
 
 -- | Create @group@ relmap.
-relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Op.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
+relmapGroup :: (Ord c, D.CRel c) => C.Intmed c -> Rop.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
 relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 
 -- | Create @group@ relkit.
-relkitGroup :: forall c. (Ord c, D.CRel c) => Op.SharedTerms -> S.TermName -> C.RelkitBinary c
+relkitGroup :: forall c. (Ord c, D.CRel c) => Rop.SharedTerms -> S.TermName -> C.RelkitBinary c
 relkitGroup sh n (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr      = D.termPicker he1 he2
     toMap2  = B.gatherToMap . map (D.ssRAssoc lr)
     he3     = D.headConsNest n he2 he1
-    kit3    = case Op.unmatchShare sh lr of
+    kit3    = case Rop.unmatchShare sh lr of
                 Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
                 Just (e, a) -> Msg.unmatchShare e a
 
@@ -141,8 +141,8 @@ relkitGroup _ _ _ _ = Right C.relkitNothing
 --
 consSlice :: (D.CRel c) => C.RopCons c
 consSlice med =
-  do n    <- Op.getTerm   med "-term"
-     rmap <- Op.getOptRelmap C.relmapId med "-relmap"
+  do n    <- Rop.getTerm   med "-term"
+     rmap <- Rop.getOptRelmap C.relmapId med "-relmap"
      Right $ relmapSlice med n rmap
 
 -- | Create @slice@ relmap.
@@ -167,7 +167,7 @@ relkitSlice _ _ _ = Right C.relkitNothing
 -- | __slice-up R__
 consSliceUp :: (D.CRel c) => C.RopCons c
 consSliceUp med =
-  do rmap <- Op.getOptRelmap C.relmapId med "-relmap"
+  do rmap <- Rop.getOptRelmap C.relmapId med "-relmap"
      Right $ relmapSliceUp med rmap
 
 -- | Create @slice-up@ relmap.

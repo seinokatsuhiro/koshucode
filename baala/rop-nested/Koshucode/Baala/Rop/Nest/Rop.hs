@@ -8,10 +8,10 @@ module Koshucode.Baala.Rop.Nest.Rop
 
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
-import qualified Koshucode.Baala.Rop.Nest.Confl     as Op
-import qualified Koshucode.Baala.Rop.Nest.Deriv     as Op
-import qualified Koshucode.Baala.Rop.Nest.Flow      as Op
+import qualified Koshucode.Baala.Rop.Base           as Rop
+import qualified Koshucode.Baala.Rop.Nest.Confl     as Rop
+import qualified Koshucode.Baala.Rop.Nest.Deriv     as Rop
+import qualified Koshucode.Baala.Rop.Nest.Flow      as Rop
 
 -- | Implementation of relational operators.
 --
@@ -43,25 +43,25 @@ import qualified Koshucode.Baala.Rop.Nest.Flow      as Op
 --    Lift up nested relation.
 
 ropsNest :: (D.CContent c) => [C.Rop c]
-ropsNest = Op.ropList "nest"
-    --        CONSTRUCTOR       USAGE                       ATTRIBUTE
-    [ Op.def  Op.consChunk      "chunk /T ... [-order /P ...]"
-                                                            "-term* . -order"
-    , Op.def  Op.consCopy       "copy N R"                  "-var -relmap/^"
-    , Op.def  Op.consDown       "down /N"                   "-term"
-    , Op.def  Op.consFor        "for /N R"                  "-term -relmap/^"
-    , Op.def  Op.consGroup      "group R -to /N [-share /P ...]"
-                                                            "-relmap/ . -to -share?"
-    , Op.def  Op.consJoinUp     "join-up /P ..."            "-term*"
-    , Op.def  Op.consNest       "nest [~] /P ... -to /N"    "-term* . -to"
-    , Op.def  Op.consOppGroup   "opp-group R -to /N [-share /P ...]"
-                                                            "-relmap/ . -to -share?"
-    , Op.def  Op.consSelfGroup  "self-group /P ... -to /N"  "-term* . -to"
-    , Op.def  Op.consSelfGroup  "sg /P ... -to /N"          "-term* . -to"
-    , Op.def  Op.consSelfGroup  "hier /P ... -to /N"        "-term* . -to"
-    , Op.def  Op.consSlice      "slice /N [R]"              "-term -relmap/^?"
-    , Op.def  Op.consSliceUp    "slice-up R"                "-relmap/^"
-    , Op.def  Op.consUngroup    "ungroup /P"                "-term"
-    , Op.def  Op.consUp         "up /N"                     "-term"
+ropsNest = Rop.ropList "nest"
+    --        CONSTRUCTOR        USAGE                       ATTRIBUTE
+    [ Rop.def Rop.consChunk      "chunk /T ... [-order /P ...]"
+                                                             "-term* . -order"
+    , Rop.def Rop.consCopy       "copy N R"                  "-var -relmap/^"
+    , Rop.def Rop.consDown       "down /N"                   "-term"
+    , Rop.def Rop.consFor        "for /N R"                  "-term -relmap/^"
+    , Rop.def Rop.consGroup      "group R -to /N [-share /P ...]"
+                                                             "-relmap/ . -to -share?"
+    , Rop.def Rop.consJoinUp     "join-up /P ..."            "-term*"
+    , Rop.def Rop.consNest       "nest [~] /P ... -to /N"    "-term* . -to"
+    , Rop.def Rop.consOppGroup   "opp-group R -to /N [-share /P ...]"
+                                                             "-relmap/ . -to -share?"
+    , Rop.def Rop.consSelfGroup  "self-group /P ... -to /N"  "-term* . -to"
+    , Rop.def Rop.consSelfGroup  "sg /P ... -to /N"          "-term* . -to"
+    , Rop.def Rop.consSelfGroup  "hier /P ... -to /N"        "-term* . -to"
+    , Rop.def Rop.consSlice      "slice /N [R]"              "-term -relmap/^?"
+    , Rop.def Rop.consSliceUp    "slice-up R"                "-relmap/^"
+    , Rop.def Rop.consUngroup    "ungroup /P"                "-term"
+    , Rop.def Rop.consUp         "up /N"                     "-term"
     ]
 

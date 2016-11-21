@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Op
+import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
 
 
@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
 --
 consDown :: (D.CRel c) => C.RopCons c
 consDown med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      Right $ relmapDown med n
 
 -- | Create @down@ relmap.
@@ -52,7 +52,7 @@ relkitDown n (Just he1) = Right kit2 where
 --
 consUp :: (D.CRel c) => C.RopCons c
 consUp med =
-  do n <- Op.getTerm med "-term"
+  do n <- Rop.getTerm med "-term"
      Right $ relmapUp med n
 
 -- | Create @up@ relmap.
@@ -85,8 +85,8 @@ relkitUp n (Just he1)
 --
 consChunk :: (Ord c, D.CRel c) => C.RopCons c
 consChunk med =
-  do ns  <- Op.getTerms med "-term"
-     ord <- Op.getOption [] Op.getTerms med "-order"
+  do ns  <- Rop.getTerms med "-term"
+     ord <- Rop.getOption [] Rop.getTerms med "-order"
      Right $ relmapChunk med ns ord
 
 -- | Create @chunk@ relmap.
