@@ -14,6 +14,7 @@ module Koshucode.Baala.Rop.Flat.Order
     consOrder, relmapOrder, relkitOrder,
   ) where
 
+import Koshucode.Baala.Overture ((&))
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -24,7 +25,10 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- | Pseudorelmap operators for term and tuple ordering.
 ropsOrder :: (Ord c) => [C.Rop c]
-ropsOrder = Rop.ropList "order"  -- GROUP
+ropsOrder = Rop.ropAlias
+    [ "fw" & "forward"
+    , "bw" & "backward"
+    ] $ Rop.ropList "order"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
     [ Rop.def  consBackward       "backward /P ..."          "-term*"
     , Rop.def  consForward        "forward /P ..."           "-term*"
