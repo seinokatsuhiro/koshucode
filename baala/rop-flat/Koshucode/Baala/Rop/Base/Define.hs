@@ -17,7 +17,7 @@ type RopDefine c = (C.RopCons c, C.RopUsage, S.AttrLayout)
 
 -- | Make implementations of relmap operators.
 ropList
-    :: String         -- ^ Operator group
+    :: C.RopGroup     -- ^ Operator group
     -> [RopDefine c]  -- ^ Operator definitions
     -> [C.Rop c]      -- ^ Relmap operators
 ropList group = map rop where
