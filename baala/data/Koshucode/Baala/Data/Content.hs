@@ -16,7 +16,7 @@ module Koshucode.Baala.Data.Content
     dispatchContent,
 
     -- * Concrete type
-    TermC, JudgeC, RelC,
+    TermC, JudgeC, RelC, AbC,
     the, stringC,
   ) where
 
@@ -343,6 +343,9 @@ type TermC = S.Term Content
 
 -- | @Rel@ for concrete baala content.
 type RelC = D.Rel Content
+
+-- | Abortable content.
+type AbC = B.Ab Content
 
 -- | Shorthand function for the Baala content type.
 --
