@@ -22,6 +22,7 @@ module Koshucode.Baala.Rop.Cox.Calc
   ) where
 
 import Prelude hiding (getContents)
+import Koshucode.Baala.Overture ((&))
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
@@ -32,16 +33,13 @@ import qualified Koshucode.Baala.Rop.Cox.Message as Msg
 
 
 -- | Implementation of relational operators.
---
---   [@add \/N E ...@]
---     Add terms of name @\/N@ and content @E@ ...
--- 
 ropsCoxCalc :: (D.CContent c) => [C.Rop c]
-ropsCoxCalc = Op.ropList "cox-calc"
+ropsCoxCalc = Op.ropAlias
+    [ "subst" & "alt"
+    ] $ Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
     [ Op.def  consAdd           "add /N E ..."                 "-cox* . -where?"
     , Op.def  consAlt           "alt /N E ..."                 "-cox* . -where?"
-    , Op.def  consAlt           "subst /N E ..."               "-cox* . -where?"
     , Op.def  consFill          "fill /P ... -with E"          "-term* . -with"
     , Op.def  consReplace       "replace /P ... -by F"         "-term* . -by"
     , Op.def  consReplaceAll    "replace-all -from E -to E"    ". -from -to"
