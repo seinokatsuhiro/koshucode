@@ -98,12 +98,17 @@ copMax = op where
     op [Right c] | D.isList c = Right $ D.contMaximum $ D.gList c
     op xs = typeUnmatch xs
 
+-- >>> copLength [D.putText "abc"] :: B.Ab D.Content
+-- Right (ContentDec Decimal (0) 3)
 copLength :: (D.CContent c) => D.CopCalc c
 copLength = op where
-    op [Right c] | D.isList c  = Right . D.pInt $ length (D.gList c)
-                 | D.isText c  = Right . D.pInt $ length (D.gText c)
-                 | D.isRel c   = Right . D.pInt $ length (D.relBody $ D.gRel c)
+    op [Right c] | D.isList c  = len c D.gList
+                 | D.isSet  c  = len c D.gSet
+                 | D.isText c  = len c D.gText
+                 | D.isRel  c  = len c (D.relBody . D.gRel)
     op xs = typeUnmatch xs
+
+    len c f = Right . D.pInt $ length (f c)
 
 typeUnmatch :: D.CTypeOf c => [B.Ab c] -> B.Ab c
 typeUnmatch _ = Msg.unmatchType ""
