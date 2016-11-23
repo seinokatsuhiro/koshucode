@@ -27,23 +27,23 @@ import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Rop.Base           as Op
-import qualified Koshucode.Baala.Rop.Cox.Get        as Op
-import qualified Koshucode.Baala.Rop.Cox.GeoDatumJp as Op
+import qualified Koshucode.Baala.Rop.Base           as Rop
+import qualified Koshucode.Baala.Rop.Cox.Get        as Rop
+import qualified Koshucode.Baala.Rop.Cox.GeoDatumJp as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message    as Msg
 
 
 -- | Implementation of relational operators.
 ropsCoxGadget :: (D.CContent c) => [C.Rop c]
-ropsCoxGadget = Op.ropList "cox-gadget"
-    --       CONSTRUCTOR    USAGE                            ATTRIBUTE
-    [ Op.def consConst      "const R"                        "-lit"
-    , Op.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "-n -x -y . -to"
-    , Op.def consGeoDegree  "geo-degree /N /P /P /P"         "-real -deg -min -sec"
-    , Op.def consInterp     "interp E"                       "-interp . -x?"
-    , Op.def consNumber     "number /N -order /P ..."        "-term . -order? -from?"
-    , Op.def consRank       "rank /N -order /P ..."          "-term . -order? -from? -dense?"
-    , Op.def consRepeat     "repeat I R"                     "-count -relmap/"
+ropsCoxGadget = Rop.ropList "cox-gadget"
+    --        CONSTRUCTOR    USAGE                            ATTRIBUTE
+    [ Rop.def consConst      "const R"                        "-lit"
+    , Rop.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "-n -x -y . -to"
+    , Rop.def consGeoDegree  "geo-degree /N /P /P /P"         "-real -deg -min -sec"
+    , Rop.def consInterp     "interp E"                       "-interp . -x?"
+    , Rop.def consNumber     "number /N -order /P ..."        "-term . -order? -from?"
+    , Rop.def consRank       "rank /N -order /P ..."          "-term . -order? -from? -dense?"
+    , Rop.def consRepeat     "repeat I R"                     "-count -relmap/"
     ]
 
 
@@ -57,7 +57,7 @@ ropsCoxGadget = Op.ropList "cox-gadget"
 --
 consConst :: (D.CContent c) => C.RopCons c
 consConst med =
-    do lit <- Op.getContent med "-lit"
+    do lit <- Rop.getContent med "-lit"
        case D.isRel lit of
          True  -> Right $ relmapConst med $ D.gRel lit
          False -> Msg.reqRel
@@ -79,10 +79,10 @@ relkitConst (D.Rel he bo) _ = Right kit2 where
 
 consGeoDatumJp :: (Ord c, D.CContent c) => C.RopCons c
 consGeoDatumJp med =
-    do n  <- Op.getCox med "-n"
-       x  <- Op.getCox med "-x"
-       y  <- Op.getCox med "-y"
-       (lat, long) <- Op.getTerm2 med "-to"
+    do n  <- Rop.getCox med "-n"
+       x  <- Rop.getCox med "-x"
+       y  <- Rop.getCox med "-y"
+       (lat, long) <- Rop.getTerm2 med "-to"
        let cops = C.globalCopset $ C.ropGlobal med
        Right $ relmapGeoDatumJp med (cops, (n,x,y), (lat,long))
 
@@ -109,7 +109,7 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
                    let n  = fromInteger $ D.decimalNum decn
                        dx = D.decimalFractional decx :: Double
                        dy = D.decimalFractional decy :: Double
-                       (dlat, dlong) = Op.convDegree n (dx, dy)
+                       (dlat, dlong) = Rop.convDegree n (dx, dy)
 
                    Right $ pReal dlat : pReal dlong : cs
 
@@ -120,10 +120,10 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
 
 consGeoDegree :: (Ord c, D.CContent c) => C.RopCons c
 consGeoDegree med =
-    do real <- Op.getTerm med "-real"
-       deg  <- Op.getTerm med "-deg"
-       mnt  <- Op.getTerm med "-min"
-       sec  <- Op.getTerm med "-sec"
+    do real <- Rop.getTerm med "-real"
+       deg  <- Rop.getTerm med "-deg"
+       mnt  <- Rop.getTerm med "-min"
+       sec  <- Rop.getTerm med "-sec"
        Right $ relmapGeoDegree med (real, deg, mnt, sec)
 
 -- | Create @geo-degree@ relmap.
@@ -158,14 +158,14 @@ relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
 
 consInterp :: (D.CContent c) => C.RopCons c
 consInterp med =
-    do skip <- Op.getSwitch med "-x"
+    do skip <- Rop.getSwitch med "-x"
        case skip of
-         True  -> Right $ Op.relmapId med
+         True  -> Right $ Rop.relmapId med
          False -> consInterp2 med
 
 consInterp2 :: (D.CContent c) => C.RopCons c
 consInterp2 med =
-    do c <- Op.getContent med "-interp"
+    do c <- Rop.getContent med "-interp"
        case D.isInterp c of
          True  -> Right $ relmapInterp med $ D.gInterp c
          False -> Msg.reqInterp
@@ -192,9 +192,9 @@ interpMatch interp he = ns1 == ns2 where
 -- | __number \/N -from I -order \/P ...__
 consNumber :: (Ord c, D.CContent c) => C.RopCons c
 consNumber med =
-    do n    <- Op.getTerm                  med "-term"
-       ns   <- Op.getOption [] Op.getTerms med "-order"
-       from <- Op.getOption 0  Op.getInt   med "-from"
+    do n    <- Rop.getTerm                  med "-term"
+       ns   <- Rop.getOption [] Rop.getTerms med "-order"
+       from <- Rop.getOption 0  Rop.getInt   med "-from"
        Right $ relmapNumber med (n, ns, fromInteger from)
 
 -- | Create @number@ relmap.
@@ -228,10 +228,10 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
 --
 consRank :: (Ord c, D.CContent c) => C.RopCons c
 consRank med =
-    do n     <- Op.getTerm               med "-term"
-       ns    <- Op.getTerms              med "-order"
-       from  <- Op.getOption 0 Op.getInt med "-from"
-       dense <- Op.getSwitch             med "-dense"
+    do n     <- Rop.getTerm               med "-term"
+       ns    <- Rop.getTerms              med "-order"
+       from  <- Rop.getOption 0 Rop.getInt med "-from"
+       dense <- Rop.getSwitch             med "-dense"
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
@@ -261,8 +261,8 @@ relkitGapRank = relkitRanking B.sortByNameGapRank
 -- | __repeat I R__
 consRepeat :: (Ord c, D.CContent c) => C.RopCons c
 consRepeat med =
-  do cnt  <- Op.getInt    med "-count"
-     rmap <- Op.getRelmap med "-relmap"
+  do cnt  <- Rop.getInt    med "-count"
+     rmap <- Rop.getRelmap med "-relmap"
      Right $ relmapRepeat med cnt rmap
 
 -- | Create @repeat@ relmap.

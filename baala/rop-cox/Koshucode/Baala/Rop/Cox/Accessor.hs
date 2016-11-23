@@ -16,20 +16,20 @@ import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
 import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Op
-import qualified Koshucode.Baala.Rop.Cox.Get  as Op
+import qualified Koshucode.Baala.Rop.Base     as Rop
+import qualified Koshucode.Baala.Rop.Cox.Get  as Rop
 
 
 -- | Implementation of relational operators.
 ropsCoxAccessor :: (D.CContent c) => [C.Rop c]
-ropsCoxAccessor = Op.ropList "cox-accessor"
-    --       CONSTRUCTOR     USAGE
+ropsCoxAccessor = Rop.ropList "cox-accessor"
+    --        CONSTRUCTOR    USAGE
     --                       ATTRIBUTE
-    [ Op.def consClock       "clock /N -PROP E ..."
+    [ Rop.def consClock      "clock /N -PROP E ..."
                              "-clock . -times? -day? -hour? -min? -sec?"
-    , Op.def consClockGet    "clock-get E -PROP /N ..."
+    , Rop.def consClockGet   "clock-get E -PROP /N ..."
                              "-clock* . -sign? -day? -hour? -min? -sec?"
-    , Op.def consClockAlter  "clock-alter /P -PROP E ..."
+    , Rop.def consClockAlter "clock-alter /P -PROP E ..."
                              "-clock . -sign? -day? -hour? -min? -sec?"
     ]
 
@@ -38,13 +38,13 @@ ropsCoxAccessor = Op.ropList "cox-accessor"
 
 consClock :: (D.CContent c) => C.RopCons c
 consClock med =
-    do cops     <- Op.getWhere    med "-where"
-       clock    <- Op.getTerm     med "-clock"
-       times    <- Op.getOptionCox (D.pInt 1) med "-times"
-       day      <- Op.getOptionCox (D.pInt 0) med "-day"
-       hour     <- Op.getMaybeCox med "-hour"
-       minute   <- Op.getMaybeCox med "-min"
-       sec      <- Op.getMaybeCox med "-sec"
+    do cops     <- Rop.getWhere    med "-where"
+       clock    <- Rop.getTerm     med "-clock"
+       times    <- Rop.getOptionCox (D.pInt 1) med "-times"
+       day      <- Rop.getOptionCox (D.pInt 0) med "-day"
+       hour     <- Rop.getMaybeCox med "-hour"
+       minute   <- Rop.getMaybeCox med "-min"
+       sec      <- Rop.getMaybeCox med "-sec"
        let hms   = fill (hour, minute, sec)
        Right $ relmapClock med (cops, clock, (times, day, hms))
     where
@@ -99,13 +99,13 @@ getInteger c = do i <- getInt c
 
 consClockGet :: (D.CContent c) => C.RopCons c
 consClockGet med =
-  do cops     <- Op.getWhere   med "-where"
-     clock    <- Op.getCox     med "-clock"
-     sign     <- Op.getTermOpt med "-sign"
-     day      <- Op.getTermOpt med "-day"
-     hour     <- Op.getTermOpt med "-hour"
-     minute   <- Op.getTermOpt med "-min"
-     sec      <- Op.getTermOpt med "-sec"
+  do cops     <- Rop.getWhere   med "-where"
+     clock    <- Rop.getCox     med "-clock"
+     sign     <- Rop.getTermOpt med "-sign"
+     day      <- Rop.getTermOpt med "-day"
+     hour     <- Rop.getTermOpt med "-hour"
+     minute   <- Rop.getTermOpt med "-min"
+     sec      <- Rop.getTermOpt med "-sec"
      let ns    = [sign, day, hour, minute, sec]
      Right $ relmapClockGet med (cops, clock, ns)
 
@@ -139,12 +139,12 @@ clockProps clock = [sign, day, hour, minute, sec] where
 
 consClockAlter :: (D.CContent c) => C.RopCons c
 consClockAlter med =
-    do cops     <- Op.getWhere    med "-where"
-       clock    <- Op.getTerm     med "-clock"
-       day      <- Op.getMaybeCox med "-day"
-       hour     <- Op.getMaybeCox med "-hour"
-       minute   <- Op.getMaybeCox med "-min"
-       sec      <- Op.getMaybeCox med "-sec"
+    do cops     <- Rop.getWhere    med "-where"
+       clock    <- Rop.getTerm     med "-clock"
+       day      <- Rop.getMaybeCox med "-day"
+       hour     <- Rop.getMaybeCox med "-hour"
+       minute   <- Rop.getMaybeCox med "-min"
+       sec      <- Rop.getMaybeCox med "-sec"
        Right $ relmapClockAlter med (cops, clock, (day, hour, minute, sec))
 
 -- | Create @clock-alter@ relmap.

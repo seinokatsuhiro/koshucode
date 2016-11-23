@@ -22,31 +22,31 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Base         as Op
+import qualified Koshucode.Baala.Rop.Base         as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 
 -- --------------------------------------------  Cox
 
 -- | Get relmap attribute as single cox.
-getCox :: (D.CContent c) => Op.RopGet c (D.Cox c)
-getCox med = ropBuild med . S.ttreeGroup B.<.> Op.getTrees med
+getCox :: (D.CContent c) => Rop.RopGet c (D.Cox c)
+getCox med = ropBuild med . S.ttreeGroup B.<.> Rop.getTrees med
 
 -- | Get optional content expression with default content.
-getOptionCox :: (D.CContent c) => c -> Op.RopGet c (D.Cox c)
-getOptionCox c = Op.getOption (D.CoxLit [] c) getCox
+getOptionCox :: (D.CContent c) => c -> Rop.RopGet c (D.Cox c)
+getOptionCox c = Rop.getOption (D.CoxLit [] c) getCox
 
 -- | Get optional content expression.
-getMaybeCox :: (D.CContent c) => Op.RopGet c (Maybe (D.Cox c))
-getMaybeCox = Op.getMaybe getCox
+getMaybeCox :: (D.CContent c) => Rop.RopGet c (Maybe (D.Cox c))
+getMaybeCox = Rop.getMaybe getCox
 
 -- | Get relmap attribute as cox list with name.
-getNamedCoxes :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
-getNamedCoxes med = ropNamedAlphas med B.<.> Op.getWordTrees med 
+getNamedCoxes :: (D.CContent c) => Rop.RopGet c [D.NamedCox c]
+getNamedCoxes med = ropNamedAlphas med B.<.> Rop.getWordTrees med 
 
 -- | Get relmap attribute as cox list with term name.
-getTermCoxes :: (D.CContent c) => Op.RopGet c [S.Term (D.Cox c)]
-getTermCoxes med = ropNamedAlphas med B.<.> Op.getTermTrees med
+getTermCoxes :: (D.CContent c) => Rop.RopGet c [S.Term (D.Cox c)]
+getTermCoxes med = ropNamedAlphas med B.<.> Rop.getTermTrees med
 
 ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
 ropBuild = C.treeCoxG . C.ropGlobal
@@ -58,15 +58,15 @@ ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
 -- --------------------------------------------  Where
 
 -- | Get where attribute as operator set.
-getWhere :: (D.CContent c) => Op.RopGet c (D.CopSet c)
+getWhere :: (D.CContent c) => Rop.RopGet c (D.CopSet c)
 getWhere u name =
-    do wh <- Op.getOption [] getWhereBody u name
+    do wh <- Rop.getOption [] getWhereBody u name
        let copset = C.globalCopset $ C.ropGlobal u
        Right $ copset { D.copsetDerived = wh }
 
-getWhereBody :: (D.CContent c) => Op.RopGet c [D.NamedCox c]
+getWhereBody :: (D.CContent c) => Rop.RopGet c [D.NamedCox c]
 getWhereBody u name =
-    do xs <- Op.getTreesByColon u name
+    do xs <- Rop.getTreesByColon u name
        getWhereClause u `mapM` xs
 
 getWhereClause :: (D.CContent c) => C.Intmed c -> [S.TTree] -> B.Ab (D.NamedCox c)
@@ -102,15 +102,15 @@ getTextFromTree _ = Msg.adlib "getTextFromTree"
 -- --------------------------------------------  Content
 
 -- | Get relmap attribute as calculated content.
-getContent :: (D.CContent c) => Op.RopGet c c
+getContent :: (D.CContent c) => Rop.RopGet c c
 getContent med name =
-    do tree <- Op.getTree med name
+    do tree <- Rop.getTree med name
        calcTree med tree
 
 -- | Get relmap attribute as list of calculated contents.
-getContents :: (D.CContent c) => Op.RopGet c [c]
+getContents :: (D.CContent c) => Rop.RopGet c [c]
 getContents med name =
-    do trees <- Op.getTrees med name
+    do trees <- Rop.getTrees med name
        let trees2 = S.ttreeGroup `map` S.divideTreesByColon trees
        calcTree med `mapM` trees2
 
@@ -118,15 +118,15 @@ calcTree :: (D.CContent c) => C.Intmed c -> D.CalcContent c
 calcTree = D.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.
-getOptContent :: (D.CContent c) => c -> Op.RopGet c c
-getOptContent opt = Op.getOption opt getContent
+getOptContent :: (D.CContent c) => c -> Rop.RopGet c c
+getOptContent opt = Rop.getOption opt getContent
 
 -- | Get relmap attribute as filler content, i.e., given content or empty.
-getFiller :: (D.CContent c) => Op.RopGet c c
+getFiller :: (D.CContent c) => Rop.RopGet c c
 getFiller = getOptContent D.empty
 
 -- | Get decimal integer content.
-getInt :: (D.CContent c) => Op.RopGet c D.DecimalInteger
+getInt :: (D.CContent c) => Rop.RopGet c D.DecimalInteger
 getInt med name =
     do dec <- D.getDec $ getContent med name
        Right $ D.decimalNum dec

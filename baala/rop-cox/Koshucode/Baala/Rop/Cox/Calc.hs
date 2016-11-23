@@ -27,25 +27,25 @@ import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
-import qualified Koshucode.Baala.Rop.Base        as Op
-import qualified Koshucode.Baala.Rop.Cox.Get     as Op
+import qualified Koshucode.Baala.Rop.Base        as Rop
+import qualified Koshucode.Baala.Rop.Cox.Get     as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message as Msg
 
 
 -- | Implementation of relational operators.
 ropsCoxCalc :: (D.CContent c) => [C.Rop c]
-ropsCoxCalc = Op.ropAlias
+ropsCoxCalc = Rop.ropAlias
     [ "subst" & "alt"
-    ] $ Op.ropList "cox-calc"
+    ] $ Rop.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
-    [ Op.def  consAdd           "add /N E ..."                 "-cox* . -where?"
-    , Op.def  consAlt           "alt /N E ..."                 "-cox* . -where?"
-    , Op.def  consFill          "fill /P ... -with E"          "-term* . -with"
-    , Op.def  consReplace       "replace /P ... -by F"         "-term* . -by"
-    , Op.def  consReplaceAll    "replace-all -from E -to E"    ". -from -to"
-    , Op.def  consSplit         "split /N E ..."               "-cox* . -where?"
-    , Op.def  consUnary         "unary /N E ..."               "-term -expr*"
-    , Op.def  consDumpCox       "dump-cox E"                   "-cox*"
+    [ Rop.def consAdd           "add /N E ..."                 "-cox* . -where?"
+    , Rop.def consAlt           "alt /N E ..."                 "-cox* . -where?"
+    , Rop.def consFill          "fill /P ... -with E"          "-term* . -with"
+    , Rop.def consReplace       "replace /P ... -by F"         "-term* . -by"
+    , Rop.def consReplaceAll    "replace-all -from E -to E"    ". -from -to"
+    , Rop.def consSplit         "split /N E ..."               "-cox* . -where?"
+    , Rop.def consUnary         "unary /N E ..."               "-term -expr*"
+    , Rop.def consDumpCox       "dump-cox E"                   "-cox*"
     ]
 
 
@@ -57,8 +57,8 @@ ropsCoxCalc = Op.ropAlias
 --
 consAdd :: (D.CContent c) => C.RopCons c
 consAdd med =
-    do cops <- Op.getWhere med "-where"
-       cox  <- Op.getTermCoxes med "-cox"
+    do cops <- Rop.getWhere med "-where"
+       cox  <- Rop.getTermCoxes med "-cox"
        Right $ relmapAdd med (cops, cox)
 
 -- | Create @add@ relmap.
@@ -90,8 +90,8 @@ relkitAdd (cops, cox) (Just he1)
 --
 consAlt :: (D.CContent c) => C.RopCons c
 consAlt med =
-    do cops <- Op.getWhere med "-where"
-       cox  <- Op.getTermCoxes med "-cox"
+    do cops <- Rop.getWhere med "-where"
+       cox  <- Rop.getTermCoxes med "-cox"
        Right $ relmapAlt med (cops, cox)
 
 -- | Create @alt@ relmap.
@@ -122,8 +122,8 @@ relkitAlt (cops, cox) (Just he1)
 --
 consFill :: (D.CContent c) => C.RopCons c
 consFill med =
-  do ns    <- Op.getTerms med "-term"
-     coxTo <- Op.getCox med "-with"
+  do ns    <- Rop.getTerms med "-term"
+     coxTo <- Rop.getCox med "-with"
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapFill med (ns, cops, coxTo)
 
@@ -153,8 +153,8 @@ relkitFill (ns, cops, coxTo) (Just he1)
 -- | __map \/P ... -by F__
 consReplace :: (D.CContent c) => C.RopCons c
 consReplace med =
-    do ns     <- Op.getTerms med "-term"
-       coxBy  <- Op.getCox med "-by"
+    do ns     <- Rop.getTerms med "-term"
+       coxBy  <- Rop.getCox med "-by"
        B.unless (D.coxSyntacticArity coxBy == 1) $ do
          B.abortable "relmap-replace" [coxBy] Msg.reqUnaryFn
        let expr n = (n, D.CoxFill [] coxBy [D.CoxTerm [] [n] []])
@@ -167,8 +167,8 @@ consReplace med =
 -- | __replace-all -from E -to E__
 consReplaceAll :: (D.CContent c) => C.RopCons c
 consReplaceAll med =
-  do coxFrom <- Op.getCox med "-from"
-     coxTo   <- Op.getCox med "-to"
+  do coxFrom <- Rop.getCox med "-from"
+     coxTo   <- Rop.getCox med "-to"
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapReplaceAll med (cops, coxFrom, coxTo)
 
@@ -197,8 +197,8 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 --
 consSplit :: (D.CContent c) => C.RopCons c
 consSplit med =
-    do cops <- Op.getWhere med "-where"
-       cox <- Op.getTermCoxes med "-cox"
+    do cops <- Rop.getWhere med "-where"
+       cox <- Rop.getTermCoxes med "-cox"
        Right $ relmapSplit med (cops, cox)
 
 -- | Create @split@ relmap.
@@ -243,8 +243,8 @@ relkitSplit (cops, cox) (Just he1)
 -- | __unary \/N E : ...__
 consUnary :: (D.CContent c) => C.RopCons c
 consUnary med =
-    do n  <- Op.getTerm  med "-term"
-       cs <- Op.getContents med "-expr"
+    do n  <- Rop.getTerm  med "-term"
+       cs <- Rop.getContents med "-expr"
        Right $ relmapUnary med (n, cs)
 
 -- | Create @unary@ relmap.
@@ -265,6 +265,6 @@ relkitUnary (n, cs) _ = Right kit2 where
 -- | __dump-cox E__
 consDumpCox :: (D.CContent c) => C.RopCons c
 consDumpCox med =
-    do cox <- Op.getCox med "-cox"
+    do cox <- Rop.getCox med "-cox"
        Msg.dumpCox cox
 

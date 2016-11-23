@@ -19,8 +19,8 @@ module Koshucode.Baala.Rop.Cox.Filter
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Base         as Op
-import qualified Koshucode.Baala.Rop.Cox.Get      as Op
+import qualified Koshucode.Baala.Rop.Base         as Rop
+import qualified Koshucode.Baala.Rop.Cox.Get      as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 
@@ -33,12 +33,12 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 --     Omit tuples @E@ equals true.
 -- 
 ropsCoxFilter :: (D.CContent c) => [C.Rop c]
-ropsCoxFilter = Op.ropList "cox-filter"
+ropsCoxFilter = Rop.ropList "cox-filter"
     --        CONSTRUCTOR         USAGE         ATTRIBUTE
-    [ Op.def  consContain         "contain E"   "-expr"
-    , Op.def  (consFilter True)   "keep E"      "-in* . -where?"
-    , Op.def  (consFilter False)  "omit E"      "-in* . -where?"
-    , Op.def  consOmitAll         "omit-all"    ""
+    [ Rop.def consContain         "contain E"   "-expr"
+    , Rop.def (consFilter True)   "keep E"      "-in* . -where?"
+    , Rop.def (consFilter False)  "omit E"      "-in* . -where?"
+    , Rop.def consOmitAll         "omit-all"    ""
     ]
 
 
@@ -53,8 +53,8 @@ ropsCoxFilter = Op.ropList "cox-filter"
 --
 consFilter :: (D.CContent c) => Bool -> C.RopCons c
 consFilter b med =
-    do cops   <- Op.getWhere med "-where"
-       coxIn  <- Op.getCox med "-in"
+    do cops   <- Rop.getWhere med "-where"
+       coxIn  <- Rop.getCox med "-in"
        Right $ relmapFilter med (b, cops, coxIn)
 
 -- | Create @keep@ and @omit@ relmap.
@@ -80,7 +80,7 @@ relkitFilter (which, cops, body) (Just he1) = Right kit2 where
 --
 consContain :: (D.CContent c) => C.RopCons c
 consContain med =
-    do c <- Op.getContent med "-expr"
+    do c <- Rop.getContent med "-expr"
        Right $ relmapContain med c
 
 -- | Create @contain@ relmap.

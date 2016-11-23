@@ -26,21 +26,21 @@ import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Rop.Base      as Op
-import qualified Koshucode.Baala.Rop.Cox.Get   as Op
+import qualified Koshucode.Baala.Rop.Base      as Rop
+import qualified Koshucode.Baala.Rop.Cox.Get   as Rop
 
 
 -- | Implementation of relational operators.
 ropsCoxRange :: (D.CContent c) => [C.Rop c]
-ropsCoxRange = Op.ropList "cox-calc"
+ropsCoxRange = Rop.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                             ATTRIBUTE
-    [ Op.def  consRange         "range /N -from E -to E"          "-term . -from -to"
-    , Op.def  consRangeYear     "range-year /N -from /P to /P"    "-term . -from -to"
-    , Op.def  consRangeMonth    "range-month /N -from /P to /P"   "-term . -from -to"
-    , Op.def  consRangeDay      "range-day /N -from /P to /P"     "-term . -from -to"
-    , Op.def  consRangeHour     "range-hour /N -from /P to /P"    "-term . -from -to"
-    , Op.def  consRangeMinute   "range-minute /N -from /P to /P"  "-term . -from -to"
-    , Op.def  consRangeSecond   "range-second /N -from /P to /P"  "-term . -from -to"
+    [ Rop.def consRange         "range /N -from E -to E"          "-term . -from -to"
+    , Rop.def consRangeYear     "range-year /N -from /P to /P"    "-term . -from -to"
+    , Rop.def consRangeMonth    "range-month /N -from /P to /P"   "-term . -from -to"
+    , Rop.def consRangeDay      "range-day /N -from /P to /P"     "-term . -from -to"
+    , Rop.def consRangeHour     "range-hour /N -from /P to /P"    "-term . -from -to"
+    , Rop.def consRangeMinute   "range-minute /N -from /P to /P"  "-term . -from -to"
+    , Rop.def consRangeSecond   "range-second /N -from /P to /P"  "-term . -from -to"
     ]
 
 
@@ -51,9 +51,9 @@ type RangeAttr c = (S.TermName, D.CopSet c, D.Cox c, D.Cox c)
 
 getRangeAttr :: (D.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
 getRangeAttr med =
-  do term     <- Op.getTerm med "-term"
-     coxLow   <- Op.getCox  med "-from"
-     coxHigh  <- Op.getCox  med "-to"
+  do term     <- Rop.getTerm med "-term"
+     coxLow   <- Rop.getCox  med "-from"
+     coxHigh  <- Rop.getCox  med "-to"
      let cops = C.globalCopset $ C.ropGlobal med
      Right (term, cops, coxLow, coxHigh)
 
