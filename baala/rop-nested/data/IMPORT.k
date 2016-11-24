@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    37 judges
+**    38 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Confl"            /import "Koshucode.Baala.Overture"
@@ -41,6 +41,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Message"          /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Message"          /import "Koshucode.Baala.Rop.Flat.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Rop.Base"

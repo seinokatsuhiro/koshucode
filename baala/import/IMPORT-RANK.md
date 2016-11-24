@@ -1041,7 +1041,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    21 judges
+**    25 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Cache"            /import "Data.Map.Strict"
@@ -1078,6 +1078,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Text"
 |-- IMPORT  /module "Koshucode.Baala.Overture"                  /import "Koshucode.Baala.Overture.Type"
 
+|-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "Data.Maybe"
+|-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "Data.Version"
+|-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "System.Console.GetOpt"
+|-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "System.Environment"
+
 ```
 
 
@@ -1094,7 +1099,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    69 judges
+**    70 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Base"
@@ -1114,6 +1119,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Range"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Data"
@@ -1193,9 +1199,10 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    161 judges
+**    163 judges
 **
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Core"
 
@@ -1312,6 +1319,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Meta"             /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Meta"             /import "Koshucode.Baala.Rop.Flat.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Order"            /import "Koshucode.Baala.Data"
@@ -1398,7 +1406,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    37 judges
+**    38 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Confl"            /import "Koshucode.Baala.Overture"
@@ -1432,6 +1440,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Message"          /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Message"          /import "Koshucode.Baala.Rop.Flat.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Nest.Rop"              /import "Koshucode.Baala.Rop.Base"
@@ -1542,7 +1551,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    138 judges
+**    139 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Overture"
@@ -1560,6 +1569,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.Attr.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Base.Message"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.Attr.Message"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.AttrEd"        /import "Koshucode.Baala.Syntax.TTree.Pattern"
 
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Message"       /import "Koshucode.Baala.Base"
