@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Token utilities.
@@ -8,9 +7,11 @@ module Koshucode.Baala.Syntax.Token.Utility
     tokenContent,
     tokenDetailTypeString,
     tokenParents,
+    prepareTokens,
+    sweepToken,
   
     -- * Type of token
-    isBlankToken, sweepToken,
+    isBlankToken,
     isShortToken, isTermToken,
     isOpenToken, isCloseToken,
     isOpenTokenOf, isCloseTokenOf,
@@ -76,6 +77,33 @@ tokenParents :: S.Token -> [S.Token]
 tokenParents (S.TLocal _ _ _ ps) = ps
 tokenParents _                   = []
 
+-- | Prepare token list for parsing.
+--
+--   1. Remove spaces.
+--   2. Remove comments.
+--   3. Join fragmented texts.
+--
+prepareTokens :: O.Map [S.Token]
+prepareTokens = pre where
+    pre ((S.TText cp f1 s1) : (S.TText _ f2 s2) : ts)
+        | isQqKey f1 && isQqKey f2
+                          = let t' = S.TText cp S.TextQQ (s1 ++ s2)
+                            in pre (t' : ts)
+    pre ((S.TText cp f1 s1) : ts)
+        | isQqKey f1      = (S.TText cp S.TextQQ s1) : pre ts
+    pre (t : ts)
+        | isBlankToken t  = pre ts
+        | otherwise       = t : pre ts
+    pre []                = []
+
+-- | Test double-quoted or related text.
+isQqKey :: O.Test S.TextForm
+isQqKey f = f == S.TextQQ || f == S.TextKey
+
+-- | Remove blank tokens.
+sweepToken :: O.Map [S.Token]
+sweepToken = B.omit isBlankToken
+
 
 -- ----------------------  Predicate
 
@@ -84,10 +112,6 @@ isBlankToken :: O.Test S.Token
 isBlankToken (S.TSpace _ _)       = True
 isBlankToken (S.TComment _ _)     = True
 isBlankToken _                    = False
-
--- | Remove blank tokens.
-sweepToken :: O.Map [S.Token]
-sweepToken = B.omit isBlankToken
 
 -- | Test token is unknown.
 isUnknownToken :: O.Test S.Token

@@ -44,6 +44,12 @@ class ToTrees a where
     toTree' :: a -> S.TTree
     toTree' = B.unabort . toTree
 
+    -- | Pretty print token trees.
+    ppTrees :: a -> IO ()
+    ppTrees a = case toTrees a of
+                  Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
+                  Right ts  -> print $ ttDoc ts
+
     -- | Pretty print token tree.
     ppTree :: a -> IO ()
     ppTree a = case toTrees a of
@@ -63,28 +69,13 @@ instance ToTrees [S.TTree] where
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
+{-# DEPRECATED ttrees "Use 'toTrees' instead." #-}
 ttrees :: [S.Token] -> B.Ab [S.TTree]
-ttrees = B.trees S.getBracketType B.BracketNone . joinText . S.sweepToken
+ttrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Wrap trees in group.
 ttreeGroup :: [S.TTree] -> S.TTree
 ttreeGroup = B.treeWrap S.BracketGroup
-
--- | Join fragmented texts.
-joinText :: O.Map [S.Token]
-joinText = join where
-    join ((S.TText cp f1 s1) : (S.TText _ f2 s2) : xs)
-        | isQqKey f1 && isQqKey f2
-            = let x' = S.TText cp S.TextQQ (s1 ++ s2)
-              in join (x' : xs)
-    join ((S.TText cp f1 s1) : xs)
-        | isQqKey f1                = (S.TText cp S.TextQQ s1) : join xs
-    join (x : xs)                   = x : join xs
-    join []                         = []
-
--- | Test double-quoted or related text.
-isQqKey :: O.Test S.TextForm
-isQqKey f = f == S.TextQQ || f == S.TextKey
 
 
 -- --------------------------------------------  Abbreviation
