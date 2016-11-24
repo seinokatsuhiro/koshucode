@@ -44,6 +44,23 @@ data BracketType
     | BracketUnknown  -- ^ __10.__ Unknown bracket
       deriving (Show, Eq, Ord)
 
+-- | Lower case name of bracket type.
+--
+--   >>> B.name BracketList
+--   "list"
+--
+instance B.Name BracketType where
+    name BracketGroup    = "group"
+    name BracketTerm     = "term"
+    name BracketList     = "list"
+    name BracketSet      = "set"
+    name BracketTie      = "tie"
+    name BracketRel      = "rel"
+    name BracketInterp   = "interp"
+    name BracketType     = "type"
+    name BracketForm     = "form"
+    name BracketUnknown  = "unknown"
+
 -- | Bracket type of token.
 getBracketType :: B.GetBracketType BracketType S.Token
 getBracketType = B.bracketTable
