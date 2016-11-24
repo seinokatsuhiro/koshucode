@@ -33,12 +33,10 @@ import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
 
 -- | Tree of leaf and branch.
 data CodeTree p a
-    = TreeL { treeLeaf         :: a
-            } -- ^ Terminal of tree.
-    | TreeB { treeBracketType  :: p
-            , treeBracketLeaf  :: Maybe (a, a)
-            , treeBranch       :: [CodeTree p a]
-            } -- ^ Bracket-type and subtrees.
+    = TreeL a
+      -- ^ __Leaf:__ Terminal of tree.
+    | TreeB p (Maybe (a, a)) [CodeTree p a]
+      -- ^ __Branch:__ Bracket-type, open/close leaves, and subtrees.
       deriving (Show, Eq, Ord)
 
 instance Functor (CodeTree p) where
@@ -121,7 +119,7 @@ mapToAllLeaf f = loop where
 
 -- | Map function to all leaves.
 --   This function is similar to 'fmap',
---   but not map to 'treeBracketLeaf'.
+--   but not map to bracket leaf.
 treeLeafMap :: (a -> a) -> O.Map (CodeTree p a)
 treeLeafMap f = loop where
     loop (TreeL x)        = TreeL $ f x
