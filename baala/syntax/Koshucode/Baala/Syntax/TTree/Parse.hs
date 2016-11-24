@@ -1,9 +1,11 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parser for token tree.
 
 module Koshucode.Baala.Syntax.TTree.Parse
   ( -- * Parser
+    ToTrees (..),
     ttrees, ttreeGroup,
   
     -- * Abbreviation
@@ -25,10 +27,44 @@ import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 
 -- --------------------------------------------  Parser
 
+-- | Convert to token trees.
+class ToTrees a where
+    -- | Convert to list of token trees.
+    toTrees :: a -> B.Ab [S.TTree]
+
+    -- | Convert to token tree.
+    toTree :: a -> B.Ab S.TTree
+    toTree a = ttreeGroup <$> toTrees a
+
+    -- | List of token trees or error.
+    toTrees' :: a -> [S.TTree]
+    toTrees' = B.unabort . toTrees
+
+    -- | Token tree or error.
+    toTree' :: a -> S.TTree
+    toTree' = B.unabort . toTree
+
+    -- | Pretty print token tree.
+    ppTree :: a -> IO ()
+    ppTree a = case toTrees a of
+                 Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
+                 Right []  -> return ()
+                 Right [t] -> print $ ttDoc [t]
+                 Right ts  -> print $ ttDoc [ttreeGroup ts]
+
+instance ToTrees String where
+    toTrees = ttrees . S.toks
+
+instance ToTrees [S.Token] where
+    toTrees = ttrees
+
+instance ToTrees [S.TTree] where
+    toTrees = Right
+
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 ttrees :: [S.Token] -> B.Ab [S.TTree]
-ttrees = B.trees S.getBracketType B.BracketNone . joinText
+ttrees = B.trees S.getBracketType B.BracketNone . joinText . S.sweepToken
 
 -- | Wrap trees in group.
 ttreeGroup :: [S.TTree] -> S.TTree
@@ -55,7 +91,7 @@ isQqKey f = f == S.TextQQ || f == S.TextKey
 
 -- | Convert string to token trees.
 tt :: String -> B.Ab [S.TTree]
-tt s = ttrees $ S.sweepToken $ S.toks s
+tt = ttrees . S.toks
 
 -- | Parse string and group it.
 tt1 :: String -> B.Ab S.TTree
@@ -72,13 +108,15 @@ ttPrint s = case tt s of
 ttDoc :: [S.TTree] -> B.Doc
 ttDoc = dv where
     dv = B.pprintV . map d
-    d (B.TreeL x) = B.pprint "TreeL :" B.<+> B.pprint x
-    d (B.TreeB n pp xs) =
-        let treeB = B.pprintH ["TreeB", show n] B.<+> brackets pp
-        in P.hang treeB 2 (dv xs)
+    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
+    d (B.TreeB br oc xs) =
+        let tag   = "<" ++ B.name br ++ ">"
+            treeB = B.pprint tag B.<+> brackets oc
+        in P.hang treeB 2 $ dv xs
 
-    brackets Nothing = B.pprint "no brackets"
-    brackets (Just (open, close)) = B.pprintH [B.pprint ":", B.pprint open, B.pprint close]
+    brackets Nothing = B.pprint ""
+    brackets (Just (open, close)) =
+        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
 
 
 -- --------------------------------------------  Split and divide

@@ -18,7 +18,7 @@
 
 module Koshucode.Baala.Base.Abort.Report
   ( CommandLine,
-    abort, abortPrint,
+    abort, unabort, abortPrint,
     abortMessage, bug,
   ) where
 
@@ -39,6 +39,11 @@ abort cmd a =
   do abortPrint cmd a
      B.putCommentLines ["Exit with status 2", ""]
      B.exitWith $ B.ExitFailure 2
+
+-- | Extract right value or print abort message.
+unabort :: B.Ab a -> a
+unabort (Right a)  = a
+unabort (Left a)   = error $ B.abortReason a
 
 -- | Print abort message.
 abortPrint :: CommandLine -> B.AbortReason -> IO ()
