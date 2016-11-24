@@ -103,21 +103,20 @@ instance B.CodePtr Token where
 
 instance B.PPrint Token where
     pprint = d where
-        d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
-        d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
-        d (TTerm      cp n)      = pretty "TTerm"    cp [show n]
-        d (TLocal     cp n _ _)  = pretty "TLocal"   cp [show n]
-        d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
-        d (TOpen      cp p)      = pretty "TOpen"    cp [show p]
-        d (TClose     cp p)      = pretty "TClose"   cp [show p]
-        d (TSpace     cp c)      = pretty "TSpace"   cp [show c]
-        d (TComment   cp s)      = pretty "TComment" cp [show s]
-        d (TName      cp w)      = pretty "TName"    cp [show w]
-        d (TUnknown   cp w _)    = pretty "TUnknown" cp [show w]
+        d (TText     cp q w)    = pp2 "TText"    cp q w
+        d (TShort    cp a b)    = pp2 "TShort"   cp a b
+        d (TTerm     cp n)      = pp1 "TTerm"    cp n
+        d (TLocal    cp n _ _)  = pp1 "TLocal"   cp n
+        d (TSlot     cp n w)    = pp2 "TSlot"    cp n w
+        d (TOpen     cp p)      = pp1 "TOpen"    cp p
+        d (TClose    cp p)      = pp1 "TClose"   cp p
+        d (TSpace    cp c)      = pp1 "TSpace"   cp c
+        d (TComment  cp s)      = pp1 "TComment" cp s
+        d (TName     cp w)      = pp1 "TName"    cp w
+        d (TUnknown  cp w _)    = pp1 "TUnknown" cp w
 
-        pretty k cp xs         = B.pprintH $ lineCol cp : k : xs
-        lineCol cp             = (show $ B.codePtLineNo cp)
-                                 ++ "." ++ (show $ B.codePtColumnNo cp)
+        pp1 k cp x   = B.pprintH [B.pprint k, B.pprint cp, B.pprint $ show x]
+        pp2 k cp x y = pp1 k cp x B.<+> B.pprint (show y)
 
 -- | Create raw text token.
 rawTextToken :: String -> Token

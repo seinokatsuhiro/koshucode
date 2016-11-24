@@ -1,4 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Source code information.
@@ -18,6 +17,7 @@ module Koshucode.Baala.Base.IO.CodePt
 
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
+import qualified Koshucode.Baala.Base.Text          as B
 import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 
@@ -32,12 +32,28 @@ data CodePt = CodePt
       } deriving (Eq)
 
 -- | Number of input point, line number, and column number,
---   e.g., @\<I1-L6-C14\>@.
+--   e.g., @\/1.6.14\/@.
 instance Show CodePt where
-    show cp = "<I" ++ show (B.nioNumber $ codePtSource cp)
-              ++ "-L" ++ show (codePtLineNo cp)
-              ++ "-C" ++ show (codePtColumnNo cp)
-              ++ ">"
+    show = longSlash
+
+-- | Line number and column number, e.g., @\/6.14\/@.
+instance B.PPrint CodePt where
+    pprint = B.pprint . shortSlash
+
+-- showAngle :: CodePt -> String
+-- showAngle = showCp (\s l c -> "<I" ++ s ++ "-L" ++ l ++ "-C" ++ c ++ ">")
+
+longSlash :: CodePt -> String
+longSlash = showCp (\s l c -> "/" ++ s ++ "." ++ l ++ "." ++ c ++ "/")
+
+shortSlash :: CodePt -> String
+shortSlash = showCp (\_ l c -> "/" ++ l ++ "." ++ c ++ "/")
+
+showCp :: (String -> String -> String -> String) -> CodePt -> String
+showCp f cp = f s l c where
+    s = show $ B.nioNumber $ codePtSource cp
+    l = show $ codePtLineNo cp
+    c = show $ codePtColumnNo cp
 
 instance Ord CodePt where
     compare = codePtCompare
