@@ -56,6 +56,6 @@ ttreePara2 = ttreeParaBy S.maybeDoubleHyphen
 
 ttreeParaBy :: (S.TTree -> Maybe String) -> [S.Token] -> B.Ab TTreePara
 ttreeParaBy f toks =
-    do trees <- S.ttrees toks
+    do trees <- S.toTrees toks
        Right $ S.para f trees
 

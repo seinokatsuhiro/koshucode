@@ -55,7 +55,7 @@ type NamedT a = ((String, [S.TTree]), a)
 
 optionAssn :: [S.Token] -> B.Ab [NamedT [S.TTree]]
 optionAssn toks =
-    do trees <- S.ttrees toks
+    do trees <- S.toTrees toks
        case B.assocBy maybeName trees of
          ([], assoc) -> Right assoc
          _           -> Msg.adlib "extra input"

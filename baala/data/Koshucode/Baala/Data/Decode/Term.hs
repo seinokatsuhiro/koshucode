@@ -36,13 +36,13 @@ cacheT = O.cache [] S.stringTermName
 -- | Read flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
 --
---   >>> S.tt1 "/a" >>= treeFlatName
+--   >>> S.toTree "/a" >>= treeFlatName
 --   Right (TermName EQ "a")
 --
---   >>> S.tt1 "+/a" >>= treeFlatName
+--   >>> S.toTree "+/a" >>= treeFlatName
 --   Right (TermName GT "a")
 --
---   >>> S.tt1 "/a/x" >>= treeFlatName
+--   >>> S.toTree "/a/x" >>= treeFlatName
 --   Left ...
 --
 treeFlatName :: S.TTree -> B.Ab S.TermName
@@ -56,7 +56,7 @@ treeFlatNameCached _  _                   = Msg.reqTermName
 
 -- | Read flat term names.
 --
---   >>> S.tt "/a +/b -/c" >>= treesFlatNames
+--   >>> S.toTrees "/a +/b -/c" >>= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --
 treesFlatNames :: [S.TTree] -> B.Ab [S.TermName]
@@ -64,7 +64,7 @@ treesFlatNames = mapM treeFlatName
 
 -- | Read list of named token trees from token trees.
 --
---   >>> S.tt "/a 'A3 /b 10" >>= treesTerms
+--   >>> S.toTrees "/a 'A3 /b 10" >>= treesTerms
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --
@@ -109,7 +109,7 @@ treesTerms1 xs = do xs' <- treesTerms xs
 
 -- | Decode a list of name-and-name pairs.
 -- 
---   >>> S.tt "/a /x /b /y" >>= treesFlatNamePairs
+--   >>> S.toTrees "/a /x /b /y" >>= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --
 treesFlatNamePairs :: [S.TTree] -> B.Ab [S.TermName2]
@@ -124,7 +124,7 @@ treesFlatNamePairs = loop where
 
 -- | Decode term names grouped by colons.
 --
---   >>> S.tt "/a /b : /p /q : /x /y" >>= treesNamesByColon
+--   >>> S.toTrees "/a /b : /p /q : /x /y" >>= treesNamesByColon
 --   Right [ [TermName EQ "a", TermName EQ "b"]
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
@@ -138,10 +138,10 @@ treesNamesByColon = loop [] [] where
 
 -- | Decode term names with optional complement symbol.
 -- 
---   >>> S.tt "~ /a /b" >>= treesFlatNamesCo
+--   >>> S.toTrees "~ /a /b" >>= treesFlatNamesCo
 --   Right (True, [TermName EQ "a",TermName EQ "b"])
 -- 
---   >>> S.tt "/a /b" >>= treesFlatNamesCo
+--   >>> S.toTrees "/a /b" >>= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --
 treesFlatNamesCo :: [S.TTree] -> B.Ab (Bool, [S.TermName])

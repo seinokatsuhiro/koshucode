@@ -81,14 +81,17 @@ ttreeGroup = B.treeWrap S.BracketGroup
 -- --------------------------------------------  Abbreviation
 
 -- | Convert string to token trees.
+{-# DEPRECATED tt "Use 'toTrees' instead." #-}
 tt :: String -> B.Ab [S.TTree]
 tt = ttrees . S.toks
 
 -- | Parse string and group it.
+{-# DEPRECATED tt1 "Use 'toTree' instead." #-}
 tt1 :: String -> B.Ab S.TTree
 tt1 = Right . ttreeGroup B.<.> tt
 
 -- | Parse string and print it.
+{-# DEPRECATED ttPrint "Use 'ppTree' instead." #-}
 ttPrint :: String -> IO ()
 ttPrint s = case tt s of
               Left msg    -> print msg

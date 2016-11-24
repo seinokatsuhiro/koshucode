@@ -48,7 +48,7 @@ createJudges res = loop $ C.resCacheT res where
 
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
-           trees          <- S.ttrees toks
+           trees          <- S.toTrees toks
            (cc1, judge)   <- D.treesJudge calc cc q cl trees
            (cc2, js, cs') <- loop cc1 cs
            Right (cc2, judge : js, cs')
@@ -102,7 +102,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
              Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
       slot n toks =
-          do trees <- S.ttrees toks
+          do trees <- S.toTrees toks
              Right res { C.resSlot = C.resSlot << (n, trees) }
 
       option toks =

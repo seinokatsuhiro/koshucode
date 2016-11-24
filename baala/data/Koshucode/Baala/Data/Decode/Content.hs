@@ -39,7 +39,7 @@ type CalcContent c = S.TTree -> B.Ab c
 
 -- | Decode content from string.
 stringContent :: (D.CContent c) => String -> B.Ab c
-stringContent = S.tt1 B.>=> treeContent undefined
+stringContent = S.toTree B.>=> treeContent undefined
 
 -- | Decode content from token tree.
 treeContent :: forall c. (D.CContent c) => CalcContent c -> DecodeContent c

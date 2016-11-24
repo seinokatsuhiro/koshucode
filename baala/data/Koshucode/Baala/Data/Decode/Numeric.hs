@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 -- | Get digits from token trees.
 --
---   >>> S.tt "-123 450.00" >>= treesDigits
+--   >>> S.toTrees "-123 450.00" >>= treesDigits
 --   Right "-123450.00"
 --
 treesDigits :: [S.TTree] -> B.Ab String
@@ -105,13 +105,13 @@ fromDigit _    =  Nothing
 
 -- | Get time from token trees.
 --
---   >>> S.tt "2013-04-18 12:00" >>= treesTime
+--   >>> S.toTrees "2013-04-18 12:00" >>= treesTime
 --   Right 2013-04-18 12:00
 --
---   >>> S.tt "2013-04-18" >>= treesTime
+--   >>> S.toTrees "2013-04-18" >>= treesTime
 --   Right 2013-04-18
 --
---   >>> S.tt "2013-#16" >>= treesTime
+--   >>> S.toTrees "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
 treesTime :: [S.TTree] -> B.Ab D.Time
@@ -123,7 +123,7 @@ treesTime = stringsTime B.<.> D.treesTexts False
 --   Right 2013-04-18 12:00
 --
 stringTime :: String -> B.Ab D.Time
-stringTime = S.tt B.>=> treesTime
+stringTime = S.toTrees B.>=> treesTime
 
 stringsTime :: [String] -> B.Ab D.Time
 stringsTime = year where

@@ -22,10 +22,10 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- | Get single text from token trees.
 --
---   >>> S.tt "'aa 'bb" >>= treesTexts True
+--   >>> S.toTrees "'aa 'bb" >>= treesTexts True
 --   Right ["aa","bb"]
 --
---   >>> S.tt "\"aa\" \"bb\"" >>= treesTexts True
+--   >>> S.toTrees "\"aa\" \"bb\"" >>= treesTexts True
 --   Right ["aabb"]
 --
 treesTexts :: Bool -> [S.TTree] -> B.Ab [String]
@@ -33,7 +33,7 @@ treesTexts q = mapM $ treeText q
 
 -- | Get text from token tree.
 --
---   >>> S.tt1 "aa" >>= treeText False
+--   >>> S.toTree "aa" >>= treeText False
 --   Right "aa"
 --
 treeText :: Bool -> S.TTree -> B.Ab String
@@ -51,7 +51,7 @@ tokenString _ _  =  Msg.nothing
 
 -- | Get interpretation from token trees.
 --
---   >>> S.tt "term /a" >>= treesInterp
+--   >>> S.toTrees "term /a" >>= treesInterp
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
