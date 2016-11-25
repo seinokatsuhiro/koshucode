@@ -12,12 +12,17 @@ module Koshucode.Baala.Base.Abort.Reason
     Ab, AbMap, MapAb, AbManyMap,
     AbTest, IOAb, BinAb,
   
-    -- * Constructor
+    -- * Creation
     abortBecause,
     abortLine, abortLines,
     abortPage,
+
+    -- * Alteration
+    Abortable,
+    abortable,
   ) where
 
+import qualified Koshucode.Baala.Overture   as O
 import qualified Koshucode.Baala.Base.IO    as B
 
 
@@ -33,6 +38,7 @@ data AbortReason = AbortReason
 
 -- | Tag on aborting point.
 type AbortTag = String
+
 
 -- --------------------------------------------  Deriving type
 
@@ -58,7 +64,7 @@ type IOAb a = IO (Ab a)
 type BinAb a = a -> a -> Ab a
 
 
--- --------------------------------------------  Constructor
+-- --------------------------------------------  Creation
 
 -- | Construct abort reason with reason text.
 abortBecause :: String -> AbortReason
@@ -75,4 +81,19 @@ abortLines r d = AbortReason r d [] []
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
 abortPage  r n = AbortReason r [] n []
+
+
+-- --------------------------------------------  Alteration
+
+-- | Abortable process.
+type Abortable cp b = cp -> MapAb b
+
+-- | Push source information when process is aborted.
+abortable :: (B.CodePtr cp) => AbortTag -> Abortable cp b
+abortable tag cp = either (Left . push tag (B.codePtList cp)) Right
+
+push :: AbortTag -> [B.CodePt] -> O.Map AbortReason
+push _ [] a = a
+push tag (p:_) a@AbortReason { abortPoint = ps } =
+    a { abortPoint = (tag, p) : ps }
 

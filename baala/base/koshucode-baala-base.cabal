@@ -50,7 +50,6 @@ library
         Koshucode.Baala.Base.Message
 
         Koshucode.Baala.Base.Abort
-        Koshucode.Baala.Base.Abort.Abortable
         Koshucode.Baala.Base.Abort.Message
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
