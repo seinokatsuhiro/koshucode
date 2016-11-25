@@ -54,6 +54,13 @@ library
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
 
+        Koshucode.Baala.Base.Code.Clause
+        Koshucode.Baala.Base.Code.Infix
+        Koshucode.Baala.Base.Code.Line
+        Koshucode.Baala.Base.Code.Message
+        Koshucode.Baala.Base.Code.Scan
+        Koshucode.Baala.Base.Code.Tree
+
         Koshucode.Baala.Base.List
         Koshucode.Baala.Base.List.Assoc
         Koshucode.Baala.Base.List.Dots
@@ -85,14 +92,7 @@ library
         Koshucode.Baala.Base.Prelude.Pair
         Koshucode.Baala.Base.Prelude.Queue
 
-        Koshucode.Baala.Base.Syntax
-        Koshucode.Baala.Base.Syntax.Clause
-        Koshucode.Baala.Base.Syntax.Infix
-        Koshucode.Baala.Base.Syntax.Line
-        Koshucode.Baala.Base.Syntax.Message
-        Koshucode.Baala.Base.Syntax.Scan
-        Koshucode.Baala.Base.Syntax.Tree
-
+        Koshucode.Baala.Base.Code
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.PPrint

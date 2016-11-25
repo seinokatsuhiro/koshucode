@@ -3,7 +3,7 @@
 
 -- | Code scanner.
 
-module Koshucode.Baala.Base.Syntax.Scan
+module Koshucode.Baala.Base.Code.Scan
   ( -- * Type
     CodeScan (..), CodeScanMap, WordTable,
 
@@ -20,7 +20,7 @@ import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.Line     as B
+import qualified Koshucode.Baala.Base.Code.Line       as B
 
 
 -- | Code scanner divides input text into output tokens.

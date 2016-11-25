@@ -3,7 +3,7 @@
 
 -- | Tree structure.
 
-module Koshucode.Baala.Base.Syntax.Tree
+module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     CodeTree (..),
     tree, trees,
@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Base.Abort            as B
 import qualified Koshucode.Baala.Base.IO               as B
 import qualified Koshucode.Baala.Base.List             as B
 import qualified Koshucode.Baala.Base.Prelude          as B
-import qualified Koshucode.Baala.Base.Syntax.Message   as Msg
+import qualified Koshucode.Baala.Base.Code.Message     as Msg
 
 
 -- ----------------------  Tree

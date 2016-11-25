@@ -6,7 +6,7 @@
 --   You can represent tokenized source code
 --   as a list of 'CodeLine'.
 
-module Koshucode.Baala.Base.Syntax.Clause
+module Koshucode.Baala.Base.Code.Clause
   ( -- * CodeClause
     CodeClause (..),
     codeClauseEmpty,  
@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Syntax.Clause
 import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.List            as B
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.Line     as B
+import qualified Koshucode.Baala.Base.Code.Line       as B
 
 
 -- ----------------------  CodeClause

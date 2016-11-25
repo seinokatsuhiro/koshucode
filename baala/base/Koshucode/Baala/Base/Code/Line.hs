@@ -3,7 +3,7 @@
 
 -- | Text lines delimited by carriage returns or line feeds.
 
-module Koshucode.Baala.Base.Syntax.Line
+module Koshucode.Baala.Base.Code.Line
   ( -- * Line
     LineNumber,
     NumberedLine,

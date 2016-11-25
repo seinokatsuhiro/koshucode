@@ -3,7 +3,7 @@
 
 -- | Convert infixed-operator trees into prefixed-operator trees.
 
-module Koshucode.Baala.Base.Syntax.Infix
+module Koshucode.Baala.Base.Code.Infix
   ( InfixHeight,
     infixHeight,
     infixToPrefix,
@@ -14,7 +14,7 @@ module Koshucode.Baala.Base.Syntax.Infix
 import qualified Data.Map                          as Map
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Syntax.Tree  as B
+import qualified Koshucode.Baala.Base.Code.Tree    as B
 
 
 -- ----------------------  Height function
