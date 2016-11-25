@@ -9,12 +9,11 @@ module Koshucode.Baala.Core.Relkit.Message
     unkLocalRel,
   ) where
 
-import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 
 -- | Abortable scope for running relkit.
-abRun :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abRun :: (B.GetCodePos cp) => B.Abortable cp b
 abRun = B.abortable "run"
 
 -- | Unknown local relation

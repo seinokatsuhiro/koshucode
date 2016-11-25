@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base.Abort          as B
 import qualified Koshucode.Baala.Base.IO             as B
 
 -- | Abortable scope for code.
-abCode :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCode :: (B.GetCodePos cp) => B.Abortable cp b
 abCode = B.abortable "code"
 
 -- | Extra close bracket

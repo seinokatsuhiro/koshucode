@@ -20,12 +20,11 @@ module Koshucode.Baala.Data.Decode.Message
     expect2Actual,
   ) where
 
-import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 
 -- | Abortable scope for literal.
-abLiteral :: S.TTree -> O.Map (B.Ab b)
+abLiteral :: (B.GetCodePos cp) => B.Abortable cp b
 abLiteral = B.abortable "literal"
 
 -- | Nothing

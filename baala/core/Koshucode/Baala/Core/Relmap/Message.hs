@@ -19,15 +19,15 @@ import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
 
 -- | Abortable scope for option.
-abOption :: [S.TTree] -> B.MapAb b
+abOption :: (B.GetCodePos cp) => B.Abortable cp b
 abOption = B.abortable "option"
 
 -- | Abortable scope for relmap.
-abRelmap :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abRelmap :: (B.GetCodePos cp) => B.Abortable cp b
 abRelmap = B.abortable "relmap"
 
 -- | Abortable scope for specialization.
-abSpecialize :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abSpecialize :: (B.GetCodePos cp) => B.Abortable cp b
 abSpecialize = B.abortable "specialize"
 
 -- | Unknown nested relation reference.

@@ -21,18 +21,17 @@ module Koshucode.Baala.Syntax.Attr.Message
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Para             as S
 import qualified Koshucode.Baala.Syntax.Symbol           as S
-import qualified Koshucode.Baala.Syntax.TTree            as S
 
 -- | Abortable scope for attribute.
-abAttr :: (B.GetCodePos cp) => cp -> B.MapAb b
+abAttr :: (B.GetCodePos cp) => B.Abortable cp b
 abAttr = B.abortable "attr"
 
 -- | Abortable scope for attribute.
-abAttrTrees :: [S.TTree] -> B.MapAb b
+abAttrTrees :: (B.GetCodePos cp) => B.Abortable cp b
 abAttrTrees = B.abortable "attr"
 
 -- | Abortable scope for slot.
-abSlot :: (B.GetCodePos cp) => cp -> B.MapAb b
+abSlot :: (B.GetCodePos cp) => B.Abortable cp b
 abSlot = B.abortable "slot"
 
 -- | Unexpected attribute / Duplicate

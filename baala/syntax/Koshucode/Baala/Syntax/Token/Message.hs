@@ -11,11 +11,10 @@ module Koshucode.Baala.Syntax.Token.Message
     unkAngleText,
   ) where
 
-import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 
 -- | Abortable scope for token.
-abToken :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abToken :: (B.GetCodePos cp) => B.Abortable cp b
 abToken = B.abortable "token"
 
 -- | Forbidden input

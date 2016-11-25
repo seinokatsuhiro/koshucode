@@ -9,12 +9,11 @@ module Koshucode.Baala.Core.Assert.Message
     unkOption,
   ) where
 
-import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 
 -- | Abortable scope for assertion.
-abAssert :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abAssert :: (B.GetCodePos cp) => B.Abortable cp b
 abAssert = B.abortable "assert"
 
 -- | Unknown option

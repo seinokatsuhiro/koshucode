@@ -12,10 +12,9 @@ module Koshucode.Baala.Core.Lexmap.Message
   ) where
 
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Syntax        as S
 
 -- | Abortable scope for lexmap.
-abLexmap :: [S.TTree] -> B.MapAb b
+abLexmap :: (B.GetCodePos cp) => B.Abortable cp b
 abLexmap = B.abortable "lexmap"
 
 -- | Ambiguous relmaps

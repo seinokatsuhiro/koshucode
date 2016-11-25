@@ -37,35 +37,35 @@ import qualified Koshucode.Baala.Data.Type            as D
 -- --------------------------------------------  Abortable scope
 
 -- | Abortable scope for cox building.
-abCoxBuild :: S.TTree -> B.MapAb b
+abCoxBuild :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxBuild = B.abortable "cox-build"
 
 -- | Abortable scope for cox calculation.
-abCoxCalc :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCoxCalc :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxCalc = B.abortable "cox-calc"
 
 -- | Abortable scope for cox filling.
-abCoxFill :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCoxFill :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxFill = B.abortable "cox-fill"
 
 -- | Abortable scope for irreducible expression.
-abCoxIrrep :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCoxIrrep :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxIrrep = B.abortable "cox-irrep"
 
 -- | Abortable scope for cox position.
-abCoxPosition :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCoxPosition :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxPosition = B.abortable "cox-position"
 
 -- | Abortable scope for cox prefix.
-abCoxPrefix :: S.TTree -> B.MapAb b
+abCoxPrefix :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxPrefix = B.abortable "cox-prefix"
 
 -- | Abortable scope for cox reduction.
-abCoxReduce :: (B.GetCodePos cp) => [cp] -> B.MapAb b
+abCoxReduce :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxReduce = B.abortable "cox-reduce"
 
 -- | Abortable scope for cox syntax.
-abCoxSyntax :: S.TTree -> B.MapAb b
+abCoxSyntax :: (B.GetCodePos cp) => B.Abortable cp b
 abCoxSyntax = B.abortable "cox-syntax"
 
 

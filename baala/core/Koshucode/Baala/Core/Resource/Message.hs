@@ -16,11 +16,10 @@ module Koshucode.Baala.Core.Resource.Message
     unresPrefix,
   ) where
 
-import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 
 -- | Abortable scope for clause.
-abClause :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
+abClause :: (B.GetCodePos cp) => B.Abortable cp b
 abClause = B.abortable "clause"
 
 -- | Duplicate prefix
