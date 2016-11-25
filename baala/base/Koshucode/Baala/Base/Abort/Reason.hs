@@ -89,8 +89,8 @@ abortPage  r n = AbortReason r [] n []
 type Abortable cp b = cp -> MapAb b
 
 -- | Push source information when process is aborted.
-abortable :: (B.CodePtr cp) => AbortTag -> Abortable cp b
-abortable tag cp = either (Left . push tag (B.codePtList cp)) Right
+abortable :: (B.GetCodePos cp) => AbortTag -> Abortable cp b
+abortable tag cp = either (Left . push tag (B.getCPs cp)) Right
 
 push :: AbortTag -> [B.CodePos] -> O.Map AbortReason
 push _ [] a = a

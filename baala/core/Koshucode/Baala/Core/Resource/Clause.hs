@@ -62,8 +62,8 @@ instance B.Default ClauseHead where
                      , clauseAbout  = []
                      , clauseSource = B.codeClauseEmpty }
 
-instance B.CodePtr ClauseHead where
-    codePtList = B.codePtList . clauseSource
+instance B.GetCodePos ClauseHead where
+    getCPs = B.getCPs . clauseSource
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
@@ -173,7 +173,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     newAbout about'       = (Clause h empty, h { clauseAbout = about' })
 
     -- Error messages
-    unk ts msg     = let cp = B.codePtList $ B.headNull (head orig) ts
+    unk ts msg     = let cp = B.getCPs $ B.headNull (head orig) ts
                      in Msg.abClause cp msg
     unkAt ts xs    = unk ts $ Msg.unkClause xs
     unkAtStart     = unkAt orig

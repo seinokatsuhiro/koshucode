@@ -74,7 +74,7 @@ getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
        cox      <- ropBuild u $ S.ttreeGroup bo
-       let cp = B.codePtList $ head $ B.untrees trees
+       let cp = B.getCPs $ head $ B.untrees trees
        case vs of
          [] -> Right (n, cox)
          _  -> Right (n, D.coxForm cp (Just n) vs cox)

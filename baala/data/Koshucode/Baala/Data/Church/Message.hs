@@ -41,19 +41,19 @@ abCoxBuild :: S.TTree -> B.MapAb b
 abCoxBuild = B.abortable "cox-build"
 
 -- | Abortable scope for cox calculation.
-abCoxCalc :: (B.CodePtr cp) => [cp] -> B.MapAb b
+abCoxCalc :: (B.GetCodePos cp) => [cp] -> B.MapAb b
 abCoxCalc = B.abortable "cox-calc"
 
 -- | Abortable scope for cox filling.
-abCoxFill :: (B.CodePtr cp) => [cp] -> B.MapAb b
+abCoxFill :: (B.GetCodePos cp) => [cp] -> B.MapAb b
 abCoxFill = B.abortable "cox-fill"
 
 -- | Abortable scope for irreducible expression.
-abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.MapAb b
+abCoxIrrep :: (B.GetCodePos cp) => [cp] -> B.MapAb b
 abCoxIrrep = B.abortable "cox-irrep"
 
 -- | Abortable scope for cox position.
-abCoxPosition :: (B.CodePtr cp) => [cp] -> B.MapAb b
+abCoxPosition :: (B.GetCodePos cp) => [cp] -> B.MapAb b
 abCoxPosition = B.abortable "cox-position"
 
 -- | Abortable scope for cox prefix.
@@ -61,7 +61,7 @@ abCoxPrefix :: S.TTree -> B.MapAb b
 abCoxPrefix = B.abortable "cox-prefix"
 
 -- | Abortable scope for cox reduction.
-abCoxReduce :: (B.CodePtr cp) => [cp] -> B.MapAb b
+abCoxReduce :: (B.GetCodePos cp) => [cp] -> B.MapAb b
 abCoxReduce = B.abortable "cox-reduce"
 
 -- | Abortable scope for cox syntax.

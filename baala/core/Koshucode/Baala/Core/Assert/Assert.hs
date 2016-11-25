@@ -35,8 +35,8 @@ data Assert' h c = Assert
     , assLinks     :: C.RelmapLinkTable' h c
     } deriving (Show)
 
-instance B.CodePtr (Assert' h c) where
-    codePtList = concatMap B.codePtList . assToken
+instance B.GetCodePos (Assert' h c) where
+    getCPs = concatMap B.getCPs . assToken
 
 
 -- ----------------------  Short assertion

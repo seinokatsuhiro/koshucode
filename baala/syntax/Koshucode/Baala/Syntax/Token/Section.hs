@@ -70,7 +70,7 @@ sectionUnexp :: [S.Token] -> S.TokenScanMap
 sectionUnexp ts sc@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok sc where
     tok  = S.unknownToken cp cs $ Msg.unexpSect help
     cp | null ts    = B.codeInputPt sc
-       | otherwise  = B.codePt $ head ts
+       | otherwise  = B.getCP $ head ts
     help = [ "=== rel      for relational calculation"
            , "=== note     for commentary section"
            , "=== license  for license section"
@@ -93,7 +93,7 @@ scanNote change sc = section change (`comment` sc) sc
 comment :: S.InputText -> S.TokenScanMap
 comment "" sc = sc
 comment cs sc = B.codeUpdate "" tok sc where
-    tok = S.TComment (B.codePt sc) cs
+    tok = S.TComment (B.getCP sc) cs
 
 -- | Scan tokens in @license@ section.
 scanLicense :: Scanner
@@ -103,22 +103,22 @@ scanLicense = scanLine S.TextLicense
 scanLine :: S.TextForm -> Scanner
 scanLine form change sc = section change text sc where
     text "" = sc
-    text cs = let tok = S.TText (B.codePt sc) form cs
+    text cs = let tok = S.TText (B.getCP sc) form cs
               in B.codeUpdate "" tok sc
 
 scanLineInClause :: S.TextForm -> Scanner
 scanLineInClause form change sc = section change text sc where
     text "" = sc
     text cs@(c:_)
-        | S.isSpace c = S.nipUpdate sc $ S.nipSpace (B.codePt sc) cs
+        | S.isSpace c = S.nipUpdate sc $ S.nipSpace (B.getCP sc) cs
         | B.isBol sc  = B.codeScanRestore sc
-        | otherwise   = let tok = S.TText (B.codePt sc) form cs
+        | otherwise   = let tok = S.TText (B.getCP sc) form cs
                         in B.codeUpdate "" tok sc
 
 -- | Section for @koshu-text-assert@ command.
 scanTextAssert :: Scanner
 scanTextAssert change sc = section change text sc where
-    cp = B.codePt sc
+    cp = B.getCP sc
     text "" = sc
     text ccs@(c:cs)
         | S.isSpace c  = S.nipUpdate  sc $ S.nipSpace cp ccs

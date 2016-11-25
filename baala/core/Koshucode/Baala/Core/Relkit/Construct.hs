@@ -44,9 +44,9 @@ relkitNothing :: C.Relkit c
 relkitNothing = relkit Nothing C.RelkitId
 
 -- | Set relkit source.
-relkitSetSource :: (B.CodePtr a) => a -> O.Map (C.Relkit c)
+relkitSetSource :: (B.GetCodePos a) => a -> O.Map (C.Relkit c)
 relkitSetSource src (C.Relkit hi ho (B.Sourced _ core)) =
-    C.Relkit hi ho $ B.Sourced (B.codePtList src) core
+    C.Relkit hi ho $ B.Sourced (B.getCPs src) core
 
 instance Monoid (C.Relkit c) where
     mempty = relkitConst D.reldee

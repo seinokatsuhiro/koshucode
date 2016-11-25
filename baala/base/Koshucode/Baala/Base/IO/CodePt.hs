@@ -9,8 +9,8 @@ module Koshucode.Baala.Base.IO.CodePt
     cpColumnNo,
     cpDisplay,
   
-    -- * Code pointer
-    CodePtr (..),
+    -- * Get code positions
+    GetCodePos (..),
 
     -- * Sourced
     Sourced (..),
@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 -- ----------------------  CodePos
 
--- | Point of input code.
+-- | Position of input code.
 data CodePos = CodePos
       { cpSource     :: B.NIOPoint  -- ^ Source of code
       , cpLineNo     :: Int         -- ^ Line number
@@ -59,7 +59,7 @@ showCp f cp = f s l c where
 instance Ord CodePos where
     compare = cpCompare
 
--- | Empty code point, i.e., empty content and zero line number.
+-- | Empty code position, i.e., empty content and zero line number.
 instance B.Default CodePos where
     def = CodePos B.def 0 "" ""
 
@@ -91,21 +91,21 @@ cpDisplay (tag, p)
                 | otherwise      = s
 
 
--- ----------------------  CodePtr
+-- ----------------------  GetCodePos
 
--- | Type which has code points.
-class CodePtr a where
-    codePtList :: a -> [CodePos]
+-- | Type which has code positions.
+class GetCodePos a where
+    getCPs :: a -> [CodePos]
 
-    codePt :: a -> CodePos
-    codePt p = B.headNull B.def $ codePtList p
+    getCP :: a -> CodePos
+    getCP a = B.headNull B.def $ getCPs a
 
-instance CodePtr CodePos where
-    codePtList cp  = [cp]
-    codePt     cp  =  cp
+instance GetCodePos CodePos where
+    getCPs cp  = [cp]
+    getCP  cp  =  cp
 
-instance (CodePtr cp) => CodePtr [cp] where
-    codePtList = concatMap codePtList
+instance (GetCodePos cp) => GetCodePos [cp] where
+    getCPs = concatMap getCPs
 
 
 -- ----------------------  Sourced
@@ -119,6 +119,6 @@ data Sourced a =
 instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
 
-instance CodePtr (Sourced a) where
-    codePtList = source
+instance GetCodePos (Sourced a) where
+    getCPs = source
 

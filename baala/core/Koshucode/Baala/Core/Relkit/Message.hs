@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 
 -- | Abortable scope for running relkit.
-abRun :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+abRun :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
 abRun = B.abortable "run"
 
 -- | Unknown local relation

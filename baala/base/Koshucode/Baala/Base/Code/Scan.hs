@@ -34,9 +34,9 @@ data CodeScan i o = CodeScan
      }
 
 -- | Return 'codeInputPt'.
-instance B.CodePtr (CodeScan i o) where
-    codePtList cp = [codeInputPt cp]
-    codePt     cp = codeInputPt cp
+instance B.GetCodePos (CodeScan i o) where
+    getCPs cp = [codeInputPt cp]
+    getCP  cp = codeInputPt cp
 
 -- | Update code scanner.
 type CodeScanMap i o = O.Map (CodeScan i o)

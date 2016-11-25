@@ -23,11 +23,11 @@ abOption :: [S.TTree] -> B.MapAb b
 abOption = B.abortable "option"
 
 -- | Abortable scope for relmap.
-abRelmap :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+abRelmap :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
 
 -- | Abortable scope for specialization.
-abSpecialize :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+abSpecialize :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
 abSpecialize = B.abortable "specialize"
 
 -- | Unknown nested relation reference.
@@ -49,7 +49,7 @@ quote s = "'" ++ s ++ "'"
 tokenAtPoint :: S.Token -> String
 tokenAtPoint tok = unwords ws where
     ws    = [S.tokenContent tok, "at L" ++ line, "C" ++ col]
-    cp    = B.codePt tok
+    cp    = B.getCP tok
     line  = show $ B.cpLineNo   cp
     col   = show $ B.cpColumnNo cp
 

@@ -94,7 +94,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
       assert typ cl toks =
           do optPara <- C.ttreePara2 toks
              let ass   = C.Assert sec typ cl src optPara Nothing []
-                 ass'  = S.Short (B.codePtList $ head src) sh ass
+                 ass'  = S.Short (B.getCPs $ head src) sh ass
              Right $ res { C.resAssert = C.resAssert << ass' }
 
       relmap n toks =

@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
 
 -- | Abortable scope for assertion.
-abAssert :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)
+abAssert :: (B.GetCodePos cp) => [cp] -> O.Map (B.Ab b)
 abAssert = B.abortable "assert"
 
 -- | Unknown option

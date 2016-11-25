@@ -37,8 +37,8 @@ data LexmapType
     | LexmapLocal     -- ^ Local relation reference like @^/r@ or @^r@
       deriving (Show, Eq, Ord)
 
-instance B.CodePtr Lexmap where
-    codePtList = B.codePtList . lexToken
+instance B.GetCodePos Lexmap where
+    getCPs = B.getCPs . lexToken
 
 -- | Empty base lexmap.
 instance B.Default Lexmap where
@@ -75,5 +75,5 @@ lexMessageList Lexmap { lexToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
     where src = map (("  " ++) . fst) $ B.cpDisplay ("", pt)
-          pt  = head $ B.codePtList tok
+          pt  = head $ B.getCPs tok
 

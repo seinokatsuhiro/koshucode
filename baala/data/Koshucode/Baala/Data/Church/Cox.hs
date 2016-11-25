@@ -67,16 +67,16 @@ type CopCalc c = [B.Ab c] -> B.Ab c
 -- | Expression tag.
 type CoxTag = Maybe String
 
-instance B.CodePtr (Cox c) where
-    codePtList (CoxLit    cp _)       = cp
-    codePtList (CoxTerm   cp _ _)     = cp
-    codePtList (CoxCalc   cp _ _)     = cp
-    codePtList (CoxLocal  cp _ _)     = cp
-    codePtList (CoxBlank  cp _)       = cp
-    codePtList (CoxFill   cp _ _)     = cp
-    codePtList (CoxForm1  cp _ _ _)   = cp
-    codePtList (CoxForm   cp _ _ _)   = cp
-    codePtList (CoxWith   cp _ _)     = cp
+instance B.GetCodePos (Cox c) where
+    getCPs (CoxLit    cp _)       = cp
+    getCPs (CoxTerm   cp _ _)     = cp
+    getCPs (CoxCalc   cp _ _)     = cp
+    getCPs (CoxLocal  cp _ _)     = cp
+    getCPs (CoxBlank  cp _)       = cp
+    getCPs (CoxFill   cp _ _)     = cp
+    getCPs (CoxForm1  cp _ _ _)   = cp
+    getCPs (CoxForm   cp _ _ _)   = cp
+    getCPs (CoxWith   cp _ _)     = cp
 
 instance (B.MixShortEncode c) => Show (Cox c) where
     show = show . coxToDoc B.noShorten

@@ -80,8 +80,8 @@ instance B.Name (Relmap' h c) where
     name (RelmapCalc   lx _ _)      = C.lexName lx
     name _ = undefined
 
-instance B.CodePtr (Relmap' h c) where
-    codePtList = concatMap B.codePtList . relmapLexmaps
+instance B.GetCodePos (Relmap' h c) where
+    getCPs = concatMap B.getCPs . relmapLexmaps
 
 -- | Identity relmap.
 relmapId :: Relmap' h c

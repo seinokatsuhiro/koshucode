@@ -101,8 +101,8 @@ data CodeLine a = CodeLine
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord)
 
-instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
-    codePtList (CodeLine _ _ ts) = B.codePtList $ head ts
+instance (B.GetCodePos a) => B.GetCodePos (CodeLine a) where
+    getCPs (CodeLine _ _ ts) = B.getCPs $ head ts
 
 -- | Type for indent size.
 type IndentSize = Int

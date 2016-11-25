@@ -88,18 +88,18 @@ instance B.Name Token where
     name (TComment     _ s)  = s
     name x = error $ "unknown name: " ++ show x
 
-instance B.CodePtr Token where
-    codePtList (TText    cp _ _)    = [cp]
-    codePtList (TShort   cp _ _)    = [cp]
-    codePtList (TTerm    cp _)      = [cp]
-    codePtList (TLocal   cp _ _ _)  = [cp]
-    codePtList (TSlot    cp _ _)    = [cp]
-    codePtList (TOpen    cp _)      = [cp]
-    codePtList (TClose   cp _)      = [cp]
-    codePtList (TSpace   cp _)      = [cp]
-    codePtList (TComment cp _)      = [cp]
-    codePtList (TName    cp _)      = [cp]
-    codePtList (TUnknown cp _ _)    = [cp]
+instance B.GetCodePos Token where
+    getCPs (TText    cp _ _)    = [cp]
+    getCPs (TShort   cp _ _)    = [cp]
+    getCPs (TTerm    cp _)      = [cp]
+    getCPs (TLocal   cp _ _ _)  = [cp]
+    getCPs (TSlot    cp _ _)    = [cp]
+    getCPs (TOpen    cp _)      = [cp]
+    getCPs (TClose   cp _)      = [cp]
+    getCPs (TSpace   cp _)      = [cp]
+    getCPs (TComment cp _)      = [cp]
+    getCPs (TName    cp _)      = [cp]
+    getCPs (TUnknown cp _ _)    = [cp]
 
 instance B.PPrint Token where
     pprint = d where

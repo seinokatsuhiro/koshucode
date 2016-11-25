@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.TTree            as S
 
 -- | Abortable scope for attribute.
-abAttr :: (B.CodePtr cp) => cp -> B.MapAb b
+abAttr :: (B.GetCodePos cp) => cp -> B.MapAb b
 abAttr = B.abortable "attr"
 
 -- | Abortable scope for attribute.
@@ -32,7 +32,7 @@ abAttrTrees :: [S.TTree] -> B.MapAb b
 abAttrTrees = B.abortable "attr"
 
 -- | Abortable scope for slot.
-abSlot :: (B.CodePtr cp) => cp -> B.MapAb b
+abSlot :: (B.GetCodePos cp) => cp -> B.MapAb b
 abSlot = B.abortable "slot"
 
 -- | Unexpected attribute / Duplicate

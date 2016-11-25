@@ -27,8 +27,8 @@ data CodeClause a = CodeClause
     , clauseTokens    :: [a]             -- ^ Source tokens of clause
     } deriving (Show)
 
-instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
-    codePtList (CodeClause _ ts) = B.codePtList $ head ts
+instance (B.GetCodePos a) => B.GetCodePos (CodeClause a) where
+    getCPs (CodeClause _ ts) = B.getCPs $ head ts
 
 -- | Clause with no tokens.
 codeClauseEmpty :: CodeClause a

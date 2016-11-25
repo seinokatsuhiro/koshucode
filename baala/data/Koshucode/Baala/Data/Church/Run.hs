@@ -37,10 +37,10 @@ data Beta c
     | BetaCall [B.CodePos] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
       -- ^ Function application
 
-instance B.CodePtr (Beta c) where
-    codePtList (BetaLit  cp _)      = cp
-    codePtList (BetaTerm cp _ _)    = cp
-    codePtList (BetaCall cp _ _ _)  = cp
+instance B.GetCodePos (Beta c) where
+    getCPs (BetaLit  cp _)      = cp
+    getCPs (BetaTerm cp _ _)    = cp
+    getCPs (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
 beta :: (B.MixShortEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
@@ -74,7 +74,7 @@ reduce = red [] where
                                       let xs3 = red args `map` xs2
                                       Right $ BetaCall cp n f xs3
     fill args f1 []              = red args f1
-    fill args f1 xxs@(x:xs)      = Msg.abCoxFill (B.codePtList f1) $ case f1 of
+    fill args f1 xxs@(x:xs)      = Msg.abCoxFill (B.getCPs f1) $ case f1 of
         D.CoxForm1  cp _ v f2   -> do x' <- x
                                       let vx = (v, D.CoxWith cp args x')
                                       fill (vx : args) f2 xs

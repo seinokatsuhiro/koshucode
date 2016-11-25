@@ -48,7 +48,7 @@ consAttrEd = loop where
     fill []                          = []
 
     right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
-    right trees = Right . B.Sourced (concatMap B.codePtList $ B.untrees trees)
+    right trees = Right . B.Sourced (concatMap B.getCPs $ B.untrees trees)
 
     loop trees =
         Msg.abAttrTrees trees $ case S.divideTreesByBar trees of

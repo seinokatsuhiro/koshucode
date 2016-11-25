@@ -57,6 +57,6 @@ data Intmed' h c = Intmed
     , medSubmap   :: [(String, C.Relmap' h c)]  -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.CodePtr (Intmed' h c) where
-    codePtList = B.codePtList . medLexmap
+instance B.GetCodePos (Intmed' h c) where
+    getCPs = B.getCPs . medLexmap
 

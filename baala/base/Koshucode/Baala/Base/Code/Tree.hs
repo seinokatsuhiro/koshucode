@@ -42,16 +42,16 @@ data CodeTree p a
 instance Functor (CodeTree p) where
     fmap = mapToAllLeaf
 
-instance (B.CodePtr a) => B.CodePtr (CodeTree p a) where
-    codePtList t = B.codePt <$> untree t
+instance (B.GetCodePos a) => B.GetCodePos (CodeTree p a) where
+    getCPs t = B.getCP <$> untree t
 
 -- | Convert a list of elements to a single tree.
-tree :: (Ord p, B.CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+tree :: (Ord p, B.GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
 tree bracketType zero one =
     Right . treeWrap one B.<.> trees bracketType zero
 
 -- | Convert a list of elements to trees.
-trees :: forall a. forall p. (Ord p, B.CodePtr a)
+trees :: forall a. forall p. (Ord p, B.GetCodePos a)
       => GetBracketType p a -> Bracket p -> [a] -> B.Ab [CodeTree p a]
 trees bracketType zero xs = result where
     result       = do (ts, _) <- loop xs zero
