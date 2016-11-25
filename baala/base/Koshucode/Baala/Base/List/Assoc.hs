@@ -4,10 +4,9 @@
 
 module Koshucode.Baala.Base.List.Assoc
   ( -- * Association list
-    Lookup,
     assocBy,
     assocExist,
-    namedMapM,
+    sndM,
     lookupBy,
     lookupSatisfy,
     assocFinder,
@@ -18,19 +17,10 @@ module Koshucode.Baala.Base.List.Assoc
     assocCut,
     assocCut1,
     assocRename1,
-    assocRehead,
     assocCompose, assocMeet,
   
-    -- * Once/more list
-    OnceMore (..),
-    assocGather,
-    assocPush,
-    assocOnce,
-    assocMore,
-    -- $OnceMore
-  
     -- * Gather
-    Gather, gather, gatherWith,
+    Gather, gather, --gatherWith,
     gatherToMap, gatherToMapSwap, gatherToAssoc,
   ) where
 
@@ -72,8 +62,6 @@ import qualified Koshucode.Baala.Overture       as O
 --    >>> fromMaybe 0 (Nothing)
 --    0
 
-type Lookup a = String -> Maybe a
-
 -- | Construct assoc list by splitting base list.
 assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
 assocBy p = lead [] where
@@ -91,12 +79,22 @@ assocBy p = lead [] where
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
 assocExist k a = Maybe.isJust $ lookup k a
 
-namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
-namedMapM f (a, b) =
-    do c <- f b
-       return (a, c)
+-- | Apply monadic function to 'snd' of pair.
+--
+--   >>> sndM Just ("a", "b")
+--   Just ("a","b")
+--
+sndM :: (Monad m) => (v -> m v') -> (k, v) -> m (k, v')
+sndM f (k, v) =
+    do v' <- f v
+       return (k, v')
 
-lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
+-- | Lookup association list using Boolean function.
+--
+--   >>> lookupBy (> (4 :: Int)) [(1, "one"), (3, "three"), (5, "five")]
+--   Just "five"
+--
+lookupBy :: O.Test a -> [(a, b)] -> Maybe b
 lookupBy p = loop where
     loop [] = Nothing
     loop ((k, v) : xs)
@@ -111,6 +109,12 @@ lookupSatisfy x = loop where
         | p x = Just v
         | otherwise = loop ps
 
+-- | Create lookup function for fixed association list.
+--
+--   >>> let f = assocFinder [('a', "apple"), ('b', "banana")]
+--   >>> f 'a'
+--   Just "apple"
+--
 assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
 assocFinder xs k = Map.lookup k $ Map.fromList xs
 
@@ -133,11 +137,14 @@ assocPick xs = loop where
 --   >>> assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
 --   [("b",2)]
 --
---   >>> assocCut1 "b" [("a",1), ("b",2), ("c",3)]
---   [("a",1), ("c",3)]
 assocCut :: (Eq k) => [k] -> O.Map [(k, a)]
 assocCut ks xs = foldr assocCut1 xs ks
 
+-- | Single key version of 'assocCut'.
+--
+--   >>> assocCut1 "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
+--
 assocCut1 :: (Eq k) => k -> O.Map [(k, a)]
 assocCut1 k1 = loop where
     loop [] = []
@@ -149,21 +156,17 @@ assocCut1 k1 = loop where
 --
 --   >>> assocRename1 "x" "a" [("a",1), ("b",2), ("c",3)]
 --   [("x",1), ("b",2), ("c",3)]
+--
 assocRename1 :: (Eq k) => k -> k -> O.Map [(k, a)]
 assocRename1 new old = map r where
     r (k, x) | k == old  = (new, x)
              | otherwise = (k, x)
 
-assocRehead :: (Eq k) => [(k,k)] -> [(k,v)] -> [(k,v)]
-assocRehead new = map rehead where
-    rehead (k1,v) = case lookup k1 new of
-                      Nothing -> (k1,v)
-                      Just k2 -> (k2,v)
-
 -- | Compose two assocs.
 --
 --   >>> assocCompose [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
 --   [("A","P"), ("A","Q"), ("B","S")]
+--
 assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
 assocCompose ab bc =
     [ (a, c) | (a, b)  <- ab
@@ -174,6 +177,7 @@ assocCompose ab bc =
 --
 --   >>> assocMeet [("A","H"), ("B","J")] [("H","P"), ("H","Q"), ("I","R"), ("J","S")]
 --   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
+--
 assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
 assocMeet ab bc =
     [ (a, b, c) | (a, b)  <- ab
@@ -181,79 +185,9 @@ assocMeet ab bc =
                 , b == b' ]
 
 
--- ----------------------  Once/more list
-
--- $OnceMore
---
---  /Examples/
---
---  Convert into once/more list.
---
---    >>> assocGather [(1, "1"), (2, "2"), (1, "01")]
---    [(1, More ["1", "01"]), (2, Once "2")]
---
---  Push key and value into once/more list
---
---    >>> assocPush 2 "02" [(1, Once "1"), (2, Once "2")]
---    [(1, Once "1"), (2, More ["02", "2"])]
---
---  Extract once part.
---
---    >>> assocOnce [(1, Once "1"), (2, More ["02", "2"])]
---    [(1, "1")]
---
---  Extract more part.
---
---    >>> assocMore [(1, Once "1"), (2, More ["02", "2"])]
---    [(2, ["02", "2"])]
---
-
-data OnceMore a
-    = Once a
-    | More [a]
-      deriving (Show, Eq, Ord)
-
--- isOnce :: OnceMore a -> Bool
--- isOnce (Once _) = True
--- isOnce (More _) = False
-
--- isMore :: OnceMore a -> Bool
--- isMore = not . isOnce
-
-push :: a -> O.Map (OnceMore a)
-push x (Once x2) = More [x, x2]
-push x (More xs) = More (x : xs)
-
--- | Convert general assoc list into once/more assoc list.
-assocGather :: (Eq k) => [(k, a)] -> [(k, OnceMore a)]
-assocGather [] = []
-assocGather ((k, a) : xs) = assocPush k a $ assocGather xs
-
--- | Push  key and value into once/more assoc list.
-assocPush :: (Eq k) => k -> a -> O.Map [(k, OnceMore a)]
-assocPush k x = loop where
-    loop [] = [(k, Once x)]
-    loop (p@(k2, x2) : xs)
-        | k2 == k   = (k, push x x2) : xs
-        | otherwise = p : loop xs
-
--- | Extract once part from once/more assoc list.
-assocOnce :: [(k, OnceMore a)] -> [(k, a)]
-assocOnce = loop where
-    loop [] = []
-    loop ((k, Once x) : xs) = (k, x) : loop xs
-    loop (_           : xs) =          loop xs
-
--- | Extract more part from once/more assoc list.
-assocMore :: [(k, OnceMore a)] -> [(k, [a])]
-assocMore = loop where
-    loop [] = []
-    loop ((k, More x) : xs) = (k, x) : loop xs
-    loop (_           : xs) =          loop xs
-
-
 -- ----------------------  Gather
 
+-- | Snip /b/ from sequence /a/.
 type Gather a b = a -> (b, a)
 
 -- | Gather what is gotten by splitter.
@@ -263,14 +197,18 @@ gather one = loop where
     loop xs = let (y, xs2) = one xs
               in y : loop xs2
 
-gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
-gatherWith f = loop where
-    loop [] _ = []
-    loop _ [] = []
-    loop (c:cs) as = let (b, as') = f c as
-                     in b : loop cs as'
+-- gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
+-- gatherWith f = loop where
+--     loop [] _ = []
+--     loop _ [] = []
+--     loop (c:cs) as = let (b, as') = f c as
+--                      in b : loop cs as'
 
 -- | Gather (/k/, /v/) to 'Map.Map' /k/ [/v/].
+--
+--   >>> gatherToMap [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   fromList [(1,"ca"),(2,"b")]
+--
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
     loop [] m = m
@@ -294,5 +232,10 @@ gatherToMapSwap = foldr gath Map.empty where
     add v (Just vs) = Just $ v:vs
     add v (Nothing) = Just [v]
 
+-- | Gather values of duplicable associations.
+--
+--   >>> gatherToAssoc [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   [(1,"ca"), (2,"b")]
+--
 gatherToAssoc :: (Ord k) => [(k,v)] -> [(k, [v])]
 gatherToAssoc = Map.assocs . gatherToMap

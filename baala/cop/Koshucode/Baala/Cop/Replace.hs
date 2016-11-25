@@ -9,7 +9,6 @@ module Koshucode.Baala.Cop.Replace
     replaceLast,
     replaceBegin,
     replaceEnd,
-    -- $Operators
   ) where
 
 import qualified Data.List  as List

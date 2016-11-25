@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.Prelude.Class
   ( Name (..),
     Named,
     named,
-    YesNo (..),
     Index,
     Collect,
     Choose (..),
@@ -21,27 +20,28 @@ class Name a where
 -- | Entry in association list.
 type Named a = (String, a)
 
+-- | Create named pair.
 named :: (Name a) => a -> Named a
 named a = (name a, a)
 
--- | Type of value which is classified as yes or no.
-data YesNo a = Yes a | No a
-               deriving (Show, Eq, Ord)
-
+-- | Numerical index.
 type Index = Int
 
+-- | Wrap list.
 type Collect a = [a] -> a
+
 
 -- ----------------------  Choose
 
+-- | Choose one of two.
 class Choose m where
     (<|>) :: m a -> m a -> m a
 
 instance Choose Maybe where
-    (Just a)  <|> _  =  Just a
-    (Nothing) <|> b  =  b
+    (Just a)  <|> _  = Just a
+    (Nothing) <|> b  = b
 
 instance Choose (Either a) where
-    (Right a)  <|> _  =  Right a
-    (Left _)   <|> b  =  b
+    (Right a)  <|> _  = Right a
+    (Left _)   <|> b  = b
 

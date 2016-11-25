@@ -52,7 +52,7 @@ ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
 ropBuild = C.treeCoxG . C.ropGlobal
 
 ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [(n, S.TTree)] -> B.Ab [(n, D.Cox c)]
-ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
+ropNamedAlphas med = mapM (B.sndM $ ropBuild med)
 
 
 -- --------------------------------------------  Where
