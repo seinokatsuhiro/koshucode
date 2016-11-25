@@ -123,18 +123,18 @@ ttDoc = dv where
 --
 --   >>> let Right t = S.toks "b c"
 --   >>> splitTokensBy (== "|") t
---   Left [ TText  CodePt {..} TextRaw "b"
---        , TSpace CodePt {..} 1
---        , TText  CodePt {..} TextRaw "c" ]
+--   Left [ TText  CodePos {..} TextRaw "b"
+--        , TSpace CodePos {..} 1
+--        , TText  CodePos {..} TextRaw "c" ]
 --
 --   >>> let Right t = S.toks "a | b | c"
 --   >>> splitTokensBy (== "|") t
---   Right ( [ TText CodePt {..} TextRaw "a", TSpace CodePt {..} 1]
---         , TText CodePt {..} TextRaw "|"
---         , [ TText  CodePt {..} TextRaw "b"
---           , TSpace CodePt {..} 1
---           , TText  CodePt {..} TextRaw "|"
---           , TText  CodePt {..} TextRaw "c" ] )
+--   Right ( [ TText CodePos {..} TextRaw "a", TSpace CodePos {..} 1]
+--         , TText CodePos {..} TextRaw "|"
+--         , [ TText  CodePos {..} TextRaw "b"
+--           , TSpace CodePos {..} 1
+--           , TText  CodePos {..} TextRaw "|"
+--           , TText  CodePos {..} TextRaw "c" ] )
 
 splitTokensBy :: O.Test String -> B.SplitList3e S.Token
 splitTokensBy p = B.splitBy p2 where

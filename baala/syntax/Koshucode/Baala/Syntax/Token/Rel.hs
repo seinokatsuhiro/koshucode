@@ -138,7 +138,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
 
 -- | Nip off token beginning with @<@.
-nipAngle :: B.CodePt -> String -> String -> S.TokenNipResult
+nipAngle :: B.CodePos -> String -> String -> S.TokenNipResult
 nipAngle cp = angle where
     angle (c:cs) w | c == '<'        = angle cs (c:w)
     angle cs w     | w == "<"        = angleMid cs ""
@@ -163,14 +163,14 @@ nipAngle cp = angle where
                           Nothing  -> S.TTextUnk cp s
 
 -- | Nip off token beginning with "@".
-nipAt :: B.CodePt -> String -> Int -> S.TokenNipResult
+nipAt :: B.CodePos -> String -> Int -> S.TokenNipResult
 nipAt cp = at where
     at (c:cs) n | c == '@'           = at cs $ n + 1
                 | c == '\''          = S.nipSlot 0 cp cs  -- positional
     at cs n                          = S.nipSlot n cp cs
 
 -- | Nip off local reference token, like @^/g@.
-nipHat :: B.CodePt -> String -> S.TokenNipResult
+nipHat :: B.CodePos -> String -> S.TokenNipResult
 nipHat cp = hat where
     hat ('/' : cs)                   = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol

@@ -84,7 +84,7 @@ construct calc = expr where
          let cp = concatMap B.codePtList $ B.takeFirst $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePt] -> S.TTree -> B.Ab (D.Cox c)
+    cons :: [B.CodePos] -> S.TTree -> B.Ab (D.Cox c)
     cons cp tree@(B S.BracketGroup subtrees)
          = case subtrees of
              f@(L (S.TText _ q w)) : xs
@@ -209,7 +209,7 @@ convTree find = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePt] -> D.CoxTag -> [String] -> O.Map (D.Cox c)
+coxForm :: [B.CodePos] -> D.CoxTag -> [String] -> O.Map (D.Cox c)
 coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . D.CoxForm cp0 tag vs where
     n = length vs
     outside vars cox = case cox of

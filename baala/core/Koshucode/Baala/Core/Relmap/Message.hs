@@ -50,8 +50,8 @@ tokenAtPoint :: S.Token -> String
 tokenAtPoint tok = unwords ws where
     ws    = [S.tokenContent tok, "at L" ++ line, "C" ++ col]
     cp    = B.codePt tok
-    line  = show $ B.codePtLineNo   cp
-    col   = show $ B.codePtColumnNo cp
+    line  = show $ B.cpLineNo   cp
+    col   = show $ B.cpColumnNo cp
 
 -- | Disabled feature: input clause
 disabledInputClause :: B.Ab b

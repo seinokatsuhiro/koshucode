@@ -33,35 +33,35 @@ class SubtypeName a where
 
 -- | There are eleven types of tokens.
 data Token
-    = TText     B.CodePt TextForm String
+    = TText     B.CodePos TextForm String
                 -- ^ __1 Textual:__ Text — @'code@, @"text"@, etc
-    | TShort    B.CodePt String String
+    | TShort    B.CodePos String String
                 -- ^ __2 Textual:__ Prefixed shorten text — @short.proper@
-    | TTerm     B.CodePt String
+    | TTerm     B.CodePos String
                 -- ^ __3 Textual:__ Term name — @\/term@
 
-    | TLocal    B.CodePt LocalRef Int [Token]
+    | TLocal    B.CodePos LocalRef Int [Token]
                 -- ^ __4 Symbolic:__ Local name — @^r@, @^\/r@
-    | TSlot     B.CodePt Int String
+    | TSlot     B.CodePos Int String
                 -- ^ __5 Symbolic:__ Slot name.
                 --   'Int' represents slot level, i.e.,
                 --   0 for local positional slots,
                 --   1 for local named slots,
                 --   2 for global slots
                 --   —  @\@slot@, @\@\@global@
-    | TName     B.CodePt BlankName
+    | TName     B.CodePos BlankName
                 -- ^ __6 Symbolic:__ Blank name.
                 --   (This is only used in building content expression)
 
-    | TOpen     B.CodePt String
+    | TOpen     B.CodePos String
                 -- ^ __7 Punctuational:__ Opening bracket — @(@, @{@, @{=@, etc
-    | TClose    B.CodePt String
+    | TClose    B.CodePos String
                 -- ^ __8 Punctuational:__ Closing bracket — @=}@, @}@, @)@, etc
-    | TSpace    B.CodePt Int
+    | TSpace    B.CodePos Int
                 -- ^ __9 Punctuational:__ /N/ space characters
-    | TComment  B.CodePt String
+    | TComment  B.CodePos String
                 -- ^ __10 Punctuational:__ Comment — @** comment line@
-    | TUnknown  B.CodePt String B.AbortReason
+    | TUnknown  B.CodePos String B.AbortReason
                 -- ^ __11 Other:__ Unknown token
 
       deriving (Show, Eq, Ord)
@@ -123,7 +123,7 @@ rawTextToken :: String -> Token
 rawTextToken = TText B.def TextRaw
 
 -- | Create unknown token.
-unknownToken :: B.CodePt -> String -> B.Ab a -> Token
+unknownToken :: B.CodePos -> String -> B.Ab a -> Token
 unknownToken cp w (Left a)  = TUnknown cp w a
 unknownToken cp w (Right _) = TUnknown cp w $ B.abortBecause "bug?"
 

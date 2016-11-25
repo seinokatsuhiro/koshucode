@@ -27,9 +27,9 @@ import qualified Koshucode.Baala.Syntax.Symbol.Next       as S
 
 -- | Something with short definition.
 data Short a =
-    Short { shortSource :: [B.CodePt]  -- ^ Source information
-          , shortHead   :: [ShortDef]  -- ^ Definition of short signs
-          , shortBody   :: a           -- ^ Body with short signs
+    Short { shortSource :: [B.CodePos]  -- ^ Source information
+          , shortHead   :: [ShortDef]   -- ^ Definition of short signs
+          , shortBody   :: a            -- ^ Body with short signs
           } deriving (Show, Ord, Eq)
 
 -- | Short prefix and replacement.

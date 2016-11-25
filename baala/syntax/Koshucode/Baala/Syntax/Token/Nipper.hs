@@ -63,13 +63,13 @@ type TokenNipWResult = (B.WordTable, S.InputText, S.Token)
 type TokenNipLWResult = (B.WordTable, S.InputText, [S.Token])
 
 -- | Nip off a next token.
-type TokenNip = B.CodePt -> S.InputText -> TokenNipResult
+type TokenNip = B.CodePos -> S.InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
-type TokenNipW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipWResult
+type TokenNipW = B.CodePos -> B.WordTable -> S.InputText -> TokenNipWResult
 
 -- | Nip off a next token with word table.
-type TokenNipLW = B.CodePt -> B.WordTable -> S.InputText -> TokenNipLWResult
+type TokenNipLW = B.CodePos -> B.WordTable -> S.InputText -> TokenNipLWResult
 
 
 -- --------------------------------------------  Utility
@@ -164,7 +164,7 @@ nipSymbol cp wtab cs =
          S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 -- | Create symbolic token.
-symbolToken :: (B.CodePt -> String -> S.Token) -> String -> TokenNipW
+symbolToken :: (B.CodePos -> String -> S.Token) -> String -> TokenNipW
 symbolToken k w cp wtab cs =
     case Map.lookup w wtab of
          Just w' -> (wtab, cs, k cp w')
@@ -220,7 +220,7 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
                            Right (cs', w) -> f w cs'
                            Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'     = let n  = B.nioNumber $ B.codePtSource cp
+    nterm ns w cs'     = let n  = B.nioNumber $ B.cpSource cp
                              w' = show n ++ ('=' : w)
                          in term (w' : ns) cs'
 
@@ -243,7 +243,7 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
 -- ----------------------  Symbol
 
 -- | Nip off token beginning with @"|"@.
-nipBar :: B.CodePt -> String -> String -> TokenNipResult
+nipBar :: B.CodePos -> String -> String -> TokenNipResult
 nipBar cp = bar where
     bar (c:cs) w
         | c == '|'                   = bar cs (c:w)

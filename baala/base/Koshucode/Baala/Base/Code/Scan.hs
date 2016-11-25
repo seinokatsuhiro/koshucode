@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Base.Code.Line       as B
 data CodeScan i o = CodeScan
      { codeMapSaved :: [CodeScanMap i o]  -- ^ Saved updater
      , codeMap      :: CodeScanMap i o    -- ^ Updater
-     , codeInputPt  :: B.CodePt           -- ^ Code point
+     , codeInputPt  :: B.CodePos          -- ^ Code position
      , codeInput    :: i                  -- ^ Input text
      , codeOutput   :: [o]                -- ^ Output tokens
      , codeWords    :: WordTable          -- ^ Collected words
@@ -81,23 +81,23 @@ codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
 codeScanUpLines f nio = loop (CodeScan [] f cp "" [] Map.empty) where
-    cp    = B.def { B.codePtSource = nio }
+    cp    = B.def { B.cpSource = nio }
 
     loop _ [] = []
     loop r ((num, line) : ls) =
-       let cp'  = setCodePt num line cp
+       let cp'  = setCodePos num line cp
            r'   = codeScan $ setScan cp' line r
            toks = reverse $ codeOutput r'
            ls'  = loop r' ls
        in B.CodeLine num line toks : ls'
 
-setCodePt :: B.LineNumber -> String -> O.Map B.CodePt
-setCodePt num line cp =
-    cp { B.codePtLineNo    = num
-       , B.codePtLineText  = line
-       , B.codePtText      = line }
+setCodePos :: B.LineNumber -> String -> O.Map B.CodePos
+setCodePos num line cp =
+    cp { B.cpLineNo    = num
+       , B.cpLineText  = line
+       , B.cpText      = line }
 
-setScan :: B.CodePt -> i -> CodeScan i o -> CodeScan i o
+setScan :: B.CodePos -> i -> CodeScan i o -> CodeScan i o
 setScan cp line sc =
     sc { codeInputPt = cp
        , codeInput   = line
@@ -109,8 +109,8 @@ codeScan sc@CodeScan { codeMap = f, codeInputPt = cp, codeInput = input }
     | otherwise   = codeScan call
     where call    = f sc { codeInputPt = setText input cp }
 
-setText :: String -> O.Map B.CodePt
-setText text cp = cp { B.codePtText = text }
+setText :: String -> O.Map B.CodePos
+setText text cp = cp { B.cpText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.
 codeUpdate :: i -> o -> CodeScanMap i o

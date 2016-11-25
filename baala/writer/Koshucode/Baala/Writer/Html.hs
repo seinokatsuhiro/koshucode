@@ -85,11 +85,11 @@ instance H.ToMarkup B.AbortReason where
           text n         = H.toMarkup (n :: String)
           detail x       = H.div $ H.toMarkup x
           code (ctx, p)  = point p ctx >> line p
-          line p         = div_ "abort-line" $ text $ B.codePtText p
+          line p         = div_ "abort-line" $ text $ B.cpText p
           source k n c   = span_ k $ text n >> (H.toMarkup c)
           point p ctx    = div_ "abort-point" $ do
-                                  source "abort-point-line"    "Line "    $ B.codePtLineNo p
-                                  source "abort-point-column"  "Column "  $ B.codePtColumnNo p
+                                  source "abort-point-line"    "Line "    $ B.cpLineNo p
+                                  source "abort-point-column"  "Column "  $ B.cpColumnNo p
                                   source "abort-point-context" "Context " ctx
 
 -- | 'H.div' with class name.

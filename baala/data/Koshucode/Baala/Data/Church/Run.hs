@@ -30,11 +30,11 @@ import qualified Koshucode.Baala.Data.Church.Message    as Msg
 -- --------------------------------------------  Beta reduction
 
 data Beta c
-    = BetaLit  [B.CodePt] c
+    = BetaLit  [B.CodePos] c
       -- ^ Literal content
-    | BetaTerm [B.CodePt] [S.TermName] [S.TermIndex]
+    | BetaTerm [B.CodePos] [S.TermName] [S.TermIndex]
       -- ^ Term reference, its name and position
-    | BetaCall [B.CodePt] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
+    | BetaCall [B.CodePos] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
       -- ^ Function application
 
 instance B.CodePtr (Beta c) where

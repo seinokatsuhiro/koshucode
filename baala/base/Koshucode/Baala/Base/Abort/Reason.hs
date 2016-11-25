@@ -30,10 +30,10 @@ import qualified Koshucode.Baala.Base.IO    as B
 
 -- | Abort reason.
 data AbortReason = AbortReason
-    { abortReason :: String                 -- ^ Reason in one line
-    , abortDetail :: [String]               -- ^ Detailed description
-    , abortNote   :: [String]               -- ^ Additional notes for long description
-    , abortPoint  :: [(AbortTag, B.CodePt)] -- ^ Tag and aborting point
+    { abortReason :: String       -- ^ Reason in one line
+    , abortDetail :: [String]     -- ^ Detailed description
+    , abortNote   :: [String]     -- ^ Additional notes for long description
+    , abortPoint  :: [(AbortTag, B.CodePos)] -- ^ Tag and aborting point
     } deriving (Show, Eq, Ord)
 
 -- | Tag on aborting point.
@@ -92,7 +92,7 @@ type Abortable cp b = cp -> MapAb b
 abortable :: (B.CodePtr cp) => AbortTag -> Abortable cp b
 abortable tag cp = either (Left . push tag (B.codePtList cp)) Right
 
-push :: AbortTag -> [B.CodePt] -> O.Map AbortReason
+push :: AbortTag -> [B.CodePos] -> O.Map AbortReason
 push _ [] a = a
 push tag (p:_) a@AbortReason { abortPoint = ps } =
     a { abortPoint = (tag, p) : ps }
