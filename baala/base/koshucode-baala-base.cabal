@@ -72,7 +72,7 @@ library
 
         Koshucode.Baala.Base.IO
         Koshucode.Baala.Base.IO.BzFile
-        Koshucode.Baala.Base.IO.CodePt
+        Koshucode.Baala.Base.IO.CodePos
         Koshucode.Baala.Base.IO.Exit
         Koshucode.Baala.Base.IO.Http
         Koshucode.Baala.Base.IO.IOPoint

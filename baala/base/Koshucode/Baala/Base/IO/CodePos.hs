@@ -3,7 +3,7 @@
 
 -- | Source code information.
 
-module Koshucode.Baala.Base.IO.CodePt
+module Koshucode.Baala.Base.IO.CodePos
   ( -- * Code position
     CodePos (..),
     cpColumnNo,
