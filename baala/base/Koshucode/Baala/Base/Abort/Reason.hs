@@ -6,6 +6,7 @@
 module Koshucode.Baala.Base.Abort.Reason
   ( -- * Data type
     AbortReason (..),
+    AbortTag,
 
     -- * Derived type
     Ab, AbMap, MapAb, AbManyMap,
@@ -24,12 +25,14 @@ import qualified Koshucode.Baala.Base.IO    as B
 
 -- | Abort reason.
 data AbortReason = AbortReason
-    { abortReason :: String                -- ^ Reason in one line
-    , abortDetail :: [String]              -- ^ Detailed description
-    , abortNote   :: [String]              -- ^ Additional notes for long description
-    , abortPoint  :: [(String, B.CodePt)]  -- ^ Tag and aborting point
+    { abortReason :: String                 -- ^ Reason in one line
+    , abortDetail :: [String]               -- ^ Detailed description
+    , abortNote   :: [String]               -- ^ Additional notes for long description
+    , abortPoint  :: [(AbortTag, B.CodePt)] -- ^ Tag and aborting point
     } deriving (Show, Eq, Ord)
 
+-- | Tag on aborting point.
+type AbortTag = String
 
 -- --------------------------------------------  Deriving type
 

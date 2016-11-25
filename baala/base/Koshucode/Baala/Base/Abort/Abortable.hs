@@ -4,19 +4,17 @@
 
 module Koshucode.Baala.Base.Abort.Abortable
   ( abortable,
-  --abortableSourced,
   ) where
 
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base.IO             as B
 import qualified Koshucode.Baala.Base.Abort.Reason   as B
 
-
 -- | Push source information when process is aborted.
-abortable :: (B.CodePtr p) => String -> [p] -> O.Map (B.Ab b)
+abortable :: (B.CodePtr cp) => B.AbortTag -> [cp] -> B.MapAb b
 abortable tag ps = abortablePoints tag $ concatMap B.codePtList ps
 
-abortablePoints :: String -> [B.CodePt] -> O.Map (B.Ab b)
+abortablePoints :: String -> [B.CodePt] -> B.MapAb b
 abortablePoints tag ps = either (Left . push tag ps) Right
 
 push :: String -> [B.CodePt] -> O.Map B.AbortReason
@@ -25,10 +23,4 @@ push tag ps abort@B.AbortReason { B.abortPoint = src } =
        []      -> abort
        [p]     -> abort { B.abortPoint = (tag, p) : src }
        (p : _) -> push tag [p] abort
-
--- abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
--- abortableSourced tag f (B.Sourced pt x) =
---     abortable tag pt $ do
---       y <- f x
---       Right $ B.Sourced pt y
 
