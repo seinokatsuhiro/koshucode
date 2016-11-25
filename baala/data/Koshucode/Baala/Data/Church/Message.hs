@@ -32,14 +32,13 @@ module Koshucode.Baala.Data.Church.Message
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data.Type            as D
-import qualified Koshucode.Baala.Syntax.Message       as Msg
 
 
 -- --------------------------------------------  Abortable scope
 
 -- | Abortable scope for cox building.
 abCoxBuild :: S.TTree -> B.MapAb b
-abCoxBuild = Msg.abortableTree "cox-build"
+abCoxBuild = B.abortable "cox-build"
 
 -- | Abortable scope for cox calculation.
 abCoxCalc :: (B.CodePtr cp) => [cp] -> B.MapAb b
@@ -59,7 +58,7 @@ abCoxPosition = B.abortable "cox-position"
 
 -- | Abortable scope for cox prefix.
 abCoxPrefix :: S.TTree -> B.MapAb b
-abCoxPrefix = Msg.abortableTree "cox-prefix"
+abCoxPrefix = B.abortable "cox-prefix"
 
 -- | Abortable scope for cox reduction.
 abCoxReduce :: (B.CodePtr cp) => [cp] -> B.MapAb b
@@ -67,7 +66,7 @@ abCoxReduce = B.abortable "cox-reduce"
 
 -- | Abortable scope for cox syntax.
 abCoxSyntax :: S.TTree -> B.MapAb b
-abCoxSyntax = Msg.abortableTree "cox-syntax"
+abCoxSyntax = B.abortable "cox-syntax"
 
 
 -- --------------------------------------------  Message

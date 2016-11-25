@@ -132,6 +132,4 @@ copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) tr
           _   -> abortSyntax xs "Mixed arrows"
 
     abortSyntax xs msg =
-        Msg.abortableTrees "if" xs $
-         Msg.unexpAttr msg
-
+        B.abortable "if" xs $ Msg.unexpAttr msg

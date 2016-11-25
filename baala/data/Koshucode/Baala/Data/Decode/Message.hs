@@ -23,11 +23,10 @@ module Koshucode.Baala.Data.Decode.Message
 import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
-import qualified Koshucode.Baala.Syntax.Message  as Msg
 
 -- | Abortable scope for literal.
 abLiteral :: S.TTree -> O.Map (B.Ab b)
-abLiteral = Msg.abortableTree "literal"
+abLiteral = B.abortable "literal"
 
 -- | Nothing
 nothing :: B.Ab a

@@ -17,11 +17,10 @@ import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
-import qualified Koshucode.Baala.Data.Message  as Msg
 
 -- | Abortable scope for option.
 abOption :: [S.TTree] -> B.MapAb b
-abOption = Msg.abortableTrees "option"
+abOption = B.abortable "option"
 
 -- | Abortable scope for relmap.
 abRelmap :: (B.CodePtr cp) => [cp] -> O.Map (B.Ab b)

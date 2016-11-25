@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Source code information.
@@ -102,6 +103,9 @@ class CodePtr a where
 instance CodePtr CodePt where
     codePtList cp  = [cp]
     codePt     cp  =  cp
+
+instance (CodePtr cp) => CodePtr [cp] where
+    codePtList = concatMap codePtList
 
 
 -- ----------------------  Sourced
