@@ -41,18 +41,22 @@ data ClauseHead = ClauseHead
 
 -- | Proper part of clause.
 data ClauseBody
-    = CInput    [S.Token]                            -- ^ Input point
-    | CExport   String                               -- ^ Exporting name
-    | CRelmap   String [S.Token]                     -- ^ Source of relmap
-    | CAssert   D.AssertType D.JudgeClass [S.Token]  -- ^ Assertion
-    | CJudge    D.AssertType D.JudgeClass [S.Token]  -- ^ Judge
-    | CSlot     String [S.Token]                     -- ^ Global slot
-    | COption   [S.Token]                            -- ^ Option settings
-    | COutput   [S.Token]                            -- ^ Output point
-    | CEcho     S.TokenClause                        -- ^ Echo text
-    | CLicense  String                               -- ^ License text
-    | CBodies   [ClauseBody]                         -- ^ Multiple bodies
-    | CUnknown  (B.Ab ())                            -- ^ Unknown clause
+    = CJudge    D.AssertType D.JudgeClass
+                       [S.Token]    -- ^ __Relational:__ Judge
+    | CAssert   D.AssertType D.JudgeClass
+                       [S.Token]    -- ^ __Relational:__ Assertion
+    | CRelmap   String [S.Token]    -- ^ __Relational:__ Source of relmap
+    | CSlot     String [S.Token]    -- ^ __Relational:__ Global slot
+
+    | CInput    [S.Token]           -- ^ __Resource:__ Input point
+    | COutput   [S.Token]           -- ^ __Resource:__ Output point
+    | COption   [S.Token]           -- ^ __Resource:__ Option settings
+    | CExport   String              -- ^ __Resource:__ Exporting name
+
+    | CEcho     S.TokenClause       -- ^ __Other:__ Echo text
+    | CLicense  String              -- ^ __Other:__ License text
+    | CBodies   [ClauseBody]        -- ^ __Other:__ Multiple bodies
+    | CUnknown  (B.Ab ())           -- ^ __Other:__ Unknown clause
       deriving (Show)
 
 -- | The empty clause heading.
@@ -61,6 +65,9 @@ instance B.Default ClauseHead where
                      , clauseShort  = []
                      , clauseAbout  = []
                      , clauseSource = B.codeClauseEmpty }
+
+instance B.GetCodePos Clause where
+    getCPs = B.getCPs . clauseHead
 
 instance B.GetCodePos ClauseHead where
     getCPs = B.getCPs . clauseSource
