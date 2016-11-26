@@ -28,8 +28,6 @@ module Koshucode.Baala.Syntax.Token.Token
     pattern TTextQQ,
     pattern TTextKey,
     pattern TTextBar,
-    pattern TTextLicense,
-    pattern TTextSect,
   ) where
 
 import qualified Koshucode.Baala.Base             as B
@@ -211,26 +209,25 @@ instance SubtypeName BlankName where
 -- --------------------------------------------  Pattern
 
 -- | Unknown text token.
+{-# DEPRECATED TTextUnk "Use TUnk instead." #-}
 pattern TTextUnk cp w = TText cp TextUnk  w
 
 -- | Raw text token.
 pattern TTextRaw cp w = TText cp TextRaw  w
 
 -- | Quoted text token.
+{-# DEPRECATED TTextQ "Use TQq instead." #-}
 pattern TTextQ cp w = TText cp TextQ    w
 
 -- | Dobule-quoted text token.
+{-# DEPRECATED TTextQQ "Use TQq instead." #-}
 pattern TTextQQ cp w = TText cp TextQQ   w
 
 -- | Keyword token.
+{-# DEPRECATED TTextKey "Use TKey instead." #-}
 pattern TTextKey cp w = TText cp TextKey  w
 
 -- | Bar-enclosed token.
+{-# DEPRECATED TTextBar "Use TBar instead." #-}
 pattern TTextBar cp w = TText cp TextBar  w
-
--- | License text token.
-pattern TTextLicense cp w = TText cp TextLicense w
-
--- | Section sign.
-pattern TTextSect cp = TTextRaw cp "==="
 

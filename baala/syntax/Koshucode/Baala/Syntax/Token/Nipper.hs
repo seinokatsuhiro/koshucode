@@ -131,7 +131,7 @@ nipSpace cp cs =
 nipQ :: TokenNipW
 nipQ cp wtab cs =
     case S.nextSymbolPlain cs of
-      Right (cs', w) -> symbolToken S.TTextQ w cp wtab cs'
+      Right (cs', w) -> symbolToken S.TextQ w cp wtab cs'
       Left a         -> (wtab, [], S.TUnknown cp cs a)
 
 -- | Nip off a double-quoted text.
@@ -141,7 +141,7 @@ nipQ cp wtab cs =
 --
 nipQQ :: TokenNip
 nipQQ cp cs = case S.nextQQ cs of
-                Right (cs', w) -> (cs', S.TTextQQ cp w)
+                Right (cs', w) -> (cs', S.TText cp S.TextQQ w)
                 Left a         -> ([], S.TUnknown cp cs a)
 
 -- ----------------------  Identifier
@@ -156,19 +156,19 @@ nipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
          S.SymbolShort pre w  -> (wtab, cs', S.TShort cp pre w)
-         S.SymbolCommon    w  -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolGeneral   w  -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolPlain     w  -> symbolToken S.TTextRaw w cp wtab cs'
-         S.SymbolNumeric   w  -> symbolToken S.TTextRaw w cp wtab cs'
+         S.SymbolCommon    w  -> symbolToken S.TextRaw w cp wtab cs'
+         S.SymbolGeneral   w  -> symbolToken S.TextRaw w cp wtab cs'
+         S.SymbolPlain     w  -> symbolToken S.TextRaw w cp wtab cs'
+         S.SymbolNumeric   w  -> symbolToken S.TextRaw w cp wtab cs'
          S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 -- | Create symbolic token.
-symbolToken :: (B.CodePos -> String -> S.Token) -> String -> TokenNipW
-symbolToken k w cp wtab cs =
+symbolToken :: S.TextForm -> String -> TokenNipW
+symbolToken f w cp wtab cs =
     case Map.lookup w wtab of
-         Just w' -> (wtab, cs, k cp w')
+         Just w' -> (wtab, cs, S.TText cp f w')
          Nothing -> let wtab' = Map.insert w w wtab
-                    in (wtab', cs, k cp w)
+                    in (wtab', cs, S.TText cp f w)
 
 -- | Nip off a slot name, like @\@foo@.
 --
@@ -255,10 +255,11 @@ nipBar cp = bar where
     judge (c:cs) w
         | isJudge c || Ch.isAlpha c  = judge cs (c:w)
         | isSymbol c                 = clock (c:cs) w
-    judge cs w                       = (cs, S.TTextBar cp $ reverse w)
+    judge cs w                       = (cs, token w)
 
     -- read clock, like |03:30|
-    clock (c:cs) w | c == '|'        = (cs, S.TTextBar cp $ reverse (c:w))
+    clock (c:cs) w | c == '|'        = (cs, token (c:w))
                    | isClock c       = clock cs (c:w)
-    clock cs w                       = (cs, S.TTextBar cp $ reverse w)
+    clock cs w                       = (cs, token w)
 
+    token w = S.TText cp S.TextBar $ reverse w

@@ -15,6 +15,8 @@ import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Decode.Type      as D
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
+import Koshucode.Baala.Syntax.Token.Pattern
+
 
 -- ----------------------  Number
 
@@ -44,7 +46,7 @@ concatDigits = first where
 --   Right |12:00|
 --
 tokenClock :: S.Token -> B.Ab D.Clock
-tokenClock (S.TTextBar _ ('|' : w)) = textClock w
+tokenClock (TBar ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
 textClock :: String -> B.Ab D.Clock

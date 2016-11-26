@@ -24,6 +24,8 @@ import qualified Koshucode.Baala.Syntax.Token.Token     as S
 import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
+import Koshucode.Baala.Syntax.Token.Pattern
+
 
 -- --------------------------------------------
 
@@ -58,8 +60,8 @@ selectSection change prev
         | otherwise      = sectionUnexp [] sc
 
     dispatch :: [S.Token] -> S.TokenScan
-    dispatch [S.TTextSect _] = B.codeChange prev sc
-    dispatch ts@[S.TTextSect _, S.TTextRaw _ name] =
+    dispatch [TSection] = B.codeChange prev sc
+    dispatch ts@[TSection, TRaw name] =
         case change name of
           Just ch -> ch sc
           Nothing -> sectionUnexp ts sc

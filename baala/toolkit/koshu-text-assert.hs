@@ -9,6 +9,7 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Paths_koshucode_baala_toolkit    as V
 
+import Koshucode.Baala.Syntax.Token.Pattern
 
 -- --------------------------------------------  Parameter
 
@@ -64,7 +65,7 @@ clauseMixForBz f bz = B.mixLines texts where
     clauses = S.tokenClauses $ S.tokenLinesBzTextAssert B.def bz
 
 pattern Affirm name ts <-
-    (S.TTextBar _ "|==") : (S.TTextRaw _ name) : (S.TTextRaw _ ":") : ts
+    (TBar "|==") : (S.TTextRaw _ name) : (S.TTextRaw _ ":") : ts
 
 clauseMix :: S.TokenClause -> B.MixText
 clauseMix = dispatch . B.clauseTokens where

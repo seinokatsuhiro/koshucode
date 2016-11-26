@@ -20,6 +20,7 @@ import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Token.Pattern
 
 
 -- --------------------------------------------  Operator
@@ -95,7 +96,7 @@ trimIf False t = t
 type CharBundle = T.Bundle Char
 
 pattern K n     <- L (Key n)
-pattern T s     <- L (Text s)
+pattern T s     <- LQq s
 pattern C c     <- L (Char c)
 pattern To      <- K "to"
 
@@ -103,8 +104,7 @@ pattern G xs    <- B S.BracketGroup xs
 pattern Empty   <- G []
 
 pattern Key  n  <- S.TTextRaw _ n
-pattern Text t  <- S.TTextQQ  _ t
-pattern Char c  <- S.TTextQQ  _ [c]
+pattern Char c  <- TQq [c]
 pattern Term n  <- S.TTerm    _ n
 
 unknownSyntax :: (Show a) => a -> B.Ab b
@@ -166,7 +166,7 @@ parseSubtext ns = trees False where
     tree x            = unknownSyntax x
 
     leaf :: S.Token -> B.Ab T.CharExpr
-    leaf (Text t)     = Right $ T.equal t     -- "LITERAL"
+    leaf (TQq t)      = Right $ T.equal t     -- "LITERAL"
     leaf (Key n)      = pre n []
     leaf x            = unknownSyntax x
 

@@ -22,6 +22,8 @@ import qualified Koshucode.Baala.Core.Lexmap            as C
 import qualified Koshucode.Baala.Data.Message           as Msg
 import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 
+import Koshucode.Baala.Syntax.Token.Pattern
+
 
 -- ----------------------  Data type
 
@@ -134,9 +136,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
            | otherwise        = Right orig
 
     unshorten :: S.Token -> Either S.Token S.Token
-    unshorten t@(S.TShort n pre b) = case lookup pre sh of
-                                       Just l  -> Right $ S.TTextQQ n $ l ++ b
-                                       Nothing -> Left t
+    unshorten t@(S.TShort n pre b) =
+        case lookup pre sh of
+          Just l  -> Right $ S.TText n S.TextQQ (l ++ b)
+          Nothing -> Left t
     unshorten t = Right t
 
     -- ----------------------  Utility
@@ -153,11 +156,11 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     -- ----------------------  Clause dispatcher
 
-    dispatch (S.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
+    dispatch (TBar ('|' : k) : xs)   -- Frege's judgement stroke
                                     = clause    $ frege (lower k) xs
     dispatch (S.TTextRaw _ name : S.TTextRaw _ is : body)
         | isDelim is                = clause    $ CRelmap name body
-    dispatch (S.TTextSect _ : _)    = newSec
+    dispatch (TSection : _)    = newSec
     dispatch (S.TTextRaw _ k : xs)
         | k == "input"              = clause    $ CInput xs
         | k == "include"            = clause    $ CInput xs
@@ -170,7 +173,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         | k == "****"               = clause    $ empty
     dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
     dispatch []                     = clause    $ empty
-    dispatch [S.TTextLicense _ ln]  = clause    $ CLicense $ O.trimEnd ln
+    dispatch [TLicense ln]          = clause    $ CLicense $ O.trimEnd ln
     dispatch _                      = clause    $ CUnknown $ unkAtStart []
 
     -- Return form

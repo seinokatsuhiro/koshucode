@@ -154,12 +154,12 @@ nipAngle cp = angle where
     angleToken ('c' : s) | isCodePoint s
                                  = fromCodePoint stringIntList s
     angleToken s                 = case lookup s S.angleTexts of
-                                     Just w   -> S.TTextKey cp w
-                                     Nothing  -> S.TTextUnk cp s
+                                     Just w   -> S.TText cp S.TextKey w
+                                     Nothing  -> S.TText cp S.TextUnk s
 
     fromCodePoint f s = case f s of
-                          Just ns  -> S.TTextKey cp (toEnum <$> ns)
-                          Nothing  -> S.TTextUnk cp s
+                          Just ns  -> S.TText cp S.TextKey (toEnum <$> ns)
+                          Nothing  -> S.TText cp S.TextUnk s
 
 -- | Nip off token beginning with "@".
 nipAt :: B.CodePos -> String -> Int -> S.TokenNipResult
