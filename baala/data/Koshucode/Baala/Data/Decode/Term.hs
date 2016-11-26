@@ -50,9 +50,9 @@ treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
 treeFlatNameCached :: CacheT -> S.TTree -> B.Ab (CacheT, S.TermName)
-treeFlatNameCached cc (L (S.TTerm _ n))   = Right $ O.cacheGet cc n
-treeFlatNameCached _  (L t)               = Msg.reqFlatName t
-treeFlatNameCached _  _                   = Msg.reqTermName
+treeFlatNameCached cc (LTerm n)   = Right $ O.cacheGet cc n
+treeFlatNameCached _  (L t)       = Msg.reqFlatName t
+treeFlatNameCached _  _           = Msg.reqTermName
 
 -- | Read flat term names.
 --
@@ -114,11 +114,10 @@ treesTerms1 xs = do xs' <- treesTerms xs
 --
 treesFlatNamePairs :: [S.TTree] -> B.Ab [S.TermName2]
 treesFlatNamePairs = loop where
-    loop (a : b : xs) =
-        do a'  <- treeFlatName a
-           b'  <- treeFlatName b
-           xs' <- loop xs
-           Right $ (a', b') : xs'
+    loop (a : b : xs) = do a'  <- treeFlatName a
+                           b'  <- treeFlatName b
+                           xs' <- loop xs
+                           Right $ (a', b') : xs'
     loop [] = Right []
     loop _  = Msg.reqTermName
 
@@ -131,10 +130,10 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (L (S.TTerm _ n)     : ts)   = loop ret (S.toTermName n : ns) ts
-    loop ret ns (L (S.TTextRaw _ ":") : ts)  = loop (reverse ns : ret) [] ts
-    loop ret ns []                           = Right $ reverse $ reverse ns : ret
-    loop _ _ _                               = Msg.reqTermName
+    loop ret ns (LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
+    loop ret ns (LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
+    loop ret ns []               = Right $ reverse $ reverse ns : ret
+    loop _ _ _                   = Msg.reqTermName
 
 -- | Decode term names with optional complement symbol.
 -- 
@@ -152,6 +151,6 @@ treesFlatNamesCo trees =
 
 -- | Term complement symbol.
 treesTermCo :: [S.TTree] -> B.Ab (Bool, [S.TTree])
-treesTermCo (L (S.TTextRaw _ "~") : trees)  = Right (True,  trees)
-treesTermCo trees                           = Right (False, trees)
+treesTermCo (LRaw "~" : trees)  = Right (True,  trees)
+treesTermCo trees               = Right (False, trees)
 

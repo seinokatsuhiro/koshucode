@@ -87,7 +87,7 @@ construct calc = expr where
     cons :: [B.CodePos] -> S.TTree -> B.Ab (D.Cox c)
     cons cp tree@(BGroup subtrees)
          = case subtrees of
-             f@(L (S.TText _ q w)) : xs
+             f@(LText q w) : xs
                  | q == S.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
@@ -132,7 +132,7 @@ construct calc = expr where
                      | otherwise      = calc tree'
 
     untag :: S.TTree -> (D.CoxTag, S.TTree)
-    untag (B.TreeB l p (S.TextLeafQ _ tag : vars))
+    untag (B.TreeB l p (LQ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
@@ -191,7 +191,7 @@ convTree :: D.CopFind D.CopTree -> B.AbMap S.TTree
 convTree find = expand where
     expand tree@(B.TreeB S.BracketGroup p subtrees) =
         case subtrees of
-          op@(S.TextLeafRaw _ name) : args
+          op@(LRaw name) : args
               -> Msg.abCoxSyntax tree $
                  case find $ S.BlankNormal name of
                    Just f -> expand =<< f args

@@ -8,7 +8,11 @@ module Koshucode.Baala.Syntax.TTree.Pattern
     pattern L,
     pattern LText,
     pattern LRaw,
+    pattern LQ,
     pattern LQq,
+    pattern LSlot,
+    pattern LTerm,
+
     -- * Branch
     pattern B,
     pattern BGroup,
@@ -33,8 +37,17 @@ pattern LText f s <- L (S.TText _ f s)
 -- | Raw text leaf.
 pattern LRaw s <- LText S.TextRaw s
 
+-- | Single-quoted text leaf.
+pattern LQ s <- LText S.TextQ s
+
 -- | Double-quoted text leaf.
 pattern LQq s <- LText S.TextQQ s
+
+-- | Slot leaf.
+pattern LSlot n s <- L (S.TSlot _ n s)
+
+-- | Term leaf.
+pattern LTerm s <- L (S.TTerm _ s)
 
 -- ---------------------------------  Branch
 

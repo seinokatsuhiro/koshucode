@@ -28,8 +28,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- ----------------------  General content
 
-pattern LName s    <- L (S.TTerm _ s)
-pattern Text f s   <- S.TText _ f s
+pattern Text f s <- S.TText _ f s
 
 -- | Content decoder.
 type DecodeContent c = S.TTree -> B.Ab c
@@ -113,7 +112,7 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      treesTie                 treesTie
 --
 treesTie :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab c
-treesTie cons xs@(LName _ : _) = D.putTie =<< treesTerms cons xs
+treesTie cons xs@(LTerm _ : _) = D.putTie =<< treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
 treesTie _ _ = Msg.adlib "unknown angle bracket"
@@ -172,7 +171,7 @@ treesRel cons xs =
 -- | Split term names.
 treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
 treesTermNames = terms [] where
-    terms ns (LName n : xs) = terms (S.toTermName n : ns) xs
+    terms ns (LTerm n : xs) = terms (S.toTermName n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 -- | Decode specific number of contents.

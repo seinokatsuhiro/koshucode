@@ -15,6 +15,8 @@ import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 -- | Attribute name and its contents.
 type AttrTree = (S.AttrName, [S.TTree])
 
@@ -29,7 +31,7 @@ substTree :: [GlobalSlot] -> [AttrTree] -> S.TTree -> B.Ab [S.TTree]
 substTree gslot attr tree = Msg.abSlot [tree] $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
-    loop (B.TreeL (S.TSlot _ n name))
+    loop (LSlot n name)
         | n == 0    = replace n name S.attrNameTrunk attr (`pos` name)
         | n == 1    = replace n name (S.AttrNormal name) attr Right
         | n == 2    = replace n name name gslot Right
