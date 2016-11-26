@@ -29,8 +29,8 @@ relkitLink kits = linkKit where
     kitsRec = linkKit `B.mapSndTo` kits
 
     link :: O.Map (C.RelkitBody c)
-    link (B.Sourced src core) =
-        B.Sourced src $
+    link (B.Sourced cp core) =
+        B.Sourced cp $
          case core of
            C.RelkitAbFull      u f bs    -> C.RelkitAbFull      u f $ map link bs
            C.RelkitOneToAbMany u f bs    -> C.RelkitOneToAbMany u f $ map link bs
@@ -49,8 +49,8 @@ relkitLink kits = linkKit where
 -- | Run relkit.
 relkitRun :: forall h. forall c. (Ord c, D.CRel c, D.SelectRel h)
     => h c -> [LocalTable c] -> C.RelkitBody c -> B.AbMap [[c]]
-relkitRun hook rs (B.Sourced toks core) bo1 =
-    Msg.abRun toks $
+relkitRun hook rs (B.Sourced cp core) bo1 =
+    Msg.abRun cp $
      case core of
        C.RelkitFull        u f     -> right u $ f             bo1
        C.RelkitOneToMany   u f     -> right u $ f `concatMap` bo1
@@ -66,9 +66,9 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitConst           bo  -> Right bo
        C.RelkitId                  -> Right bo1
 
-       C.RelkitAppend b1@(B.Sourced toks1 _) b2
+       C.RelkitAppend b1@(B.Sourced cp' _) b2
                                    -> do bo2 <- run b1 bo1
-                                         Msg.abRun toks1 $ run b2 bo2
+                                         Msg.abRun cp' $ run b2 bo2
 
        C.RelkitSource pat ns       -> let r = D.selectRel hook pat ns
                                       in Right $ D.relBody r

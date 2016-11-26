@@ -13,6 +13,7 @@ module Koshucode.Baala.Base.IO.CodePos
 
     -- * Sourced
     Sourced (..),
+    sourced,
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
@@ -106,8 +107,12 @@ data Sourced a =
             } deriving (Show, Eq, Ord)
 
 instance Functor Sourced where
-    fmap f (Sourced src x) = Sourced src $ f x
+    fmap f (Sourced cp x) = Sourced cp $ f x
 
 instance GetCodePos (Sourced a) where
     getCPs = source
+
+-- | Create value with code position.
+sourced :: (GetCodePos cp) => cp -> a -> Sourced a
+sourced cp = Sourced $ getCPs cp
 

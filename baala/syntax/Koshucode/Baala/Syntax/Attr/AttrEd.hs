@@ -48,7 +48,7 @@ consAttrEd = loop where
     fill []                          = []
 
     right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
-    right trees = Right . B.Sourced (concatMap B.getCPs $ B.untrees trees)
+    right trees = Right . B.sourced trees
 
     loop trees =
         Msg.abAttrTrees trees $ case S.divideTreesByBar trees of
@@ -76,8 +76,8 @@ consAttrEd = loop where
 
 -- | Edit relmap attributes.
 runAttrEd :: AttrEd -> B.AbMap [S.AttrTree]
-runAttrEd (B.Sourced toks edit) attr = run where
-    run = Msg.abAttr toks $ case edit of
+runAttrEd (B.Sourced cp edit) attr = run where
+    run = Msg.abAttr cp $ case edit of
             AttrEdId                -> Right attr
             AttrEdAdd opt k xs      -> add opt (S.AttrNormal k) xs
             AttrEdRename (k', k)    -> rename (S.AttrNormal k') (S.AttrNormal k)
