@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -15,9 +16,11 @@ module Koshucode.Baala.Base.IO.IOPoint
     -- * Numbered I/O point
     NIOPoint (..),
     nioFrom,
+    Code, ToCode (..),
   ) where
 
 import qualified System.IO                     as IO
+import qualified Data.ByteString.Lazy          as Bz
 import qualified Koshucode.Baala.Base.List     as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 
@@ -46,7 +49,7 @@ instance Ord NamedHandle where
 data IOPoint
     = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
     | IOPointUri    String                  -- ^ Universal resource identifier
-    | IOPointText   (Maybe String) B.Bz     -- ^ Code itself
+    | IOPointText   (Maybe String) Code     -- ^ Code itself
     | IOPointCustom String B.Bz             -- ^ Custom I/O
     | IOPointStdin                          -- ^ Sandard input
     | IOPointStdout                         -- ^ Sandard output
@@ -84,7 +87,7 @@ ioPointFrom context path
     | otherwise                     = IOPointFile context path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [B.Bz] -> FilePath -> [FilePath] -> [IOPoint]
+ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
 ioPointList stdin texts context paths =
     B.consIf stdin IOPointStdin $
          IOPointText Nothing `map` texts ++
@@ -116,9 +119,26 @@ instance Ord NIOPoint where
 
 -- | Zero-numbered empty input point.
 instance B.Default NIOPoint where
-    def = nioFrom ""
+    def = nioFrom Bz.empty
 
 -- | Create input point for given lazy bytestring.
-nioFrom :: B.Bz -> NIOPoint
-nioFrom = NIOPoint 0 . IOPointText Nothing
+--
+--   >>> nioFrom "abc"
+--   NIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
+--
+nioFrom :: (ToCode code) => code -> NIOPoint
+nioFrom = NIOPoint 0 . IOPointText Nothing . toCode
+
+-- | This implementation uses lazy bytestring as code string.
+type Code = B.Bz
+
+-- | Convert to code string.
+class ToCode a where
+    toCode :: a -> Code
+
+instance ToCode B.Bz where
+    toCode = id
+
+instance ToCode String where
+    toCode = B.stringBz
 
