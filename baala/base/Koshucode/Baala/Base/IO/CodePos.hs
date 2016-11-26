@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Source code information.
+-- | Position on code string.
 
 module Koshucode.Baala.Base.IO.CodePos
   ( -- * Code position
@@ -11,9 +11,9 @@ module Koshucode.Baala.Base.IO.CodePos
     -- * Get code positions
     GetCodePos (..),
 
-    -- * Sourced
-    Sourced (..),
-    sourced,
+    -- * Codic
+    Codic (..),
+    codic,
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
@@ -23,12 +23,12 @@ import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 -- ----------------------  CodePos
 
--- | Position of input code.
+-- | Position on input code string.
 data CodePos = CodePos
       { cpSource     :: B.NIOPoint  -- ^ Source of code
       , cpLineNo     :: Int         -- ^ Line number
-      , cpLineText   :: String      -- ^ Line content
-      , cpText       :: String      -- ^ Text at which begins token
+      , cpLineText   :: String      -- ^ Code string line
+      , cpText       :: String      -- ^ Current code string
       } deriving (Eq)
 
 -- | Number of input point, line number, and column number,
@@ -98,21 +98,21 @@ instance (GetCodePos cp) => GetCodePos [cp] where
     getCPs = concatMap getCPs
 
 
--- ----------------------  Sourced
+-- ----------------------  Codic
 
--- | Type with source code information.
-data Sourced a =
-    Sourced { source    :: [CodePos]
-            , unsourced :: a
-            } deriving (Show, Eq, Ord)
+-- | Value with code string.
+data Codic a =
+    Codic { codicCPs :: [CodePos]    -- ^ Code positions.
+          , uncodic  :: a            -- ^ Value.
+          } deriving (Show, Eq, Ord)
 
-instance Functor Sourced where
-    fmap f (Sourced cp x) = Sourced cp $ f x
+instance Functor Codic where
+    fmap f (Codic cp a) = Codic cp $ f a
 
-instance GetCodePos (Sourced a) where
-    getCPs = source
+instance GetCodePos (Codic a) where
+    getCPs = codicCPs
 
 -- | Create value with code position.
-sourced :: (GetCodePos cp) => cp -> a -> Sourced a
-sourced cp = Sourced $ getCPs cp
+codic :: (GetCodePos cp) => cp -> a -> Codic a
+codic cp = Codic $ getCPs cp
 

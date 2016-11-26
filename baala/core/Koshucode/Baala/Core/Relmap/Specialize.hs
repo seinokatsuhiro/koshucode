@@ -125,5 +125,5 @@ relmapSpecialize hook links = spec [] [] where
             where
               cyclic        = C.Relkit Nothing Nothing body
               acyclic kit1  = C.Relkit Nothing (C.relkitOutput kit1) body
-              body          = B.Sourced [] $ C.RelkitLink n key1 Nothing
+              body          = B.Codic [] $ C.RelkitLink n key1 Nothing
 

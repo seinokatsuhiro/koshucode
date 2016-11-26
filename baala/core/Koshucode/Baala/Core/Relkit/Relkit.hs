@@ -33,7 +33,7 @@ data Relkit c = Relkit
     }
 
 -- | Body of relkit.
-type RelkitBody c = B.Sourced (RelkitCore c)
+type RelkitBody c = B.Codic (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c

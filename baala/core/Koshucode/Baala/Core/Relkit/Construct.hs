@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 -- | Construct relkit with output heading
 --   and relation-to-relation calculation.
 relkit :: Maybe D.Head -> C.RelkitCore c -> C.Relkit c
-relkit ho = C.Relkit Nothing ho . B.Sourced []
+relkit ho = C.Relkit Nothing ho . B.Codic []
 
 -- | Relkit for identity relmap.
 relkitId :: Maybe D.Head -> C.Relkit c
@@ -45,8 +45,8 @@ relkitNothing = relkit Nothing C.RelkitId
 
 -- | Set relkit source.
 relkitSetSource :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)
-relkitSetSource cp (C.Relkit hi ho (B.Sourced _ core)) =
-    C.Relkit hi ho $ B.sourced cp core
+relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
+    C.Relkit hi ho $ B.codic cp core
 
 instance Monoid (C.Relkit c) where
     mempty = relkitConst D.reldee

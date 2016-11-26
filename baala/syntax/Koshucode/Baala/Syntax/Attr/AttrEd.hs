@@ -22,7 +22,7 @@ import Koshucode.Baala.Syntax.TTree.Pattern
 -- ----------------------  Data type
 
 -- | Attribute editor with source code information.
-type AttrEd = B.Sourced AttrEdBody
+type AttrEd = B.Codic AttrEdBody
 
 -- | Operators for attribute editors.
 data AttrEdBody
@@ -48,7 +48,7 @@ consAttrEd = loop where
     fill []                          = []
 
     right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
-    right trees = Right . B.sourced trees
+    right trees = Right . B.codic trees
 
     loop trees =
         Msg.abAttrTrees trees $ case S.divideTreesByBar trees of
@@ -76,7 +76,7 @@ consAttrEd = loop where
 
 -- | Edit relmap attributes.
 runAttrEd :: AttrEd -> B.AbMap [S.AttrTree]
-runAttrEd (B.Sourced cp edit) attr = run where
+runAttrEd (B.Codic cp edit) attr = run where
     run = Msg.abAttr cp $ case edit of
             AttrEdId                -> Right attr
             AttrEdAdd opt k xs      -> add opt (S.AttrNormal k) xs
