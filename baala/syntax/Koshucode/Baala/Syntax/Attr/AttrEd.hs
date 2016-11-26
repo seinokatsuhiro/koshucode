@@ -43,9 +43,9 @@ consAttrEd = loop where
     notKeyword ('-' : _)  = False
     notKeyword _          = True
 
-    fill (S.TextLeafRaw _ "*" : xs)  = Nothing : fill xs
-    fill (x : xs)                    = Just x  : fill xs
-    fill []                          = []
+    fill (LRaw "*" : xs)  = Nothing : fill xs
+    fill (x : xs)         = Just x  : fill xs
+    fill []               = []
 
     right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
     right trees = Right . B.codic trees
@@ -110,7 +110,7 @@ runAttrEd (B.Codic cp edit) attr = run where
     fill ps       []               = Right $ ps
 
 nestName :: B.AbMap [S.TTree]
-nestName [L (S.TTerm _ n)] = Right $ localNest $ S.toTermName n
+nestName [LTerm n] = Right $ localNest $ S.toTermName n
 nestName _ = Msg.adlib "require term name"
 
 localNest :: S.TermName -> [S.TTree]

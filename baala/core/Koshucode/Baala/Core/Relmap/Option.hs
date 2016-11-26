@@ -18,6 +18,8 @@ import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
+
 
 -- | Option type.
 type Option c = Map.Map String (OptionContent c)
@@ -60,7 +62,7 @@ optionAssn toks =
          ([], assoc) -> Right assoc
          _           -> Msg.adlib "extra input"
     where
-      maybeName pt@(S.TextLeafRaw _ n) = Just (n, [pt])
+      maybeName pt@(LRaw n) = Just (n, [pt])
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)

@@ -38,13 +38,14 @@ type NamedTree = B.Named TTree
 -- --------------------------------------------  Pattern
 
 -- | Term leaf.
-{-# DEPRECATED TermLeafName "Use L (TTerm _ _) instead." #-}
+{-# DEPRECATED TermLeafName "Use LTerm instead." #-}
 pattern TermLeafName  cp w  = B.TreeL (S.TTerm  cp w)
 
 -- | Text leaf.
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
 
 -- | Text leaf of 'S.TextRaw'.
+{-# DEPRECATED TextLeafRaw "Use LRaw instead." #-}
 pattern TextLeafRaw   cp w  = TextLeaf S.TextRaw cp w
 
 -- | Text leaf beginning with single hyphen.

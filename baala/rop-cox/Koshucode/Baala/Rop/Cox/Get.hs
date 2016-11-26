@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
+import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- --------------------------------------------  Cox
 
@@ -93,7 +94,7 @@ getTreesByEqual trees =
       _             -> Msg.adlib "getTreesByEqual"
 
 getTextFromTree :: S.TTree -> B.Ab String
-getTextFromTree (S.TextLeafRaw _ n)  = Right n
+getTextFromTree (LRaw n) = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 
