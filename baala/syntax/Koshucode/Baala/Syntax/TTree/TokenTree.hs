@@ -38,6 +38,7 @@ type NamedTree = B.Named TTree
 pattern TermLeafName  cp w  = B.TreeL (S.TTerm  cp w)
 
 -- | Text leaf.
+{-# DEPRECATED TextLeaf "Use LText instead." #-}
 pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
 
 -- | Text leaf of 'S.TextRaw'.
@@ -45,4 +46,5 @@ pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
 pattern TextLeafRaw   cp w  = TextLeaf S.TextRaw cp w
 
 -- | Text leaf of 'S.TextQ'.
+{-# DEPRECATED TextLeafQ "Use LQ instead." #-}
 pattern TextLeafQ     cp w  = TextLeaf S.TextQ   cp w
