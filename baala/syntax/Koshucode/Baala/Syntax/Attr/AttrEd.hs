@@ -52,22 +52,21 @@ consAttrEd = loop where
 
     loop trees =
         Msg.abAttrTrees trees $ case S.divideTreesByBar trees of
-          [ S.TextLeafRaw _ op : xs ]
+          [LRaw op : xs]
             | op == "id"        -> right trees $ AttrEdId
             | op == "fill"      -> right trees $ AttrEdFill $ fill xs
 
-          [ S.TextLeafRaw _ op : S.TextLeafRaw _ ('-' : k) : xs ]
+          [LRaw op : LRaw ('-' : k) : xs]
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
             | op == "nest"      -> right trees $ AttrEdNest k xs
 
-          [ S.TextLeafRaw _ op : S.TextLeafRaw _ k'
-                : S.TextLeafRaw _ k : _ ]
+          [LRaw op : LRaw k' : LRaw k : _]
             | notKeyword k'     -> Msg.reqAttrName k'
             | notKeyword k      -> Msg.reqAttrName k
             | op == "rename"    -> right trees $ AttrEdRename (k', k)
 
-          [[ B.TreeB S.BracketGroup _ xs ]]  ->  loop xs
+          [[BGroup xs]]         -> loop xs
 
           [[]]                  -> right [] AttrEdId
           [_]                   -> Msg.adlib "unknown attribute editor"

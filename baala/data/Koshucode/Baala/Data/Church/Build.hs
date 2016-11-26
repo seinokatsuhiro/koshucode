@@ -85,7 +85,7 @@ construct calc = expr where
          in cons cp tree
 
     cons :: [B.CodePos] -> S.TTree -> B.Ab (D.Cox c)
-    cons cp tree@(B S.BracketGroup subtrees)
+    cons cp tree@(BGroup subtrees)
          = case subtrees of
              f@(L (S.TText _ q w)) : xs
                  | q == S.TextRaw && isName w -> fill cp f xs
@@ -96,16 +96,16 @@ construct calc = expr where
              []     -> lit cp tree
 
     -- form with blanks (function)
-    cons cp (B S.BracketForm [vars, b1]) =
+    cons cp (BForm [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
            let vs = map S.tokenContent $ B.untree vars'
            Right $ D.CoxForm cp tag vs b2
-    cons _ (B S.BracketForm trees) =
+    cons _ (BForm trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- term path
-    cons cp (B S.BracketTerm trees) =
+    cons cp (BTerm trees) =
         do ns <- D.treesFlatNames trees
            Right $ D.CoxTerm cp ns []
 
