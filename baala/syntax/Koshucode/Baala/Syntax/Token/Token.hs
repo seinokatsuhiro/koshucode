@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
@@ -19,6 +20,16 @@ module Koshucode.Baala.Syntax.Token.Token
     LocalRef (..),
     -- ** Blank
     BlankName (..),
+
+    -- * Pattern
+    pattern TTextUnk,
+    pattern TTextRaw,
+    pattern TTextQ,
+    pattern TTextQQ,
+    pattern TTextKey,
+    pattern TTextBar,
+    pattern TTextLicense,
+    pattern TTextSect,
   ) where
 
 import qualified Koshucode.Baala.Base             as B
@@ -195,4 +206,31 @@ instance SubtypeName BlankName where
     subtypeName (BlankPrefix   _) = "prefix"
     subtypeName (BlankInfix    _) = "infix"
     subtypeName (BlankPostfix  _) = "postfix"
+
+
+-- --------------------------------------------  Pattern
+
+-- | Unknown text token.
+pattern TTextUnk cp w = TText cp TextUnk  w
+
+-- | Raw text token.
+pattern TTextRaw cp w = TText cp TextRaw  w
+
+-- | Quoted text token.
+pattern TTextQ cp w = TText cp TextQ    w
+
+-- | Dobule-quoted text token.
+pattern TTextQQ cp w = TText cp TextQQ   w
+
+-- | Keyword token.
+pattern TTextKey cp w = TText cp TextKey  w
+
+-- | Bar-enclosed token.
+pattern TTextBar cp w = TText cp TextBar  w
+
+-- | License text token.
+pattern TTextLicense cp w = TText cp TextLicense w
+
+-- | Section sign.
+pattern TTextSect cp = TTextRaw cp "==="
 
