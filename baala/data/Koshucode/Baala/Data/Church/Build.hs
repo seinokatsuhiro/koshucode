@@ -18,6 +18,7 @@ import qualified Koshucode.Baala.Data.Church.Cox        as D
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Token.Pattern
 
 -- | Construct content expression from token tree.
 treeCox :: forall c. (D.CContent c)
@@ -114,11 +115,11 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(L tok) = case tok of
-        S.TTerm _ n                -> Right $ D.CoxTerm  cp [S.toTermName n] []
-        S.TName _ op               -> Right $ D.CoxBlank cp op
-        S.TTextRaw _ n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
-        S.TText _ _ _              -> lit cp tree
-        _                          -> B.bug "core/leaf"
+        TTerm n             -> Right $ D.CoxTerm  cp [S.toTermName n] []
+        S.TName _ op        -> Right $ D.CoxBlank cp op
+        TRaw n | isName n   -> Right $ D.CoxBlank cp $ S.BlankNormal n
+        TText _ _           -> lit cp tree
+        _                   -> B.bug "core/leaf"
 
     cons _ _ = B.bug "core"
 
@@ -157,15 +158,15 @@ prefix htab tree =
     where
       conv = (c D.copPrefix, c D.copInfix, c D.copPostfix)
       c :: (String -> S.BlankName) -> O.Map S.Token
-      c f (S.TTextRaw cp s) = S.TName cp $ f s
+      c f (S.TText cp S.TextRaw s) = S.TName cp $ f s
       c _ x = x
 
       ht :: S.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
       wordText :: S.Token -> Maybe String
-      wordText (S.TTextRaw _ w) = Just w
-      wordText _               = Nothing
+      wordText (TRaw w)  = Just w
+      wordText _         = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n

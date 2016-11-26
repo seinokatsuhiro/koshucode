@@ -158,10 +158,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     dispatch (TBar ('|' : k) : xs)   -- Frege's judgement stroke
                                     = clause    $ frege (lower k) xs
-    dispatch (S.TTextRaw _ name : S.TTextRaw _ is : body)
+    dispatch (TRaw name : TRaw is : body)
         | isDelim is                = clause    $ CRelmap name body
     dispatch (TSection : _)    = newSec
-    dispatch (S.TTextRaw _ k : xs)
+    dispatch (TRaw k : xs)
         | k == "input"              = clause    $ CInput xs
         | k == "include"            = clause    $ CInput xs
         | k == "export"             = clause    $ expt xs
@@ -212,17 +212,17 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                              ("|" ++ s)
 
     -- Judgement
-    judge q (S.TText _ _ p : xs)  = CJudge q p $ addAbout xs
-    judge _ ts                    = CUnknown $ judgeError ts
+    judge q (TText _ p : xs)  = CJudge q p $ addAbout xs
+    judge _ ts                = CUnknown $ judgeError ts
 
-    judgeError []                 = unkAtStart ["Give a judgement pattern"]
-    judgeError ts                 = unkAt ts ["Use text in judgement pattern"]
+    judgeError []             = unkAtStart ["Give a judgement pattern"]
+    judgeError ts             = unkAt ts ["Use text in judgement pattern"]
 
     addAbout xs | null resAbout && null about  = xs
                 | otherwise                    = resAbout ++ about ++ xs
 
     -- Assertion
-    assert q (S.TText _ _ p : xs) =
+    assert q (TText _ p : xs) =
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
@@ -248,10 +248,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
               abort msg       = CUnknown $ unk orig msg
 
     -- Others
-    expt (S.TText _ _ n : S.TText _ _ ":" : xs)
-                                  = CBodies [CExport n, CRelmap n xs]
-    expt [S.TText _ _ n]          = CExport n
-    expt _                        = CUnknown $ unkAtStart []
+    expt (TText _ n : TText _ ":" : xs)
+                              = CBodies [CExport n, CRelmap n xs]
+    expt [TText _ n]          = CExport n
+    expt _                    = CUnknown $ unkAtStart []
 
 
 pairs :: [a] -> Maybe [(a, a)]
@@ -266,6 +266,6 @@ wordPairs toks =
        mapM wordPair p
     where
       wordPair :: (S.Token, S.Token) -> Maybe (String, String)
-      wordPair (S.TText _ _ a, S.TText _ _ b) = Just (a, b)
+      wordPair (TText _ a, TText _ b) = Just (a, b)
       wordPair _ = Nothing
 

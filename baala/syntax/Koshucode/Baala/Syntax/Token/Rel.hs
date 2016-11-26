@@ -85,12 +85,13 @@ isCodePointDigit c = isPM c || Ch.isDigit c
 scanRel :: S.Scanner
 scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
-    nip            = S.nipUpdate   sc
-    nipw           = S.nipUpdateW  sc
-    niplw          = S.nipUpdateLW sc
-    upd cs tok     = B.codeUpdate cs tok sc
-    updEnd         = upd ""
-    int cs tok     = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
+    nip          = S.nipUpdate   sc
+    nipw         = S.nipUpdateW  sc
+    niplw        = S.nipUpdateLW sc
+    upd cs tok   = B.codeUpdate cs tok sc
+    updEnd       = upd ""
+    int cs tok   = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
+    raw          = S.TText cp S.TextRaw
 
     -- ----------------------  dispatch
 
@@ -105,7 +106,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | isQ a                  = nipw            $ S.nipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
-                                 = upd ds          $ S.TTextRaw   cp [a,b,c]
+                                 = upd ds          $ raw             [a,b,c]
         | a == '{' && b == '|'   = int cs          $ S.TOpen      cp [a,b]
         | isOpen a && isGrip b   = upd cs          $ S.TOpen      cp [a,b]
         | isGrip a && isClose b  = upd cs          $ S.TClose     cp [a,b]
@@ -121,7 +122,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | a == '-' && b == '*' && c == '-'
                                  = updEnd          $ S.TComment   cp bs
 
-        | isSingle a             = upd bs          $ S.TTextRaw   cp [a]
+        | isSingle a             = upd bs          $ raw [a]
         | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
         | n == 0                 = sc
         | otherwise              = upd []          $ S.unknownToken cp cs
@@ -129,7 +130,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 
     aster :: String -> String -> S.TokenScan
     aster (c:cs) w
-        | w == "****"         = upd (c:cs)      $ S.TTextRaw cp w
+        | w == "****"         = upd (c:cs)      $ raw w
         | c == '*'            = aster cs (c:w)
     aster cs w
         | w == "**"           = updEnd          $ S.TComment cp cs
@@ -139,17 +140,19 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
 -- | Nip off token beginning with @<@.
 nipAngle :: B.CodePos -> String -> String -> S.TokenNipResult
 nipAngle cp = angle where
+    raw = S.TText cp S.TextRaw
+
     angle (c:cs) w | c == '<'        = angle cs (c:w)
     angle cs w     | w == "<"        = angleMid cs ""
-                   | otherwise       = (cs, S.TTextRaw cp w)
+                   | otherwise       = (cs, raw w)
 
     -- read keyword, like <crlf>
     angleMid (c:cs) w
         | c == '>'                   = (cs, angleToken $ rv w)
         | S.isSymbol c               = angleMid cs (c:w)
-    angleMid cs w                    = (cs, S.TTextRaw cp $ '<' : rv w)
+    angleMid cs w                    = (cs, raw $ '<' : rv w)
 
-    angleToken ""                = S.TTextRaw cp "<>"
+    angleToken ""                = raw "<>"
     angleToken ('U' : '+' : s)   = fromCodePoint stringHexIntList s
     angleToken ('c' : s) | isCodePoint s
                                  = fromCodePoint stringIntList s
@@ -185,22 +188,23 @@ nipHat cp = hat where
 -- | Scan interpretation content between @{|@ and @|}@.
 scanInterp :: S.Scanner
 scanInterp change sc@B.CodeScan { B.codeInputPt = cp
-                            , B.codeWords = wtab } = S.section change int sc where
+                                , B.codeWords = wtab } = S.section change int sc where
     nip         = S.nipUpdate   sc
     niplw       = S.nipUpdateLW sc
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
+    raw         = S.TText cp S.TextRaw
 
     int ""                           = sc
     int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
                   | S.isTerm c       = niplw       $ S.nipTermName cp wtab cs
                   | otherwise        = word (c:cs) ""
 
-    word cs@('|':'}':_) w            = gen cs      $ S.TTextRaw cp $ rv w
-    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ S.TTextRaw cp $ rv w
-                  | S.isTerm c       = upd (c:cs)  $ S.TTextRaw cp $ rv w
+    word cs@('|':'}':_) w            = gen cs      $ raw $ rv w
+    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ raw $ rv w
+                  | S.isTerm c       = upd (c:cs)  $ raw $ rv w
                   | otherwise        = word cs     $ c:w
-    word cs w                        = upd cs      $ S.TTextRaw cp $ rv w
+    word cs w                        = upd cs      $ raw $ rv w
 
 
 -- ------------------------------------------------------------------

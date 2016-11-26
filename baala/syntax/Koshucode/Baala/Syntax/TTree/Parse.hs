@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 
 import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Token.Pattern
 
 -- --------------------------------------------  Parser
 
@@ -139,8 +140,8 @@ ttDoc = dv where
 
 splitTokensBy :: O.Test String -> B.SplitList3e S.Token
 splitTokensBy p = B.splitBy p2 where
-    p2 (S.TTextRaw _ x)  = p x
-    p2 _ = False
+    p2 (TRaw x) = p x
+    p2 _        = False
 
 raw :: O.Test String -> S.TTree -> Bool
 raw p (LRaw w) = p w

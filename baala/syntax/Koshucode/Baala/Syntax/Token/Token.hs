@@ -213,6 +213,7 @@ instance SubtypeName BlankName where
 pattern TTextUnk cp w = TText cp TextUnk  w
 
 -- | Raw text token.
+{-# DEPRECATED TTextRaw "Use TRaw instead." #-}
 pattern TTextRaw cp w = TText cp TextRaw  w
 
 -- | Quoted text token.

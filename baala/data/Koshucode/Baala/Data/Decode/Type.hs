@@ -16,6 +16,7 @@ import qualified Koshucode.Baala.Data.Decode.Term      as D
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Token.Pattern
 
 
 -- ----------------------  Text
@@ -42,8 +43,8 @@ treeText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
 tokenString :: Bool -> S.Token -> B.Ab String
-tokenString True  (S.TText _ q w) | q > S.TextRaw  = Right w
-tokenString False (S.TTextRaw _ w)                 = Right w
+tokenString True  (TText q w) | q > S.TextRaw  = Right w
+tokenString False (TRaw w)                     = Right w
 tokenString _ _  =  Msg.nothing
 
 

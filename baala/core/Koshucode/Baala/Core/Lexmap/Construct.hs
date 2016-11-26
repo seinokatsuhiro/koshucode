@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Data.Message             as Msg
 import qualified Koshucode.Baala.Core.Lexmap.Message      as Msg
 
 import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Token.Pattern
 
 
 -- ----------------------  Section number
@@ -78,15 +79,15 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                        baseOf "append" [S.ttreeGroup ts, S.ttreeGroup rest]
 
         single :: ConsLexmapBody
-        single (L tok@(S.TTextRaw _ n)   : ts)
+        single (L tok@(TRaw n)   : ts)
             = find tok n ts                       -- derived or base
         single (L tok@(S.TLocal _ _ _ _) : ts)
             = local tok ts                        -- local relation "^/x" or "^x"
-        single [B S.BracketGroup ts]
+        single [BGroup ts]
             = lexmap eid sec ts                   -- group "( ... )"
         single [B _ _]
             = Msg.reqGroup                        -- unknown group
-        single (n@(L (S.TTerm _ _)) : ts)
+        single (n@(LTerm _) : ts)
             = baseOf "add" $ n : [S.ttreeGroup ts] -- "/N E" means "add /N ( E )"
         single []
             = baseOf "id" []                      -- "| R | R" means "id | R | R"

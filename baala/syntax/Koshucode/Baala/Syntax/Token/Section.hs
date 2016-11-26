@@ -120,14 +120,15 @@ scanLineInClause form change sc = section change text sc where
 scanTextAssert :: Scanner
 scanTextAssert change sc = section change text sc where
     cp = B.getCP sc
+    raw = S.TText cp S.TextRaw
     text "" = sc
     text ccs@(c:cs)
         | S.isSpace c  = S.nipUpdate  sc $ S.nipSpace cp ccs
         | c == '|'     = S.nipUpdate  sc $ S.nipBar cp cs [c]
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
-                           $ B.codeScanSave $ S.nipUpdate sc (cs, S.TTextRaw cp [c])
+                           $ B.codeScanSave $ S.nipUpdate sc (cs, raw [c])
         | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
-                           (ws', _, S.TTextRaw _ "") ->
-                               S.nipUpdateW sc (ws', cs, S.TTextRaw cp [c])
+                           (ws', _, TRaw "") ->
+                               S.nipUpdateW sc (ws', cs, raw [c])
                            nip -> S.nipUpdateW sc nip
 

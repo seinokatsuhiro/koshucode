@@ -64,8 +64,7 @@ clauseMixForBz f bz = B.mixLines texts where
     texts   = f <$> clauses
     clauses = S.tokenClauses $ S.tokenLinesBzTextAssert B.def bz
 
-pattern Affirm name ts <-
-    (TBar "|==") : (S.TTextRaw _ name) : (S.TTextRaw _ ":") : ts
+pattern Affirm name ts <- (TBar "|==") : (TRaw name) : (TRaw ":") : ts
 
 clauseMix :: S.TokenClause -> B.MixText
 clauseMix = dispatch . B.clauseTokens where
@@ -77,5 +76,5 @@ tokensMix (t : ts)  = tokenMix t `B.mixSep` tokensMix ts
 tokensMix []        = B.mixEmpty
 
 tokenMix :: S.Token -> B.MixText
-tokenMix (S.TTextRaw _ s) = B.mix s
-tokenMix t                = B.mixShow t
+tokenMix (TRaw s)  = B.mix s
+tokenMix t         = B.mixShow t

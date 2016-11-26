@@ -95,17 +95,9 @@ trimIf False t = t
 -- | Type for subtext bundle.
 type CharBundle = T.Bundle Char
 
-pattern K n     <- L (Key n)
-pattern T s     <- LQq s
-pattern C c     <- L (Char c)
-pattern To      <- K "to"
-
-pattern G xs    <- B S.BracketGroup xs
-pattern Empty   <- G []
-
-pattern Key  n  <- S.TTextRaw _ n
-pattern Char c  <- TQq [c]
-pattern Term n  <- S.TTerm    _ n
+pattern LChar c <- LQq [c]
+pattern To      <- LRaw "to"
+pattern Empty   <- BGroup []
 
 unknownSyntax :: (Show a) => a -> B.Ab b
 unknownSyntax x = Msg.adlib $ "subtext syntax error " ++ show x
@@ -138,8 +130,8 @@ parseBundle = bundle where
 
     step1 :: [S.TTree] -> B.Ab (String, [S.TTree])
     step1 xs = case divide "=" xs of
-                 [[K n], x] -> Right (n, x)
-                 _                -> unknownSyntax xs
+                 [[LRaw n], x]  -> Right (n, x)
+                 _              -> unknownSyntax xs
 
     step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, T.CharExpr)
     step2 ns (n, x) = do e <- parseSubtext ns x
@@ -151,13 +143,13 @@ parseSubtext ns = trees False where
 
     -- Trees
     trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
-    trees False xs              = opTop xs
-    trees True (K n : xs)       = pre n xs
-    trees True [L (Term n), x]  = Right . T.sub n =<< tree x  -- /N E
-    trees True [L (Term n)]     = Right $ T.sub n T.what      -- /N
-    trees True []               = Right T.succ                -- ()
-    trees True [x]              = tree x
-    trees True  xs              = unknownSyntax $ show xs
+    trees False xs            = opTop xs
+    trees True (LRaw n : xs)  = pre n xs
+    trees True [LTerm n, x]   = Right . T.sub n =<< tree x  -- /N E
+    trees True [LTerm n]      = Right $ T.sub n T.what      -- /N
+    trees True []             = Right T.succ                -- ()
+    trees True [x]            = tree x
+    trees True  xs            = unknownSyntax $ show xs
 
     -- Leaf or branch
     tree :: S.TTree -> B.Ab T.CharExpr
@@ -167,7 +159,7 @@ parseSubtext ns = trees False where
 
     leaf :: S.Token -> B.Ab T.CharExpr
     leaf (TQq t)      = Right $ T.equal t     -- "LITERAL"
-    leaf (Key n)      = pre n []
+    leaf (TRaw n)     = pre n []
     leaf x            = unknownSyntax x
 
     branch :: S.BracketType -> [S.TTree] -> B.Ab T.CharExpr
@@ -181,26 +173,26 @@ parseSubtext ns = trees False where
                        Right $ op e
 
     times :: [S.TTree] -> [S.TTree] -> B.Ab T.CharExpr
-    times [ Empty , To , Empty ] = bracket (T.many)
-    times [ K a   , To         ] = bracket (T.min (int a))
-    times [ K a   , To , Empty ] = bracket (T.min (int a))
-    times [         To , K b   ] = bracket (T.max (int b))
-    times [ Empty , To , K b   ] = bracket (T.max (int b))
-    times [ K a   , To , K b   ] = bracket (T.minMax (int a) (int b))
-    times [ K a                ] = bracket (T.minMax (int a) (int a))
+    times [ Empty , To , Empty  ] = bracket (T.many)
+    times [ LRaw a, To          ] = bracket (T.min (int a))
+    times [ LRaw a, To , Empty  ] = bracket (T.min (int a))
+    times [         To , LRaw b ] = bracket (T.max (int b))
+    times [ Empty , To , LRaw b ] = bracket (T.max (int b))
+    times [ LRaw a, To , LRaw b ] = bracket (T.minMax (int a) (int b))
+    times [ LRaw a              ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
     int s = case O.stringInt s of
               Just n   -> n
               Nothing  -> error "require integer"
 
-    text (T x)                     = Right x
-    text (B S.BracketGroup [T x])  = Right x
-    text x                         = unknownSyntax x
+    text (LQq x)           = Right x
+    text (BGroup [LQq x])  = Right x
+    text x                 = unknownSyntax x
 
     -- Infix operators
     opTop :: [S.TTree] -> B.Ab T.CharExpr
-    opTop [B S.BracketSet xs, G m] = times m xs
+    opTop [BSet xs, BGroup m] = times m xs
     opTop xs = opAlt xs
     opAlt    = inf "|"   T.or    opSeq   -- E | E | E
     opSeq    = inf "++"  T.seq   opOr    -- E ++ E ++ E
@@ -217,25 +209,25 @@ parseSubtext ns = trees False where
                  _        -> unknownSyntax xs
 
     opAs xs = case divide "as" xs of    -- E as E
-                 [xs2, [K "lower"]] -> Right . T.asLower    =<< trees False xs2
-                 [xs2, [K "upper"]] -> Right . T.asUpper    =<< trees False xs2
-                 [xs2, [K "wrap", a, b]]   -> do at <- text a
-                                                 bt <- text b
-                                                 e  <- trees False xs2
-                                                 Right $ T.asWrap at bt e 
-                 [xs2, [K "prepend", a]]   -> do at <- text a
-                                                 e  <- trees False xs2
-                                                 Right $ T.asPrepend at e
-                 [xs2, [K "append", b]]    -> do bt <- text b
-                                                 e  <- trees False xs2
-                                                 Right $ T.asAppend bt e
+                 [xs2, [LRaw "lower"]] -> Right . T.asLower =<< trees False xs2
+                 [xs2, [LRaw "upper"]] -> Right . T.asUpper =<< trees False xs2
+                 [xs2, [LRaw "wrap", a, b]]   -> do at <- text a
+                                                    bt <- text b
+                                                    e  <- trees False xs2
+                                                    Right $ T.asWrap at bt e 
+                 [xs2, [LRaw "prepend", a]]   -> do at <- text a
+                                                    e  <- trees False xs2
+                                                    Right $ T.asPrepend at e
+                 [xs2, [LRaw "append", b]]    -> do bt <- text b
+                                                    e  <- trees False xs2
+                                                    Right $ T.asAppend bt e
                      
-                 [xs2, [T to]]      -> Right . T.asConst to =<< trees False xs2
+                 [xs2, [LQq to]]    -> Right . T.asConst to =<< trees False xs2
                  [xs2]              -> opTo xs2
                  _                  -> unknownSyntax xs
 
     opTo xs = case divide "to" xs of    -- C to C
-                 [[C fr], [C to]] -> Right $ T.to fr to
+                 [[LChar fr], [LChar to]] -> Right $ T.to fr to
                  [xs2]            -> trees True xs2  -- Turn on loop check
                  _                -> unknownSyntax xs
 
@@ -260,8 +252,8 @@ parseSubtext ns = trees False where
     pre "koshu-plain"   []  = Right koshuPlain
     pre "koshu-numeric" []  = Right koshuNumeric
 
-    pre "char"   [T s]      = Right $ T.char s             -- char T
-    pre "word"   [T s]      = Right $ T.word s             -- word T
+    pre "char"   [LQq s]    = Right $ T.char s             -- char T
+    pre "word"   [LQq s]    = Right $ T.word s             -- word T
     pre "not"    [x]        = Right . T.not    =<< tree x  -- not E
     pre "last"   [x]        = Right . T.last   =<< tree x  -- last E
     pre "before" [x]        = Right . T.before =<< tree x  -- before E
@@ -274,7 +266,7 @@ parseSubtext ns = trees False where
                                    Left n  -> unknownCategory n
     pre n _                 = unknownKeyword n
 
-    keyword (K s)           = Right s
+    keyword (LRaw s)        = Right s
     keyword x               = unknownSyntax x
 
 koshuSymbol :: T.CharExpr
