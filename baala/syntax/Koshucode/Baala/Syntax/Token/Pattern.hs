@@ -4,53 +4,47 @@
 -- | Token pattern.
 
 module Koshucode.Baala.Syntax.Token.Pattern
-  ( -- * Text token
-    pattern TTextUnk,
-    pattern TTextRaw,
-    pattern TTextQ,
-    pattern TTextQQ,
-    pattern TTextKey,
-    pattern TTextBar,
-    pattern TTextLicense,
-    pattern TTextSect,
+  ( pattern TText,
+    pattern TUnk,
+    pattern TRaw,
+    pattern TSection,
+    pattern TQ,
+    pattern TQq,
+    pattern TKey,
+    pattern TBar,
+    pattern TLicense,
+    pattern TTerm,
   ) where
 
 import qualified Koshucode.Baala.Syntax.Token.Token  as S
 
-
--- ----------------------  Text token
+-- | Text token.
+pattern TText f w <- S.TText _ f w
 
 -- | Unknown text token.
-pattern TTextUnk cp w = S.TText cp S.TextUnk  w
+pattern TUnk w <- TText S.TextUnk w
 
 -- | Raw text token.
---
---   >>> S.TTextRaw B.def "a"   -- a
-pattern TTextRaw cp w = S.TText cp S.TextRaw  w
-
--- | Quoted text token.
---
---   >>> S.TTextQ B.def "a"   -- 'a
-pattern TTextQ cp w = S.TText cp S.TextQ    w
-
--- | Dobule-quoted text token.
---
---   >>> S.TTextQQ B.def "a"   -- "a"
-pattern TTextQQ cp w = S.TText cp S.TextQQ   w
-
--- | Keyword token.
---
---   >>> S.TTextKey B.def "a"   -- <a>
-pattern TTextKey cp w = S.TText cp S.TextKey  w
-
--- | Bar-enclosed token.
---
---   >>> S.TTextBar B.def "a"   -- |a|
-pattern TTextBar cp w = S.TText cp S.TextBar  w
-
--- | License text token.
-pattern TTextLicense cp w = S.TText cp S.TextLicense w
+pattern TRaw w <- TText S.TextRaw w
 
 -- | Section sign.
-pattern TTextSect cp = TTextRaw cp "==="
+pattern TSection <- TRaw "==="
+
+-- | Quoted text token.
+pattern TQ w <- TText S.TextQ w
+
+-- | Dobule-quoted text token.
+pattern TQq w <- TText S.TextQQ w
+
+-- | Keyword token.
+pattern TKey w <- TText S.TextKey w
+
+-- | Bar-enclosed token.
+pattern TBar w <- TText S.TextBar w
+
+-- | License text token.
+pattern TLicense w <- TText S.TextLicense w
+
+-- | Term token.
+pattern TTerm w <- S.TTerm _ w
 
