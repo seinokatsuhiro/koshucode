@@ -11,11 +11,7 @@ module Koshucode.Baala.Syntax.TTree.TokenTree
     pattern TermLeafName,
     pattern TextLeaf,
     pattern TextLeafRaw,
-    pattern TextLeafAttr,
-    pattern TextLeafAttr2,
     pattern TextLeafQ,
-    --pattern TextLeafQQ,
-    --pattern TextLeafKey,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -48,18 +44,5 @@ pattern TextLeaf form cp w  = B.TreeL (S.TText   cp form w)
 {-# DEPRECATED TextLeafRaw "Use LRaw instead." #-}
 pattern TextLeafRaw   cp w  = TextLeaf S.TextRaw cp w
 
--- | Text leaf beginning with single hyphen.
-pattern TextLeafAttr  cp w  = TextLeaf S.TextRaw cp ('-' : w)
-
--- | Text leaf beginning with double hyphens.
-pattern TextLeafAttr2 cp w  = TextLeaf S.TextRaw cp ('-' : '-' : w)
-
 -- | Text leaf of 'S.TextQ'.
 pattern TextLeafQ     cp w  = TextLeaf S.TextQ   cp w
-
--- | Text leaf of 'S.TextQQ'.
---pattern TextLeafQQ    cp w  = TextLeaf S.TextQQ  cp w
-
--- | Text leaf of 'S.TextKey'.
---pattern TextLeafKey   cp w  = TextLeaf S.TextKey cp w
-

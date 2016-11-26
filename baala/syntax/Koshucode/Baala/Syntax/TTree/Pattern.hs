@@ -7,9 +7,8 @@ module Koshucode.Baala.Syntax.TTree.Pattern
   ( -- * Leaf
     pattern L,
     pattern LText,
-    pattern LRaw,
-    pattern LQ,
-    pattern LQq,
+    pattern LRaw, pattern LAtt1, pattern LAtt2,
+    pattern LQ, pattern LQq,
     pattern LSlot,
     pattern LTerm,
 
@@ -36,6 +35,12 @@ pattern LText f s <- L (S.TText _ f s)
 
 -- | Raw text leaf.
 pattern LRaw s <- LText S.TextRaw s
+
+-- | Single-hyphen attribute text leaf.
+pattern LAtt1 s <- LRaw ('-' : s)
+
+-- | Double-hyphen attribute text leaf.
+pattern LAtt2 s <- LRaw ('-' : '-' : s)
 
 -- | Single-quoted text leaf.
 pattern LQ s <- LText S.TextQ s
