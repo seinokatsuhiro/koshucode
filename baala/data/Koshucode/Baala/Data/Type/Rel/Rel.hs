@@ -61,8 +61,8 @@ instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
     mixShortEncode sh (Rel he bo) =
         let he'  = B.mixEncode he
             bo'  = B.mixJoin1 $ map d bo
-            d xs = B.mixBracketS S.openList S.closeList $ mixBar xs
-        in B.mixBracketS S.openRel S.closeRel (he' `B.mixSep` bo')
+            d xs = B.mixBracketS S.bracketList $ mixBar xs
+        in B.mixBracketS S.bracketRel (he' `B.mixSep` bo')
         where mixBar cs = B.mixJoinBar $ map (B.mixShortEncode sh) cs
 
 

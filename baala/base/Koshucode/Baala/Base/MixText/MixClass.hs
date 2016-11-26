@@ -77,12 +77,12 @@ instance Mix (Maybe B.MixText) where
 -- ----------------------  Utility
 
 -- | Enclose mix text with open and close bracket.
-mixBracket :: (Mix m) => m -> m -> B.MixText -> B.MixText
-mixBracket open close body = mix open <> body <> mix close
+mixBracket :: (Mix m) => (m, m) -> B.MixText -> B.MixText
+mixBracket (open, close) body = mix open <> body <> mix close
 
 -- | Enclose mix text with bracket and space.
-mixBracketS :: (Mix m) => m -> m -> B.MixText -> B.MixText
-mixBracketS open close = mixBracket (mix open <> B.mix1) (B.mix1 <> mix close)
+mixBracketS :: (Mix m) => (m, m) -> B.MixText -> B.MixText
+mixBracketS (open, close) = mixBracket (mix open <> B.mix1, B.mix1 <> mix close)
 
 -- | Concatenate mix texts with delimiter.
 mixJoin :: (Mix m) => m -> [B.MixText] -> B.MixText

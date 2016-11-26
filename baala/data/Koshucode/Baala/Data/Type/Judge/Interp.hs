@@ -30,7 +30,7 @@ instance D.GetTermNames Interp where
 
 instance B.MixEncode Interp where
     mixEncode Interp { interpWords = xs } =
-        B.mixBracketS S.openInterp S.closeInterp
+        B.mixBracketS S.bracketInterp
              $ B.mixJoin B.mix1 $ map B.mixEncode xs
 
 instance B.MixEncode InterpWord where

@@ -198,7 +198,7 @@ instance B.MixEncode Clock where
 
 -- | Convert clock to mix text with vertical bars.
 clockToMix :: Clock -> B.MixText
-clockToMix = B.mixBracket "|" "|" . clockBodyToMix
+clockToMix = B.mixBracket ("|", "|") . clockBodyToMix
 
 -- | Convert clock to mix text.
 --

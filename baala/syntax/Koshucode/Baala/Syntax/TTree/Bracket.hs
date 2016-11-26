@@ -8,14 +8,14 @@ module Koshucode.Baala.Syntax.TTree.Bracket
     getBracketType,
 
     -- * Open and close
-    openGroup,  closeGroup,
-    openTerm,   closeTerm,
-    openList,   closeList,
-    openSet,    closeSet,
-    openTie,    closeTie,
-    openRel,    closeRel,
-    openInterp, closeInterp,
-    openType,   closeType,
+    bracketGroup,
+    bracketTerm,
+    bracketList,
+    bracketSet,
+    bracketTie,
+    bracketRel,
+    bracketInterp,
+    bracketType,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -76,103 +76,39 @@ getBracketType = B.bracketTable
     , (BracketUnknown, (S.isOpenToken, S.isCloseToken))
     ] where br # p = (br, S.isBracketTokenOf p)
 
--- | Open group: @"("@
-openGroup :: String
-openGroup = "("
-
--- | Close group: @")"@
-closeGroup :: String
-closeGroup = ")"
-
--- | Group bracket: @"("@ and @")"@
+-- | Group bracket — @"("@ and @")"@
 bracketGroup :: (String, String)
 bracketGroup = ("(", ")")
 
--- | Open term path: @"(-"@
-openTerm :: String
-openTerm = "(-"
-
--- | Close term path: @"-)"@
-closeTerm :: String
-closeTerm = "-)"
-
--- | Term bracket: @"(-"@ and @"-)"@
+-- | Term bracket — @"(-"@ and @"-)"@
 bracketTerm :: (String, String)
 bracketTerm = ("(-", "-)")
 
--- | Open list: @"["@
-openList :: String
-openList = "["
-
--- | Close list: @"]"@
-closeList :: String
-closeList = "]"
-
--- | List bracket: @"["@ and @"]"@
+-- | List bracket — @"["@ and @"]"@
 bracketList :: (String, String)
 bracketList = ("[", "]")
 
--- | Open set: @"{"@
-openSet :: String
-openSet = "{"
-
--- | Close set: @"}"@
-closeSet :: String
-closeSet = "}"
-
--- | Set bracket: @"{"@ and @"}"@
+-- | Set bracket — @"{"@ and @"}"@
 bracketSet :: (String, String)
 bracketSet = ("{", "}")
 
--- | Open tie: @"{-"@
-openTie :: String
-openTie = "{-"
-
--- | Close tie: @"-}"@
-closeTie :: String
-closeTie = "-}"
-
--- | Tie bracket: @"{-"@ and @"-}"@
+-- | Tie bracket — @"{-"@ and @"-}"@
 bracketTie :: (String, String)
 bracketTie = ("{-", "-}")
 
--- | Open relation: @"{="@
-openRel :: String
-openRel = "{="
-
--- | Close relation: @"=}"@
-closeRel :: String
-closeRel = "=}"
-
--- | Rel bracket: @"{="@ and @"=}"@
+-- | Rel bracket — @"{="@ and @"=}"@
 bracketRel :: (String, String)
 bracketRel = ("{=", "=}")
 
--- | Open interpreation: @"{|"@
-openInterp :: String
-openInterp = "{|"
-
--- | Close interpreation: @"|}"@
-closeInterp :: String
-closeInterp = "|}"
-
--- | Interp bracket: @"{|"@ and @"|}"@
+-- | Interp bracket — @"{|"@ and @"|}"@
 bracketInterp :: (String, String)
 bracketInterp = ("{|", "|}")
 
--- | Open type: @"[-"@
-openType :: String
-openType = "[-"
-
--- | Close type: @"-]"@
-closeType :: String
-closeType = "-]"
-
--- | Type bracket: @"[-"@ and @"-]"@
+-- | Type bracket — @"[-"@ and @"-]"@
 bracketType :: (String, String)
 bracketType = ("[-", "-]")
 
--- | Form bracket: @"(|"@ and @"|)"@
+-- | Form bracket — @"(|"@ and @"|)"@
 bracketForm :: (String, String)
 bracketForm = ("(|", "|)")
 
