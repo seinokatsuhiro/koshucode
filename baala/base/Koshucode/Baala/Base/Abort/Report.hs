@@ -1,25 +1,31 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Reporting abort reasons.
-
---  Text
+-- | Report abort reasons.
 --
---    ABORTED  (main reason)
---    -------- --------------------------------------------
---    Detail   (detailed reason)
---             (detailed reason)
---    Source   (line #) (col #) (filename)
---             > (line text)
---             (line #) (col #) (filename)
---             > (line text)
---    Command  koshu
---             (arg 1)
---             (arg 2)
+-- Abortable process returns @Left@ 'B.AbortReason' when aborted.
+-- The 'B.abortable' function adds code positions to the reason.
+-- 'abortPrint' outputs aborted message in the following format.
+--
+-- > ** ABORTED  {main reason}
+-- > ** -------- --------------------------------------------
+-- > ** Detail   {detailed reason}
+-- > **          {detailed reason}
+-- > ** Source   {line #} {char #} {source}
+-- > **          > {code string}
+-- > **          {line #} {char #} {source}
+-- > **          > {code string}
+-- > ** Command  {program name}
+-- > **          {arg 1}
+-- > **          {arg 2}
 
 module Koshucode.Baala.Base.Abort.Report
   ( CommandLine,
-    abort, unabort, abortPrint,
-    abortMessage, bug,
+    abort,
+    unabort,
+    abortPrint,
+    abortMessage,
+    cpMessage,
+    bug,
   ) where
 
 import qualified Koshucode.Baala.Overture           as O
@@ -46,6 +52,25 @@ unabort (Right a)  = a
 unabort (Left a)   = error $ B.abortReason a
 
 -- | Print abort message.
+--
+-- Prepare code position and abort reason.
+--
+--   >>> let cp = B.CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "defg"
+--   >>> let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
+--
+-- Print it.
+--
+--   >>> abortPrint (words "prog x y") a
+--   **
+--   **  ABORTED  Bad luck
+--   **  -------- ---------- ------
+--   **  Source   1 4 <text>
+--   **           > defg     .. tag
+--   **  Command  prog
+--   **           x
+--   **           y
+--   **
+--
 abortPrint :: CommandLine -> B.AbortReason -> IO ()
 abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
 
@@ -84,8 +109,24 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     sandwich :: a -> a -> O.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-source :: [(B.AbortTag, B.CodePos)] -> [(String, String)]
-source = concatMap B.cpDisplay . B.unique . reverse
+source :: [(B.AbortTag, B.CodePos)] -> [(String, B.AbortTag)]
+source = concatMap cpMessage . B.unique . reverse
+
+-- | Create position and line information.
+cpMessage :: (B.AbortTag, B.CodePos) -> [(String, B.AbortTag)]
+cpMessage (tag, cp@B.CodePos { B.cpSource = src
+                             , B.cpLineNo = lno
+                             , B.cpText   = text })
+    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
+    | otherwise = []
+    where
+      pos       = show lno ++ " " ++ show cno ++ " " ++ code
+      cno       = B.cpColumnNo cp
+      code      = B.ioPointText $ B.nioPoint src
+
+      shorten :: O.StringMap
+      shorten s | length s > 48  = take 45 s ++ "..."
+                | otherwise      = s
 
 -- | Stop on error @'BUG DISCOVERED'@
 bug :: String -> a

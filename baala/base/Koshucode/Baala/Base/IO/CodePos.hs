@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.IO.CodePos
   ( -- * Code position
     CodePos (..),
     cpColumnNo,
-    cpDisplay,
   
     -- * Get code positions
     GetCodePos (..),
@@ -16,7 +15,6 @@ module Koshucode.Baala.Base.IO.CodePos
     Sourced (..),
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
 import qualified Koshucode.Baala.Base.IO.IOPoint    as B
@@ -70,25 +68,16 @@ cpCompare p1 p2 = line B.<> column where
     size   = length . cpText
 
 -- | Column number at which code starts.
+--
+--   >>> let cp = CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "abc"
+--   >>> cp
+--   /0.1.4/
+--   >>> cpColumnNo cp
+--   4
+--
 cpColumnNo :: CodePos -> Int
 cpColumnNo CodePos { cpLineText = line, cpText = subline }
     = length line - length subline
-
--- | Create position and line information.
-cpDisplay :: (String, CodePos) -> [(String, String)]
-cpDisplay (tag, p)
-    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
-    | otherwise = []
-    where
-      pos       = show lno ++ " " ++ show cno ++ " " ++ code
-      lno       = cpLineNo p
-      cno       = cpColumnNo p
-      code      = B.ioPointText $ B.nioPoint $ cpSource p
-      text      = cpText p
-
-      shorten :: O.StringMap
-      shorten s | length s > 48  = take 45 s ++ "..."
-                | otherwise      = s
 
 
 -- ----------------------  GetCodePos
