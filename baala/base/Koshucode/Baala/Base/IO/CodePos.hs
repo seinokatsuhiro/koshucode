@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.IO.CodePos
 
     -- * Codic
     Codic (..),
-    codic,
+    codic, noCodic,
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
@@ -115,4 +115,8 @@ instance GetCodePos (Codic a) where
 -- | Create value with code position.
 codic :: (GetCodePos cp) => cp -> a -> Codic a
 codic cp = Codic $ getCPs cp
+
+-- | Create codic value without code string.
+noCodic :: a -> Codic a
+noCodic = Codic []
 
