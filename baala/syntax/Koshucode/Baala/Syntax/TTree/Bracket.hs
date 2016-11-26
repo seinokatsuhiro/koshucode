@@ -64,17 +64,17 @@ instance B.Name BracketType where
 -- | Bracket type of token.
 getBracketType :: B.GetBracketType BracketType S.Token
 getBracketType = B.bracketTable
-    [ o BracketGroup   openGroup  closeGroup
-    , o BracketTerm    openTerm   closeTerm
-    , o BracketList    openList   closeList
-    , o BracketSet     openSet    closeSet
-    , o BracketTie     openTie    closeTie
-    , o BracketRel     openRel    closeRel
-    , o BracketInterp  openInterp closeInterp
-    , o BracketType    openType   closeType
-    , o BracketForm    "(|"       "|)"
-    , (BracketUnknown, S.isOpenToken, S.isCloseToken)
-    ] where o t a b = (t, S.isOpenTokenOf a, S.isCloseTokenOf b)
+    [ BracketGroup   # bracketGroup
+    , BracketTerm    # bracketTerm
+    , BracketList    # bracketList
+    , BracketSet     # bracketSet
+    , BracketTie     # bracketTie
+    , BracketRel     # bracketRel
+    , BracketInterp  # bracketInterp
+    , BracketType    # bracketType
+    , BracketForm    # bracketForm
+    , (BracketUnknown, (S.isOpenToken, S.isCloseToken))
+    ] where br # p = (br, S.isBracketTokenOf p)
 
 -- | Open group: @"("@
 openGroup :: String
@@ -84,6 +84,10 @@ openGroup = "("
 closeGroup :: String
 closeGroup = ")"
 
+-- | Group bracket: @"("@ and @")"@
+bracketGroup :: (String, String)
+bracketGroup = ("(", ")")
+
 -- | Open term path: @"(-"@
 openTerm :: String
 openTerm = "(-"
@@ -91,6 +95,10 @@ openTerm = "(-"
 -- | Close term path: @"-)"@
 closeTerm :: String
 closeTerm = "-)"
+
+-- | Term bracket: @"(-"@ and @"-)"@
+bracketTerm :: (String, String)
+bracketTerm = ("(-", "-)")
 
 -- | Open list: @"["@
 openList :: String
@@ -100,6 +108,10 @@ openList = "["
 closeList :: String
 closeList = "]"
 
+-- | List bracket: @"["@ and @"]"@
+bracketList :: (String, String)
+bracketList = ("[", "]")
+
 -- | Open set: @"{"@
 openSet :: String
 openSet = "{"
@@ -107,6 +119,10 @@ openSet = "{"
 -- | Close set: @"}"@
 closeSet :: String
 closeSet = "}"
+
+-- | Set bracket: @"{"@ and @"}"@
+bracketSet :: (String, String)
+bracketSet = ("{", "}")
 
 -- | Open tie: @"{-"@
 openTie :: String
@@ -116,6 +132,10 @@ openTie = "{-"
 closeTie :: String
 closeTie = "-}"
 
+-- | Tie bracket: @"{-"@ and @"-}"@
+bracketTie :: (String, String)
+bracketTie = ("{-", "-}")
+
 -- | Open relation: @"{="@
 openRel :: String
 openRel = "{="
@@ -123,6 +143,10 @@ openRel = "{="
 -- | Close relation: @"=}"@
 closeRel :: String
 closeRel = "=}"
+
+-- | Rel bracket: @"{="@ and @"=}"@
+bracketRel :: (String, String)
+bracketRel = ("{=", "=}")
 
 -- | Open interpreation: @"{|"@
 openInterp :: String
@@ -132,6 +156,10 @@ openInterp = "{|"
 closeInterp :: String
 closeInterp = "|}"
 
+-- | Interp bracket: @"{|"@ and @"|}"@
+bracketInterp :: (String, String)
+bracketInterp = ("{|", "|}")
+
 -- | Open type: @"[-"@
 openType :: String
 openType = "[-"
@@ -139,4 +167,12 @@ openType = "[-"
 -- | Close type: @"-]"@
 closeType :: String
 closeType = "-]"
+
+-- | Type bracket: @"[-"@ and @"-]"@
+bracketType :: (String, String)
+bracketType = ("[-", "-]")
+
+-- | Form bracket: @"(|"@ and @"|)"@
+bracketForm :: (String, String)
+bracketForm = ("(|", "|)")
 

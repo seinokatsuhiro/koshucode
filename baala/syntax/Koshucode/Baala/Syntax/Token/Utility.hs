@@ -14,7 +14,8 @@ module Koshucode.Baala.Syntax.Token.Utility
     isBlankToken,
     isShortToken, isTermToken,
     isOpenToken, isCloseToken,
-    isOpenTokenOf, isCloseTokenOf,
+    --isOpenTokenOf, isCloseTokenOf,
+    isBracketTokenOf,
     isUnknownToken,
   ) where
 
@@ -155,3 +156,6 @@ isCloseTokenOf :: String -> O.Test S.Token
 isCloseTokenOf p1 (S.TClose _ p2) = p1 == p2
 isCloseTokenOf _ _                = False
 
+-- | Create bracket testers.
+isBracketTokenOf :: (String, String) -> (O.Test S.Token, O.Test S.Token)
+isBracketTokenOf (a, b) = (isOpenTokenOf a, isCloseTokenOf b)

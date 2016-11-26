@@ -162,29 +162,34 @@ isCloseBracket _                 = False
 -- | Get a bracket type.
 type GetBracketType p a = a -> Bracket p
 
--- | Make 'GetBracketType' functions
---   from a type-open-close table.
+-- | Create 'GetBracketType' functions
+-- from a type-open-close table.
 --
---   Make bracket/type functions from @()@ and @[]@.
+-- /Example/
 --
---   >>> let bracket n [a, b] = (n, (== a), (== b))
+-- Create bracket/type functions from @()@ and @[]@.
+--
+--   >>> let bracket n [a, b] = (n, ((== a), (== b)))
 --   >>> let pt = bracketTable [ bracket 1 "()", bracket 2 "[]" ]
 --
---   Get bracket types for each chars.
---   Types of open brackets are positive integer,
---   and closes are negative.
+-- Get bracket types for each chars.
+-- Types of open brackets are positive integer,
+-- and closes are negative.
 --
 --   >>> map pt "ab(cd[ef])g"
---   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
+--   [BracketNone, BracketNone,
+--    BracketOpen 1, BracketNone, BracketNone,
+--     BracketOpen 2, BracketNone, BracketNone, BracketClose 2,
+--    BracketClose 1, BracketNone]
 --
 bracketTable
     :: (Eq a)
-    => [(p, O.Test a, O.Test a)] -- ^ List of (/type/, /open/, /close/)
+    => [(p, (O.Test a, O.Test a))] -- ^ List of (/type/, (/open/, /close/))
     -> GetBracketType p a
 bracketTable xs = bracketType where
     bracketTypeTable = map bracketOpen xs ++ map bracketClose xs
-    bracketOpen  (n, isOpen, _)  = (isOpen,  BracketOpen n)
-    bracketClose (n, _, isClose) = (isClose, BracketClose n)
+    bracketOpen  (n, (isOpen, _))  = (isOpen,  BracketOpen n)
+    bracketClose (n, (_, isClose)) = (isClose, BracketClose n)
     bracketType a =
         case B.lookupSatisfy a bracketTypeTable of
           Just p  -> p
