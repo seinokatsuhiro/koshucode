@@ -19,10 +19,9 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Message           as Msg
 import qualified Koshucode.Baala.Core.Resource.Message  as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Data type
@@ -156,12 +155,12 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
 
     -- ----------------------  Clause dispatcher
 
-    dispatch (TBar ('|' : k) : xs)   -- Frege's judgement stroke
+    dispatch (P.TBar ('|' : k) : xs)   -- Frege's judgement stroke
                                     = clause    $ frege (lower k) xs
-    dispatch (TRaw name : TRaw is : body)
+    dispatch (P.TRaw name : P.TRaw is : body)
         | isDelim is                = clause    $ CRelmap name body
-    dispatch (TSection : _)    = newSec
-    dispatch (TRaw k : xs)
+    dispatch (P.TSection : _)       = newSec
+    dispatch (P.TRaw k : xs)
         | k == "input"              = clause    $ CInput xs
         | k == "include"            = clause    $ CInput xs
         | k == "export"             = clause    $ expt xs
@@ -173,7 +172,7 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
         | k == "****"               = clause    $ empty
     dispatch (S.TSlot _ 2 n : xs)   = clause    $ CSlot n xs
     dispatch []                     = clause    $ empty
-    dispatch [TLicense ln]          = clause    $ CLicense $ O.trimEnd ln
+    dispatch [P.TLicense ln]        = clause    $ CLicense $ O.trimEnd ln
     dispatch _                      = clause    $ CUnknown $ unkAtStart []
 
     -- Return form
@@ -212,17 +211,17 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                              ("|" ++ s)
 
     -- Judgement
-    judge q (TText _ p : xs)  = CJudge q p $ addAbout xs
-    judge _ ts                = CUnknown $ judgeError ts
+    judge q (P.TText _ p : xs) = CJudge q p $ addAbout xs
+    judge _ ts                 = CUnknown $ judgeError ts
 
-    judgeError []             = unkAtStart ["Give a judgement pattern"]
-    judgeError ts             = unkAt ts ["Use text in judgement pattern"]
+    judgeError []              = unkAtStart ["Give a judgement pattern"]
+    judgeError ts              = unkAt ts ["Use text in judgement pattern"]
 
     addAbout xs | null resAbout && null about  = xs
                 | otherwise                    = resAbout ++ about ++ xs
 
     -- Assertion
-    assert q (TText _ p : xs) =
+    assert q (P.TText _ p : xs) =
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
@@ -248,9 +247,9 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
               abort msg       = CUnknown $ unk orig msg
 
     -- Others
-    expt (TText _ n : TText _ ":" : xs)
+    expt (P.TText _ n : P.TText _ ":" : xs)
                               = CBodies [CExport n, CRelmap n xs]
-    expt [TText _ n]          = CExport n
+    expt [P.TText _ n]          = CExport n
     expt _                    = CUnknown $ unkAtStart []
 
 
@@ -266,6 +265,6 @@ wordPairs toks =
        mapM wordPair p
     where
       wordPair :: (S.Token, S.Token) -> Maybe (String, String)
-      wordPair (TText _ a, TText _ b) = Just (a, b)
+      wordPair (P.TText _ a, P.TText _ b) = Just (a, b)
       wordPair _ = Nothing
 

@@ -13,10 +13,9 @@ import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.TTree           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Slot       as S
+import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Data type
@@ -43,35 +42,35 @@ consAttrEd = loop where
     notKeyword ('-' : _)  = False
     notKeyword _          = True
 
-    fill (LRaw "*" : xs)  = Nothing : fill xs
-    fill (x : xs)         = Just x  : fill xs
-    fill []               = []
+    fill (P.LRaw "*" : xs) = Nothing : fill xs
+    fill (x : xs)          = Just x  : fill xs
+    fill []                = []
 
     right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
     right trees = Right . B.codic trees
 
     loop trees =
         Msg.abAttrTrees trees $ case S.divideTreesByBar trees of
-          [LRaw op : xs]
-            | op == "id"        -> right trees $ AttrEdId
-            | op == "fill"      -> right trees $ AttrEdFill $ fill xs
+          [P.LRaw op : xs]
+            | op == "id"      -> right trees $ AttrEdId
+            | op == "fill"    -> right trees $ AttrEdFill $ fill xs
 
-          [LRaw op : LRaw ('-' : k) : xs]
-            | op == "add"       -> right trees $ AttrEdAdd False k xs
-            | op == "opt"       -> right trees $ AttrEdAdd True  k xs
-            | op == "nest"      -> right trees $ AttrEdNest k xs
+          [P.LRaw op : P.LRaw ('-' : k) : xs]
+            | op == "add"     -> right trees $ AttrEdAdd False k xs
+            | op == "opt"     -> right trees $ AttrEdAdd True  k xs
+            | op == "nest"    -> right trees $ AttrEdNest k xs
 
-          [LRaw op : LRaw k' : LRaw k : _]
-            | notKeyword k'     -> Msg.reqAttrName k'
-            | notKeyword k      -> Msg.reqAttrName k
-            | op == "rename"    -> right trees $ AttrEdRename (k', k)
+          [P.LRaw op : P.LRaw k' : P.LRaw k : _]
+            | notKeyword k'   -> Msg.reqAttrName k'
+            | notKeyword k    -> Msg.reqAttrName k
+            | op == "rename"  -> right trees $ AttrEdRename (k', k)
 
-          [[BGroup xs]]         -> loop xs
+          [[P.BGroup xs]]     -> loop xs
 
-          [[]]                  -> right [] AttrEdId
-          [_]                   -> Msg.adlib "unknown attribute editor"
-          trees2                -> do subs <- mapM loop trees2
-                                      right trees $ AttrEdAppend subs
+          [[]]                -> right [] AttrEdId
+          [_]                 -> Msg.adlib "unknown attribute editor"
+          trees2              -> do subs <- mapM loop trees2
+                                    right trees $ AttrEdAppend subs
 
 -- | Edit relmap attributes.
 runAttrEd :: AttrEd -> B.AbMap [S.AttrTree]
@@ -110,7 +109,7 @@ runAttrEd (B.Codic cp edit) attr = run where
     fill ps       []               = Right $ ps
 
 nestName :: B.AbMap [S.TTree]
-nestName [LTerm n] = Right $ localNest $ S.toTermName n
+nestName [P.LTerm n] = Right $ localNest $ S.toTermName n
 nestName _ = Msg.adlib "require term name"
 
 localNest :: S.TermName -> [S.TTree]

@@ -15,10 +15,9 @@ import qualified Data.Map.Strict                      as Map
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Syntax.Pattern       as P
 import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- | Option type.
@@ -62,7 +61,7 @@ optionAssn toks =
          ([], assoc) -> Right assoc
          _           -> Msg.adlib "extra input"
     where
-      maybeName pt@(LRaw n) = Just (n, [pt])
+      maybeName pt@(P.LRaw n) = Just (n, [pt])
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)

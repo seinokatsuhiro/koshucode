@@ -20,10 +20,9 @@ import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Numeric     as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Data.Decode.Type        as D
+import qualified Koshucode.Baala.Syntax.Pattern          as P
 import qualified Koshucode.Baala.Base.Message            as Msg
 import qualified Koshucode.Baala.Data.Decode.Message     as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  General content
@@ -44,12 +43,12 @@ stringContent = S.toTree B.>=> treeContent undefined
 treeContent :: forall c. (D.CContent c) => CalcContent c -> DecodeContent c
 treeContent calc tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent c
-    cons x@(L tok)
+    cons x@(P.L tok)
         = eithcon (eithcon (eithcon (token tok)
             D.putClock  $ D.tokenClock tok)
             D.putTime   $ D.treesTime   [x])
             decimal     $ D.treesDigits [x]
-    cons g@(B b xs) = case b of
+    cons g@(P.B b xs) = case b of
         S.BracketGroup   -> group g xs
         S.BracketList    -> D.putList   =<< treesContents cons xs
         S.BracketSet     -> D.putSet    =<< treesContents cons xs
@@ -68,7 +67,7 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
         | otherwise          = D.putText w
     token t                  = Msg.unkWord $ S.tokenContent t
 
-    group g xs@(LText f _ : _)
+    group g xs@(P.LText f _ : _)
         | f == S.TextRaw   = eithcon (eith g
                                D.putTime $ D.treesTime   xs)
                                decimal   $ D.treesDigits xs
@@ -112,9 +111,9 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      treesTie                 treesTie
 --
 treesTie :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab c
-treesTie cons xs@(LTerm _ : _) = D.putTie =<< treesTerms cons xs
+treesTie cons xs@(P.LTerm _ : _) = D.putTie =<< treesTerms cons xs
 treesTie _ [] = D.putTie []
-treesTie _ [LRaw "words", LQq ws] = D.putList $ map D.pText $ words ws
+treesTie _ [P.LRaw "words", P.LQq ws] = D.putList $ map D.pText $ words ws
 treesTie _ _ = Msg.adlib "unknown angle bracket"
 
 -- Terms
@@ -171,12 +170,12 @@ treesRel cons xs =
 -- | Split term names.
 treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
 treesTermNames = terms [] where
-    terms ns (LTerm n : xs) = terms (S.toTermName n : ns) xs
+    terms ns (P.LTerm n : xs) = terms (S.toTermName n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 -- | Decode specific number of contents.
 treeTuple :: (D.CContent c) => DecodeContent c -> Int -> S.TTree -> B.Ab [c]
-treeTuple cons n g@(B S.BracketList xs) =
+treeTuple cons n g@(P.B S.BracketList xs) =
     do cs <- treesContents cons xs
        let n' = length cs
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'

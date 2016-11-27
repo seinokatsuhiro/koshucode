@@ -19,9 +19,8 @@ module Koshucode.Baala.Data.Decode.Term
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
+import qualified Koshucode.Baala.Syntax.Pattern        as P
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Term
@@ -50,8 +49,8 @@ treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
 treeFlatNameCached :: CacheT -> S.TTree -> B.Ab (CacheT, S.TermName)
-treeFlatNameCached cc (LTerm n)   = Right $ O.cacheGet cc n
-treeFlatNameCached _  (L t)       = Msg.reqFlatName t
+treeFlatNameCached cc (P.LTerm n) = Right $ O.cacheGet cc n
+treeFlatNameCached _  (P.L t)     = Msg.reqFlatName t
 treeFlatNameCached _  _           = Msg.reqTermName
 
 -- | Read flat term names.
@@ -98,8 +97,8 @@ treesTermsCached = name where
 
 -- | Test token tree is term leaf.
 isTermLeaf :: O.Test S.TTree
-isTermLeaf (L (S.TTerm _ _))   = True
-isTermLeaf _                   = False
+isTermLeaf (P.LTerm _)   = True
+isTermLeaf _             = False
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
@@ -130,10 +129,10 @@ treesFlatNamePairs = loop where
 --
 treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
-    loop ret ns (LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
-    loop ret ns (LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
-    loop ret ns []               = Right $ reverse $ reverse ns : ret
-    loop _ _ _                   = Msg.reqTermName
+    loop ret ns (P.LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
+    loop ret ns (P.LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
+    loop ret ns []                 = Right $ reverse $ reverse ns : ret
+    loop _ _ _                     = Msg.reqTermName
 
 -- | Decode term names with optional complement symbol.
 -- 
@@ -151,6 +150,6 @@ treesFlatNamesCo trees =
 
 -- | Term complement symbol.
 treesTermCo :: [S.TTree] -> B.Ab (Bool, [S.TTree])
-treesTermCo (LRaw "~" : trees)  = Right (True,  trees)
-treesTermCo trees               = Right (False, trees)
+treesTermCo (P.LRaw "~" : trees)  = Right (True,  trees)
+treesTermCo trees                 = Right (False, trees)
 

@@ -31,9 +31,9 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
+import qualified Koshucode.Baala.Syntax.Pattern   as P
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
-import Koshucode.Baala.Syntax.Pattern
 
 -- ----------------------  Datatype
 
@@ -105,7 +105,7 @@ getSwitch med name = getAbortableOption False get med name where
 --   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
-    get [LText _ s] = Right s
+    get [P.LText _ s] = Right s
     get _ = Msg.unexpAttr "Require one word"
 
 
@@ -140,7 +140,7 @@ wordTrees (w : tree : xs) =
        Right $ (w', tree) : xs'
 
 word :: S.TTree -> B.Ab String
-word (LText _ w) = Right w
+word (P.LText _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
 -- | Get trees delimited by colon.

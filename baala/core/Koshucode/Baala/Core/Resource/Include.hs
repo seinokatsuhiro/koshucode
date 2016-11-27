@@ -16,11 +16,10 @@ import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Clause    as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
+import qualified Koshucode.Baala.Syntax.Pattern          as P
 import qualified Koshucode.Baala.Data.Message            as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message     as Msg
 import qualified Koshucode.Baala.Core.Resource.Message   as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 -- | Include source code into resource.
 resInclude :: forall c. (D.CContent c)
@@ -154,7 +153,7 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     just1 p = do arg   <- S.paraGetFst p
                  about <- S.paraGetOpt [] p "about"
                  case arg of
-                   LText _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
+                   P.LText _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
                    _ -> Msg.adlib "input not text"
 
     stdin :: C.TTreePara -> B.Ab C.InputPoint

@@ -23,9 +23,8 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax.Para           as S
 import qualified Koshucode.Baala.Syntax.TTree          as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName  as S
+import qualified Koshucode.Baala.Syntax.Pattern        as P
 import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Attribute layout
@@ -103,11 +102,11 @@ byHyphen = fmap S.AttrNormal . maybeSingleHyphen
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
 maybeSingleHyphen :: S.TTree -> Maybe String
-maybeSingleHyphen (LAtt1 n)   = Just n
+maybeSingleHyphen (P.LAtt1 n) = Just n
 maybeSingleHyphen _           = Nothing
 
 -- | Take out double-hyphened text (like @"--xyz"@) from token tree.
 maybeDoubleHyphen :: S.TTree -> Maybe String
-maybeDoubleHyphen (LAtt2 n)   = Just n
+maybeDoubleHyphen (P.LAtt2 n) = Just n
 maybeDoubleHyphen _           = Nothing
 

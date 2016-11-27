@@ -13,9 +13,8 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Decode.Term      as D
+import qualified Koshucode.Baala.Syntax.Pattern        as P
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Text
@@ -37,14 +36,14 @@ treesTexts q = mapM $ treeText q
 --   Right "aa"
 --
 treeText :: Bool -> S.TTree -> B.Ab String
-treeText q (L tok) = tokenString q tok
+treeText q (P.L tok) = tokenString q tok
 treeText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
 tokenString :: Bool -> S.Token -> B.Ab String
-tokenString True  (TText q w) | q > S.TextRaw  = Right w
-tokenString False (TRaw w)                     = Right w
-tokenString _ _  =  Msg.nothing
+tokenString True  (P.TText q w) | q > S.TextRaw  = Right w
+tokenString False (P.TRaw w)                     = Right w
+tokenString _ _  = Msg.nothing
 
 
 -- ----------------------  Interp
@@ -76,14 +75,14 @@ treesType = gen where
                [x] ->  single x
                xs2 ->  Right . D.TypeSum =<< mapM gen xs2
 
-    single [B _ xs]          = gen xs
-    single (LText f n : xs)
+    single [P.B _ xs]        = gen xs
+    single (P.LText f n : xs)
         | f == S.TextRaw     = dispatch n xs
         | otherwise          = Msg.quoteType n
     single []                = Right $ D.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [LRaw w] | w `elem` ws = Right $ Just w
+    precision ws [P.LRaw w] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 

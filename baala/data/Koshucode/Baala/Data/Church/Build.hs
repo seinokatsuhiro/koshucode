@@ -15,9 +15,8 @@ import qualified Koshucode.Baala.Data.Class             as D
 import qualified Koshucode.Baala.Data.Decode            as D
 import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D
+import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
-
-import Koshucode.Baala.Syntax.Pattern
 
 -- | Construct content expression from token tree.
 treeCox :: forall c. (D.CContent c)
@@ -85,9 +84,9 @@ construct calc = expr where
          in cons cp tree
 
     cons :: [B.CodePos] -> S.TTree -> B.Ab (D.Cox c)
-    cons cp tree@(BGroup subtrees)
+    cons cp tree@(P.BGroup subtrees)
          = case subtrees of
-             f@(LText q w) : xs
+             f@(P.LText q w) : xs
                  | q == S.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
@@ -96,29 +95,29 @@ construct calc = expr where
              []     -> lit cp tree
 
     -- form with blanks (function)
-    cons cp (BForm [vars, b1]) =
+    cons cp (P.BForm [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
            let vs = map S.tokenContent $ B.untree vars'
            Right $ D.CoxForm cp tag vs b2
-    cons _ (BForm trees) =
+    cons _ (P.BForm trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- term path
-    cons cp (BTerm trees) =
+    cons cp (P.BTerm trees) =
         do ns <- D.treesFlatNames trees
            Right $ D.CoxTerm cp ns []
 
     -- compound literal
-    cons cp tree@(B _ _) = lit cp tree
+    cons cp tree@(P.B _ _) = lit cp tree
 
     -- literal or variable
-    cons cp tree@(L tok) = case tok of
-        TTerm n             -> Right $ D.CoxTerm  cp [S.toTermName n] []
-        S.TName _ op        -> Right $ D.CoxBlank cp op
-        TRaw n | isName n   -> Right $ D.CoxBlank cp $ S.BlankNormal n
-        TText _ _           -> lit cp tree
-        _                   -> B.bug "core/leaf"
+    cons cp tree@(P.L tok) = case tok of
+        P.TTerm n            -> Right $ D.CoxTerm  cp [S.toTermName n] []
+        S.TName _ op         -> Right $ D.CoxBlank cp op
+        P.TRaw n | isName n  -> Right $ D.CoxBlank cp $ S.BlankNormal n
+        P.TText _ _          -> lit cp tree
+        _                    -> B.bug "core/leaf"
 
     cons _ _ = B.bug "core"
 
@@ -132,7 +131,7 @@ construct calc = expr where
                      | otherwise      = calc tree'
 
     untag :: S.TTree -> (D.CoxTag, S.TTree)
-    untag (B.TreeB l p (LQ tag : vars))
+    untag (B.TreeB l p (P.LQ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
 
@@ -164,8 +163,8 @@ prefix htab tree =
       ht = B.infixHeight wordText htab
 
       wordText :: S.Token -> Maybe String
-      wordText (TRaw w)  = Just w
-      wordText _         = Nothing
+      wordText (P.TRaw w)  = Just w
+      wordText _           = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
@@ -191,7 +190,7 @@ convTree :: D.CopFind D.CopTree -> B.AbMap S.TTree
 convTree find = expand where
     expand tree@(B.TreeB S.BracketGroup p subtrees) =
         case subtrees of
-          op@(LRaw name) : args
+          op@(P.LRaw name) : args
               -> Msg.abCoxSyntax tree $
                  case find $ S.BlankNormal name of
                    Just f -> expand =<< f args

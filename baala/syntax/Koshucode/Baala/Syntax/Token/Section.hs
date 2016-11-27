@@ -22,9 +22,8 @@ import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token.Nipper    as S
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
 import qualified Koshucode.Baala.Syntax.Token.Utility   as S
+import qualified Koshucode.Baala.Syntax.Token.Pattern   as P
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
-
-import Koshucode.Baala.Syntax.Token.Pattern
 
 
 -- --------------------------------------------
@@ -60,8 +59,8 @@ selectSection change prev
         | otherwise      = sectionUnexp [] sc
 
     dispatch :: [S.Token] -> S.TokenScan
-    dispatch [TSection] = B.codeChange prev sc
-    dispatch ts@[TSection, TRaw name] =
+    dispatch [P.TSection] = B.codeChange prev sc
+    dispatch ts@[P.TSection, P.TRaw name] =
         case change name of
           Just ch -> ch sc
           Nothing -> sectionUnexp ts sc
@@ -128,7 +127,7 @@ scanTextAssert change sc = section change text sc where
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
                            $ B.codeScanSave $ S.nipUpdate sc (cs, raw [c])
         | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
-                           (ws', _, TRaw "") ->
+                           (ws', _, P.TRaw "") ->
                                S.nipUpdateW sc (ws', cs, raw [c])
                            nip -> S.nipUpdateW sc nip
 
