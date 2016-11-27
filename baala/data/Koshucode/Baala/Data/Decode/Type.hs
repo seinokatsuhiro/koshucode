@@ -41,8 +41,8 @@ treeText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
 tokenString :: Bool -> S.Token -> B.Ab String
-tokenString True  (P.TText q w) | q > S.TextRaw  = Right w
-tokenString False (P.TRaw w)                     = Right w
+tokenString True  (P.T q w) | q > S.TextRaw  = Right w
+tokenString False (P.TRaw w)                 = Right w
 tokenString _ _  = Msg.nothing
 
 

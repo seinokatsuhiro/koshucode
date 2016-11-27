@@ -24,6 +24,7 @@ module Koshucode.Baala.Syntax.TTree.Pattern
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
+import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 
 -- ---------------------------------  Leaf
 
@@ -31,10 +32,10 @@ import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 pattern L tok <- B.TreeL tok
 
 -- | Text leaf.
-pattern LText f s <- L (S.TText _ f s)
+pattern LText f s <- L (P.T f s)
 
 -- | Raw text leaf.
-pattern LRaw s <- LText S.TextRaw s
+pattern LRaw s <- L (P.TRaw s)
 
 -- | Single-hyphen attribute text leaf.
 pattern LAtt1 s <- LRaw ('-' : s)
@@ -43,16 +44,16 @@ pattern LAtt1 s <- LRaw ('-' : s)
 pattern LAtt2 s <- LRaw ('-' : '-' : s)
 
 -- | Single-quoted text leaf.
-pattern LQ s <- LText S.TextQ s
+pattern LQ s <- L (P.TQ s)
 
 -- | Double-quoted text leaf.
-pattern LQq s <- LText S.TextQQ s
+pattern LQq s <- L (P.TQq s)
 
 -- | Slot leaf.
 pattern LSlot n s <- L (S.TSlot _ n s)
 
 -- | Term leaf.
-pattern LTerm s <- L (S.TTerm _ s)
+pattern LTerm s <- L (P.Term s)
 
 -- ---------------------------------  Branch
 

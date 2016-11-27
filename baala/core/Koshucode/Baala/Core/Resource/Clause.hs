@@ -211,17 +211,18 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
                              ("|" ++ s)
 
     -- Judgement
-    judge q (P.TText _ p : xs) = CJudge q p $ addAbout xs
-    judge _ ts                 = CUnknown $ judgeError ts
+    judge q (P.T _ p : xs)  = CJudge q p $ addAbout xs
+    judge _ ts              = CUnknown $ judgeError ts
 
-    judgeError []              = unkAtStart ["Give a judgement pattern"]
-    judgeError ts              = unkAt ts ["Use text in judgement pattern"]
+    judgeError []           = unkAtStart ["Give a judgement pattern"]
+    judgeError ts           = unkAt ts ["Use text in judgement pattern"]
 
-    addAbout xs | null resAbout && null about  = xs
-                | otherwise                    = resAbout ++ about ++ xs
+    addAbout xs
+        | null resAbout && null about  = xs
+        | otherwise                    = resAbout ++ about ++ xs
 
     -- Assertion
-    assert q (P.TText _ p : xs) =
+    assert q (P.T _ p : xs) =
         case S.splitTokensBy isDelim xs of
           Just (_, _, expr)      -> a expr
           Nothing                -> a xs
@@ -247,10 +248,10 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
               abort msg       = CUnknown $ unk orig msg
 
     -- Others
-    expt (P.TText _ n : P.TText _ ":" : xs)
-                              = CBodies [CExport n, CRelmap n xs]
-    expt [P.TText _ n]          = CExport n
-    expt _                    = CUnknown $ unkAtStart []
+    expt (P.T _ n : P.T _ ":" : xs)
+                       = CBodies [CExport n, CRelmap n xs]
+    expt [P.T _ n]     = CExport n
+    expt _             = CUnknown $ unkAtStart []
 
 
 pairs :: [a] -> Maybe [(a, a)]
@@ -265,6 +266,6 @@ wordPairs toks =
        mapM wordPair p
     where
       wordPair :: (S.Token, S.Token) -> Maybe (String, String)
-      wordPair (P.TText _ a, P.TText _ b) = Just (a, b)
+      wordPair (P.T _ a, P.T _ b) = Just (a, b)
       wordPair _ = Nothing
 
