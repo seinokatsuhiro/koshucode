@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 
-import Koshucode.Baala.Syntax.TTree.Pattern
 import Koshucode.Baala.Syntax.Token.Pattern
+import Koshucode.Baala.Syntax.TTree.Pattern
 
 -- --------------------------------------------  Parser
 

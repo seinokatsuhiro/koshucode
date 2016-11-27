@@ -15,8 +15,7 @@ import qualified Koshucode.Baala.Data.Type             as D
 import qualified Koshucode.Baala.Data.Decode.Term      as D
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
-import Koshucode.Baala.Syntax.Token.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Text

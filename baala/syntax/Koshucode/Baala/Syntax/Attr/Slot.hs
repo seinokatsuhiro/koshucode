@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Syntax.Token           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 -- | Attribute name and its contents.
 type AttrTree = (S.AttrName, [S.TTree])

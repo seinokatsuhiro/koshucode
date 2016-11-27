@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 -- ----------------------  Datatype
 

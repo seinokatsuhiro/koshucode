@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Data.Message         as Msg
 import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- | Option type.

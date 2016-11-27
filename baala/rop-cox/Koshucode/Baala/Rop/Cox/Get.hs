@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 -- --------------------------------------------  Cox
 

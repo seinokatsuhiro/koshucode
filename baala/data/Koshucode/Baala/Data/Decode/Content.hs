@@ -23,7 +23,7 @@ import qualified Koshucode.Baala.Data.Decode.Type        as D
 import qualified Koshucode.Baala.Base.Message            as Msg
 import qualified Koshucode.Baala.Data.Decode.Message     as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  General content

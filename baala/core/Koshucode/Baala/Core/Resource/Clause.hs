@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Lexmap            as C
 import qualified Koshucode.Baala.Data.Message           as Msg
 import qualified Koshucode.Baala.Core.Resource.Message  as Msg
 
-import Koshucode.Baala.Syntax.Token.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Data type

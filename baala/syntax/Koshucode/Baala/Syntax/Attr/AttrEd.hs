@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Syntax.Attr.Slot       as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Data type

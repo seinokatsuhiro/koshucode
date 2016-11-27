@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Syntax.TTree          as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName  as S
 import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 
 -- ----------------------  Attribute layout

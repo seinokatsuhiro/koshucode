@@ -17,8 +17,7 @@ import qualified Koshucode.Baala.Data.Church.Cop        as D
 import qualified Koshucode.Baala.Data.Church.Cox        as D
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
-import Koshucode.Baala.Syntax.TTree.Pattern
-import Koshucode.Baala.Syntax.Token.Pattern
+import Koshucode.Baala.Syntax.Pattern
 
 -- | Construct content expression from token tree.
 treeCox :: forall c. (D.CContent c)
