@@ -59,6 +59,8 @@ library
         Koshucode.Baala.Syntax.Para.Para
         Koshucode.Baala.Syntax.Para.ParaSpec
 
+        Koshucode.Baala.Syntax.Pattern
+
         Koshucode.Baala.Syntax.Symbol
         Koshucode.Baala.Syntax.Symbol.AngleText
         Koshucode.Baala.Syntax.Symbol.Message
