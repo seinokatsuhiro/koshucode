@@ -114,7 +114,7 @@ globalInfix   = D.copsetInfixList . opsetCop . globalOpset
 
 -- | Abort with command line.
 globalAbort :: Global' h c -> B.AbortReason -> IO a
-globalAbort = B.abort . globalCommandLine
+globalAbort = B.abortCommand . globalCommandLine
 
 -- | Empty global parameters.
 global' :: (Show c, D.CBool c, D.CText c) => h c -> Global' h c

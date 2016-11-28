@@ -178,13 +178,9 @@ koshuMainParam g p
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
     do (abres, _) <- C.resRead g ns
-       res2 <- abio abres
-       res3 <- abio $ C.assembleRelmap res2
+       res2 <- B.abortLeft abres
+       res3 <- B.abortLeft $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
        W.putJudgesWith (B.exitCode 0) $ L.resourceElem res3
-    where
-      abio mx = case mx of
-                  Left  a -> B.abort [] a
-                  Right x -> return x
 

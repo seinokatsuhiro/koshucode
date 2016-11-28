@@ -20,6 +20,7 @@ module Koshucode.Baala.Base.Abort.Reason
     -- * Alteration
     Abortable,
     abortable,
+    unabort,
   ) where
 
 import qualified Koshucode.Baala.Overture   as O
@@ -97,3 +98,7 @@ push _ [] a = a
 push tag (p:_) a@AbortReason { abortPoint = ps } =
     a { abortPoint = (tag, p) : ps }
 
+-- | Extract right value or print error message.
+unabort :: Ab a -> a
+unabort (Right a)  = a
+unabort (Left a)   = error $ abortReason a

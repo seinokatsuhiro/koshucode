@@ -19,12 +19,16 @@
 -- > **          {arg 2}
 
 module Koshucode.Baala.Base.Abort.Report
-  ( CommandLine,
-    abort,
-    unabort,
-    abortPrint,
-    abortMessage,
+  ( -- * Message
+    CommandLine,
     cpMessage,
+    abortMessage,
+    abortPrint,
+
+    -- * Abort
+    abort,
+    abortCommand,
+    abortLeft,
     bug,
   ) where
 
@@ -36,43 +40,26 @@ import qualified Koshucode.Baala.Base.Text          as B
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
 
 
+-- --------------------------------------------  Message
+
 -- | Command name and its arguments.
 type CommandLine = [String]
 
--- | Stop program execution abnormally.
-abort :: CommandLine -> B.AbortReason -> IO x
-abort cmd a =
-  do abortPrint cmd a
-     B.putCommentLines ["Exit with status 2", ""]
-     B.exitWith $ B.ExitFailure 2
+-- | Create position and line information.
+cpMessage :: (B.AbortTag, B.CodePos) -> [(String, B.AbortTag)]
+cpMessage (tag, cp@B.CodePos { B.cpSource = src
+                             , B.cpLineNo = lno
+                             , B.cpText   = text })
+    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
+    | otherwise = []
+    where
+      pos       = show lno ++ " " ++ show cno ++ " " ++ code
+      cno       = B.cpColumnNo cp
+      code      = B.ioPointText $ B.nioPoint src
 
--- | Extract right value or print abort message.
-unabort :: B.Ab a -> a
-unabort (Right a)  = a
-unabort (Left a)   = error $ B.abortReason a
-
--- | Print abort message.
---
--- Prepare code position and abort reason.
---
---   >>> let cp = B.CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "defg"
---   >>> let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
---
--- Print it.
---
---   >>> abortPrint (words "prog x y") a
---   **
---   **  ABORTED  Bad luck
---   **  -------- ---------- ------
---   **  Source   1 4 <text>
---   **           > defg     .. tag
---   **  Command  prog
---   **           x
---   **           y
---   **
---
-abortPrint :: CommandLine -> B.AbortReason -> IO ()
-abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
+      shorten :: O.StringMap
+      shorten s | length s > 48  = take 45 s ++ "..."
+                | otherwise      = s
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> B.AbortReason -> [String]
@@ -109,24 +96,52 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     sandwich :: a -> a -> O.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-source :: [(B.AbortTag, B.CodePos)] -> [(String, B.AbortTag)]
-source = concatMap cpMessage . B.unique . reverse
+    source :: [(B.AbortTag, B.CodePos)] -> [(String, B.AbortTag)]
+    source = concatMap cpMessage . B.unique . reverse
 
--- | Create position and line information.
-cpMessage :: (B.AbortTag, B.CodePos) -> [(String, B.AbortTag)]
-cpMessage (tag, cp@B.CodePos { B.cpSource = src
-                             , B.cpLineNo = lno
-                             , B.cpText   = text })
-    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
-    | otherwise = []
-    where
-      pos       = show lno ++ " " ++ show cno ++ " " ++ code
-      cno       = B.cpColumnNo cp
-      code      = B.ioPointText $ B.nioPoint src
+-- | Print abort message.
+--
+-- Prepare code position and abort reason.
+--
+--   >>> let cp = B.CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "defg"
+--   >>> let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
+--
+-- Print it.
+--
+--   >>> abortPrint (words "prog x y") a
+--   **
+--   **  ABORTED  Bad luck
+--   **  -------- ---------- ------
+--   **  Source   1 4 <text>
+--   **           > defg     .. tag
+--   **  Command  prog
+--   **           x
+--   **           y
+--   **
+--
+abortPrint :: CommandLine -> B.AbortReason -> IO ()
+abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
 
-      shorten :: O.StringMap
-      shorten s | length s > 48  = take 45 s ++ "..."
-                | otherwise      = s
+
+-- --------------------------------------------  Abort
+
+-- | Stop program execution abnormally.
+abort :: B.AbortReason -> IO x
+abort a =
+  do (prog, args) <- B.progAndArgs
+     abortCommand (prog : args) a
+
+-- | Abort with a command line.
+abortCommand :: CommandLine -> B.AbortReason -> IO x
+abortCommand cmd a =
+  do abortPrint cmd a
+     B.putCommentLines ["Exit with status 2", ""]
+     B.exitWith $ B.ExitFailure 2
+
+-- | Abort when getting abort reason.
+abortLeft :: B.Ab b -> IO b
+abortLeft (Right b)  = return b
+abortLeft (Left a)   = abort a
 
 -- | Stop on error @'BUG DISCOVERED'@
 bug :: String -> a
