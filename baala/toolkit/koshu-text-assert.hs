@@ -5,9 +5,10 @@
 
 module Main (main) where
 
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax           as S
-import qualified Paths_koshucode_baala_toolkit    as V
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.System.CliParser  as Z
+import qualified Paths_koshucode_baala_toolkit     as V
 
 import Koshucode.Baala.Syntax.Token.Pattern
 
@@ -26,22 +27,22 @@ optionHead =
     , ""
     ]
 
-options :: B.SimpleOptions
-options = [B.help, B.version]
+options :: [Z.Option]
+options = [Z.help, Z.version]
 
 
 -- --------------------------------------------  Main
 
 main :: IO ()
 main =
-  do rslt <- B.parseCommand options
+  do rslt <- Z.parseCommand options
      case rslt of
        Left errs -> B.putAbortWith $ concat errs
-       Right (opts, args)
-           | flag "help"     -> B.printHelp optionHead options
+       Right (z, args)
+           | flag "help"     -> Z.printHelp optionHead options
            | flag "version"  -> B.putSuccessLn programVersion
            | otherwise       -> run clauseMix `mapM_` args
-           where flag = B.getFlag opts
+           where flag = Z.getFlag z
 
 run :: ClauseMix -> FilePath -> IO ()
 run f = readRun g where

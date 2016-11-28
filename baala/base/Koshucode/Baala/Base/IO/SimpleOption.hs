@@ -4,6 +4,7 @@
 --   This module is based on "System.Console.GetOpt".
 
 module Koshucode.Baala.Base.IO.SimpleOption
+ {-# DEPRECATED "Use Koshucode.Baala.System.CliParser instead" #-}
  ( -- * Data type
    ShortOption, LongOption,
    SimpleOption,
