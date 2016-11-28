@@ -11,6 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 
 import qualified System.Console.GetOpt                   as G
 import qualified Koshucode.Baala.Overture                as O
+import qualified Koshucode.Baala.System                  as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -70,17 +71,17 @@ koshuSyntaxMain' :: (String, [String]) -> IO ()
 koshuSyntaxMain' (_, argv) =
     case G.getOpt G.Permute koshuSyntaxOptions argv of
       (opts, files, [])
-          | has OptHelp          -> B.putSuccess usage
-          | has OptVersion       -> B.putSuccessLn version
+          | has OptHelp          -> O.putSuccess usage
+          | has OptVersion       -> O.putSuccessLn version
           | has OptDict          -> dumpDict
-          | has OptEncoding      -> B.putSuccessLn =<< B.currentEncodings
+          | has OptEncoding      -> O.putSuccessLn =<< B.currentEncodings
           | has OptStdin         -> dumpStdin omit
           | length files == 1    -> dumpFile omit $ head files
-          | otherwise            -> B.putFailure usage
+          | otherwise            -> O.putFailure usage
           where has     = (`elem` opts)
                 omit    = has OptOmitBlank
 
-      (_, _, errs)    -> B.putFailure $ concat errs
+      (_, _, errs)    -> O.putFailure $ concat errs
 
 
 -- ----------------------  Dump

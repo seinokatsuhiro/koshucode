@@ -5,6 +5,7 @@
 
 module Main (main) where
 
+import qualified Koshucode.Baala.System            as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.System.CliParser  as Z
@@ -37,10 +38,10 @@ main :: IO ()
 main =
   do rslt <- Z.parseCommand options
      case rslt of
-       Left errs -> B.putAbortWith $ concat errs
+       Left errs -> O.putAbortWith $ concat errs
        Right (z, args)
            | flag "help"     -> Z.printHelp optionHead options
-           | flag "version"  -> B.putSuccessLn programVersion
+           | flag "version"  -> O.putSuccessLn programVersion
            | otherwise       -> run clauseMix `mapM_` args
            where flag = Z.getFlag z
 
@@ -52,7 +53,7 @@ readRun :: (B.Bz -> IO()) -> FilePath -> IO ()
 readRun f path =
     do file <- B.readBzFile path
        case B.bzFileException file of
-         Just e  -> B.putAbortWith $ show e
+         Just e  -> O.putAbortWith $ show e
          Nothing -> f $ B.bzFileContent file
 
                     

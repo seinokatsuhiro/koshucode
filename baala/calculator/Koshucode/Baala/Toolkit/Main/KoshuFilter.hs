@@ -8,6 +8,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuFilter
 
 import qualified System.Console.GetOpt                 as G
 import qualified System.IO                             as IO
+import qualified Koshucode.Baala.System                as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
@@ -48,8 +49,8 @@ koshuFilter g withRes =
      today        <- D.today
      case G.getOpt G.Permute options argv of
        (opts, paths, [])
-           | has OptHelp     -> B.putSuccess usage
-           | has OptVersion  -> B.putSuccessLn ver
+           | has OptHelp     -> O.putSuccess usage
+           | has OptVersion  -> O.putSuccessLn ver
            | otherwise       -> runFiles g2 withRes src
            where
              has   = (`elem` opts)
@@ -63,7 +64,7 @@ koshuFilter g withRes =
                        , C.globalTime      = today
                        , C.globalHook      = root }
 
-       (_, _, errs) -> B.putFailure $ concat errs
+       (_, _, errs) -> O.putFailure $ concat errs
 
 runFiles :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
 runFiles = hRunFiles B.stdout

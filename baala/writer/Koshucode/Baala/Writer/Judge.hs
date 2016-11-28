@@ -15,6 +15,7 @@ module Koshucode.Baala.Writer.Judge
 import Data.Monoid ((<>))
 import qualified Data.Map                            as Map
 import qualified Koshucode.Baala.Overture            as O
+import qualified Koshucode.Baala.System              as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core                as C
@@ -25,7 +26,7 @@ import qualified Koshucode.Baala.Core                as C
 -- | Print list of judgements.
 putJudges :: (Show c, B.MixShortEncode c) => [D.Judge c] -> IO ()
 putJudges js =
-    do _ <- putJudgesWith (B.exitCode 0) js
+    do _ <- putJudgesWith (O.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
@@ -98,7 +99,7 @@ judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Generate judgement counter comment.
 --
---  >>> O.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--  >>> O.putLines $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 --  **
 --  **  SUMMARY
 --  **       3 judges on A

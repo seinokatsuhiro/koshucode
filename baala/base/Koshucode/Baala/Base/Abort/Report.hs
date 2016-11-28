@@ -33,9 +33,9 @@ module Koshucode.Baala.Base.Abort.Report
   ) where
 
 import qualified Koshucode.Baala.Overture           as O
+import qualified Koshucode.Baala.System             as O
 import qualified Koshucode.Baala.Base.IO            as B
 import qualified Koshucode.Baala.Base.List          as B
-import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
 
@@ -136,7 +136,7 @@ abortCommand :: CommandLine -> B.AbortReason -> IO x
 abortCommand cmd a =
   do abortPrint cmd a
      B.putCommentLines ["Exit with status 2", ""]
-     B.exitWith $ B.ExitFailure 2
+     O.exit 2
 
 -- | Abort when getting abort reason.
 abortLeft :: B.Ab b -> IO b

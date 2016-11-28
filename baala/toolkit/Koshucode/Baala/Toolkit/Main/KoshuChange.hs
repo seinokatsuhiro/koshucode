@@ -10,6 +10,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuChange
 
 import System.Console.GetOpt
 
+import qualified Koshucode.Baala.System                  as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Toolkit.Library.Input   as L
 import qualified Koshucode.Baala.Toolkit.Library.Change  as L
@@ -82,12 +83,12 @@ koshuChangeMain' (_, argv) =
           where has = (`elem` opts)
 
       (opts, _, [])
-          | has OptHelp         -> B.putSuccess usage
-          | has OptVersion      -> B.putSuccessLn version
-          | has OptShowEncoding -> B.putSuccessLn =<< B.currentEncodings
+          | has OptHelp         -> O.putSuccess usage
+          | has OptVersion      -> O.putSuccessLn version
+          | has OptShowEncoding -> O.putSuccessLn =<< B.currentEncodings
           where has = (`elem` opts)
 
-      (_, _, errs) -> B.putFailure $ concat errs ++ usage
+      (_, _, errs) -> O.putFailure $ concat errs ++ usage
 
     where
       run opts left right
@@ -95,7 +96,7 @@ koshuChangeMain' (_, argv) =
           | has OptTo      = right `L.minusInput`  left
           | has OptMinus   = left  `L.minusInput`  right
           | has OptUpdate  = left  `L.updateInput` right
-          | otherwise      = B.putFailure usage
+          | otherwise      = O.putFailure usage
           where has = (`elem` opts)
 
 

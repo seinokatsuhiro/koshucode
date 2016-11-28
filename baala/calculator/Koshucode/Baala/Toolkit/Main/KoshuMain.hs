@@ -9,6 +9,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   ) where
 
 import qualified Koshucode.Baala.Overture                 as O
+import qualified Koshucode.Baala.System                   as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Data                     as D
 import qualified Koshucode.Baala.Core                     as C
@@ -57,7 +58,7 @@ data Param c = Param
     } deriving (Show)
 
 initParam :: (Show c, D.CContent c, W.ToJSON c) => Z.Parsed -> IO (Param c)
-initParam (Left errs) = B.putFailure $ concat errs
+initParam (Left errs) = O.putFailure $ concat errs
 initParam (Right (z, args)) =
     do (prog, _) <- B.progAndArgs
        proxy     <- L.getProxies
@@ -155,9 +156,9 @@ koshuMain g = Z.parseCommand options >>= initParam >>= koshuMainParam g
 
 koshuMainParam :: (D.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
 koshuMainParam g p
-    | paramHelp p          = B.putSuccess $ Z.helpMessage help options
-    | paramVersion p       = B.putSuccessLn ver
-    | paramShowEncoding p  = B.putSuccessLn =<< B.currentEncodings
+    | paramHelp p          = O.putSuccess $ Z.helpMessage help options
+    | paramVersion p       = O.putSuccessLn ver
+    | paramShowEncoding p  = O.putSuccessLn =<< B.currentEncodings
     | paramElement p       = putElems   g2 src
     | otherwise            = L.runFiles g2 src
     where
@@ -182,5 +183,5 @@ putElems g ns =
        res3 <- B.abortLeft $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
-       W.putJudgesWith (B.exitCode 0) $ L.resourceElem res3
+       W.putJudgesWith (O.exitCode 0) $ L.resourceElem res3
 

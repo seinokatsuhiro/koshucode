@@ -14,6 +14,7 @@ import qualified Data.RDF                 as RDF
 import qualified Data.Text                as Tx
 import System.Console.GetOpt
 
+import qualified Koshucode.Baala.System                  as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
@@ -53,9 +54,9 @@ options =
 
 checkOptions :: [Option] -> IO ()
 checkOptions opts | more opts [OptTurtle, OptXml] =
-  B.putFailure "choose one of -n -t -x"
+  O.putFailure "choose one of -n -t -x"
 checkOptions opts | more opts [Opt2, Opt3] =
-  B.putFailure "choose one of -2 -3"
+  O.putFailure "choose one of -2 -3"
 checkOptions _ = return ()
 
 more :: (Eq a) => [a] -> [a] -> Bool
@@ -70,13 +71,13 @@ parseCommand :: (String, [String]) -> IO ([Option], [String])
 parseCommand (prog, argv) =
     case getOpt Permute options argv of
       (opts, _, [])
-          | has OptHelp    -> B.putSuccess usage
-          | has OptVersion -> B.putSuccess version
+          | has OptHelp    -> O.putSuccess usage
+          | has OptVersion -> O.putSuccess version
           where has = (`elem` opts)
                 version = "koshu-rdf-" ++ L.versionString
       (opts, [], [])       -> return (opts, ["-"])
       (opts, files, [])    -> return (opts, files)
-      (_, _, errs)         -> B.putFailure $ concat errs
+      (_, _, errs)         -> O.putFailure $ concat errs
     where
       usage  = usageInfo header options
       header = unlines

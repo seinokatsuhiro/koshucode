@@ -18,6 +18,7 @@ module Koshucode.Baala.Toolkit.Library.Change
   ) where
 
 import qualified Data.Set                              as S
+import qualified Koshucode.Baala.System                as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Writer                as W
@@ -36,7 +37,7 @@ minusInput inputA inputB =
     do js <- minusInputJudge inputA inputB
        putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
-       W.putJudgesWith (B.exitCode 0) js
+       W.putJudgesWith (O.exitCode 0) js
 
 -- | Read and calculate judges subtraction.
 minusInputJudge :: L.Input -> L.Input -> IO [D.JudgeC]
@@ -78,7 +79,7 @@ updateInput inputB inputC =
     do [textB, textC] <- L.readInputs [inputB, inputC]
        putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
-       W.putJudgesWith (B.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
+       W.putJudgesWith (O.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
 
 -- | Apply change judges.
 updateJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]

@@ -52,6 +52,7 @@ executable koshu-change
   build-depends:
          base                       == 4.*
        , containers                 == 0.5.*
+       , koshucode-baala-overture   == 0.177.0.0
        , koshucode-baala-base       == 0.177.0.0
        , koshucode-baala-syntax     == 0.177.0.0
        , koshucode-baala-data       == 0.177.0.0
@@ -71,6 +72,7 @@ executable koshu-rdf
        , containers                 == 0.5.*
        , rdf4h                      == 1.*
        , text                       == 1.*
+       , koshucode-baala-overture   == 0.177.0.0
        , koshucode-baala-base       == 0.177.0.0
        , koshucode-baala-syntax     == 0.177.0.0
        , koshucode-baala-data       == 0.177.0.0

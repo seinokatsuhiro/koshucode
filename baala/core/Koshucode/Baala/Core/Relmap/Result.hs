@@ -23,6 +23,7 @@ module Koshucode.Baala.Core.Relmap.Result
 
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.System            as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -161,8 +162,8 @@ putResult result =
 hPutResult :: IO.Handle -> Result c -> IO B.ExitCode
 hPutResult h result =
     case resultShortChunks result of
-      Right sh  -> hPutAllChunks h result (B.exitCode 0) sh
-      Left  sh  -> hPutAllChunks h result (B.exitCode 1) sh
+      Right sh  -> hPutAllChunks h result (O.exitCode 0) sh
+      Left  sh  -> hPutAllChunks h result (O.exitCode 1) sh
 
 hPutAllChunks :: ResultWriterChunk c
 hPutAllChunks h result status sh =
