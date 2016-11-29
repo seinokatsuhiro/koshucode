@@ -48,6 +48,7 @@ data Param c = Param
     , paramRun           :: Bool
     , paramShowEncoding  :: Bool
     , paramStdin         :: Bool
+    , paramOutput        :: Maybe FilePath
     , paramHelp          :: Bool
     , paramVersion       :: Bool
 
@@ -71,6 +72,7 @@ initParam (Right (z, args)) =
                       , paramRun           = getFlag "run"
                       , paramShowEncoding  = getFlag "show-encoding"
                       , paramStdin         = getFlag "stdin"
+                      , paramOutput        = getLast "output"
                       , paramHelp          = getFlag "help"
                       , paramVersion       = getFlag "version"
 
@@ -81,6 +83,7 @@ initParam (Right (z, args)) =
     where
       getFlag  = Z.getFlag z
       getReq   = Z.getReq  z
+      getLast  = Z.getReqLast z
 
       assertX  = getReq "assert-x"
 
@@ -129,23 +132,24 @@ options :: [Z.Option]
 options =
     [ Z.help
     , Z.version
-    , Z.flag "i" ["stdin"]                   "Read from stdin"
     , Z.req  "x" ["assert-x"] "EXPR"         "|== X : add /x ( EXPR )"
     , Z.flag ""  ["auto-output"]             "Automatic output when no assertions"
-    , Z.flag ""  ["element"]                 "Analize input code"
-    , Z.flag ""  ["html-indented", "html"]   "HTML output with indent"
-    , Z.flag ""  ["html-compact"]            "HTML output without indent"
     , Z.flag ""  ["csv"]                     "CSV output with judgement"
     , Z.flag ""  ["csv-heading"]             "CSV output with heading"
-    , Z.flag ""  ["tsv-heading"]             "TSV output with heading"
     , Z.flag ""  ["dump"]                    "Dump internal data"
-    , Z.flag ""  ["json"]                    "JSON output"
+    , Z.flag ""  ["element"]                 "Analize input code"
     , Z.flag ""  ["geojson"]                 "GeoJSON output"
+    , Z.flag ""  ["html-indented", "html"]   "HTML output with indent"
+    , Z.flag ""  ["html-compact"]            "HTML output without indent"
+    , Z.flag ""  ["json"]                    "JSON output"
     , Z.req  ""  ["liner"] "CODE"            "One liner"
     , Z.req  ""  ["now"] "CODE"              "Set system time"
+    , Z.req  "o" ["output"] "FILE.k"         "Output file"
     , Z.flag ""  ["pretty"]                  "Pretty print"
     , Z.flag ""  ["run"]                     "Run input code"
     , Z.flag ""  ["show-encoding"]           "Show character encoding"
+    , Z.flag "i" ["stdin"]                   "Read from stdin"
+    , Z.flag ""  ["tsv-heading"]             "TSV output with heading"
     ]
 
 -- | The main function for @koshu@ command.
@@ -155,7 +159,10 @@ koshuMain :: (D.CContent c, W.ToJSON c) => C.Global c -> IO B.ExitCode
 koshuMain g = Z.parseCommand options >>= initParam >>= koshuMainParam g
 
 koshuMainParam :: (D.CContent c, W.ToJSON c) => C.Global c -> Param c -> IO B.ExitCode
-koshuMainParam g p
+koshuMainParam g@C.Global { C.globalResult  = rslt
+                          , C.globalFeature = feat
+                          , C.globalHook    = res }
+               p
     | paramHelp p          = O.putSuccess $ Z.helpMessage help options
     | paramVersion p       = O.putSuccessLn ver
     | paramShowEncoding p  = O.putSuccessLn =<< B.currentEncodings
@@ -166,15 +173,24 @@ koshuMainParam g p
       src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
 
       -- global parameter
-      rslt  = C.globalResult g
-      feat  = C.globalFeature g
-      g2    = C.globalFill g
-              { C.globalFeature   = feat { C.featAutoOutput = paramAutoOutput p }
-              , C.globalResult    = rslt { C.resultWriter = paramWriter p }
-              , C.globalProgram   = paramProg  p
-              , C.globalArgs      = paramArgs  p
-              , C.globalProxy     = paramProxy p
-              , C.globalTime      = paramNow   p }
+      g2 = C.globalFill g
+           { C.globalFeature   = feat { C.featAutoOutput = paramAutoOutput p }
+           , C.globalResult    = rslt { C.resultWriter = paramWriter p }
+           , C.globalProgram   = paramProg  p
+           , C.globalArgs      = paramArgs  p
+           , C.globalProxy     = paramProxy p
+           , C.globalTime      = paramNow   p
+           , C.globalHook      = altMaybe resOutputAlt (paramOutput p) res }
+
+-- | Alter output of data resource.
+resOutputAlt :: FilePath -> O.Map (C.Resource c)
+resOutputAlt path res = res { C.resOutput = B.ioPointFrom "" path }
+
+-- | Alter only if 'Just' value is given.
+altMaybe :: (a -> b -> b)         -- ^ Pure alteration
+         -> (Maybe a -> b -> b)   -- ^ Maybe alteration
+altMaybe _ (Nothing) b  = b
+altMaybe f (Just a)  b  = f a b
 
 putElems :: (D.CContent c) => C.Global c -> [B.IOPoint] -> IO B.ExitCode
 putElems g ns =
