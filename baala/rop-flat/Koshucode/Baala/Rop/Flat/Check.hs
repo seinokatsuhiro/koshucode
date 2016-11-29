@@ -11,6 +11,7 @@ module Koshucode.Baala.Rop.Flat.Check
   ) where
 
 import qualified Data.Map                          as Map
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -116,9 +117,9 @@ consExclude med =
 
 relmapExclude :: (Ord c) => C.Intmed c -> ([S.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
-    excl = Rop.relmapNone med (pick B.<> meet)
+    excl = Rop.relmapNone med (pick O.++ meet)
     pick = Rop.relmapPick med ns
-    meet = Rop.relmapMeet med Nothing (m B.<> pick)
+    meet = Rop.relmapMeet med Nothing (m O.++ pick)
 
 
 -- ----------------------  dump

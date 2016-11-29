@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.IO.CodePos
     codic, noCodic,
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
 import qualified Koshucode.Baala.Base.IO.IOPoint    as B
@@ -63,7 +64,7 @@ instance B.Default CodePos where
     def = CodePos B.def 0 "" ""
 
 cpCompare :: CodePos -> CodePos -> Ordering
-cpCompare p1 p2 = line B.<> column where
+cpCompare p1 p2 = line O.++ column where
     line   = cpLineNo p1 `compare` cpLineNo p2
     column = size p2 `compare` size p1
     size   = length . cpText

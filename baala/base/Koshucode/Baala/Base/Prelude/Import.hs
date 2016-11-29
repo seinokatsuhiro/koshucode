@@ -43,9 +43,6 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.Maybe.fromJust,
     Data.Maybe.fromMaybe,
   
-    -- * Data.Monoid
-    (Data.Monoid.<>),
-  
     -- * Data.Tuple
     Data.Tuple.swap,
 
@@ -74,7 +71,6 @@ import qualified Data.Default
 import qualified Data.List
 import qualified Data.Map
 import qualified Data.Maybe
-import qualified Data.Monoid
 import qualified Data.Tuple
 import qualified System.IO
 import qualified System.Exit

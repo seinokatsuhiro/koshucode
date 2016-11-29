@@ -60,7 +60,7 @@ consFor med =
 
 -- | Create @for@ relmap.
 relmapFor :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
-relmapFor med n rmap = relmapForInner med n (Rop.relmapUp med n B.<> rmap)
+relmapFor med n rmap = relmapForInner med n (Rop.relmapUp med n O.++ rmap)
 
 relmapForInner :: (D.CRel c) => C.Intmed c -> S.TermName -> O.Map (C.Relmap c)
 relmapForInner med n = C.relmapNest med . bin where

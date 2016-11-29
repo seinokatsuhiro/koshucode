@@ -54,15 +54,19 @@ consBoth med =
 -- | Create @both@ relmap.
 relmapBoth :: (Ord c, D.CRel c) => C.Intmed c -> Rop.SharedTerms -> c -> O.Map (C.Relmap c)
 relmapBoth med sh fill rmap = C.relmapCopy med "i" rmapBoth where
-    rmapBoth = rmapL B.<> Rop.relmapJoin med sh rmapR
-    rmapR    = rmap  B.<> relmapMaybe med sh fill rmapIn
+    rmapBoth = rmapL O.++ Rop.relmapJoin med sh rmapR
+    rmapR    = rmap  O.++ relmapMaybe med sh fill rmapIn
     rmapL    = relmapMaybe med sh fill rmap
     rmapIn   = C.relmapLocalSymbol med "i"
 
 
 -- ----------------------  maybe
 
--- | Construct maybe relmap.
+-- | __maybe R -share \/P ... -fill E__
+--
+--   Meet input and given relation.
+--   It keeps input tuples of which counterparts are totally negated.
+--
 consMaybe :: (D.CContent c) => C.RopCons c
 consMaybe med =
     do rmap <- Rop.getRelmap med "-relmap"
@@ -78,7 +82,7 @@ relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 relkitMaybe :: forall c. (Ord c, D.CRel c) => Rop.SharedTerms -> c -> C.RelkitBinary c
 relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
     lr   = D.termPicker he1 he2
-    he3  = he2 B.<> he1
+    he3  = he2 O.++ he1
     kit3 = case Rop.unmatchShare sh lr of
              Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
              Just (e, a) -> Msg.unmatchShare e a
@@ -105,7 +109,7 @@ selectFiller fill _ = fill
 
 -- ----------------------  compose-maybe
 
--- | __compose-maybe__
+-- | __compose-maybe R -share \/P ... -fill E__
 --
 ---  Construct relmap for relational composition.
 --

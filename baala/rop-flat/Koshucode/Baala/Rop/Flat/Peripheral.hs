@@ -20,6 +20,7 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     consAdd1, relmapAdd1, relkitAdd1,
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
@@ -51,7 +52,7 @@ consRdf :: C.RopCons c
 consRdf med =
     do sign  <- Rop.getWord  med "-pattern"
        [s,o] <- Rop.getTerms med "-term"
-       Right $ C.relmapSource med sign ["/s", "/o"] B.<>
+       Right $ C.relmapSource med sign ["/s", "/o"] O.++
                Rop.relmapRename med [(s,"/s"), (o,"/o")]
 
 

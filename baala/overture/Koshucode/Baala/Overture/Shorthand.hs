@@ -4,10 +4,12 @@
 
 module Koshucode.Baala.Overture.Shorthand
  ( (&),
+   (++),
    int, integer,
    nothing,
  ) where
 
+import Prelude hiding ((++))
 import qualified Koshucode.Baala.Overture.Type as O
 
 infixr 0 &
@@ -20,8 +22,17 @@ infixr 0 &
 --   >>> "a" & "b" & "c"
 --   ("a", ("b", "c"))
 --
+{-# INLINE (&) #-}
 (&) :: a -> b -> (a, b)
 a & b = (a, b)
+
+infixr 6 ++
+
+-- | Associative operator of monoid,
+--   same as 'mappend' or infix '<>'.
+{-# INLINE (++) #-}
+(++) :: (Monoid a) => a -> a -> a
+(++) = mappend
 
 -- | 'Int' shorthand.
 --
@@ -33,8 +44,8 @@ a & b = (a, b)
 --   >>> 12 :: Int
 --   12
 --
-int :: O.Map Int
 {-# INLINE int #-}
+int :: O.Map Int
 int = id
 
 -- | 'Integer' shorthand.
@@ -47,8 +58,8 @@ int = id
 --   >>> 12 :: Integer
 --   12
 --
-integer :: O.Map Integer
 {-# INLINE integer #-}
+integer :: O.Map Integer
 integer = id
 
 -- | Function which always returns 'Nothing'.

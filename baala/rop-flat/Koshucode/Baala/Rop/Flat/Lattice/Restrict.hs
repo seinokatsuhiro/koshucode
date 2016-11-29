@@ -20,7 +20,6 @@ module Koshucode.Baala.Rop.Flat.Lattice.Restrict
 
 import qualified Data.Set                                   as Set
 import qualified Koshucode.Baala.Overture                   as O
-import qualified Koshucode.Baala.Base                       as B
 import qualified Koshucode.Baala.Syntax                     as S
 import qualified Koshucode.Baala.Data                       as D
 import qualified Koshucode.Baala.Core                       as C
@@ -164,7 +163,7 @@ relkitCompose :: forall c. (Ord c) => (Rop.SharedTerms -> C.RelkitBinary c) -> R
 relkitCompose m sh kit2@(C.Relkit _ (Just he2) _) (Just he1) =
     do kitMeet <- m sh kit2 (Just he1)
        kitCut  <- Rop.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
-       Right (kitMeet B.<> kitCut)
+       Right (kitMeet O.++ kitCut)
 relkitCompose _ _ _ _ = Right C.relkitNothing
 
 sharedNames :: D.Head -> D.Head -> [S.TermName]

@@ -14,7 +14,6 @@ module Koshucode.Baala.Rop.Nest.Deriv
   ) where
 
 import qualified Koshucode.Baala.Overture        as O
-import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
 import qualified Koshucode.Baala.Core            as C
@@ -39,7 +38,7 @@ consOppGroup med =
 -- | Create @odd-group@ relmap.
 relmapOppGroup :: (Ord c, D.CRel c) => C.Intmed c -> Rop.SharedTerms -> S.TermName -> O.Map (C.Relmap c)
 relmapOppGroup med sh n rmap = C.relmapCopy med n' rmapGroup where
-    rmapGroup  = rmap B.<> Rop.relmapGroup med sh n rmapLocal
+    rmapGroup  = rmap O.++ Rop.relmapGroup med sh n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n'
     n'         = S.termNameContent n
 
@@ -65,7 +64,7 @@ consSelfGroup med =
 
 -- | Create @self-group@ relmap.
 relmapSelfGroup :: (Ord c, D.CRel c) => C.Intmed c -> (Bool, [S.TermName], S.TermName) -> C.Relmap c
-relmapSelfGroup med (co, ns, to) = group B.<> for where
+relmapSelfGroup med (co, ns, to) = group O.++ for where
     group  = relmapOppGroup med Nothing to key
     for    = Rop.relmapFor med to nest
     key    = if co then pick else cut
@@ -88,7 +87,7 @@ consUngroup med =
 -- | Create @ungroup@ relmap.
 relmapUngroup :: (Ord c, D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
 relmapUngroup med n = ungroup where
-    ungroup = slice B.<> cut
+    ungroup = slice O.++ cut
     slice   = Rop.relmapSliceUp med meet
     meet    = Rop.relmapMeet med Nothing $ C.relmapLocalNest med n
     cut     = Rop.relmapCut  med [n]

@@ -221,7 +221,7 @@ clockPos :: O.Map Clock
 clockPos = clockMap abs abs
 
 signToMix :: Int -> O.Map B.MixText
-signToMix (-1) m = B.mixString "-" B.<> m
+signToMix (-1) m = B.mixString "-" O.++ m
 signToMix _    m = m
 
 daySecToMix :: (Sec -> (Days, B.MixText)) -> Days -> Sec -> B.MixText
@@ -229,7 +229,7 @@ daySecToMix secMix day sec =
     let (d, mx) = secMix sec
     in case day + d of
          0  -> mx
-         d2 -> dayToMix d2 B.<> mx
+         d2 -> dayToMix d2 O.++ mx
 
 mixColon :: O.Bin B.MixText
 mixColon = B.mixInfix ":"
@@ -250,7 +250,7 @@ dhToMix sec = (d, hm) where
     (d, h, _, _)   = dhmsFromSec sec
 
 dayToMix :: Days -> B.MixText
-dayToMix d = B.mixDec d B.<> B.mixString "'"
+dayToMix d = B.mixDec d O.++ B.mixString "'"
 
 
 -- ----------------------  Map

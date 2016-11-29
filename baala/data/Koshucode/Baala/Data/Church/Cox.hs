@@ -90,7 +90,7 @@ coxToDoc sh = d (0 :: Int) . coxFold where
         CoxLit    _ c          -> B.pprint "lit"    B.<+> encode c
         CoxTerm   _ ns _       -> B.pprint $ S.termPathString ns
         CoxCalc   _ op _       -> B.pprint "calc"   B.<+> blankNameToDoc op
-        CoxLocal  _ v i        -> B.pprint "local"  B.<+> (B.pprint v B.<> B.pprint "/" B.<> B.pprint i)
+        CoxLocal  _ v i        -> B.pprint "local"  B.<+> (B.pprint v O.++ B.pprint "/" O.++ B.pprint i)
         CoxBlank  _ v          -> B.pprint "global" B.<+> blankNameToDoc v
         CoxFill   _ f xs       -> let f'  = B.pprint ">>" B.<+> d' f
                                       xs' = B.nest 3 $ B.pprintV $ map arg xs

@@ -94,7 +94,7 @@ typeToMix = wf where
 
     w _ (TypeList    t)        = B.mix "list" `B.mixSep` wt t
     w _ (TypeSet     t)        = B.mix "set"  `B.mixSep` wt t
-    w _ (TypeTag tag t)        = B.mix "tag"  `B.mixSep` (B.mix tag B.<> B.mix ":")
+    w _ (TypeTag tag t)        = B.mix "tag"  `B.mixSep` (B.mix tag O.++ B.mix ":")
                                               `B.mixSep` wt t
 
     w q (TypeTie    ts)        = wrap q (B.mix "tie" `B.mixSep` termTypes ts)

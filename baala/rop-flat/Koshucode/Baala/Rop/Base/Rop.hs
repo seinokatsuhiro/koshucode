@@ -10,7 +10,7 @@ module Koshucode.Baala.Rop.Base.Rop
     consXxx
   ) where
 
-import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base.Define    as Rop
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
@@ -31,7 +31,7 @@ ropsBuiltin = Rop.ropList "builtin"
 -- | Append relmaps.
 consAppend :: C.RopCons c
 consAppend = app . map snd . C.medSubmap where
-    app [a,b] = Right (a B.<> b)
+    app [a,b] = Right (a O.++ b)
     app _     = Msg.reqRelmap 2
 
 -- | __id__

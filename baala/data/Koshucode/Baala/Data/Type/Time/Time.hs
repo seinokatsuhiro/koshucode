@@ -113,8 +113,8 @@ timeToMix time =
       zone z            = hm $ D.dhmsFromSec z
       szone z           = case z `compare` 0 of
                             EQ -> B.mixString "UTC"
-                            LT -> B.mixString "-" B.<> zone z
-                            GT -> B.mixString "+" B.<> zone z
+                            LT -> B.mixString "-" O.++ zone z
+                            GT -> B.mixString "+" O.++ zone z
 
       hm (_, h, m, _)   = B.mixJoin ":"  [D.mix02 h, D.mix02 m]
       yw (y, w, _)      = B.mixJoin "-#" [B.mixDec y, B.mixDec w]

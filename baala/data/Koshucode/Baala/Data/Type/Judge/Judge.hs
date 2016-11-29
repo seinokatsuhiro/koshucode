@@ -67,7 +67,7 @@ instance (Ord c) => Ord (Judge c) where
             p2   = judgeClass j2'
             xs1  = judgeTerms j1'
             xs2  = judgeTerms j2'
-        in compare p1 p2 B.<> compare xs1 xs2
+        in compare p1 p2 O.++ compare xs1 xs2
 
 -- Apply function to each values
 instance Functor Judge where
@@ -218,7 +218,7 @@ judgeMix sep sh j =
       JudgeMultiChange c xs _  -> judge "|-CC" c xs
       JudgeViolate     c xs    -> judge "|-V"  c xs
     where
-      judge sym c xs = B.mix sym `B.mixSep` B.mix c B.<> sep B.<> termsToMix sep sh xs
+      judge sym c xs = B.mix sym `B.mixSep` B.mix c O.++ sep O.++ termsToMix sep sh xs
 
 -- | Encode judgement with two-spaces term separator.
 judgeMix2 :: (B.MixShortEncode c) => B.Shorten -> Judge c -> B.MixText
