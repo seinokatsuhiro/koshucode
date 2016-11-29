@@ -14,7 +14,9 @@ module Koshucode.Baala.System.CliParser
    Parsed, parse, parseCommand,
    -- ** 3. Get parameters
    -- $Get
-   Para, getFlag, getReq, getOpt,
+   Para, getFlag,
+   getReq, getReqLast,
+   getOpt, getOptLast,
 
    -- * Predefined options
    -- ** --help
@@ -160,6 +162,10 @@ getReq opts name = May.mapMaybe get opts where
     get (CliReq n p) | (n == name) = Just p
     get _ = Nothing
 
+-- | Get last parameter of 'req'-type option.
+getReqLast :: [Para] -> OptionName -> Maybe String
+getReqLast z n = maybeLast $ getReq z n
+
 -- | Get parameter list of 'opt'-type option.
 --
 --   >>> let Right (o,p) = parse [opt [] ["a"] "text" "optional text"] ["--a", "--a=foo", "bar"]
@@ -172,6 +178,21 @@ getOpt :: [Para] -> OptionName -> String -> [String]
 getOpt opts name def = May.mapMaybe get opts where
     get (CliOpt n p) | (n == name) = Just $ May.fromMaybe def p
     get _ = Nothing
+
+-- | Get last parameter of 'opt'-type option.
+getOptLast :: [Para] -> OptionName -> String -> Maybe String
+getOptLast z n def = maybeLast $ getOpt z n def
+
+-- | Head element of list.
+-- maybeHead :: [a] -> Maybe a
+-- maybeHead []       = Nothing
+-- maybeHead (e : _)  = Just e
+
+-- | Last element of list.
+maybeLast :: [a] -> Maybe a
+maybeLast []       = Nothing
+maybeLast [e]      = Just e
+maybeLast (_ : es) = maybeLast es
 
 
 -- ============================================  Predefined option
