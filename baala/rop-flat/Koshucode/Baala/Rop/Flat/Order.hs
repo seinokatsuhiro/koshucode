@@ -74,7 +74,7 @@ relkitToward (hePick, boPick) ns (Just he1)
     where
       pk    = D.termPicker ns he1
       he2   = D.headMap (hePick pk) he1
-      kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boPick pk
+      kit2  = C.relkitJust he2 $ C.RelkitLinear False $ boPick pk
 
 
 -- ----------------------  lexical
@@ -94,7 +94,7 @@ relkitLexical (Just he1) = Right kit2 where
     ns    = D.getTermNames he1
     lr    = D.termPicker (B.sort ns) ns
     he2   = D.headMap (D.ssRForward lr) he1
-    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ D.ssRForward lr
+    kit2  = C.relkitJust he2 $ C.RelkitLinear False $ D.ssRForward lr
 
 
 -- ----------------------  order

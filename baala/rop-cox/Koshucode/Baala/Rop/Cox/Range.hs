@@ -70,7 +70,7 @@ relkitRange :: (D.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = D.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
     f2 _ cs  = do decLow    <- D.getDec $ D.coxRunCox cops he1 cs coxLow
                   decHigh   <- D.getDec $ D.coxRunCox cops he1 cs coxHigh
 
@@ -127,7 +127,7 @@ relkitRangeBy :: (D.CContent c) => B.RangeBy D.Time -> RangeAttr c -> C.RelkitFl
 relkitRangeBy _ _ Nothing = Right C.relkitNothing
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = D.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
     f2 _ cs  = do timeFrom  <-  D.getTime $ D.coxRunCox cops he1 cs from
                   timeTo    <-  D.getTime $ D.coxRunCox cops he1 cs to
                   let ts    =   map D.pTime $ range timeFrom timeTo
@@ -180,7 +180,7 @@ relkitRangeClock :: (D.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
 relkitRangeClock _ _ Nothing = Right C.relkitNothing
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = D.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
     f2 _ cs  = do clockFrom  <- D.getClock $ D.coxRunCox cops he1 cs from
                   clockTo    <- D.getClock $ D.coxRunCox cops he1 cs to
                   let range   = D.clockRangeBy $ D.clockStep sec

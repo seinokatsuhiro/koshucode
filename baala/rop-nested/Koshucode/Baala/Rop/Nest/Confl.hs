@@ -72,7 +72,7 @@ relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     lr    = D.termPicker [n] he1
     side  = D.ssRSide lr
     he3   = D.headConsNest n he2 $ D.headMap side he1
-    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
+    kit3  = C.relkitJust he3 $ C.RelkitAbLinear False kitf3 [kitb2]
 
     kitf3 :: [C.BodyMap c] -> B.AbMap [c]
     kitf3 bmaps cs1 =
@@ -154,7 +154,7 @@ relmapSlice med n = C.relmapNest med . bin where
 relkitSlice :: (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitSlice n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = D.headConsNest n he2 he1
-    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
+    kit3  = C.relkitJust he3 $ C.RelkitAbLinear False kitf3 [kitb2]
     kitf3 bmaps cs1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 [cs1]
@@ -178,7 +178,7 @@ relmapSliceUp med = C.relmapNest med . bin where
 -- | Create @slice-up@ relkit.
 relkitSliceUp :: (D.CRel c) => C.RelkitBinary c
 relkitSliceUp (C.Relkit _ (Just he2) kitb2) _ = Right kit3 where
-    kit3  = C.relkitJust he2 $ C.RelkitOneToAbMany False kitf3 [kitb2]
+    kit3  = C.relkitJust he2 $ C.RelkitAbMany False kitf3 [kitb2]
     kitf3 bmaps cs1 = do let [bmap2] = bmaps
                          bmap2 [cs1]
 relkitSliceUp _ _ = Right C.relkitNothing

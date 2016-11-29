@@ -76,7 +76,7 @@ relkitTie _ Nothing = Right C.relkitNothing
 relkitTie (ns, to) (Just he1) = Right kit2 where
     pick      =  D.picker ns he1
     he2       =  D.headCons to he1
-    kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
+    kit2      =  C.relkitJust he2 $ C.RelkitLinear False f2
     f2 cs1    =  let tie = D.pTie $ zip ns $ pick cs1
                  in tie : cs1
 
@@ -100,7 +100,7 @@ relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
     pick      =  D.picker [from] he1
     he2       =  D.headAppend ns he1
-    kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    kit2      =  C.relkitJust he2 $ C.RelkitAbLinear False f2 []
     f2 _ cs1  =  do let [tie] = pick cs1
                     cs <- tiePick ns $ D.gTie tie
                     Right $ cs ++ cs1
@@ -178,6 +178,6 @@ relkitAdd1 :: S.Term c -> Maybe D.Head -> B.Ab (C.Relkit c)
 relkitAdd1 _ Nothing = Right C.relkitNothing
 relkitAdd1 (n, c) (Just he1) = Right kit2 where
     he2   = D.headCons n he1
-    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False f2
+    kit2  = C.relkitJust he2 $ C.RelkitLinear False f2
     f2 cs = c : cs
 

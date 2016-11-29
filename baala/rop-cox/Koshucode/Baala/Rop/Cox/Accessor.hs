@@ -65,7 +65,7 @@ relkitClock :: (D.CContent c)
 relkitClock _ Nothing = Right C.relkitNothing
 relkitClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = Right kit2 where
       he2       = n `D.headCons` he1
-      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do let run = D.coxRunCox cops he1 cs1
                      t <- getInt     $ run times
                      d <- getInteger $ run day
@@ -120,7 +120,7 @@ relkitClockGet :: (D.CContent c) =>
 relkitClockGet _ Nothing = Right C.relkitNothing
 relkitClockGet (cops, cox, ns) (Just he1) = Right kit2 where
       he2       = B.catMaybes ns `D.headAppend` he1
-      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do clock <- D.getClock $ D.coxRunCox cops he1 cs1 cox
                      let cs2 = B.zipMaybe2 ns $ clockProps clock
                      Right $ cs2 ++ cs1
@@ -164,7 +164,7 @@ relkitClockAlter (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 whe
       cut       = B.snipOff ind
       fore      = B.snipForward ind
       he2       = D.headMap fore he1
-      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do let run    = D.coxRunCox cops he1 cs1
                          [c]    = pick cs1
                          clock  = D.gClock c

@@ -95,7 +95,7 @@ relkitGeoDatumJp :: (Ord c, D.CContent c) => (D.CopSet c, D.Cox3 c, S.TermName2)
 relkitGeoDatumJp _ Nothing = Right C.relkitNothing
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
     he2       = D.headAppend [lat, long] he1
-    kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
     pReal     = D.pDec . D.realDecimal 4
 
     f2 _ cs   = do cn    <- D.coxRunCox cops he1 cs coxn
@@ -135,7 +135,7 @@ relkitGeoDegree :: (Ord c, D.CContent c) => S.TermName4 -> C.RelkitFlow c
 relkitGeoDegree _ Nothing = Right C.relkitNothing
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
     he2       = D.headCons real he1
-    kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
     pick      = D.picker [deg, mnt, sec] he1
     pReal     = D.pDec . D.realDecimal 4
 

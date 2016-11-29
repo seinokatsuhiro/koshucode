@@ -76,7 +76,7 @@ relkitAdd (cops, cox) (Just he1)
       (ns, xs)   = unzip cox       -- names and expressions
       pk         = D.termPicker ns he1
       he2        = ns `D.headAppend` he1
-      kit2       = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+      kit2       = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1   = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cs1
 
@@ -109,7 +109,7 @@ relkitAlt (cops, cox) (Just he1)
       (ns, xs)  = unzip cox               -- names and expressions
       pk        = D.termPicker ns he1
       he2       = D.forwardTerms pk `D.headMap` he1  -- heading of output relation
-      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear True f2 []
       f2 _ cs1  = do cs2 <- D.coxRunCox cops he1 cs1 `mapM` xs
                      Right $ cs2 ++ D.cutTerms pk cs1
 
@@ -141,7 +141,7 @@ relkitFill (ns, cops, coxTo) (Just he1)
     where
       pk        = D.termPicker ns he1
       he2       = D.forwardTerms pk `D.headMap` he1
-      kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear True f2 []
       f2 _ cs1  = do cTo  <- D.coxRunCox cops he1 cs1 coxTo
                      let fill c | D.isEmpty c = cTo
                                 | otherwise   = c
@@ -180,7 +180,7 @@ relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 relkitReplaceAll :: (D.CContent c) => (D.CopSet c, D.Cox c, D.Cox c) -> C.RelkitFlow c
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
-    kit2     = C.relkitJust he1 $ C.RelkitOneToAbOne False f2 []
+    kit2     = C.relkitJust he1 $ C.RelkitAbLinear False f2 []
     f2 _ cs  = do cFrom    <-  D.coxRunCox cops he1 cs coxFrom
                   cTo      <-  D.coxRunCox cops he1 cs coxTo
                   let replace c | c == cFrom = cTo

@@ -33,8 +33,8 @@ relkitLink kits = linkKit where
         B.Codic cp $
          case core of
            C.RelkitAbFull      u f bs    -> C.RelkitAbFull      u f $ map link bs
-           C.RelkitOneToAbMany u f bs    -> C.RelkitOneToAbMany u f $ map link bs
-           C.RelkitOneToAbOne  u f bs    -> C.RelkitOneToAbOne  u f $ map link bs
+           C.RelkitAbMany      u f bs    -> C.RelkitAbMany      u f $ map link bs
+           C.RelkitAbLinear    u f bs    -> C.RelkitAbLinear    u f $ map link bs
            C.RelkitAbSemi        f b     -> C.RelkitAbSemi        f $ link  b
            C.RelkitAppend        b1 b2   -> C.RelkitAppend (link b1) (link b2)
            C.RelkitNest        p nest b  -> C.RelkitNest     p nest $ link  b
@@ -53,13 +53,13 @@ relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $
      case core of
        C.RelkitFull        u f     -> right u $ f             bo1
-       C.RelkitOneToMany   u f     -> right u $ f `concatMap` bo1
-       C.RelkitOneToOne    u f     -> right u $ f `map`       bo1
+       C.RelkitMany        u f     -> right u $ f `concatMap` bo1
+       C.RelkitLinear      u f     -> right u $ f `map`       bo1
        C.RelkitTest          f     -> Right   $ filter f      bo1
 
        C.RelkitAbFull      u f bs  -> monad u $            f (mrun bs)        bo1
-       C.RelkitOneToAbOne  u f bs  -> monad u $            f (mrun bs) `mapM` bo1
-       C.RelkitOneToAbMany u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
+       C.RelkitAbLinear    u f bs  -> monad u $            f (mrun bs) `mapM` bo1
+       C.RelkitAbMany      u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
        C.RelkitAbSemi        f b   -> B.filterM (semi f b) bo1
        C.RelkitAbTest        f     -> B.filterM f bo1
 

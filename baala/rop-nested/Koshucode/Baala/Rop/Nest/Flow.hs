@@ -72,7 +72,7 @@ relkitUp n (Just he1)
       he1'   = D.headMap share he1
       t1     = D.headNested he1'
       he2    = D.headUp he1'
-      kit2   = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
+      kit2   = C.relkitJust he2 $ C.RelkitMany True kitf2
       kitf2  = D.relBody . D.gRel . head . share
 
 

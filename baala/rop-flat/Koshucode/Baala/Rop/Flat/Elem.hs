@@ -104,7 +104,7 @@ relkitMemberExpand :: (Ord c, D.CSet c, D.CList c, D.CText c)
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
     he2      = D.headCons x he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
     kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
                in case xsc of
                     _ | D.isSet  xsc -> map (: cs) $ D.gSet xsc
@@ -147,7 +147,7 @@ relkitIndexElemExpand :: forall c. (Ord c, D.CContent c)
 relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
 relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = D.headAppend [i, x] he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
     kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
                in case xsc of
                     _ | D.isSet  xsc -> indexElem cs $ B.sort $ D.gSet xsc
@@ -187,7 +187,7 @@ relmapUnroll med = C.relmapFlow med . relkitUnroll
 relkitUnroll :: (D.CTerm c) =>  (S.TermName, S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUnroll _ Nothing = Right C.relkitNothing
 relkitUnroll (t, c, from) (Just he1) = kit2 where
-    kit2 | S.termsPN fromi [ti, ci]  = Right $ C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kit2 | S.termsPN fromi [ti, ci]  = Right $ C.relkitJust he2 $ C.RelkitMany False kitf2
          | otherwise                 = Msg.unkTerm (t : c : from) he1
     [ti, ci] = headIndex he1 [t, c]
     fromi    = headIndex he1 from
@@ -231,7 +231,7 @@ relmapElemEnd med = C.relmapFlow med . relkitElemBy B.takeTailFill
 relkitElemBy :: (Ord c, D.CContent c) => (c -> Int -> [c] -> [c]) -> (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitElemBy _ _ Nothing = Right C.relkitNothing
 relkitElemBy f (coll, to) (Just he1) = kit2 where
-    kit2 | S.termsPN [colli] toi = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kit2 | S.termsPN [colli] toi = Right $ C.relkitJust he2 $ C.RelkitLinear False kitf2
          | otherwise = Msg.unkTerm [coll] he1
 
     [colli]  = headIndex he1 [coll]
@@ -263,7 +263,7 @@ relkitUncollect :: (Ord c, D.CSet c, D.CList c, D.CText c, D.CDec c, D.CEmpty c)
   => (S.TermName, [S.TermName]) -> C.RelkitFlow c
 relkitUncollect _ Nothing = Right C.relkitNothing
 relkitUncollect (coll, to) (Just he1) = kit2 where
-    kit2 | S.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kit2 | S.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitLinear False kitf2
          | otherwise            = Msg.unkTerm (coll : to) he1
 
     icoll    = headIndex he1 [coll]
