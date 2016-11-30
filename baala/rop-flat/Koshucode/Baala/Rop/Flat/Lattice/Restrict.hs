@@ -99,7 +99,7 @@ relmapNoneMeet :: (Ord c) => C.Intmed c -> Rop.SharedTerms -> C.Relmap c -> C.Re
 relmapNoneMeet med sh = C.relmapBinary med $ relkitFilterMeet False sh
 
 relkitFilterMeet :: forall c. (Ord c) => Bool -> Rop.SharedTerms -> C.RelkitBinary c
-relkitFilterMeet which sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
+relkitFilterMeet which sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr     = D.termPicker he1 he2
     kit3   = case Rop.unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
@@ -132,7 +132,7 @@ relmapSub med sh = C.relmapBinary med $ relkitSub sh
 
 -- | Calculate subrelation filter.
 relkitSub :: (Ord c) => Rop.SharedTerms -> C.RelkitBinary c
-relkitSub sh kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
+relkitSub sh kit2@(C.RelkitOutput he2 _) he1'@(Just he1)
     | he1 `D.isSuperhead` he2 = kit
     | otherwise = case Rop.unmatchShare sh lr of
                     Nothing     -> Right $ C.relkitJust he1 $ C.RelkitConst []
@@ -160,7 +160,7 @@ relmapCompose med sh = C.relmapBinary med $ relkitCompose Rop.relkitMeet sh
 
 -- | Calculate relational composition.
 relkitCompose :: forall c. (Ord c) => (Rop.SharedTerms -> C.RelkitBinary c) -> Rop.SharedTerms -> C.RelkitBinary c
-relkitCompose m sh kit2@(C.Relkit _ (Just he2) _) (Just he1) =
+relkitCompose m sh kit2@(C.RelkitOutput he2 _) (Just he1) =
     do kitMeet <- m sh kit2 (Just he1)
        kitCut  <- Rop.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
        Right (kitMeet O.++ kitCut)

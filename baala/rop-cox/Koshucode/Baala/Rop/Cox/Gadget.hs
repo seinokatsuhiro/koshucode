@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall #-}
 
 -- | Gadgets with content calculation.
 
@@ -271,7 +271,7 @@ relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
 -- | Create @repeat@ relkit.
 relkitRepeat :: forall c. (Ord c) => Integer -> C.RelkitBinary c
-relkitRepeat cnt (C.Relkit _ (Just he2) kitb2) (Just he1)
+relkitRepeat cnt (C.RelkitOutput he2 kitb2) (Just he1)
     | D.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where

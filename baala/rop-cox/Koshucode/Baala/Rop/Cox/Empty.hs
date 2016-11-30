@@ -80,7 +80,7 @@ relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 
 -- | Create @maybe@ relkit.
 relkitMaybe :: forall c. (Ord c, D.CRel c) => Rop.SharedTerms -> c -> C.RelkitBinary c
-relkitMaybe sh fill (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
+relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr   = D.termPicker he1 he2
     he3  = he2 O.++ he1
     kit3 = case Rop.unmatchShare sh lr of
@@ -111,10 +111,8 @@ selectFiller fill _ = fill
 
 -- | __compose-maybe R -share \/P ... -fill E__
 --
----  Construct relmap for relational composition.
+--  Construct relmap for relational composition.
 --
---   >>> a | compose-maybe b
-
 consComposeMaybe :: (D.CContent c) => C.RopCons c
 consComposeMaybe med =
     do rmap <- Rop.getRelmap med "-relmap"

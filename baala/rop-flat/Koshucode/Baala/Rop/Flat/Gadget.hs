@@ -126,7 +126,7 @@ relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
 -- | Create @visit-distance@ relkit.
 relkitVisitDistance :: (Ord c, D.CDec c, D.CRel c) => ([S.TermName], [S.TermName], S.TermName, S.TermName) -> C.RelkitBinary c
-relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
+relkitVisitDistance (step1, step2, to, dist) (C.RelkitOutput he2 kitb2) (Just he1)
     | D.newTermsExist pkStart   = Msg.unkTerm (D.newTerms pkStart) he1
     | D.newTermsExist pkFrom    = Msg.unkTerm (D.newTerms pkFrom)  he2
     | D.newTermsExist pkTo      = Msg.unkTerm (D.newTerms pkTo)    he2

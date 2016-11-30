@@ -59,7 +59,7 @@ relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => SharedTerms -> C.RelkitBinary c
-relkitMeet sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
+relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr     = D.termPicker he1 he2
     he3    = he2 O.++ he1
     kit3   = case unmatchShare sh lr of
@@ -115,7 +115,7 @@ relmapJoinList med (rmap : rmaps) = rmap O.++ rmaps' where
 
 -- | Join two relations.
 relkitJoin :: SharedTerms -> C.RelkitBinary c
-relkitJoin sh (C.Relkit _ (Just he2) kitb2) (Just he1) = kit3 where
+relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr     = D.termPicker he1 he2
     he3    = D.ssLShare lr `D.headMap` he1
     kit3   = case unmatchShare sh lr of

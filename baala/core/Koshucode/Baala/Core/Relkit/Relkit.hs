@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Specialized relmap.
@@ -5,8 +6,10 @@
 module Koshucode.Baala.Core.Relkit.Relkit
   ( 
     -- * Datatype for Relkit
-    Relkit (..), RelkitBody, RelkitCore (..),
-  
+    Relkit (..), 
+    pattern RelkitOutput,
+    RelkitBody, RelkitCore (..),
+
     -- * Derived types
     RelkitTable, RelkitKey,
     BodyMap,
@@ -31,6 +34,9 @@ data Relkit c = Relkit
     , relkitOutput :: Maybe D.Head     -- ^ Output heading
     , relkitBody   :: RelkitBody c     -- ^ Calculation function
     }
+
+-- | Relkit of output heading and its body.
+pattern RelkitOutput he bo <- Relkit _ (Just he) bo
 
 -- | Body of relkit.
 type RelkitBody c = B.Codic (RelkitCore c)
@@ -118,3 +124,4 @@ type RelkitBinary c   = Relkit c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from multiple subrelmaps and input heading.
 type RelkitConfl c    = [Relkit c] -> RelkitFlow c
+

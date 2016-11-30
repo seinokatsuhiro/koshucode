@@ -58,7 +58,7 @@ relmapIf med (mt, ma, mb) = C.relmapConfl med relkitIf [mt, ma, mb]
 
 -- | Create @if@ relkit.
 relkitIf :: (Ord c) => C.RelkitConfl c
-relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB) kitbB] _
+relkitIf [C.Relkit _ _ kitbT, C.RelkitOutput heA kitbA, C.RelkitOutput heB kitbB] _
     | D.headEquiv heA heB = Right $ kit3
     | otherwise = Msg.diffHead [heA, heB]
     where
@@ -124,7 +124,7 @@ relmapFix med = C.relmapBinary med relkitFix
 
 -- | Create @fix@ relkit.
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
-relkitFix (C.Relkit _ (Just he2) kitb2) (Just he1)
+relkitFix (C.RelkitOutput he2 kitb2) (Just he1)
     | D.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
@@ -149,7 +149,7 @@ relmapEqual med = C.relmapBinary med relkitEqual
 
 -- | Create @equal@ relkit.
 relkitEqual :: (Ord c) => C.RelkitBinary c
-relkitEqual (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitEqual (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
     kit3 = C.relkitJust mempty $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
