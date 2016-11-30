@@ -21,8 +21,9 @@ module Koshucode.Baala.Data.Type.Judge.Judge
     assertSymbol,
 
     -- * Encode
+    EncodeJudge,
     judgeBreak,
-    judgeMix, judgeMix2, judgeMixTab,
+    judgeMix, judgeMix2, judgeMixTab, judgeMix2Tab,
     termNameToMix,
     termsToMix1, termsToMix2,
   ) where
@@ -207,8 +208,11 @@ judgeTerms (JudgeViolate     _ xs)     = xs
 instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
     mixShortEncode = judgeMix2
 
+-- | Encode judgement with short sign converter.
+type EncodeJudge c = B.Shorten -> Judge c -> B.MixText
+
 -- | Encode judgement with term separator.
-judgeMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> Judge c -> B.MixText
+judgeMix :: (B.MixShortEncode c) => B.MixText -> EncodeJudge c
 judgeMix sep sh j =
     case j of
       JudgeAffirm      c xs    -> judge "|--"  c xs
@@ -221,12 +225,18 @@ judgeMix sep sh j =
       judge sym c xs = B.mix sym `B.mixSep` B.mix c O.++ sep O.++ termsToMix sep sh xs
 
 -- | Encode judgement with two-spaces term separator.
-judgeMix2 :: (B.MixShortEncode c) => B.Shorten -> Judge c -> B.MixText
+judgeMix2 :: (B.MixShortEncode c) => EncodeJudge c
 judgeMix2 = judgeMix B.mix2
 
 -- | Encode judgement with tab term separator.
-judgeMixTab :: (B.MixShortEncode c) => B.Shorten -> Judge c -> B.MixText
+judgeMixTab :: (B.MixShortEncode c) => EncodeJudge c
 judgeMixTab = judgeMix B.mixTab
+
+-- | Conditional judgement encoder.
+--   If the first argument is true, 'judgeMix2' is used, otherwise 'judgeMixTab'.
+judgeMix2Tab :: (B.MixShortEncode c) => Bool -> EncodeJudge c
+judgeMix2Tab True   = judgeMix2
+judgeMix2Tab False  = judgeMixTab
 
 -- | Conventional line-break setting for judges:
 --   4-spaces indent and 120-columns line.

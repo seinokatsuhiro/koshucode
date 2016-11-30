@@ -90,9 +90,10 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
+-- | Output result chunk.
 hPutChunks :: (B.MixShortEncode c) => IO.Handle -> C.Result c -> B.Shorten -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks h result sh = loop where
-    writer = B.mixShortEncode sh
+    writer = D.judgeMix2 sh
 
     loop [] cnt                            = return cnt
     loop (C.ResultJudge js : xs) (_, tab)  =
