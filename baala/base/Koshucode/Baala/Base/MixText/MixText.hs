@@ -42,7 +42,7 @@ module Koshucode.Baala.Base.MixText.MixText
     putMix, putMixLn,
     hPutMix, hPutMixLn,
     putMixLines, hPutMixLines,
-    writeMix,
+    writeMix, outputMix,
   ) where
 
 import Data.Monoid ((<>))
@@ -385,6 +385,12 @@ writeMix :: B.LineBreak -> FilePath -> MixText -> IO ()
 writeMix lb path mx = E.bracket open IO.hClose body where
     open   = IO.openBinaryFile path IO.WriteMode
     body h = hPutMix lb h mx
+
+-- | Output mix text to a file when the file path is given,
+--   or to the standard output.
+outputMix :: B.LineBreak -> Maybe FilePath -> MixText -> IO ()
+outputMix lb Nothing mx      = putMix   lb mx
+outputMix lb (Just path) mx  = writeMix lb path mx
 
 -- ----------------------  Build
 
