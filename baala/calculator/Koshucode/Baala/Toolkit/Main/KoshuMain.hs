@@ -98,6 +98,7 @@ initParam (Right (z, args)) =
              | getFlag "html-compact"   = W.resultHtmlCompact
              | getFlag "html-indented"  = W.resultHtmlIndented
              | getFlag "json"           = W.resultJson
+             | getFlag "tab"            = W.resultKoshuTab
              | otherwise                = W.resultKoshu
 
       -- replace "||" to "\n"
@@ -149,6 +150,7 @@ options =
     , Z.flag ""  ["run"]                     "Run input code"
     , Z.flag ""  ["show-encoding"]           "Show character encoding"
     , Z.flag "i" ["stdin"]                   "Read from stdin"
+    , Z.flag ""  ["tab"]                     "Tab-separated output"
     , Z.flag ""  ["tsv-heading"]             "TSV output with heading"
     ]
 
