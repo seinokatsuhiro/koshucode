@@ -173,6 +173,14 @@ s/<a href="(src[^"]*)"/<a onclick="showSource('\1');" href="javascript:void(0);"
 EOF
     done
 
+    # Index
+    for html in */doc-index*.html; do
+        dir=`dirname $html`
+        perl -i -p - <<EOF $html
+s|Koshucode[.]Baala[.]|<strong>K</strong>.|g;
+EOF
+    done
+
     # Line number
     for html in */src/*.html; do
         perl -i -p - <<EOF $html
