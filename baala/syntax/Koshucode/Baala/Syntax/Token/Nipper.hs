@@ -124,8 +124,8 @@ nipSpace cp cs =
 
 -- | Nip off a single-quoted text.
 --
---   >>> nipQ B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TText <I0-L0-C0> TextQ "foo")
+--   >>> nipQ B.def O.emptyWordCache "foo bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --
 nipQ :: TokenNipW
 nipQ cp wtab cs =
@@ -135,20 +135,22 @@ nipQ cp wtab cs =
 
 -- | Nip off a double-quoted text.
 --
---   >>> nipQQ B.def "foo\" bar baz"
---   (" bar baz", TText <I0-L0-C0> TextQQ "foo")
+--   >>> nipQQ B.def O.emptyWordCache "foo\" bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-nipQQ :: TokenNip
-nipQQ cp cs = case S.nextQQ cs of
-                Right (cs', w) -> (cs', S.TText cp S.TextQQ w)
-                Left a         -> ([], S.TUnknown cp cs a)
+nipQQ :: TokenNipW
+nipQQ cp wtab cs =
+    case S.nextQQ cs of
+      Left a         -> (wtab, [], S.TUnknown cp cs a)
+      Right (cs', w) -> case O.cacheGet wtab w of
+                          (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
 
 -- ----------------------  Identifier
 
 -- | Nip off symbolic token.
 --
---   >>> nipSymbol B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TText <I0-L0-C0> TextRaw "foo")
+--   >>> nipSymbol B.def O.emptyWordCache "foo bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --
 nipSymbol :: TokenNipW
 nipSymbol cp wtab cs =
@@ -170,7 +172,7 @@ symbolToken f w cp wtab cs =
 -- | Nip off a slot name, like @\@foo@.
 --
 --   >>> nipSlot 1 B.def "foo bar baz"
---   (" bar baz", TSlot <I0-L0-C0> 1 "foo")
+--   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --
 nipSlot :: Int -> TokenNip
 nipSlot n cp cs =
@@ -222,8 +224,8 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
 
     term ns (c:cs) | isTerm c = word ns cs
     term [n] cs
-        | not q        = case O.cacheGet wtab n of
-                           (wtab', n') -> (wtab', cs, [S.TTerm cp $ slash ++ n'])
+        | not q        = case O.cacheGet wtab $ slash ++ n of
+                           (wtab', n') -> (wtab', cs, [S.TTerm cp n'])
     term ns cs
         | q            = case ns of
                            [n] -> (wtab, cs, [S.TText cp S.TextTerm n])

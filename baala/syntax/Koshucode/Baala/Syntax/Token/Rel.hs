@@ -101,7 +101,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | S.isSpace a            = nip             $ S.nipSpace    cp bs
         | S.isTerm a             = niplw           $ S.nipTermName cp wtab bs
         | isPM a && S.isTerm b   = niplw           $ S.nipTermSign [a,b] cp wtab cs
-        | S.isQQ a               = nip             $ S.nipQQ       cp bs
+        | S.isQQ a               = nipw            $ S.nipQQ       cp wtab bs
         | isQ a && S.isTerm b    = niplw           $ S.nipTermQ    cp wtab cs
         | isQ a                  = nipw            $ S.nipQ        cp wtab bs
 
