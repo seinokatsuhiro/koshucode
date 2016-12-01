@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    25 judges
+**    31 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Cache"            /import "Data.Map.Strict"
@@ -18,6 +18,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Name.Text"        /import "Data.Text"
 
+|-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Overture.Shorthand"        /import "Koshucode.Baala.Overture.Type"
 
 |-- IMPORT  /module "Koshucode.Baala.Overture.Text.Category"    /import "Data.Char"
@@ -48,4 +49,11 @@
 |-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "Data.Version"
 |-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "System.Console.GetOpt"
 |-- IMPORT  /module "Koshucode.Baala.System.CliParser"          /import "System.Environment"
+
+|-- IMPORT  /module "Koshucode.Baala.System.Exit"               /import "System.Environment"
+|-- IMPORT  /module "Koshucode.Baala.System.Exit"               /import "System.Exit"
+|-- IMPORT  /module "Koshucode.Baala.System.Exit"               /import "System.IO"
+
+|-- IMPORT  /module "Koshucode.Baala.System"                    /import "Koshucode.Baala.System.CliParser"
+|-- IMPORT  /module "Koshucode.Baala.System"                    /import "Koshucode.Baala.System.Exit"
 

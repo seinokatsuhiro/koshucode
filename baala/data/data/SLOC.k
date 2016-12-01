@@ -9,12 +9,12 @@ about /package 'data
 |-- DIR  /code 439  /comment 294  /dir "data/Koshucode/Baala/Data/Decode"
 |-- DIR  /code 206  /comment 167  /dir "data/Koshucode/Baala/Data/Type"
 |-- DIR  /code 484  /comment 414  /dir "data/Koshucode/Baala/Data/Type/Decimal"
-|-- DIR  /code 198  /comment 144  /dir "data/Koshucode/Baala/Data/Type/Judge"
+|-- DIR  /code 203  /comment 149  /dir "data/Koshucode/Baala/Data/Type/Judge"
 |-- DIR  /code 279  /comment 377  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- DIR  /code 566  /comment 511  /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- DIR-TOTAL  /code 3525  /comment 2889
+|-- DIR-TOTAL  /code 3530  /comment 2894
 
 |-- FILE  /code 13   /comment 5    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 5    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -48,7 +48,7 @@ about /package 'data
 |-- FILE  /code 79   /comment 90   /file "Rational.hs"    /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- FILE  /code 8    /comment 6    /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 34   /comment 16   /file "Interp.hs"      /dir "data/Koshucode/Baala/Data/Type/Judge"
-|-- FILE  /code 144  /comment 111  /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type/Judge"
+|-- FILE  /code 149  /comment 116  /file "Judge.hs"       /dir "data/Koshucode/Baala/Data/Type/Judge"
 |-- FILE  /code 20   /comment 17   /file "JudgeClass.hs"  /dir "data/Koshucode/Baala/Data/Type/Judge"
 |-- FILE  /code 22   /comment 17   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 10   /comment 6    /file "Rel.hs"         /dir "data/Koshucode/Baala/Data/Type"
@@ -66,4 +66,4 @@ about /package 'data
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "data/Koshucode/Baala/Data/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- FILE-TOTAL  /code 3525  /comment 2889
+|-- FILE-TOTAL  /code 3530  /comment 2894
