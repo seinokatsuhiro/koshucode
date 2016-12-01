@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Base.Code.Scan
   ( -- * Type
-    CodeScan (..), CodeScanMap, WordTable,
+    CodeScan (..), CodeScanMap, WordCache,
 
     -- * Function
     isBol,
@@ -31,7 +31,7 @@ data CodeScan i o = CodeScan
      , codeInputPt  :: B.CodePos          -- ^ Code position
      , codeInput    :: i                  -- ^ Input text
      , codeOutput   :: [o]                -- ^ Output tokens
-     , codeWords    :: WordTable          -- ^ Collected words
+     , codeWords    :: WordCache          -- ^ Cached words
      }
 
 -- | Return 'codeInputPt'.
@@ -42,8 +42,8 @@ instance B.GetCodePos (CodeScan i o) where
 -- | Update code scanner.
 type CodeScanMap i o = O.Map (CodeScan i o)
 
--- | Collected words.
-type WordTable = Map.Map String String
+-- | Cached words.
+type WordCache = Map.Map String String
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
 isBol :: O.Test (CodeScan i o)
@@ -120,7 +120,7 @@ codeUpdate cs tok sc =
        , codeOutput = tok : codeOutput sc }
 
 -- | Update code scanner with word table.
-codeUpdateWords :: WordTable -> i -> o -> CodeScanMap i o
+codeUpdateWords :: WordCache -> i -> o -> CodeScanMap i o
 codeUpdateWords ws cs tok sc =
     sc { codeInput  = cs
        , codeOutput = tok : codeOutput sc
@@ -133,7 +133,7 @@ codeUpdateList cs toks sc =
        , codeOutput = toks ++ codeOutput sc }
 
 -- | Multi-element and cached version of 'codeUpdate'.
-codeUpdateListWords :: WordTable -> i -> [o] -> CodeScanMap i o
+codeUpdateListWords :: WordCache -> i -> [o] -> CodeScanMap i o
 codeUpdateListWords ws cs toks sc =
     sc { codeInput  = cs
        , codeOutput = toks ++ codeOutput sc

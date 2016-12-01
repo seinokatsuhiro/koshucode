@@ -56,19 +56,19 @@ type TokenScanMap = O.Map TokenScan
 type TokenNipResult = (S.InputText, S.Token)
 
 -- | Nip result with word table.
-type TokenNipWResult = (B.WordTable, S.InputText, S.Token)
+type TokenNipWResult = (B.WordCache, S.InputText, S.Token)
 
 -- | Nip result with word table.
-type TokenNipLWResult = (B.WordTable, S.InputText, [S.Token])
+type TokenNipLWResult = (B.WordCache, S.InputText, [S.Token])
 
 -- | Nip off a next token.
 type TokenNip = B.CodePos -> S.InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
-type TokenNipW = B.CodePos -> B.WordTable -> S.InputText -> TokenNipWResult
+type TokenNipW = B.CodePos -> B.WordCache -> S.InputText -> TokenNipWResult
 
 -- | Nip off a next token with word table.
-type TokenNipLW = B.CodePos -> B.WordTable -> S.InputText -> TokenNipLWResult
+type TokenNipLW = B.CodePos -> B.WordCache -> S.InputText -> TokenNipLWResult
 
 
 -- --------------------------------------------  Utility
