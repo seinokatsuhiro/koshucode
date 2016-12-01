@@ -5,7 +5,8 @@
 
 module Koshucode.Baala.Base.Code.Scan
   ( -- * Type
-    CodeScan (..), CodeScanMap, WordCache,
+    CodeScan (..), CodeScanMap,
+    WordCache, emptyWordCache,
 
     -- * Function
     isBol,
@@ -44,6 +45,10 @@ type CodeScanMap i o = O.Map (CodeScan i o)
 -- | Cached words.
 type WordCache = O.CacheS String
 
+-- | Empty word cache.
+emptyWordCache :: WordCache
+emptyWordCache = O.cache [] id
+
 -- | Test scanner at the beginning of line, i.e., no output collected.
 isBol :: O.Test (CodeScan i o)
 isBol CodeScan {..} = null codeOutput
@@ -80,7 +85,7 @@ codeScanUpBz :: CodeScanMap String o -> B.NIOPoint -> B.Bz -> [B.CodeLine o]
 codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
-codeScanUpLines f nio = loop (CodeScan [] f cp "" [] $ O.cache [] id) where
+codeScanUpLines f nio = loop (CodeScan [] f cp "" [] emptyWordCache) where
     cp    = B.def { B.cpSource = nio }
 
     loop _ [] = []
