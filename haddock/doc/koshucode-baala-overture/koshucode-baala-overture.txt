@@ -6,7 +6,169 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.174.0.0
+@version 0.178.0.0
+
+
+-- | Exit process.
+module Koshucode.Baala.System.Exit
+
+-- | Exit process.
+exit :: Int -> IO a
+
+-- | Map integer value to exit code.
+exitCode :: Int -> ExitCode
+
+-- | Print message and exit on 0.
+putSuccess :: String -> IO a
+
+-- | Print message line and exit on 0.
+putSuccessLn :: String -> IO a
+
+-- | Print abort message and exit on 1.
+--   
+--   <pre>
+--   &gt;&gt;&gt; putAbort
+--   ABORT / &lt;interactive&gt; exits on 1
+--   </pre>
+putAbort :: IO a
+
+-- | Print error and abort message and exit on 1.
+putAbortWith :: String -> IO a
+
+-- | Print error message and exit on 1.
+putFailure :: String -> IO a
+
+-- | Print error message line and exit on 1.
+putFailureLn :: String -> IO a
+
+
+-- | Parser for command-line interface parameter. This module is based on
+--   <a>System.Console.GetOpt</a>.
+module Koshucode.Baala.System.CliParser
+
+-- | Option definition.
+type Option = OptDescr Para
+
+-- | Long name options, like <tt>help</tt> of <tt>--help</tt>.
+type OptionName = String
+
+-- | Single letter options, like <tt>h</tt> of <tt>-h</tt>.
+type OptionLetter = Char
+
+-- | Explanation of option.
+type OptionExplain = String
+
+-- | Option definition for flag (switch) type.
+--   
+--   <pre>
+--   flag ['f'] ["foo"] "Echo foo"
+--   </pre>
+flag :: [OptionLetter] -> [OptionName] -> OptionExplain -> Option
+
+-- | Option definition with required one parameter.
+--   
+--   <pre>
+--   req [] ["baz"] "text" "Echo baz and text"
+--   </pre>
+req :: [OptionLetter] -> [OptionName] -> String -> OptionExplain -> Option
+
+-- | Option definition with optional one parameter.
+--   
+--   <pre>
+--   opt [] ["bar"] "text" "Echo bar or text"
+--   </pre>
+opt :: [OptionLetter] -> [OptionName] -> String -> OptionExplain -> Option
+
+-- | Result of parsing command-line parameters, consist of (1) error
+--   message or (2) options and non-option parameters.
+type Parsed = Either [String] ([Para], [String])
+
+-- | Parse command-line parameters.
+parse :: [Option] -> [String] -> Parsed
+
+-- | Parse command-line parameters of the current process.
+parseCommand :: [Option] -> IO Parsed
+
+-- | Actual optional parameter.
+data Para
+
+-- | Get flag of <a>flag</a>-type option.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let Right (o,p) = parse [help, version] ["-h", "foo", "bar"]
+--   
+--   &gt;&gt;&gt; getFlag o "help"
+--   True
+--   
+--   &gt;&gt;&gt; p
+--   ["foo","bar"]
+--   </pre>
+getFlag :: [Para] -> OptionName -> Bool
+
+-- | Get parameter list of <a>req</a>-type option.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let Right (o,p) = parse [req [] ["a"] "text" "required text"] ["--a=foo", "bar"]
+--   
+--   &gt;&gt;&gt; getReq o "a"
+--   ["foo"]
+--   
+--   &gt;&gt;&gt; p
+--   ["bar"]
+--   </pre>
+getReq :: [Para] -> OptionName -> [String]
+
+-- | Get last parameter of <a>req</a>-type option.
+getReqLast :: [Para] -> OptionName -> Maybe String
+
+-- | Get parameter list of <a>opt</a>-type option.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let Right (o,p) = parse [opt [] ["a"] "text" "optional text"] ["--a", "--a=foo", "bar"]
+--   
+--   &gt;&gt;&gt; getOpt o "a" "default"
+--   ["default","foo"]
+--   
+--   &gt;&gt;&gt; p
+--   ["bar"]
+--   </pre>
+getOpt :: [Para] -> OptionName -> String -> [String]
+
+-- | Get last parameter of <a>opt</a>-type option.
+getOptLast :: [Para] -> OptionName -> String -> Maybe String
+
+-- | Predefined <tt>-h</tt> or <tt>--help</tt> option.
+--   
+--   <pre>
+--   flag "h" ["help"] "Show help message"
+--   </pre>
+help :: Option
+
+-- | Create help message.
+helpMessage :: [String] -> [Option] -> String
+
+-- | Print help message.
+printHelp :: [String] -> [Option] -> IO ()
+
+-- | Predefined <tt>-V</tt> or <tt>--version</tt> option.
+--   
+--   <pre>
+--   flag "V" ["version"] "Show version number"
+--   </pre>
+version :: Option
+
+-- | Provides one possible concrete representation for <a>Version</a>. For
+--   a version with <a>versionBranch</a> <tt>= [1,2,3]</tt> and
+--   <a>versionTags</a> <tt>= ["tag1","tag2"]</tt>, the output will be
+--   <tt>1.2.3-tag1-tag2</tt>.
+showVersion :: Version -> String
+instance GHC.Classes.Ord Koshucode.Baala.System.CliParser.Para
+instance GHC.Classes.Eq Koshucode.Baala.System.CliParser.Para
+instance GHC.Show.Show Koshucode.Baala.System.CliParser.Para
+
+
+-- | Bundle of system modules.
+module Koshucode.Baala.System
 
 
 -- | Unicode general categories.
@@ -398,6 +560,23 @@ module Koshucode.Baala.Overture.Text
 
 -- | Shorthand functions.
 module Koshucode.Baala.Overture.Shorthand
+
+-- | Pairing operator.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "a" &amp; "b"
+--   ("a", "b")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; "a" &amp; "b" &amp; "c"
+--   ("a", ("b", "c"))
+--   </pre>
+(&) :: a -> b -> (a, b)
+
+-- | Associative operator of monoid, same as <a>mappend</a> or infix
+--   <tt>&lt;&gt;</tt>.
+(++) :: (Monoid a) => a -> a -> a
 
 -- | <a>Int</a> shorthand.
 --   

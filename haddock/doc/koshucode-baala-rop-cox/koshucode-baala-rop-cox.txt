@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -251,7 +251,10 @@ consBoth :: (CContent c) => RopCons c
 -- | Create <tt>both</tt> relmap.
 relmapBoth :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 
--- | Construct maybe relmap.
+-- | <b>maybe R -share /P ... -fill E</b>
+--   
+--   Meet input and given relation. It keeps input tuples of which
+--   counterparts are totally negated.
 consMaybe :: (CContent c) => RopCons c
 
 -- | Create <tt>maybe</tt> relmap.
@@ -260,7 +263,9 @@ relmapMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Relmap c)
 -- | Create <tt>maybe</tt> relkit.
 relkitMaybe :: (Ord c, CRel c) => SharedTerms -> c -> RelkitBinary c
 
--- | <b>compose-maybe</b>
+-- | <b>compose-maybe R -share /P ... -fill E</b>
+--   
+--   Construct relmap for relational composition.
 consComposeMaybe :: (CContent c) => RopCons c
 
 -- | Create <tt>compose-maybe</tt> relmap.
@@ -271,11 +276,6 @@ relmapComposeMaybe :: (Ord c, CRel c) => Intmed c -> SharedTerms -> c -> Map (Re
 module Koshucode.Baala.Rop.Cox.Calc
 
 -- | Implementation of relational operators.
---   
---   <ul>
---   <li><i><tt>add /N E ...</tt></i> Add terms of name <tt>/N</tt> and
---   content <tt>E</tt> ...</li>
---   </ul>
 ropsCoxCalc :: (CContent c) => [Rop c]
 
 -- | <b>add /N E ...</b>

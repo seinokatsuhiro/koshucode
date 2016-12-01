@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.174.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.178.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -65,6 +65,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><a href="#v:-38-"
+	    >(&amp;)</a
+	    > :: a -&gt; b -&gt; (a, b)</li
+	  ><li class="src short"
+	  ><a href="#v:-43--43-"
+	    >(++)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a =&gt; a -&gt; a -&gt; a</li
+	  ><li class="src short"
 	  ><a href="#v:int"
 	    >int</a
 	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
@@ -91,6 +101,67 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
       ><div id="interface"
       ><h1
 	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-38-" class="def"
+	    >(&amp;)</a
+	    > :: a -&gt; b -&gt; (a, b) <span class="fixity"
+	    >infixr 0</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#%26');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pairing operator.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;a&quot; &amp; &quot;b&quot;
+</code
+		></strong
+	      >(&quot;a&quot;, &quot;b&quot;)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;a&quot; &amp; &quot;b&quot; &amp; &quot;c&quot;
+</code
+		></strong
+	      >(&quot;a&quot;, (&quot;b&quot;, &quot;c&quot;))
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-43--43-" class="def"
+	    >(++)</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a =&gt; a -&gt; a -&gt; a <span class="fixity"
+	    >infixr 6</span
+	    ><span class="rightedge"
+	    ></span
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#%2B%2B');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Associative operator of monoid,
+   same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#v:mappend"
+		>mappend</a
+		></code
+	      > or infix <code
+	      >&lt;&gt;</code
+	      >.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:int" class="def"

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -131,8 +131,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		>Maybe</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		>String</a
-		>) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-		>Bz</a
+		>) <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+		>Code</a
 		></li
 	      ><li
 	      >| <a href="#v:IOPointCustom"
@@ -189,8 +189,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	    >ioPointList</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-	    >Bz</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+	    >Code</a
 	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
@@ -223,10 +223,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ><li class="src short"
 	  ><a href="#v:nioFrom"
 	    >nioFrom</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-	    >Bz</a
-	    > -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+	    >ToCode</a
+	    > code =&gt; code -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 	    >NIOPoint</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Code"
+	    >Code</a
+	    > = <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToCode"
+	    >ToCode</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toCode"
+		>toCode</a
+		> :: a -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+		>Code</a
+		></li
+	      ></ul
 	    ></li
 	  ></ul
 	></div
@@ -305,7 +329,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NamedHandle"
 		      >NamedHandle</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-36');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -319,7 +343,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NamedHandle"
 		      >NamedHandle</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-39');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-42');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -333,7 +357,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NamedHandle"
 		      >NamedHandle</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-33');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-36');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -396,8 +420,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		  >Maybe</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		  >String</a
-		  >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-		  >Bz</a
+		  >) <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+		  >Code</a
 		  ></td
 		><td class="doc"
 		><p
@@ -465,7 +489,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IOPoint"
 		      >IOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-54');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-57');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -479,7 +503,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IOPoint"
 		      >IOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-54');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-57');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -493,7 +517,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IOPoint"
 		      >IOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-54');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-57');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -570,8 +594,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	    >ioPointList</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-	    >Bz</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+	    >Code</a
 	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
@@ -661,7 +685,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 		      >NIOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-103');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-106');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -675,7 +699,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 		      >NIOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-110');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-113');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -689,7 +713,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 		      >NIOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-101');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-104');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -703,7 +727,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 		      >NIOPoint</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-118');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-121');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -719,9 +743,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	><p class="src"
 	  ><a name="v:nioFrom" class="def"
 	    >nioFrom</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
-	    >Bz</a
-	    > -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    > :: <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+	    >ToCode</a
+	    > code =&gt; code -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
 	    >NIOPoint</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#nioFrom');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -729,6 +753,96 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-I
 	  ><div class="doc"
 	  ><p
 	    >Create input point for given lazy bytestring.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>nioFrom &quot;abc&quot;
+</code
+		></strong
+	      >NIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing &quot;abc&quot;}
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Code" class="def"
+	    >Code</a
+	    > = <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#Code');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This implementation uses lazy bytestring as code string.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToCode" class="def"
+	    >ToCode</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#ToCode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to code string.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toCode" class="def"
+	      >toCode</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:Code"
+	      >Code</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#toCode');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToCode" class="caption collapser" onclick="toggleSection('i:ToCode')"
+	    >Instances</p
+	    ><div id="section.i:ToCode" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+		      >ToCode</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-142');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-IOPoint.html#t:ToCode"
+		      >ToCode</a
+		      > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+		      >Bz</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-IO-IOPoint.html#line-139');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	></div

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Result of relational calculation.
@@ -195,7 +195,7 @@ instance GHC.Show.Show Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 instance GHC.Classes.Ord Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Classes.Eq Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Show.Show Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 instance Data.Default.Class.Default Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 
 
@@ -237,7 +237,7 @@ instance Data.Default.Class.Default (Koshucode.Baala.Core.Assert.Dataset.Dataset
 module Koshucode.Baala.Core.Resource.Message
 
 -- | Abortable scope for clause.
-abClause :: (CodePtr cp) => [cp] -> Map (Ab b)
+abClause :: (GetCodePos cp) => Abortable cp b
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> Ab a
@@ -268,13 +268,13 @@ unresPrefix :: String -> Ab a
 module Koshucode.Baala.Core.Relmap.Message
 
 -- | Abortable scope for option.
-abOption :: [TTree] -> MapAb b
+abOption :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for relmap.
-abRelmap :: (CodePtr cp) => [cp] -> Map (Ab b)
+abRelmap :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for specialization.
-abSpecialize :: (CodePtr cp) => [cp] -> Map (Ab b)
+abSpecialize :: (GetCodePos cp) => Abortable cp b
 
 -- | Unknown nested relation reference.
 unkNestVar :: String -> [Token] -> [((Token, LocalRef), Head)] -> Ab a
@@ -315,7 +315,7 @@ instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Option.OptionContent c)
 module Koshucode.Baala.Core.Relkit.Message
 
 -- | Abortable scope for running relkit.
-abRun :: (CodePtr cp) => [cp] -> Map (Ab b)
+abRun :: (GetCodePos cp) => Abortable cp b
 
 -- | Unknown local relation
 unkLocalRel :: Token -> String -> [String] -> Ab a
@@ -325,7 +325,7 @@ unkLocalRel :: Token -> String -> [String] -> Ab a
 module Koshucode.Baala.Core.Lexmap.Message
 
 -- | Abortable scope for lexmap.
-abLexmap :: [TTree] -> MapAb b
+abLexmap :: (GetCodePos cp) => Abortable cp b
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> Ab a
@@ -376,7 +376,7 @@ type NNamed a = (NName, a)
 module Koshucode.Baala.Core.Assert.Message
 
 -- | Abortable scope for assertion.
-abAssert :: (CodePtr cp) => [cp] -> Map (Ab b)
+abAssert :: (GetCodePos cp) => Abortable cp b
 
 -- | Unknown option
 unkOption :: ParaUnmatch String -> Ab a
@@ -406,64 +406,66 @@ Relkit :: Maybe Head -> Maybe Head -> RelkitBody c -> Relkit c
 -- | Calculation function
 [relkitBody] :: Relkit c -> RelkitBody c
 
+-- | Relkit of output heading and its body.
+
 -- | Body of relkit.
-type RelkitBody c = Sourced (RelkitCore c)
+type RelkitBody c = Codic (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
 
--- | <i>Safe flow:</i> Arbitrary relation mapping, i.e., mapping from
+-- | <b>Safe flow:</b> Arbitrary relation mapping, i.e., mapping from
 --   multiple tuples to multiple tuples.
 RelkitFull :: Bool -> (Map [[c]]) -> RelkitCore c
 
--- | <i>Safe flow:</i> Mapping from single tuple to multiple tuples,
+-- | <b>Safe flow:</b> Mapping from single tuple to multiple tuples,
 --   include no tuples.
-RelkitOneToMany :: Bool -> (ManyMap [c]) -> RelkitCore c
+RelkitMany :: Bool -> (ManyMap [c]) -> RelkitCore c
 
--- | <i>Safe flow:</i> Mapping from single tuple to single tuple.
-RelkitOneToOne :: Bool -> (Map [c]) -> RelkitCore c
+-- | <b>Safe flow:</b> Mapping from single tuple to single tuple.
+RelkitLinear :: Bool -> (Map [c]) -> RelkitCore c
 
--- | <i>Safe flow:</i> Filter tuples
+-- | <b>Safe flow:</b> Filter tuples
 RelkitTest :: (Test [c]) -> RelkitCore c
 
--- | <i>Abortable flow:</i> Filter by calculation.
+-- | <b>Abortable flow:</b> Filter by calculation.
 RelkitAbTest :: (AbTest [c]) -> RelkitCore c
 
--- | <i>Abortable flow:</i> Filter by data.
+-- | <b>Abortable flow:</b> Filter by data.
 RelkitAbSemi :: (AbTest [[c]]) -> (RelkitBody c) -> RelkitCore c
 
--- | <i>Abortable confluence:</i> Multiple to multiple.
+-- | <b>Abortable confluence:</b> Multiple to multiple.
 RelkitAbFull :: Bool -> ([BodyMap c] -> AbMap [[c]]) -> [RelkitBody c] -> RelkitCore c
 
--- | <i>Abortable confluence:</i> Single to multiple.
-RelkitOneToAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
+-- | <b>Abortable confluence:</b> Single to multiple.
+RelkitAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
 
--- | <i>Abortable confluence:</i> Single to single.
-RelkitOneToAbOne :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
+-- | <b>Abortable confluence:</b> Single to single.
+RelkitAbLinear :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
 
--- | <i>Connection:</i> Append two mapping.
+-- | <b>Connection:</b> Append two mapping.
 RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
 
--- | <i>Connection:</i> Identity mapping, i.e., output input relation
+-- | <b>Connection:</b> Identity mapping, i.e., output input relation
 --   without modification.
 RelkitId :: RelkitCore c
 
--- | <i>Source:</i> Ignore input, and output constant relation.
+-- | <b>Source:</b> Ignore input, and output constant relation.
 RelkitConst :: [[c]] -> RelkitCore c
 
--- | <i>Source:</i> Ignore input, and output relation from data source.
+-- | <b>Source:</b> Ignore input, and output relation from data source.
 RelkitSource :: JudgeClass -> [TermName] -> RelkitCore c
 
--- | <i>Reference:</i> Link point to other relmap.
+-- | <b>Reference:</b> Link point to other relmap.
 RelkitLink :: RopName -> RelkitKey -> (Maybe (RelkitBody c)) -> RelkitCore c
 
--- | <i>Reference:</i> Give indecies to nested relations.
+-- | <b>Reference:</b> Give indecies to nested relations.
 RelkitNest :: Token -> [IndexTerm] -> (RelkitBody c) -> RelkitCore c
 
--- | <i>Reference:</i> Give a name to input relation.
+-- | <b>Reference:</b> Give a name to input relation.
 RelkitCopy :: Token -> RopName -> (RelkitBody c) -> RelkitCore c
 
--- | <i>Reference:</i> Local relation reference, i.e., <tt>^/r</tt> or
+-- | <b>Reference:</b> Local relation reference, i.e., <tt>^/r</tt> or
 --   <tt>^r</tt>.
 RelkitLocal :: Token -> LocalRef -> RelkitCore c
 
@@ -507,7 +509,7 @@ relkitJust :: Head -> RelkitCore c -> Relkit c
 relkitNothing :: Relkit c
 
 -- | Set relkit source.
-relkitSetSource :: (CodePtr a) => a -> Map (Relkit c)
+relkitSetSource :: (GetCodePos cp) => cp -> Map (Relkit c)
 
 -- | Relkit for constant relmap.
 relkitConst :: Rel c -> Relkit c
@@ -606,7 +608,7 @@ instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance GHC.Base.Monoid (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 
 
 -- | Relmap operators.
@@ -614,13 +616,13 @@ module Koshucode.Baala.Core.Relmap.Rop
 
 -- | Implementation of relmap operator.
 data Rop' h c
-Rop :: RopName -> String -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h c -> Rop' h c
+Rop :: RopName -> RopGroup -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h c -> Rop' h c
 
 -- | Operator name
 [ropName] :: Rop' h c -> RopName
 
 -- | Operator group
-[ropGroup] :: Rop' h c -> String
+[ropGroup] :: Rop' h c -> RopGroup
 
 -- | Usage text of operator
 [ropUsage] :: Rop' h c -> RopUsage
@@ -633,6 +635,9 @@ Rop :: RopName -> String -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h c
 
 -- | Constructor of operator
 [ropCons] :: Rop' h c -> RopCons' h c
+
+-- | Group of operators.
+type RopGroup = String
 
 -- | Usage text of operator.
 type RopUsage = String
@@ -657,7 +662,7 @@ Intmed :: h c -> Lexmap -> [(String, Relmap' h c)] -> Intmed' h c
 instance GHC.Show.Show (h c) => GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
 
 
 -- | Construction of relmaps.
@@ -681,20 +686,22 @@ relmapBinary :: Intmed' h c -> RelkitBinary c -> Relmap' h c -> Relmap' h c
 -- | Make a confluent relmap. Confluent relmaps take multiple submaps.
 relmapConfl :: Intmed' h c -> RelkitConfl c -> [Relmap' h c] -> Relmap' h c
 
--- | Parent for nested relation references.
-relmapNest :: Intmed' h c -> Map (Relmap' h c)
-
--- | Copy-of-input-relation relmap.
-relmapCopy :: Intmed' h c -> RopName -> Map (Relmap' h c)
-
 -- | Link-to-other relmap.
 relmapLink :: Intmed' h c -> Relmap' h c
 
--- | Relmap reference of local symbolic relation.
-relmapLocalSymbol :: Intmed' h c -> RopName -> Relmap' h c
+-- | Reference base of nested relation references. This base is refered by
+--   <a>relmapLocalNest</a>.
+relmapNest :: Intmed' h c -> Map (Relmap' h c)
 
--- | Relmap reference of local nested relation.
+-- | Relation reference for nested relation.
 relmapLocalNest :: Intmed' h c -> TermName -> Relmap' h c
+
+-- | Reference base of copy-of-input relation reference. This base is
+--   refered by <a>relmapLocalSymbol</a>.
+relmapCopy :: Intmed' h c -> RopName -> Map (Relmap' h c)
+
+-- | Relation reference for locally introduced relation.
+relmapLocalSymbol :: Intmed' h c -> RopName -> Relmap' h c
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap' h c = Lexmap -> Ab (Relmap' h c)
@@ -797,8 +804,14 @@ ropCopset :: (GetGlobal h) => Intmed' h c -> CopSet c
 -- | Set of relmap and content operators.
 data OpSet' h c
 OpSet :: [Rop' h c] -> FindRop' h c -> CopSet c -> OpSet' h c
+
+-- | Relmap operators.
 [opsetRopList] :: OpSet' h c -> [Rop' h c]
+
+-- | Operator finder.
 [opsetFindRop] :: OpSet' h c -> FindRop' h c
+
+-- | Content operators.
 [opsetCop] :: OpSet' h c -> CopSet c
 
 -- | Make complete operator set by filling auto-generated part.
@@ -879,7 +892,7 @@ assertNormal :: Map [ShortAssert' h c]
 -- | Select violated assertions.
 assertViolated :: Map [ShortAssert' h c]
 instance GHC.Show.Show (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
 
 
 -- | Running relational calculation.
@@ -921,40 +934,40 @@ ClauseHead :: SecNo -> [ShortDef] -> [Token] -> TokenClause -> ClauseHead
 -- | Proper part of clause.
 data ClauseBody
 
--- | Input point
-CInput :: [Token] -> ClauseBody
-
--- | Exporting name
-CExport :: String -> ClauseBody
-
--- | Source of relmap
-CRelmap :: String -> [Token] -> ClauseBody
-
--- | Assertion
-CAssert :: AssertType -> JudgeClass -> [Token] -> ClauseBody
-
--- | Judge
+-- | <b>Relational:</b> Judge
 CJudge :: AssertType -> JudgeClass -> [Token] -> ClauseBody
 
--- | Global slot
+-- | <b>Relational:</b> Assertion
+CAssert :: AssertType -> JudgeClass -> [Token] -> ClauseBody
+
+-- | <b>Relational:</b> Source of relmap
+CRelmap :: String -> [Token] -> ClauseBody
+
+-- | <b>Relational:</b> Global slot
 CSlot :: String -> [Token] -> ClauseBody
 
--- | Option settings
-COption :: [Token] -> ClauseBody
+-- | <b>Resource:</b> Input point
+CInput :: [Token] -> ClauseBody
 
--- | Output point
+-- | <b>Resource:</b> Output point
 COutput :: [Token] -> ClauseBody
 
--- | Echo text
+-- | <b>Resource:</b> Option settings
+COption :: [Token] -> ClauseBody
+
+-- | <b>Resource:</b> Exporting name
+CExport :: String -> ClauseBody
+
+-- | <b>Other:</b> Echo text
 CEcho :: TokenClause -> ClauseBody
 
--- | License text
+-- | <b>Other:</b> License text
 CLicense :: String -> ClauseBody
 
--- | Multiple bodies
+-- | <b>Other:</b> Multiple bodies
 CBodies :: [ClauseBody] -> ClauseBody
 
--- | Unknown clause
+-- | <b>Other:</b> Unknown clause
 CUnknown :: (Ab ()) -> ClauseBody
 
 -- | Name of clause type. e.g., <tt>"relmap"</tt>, <tt>"assert"</tt>.
@@ -983,7 +996,8 @@ instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.Clause
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseBody
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseHead
 instance Data.Default.Class.Default Koshucode.Baala.Core.Resource.Clause.ClauseHead
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Core.Resource.Clause.ClauseHead
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.Clause
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.ClauseHead
 
 
 -- | Affirming or denying proposition.

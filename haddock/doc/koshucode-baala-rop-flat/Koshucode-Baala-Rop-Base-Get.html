@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.174.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.178.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Tree</a
+	    >Token tree</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
@@ -195,13 +195,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ><li class="src short"
 	  ><a href="#v:getRelmap"
 	    >getRelmap</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
-	    >Intmed</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > :: <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -209,13 +205,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >getOptRelmap</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
-	    >Intmed</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -249,14 +241,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ><li class="src short"
 	  ><a href="#v:getTerms"
 	    >getTerms</a
-	    > :: <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
-	    >RopGet</a
-	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:getSignedTerms"
-	    >getSignedTerms</a
 	    > :: <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
 	    >RopGet</a
 	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
@@ -471,7 +455,7 @@ consXxx med = do
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Tree</h1
+	>Token tree</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:getTree" class="def"
@@ -544,13 +528,9 @@ consXxx med = do
 	><p class="src"
 	  ><a name="v:getRelmap" class="def"
 	    >getRelmap</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
-	    >Intmed</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > :: <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Get.html#getRelmap');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -571,13 +551,9 @@ consMeet med = do
 	    >getOptRelmap</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
-	    >Intmed</a
-	    > c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c -&gt; <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Get.html#getOptRelmap');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -655,22 +631,6 @@ consMeet med = do
 	  ><div class="doc"
 	  ><p
 	    >Get list of term names from named attribute.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:getSignedTerms" class="def"
-	    >getSignedTerms</a
-	    > :: <a href="Koshucode-Baala-Rop-Base-Get.html#t:RopGet"
-	    >RopGet</a
-	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Get.html#getSignedTerms');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Get signed term names.</p
 	    ></div
 	  ></div
 	><div class="top"

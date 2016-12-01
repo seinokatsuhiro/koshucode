@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.178.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,6 +52,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="caption"
 	>Koshucode.Baala.Syntax.TTree.Pattern</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Leaf</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Branch</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -69,17 +83,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >pattern</span
 	    > <a href="#v:L"
 	    >L</a
-	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > t t</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >pattern</span
-	    > <a href="#v:B"
-	    >B</a
-	    > ::   t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > t t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t t</li
 	  ><li class="src short"
@@ -91,7 +95,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >TextForm</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -103,7 +107,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LRaw</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:LAtt1"
+	    >LAtt1</a
+	    > ::   [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:LAtt2"
+	    >LAtt2</a
+	    > ::   [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:LQ"
+	    >LQ</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -115,23 +155,129 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LQq</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:LSlot"
+	    >LSlot</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:LTerm"
+	    >LTerm</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:B"
+	    >B</a
+	    > ::   t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t t</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:BGroup"
+	    >BGroup</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:BList"
+	    >BList</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:BSet"
+	    >BSet</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:BTerm"
+	    >BTerm</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:BForm"
+	    >BForm</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Leaf</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >pattern</span
 	    > <a name="v:L" class="def"
 	    >L</a
-	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > ::   t -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#L');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -145,31 +291,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><span class="keyword"
 	    >pattern</span
-	    > <a name="v:B" class="def"
-	    >B</a
-	    > ::   t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > t t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > t t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#B');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Token branch.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >pattern</span
 	    > <a name="v:LText" class="def"
 	    >LText</a
 	    > ::   <a href="Koshucode-Baala-Syntax-Token-Token.html#t:TextForm"
 	    >TextForm</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -189,7 +317,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >LRaw</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -205,11 +333,71 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><span class="keyword"
 	    >pattern</span
+	    > <a name="v:LAtt1" class="def"
+	    >LAtt1</a
+	    > ::   [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#LAtt1');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Single-hyphen attribute text leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:LAtt2" class="def"
+	    >LAtt2</a
+	    > ::   [<a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#LAtt2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double-hyphen attribute text leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:LQ" class="def"
+	    >LQ</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#LQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Single-quoted text leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
 	    > <a name="v:LQq" class="def"
 	    >LQq</a
 	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
 	    >CodeTree</a
 	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
@@ -219,6 +407,178 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Double-quoted text leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:LSlot" class="def"
+	    >LSlot</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#LSlot');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Slot leaf.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:LTerm" class="def"
+	    >LTerm</a
+	    > ::   <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#LTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term leaf.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Branch</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:B" class="def"
+	    >B</a
+	    > ::   t -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > t t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#B');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Token branch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:BGroup" class="def"
+	    >BGroup</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#BGroup');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Group branch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:BList" class="def"
+	    >BList</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#BList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List branch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:BSet" class="def"
+	    >BSet</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#BSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set branch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:BTerm" class="def"
+	    >BTerm</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#BTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term path branch.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:BForm" class="def"
+	    >BForm</a
+	    > ::   [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Bracket.html#t:BracketType"
+	    >BracketType</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Pattern.html#BForm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Form branch.</p
 	    ></div
 	  ></div
 	></div

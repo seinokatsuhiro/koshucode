@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.178.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,55 +81,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><li class="src short"
 	  ><a href="#v:abAttr"
 	    >abAttr</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
-	    >CodePtr</a
-	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b</li
 	  ><li class="src short"
 	  ><a href="#v:abAttrTrees"
 	    >abAttrTrees</a
-	    > :: [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b</li
 	  ><li class="src short"
 	  ><a href="#v:abSlot"
 	    >abSlot</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
-	    >CodePtr</a
-	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
-	  ><li class="src short"
-	  ><a href="#v:abSlotTree"
-	    >abSlotTree</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
-	  ><li class="src short"
-	  ><a href="#v:abortableTree"
-	    >abortableTree</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
-	  ><li class="src short"
-	  ><a href="#v:abortableTrees"
-	    >abortableTrees</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b</li
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b</li
 	  ><li class="src short"
 	  ><a href="#v:dupAttr"
 	    >dupAttr</a
@@ -207,11 +179,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:abAttr" class="def"
 	    >abAttr</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
-	    >CodePtr</a
-	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abAttr');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abAttr');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -223,11 +195,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:abAttrTrees" class="def"
 	    >abAttrTrees</a
-	    > :: [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abAttrTrees');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abAttrTrees');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -239,90 +211,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:abSlot" class="def"
 	    >abSlot</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
-	    >CodePtr</a
-	    > cp =&gt; [cp] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abSlot');" href="javascript:void(0);" class="link"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    >GetCodePos</a
+	    > cp =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Abortable"
+	    >Abortable</a
+	    > cp b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abSlot');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Abortable scope for slot.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:abSlotTree" class="def"
-	    >abSlotTree</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abSlotTree');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Abortable scope for slot.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:abortableTree" class="def"
-	    >abortableTree</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abortableTree');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Same as <code
-	      >abortable</code
-	      > except for using <code
-	      ><a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-		>TTree</a
-		></code
-	      >
-   instead of list of <code
-	      ><a href="S.html#v:Token"
-		>Token</a
-		></code
-	      >.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:abortableTrees" class="def"
-	    >abortableTrees</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
-	    >MapAb</a
-	    > b <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Message.html#abortableTrees');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Same as <code
-	      >abortable</code
-	      > except for using list of <code
-	      ><a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-		>TTree</a
-		></code
-	      >
-   instead of list of <code
-	      ><a href="S.html#v:Token"
-		>Token</a
-		></code
-	      >.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"

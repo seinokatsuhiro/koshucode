@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -157,6 +157,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Relmap'</a
 	    > h c</li
 	  ><li class="src short"
+	  ><a href="#v:relmapLink"
+	    >relmapLink</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
+	  ><li class="src short"
 	  ><a href="#v:relmapNest"
 	    >relmapNest</a
 	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
@@ -166,6 +174,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
 	    >Relmap'</a
 	    > h c)</li
+	  ><li class="src short"
+	  ><a href="#v:relmapLocalNest"
+	    >relmapLocalNest</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapCopy"
 	    >relmapCopy</a
@@ -179,30 +197,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Relmap'</a
 	    > h c)</li
 	  ><li class="src short"
-	  ><a href="#v:relmapLink"
-	    >relmapLink</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-	    >Relmap'</a
-	    > h c</li
-	  ><li class="src short"
 	  ><a href="#v:relmapLocalSymbol"
 	    >relmapLocalSymbol</a
 	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
 	    >Intmed'</a
 	    > h c -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 	    >RopName</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-	    >Relmap'</a
-	    > h c</li
-	  ><li class="src short"
-	  ><a href="#v:relmapLocalNest"
-	    >relmapLocalNest</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
 	    >Relmap'</a
 	    > h c</li
@@ -354,6 +354,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Variable</h1
 	><div class="top"
 	><p class="src"
+	  ><a name="v:relmapLink" class="def"
+	    >relmapLink</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLink');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Link-to-other relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:relmapNest" class="def"
 	    >relmapNest</a
 	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
@@ -367,7 +383,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Parent for nested relation references.</p
+	    >Reference base of nested relation references.
+   This base is refered by <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Construct.html#v:relmapLocalNest"
+		>relmapLocalNest</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapLocalNest" class="def"
+	    >relmapLocalNest</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLocalNest');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relation reference for nested relation.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -387,23 +426,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Copy-of-input-relation relmap.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relmapLink" class="def"
-	    >relmapLink</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-	    >Relmap'</a
-	    > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLink');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Link-to-other relmap.</p
+	    >Reference base of copy-of-input relation reference.
+   This base is refered by <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Construct.html#v:relmapLocalSymbol"
+		>relmapLocalSymbol</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -421,25 +449,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Relmap reference of local symbolic relation.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relmapLocalNest" class="def"
-	    >relmapLocalNest</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-	    >Relmap'</a
-	    > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLocalNest');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Relmap reference of local nested relation.</p
+	    >Relation reference for locally introduced relation.</p
 	    ></div
 	  ></div
 	><h1 id="g:4"

@@ -1,0 +1,993 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.System.CliParser</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('overture', 'koshucode-baala-overture', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-System-CliParser.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-System-CliParser.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-overture-0.178.0.0: Preliminary library for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.System.CliParser</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Procedure</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>1. Define options</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>2. Parse comand line</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>3. Get parameters</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Predefined options</a
+	    ><ul
+	    ><li
+	      ><a href="#g:6"
+		>--help</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>--version</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Parser for command-line interface parameter.
+   This module is based on <a href="http://hackage.haskell.org/package/base/docs/System-Console-GetOpt.html"
+	    >System.Console.GetOpt</a
+	    >.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Option"
+	    >Option</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/System-Console-GetOpt.html#t:OptDescr"
+	    >OptDescr</a
+	    > <a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:OptionName"
+	    >OptionName</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:OptionLetter"
+	    >OptionLetter</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:OptionExplain"
+	    >OptionExplain</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:flag"
+	    >flag</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:req"
+	    >req</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:opt"
+	    >opt</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Parsed"
+	    >Parsed</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] ([<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:parse"
+	    >parse</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Parsed"
+	    >Parsed</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:parseCommand"
+	    >parseCommand</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-System-CliParser.html#t:Parsed"
+	    >Parsed</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Para"
+	    >Para</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:getFlag"
+	    >getFlag</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:getReq"
+	    >getReq</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:getReqLast"
+	    >getReqLast</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:getOpt"
+	    >getOpt</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:getOptLast"
+	    >getOptLast</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:help"
+	    >help</a
+	    > :: <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:helpMessage"
+	    >helpMessage</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:printHelp"
+	    >printHelp</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:version"
+	    >version</a
+	    > :: <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:showVersion"
+	    >showVersion</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Version.html#t:Version"
+	    >Version</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Procedure</h1
+	><h2 id="g:2"
+	>1. Define options</h2
+	><div class="doc"
+	><p
+	  >Define options as a list of <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	      >Option</a
+	      ></code
+	    >s.
+ Each <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	      >Option</a
+	      ></code
+	    > is created using <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:flag"
+	      >flag</a
+	      ></code
+	    >, <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:req"
+	      >req</a
+	      ></code
+	    >, or <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:opt"
+	      >opt</a
+	      ></code
+	    >.
+ There are predefined options <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:help"
+	      >help</a
+	      ></code
+	    > and <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:version"
+	      >version</a
+	      ></code
+	    >.</p
+	  ><pre
+	  >import qualified Koshucode.Baala.System.CliParser as Cli
+
+options :: [Cli.Option]
+options =
+  [ Cli.help
+  , Cli.version
+  , Cli.flag ['f'] [&quot;foo&quot;]        &quot;Echo foo&quot;
+  , Cli.req  []    [&quot;baz&quot;] &quot;text&quot; &quot;Echo baz and text&quot;
+  , Cli.opt  []    [&quot;bar&quot;] &quot;text&quot; &quot;Echo bar or text&quot;
+  ]</pre
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Option" class="def"
+	    >Option</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/System-Console-GetOpt.html#t:OptDescr"
+	    >OptDescr</a
+	    > <a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#Option');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option definition.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:OptionName" class="def"
+	    >OptionName</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#OptionName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Long name options, like <code
+	      >help</code
+	      > of <code
+	      >--help</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:OptionLetter" class="def"
+	    >OptionLetter</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#OptionLetter');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Single letter options, like <code
+	      >h</code
+	      > of <code
+	      >-h</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:OptionExplain" class="def"
+	    >OptionExplain</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#OptionExplain');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Explanation of option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:flag" class="def"
+	    >flag</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#flag');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option definition for flag (switch) type.</p
+	    ><pre
+	    >flag ['f'] [&quot;foo&quot;] &quot;Echo foo&quot;</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:req" class="def"
+	    >req</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#req');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option definition with required one parameter.</p
+	    ><pre
+	    >req [] [&quot;baz&quot;] &quot;text&quot; &quot;Echo baz and text&quot;</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:opt" class="def"
+	    >opt</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:OptionLetter"
+	    >OptionLetter</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionExplain"
+	    >OptionExplain</a
+	    > -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#opt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option definition with optional one parameter.</p
+	    ><pre
+	    >opt [] [&quot;bar&quot;] &quot;text&quot; &quot;Echo bar or text&quot;</pre
+	    ></div
+	  ></div
+	><h2 id="g:3"
+	>2. Parse comand line</h2
+	><div class="doc"
+	><p
+	  >Parse command-line parameter with defined options.</p
+	  ><pre
+	  >main :: IO ()
+main =
+  case Cli.parseCommand options of
+    Left errs -&gt; Cli.printHelp errs options
+    Right (ps, rest) -&gt; ...</pre
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Parsed" class="def"
+	    >Parsed</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] ([<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#Parsed');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Result of parsing command-line parameters, consist of
+   (1) error message or (2) options and non-option parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parse" class="def"
+	    >parse</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:Parsed"
+	    >Parsed</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#parse');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse command-line parameters.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseCommand" class="def"
+	    >parseCommand</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="Koshucode-Baala-System-CliParser.html#t:Parsed"
+	    >Parsed</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#parseCommand');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse command-line parameters of the current process.</p
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>3. Get parameters</h2
+	><div class="doc"
+	><p
+	  >Get optional parameters using <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:getFlag"
+	      >getFlag</a
+	      ></code
+	    >, <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:getReq"
+	      >getReq</a
+	      ></code
+	    >, or <code
+	    ><a href="Koshucode-Baala-System-CliParser.html#v:getOpt"
+	      >getOpt</a
+	      ></code
+	    >.</p
+	  ><pre
+	  >    Right (ps, rest)
+      | Cli.getFlag ps &quot;help&quot;     -&gt; Cli.printHelp [&quot;USAGE&quot;, ...] options
+      | Cli.getFlag ps &quot;version&quot;  -&gt; ...
+      | ...</pre
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Para" class="def"
+	    >Para</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#Para');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Actual optional parameter.</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Para" class="caption collapser" onclick="toggleSection('i:Para')"
+	    >Instances</p
+	    ><div id="section.i:Para" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-System-CliParser.html#t:Para"
+		      >Para</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#line-137');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-System-CliParser.html#t:Para"
+		      >Para</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#line-137');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-System-CliParser.html#t:Para"
+		      >Para</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#line-137');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getFlag" class="def"
+	    >getFlag</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#getFlag');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get flag of <code
+	      ><a href="Koshucode-Baala-System-CliParser.html#v:flag"
+		>flag</a
+		></code
+	      >-type option.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let Right (o,p) = parse [help, version] [&quot;-h&quot;, &quot;foo&quot;, &quot;bar&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>getFlag o &quot;help&quot;
+</code
+		></strong
+	      >True
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>p
+</code
+		></strong
+	      >[&quot;foo&quot;,&quot;bar&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getReq" class="def"
+	    >getReq</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#getReq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get parameter list of <code
+	      ><a href="Koshucode-Baala-System-CliParser.html#v:req"
+		>req</a
+		></code
+	      >-type option.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let Right (o,p) = parse [req [] [&quot;a&quot;] &quot;text&quot; &quot;required text&quot;] [&quot;--a=foo&quot;, &quot;bar&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>getReq o &quot;a&quot;
+</code
+		></strong
+	      >[&quot;foo&quot;]
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>p
+</code
+		></strong
+	      >[&quot;bar&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getReqLast" class="def"
+	    >getReqLast</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#getReqLast');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get last parameter of <code
+	      ><a href="Koshucode-Baala-System-CliParser.html#v:req"
+		>req</a
+		></code
+	      >-type option.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getOpt" class="def"
+	    >getOpt</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#getOpt');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get parameter list of <code
+	      ><a href="Koshucode-Baala-System-CliParser.html#v:opt"
+		>opt</a
+		></code
+	      >-type option.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let Right (o,p) = parse [opt [] [&quot;a&quot;] &quot;text&quot; &quot;optional text&quot;] [&quot;--a&quot;, &quot;--a=foo&quot;, &quot;bar&quot;]
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>getOpt o &quot;a&quot; &quot;default&quot;
+</code
+		></strong
+	      >[&quot;default&quot;,&quot;foo&quot;]
+<code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>p
+</code
+		></strong
+	      >[&quot;bar&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getOptLast" class="def"
+	    >getOptLast</a
+	    > :: [<a href="Koshucode-Baala-System-CliParser.html#t:Para"
+	    >Para</a
+	    >] -&gt; <a href="Koshucode-Baala-System-CliParser.html#t:OptionName"
+	    >OptionName</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#getOptLast');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get last parameter of <code
+	      ><a href="Koshucode-Baala-System-CliParser.html#v:opt"
+		>opt</a
+		></code
+	      >-type option.</p
+	    ></div
+	  ></div
+	><h1 id="g:5"
+	>Predefined options</h1
+	><h2 id="g:6"
+	>--help</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:help" class="def"
+	    >help</a
+	    > :: <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#help');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Predefined <code
+	      >-h</code
+	      > or <code
+	      >--help</code
+	      > option.</p
+	    ><pre
+	    >flag &quot;h&quot; [&quot;help&quot;] &quot;Show help message&quot;</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:helpMessage" class="def"
+	    >helpMessage</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#helpMessage');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create help message.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:printHelp" class="def"
+	    >printHelp</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [<a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    >] -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#printHelp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print help message.</p
+	    ></div
+	  ></div
+	><h2 id="g:7"
+	>--version</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:version" class="def"
+	    >version</a
+	    > :: <a href="Koshucode-Baala-System-CliParser.html#t:Option"
+	    >Option</a
+	    > <a onclick="showSource('src/Koshucode-Baala-System-CliParser.html#version');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Predefined <code
+	      >-V</code
+	      > or <code
+	      >--version</code
+	      > option.</p
+	    ><pre
+	    >flag &quot;V&quot; [&quot;version&quot;] &quot;Show version number&quot;</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:showVersion" class="def"
+	    >showVersion</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Version.html#t:Version"
+	    >Version</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Provides one possible concrete representation for <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Version.html#t:Version"
+		>Version</a
+		></code
+	      >.  For
+ a version with <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Version.html#v:versionBranch"
+		>versionBranch</a
+		></code
+	      > <code
+	      >= [1,2,3]</code
+	      > and <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Version.html#v:versionTags"
+		>versionTags</a
+		></code
+	      >
+ <code
+	      >= [&quot;tag1&quot;,&quot;tag2&quot;]</code
+	      >, the output will be <code
+	      >1.2.3-tag1-tag2</code
+	      >.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

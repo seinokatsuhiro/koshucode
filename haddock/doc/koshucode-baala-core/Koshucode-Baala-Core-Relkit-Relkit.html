@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -116,11 +116,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >}</li
 	  ><li class="src short"
 	  ><span class="keyword"
+	    >pattern</span
+	    > <a href="#v:RelkitOutput"
+	    >RelkitOutput</a
+	    > ::   <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > t -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > t</li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:RelkitBody"
 	    >RelkitBody</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:Sourced"
-	    >Sourced</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:Codic"
+	    >Codic</a
 	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitCore"
 	    >RelkitCore</a
 	    > c)</li
@@ -139,16 +151,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>Map</a
 		> [[c]])</li
 	      ><li
-	      >| <a href="#v:RelkitOneToMany"
-		>RelkitOneToMany</a
+	      >| <a href="#v:RelkitMany"
+		>RelkitMany</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
 		> (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:ManyMap"
 		>ManyMap</a
 		> [c])</li
 	      ><li
-	      >| <a href="#v:RelkitOneToOne"
-		>RelkitOneToOne</a
+	      >| <a href="#v:RelkitLinear"
+		>RelkitLinear</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
 		> (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -187,8 +199,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>RelkitBody</a
 		> c]</li
 	      ><li
-	      >| <a href="#v:RelkitOneToAbMany"
-		>RelkitOneToAbMany</a
+	      >| <a href="#v:RelkitAbMany"
+		>RelkitAbMany</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
 		> ([<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:BodyMap"
@@ -199,8 +211,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>RelkitBody</a
 		> c]</li
 	      ><li
-	      >| <a href="#v:RelkitOneToAbOne"
-		>RelkitOneToAbOne</a
+	      >| <a href="#v:RelkitAbLinear"
+		>RelkitAbLinear</a
 		> <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		>Bool</a
 		> ([<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:BodyMap"
@@ -430,11 +442,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
+	    >pattern</span
+	    > <a name="v:RelkitOutput" class="def"
+	    >RelkitOutput</a
+	    > ::   <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > t -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > t <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Relkit.html#RelkitOutput');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit of output heading and its body.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
 	    >type</span
 	    > <a name="t:RelkitBody" class="def"
 	    >RelkitBody</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:Sourced"
-	    >Sourced</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:Codic"
+	    >Codic</a
 	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitCore"
 	    >RelkitCore</a
 	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Relkit.html#RelkitBody');" href="javascript:void(0);" class="link"
@@ -473,16 +505,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [[c]])</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Safe flow:</em
+		  ><strong
+		    >Safe flow:</strong
 		    > Arbitrary relation mapping, i.e.,
    mapping from multiple tuples to multiple tuples.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:RelkitOneToMany" class="def"
-		  >RelkitOneToMany</a
+		><a name="v:RelkitMany" class="def"
+		  >RelkitMany</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		  >Bool</a
 		  > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:ManyMap"
@@ -490,15 +522,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [c])</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Safe flow:</em
+		  ><strong
+		    >Safe flow:</strong
 		    > Mapping from single tuple to multiple tuples, include no tuples.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:RelkitOneToOne" class="def"
-		  >RelkitOneToOne</a
+		><a name="v:RelkitLinear" class="def"
+		  >RelkitLinear</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		  >Bool</a
 		  > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -506,8 +538,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [c])</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Safe flow:</em
+		  ><strong
+		    >Safe flow:</strong
 		    > Mapping from single tuple to single tuple.</p
 		  ></td
 		></tr
@@ -520,8 +552,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [c])</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Safe flow:</em
+		  ><strong
+		    >Safe flow:</strong
 		    > Filter tuples</p
 		  ></td
 		></tr
@@ -534,8 +566,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [c])</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Abortable flow:</em
+		  ><strong
+		    >Abortable flow:</strong
 		    > Filter by calculation.</p
 		  ></td
 		></tr
@@ -550,8 +582,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c)</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Abortable flow:</em
+		  ><strong
+		    >Abortable flow:</strong
 		    > Filter by data.</p
 		  ></td
 		></tr
@@ -570,15 +602,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c]</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Abortable confluence:</em
+		  ><strong
+		    >Abortable confluence:</strong
 		    > Multiple to multiple.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:RelkitOneToAbMany" class="def"
-		  >RelkitOneToAbMany</a
+		><a name="v:RelkitAbMany" class="def"
+		  >RelkitAbMany</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		  >Bool</a
 		  > ([<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:BodyMap"
@@ -590,15 +622,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c]</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Abortable confluence:</em
+		  ><strong
+		    >Abortable confluence:</strong
 		    > Single to multiple.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:RelkitOneToAbOne" class="def"
-		  >RelkitOneToAbOne</a
+		><a name="v:RelkitAbLinear" class="def"
+		  >RelkitAbLinear</a
 		  > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		  >Bool</a
 		  > ([<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:BodyMap"
@@ -610,8 +642,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c]</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Abortable confluence:</em
+		  ><strong
+		    >Abortable confluence:</strong
 		    > Single to single.</p
 		  ></td
 		></tr
@@ -626,8 +658,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c)</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Connection:</em
+		  ><strong
+		    >Connection:</strong
 		    > Append two mapping.</p
 		  ></td
 		></tr
@@ -638,8 +670,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></td
 		><td class="doc"
 		><p
-		  ><em
-		    >Connection:</em
+		  ><strong
+		    >Connection:</strong
 		    > Identity mapping, i.e.,
    output input relation without modification.</p
 		  ></td
@@ -651,8 +683,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > [[c]]</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Source:</em
+		  ><strong
+		    >Source:</strong
 		    > Ignore input, and output constant relation.</p
 		  ></td
 		></tr
@@ -667,8 +699,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Source:</em
+		  ><strong
+		    >Source:</strong
 		    > Ignore input, and output relation from data source.</p
 		  ></td
 		></tr
@@ -687,8 +719,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c))</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Reference:</em
+		  ><strong
+		    >Reference:</strong
 		    > Link point to other relmap.</p
 		  ></td
 		></tr
@@ -705,8 +737,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c)</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Reference:</em
+		  ><strong
+		    >Reference:</strong
 		    > Give indecies to nested relations.</p
 		  ></td
 		></tr
@@ -723,8 +755,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > c)</td
 		><td class="doc"
 		><p
-		  ><em
-		    >Reference:</em
+		  ><strong
+		    >Reference:</strong
 		    > Give a name to input relation.</p
 		  ></td
 		></tr
@@ -739,8 +771,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></td
 		><td class="doc"
 		><p
-		  ><em
-		    >Reference:</em
+		  ><strong
+		    >Reference:</strong
 		    > Local relation reference, i.e., <code
 		    >^/r</code
 		    > or <code
@@ -763,7 +795,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitCore"
 		      >RelkitCore</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Relkit.html#line-79');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Relkit.html#line-85');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

@@ -599,6 +599,10 @@ div#style-menu-holder {
   padding-left: 2em;
 }
 
+#index .module {
+  color: rgb(160,160,160);
+}
+
 #index td + td {
   padding-left: 1em;
 }

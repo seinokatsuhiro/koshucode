@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -124,16 +124,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:treeSignedName"
-	    >treeSignedName</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    ></li
 	  ><li class="src short"
 	  ><a href="#v:treesTerms"
 	    >treesTerms</a
@@ -265,27 +255,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt1 &quot;/a&quot; &gt;&gt;= treeFlatName
+		>S.toTree &quot;/a&quot; &gt;&gt;= treeFlatName
 </code
 		></strong
-	      >Right (TermName &quot;a&quot;)
+	      >Right (TermName EQ &quot;a&quot;)
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt1 &quot;+/a&quot; &gt;&gt;= treeFlatName
+		>S.toTree &quot;+/a&quot; &gt;&gt;= treeFlatName
 </code
 		></strong
-	      >Right (TermName &quot;a&quot;)
+	      >Right (TermName GT &quot;a&quot;)
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt1 &quot;/a/x&quot; &gt;&gt;= treeFlatName
+		>S.toTree &quot;/a/x&quot; &gt;&gt;= treeFlatName
 </code
 		></strong
 	      >Left ...
@@ -339,38 +329,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;/a /b&quot; &gt;&gt;= treesFlatNames
+		>S.toTrees &quot;/a +/b -/c&quot; &gt;&gt;= treesFlatNames
 </code
 		></strong
-	      >Right [&quot;a&quot;,&quot;b&quot;]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:treeSignedName" class="def"
-	    >treeSignedName</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
-	    >TTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treeSignedName');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Read signed term name.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>S.tt1 &quot;+/a&quot; &gt;&gt;= treeSignedName
-</code
-		></strong
-	      >Right (GT, &quot;a&quot;)
+	      >Right [TermName EQ &quot;a&quot;,TermName GT &quot;b&quot;,TermName LT &quot;c&quot;]
 </pre
 	    ></div
 	  ></div
@@ -397,11 +359,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;/a 'A3 /b 10&quot; &gt;&gt;= treesTerms
+		>S.toTrees &quot;/a 'A3 /b 10&quot; &gt;&gt;= treesTerms
 </code
 		></strong
-	      >Right [(&quot;a&quot;, [TreeL ...]),
-       (&quot;b&quot;, [TreeL ...])]
+	      >Right [ (TermName EQ &quot;a&quot;, [TreeL ...]),
+        (TermName EQ &quot;b&quot;, [TreeL ...]) ]
 </pre
 	    ></div
 	  ></div
@@ -475,10 +437,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;/a /x /b /y&quot; &gt;&gt;= treesFlatNamePairs
+		>S.toTrees &quot;/a /x /b /y&quot; &gt;&gt;= treesFlatNamePairs
 </code
 		></strong
-	      >Right [(&quot;/a&quot;, &quot;/x&quot;), (&quot;/b&quot;, &quot;/y&quot;)]
+	      >Right [(TermName EQ &quot;a&quot;, TermName EQ &quot;x&quot;), (TermName EQ &quot;b&quot;, TermName EQ &quot;y&quot;)]
 </pre
 	    ></div
 	  ></div
@@ -503,10 +465,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;/a /b : /p /q : /x /y&quot; &gt;&gt;= treesNamesByColon
+		>S.toTrees &quot;/a /b : /p /q : /x /y&quot; &gt;&gt;= treesNamesByColon
 </code
 		></strong
-	      >Right [[&quot;a&quot;,&quot;b&quot;], [&quot;p&quot;,&quot;q&quot;], [&quot;x&quot;,&quot;y&quot;]]
+	      >Right [ [TermName EQ &quot;a&quot;, TermName EQ &quot;b&quot;]
+      , [TermName EQ &quot;p&quot;, TermName EQ &quot;q&quot;]
+      , [TermName EQ &quot;x&quot;, TermName EQ &quot;y&quot;] ]
 </pre
 	    ></div
 	  ></div
@@ -533,20 +497,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;~ /a /b&quot; &gt;&gt;= treesFlatNamesCo
+		>S.toTrees &quot;~ /a /b&quot; &gt;&gt;= treesFlatNamesCo
 </code
 		></strong
-	      >Right (True, [&quot;a&quot;,&quot;b&quot;])
+	      >Right (True, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;/a /b&quot; &gt;&gt;= treesFlatNamesCo
+		>S.toTrees &quot;/a /b&quot; &gt;&gt;= treesFlatNamesCo
 </code
 		></strong
-	      >Right (False, [&quot;a&quot;,&quot;b&quot;])
+	      >Right (False, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
 </pre
 	    ></div
 	  ></div

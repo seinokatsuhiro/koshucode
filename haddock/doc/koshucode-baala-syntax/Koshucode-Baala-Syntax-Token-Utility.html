@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.178.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -105,13 +105,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Token</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:isBlankToken"
-	    >isBlankToken</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
-	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	  ><a href="#v:prepareTokens"
+	    >prepareTokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    ></li
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:sweepToken"
 	    >sweepToken</a
@@ -120,6 +120,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isBlankToken"
+	    >isBlankToken</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:isShortToken"
 	    >isShortToken</a
@@ -153,25 +161,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Token</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:isOpenTokenOf"
-	    >isOpenTokenOf</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	  ><a href="#v:isBracketTokenOf"
+	    >isBracketTokenOf</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
 	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isCloseTokenOf"
-	    >isCloseTokenOf</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
 	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    ></li
+	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:isUnknownToken"
 	    >isUnknownToken</a
@@ -255,22 +259,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Get token parents from local token.</p
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Type of token</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:isBlankToken" class="def"
-	    >isBlankToken</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
-	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	  ><a name="v:prepareTokens" class="def"
+	    >prepareTokens</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBlankToken');" href="javascript:void(0);" class="link"
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#prepareTokens');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test token is blank, i.e., comment or space.</p
+	    >Prepare token list for parsing.</p
+	    ><ol
+	    ><li
+	      >Remove spaces.</li
+	      ><li
+	      >Remove comments.</li
+	      ><li
+	      >Join fragmented texts.</li
+	      ></ol
 	    ></div
 	  ></div
 	><div class="top"
@@ -287,6 +297,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><div class="doc"
 	  ><p
 	    >Remove blank tokens.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Type of token</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isBlankToken" class="def"
+	    >isBlankToken</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBlankToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test token is blank, i.e., comment or space.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -355,58 +383,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:isOpenTokenOf" class="def"
-	    >isOpenTokenOf</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	  ><a name="v:isBracketTokenOf" class="def"
+	    >isBracketTokenOf</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
 	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isOpenTokenOf');" href="javascript:void(0);" class="link"
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isBracketTokenOf');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test token is a open-type of the specific bracket.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let tok = S.TOpen B.def &quot;(&quot; in isOpenTokenOf &quot;(&quot; tok
-</code
-		></strong
-	      >True
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let tok = S.TOpen B.def &quot;{&quot; in isOpenTokenOf &quot;(&quot; tok
-</code
-		></strong
-	      >False
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isCloseTokenOf" class="def"
-	    >isCloseTokenOf</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
-	    >Test</a
-	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-	    >Token</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Utility.html#isCloseTokenOf');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Test token is a close-type of the specific bracket.</p
+	    >Create bracket testers.</p
 	    ></div
 	  ></div
 	><div class="top"

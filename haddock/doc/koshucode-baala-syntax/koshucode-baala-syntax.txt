@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Term types and related functions.
@@ -626,7 +626,7 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrName.AttrName
 module Koshucode.Baala.Syntax.Token.Message
 
 -- | Abortable scope for token.
-abToken :: (CodePtr cp) => [cp] -> Map (Ab b)
+abToken :: (GetCodePos cp) => Abortable cp b
 
 -- | Forbidden input
 forbiddenInput :: String -> Ab a
@@ -784,10 +784,10 @@ module Koshucode.Baala.Syntax.Symbol.Short
 
 -- | Something with short definition.
 data Short a
-Short :: [CodePt] -> [ShortDef] -> a -> Short a
+Short :: [CodePos] -> [ShortDef] -> a -> Short a
 
 -- | Source information
-[shortSource] :: Short a -> [CodePt]
+[shortSource] :: Short a -> [CodePos]
 
 -- | Definition of short signs
 [shortHead] :: Short a -> [ShortDef]
@@ -830,48 +830,48 @@ subtypeName :: SubtypeName a => a -> String
 data Token
 
 -- | <b>1 Textual:</b> Text — <tt>'code</tt>, <tt>"text"</tt>, etc
-TText :: CodePt -> TextForm -> String -> Token
+TText :: CodePos -> TextForm -> String -> Token
 
 -- | <b>2 Textual:</b> Prefixed shorten text — <tt>short.proper</tt>
-TShort :: CodePt -> String -> String -> Token
+TShort :: CodePos -> String -> String -> Token
 
 -- | <b>3 Textual:</b> Term name — <tt>/term</tt>
-TTerm :: CodePt -> String -> Token
+TTerm :: CodePos -> String -> Token
 
 -- | <b>4 Symbolic:</b> Local name — <tt>^r</tt>, <tt>^/r</tt>
-TLocal :: CodePt -> LocalRef -> Int -> [Token] -> Token
+TLocal :: CodePos -> LocalRef -> Int -> [Token] -> Token
 
 -- | <b>5 Symbolic:</b> Slot name. <a>Int</a> represents slot level, i.e.,
 --   0 for local positional slots, 1 for local named slots, 2 for global
 --   slots — <tt>@slot</tt>, <tt>@@global</tt>
-TSlot :: CodePt -> Int -> String -> Token
+TSlot :: CodePos -> Int -> String -> Token
 
 -- | <b>6 Symbolic:</b> Blank name. (This is only used in building content
 --   expression)
-TName :: CodePt -> BlankName -> Token
+TName :: CodePos -> BlankName -> Token
 
 -- | <b>7 Punctuational:</b> Opening bracket — <tt>(</tt>, <tt>{</tt>,
 --   <tt>{=</tt>, etc
-TOpen :: CodePt -> String -> Token
+TOpen :: CodePos -> String -> Token
 
 -- | <b>8 Punctuational:</b> Closing bracket — <tt>=}</tt>, <tt>}</tt>,
 --   <tt>)</tt>, etc
-TClose :: CodePt -> String -> Token
+TClose :: CodePos -> String -> Token
 
 -- | <b>9 Punctuational:</b> <i>N</i> space characters
-TSpace :: CodePt -> Int -> Token
+TSpace :: CodePos -> Int -> Token
 
 -- | <b>10 Punctuational:</b> Comment — <tt>** comment line</tt>
-TComment :: CodePt -> String -> Token
+TComment :: CodePos -> String -> Token
 
 -- | <b>11 Other:</b> Unknown token
-TUnknown :: CodePt -> String -> AbortReason -> Token
+TUnknown :: CodePos -> String -> AbortReason -> Token
 
 -- | Create raw text token.
 rawTextToken :: String -> Token
 
 -- | Create unknown token.
-unknownToken :: CodePt -> String -> Ab a -> Token
+unknownToken :: CodePos -> String -> Ab a -> Token
 
 -- | Subtype of text token.
 data TextForm
@@ -916,6 +916,30 @@ BlankInternal :: String -> BlankName
 BlankPrefix :: String -> BlankName
 BlankInfix :: String -> BlankName
 BlankPostfix :: String -> BlankName
+
+-- | Unknown text token.
+
+-- | <i>Deprecated: Use TUnk instead.</i>
+
+-- | Raw text token.
+
+-- | <i>Deprecated: Use TRaw instead.</i>
+
+-- | Quoted text token.
+
+-- | <i>Deprecated: Use TQq instead.</i>
+
+-- | Dobule-quoted text token.
+
+-- | <i>Deprecated: Use TQq instead.</i>
+
+-- | Keyword token.
+
+-- | <i>Deprecated: Use TKey instead.</i>
+
+-- | Bar-enclosed token.
+
+-- | <i>Deprecated: Use TBar instead.</i>
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.Token
@@ -930,7 +954,7 @@ instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
@@ -941,41 +965,25 @@ instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.T
 -- | Token pattern.
 module Koshucode.Baala.Syntax.Token.Pattern
 
--- | Unknown text token.
+-- | Text token.
 
--- | Raw text token.
---   
---   <pre>
---   &gt;&gt;&gt; S.TTextRaw B.def "a"   -- a
---   </pre>
+-- | Unknown text.
 
--- | Quoted text token.
---   
---   <pre>
---   &gt;&gt;&gt; S.TTextQ B.def "a"   -- 'a
---   </pre>
+-- | Raw text.
 
--- | Dobule-quoted text token.
---   
---   <pre>
---   &gt;&gt;&gt; S.TTextQQ B.def "a"   -- "a"
---   </pre>
+-- | Section sign: <tt>"==="</tt>
 
--- | Keyword token.
---   
---   <pre>
---   &gt;&gt;&gt; S.TTextKey B.def "a"   -- &lt;a&gt;
---   </pre>
+-- | Single-quoted text.
 
--- | Bar-enclosed token.
---   
---   <pre>
---   &gt;&gt;&gt; S.TTextBar B.def "a"   -- |a|
---   </pre>
+-- | Double-quoted text.
 
--- | License text token.
+-- | Keyword text.
 
--- | Section sign.
+-- | Bar-enclosed text.
+
+-- | License text.
+
+-- | Term token.
 
 
 -- | Token utilities.
@@ -1000,11 +1008,20 @@ tokenDetailTypeString :: Token -> Maybe String
 -- | Get token parents from local token.
 tokenParents :: Token -> [Token]
 
--- | Test token is blank, i.e., comment or space.
-isBlankToken :: Test Token
+-- | Prepare token list for parsing.
+--   
+--   <ol>
+--   <li>Remove spaces.</li>
+--   <li>Remove comments.</li>
+--   <li>Join fragmented texts.</li>
+--   </ol>
+prepareTokens :: Map [Token]
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
+
+-- | Test token is blank, i.e., comment or space.
+isBlankToken :: Test Token
 
 -- | Test token is short-type token.
 isShortToken :: Test Token
@@ -1018,21 +1035,8 @@ isOpenToken :: Test Token
 -- | Test token is close-type token.
 isCloseToken :: Test Token
 
--- | Test token is a open-type of the specific bracket.
---   
---   <pre>
---   &gt;&gt;&gt; let tok = S.TOpen B.def "(" in isOpenTokenOf "(" tok
---   True
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; let tok = S.TOpen B.def "{" in isOpenTokenOf "(" tok
---   False
---   </pre>
-isOpenTokenOf :: String -> Test Token
-
--- | Test token is a close-type of the specific bracket.
-isCloseTokenOf :: String -> Test Token
+-- | Create bracket testers.
+isBracketTokenOf :: (String, String) -> (Test Token, Test Token)
 
 -- | Test token is unknown.
 isUnknownToken :: Test Token
@@ -1048,13 +1052,13 @@ type TokenScan = CodeScan String Token
 type TokenScanMap = Map TokenScan
 
 -- | Nip off a next token.
-type TokenNip = CodePt -> InputText -> TokenNipResult
+type TokenNip = CodePos -> InputText -> TokenNipResult
 
 -- | Nip off a next token with word table.
-type TokenNipW = CodePt -> WordTable -> InputText -> TokenNipWResult
+type TokenNipW = CodePos -> WordTable -> InputText -> TokenNipWResult
 
 -- | Nip off a next token with word table.
-type TokenNipLW = CodePt -> WordTable -> InputText -> TokenNipLWResult
+type TokenNipLW = CodePos -> WordTable -> InputText -> TokenNipLWResult
 
 -- | Nip result.
 type TokenNipResult = (InputText, Token)
@@ -1135,18 +1139,18 @@ nipSlot :: Int -> TokenNip
 -- | Nip off a signed term name.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipTermSign EQ B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
+--   &gt;&gt;&gt; nipTermSign "+/" B.def Map.empty "foo bar baz"
+--   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "+/foo"])
 --   </pre>
-nipTermSign :: Ordering -> TokenNipLW
+nipTermSign :: String -> TokenNipLW
 
 -- | Nip off a term name.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipTermPath B.def Map.empty "foo bar baz"
+--   &gt;&gt;&gt; nipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
 --   </pre>
-nipTermPath :: TokenNipLW
+nipTermName :: TokenNipLW
 
 -- | Nip off a quoted term.
 --   
@@ -1157,7 +1161,7 @@ nipTermPath :: TokenNipLW
 nipTermQ :: TokenNipLW
 
 -- | Nip off token beginning with <tt>"|"</tt>.
-nipBar :: CodePt -> String -> String -> TokenNipResult
+nipBar :: CodePos -> String -> String -> TokenNipResult
 
 
 -- | Code section.
@@ -1272,56 +1276,72 @@ BracketUnknown :: BracketType
 -- | Bracket type of token.
 getBracketType :: GetBracketType BracketType Token
 
--- | Open group: <tt>"("</tt>
-openGroup :: String
+-- | Group bracket — <tt>"("</tt> and <tt>")"</tt>
+bracketGroup :: (String, String)
 
--- | Close group: <tt>")"</tt>
-closeGroup :: String
+-- | Term bracket — <tt>"(-"</tt> and <tt>"-)"</tt>
+bracketTerm :: (String, String)
 
--- | Open term path: <tt>"(-"</tt>
-openTerm :: String
+-- | List bracket — <tt>"["</tt> and <tt>"]"</tt>
+bracketList :: (String, String)
 
--- | Close term path: <tt>"-)"</tt>
-closeTerm :: String
+-- | Set bracket — <tt>"{"</tt> and <tt>"}"</tt>
+bracketSet :: (String, String)
 
--- | Open list: <tt>"["</tt>
-openList :: String
+-- | Tie bracket — <tt>"{-"</tt> and <tt>"-}"</tt>
+bracketTie :: (String, String)
 
--- | Close list: <tt>"]"</tt>
-closeList :: String
+-- | Rel bracket — <tt>"{="</tt> and <tt>"=}"</tt>
+bracketRel :: (String, String)
 
--- | Open set: <tt>"{"</tt>
-openSet :: String
+-- | Interp bracket — <tt>"{|"</tt> and <tt>"|}"</tt>
+bracketInterp :: (String, String)
 
--- | Close set: <tt>"}"</tt>
-closeSet :: String
-
--- | Open tie: <tt>"{-"</tt>
-openTie :: String
-
--- | Close tie: <tt>"-}"</tt>
-closeTie :: String
-
--- | Open relation: <tt>"{="</tt>
-openRel :: String
-
--- | Close relation: <tt>"=}"</tt>
-closeRel :: String
-
--- | Open interpreation: <tt>"{|"</tt>
-openInterp :: String
-
--- | Close interpreation: <tt>"|}"</tt>
-closeInterp :: String
-
--- | Open type: <tt>"[-"</tt>
-openType :: String
-
--- | Close type: <tt>"-]"</tt>
-closeType :: String
+-- | Type bracket — <tt>"[-"</tt> and <tt>"-]"</tt>
+bracketType :: (String, String)
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.TTree.Bracket.BracketType
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.TTree.Bracket.BracketType
 instance GHC.Show.Show Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+
+
+-- | Patterns for token tree.
+module Koshucode.Baala.Syntax.TTree.Pattern
+
+-- | Token leaf.
+
+-- | Text leaf.
+
+-- | Raw text leaf.
+
+-- | Single-hyphen attribute text leaf.
+
+-- | Double-hyphen attribute text leaf.
+
+-- | Single-quoted text leaf.
+
+-- | Double-quoted text leaf.
+
+-- | Slot leaf.
+
+-- | Term leaf.
+
+-- | Token branch.
+
+-- | Group branch.
+
+-- | List branch.
+
+-- | Set branch.
+
+-- | Term path branch.
+
+-- | Form branch.
+
+
+-- | Syntax patterns. There are three one-letter patterns: <a>B</a> for
+--   tree branch, <a>L</a> for tree leaf, and <a>T</a> for text token.
+module Koshucode.Baala.Syntax.Pattern
 
 
 -- | Tree of tokens
@@ -1338,34 +1358,67 @@ type NamedTrees = Named [TTree]
 
 -- | Term leaf.
 
+-- | <i>Deprecated: Use LTerm instead.</i>
+
 -- | Text leaf.
+
+-- | <i>Deprecated: Use LText instead.</i>
 
 -- | Text leaf of <a>TextRaw</a>.
 
--- | Text leaf beginning with single hyphen.
-
--- | Text leaf beginning with double hyphens.
+-- | <i>Deprecated: Use LRaw instead.</i>
 
 -- | Text leaf of <a>TextQ</a>.
+
+-- | <i>Deprecated: Use LQ instead.</i>
 
 
 -- | Parser for token tree.
 module Koshucode.Baala.Syntax.TTree.Parse
 
+-- | Convert to token trees.
+class ToTrees a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree ppTrees a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right ts -> print $ ttDoc ts } ppTree a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right [] -> return () Right [t] -> print $ ttDoc [t] Right ts -> print $ ttDoc [ttreeGroup ts] }
+
+-- | Convert to list of token trees.
+toTrees :: ToTrees a => a -> Ab [TTree]
+
+-- | Convert to token tree.
+toTree :: ToTrees a => a -> Ab TTree
+
+-- | List of token trees or error.
+toTrees' :: ToTrees a => a -> [TTree]
+
+-- | Token tree or error.
+toTree' :: ToTrees a => a -> TTree
+
+-- | Pretty print token trees.
+ppTrees :: ToTrees a => a -> IO ()
+
+-- | Pretty print token tree.
+ppTree :: ToTrees a => a -> IO ()
+
 -- | Parse tokens with brackets into trees. Blank tokens and comments are
 --   excluded.
+
+-- | <i>Deprecated: Use <a>toTrees</a> instead.</i>
 ttrees :: [Token] -> Ab [TTree]
 
 -- | Wrap trees in group.
 ttreeGroup :: [TTree] -> TTree
 
 -- | Convert string to token trees.
+
+-- | <i>Deprecated: Use <a>toTrees</a> instead.</i>
 tt :: String -> Ab [TTree]
 
 -- | Parse string and group it.
+
+-- | <i>Deprecated: Use <a>toTree</a> instead.</i>
 tt1 :: String -> Ab TTree
 
 -- | Parse string and print it.
+
+-- | <i>Deprecated: Use <a>ppTree</a> instead.</i>
 ttPrint :: String -> IO ()
 
 -- | Get <a>Doc</a> value of token trees for pretty printing.
@@ -1380,21 +1433,21 @@ ttDoc :: [TTree] -> Doc
 --   &gt;&gt;&gt; let Right t = S.toks "b c"
 --   
 --   &gt;&gt;&gt; splitTokensBy (== "|") t
---   Left [ TText  CodePt {..} TextRaw "b"
---        , TSpace CodePt {..} 1
---        , TText  CodePt {..} TextRaw "c" ]
+--   Left [ TText  CodePos {..} TextRaw "b"
+--        , TSpace CodePos {..} 1
+--        , TText  CodePos {..} TextRaw "c" ]
 --   </pre>
 --   
 --   <pre>
 --   &gt;&gt;&gt; let Right t = S.toks "a | b | c"
 --   
 --   &gt;&gt;&gt; splitTokensBy (== "|") t
---   Right ( [ TText CodePt {..} TextRaw "a", TSpace CodePt {..} 1]
---         , TText CodePt {..} TextRaw "|"
---         , [ TText  CodePt {..} TextRaw "b"
---           , TSpace CodePt {..} 1
---           , TText  CodePt {..} TextRaw "|"
---           , TText  CodePt {..} TextRaw "c" ] )
+--   Right ( [ TText CodePos {..} TextRaw "a", TSpace CodePos {..} 1]
+--         , TText CodePos {..} TextRaw "|"
+--         , [ TText  CodePos {..} TextRaw "b"
+--           , TSpace CodePos {..} 1
+--           , TText  CodePos {..} TextRaw "|"
+--           , TText  CodePos {..} TextRaw "c" ] )
 --   </pre>
 splitTokensBy :: Test String -> SplitList3e Token
 
@@ -1412,24 +1465,13 @@ divideTreesByColon :: [TTree] -> [[TTree]]
 
 -- | Divide token trees by equal sign <tt>"="</tt>.
 divideTreesByEqual :: [TTree] -> [[TTree]]
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees GHC.Base.String
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.TokenTree.TTree]
 
 
 -- | Token trees.
 module Koshucode.Baala.Syntax.TTree
-
-
--- | Patterns for token tree.
-module Koshucode.Baala.Syntax.TTree.Pattern
-
--- | Token leaf.
-
--- | Token branch.
-
--- | Text leaf.
-
--- | Raw text leaf.
-
--- | Double-quoted text leaf.
 
 
 -- | Parameter.
@@ -1440,24 +1482,13 @@ module Koshucode.Baala.Syntax.Para
 module Koshucode.Baala.Syntax.Attr.Message
 
 -- | Abortable scope for attribute.
-abAttr :: (CodePtr cp) => [cp] -> MapAb b
+abAttr :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for attribute.
-abAttrTrees :: [TTree] -> MapAb b
+abAttrTrees :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for slot.
-abSlot :: (CodePtr cp) => [cp] -> MapAb b
-
--- | Abortable scope for slot.
-abSlotTree :: TTree -> MapAb b
-
--- | Same as <tt>abortable</tt> except for using <a>TTree</a> instead of
---   list of <a>Token</a>.
-abortableTree :: String -> TTree -> MapAb b
-
--- | Same as <tt>abortable</tt> except for using list of <a>TTree</a>
---   instead of list of <a>Token</a>.
-abortableTrees :: String -> [TTree] -> MapAb b
+abSlot :: (GetCodePos cp) => Abortable cp b
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [TermName] -> Ab a
@@ -1505,7 +1536,7 @@ substSlot :: [GlobalSlot] -> [AttrTree] -> AbMap [TTree]
 module Koshucode.Baala.Syntax.Attr.AttrEd
 
 -- | Attribute editor with source code information.
-type AttrEd = Sourced AttrEdBody
+type AttrEd = Codic AttrEdBody
 
 -- | Operators for attribute editors.
 data AttrEdBody

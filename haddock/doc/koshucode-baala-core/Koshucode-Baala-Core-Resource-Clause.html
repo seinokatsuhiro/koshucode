@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -141,22 +141,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >ClauseBody</a
 	    ><ul class="subs"
 	    ><li
-	      >= <a href="#v:CInput"
-		>CInput</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-		>Token</a
-		>]</li
-	      ><li
-	      >| <a href="#v:CExport"
-		>CExport</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      >| <a href="#v:CRelmap"
-		>CRelmap</a
-		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		>String</a
+	      >= <a href="#v:CJudge"
+		>CJudge</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+		>AssertType</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
 		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
@@ -171,12 +161,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>Token</a
 		>]</li
 	      ><li
-	      >| <a href="#v:CJudge"
-		>CJudge</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
-		>AssertType</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
-		>JudgeClass</a
+	      >| <a href="#v:CRelmap"
+		>CRelmap</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
 		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
@@ -189,8 +177,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>Token</a
 		>]</li
 	      ><li
-	      >| <a href="#v:COption"
-		>COption</a
+	      >| <a href="#v:CInput"
+		>CInput</a
 		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
@@ -200,6 +188,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
+	      ><li
+	      >| <a href="#v:COption"
+		>COption</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+		>Token</a
+		>]</li
+	      ><li
+	      >| <a href="#v:CExport"
+		>CExport</a
+		> <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>String</a
+		></li
 	      ><li
 	      >| <a href="#v:CEcho"
 		>CEcho</a
@@ -323,7 +323,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:Clause"
 		      >Clause</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-32');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-33');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:Clause"
+		      >Clause</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-70');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -425,7 +439,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:ClauseHead"
 		      >ClauseHead</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-40');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-41');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -434,12 +448,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePt.html#t:CodePtr"
-		      >CodePtr</a
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
 		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:ClauseHead"
 		      >ClauseHead</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-65');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-73');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -453,7 +467,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:ClauseHead"
 		      >ClauseHead</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-64');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -484,40 +498,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:CInput" class="def"
-		  >CInput</a
+		><a name="v:CJudge" class="def"
+		  >CJudge</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
+		  >AssertType</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
 		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		  >Token</a
 		  >]</td
 		><td class="doc"
 		><p
-		  >Input point</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:CExport" class="def"
-		  >CExport</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Exporting name</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:CRelmap" class="def"
-		  >CRelmap</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
-		  >Token</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Source of relmap</p
+		  ><strong
+		    >Relational:</strong
+		    > Judge</p
 		  ></td
 		></tr
 	      ><tr
@@ -533,23 +527,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  >Assertion</p
+		  ><strong
+		    >Relational:</strong
+		    > Assertion</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:CJudge" class="def"
-		  >CJudge</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-Judge.html#t:AssertType"
-		  >AssertType</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Type-Judge-JudgeClass.html#t:JudgeClass"
-		  >JudgeClass</a
+		><a name="v:CRelmap" class="def"
+		  >CRelmap</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
 		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		  >Token</a
 		  >]</td
 		><td class="doc"
 		><p
-		  >Judge</p
+		  ><strong
+		    >Relational:</strong
+		    > Source of relmap</p
 		  ></td
 		></tr
 	      ><tr
@@ -563,19 +559,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  >Global slot</p
+		  ><strong
+		    >Relational:</strong
+		    > Global slot</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:COption" class="def"
-		  >COption</a
+		><a name="v:CInput" class="def"
+		  >CInput</a
 		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
 		  >Token</a
 		  >]</td
 		><td class="doc"
 		><p
-		  >Option settings</p
+		  ><strong
+		    >Resource:</strong
+		    > Input point</p
 		  ></td
 		></tr
 	      ><tr
@@ -587,7 +587,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  >Output point</p
+		  ><strong
+		    >Resource:</strong
+		    > Output point</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:COption" class="def"
+		  >COption</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+		  >Token</a
+		  >]</td
+		><td class="doc"
+		><p
+		  ><strong
+		    >Resource:</strong
+		    > Option settings</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:CExport" class="def"
+		  >CExport</a
+		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><strong
+		    >Resource:</strong
+		    > Exporting name</p
 		  ></td
 		></tr
 	      ><tr
@@ -599,7 +629,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></td
 		><td class="doc"
 		><p
-		  >Echo text</p
+		  ><strong
+		    >Other:</strong
+		    > Echo text</p
 		  ></td
 		></tr
 	      ><tr
@@ -611,7 +643,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></td
 		><td class="doc"
 		><p
-		  >License text</p
+		  ><strong
+		    >Other:</strong
+		    > License text</p
 		  ></td
 		></tr
 	      ><tr
@@ -623,7 +657,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  >Multiple bodies</p
+		  ><strong
+		    >Other:</strong
+		    > Multiple bodies</p
 		  ></td
 		></tr
 	      ><tr
@@ -635,7 +671,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  > ())</td
 		><td class="doc"
 		><p
-		  >Unknown clause</p
+		  ><strong
+		    >Other:</strong
+		    > Unknown clause</p
 		  ></td
 		></tr
 	      ></table
@@ -653,7 +691,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Resource-Clause.html#t:ClauseBody"
 		      >ClauseBody</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-56');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Resource-Clause.html#line-61');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

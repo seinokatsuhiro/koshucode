@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-calculator-0.174.0.0: A portable relational calculator</p
+      >koshucode-baala-calculator-0.178.0.0: A portable relational calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -116,7 +116,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	      >koshu</code
 	      > command.
    See <code
-	      ><a href="Koshucode-Baala-Op-Global.html#v:baalaRops"
+	      ><a href="Koshucode-Baala-Toolkit-Library-Global.html#v:baalaRops"
 		>baalaRops</a
 		></code
 	      >
@@ -137,18 +137,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ><pre
 	  >import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Core                     as C
-import qualified Koshucode.Baala.Type.Vanilla             as Type
-import qualified Koshucode.Baala.Op.Global                as Op
+import qualified Koshucode.Baala.Toolkit.Library.Global   as Gl
+import qualified Koshucode.Baala.Toolkit.Library.Version  as Ver
 import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
-import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
 
 main :: IO ()
 main = B.exitWith =&lt;&lt; Main.koshuMain koshuGlobal
 
-koshuGlobal :: Type.GlobalC
-koshuGlobal = Op.baalaGlobal
+koshuGlobal :: C.GlobalC
+koshuGlobal = Gl.baalaGlobal
               { C.globalSynopsis  = &quot;The Koshucode Baala Implementation&quot;
-              , C.globalVersion   = Main.version }</pre
+              , C.globalVersion   = Ver.version }</pre
 	  ></div
 	></div
       ></div

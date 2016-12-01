@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,12 +52,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="caption"
 	>Koshucode.Baala.Base.Abort.Report</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Message</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Abort</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Reporting abort reasons.</p
+	  >Report abort reasons.</p
+	  ><p
+	  >Abortable process returns <code
+	    >Left</code
+	    > <code
+	    ><a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	      >AbortReason</a
+	      ></code
+	    > when aborted.
+ The <code
+	    ><a href="Koshucode-Baala-Base-Abort-Reason.html#v:abortable"
+	      >abortable</a
+	      ></code
+	    > function adds code positions to the reason.
+ <code
+	    ><a href="Koshucode-Baala-Base-Abort-Report.html#v:abortPrint"
+	      >abortPrint</a
+	      ></code
+	    > outputs aborted message in the following format.</p
+	  ><pre
+	  >** ABORTED  {main reason}
+** -------- --------------------------------------------
+** Detail   {detailed reason}
+**          {detailed reason}
+** Source   {line #} {char #} {source}
+**          &gt; {code string}
+**          {line #} {char #} {source}
+**          &gt; {code string}
+** Command  {program name}
+**          {arg 1}
+**          {arg 2}</pre
 	  ></div
 	></div
       ><div id="synopsis"
@@ -73,25 +117,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >String</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:abort"
-	    >abort</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
-	    >CommandLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > x</li
-	  ><li class="src short"
-	  ><a href="#v:abortPrint"
-	    >abortPrint</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
-	    >CommandLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > ()</li
+	  ><a href="#v:cpMessage"
+	    >cpMessage</a
+	    > :: (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >, <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    >) -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >)]</li
 	  ><li class="src short"
 	  ><a href="#v:abortMessage"
 	    >abortMessage</a
@@ -103,6 +139,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >String</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:abortPrint"
+	    >abortPrint</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
+	    >CommandLine</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:abort"
+	    >abort</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > x</li
+	  ><li class="src short"
+	  ><a href="#v:abortCommand"
+	    >abortCommand</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
+	    >CommandLine</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > x</li
+	  ><li class="src short"
+	  ><a href="#v:abortLeft"
+	    >abortLeft</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > b</li
+	  ><li class="src short"
 	  ><a href="#v:bug"
 	    >bug</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -111,8 +183,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Message</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -131,38 +203,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:abort" class="def"
-	    >abort</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
-	    >CommandLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > x <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abort');" href="javascript:void(0);" class="link"
+	  ><a name="v:cpMessage" class="def"
+	    >cpMessage</a
+	    > :: (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >, <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    >) -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >)] <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#cpMessage');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Stop program execution abnormally.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:abortPrint" class="def"
-	    >abortPrint</a
-	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
-	    >CommandLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
-	    >IO</a
-	    > () <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abortPrint');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Print abort message.</p
+	    >Create position and line information.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -181,6 +237,114 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><div class="doc"
 	  ><p
 	    >Convert abort reason to message lines.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abortPrint" class="def"
+	    >abortPrint</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
+	    >CommandLine</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abortPrint');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print abort message.</p
+	    ><p
+	    >Prepare code position and abort reason.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let cp = B.CodePos (B.nioFrom &quot;abcdefg&quot;) 1 &quot;abcdefg&quot; &quot;defg&quot;
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let Left a = B.abortable &quot;tag&quot; cp $ Left $ B.abortBecause &quot;Bad luck&quot;
+</code
+		></strong
+	      ></pre
+	    ><p
+	    >Print it.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>abortPrint (words &quot;prog x y&quot;) a
+</code
+		></strong
+	      >**
+**  ABORTED  Bad luck
+**  -------- ---------- ------
+**  Source   1 4 &lt;text&gt;
+**           &gt; defg     .. tag
+**  Command  prog
+**           x
+**           y
+**
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Abort</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abort" class="def"
+	    >abort</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > x <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abort');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Stop program execution abnormally.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abortCommand" class="def"
+	    >abortCommand</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Report.html#t:CommandLine"
+	    >CommandLine</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > x <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abortCommand');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abort with a command line.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abortLeft" class="def"
+	    >abortLeft</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > b <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#abortLeft');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abort when getting abort reason.</p
 	    ></div
 	  ></div
 	><div class="top"

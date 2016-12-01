@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.174.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.178.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -83,6 +83,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToTrees"
+	    >ToTrees</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toTrees"
+		>toTrees</a
+		> :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+		>TTree</a
+		>]</li
+	      ><li
+	      ><a href="#v:toTree"
+		>toTree</a
+		> :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+		>TTree</a
+		></li
+	      ><li
+	      ><a href="#v:toTrees-39-"
+		>toTrees'</a
+		> :: a -&gt; [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+		>TTree</a
+		>]</li
+	      ><li
+	      ><a href="#v:toTree-39-"
+		>toTree'</a
+		> :: a -&gt; <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+		>TTree</a
+		></li
+	      ><li
+	      ><a href="#v:ppTrees"
+		>ppTrees</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		>IO</a
+		> ()</li
+	      ><li
+	      ><a href="#v:ppTree"
+		>ppTree</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+		>IO</a
+		> ()</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:ttrees"
 	    >ttrees</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
@@ -203,6 +253,160 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	>Parser</h1
 	><div class="top"
 	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToTrees" class="def"
+	    >ToTrees</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#ToTrees');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to token trees.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Syntax-TTree-Parse.html#v:toTrees"
+	      >toTrees</a
+	      ></p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toTrees" class="def"
+	      >toTrees</a
+	      > :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	      >TTree</a
+	      >] <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#toTrees');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Convert to list of token trees.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:toTree" class="def"
+	      >toTree</a
+	      > :: a -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	      >TTree</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#toTree');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Convert to token tree.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:toTrees-39-" class="def"
+	      >toTrees'</a
+	      > :: a -&gt; [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	      >TTree</a
+	      >] <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#toTrees%27');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >List of token trees or error.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:toTree-39-" class="def"
+	      >toTree'</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+	      >TTree</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#toTree%27');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Token tree or error.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:ppTrees" class="def"
+	      >ppTrees</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	      >IO</a
+	      > () <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#ppTrees');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Pretty print token trees.</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:ppTree" class="def"
+	      >ppTree</a
+	      > :: a -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	      >IO</a
+	      > () <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#ppTree');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Pretty print token tree.</p
+	      ></div
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToTrees" class="caption collapser" onclick="toggleSection('i:ToTrees')"
+	    >Instances</p
+	    ><div id="section.i:ToTrees" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:ToTrees"
+		      >ToTrees</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#line-62');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:ToTrees"
+		      >ToTrees</a
+		      > [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+		      >Token</a
+		      >]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#line-65');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:ToTrees"
+		      >ToTrees</a
+		      > [<a href="Koshucode-Baala-Syntax-TTree-TokenTree.html#t:TTree"
+		      >TTree</a
+		      >]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-TTree-Parse.html#line-68');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:ttrees" class="def"
 	    >ttrees</a
 	    > :: [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
@@ -215,7 +419,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-TTree-Parse.html#v:toTrees"
+		  >toTrees</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Parse tokens with brackets into trees.
    Blank tokens and comments are excluded.</p
 	    ></div
@@ -252,7 +464,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-TTree-Parse.html#v:toTrees"
+		  >toTrees</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Convert string to token trees.</p
 	    ></div
 	  ></div
@@ -270,7 +490,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-TTree-Parse.html#v:toTree"
+		  >toTree</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Parse string and group it.</p
 	    ></div
 	  ></div
@@ -286,7 +514,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-TTree-Parse.html#v:ppTree"
+		  >ppTree</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Parse string and print it.</p
 	    ></div
 	  ></div
@@ -355,9 +591,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>splitTokensBy (== &quot;|&quot;) t
 </code
 		></strong
-	      >Left [ TText  CodePt {..} TextRaw &quot;b&quot;
-     , TSpace CodePt {..} 1
-     , TText  CodePt {..} TextRaw &quot;c&quot; ]
+	      >Left [ TText  CodePos {..} TextRaw &quot;b&quot;
+     , TSpace CodePos {..} 1
+     , TText  CodePos {..} TextRaw &quot;c&quot; ]
 </pre
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -374,12 +610,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		>splitTokensBy (== &quot;|&quot;) t
 </code
 		></strong
-	      >Right ( [ TText CodePt {..} TextRaw &quot;a&quot;, TSpace CodePt {..} 1]
-      , TText CodePt {..} TextRaw &quot;|&quot;
-      , [ TText  CodePt {..} TextRaw &quot;b&quot;
-        , TSpace CodePt {..} 1
-        , TText  CodePt {..} TextRaw &quot;|&quot;
-        , TText  CodePt {..} TextRaw &quot;c&quot; ] )
+	      >Right ( [ TText CodePos {..} TextRaw &quot;a&quot;, TSpace CodePos {..} 1]
+      , TText CodePos {..} TextRaw &quot;|&quot;
+      , [ TText  CodePos {..} TextRaw &quot;b&quot;
+        , TSpace CodePos {..} 1
+        , TText  CodePos {..} TextRaw &quot;|&quot;
+        , TText  CodePos {..} TextRaw &quot;c&quot; ] )
 </pre
 	    ></div
 	  ></div

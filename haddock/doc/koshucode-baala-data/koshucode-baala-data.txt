@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -154,18 +154,25 @@ assertAs :: AssertType -> JudgeOf c
 --   </pre>
 assertSymbol :: AssertType -> String
 
+-- | Encode judgement with short sign converter.
+type EncodeJudge c = Shorten -> Judge c -> MixText
+
 -- | Conventional line-break setting for judges: 4-spaces indent and
 --   120-columns line.
 judgeBreak :: LineBreak
 
 -- | Encode judgement with term separator.
-judgeMix :: (MixShortEncode c) => MixText -> Shorten -> Judge c -> MixText
+judgeMix :: (MixShortEncode c) => MixText -> EncodeJudge c
 
 -- | Encode judgement with two-spaces term separator.
-judgeMix2 :: (MixShortEncode c) => Shorten -> Judge c -> MixText
+judgeMix2 :: (MixShortEncode c) => EncodeJudge c
 
 -- | Encode judgement with tab term separator.
-judgeMixTab :: (MixShortEncode c) => Shorten -> Judge c -> MixText
+judgeMixTab :: (MixShortEncode c) => EncodeJudge c
+
+-- | Conditional judgement encoder. If the first argument is true,
+--   <a>judgeMix2</a> is used, otherwise <a>judgeMixTab</a>.
+judgeMix2Tab :: (MixShortEncode c) => Bool -> EncodeJudge c
 
 -- | Encode term name.
 --   
@@ -1795,7 +1802,7 @@ module Koshucode.Baala.Data.Type.Time
 module Koshucode.Baala.Data.Decode.Message
 
 -- | Abortable scope for literal.
-abLiteral :: TTree -> Map (Ab b)
+abLiteral :: (GetCodePos cp) => Abortable cp b
 
 -- | Nothing
 nothing :: Ab a
@@ -1844,17 +1851,17 @@ cacheT :: CacheT
 --   term name, this function failed.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt1 "/a" &gt;&gt;= treeFlatName
---   Right (TermName "a")
+--   &gt;&gt;&gt; S.toTree "/a" &gt;&gt;= treeFlatName
+--   Right (TermName EQ "a")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeFlatName
---   Right (TermName "a")
+--   &gt;&gt;&gt; S.toTree "+/a" &gt;&gt;= treeFlatName
+--   Right (TermName GT "a")
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt1 "/a/x" &gt;&gt;= treeFlatName
+--   &gt;&gt;&gt; S.toTree "/a/x" &gt;&gt;= treeFlatName
 --   Left ...
 --   </pre>
 treeFlatName :: TTree -> Ab TermName
@@ -1865,25 +1872,17 @@ treeFlatNameCached :: CacheT -> TTree -> Ab (CacheT, TermName)
 -- | Read flat term names.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "/a /b" &gt;&gt;= treesFlatNames
---   Right ["a","b"]
+--   &gt;&gt;&gt; S.toTrees "/a +/b -/c" &gt;&gt;= treesFlatNames
+--   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --   </pre>
 treesFlatNames :: [TTree] -> Ab [TermName]
-
--- | Read signed term name.
---   
---   <pre>
---   &gt;&gt;&gt; S.tt1 "+/a" &gt;&gt;= treeSignedName
---   Right (GT, "a")
---   </pre>
-treeSignedName :: TTree -> Ab TermName
 
 -- | Read list of named token trees from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "/a 'A3 /b 10" &gt;&gt;= treesTerms
---   Right [("a", [TreeL ...]),
---          ("b", [TreeL ...])]
+--   &gt;&gt;&gt; S.toTrees "/a 'A3 /b 10" &gt;&gt;= treesTerms
+--   Right [ (TermName EQ "a", [TreeL ...]),
+--           (TermName EQ "b", [TreeL ...]) ]
 --   </pre>
 treesTerms :: [TTree] -> Ab [Term [TTree]]
 
@@ -1897,29 +1896,31 @@ treesTerms1 :: [TTree] -> Ab [Term TTree]
 -- | Decode a list of name-and-name pairs.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "/a /x /b /y" &gt;&gt;= treesFlatNamePairs
---   Right [("/a", "/x"), ("/b", "/y")]
+--   &gt;&gt;&gt; S.toTrees "/a /x /b /y" &gt;&gt;= treesFlatNamePairs
+--   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --   </pre>
 treesFlatNamePairs :: [TTree] -> Ab [TermName2]
 
 -- | Decode term names grouped by colons.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "/a /b : /p /q : /x /y" &gt;&gt;= treesNamesByColon
---   Right [["a","b"], ["p","q"], ["x","y"]]
+--   &gt;&gt;&gt; S.toTrees "/a /b : /p /q : /x /y" &gt;&gt;= treesNamesByColon
+--   Right [ [TermName EQ "a", TermName EQ "b"]
+--         , [TermName EQ "p", TermName EQ "q"]
+--         , [TermName EQ "x", TermName EQ "y"] ]
 --   </pre>
 treesNamesByColon :: [TTree] -> Ab [[TermName]]
 
 -- | Decode term names with optional complement symbol.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "~ /a /b" &gt;&gt;= treesFlatNamesCo
---   Right (True, ["a","b"])
+--   &gt;&gt;&gt; S.toTrees "~ /a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (True, [TermName EQ "a",TermName EQ "b"])
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "/a /b" &gt;&gt;= treesFlatNamesCo
---   Right (False, ["a","b"])
+--   &gt;&gt;&gt; S.toTrees "/a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (False, [TermName EQ "a",TermName EQ "b"])
 --   </pre>
 treesFlatNamesCo :: [TTree] -> Ab (Bool, [TermName])
 
@@ -1939,28 +1940,28 @@ module Koshucode.Baala.Data.Type
 module Koshucode.Baala.Data.Church.Message
 
 -- | Abortable scope for cox building.
-abCoxBuild :: TTree -> MapAb b
+abCoxBuild :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox calculation.
-abCoxCalc :: (CodePtr cp) => [cp] -> MapAb b
+abCoxCalc :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox filling.
-abCoxFill :: (CodePtr cp) => [cp] -> MapAb b
+abCoxFill :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for irreducible expression.
-abCoxIrrep :: (CodePtr cp) => [cp] -> MapAb b
+abCoxIrrep :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox position.
-abCoxPosition :: (CodePtr cp) => [cp] -> MapAb b
+abCoxPosition :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox prefix.
-abCoxPrefix :: TTree -> MapAb b
+abCoxPrefix :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox reduction.
-abCoxReduce :: (CodePtr cp) => [cp] -> MapAb b
+abCoxReduce :: (GetCodePos cp) => Abortable cp b
 
 -- | Abortable scope for cox syntax.
-abCoxSyntax :: TTree -> MapAb b
+abCoxSyntax :: (GetCodePos cp) => Abortable cp b
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> Ab a
@@ -2007,31 +2008,31 @@ module Koshucode.Baala.Data.Church.Cox
 data Cox c
 
 -- | <b>1.</b> Literal content
-CoxLit :: [CodePt] -> c -> Cox c
+CoxLit :: [CodePos] -> c -> Cox c
 
 -- | <b>2.</b> Term reference, its name and index
-CoxTerm :: [CodePt] -> [TermName] -> [TermIndex] -> Cox c
+CoxTerm :: [CodePos] -> [TermName] -> [TermIndex] -> Cox c
 
 -- | <b>3.</b> Content calculator
-CoxCalc :: [CodePt] -> BlankName -> (CopCalc c) -> Cox c
+CoxCalc :: [CodePos] -> BlankName -> (CopCalc c) -> Cox c
 
 -- | <b>4.</b> Local blank, its name and De Bruijn index
-CoxLocal :: [CodePt] -> String -> Int -> Cox c
+CoxLocal :: [CodePos] -> String -> Int -> Cox c
 
 -- | <b>5.</b> Blank in form
-CoxBlank :: [CodePt] -> BlankName -> Cox c
+CoxBlank :: [CodePos] -> BlankName -> Cox c
 
 -- | <b>6.</b> Fill args in a form
-CoxFill :: [CodePt] -> (Cox c) -> [Cox c] -> Cox c
+CoxFill :: [CodePos] -> (Cox c) -> [Cox c] -> Cox c
 
 -- | <b>7.</b> Form with single blank
-CoxForm1 :: [CodePt] -> CoxTag -> String -> (Cox c) -> Cox c
+CoxForm1 :: [CodePos] -> CoxTag -> String -> (Cox c) -> Cox c
 
 -- | <b>8.</b> Form with multiple blanks
-CoxForm :: [CodePt] -> CoxTag -> [String] -> (Cox c) -> Cox c
+CoxForm :: [CodePos] -> CoxTag -> [String] -> (Cox c) -> Cox c
 
 -- | <b>9.</b> Cox with outside arguments
-CoxWith :: [CodePt] -> [NamedCox c] -> (Cox c) -> Cox c
+CoxWith :: [CodePos] -> [NamedCox c] -> (Cox c) -> Cox c
 
 -- | Expression pair.
 type Cox2 c = (Cox c, Cox c)
@@ -2068,7 +2069,7 @@ coxCall :: Cox c -> (Map (Cox c)) -> Cox c
 
 -- | Check irreducible expression.
 checkIrreducible :: AbMap (Cox c)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Data.Church.Cox.Cox c)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Data.Church.Cox.Cox c)
 instance Koshucode.Baala.Base.MixText.MixEncode.MixShortEncode c => GHC.Show.Show (Koshucode.Baala.Data.Church.Cox.Cox c)
 
 
@@ -2157,12 +2158,12 @@ module Koshucode.Baala.Data.Decode.Type
 -- | Get single text from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "'aa 'bb" &gt;&gt;= treesTexts True
+--   &gt;&gt;&gt; S.toTrees "'aa 'bb" &gt;&gt;= treesTexts True
 --   Right ["aa","bb"]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "\"aa\" \"bb\"" &gt;&gt;= treesTexts True
+--   &gt;&gt;&gt; S.toTrees "\"aa\" \"bb\"" &gt;&gt;= treesTexts True
 --   Right ["aabb"]
 --   </pre>
 treesTexts :: Bool -> [TTree] -> Ab [String]
@@ -2170,7 +2171,7 @@ treesTexts :: Bool -> [TTree] -> Ab [String]
 -- | Get text from token tree.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt1 "aa" &gt;&gt;= treeText False
+--   &gt;&gt;&gt; S.toTree "aa" &gt;&gt;= treeText False
 --   Right "aa"
 --   </pre>
 treeText :: Bool -> TTree -> Ab String
@@ -2178,7 +2179,7 @@ treeText :: Bool -> TTree -> Ab String
 -- | Get interpretation from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "term /a" &gt;&gt;= treesInterp
+--   &gt;&gt;&gt; S.toTrees "term /a" &gt;&gt;= treesInterp
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --   </pre>
@@ -2194,7 +2195,7 @@ module Koshucode.Baala.Data.Decode.Numeric
 -- | Get digits from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "-123 450.00" &gt;&gt;= treesDigits
+--   &gt;&gt;&gt; S.toTrees "-123 450.00" &gt;&gt;= treesDigits
 --   Right "-123450.00"
 --   </pre>
 treesDigits :: [TTree] -> Ab String
@@ -2210,17 +2211,17 @@ tokenClock :: Token -> Ab Clock
 -- | Get time from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-04-18 12:00" &gt;&gt;= treesTime
+--   &gt;&gt;&gt; S.toTrees "2013-04-18 12:00" &gt;&gt;= treesTime
 --   Right 2013-04-18 12:00
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-04-18" &gt;&gt;= treesTime
+--   &gt;&gt;&gt; S.toTrees "2013-04-18" &gt;&gt;= treesTime
 --   Right 2013-04-18
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; S.tt "2013-#16" &gt;&gt;= treesTime
+--   &gt;&gt;&gt; S.toTrees "2013-#16" &gt;&gt;= treesTime
 --   Right 2013-#16
 --   </pre>
 treesTime :: [TTree] -> Ab Time
@@ -2679,6 +2680,9 @@ type JudgeC = Judge Content
 -- | <tt>Rel</tt> for concrete baala content.
 type RelC = Rel Content
 
+-- | Abortable content.
+type AbC = Ab Content
+
 -- | Shorthand function for the Baala content type.
 --   
 --   <pre>
@@ -2804,7 +2808,7 @@ module Koshucode.Baala.Data.Church.Build
 treeCox :: (CContent c) => CalcContent c -> CopSet c -> TTree -> Ab (Cox c)
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [CodePt] -> CoxTag -> [String] -> Map (Cox c)
+coxForm :: [CodePos] -> CoxTag -> [String] -> Map (Cox c)
 
 
 -- | Term-content calculation.
@@ -2839,7 +2843,7 @@ getRightArg2 :: [Ab c] -> Ab (c, c)
 
 -- | Extract three non-abortable arguments.
 getRightArg3 :: [Ab c] -> Ab (c, c, c)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Data.Church.Run.Beta c)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Data.Church.Run.Beta c)
 
 
 -- | Genus of contents.

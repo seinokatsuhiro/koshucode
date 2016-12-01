@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.174.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.178.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -136,7 +136,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;'aa 'bb&quot; &gt;&gt;= treesTexts True
+		>S.toTrees &quot;'aa 'bb&quot; &gt;&gt;= treesTexts True
 </code
 		></strong
 	      >Right [&quot;aa&quot;,&quot;bb&quot;]
@@ -146,7 +146,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;\&quot;aa\&quot; \&quot;bb\&quot;&quot; &gt;&gt;= treesTexts True
+		>S.toTrees &quot;\&quot;aa\&quot; \&quot;bb\&quot;&quot; &gt;&gt;= treesTexts True
 </code
 		></strong
 	      >Right [&quot;aabb&quot;]
@@ -176,7 +176,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt1 &quot;aa&quot; &gt;&gt;= treeText False
+		>S.toTree &quot;aa&quot; &gt;&gt;= treeText False
 </code
 		></strong
 	      >Right &quot;aa&quot;
@@ -204,7 +204,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>S.tt &quot;term /a&quot; &gt;&gt;= treesInterp
+		>S.toTrees &quot;term /a&quot; &gt;&gt;= treesInterp
 </code
 		></strong
 	      >Right (Interp { interpWords = [InterpText &quot;term&quot;, InterpTerm &quot;a&quot;],

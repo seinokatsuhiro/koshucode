@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Text table
@@ -459,9 +459,6 @@ fromJust :: Maybe a -> a
 --   </pre>
 fromMaybe :: a -> Maybe a -> a
 
--- | An infix synonym for <a>mappend</a>.
-(<>) :: Monoid m => m -> m -> m
-
 -- | Swap the components of a pair.
 swap :: (a, b) -> (b, a)
 
@@ -639,19 +636,19 @@ names :: Name a => [a] -> [String]
 
 -- | Entry in association list.
 type Named a = (String, a)
+
+-- | Create named pair.
 named :: (Name a) => a -> Named a
 
--- | Type of value which is classified as yes or no.
-data YesNo a
-Yes :: a -> YesNo a
-No :: a -> YesNo a
+-- | Numerical index.
 type Index = Int
+
+-- | Wrap list.
 type Collect a = [a] -> a
+
+-- | Choose one of two.
 class Choose m
 (<|>) :: Choose m => m a -> m a -> m a
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Prelude.Class.YesNo a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Prelude.Class.YesNo a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Prelude.Class.YesNo a)
 instance Koshucode.Baala.Base.Prelude.Class.Choose GHC.Base.Maybe
 instance Koshucode.Baala.Base.Prelude.Class.Choose (Data.Either.Either a)
 
@@ -1030,6 +1027,10 @@ hPutMixLines :: LineBreak -> Handle -> [MixText] -> IO ()
 
 -- | Write mix text to a file.
 writeMix :: LineBreak -> FilePath -> MixText -> IO ()
+
+-- | Output mix text to a file when the file path is given, or to the
+--   standard output.
+outputMix :: LineBreak -> Maybe FilePath -> MixText -> IO ()
 instance GHC.Show.Show Koshucode.Baala.Base.MixText.MixText.MixText
 instance GHC.Classes.Eq Koshucode.Baala.Base.MixText.MixText.MixText
 instance GHC.Classes.Ord Koshucode.Baala.Base.MixText.MixText.MixText
@@ -1045,10 +1046,10 @@ class Mix a
 mix :: Mix a => a -> MixText
 
 -- | Enclose mix text with open and close bracket.
-mixBracket :: (Mix m) => m -> m -> MixText -> MixText
+mixBracket :: (Mix m) => (m, m) -> MixText -> MixText
 
 -- | Enclose mix text with bracket and space.
-mixBracketS :: (Mix m) => m -> m -> MixText -> MixText
+mixBracketS :: (Mix m) => (m, m) -> MixText -> MixText
 
 -- | Concatenate mix texts with delimiter.
 mixJoin :: (Mix m) => m -> [MixText] -> MixText
@@ -1134,6 +1135,8 @@ instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode GHC.Types.Bool
 
 -- | Simple functions for parsing command-line options. This module is
 --   based on <a>System.Console.GetOpt</a>.
+
+-- | <i>Deprecated: Use Koshucode.Baala.System.CliParser instead</i>
 module Koshucode.Baala.Base.IO.SimpleOption
 
 -- | Single letter options, like <tt>h</tt> of <tt>-h</tt>.
@@ -1728,18 +1731,40 @@ takeDots :: [String] -> String -> Maybe [String]
 
 -- | Utilities for association lists.
 module Koshucode.Baala.Base.List.Assoc
-type Lookup a = String -> Maybe a
 
 -- | Construct assoc list by splitting base list.
 assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
 
 -- | Check which given key is there in assoc list.
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
-namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
-lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
+
+-- | Apply monadic function to <a>snd</a> of pair.
+--   
+--   <pre>
+--   &gt;&gt;&gt; sndM Just ("a", "b")
+--   Just ("a","b")
+--   </pre>
+sndM :: (Monad m) => (v -> m v') -> (k, v) -> m (k, v')
+
+-- | Lookup association list using Boolean function.
+--   
+--   <pre>
+--   &gt;&gt;&gt; lookupBy (&gt; (4 :: Int)) [(1, "one"), (3, "three"), (5, "five")]
+--   Just "five"
+--   </pre>
+lookupBy :: Test a -> [(a, b)] -> Maybe b
 
 -- | Lookup assoc list that keys are truth-valued functions.
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+
+-- | Create lookup function for fixed association list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let f = assocFinder [('a', "apple"), ('b', "banana")]
+--   
+--   &gt;&gt;&gt; f 'a'
+--   Just "apple"
+--   </pre>
 assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
 
 -- | Pick up associations that have given keys.
@@ -1756,12 +1781,14 @@ assocPick :: (Eq k) => [k] -> Map [(k, a)]
 --   &gt;&gt;&gt; assocCut ["a","c"] [("a",1), ("b",2), ("c",3)]
 --   [("b",2)]
 --   </pre>
+assocCut :: (Eq k) => [k] -> Map [(k, a)]
+
+-- | Single key version of <a>assocCut</a>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; assocCut1 "b" [("a",1), ("b",2), ("c",3)]
 --   [("a",1), ("c",3)]
 --   </pre>
-assocCut :: (Eq k) => [k] -> Map [(k, a)]
 assocCut1 :: (Eq k) => k -> Map [(k, a)]
 
 -- | Change key of assoc list.
@@ -1771,7 +1798,6 @@ assocCut1 :: (Eq k) => k -> Map [(k, a)]
 --   [("x",1), ("b",2), ("c",3)]
 --   </pre>
 assocRename1 :: (Eq k) => k -> k -> Map [(k, a)]
-assocRehead :: (Eq k) => [(k, k)] -> [(k, v)] -> [(k, v)]
 
 -- | Compose two assocs.
 --   
@@ -1788,36 +1814,31 @@ assocCompose :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, c)]
 --   [("A","H","P"), ("A","H","Q"), ("B","J","S")]
 --   </pre>
 assocMeet :: (Eq b) => [(a, b)] -> [(b, c)] -> [(a, b, c)]
-data OnceMore a
-Once :: a -> OnceMore a
-More :: [a] -> OnceMore a
 
--- | Convert general assoc list into once/more assoc list.
-assocGather :: (Eq k) => [(k, a)] -> [(k, OnceMore a)]
-
--- | Push key and value into once/more assoc list.
-assocPush :: (Eq k) => k -> a -> Map [(k, OnceMore a)]
-
--- | Extract once part from once/more assoc list.
-assocOnce :: [(k, OnceMore a)] -> [(k, a)]
-
--- | Extract more part from once/more assoc list.
-assocMore :: [(k, OnceMore a)] -> [(k, [a])]
+-- | Snip <i>b</i> from sequence <i>a</i>.
 type Gather a b = a -> (b, a)
 
 -- | Gather what is gotten by splitter.
 gather :: Gather [a] b -> [a] -> [b]
-gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
 
 -- | Gather (<i>k</i>, <i>v</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
+--   
+--   <pre>
+--   &gt;&gt;&gt; gatherToMap [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   fromList [(1,"ca"),(2,"b")]
+--   </pre>
 gatherToMap :: (Ord k) => [(k, v)] -> Map k [v]
 
 -- | Gather (<i>v</i>, <i>k</i>) to <a>Map</a> <i>k</i> [<i>v</i>].
 gatherToMapSwap :: (Ord k) => [(v, k)] -> Map k [v]
+
+-- | Gather values of duplicable associations.
+--   
+--   <pre>
+--   &gt;&gt;&gt; gatherToAssoc [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   [(1,"ca"), (2,"b")]
+--   </pre>
 gatherToAssoc :: (Ord k) => [(k, v)] -> [(k, [v])]
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.List.Assoc.OnceMore a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.List.Assoc.OnceMore a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.List.Assoc.OnceMore a)
 
 
 -- | Additional prelude.
@@ -2052,47 +2073,23 @@ tryReadFile :: (Exception e) => FilePath -> IO (Either e Bz)
 instance GHC.Show.Show Koshucode.Baala.Base.IO.BzFile.BzFile
 
 
--- | Exit process.
-module Koshucode.Baala.Base.IO.Exit
-
--- | Program name and command-line arguments. This function removes carrige
---   returns from the arguments.
-progAndArgs :: IO (String, [String])
+-- | Encoding.
+module Koshucode.Baala.Base.IO.Encoding
 
 -- | Set I/O handle for Koshucode output.
 hSetKoshuOutput :: Handle -> IO ()
 
 -- | Encoding judgement string.
-currentEncodings :: IO String
-
--- | Exit process.
-exit :: Int -> IO a
-
--- | Map integer value to exit code.
-exitCode :: Int -> ExitCode
-
--- | Print message and exit on 0.
-putSuccess :: String -> IO a
-
--- | Print message line and exit on 0.
-putSuccessLn :: String -> IO a
-
--- | Print abort message and exit on 1.
 --   
 --   <pre>
---   &gt;&gt;&gt; putAbort
---   ABORT / &lt;interactive&gt; exits on 1
+--   &gt;&gt;&gt; currentEncodings
+--   "|-- ENCODING  /content 'UTF-8  /file 'UTF-8"
 --   </pre>
-putAbort :: IO a
+currentEncodings :: IO String
 
--- | Print error and abort message and exit on 1.
-putAbortWith :: String -> IO a
-
--- | Print error message and exit on 1.
-putFailure :: String -> IO a
-
--- | Print error message line and exit on 1.
-putFailureLn :: String -> IO a
+-- | Program name and command-line arguments. This function removes carrige
+--   returns from the arguments.
+progAndArgs :: IO (String, [String])
 
 
 -- | Retrieve via HTTP.
@@ -2179,7 +2176,7 @@ IOPointFile :: FilePath -> FilePath -> IOPoint
 IOPointUri :: String -> IOPoint
 
 -- | Code itself
-IOPointText :: (Maybe String) -> Bz -> IOPoint
+IOPointText :: (Maybe String) -> Code -> IOPoint
 
 -- | Custom I/O
 IOPointCustom :: String -> Bz -> IOPoint
@@ -2204,7 +2201,7 @@ ioPointText :: IOPoint -> String
 ioPointFrom :: FilePath -> FilePath -> IOPoint
 
 -- | Create I/O points from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [Bz] -> FilePath -> [FilePath] -> [IOPoint]
+ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
 
 -- | Numbered I/O point.
 data NIOPoint
@@ -2217,7 +2214,19 @@ NIOPoint :: Int -> IOPoint -> NIOPoint
 [nioPoint] :: NIOPoint -> IOPoint
 
 -- | Create input point for given lazy bytestring.
-nioFrom :: Bz -> NIOPoint
+--   
+--   <pre>
+--   &gt;&gt;&gt; nioFrom "abc"
+--   NIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
+--   </pre>
+nioFrom :: (ToCode code) => code -> NIOPoint
+
+-- | This implementation uses lazy bytestring as code string.
+type Code = Bz
+
+-- | Convert to code string.
+class ToCode a
+toCode :: ToCode a => a -> Code
 instance GHC.Show.Show Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.IOPoint
 instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.IOPoint
@@ -2228,53 +2237,8 @@ instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NamedHandle
 instance GHC.Classes.Eq Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 instance GHC.Classes.Ord Koshucode.Baala.Base.IO.IOPoint.NIOPoint
 instance Data.Default.Class.Default Koshucode.Baala.Base.IO.IOPoint.NIOPoint
-
-
--- | Source code information.
-module Koshucode.Baala.Base.IO.CodePt
-
--- | Point of input code.
-data CodePt
-CodePt :: NIOPoint -> Int -> String -> String -> CodePt
-
--- | Source of code
-[codePtSource] :: CodePt -> NIOPoint
-
--- | Line number
-[codePtLineNo] :: CodePt -> Int
-
--- | Line content
-[codePtLineText] :: CodePt -> String
-
--- | Text at which begins token
-[codePtText] :: CodePt -> String
-
--- | Column number at which code starts.
-codePtColumnNo :: CodePt -> Int
-
--- | Create position and line information.
-codePtDisplay :: (String, CodePt) -> [(String, String)]
-
--- | Type which has code points.
-class CodePtr a where codePt p = headNull def $ codePtList p
-codePtList :: CodePtr a => a -> [CodePt]
-codePt :: CodePtr a => a -> CodePt
-
--- | Type with source code information.
-data Sourced a
-Sourced :: [CodePt] -> a -> Sourced a
-[source] :: Sourced a -> [CodePt]
-[unsourced] :: Sourced a -> a
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.IO.CodePt.Sourced a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.IO.CodePt.Sourced a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.IO.CodePt.Sourced a)
-instance GHC.Classes.Eq Koshucode.Baala.Base.IO.CodePt.CodePt
-instance GHC.Show.Show Koshucode.Baala.Base.IO.CodePt.CodePt
-instance GHC.Classes.Ord Koshucode.Baala.Base.IO.CodePt.CodePt
-instance Data.Default.Class.Default Koshucode.Baala.Base.IO.CodePt.CodePt
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr Koshucode.Baala.Base.IO.CodePt.CodePt
-instance GHC.Base.Functor Koshucode.Baala.Base.IO.CodePt.Sourced
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.IO.CodePt.Sourced a)
+instance Koshucode.Baala.Base.IO.IOPoint.ToCode Koshucode.Baala.Base.Prelude.Import.Bz
+instance Koshucode.Baala.Base.IO.IOPoint.ToCode GHC.Base.String
 
 
 -- | Suffix and prefix.
@@ -2309,6 +2273,72 @@ uniqueNames :: Char -> Map [String]
 module Koshucode.Baala.Base.Text
 
 
+-- | Position on code string.
+module Koshucode.Baala.Base.IO.CodePos
+
+-- | Position on input code string.
+data CodePos
+CodePos :: NIOPoint -> Int -> String -> String -> CodePos
+
+-- | Source of code
+[cpSource] :: CodePos -> NIOPoint
+
+-- | Line number
+[cpLineNo] :: CodePos -> Int
+
+-- | Code string line
+[cpLineText] :: CodePos -> String
+
+-- | Current code string
+[cpText] :: CodePos -> String
+
+-- | Column number at which code starts.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let cp = CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "abc"
+--   
+--   &gt;&gt;&gt; cp
+--   /0.1.4/
+--   
+--   &gt;&gt;&gt; cpColumnNo cp
+--   4
+--   </pre>
+cpColumnNo :: CodePos -> Int
+
+-- | Type which has code positions.
+class GetCodePos a where getCP a = headNull def $ getCPs a
+getCPs :: GetCodePos a => a -> [CodePos]
+getCP :: GetCodePos a => a -> CodePos
+
+-- | Value with code string.
+data Codic a
+Codic :: [CodePos] -> a -> Codic a
+
+-- | Code positions.
+[codicCPs] :: Codic a -> [CodePos]
+
+-- | Value.
+[uncodic] :: Codic a -> a
+
+-- | Create value with code position.
+codic :: (GetCodePos cp) => cp -> a -> Codic a
+
+-- | Create codic value without code string.
+noCodic :: a -> Codic a
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.IO.CodePos.Codic a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.IO.CodePos.Codic a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.IO.CodePos.Codic a)
+instance GHC.Classes.Eq Koshucode.Baala.Base.IO.CodePos.CodePos
+instance GHC.Show.Show Koshucode.Baala.Base.IO.CodePos.CodePos
+instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Base.IO.CodePos.CodePos
+instance GHC.Classes.Ord Koshucode.Baala.Base.IO.CodePos.CodePos
+instance Data.Default.Class.Default Koshucode.Baala.Base.IO.CodePos.CodePos
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Base.IO.CodePos.CodePos
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos cp => Koshucode.Baala.Base.IO.CodePos.GetCodePos [cp]
+instance GHC.Base.Functor Koshucode.Baala.Base.IO.CodePos.Codic
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Base.IO.CodePos.Codic a)
+
+
 -- | I/O related modules.
 module Koshucode.Baala.Base.IO
 
@@ -2318,7 +2348,7 @@ module Koshucode.Baala.Base.Abort.Reason
 
 -- | Abort reason.
 data AbortReason
-AbortReason :: String -> [String] -> [String] -> [(String, CodePt)] -> AbortReason
+AbortReason :: String -> [String] -> [String] -> [(AbortTag, CodePos)] -> AbortReason
 
 -- | Reason in one line
 [abortReason] :: AbortReason -> String
@@ -2330,7 +2360,10 @@ AbortReason :: String -> [String] -> [String] -> [(String, CodePt)] -> AbortReas
 [abortNote] :: AbortReason -> [String]
 
 -- | Tag and aborting point
-[abortPoint] :: AbortReason -> [(String, CodePt)]
+[abortPoint] :: AbortReason -> [(AbortTag, CodePos)]
+
+-- | Tag on aborting point.
+type AbortTag = String
 
 -- | Abortable result, i.e., either of right result or abort reason.
 type Ab a = Either AbortReason a
@@ -2364,39 +2397,92 @@ abortLines :: String -> [String] -> AbortReason
 
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
+
+-- | Abortable process.
+type Abortable cp b = cp -> MapAb b
+
+-- | Push source information when process is aborted.
+abortable :: (GetCodePos cp) => AbortTag -> Abortable cp b
+
+-- | Extract right value or print error message.
+unabort :: Ab a -> a
 instance GHC.Classes.Ord Koshucode.Baala.Base.Abort.Reason.AbortReason
 instance GHC.Classes.Eq Koshucode.Baala.Base.Abort.Reason.AbortReason
 instance GHC.Show.Show Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 
--- | Abortable process.
-module Koshucode.Baala.Base.Abort.Abortable
-
--- | Push source information when process is aborted.
-abortable :: (CodePtr p) => String -> [p] -> Map (Ab b)
-
-
--- | Reporting abort reasons.
+-- | Report abort reasons.
+--   
+--   Abortable process returns <tt>Left</tt> <a>AbortReason</a> when
+--   aborted. The <a>abortable</a> function adds code positions to the
+--   reason. <a>abortPrint</a> outputs aborted message in the following
+--   format.
+--   
+--   <pre>
+--   ** ABORTED  {main reason}
+--   ** -------- --------------------------------------------
+--   ** Detail   {detailed reason}
+--   **          {detailed reason}
+--   ** Source   {line #} {char #} {source}
+--   **          &gt; {code string}
+--   **          {line #} {char #} {source}
+--   **          &gt; {code string}
+--   ** Command  {program name}
+--   **          {arg 1}
+--   **          {arg 2}
+--   </pre>
 module Koshucode.Baala.Base.Abort.Report
 
 -- | Command name and its arguments.
 type CommandLine = [String]
 
--- | Stop program execution abnormally.
-abort :: CommandLine -> AbortReason -> IO x
-
--- | Print abort message.
-abortPrint :: CommandLine -> AbortReason -> IO ()
+-- | Create position and line information.
+cpMessage :: (AbortTag, CodePos) -> [(String, AbortTag)]
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> AbortReason -> [String]
+
+-- | Print abort message.
+--   
+--   Prepare code position and abort reason.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let cp = B.CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "defg"
+--   
+--   &gt;&gt;&gt; let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
+--   </pre>
+--   
+--   Print it.
+--   
+--   <pre>
+--   &gt;&gt;&gt; abortPrint (words "prog x y") a
+--   **
+--   **  ABORTED  Bad luck
+--   **  -------- ---------- ------
+--   **  Source   1 4 &lt;text&gt;
+--   **           &gt; defg     .. tag
+--   **  Command  prog
+--   **           x
+--   **           y
+--   **
+--   </pre>
+abortPrint :: CommandLine -> AbortReason -> IO ()
+
+-- | Stop program execution abnormally.
+abort :: AbortReason -> IO x
+
+-- | Abort with a command line.
+abortCommand :: CommandLine -> AbortReason -> IO x
+
+-- | Abort when getting abort reason.
+abortLeft :: Ab b -> IO b
 
 -- | Stop on error <tt>'BUG DISCOVERED'</tt>
 bug :: String -> a
 
 
 -- | Text lines delimited by carriage returns or line feeds.
-module Koshucode.Baala.Base.Syntax.Line
+module Koshucode.Baala.Base.Code.Line
 
 -- | Line number.
 type LineNumber = Int
@@ -2447,17 +2533,17 @@ type IndentSize = Int
 
 -- | Calculate indent of line and pairing it.
 lineIndentPair :: (a -> IndentSize) -> CodeLine a -> (IndentSize, CodeLine a)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr a => Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Line.CodeLine a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Line.CodeLine a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Line.CodeLine a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Code.Line.CodeLine a)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos a => Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Line.CodeLine a)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
 --   are in a extent of multiple lines. <tt>CodeLine</tt> includes whole
 --   tokens in a line. You can represent tokenized source code as a list of
 --   <tt>CodeLine</tt>.
-module Koshucode.Baala.Base.Syntax.Clause
+module Koshucode.Baala.Base.Code.Clause
 
 -- | Tokens in clause.
 data CodeClause a
@@ -2479,16 +2565,16 @@ codeClauseEmpty :: CodeClause a
 --   (["a","b"], [(0,"c"),(1,"d")])
 --   </pre>
 splitClause :: Gather [(IndentSize, a)] [a]
-instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr a => Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Clause.CodeClause a)
+instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Base.Code.Clause.CodeClause a)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos a => Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Clause.CodeClause a)
 
 
 -- | Code scanner.
-module Koshucode.Baala.Base.Syntax.Scan
+module Koshucode.Baala.Base.Code.Scan
 
 -- | Code scanner divides input text into output tokens.
 data CodeScan i o
-CodeScan :: [CodeScanMap i o] -> CodeScanMap i o -> CodePt -> i -> [o] -> WordTable -> CodeScan i o
+CodeScan :: [CodeScanMap i o] -> CodeScanMap i o -> CodePos -> i -> [o] -> WordTable -> CodeScan i o
 
 -- | Saved updater
 [codeMapSaved] :: CodeScan i o -> [CodeScanMap i o]
@@ -2496,8 +2582,8 @@ CodeScan :: [CodeScanMap i o] -> CodeScanMap i o -> CodePt -> i -> [o] -> WordTa
 -- | Updater
 [codeMap] :: CodeScan i o -> CodeScanMap i o
 
--- | Code point
-[codeInputPt] :: CodeScan i o -> CodePt
+-- | Code position
+[codeInputPt] :: CodeScan i o -> CodePos
 
 -- | Input text
 [codeInput] :: CodeScan i o -> i
@@ -2553,7 +2639,7 @@ codeUpdateListWords :: WordTable -> i -> [o] -> CodeScanMap i o
 
 -- | Change mapper of code sc.
 codeChange :: Map (CodeScanMap i o)
-instance Koshucode.Baala.Base.IO.CodePt.CodePtr (Koshucode.Baala.Base.Syntax.Scan.CodeScan i o)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Scan.CodeScan i o)
 
 
 -- | Abort symbols
@@ -2574,10 +2660,10 @@ unsupported :: String -> Ab a
 
 
 -- | Message list.
-module Koshucode.Baala.Base.Syntax.Message
+module Koshucode.Baala.Base.Code.Message
 
 -- | Abortable scope for code.
-abCode :: (CodePtr cp) => [cp] -> MapAb b
+abCode :: (GetCodePos cp) => Abortable cp b
 
 -- | Extra close bracket
 extraCloseBracket :: Ab a
@@ -2591,26 +2677,22 @@ module Koshucode.Baala.Base.Message
 
 
 -- | Tree structure.
-module Koshucode.Baala.Base.Syntax.Tree
+module Koshucode.Baala.Base.Code.Tree
 
 -- | Tree of leaf and branch.
 data CodeTree p a
 
--- | Terminal of tree.
+-- | <b>Leaf:</b> Terminal of tree.
 TreeL :: a -> CodeTree p a
-[treeLeaf] :: CodeTree p a -> a
 
--- | Bracket-type and subtrees.
-TreeB :: p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a
-[treeBracketType] :: CodeTree p a -> p
-[treeBracketLeaf] :: CodeTree p a -> Maybe (a, a)
-[treeBranch] :: CodeTree p a -> [CodeTree p a]
+-- | <b>Branch:</b> Bracket-type, open/close leaves, and subtrees.
+TreeB :: p -> (Maybe (a, a)) -> [CodeTree p a] -> CodeTree p a
 
 -- | Convert a list of elements to a single tree.
-tree :: (Ord p, CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
+tree :: (Ord p, GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
 
 -- | Convert a list of elements to trees.
-trees :: (Ord p, CodePtr a) => GetBracketType p a -> Bracket p -> [a] -> Ab [CodeTree p a]
+trees :: (Ord p, GetCodePos a) => GetBracketType p a -> Bracket p -> [a] -> Ab [CodeTree p a]
 
 -- | Convert tree to list of tokens.
 untree :: CodeTree p a -> [a]
@@ -2634,7 +2716,7 @@ undouble :: Test p -> Map (CodeTree p a)
 treeWrap :: p -> [CodeTree p a] -> CodeTree p a
 
 -- | Map function to all leaves. This function is similar to <a>fmap</a>,
---   but not map to <a>treeBracketLeaf</a>.
+--   but not map to bracket leaf.
 treeLeafMap :: (a -> a) -> Map (CodeTree p a)
 
 -- | Map function to all branches.
@@ -2655,12 +2737,14 @@ BracketClose :: p -> Bracket p
 -- | Get a bracket type.
 type GetBracketType p a = a -> Bracket p
 
--- | Make <a>GetBracketType</a> functions from a type-open-close table.
+-- | Create <a>GetBracketType</a> functions from a type-open-close table.
 --   
---   Make bracket/type functions from <tt>()</tt> and <tt>[]</tt>.
+--   <i>Example</i>
+--   
+--   Create bracket/type functions from <tt>()</tt> and <tt>[]</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; let bracket n [a, b] = (n, (== a), (== b))
+--   &gt;&gt;&gt; let bracket n [a, b] = (n, ((== a), (== b)))
 --   
 --   &gt;&gt;&gt; let pt = bracketTable [ bracket 1 "()", bracket 2 "[]" ]
 --   </pre>
@@ -2670,20 +2754,24 @@ type GetBracketType p a = a -> Bracket p
 --   
 --   <pre>
 --   &gt;&gt;&gt; map pt "ab(cd[ef])g"
---   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
+--   [BracketNone, BracketNone,
+--    BracketOpen 1, BracketNone, BracketNone,
+--     BracketOpen 2, BracketNone, BracketNone, BracketClose 2,
+--    BracketClose 1, BracketNone]
 --   </pre>
-bracketTable :: (Eq a) => [(p, Test a, Test a)] -> GetBracketType p a
-instance GHC.Classes.Ord p => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
-instance GHC.Classes.Eq p => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
-instance GHC.Show.Show p => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Tree.Bracket p)
-instance (GHC.Classes.Ord p, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
-instance (GHC.Classes.Eq p, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
-instance (GHC.Show.Show p, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Base.Syntax.Tree.CodeTree p a)
-instance GHC.Base.Functor (Koshucode.Baala.Base.Syntax.Tree.CodeTree p)
+bracketTable :: (Eq a) => [(p, (Test a, Test a))] -> GetBracketType p a
+instance GHC.Classes.Ord p => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.Bracket p)
+instance GHC.Classes.Eq p => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.Bracket p)
+instance GHC.Show.Show p => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.Bracket p)
+instance (GHC.Classes.Ord p, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
+instance (GHC.Classes.Eq p, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
+instance (GHC.Show.Show p, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
+instance GHC.Base.Functor (Koshucode.Baala.Base.Code.Tree.CodeTree p)
+instance Koshucode.Baala.Base.IO.CodePos.GetCodePos a => Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
 
 
 -- | Convert infixed-operator trees into prefixed-operator trees.
-module Koshucode.Baala.Base.Syntax.Infix
+module Koshucode.Baala.Base.Code.Infix
 
 -- | Direction and height for binary splitting.
 --   
@@ -2735,7 +2823,7 @@ type InfixTree p a = CodeTree p (InfixHeight, a)
 
 
 -- | Syntactic functions.
-module Koshucode.Baala.Base.Syntax
+module Koshucode.Baala.Base.Code
 
 
 -- | Bundle of base modules.

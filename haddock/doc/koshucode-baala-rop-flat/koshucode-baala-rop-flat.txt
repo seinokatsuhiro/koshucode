@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Partial-order scale.
@@ -161,10 +161,10 @@ getTreesByColon :: RopGet c [[TTree]]
 --     m &lt;- getRelmap med "-relmap"
 --     Right $ relmapMeet med m
 --   </pre>
-getRelmap :: Intmed c -> String -> Ab (Relmap c)
+getRelmap :: RopGet c (Relmap c)
 
 -- | Get optional relmap.
-getOptRelmap :: Relmap c -> Intmed c -> String -> Ab (Relmap c)
+getOptRelmap :: Relmap c -> RopGet c (Relmap c)
 
 -- | Get a term name from named attribute.
 getTerm :: RopGet c TermName
@@ -177,9 +177,6 @@ getTermOpt :: RopGet c (Maybe TermName)
 
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [TermName]
-
--- | Get signed term names.
-getSignedTerms :: RopGet c [TermName]
 
 -- | Get term names and complement sign (<tt>~</tt>) .
 getTermsCo :: RopGet c (Bool, [TermName])
@@ -201,10 +198,13 @@ module Koshucode.Baala.Rop.Base.Define
 type RopDefine c = (RopCons c, RopUsage, AttrLayout)
 
 -- | Make implementations of relmap operators.
-ropList :: String -> [RopDefine c] -> [Rop c]
+ropList :: RopGroup -> [RopDefine c] -> [Rop c]
 
 -- | Make definition of relmap operator.
 def :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Add aliases of relmap operator.
+ropAlias :: [(RopName, RopName)] -> Map [Rop c]
 
 
 -- | Built-in relmap operator.

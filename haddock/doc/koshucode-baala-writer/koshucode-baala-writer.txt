@@ -9,7 +9,7 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.174.0.0
+@version 0.178.0.0
 
 
 -- | Judgement writer.
@@ -47,7 +47,7 @@ judgeCountMix :: [JudgeClass] -> JudgeCountMix
 -- | Generate judgement counter comment.
 --   
 --   <pre>
---   &gt;&gt;&gt; O.putLines $ judgeSummary (B.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--   &gt;&gt;&gt; O.putLines $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 --   **
 --   **  SUMMARY
 --   **       3 judges on A
@@ -64,6 +64,14 @@ module Koshucode.Baala.Writer.Koshu
 
 -- | Koshucode writer.
 resultKoshu :: (MixShortEncode c) => ResultWriter c
+
+-- | Koshucode writer with two-space separator. This function uses
+--   <a>judgeMix2</a>.
+resultKoshu2 :: (MixShortEncode c) => ResultWriter c
+
+-- | Koshucode writer with tab separator. This function uses
+--   <a>judgeMixTab</a>.
+resultKoshuTab :: (MixShortEncode c) => ResultWriter c
 
 
 -- | JSON output.

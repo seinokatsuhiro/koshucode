@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Code.Scan</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Code-Scan.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Code.Scan</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Function</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Code scanner.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:CodeScan"
+	    >CodeScan</a
+	    > i o = <a href="#v:CodeScan"
+	    >CodeScan</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:codeMapSaved"
+		>codeMapSaved</a
+		> :: [<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+		>CodeScanMap</a
+		> i o]</li
+	      ><li
+	      ><a href="#v:codeMap"
+		>codeMap</a
+		> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+		>CodeScanMap</a
+		> i o</li
+	      ><li
+	      ><a href="#v:codeInputPt"
+		>codeInputPt</a
+		> :: <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
+		>CodePos</a
+		></li
+	      ><li
+	      ><a href="#v:codeInput"
+		>codeInput</a
+		> :: i</li
+	      ><li
+	      ><a href="#v:codeOutput"
+		>codeOutput</a
+		> :: [o]</li
+	      ><li
+	      ><a href="#v:codeWords"
+		>codeWords</a
+		> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+		>WordTable</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > i o)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:WordTable"
+	    >WordTable</a
+	    > = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isBol"
+	    >isBol</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > i o)</li
+	  ><li class="src short"
+	  ><a href="#v:codeScanSave"
+	    >codeScanSave</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeScanRestore"
+	    >codeScanRestore</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeScanUp"
+	    >codeScanUp</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > o]</li
+	  ><li class="src short"
+	  ><a href="#v:codeScanUpBz"
+	    >codeScanUpBz</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > o]</li
+	  ><li class="src short"
+	  ><a href="#v:codeUpdate"
+	    >codeUpdate</a
+	    > :: i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeUpdateWords"
+	    >codeUpdateWords</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeUpdateList"
+	    >codeUpdateList</a
+	    > :: i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeUpdateListWords"
+	    >codeUpdateListWords</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o</li
+	  ><li class="src short"
+	  ><a href="#v:codeChange"
+	    >codeChange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:CodeScan" class="def"
+	    >CodeScan</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScan');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Code scanner divides input text into output tokens.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:CodeScan" class="def"
+		  >CodeScan</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:codeMapSaved" class="def"
+			>codeMapSaved</a
+			> :: [<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+			>CodeScanMap</a
+			> i o]</dt
+		      ><dd class="doc"
+		      ><p
+			>Saved updater</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codeMap" class="def"
+			>codeMap</a
+			> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+			>CodeScanMap</a
+			> i o</dt
+		      ><dd class="doc"
+		      ><p
+			>Updater</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codeInputPt" class="def"
+			>codeInputPt</a
+			> :: <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
+			>CodePos</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Code position</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codeInput" class="def"
+			>codeInput</a
+			> :: i</dt
+		      ><dd class="doc"
+		      ><p
+			>Input text</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codeOutput" class="def"
+			>codeOutput</a
+			> :: [o]</dt
+		      ><dd class="doc"
+		      ><p
+			>Output tokens</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codeWords" class="def"
+			>codeWords</a
+			> :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+			>WordTable</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Collected words</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CodeScan" class="caption collapser" onclick="toggleSection('i:CodeScan')"
+	    >Instances</p
+	    ><div id="section.i:CodeScan" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+		      >GetCodePos</a
+		      > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+		      >CodeScan</a
+		      > i o)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#line-37');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Return <code
+		      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeInputPt"
+			>codeInputPt</a
+			></code
+		      >.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CodeScanMap" class="def"
+	    >CodeScanMap</a
+	    > i o = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#CodeScanMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update code scanner.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:WordTable" class="def"
+	    >WordTable</a
+	    > = <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#WordTable');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Collected words.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Function</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isBol" class="def"
+	    >isBol</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#isBol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test scanner at the beginning of line, i.e., no output collected.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeScanSave" class="def"
+	    >codeScanSave</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanSave');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Save current updater.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeScanRestore" class="def"
+	    >codeScanRestore</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanRestore');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Restore saved updater.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeScanUp" class="def"
+	    >codeScanUp</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > o] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanUp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split source text into <code
+	      ><a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+		>CodeLine</a
+		></code
+	      > list.</p
+	    ><ol
+	    ><li
+	      >Split source text into lines by line delimiters
+      (carriage return <code
+		>\r</code
+		> or line feed <code
+		>\n</code
+		>).</li
+	      ><li
+	      >Numbering lines from 1.
+      Internally, this is represented as
+      a list of pairs <code
+		>(</code
+		><code
+		><a href="Koshucode-Baala-Base-Code-Line.html#t:LineNumber"
+		  >LineNumber</a
+		  ></code
+		><code
+		>, </code
+		><code
+		><a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		  >String</a
+		  ></code
+		><code
+		>)</code
+		>.</li
+	      ><li
+	      >Tokenize each lines,
+      and put tokens together in <code
+		><a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+		  >CodeLine</a
+		  ></code
+		>.</li
+	      ></ol
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeScanUpBz" class="def"
+	    >codeScanUpBz</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > o -&gt; <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
+	    >NIOPoint</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Code-Line.html#t:CodeLine"
+	    >CodeLine</a
+	    > o] <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeScanUpBz');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lazy bytestring version of <code
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeScanUp"
+		>codeScanUp</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeUpdate" class="def"
+	    >codeUpdate</a
+	    > :: i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdate');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update <code
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeInput"
+		>codeInput</a
+		></code
+	      > and push result element to <code
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeOutput"
+		>codeOutput</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeUpdateWords" class="def"
+	    >codeUpdateWords</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; i -&gt; o -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateWords');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update code scanner with word table.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeUpdateList" class="def"
+	    >codeUpdateList</a
+	    > :: i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Multi-element version of <code
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeUpdate"
+		>codeUpdate</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeUpdateListWords" class="def"
+	    >codeUpdateListWords</a
+	    > :: <a href="Koshucode-Baala-Base-Code-Scan.html#t:WordTable"
+	    >WordTable</a
+	    > -&gt; i -&gt; [o] -&gt; <a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeUpdateListWords');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Multi-element and cached version of <code
+	      ><a href="Koshucode-Baala-Base-Code-Scan.html#v:codeUpdate"
+		>codeUpdate</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeChange" class="def"
+	    >codeChange</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Code-Scan.html#t:CodeScanMap"
+	    >CodeScanMap</a
+	    > i o) <a onclick="showSource('src/Koshucode-Baala-Base-Code-Scan.html#codeChange');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Change mapper of code sc.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>
