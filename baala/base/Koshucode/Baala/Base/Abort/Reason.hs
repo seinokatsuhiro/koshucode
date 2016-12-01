@@ -23,8 +23,8 @@ module Koshucode.Baala.Base.Abort.Reason
     unabort,
   ) where
 
-import qualified Koshucode.Baala.Overture   as O
-import qualified Koshucode.Baala.Base.IO    as B
+import qualified Koshucode.Baala.Overture             as O
+import qualified Koshucode.Baala.Base.Abort.CodePos   as B
 
 
 -- --------------------------------------------  Type

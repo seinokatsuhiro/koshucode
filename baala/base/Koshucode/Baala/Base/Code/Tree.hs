@@ -23,7 +23,6 @@ module Koshucode.Baala.Base.Code.Tree
 
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.Abort            as B
-import qualified Koshucode.Baala.Base.IO               as B
 import qualified Koshucode.Baala.Base.List             as B
 import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Code.Message     as Msg

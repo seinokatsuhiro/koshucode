@@ -50,6 +50,7 @@ library
         Koshucode.Baala.Base.Message
 
         Koshucode.Baala.Base.Abort
+        Koshucode.Baala.Base.Abort.CodePos
         Koshucode.Baala.Base.Abort.Message
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
@@ -72,7 +73,6 @@ library
 
         Koshucode.Baala.Base.IO
         Koshucode.Baala.Base.IO.BzFile
-        Koshucode.Baala.Base.IO.CodePos
         Koshucode.Baala.Base.IO.Encoding
         Koshucode.Baala.Base.IO.Http
         Koshucode.Baala.Base.IO.IOPoint

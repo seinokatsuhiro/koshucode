@@ -32,12 +32,13 @@ module Koshucode.Baala.Base.Abort.Report
     bug,
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
-import qualified Koshucode.Baala.System             as O
-import qualified Koshucode.Baala.Base.IO            as B
-import qualified Koshucode.Baala.Base.List          as B
-import qualified Koshucode.Baala.Base.Text          as B
-import qualified Koshucode.Baala.Base.Abort.Reason  as B
+import qualified Koshucode.Baala.Overture             as O
+import qualified Koshucode.Baala.System               as O
+import qualified Koshucode.Baala.Base.IO              as B
+import qualified Koshucode.Baala.Base.List            as B
+import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base.Abort.CodePos   as B
+import qualified Koshucode.Baala.Base.Abort.Reason    as B
 
 
 -- --------------------------------------------  Message

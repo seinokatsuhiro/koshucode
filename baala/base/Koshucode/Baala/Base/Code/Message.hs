@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Code.Message
   ) where
 
 import qualified Koshucode.Baala.Base.Abort          as B
-import qualified Koshucode.Baala.Base.IO             as B
 
 -- | Abortable scope for code.
 abCode :: (B.GetCodePos cp) => B.Abortable cp b

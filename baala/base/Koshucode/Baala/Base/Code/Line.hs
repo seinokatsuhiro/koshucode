@@ -21,7 +21,7 @@ module Koshucode.Baala.Base.Code.Line
 
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.ByteString.Lazy.UTF8            as Bu
-import qualified Koshucode.Baala.Base.IO              as B
+import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 
 
