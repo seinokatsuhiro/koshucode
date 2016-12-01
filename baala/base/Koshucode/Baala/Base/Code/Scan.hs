@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Code.Scan
     codeChange,
   ) where
 
-import qualified Data.Map                             as Map
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.IO              as B
@@ -43,7 +42,7 @@ instance B.GetCodePos (CodeScan i o) where
 type CodeScanMap i o = O.Map (CodeScan i o)
 
 -- | Cached words.
-type WordCache = Map.Map String String
+type WordCache = O.CacheS String
 
 -- | Test scanner at the beginning of line, i.e., no output collected.
 isBol :: O.Test (CodeScan i o)
@@ -81,7 +80,7 @@ codeScanUpBz :: CodeScanMap String o -> B.NIOPoint -> B.Bz -> [B.CodeLine o]
 codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.NIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
-codeScanUpLines f nio = loop (CodeScan [] f cp "" [] Map.empty) where
+codeScanUpLines f nio = loop (CodeScan [] f cp "" [] $ O.cache [] id) where
     cp    = B.def { B.cpSource = nio }
 
     loop _ [] = []

@@ -34,7 +34,6 @@ module Koshucode.Baala.Syntax.Token.Nipper
     nipBar,
   ) where
 
-import qualified Data.Map                               as Map
 import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
@@ -165,10 +164,8 @@ nipSymbol cp wtab cs =
 -- | Create symbolic token.
 symbolToken :: S.TextForm -> String -> TokenNipW
 symbolToken f w cp wtab cs =
-    case Map.lookup w wtab of
-         Just w' -> (wtab, cs, S.TText cp f w')
-         Nothing -> let wtab' = Map.insert w w wtab
-                    in (wtab', cs, S.TText cp f w)
+    case O.cacheGet wtab w of
+      (wtab', w') -> (wtab', cs, S.TText cp f w')
 
 -- | Nip off a slot name, like @\@foo@.
 --
@@ -225,10 +222,8 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
 
     term ns (c:cs) | isTerm c = word ns cs
     term [n] cs
-        | not q        = case Map.lookup n wtab of
-                           Just n' -> (wtab, cs, [S.TTerm cp $ slash ++ n'])
-                           Nothing -> let wtab' = Map.insert n n wtab
-                                      in (wtab', cs, [S.TTerm cp $ slash ++ n])
+        | not q        = case O.cacheGet wtab n of
+                           (wtab', n') -> (wtab', cs, [S.TTerm cp $ slash ++ n'])
     term ns cs
         | q            = case ns of
                            [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
