@@ -65,7 +65,7 @@ instance B.Default ClauseHead where
     def = ClauseHead { clauseSecNo  = 0
                      , clauseShort  = []
                      , clauseAbout  = []
-                     , clauseSource = B.codeClauseEmpty }
+                     , clauseSource = B.def }
 
 instance B.GetCodePos Clause where
     getCPs = B.getCPs . clauseHead

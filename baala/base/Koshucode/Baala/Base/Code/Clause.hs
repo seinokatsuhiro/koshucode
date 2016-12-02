@@ -9,7 +9,6 @@
 module Koshucode.Baala.Base.Code.Clause
   ( -- * CodeClause
     CodeClause (..),
-    codeClauseEmpty,  
     splitClause,
   ) where
 
@@ -30,9 +29,9 @@ data CodeClause a = CodeClause
 instance (B.GetCodePos a) => B.GetCodePos (CodeClause a) where
     getCPs (CodeClause _ ts) = B.getCPs $ head ts
 
--- | Clause with no tokens.
-codeClauseEmpty :: CodeClause a
-codeClauseEmpty = CodeClause [] []
+-- | No lines, no tokens.
+instance B.Default (CodeClause a) where
+    def = CodeClause [] []
 
 -- | Split lines into clause based on indent size.
 --
