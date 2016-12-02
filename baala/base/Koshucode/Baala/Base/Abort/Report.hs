@@ -47,7 +47,7 @@ import qualified Koshucode.Baala.Base.Abort.Reason    as B
 type CommandLine = [String]
 
 -- | Create position and line information.
-cpMessage :: (B.AbortTag, B.CodePos) -> [(String, B.AbortTag)]
+cpMessage :: B.CodePosInfo -> [(String, B.AbortTag)]
 cpMessage (tag, cp@B.CodePos { B.cpSource = src
                              , B.cpLineNo = lno
                              , B.cpText   = text })
@@ -97,7 +97,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     sandwich :: a -> a -> O.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-    source :: [(B.AbortTag, B.CodePos)] -> [(String, B.AbortTag)]
+    source :: [B.CodePosInfo] -> [(String, B.AbortTag)]
     source = concatMap cpMessage . B.unique . reverse
 
 -- | Print abort message.
