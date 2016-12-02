@@ -48,9 +48,9 @@ type CommandLine = [String]
 
 -- | Create position and line information.
 cpMessage :: B.CodePosInfo -> [(String, B.AbortTag)]
-cpMessage (tag, cp@B.CodePos { B.cpSource = src
-                             , B.cpLineNo = lno
-                             , B.cpText   = text })
+cpMessage (cp@B.CodePos { B.cpSource = src
+                        , B.cpLineNo = lno
+                        , B.cpText   = text }, tag)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
     where

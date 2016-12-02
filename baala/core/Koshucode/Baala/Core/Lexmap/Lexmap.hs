@@ -74,6 +74,6 @@ lexMessageList :: Lexmap -> [String]
 lexMessageList Lexmap { lexToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
-    where src = map (("  " ++) . fst) $ B.cpMessage ("", cp)
+    where src = map (("  " ++) . fst) $ B.cpMessage (cp, "")
           cp  = head $ B.getCPs tok
 

@@ -82,15 +82,15 @@ instance H.ToMarkup B.AbortReason where
           div_ "abort-detail"  $ mapM_ detail  $ B.abortDetail a
           div_ "abort-source"  $ mapM_ code $ B.abortPoint a
         where
-          text n         = H.toMarkup (n :: String)
-          detail x       = H.div $ H.toMarkup x
-          code (ctx, p)  = point p ctx >> line p
-          line p         = div_ "abort-line" $ text $ B.cpText p
-          source k n c   = span_ k $ text n >> (H.toMarkup c)
-          point p ctx    = div_ "abort-point" $ do
-                                  source "abort-point-line"    "Line "    $ B.cpLineNo p
-                                  source "abort-point-column"  "Column "  $ B.cpColumnNo p
-                                  source "abort-point-context" "Context " ctx
+          text n          = H.toMarkup (n :: String)
+          detail x        = H.div $ H.toMarkup x
+          code (cp, tag)  = point cp tag >> line cp
+          line p          = div_ "abort-line" $ text $ B.cpText p
+          source k n c    = span_ k $ text n >> (H.toMarkup c)
+          point cp tag    = div_ "abort-point" $ do
+                                  source "abort-point-line"    "Line "    $ B.cpLineNo cp
+                                  source "abort-point-column"  "Column "  $ B.cpColumnNo cp
+                                  source "abort-point-context" "Context " tag
 
 -- | 'H.div' with class name.
 div_ :: H.AttributeValue -> O.Map H.Html

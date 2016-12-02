@@ -42,7 +42,7 @@ data AbortReason = AbortReason
 type AbortTag = String
 
 -- | Source code position information.
-type CodePosInfo = (AbortTag, B.CodePos)
+type CodePosInfo = (B.CodePos, AbortTag)
 
 
 -- --------------------------------------------  Deriving type
@@ -99,8 +99,8 @@ abortable tag cp = either (Left . push tag (B.getCPs cp)) Right
 
 push :: AbortTag -> [B.CodePos] -> O.Map AbortReason
 push _ [] a = a
-push tag (p:_) a@AbortReason { abortPoint = ps } =
-    a { abortPoint = (tag, p) : ps }
+push tag (cp : _) a@AbortReason { abortPoint = ps } =
+    a { abortPoint = (cp, tag) : ps }
 
 -- | Extract right value or print error message.
 unabort :: Ab a -> a
