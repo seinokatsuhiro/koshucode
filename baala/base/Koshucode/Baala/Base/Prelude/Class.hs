@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.Prelude.Class
   ( Name (..),
     Named,
     named,
-    Index,
     Collect,
     Choose (..),
   ) where
@@ -23,9 +22,6 @@ type Named a = (String, a)
 -- | Create named pair.
 named :: (Name a) => a -> Named a
 named a = (name a, a)
-
--- | Numerical index.
-type Index = Int
 
 -- | Wrap list.
 type Collect a = [a] -> a

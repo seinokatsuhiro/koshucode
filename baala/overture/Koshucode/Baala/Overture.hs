@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Overture
  ( module Koshucode.Baala.Overture.Cache,
+   module Koshucode.Baala.Overture.Index,
    module Koshucode.Baala.Overture.Misc,
    module Koshucode.Baala.Overture.Shorthand,
    module Koshucode.Baala.Overture.Text,
@@ -11,6 +12,7 @@ module Koshucode.Baala.Overture
  ) where
 
 import Koshucode.Baala.Overture.Cache
+import Koshucode.Baala.Overture.Index
 import Koshucode.Baala.Overture.Misc
 import Koshucode.Baala.Overture.Shorthand
 import Koshucode.Baala.Overture.Text

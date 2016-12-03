@@ -114,7 +114,8 @@ treeHeight :: InfixTree p a -> InfixHeight
 treeHeight (B.TreeL (ht, _))  =  ht
 treeHeight (B.TreeB _ _ _)    =  Left 0
 
-infixPos :: [InfixHeight] -> Either [B.Index] B.Index
+-- | Find index of infix operator.
+infixPos :: [InfixHeight] -> Either [O.Ix] O.Ix
 infixPos = fmap fst . pos (Right (-1, 0)) (Left 0) . zip [0 ..] where
     pos res _ [] = res
 

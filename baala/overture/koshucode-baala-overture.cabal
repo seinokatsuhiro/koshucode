@@ -46,6 +46,7 @@ library
         Koshucode.Baala.Overture
         Koshucode.Baala.Overture.Cache
         Koshucode.Baala.Overture.Fn
+        Koshucode.Baala.Overture.Index
         Koshucode.Baala.Overture.Misc
         Koshucode.Baala.Overture.Name.IntString
         Koshucode.Baala.Overture.Name.String
