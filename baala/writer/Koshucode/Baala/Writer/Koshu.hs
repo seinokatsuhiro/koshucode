@@ -55,6 +55,8 @@ hPutHead h result =
       itext  = B.ioPointText `map` inputs
       otext  = B.ioPointText $ C.resultOutput result
 
+      comm _ | itext == [otext]
+             = B.CommentDoc [ B.CommentSec "INPUT / OUTPUT" itext ]
       comm [B.IOPointCustom _ _]
              = B.CommentDoc [ B.CommentSec "INPUT / OUTPUT" itext ]
       comm _ = B.CommentDoc [ B.CommentSec "INPUT"  itext
