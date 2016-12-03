@@ -71,7 +71,7 @@ cpCompare p1 p2 = line O.++ column where
 
 -- | Column number at which code starts.
 --
---   >>> let cp = CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "abc"
+--   >>> let cp = CodePos (B.codeIxIO "abcdefg") 1 "abcdefg" "abc"
 --   >>> cp
 --   /0.1.4/
 --   >>> cpColumnNo cp

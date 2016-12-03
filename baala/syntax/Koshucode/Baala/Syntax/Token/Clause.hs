@@ -147,7 +147,7 @@ readClauses path =
 
 -- | Abbreviated tokenizer.
 toks :: String -> [S.Token]
-toks s = tokens (B.nioFrom $ B.stringBz s) s
+toks s = tokens (B.codeIxIO $ B.stringBz s) s
 
 -- | Tokenize and print for debug.
 --

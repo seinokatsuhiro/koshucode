@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.IO.IOPoint
 
     -- * Indexed I/O point
     IxIOPoint (..),
-    nioFrom,
+    codeIxIO,
     Code, ToCode (..),
   ) where
 
@@ -48,20 +48,20 @@ instance Ord NamedHandle where
 
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
-    = IOPointFile   FilePath FilePath       -- ^ Context directory and target path
-    | IOPointUri    String                  -- ^ Universal resource identifier
-    | IOPointText   (Maybe String) Code     -- ^ Code itself
-    | IOPointCustom String B.Bz             -- ^ Custom I/O
-    | IOPointStdin                          -- ^ Sandard input
-    | IOPointStdout                         -- ^ Sandard output
-    | IOPointOutput NamedHandle             -- ^ Output handler
+    = IOPointFile   FilePath FilePath    -- ^ __1.__ Context directory and target path.
+    | IOPointUri    String               -- ^ __2.__ Universal resource identifier.
+    | IOPointText   (Maybe String) Code  -- ^ __3.__ Code and its name.
+    | IOPointCustom String B.Bz          -- ^ __4.__ Custom I/O.
+    | IOPointStdin                       -- ^ __5.__ The sandard input.
+    | IOPointStdout                      -- ^ __6.__ The sandard output.
+    | IOPointOutput NamedHandle          -- ^ __7.__ Output handler.
       deriving (Show, Eq, Ord)
 
--- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
+-- | Name of I/O point, i.e., @\"file\"@, @\"uri\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
 ioPointType :: IOPoint -> String
 ioPointType (IOPointFile _ _)   = "file"
-ioPointType (IOPointUri  _)     = "url"
+ioPointType (IOPointUri  _)     = "uri"
 ioPointType (IOPointText _ _)   = "text"
 ioPointType (IOPointCustom _ _) = "custom"
 ioPointType (IOPointStdin)      = "stdin"
@@ -71,7 +71,7 @@ ioPointType (IOPointOutput _)   = "output"
 -- | Name of I/O point.
 ioPointText :: IOPoint -> String
 ioPointText (IOPointFile dir file)       = dir ++ file
-ioPointText (IOPointUri  url)            = url
+ioPointText (IOPointUri  uri)            = uri
 ioPointText (IOPointText (Just name) _)  = name
 ioPointText (IOPointText (Nothing) _)    = "<text>"
 ioPointText (IOPointCustom name _)       = name
@@ -87,7 +87,7 @@ ioPointFrom context path
     | B.isPrefixOf "ftp://"   path  = IOPointUri  path
     | otherwise                     = IOPointFile context path
 
--- | Create I/O points from using stdin, texts itself, filenames, and urls.
+-- | Create I/O points from using stdin, texts itself, filenames, and URIs.
 ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
 ioPointList stdin texts context paths =
     B.consIf stdin IOPointStdin $
@@ -115,18 +115,18 @@ instance Ord IxIOPoint where
 
 -- | Zero-numbered empty input point.
 instance B.Default IxIOPoint where
-    def = nioFrom Bz.empty
+    def = codeIxIO Bz.empty
 
 instance O.GetIx IxIOPoint where
     getIx = nioNumber
 
 -- | Create input point for given lazy bytestring.
 --
---   >>> nioFrom "abc"
+--   >>> codeIxIO "abc"
 --   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
 --
-nioFrom :: (ToCode code) => code -> IxIOPoint
-nioFrom = IxIOPoint 0 . IOPointText Nothing . toCode
+codeIxIO :: (ToCode code) => code -> IxIOPoint
+codeIxIO = IxIOPoint 0 . IOPointText Nothing . toCode
 
 -- | This implementation uses lazy bytestring as code string.
 type Code = B.Bz

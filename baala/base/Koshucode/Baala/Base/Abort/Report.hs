@@ -104,7 +104,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
 --
 -- Prepare code position and abort reason.
 --
---   >>> let cp = B.CodePos (B.nioFrom "abcdefg") 1 "abcdefg" "defg"
+--   >>> let cp = B.CodePos (B.codeIxIO "abcdefg") 1 "abcdefg" "defg"
 --   >>> let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
 --
 -- Print it.
