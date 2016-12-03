@@ -104,18 +104,14 @@ data IxIOPoint = IxIOPoint
     } deriving (Show)
 
 instance Eq IxIOPoint where
-    x == y
-      | xn == 0 && yn == 0  = nioPoint x == nioPoint y
-      | otherwise           = xn == yn
-      where xn = nioNumber x
-            yn = nioNumber y
+    x == y  = compare x y == EQ
 
+-- | Comapre indicies if indicies are non zero,
+--   comapre I/O point if both are zero.
 instance Ord IxIOPoint where
-    x `compare` y
+    x@IxIOPoint{ nioNumber = xn } `compare` y@IxIOPoint{ nioNumber = yn }
       | xn == 0 && yn == 0  = nioPoint x `compare` nioPoint y
       | otherwise           = xn `compare` yn
-      where xn = nioNumber x
-            yn = nioNumber y
 
 -- | Zero-numbered empty input point.
 instance B.Default IxIOPoint where
