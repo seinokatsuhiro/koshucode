@@ -52,7 +52,7 @@ data IOPoint
     | IOPointUri    String               -- ^ __2 Input:__ Universal resource identifier.
     | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
     | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
-    | IOPointStdin                       -- ^ __5 Input:__ The sandard input.
+    | IOPointStdin  (Maybe String)       -- ^ __5 Input:__ The sandard input.
     | IOPointStdout (Maybe String)       -- ^ __6 Output:__ The sandard output.
     | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
       deriving (Show, Eq, Ord)
@@ -64,7 +64,7 @@ ioPointType (IOPointFile _ _)   = "file"
 ioPointType (IOPointUri  _)     = "uri"
 ioPointType (IOPointText _ _)   = "text"
 ioPointType (IOPointCustom _ _) = "custom"
-ioPointType (IOPointStdin)      = "stdin"
+ioPointType (IOPointStdin _)    = "stdin"
 ioPointType (IOPointStdout _)   = "stdout"
 ioPointType (IOPointOutput _)   = "output"
 
@@ -74,7 +74,7 @@ ioPointText (IOPointFile dir file)  = dir ++ file
 ioPointText (IOPointUri  uri)       = uri
 ioPointText (IOPointText name _)    = B.fromMaybe "<text>" name
 ioPointText (IOPointCustom name _)  = name
-ioPointText (IOPointStdin)          = "<stdin>"
+ioPointText (IOPointStdin  name)    = B.fromMaybe "<stdin>" name
 ioPointText (IOPointStdout name)    = B.fromMaybe "<stdout>" name
 ioPointText (IOPointOutput h)       = handleName h
 
@@ -93,7 +93,7 @@ isUri path = B.isPrefixOf "http://"  path
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
 ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
 ioPointList stdin texts context paths =
-    B.consIf stdin IOPointStdin $
+    B.consIf stdin (IOPointStdin Nothing) $
          IOPointText Nothing `map` texts ++
          ioPointFrom context `map` paths
 

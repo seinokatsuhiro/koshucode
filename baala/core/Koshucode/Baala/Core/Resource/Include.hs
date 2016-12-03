@@ -159,7 +159,7 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     stdin :: C.TTreePara -> B.Ab C.InputPoint
     stdin p = do args <- S.paraGet p "stdin"
                  case args of
-                   [] -> Right $ C.InputPoint B.IOPointStdin []
+                   [] -> Right $ C.InputPoint (B.IOPointStdin Nothing) []
                    _  -> Msg.adlib "input no args"
 
     unmatch = Msg.adlib "input unknown"

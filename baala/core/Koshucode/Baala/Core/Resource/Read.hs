@@ -125,7 +125,7 @@ readCode res src add = dispatch $ B.nioPoint src where
 
     dispatch (B.IOPointText   _ code) = M.liftIO $ include code
     dispatch (B.IOPointCustom _ code) = M.liftIO $ include code
-    dispatch (B.IOPointStdin)         = lift $ include =<< Bz.getContents
+    dispatch (B.IOPointStdin _)       = lift $ include =<< Bz.getContents
     dispatch _                        = B.bug "read resource"
 
     putDir dir path  = cutDot dir ++ cutDot path
