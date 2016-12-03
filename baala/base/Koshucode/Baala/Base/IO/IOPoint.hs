@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.IO.IOPoint
     -- * Indexed I/O point
     IxIOPoint (..),
     codeIxIO,
+    pathIxIO,
     Code, ToCode (..),
   ) where
 
@@ -48,7 +49,7 @@ instance Ord NamedHandle where
 
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
-    = IOPointFile   FilePath FilePath    -- ^ __1 Input:__ Context directory and target path.
+    = IOPointFile   FilePath FilePath    -- ^ __1 Input/Output:__ Context directory and target path.
     | IOPointUri    String               -- ^ __2 Input:__ Universal resource identifier.
     | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
     | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
@@ -130,6 +131,10 @@ instance O.GetIx IxIOPoint where
 --
 codeIxIO :: (ToCode code) => code -> IxIOPoint
 codeIxIO = IxIOPoint 0 . IOPointText Nothing . toCode
+
+-- | Create input point from file path.
+pathIxIO :: FilePath -> IxIOPoint
+pathIxIO path = IxIOPoint 0 $ IOPointFile "" path
 
 -- | This implementation uses lazy bytestring as code string.
 type Code = B.Bz

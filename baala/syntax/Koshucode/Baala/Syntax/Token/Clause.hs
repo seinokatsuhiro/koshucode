@@ -138,9 +138,8 @@ tokenIndent             _  = 0
 --
 readClauses :: FilePath -> IO [TokenClause]
 readClauses path =
-    do let i = B.IOPointFile "" path
-       s <- readFile path
-       return $ tokenClauses $ tokenLines (B.IxIOPoint 0 i) s
+    do s <- readFile path
+       return $ tokenClauses $ tokenLines (B.pathIxIO path) s
 
 
 -- --------------------------------------------  Abbreviation
