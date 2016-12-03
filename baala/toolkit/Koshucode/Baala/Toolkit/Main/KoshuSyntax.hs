@@ -218,7 +218,7 @@ putJudges :: (B.MixShortEncode c) => [D.Judge c] -> IO ()
 putJudges = mapM_ putJudge
 
 putJudge :: (B.MixShortEncode a) => a -> IO ()
-putJudge = B.putMixLn B.crlfBreak . B.mixIdEncode
+putJudge = B.putMixLn B.crlfBreak . B.mixPlainEncode
 
 putNewline :: IO ()
 putNewline = putStrLn ""

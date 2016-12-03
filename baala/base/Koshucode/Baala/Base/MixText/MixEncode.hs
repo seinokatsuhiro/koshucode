@@ -23,14 +23,20 @@ instance MixEncode Bool where
 
 -- | Encode with shortener.
 class MixShortEncode a where
+    -- | Encode with string converter.
     mixShortEncode :: Shorten -> a -> B.MixText
 
--- | 'mixShortEncode' with no shortener.
-mixIdEncode :: (MixShortEncode a) => a -> B.MixText
-mixIdEncode = mixShortEncode noShorten
+    -- | 'mixShortEncode' with no shortener.
+    mixPlainEncode :: a -> B.MixText
+    mixPlainEncode = mixShortEncode noShorten
 
 -- | Convert string to short sign.
 type Shorten = String -> Maybe String
+
+-- | Same as 'mixPlainEncode'.
+{-# DEPRECATED mixIdEncode "Use 'mixPlainEncode' instead." #-}
+mixIdEncode :: (MixShortEncode a) => a -> B.MixText
+mixIdEncode = mixPlainEncode
 
 -- | Shorten which does not shorten strings.
 noShorten :: Shorten
