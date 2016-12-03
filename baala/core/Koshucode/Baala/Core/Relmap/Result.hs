@@ -61,7 +61,7 @@ instance (Show c) => B.Default (Result c) where
                  , resultGutter     = 5
                  , resultMeasure    = 25
                  , resultInput      = []
-                 , resultOutput     = B.IOPointStdout
+                 , resultOutput     = B.IOPointStdout Nothing
                  , resultEcho       = []
                  , resultLicense    = []
                  , resultViolated   = []
@@ -150,7 +150,7 @@ hPutShow h result status () = do IO.hPutStrLn h $ show result
 putResult :: Result c -> IO B.ExitCode
 putResult result =
     case resultOutput result of
-      B.IOPointStdout      -> hPutResult B.stdout result
+      B.IOPointStdout _    -> hPutResult B.stdout result
       B.IOPointOutput h    -> hPutResult (B.handle h) result
       B.IOPointFile _ path -> do h <- IO.openFile path IO.WriteMode
                                  n <- hPutResult h result

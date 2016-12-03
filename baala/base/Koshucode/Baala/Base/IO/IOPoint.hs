@@ -48,13 +48,13 @@ instance Ord NamedHandle where
 
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
-    = IOPointFile   FilePath FilePath    -- ^ __1.__ Context directory and target path.
-    | IOPointUri    String               -- ^ __2.__ Universal resource identifier.
-    | IOPointText   (Maybe String) Code  -- ^ __3.__ Code and its name.
-    | IOPointCustom String B.Bz          -- ^ __4.__ Custom I/O.
-    | IOPointStdin                       -- ^ __5.__ The sandard input.
-    | IOPointStdout                      -- ^ __6.__ The sandard output.
-    | IOPointOutput NamedHandle          -- ^ __7.__ Output handler.
+    = IOPointFile   FilePath FilePath    -- ^ __1 Input:__ Context directory and target path.
+    | IOPointUri    String               -- ^ __2 Input:__ Universal resource identifier.
+    | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
+    | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
+    | IOPointStdin                       -- ^ __5 Input:__ The sandard input.
+    | IOPointStdout (Maybe String)       -- ^ __6 Output:__ The sandard output.
+    | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
       deriving (Show, Eq, Ord)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"uri\"@, @\"text\"@,
@@ -65,19 +65,18 @@ ioPointType (IOPointUri  _)     = "uri"
 ioPointType (IOPointText _ _)   = "text"
 ioPointType (IOPointCustom _ _) = "custom"
 ioPointType (IOPointStdin)      = "stdin"
-ioPointType (IOPointStdout)     = "stdout"
+ioPointType (IOPointStdout _)   = "stdout"
 ioPointType (IOPointOutput _)   = "output"
 
 -- | Name of I/O point.
 ioPointText :: IOPoint -> String
-ioPointText (IOPointFile dir file)       = dir ++ file
-ioPointText (IOPointUri  uri)            = uri
-ioPointText (IOPointText (Just name) _)  = name
-ioPointText (IOPointText (Nothing) _)    = "<text>"
-ioPointText (IOPointCustom name _)       = name
-ioPointText (IOPointStdin)               = "<stdin>"
-ioPointText (IOPointStdout)              = "<stdout>"
-ioPointText (IOPointOutput h)            = handleName h
+ioPointText (IOPointFile dir file)  = dir ++ file
+ioPointText (IOPointUri  uri)       = uri
+ioPointText (IOPointText name _)    = B.fromMaybe "<text>" name
+ioPointText (IOPointCustom name _)  = name
+ioPointText (IOPointStdin)          = "<stdin>"
+ioPointText (IOPointStdout name)    = B.fromMaybe "<stdout>" name
+ioPointText (IOPointOutput h)       = handleName h
 
 -- | Create I/O point.
 ioPointFrom :: FilePath -> FilePath -> IOPoint
