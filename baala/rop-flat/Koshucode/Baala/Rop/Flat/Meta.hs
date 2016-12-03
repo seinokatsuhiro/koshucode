@@ -19,6 +19,7 @@ module Koshucode.Baala.Rop.Flat.Meta
   ) where
 
 import qualified Data.Version                      as V
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -243,7 +244,7 @@ relkitKoshuSource (num, ty, name) h _ = Right kit2 where
     kit2       = C.relkitConstBody ns $ map assn code
     assn c     = B.catMaybes [codeNo c, codeType c, codeText c]
 
-    codeNo     = Just         . D.pInt  . B.nioNumber
+    codeNo     = Just         . D.pInt  . O.getIx
     codeType   = maybeAs ty   . D.pText . B.ioPointType . B.nioPoint
     codeText   = maybeAs name . D.pText . B.ioPointText . B.nioPoint
 

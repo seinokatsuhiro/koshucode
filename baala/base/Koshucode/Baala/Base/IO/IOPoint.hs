@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.IO.IOPoint
 
 import qualified System.IO                     as IO
 import qualified Data.ByteString.Lazy          as Bz
+import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base.List     as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 
@@ -98,7 +99,7 @@ ioPointList stdin texts context paths =
 
 -- | Indexed I/O point.
 data IxIOPoint = IxIOPoint
-    { nioNumber  :: Int       -- ^ Index (0 for unindexed, > 0 for indexed)
+    { nioNumber  :: O.Ix      -- ^ Index (0 for unindexed, > 0 for indexed)
     , nioPoint   :: IOPoint   -- ^ I/O point
     } deriving (Show)
 
@@ -119,6 +120,9 @@ instance Ord IxIOPoint where
 -- | Zero-numbered empty input point.
 instance B.Default IxIOPoint where
     def = nioFrom Bz.empty
+
+instance O.GetIx IxIOPoint where
+    getIx = nioNumber
 
 -- | Create input point for given lazy bytestring.
 --

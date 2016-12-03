@@ -218,7 +218,7 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
                            Right (cs', w) -> f w cs'
                            Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'     = let n  = B.nioNumber $ B.cpSource cp
+    nterm ns w cs'     = let n  = O.getIx $ B.cpSource cp
                              w' = show n ++ ('=' : w)
                          in term (w' : ns) cs'
 

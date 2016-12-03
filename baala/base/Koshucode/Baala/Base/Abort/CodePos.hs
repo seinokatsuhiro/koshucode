@@ -52,7 +52,7 @@ shortSlash = showCp (\_ l c -> "/" ++ l ++ "." ++ c ++ "/")
 
 showCp :: (String -> String -> String -> String) -> CodePos -> String
 showCp f cp = f s l c where
-    s = show $ B.nioNumber $ cpSource cp
+    s = show $ O.getIx $ cpSource cp
     l = show $ cpLineNo cp
     c = show $ cpColumnNo cp
 
