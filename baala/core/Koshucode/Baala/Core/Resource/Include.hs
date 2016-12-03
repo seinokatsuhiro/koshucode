@@ -26,7 +26,7 @@ resInclude :: forall c. (D.CContent c)
     => [S.Token]        -- ^ Additional terms
     -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
-    -> B.NIOPoint       -- ^ Input point
+    -> B.IxIOPoint      -- ^ Input point
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude resAbout cd base nio code =

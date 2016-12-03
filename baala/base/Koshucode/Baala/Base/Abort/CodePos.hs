@@ -26,10 +26,10 @@ import qualified Koshucode.Baala.Base.IO.IOPoint    as B
 
 -- | Position on input code string.
 data CodePos = CodePos
-      { cpSource     :: B.NIOPoint  -- ^ Source of code
-      , cpLineNo     :: Int         -- ^ Line number
-      , cpLineText   :: String      -- ^ Code string line
-      , cpText       :: String      -- ^ Current code string
+      { cpSource     :: B.IxIOPoint  -- ^ Source of code
+      , cpLineNo     :: Int          -- ^ Line number
+      , cpLineText   :: String       -- ^ Code string line
+      , cpText       :: String       -- ^ Current code string
       } deriving (Eq)
 
 -- | Number of input point, line number, and column number,

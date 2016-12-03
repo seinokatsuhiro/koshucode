@@ -69,7 +69,7 @@ data Global' h c = Global
       , globalOption       :: C.Option c        -- ^ Options
       , globalSourceLimit  :: Int               -- ^ Limit number of including sources
       , globalSourceCount  :: Int               -- ^ Sequential number for sources
-      , globalSources      :: [B.NIOPoint]      -- ^ Included sources
+      , globalSources      :: [B.IxIOPoint]     -- ^ Included sources
       , globalHook         :: h c               -- ^ Usually, data resource is used as hook
       }
 

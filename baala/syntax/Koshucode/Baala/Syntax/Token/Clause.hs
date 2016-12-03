@@ -37,25 +37,25 @@ type TokenLine = B.CodeLine S.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.NIOPoint -> S.InputText -> [S.Token]
+tokens :: B.IxIOPoint -> S.InputText -> [S.Token]
 tokens nio cs = concatMap B.lineTokens $ tokenLines nio cs
 
 -- | Tokenize text.
-tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
+tokenLines :: B.IxIOPoint -> S.InputText -> [TokenLine]
 tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize lazy bytestring.
-tokenLinesBz :: B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBz :: B.IxIOPoint -> B.Bz -> [TokenLine]
 tokenLinesBz = tokenLinesBzWith S.scanRel
 
 -- | Tokenize lazy bytestring.
-tokenLinesBzTextAssert :: B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzTextAssert :: B.IxIOPoint -> B.Bz -> [TokenLine]
 tokenLinesBzTextAssert = tokenLinesBzWith S.scanTextAssert
 
-tokenLinesWith :: S.Scanner -> B.NIOPoint -> S.InputText -> [TokenLine]
+tokenLinesWith :: S.Scanner -> B.IxIOPoint -> S.InputText -> [TokenLine]
 tokenLinesWith scan = B.codeScanUp $ scan changeSection
 
-tokenLinesBzWith :: S.Scanner -> B.NIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzWith :: S.Scanner -> B.IxIOPoint -> B.Bz -> [TokenLine]
 tokenLinesBzWith scan = B.codeScanUpBz $ scan changeSection
 
 changeSection :: S.ChangeSection
@@ -140,7 +140,7 @@ readClauses :: FilePath -> IO [TokenClause]
 readClauses path =
     do let i = B.IOPointFile "" path
        s <- readFile path
-       return $ tokenClauses $ tokenLines (B.NIOPoint 0 i) s
+       return $ tokenClauses $ tokenLines (B.IxIOPoint 0 i) s
 
 
 -- --------------------------------------------  Abbreviation

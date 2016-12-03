@@ -13,8 +13,8 @@ module Koshucode.Baala.Base.IO.IOPoint
     ioPointType, ioPointText,
     ioPointFrom, ioPointList,
 
-    -- * Numbered I/O point
-    NIOPoint (..),
+    -- * Indexed I/O point
+    IxIOPoint (..),
     nioFrom,
     Code, ToCode (..),
   ) where
@@ -94,23 +94,22 @@ ioPointList stdin texts context paths =
          ioPointFrom context `map` paths
 
 
--- ----------------------  NIOPoint
+-- ----------------------  Indexed I/O point
 
--- | Numbered I/O point.
-data NIOPoint = NIOPoint
-    { nioNumber  :: Int        -- ^ Sequential number
-                               --   (0 for unnumbered, > 0 for numbered)
-    , nioPoint   :: IOPoint    -- ^ I/O point
+-- | Indexed I/O point.
+data IxIOPoint = IxIOPoint
+    { nioNumber  :: Int       -- ^ Index (0 for unindexed, > 0 for indexed)
+    , nioPoint   :: IOPoint   -- ^ I/O point
     } deriving (Show)
 
-instance Eq NIOPoint where
+instance Eq IxIOPoint where
     x == y
       | xn == 0 && yn == 0  = nioPoint x == nioPoint y
       | otherwise           = xn == yn
       where xn = nioNumber x
             yn = nioNumber y
 
-instance Ord NIOPoint where
+instance Ord IxIOPoint where
     x `compare` y
       | xn == 0 && yn == 0  = nioPoint x `compare` nioPoint y
       | otherwise           = xn `compare` yn
@@ -118,16 +117,16 @@ instance Ord NIOPoint where
             yn = nioNumber y
 
 -- | Zero-numbered empty input point.
-instance B.Default NIOPoint where
+instance B.Default IxIOPoint where
     def = nioFrom Bz.empty
 
 -- | Create input point for given lazy bytestring.
 --
 --   >>> nioFrom "abc"
---   NIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
+--   IxIOPoint {nioNumber = 0, nioPoint = IOPointText Nothing "abc"}
 --
-nioFrom :: (ToCode code) => code -> NIOPoint
-nioFrom = NIOPoint 0 . IOPointText Nothing . toCode
+nioFrom :: (ToCode code) => code -> IxIOPoint
+nioFrom = IxIOPoint 0 . IOPointText Nothing . toCode
 
 -- | This implementation uses lazy bytestring as code string.
 type Code = B.Bz

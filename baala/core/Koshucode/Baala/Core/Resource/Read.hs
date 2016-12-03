@@ -89,15 +89,15 @@ readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
     where
       proc (Nothing, _) = return $ Right res
       proc (Just src, q')
-          | B.NIOPoint 0 srcPt `elem` done = readQueue limit' pop  -- skip
-          | otherwise                      = readOne
+          | B.IxIOPoint 0 srcPt `elem` done = readQueue limit' pop  -- skip
+          | otherwise                       = readOne
           where
             limit'   = limit - 1
             srcPt    = C.inputPoint src
             srcAbout = C.inputPointAbout src
             pop      = res { C.resInputQueue = (q', done) }
             readOne  = do n <- nextSourceCount
-                          let src' = B.NIOPoint n srcPt
+                          let src' = B.IxIOPoint n srcPt
                           abres' <- readCode pop src' srcAbout
                           case abres' of
                             Right res' -> readQueue limit' $ C.resQueueDone src' res'
@@ -105,7 +105,7 @@ readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
 
 -- | Read resource from certain source.
 readCode :: forall c. (D.CContent c) =>
-    C.Resource c -> B.NIOPoint -> [S.TTree] -> ResourceIO c
+    C.Resource c -> B.IxIOPoint -> [S.TTree] -> ResourceIO c
 readCode res src add = dispatch $ B.nioPoint src where
     dispatch (B.IOPointFile cd path) = M.liftIO $ do
          let path' = putDir cd path
