@@ -13,6 +13,8 @@ pkg_help () {
     echo "  cabal-path       List paths of cabal files"
     echo "  copyright        List copyright in cabal files"
     echo "  dir              List package directory names"
+    echo "  import [DIR]     List import lines"
+    echo "  import-outer [DIR] List imported modules except for Koshucode"
     echo "  installed        List installed packages in sandbox"
     echo "  installed-koshu  List installed packages named 'koshu'"
     echo "  hoogle           List Hoogle files"
@@ -125,6 +127,28 @@ pkg_exec_all () {
             echo "ABORT / status $pkg_status"
         fi
     done
+}
+
+pkg_import () {
+    for pkg in `pkg_dirs_or $1`; do
+        ( cd "$pkg"
+          pkg_section "$pkg"
+          find Koshucode -name '*.hs' \
+            -exec grep '^module \|^import' {} ';' \
+            -exec echo ';'
+        )
+    done
+}
+
+pkg_import_outer () {
+    for pkg in `pkg_dirs_or $1`; do
+        ( cd "$pkg"
+          pkg_section "$pkg"
+          find Koshucode -name '*.hs' \
+              -exec perl -lne 'print "$2" if /^import +(qualified *)?([^\s]+)/' {} ';' \
+              | grep -v '^Koshucode' | sort | uniq | cat -n
+        )
+    done 
 }
 
 pkg_haddock () {
@@ -286,6 +310,10 @@ case "$1" in
     exec-all)
         shift
         pkg_exec_all "$@" ;;
+    import)
+        pkg_import "$2" ;;
+    import-outer)
+        pkg_import_outer "$2" ;;
     init)
         pkg_exec pkg_sandbox_init ;;
     installed)
