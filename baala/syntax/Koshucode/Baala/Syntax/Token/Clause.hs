@@ -1,20 +1,20 @@
 
--- | Token clause.
+-- | Token line and clause.
 
 module Koshucode.Baala.Syntax.Token.Clause
-  ( -- * Token clause
-    TokenClause,
-    tokenClauses,
-
-    -- * Token line
+  ( -- * Token line
     TokenLine,
-    toks,
     tokenLines, tokenLinesBz,
     tokenLinesBzTextAssert,
     isShortPrefix,
   
-    -- * Examples
-    -- $Examples
+    -- * Token clause
+    TokenClause,
+    tokenClauses,
+
+    -- * Abbreviation
+    toks,
+    toksPrint,
   ) where
 
 import qualified Data.Char                              as Ch
@@ -29,33 +29,6 @@ import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 import qualified Koshucode.Baala.Base.Message           as Msg
 
 
--- --------------------------------------------  Token clause
-
--- | Code clause of tokens.
-type TokenClause = B.CodeClause S.Token
-
--- | Convert token lines into token clauses
-tokenClauses :: [TokenLine] -> [TokenClause]
-tokenClauses = map clause . split where
-    clause ls = B.CodeClause ls $ list ls
-
-    list :: [TokenLine] -> [S.Token]
-    list = concatMap $ S.sweepToken . B.lineTokens
-
-    split :: [TokenLine] -> [[TokenLine]]
-    split = B.gather B.splitClause . map indent . B.omit blank
-
-    blank :: TokenLine -> Bool
-    blank = all S.isBlankToken . B.lineTokens
-
-    indent :: TokenLine -> (B.IndentSize, TokenLine)
-    indent = B.lineIndentPair tokenIndent
-
-tokenIndent :: S.Token -> Int
-tokenIndent (S.TSpace _ n) = n
-tokenIndent _ = 0
-
-
 -- --------------------------------------------  Token line
 
 -- | Token list on a line.
@@ -65,10 +38,6 @@ type TokenLine = B.CodeLine S.Token
 --   Result token list does not contain newline characters.
 tokens :: B.NIOPoint -> S.InputText -> [S.Token]
 tokens nio cs = concatMap B.lineTokens $ tokenLines nio cs
-
--- | Abbreviated tokenizer.
-toks :: S.InputText -> [S.Token]
-toks s = tokens (B.nioFrom $ B.stringBz s) s
 
 -- | Tokenize text.
 tokenLines :: B.NIOPoint -> S.InputText -> [TokenLine]
@@ -115,45 +84,92 @@ isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
 
 
--- ------------------------------------------------------------------
--- $Examples
+-- --------------------------------------------  Token clause
+
+-- | Code clause of tokens.
+type TokenClause = B.CodeClause S.Token
+
+-- | Convert token lines into token clauses
+tokenClauses :: [TokenLine] -> [TokenClause]
+tokenClauses = map clause . split where
+    clause ls = B.CodeClause ls $ list ls
+
+    list :: [TokenLine] -> [S.Token]
+    list = concatMap $ S.sweepToken . B.lineTokens
+
+    split :: [TokenLine] -> [[TokenLine]]
+    split = B.gather B.splitClause . map indent . B.omit blank
+
+    blank :: TokenLine -> Bool
+    blank = all S.isBlankToken . B.lineTokens
+
+    indent :: TokenLine -> (B.IndentSize, TokenLine)
+    indent = B.lineIndentPair tokenIndent
+
+-- | Indent level.
+tokenIndent :: S.Token -> Int
+tokenIndent (S.TSpace _ n) = n
+tokenIndent             _  = 0
+
+
+-- --------------------------------------------  Abbreviation
+
+-- | Abbreviated tokenizer.
+toks :: String -> [S.Token]
+toks s = tokens (B.nioFrom $ B.stringBz s) s
+
+-- | Tokenize and print for debug.
 --
 --  Words and quotations.
 --
---  >>> toks $ unlines ["aa", "'bb'", "\"cc\""]
---  [ TText <I0-L1-C0> TextRaw "aa"
---  , TText <I0-L2-C0> TextQ "bb"
---  , TText <I0-L2-C3> TextQ ""
---  , TText <I0-L3-C0> TextQQ "cc" ]
+--    >>> toksPrint ["aa", "'bb", "\"cc\"", "<dd>", "'/ee", "|012|"]
+--    TText /0.1.0/ TextRaw "aa"
+--    TText /0.2.0/ TextQ "bb"
+--    TText /0.3.0/ TextQQ "cc"
+--    TText /0.4.0/ TextUnk "dd"
+--    TText /0.5.0/ TextTerm "ee"
+--    TText /0.6.0/ TextBar "|012|"
 --
 --  Judgement.
 --
---  >>> toks "|-- R  /a A0 /b 31"
---  [ TText <I0-L1-C0> TextBar "|--", TSpace <I0-L1-C3> 1
---  , TText <I0-L1-C4> TextRaw "R", TSpace <I0-L1-C5> 2
---  , TTerm <I0-L1-C7> "/a", TSpace <I0-L1-C9> 1
---  , TText <I0-L1-C10> TextRaw "A0", TSpace <I0-L1-C12> 1
---  , TTerm <I0-L1-C13> "/b", TSpace <I0-L1-C15> 1
---  , TText <I0-L1-C16> TextRaw "31" ]
+--    >>> toksPrint ["|-- R  /a A0 /b 31"]
+--    TText /0.1.0/ TextBar "|--"
+--    TSpace /0.1.3/ 1
+--    TText /0.1.4/ TextRaw "R"
+--    TSpace /0.1.5/ 2
+--    TTerm /0.1.7/ "/a"
+--    TSpace /0.1.9/ 1
+--    TText /0.1.10/ TextRaw "A0"
+--    TSpace /0.1.12/ 1
+--    TTerm /0.1.13/ "/b"
+--    TSpace /0.1.15/ 1
+--    TText /0.1.16/ TextRaw "31"
 --  
 --  Brackets.
 --
---  >>> toks "aa (bb x y (z))"
---  [ TText <I0-L1-C0> TextRaw "aa"
---  , TSpace <I0-L1-C2> 1
---  , TOpen <I0-L1-C3> "("
---    , TText <I0-L1-C4> TextRaw "bb", TSpace <I0-L1-C6> 1
---    , TText <I0-L1-C7> TextRaw "x", TSpace <I0-L1-C8> 1
---    , TText <I0-L1-C9> TextRaw "y", TSpace <I0-L1-C10> 1
---    , TOpen <I0-L1-C11> "("
---      , TText <I0-L1-C12> TextRaw "z"
---    , TClose <I0-L1-C13> ")"
---  , TClose <I0-L1-C14> ")" ]
+--    >>> toksPrint ["aa (bb x y (z))"]
+--    TText /0.1.0/ TextRaw "aa"
+--    TSpace /0.1.2/ 1
+--    TOpen /0.1.3/ "("
+--    TText /0.1.4/ TextRaw "bb"
+--    TSpace /0.1.6/ 1
+--    TText /0.1.7/ TextRaw "x"
+--    TSpace /0.1.8/ 1
+--    TText /0.1.9/ TextRaw "y"
+--    TSpace /0.1.10/ 1
+--    TOpen /0.1.11/ "("
+--    TText /0.1.12/ TextRaw "z"
+--    TClose /0.1.13/ ")"
+--    TClose /0.1.14/ ")"
 --
---  A comment.
+--  Comment.
 --
---  >>> toks $ unlines ["abc ** this is a comment", "def",""]
---  [ TText <I0-L1-C0> TextRaw "abc", TSpace <I0-L1-C3> 1
---  , TComment <I0-L1-C4> " this is a comment"
---  , TText <I0-L2-C0> TextRaw "def" ]
+--    >>> toksPrint ["abc ** this is a comment", "def",""]
+--    TText /0.1.0/ TextRaw "abc"
+--    TSpace /0.1.3/ 1
+--    TComment /0.1.4/ " this is a comment"
+--    TText /0.2.0/ TextRaw "def"
 --
+toksPrint :: [String] -> IO ()
+toksPrint ss = mapM_ print $ toks $ unlines ss
+
