@@ -9,9 +9,9 @@ module Koshucode.Baala.Base.IO.IOPoint
     NamedHandle (..),
 
     -- * I/O point
-    IOPoint (..),
+    IOPoint (..), IOPath,
     ioPointType, ioPointText,
-    ioPointFrom, ioPointList,
+    ioPoint, ioPointFrom, ioPointList,
 
     -- * Indexed I/O point
     IxIOPoint (..),
@@ -50,7 +50,7 @@ instance Ord NamedHandle where
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
     = IOPointFile   FilePath FilePath    -- ^ __1 Input/Output:__ Context directory and target path.
-    | IOPointUri    String               -- ^ __2 Input:__ Universal resource identifier.
+    | IOPointUri    IOPath               -- ^ __2 Input:__ Universal resource identifier.
     | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
     | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
     | IOPointStdin  (Maybe String)       -- ^ __5 Input:__ The sandard input.
@@ -79,11 +79,23 @@ ioPointText (IOPointStdin  name)    = B.fromMaybe "<stdin>" name
 ioPointText (IOPointStdout name)    = B.fromMaybe "<stdout>" name
 ioPointText (IOPointOutput h)       = handleName h
 
+-- | URI, file path, etc.
+type IOPath = String
+
+-- | Create I/O Point.
+ioPoint :: IOPath -> IOPoint
+ioPoint "system://stdin"    = IOPointStdin  Nothing
+ioPoint "system://stdout"   = IOPointStdout Nothing
+ioPoint path | isUri path   = IOPointUri  path
+             | otherwise    = IOPointFile "" path
+
 -- | Create I/O point.
-ioPointFrom :: FilePath -> FilePath -> IOPoint
-ioPointFrom context path
-    | isUri path  = IOPointUri  path
-    | otherwise   = IOPointFile context path
+ioPointFrom :: FilePath -> IOPath -> IOPoint
+ioPointFrom dir path = ioPointDir dir $ ioPoint path
+
+ioPointDir :: FilePath -> O.Map IOPoint
+ioPointDir dir (IOPointFile _ path) = IOPointFile dir path
+ioPointDir _ iop = iop
 
 -- | Test path is URI.
 isUri :: O.Test FilePath
