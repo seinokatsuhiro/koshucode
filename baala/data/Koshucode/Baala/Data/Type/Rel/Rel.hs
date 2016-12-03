@@ -58,12 +58,12 @@ instance D.GetTermNames (Rel c) where
     getTermNames = D.getTermNames . relHead
 
 instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
-    mixShortEncode sh (Rel he bo) =
+    mixTransEncode sh (Rel he bo) =
         let he'  = B.mixEncode he
             bo'  = B.mixJoin1 $ map d bo
             d xs = B.mixBracketS S.bracketList $ mixBar xs
         in B.mixBracketS S.bracketRel (he' `B.mixSep` bo')
-        where mixBar cs = B.mixJoinBar $ map (B.mixShortEncode sh) cs
+        where mixBar cs = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
 
 -- ----------------------  Sort contents

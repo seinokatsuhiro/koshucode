@@ -206,10 +206,10 @@ judgeTerms (JudgeViolate     _ xs)     = xs
 -- ----------------------  Encode
 
 instance (B.MixShortEncode c) => B.MixShortEncode (Judge c) where
-    mixShortEncode = judgeMix2
+    mixTransEncode = judgeMix2
 
 -- | Encode judgement with short sign converter.
-type EncodeJudge c = B.Shorten -> Judge c -> B.MixText
+type EncodeJudge c = B.TransString -> Judge c -> B.MixText
 
 -- | Encode judgement with term separator.
 judgeMix :: (B.MixShortEncode c) => B.MixText -> EncodeJudge c
@@ -252,14 +252,14 @@ termNameToMix :: S.TermName -> B.MixText
 termNameToMix n = B.mixString $ S.termNameString n
 
 -- | Encode term list with one-space separator.
-termsToMix1 :: (B.MixShortEncode c) => B.Shorten -> [S.Term c] -> B.MixText
+termsToMix1 :: (B.MixShortEncode c) => B.TransString -> [S.Term c] -> B.MixText
 termsToMix1 = termsToMix B.mix1
 
 -- | Encode term list with two-spaces separator.
-termsToMix2 :: (B.MixShortEncode c) => B.Shorten -> [S.Term c] -> B.MixText
+termsToMix2 :: (B.MixShortEncode c) => B.TransString -> [S.Term c] -> B.MixText
 termsToMix2 = termsToMix B.mix2
 
-termsToMix :: (B.MixShortEncode c) => B.MixText -> B.Shorten -> [S.Term c] -> B.MixText
+termsToMix :: (B.MixShortEncode c) => B.MixText -> B.TransString -> [S.Term c] -> B.MixText
 termsToMix sep sh ts = B.mixJoin sep $ map term ts where
-    term (n, c) = termNameToMix n `B.mixSep` B.mixShortEncode sh c
+    term (n, c) = termNameToMix n `B.mixSep` B.mixTransEncode sh c
 

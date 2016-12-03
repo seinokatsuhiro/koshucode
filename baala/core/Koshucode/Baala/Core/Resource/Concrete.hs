@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 data About c = About [S.Term c] deriving (Show)
 
 instance (B.MixShortEncode c) => B.MixShortEncode (About c) where
-    mixShortEncode sh (About ts) =
+    mixTransEncode sh (About ts) =
         B.mixString "about" `B.mixSep2` D.termsToMix2 sh ts
 
 -- | Judges with about setting.

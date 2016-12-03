@@ -6,10 +6,13 @@ module Koshucode.Baala.Base.MixText.MixEncode
   ( -- * Encode
     MixEncode (..),
     MixShortEncode (..),
+    TransString,
+    mixShortEncode,
     mixIdEncode,
-    Shorten, noShorten,
+    noShorten,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base.MixText.MixText    as B
 
 -- | Encode via mix text.
@@ -21,17 +24,22 @@ instance MixEncode Bool where
     mixEncode True  = B.mixString "(+)"
     mixEncode False = B.mixString "(-)"
 
--- | Encode with shortener.
+-- | Encode with transformer.
 class MixShortEncode a where
     -- | Encode with string converter.
-    mixShortEncode :: Shorten -> a -> B.MixText
+    mixTransEncode :: TransString -> a -> B.MixText
 
-    -- | 'mixShortEncode' with no shortener.
+    -- | 'mixTransEncode' with no transformer.
     mixPlainEncode :: a -> B.MixText
-    mixPlainEncode = mixShortEncode noShorten
+    mixPlainEncode = mixTransEncode O.nothing
 
--- | Convert string to short sign.
-type Shorten = String -> Maybe String
+-- | Transform string to another form.
+type TransString = String -> Maybe String
+
+-- | Same as 'mixTransEncode'.
+{-# DEPRECATED mixShortEncode "Use 'mixTransEncode' instead." #-}
+mixShortEncode :: (MixShortEncode a) => TransString -> a -> B.MixText
+mixShortEncode = mixTransEncode
 
 -- | Same as 'mixPlainEncode'.
 {-# DEPRECATED mixIdEncode "Use 'mixPlainEncode' instead." #-}
@@ -39,6 +47,7 @@ mixIdEncode :: (MixShortEncode a) => a -> B.MixText
 mixIdEncode = mixPlainEncode
 
 -- | Shorten which does not shorten strings.
-noShorten :: Shorten
+{-# DEPRECATED noShorten "Use 'nothing' instead." #-}
+noShorten :: TransString
 noShorten _ = Nothing
 

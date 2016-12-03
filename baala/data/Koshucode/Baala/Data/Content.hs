@@ -125,7 +125,7 @@ instance D.CContent Content where
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
 instance B.MixShortEncode Content where
-    mixShortEncode sh c =
+    mixTransEncode sh c =
         case c of
           ContentCode  s   -> B.mixString $ quote  (sh s) s
           ContentText  s   -> B.mixString $ qquote (sh s) s
@@ -140,11 +140,11 @@ instance B.MixShortEncode Content where
           ContentList cs   -> D.mixBracketList $ mixBar cs
           ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
           ContentTie  ts   -> B.mixBracketS S.bracketTie $ D.termsToMix1 sh ts
-          ContentRel  r    -> B.mixShortEncode sh r
+          ContentRel  r    -> B.mixTransEncode sh r
           ContentInterp i  -> B.mixEncode i
           ContentType t    -> B.mixBracketS S.bracketType $ B.mixEncode t
         where
-          mixBar cs   = B.mixJoinBar $ map (B.mixShortEncode sh) cs
+          mixBar cs   = B.mixJoinBar $ map (B.mixTransEncode sh) cs
 
 quote :: Maybe String -> O.StringMap
 quote (Nothing) s   = "'" ++ s

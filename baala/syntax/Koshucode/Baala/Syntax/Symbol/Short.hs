@@ -63,7 +63,7 @@ shortGroup (Short cp1 sh1 a : xs) =
 -- ----------------------  Shorten
 
 -- | String shortener.
-shortText :: [ShortDef] -> B.Shorten
+shortText :: [ShortDef] -> B.TransString
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
 

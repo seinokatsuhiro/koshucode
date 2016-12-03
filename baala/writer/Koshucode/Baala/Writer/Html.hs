@@ -41,14 +41,14 @@ hPutRel h render sh = mapM_ put chunks where
     put _                  = return ()
     html cl r = H.div ! class_ "named-relation" $ do
                   H.p ! class_ "name" $ H.toMarkup cl
-                  contToHtml B.noShorten $ D.pRel r
+                  contToHtml O.nothing $ D.pRel r
 
 -- | Encode term content in HTML.
-contToHtml :: (D.CContent c) => B.Shorten -> c -> H.Html
+contToHtml :: (D.CContent c) => B.TransString -> c -> H.Html
 contToHtml sh = content where
     content c
         | D.isRel c = rel $ D.gRel c
-        | otherwise = H.toMarkup $ B.mixToFlatString $ B.mixShortEncode sh c
+        | otherwise = H.toMarkup $ B.mixToFlatString $ B.mixTransEncode sh c
 
     rel (D.Rel he bo) =
         H.table ! class_ "relation" $ do
