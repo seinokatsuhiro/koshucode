@@ -5,7 +5,7 @@
 module Koshucode.Baala.Base.MixText.MixEncode
   ( -- * Encode
     MixEncode (..),
-    MixShortEncode (..),
+    MixTransEncode (..),
     TransString,
     mixShortEncode,
     mixIdEncode,
@@ -25,7 +25,7 @@ instance MixEncode Bool where
     mixEncode False = B.mixString "(-)"
 
 -- | Encode with transformer.
-class MixShortEncode a where
+class MixTransEncode a where
     -- | Encode with string converter.
     mixTransEncode :: TransString -> a -> B.MixText
 
@@ -38,12 +38,12 @@ type TransString = String -> Maybe String
 
 -- | Same as 'mixTransEncode'.
 {-# DEPRECATED mixShortEncode "Use 'mixTransEncode' instead." #-}
-mixShortEncode :: (MixShortEncode a) => TransString -> a -> B.MixText
+mixShortEncode :: (MixTransEncode a) => TransString -> a -> B.MixText
 mixShortEncode = mixTransEncode
 
 -- | Same as 'mixPlainEncode'.
 {-# DEPRECATED mixIdEncode "Use 'mixPlainEncode' instead." #-}
-mixIdEncode :: (MixShortEncode a) => a -> B.MixText
+mixIdEncode :: (MixTransEncode a) => a -> B.MixText
 mixIdEncode = mixPlainEncode
 
 -- | Shorten which does not shorten strings.

@@ -214,10 +214,10 @@ judgesTokenType = map j cs where
 
 -- ----------------------  Utility
 
-putJudges :: (B.MixShortEncode c) => [D.Judge c] -> IO ()
+putJudges :: (B.MixTransEncode c) => [D.Judge c] -> IO ()
 putJudges = mapM_ putJudge
 
-putJudge :: (B.MixShortEncode a) => a -> IO ()
+putJudge :: (B.MixTransEncode a) => a -> IO ()
 putJudge = B.putMixLn B.crlfBreak . B.mixPlainEncode
 
 putNewline :: IO ()

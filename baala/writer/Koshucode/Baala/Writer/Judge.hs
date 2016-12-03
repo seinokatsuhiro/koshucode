@@ -24,17 +24,17 @@ import qualified Koshucode.Baala.Core                as C
 -- ----------------------  Writer
 
 -- | Print list of judgements.
-putJudges :: (Show c, B.MixShortEncode c) => [D.Judge c] -> IO ()
+putJudges :: (Show c, B.MixTransEncode c) => [D.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (O.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Show c, B.MixShortEncode c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
+putJudgesWith :: (Show c, B.MixTransEncode c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
 -- | Print list of judges.
-hPutJudgesWith :: (B.MixShortEncode c) => C.ResultWriterJudge c
+hPutJudgesWith :: (B.MixTransEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixPlainEncode js $ judgeCountMix []
        B.hPutMix D.judgeBreak h mx

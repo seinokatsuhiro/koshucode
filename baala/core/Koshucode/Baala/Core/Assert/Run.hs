@@ -75,7 +75,7 @@ optionType = S.paraSpec $ S.paraMin 0 . S.paraOpt
              , "table"     -- output relation in tabular format
              ]
 
-optionProcess :: (Ord c, D.CRel c, B.MixShortEncode c)
+optionProcess :: (Ord c, D.CRel c, B.MixTransEncode c)
     => [S.ShortDef] -> (Bool -> D.JudgeOf c) -> D.JudgeClass
     -> C.Option c -> C.TTreePara
     -> D.Rel c -> B.Ab [C.ResultChunk c]
@@ -108,7 +108,7 @@ optionRelmapAssert opt r1 =
                              Right args -> f args r2
                              Left _     -> Right r2
 
-optionComment :: (D.CRel c, B.MixShortEncode c) =>
+optionComment :: (D.CRel c, B.MixTransEncode c) =>
     [S.ShortDef] -> D.JudgeClass -> C.TTreePara -> D.Rel c -> B.Ab [String]
 optionComment sh p opt r =
     do optTable <- S.paraGetSwitch opt "table"

@@ -57,7 +57,7 @@ instance Functor Rel where
 instance D.GetTermNames (Rel c) where
     getTermNames = D.getTermNames . relHead
 
-instance (B.MixShortEncode c) => B.MixShortEncode (Rel c) where
+instance (B.MixTransEncode c) => B.MixTransEncode (Rel c) where
     mixTransEncode sh (Rel he bo) =
         let he'  = B.mixEncode he
             bo'  = B.mixJoin1 $ map d bo

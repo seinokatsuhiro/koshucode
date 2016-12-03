@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Data.Class.Complex       as D
 {-# DEPRECATED joinContent "Do not use it." #-}
 
 -- | Generic content class.
-class (Ord c, Show c, B.MixShortEncode c, D.CTypeOf c,
+class (Ord c, Show c, B.MixTransEncode c, D.CTypeOf c,
        D.CEmpty c, D.CEnd c,
        D.CBool c, D.CCode c, D.CText c, D.CClock c, D.CTime c,
        D.CTerm c, D.CDec c, D.CType c, D.CInterp c,

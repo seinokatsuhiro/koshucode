@@ -43,7 +43,7 @@ instance B.GetCodePos (Beta c) where
     getCPs (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
-beta :: (B.MixShortEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
+beta :: (B.MixTransEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = D.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
@@ -54,7 +54,7 @@ beta copset he cox =
       pos = position he
 
 -- beta reduction, i.e., process CoxBlank and CoxForm1.
-reduce :: forall c. (B.MixShortEncode c) => D.Cox c -> B.Ab (Beta c)
+reduce :: forall c. (B.MixTransEncode c) => D.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     red :: [D.NamedCox c] -> D.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
@@ -187,7 +187,7 @@ coxRun args = run 0 where
     rel ps (D.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
-(!!!) :: (B.MixShortEncode c) => [c] -> S.TermIndex -> c
+(!!!) :: (B.MixTransEncode c) => [c] -> S.TermIndex -> c
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs

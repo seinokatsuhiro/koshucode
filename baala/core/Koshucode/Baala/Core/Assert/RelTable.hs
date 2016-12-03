@@ -20,11 +20,11 @@ import qualified Koshucode.Baala.Data         as D
 -- --------------------------------------------  Rel table
 
 -- | Render relation in table layout.
-relTable :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> String
+relTable :: (D.CRel c, B.MixTransEncode c) => [S.ShortDef] -> D.Rel c -> String
 relTable sh = unlines . relTableLines sh
 
 -- | Render relation in table layout.
-relTableLines :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> [String]
+relTableLines :: (D.CRel c, B.MixTransEncode c) => [S.ShortDef] -> D.Rel c -> [String]
 relTableLines sh r = render $ relCells 2 size [] text where
     text = relText sh r
     size = maxTermSize text
@@ -47,7 +47,7 @@ relCells pad m path (D.Rel he bo) = table where
     rule _ = B.textRuleCell '-'
 
 -- | Convert contents of relation into strings.
-relText :: (D.CRel c, B.MixShortEncode c) => [S.ShortDef] -> D.Rel c -> D.RelText
+relText :: (D.CRel c, B.MixTransEncode c) => [S.ShortDef] -> D.Rel c -> D.RelText
 relText sh (D.Rel he bo) = D.Rel he $ map (map content) bo where
     content c | D.isRel c  = D.MonoNest $ relText sh $ D.gRel c
               | otherwise  = D.MonoTerm $ B.mixToFlatString $ B.mixTransEncode (S.shortText sh) c
