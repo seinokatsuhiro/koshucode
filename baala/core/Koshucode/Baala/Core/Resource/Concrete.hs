@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Resource.Concrete
     ResourceC, ResultC, ResultWriterC,
   ) where
 
+import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
@@ -21,6 +22,10 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 
 -- | @about@ clause.
 data About c = About [S.Term c] deriving (Show)
+
+instance (B.MixShortEncode c) => B.MixShortEncode (About c) where
+    mixShortEncode sh (About ts) =
+        B.mixString "about" `B.mixSep2` D.termsToMix2 sh ts
 
 -- | Judges with about setting.
 type AboutJudges c = (Maybe (About c), [D.Judge c])
