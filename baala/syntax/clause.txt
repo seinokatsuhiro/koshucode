@@ -1,0 +1,11 @@
+**
+**  This is an example file for 'readClauses' function
+**  defined in Koshucode.Baala.Syntax.Token.Clause module.
+**
+
+aa
+bb
+ cc
+
+** dd
+ee

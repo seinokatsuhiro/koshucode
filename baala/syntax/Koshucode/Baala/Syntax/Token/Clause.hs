@@ -11,6 +11,7 @@ module Koshucode.Baala.Syntax.Token.Clause
     -- * Token clause
     TokenClause,
     tokenClauses,
+    readClauses,
 
     -- * Abbreviation
     toks,
@@ -110,6 +111,36 @@ tokenClauses = map clause . split where
 tokenIndent :: S.Token -> Int
 tokenIndent (S.TSpace _ n) = n
 tokenIndent             _  = 0
+
+-- | Read clause list from file.
+--
+-- Content of file @clause.txt@:
+--
+--   > **
+--   > **  This is an example file for 'readClauses' function
+--   > **  defined in Koshucode.Baala.Syntax.Token.Clause module.
+--   > **
+--   > 
+--   > aa
+--   > bb
+--   >  cc
+--   > 
+--   > ** dd
+--   > ee
+--
+-- Read this file and parse to token clauses.
+--
+--   >>> O.printList =<< readClauses "clause.txt"
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.1.0/ TextRaw "aa"]}
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.2.0/ TextRaw "bb",
+--                                                  TText /0.3.1/ TextRaw "cc"]}
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
+--
+readClauses :: FilePath -> IO [TokenClause]
+readClauses path =
+    do let i = B.IOPointFile "" path
+       s <- readFile path
+       return $ tokenClauses $ tokenLines (B.NIOPoint 0 i) s
 
 
 -- --------------------------------------------  Abbreviation
