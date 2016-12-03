@@ -82,10 +82,14 @@ ioPointText (IOPointOutput h)            = handleName h
 -- | Create I/O point.
 ioPointFrom :: FilePath -> FilePath -> IOPoint
 ioPointFrom context path
-    | B.isPrefixOf "http://"  path  = IOPointUri  path
-    | B.isPrefixOf "https://" path  = IOPointUri  path
-    | B.isPrefixOf "ftp://"   path  = IOPointUri  path
-    | otherwise                     = IOPointFile context path
+    | isUri path  = IOPointUri  path
+    | otherwise   = IOPointFile context path
+
+-- | Test path is URI.
+isUri :: O.Test FilePath
+isUri path = B.isPrefixOf "http://"  path
+          || B.isPrefixOf "https://" path
+          || B.isPrefixOf "ftp://"   path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
 ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
