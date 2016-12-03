@@ -8,9 +8,9 @@ about /package 'syntax
 |-- DIR  /code 352  /comment 290  /dir "syntax/Koshucode/Baala/Syntax/Para"
 |-- DIR  /code 318  /comment 380  /dir "syntax/Koshucode/Baala/Syntax/Symbol"
 |-- DIR  /code 203  /comment 206  /dir "syntax/Koshucode/Baala/Syntax/TTree"
-|-- DIR  /code 709  /comment 598  /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- DIR  /code 714  /comment 636  /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- DIR-TOTAL  /code 1998  /comment 1759
+|-- DIR-TOTAL  /code 2003  /comment 1797
 
 |-- FILE  /code 12   /comment 6    /file "Syntax.hs"      /dir "syntax/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Attr.hs"        /dir "syntax/Koshucode/Baala/Syntax"
@@ -38,13 +38,13 @@ about /package 'syntax
 |-- FILE  /code 34   /comment 43   /file "Pattern.hs"     /dir "syntax/Koshucode/Baala/Syntax/TTree"
 |-- FILE  /code 18   /comment 32   /file "TokenTree.hs"   /dir "syntax/Koshucode/Baala/Syntax/TTree"
 |-- FILE  /code 8    /comment 6    /file "Token.hs"       /dir "syntax/Koshucode/Baala/Syntax"
-|-- FILE  /code 72   /comment 87   /file "Clause.hs"      /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- FILE  /code 80   /comment 125  /file "Clause.hs"      /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 16   /comment 14   /file "Message.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
-|-- FILE  /code 137  /comment 128  /file "Nipper.hs"      /dir "syntax/Koshucode/Baala/Syntax/Token"
+|-- FILE  /code 134  /comment 128  /file "Nipper.hs"      /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 24   /comment 29   /file "Pattern.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 134  /comment 138  /file "Rel.hs"         /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 95   /comment 38   /file "Section.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 135  /comment 99   /file "Token.hs"       /dir "syntax/Koshucode/Baala/Syntax/Token"
 |-- FILE  /code 96   /comment 65   /file "Utility.hs"     /dir "syntax/Koshucode/Baala/Syntax/Token"
 
-|-- FILE-TOTAL  /code 1998  /comment 1759
+|-- FILE-TOTAL  /code 2003  /comment 1797
