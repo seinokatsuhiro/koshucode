@@ -172,7 +172,7 @@ koshuMainParam g@C.Global { C.globalResult  = rslt
     | otherwise            = L.runFiles g2 src
     where
       ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
-      src   = B.ioPointList (paramStdin p) (paramLiner p) "" (paramArgs p)
+      src   = B.ioPointTogether (paramStdin p) (paramLiner p) (paramArgs p)
 
       -- global parameter
       g2 = C.globalFill g
@@ -186,7 +186,7 @@ koshuMainParam g@C.Global { C.globalResult  = rslt
 
 -- | Alter output of data resource.
 resOutputAlt :: FilePath -> O.Map (C.Resource c)
-resOutputAlt path res = res { C.resOutput = B.ioPointFrom "" path }
+resOutputAlt path res = res { C.resOutput = B.ioPoint path }
 
 -- | Alter only if 'Just' value is given.
 altMaybe :: (a -> b -> b)         -- ^ Pure alteration

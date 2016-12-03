@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.IO.IOPoint
     -- * I/O point
     IOPoint (..), IOPath,
     ioPointType, ioPointText,
-    ioPoint, ioPointFrom, ioPointList,
+    ioPoint, ioPointDir, ioPointTogether,
 
     -- * Indexed I/O point
     IxIOPoint (..),
@@ -89,26 +89,23 @@ ioPoint "system://stdout"   = IOPointStdout Nothing
 ioPoint path | isUri path   = IOPointUri  path
              | otherwise    = IOPointFile "" path
 
--- | Create I/O point.
-ioPointFrom :: FilePath -> IOPath -> IOPoint
-ioPointFrom dir path = ioPointDir dir $ ioPoint path
-
+-- | Add context directory.
 ioPointDir :: FilePath -> O.Map IOPoint
 ioPointDir dir (IOPointFile _ path) = IOPointFile dir path
 ioPointDir _ iop = iop
 
 -- | Test path is URI.
-isUri :: O.Test FilePath
+isUri :: O.Test IOPath
 isUri path = B.isPrefixOf "http://"  path
           || B.isPrefixOf "https://" path
           || B.isPrefixOf "ftp://"   path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and URIs.
-ioPointList :: Bool -> [Code] -> FilePath -> [FilePath] -> [IOPoint]
-ioPointList stdin texts context paths =
-    B.consIf stdin (IOPointStdin Nothing) $
-         IOPointText Nothing `map` texts ++
-         ioPointFrom context `map` paths
+ioPointTogether :: Bool -> [Code] -> [FilePath] -> [IOPoint]
+ioPointTogether stdin texts paths =
+    let ts = IOPointText Nothing <$> texts
+        ps = ioPoint <$> paths
+    in B.consIf stdin (IOPointStdin Nothing) $ ts ++ ps
 
 
 -- ----------------------  Indexed I/O point

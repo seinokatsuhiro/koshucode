@@ -153,7 +153,8 @@ paraToIOPoint cd = S.paraSelect unmatch ps where
     just1 p = do arg   <- S.paraGetFst p
                  about <- S.paraGetOpt [] p "about"
                  case arg of
-                   P.LText _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
+                   P.LText _ path -> let iop = B.ioPointDir cd $ B.ioPoint path
+                                     in Right $ C.InputPoint iop about
                    _ -> Msg.adlib "input not text"
 
     stdin :: C.TTreePara -> B.Ab C.InputPoint
