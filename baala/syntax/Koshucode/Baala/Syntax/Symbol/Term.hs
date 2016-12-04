@@ -80,6 +80,10 @@ instance ToTermName Tx.Text where
 instance ToTermName Tz.Text where
     toTermName = toTermName . Tz.unpack
 
+-- | Integer term name.
+instance ToTermName Int where
+    toTermName = toTermName . show
+
 -- | Add necessary slash character indicating term name.
 --
 --   >>> enslash <$> ["foo", "/bar", "+/baz", "-/qux"]
