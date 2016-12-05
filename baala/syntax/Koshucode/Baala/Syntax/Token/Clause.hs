@@ -7,16 +7,17 @@ module Koshucode.Baala.Syntax.Token.Clause
     tokenLines, tokenLinesBz,
     tokenLinesBzTextAssert,
     isShortPrefix,
+    readTokenLines,
   
     -- * Token clause
     TokenClause,
     tokenClauses,
     readClauses,
-    clausePrint,
 
     -- * Abbreviation
     toks,
     toksPrint,
+    clausePrint,
   ) where
 
 import qualified Data.Char                              as Ch
@@ -56,6 +57,7 @@ tokenLinesBzTextAssert = tokenLinesBzWith S.scanTextAssert
 tokenLinesWith :: S.Scanner -> B.IxIOPoint -> S.InputText -> [TokenLine]
 tokenLinesWith scan = B.codeScanUp $ scan changeSection
 
+-- | Tokenize with code scanner.
 tokenLinesBzWith :: (B.ToCode code) => S.Scanner -> B.IxIOPoint -> code -> [TokenLine]
 tokenLinesBzWith scan = B.codeScanUpBz $ scan changeSection
 
@@ -84,6 +86,14 @@ sectionUnsupported msg r@B.CodeScan { B.codeInput = cs } = B.codeUpdate "" tok r
 -- | Test string is short prefix.
 isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
+
+-- | Read token lines from file.
+readTokenLines :: FilePath -> IO (B.Ab [TokenLine])
+readTokenLines path =
+    do file <- B.readBzFile path
+       return $ case B.bzFileException file of
+         Nothing -> Right $ tokenLinesBz (B.pathIxIO path) (B.bzFileContent file)
+         Just e  -> Left $ B.abortLines "Abort when reading file" [show e]
 
 
 -- --------------------------------------------  Token clause
@@ -131,45 +141,16 @@ tokenIndent             _  = 0
 --
 -- Read this file and parse to token clauses.
 --
---   >>> O.printList =<< readClauses "clause.txt"
+--   >>> O.printList =<< B.abortLeft =<< readClauses "clause.txt"
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.1.0/ TextRaw "aa"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.2.0/ TextRaw "bb",
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --
-readClauses :: FilePath -> IO [TokenClause]
+readClauses :: FilePath -> IO (B.Ab [TokenClause])
 readClauses path =
-    do s <- readFile path
-       return $ tokenClauses $ tokenLines (B.pathIxIO path) s
-
--- | Parse string to clause and print it for inspection.
---
---   >>> clausePrint ["|-- A /x 0 /y 1", "", "|== B : ", "  source A /x /y"]
---   ********** |-- A /x 0 /y 1
---   TText /0.1.0/ TextBar "|--"
---   TText /0.1.4/ TextRaw "A"
---   TTerm /0.1.6/ "/x"
---   TText /0.1.9/ TextRaw "0"
---   TTerm /0.1.11/ "/y"
---   TText /0.1.14/ TextRaw "1"
---   ********** |== B : 
---   TText /0.3.0/ TextBar "|=="
---   TText /0.3.4/ TextRaw "B"
---   TText /0.3.6/ TextRaw ":"
---   TText /0.4.2/ TextRaw "source"
---   TText /0.4.9/ TextRaw "A"
---   TTerm /0.4.11/ "/x"
---   TTerm /0.4.14/ "/y"
---
-clausePrint :: [String] -> IO ()
-clausePrint ss =
-    do let ls = tokenClauses $ tokenLines B.def $ unlines ss
-       printToks `mapM_` (B.clauseTokens <$> ls)
-
-printToks :: [S.Token] -> IO ()
-printToks ts =
-    do putStrLn $ "********** " ++ (B.cpLineText $ B.getCP ts)
-       mapM_ print ts
+    do ls <- readTokenLines path
+       return (tokenClauses <$> ls)
 
 
 -- --------------------------------------------  Abbreviation
@@ -177,6 +158,11 @@ printToks ts =
 -- | Abbreviated tokenizer.
 toks :: String -> [S.Token]
 toks s = tokens (B.codeIxIO $ B.stringBz s) s
+
+printToks :: [S.Token] -> IO ()
+printToks ts =
+    do putStrLn $ "********** " ++ (B.cpLineText $ B.getCP ts)
+       mapM_ print ts
 
 -- | Tokenize and print for debug.
 --
@@ -232,4 +218,29 @@ toks s = tokens (B.codeIxIO $ B.stringBz s) s
 --
 toksPrint :: [String] -> IO ()
 toksPrint ss = printToks $ toks $ unlines ss
+
+
+-- | Parse string to clause and print it for inspection.
+--
+--   >>> clausePrint ["|-- A /x 0 /y 1", "", "|== B : ", "  source A /x /y"]
+--   ********** |-- A /x 0 /y 1
+--   TText /0.1.0/ TextBar "|--"
+--   TText /0.1.4/ TextRaw "A"
+--   TTerm /0.1.6/ "/x"
+--   TText /0.1.9/ TextRaw "0"
+--   TTerm /0.1.11/ "/y"
+--   TText /0.1.14/ TextRaw "1"
+--   ********** |== B : 
+--   TText /0.3.0/ TextBar "|=="
+--   TText /0.3.4/ TextRaw "B"
+--   TText /0.3.6/ TextRaw ":"
+--   TText /0.4.2/ TextRaw "source"
+--   TText /0.4.9/ TextRaw "A"
+--   TTerm /0.4.11/ "/x"
+--   TTerm /0.4.14/ "/y"
+--
+clausePrint :: [String] -> IO ()
+clausePrint ss =
+    do let ls = tokenClauses $ tokenLines B.def $ unlines ss
+       printToks `mapM_` (B.clauseTokens <$> ls)
 
