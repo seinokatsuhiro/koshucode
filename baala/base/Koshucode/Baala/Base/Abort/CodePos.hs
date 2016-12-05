@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Abort.CodePos
   ( -- * Code position
     CodePos (..),
     cpColumnNo,
+    cpSplit,
 
     -- * Get code positions
     GetCodePos (..),
@@ -16,6 +17,7 @@ module Koshucode.Baala.Base.Abort.CodePos
     codic, noCodic,
   ) where
 
+import qualified Data.List                          as Li
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
@@ -62,6 +64,12 @@ showCp f cp = f s l c where
 instance Ord CodePos where
     compare = cpCompare
 
+cpCompare :: CodePos -> CodePos -> Ordering
+cpCompare p1 p2 = line O.++ column where
+    line   = cpLineNo p1 `compare` cpLineNo p2
+    column = size p2 `compare` size p1
+    size   = length . cpText
+
 -- | Empty code position, i.e., empty content and zero line number.
 instance B.Default CodePos where
     def = CodePos { cpIndex    = 0
@@ -70,23 +78,31 @@ instance B.Default CodePos where
                   , cpLineText = ""
                   , cpText     = "" }
 
-cpCompare :: CodePos -> CodePos -> Ordering
-cpCompare p1 p2 = line O.++ column where
-    line   = cpLineNo p1 `compare` cpLineNo p2
-    column = size p2 `compare` size p1
-    size   = length . cpText
-
 -- | Column number at which code starts.
 --
---   >>> let cp = CodePos (B.codeIxIO "abcdefg") 1 "abcdefg" "abc"
+--   >>> let cp = CodePos 0 "<stdin>" 1 "abcdefg" "defg"
 --   >>> cp
---   /0.1.4/
+--   /0.1.3/
 --   >>> cpColumnNo cp
---   4
+--   3
 --
 cpColumnNo :: CodePos -> Int
 cpColumnNo CodePos { cpLineText = line, cpText = subline }
     = length line - length subline
+
+-- | Before and after text of code position.
+--
+--   >>> cpSplit $ CodePos 0 "<stdin>" 1 "abcdefg" "defg"
+--   ("abc", "defg")
+--
+cpSplit :: CodePos -> (String, String)
+cpSplit CodePos { cpLineText = ln, cpText = t } =
+    case stripSuffix t ln of
+      Just s  -> (s, t)
+      Nothing -> (ln, t)
+
+stripSuffix :: (Eq a) => [a] -> [a] -> Maybe [a]
+stripSuffix suf s = reverse <$> Li.stripPrefix (reverse suf) (reverse s)
 
 
 -- ----------------------  GetCodePos
