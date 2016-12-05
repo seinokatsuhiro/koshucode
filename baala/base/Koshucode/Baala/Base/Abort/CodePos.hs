@@ -19,7 +19,6 @@ module Koshucode.Baala.Base.Abort.CodePos
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
-import qualified Koshucode.Baala.Base.IO            as B
 
 
 -- ----------------------  CodePos
@@ -45,7 +44,7 @@ instance B.PPrint CodePos where
 instance O.GetIx CodePos where
     getIx = cpIndex
 
-instance B.GetIOPath CodePos where
+instance O.GetIOPath CodePos where
     getIOPath = cpPath
 
 longSlash :: CodePos -> String

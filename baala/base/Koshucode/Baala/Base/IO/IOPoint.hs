@@ -8,10 +8,6 @@ module Koshucode.Baala.Base.IO.IOPoint
   ( -- * Named handle
     NamedHandle (..),
 
-    -- * I/O path
-    IOPath,
-    GetIOPath (..),
-
     -- * I/O point
     IOPoint (..),
     ioPointType, ioPointText,
@@ -49,25 +45,12 @@ instance Ord NamedHandle where
     h1 `compare` h2 = handleName h1 `compare` handleName h2
 
 
--- ----------------------  I/O path
-
--- | URI, file path, etc.
-type IOPath = String
-
--- | Type which has I/O path.
-class GetIOPath a where
-    getIOPath :: a -> IOPath
-
-instance GetIOPath String where
-    getIOPath = id
-
-
 -- ----------------------  IOPoint
 
 -- | I/O point: file, standard input, direct text, etc.
 data IOPoint
     = IOPointFile   FilePath FilePath    -- ^ __1 Input/Output:__ Context directory and target path.
-    | IOPointUri    IOPath               -- ^ __2 Input:__ Universal resource identifier.
+    | IOPointUri    O.IOPath             -- ^ __2 Input:__ Universal resource identifier.
     | IOPointText   (Maybe String) Code  -- ^ __3 Input:__ Code and its name.
     | IOPointCustom String B.Bz          -- ^ __4 Input:__ Custom I/O.
     | IOPointStdin  (Maybe String)       -- ^ __5 Input:__ The sandard input.
@@ -75,7 +58,7 @@ data IOPoint
     | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
       deriving (Show, Eq, Ord)
 
-instance GetIOPath IOPoint where
+instance O.GetIOPath IOPoint where
     getIOPath = ioPointText
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"uri\"@, @\"text\"@,
@@ -100,7 +83,7 @@ ioPointText (IOPointStdout name)      = B.fromMaybe "<stdout>" name
 ioPointText (IOPointOutput h)         = handleName h
 
 -- | Create I/O Point.
-ioPoint :: IOPath -> IOPoint
+ioPoint :: O.IOPath -> IOPoint
 ioPoint "system://stdin"    = IOPointStdin  Nothing
 ioPoint "system://stdout"   = IOPointStdout Nothing
 ioPoint path | isUri path   = IOPointUri  path
@@ -112,7 +95,7 @@ ioPointDir dir (IOPointFile _ path) = IOPointFile dir path
 ioPointDir _ iop = iop
 
 -- | Test path is URI.
-isUri :: O.Test IOPath
+isUri :: O.Test O.IOPath
 isUri path = B.isPrefixOf "http://"  path
           || B.isPrefixOf "https://" path
           || B.isPrefixOf "ftp://"   path
@@ -150,8 +133,8 @@ instance B.Default IxIOPoint where
 instance O.GetIx IxIOPoint where
     getIx = nioNumber
 
-instance GetIOPath IxIOPoint where
-    getIOPath = getIOPath . nioPoint
+instance O.GetIOPath IxIOPoint where
+    getIOPath = O.getIOPath . nioPoint
 
 -- | Create input point for given lazy bytestring.
 --

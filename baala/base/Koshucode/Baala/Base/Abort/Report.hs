@@ -53,7 +53,7 @@ cpMessage (cp@B.CodePos { B.cpLineNo = lno
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
     where
-      pos  = show lno ++ " " ++ show cno ++ " " ++ B.getIOPath cp
+      pos  = show lno ++ " " ++ show cno ++ " " ++ O.getIOPath cp
       cno  = B.cpColumnNo cp
 
       shorten :: O.StringMap
