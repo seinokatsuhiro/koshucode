@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.Prelude.Import
     -- * Data.ByteString.Lazy
     Bz,
     -- * Data.ByteString.Lazy.UTF8
-    stringBz,
+    stringBz, bzString,
 
     -- * Data.Default
     Data.Default.Default (..),
@@ -98,8 +98,14 @@ type Bs = Data.ByteString.ByteString
 type Bz = Data.ByteString.Lazy.ByteString
 
 -- | Convert string into lazy bytestring.
+--   This is same as 'Data.ByteString.Lazy.UTF8.fromString'.
 stringBz :: String -> Bz
 stringBz = Data.ByteString.Lazy.UTF8.fromString
+
+-- | Convert lazy bytestring to string.
+--   This is same as 'Data.ByteString.Lazy.UTF8.toString'.
+bzString :: Bz -> String
+bzString = Data.ByteString.Lazy.UTF8.toString
 
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
