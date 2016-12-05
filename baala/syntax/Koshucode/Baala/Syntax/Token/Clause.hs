@@ -12,6 +12,7 @@ module Koshucode.Baala.Syntax.Token.Clause
     TokenClause,
     tokenClauses,
     readClauses,
+    clausePrint,
 
     -- * Abbreviation
     toks,
@@ -141,6 +142,35 @@ readClauses path =
     do s <- readFile path
        return $ tokenClauses $ tokenLines (B.pathIxIO path) s
 
+-- | Parse string to clause and print it for inspection.
+--
+--   >>> clausePrint ["|-- A /x 0 /y 1", "", "|== B : ", "  source A /x /y"]
+--   ********** |-- A /x 0 /y 1
+--   TText /0.1.0/ TextBar "|--"
+--   TText /0.1.4/ TextRaw "A"
+--   TTerm /0.1.6/ "/x"
+--   TText /0.1.9/ TextRaw "0"
+--   TTerm /0.1.11/ "/y"
+--   TText /0.1.14/ TextRaw "1"
+--   ********** |== B : 
+--   TText /0.3.0/ TextBar "|=="
+--   TText /0.3.4/ TextRaw "B"
+--   TText /0.3.6/ TextRaw ":"
+--   TText /0.4.2/ TextRaw "source"
+--   TText /0.4.9/ TextRaw "A"
+--   TTerm /0.4.11/ "/x"
+--   TTerm /0.4.14/ "/y"
+--
+clausePrint :: [String] -> IO ()
+clausePrint ss =
+    do let ls = tokenClauses $ tokenLines B.def $ unlines ss
+       printToks `mapM_` (B.clauseTokens <$> ls)
+
+printToks :: [S.Token] -> IO ()
+printToks ts =
+    do putStrLn $ "********** " ++ (B.cpLineText $ B.getCP ts)
+       mapM_ print ts
+
 
 -- --------------------------------------------  Abbreviation
 
@@ -201,5 +231,5 @@ toks s = tokens (B.codeIxIO $ B.stringBz s) s
 --    TText /0.2.0/ TextRaw "def"
 --
 toksPrint :: [String] -> IO ()
-toksPrint ss = mapM_ print $ toks $ unlines ss
+toksPrint ss = printToks $ toks $ unlines ss
 
