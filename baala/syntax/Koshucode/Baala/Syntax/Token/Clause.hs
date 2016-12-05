@@ -46,17 +46,17 @@ tokenLines :: B.IxIOPoint -> S.InputText -> [TokenLine]
 tokenLines = tokenLinesWith S.scanRel
 
 -- | Tokenize lazy bytestring.
-tokenLinesBz :: B.IxIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBz :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLinesBz = tokenLinesBzWith S.scanRel
 
 -- | Tokenize lazy bytestring.
-tokenLinesBzTextAssert :: B.IxIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLinesBzTextAssert = tokenLinesBzWith S.scanTextAssert
 
 tokenLinesWith :: S.Scanner -> B.IxIOPoint -> S.InputText -> [TokenLine]
 tokenLinesWith scan = B.codeScanUp $ scan changeSection
 
-tokenLinesBzWith :: S.Scanner -> B.IxIOPoint -> B.Bz -> [TokenLine]
+tokenLinesBzWith :: (B.ToCode code) => S.Scanner -> B.IxIOPoint -> code -> [TokenLine]
 tokenLinesBzWith scan = B.codeScanUpBz $ scan changeSection
 
 changeSection :: S.ChangeSection

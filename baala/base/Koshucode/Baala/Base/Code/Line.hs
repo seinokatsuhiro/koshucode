@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Code.Line
 import qualified Data.ByteString.Lazy                 as Bz
 import qualified Data.ByteString.Lazy.UTF8            as Bu
 import qualified Koshucode.Baala.Base.Abort           as B
+import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 
 
@@ -53,21 +54,21 @@ linesCrlf s = ln : next s2 where
     next s3          = linesCrlf s3
 
 -- | Create numbered lines from lazy bytestring.
-linesCrlfBzNumbered :: B.Bz -> [NumberedLine]
+linesCrlfBzNumbered :: (B.ToCode code) => code -> [NumberedLine]
 linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
 
 -- | Create string lines from lazy bytestring.
-linesCrlfBzString :: B.Bz -> [String]
+linesCrlfBzString :: (B.ToCode code) => code -> [String]
 linesCrlfBzString = map Bu.toString . linesCrlfBz
 
 -- | Split lazy bytestring by newline character sequence.
 --   This function drops the BOM sequence.
-linesCrlfBz :: B.Bz -> [B.Bz]
+linesCrlfBz :: (B.ToCode code) => code -> [B.Bz]
 linesCrlfBz = linesCrlfBzRaw . dropBom
 
 -- | Split lazy bytestring by newline character sequence.
-linesCrlfBzRaw :: B.Bz -> [B.Bz]
-linesCrlfBzRaw = loop where
+linesCrlfBzRaw :: (B.ToCode code) => code -> [B.Bz]
+linesCrlfBzRaw = loop . B.toCode where
     loop bz
         | Bz.null bz  = []
         | otherwise   = case Bz.break crlf bz of
@@ -85,11 +86,12 @@ linesCrlfBzRaw = loop where
                       | otherwise -> bz2
 
 -- | Remove UTF-8 BOM (EF BB BF) from lazy bytestring.
-dropBom :: B.Bz -> B.Bz
-dropBom bz =
-  case Bz.splitAt 3 bz of
-    (bom, body) | "\xEF\xBB\xBF" `Bz.isPrefixOf` bom -> body
-                | otherwise                          -> bz
+dropBom :: (B.ToCode code) => code -> B.Bz
+dropBom code =
+    let bz = B.toCode code
+    in case Bz.splitAt 3 bz of
+         (bom, body) | "\xEF\xBB\xBF" `Bz.isPrefixOf` bom -> body
+                     | otherwise                          -> bz
 
 
 -- ----------------------  CodeLine

@@ -81,7 +81,7 @@ codeScanUp :: CodeScanMap String o -> B.IxIOPoint -> String -> [B.CodeLine o]
 codeScanUp f nio = codeScanUpLines f nio . B.linesCrlfNumbered
 
 -- | Lazy bytestring version of 'codeScanUp'.
-codeScanUpBz :: CodeScanMap String o -> B.IxIOPoint -> B.Bz -> [B.CodeLine o]
+codeScanUpBz :: (B.ToCode code) => CodeScanMap String o -> B.IxIOPoint -> code -> [B.CodeLine o]
 codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.IxIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
