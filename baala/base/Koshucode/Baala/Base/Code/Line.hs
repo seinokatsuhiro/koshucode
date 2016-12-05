@@ -7,10 +7,8 @@ module Koshucode.Baala.Base.Code.Line
   ( -- * Line
     LineNumber,
     NumberedLine,
-    linesCrlfNumbered,
-    linesCrlf,
-    linesCrlfBzNumbered,
-    linesCrlfBz, linesCrlfBzString,
+    linesCrlf, linesCrlfNumbered,
+    linesCrlfBz, linesCrlfBzNumbered,
     dropBom,
 
     -- * CodeLine
@@ -33,10 +31,6 @@ type LineNumber = Int
 -- | Line with number.
 type NumberedLine = (LineNumber, String)
 
--- | Line number and its content.
-linesCrlfNumbered :: String -> [NumberedLine]
-linesCrlfNumbered = zip [1..] . linesCrlf
-
 -- | Split string into lines.
 --   The result strings do not contain
 --   carriage returns (@\\r@)
@@ -52,13 +46,9 @@ linesCrlf s = ln : next s2 where
     next ('\n' : s3) = linesCrlf s3
     next s3          = linesCrlf s3
 
--- | Create numbered lines from lazy bytestring.
-linesCrlfBzNumbered :: (B.ToCode code) => code -> [NumberedLine]
-linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
-
--- | Create string lines from lazy bytestring.
-linesCrlfBzString :: (B.ToCode code) => code -> [String]
-linesCrlfBzString = map B.bzString . linesCrlfBz
+-- | Line number and its content.
+linesCrlfNumbered :: String -> [NumberedLine]
+linesCrlfNumbered = zip [1..] . linesCrlf
 
 -- | Split lazy bytestring by newline character sequence.
 --   This function drops the BOM sequence.
@@ -83,6 +73,14 @@ linesCrlfBzRaw = loop . B.toCode where
                       | c == cr   -> strip bz2'
                       | c == lf   -> bz2'
                       | otherwise -> bz2
+
+-- | Create numbered lines from lazy bytestring.
+linesCrlfBzNumbered :: (B.ToCode code) => code -> [NumberedLine]
+linesCrlfBzNumbered = zip [1..] . linesCrlfBzString
+
+-- | Create string lines from lazy bytestring.
+linesCrlfBzString :: (B.ToCode code) => code -> [String]
+linesCrlfBzString = map B.bzString . linesCrlfBz
 
 -- | Remove UTF-8 BOM (EF BB BF) from lazy bytestring.
 dropBom :: (B.ToCode code) => code -> B.Bz

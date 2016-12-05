@@ -4,8 +4,8 @@
 module Koshucode.Baala.Syntax.Token.Clause
   ( -- * Token line
     TokenLine,
-    tokenLines, tokenLinesBz,
-    tokenLinesBzTextAssert,
+    tokenLines,
+    tokenLinesTextAssert,
     isShortPrefix,
     readTokenLines,
   
@@ -37,29 +37,21 @@ import qualified Koshucode.Baala.Base.Message           as Msg
 -- | Token list on a line.
 type TokenLine = B.CodeLine S.Token
 
--- | Split string into list of tokens.
---   Result token list does not contain newline characters.
-tokens :: B.IxIOPoint -> S.InputText -> [S.Token]
-tokens nio cs = concatMap B.lineTokens $ tokenLines nio cs
-
--- | Tokenize text.
-tokenLines :: B.IxIOPoint -> S.InputText -> [TokenLine]
+-- | Tokenize lazy bytestring.
+tokenLines :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
 tokenLines = tokenLinesWith S.scanRel
 
--- | Tokenize lazy bytestring.
-tokenLinesBz :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
-tokenLinesBz = tokenLinesBzWith S.scanRel
-
--- | Tokenize lazy bytestring.
-tokenLinesBzTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
-tokenLinesBzTextAssert = tokenLinesBzWith S.scanTextAssert
-
-tokenLinesWith :: S.Scanner -> B.IxIOPoint -> S.InputText -> [TokenLine]
-tokenLinesWith scan = B.codeScanUp $ scan changeSection
-
 -- | Tokenize with code scanner.
-tokenLinesBzWith :: (B.ToCode code) => S.Scanner -> B.IxIOPoint -> code -> [TokenLine]
-tokenLinesBzWith scan = B.codeScanUpBz $ scan changeSection
+tokenLinesWith :: (B.ToCode code) => S.Scanner -> B.IxIOPoint -> code -> [TokenLine]
+tokenLinesWith scan = B.codeScanUpBz $ scan changeSection
+
+-- | Tokenize text.
+tokenLinesString :: B.IxIOPoint -> S.InputText -> [TokenLine]
+tokenLinesString = B.codeScanUp $ S.scanRel changeSection
+
+-- | Tokenize lazy bytestring.
+tokenLinesTextAssert :: (B.ToCode code) => B.IxIOPoint -> code -> [TokenLine]
+tokenLinesTextAssert = tokenLinesWith S.scanTextAssert
 
 changeSection :: S.ChangeSection
 changeSection name =
@@ -92,7 +84,7 @@ readTokenLines :: FilePath -> IO (B.Ab [TokenLine])
 readTokenLines path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
-       return $ Right $ tokenLinesBz (B.pathIxIO path) bz
+       return $ Right $ tokenLines (B.pathIxIO path) bz
 
 
 -- --------------------------------------------  Token clause
@@ -156,7 +148,7 @@ readClauses path =
 
 -- | Abbreviated tokenizer.
 toks :: String -> [S.Token]
-toks s = tokens (B.codeIxIO $ B.stringBz s) s
+toks s = concatMap B.lineTokens $ tokenLinesString (B.codeIxIO s) s
 
 printToks :: [S.Token] -> IO ()
 printToks ts =
@@ -240,6 +232,6 @@ toksPrint ss = printToks $ toks $ unlines ss
 --
 clausePrint :: [String] -> IO ()
 clausePrint ss =
-    do let ls = tokenClauses $ tokenLines B.def $ unlines ss
+    do let ls = tokenClauses $ tokenLinesString B.def $ unlines ss
        printToks `mapM_` (B.clauseTokens <$> ls)
 

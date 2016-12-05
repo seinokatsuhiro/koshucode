@@ -29,8 +29,8 @@ resInclude :: forall c. (D.CContent c)
     -> B.IxIOPoint      -- ^ Input point
     -> B.Bz             -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude resAbout cd base nio code =
-    do let ls   = S.tokenLinesBz nio code
+resInclude resAbout cd base xio code =
+    do let ls   = S.tokenLines xio code
            sec  = C.resLastSecNo base + 1
            cs   = C.consClause resAbout sec ls
        (cc, js, cs2) <- createJudges base cs

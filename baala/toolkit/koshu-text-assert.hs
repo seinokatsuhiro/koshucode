@@ -63,7 +63,7 @@ type ClauseMix = S.TokenClause -> B.MixText
 clauseMixForBz :: ClauseMix -> B.Bz -> B.MixText
 clauseMixForBz f bz = B.mixLines texts where
     texts   = f <$> clauses
-    clauses = S.tokenClauses $ S.tokenLinesBzTextAssert B.def bz
+    clauses = S.tokenClauses $ S.tokenLinesTextAssert B.def bz
 
 pattern Affirm name ts <- (TBar "|==") : (TRaw name) : (TRaw ":") : ts
 
