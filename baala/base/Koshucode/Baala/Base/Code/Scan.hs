@@ -78,15 +78,16 @@ codeScanRestore sc =
 --      and put tokens together in 'B.CodeLine'.
 --
 codeScanUp :: CodeScanMap String o -> B.IxIOPoint -> String -> [B.CodeLine o]
-codeScanUp f nio = codeScanUpLines f nio . B.linesCrlfNumbered
+codeScanUp f ixio = codeScanUpLines f ixio . B.linesCrlfNumbered
 
 -- | Lazy bytestring version of 'codeScanUp'.
 codeScanUpBz :: (B.ToCode code) => CodeScanMap String o -> B.IxIOPoint -> code -> [B.CodeLine o]
-codeScanUpBz f nio = codeScanUpLines f nio . B.linesCrlfBzNumbered
+codeScanUpBz f ixio = codeScanUpLines f ixio . B.linesCrlfBzNumbered
 
 codeScanUpLines :: CodeScanMap String o -> B.IxIOPoint -> [B.NumberedLine] -> [B.CodeLine o]
-codeScanUpLines f nio = loop (CodeScan [] f cp "" [] emptyWordCache) where
-    cp    = B.def { B.cpSource = nio }
+codeScanUpLines f ixio = loop (CodeScan [] f cp "" [] emptyWordCache) where
+    cp = B.def { B.cpIndex = O.getIx ixio
+               , B.cpPath  = B.getIOPath ixio }
 
     loop _ [] = []
     loop r ((num, line) : ls) =

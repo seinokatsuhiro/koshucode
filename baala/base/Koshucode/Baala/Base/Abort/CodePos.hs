@@ -26,10 +26,11 @@ import qualified Koshucode.Baala.Base.IO            as B
 
 -- | Position on input code string.
 data CodePos = CodePos
-      { cpSource     :: B.IxIOPoint  -- ^ Source of code
-      , cpLineNo     :: Int          -- ^ Line number
-      , cpLineText   :: String       -- ^ Code string line
-      , cpText       :: String       -- ^ Current code string
+      { cpIndex      :: O.Ix       -- ^ Index of code source
+      , cpPath       :: FilePath   -- ^ Path of code source
+      , cpLineNo     :: Int        -- ^ Line number
+      , cpLineText   :: String     -- ^ Code string line
+      , cpText       :: String     -- ^ Current code string
       } deriving (Eq)
 
 -- | Number of input point, line number, and column number,
@@ -42,13 +43,10 @@ instance B.PPrint CodePos where
     pprint = B.pprint . shortSlash
 
 instance O.GetIx CodePos where
-    getIx = O.getIx . cpSource
+    getIx = cpIndex
 
 instance B.GetIOPath CodePos where
-    getIOPath = B.getIOPath . cpSource
-
--- showAngle :: CodePos -> String
--- showAngle = showCp (\s l c -> "<I" ++ s ++ "-L" ++ l ++ "-C" ++ c ++ ">")
+    getIOPath = cpPath
 
 longSlash :: CodePos -> String
 longSlash = showCp (\s l c -> "/" ++ s ++ "." ++ l ++ "." ++ c ++ "/")
@@ -67,7 +65,11 @@ instance Ord CodePos where
 
 -- | Empty code position, i.e., empty content and zero line number.
 instance B.Default CodePos where
-    def = CodePos B.def 0 "" ""
+    def = CodePos { cpIndex    = 0
+                  , cpPath     = ""
+                  , cpLineNo   = 0
+                  , cpLineText = ""
+                  , cpText     = "" }
 
 cpCompare :: CodePos -> CodePos -> Ordering
 cpCompare p1 p2 = line O.++ column where
