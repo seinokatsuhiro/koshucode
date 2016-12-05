@@ -91,9 +91,8 @@ isShortPrefix  = all Ch.isAlpha
 readTokenLines :: FilePath -> IO (B.Ab [TokenLine])
 readTokenLines path =
     do file <- B.readBzFile path
-       return $ case B.bzFileException file of
-         Nothing -> Right $ tokenLinesBz (B.pathIxIO path) (B.bzFileContent file)
-         Just e  -> Left $ B.abortLines "Abort when reading file" [show e]
+       bz   <- B.abortLeft $ B.bzFileContent file
+       return $ Right $ tokenLinesBz (B.pathIxIO path) bz
 
 
 -- --------------------------------------------  Token clause

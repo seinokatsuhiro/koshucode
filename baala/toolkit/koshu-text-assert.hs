@@ -52,9 +52,8 @@ run f = readRun g where
 readRun :: (B.Bz -> IO()) -> FilePath -> IO ()
 readRun f path =
     do file <- B.readBzFile path
-       case B.bzFileException file of
-         Just e  -> O.putAbortWith $ show e
-         Nothing -> f $ B.bzFileContent file
+       bz   <- B.abortLeft $ B.bzFileContent file
+       f bz
 
                     
 -- --------------------------------------------  Clause
