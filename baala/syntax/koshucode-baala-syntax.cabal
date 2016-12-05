@@ -7,7 +7,7 @@ name:                koshucode-baala-syntax
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.179.0.0
+version:             0.180.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Syntax for Koshucode
@@ -93,7 +93,7 @@ library
        , containers                == 0.5.*
        , pretty                    == 1.*
        , text                      == 1.*
-       , koshucode-baala-overture  == 0.179.0.0
-       , koshucode-baala-base      == 0.179.0.0
+       , koshucode-baala-overture  == 0.180.0.0
+       , koshucode-baala-base      == 0.180.0.0
 
   ghc-options:         -Wall
