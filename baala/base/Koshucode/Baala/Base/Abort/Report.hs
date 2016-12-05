@@ -48,15 +48,13 @@ type CommandLine = [String]
 
 -- | Create position and line information.
 cpMessage :: B.CodePosInfo -> [(String, B.AbortTag)]
-cpMessage (cp@B.CodePos { B.cpSource = src
-                        , B.cpLineNo = lno
+cpMessage (cp@B.CodePos { B.cpLineNo = lno
                         , B.cpText   = text }, tag)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
     where
-      pos       = show lno ++ " " ++ show cno ++ " " ++ code
-      cno       = B.cpColumnNo cp
-      code      = B.ioPointText $ B.nioPoint src
+      pos  = show lno ++ " " ++ show cno ++ " " ++ B.getIOPath cp
+      cno  = B.cpColumnNo cp
 
       shorten :: O.StringMap
       shorten s | length s > 48  = take 45 s ++ "..."

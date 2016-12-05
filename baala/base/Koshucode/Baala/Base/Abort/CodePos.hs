@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Abort.CodePos
   ( -- * Code position
     CodePos (..),
     cpColumnNo,
-  
+
     -- * Get code positions
     GetCodePos (..),
 
@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.Abort.CodePos
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
-import qualified Koshucode.Baala.Base.IO.IOPoint    as B
+import qualified Koshucode.Baala.Base.IO            as B
 
 
 -- ----------------------  CodePos
@@ -41,6 +41,12 @@ instance Show CodePos where
 instance B.PPrint CodePos where
     pprint = B.pprint . shortSlash
 
+instance O.GetIx CodePos where
+    getIx = O.getIx . cpSource
+
+instance B.GetIOPath CodePos where
+    getIOPath = B.getIOPath . cpSource
+
 -- showAngle :: CodePos -> String
 -- showAngle = showCp (\s l c -> "<I" ++ s ++ "-L" ++ l ++ "-C" ++ c ++ ">")
 
@@ -52,7 +58,7 @@ shortSlash = showCp (\_ l c -> "/" ++ l ++ "." ++ c ++ "/")
 
 showCp :: (String -> String -> String -> String) -> CodePos -> String
 showCp f cp = f s l c where
-    s = show $ O.getIx $ cpSource cp
+    s = show $ O.getIx cp
     l = show $ cpLineNo cp
     c = show $ cpColumnNo cp
 

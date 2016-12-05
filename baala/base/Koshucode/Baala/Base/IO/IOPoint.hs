@@ -8,8 +8,12 @@ module Koshucode.Baala.Base.IO.IOPoint
   ( -- * Named handle
     NamedHandle (..),
 
+    -- * I/O path
+    IOPath,
+    GetIOPath (..),
+
     -- * I/O point
-    IOPoint (..), IOPath,
+    IOPoint (..),
     ioPointType, ioPointText,
     ioPoint, ioPointDir, ioPointTogether,
 
@@ -45,6 +49,19 @@ instance Ord NamedHandle where
     h1 `compare` h2 = handleName h1 `compare` handleName h2
 
 
+-- ----------------------  I/O path
+
+-- | URI, file path, etc.
+type IOPath = String
+
+-- | Type which has I/O path.
+class GetIOPath a where
+    getIOPath :: a -> IOPath
+
+instance GetIOPath String where
+    getIOPath = id
+
+
 -- ----------------------  IOPoint
 
 -- | I/O point: file, standard input, direct text, etc.
@@ -58,29 +75,29 @@ data IOPoint
     | IOPointOutput NamedHandle          -- ^ __7 Output:__ Output handler.
       deriving (Show, Eq, Ord)
 
+instance GetIOPath IOPoint where
+    getIOPath = ioPointText
+
 -- | Name of I/O point, i.e., @\"file\"@, @\"uri\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
 ioPointType :: IOPoint -> String
-ioPointType (IOPointFile _ _)   = "file"
-ioPointType (IOPointUri  _)     = "uri"
-ioPointType (IOPointText _ _)   = "text"
-ioPointType (IOPointCustom _ _) = "custom"
-ioPointType (IOPointStdin _)    = "stdin"
-ioPointType (IOPointStdout _)   = "stdout"
-ioPointType (IOPointOutput _)   = "output"
+ioPointType (IOPointFile   _ _)  = "file"
+ioPointType (IOPointUri    _)    = "uri"
+ioPointType (IOPointText   _ _)  = "text"
+ioPointType (IOPointCustom _ _)  = "custom"
+ioPointType (IOPointStdin  _)    = "stdin"
+ioPointType (IOPointStdout _)    = "stdout"
+ioPointType (IOPointOutput _)    = "output"
 
 -- | Name of I/O point.
 ioPointText :: IOPoint -> String
-ioPointText (IOPointFile dir file)  = dir ++ file
-ioPointText (IOPointUri  uri)       = uri
-ioPointText (IOPointText name _)    = B.fromMaybe "<text>" name
-ioPointText (IOPointCustom name _)  = name
-ioPointText (IOPointStdin  name)    = B.fromMaybe "<stdin>" name
-ioPointText (IOPointStdout name)    = B.fromMaybe "<stdout>" name
-ioPointText (IOPointOutput h)       = handleName h
-
--- | URI, file path, etc.
-type IOPath = String
+ioPointText (IOPointFile   dir file)  = dir ++ file
+ioPointText (IOPointUri    uri)       = uri
+ioPointText (IOPointText   name _)    = B.fromMaybe "<text>" name
+ioPointText (IOPointCustom name _)    = name
+ioPointText (IOPointStdin  name)      = B.fromMaybe "<stdin>" name
+ioPointText (IOPointStdout name)      = B.fromMaybe "<stdout>" name
+ioPointText (IOPointOutput h)         = handleName h
 
 -- | Create I/O Point.
 ioPoint :: IOPath -> IOPoint
@@ -132,6 +149,9 @@ instance B.Default IxIOPoint where
 
 instance O.GetIx IxIOPoint where
     getIx = nioNumber
+
+instance GetIOPath IxIOPoint where
+    getIOPath = getIOPath . nioPoint
 
 -- | Create input point for given lazy bytestring.
 --
