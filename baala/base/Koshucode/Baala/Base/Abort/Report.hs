@@ -34,7 +34,6 @@ module Koshucode.Baala.Base.Abort.Report
 
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.System               as O
-import qualified Koshucode.Baala.Base.IO              as B
 import qualified Koshucode.Baala.Base.List            as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Abort.CodePos   as B
@@ -127,7 +126,7 @@ abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
 -- | Stop program execution abnormally.
 abort :: B.AbortReason -> IO x
 abort a =
-  do (prog, args) <- B.progAndArgs
+  do (prog, args) <- O.progAndArgs
      abortCommand (prog : args) a
 
 -- | Abort with a command line.

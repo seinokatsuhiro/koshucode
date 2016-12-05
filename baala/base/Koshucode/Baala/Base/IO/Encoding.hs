@@ -9,8 +9,8 @@ module Koshucode.Baala.Base.IO.Encoding
   ) where
 
 import qualified GHC.IO.Encoding               as Enc
-import qualified System.Environment            as Sys
 import qualified System.IO                     as IO
+import qualified Koshucode.Baala.System        as O
 import qualified Koshucode.Baala.Base.Prelude  as B
 
 -- | Set I/O handle for Koshucode output.
@@ -42,13 +42,5 @@ currentEncodings =
 progAndArgs :: IO (String, [String])
 progAndArgs =
     do hSetKoshuOutput B.stdout
-       prog <- Sys.getProgName
-       args <- Sys.getArgs
-       return (prog, deleteCr args)
-
--- | Delete carriage return from command line argument.
-deleteCr :: [String] -> [String]
-deleteCr = map (filter notCrChar) . filter notCrString where
-    notCrChar   = (/= '\r')
-    notCrString = (/= "\r")
+       O.progAndArgs
 

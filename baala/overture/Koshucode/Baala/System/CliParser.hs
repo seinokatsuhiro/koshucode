@@ -5,13 +5,19 @@
 
 module Koshucode.Baala.System.CliParser
  ( -- * Procedure
+
    -- ** 1. Define options
    -- $Define
-   Option, OptionName, OptionLetter, OptionExplain,
+   Option, OptionName,
+   OptionLetter, OptionExplain,
    flag, req, opt,
+
    -- ** 2. Parse comand line
    -- $Parse
-   Parsed, parse, parseCommand,
+   Parsed, parse,
+   parseCommand,
+   progAndArgs,
+
    -- ** 3. Get parameters
    -- $Get
    Para, getFlag,
@@ -116,6 +122,20 @@ parseCommand :: [Option] -> IO Parsed
 parseCommand opts =
     do args <- Env.getArgs
        return $ parse opts args
+
+-- | Program name and command-line arguments.
+--   This function removes carrige returns from the arguments.
+progAndArgs :: IO (String, [String])
+progAndArgs =
+    do prog <- Env.getProgName
+       args <- Env.getArgs
+       return (prog, deleteCr args)
+
+-- | Delete carriage return from command line argument.
+deleteCr :: [String] -> [String]
+deleteCr = map (filter notCrChar) . filter notCrString where
+    notCrChar   = (/= '\r')
+    notCrString = (/= "\r")
 
 
 -- ---------------------------------  Getting parameters
