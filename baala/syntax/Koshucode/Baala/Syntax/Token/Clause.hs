@@ -13,6 +13,7 @@ module Koshucode.Baala.Syntax.Token.Clause
     TokenClause,
     tokenClauses,
     readClauses,
+    readClauseTokens,
 
     -- * Abbreviation
     toks,
@@ -142,6 +143,12 @@ readClauses :: FilePath -> IO (B.Ab [TokenClause])
 readClauses path =
     do ls <- readTokenLines path
        return (tokenClauses <$> ls)
+
+-- | Read clauses and extract tokens.
+readClauseTokens :: FilePath -> IO (B.Ab [[S.Token]])
+readClauseTokens path =
+    do ls <- readClauses path
+       return (B.clauseTokens O.<$$> ls)
 
 
 -- --------------------------------------------  Abbreviation

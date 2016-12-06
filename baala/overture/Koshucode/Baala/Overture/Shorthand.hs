@@ -5,6 +5,7 @@
 module Koshucode.Baala.Overture.Shorthand
  ( (&),
    (++),
+   (<$$>),
    int, integer,
    nothing,
  ) where
@@ -33,6 +34,12 @@ infixr 6 ++
 {-# INLINE (++) #-}
 (++) :: (Monoid a) => a -> a -> a
 (++) = mappend
+
+infixl 4 <$$>
+
+-- | Double fmap.
+(<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+f <$$> x = fmap f <$> x
 
 -- | 'Int' shorthand.
 --
