@@ -8,6 +8,7 @@ module Koshucode.Baala.Syntax.TTree.Parse
     ToTrees (..),
     ttreeGroup,
     ttDoc,
+    readClauseTrees,
 
     -- * Split and divide
     splitTokensBy, splitTreesBy,
@@ -89,6 +90,14 @@ ttDoc = dv where
     brackets Nothing = B.pprint ""
     brackets (Just (open, close)) =
         B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
+
+-- | Read clauses and convert to token trees.
+readClauseTrees :: FilePath -> IO (B.Ab [[S.TTree]])
+readClauseTrees path =
+    do toks' <- S.readClauseTokens path
+       return $ case toks' of
+         Right toks -> mapM toTrees toks
+         Left a     -> Left a
 
 
 -- --------------------------------------------  Split and divide
