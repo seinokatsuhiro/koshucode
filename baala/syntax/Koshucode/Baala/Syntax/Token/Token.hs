@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
@@ -20,14 +19,6 @@ module Koshucode.Baala.Syntax.Token.Token
     LocalRef (..),
     -- ** Blank
     BlankName (..),
-
-    -- * Pattern
-    pattern TTextUnk,
-    pattern TTextRaw,
-    pattern TTextQ,
-    pattern TTextQQ,
-    pattern TTextKey,
-    pattern TTextBar,
   ) where
 
 import qualified Koshucode.Baala.Base             as B
@@ -204,31 +195,4 @@ instance SubtypeName BlankName where
     subtypeName (BlankPrefix   _) = "prefix"
     subtypeName (BlankInfix    _) = "infix"
     subtypeName (BlankPostfix  _) = "postfix"
-
-
--- --------------------------------------------  Pattern
-
--- | Unknown text token.
-{-# DEPRECATED TTextUnk "Use TUnk instead." #-}
-pattern TTextUnk cp w = TText cp TextUnk  w
-
--- | Raw text token.
-{-# DEPRECATED TTextRaw "Use TRaw instead." #-}
-pattern TTextRaw cp w = TText cp TextRaw  w
-
--- | Quoted text token.
-{-# DEPRECATED TTextQ "Use TQq instead." #-}
-pattern TTextQ cp w = TText cp TextQ    w
-
--- | Dobule-quoted text token.
-{-# DEPRECATED TTextQQ "Use TQq instead." #-}
-pattern TTextQQ cp w = TText cp TextQQ   w
-
--- | Keyword token.
-{-# DEPRECATED TTextKey "Use TKey instead." #-}
-pattern TTextKey cp w = TText cp TextKey  w
-
--- | Bar-enclosed token.
-{-# DEPRECATED TTextBar "Use TBar instead." #-}
-pattern TTextBar cp w = TText cp TextBar  w
 
