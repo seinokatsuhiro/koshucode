@@ -25,22 +25,22 @@ resultKoshu = resultKoshu2
 -- | Koshucode writer with two-space separator.
 --   This function uses 'D.judgeMix2'.
 resultKoshu2 :: (B.MixTransEncode c) => C.ResultWriter c
-resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu D.judgeMix2
+resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu (D.judgeBreak, D.judgeMix2)
 
 -- | Koshucode writer with tab separator.
 --   This function uses 'D.judgeMixTab'.
 resultKoshuTab :: (B.MixTransEncode c) => C.ResultWriter c
-resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu D.judgeMixTab
+resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, D.judgeMixTab)
 
-hPutKoshu :: (B.MixTransEncode c) => D.EncodeJudge c -> C.ResultWriterChunk c
-hPutKoshu encode h result status sh =
+hPutKoshu :: (B.MixTransEncode c) => (B.LineBreak, D.EncodeJudge c) -> C.ResultWriterChunk c
+hPutKoshu output h result status sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
        hPutLicense h result
        hPutEcho h result
        -- body
        let cnt = W.judgeCount $ C.resultClass result
-       cnt' <- M.foldM (hPutShortChunk encode h result) cnt sh
+       cnt' <- M.foldM (hPutShortChunk output h result) cnt sh
        -- foot
        B.when (C.resultPrintFoot result) $ hPutFoot h status cnt'
        return status
@@ -88,11 +88,11 @@ hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 hPutShortChunk
-    :: (B.MixTransEncode c) => D.EncodeJudge c -> IO.Handle -> C.Result c
+    :: (B.MixTransEncode c) => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c
     -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
-hPutShortChunk encode h result cnt (S.Short _ def output) =
+hPutShortChunk output h result cnt (S.Short _ def chunks) =
     do hPutShort h def
-       hPutChunks encode h result (S.shortText def) output cnt
+       hPutChunks output h result (S.shortText def) chunks cnt
 
 hPutShort :: IO.Handle -> [S.ShortDef] -> IO ()
 hPutShort _ [] = return ()
@@ -109,13 +109,13 @@ hPutShort h def =
 -- | Output result chunk.
 hPutChunks
     :: (B.MixTransEncode c)
-    => D.EncodeJudge c -> IO.Handle -> C.Result c -> B.TransString 
+    => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransString 
     -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
-hPutChunks encode h result sh = loop where
+hPutChunks (lb, encode) h result sh = loop where
     loop [] cnt                            = return cnt
     loop (C.ResultJudge js : xs) (_, tab)  =
         case W.judgesCountMix result (encode sh) js (B.mixEmpty, 0, tab) of
-          (mx, cnt', tab') -> do B.hPutMix D.judgeBreak h mx
+          (mx, cnt', tab') -> do B.hPutMix lb h mx
                                  loop xs (cnt', tab')
     loop (C.ResultNote [] : xs) cnt        = loop xs cnt
     loop (C.ResultNote ls : xs) cnt        = do hPutNote h ls
