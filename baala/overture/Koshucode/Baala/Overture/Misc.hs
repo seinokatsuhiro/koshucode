@@ -8,7 +8,10 @@ module Koshucode.Baala.Overture.Misc
    GetIOPath (..),
    ints,
    printList,
+   truncateString,
  ) where
+
+import qualified Koshucode.Baala.Overture.Type as O
 
 -- | URI, file path, etc.
 type IOPath = String
@@ -37,3 +40,20 @@ ints n = [n ..]
 --
 printList :: (Show a) => [a] -> IO ()
 printList = mapM_ print
+
+-- | Truncate end of long string.
+--
+--   >>> truncateString 10 "abcdefg"
+--   "abcdefg"
+--
+--   >>> truncateString 10 "abcdefg hijklmn"
+--   "abcdefg..."
+--
+truncateString :: Int -> O.StringMap
+truncateString = truncateStringWith "..."
+
+truncateStringWith :: String -> Int -> O.StringMap
+truncateStringWith ellipsis size s
+    | length s > size  = take (size - 3) s ++ ellipsis
+    | otherwise        = s
+
