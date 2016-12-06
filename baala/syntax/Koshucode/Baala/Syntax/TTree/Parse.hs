@@ -6,10 +6,8 @@
 module Koshucode.Baala.Syntax.TTree.Parse
   ( -- * Parser
     ToTrees (..),
-    ttrees, ttreeGroup,
-  
-    -- * Abbreviation
-    tt, tt1, ttPrint, ttDoc,
+    ttreeGroup,
+    ttDoc,
 
     -- * Split and divide
     splitTokensBy, splitTreesBy,
@@ -25,6 +23,7 @@ import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
 import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 import qualified Koshucode.Baala.Syntax.TTree.Pattern    as P
+
 
 -- --------------------------------------------  Parser
 
@@ -70,34 +69,12 @@ instance ToTrees [S.TTree] where
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-{-# DEPRECATED ttrees "Use 'toTrees' instead." #-}
 ttrees :: [S.Token] -> B.Ab [S.TTree]
 ttrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Wrap trees in group.
 ttreeGroup :: [S.TTree] -> S.TTree
 ttreeGroup = B.treeWrap S.BracketGroup
-
-
--- --------------------------------------------  Abbreviation
-
--- | Convert string to token trees.
-{-# DEPRECATED tt "Use 'toTrees' instead." #-}
-tt :: String -> B.Ab [S.TTree]
-tt = ttrees . S.toks
-
--- | Parse string and group it.
-{-# DEPRECATED tt1 "Use 'toTree' instead." #-}
-tt1 :: String -> B.Ab S.TTree
-tt1 = Right . ttreeGroup B.<.> tt
-
--- | Parse string and print it.
-{-# DEPRECATED ttPrint "Use 'ppTree' instead." #-}
-ttPrint :: String -> IO ()
-ttPrint s = case tt s of
-              Left msg    -> print msg
-              Right trees -> do print $ ttDoc trees
-                                return ()
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: [S.TTree] -> B.Doc
@@ -136,7 +113,7 @@ ttDoc = dv where
 --           , TSpace CodePos {..} 1
 --           , TText  CodePos {..} TextRaw "|"
 --           , TText  CodePos {..} TextRaw "c" ] )
-
+--
 splitTokensBy :: O.Test String -> B.SplitList3e S.Token
 splitTokensBy p = B.splitBy p2 where
     p2 (P.TRaw x) = p x
