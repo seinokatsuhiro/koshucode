@@ -38,6 +38,7 @@ mixJoin sep = loop where
 --  >>> mixTerms B.mix2 [("a", "foo"), ("b", "bar")]
 --  MixText "/a foo  /b bar"
 --
+{-# DEPRECATED mixTerms "Use 'termsToMix2' instead." #-}
 mixTerms :: (B.Mix sep,  B.Mix c) => sep -> [(String, c)] -> B.MixText
 mixTerms sep ts = mixJoin sep (f <$> ts) where
     f (n, c) = mixTermName n `B.mixSep` B.mix c
@@ -50,6 +51,7 @@ mixTermName n = B.mixString ('/' : n)
 --  >>> mixJudge B.mix2 "AB" [("a", "foo"), ("b", "bar")]
 --  MixText "|-- AB  /a foo  /b bar"
 --
+{-# DEPRECATED mixJudge "Use 'judgeMix2' instead." #-}
 mixJudge :: (B.Mix sep, B.Mix cl, B.Mix c) => sep -> cl -> [(String, c)] -> B.MixText
 mixJudge sep cl ts = B.mixString "|-- " <> B.mix cl <> B.mix sep <> mixTerms sep ts
 
