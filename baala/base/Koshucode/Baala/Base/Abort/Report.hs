@@ -32,6 +32,7 @@ module Koshucode.Baala.Base.Abort.Report
     bug,
   ) where
 
+import Koshucode.Baala.Overture ((&))
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.System               as O
 import qualified Koshucode.Baala.Base.List            as B
@@ -47,17 +48,23 @@ type CommandLine = [String]
 
 -- | Create position and line information.
 cpMessage :: B.CodePosInfo -> [(String, B.AbortTag)]
-cpMessage (cp@B.CodePos { B.cpLineNo = lno
-                        , B.cpText   = text }, tag)
-    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
-    | otherwise = []
+cpMessage (cp@B.CodePos { B.cpLineNo = lno }, tag)
+    | lno <= 0      = []
+    | null before'  = [ trunc pos     & ""
+                      , indent after' & tag
+                      , "" & "" ]
+    | otherwise     = [ trunc pos      & ""
+                      , indent before' & ""
+                      , indent after'  & tag
+                      , "" & "" ]
     where
-      pos  = show lno ++ " " ++ show cno ++ " " ++ O.getIOPath cp
-      cno  = B.cpColumnNo cp
-
-      shorten :: O.StringMap
-      shorten s | length s > 48  = take 45 s ++ "..."
-                | otherwise      = s
+      trunc   = O.truncateString 48
+      indent s = "  " ++ trunc s
+      pos     = show lno ++ "." ++ show cno ++ " " ++ O.getIOPath cp
+      cno     = B.cpColumnNo cp
+      before' = O.trimBegin before
+      after'  = replicate (min 4 $ length before') ' ' ++ O.trimBegin after
+      (before, after) = B.cpSplit cp
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> B.AbortReason -> [String]
@@ -70,14 +77,9 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     r      = B.textRuleCell '-'
     p text = (text, "")
     rows   = concatMap row
-             [ ("Detail"  , map p  $ B.abortDetail a)
-             , ("Source"  , source $ B.abortPoint a)
-             , ("Command" , map p  $ cmd)
-             ]
-
-    note = case B.abortNote a of
-             n | n == []   -> []
-               | otherwise -> "" : "Note" : "" : map ("  " ++) n
+             [ "Detail"  & detail $ B.abortDetail a
+             , "Source"  & source $ B.abortPoint a
+             , "Command" & p <$> cmd ]
 
     row :: (String, [(String, String)]) -> [[B.Cell]]
     row (_, []) = []
@@ -87,6 +89,12 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
               , B.textBlockCell B.Front codes
               , B.textBlockCell B.Front $ map dots tags ]]
 
+    detail [] = []
+    detail ln = p <$> ln ++ [""]
+
+    source :: [B.CodePosInfo] -> [(String, B.AbortTag)]
+    source = concatMap cpMessage . B.unique . reverse
+
     dots :: O.StringMap
     dots ""   = ""
     dots text = ".. " ++ text
@@ -94,14 +102,15 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     sandwich :: a -> a -> O.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-    source :: [B.CodePosInfo] -> [(String, B.AbortTag)]
-    source = concatMap cpMessage . B.unique . reverse
+    note = case B.abortNote a of
+             n | n == []   -> []
+               | otherwise -> "" : "Note" : "" : (("  " ++) <$> n)
 
 -- | Print abort message.
 --
 -- Prepare code position and abort reason.
 --
---   >>> let cp = B.CodePos (B.codeIxIO "abcdefg") 1 "abcdefg" "defg"
+--   >>> let cp = B.CodePos 0 "<stdin>" 1 "abcdefg" "defg"
 --   >>> let Left a = B.abortable "tag" cp $ Left $ B.abortBecause "Bad luck"
 --
 -- Print it.
@@ -109,9 +118,11 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
 --   >>> abortPrint (words "prog x y") a
 --   **
 --   **  ABORTED  Bad luck
---   **  -------- ---------- ------
---   **  Source   1 4 <text>
---   **           > defg     .. tag
+--   **  -------- ----------- ------
+--   **  Source   1.3 <stdin>
+--   **             abc
+--   **                defg   .. tag
+--   **
 --   **  Command  prog
 --   **           x
 --   **           y
