@@ -10,7 +10,6 @@ module Koshucode.Baala.Core.Assert.Dataset
   ( Dataset,
     dataset,
     datasetAdd,
-    datasetSelect,
   ) where
 
 import qualified Data.Map                     as Map
@@ -26,6 +25,9 @@ data Dataset c = Dataset (Map.Map D.JudgeClass [[S.Term c]])
 -- | Dataset that has no judges.
 instance B.Default (Dataset c) where
     def = Dataset Map.empty
+
+instance D.SelectRel Dataset where
+    selectRel = datasetSelect B.def
 
 -- | Gather judges into a dataset.
 dataset :: [D.Judge c] -> Dataset c
