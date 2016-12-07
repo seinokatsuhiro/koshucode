@@ -47,7 +47,7 @@ runAssertDataset hook option (S.Short _ sh ass) =
       assert True  q p = D.assertAs q p
       assert False q p = D.assertAs q p . D.omitEmpty
 
-runRelmapViaRelkit :: (Ord c, D.CRel c, D.SelectRel h, C.GetGlobal h)
+runRelmapViaRelkit :: (D.CContent c, D.SelectRel h, C.GetGlobal h)
   => h c -> C.RelmapLinkTable' h c
   -> C.Relmap' h c -> B.AbMap (D.Rel c)
 runRelmapViaRelkit hook links r (D.Rel he1 bo1) =

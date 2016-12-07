@@ -129,10 +129,10 @@ reldau = Rel mempty []
 -- | Type for having relations.
 class SelectRel r where
     -- | Convert judges to relation.
-    selectRel :: r c -> RelSelect c
+    selectRel :: (Ord c, B.Default c) => r c -> RelSelect c
 
     -- | Convert judges to judgemental relation.
-    selectJudgeRel :: r c -> JudgeRelSelect c
+    selectJudgeRel :: (Ord c, B.Default c) => r c -> JudgeRelSelect c
     selectJudgeRel r cl ns = JudgeRel cl $ selectRel r cl ns
 
 -- | Select relation.

@@ -47,7 +47,7 @@ relkitLink kits = linkKit where
 
 -- todo: optimization
 -- | Run relkit.
-relkitRun :: forall h. forall c. (Ord c, D.CRel c, D.SelectRel h)
+relkitRun :: forall h. forall c. (D.CContent c, D.SelectRel h)
     => h c -> [LocalTable c] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $

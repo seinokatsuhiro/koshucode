@@ -96,6 +96,10 @@ instance Ord Content where
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
+-- | Empty content.
+instance B.Default Content where
+    def = D.empty
+
 instance D.CTypeOf Content where
     typeOf (ContentEmpty    )  = D.TypeEmpty
     typeOf (ContentBool    _)  = D.TypeBool
