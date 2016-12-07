@@ -58,7 +58,6 @@ data Resource c = Resource
     , resMessage    :: [String]            -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo             -- ^ Last section number
     , resCacheT     :: D.CacheT            -- ^ Term name cache
-    , resSelect     :: D.RelSelect c       -- ^ Relation selector
     }
 
 instance Show (Resource c) where
@@ -66,7 +65,7 @@ instance Show (Resource c) where
         = "Resources " ++ show q
 
 instance D.SelectRel Resource where
-    selectRel Resource { resSelect = sel } = sel
+    selectRel = D.selectRel . resDataset
 
 instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
@@ -90,7 +89,6 @@ instance (D.CContent c) => B.Default (Resource c) where
            , resMessage    = []
            , resLastSecNo  = 0
            , resCacheT     = D.cacheT
-           , resSelect     = \_ _ -> D.reldee
            }
 
 -- | Abort or resource.
