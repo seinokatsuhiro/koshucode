@@ -6,17 +6,31 @@
 -- The 'B.abortable' function adds code positions to the reason.
 -- 'abortPrint' outputs aborted message in the following format.
 --
--- > ** ABORTED  {main reason}
--- > ** -------- --------------------------------------------
--- > ** Detail   {detailed reason}
--- > **          {detailed reason}
--- > ** Source   {line #} {char #} {source}
--- > **          > {code string}
--- > **          {line #} {char #} {source}
--- > **          > {code string}
--- > ** Command  {program name}
--- > **          {arg 1}
--- > **          {arg 2}
+-- > **
+-- > ** ABORTED  {reason}
+-- > ** -------- ---------------------------------- ------
+-- > ** Detail   {description}
+-- > **          {description}
+-- > **
+-- > ** Source   {line}.{char} {path}
+-- > **            {before}
+-- > **                {after}                      {tag}
+-- > **
+-- > **          {line}.{char} {path}
+-- > **            {before}
+-- > **                {after}                      {tag}
+-- > **
+-- > ** Command  {program}
+-- > **          {arg}
+-- > **          {arg}
+-- > **
+-- >
+-- > === note
+-- > 
+-- > {note}
+-- > {note}
+-- > 
+-- > === rel
 
 module Koshucode.Baala.Base.Abort.Report
   ( -- * Message
