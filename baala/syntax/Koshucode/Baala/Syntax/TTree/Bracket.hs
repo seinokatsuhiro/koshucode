@@ -24,23 +24,41 @@ import qualified Koshucode.Baala.Syntax.Token          as S
 -- | Type of bracket.
 data BracketType
     = BracketGroup    -- ^ __1.__ Round brackets for grouping:
-                      --   @( E ... )@
+                      --
+                      -- > ( E ... )
+
     | BracketTerm     -- ^ __2.__ Round-single brackets for term path:
-                      --   @(- \/P ... -)@
+                      --
+                      -- > (- /N ... -)
+
     | BracketList     -- ^ __3.__ Square brackets for lists:
-                      --   @[ C | ... ]@
+                      --
+                      -- > [ C | ... ]
+
     | BracketSet      -- ^ __4.__ Curely braces for sets:
-                      --   @{ C | ... }@
+                      --
+                      -- > { C | ... }
+
     | BracketTie      -- ^ __5.__ Curely-single braces for ties:
-                      --   @{- /N C ... -}@
+                      --
+                      -- > {- /N C ... -}
+
     | BracketRel      -- ^ __6.__ Curely-double braces for relations:
-                      --   @{= /N ... [ C | ... ][ C | ... ] =}@
+                      --
+                      -- > {= /N ... [ C | ... ][ C | ... ] =}
+
     | BracketInterp   -- ^ __7.__ Curely-bar braces for data interpretation:
-                      --   @{| ... /N ... |}@
+                      --
+                      -- > {| ... /N ... |}
+
     | BracketType     -- ^ __8.__ Square-single brackets for type:
-                      --   @[- ... -]@
+                      --
+                      -- > [- ... -]
+
     | BracketForm     -- ^ __9.__ Round-bar brackets for calculation form:
-                      --   @(| V ... | E ... |)@
+                      --
+                      -- > (| V ... | E ... |)
+
     | BracketUnknown  -- ^ __10.__ Unknown bracket
       deriving (Show, Eq, Ord)
 
@@ -96,11 +114,11 @@ bracketSet = ("{", "}")
 bracketTie :: (String, String)
 bracketTie = ("{-", "-}")
 
--- | Rel bracket — @"{="@ and @"=}"@
+-- | Relation bracket — @"{="@ and @"=}"@
 bracketRel :: (String, String)
 bracketRel = ("{=", "=}")
 
--- | Interp bracket — @"{|"@ and @"|}"@
+-- | Interpretation bracket — @"{|"@ and @"|}"@
 bracketInterp :: (String, String)
 bracketInterp = ("{|", "|}")
 
