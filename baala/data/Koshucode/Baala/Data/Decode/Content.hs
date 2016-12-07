@@ -28,8 +28,6 @@ import qualified Koshucode.Baala.Data.Decode.Message     as Msg
 
 -- ----------------------  General content
 
-pattern Text f s <- S.TText _ f s
-
 -- | Content decoder.
 type DecodeContent c = S.TTree -> B.Ab c
 
@@ -61,19 +59,19 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
     cons _ = B.bug "treeContent"
 
     token :: S.Token -> B.Ab c
-    token (Text n w)
+    token (P.T n w)
         | n <= S.TextRaw     = keyword w
         | n == S.TextQ       = D.putCode w
         | n == S.TextTerm    = D.putTerm $ S.toTermName w
         | otherwise          = D.putText w
     token t                  = Msg.unkWord $ S.tokenContent t
 
-    group xs@(P.LText f _ : _)
-        | f == S.TextRaw   = case decimal =<< D.treesDigits xs of
-                               Right c  -> Right c
-                               Left _   -> D.putTime =<< D.treesTime xs
-    group []               = Right D.empty
-    group _                = Msg.adlib "unknown content"
+    group :: [S.TTree] -> B.Ab c
+    group xs@(P.LRaw _ : _)  = case decimal =<< D.treesDigits xs of
+                                 Right c  -> Right c
+                                 Left _   -> D.putTime =<< D.treesTime xs
+    group []                 = Right D.empty
+    group _                  = Msg.adlib "unknown content"
 
     eithcon f      = either (const f)
     decimal        = D.putDec B.<.> D.decodeDecimal
