@@ -5,6 +5,7 @@
 module Koshucode.Baala.Data.Type.Rel.Rel
   ( -- * Data type
     Rel (..), Body,
+    JudgeRel (..),
     relSort, relBodyOrder,
   
     -- * Constant
@@ -13,6 +14,7 @@ module Koshucode.Baala.Data.Type.Rel.Rel
     -- * Converter
     SelectRel (..),
     RelSelect,
+    JudgeRelSelect,
     judgesFromRel,
   ) where
 
@@ -30,7 +32,7 @@ import qualified Koshucode.Baala.Data.Type.Rel.Head    as D
 --   Body is thoretically a set of tuples,
 --   but implemented using list of list.
 data Rel c = Rel
-    { relHead :: D.Head       -- ^ Heading of relation
+    { relHead :: D.Head    -- ^ Heading of relation
     , relBody :: Body c    -- ^ Body of relation
     } deriving (Show)
 
@@ -64,6 +66,11 @@ instance (B.MixTransEncode c) => B.MixTransEncode (Rel c) where
             d xs = B.mixBracketS S.bracketList $ mixBar xs
         in B.mixBracketS S.bracketRel (he' `B.mixSep` bo')
         where mixBar cs = B.mixJoinBar $ map (B.mixTransEncode sh) cs
+
+-- | Relation with judgement class.
+data JudgeRel c =
+    JudgeRel D.JudgeClass (Rel c)
+    deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Sort contents
@@ -124,8 +131,15 @@ class SelectRel r where
     -- | Convert judges to relation.
     selectRel :: r c -> RelSelect c
 
+    -- | Convert judges to judgemental relation.
+    selectJudgeRel :: r c -> JudgeRelSelect c
+    selectJudgeRel r cl ns = JudgeRel cl $ selectRel r cl ns
+
 -- | Select relation.
 type RelSelect c = D.JudgeClass -> [S.TermName] -> Rel c
+
+-- | Select judgemental relation.
+type JudgeRelSelect c = D.JudgeClass -> [S.TermName] -> JudgeRel c
 
 -- | Convert relation to list of judges.
 judgesFromRel :: D.JudgeOf c -> D.JudgeClass -> Rel c -> [D.Judge c]
