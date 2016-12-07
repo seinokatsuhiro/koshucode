@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Syntax.Pattern          as P
 -- | Read file and convert to dataset.
 --
 --   >>> readDataset "foo.k" :: Koshucode.Baala.Base.IOAb DatasetC
---   Right Dataset { A * 3 | B * 2 | C * 1 }
+--   Right Dataset { 3 * A /x /y | 2 * B /y /z | 1 * C /z }
 --
 readDataset :: (D.CContent c) => FilePath -> B.IOAb (D.Dataset c)
 readDataset path =

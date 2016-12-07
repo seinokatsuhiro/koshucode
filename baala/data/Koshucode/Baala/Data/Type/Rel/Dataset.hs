@@ -12,7 +12,7 @@ module Koshucode.Baala.Data.Type.Rel.Dataset
     datasetAdd,
   ) where
 
-import qualified Data.Map                            as Map
+import qualified Data.Map.Strict                     as Map
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
@@ -30,7 +30,10 @@ instance Show (Dataset c) where
 showDataset :: Dataset c -> String
 showDataset (Dataset ds) =
     "Dataset { " ++ B.intercalate " | " (desc <$> Map.assocs ds) ++ " }"
-        where desc (cl, js) = cl ++ " * " ++ show (length js)
+        where desc (cl, ts) = let ns  = B.uniqueConcat (fst O.<$$> ts)
+                                  s   = unwords (S.termNameString <$> ns)
+                                  n   = show (length ts)
+                              in n ++ " * " ++ cl ++ " " ++ s
 
 -- | Dataset that has no judges.
 instance B.Default (Dataset c) where

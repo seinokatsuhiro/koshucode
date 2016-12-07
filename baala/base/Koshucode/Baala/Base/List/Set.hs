@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.List.Set
   ( duplicates, duplicated,
     unique,
+    uniqueConcat,
     unionUp,
     keepMember, omitMember, sublist,
     setList, setEq,
@@ -53,6 +54,14 @@ unique xs = loop xs Set.empty where
     loop (x:xs2) set
         | Set.member x set = loop xs2 set
         | otherwise        = x : loop xs2 (Set.insert x set)
+
+-- | Collect elements in occurence order.
+--
+--   >>> uniqueConcat ["apple", "banana", "cocoa"]
+--   "aplebnco"
+--
+uniqueConcat :: (Ord a) => [[a]] -> [a]
+uniqueConcat = unique . concat
 
 -- | Union list to base list.
 --
