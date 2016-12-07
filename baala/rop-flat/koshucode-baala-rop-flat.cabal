@@ -7,7 +7,7 @@ name:                koshucode-baala-rop-flat
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.180.0.0
+version:             0.181.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Relation-mapping operators in Koshucode
@@ -82,10 +82,10 @@ library
   build-depends:
          base                     == 4.*
        , containers               == 0.5.*
-       , koshucode-baala-overture == 0.180.0.0
-       , koshucode-baala-base     == 0.180.0.0
-       , koshucode-baala-syntax   == 0.180.0.0
-       , koshucode-baala-data     == 0.180.0.0
-       , koshucode-baala-core     == 0.180.0.0
-       , koshucode-baala-subtext  == 0.180.0.0
+       , koshucode-baala-overture == 0.181.0.0
+       , koshucode-baala-base     == 0.181.0.0
+       , koshucode-baala-syntax   == 0.181.0.0
+       , koshucode-baala-data     == 0.181.0.0
+       , koshucode-baala-core     == 0.181.0.0
+       , koshucode-baala-subtext  == 0.181.0.0
 
