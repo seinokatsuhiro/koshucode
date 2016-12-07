@@ -14,7 +14,6 @@ module Koshucode.Baala.Core.Assert.Dataset
   ) where
 
 import qualified Data.Map                     as Map
-import qualified Data.Maybe                   as Maybe
 import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
@@ -44,18 +43,15 @@ addJudge (D.JudgeAffirm cl xs) (Dataset ds1) = Dataset ds2 where
 addJudge _ _ = undefined
 
 -- | Select relation from dataset.
---   If a giving term is not in judges, 'CEmpty' sign is used.
-datasetSelect
-    :: (Ord c, D.CEmpty c)
-    => Dataset c       -- ^ Dataset
-    -> D.RelSelect c   -- ^ Relation selector
-datasetSelect (Dataset ds) cl ns = D.Rel he bo where
+--   If a given term is not in judges, first argument is used.
+datasetSelect :: (Ord c) => c -> Dataset c -> D.RelSelect c
+datasetSelect filler (Dataset ds) cl ns = D.Rel he bo where
     he = D.headFrom ns
     bo = case Map.lookup cl ds of
-           Just set -> B.unique (selectTuple ns <$> set)
-           Nothing     -> []
+           Just set -> B.unique (pickContents filler ns <$> set)
+           Nothing  -> []
 
-selectTuple :: (D.CEmpty c) => [S.TermName] -> [S.Term c] -> [c]
-selectTuple ns ts = map pick ns where
-    pick n = Maybe.fromMaybe D.empty $ lookup n ts
+pickContents :: c -> [S.TermName] -> [S.Term c] -> [c]
+pickContents filler ns ts = map pick ns where
+    pick n = B.fromMaybe filler $ lookup n ts
 

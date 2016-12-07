@@ -41,7 +41,7 @@ resInclude resAbout cd base xio code =
        Right res { C.resLastSecNo = sec'
                  , C.resCacheT    = cc
                  , C.resJudge     = js
-                 , C.resSelect    = C.datasetSelect $ C.dataset js }
+                 , C.resSelect    = C.datasetSelect D.empty $ C.dataset js }
 
 createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [D.Judge c], [C.Clause])
 createJudges res = loop $ C.resCacheT res where
