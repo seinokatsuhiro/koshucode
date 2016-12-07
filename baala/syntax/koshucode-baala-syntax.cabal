@@ -72,6 +72,7 @@ library
         Koshucode.Baala.Syntax.TTree.Bracket
         Koshucode.Baala.Syntax.TTree.Parse
         Koshucode.Baala.Syntax.TTree.Pattern
+        Koshucode.Baala.Syntax.TTree.Split
         Koshucode.Baala.Syntax.TTree.TokenTree
 
         Koshucode.Baala.Syntax.Token
