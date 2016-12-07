@@ -192,8 +192,8 @@ consKoshuVersion med =
        _            -> Msg.unexpAttr ""
   where
     check n f t = do
-      from <- D.treeContent undefined f
-      to   <- D.treeContent undefined t
+      from <- D.treeContent f
+      to   <- D.treeContent t
       Right $ C.relmapHook med $ relkitKoshuVersionCheck (from, to) n
 
 -- | Create @koshu-version@ relkit.

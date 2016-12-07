@@ -45,12 +45,10 @@ resInclude resAbout cd base xio code =
 
 createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [D.Judge c], [C.Clause])
 createJudges res = loop $ C.resCacheT res where
-    calc = calcContG $ C.resGlobal res
-
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do
            trees          <- S.toTrees toks
-           (cc1, judge)   <- D.treesJudge calc cc q cl trees
+           (cc1, judge)   <- D.treesJudge cc q cl trees
            (cc2, js, cs') <- loop cc1 cs
            Right (cc2, judge : js, cs')
 
@@ -136,7 +134,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
 
 -- | Build content expression with global parameter.
 treeCoxG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
-treeCoxG g = D.treeCox (calcContG g) (C.globalCopset g)
+treeCoxG g = D.treeCox (C.globalCopset g)
 
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c
 calcContG = D.calcContent . C.globalCopset

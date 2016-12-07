@@ -7,7 +7,8 @@
 
 module Koshucode.Baala.Data.Decode.Content
   ( -- * Functions
-    DecodeContent, CalcContent, 
+    DecodeContent,
+    CalcContent, 
     stringContent,
     treeContent,
     treesJudge,
@@ -37,19 +38,19 @@ type CalcContent c = S.TTree -> B.Ab c
 
 -- | Decode content from string.
 stringContent :: (D.CContent c) => String -> B.Ab c
-stringContent = S.toTree B.>=> treeContent undefined
+stringContent = S.toTree B.>=> treeContent
 
 -- | Decode content from token tree.
-treeContent :: forall c. (D.CContent c) => CalcContent c -> DecodeContent c
-treeContent calc tree = Msg.abLiteral tree $ cons tree where
+treeContent :: forall c. (D.CContent c) => DecodeContent c
+treeContent tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent c
     cons x@(P.L tok)
         = eithcon (eithcon (eithcon (token tok)
             D.putClock  $ D.tokenClock tok)
             D.putTime   $ D.treesTime   [x])
             decimal     $ D.treesDigits [x]
-    cons g@(P.B b xs) = case b of
-        S.BracketGroup   -> group g xs
+    cons (P.B b xs) = case b of
+        S.BracketGroup   -> group xs
         S.BracketList    -> D.putList   =<< treesContents cons xs
         S.BracketSet     -> D.putSet    =<< treesContents cons xs
         S.BracketTie     ->                 treesTie      cons xs
@@ -67,15 +68,14 @@ treeContent calc tree = Msg.abLiteral tree $ cons tree where
         | otherwise          = D.putText w
     token t                  = Msg.unkWord $ S.tokenContent t
 
-    group g xs@(P.LText f _ : _)
-        | f == S.TextRaw   = eithcon (eith g
-                               D.putTime $ D.treesTime   xs)
-                               decimal   $ D.treesDigits xs
-    group _ []             = Right D.empty
-    group g _              = calc g
+    group xs@(P.LText f _ : _)
+        | f == S.TextRaw   = case decimal =<< D.treesDigits xs of
+                               Right c  -> Right c
+                               Left _   -> D.putTime =<< D.treesTime xs
+    group []               = Right D.empty
+    group _                = Msg.adlib "unknown content"
 
     eithcon f      = either (const f)
-    eith g         = either (const $ calc g)
     decimal        = D.putDec B.<.> D.decodeDecimal
 
     keyword :: String -> B.Ab c
@@ -114,7 +114,7 @@ treesTie :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab c
 treesTie cons xs@(P.LTerm _ : _) = D.putTie =<< treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [P.LRaw "words", P.LQq ws] = D.putList $ map D.pText $ words ws
-treesTie _ _ = Msg.adlib "unknown angle bracket"
+treesTie _ _ = Msg.adlib "unknown tie"
 
 -- Terms
 --
@@ -132,18 +132,17 @@ treesTerms cons = mapM p B.<.> D.treesTerms1 where
 --   It can be only used in the top-level of resources.
 treesJudge ::
     (D.CContent c)
-    => CalcContent c      -- ^ 
-    -> D.CacheT           -- ^ Term name cache
+    => D.CacheT           -- ^ Term name cache
     -> D.AssertType       -- ^ Assertion type
     -> D.JudgeClass       -- ^ Judgement class
     -> [S.TTree]          -- ^ Trees of terms
     -> B.Ab (D.CacheT, D.Judge c)   -- ^ Error or decoded judgement
-treesJudge calc cc q cl trees =
+treesJudge cc q cl trees =
     do (cc', ts) <- D.treesTermsCached cc trees
        terms <- mapM term ts
        Right (cc', D.assertAs q cl terms)
     where
-      term (n, ts) = do c <- treeContent calc $ S.ttreeGroup ts
+      term (n, ts) = do c <- treeContent $ S.ttreeGroup ts
                         Right (n, c)
 
 

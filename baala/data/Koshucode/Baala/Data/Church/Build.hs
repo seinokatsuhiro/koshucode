@@ -19,14 +19,13 @@ import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 -- | Construct content expression from token tree.
-treeCox :: forall c. (D.CContent c)
-  => D.CalcContent c -> D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
-treeCox calc copset =
+treeCox :: (D.CContent c) => D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
+treeCox copset =
     convCox findCox            -- convert cox to cox
       B.<.> Right
       . debruijn               -- attach De Bruijn indicies
       . coxUnfold              -- expand multiple-blank form
-      B.<.> construct calc     -- construct content expression from token tree
+      B.<.> construct          -- construct content expression from token tree
       B.<.> prefix htab        -- convert infix operator to prefix
       B.<.> convTree findTree  -- convert token tree to token tree
     where
@@ -77,8 +76,8 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => D.CalcContent c -> S.TTree -> B.Ab (D.Cox c)
-construct calc = expr where
+construct :: forall c. (D.CContent c) => S.TTree -> B.Ab (D.Cox c)
+construct = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.getCPs $ B.takeFirst $ B.untree tree
          in cons cp tree
@@ -126,9 +125,7 @@ construct calc = expr where
            xs' <- expr `mapM` xs
            Right $ D.CoxFill cp f' xs'
 
-    lit cp tree  = fmap (D.CoxLit cp) $ D.treeContent (calc' tree) tree
-    calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
-                     | otherwise      = calc tree'
+    lit cp tree  = D.CoxLit cp <$> D.treeContent tree
 
     untag :: S.TTree -> (D.CoxTag, S.TTree)
     untag (B.TreeB l p (P.LQ tag : vars))
