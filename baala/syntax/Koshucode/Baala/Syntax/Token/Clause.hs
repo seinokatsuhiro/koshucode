@@ -81,7 +81,7 @@ isShortPrefix :: O.Test String
 isShortPrefix  = all Ch.isAlpha
 
 -- | Read token lines from file.
-readTokenLines :: FilePath -> IO (B.Ab [TokenLine])
+readTokenLines :: FilePath -> B.IOAb [TokenLine]
 readTokenLines path =
     do file <- B.readBzFile path
        bz   <- B.abortLeft $ B.bzFileContent file
@@ -139,13 +139,13 @@ tokenIndent             _  = 0
 --                                                  TText /0.3.1/ TextRaw "cc"]}
 --   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
 --
-readClauses :: FilePath -> IO (B.Ab [TokenClause])
+readClauses :: FilePath -> B.IOAb [TokenClause]
 readClauses path =
     do ls <- readTokenLines path
        return (tokenClauses <$> ls)
 
 -- | Read clauses and extract tokens.
-readClauseTokens :: FilePath -> IO (B.Ab [[S.Token]])
+readClauseTokens :: FilePath -> B.IOAb [[S.Token]]
 readClauseTokens path =
     do ls <- readClauses path
        return (B.clauseTokens O.<$$> ls)

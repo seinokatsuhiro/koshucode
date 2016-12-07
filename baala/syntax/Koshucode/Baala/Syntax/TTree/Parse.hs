@@ -95,7 +95,7 @@ ttrees :: [S.Token] -> B.Ab [TTree]
 ttrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> IO (B.Ab [[TTree]])
+readClauseTrees :: FilePath -> B.IOAb [[TTree]]
 readClauseTrees path =
     do toks' <- S.readClauseTokens path
        return $ case toks' of
