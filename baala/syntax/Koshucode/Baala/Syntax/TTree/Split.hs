@@ -4,8 +4,9 @@
 -- | Split token trees.
 
 module Koshucode.Baala.Syntax.TTree.Split
-  ( -- * Split and divide
+  ( -- * Split
     splitTokensBy, splitTreesBy,
+    -- * Divide
     divideTreesBy,
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
   ) where
@@ -13,7 +14,7 @@ module Koshucode.Baala.Syntax.TTree.Split
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
-import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
+import qualified Koshucode.Baala.Syntax.TTree.Parse      as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 import qualified Koshucode.Baala.Syntax.TTree.Pattern    as P
 

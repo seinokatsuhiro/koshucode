@@ -4,10 +4,13 @@
 -- | Parser for token tree.
 
 module Koshucode.Baala.Syntax.TTree.Parse
-  ( -- * Parser
-    ToTrees (..),
+  ( -- * Type
+    TTree, NamedTrees,
     ttreeGroup,
     ttDoc,
+
+    -- * Parser
+    ToTrees (..),
     readClauseTrees,
   ) where
 
@@ -15,7 +18,33 @@ import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
-import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
+
+
+-- --------------------------------------------  Type
+
+-- | Tree of tokens.
+type TTree = B.CodeTree S.BracketType S.Token
+
+-- | Pair of token trees and its name.
+type NamedTrees = B.Named [TTree]
+
+-- | Wrap trees in group.
+ttreeGroup :: [TTree] -> TTree
+ttreeGroup = B.treeWrap S.BracketGroup
+
+-- | Get 'B.Doc' value of token trees for pretty printing.
+ttDoc :: [TTree] -> B.Doc
+ttDoc = dv where
+    dv = B.pprintV . map d
+    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
+    d (B.TreeB br oc xs) =
+        let tag   = "<" ++ B.name br ++ ">"
+            treeB = B.pprint tag B.<+> brackets oc
+        in P.hang treeB 2 $ dv xs
+
+    brackets Nothing = B.pprint ""
+    brackets (Just (open, close)) =
+        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
 
 
 -- --------------------------------------------  Parser
@@ -23,18 +52,18 @@ import qualified Koshucode.Baala.Syntax.TTree.TokenTree  as S
 -- | Convert to token trees.
 class ToTrees a where
     -- | Convert to list of token trees.
-    toTrees :: a -> B.Ab [S.TTree]
+    toTrees :: a -> B.Ab [TTree]
 
     -- | Convert to token tree.
-    toTree :: a -> B.Ab S.TTree
+    toTree :: a -> B.Ab TTree
     toTree a = ttreeGroup <$> toTrees a
 
     -- | List of token trees or error.
-    toTrees' :: a -> [S.TTree]
+    toTrees' :: a -> [TTree]
     toTrees' = B.unabort . toTrees
 
     -- | Token tree or error.
-    toTree' :: a -> S.TTree
+    toTree' :: a -> TTree
     toTree' = B.unabort . toTree
 
     -- | Pretty print token trees.
@@ -57,34 +86,16 @@ instance ToTrees String where
 instance ToTrees [S.Token] where
     toTrees = ttrees
 
-instance ToTrees [S.TTree] where
+instance ToTrees [TTree] where
     toTrees = Right
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-ttrees :: [S.Token] -> B.Ab [S.TTree]
+ttrees :: [S.Token] -> B.Ab [TTree]
 ttrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
 
--- | Wrap trees in group.
-ttreeGroup :: [S.TTree] -> S.TTree
-ttreeGroup = B.treeWrap S.BracketGroup
-
--- | Get 'B.Doc' value of token trees for pretty printing.
-ttDoc :: [S.TTree] -> B.Doc
-ttDoc = dv where
-    dv = B.pprintV . map d
-    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
-    d (B.TreeB br oc xs) =
-        let tag   = "<" ++ B.name br ++ ">"
-            treeB = B.pprint tag B.<+> brackets oc
-        in P.hang treeB 2 $ dv xs
-
-    brackets Nothing = B.pprint ""
-    brackets (Just (open, close)) =
-        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
-
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> IO (B.Ab [[S.TTree]])
+readClauseTrees :: FilePath -> IO (B.Ab [[TTree]])
 readClauseTrees path =
     do toks' <- S.readClauseTokens path
        return $ case toks' of
