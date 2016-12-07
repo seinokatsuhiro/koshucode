@@ -76,7 +76,6 @@ library
         Koshucode.Baala.Base.IO.Encoding
         Koshucode.Baala.Base.IO.Http
         Koshucode.Baala.Base.IO.IOPoint
-        Koshucode.Baala.Base.IO.SimpleOption
 
         Koshucode.Baala.Base.MixText
         Koshucode.Baala.Base.MixText.Deriv

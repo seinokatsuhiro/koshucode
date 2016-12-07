@@ -16,7 +16,7 @@ import Koshucode.Baala.Syntax.Token.Pattern
 -- --------------------------------------------  Parameter
 
 programVersion :: String
-programVersion = "koshu-text-assert-" ++ B.showVersion V.version
+programVersion = "koshu-text-assert-" ++ Z.showVersion V.version
 
 optionHead :: [String]
 optionHead =
