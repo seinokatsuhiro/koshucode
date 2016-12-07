@@ -90,6 +90,7 @@ library
         Koshucode.Baala.Data.Type.Message
 
         Koshucode.Baala.Data.Type.Rel
+        Koshucode.Baala.Data.Type.Rel.Dataset
         Koshucode.Baala.Data.Type.Rel.Head
         Koshucode.Baala.Data.Type.Rel.Mono
         Koshucode.Baala.Data.Type.Rel.Rel
