@@ -9,7 +9,6 @@ module Koshucode.Baala.Core.Resource.Run
   ) where
 
 import qualified Data.Map.Strict                         as Map
-import qualified Data.Set                                as Set
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
@@ -113,10 +112,10 @@ findRelmap ds sec name =
 -- ---------------------- Automatic output
 
 autoOutputResource :: (Ord c) => O.Map (C.Resource c)
-autoOutputResource res@C.Resource { C.resJudge  = js
-                                  , C.resAssert = ass }
+autoOutputResource res@C.Resource { C.resDataset = ds
+                                  , C.resAssert  = ass }
     | null ass && (C.featAutoOutput $ C.resFeature res)
-                 = res { C.resAssert = a <$> classAndTerms js }
+                 = res { C.resAssert = a <$> Map.assocs (D.datasetClasses ds) }
     | otherwise  = res
     where a (c, ts) = S.Short [] [] $ C.Assert
             { C.assSection = 0
@@ -126,15 +125,4 @@ autoOutputResource res@C.Resource { C.resJudge  = js
             , C.assPara    = B.def
             , C.assRelmap  = Just $ C.RelmapSource B.def c ts
             , C.assLinks   = [] }
-
-classAndTerms :: (Ord c) => [D.Judge c] -> [(D.JudgeClass, [S.TermName])]
-classAndTerms = list . foldr f Map.empty where
-    list m = fmap Set.toAscList <$> Map.toList m
-
-    f j = let c  = D.getClass j
-              ts = D.getTerms j
-          in Map.alter (alt $ Set.fromList $ map fst ts) c
-
-    alt set (Nothing)    = Just $ set
-    alt set (Just set')  = Just $ Set.union set set'
 

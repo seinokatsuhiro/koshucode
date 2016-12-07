@@ -50,6 +50,7 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
     , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
+    , resDataset    :: D.Dataset c         -- ^ Dataset
     , resInputQueue :: InputQueue          -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
     , resEcho       :: [[S.TokenLine]]     -- ^ Echo text
@@ -81,6 +82,7 @@ instance (D.CContent c) => B.Default (Resource c) where
            , resLexmap     = []
            , resAssert     = []
            , resJudge      = []
+           , resDataset    = B.def
            , resInputQueue = (B.def, [])
            , resOutput     = B.IOPointStdout Nothing
            , resEcho       = []

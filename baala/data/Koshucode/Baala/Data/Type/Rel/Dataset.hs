@@ -8,6 +8,7 @@
 
 module Koshucode.Baala.Data.Type.Rel.Dataset
   ( Dataset,
+    datasetClasses,
     dataset,
     datasetAdd,
   ) where
@@ -41,6 +42,11 @@ instance B.Default (Dataset c) where
 
 instance D.SelectRel Dataset where
     selectRel = datasetSelect B.def
+
+-- | Retrieve judgement class and its term names.
+datasetClasses :: Dataset c -> Map.Map D.JudgeClass [S.TermName]
+datasetClasses (Dataset ds) = Map.map termName ds where
+    termName ts = B.uniqueConcat (fst O.<$$> ts)
 
 -- | Gather judges into a dataset.
 dataset :: [D.Judge c] -> Dataset c
