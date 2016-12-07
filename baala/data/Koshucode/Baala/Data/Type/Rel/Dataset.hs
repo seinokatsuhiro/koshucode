@@ -24,6 +24,14 @@ import qualified Koshucode.Baala.Data.Type.Rel.Rel   as D
 -- | Dataset is a set of judges.
 data Dataset c = Dataset (Map.Map D.JudgeClass [[S.Term c]])
 
+instance Show (Dataset c) where
+    show = showDataset
+
+showDataset :: Dataset c -> String
+showDataset (Dataset ds) =
+    "Dataset { " ++ B.intercalate " | " (desc <$> Map.assocs ds) ++ " }"
+        where desc (cl, js) = cl ++ " * " ++ show (length js)
+
 -- | Dataset that has no judges.
 instance B.Default (Dataset c) where
     def = Dataset Map.empty
