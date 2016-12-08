@@ -15,7 +15,7 @@ module Koshucode.Baala.Overture.Cache
    cacheGetList,
  ) where
 
-import qualified Data.Map.Strict  as M
+import qualified Data.Map.Strict  as Ms
 
 -- $Example
 --
@@ -57,17 +57,17 @@ import qualified Data.Map.Strict  as M
 
 -- | Cache data.
 data Cache k v = Cache
-    { cacheVal       :: k -> v     -- ^ Value function
-    , cacheLimit     :: Int        -- ^ Current size limit
-    , cacheLimits    :: [Int]      -- ^ Extended limits
-    , cacheA         :: M.Map k v  -- ^ Current cache map
-    , cacheB         :: M.Map k v  -- ^ Previous cache map
+    { cacheVal       :: k -> v      -- ^ Value function
+    , cacheLimit     :: Int         -- ^ Current size limit
+    , cacheLimits    :: [Int]       -- ^ Extended limits
+    , cacheA         :: Ms.Map k v  -- ^ Current cache map
+    , cacheB         :: Ms.Map k v  -- ^ Previous cache map
     }
 
 instance (Show k) => Show (Cache k v) where
     show Cache {..} = "Cache " ++ show cacheLimit ++ " "
-                      ++ show (M.keys cacheA) ++ " "
-                      ++ show (M.keys cacheB)
+                      ++ show (Ms.keys cacheA) ++ " "
+                      ++ show (Ms.keys cacheB)
 
 -- | String cache.
 type CacheS v = Cache String v
@@ -85,23 +85,23 @@ cacheWith l ls val =
     Cache { cacheVal     = val
           , cacheLimit   = l
           , cacheLimits  = ls
-          , cacheA       = M.empty
-          , cacheB       = M.empty }
+          , cacheA       = Ms.empty
+          , cacheB       = Ms.empty }
 
 -- | Get cached value.
 cacheGet :: (Ord k) => Cache k v -> k -> (Cache k v, v)
 cacheGet cc@Cache {..} k =
-    case M.lookup k cacheA of
+    case Ms.lookup k cacheA of
       Just v -> (cc, v)
-      Nothing -> case M.lookup k cacheB of
+      Nothing -> case Ms.lookup k cacheB of
                    Just v  -> put v
                    Nothing -> put $ cacheVal k
     where
-      put v | M.size cacheA < cacheLimit =
-                let cc' = cc { cacheA = M.insert k v cacheA }
+      put v | Ms.size cacheA < cacheLimit =
+                let cc' = cc { cacheA = Ms.insert k v cacheA }
                 in (cc', v)
             | otherwise = 
-                let cc' = cc { cacheA = M.singleton k v
+                let cc' = cc { cacheA = Ms.singleton k v
                              , cacheB = cacheA }
                 in (nextLimit cc', v)
 

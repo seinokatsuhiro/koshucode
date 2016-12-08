@@ -18,7 +18,7 @@ module Koshucode.Baala.Syntax.Para.Para
     SimplePara, paraWords, paraHyphen,
   ) where
 
-import qualified Data.Map.Strict                       as Map
+import qualified Data.Map.Strict                       as Ms
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 
@@ -35,14 +35,14 @@ data Para n a
       } deriving (Show, Eq, Ord)
 
 -- | Mapping parameter name to its contents.
-type ParaMap n a = Map.Map n [[a]]
+type ParaMap n a = Ms.Map n [[a]]
 
 -- | Empty parameter
 instance B.Default (Para n a) where
     def = Para { paraTags = []
                , paraAll  = []
                , paraPos  = []
-               , paraName = Map.empty }
+               , paraName = Ms.empty }
 
 instance (Ord n) => Monoid (Para n a) where
     mempty        = B.def
@@ -50,7 +50,7 @@ instance (Ord n) => Monoid (Para n a) where
                          , paraAll   = paraAll  p1 ++  paraAll p2
                          , paraPos   = paraPos  p1 ++  paraPos p2
                          , paraName  = paraName p1 `u` paraName p2 }
-        where u = Map.unionWith (++)
+        where u = Ms.unionWith (++)
 
 -- | Test and take parameter name.
 type ParaName n a = a -> Maybe n
@@ -72,8 +72,8 @@ para name xxs = pos xxs [] where
     pos (x:xs) ps      = case name x of
                           Nothing  -> pos xs (x:ps)
                           Just n   -> let p = make ps
-                                          m = val Map.empty n xs []
-                                      in p { paraName = Map.map reverse m }
+                                          m = val Ms.empty n xs []
+                                      in p { paraName = Ms.map reverse m }
     val a n []     vs  = add n vs a
     val a n (x:xs) vs  = case name x of
                            Nothing  -> val a n xs (x:vs)
@@ -83,22 +83,22 @@ para name xxs = pos xxs [] where
 
 -- | Association list of named parameters.
 paraNameList :: Para n a -> [(n, [[a]])]
-paraNameList = Map.assocs . paraName
+paraNameList = Ms.assocs . paraName
 
 -- | List of parameter names.
 paraNames :: Para n a -> [n]
-paraNames = Map.keys . paraName
+paraNames = Ms.keys . paraName
 
 -- | List of names which appear more than once.
 paraMultipleNames :: Para n a -> [n]
 paraMultipleNames = paraNamesOf (not . B.isSingleton)
 
 paraNamesOf :: ([[a]] -> Bool) -> Para n a -> [n]
-paraNamesOf f = Map.keys . Map.filter f . paraName
+paraNamesOf f = Ms.keys . Ms.filter f . paraName
 
 -- | Lookup named parameter.
 paraLookup :: (Ord n) => n -> Para n a -> Maybe [[a]]
-paraLookup n = Map.lookup n . paraName
+paraLookup n = Ms.lookup n . paraName
 
 -- | Lookup single-occurence parameter.
 paraLookupSingle :: (Ord n) => n -> Para n a -> Maybe [a]
@@ -112,8 +112,8 @@ paraLookupSingle n p =
 paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
 paraPosName pn p =
     do ns <- pn $ paraPos p
-       let m = Map.fromList $ map (B.mapSnd B.li1) ns
-       return $ p { paraName = paraName p `Map.union` m }
+       let m = Ms.fromList $ map (B.mapSnd B.li1) ns
+       return $ p { paraName = paraName p `Ms.union` m }
 
 -- | Add named parameter.
 paraNameAdd :: (Ord n) => n -> [a] -> O.Map (Para n a)
@@ -121,12 +121,12 @@ paraNameAdd n vs p@Para { paraName = m } =
     p { paraName = paraInsert n vs m }
 
 paraInsert :: (Ord n) => n -> [a] -> O.Map (ParaMap n a)
-paraInsert n a = Map.insertWith (++) n [a]
+paraInsert n a = Ms.insertWith (++) n [a]
 
 -- | Map names of named parameters.
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> Para n1 a -> Para n2 a
 paraNameMapKeys f p@Para { paraName = m } =
-    p { paraName = Map.mapKeys f m }
+    p { paraName = Ms.mapKeys f m }
 
 -- | Take first element from multiply given named parameter.
 --
@@ -144,7 +144,7 @@ paraTakeLast :: (Ord n) => n -> Para n a -> Para n a
 paraTakeLast = paraAdjustName B.takeLast
 
 paraAdjustName :: (Ord n) => ([[a]] -> [[a]]) -> n -> Para n a -> Para n a
-paraAdjustName f n p@Para {..} = p { paraName = Map.adjust f n paraName }
+paraAdjustName f n p@Para {..} = p { paraName = Ms.adjust f n paraName }
 
 
 -- --------------------------------------------  Simple

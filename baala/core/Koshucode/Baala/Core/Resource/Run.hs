@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Resource.Run
     relmapCons,
   ) where
 
-import qualified Data.Map.Strict                         as Map
+import qualified Data.Map.Strict                         as Ms
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
@@ -115,7 +115,7 @@ autoOutputResource :: (Ord c) => O.Map (C.Resource c)
 autoOutputResource res@C.Resource { C.resDataset = ds
                                   , C.resAssert  = ass }
     | null ass && (C.featAutoOutput $ C.resFeature res)
-                 = res { C.resAssert = a <$> Map.assocs (D.datasetClasses ds) }
+                 = res { C.resAssert = a <$> Ms.assocs (D.datasetClasses ds) }
     | otherwise  = res
     where a (c, ts) = S.Short [] [] $ C.Assert
             { C.assSection = 0

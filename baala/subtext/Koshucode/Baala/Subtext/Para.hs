@@ -11,7 +11,7 @@ module Koshucode.Baala.Subtext.Para
 
 import Prelude hiding (seq, and)
 
-import qualified Data.Map.Strict                   as Map
+import qualified Data.Map.Strict                   as Ms
 import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as T
 import qualified Koshucode.Baala.Subtext.Expr      as T
@@ -39,7 +39,7 @@ type Submatch a = (O.Name, [a])
 createPara :: T.Bundle a -> [a] -> Para a
 createPara bun s =
     let bun' = simplify bun
-    in Para { paraBundle     = Map.fromList $ T.bundleExpr bun'
+    in Para { paraBundle     = Ms.fromList $ T.bundleExpr bun'
             , paraRawSubs    = []
             , paraGather     = True
             , paraExpr       = T.bundleStart bun'

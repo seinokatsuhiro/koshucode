@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Relmap.Option
     optionParse,
   ) where
 
-import qualified Data.Map.Strict                      as Map
+import qualified Data.Map.Strict                      as Ms
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
 import qualified Koshucode.Baala.Data                 as D
@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 
 
 -- | Option type.
-type Option c = Map.Map String (OptionContent c)
+type Option c = Ms.Map String (OptionContent c)
 
 -- | Content of assertion option.
 data OptionContent c
@@ -32,7 +32,7 @@ data OptionContent c
 
 -- | Option set.
 option :: (D.CBool c, D.CText c) => Option c
-option = Map.fromList
+option = Ms.fromList
          [ ("order"    , OptionBool False)
          , ("sep-char" , OptionChar ":|" ':')
          , ("forward"  , OptionTerms [])
@@ -41,7 +41,7 @@ option = Map.fromList
 -- | Get boolean option value.
 optionBool :: String -> Option c -> Bool
 optionBool name opt =
-    case Map.lookup name opt of
+    case Ms.lookup name opt of
       Just (OptionBool b) -> b
       _                   -> B.bug "unknown option"
 
@@ -68,7 +68,7 @@ optionUpdate :: (Eq c, D.CBool c, D.CText c)
    => D.CalcContent c -> Option c -> NamedT [S.TTree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
-      case Map.lookup name opt of
+      case Ms.lookup name opt of
         Just oc  -> Msg.abOption trees $ upd oc
         Nothing  -> Msg.adlib $ "unknown option: " ++ name
     where
@@ -85,5 +85,5 @@ optionUpdate calc opt ((name, pt), trees) =
       upd (OptionTerms _)   = do terms <- D.treesFlatNames trees
                                  ins $ OptionTerms terms
                                                         
-      ins oc = Right $ Map.insert name oc opt
+      ins oc = Right $ Ms.insert name oc opt
 

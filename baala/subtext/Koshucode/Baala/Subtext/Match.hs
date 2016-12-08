@@ -13,7 +13,7 @@ module Koshucode.Baala.Subtext.Match
 
 import Prelude hiding (seq)
 
-import qualified Data.Map.Strict                   as Map
+import qualified Data.Map.Strict                   as Ms
 import qualified Koshucode.Baala.Overture.Fn       as O
 import qualified Koshucode.Baala.Subtext.Bundle    as T
 import qualified Koshucode.Baala.Subtext.Expr      as T
@@ -157,7 +157,7 @@ match pa@T.Para { T.paraBundle    = bundle
             _                          -> Nothing
 
       base (T.EChange n) =
-          do e' <- Map.lookup n bundle
+          do e' <- Ms.lookup n bundle
              pa ? e'
 
       base (T.EAlways b)       = when b

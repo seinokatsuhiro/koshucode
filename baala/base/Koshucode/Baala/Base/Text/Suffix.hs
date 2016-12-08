@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Text.Suffix
     uniqueNames,
   ) where
 
-import qualified Data.Map.Strict                   as Map
+import qualified Data.Map.Strict                   as Ms
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base.List         as B
 
@@ -49,20 +49,20 @@ uniqueNames :: Char -> O.Map [String]
 uniqueNames del xs = O.uneith <$> uniqueNamesEith del (Left <$> xs)
 
 uniqueNamesEith :: Char -> O.Map [O.Eith String]
-uniqueNamesEith del xxs = loop False (Map.map intSuffixes dup) xxs [] where
+uniqueNamesEith del xxs = loop False (Ms.map intSuffixes dup) xxs [] where
     loop b m (Left x : xs) ys
-        = case Map.lookup x m of
-            Just (n : ns) -> let m' = Map.insert x ns m
+        = case Ms.lookup x m of
+            Just (n : ns) -> let m' = Ms.insert x ns m
                              in loop True m' xs (Right (x ++ n) : ys)
             _             -> loop b m xs (Left x : ys)
     loop b m (x : xs) ys  = loop b m xs (x : ys)
     loop True  _ [] ys    = uniqueNamesEith del $ reverse ys
     loop False _ [] ys    = reverse ys  -- completed
 
-    dup = Map.filter (> 0) $ duplicateMap $ map name xxs
+    dup = Ms.filter (> 0) $ duplicateMap $ map name xxs
 
-    duplicateMap :: (Ord a) => [(a, Int)] -> Map.Map a Int
-    duplicateMap = Map.fromListWith $ const2 1
+    duplicateMap :: (Ord a) => [(a, Int)] -> Ms.Map a Int
+    duplicateMap = Ms.fromListWith $ const2 1
 
     name (Left  x) = (x, 0)
     name (Right x) = (x, 0)

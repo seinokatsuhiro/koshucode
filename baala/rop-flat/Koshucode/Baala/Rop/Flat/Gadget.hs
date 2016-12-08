@@ -20,7 +20,7 @@ module Koshucode.Baala.Rop.Flat.Gadget
     consDumpTree,
   ) where
 
-import qualified Data.Map.Strict                   as Map
+import qualified Data.Map.Strict                   as Ms
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
@@ -160,12 +160,12 @@ relkitVisitDistanceBody optimize1 pkStart pkFrom pkTo heTo
     where
       kitf3 x@(addX, _, _) bmaps bo1 =
           do [bo2] <- calcBody bmaps bo1
-             let vstep = foldr addX Map.empty bo2
+             let vstep = foldr addX Ms.empty bo2
              Right $ calc x vstep `map` bo1
 
       calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
           rel    = D.pRel $ D.Rel heTo body
-          body   = map tupleX $ Map.assocs $ vdistX vstep start
+          body   = map tupleX $ Ms.assocs $ vdistX vstep start
           start  = D.ssRShare pkStart cs1
 
       vdistN vstep cs   = visitDistanceFrom vstep cs
@@ -184,17 +184,17 @@ calcBody :: [C.BodyMap c] -> [[c]] -> B.Ab [[[c]]]
 calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps
 
 -- | Mapping node to next nodes.
-type VisitStep a = Map.Map a [a]
+type VisitStep a = Ms.Map a [a]
 
 -- | Mapping node to its distance.
-type VisitDist a = Map.Map a Int
+type VisitDist a = Ms.Map a Int
 
 visitDistanceFrom :: (Ord a) => VisitStep a -> a -> VisitDist a
-visitDistanceFrom step a = visitDistance step $ Map.fromList [(a, 0)]
+visitDistanceFrom step a = visitDistance step $ Ms.fromList [(a, 0)]
 
 visitDistance :: (Ord a) => VisitStep a -> VisitDist a -> VisitDist a
 visitDistance step = visit 1 where
-    sameSize x y = Map.size x == Map.size y
+    sameSize x y = Ms.size x == Ms.size y
     visit n dist = case visitDistanceStep step dist n of
                      dist' | sameSize dist dist' -> dist'
                            | otherwise           -> visit (n + 1) dist'
@@ -202,15 +202,15 @@ visitDistance step = visit 1 where
 visitDistanceStep :: (Ord a) => VisitStep a -> VisitDist a -> Int -> VisitDist a
 visitDistanceStep step dist n = foldr insert dist toList where
     insert a  = insertFirst a n
-    toList    = next $ Map.keys dist
-    next      = concat . B.mapMaybe (`Map.lookup` step)
+    toList    = next $ Ms.keys dist
+    next      = concat . B.mapMaybe (`Ms.lookup` step)
 
-insertFirst :: (Ord k) => k -> a -> Map.Map k a -> Map.Map k a
-insertFirst = Map.insertWith first where
+insertFirst :: (Ord k) => k -> a -> Ms.Map k a -> Ms.Map k a
+insertFirst = Ms.insertWith first where
     first _ old = old
 
-insertPush :: (Ord k) => k -> a -> O.Map (Map.Map k [a])
-insertPush k a = Map.insertWith push k [a] where
+insertPush :: (Ord k) => k -> a -> O.Map (Ms.Map k [a])
+insertPush k a = Ms.insertWith push k [a] where
     push _ as = a : as
 
 
@@ -252,22 +252,22 @@ relkitEqlize :: (Ord c) => C.RelkitFlow c
 relkitEqlize Nothing = Right C.relkitNothing
 relkitEqlize (Just he1) = Right kit2 where
     kit2       = C.relkitJust he1 $ C.RelkitFull False kitf2
-    kitf2 bo1  = case eqlizeBody Map.empty bo1 of
+    kitf2 bo1  = case eqlizeBody Ms.empty bo1 of
                    (_, bo2) -> bo2
 
-eqlize :: (Ord c) => Map.Map c c -> c -> (Map.Map c c, c)
-eqlize m c = case Map.lookup c m of
+eqlize :: (Ord c) => Ms.Map c c -> c -> (Ms.Map c c, c)
+eqlize m c = case Ms.lookup c m of
                Just c' -> (m, c')
-               Nothing -> (Map.insert c c m, c)
+               Nothing -> (Ms.insert c c m, c)
 
-eqlizeList :: (Ord c) => Map.Map c c -> [c] -> (Map.Map c c, [c])
+eqlizeList :: (Ord c) => Ms.Map c c -> [c] -> (Ms.Map c c, [c])
 eqlizeList = loop where
     loop m [] = (m, [])
     loop m (c : cs) = let (m1, c')  = eqlize m c
                           (m2, cs') = loop m1 cs
                       in (m2, c' : cs')
 
-eqlizeBody :: (Ord c) => Map.Map c c -> [[c]] -> (Map.Map c c, [[c]])
+eqlizeBody :: (Ord c) => Ms.Map c c -> [[c]] -> (Ms.Map c c, [[c]])
 eqlizeBody = loop where
     loop m [] = (m, [])
     loop m (t : ts) = let (m1, t')  = eqlizeList m t
