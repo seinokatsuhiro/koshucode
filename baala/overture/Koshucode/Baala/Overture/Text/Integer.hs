@@ -6,13 +6,15 @@ module Koshucode.Baala.Overture.Text.Integer
   ( -- * Decoder
     stringDec, stringInt, stringInteger,
     stringHex, stringHexInt, stringHexInteger,
+    stringCustomInteger, stringCountInteger,
     -- * Encoder
     intLowerHexString, intUpperHexString,
-    integralCustomString, integralReckonString,
+    integralCustomString, integralCountString,
   ) where
 
 import qualified Data.Char                      as Ch
-import qualified Data.IntMap.Strict             as Map
+import qualified Data.IntMap.Strict             as Mi
+import qualified Data.Map.Strict                as Ms
 import qualified Numeric                        as Num
 
 
@@ -69,6 +71,32 @@ stringHexInt = stringHex
 stringHexInteger :: String -> Maybe Integer
 stringHexInteger = stringHex
 
+-- | Decode custom digits to integer.
+--
+--   >>> stringCustomInteger "01234567" "144"
+--   Just 100
+--
+stringCustomInteger :: String -> String -> Maybe Integer
+stringCustomInteger = stringIntegerFrom 0
+
+-- | Decode counting digits to integer.
+--
+--   >>> stringCountInteger ['A'..'Z'] <$> ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
+--
+stringCountInteger :: String -> String -> Maybe Integer
+stringCountInteger = stringIntegerFrom 1
+
+stringIntegerFrom :: Integer -> String -> String -> Maybe Integer
+stringIntegerFrom from digits = loop 0 where
+    m = Ms.fromList $ zip digits [from ..]
+    b = toInteger $ length digits
+
+    loop n "" = Just n
+    loop n (d:ds) = case Ms.lookup d m of
+                      Nothing -> Nothing
+                      Just i  -> loop (b * n + i) ds
+
 
 -- ----------------------  Encoder
 
@@ -101,29 +129,29 @@ intUpperHexString = integralUpperHexString
 --
 integralCustomString :: (Integral n) => String -> n -> String
 integralCustomString digits = loop "" . abs where
-    dig  = Map.fromList $ zip [0..] digits
+    dig  = Mi.fromList $ zip [0..] digits
     base = integralLength digits
-    loop s 0 | null s    = [dig Map.! 0]
+    loop s 0 | null s    = [dig Mi.! 0]
              | otherwise = s
     loop s n = case quotRem n base of
                  (n', i) -> loop (dig ! i : s) n'
 
--- | Encode integer to reckoning string.
+-- | Encode integer to counting string.
 --
 --   >>> intReckonString ['A'..'Z'] <$> [0, 1, 2, 25, 26, 27, 52, 53, 100, 1000, 5303449]
 --   ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
 --
-integralReckonString :: (Integral n) => String -> n -> String
-integralReckonString digits = loop "" . abs where
-    dig       = Map.fromList $ zip [0..] $ '_' : digits
+integralCountString :: (Integral n) => String -> n -> String
+integralCountString digits = loop "" . abs where
+    dig       = Mi.fromList $ zip [0..] $ '_' : digits
     base      = integralLength digits
     loop s 0  = s
-    loop s n  = case reckonDiv n base of
+    loop s n  = case countDiv n base of
                   (n', m) -> loop (dig ! m : s) n'
 
 -- | Integral version
-(!) :: (Integral n) => Map.IntMap a -> n -> a
-(!) m n = m Map.! fromIntegral n
+(!) :: (Integral n) => Mi.IntMap a -> n -> a
+(!) m n = m Mi.! fromIntegral n
 
 -- | Integral version of 'length'.
 --
@@ -136,11 +164,11 @@ integralLength (_ : xs) = 1 + integralLength xs
 
 -- | Reckoning division.
 --
---  >>> (`reckonDiv` 3) <$> [1 .. 10 :: Int]
+--  >>> (`countDiv` 3) <$> [1 .. 10 :: Int]
 --  [(0,1),(0,2),(0,3),(1,1),(1,2),(1,3),(2,1),(2,2),(2,3),(3,1)]
 --
-reckonDiv :: (Integral n) => n -> n -> (n, n)
-reckonDiv x y =
+countDiv :: (Integral n) => n -> n -> (n, n)
+countDiv x y =
     case quotRem x y of
       (q, r) | r == 0    -> (q - 1, y)
              | otherwise -> (q, r)
