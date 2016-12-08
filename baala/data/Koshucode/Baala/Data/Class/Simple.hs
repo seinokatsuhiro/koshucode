@@ -7,7 +7,7 @@ module Koshucode.Baala.Data.Class.Simple
     -- ** Boolean
     CBool (..), true, false, putTrue, putFalse,
     -- ** Decimal
-    CDec (..), pInt, pInteger, pIntegral,
+    CDec (..), pInt, pInteger, pIntegral, gRational, gIntegral,
     -- ** Clock and time
     CClock (..),
     CTime (..),
@@ -24,6 +24,7 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
 import qualified Koshucode.Baala.Data.Class.Singleton    as D
+import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 
 -- --------------------------------------------  Simple contents
@@ -73,6 +74,10 @@ class (D.CTypeOf c) => CDec c where
     putDec      =    Right . pDec
 
 -- | Create decimal content.
+--
+--   >>> pInt 15 :: Content
+--   ContentDec Decimal (0) 15
+--
 pInt :: (CDec c) => Int -> c
 pInt = pIntegral
 
@@ -83,6 +88,14 @@ pInteger = pDec . fromInteger
 -- | Create decimal content.
 pIntegral :: (CDec c, Integral n) => n -> c
 pIntegral = pInteger . toInteger
+
+-- | Get rational number from decimal content.
+gRational :: (CDec c) => c -> Rational
+gRational = toRational . gDec
+
+-- | Get truncated integer from decimal content.
+gIntegral :: (CDec c, Integral n) => c -> n
+gIntegral = truncate . gRational
 
 -- ----------------------  Clock
 
