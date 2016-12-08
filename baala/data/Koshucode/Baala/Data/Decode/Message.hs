@@ -13,8 +13,8 @@ module Koshucode.Baala.Data.Decode.Message
     reqRelTuple,
     reqTermName,
     unkBracket,
+    unkContent,
     unkType,
-    unkWord,
     -- * Utility
     expectActual,
     expect2Actual,
@@ -58,13 +58,13 @@ reqTermName = Left $ B.abortBecause "Require term name"
 unkBracket :: B.Ab a
 unkBracket = Left $ B.abortBecause "Unknown bracket"
 
+-- | Unknown content
+unkContent :: B.Ab a
+unkContent = Left $ B.abortBecause "Unknown content"
+
 -- | Unknown type name
 unkType :: String -> B.Ab a
 unkType = Left . B.abortLine "Unknown type name"
-
--- | Unknown word
-unkWord :: String -> B.Ab a
-unkWord = Left . B.abortLine "Unknown word"
 
 -- | Expect and actual.
 expectActual :: String -> String -> [String]

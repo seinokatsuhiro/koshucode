@@ -44,10 +44,10 @@ treeContent :: forall c. (D.CContent c) => DecodeContent c
 treeContent tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent c
     cons x@(P.L tok)
-        = (decimal =<< D.treesDigits [x])
-          O.<||> (D.putTime  =<< D.treesTime [x])
-          O.<||> (D.putClock =<< D.tokenClock tok)
-          O.<||> (token tok)
+        = (putDecimal =<< D.treesDigits [x]) O.<||>
+          (D.putTime  =<< D.treesTime [x])   O.<||>
+          (D.putClock =<< D.tokenClock tok)  O.<||>
+          (tokenContent tok)
     cons (P.B b xs) = case b of
         S.BracketGroup   -> group xs
         S.BracketList    -> D.putList   =<< treesContents cons xs
@@ -59,32 +59,30 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
         _                -> Msg.unkBracket
     cons _ = B.bug "treeContent"
 
-    token :: S.Token -> B.Ab c
-    token (P.T n w)
-        | n <= S.TextRaw     = keyword w
-        | n == S.TextQ       = D.putCode w
-        | n == S.TextTerm    = D.putTerm $ S.toTermName w
-        | otherwise          = D.putText w
-    token t                  = Msg.unkWord $ S.tokenContent t
-
     group :: [S.TTree] -> B.Ab c
-    group xs@(P.LRaw _ : _)  = case decimal =<< D.treesDigits xs of
-                                 Right c  -> Right c
-                                 Left _   -> D.putTime =<< D.treesTime xs
+    group xs@(P.LRaw _ : _)  = (putDecimal =<< D.treesDigits xs) O.<||>
+                               (D.putTime  =<< D.treesTime xs)
     group []                 = Right D.empty
-    group _                  = Msg.adlib "unknown content"
+    group _                  = Msg.unkContent
 
-    decimal        = D.putDec B.<.> D.decodeDecimal
+    putDecimal = D.putDec B.<.> D.decodeDecimal
 
-    keyword :: String -> B.Ab c
-    keyword "(+)"  = Right D.true
-    keyword "(-)"  = Right D.false
-    keyword "(/)"  = Right D.end
-    keyword "0"    = Right D.false  -- obsolete
-    keyword "1"    = Right D.true   -- obsolete
-    keyword "dum"  = Right D.dum
-    keyword "dee"  = Right D.dee
-    keyword w      = Msg.unkWord w
+tokenContent :: (D.CContent c) => S.Token -> B.Ab c
+tokenContent (P.T f w)
+    | f <= S.TextRaw     = keyword w
+    | f == S.TextQ       = D.putCode w
+    | f == S.TextTerm    = D.putTerm $ S.toTermName w
+    | otherwise          = D.putText w
+    where
+      keyword "(+)"  = Right D.true
+      keyword "(-)"  = Right D.false
+      keyword "(/)"  = Right D.end
+      keyword "dum"  = Right D.dum
+      keyword "dee"  = Right D.dee
+      keyword "0"    = Right D.false  -- obsolete
+      keyword "1"    = Right D.true   -- obsolete
+      keyword _      = Msg.unkContent
+tokenContent _ = Msg.unkContent
 
 -- List of contents
 --
