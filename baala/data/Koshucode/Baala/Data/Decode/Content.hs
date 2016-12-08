@@ -14,6 +14,7 @@ module Koshucode.Baala.Data.Decode.Content
     treesJudge,
   ) where
 
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Data.Type               as D
@@ -43,10 +44,10 @@ treeContent :: forall c. (D.CContent c) => DecodeContent c
 treeContent tree = Msg.abLiteral tree $ cons tree where
     cons :: DecodeContent c
     cons x@(P.L tok)
-        = eithcon (eithcon (eithcon (token tok)
-            D.putClock  $ D.tokenClock tok)
-            D.putTime   $ D.treesTime   [x])
-            decimal     $ D.treesDigits [x]
+        = (decimal =<< D.treesDigits [x])
+          O.<||> (D.putTime  =<< D.treesTime [x])
+          O.<||> (D.putClock =<< D.tokenClock tok)
+          O.<||> (token tok)
     cons (P.B b xs) = case b of
         S.BracketGroup   -> group xs
         S.BracketList    -> D.putList   =<< treesContents cons xs
@@ -73,7 +74,6 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
     group []                 = Right D.empty
     group _                  = Msg.adlib "unknown content"
 
-    eithcon f      = either (const f)
     decimal        = D.putDec B.<.> D.decodeDecimal
 
     keyword :: String -> B.Ab c
