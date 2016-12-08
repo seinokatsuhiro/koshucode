@@ -741,7 +741,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    239 judges
+**    257 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -818,6 +818,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Data.Type"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Data.Class.Singleton"
+|-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Koshucode.Baala.Data.Class.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Singleton"      /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Singleton"      /import "Koshucode.Baala.Base"
@@ -841,6 +842,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Content"              /import "Koshucode.Baala.Data.Decode"
 |-- IMPORT  /module "Koshucode.Baala.Data.Content"              /import "Koshucode.Baala.Data.Class.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Content"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Content"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Content"       /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Content"       /import "Koshucode.Baala.Data.Type"
@@ -862,6 +864,14 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Syntax.Pattern"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Numeric"       /import "Koshucode.Baala.Data.Decode.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Data.Type"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Data.Class"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Data.Decode.Term"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Data.Decode.Content"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode.Read"          /import "Koshucode.Baala.Syntax.Pattern"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode.Term"          /import "Koshucode.Baala.Syntax"
@@ -877,6 +887,7 @@ TABLE : DIR-RANK
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode"               /import "Koshucode.Baala.Data.Decode.Content"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode"               /import "Koshucode.Baala.Data.Decode.Numeric"
+|-- IMPORT  /module "Koshucode.Baala.Data.Decode"               /import "Koshucode.Baala.Data.Decode.Read"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode"               /import "Koshucode.Baala.Data.Decode.Term"
 |-- IMPORT  /module "Koshucode.Baala.Data.Decode"               /import "Koshucode.Baala.Data.Decode.Type"
 
@@ -939,6 +950,14 @@ TABLE : DIR-RANK
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Message"         /import "Koshucode.Baala.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Data.Map.Strict"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Data.Type.Judge"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Data.Type.Rel.Head"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Koshucode.Baala.Data.Type.Rel.Rel"
+
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Head"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Head"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Head"        /import "Koshucode.Baala.Syntax"
@@ -960,6 +979,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.TermPicker"  /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.TermPicker"  /import "Koshucode.Baala.Data.Type.Judge"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel"             /import "Koshucode.Baala.Data.Type.Rel.Dataset"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel"             /import "Koshucode.Baala.Data.Type.Rel.Head"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel"             /import "Koshucode.Baala.Data.Type.Rel.Mono"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel"             /import "Koshucode.Baala.Data.Type.Rel.Rel"
@@ -1059,28 +1079,28 @@ Command `./dir-rank.k ../data/data/IMPORT.k` produces:
     ] ] [ 3 | "Clock" | [ ] ] [ 4 | "ClockCalc" | [ ] ] [ 5 | "Time" | [ ] ] [ 6 | "TimeCalc" | [ ] ] =}
 
 |-- DIR-RANK  /dir-rank 8  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 5 |
-    "TermPicker" | [ "Judge" ] ] [ 6 | "Head" | [ "Judge" | "Type" ] ] [ 7 | "Rel" | [ "Judge" ] ] [ 8 | "Mono" | [ ] ]
-    =}
+    "TermPicker" | [ "Judge" ] ] [ 6 | "Head" | [ "Judge" | "Type" ] ] [ 7 | "Rel" | [ "Judge" ] ] [ 8 | "Dataset" | [
+    "Judge" ] ] [ 8 | "Mono" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ]
     ] [ 4 | "Judge" | [ ] ] [ 5 | "Decimal" | [ ] ] [ 5 | "Type" | [ "Judge" ] ] [ 7 | "Time" | [ ] ] [ 9 | "Rel" | [ ]
     ] =}
 |-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Data.Class"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [
     ] ] [ 11 | "Singleton" | [ "Type" ] ] [ 12 | "Simple" | [ "Type" ] ] [ 13 | "Complex" | [ "Type" ] ] [ 14 |
     "Content" | [ ] ] [ 14 | "Map" | [ ] ] [ 15 | "Encode" | [ "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 17  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+|-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
     [ ] ] [ 2 | "Term" | [ ] ] [ 11 | "Type" | [ "Type" ] ] [ 12 | "Numeric" | [ "Type" ] ] [ 17 | "Content" | [ "Class"
-    | "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 20  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 11 | "Message" |
-    [ "Type" ] ] [ 12 | "Cox" | [ ] ] [ 13 | "Cop" | [ ] ] [ 19 | "Build" | [ "Class" | "Decode" ] ] [ 20 | "Run" | [
+    | "Type" ] ] [ 18 | "Read" | [ "Class" | "Type" ] ] =}
+|-- DIR-RANK  /dir-rank 21  /dir "Koshucode.Baala.Data.Church"  /base-rank {= /rank /base /import-dir [ 11 | "Message" |
+    [ "Type" ] ] [ 12 | "Cox" | [ ] ] [ 13 | "Cop" | [ ] ] [ 20 | "Build" | [ "Class" | "Decode" ] ] [ 21 | "Run" | [
     "Class" | "Decode" | "Type" ] ] =}
 
-|-- DIR-RANK  /dir-rank 21  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 10 | "Type" | [
-    "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 12 | "Message" | [ ] ] [ 16 | "Class" | [ ] ] [ 18 | "Decode" |
-    [ ] ] [ 19 | "Content" | [ "Class" | "Decode" | "Type" ] ] [ 21 | "Church" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 22  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
-    "Overture" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 22 | "Data" | [ "Church" | "Class" | "Decode" | "Type" ] ] =}
-|-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala.Data.Type.Type"  /base-rank {= /rank /base /import-dir [ 17 | "Genus"
-    | [ "Class" ] ] [ 23 | "Predefined where" | [ "Class" | "Data" ] ] =}
+|-- DIR-RANK  /dir-rank 22  /dir "Koshucode.Baala.Data"  /base-rank {= /rank /base /import-dir [ 10 | "Type" | [
+    "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 12 | "Message" | [ ] ] [ 16 | "Class" | [ ] ] [ 19 | "Decode" |
+    [ ] ] [ 20 | "Content" | [ "Class" | "Decode" | "Type" ] ] [ 22 | "Church" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 23  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Overture" | [ ] ] [ 0 | "Syntax" | [ ] ] [ 23 | "Data" | [ "Church" | "Class" | "Decode" | "Type" ] ] =}
+|-- DIR-RANK  /dir-rank 24  /dir "Koshucode.Baala.Data.Type.Type"  /base-rank {= /rank /base /import-dir [ 17 | "Genus"
+    | [ "Class" ] ] [ 24 | "Predefined where" | [ "Class" | "Data" ] ] =}
 
 *** 13 judges
 
@@ -1126,6 +1146,7 @@ TABLE : DIR-RANK
                                                   5     "TermPicker"         [ "Judge" ]
                                                   6     "Head"               [ "Judge" | "Type" ]
                                                   7     "Rel"                [ "Judge" ]
+                                                  8     "Dataset"            [ "Judge" ]
                                                   8     "Mono"               [ ]
                                                   
   9         "Koshucode.Baala.Data.Type"           /rank /base                /import-dir
@@ -1147,42 +1168,43 @@ TABLE : DIR-RANK
                                                   14    "Map"                [ ]
                                                   15    "Encode"             [ "Type" ]
                                                   
-  17        "Koshucode.Baala.Data.Decode"         /rank /base                /import-dir
+  18        "Koshucode.Baala.Data.Decode"         /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
                                                   1     "Message"            [ ]
                                                   2     "Term"               [ ]
                                                   11    "Type"               [ "Type" ]
                                                   12    "Numeric"            [ "Type" ]
                                                   17    "Content"            [ "Class" | "Type" ]
+                                                  18    "Read"               [ "Class" | "Type" ]
                                                   
-  20        "Koshucode.Baala.Data.Church"         /rank /base                /import-dir
+  21        "Koshucode.Baala.Data.Church"         /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
                                                   11    "Message"            [ "Type" ]
                                                   12    "Cox"                [ ]
                                                   13    "Cop"                [ ]
-                                                  19    "Build"              [ "Class" | "Decode" ]
-                                                  20    "Run"                [ "Class" | "Decode" | "Type" ]
+                                                  20    "Build"              [ "Class" | "Decode" ]
+                                                  21    "Run"                [ "Class" | "Decode" | "Type" ]
                                                   
-  21        "Koshucode.Baala.Data"                /rank /base                /import-dir
+  22        "Koshucode.Baala.Data"                /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
                                                   10    "Type"               [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ]
                                                   12    "Message"            [ ]
                                                   16    "Class"              [ ]
-                                                  18    "Decode"             [ ]
-                                                  19    "Content"            [ "Class" | "Decode" | "Type" ]
-                                                  21    "Church"             [ ]
+                                                  19    "Decode"             [ ]
+                                                  20    "Content"            [ "Class" | "Decode" | "Type" ]
+                                                  22    "Church"             [ ]
                                                   
-  22        "Koshucode.Baala"                     /rank /base                /import-dir
+  23        "Koshucode.Baala"                     /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
                                                   0     "Base"               [ ]
                                                   0     "Overture"           [ ]
                                                   0     "Syntax"             [ ]
-                                                  22    "Data"               [ "Church" | "Class" | "Decode" | "Type" ]
+                                                  23    "Data"               [ "Church" | "Class" | "Decode" | "Type" ]
                                                   
-  23        "Koshucode.Baala.Data.Type.Type"      /rank /base                /import-dir
+  24        "Koshucode.Baala.Data.Type.Type"      /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
                                                   17    "Genus"              [ "Class" ]
-                                                  23    "Predefined where"   [ "Class" | "Data" ]
+                                                  24    "Predefined where"   [ "Class" | "Data" ]
                                                   
 
 === rel
@@ -1208,7 +1230,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    211 judges
+**    203 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Overture"
@@ -1217,13 +1239,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Relmap"
-
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Data.Maybe"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Message"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Message"       /import "Koshucode.Baala.Syntax"
@@ -1248,7 +1263,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.Assert"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.Dataset"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.RelTable"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert"               /import "Koshucode.Baala.Core.Assert.Run"
 
@@ -1433,7 +1447,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Relmap"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Data.Map.Strict"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Data.Set"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Syntax"
@@ -1485,9 +1498,9 @@ Command `./dir-rank.k ../core/data/IMPORT.k` produces:
     ] ] [ 1 | "Result" | [ ] ] [ 2 | "Option" | [ ] ] [ 7 | "Relmap" | [ "Lexmap" | "Relkit" ] ] [ 8 | "Rop" | [
     "Lexmap" ] ] [ 8 | "Specialize" | [ "Lexmap" | "Relkit" ] ] [ 9 | "Construct" | [ "Lexmap" | "Relkit" ] ] [ 9 |
     "Global" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Dataset" |
-    [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "RelTable" | [ ] ] [ 11 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 12 | "Run" | [
-    "Lexmap" | "Relkit" | "Relmap" ] ] =}
+|-- DIR-RANK  /dir-rank 12  /dir "Koshucode.Baala.Core.Assert"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
+    [ ] ] [ 1 | "RelTable" | [ ] ] [ 11 | "Assert" | [ "Lexmap" | "Relmap" ] ] [ 12 | "Run" | [ "Lexmap" | "Relkit" |
+    "Relmap" ] ] =}
 |-- DIR-RANK  /dir-rank 16  /dir "Koshucode.Baala.Core.Resource"  /base-rank {= /rank /base /import-dir [ 1 | "Message"
     | [ ] ] [ 4 | "Clause" | [ "Lexmap" ] ] [ 14 | "Resource" | [ "Assert" | "Lexmap" | "Relkit" | "Relmap" ] ] [ 15 |
     "Concrete" | [ "Relmap" ] ] [ 15 | "Include" | [ "Assert" | "Lexmap" | "Relmap" ] ] [ 15 | "Run" | [ "Assert" |
@@ -1546,7 +1559,6 @@ TABLE : DIR-RANK
                                               
   12        "Koshucode.Baala.Core.Assert"     /rank /base           /import-dir
                                               ----- --------------- ------------------------------------------------------------
-                                              1     "Dataset"       [ ]
                                               1     "Message"       [ ]
                                               1     "RelTable"      [ ]
                                               11    "Assert"        [ "Lexmap" | "Relmap" ]
