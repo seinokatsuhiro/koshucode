@@ -10,6 +10,7 @@ module Koshucode.Baala.Cop.Time
     copTimeAdd,
     copMjd,
     copTime,
+    copClock,
   ) where
 
 import qualified Koshucode.Baala.Overture     as O
@@ -25,6 +26,7 @@ copsTime =
     , D.CopCalc  (D.copNormal "add-week")   $ copTimeAdd D.timeAddWeek
     , D.CopCalc  (D.copNormal "add-month")  $ copTimeAdd D.timeAddMonth
     , D.CopCalc  (D.copNormal "add-year")   $ copTimeAdd D.timeAddYear
+    , D.CopCalc  (D.copNormal "clock")      copClock
     , D.CopCalc  (D.copNormal "mjd")        copMjd
     , D.CopCalc  (D.copNormal "time")       copTime
     , D.CopCalc  (D.copNormal "weekly")     $ copDateForm D.weekly
@@ -59,7 +61,7 @@ copDateForm :: (D.CTime c) => O.Map D.Date -> D.CopCalc c
 copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeAltDate f $ D.gTime c
 copDateForm _ _ = Msg.unexpAttr "date"
 
--- | Create time.
+-- | Create time from year, month, and day.
 --
 --   >>> time ( 2013 )( 4 )( 18 )
 --   2013-04-18
@@ -68,6 +70,22 @@ copTime :: (D.CContent c) => D.CopCalc c
 copTime [i -> Just y, i -> Just m] = D.putTime =<< D.timeFromYmAb y m
 copTime [i -> Just y, i -> Just m, i -> Just d] = D.putTime $ D.timeFromYmd y m d
 copTime cs = Msg.badArg cs
+
+-- | Create clock from day, hour, minute, and second.
+--
+--   >>> clock ( 0 )( 12 )( 45 )( 30 )
+--   |12:45:30|
+--
+copClock :: (D.CContent c) => D.CopCalc c
+copClock [i -> Just d] =
+    D.putClock $ D.clockFromD d
+copClock [i -> Just d, i -> Just h] =
+    D.putClock $ D.clockFromDh d h
+copClock [i -> Just d, i -> Just h, i -> Just m] =
+    D.putClock $ D.clockFromDhm d h m
+copClock [i -> Just d, i -> Just h, i -> Just m, i -> Just s] =
+    D.putClock $ D.clockFromDhms d h m s
+copClock cs = Msg.badArg cs
 
 i :: (D.CDec c, Integral n) => B.Ab c -> Maybe n
 i (Right c) | D.isDec c  = Just $ truncate $ toRational $ D.gDec c
