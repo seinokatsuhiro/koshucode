@@ -150,14 +150,14 @@ copFracPart arg =
     do a <- getDec1 arg
        D.putDec $ D.decimalFracPart a
 
-copAbs :: (D.CList c, D.CDec c) => D.CopCalc c
+copAbs :: (D.CContent c) => D.CopCalc c
 copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
                  | otherwise  = copAbs1 c
-copAbs _ = Msg.unexpAttr "abs"
+copAbs xs = Msg.badArg xs
 
-copAbs1 :: (D.CDec c) => B.AbMap c
+copAbs1 :: (D.CContent c) => B.AbMap c
 copAbs1 c | D.isDec c = D.putDec $ abs $ D.gDec c
-copAbs1 _ = Msg.unexpAttr "abc"
+copAbs1 c = Msg.badArg [Right c]
 
 copRound         :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundAt       :: (D.CText c, D.CDec c) => D.CopCalc c
@@ -228,17 +228,17 @@ copPlus pr xs = fmap D.pDec $ loop xs where
                       m' <- loop m
                       (D.decimalAdd pr) n' m'
 
-copPlus2 :: (D.CDec c, D.CClock c, D.CTime c) => D.FracleSide -> D.CopCalc c
+copPlus2 :: (D.CContent c) => D.FracleSide -> D.CopCalc c
 copPlus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd       (D.gClock xc) (D.gClock yc)
     | D.isTime  xc && D.isClock yc = D.putTime  =<< D.timeAddClock   (D.gClock yc) (D.gTime  xc) 
     | D.isClock xc && D.isTime  yc = D.putTime  =<< D.timeAddClock   (D.gClock xc) (D.gTime  yc)
-copPlus2 _ _ = Msg.unexpAttr "+"
+copPlus2 _ xs = Msg.badArg xs
 
-copPlus1 :: (D.CDec c, D.CClock c, D.CTime c) => D.CopCalc c
+copPlus1 :: (D.CContent c) => D.CopCalc c
 copPlus1 [Right x] | D.isDec x = Right x
-copPlus1 _ = Msg.unexpAttr "+"
+copPlus1 xs = Msg.badArg xs
 
 
 -- --------------------------------------------  Multiply and divide
@@ -250,16 +250,16 @@ copMul xs = fmap D.pDec $ loop xs where
                       m' <- loop m
                       D.decimalMul n' m'
 
-copMinus2 :: (D.CText c, D.CDec c, D.CClock c, D.CTime c) => D.FracleSide -> D.CopCalc c
+copMinus2 :: (D.CContent c) => D.FracleSide -> D.CopCalc c
 copMinus2 pr [Right xc, Right yc]
     | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalSub pr (D.gDec   xc) (D.gDec   yc)
     | D.isClock xc && D.isClock yc = D.putClock =<< D.clockSub      (D.gClock xc) (D.gClock yc)
     | D.isTime  xc && D.isTime  yc = D.putClock =<< D.timeDiff      (D.gTime  xc) (D.gTime  yc)
-copMinus2 _ _ = Msg.unexpAttr "-"
+copMinus2 _ xs = Msg.badArg xs
 
-copMinus1 :: (D.CDec c) => D.CopCalc c
+copMinus1 :: (D.CContent c) => D.CopCalc c
 copMinus1 [Right x] | D.isDec x = D.putDec $ negate $ D.gDec x
-copMinus1 _ = Msg.unexpAttr "-"
+copMinus1 xs = Msg.badArg xs
 
 copRecip :: (D.CText c, D.CDec c) => D.CopCalc c
 copRecip arg =

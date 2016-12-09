@@ -39,27 +39,27 @@ copsTime =
 --   >>> add-week ( 5 )( 2013-04-18 )
 --   2013-05-23
 --
-copTimeAdd :: (D.CTime c, D.CDec c) => (Integer -> O.Map D.Time) -> D.CopCalc c
+copTimeAdd :: (D.CContent c) => (Integer -> O.Map D.Time) -> D.CopCalc c
 copTimeAdd add [Right c1, Right c2]
     | D.isDec c1 && D.isTime c2 = addc c1 c2
     | D.isDec c2 && D.isTime c1 = addc c2 c1
     where addc nc tc = let n = toInteger $ D.decimalNum $ D.gDec nc
                            t = D.gTime tc
                        in Right $ D.pTime $ add n t
-copTimeAdd _ _ = Msg.unexpAttr "add-time"
+copTimeAdd _ xs = Msg.badArg xs
 
 -- | Convert time to the modified Jurian day.
 --
 --   >>> mjd 2013-04-18
 --   56400
 --
-copMjd :: (D.CTime c, D.CDec c) => D.CopCalc c
+copMjd :: (D.CContent c) => D.CopCalc c
 copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
-copMjd _ = Msg.unexpAttr "mjd"
+copMjd xs = Msg.badArg xs
 
-copDateForm :: (D.CTime c) => O.Map D.Date -> D.CopCalc c
+copDateForm :: (D.CContent c) => O.Map D.Date -> D.CopCalc c
 copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeAltDate f $ D.gTime c
-copDateForm _ _ = Msg.unexpAttr "date"
+copDateForm _ xs = Msg.badArg xs
 
 -- | Create time from year, month, and day.
 --
