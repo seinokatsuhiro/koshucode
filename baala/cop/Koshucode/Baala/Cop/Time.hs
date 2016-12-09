@@ -1,45 +1,42 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Content operators on clocks and times.
 
 module Koshucode.Baala.Cop.Time
-  ( copsTime
-    -- $Operators
+  ( -- * Operators
+    copsTime,
+    -- * Implementations
+    copTimeAdd,
+    copMjd,
+    copTime,
   ) where
 
-import qualified Koshucode.Baala.Overture    as O
-import qualified Koshucode.Baala.Data        as D
-import qualified Koshucode.Baala.Cop.Message as Msg
+import qualified Koshucode.Baala.Overture     as O
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.Cop.Message  as Msg
 
-
-
--- ----------------------
--- $Operators
---
---  [@add-day@]    Add days to time.
---
---  [@add-week@]   Add weeks to time.
---
---  [@add-month@]  Add months to time.
---
---  [@add-year@]   Add years to time.
---
---  [@mjd@]        Modified Jurian Day of time.
---
 
 -- | Content operators on clocks and times.
-copsTime :: (D.CTime c, D.CDec c) => [D.Cop c]
+copsTime :: (D.CContent c) => [D.Cop c]
 copsTime =
     [ D.CopCalc  (D.copNormal "add-day")    $ copTimeAdd D.timeAddDay
     , D.CopCalc  (D.copNormal "add-week")   $ copTimeAdd D.timeAddWeek
     , D.CopCalc  (D.copNormal "add-month")  $ copTimeAdd D.timeAddMonth
     , D.CopCalc  (D.copNormal "add-year")   $ copTimeAdd D.timeAddYear
     , D.CopCalc  (D.copNormal "mjd")        copMjd
+    , D.CopCalc  (D.copNormal "time")       copTime
     , D.CopCalc  (D.copNormal "weekly")     $ copDateForm D.weekly
     , D.CopCalc  (D.copNormal "monthly")    $ copDateForm D.monthly
     , D.CopCalc  (D.copNormal "yearly")     $ copDateForm D.yearly
     ]
 
+-- | Add day\/week\/month\/year to time.
+--
+--   >>> add-week ( 5 )( 2013-04-18 )
+--   2013-05-23
+--
 copTimeAdd :: (D.CTime c, D.CDec c) => (Integer -> O.Map D.Time) -> D.CopCalc c
 copTimeAdd add [Right c1, Right c2]
     | D.isDec c1 && D.isTime c2 = addc c1 c2
@@ -49,6 +46,11 @@ copTimeAdd add [Right c1, Right c2]
                        in Right $ D.pTime $ add n t
 copTimeAdd _ _ = Msg.unexpAttr "add-time"
 
+-- | Convert time to the modified Jurian day.
+--
+--   >>> mjd 2013-04-18
+--   56400
+--
 copMjd :: (D.CTime c, D.CDec c) => D.CopCalc c
 copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
@@ -56,4 +58,18 @@ copMjd _ = Msg.unexpAttr "mjd"
 copDateForm :: (D.CTime c) => O.Map D.Date -> D.CopCalc c
 copDateForm f [Right c] | D.isTime c = D.putTime $ D.timeAltDate f $ D.gTime c
 copDateForm _ _ = Msg.unexpAttr "date"
+
+-- | Create time.
+--
+--   >>> time ( 2013 )( 4 )( 18 )
+--   2013-04-18
+--
+copTime :: (D.CContent c) => D.CopCalc c
+copTime [i -> Just y, i -> Just m] = D.putTime =<< D.timeFromYmAb y m
+copTime [i -> Just y, i -> Just m, i -> Just d] = D.putTime $ D.timeFromYmd y m d
+copTime cs = Msg.badArg cs
+
+i :: (D.CDec c, Integral n) => B.Ab c -> Maybe n
+i (Right c) | D.isDec c  = Just $ truncate $ toRational $ D.gDec c
+i _ = Nothing
 
