@@ -66,9 +66,7 @@ decimalAddStrict :: D.BinAbDecimal
 decimalAddStrict d1@D.Decimal { D.decimalFracle = f1 }
                  d2@D.Decimal { D.decimalFracle = f2 }
     | f1 == f2   = decimalAddLong d1 d2
-    | otherwise  = Msg.heteroDecimal txt1 txt2
-    where txt1   = D.encodeDecimal d1
-          txt2   = D.encodeDecimal d2
+    | otherwise  = Msg.heteroDecimal d1 d2
 
 -- | Add all decimals.
 decimalSum :: [D.Decimal] -> B.Ab D.Decimal

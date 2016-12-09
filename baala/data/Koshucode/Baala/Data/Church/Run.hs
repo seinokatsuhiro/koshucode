@@ -37,8 +37,8 @@ data Beta c
     | BetaCall [B.CodePos] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
       -- ^ Function application
 
-instance (B.MixTransEncode c) => Show (Beta c) where
-    show (BetaLit  cp c)     = "BetaLit "  ++ show cp ++ " " ++ B.plainEncode c
+instance (B.MixEncode c) => Show (Beta c) where
+    show (BetaLit  cp c)     = "BetaLit "  ++ show cp ++ " " ++ B.encode c
     show (BetaTerm cp ns _ ) = "BetaTerm " ++ show cp ++ " " ++ S.termPathString ns
     show (BetaCall cp n _ _) = "BetaCall " ++ show cp ++ " " ++ show n
 
@@ -48,7 +48,7 @@ instance B.GetCodePos (Beta c) where
     getCPs (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
-beta :: (B.MixTransEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
+beta :: (B.MixEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = D.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
@@ -59,7 +59,7 @@ beta copset he cox =
       pos = position he
 
 -- beta reduction, i.e., process CoxBlank and CoxForm1.
-reduce :: forall c. (B.MixTransEncode c) => D.Cox c -> B.Ab (Beta c)
+reduce :: forall c. (B.MixEncode c) => D.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     red :: [D.NamedCox c] -> D.Cox c -> B.Ab (Beta c)
     red args cox = Msg.abCoxReduce cox $ case cox of
@@ -195,13 +195,12 @@ coxRun args = run 0 where
     rel ps (D.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
-(!!!) :: (B.MixTransEncode c) => [c] -> S.TermIndex -> c
+(!!!) :: (B.MixEncode c) => [c] -> S.TermIndex -> c
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs
-    loop _ _        = error $ (unwords $ map string list)
+    loop _ _        = error $ (unwords $ map B.encode list)
                               ++ " !!! " ++ show index
-    string = B.mixToFlatString . B.mixPlainEncode
 
 
 -- --------------------------------------------  getArgN

@@ -128,7 +128,7 @@ instance D.CContent Content where
     appendContent (ContentText x) (ContentText y) = Right . ContentText $ x ++ y
     appendContent x y                  = Msg.unmatchType (show (x, y))
 
-instance B.MixTransEncode Content where
+instance B.MixEncode Content where
     mixTransEncode sh c =
         case c of
           ContentCode  s   -> B.mixString $ quote  (sh s) s

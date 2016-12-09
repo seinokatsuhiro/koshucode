@@ -19,20 +19,20 @@ import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
 
 -- | Koshucode writer.
-resultKoshu :: (B.MixTransEncode c) => C.ResultWriter c
+resultKoshu :: (B.MixEncode c) => C.ResultWriter c
 resultKoshu = resultKoshu2
 
 -- | Koshucode writer with two-space separator.
 --   This function uses 'D.judgeMix2'.
-resultKoshu2 :: (B.MixTransEncode c) => C.ResultWriter c
+resultKoshu2 :: (B.MixEncode c) => C.ResultWriter c
 resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu (D.judgeBreak, D.judgeMix2)
 
 -- | Koshucode writer with tab separator.
 --   This function uses 'D.judgeMixTab'.
-resultKoshuTab :: (B.MixTransEncode c) => C.ResultWriter c
+resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
 resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, D.judgeMixTab)
 
-hPutKoshu :: (B.MixTransEncode c) => (B.LineBreak, D.EncodeJudge c) -> C.ResultWriterChunk c
+hPutKoshu :: (B.MixEncode c) => (B.LineBreak, D.EncodeJudge c) -> C.ResultWriterChunk c
 hPutKoshu output h result status sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
@@ -88,7 +88,7 @@ hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 hPutShortChunk
-    :: (B.MixTransEncode c) => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c
+    :: (B.MixEncode c) => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c
     -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
 hPutShortChunk output h result cnt (S.Short _ def chunks) =
     do hPutShort h def
@@ -108,7 +108,7 @@ hPutShort h def =
 
 -- | Output result chunk.
 hPutChunks
-    :: (B.MixTransEncode c)
+    :: (B.MixEncode c)
     => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransString 
     -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks (lb, encode) h result sh = loop where

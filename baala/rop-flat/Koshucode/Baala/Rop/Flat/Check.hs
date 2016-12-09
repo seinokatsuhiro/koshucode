@@ -128,10 +128,10 @@ relmapExclude med (ns, m) = excl where
 --
 --   Dump input relation and abort.
 --
-consDump :: (D.CRel c, B.MixTransEncode c) => C.RopCons c
+consDump :: (D.CRel c, B.MixEncode c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 
-relkitDump :: (D.CRel c, B.MixTransEncode c) => C.RelkitFlow c
+relkitDump :: (D.CRel c, B.MixEncode c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []

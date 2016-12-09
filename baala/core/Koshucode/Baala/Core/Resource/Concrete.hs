@@ -23,7 +23,7 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 -- | @about@ clause.
 data About c = About [S.Term c] deriving (Show)
 
-instance (B.MixTransEncode c) => B.MixTransEncode (About c) where
+instance (B.MixEncode c) => B.MixEncode (About c) where
     mixTransEncode sh (About ts) =
         B.mixString "about" `B.mixSep2` D.termsToMix2 sh ts
 

@@ -78,10 +78,10 @@ instance B.GetCodePos (Cox c) where
     getCPs (CoxForm   cp _ _ _)   = cp
     getCPs (CoxWith   cp _ _)     = cp
 
-instance (B.MixTransEncode c) => Show (Cox c) where
+instance (B.MixEncode c) => Show (Cox c) where
     show = show . coxToDoc O.nothing
 
-coxToDoc :: (B.MixTransEncode c) => B.TransString -> Cox c -> B.Doc
+coxToDoc :: (B.MixEncode c) => B.TransString -> Cox c -> B.Doc
 coxToDoc sh = d (0 :: Int) . coxFold where
     encode = B.pprint . B.mixToFlatString . B.mixTransEncode sh
 

@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 -- | Decode and encode of decimals.
 --
@@ -150,6 +150,9 @@ ord = fromIntegral. Ch.ord
 
 
 -- ----------------------  Encode
+
+instance B.MixEncode D.Decimal where
+    mixTransEncode _ dec = B.mixString $ encodeDecimal dec
 
 separator :: O.StringMap
 separator ""            = ""

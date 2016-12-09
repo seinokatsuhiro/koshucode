@@ -8,20 +8,19 @@ module Koshucode.Baala.Data.Class.Message
     badArg,
   ) where
 
-import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Data.Type.Message   as Msg
 
 -- | Type unmatch
 unmatchType :: String -> B.Ab a
 unmatchType = Left . B.abortLine "Type unmatch"
 
 -- | Bad argument
-badArg :: (B.MixTransEncode c) => [B.Ab c] -> B.Ab a
+badArg :: (B.MixEncode c) => [B.Ab c] -> B.Ab a
 badArg cs' = case sequence cs' of
                Left a   -> Left a
                Right cs -> badArgInternal cs
-          
-badArgInternal :: (B.MixTransEncode c) => [c] -> B.Ab a
-badArgInternal cs = Left $ B.abortLines "Bad argument" (zipWith f (O.ints 1) cs) where
-    f i c = "#" ++ show i ++ " = " ++ B.plainEncode c
+
+badArgInternal :: (B.MixEncode c) => [c] -> B.Ab a
+badArgInternal cs = Left $ Msg.abortEncodables "Bad argument" cs
           
