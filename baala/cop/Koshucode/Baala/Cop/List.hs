@@ -86,17 +86,17 @@ copList argC = do arg <- sequence argC
 copTotal :: (D.CContent c) => D.CopCalc c
 copTotal = op where
     op [Right c] | D.isList c = D.putDec =<< D.decimalSum (map D.gDec $ D.gList c)
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 copMin :: (D.CContent c) => D.CopCalc c
 copMin = op where
     op [Right c] | D.isList c = Right $ D.contMinimum $ D.gList c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 copMax :: (D.CContent c) => D.CopCalc c
 copMax = op where
     op [Right c] | D.isList c = Right $ D.contMaximum $ D.gList c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 -- >>> copLength [D.putText "abc"] :: B.Ab D.Content
 -- Right (ContentDec Decimal (0) 3)
@@ -106,13 +106,9 @@ copLength = op where
                  | D.isSet  c  = len c D.gSet
                  | D.isText c  = len c D.gText
                  | D.isRel  c  = len c (D.relBody . D.gRel)
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
     len c f = Right . D.pInt $ length (f c)
-
-typeUnmatch :: D.CTypeOf c => [B.Ab c] -> B.Ab c
-typeUnmatch _ = Msg.unmatchType ""
-
 
 
 -- ----------------------  set-like operation
@@ -123,21 +119,21 @@ copAppend xs@(x : _) = op x where
     op (Right c) | D.isText c = D.putText . concat =<< mapM D.getText xs
                  | D.isSet  c = D.putSet  . concat =<< mapM D.getSet  xs
                  | D.isList c = D.putList . concat =<< mapM D.getList xs
-    op _ = typeUnmatch xs
+    op _ = Msg.badArg xs
 
 copIntersect :: (D.CContent c) => D.CopCalc c
 copIntersect [] = Right D.empty
 copIntersect xs@(x : _) = op x where
     op (Right c) | D.isSet  c = D.putSet  . intersectLists =<< mapM D.getSet  xs
                  | D.isList c = D.putList . intersectLists =<< mapM D.getList xs
-    op _ = typeUnmatch xs
+    op _ = Msg.badArg xs
 
 copMinus :: (D.CContent c) => D.CopCalc c
 copMinus = op where
     op [Right a,  Right b]
         | D.isSet  a && D.isSet  b = D.putSet  (D.gSet  a List.\\ D.gSet  b)
         | D.isList a && D.isList b = D.putList (D.gList a List.\\ D.gList b)
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
 intersectLists [] = []
@@ -152,13 +148,13 @@ copSort = op where
     op [Right c] | D.isList c  = D.putList $ B.sort $ D.gList c
                  | D.isSet  c  = D.putSet  $ B.sort $ D.gSet  c
                  | otherwise   = Right c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 copReverse :: (D.CContent c) => D.CopCalc c
 copReverse = op where
     op [Right c] | D.isText c  = D.putText $ reverse $ D.gText c
                  | D.isList c  = D.putList $ reverse $ D.gList c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 
 -- ----------------------  take-odd & take-even
@@ -172,7 +168,7 @@ collMap (f, g) xs
     | D.isList  xs  = gpMap D.gpList    g xs
     | D.isSet   xs  = gpMap D.gpSetSort g xs
     | D.isEmpty xs  = Right D.empty
-    | otherwise     = typeUnmatch [Right xs]
+    | otherwise     = Msg.badArg [Right xs]
 
 gpMap :: D.CGetPut [a] c -> O.Map [a] -> c -> B.Ab c
 gpMap (get, put) f = Right . put . f . get
@@ -206,7 +202,7 @@ copTakeOrDrop (f, g) arg =
     do (n', xs') <- D.getRightArg2 arg
        if D.isDec n'
           then collMap (f $ int n', g $ int n') xs'
-          else typeUnmatch arg
+          else Msg.badArg arg
     where
       int = fromInteger . D.decimalNum . D.gDec
 
@@ -231,7 +227,7 @@ dropTakeCop fg arg =
     do (d', t', xs') <- D.getRightArg3 arg
        if D.isDec d' && D.isDec t'
           then dropTakeDispatch fg arg (int d') (int t') xs'
-          else typeUnmatch arg
+          else Msg.badArg arg
     where
       int = fromInteger . D.decimalNum . D.gDec
 
@@ -241,7 +237,7 @@ dropTakeDispatch (f, g) arg d t xs'
     | D.isList  xs'  = gpMap D.gpList    (g d t) xs'
     | D.isSet   xs'  = gpMap D.gpSetSort (g d t) xs'
     | D.isEmpty xs'  = Right D.empty
-    | otherwise      = typeUnmatch arg
+    | otherwise      = Msg.badArg arg
 
 
 -- ----------------------  push
@@ -299,7 +295,7 @@ copReplace rep = op where
     op [Right from, Right to, Right text]
         | D.isText from && D.isText to && D.isText text =
             Right $ D.contentApText (D.gText from `rep` D.gText to) text
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 
 -- ----------------------  term-set
@@ -308,5 +304,5 @@ copReplace rep = op where
 copTermSet :: (D.CContent c) => D.CopCalc c
 copTermSet [Right c] | D.isInterp c = D.putSet ts where
                      ts = map D.pTerm $ D.interpTerms $ D.gInterp c
-copTermSet xs = typeUnmatch xs
+copTermSet xs = Msg.badArg xs
 

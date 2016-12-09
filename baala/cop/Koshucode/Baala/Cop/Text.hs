@@ -61,9 +61,6 @@ copsText =
     , D.CopCalc  (D.copNormal "match-mid")        copContainNormal
     ]
 
-typeUnmatch :: D.CTypeOf c => [B.Ab c] -> B.Ab c
-typeUnmatch _ = Msg.unmatchType ""
-
 
 -- ----------------------  begin-with / end-with
 
@@ -108,13 +105,13 @@ isText2 x y = D.isText x && D.isText y
 copChar :: (D.CContent c) => D.CopCalc c
 copChar = op where
     op [Right c] | D.isDec c = D.putText [Ch.chr $ fromInteger $ D.decimalNum $ D.gDec c]
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 -- code-list "abc" => [ 97 : 98 : 99 ]
 copCodeList :: (D.CContent c) => D.CopCalc c
 copCodeList = op where
     op [Right t] | D.isText t = Right $ D.contentMapTextList contOrd t
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
     contOrd :: (D.CDec c) => Char -> c
     contOrd = D.pInt . Ch.ord
@@ -123,7 +120,7 @@ copCodeList = op where
 copCharGroup :: (D.CContent c) => D.CopCalc c
 copCharGroup = op where
     op [Right t] | D.isText t = Right $ D.contentMapTextList contGroup t
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
     contGroup :: (D.CText c) => Char -> c
     contGroup = D.pText . charGroup
@@ -134,7 +131,7 @@ copCharGroup1 = op where
     op [Right t] | D.isText t = case D.gText t of
                                   (c : _) -> D.putText $ charGroup c
                                   _       -> Right D.empty
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 charGroup :: Char -> String
 charGroup = O.generalCategoryName . O.majorGeneralCategory
@@ -148,7 +145,7 @@ copFromBool = op where
     op [Right t, Right f, Right c]
         | D.isBool c = Right $ fromBool t f $ D.gBool c
         | otherwise  = Right c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 -- check (+) => "✓" (U+2713)
 copCheck :: (D.CContent c) => D.CopCalc c
@@ -159,7 +156,7 @@ copCheck = op where
     op [Right c, Right alt]
         | D.isBool c = Right $ from alt $ D.gBool c
         | otherwise  = Right c
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
     from = fromBool (D.pText "✓")
 
@@ -184,7 +181,7 @@ copDirBasePart part = op where
     op [Right sep, Right t]
         | D.isText sep && D.isText t =
             Right $ D.contentApText (part . dirBasePart (head $ D.gText sep)) t
-    op xs = typeUnmatch xs
+    op xs = Msg.badArg xs
 
 dirBasePart :: Char -> String -> (String, String)
 dirBasePart sep s =
@@ -200,13 +197,13 @@ copWords arg =
     do ws <- D.getRightArg1 arg
        if D.isText ws
           then D.putList $ map D.pText $ words $ D.gText ws
-          else typeUnmatch arg
+          else Msg.badArg arg
 
 copWordsBy :: (D.CContent c) => D.CopCalc c
 copWordsBy arg =
     do (sep, ws) <- D.getRightArg2 arg
        case D.isText ws && D.isText sep of
-         False -> typeUnmatch arg
+         False -> Msg.badArg arg
          True  -> let isSep = (`elem` D.gText sep)
                   in D.putList $ map D.pText $ B.wordsBy isSep $ D.gText ws
 
@@ -224,7 +221,7 @@ copUnwordsBy arg =
        case D.isText sep of
          True  -> let sep' = D.gText sep
                   in D.putText $ B.intercalate sep' $ wordList x
-         False -> typeUnmatch arg
+         False -> Msg.badArg arg
 
 wordList :: (D.CContent c) => c -> [String]
 wordList c
@@ -250,7 +247,7 @@ copTrimBy f arg =
     do text <- D.getRightArg1 arg
        case D.isText text of
          True  -> D.putText $ f (D.gText text)
-         False -> typeUnmatch arg
+         False -> Msg.badArg arg
 
 copTrimTextBegin :: (D.CContent c) => D.CopCalc c
 copTrimTextBegin = copTrimTextBy trimTextBegin
@@ -266,7 +263,7 @@ copTrimTextBy f arg =
     do (trim, text) <- D.getRightArg2 arg
        case D.isText trim && D.isText text of
          True  -> D.putText $ f (D.gText trim) (D.gText text)
-         False -> typeUnmatch arg
+         False -> Msg.badArg arg
 
 trimTextBegin :: (Eq a) => O.Bin [a]
 trimTextBegin s = dropWhile (`elem` s)
@@ -287,7 +284,7 @@ copDivideTextBy f arg =
     do (divide, text) <- D.getRightArg2 arg
        case D.isText divide && D.isText text of
          True  -> D.putList $ D.pText <$> f (`elem` D.gText divide) (D.gText text)
-         False -> typeUnmatch arg
+         False -> Msg.badArg arg
 
 -- | Divide list about beginning of list.
 --   This function returns two-element list: [match, right].
@@ -396,19 +393,19 @@ extractText c
 -- ----------------------  suffix & unsuffix
 
 -- | __suffix LIST__ adds unique suffixes to text elements of /LIST/.
-copSuffix :: (D.CText c, D.CList c) => D.CopCalc c
+copSuffix :: (D.CContent c) => D.CopCalc c
 copSuffix = op where
     op [Right ls] | D.isList ls && (all D.isText $ D.gList ls)
            = D.putList (D.pText <$> B.uniqueNames '-' (D.gText <$> D.gList ls))
     op [c] = c
-    op xs  = typeUnmatch xs
+    op xs  = Msg.badArg xs
 
 -- | __unsuffix C__ remove integer suffixes from /C/.
 copUnsuffix :: forall c. (D.CContent c) => D.CopCalc c
 copUnsuffix = op where
     op [Right c] = Right $ unsuf c
     op [c]       = c
-    op xs        = typeUnmatch xs
+    op xs        = Msg.badArg xs
 
     unsuf c | D.isText c  = D.pText $ B.unsuffix Ch.isDigit '-' $ D.gText c
             | D.isList c  = D.pList (unsuf <$> D.gList c)
