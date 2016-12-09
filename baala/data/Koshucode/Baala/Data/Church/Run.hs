@@ -37,6 +37,11 @@ data Beta c
     | BetaCall [B.CodePos] S.BlankName (D.CopCalc c) [B.Ab (Beta c)]
       -- ^ Function application
 
+instance (B.MixTransEncode c) => Show (Beta c) where
+    show (BetaLit  cp c)     = "BetaLit "  ++ show cp ++ " " ++ B.plainEncode c
+    show (BetaTerm cp ns _ ) = "BetaTerm " ++ show cp ++ " " ++ S.termPathString ns
+    show (BetaCall cp n _ _) = "BetaCall " ++ show cp ++ " " ++ show n
+
 instance B.GetCodePos (Beta c) where
     getCPs (BetaLit  cp _)      = cp
     getCPs (BetaTerm cp _ _)    = cp
@@ -57,16 +62,16 @@ beta copset he cox =
 reduce :: forall c. (B.MixTransEncode c) => D.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     red :: [D.NamedCox c] -> D.Cox c -> B.Ab (Beta c)
-    red args cox = case cox of
-        D.CoxLit    cp c        -> Right $ BetaLit  cp c
-        D.CoxTerm   cp n i      -> Right $ BetaTerm cp n i
-        D.CoxLocal  cp v k      -> Msg.abCoxReduce cp $ red args =<< kth v k args
-        D.CoxFill   cp fn xs    -> Msg.abCoxReduce cp $ fill args fn $ substL args xs
-        D.CoxCalc   cp _ _      -> Msg.abCoxReduce cp $ fill args cox []
-        D.CoxWith   cp arg2 e   -> Msg.abCoxReduce cp $ red (arg2 ++ args) e
-        D.CoxForm1  cp _ v _    -> Msg.abCoxReduce cp $ Msg.lackArg v
-        D.CoxForm   cp _ _ _    -> Msg.abCoxReduce cp $ Msg.adlib "CoxForm"
-        D.CoxBlank  cp v        -> Msg.abCoxReduce cp $ Msg.unkGlobalVar $ B.name v
+    red args cox = Msg.abCoxReduce cox $ case cox of
+        D.CoxLit    cp c      -> Right $ BetaLit  cp c
+        D.CoxTerm   cp n i    -> Right $ BetaTerm cp n i
+        D.CoxLocal  _ v k     -> red args =<< kth v k args
+        D.CoxFill   _ fn xs   -> fill args fn $ substL args xs
+        D.CoxCalc   _ _ _     -> fill args cox []
+        D.CoxWith   _ arg2 e  -> red (arg2 ++ args) e
+        D.CoxForm1  _ _ v _   -> Msg.lackArg v
+        D.CoxForm   _ _ _ _   -> Msg.adlib "CoxForm"
+        D.CoxBlank  _ v       -> Msg.unkGlobalVar $ B.name v
 
     fill :: [D.NamedCox c] -> D.Cox c -> [B.Ab (D.Cox c)] -> B.Ab (Beta c)
     fill args (D.CoxCalc cp n f) xs =
@@ -108,11 +113,15 @@ reduce = red [] where
 
 link :: forall c. D.CopSet c -> [D.NamedCox c] -> O.Map (D.Cox c)
 link copset deriv = li where
-    li cox@(D.CoxBlank _ n)   =  B.fromMaybe cox $ find n
+    li cox@(D.CoxBlank _ n)   =  putCp cox $ find n
     li cox                    =  D.coxCall cox li
 
     find n    = lookup n fs B.<|> findCont n
     findCont  = D.copsetFindCalc copset
+
+    putCp cox (Just (D.CoxCalc [] n f))  = D.CoxCalc (B.getCPs cox) n f
+    putCp _   (Just cox) = cox
+    putCp cox (Nothing)  = cox
 
     fs :: [(S.BlankName, D.Cox c)]
     fs = map (fmap li . normal) deriv
@@ -122,7 +131,7 @@ link copset deriv = li where
 -- put term positions for actural heading
 position :: D.Head -> D.Cox c -> B.Ab (D.Cox c)
 position he = spos where
-    spos e = Msg.abCoxPosition [e] $ pos e
+    spos e = Msg.abCoxPosition e $ pos e
     pos (D.CoxTerm cp ns _) =
         let index = D.headIndex1 he ns
         in if all (>= 0) index
@@ -167,7 +176,7 @@ coxRun args = run 0 where
     run 1000 _ = B.bug "Too deep expression"
     run lv cox =
         let run' = run $ lv + 1
-        in Msg.abCoxCalc [cox] $ case cox of
+        in Msg.abCoxCalc cox $ case cox of
              BetaLit  _ c       -> Right c
              BetaTerm _ _ [p]   -> Right $ args !!! p
              BetaTerm _ _ ps    -> term ps args
