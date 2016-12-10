@@ -135,19 +135,19 @@ stringsTime = year where
                             _                -> Msg.nothing
 
     mwd _ []                      = Msg.nothing
-    mwd y (('#' : '#': cs) : xs)  = day (D.dateFromYdAb y) $ cs : xs
+    mwd y (('#' : '#': cs) : xs)  = day (D.dateFromYd y) $ cs : xs
     mwd y (('#' : cs) : xs)       = week y $ cs : xs
     mwd y xs                      = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, '-'  : cs')  -> day (D.dateFromYmdAb y m) $ cs' : xs
+                            (m, '-'  : cs')  -> day (D.dateFromYmd y m) $ cs' : xs
                             (m, "")          -> D.timeFromYmAb y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, '-'  : cs')  -> day (D.dateFromYwdAb y w) $ cs' : xs
+                            (w, '-'  : cs')  -> day (D.dateFromYwd y w) $ cs' : xs
                             (w, "")          -> D.timeFromYwAb y w
                             _                -> Msg.nothing
 
