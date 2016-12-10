@@ -64,7 +64,6 @@ library
 
         Koshucode.Baala.Base.List
         Koshucode.Baala.Base.List.Assoc
-        Koshucode.Baala.Base.List.Dots
         Koshucode.Baala.Base.List.List
         Koshucode.Baala.Base.List.Order
         Koshucode.Baala.Base.List.Set
@@ -94,6 +93,7 @@ library
         Koshucode.Baala.Base.Code
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
+        Koshucode.Baala.Base.Text.Dots
         Koshucode.Baala.Base.Text.PPrint
         Koshucode.Baala.Base.Text.Suffix
         Koshucode.Baala.Base.Text.TextTable

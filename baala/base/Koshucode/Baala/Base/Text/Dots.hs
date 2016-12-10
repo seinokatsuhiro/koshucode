@@ -3,7 +3,7 @@
 
 -- | Dots pattern.
 
-module Koshucode.Baala.Base.List.Dots
+module Koshucode.Baala.Base.Text.Dots
   ( dotsStrings,
     undotsStrings,
     takeDots,
@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.List.Dots
 
 import qualified Data.Char                           as Ch
 import qualified Koshucode.Baala.Overture            as O
-import qualified Koshucode.Baala.Base.List.Split     as B
+import qualified Koshucode.Baala.Base.List           as B
 
 pattern Dots a s = '.' : '.' : '.' : a : s
 
