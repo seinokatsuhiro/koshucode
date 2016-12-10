@@ -3,9 +3,13 @@
 -- | Clock: distance between two times.
 
 module Koshucode.Baala.Data.Type.Time.Clock
-  ( -- * Data type
+  ( -- * Clock parts
+    ClockParts (..),
+    Sec, Min, Hour, Days,
+
+    -- * Clock
     Clock (..),
-    Days, Hour, Min, Sec,
+    ToClock (..),
     clockBodyToMix,
 
     -- * Constructor
@@ -39,6 +43,34 @@ import qualified Koshucode.Baala.Base.Message            as Msg
 
 -- ----------------------  Data type
 
+-- | Decomposed clock.
+data ClockParts
+    = ClockPartsSec Days Hour Min Sec
+      -- ^ >>> toClock $ ClockPartsSec 0 14 38 09
+      --   |14:38:09|
+    | ClockPartsMin Days Hour Min
+      -- ^ >>> toClock $ ClockPartsMin 0 14 70
+      --   |15:10|
+    | ClockPartsHour Days Hour
+      -- ^ >>> toClock $ ClockPartsHour 0 32
+      --   |1'08|
+    | ClockPartsDays Days
+      -- ^ >>> toClock $ ClockPartsDays 2
+      --   |2'|
+      deriving (Show, Eq, Ord)
+
+-- | Second type.
+type Sec = Int
+
+-- | Minute type.
+type Min = Int
+
+-- | Hour type.
+type Hour = Int
+
+-- | Integer type for the Modified Julian Day.
+type Days = Integer
+
 -- | Clock as distance between two times.
 data Clock
     = ClockDhms Days Sec    -- ^ Clock represented by multiple of second
@@ -47,17 +79,18 @@ data Clock
     | ClockD    Days        -- ^ Clock represented by multiple of day
       deriving (Eq, Ord)
 
--- | Integer type for the Modified Julian Day.
-type Days = Integer
+-- | Convertible to clock.
+class ToClock a where
+    toClock :: a -> Clock
 
--- | Hour type.
-type Hour = Int
+instance ToClock Clock where
+    toClock = id
 
--- | Minute type.
-type Min = Int
-
--- | Second type.
-type Sec = Int
+instance ToClock ClockParts where
+    toClock (ClockPartsSec  d h m s)  = clockFromDhms d h m s
+    toClock (ClockPartsMin  d h m)    = clockFromDhm  d h m
+    toClock (ClockPartsHour d h)      = clockFromDh   d h
+    toClock (ClockPartsDays d)        = clockFromD    d
 
 -- | Create clock from days, hour, minute, and second.
 --
