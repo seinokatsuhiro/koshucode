@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Type.Time.Date
     Mjd, mjdInteger,
 
     -- * Data type
+    DateParts (..),
     Date (..), Ymd,
     Year, Month, Week, Day,
 
@@ -38,6 +39,10 @@ import qualified Koshucode.Baala.Data.Type.Message as Msg
 -- | Convert to the Modified Julian Day.
 class ToMjd a where
     toMjd :: a -> Mjd
+    toMjd = B.fromMaybe 0 . toMjdValid
+
+    toMjdValid :: a -> Maybe Mjd
+    toMjdValid = Just . toMjd
 
 instance ToMjd Tim.Day where
     toMjd = id
@@ -69,6 +74,20 @@ mjdInteger = Tim.toModifiedJulianDay
 
 
 -- ----------------------  Type
+
+-- | Decomposed date.
+data DateParts
+    = DateYmd Year Month Day  -- ^ Monthly date
+    | DateYwd Year Week Day   -- ^ Weekly date
+    | DateYd  Year Day        -- ^ Yearly date
+    | DateMjd Mjd             -- ^ MJD date
+      deriving (Show, Eq, Ord)
+
+instance ToMjd DateParts where
+    toMjdValid (DateYmd y m d)  = Tim.fromGregorianValid   y m d
+    toMjdValid (DateYwd y w d)  = Tim.fromWeekDateValid    y w d
+    toMjdValid (DateYd  y d)    = Tim.fromOrdinalDateValid y d
+    toMjdValid (DateMjd mjd)    = Just mjd
 
 -- | Date.
 data Date
