@@ -8,11 +8,11 @@ about /package 'base
 |-- DIR  /code 377  /comment 291  /dir "base/Koshucode/Baala/Base/Code"
 |-- DIR  /code 236  /comment 125  /dir "base/Koshucode/Baala/Base/IO"
 |-- DIR  /code 518  /comment 782  /dir "base/Koshucode/Baala/Base/List"
-|-- DIR  /code 379  /comment 424  /dir "base/Koshucode/Baala/Base/MixText"
+|-- DIR  /code 367  /comment 408  /dir "base/Koshucode/Baala/Base/MixText"
 |-- DIR  /code 206  /comment 255  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 229  /comment 195  /dir "base/Koshucode/Baala/Base/Text"
 
-|-- DIR-TOTAL  /code 2274  /comment 2345
+|-- DIR-TOTAL  /code 2262  /comment 2329
 
 |-- FILE  /code 16   /comment 6    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -46,7 +46,7 @@ about /package 'base
 |-- FILE  /code 21   /comment 36   /file "Deriv.hs"       /dir "base/Koshucode/Baala/Base/MixText"
 |-- FILE  /code 51   /comment 40   /file "LineBreak.hs"   /dir "base/Koshucode/Baala/Base/MixText"
 |-- FILE  /code 56   /comment 57   /file "MixClass.hs"    /dir "base/Koshucode/Baala/Base/MixText"
-|-- FILE  /code 33   /comment 34   /file "MixEncode.hs"   /dir "base/Koshucode/Baala/Base/MixText"
+|-- FILE  /code 21   /comment 18   /file "MixEncode.hs"   /dir "base/Koshucode/Baala/Base/MixText"
 |-- FILE  /code 218  /comment 257  /file "MixText.hs"     /dir "base/Koshucode/Baala/Base/MixText"
 |-- FILE  /code 12   /comment 5    /file "Prelude.hs"     /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 38   /comment 66   /file "Case.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
@@ -60,4 +60,4 @@ about /package 'base
 |-- FILE  /code 37   /comment 40   /file "Suffix.hs"      /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 129  /comment 79   /file "TextTable.hs"   /dir "base/Koshucode/Baala/Base/Text"
 
-|-- FILE-TOTAL  /code 2274  /comment 2345
+|-- FILE-TOTAL  /code 2262  /comment 2329

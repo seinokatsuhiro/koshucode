@@ -741,7 +741,7 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    257 judges
+**    270 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -810,6 +810,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Map"            /import "Koshucode.Baala.Data.Class.Complex"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Message"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Class.Message"        /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Data.Text"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Simple"         /import "Data.Text.Lazy"
@@ -948,6 +949,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Judge"           /import "Koshucode.Baala.Data.Type.Judge.Judge"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Judge"           /import "Koshucode.Baala.Data.Type.Judge.JudgeClass"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Message"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Message"         /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Rel.Dataset"     /import "Data.Map.Strict"
@@ -988,18 +990,27 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Data.Type.Time.Date"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Data.Type.Time.Parts"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Clock"      /import "Koshucode.Baala.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Data.Type.Time.Clock"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.ClockCalc"  /import "Koshucode.Baala.Data.Type.Time.Parts"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar.WeekDate"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Data.Time.Calendar.OrdinalDate"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Koshucode.Baala.Data.Type.Time.Parts"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Date"       /import "Koshucode.Baala.Data.Type.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Parts"      /import "Data.Time.Calendar"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Parts"      /import "Data.Time.Calendar.WeekDate"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Parts"      /import "Data.Time.Calendar.OrdinalDate"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Parts"      /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Parts"      /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Data.Time.Calendar.WeekDate"
@@ -1010,6 +1021,7 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.Clock"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.Date"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Time.Parts"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.Time"       /import "Koshucode.Baala.Data.Type.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Data.Time.Calendar"
@@ -1018,12 +1030,14 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Clock"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Date"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Parts"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Data.Type.Time.Time"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time.TimeCalc"   /import "Koshucode.Baala.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Clock"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.ClockCalc"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Date"
+|-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Parts"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.Time"
 |-- IMPORT  /module "Koshucode.Baala.Data.Type.Time"            /import "Koshucode.Baala.Data.Type.Time.TimeCalc"
 
@@ -1075,16 +1089,17 @@ Command `./dir-rank.k ../data/data/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Data.Type.Decimal"  /base-rank {= /rank /base /import-dir [ 1 |
     "Decimal" | [ ] ] [ 1 | "Rational" | [ ] ] [ 2 | "Fraction" | [ ] ] [ 3 | "Coder" | [ ] ] [ 4 | "BinaryAb" | [ ] ]
     =}
-|-- DIR-RANK  /dir-rank 6  /dir "Koshucode.Baala.Data.Type.Time"  /base-rank {= /rank /base /import-dir [ 2 | "Date" | [
-    ] ] [ 3 | "Clock" | [ ] ] [ 4 | "ClockCalc" | [ ] ] [ 5 | "Time" | [ ] ] [ 6 | "TimeCalc" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 7  /dir "Koshucode.Baala.Data.Type.Time"  /base-rank {= /rank /base /import-dir [ 2 | "Parts" |
+    [ ] ] [ 3 | "Date" | [ ] ] [ 4 | "Clock" | [ ] ] [ 5 | "ClockCalc" | [ ] ] [ 6 | "Time" | [ ] ] [ 7 | "TimeCalc" | [
+    ] ] =}
 
 |-- DIR-RANK  /dir-rank 8  /dir "Koshucode.Baala.Data.Type.Rel"  /base-rank {= /rank /base /import-dir [ 5 |
     "TermPicker" | [ "Judge" ] ] [ 6 | "Head" | [ "Judge" | "Type" ] ] [ 7 | "Rel" | [ "Judge" ] ] [ 8 | "Dataset" | [
     "Judge" ] ] [ 8 | "Mono" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 9  /dir "Koshucode.Baala.Data.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [ ]
-    ] [ 4 | "Judge" | [ ] ] [ 5 | "Decimal" | [ ] ] [ 5 | "Type" | [ "Judge" ] ] [ 7 | "Time" | [ ] ] [ 9 | "Rel" | [ ]
+    ] [ 4 | "Judge" | [ ] ] [ 5 | "Decimal" | [ ] ] [ 5 | "Type" | [ "Judge" ] ] [ 8 | "Time" | [ ] ] [ 9 | "Rel" | [ ]
     ] =}
-|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Data.Class"  /base-rank {= /rank /base /import-dir [ 1 | "Message" | [
+|-- DIR-RANK  /dir-rank 15  /dir "Koshucode.Baala.Data.Class"  /base-rank {= /rank /base /import-dir [ 2 | "Message" | [
     ] ] [ 11 | "Singleton" | [ "Type" ] ] [ 12 | "Simple" | [ "Type" ] ] [ 13 | "Complex" | [ "Type" ] ] [ 14 |
     "Content" | [ ] ] [ 14 | "Map" | [ ] ] [ 15 | "Encode" | [ "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 18  /dir "Koshucode.Baala.Data.Decode"  /base-rank {= /rank /base /import-dir [ 1 | "Message" |
@@ -1133,13 +1148,14 @@ TABLE : DIR-RANK
                                                   3     "Coder"              [ ]
                                                   4     "BinaryAb"           [ ]
                                                   
-  6         "Koshucode.Baala.Data.Type.Time"      /rank /base                /import-dir
+  7         "Koshucode.Baala.Data.Type.Time"      /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
-                                                  2     "Date"               [ ]
-                                                  3     "Clock"              [ ]
-                                                  4     "ClockCalc"          [ ]
-                                                  5     "Time"               [ ]
-                                                  6     "TimeCalc"           [ ]
+                                                  2     "Parts"              [ ]
+                                                  3     "Date"               [ ]
+                                                  4     "Clock"              [ ]
+                                                  5     "ClockCalc"          [ ]
+                                                  6     "Time"               [ ]
+                                                  7     "TimeCalc"           [ ]
                                                   
   8         "Koshucode.Baala.Data.Type.Rel"       /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
@@ -1155,12 +1171,12 @@ TABLE : DIR-RANK
                                                   4     "Judge"              [ ]
                                                   5     "Decimal"            [ ]
                                                   5     "Type"               [ "Judge" ]
-                                                  7     "Time"               [ ]
+                                                  8     "Time"               [ ]
                                                   9     "Rel"                [ ]
                                                   
   15        "Koshucode.Baala.Data.Class"          /rank /base                /import-dir
                                                   ----- -------------------- ---------------------------------------------------
-                                                  1     "Message"            [ ]
+                                                  2     "Message"            [ ]
                                                   11    "Singleton"          [ "Type" ]
                                                   12    "Simple"             [ "Type" ]
                                                   13    "Complex"            [ "Type" ]
