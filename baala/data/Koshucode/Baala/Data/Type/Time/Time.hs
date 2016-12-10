@@ -5,12 +5,11 @@
 module Koshucode.Baala.Data.Type.Time.Time
   ( -- * Data type
     Time (..), Zone,
-    timeMjd,
     timeYmdTuple,
     timePrecision,
 
-    -- * Construction
-    timeYmd, timeYmdc, timeFromMjd,
+    -- * Creation
+    timeYmdc, timeFromMjd,
     timeFromYmAb, timeFromYwAb,
     timeFromDczAb,
     timeFromYmd, timeFromYmdTuple,
@@ -52,21 +51,13 @@ data Time
 -- | Time zone as offset from UTC.
 type Zone = D.Sec
 
--- | Get integer content of the Modified Julian Day of time.
---
---   >>> timeMjd $ timeFromMjd 55555
---   55555
---
-timeMjd :: Time -> D.Days
-timeMjd = Tim.toModifiedJulianDay . timeDay
-
--- Get the Modified Julian Day of time.
-timeDay :: Time -> D.Mjd
-timeDay (TimeYmdcz d _ _)   = D.toMjd d
-timeDay (TimeYmdc  d _)     = D.toMjd d
-timeDay (TimeYmd   d)       = D.toMjd d
-timeDay (TimeYw    d)       = d
-timeDay (TimeYm    d)       = d
+-- | Extract date part and convert to MJD.
+instance D.ToMjd Time where
+    toMjd (TimeYmdcz d _ _)   = D.toMjd d
+    toMjd (TimeYmdc  d _)     = D.toMjd d
+    toMjd (TimeYmd   d)       = D.toMjd d
+    toMjd (TimeYw    mjd)     = mjd
+    toMjd (TimeYm    mjd)     = mjd
 
 -- | Convert time to year\/month\/day tuple.
 --
@@ -74,7 +65,7 @@ timeDay (TimeYm    d)       = d
 --   (2010,12,25)
 --
 timeYmdTuple :: Time -> D.Ymd
-timeYmdTuple = Tim.toGregorian . timeDay
+timeYmdTuple = Tim.toGregorian . D.toMjd
 
 -- | Get the name of time precision.
 timePrecision :: Time -> String
@@ -121,23 +112,19 @@ timeToMix time =
       ym (y, m, _)      = B.mixJoin "-"  [B.mixDec y, D.mix02 m]
 
 
--- ----------------------  Construct
-
--- | Create monthly date from the Modified Julian Day.
-timeYmd :: D.Mjd -> Time
-timeYmd = TimeYmd . D.Monthly
+-- ----------------------  Creation
 
 -- | Create monthly time from the Modified Julian Day and clock.
-timeYmdc :: D.Mjd -> D.Clock -> Time
-timeYmdc = TimeYmdc . D.Monthly
+timeYmdc :: (D.ToMjd mjd) => mjd -> D.Clock -> Time
+timeYmdc = TimeYmdc . D.monthly
 
--- | Create time data form modified Julian date.
+-- | Create time data from the Modified Julian day.
 --
---   >>> timeFromMjd 55555
+--   >>> timeFromMjd (55555 :: Int)
 --   2010-12-25
 --
-timeFromMjd :: D.Days -> Time
-timeFromMjd = timeYmd . Tim.ModifiedJulianDay
+timeFromMjd :: (D.ToMjd mjd) => mjd -> Time
+timeFromMjd = TimeYmd . D.monthly
 
 -- | Create time data from year and month.
 timeFromYmAb :: D.Year -> D.Month -> B.Ab Time
@@ -178,7 +165,7 @@ timeFromDcz d c z = let (d', c') = D.clockDaysClock c
 --   2013-04-30
 --
 timeFromYmd :: D.Year -> D.Month -> D.Day -> Time
-timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
+timeFromYmd y m d = timeFromMjd $ Tim.fromGregorian y m d
 
 -- | Craete time from tuple of year, month, and day.
 --
@@ -186,7 +173,7 @@ timeFromYmd y m d = timeYmd $ Tim.fromGregorian y m d
 --   2013-04-18
 --
 timeFromYmdTuple :: D.Ymd -> Time
-timeFromYmdTuple = timeYmd . dayFromYmdTuple where
+timeFromYmdTuple = timeFromMjd . dayFromYmdTuple where
     dayFromYmdTuple (y, m, d) = Tim.fromGregorian y m d
 
 

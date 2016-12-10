@@ -54,7 +54,7 @@ copTimeAdd _ xs = Msg.badArg xs
 --   56400
 --
 copMjd :: (D.CContent c) => D.CopCalc c
-copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.timeMjd $ D.gTime c
+copMjd [Right c] | D.isTime c = Right $ D.pInteger $ D.mjdInteger $ D.toMjd $ D.gTime c
 copMjd xs = Msg.badArg xs
 
 copDateForm :: (D.CContent c) => O.Map D.Date -> D.CopCalc c

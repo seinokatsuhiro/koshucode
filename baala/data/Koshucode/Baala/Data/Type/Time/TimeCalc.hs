@@ -136,11 +136,11 @@ timeCeilYaer time =
 
 -- | Create range of time.
 --
---   >>> timeRangeDay (timeFromYmd 2014 11 3) (timeFromYmd 2014 11 5)
+--   >>> timeRangeDay (D.timeFromYmd 2014 11 3) (D.timeFromYmd 2014 11 5)
 --   [2014-11-03, 2014-11-04, 2014-11-05]
 --
 timeRangeDay :: B.RangeBy D.Time
-timeRangeDay from to = map D.timeFromMjd [D.timeMjd from .. D.timeMjd to]
+timeRangeDay from to = map D.timeFromMjd [D.toMjd from .. D.toMjd to]
 
 -- | Create range of time.
 --
