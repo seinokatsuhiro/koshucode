@@ -3,11 +3,7 @@
 -- | Clock: distance between two times.
 
 module Koshucode.Baala.Data.Type.Time.Clock
-  ( -- * Clock parts
-    ClockParts (..),
-    Sec, Min, Hour, Days,
-
-    -- * Clock
+  ( -- * Clock
     Clock (..),
     ToClock (..),
     clockBodyToMix,
@@ -37,45 +33,18 @@ module Koshucode.Baala.Data.Type.Time.Clock
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type.Time.Date     as D
+import qualified Koshucode.Baala.Data.Type.Time.Parts    as D
 import qualified Koshucode.Baala.Base.Message            as Msg
 
 
 -- ----------------------  Data type
 
--- | Decomposed clock.
-data ClockParts
-    = ClockPartsSec Days Hour Min Sec
-      -- ^ >>> toClock $ ClockPartsSec 0 14 38 09
-      --   |14:38:09|
-    | ClockPartsMin Days Hour Min
-      -- ^ >>> toClock $ ClockPartsMin 0 14 70
-      --   |15:10|
-    | ClockPartsHour Days Hour
-      -- ^ >>> toClock $ ClockPartsHour 0 32
-      --   |1'08|
-    | ClockPartsDays Days
-      -- ^ >>> toClock $ ClockPartsDays 2
-      --   |2'|
-      deriving (Show, Eq, Ord)
-
--- | Second type.
-type Sec = Int
-
--- | Minute type.
-type Min = Int
-
--- | Hour type.
-type Hour = Int
-
--- | Integer type for the Modified Julian Day.
-type Days = Integer
-
 -- | Clock as distance between two times.
 data Clock
-    = ClockDhms Days Sec    -- ^ Clock represented by multiple of second
-    | ClockDhm  Days Sec    -- ^ Clock represented by multiple of minute
-    | ClockDh   Days Sec    -- ^ Clock represented by multiple of hour
-    | ClockD    Days        -- ^ Clock represented by multiple of day
+    = ClockDhms D.Days D.Sec    -- ^ Clock represented by multiple of second
+    | ClockDhm  D.Days D.Sec    -- ^ Clock represented by multiple of minute
+    | ClockDh   D.Days D.Sec    -- ^ Clock represented by multiple of hour
+    | ClockD    D.Days          -- ^ Clock represented by multiple of day
       deriving (Eq, Ord)
 
 -- | Convertible to clock.
@@ -85,34 +54,34 @@ class ToClock a where
 instance ToClock Clock where
     toClock = id
 
-instance ToClock ClockParts where
-    toClock (ClockPartsSec  d h m s)  = clockFromDhms d h m s
-    toClock (ClockPartsMin  d h m)    = clockFromDhm  d h m
-    toClock (ClockPartsHour d h)      = clockFromDh   d h
-    toClock (ClockPartsDays d)        = clockFromD    d
+instance ToClock D.ClockParts where
+    toClock (D.ClockPartsSec  d h m s)  = clockFromDhms d h m s
+    toClock (D.ClockPartsMin  d h m)    = clockFromDhm  d h m
+    toClock (D.ClockPartsHour d h)      = clockFromDh   d h
+    toClock (D.ClockPartsDays d)        = clockFromD    d
 
 -- | Create clock from days, hour, minute, and second.
 --
 --   >>> clockFromDhms 1 9 40 20
 --   |1'09:40:20|
 --
-clockFromDhms :: Days -> Hour -> Min -> Sec -> Clock
+clockFromDhms :: D.Days -> D.Hour -> D.Min -> D.Sec -> Clock
 clockFromDhms d h m s = ClockDhms d $ secFromHms (h, m, s)
 
 -- | Create clock from days, hour, and minute.
-clockFromDhm :: Days -> Hour -> Min -> Clock
+clockFromDhm :: D.Days -> D.Hour -> D.Min -> Clock
 clockFromDhm d h m = ClockDhm d $ secFromHms (h, m, 0)
 
 -- | Create clock from days and hour.
-clockFromDh :: Days -> Hour -> Clock
+clockFromDh :: D.Days -> D.Hour -> Clock
 clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
 
 -- | Create clock from days.
-clockFromD :: Days -> Clock
+clockFromD :: D.Days -> Clock
 clockFromD = ClockD
 
 -- | Aggregate hour, minute, and second into single second.
-secFromHms :: (Hour, Min, Sec) -> Sec
+secFromHms :: (D.Hour, D.Min, D.Sec) -> D.Sec
 secFromHms (h, m, s) = s + 60 * (m + 60 * h)
 
 -- | Decompose second into days, hour, minute and second parts.
@@ -120,7 +89,7 @@ secFromHms (h, m, s) = s + 60 * (m + 60 * h)
 --   >>> dhmsFromSec 333333
 --   (3,9,15,33)
 --
-dhmsFromSec :: Sec -> (Days, Hour, Min, Sec)
+dhmsFromSec :: D.Sec -> (D.Days, D.Hour, D.Min, D.Sec)
 dhmsFromSec sec =
     let (m', s)   = sec `quotRem` 60
         (h', m)   = m'  `quotRem` 60
@@ -146,7 +115,7 @@ clockDaysSec (ClockD    d)    = (d, 0)
 --   >>> clockDaysClock $ clockFromDhms 1 9 15 33
 --   (1, |09:15:33|)
 --
-clockDaysClock :: Clock -> (Days, Clock)
+clockDaysClock :: Clock -> (D.Days, Clock)
 clockDaysClock (ClockDhms d s)  = (d, ClockDhms 0 s)
 clockDaysClock (ClockDhm  d s)  = (d, ClockDhm  0 s)
 clockDaysClock (ClockDh   d s)  = (d, ClockDh   0 s)
@@ -175,7 +144,7 @@ clockPrecision (ClockDh   _ _)   = "hour"
 clockPrecision (ClockD    _)     = "day"
 
 -- | Extract elements of clock.
-clockDhms :: Clock -> (Days, Maybe Hour, Maybe Min, Maybe Sec)
+clockDhms :: Clock -> (D.Days, Maybe D.Hour, Maybe D.Min, Maybe D.Sec)
 clockDhms clock =
     case clock of
       ClockDhms _ _  -> (day + d, Just h, Just m, Just s)
@@ -193,7 +162,7 @@ map2 :: (a -> a') -> (b -> b') -> (a, b) -> (a', b')
 map2 f g (x, y) = (f x, g y)
 
 -- | Replace elements of clock.
-clockAlter :: Maybe Days -> Maybe Hour -> Maybe Min -> Maybe Sec -> O.Map Clock
+clockAlter :: Maybe D.Days -> Maybe D.Hour -> Maybe D.Min -> Maybe D.Sec -> O.Map Clock
 clockAlter d' h' m' s' clock =
     case clockDhms clock of
       (d, Just h,  Just m,  Just s)  -> clockFromDhms (d' ! d) (h' ! h) (m' ! m) (s' ! s)
@@ -244,7 +213,7 @@ signToMix :: Int -> O.Map B.MixText
 signToMix (-1) m = B.mixString "-" O.++ m
 signToMix _    m = m
 
-daySecToMix :: (Sec -> (Days, B.MixText)) -> Days -> Sec -> B.MixText
+daySecToMix :: (D.Sec -> (D.Days, B.MixText)) -> D.Days -> D.Sec -> B.MixText
 daySecToMix secMix day sec =
     let (d, mx) = secMix sec
     in case day + d of
@@ -254,46 +223,46 @@ daySecToMix secMix day sec =
 mixColon :: O.Bin B.MixText
 mixColon = B.mixInfix ":"
 
-dhmsToMix :: Sec -> (Days, B.MixText)
+dhmsToMix :: D.Sec -> (D.Days, B.MixText)
 dhmsToMix sec = (d, hms) where
     hms            = D.mix02 h `mixColon` D.mix02 m `mixColon` D.mix02 s
     (d, h, m, s)   = dhmsFromSec $ abs sec
 
-dhmToMix :: Sec -> (Days, B.MixText)
+dhmToMix :: D.Sec -> (D.Days, B.MixText)
 dhmToMix sec = (d, hm) where
     hm             = D.mix02 h `mixColon` D.mix02 m
     (d, h, m, _)   = dhmsFromSec sec
 
-dhToMix :: Sec -> (Days, B.MixText)
+dhToMix :: D.Sec -> (D.Days, B.MixText)
 dhToMix sec = (d, hm) where
     hm             = D.mix02 h
     (d, h, _, _)   = dhmsFromSec sec
 
-dayToMix :: Days -> B.MixText
+dayToMix :: D.Days -> B.MixText
 dayToMix d = B.mixDec d O.++ B.mixString "'"
 
 
 -- ----------------------  Map
 
 -- | Map MDJ and second of clock.
-clockMap :: O.Map Days -> O.Map Sec -> O.Map Clock
+clockMap :: O.Map D.Days -> O.Map D.Sec -> O.Map Clock
 clockMap f g (ClockDhms d s)  = adjust ClockDhms (f d) (g s)
 clockMap f g (ClockDhm  d s)  = adjust ClockDhm  (f d) (g s)
 clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
 clockMap f _ (ClockD    d)    =        ClockD    (f d)
 
 -- | Combine MDJ and second of two clocks.
-clockMap2 :: O.Bin Days -> O.Bin Sec -> B.BinAb Clock
+clockMap2 :: O.Bin D.Days -> O.Bin D.Sec -> B.BinAb Clock
 clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
 clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
 clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
 clockMap2 f _ (ClockD    d)   (ClockD    e)    = Right  $ ClockD    (f d e)
 clockMap2 _ _ _ _ = Msg.adlib "clock"
 
-adjustAb :: (Days -> Sec -> Clock) -> Days -> Sec -> B.Ab Clock
+adjustAb :: (D.Days -> D.Sec -> Clock) -> D.Days -> D.Sec -> B.Ab Clock
 adjustAb k d s = Right $ adjust k d s
 
-adjust :: (Days -> Sec -> Clock) -> Days -> Sec -> Clock
+adjust :: (D.Days -> D.Sec -> Clock) -> D.Days -> D.Sec -> Clock
 adjust k d s = let (d', s')  = daysSec s
                    d2        = d + d'
                in if d2 < 0 && s' > 0
@@ -304,7 +273,7 @@ adjust k d s = let (d', s')  = daysSec s
 -- ----------------------  Days and seconds
 
 -- | Days and seconds.
-type DaysSec = (Days, Sec)
+type DaysSec = (D.Days, D.Sec)
 
 -- | Seconds in a day, i.e., 86400 seconds.
 --
@@ -322,7 +291,7 @@ daySeconds = 86400   -- 24 * 60 * 60
 --   >>> daysSec (-777777)
 --   (-10, 86223)
 --
-daysSec :: Sec -> DaysSec
+daysSec :: D.Sec -> DaysSec
 daysSec s = let (d', s') = s `divMod` daySeconds
             in (toInteger d', s')
 

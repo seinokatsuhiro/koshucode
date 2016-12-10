@@ -101,6 +101,7 @@ library
         Koshucode.Baala.Data.Type.Time.Clock
         Koshucode.Baala.Data.Type.Time.ClockCalc
         Koshucode.Baala.Data.Type.Time.Date
+        Koshucode.Baala.Data.Type.Time.Parts
         Koshucode.Baala.Data.Type.Time.Time
         Koshucode.Baala.Data.Type.Time.TimeCalc
 

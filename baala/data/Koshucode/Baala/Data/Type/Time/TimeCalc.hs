@@ -21,6 +21,7 @@ import qualified Koshucode.Baala.Base                       as B
 import qualified Koshucode.Baala.Data.Type.Time.Clock       as D
 import qualified Koshucode.Baala.Data.Type.Time.ClockCalc   as D
 import qualified Koshucode.Baala.Data.Type.Time.Date        as D
+import qualified Koshucode.Baala.Data.Type.Time.Parts       as D
 import qualified Koshucode.Baala.Data.Type.Time.Time        as D
 import qualified Koshucode.Baala.Base.Message               as Msg
 

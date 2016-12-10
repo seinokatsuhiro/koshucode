@@ -12,6 +12,7 @@ module Koshucode.Baala.Data.Type.Time.ClockCalc
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Data.Type.Time.Clock    as D
+import qualified Koshucode.Baala.Data.Type.Time.Parts    as D
 
 
 -- ----------------------  Calculation
