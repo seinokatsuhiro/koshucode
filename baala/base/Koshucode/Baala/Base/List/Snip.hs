@@ -20,6 +20,7 @@ module Koshucode.Baala.Base.List.Snip
   ) where
 
 import qualified Data.List                           as List
+import qualified Data.Set                            as Set
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base.Prelude        as B
 
@@ -112,27 +113,30 @@ snipBoth ps xs = (snipFrom ps xs, snipOff ps xs)
 
 -- | Take shared elements.
 --
---   >>> "abcd" `snipShare` "bcefg"
+--   >>> "abcd" `snipShare` "cbefg"
 --   "bc"
 --
-snipShare :: (Eq a) => O.Bin [a]
-snipShare xs ys = snipIndex xs ys `snipFrom` ys
+snipShare :: (Ord a) => O.Bin [a]
+snipShare = flip snipShareRight
+
+snipShareRight :: (Ord a) => O.Bin [a]
+snipShareRight xs = filter (`Set.member` Set.fromList xs)
 
 -- | Take left-side elements.
 --
 --   >>> "abcd" `snipLeft` "bcefg"
 --   "ad"
 --
-snipLeft :: (Eq a) => O.Bin [a]
-snipLeft xs ys = snipIndex ys xs `snipOff` xs
+snipLeft :: (Ord a) => O.Bin [a]
+snipLeft = flip snipRight
 
 -- | Take right-side elements.
 --
 --   >>> "abcd" `snipRight` "bcefg"
 --   "efg"
 --
-snipRight :: (Eq a) => O.Bin [a]
-snipRight xs ys = snipLeft ys xs
+snipRight :: (Ord a) => O.Bin [a]
+snipRight xs = filter (`Set.notMember` Set.fromList xs)
 
 
 -- --------------------------------------------  Reorder elements
