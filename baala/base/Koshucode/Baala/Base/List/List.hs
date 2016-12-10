@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.List.List
     takeFill, takeTailFill,
   
     -- * Construct
-    li1, li2, li3,
+    list1, list2, list3,
     consIf,
     RangeBy, rangeBy,
     zipMaybe, zipMaybe2,
@@ -125,27 +125,30 @@ takeTailFill fill n = reverseMap $ takeFill fill n
 
 -- | Make singleton list.
 --
---   >>> li1 'a'
+--   >>> list1 'a'
 --   "a"
 --
-li1 :: a -> [a]
-li1 x = [x]
+{-# INLINE list1 #-}
+list1 :: a -> [a]
+list1 x = [x]
 
 -- | Make two-element list.
 --
---   >>> li2 'a' 'b'
+--   >>> list2 'a' 'b'
 --   "ab"
 --
-li2 :: a -> a -> [a]
-li2 x y = [x, y]
+{-# INLINE list2 #-}
+list2 :: a -> a -> [a]
+list2 x y = [x, y]
 
 -- | Make three-element list.
 --
---   >>> li3 'a' 'b' 'c'
+--   >>> list3 'a' 'b' 'c'
 --   "abc"
 --
-li3 :: a -> a -> a -> [a]
-li3 x y z = [x, y, z]
+{-# INLINE list3 #-}
+list3 :: a -> a -> a -> [a]
+list3 x y z = [x, y, z]
 
 -- | Conditional cons up.
 consIf :: Bool -> a -> [a] -> [a]

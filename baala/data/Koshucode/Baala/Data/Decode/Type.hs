@@ -111,7 +111,7 @@ treesType = gen where
                                 _   -> Msg.unkType "tag"
     dispatch "list"  xs     = Right . D.TypeList =<< gen xs
     dispatch "set"   xs     = Right . D.TypeSet  =<< gen xs
-    dispatch "tuple" xs     = do ts <- mapM (gen. B.li1) xs
+    dispatch "tuple" xs     = do ts <- mapM (gen. B.list1) xs
                                  Right $ D.TypeTuple ts
     dispatch "tie"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1

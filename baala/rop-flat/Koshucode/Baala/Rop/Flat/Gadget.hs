@@ -66,7 +66,7 @@ relmapContents med = C.relmapFlow med . relkitContents
 relkitContents :: (Ord c) => S.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = D.headFrom [n]
-    kitf = map B.li1 . B.unique . concat
+    kitf = map B.list1 . B.unique . concat
 
 
 -- ----------------------  partial-order

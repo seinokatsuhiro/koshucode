@@ -72,7 +72,7 @@ relmapKoshuCop med = C.relmapHook med . relkitKoshuCop
 -- | Create @koshu-cop@ relkit.
 relkitKoshuCop :: (D.CContent c) => S.TermName -> C.RelkitHook c
 relkitKoshuCop name res _ =
-    Right $ C.relkitConstBody [name] $ map (B.li1 . D.pText . B.name) $ C.globalCops g
+    Right $ C.relkitConstBody [name] $ map (B.list1 . D.pText . B.name) $ C.globalCops g
           where g = C.getGlobal res
 
 
@@ -95,7 +95,7 @@ relkitKoshuCopInfix :: (D.CContent c) => (S.TermName, Maybe S.TermName, Maybe S.
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     g     = C.getGlobal res
     kit2  = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
-    he2   = D.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
+    he2   = D.headFrom $ [name] ++ heightMaybe B.list1        ++ dirMaybe B.list1
     put (n, ih)  = [D.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
     heightMaybe = maybeEmpty height

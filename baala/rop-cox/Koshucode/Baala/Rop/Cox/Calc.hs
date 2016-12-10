@@ -256,7 +256,7 @@ relkitUnary :: (D.CContent c) => (S.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
     he2    = D.headFrom [n]
     kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []
-    f2 _ _ = Right $ map B.li1 cs
+    f2 _ _ = Right $ map B.list1 cs
 
 
 

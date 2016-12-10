@@ -109,7 +109,7 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                in case xsc of
                     _ | D.isSet  xsc -> map (: cs) $ D.gSet xsc
                     _ | D.isList xsc -> map (: cs) $ B.unique $ D.gList xsc
-                    _ | D.isText xsc -> map (: cs) $ map (D.pText . B.li1)
+                    _ | D.isText xsc -> map (: cs) $ map (D.pText . B.list1)
                                                    $ B.unique $ D.gText xsc
                     _                -> [xsc : cs]
 
@@ -152,7 +152,7 @@ relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
                in case xsc of
                     _ | D.isSet  xsc -> indexElem cs $ B.sort $ D.gSet xsc
                     _ | D.isList xsc -> indexElem cs $ D.gList xsc
-                    _ | D.isText xsc -> indexElem cs $ map (D.pText . B.li1)
+                    _ | D.isText xsc -> indexElem cs $ map (D.pText . B.list1)
                                                      $ D.gText xsc
                     _                -> [xsc : cs]
 
@@ -270,7 +270,7 @@ relkitUncollect (coll, to) (Just he1) = kit2 where
     ito      = headIndex he1 to
     he2      = D.headAppend to he1
     kitf2 cs = let [xsc]    = icoll `B.snipFrom` cs
-                   char     = D.pText . B.li1
+                   char     = D.pText . B.list1
                    ys << xs = appendCount D.empty (length to) xs ys
                in case () of
                     _ | D.isSet  xsc  -> cs << (B.sort $ D.gSet xsc)

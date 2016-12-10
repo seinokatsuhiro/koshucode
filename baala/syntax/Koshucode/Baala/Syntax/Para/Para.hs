@@ -112,7 +112,7 @@ paraLookupSingle n p =
 paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> Para n a -> m (Para n a)
 paraPosName pn p =
     do ns <- pn $ paraPos p
-       let m = Ms.fromList $ map (B.mapSnd B.li1) ns
+       let m = Ms.fromList $ map (B.mapSnd B.list1) ns
        return $ p { paraName = paraName p `Ms.union` m }
 
 -- | Add named parameter.
