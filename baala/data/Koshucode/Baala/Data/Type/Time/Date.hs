@@ -6,6 +6,7 @@ module Koshucode.Baala.Data.Type.Time.Date
   ( -- * Modified Julian Day
     ToMjd (..),
     Mjd, mjdInteger,
+    ToMjdClip (..),
 
     -- * Data type
     DateParts (..),
@@ -39,10 +40,6 @@ import qualified Koshucode.Baala.Data.Type.Message as Msg
 -- | Convert to the Modified Julian Day.
 class ToMjd a where
     toMjd :: a -> Mjd
-    toMjd = B.fromMaybe 0 . toMjdValid
-
-    toMjdValid :: a -> Maybe Mjd
-    toMjdValid = Just . toMjd
 
 instance ToMjd Tim.Day where
     toMjd = id
@@ -72,6 +69,12 @@ instance Num Tim.Day where
 mjdInteger :: Mjd -> Integer
 mjdInteger = Tim.toModifiedJulianDay
 
+-- | Convert to the Modified Just Day but abortable.
+class ToMjdClip a where
+    toMjdClip :: a -> Mjd
+
+    toMjdAb :: a -> B.Ab Mjd
+    toMjdAb = Right . toMjdClip
 
 -- ----------------------  Type
 
@@ -83,11 +86,20 @@ data DateParts
     | DateMjd Mjd             -- ^ MJD date
       deriving (Show, Eq, Ord)
 
-instance ToMjd DateParts where
-    toMjdValid (DateYmd y m d)  = Tim.fromGregorianValid   y m d
-    toMjdValid (DateYwd y w d)  = Tim.fromWeekDateValid    y w d
-    toMjdValid (DateYd  y d)    = Tim.fromOrdinalDateValid y d
-    toMjdValid (DateMjd mjd)    = Just mjd
+instance ToMjdClip DateParts where
+    toMjdClip (DateYmd y m d)  = Tim.fromGregorian   y m d
+    toMjdClip (DateYwd y w d)  = Tim.fromWeekDate    y w d
+    toMjdClip (DateYd  y d)    = Tim.fromOrdinalDate y d
+    toMjdClip (DateMjd mjd)    = mjd
+
+    toMjdAb (DateYmd y m d)  = abMjd (Msg.notMonthlyDate y m d) $ Tim.fromGregorianValid   y m d
+    toMjdAb (DateYwd y w d)  = abMjd (Msg.notWeeklyDate y w d)  $ Tim.fromWeekDateValid    y w d
+    toMjdAb (DateYd  y d)    = abMjd (Msg.notYearlyDate y d)    $ Tim.fromOrdinalDateValid y d
+    toMjdAb (DateMjd mjd)    = Right mjd
+
+abMjd :: B.Ab Mjd -> Maybe Mjd -> B.Ab Mjd
+abMjd _ (Just mjd) = Right mjd
+abMjd a (Nothing)  = a
 
 -- | Date.
 data Date

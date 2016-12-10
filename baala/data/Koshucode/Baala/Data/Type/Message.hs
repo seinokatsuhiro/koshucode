@@ -7,7 +7,7 @@ module Koshucode.Baala.Data.Type.Message
     -- * Message
     divideByZero,
     heteroDecimal,
-    notDate,
+    notDate, notMonthlyDate, notWeeklyDate, notYearlyDate,
     tooLargeDigit,
     notNumber,
     abortEncodables,
@@ -26,10 +26,30 @@ heteroDecimal a b = Left $ abortEncodables "Different decimal length" [a, b]
 
 -- | Can't read as date
 notDate :: Integer -> Int -> Int -> B.Ab a
-notDate y m d = Left $ B.abortLines "Can't read as date"
-                [ "/year  " ++ show y
-                , "/month " ++ show m
-                , "/day   " ++ show d]
+notDate y m d = notMonthlyDate y m d
+
+-- | Not monthly date
+notMonthlyDate :: Integer -> Int -> Int -> B.Ab a
+notMonthlyDate y m d =
+    Left $ B.abortLines "Not monthly date"
+             [ "/year  " ++ show y
+             , "/month " ++ show m
+             , "/day   " ++ show d]
+
+-- | Not weekly date
+notWeeklyDate :: Integer -> Int -> Int -> B.Ab a
+notWeeklyDate y w d =
+    Left $ B.abortLines "Not weekly date"
+             [ "/year  " ++ show y
+             , "/week  " ++ show w
+             , "/day   " ++ show d]
+
+-- | Not yearly date
+notYearlyDate :: Integer -> Int -> B.Ab a
+notYearlyDate y d =
+    Left $ B.abortLines "Not yearly date"
+             [ "/year  " ++ show y
+             , "/day   " ++ show d]
 
 -- | Too large digit
 tooLargeDigit :: String -> B.Ab a
