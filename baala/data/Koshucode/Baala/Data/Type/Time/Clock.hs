@@ -15,7 +15,6 @@ module Koshucode.Baala.Data.Type.Time.Clock
     -- * Constructor
     clockFromDhms, clockFromDhm,
     clockFromDh, clockFromD,
-    clockFromHms,
     dhmsFromSec, secFromHms,
 
     -- * Property
@@ -111,18 +110,6 @@ clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
 -- | Create clock from days.
 clockFromD :: Days -> Clock
 clockFromD = ClockD
-
--- | Create clock from hour, minute, and optional second.
---
---   >>> clockFromHms 9 40 Nothing
---   |09:40|
---
---   >>> clockFromHms 9 40 (Just 20)
---   |09:40:20|
---
-clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
-clockFromHms h m (Nothing)  = clockFromDhm  0 h m
-clockFromHms h m (Just s)   = clockFromDhms 0 h m s
 
 -- | Aggregate hour, minute, and second into single second.
 secFromHms :: (Hour, Min, Sec) -> Sec

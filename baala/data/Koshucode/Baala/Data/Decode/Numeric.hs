@@ -123,6 +123,9 @@ treesTime = stringsTime B.<.> D.treesTexts False
 --   >>> stringTime "2013-04-18 12:00"
 --   Right 2013-04-18 12:00
 --
+--   >>> stringTime "2013-04-18 12:00 +9:00" >>= (Right . D.timeCutZone)
+--   Right 2013-04-18 03:00
+--
 stringTime :: String -> B.Ab D.Time
 stringTime = S.toTrees B.>=> treesTime
 
@@ -167,27 +170,32 @@ stringsTime = year where
     minute k h cs       = case getInt cs of
                             (m, "")          -> k (D.clockFromDhm 0 h m) Nothing
                             (m, ':' : cs')   -> second k h m cs'
-                            (m, cs')         -> zone1 k h m Nothing cs'
+                            (m, cs')         -> zone1 k (D.ClockPartsMin 0 h m) cs'
 
     second k h m cs     = case getInt cs of
                             (s, "")          -> k (D.clockFromDhms 0 h m s) Nothing
-                            (s, cs')         -> zone1 k h m (Just s) cs'
+                            (s, cs')         -> zone1 k (D.ClockPartsSec 0 h m s) cs'
 
-    zone1 k h m s cs    = case cs of
-                            '+' : cs'        -> zone2 k h m s   1  cs'
-                            '-' : cs'        -> zone2 k h m s (-1) cs'
-                            "UTC"            -> zone4 k h m s 0 0
+    zone1 k clock cs    = case cs of
+                            '+' : cs'        -> zone2 k clock   1  cs'
+                            '-' : cs'        -> zone2 k clock (-1) cs'
+                            "UTC"            -> zone4 k clock 0 0
                             _                -> Msg.nothing
 
-    zone2 k h m s pm cs = case getInt cs of
-                            (zh, ':' : cs')  -> zone3 k h m s (pm * zh) cs'
+    zone2 k clock pm cs = case getInt cs of
+                            (zh, ':' : cs')  -> zone3 k clock (pm * zh) cs'
                             _                -> Msg.nothing
 
-    zone3 k h m s zh cs = case getInt cs of
-                            (zm, "")         -> zone4 k h m s zh zm
+    zone3 k clock zh cs = case getInt cs of
+                            (zm, "")         -> zone4 k clock zh zm
                             _                -> Msg.nothing
 
-    zone4 k h m s zh zm = let c = D.clockFromHms (h - zh) (m - zm) s
-                              z = D.secFromHms (zh, zm, 0)
-                          in k c $ Just z
+    zone4 k clock zh zm =
+        let z = D.secFromHms (zh, zm, 0)
+            c = case clock of
+                  D.ClockPartsSec  d h m s -> D.ClockPartsSec d (h - zh) (m - zm) s
+                  D.ClockPartsMin  d h m   -> D.ClockPartsMin d (h - zh) (m - zm)
+                  D.ClockPartsHour d h     -> D.ClockPartsMin d (h - zh) (0 - zm)
+                  D.ClockPartsDays d       -> D.ClockPartsMin d (0 - zh) (0 - zm)
+        in k (D.toClock c) (Just z)
 
