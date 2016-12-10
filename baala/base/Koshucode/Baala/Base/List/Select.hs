@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Snipping elements.
+-- | Select elements.
 
-module Koshucode.Baala.Base.List.Snip
+module Koshucode.Baala.Base.List.Select
   ( -- * Type
     Snip, Snip2,
   

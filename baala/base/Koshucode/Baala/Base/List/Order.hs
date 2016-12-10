@@ -20,7 +20,7 @@ module Koshucode.Baala.Base.List.Order
 
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.List.Snip    as B
+import qualified Koshucode.Baala.Base.List.Select  as B
 
 -- | Data for indicating order.
 data OrderCap a
