@@ -10,6 +10,7 @@ module Koshucode.Baala.Data.Type.Time.Time
 
     -- * Creation
     monthlyTime, monthlyClippedTime,
+    monthlyTimeDate, monthlyTimeClock,
     timeFromMjd,
     timeFromYmAb, timeFromYwAb,
     timeFromDczAb,
@@ -137,6 +138,14 @@ monthlyTime = timeOf D.monthly
 -- | Create monthly clipped time.
 monthlyClippedTime :: (D.ToMjdClip day, D.ToClock clock) => day -> Maybe clock -> Time
 monthlyClippedTime = clippedTimeOf D.monthly
+
+-- | Create monthly day-precision time.
+monthlyTimeDate :: (D.ToMjdClip day) => day -> B.Ab Time
+monthlyTimeDate day = timeOf D.monthly day (Nothing :: Maybe D.ClockParts)
+
+-- | Create monthly clock-precision time.
+monthlyTimeClock :: (D.ToMjdClip day, D.ToClock clock) => day -> clock -> B.Ab Time
+monthlyTimeClock day clock = timeOf D.monthly day (Just clock)
 
 timeOf :: (D.ToMjdClip day, D.ToClock clock) =>
           (D.Mjd -> D.Date) -> day -> Maybe clock -> B.Ab Time

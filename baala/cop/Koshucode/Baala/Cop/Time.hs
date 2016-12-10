@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -67,25 +68,47 @@ copDateForm _ xs = Msg.badArg xs
 --   2013-04-18
 --
 copTime :: (D.CContent c) => D.CopCalc c
-copTime [i -> Just y, i -> Just m] = D.putTime =<< D.timeFromYmAb y m
-copTime [i -> Just y, i -> Just m, i -> Just d] = D.putTime $ D.timeFromYmd y m d
-copTime cs = Msg.badArg cs
+copTime = arg2 where
+    arg2         ((i -> Just y) : (i -> Just m) : cs) = arg3 y m cs
+    arg2         cs                    = Msg.badArg cs
+
+    arg3 y m     ((i -> Just d) : cs)  = arg4 (D.dateYmd y m d) cs
+    arg3 y m     []                    = D.pTime <$> D.monthlyTimeDate (D.dateYmd y m 1)
+    arg3 _ _     cs                    = Msg.badArg cs
+
+    arg4 day     ((i -> Just h) : cs)  = arg5 day h cs
+    arg4 day     []                    = D.pTime <$> D.monthlyTimeDate day
+    arg4 _       cs                    = Msg.badArg cs
+
+    arg5 day h   ((i -> Just m) : cs)  = arg6 day h m cs
+    arg5 day h   []                    = D.pTime <$> D.monthlyTimeClock day (D.clockDh 0 h)
+    arg5 _ _     cs                    = Msg.badArg cs
+
+    arg6 day h m [i -> Just s]         = D.pTime <$> D.monthlyTimeClock day (D.clockDhms 0 h m s)
+    arg6 day h m []                    = D.pTime <$> D.monthlyTimeClock day (D.clockDhm  0 h m)
+    arg6 _ _ _   cs                    = Msg.badArg cs
 
 -- | Create clock from day, hour, minute, and second.
 --
 --   >>> clock ( 0 )( 12 )( 45 )( 30 )
 --   |12:45:30|
 --
-copClock :: (D.CContent c) => D.CopCalc c
-copClock [i -> Just d] =
-    D.putClock $ D.clockFromD d
-copClock [i -> Just d, i -> Just h] =
-    D.putClock $ D.clockFromDh d h
-copClock [i -> Just d, i -> Just h, i -> Just m] =
-    D.putClock $ D.clockFromDhm d h m
-copClock [i -> Just d, i -> Just h, i -> Just m, i -> Just s] =
-    D.putClock $ D.clockFromDhms d h m s
-copClock cs = Msg.badArg cs
+copClock :: (D.CContent c) => [B.Ab c] -> B.Ab c
+copClock = arg1 where
+    arg1       ((i -> Just d) : cs)  = arg2 d cs
+    arg1       cs                    = Msg.badArg cs
+
+    arg2 d     ((i -> Just h) : cs)  = arg3 d h cs
+    arg2 d     []                    = D.putClock $ D.clockFromD d
+    arg2 _     cs                    = Msg.badArg cs
+
+    arg3 d h   ((i -> Just m) : cs)  = arg4 d h m cs
+    arg3 d h   []                    = D.putClock $ D.clockFromDh d h
+    arg3 _ _   cs                    = Msg.badArg cs
+
+    arg4 d h m [i -> Just s]         = D.putClock $ D.clockFromDhms d h m s
+    arg4 d h m []                    = D.putClock $ D.clockFromDhm  d h m
+    arg4 _ _ _ cs                    = Msg.badArg cs
 
 i :: (D.CDec c, Integral n) => B.Ab c -> Maybe n
 i (Right c) | D.isDec c  = Just $ truncate $ toRational $ D.gDec c
