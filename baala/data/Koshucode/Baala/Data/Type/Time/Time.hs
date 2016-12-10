@@ -9,7 +9,8 @@ module Koshucode.Baala.Data.Type.Time.Time
     timePrecision,
 
     -- * Creation
-    timeYmdc, timeFromMjd,
+    monthlyTime, monthlyClippedTime,
+    timeFromMjd,
     timeFromYmAb, timeFromYwAb,
     timeFromDczAb,
     timeFromYmd, timeFromYmdTuple,
@@ -50,6 +51,10 @@ data Time
 
 -- | Time zone as offset from UTC.
 type Zone = D.Sec
+
+-- | The first day of the Modified Julian Day.
+instance B.Default Time where
+    def = timeFromMjd (0 :: Int)
 
 -- | Extract date part and convert to MJD.
 instance D.ToMjd Time where
@@ -114,9 +119,36 @@ timeToMix time =
 
 -- ----------------------  Creation
 
--- | Create monthly time from the Modified Julian Day and clock.
-timeYmdc :: (D.ToMjd mjd) => mjd -> D.Clock -> Time
-timeYmdc = TimeYmdc . D.monthly
+-- | Create monthly time.
+--
+--   >>> monthlyTime (D.DateYmd 2013 4 18) (Just $ D.ClockPartsMin 0 12 05)
+--   Right 2013-04-18 12:05
+--
+--   >>> monthlyTime (D.DateYmd 2013 4 18) (Nothing :: Maybe D.ClockParts)
+--   Right 2013-04-18
+--
+--   >>> monthlyTime (D.DateYmd 2013 4 31) (Nothing :: Maybe D.ClockParts)
+--   Left AbortReason "Not monthly date" ...
+--
+monthlyTime :: (D.ToMjdClip day, D.ToClock clock) => day -> Maybe clock -> B.Ab Time
+monthlyTime = timeOf D.monthly
+
+-- | Create monthly clipped time.
+monthlyClippedTime :: (D.ToMjdClip day, D.ToClock clock) => day -> Maybe clock -> Time
+monthlyClippedTime = clippedTimeOf D.monthly
+
+timeOf :: (D.ToMjdClip day, D.ToClock clock) =>
+          (D.Mjd -> D.Date) -> day -> Maybe clock -> B.Ab Time
+timeOf ly day clock = do mjd <- D.toMjdAb day
+                         Right $ createTime (ly mjd) clock
+
+clippedTimeOf :: (D.ToMjdClip day, D.ToClock clock) =>
+                 (D.Mjd -> D.Date) -> day -> Maybe clock -> Time
+clippedTimeOf ly day = createTime (ly $ D.toMjdClip day)
+
+createTime :: (D.ToClock clock) => D.Date -> Maybe clock -> Time
+createTime date (Nothing) = TimeYmd  date
+createTime date (Just c)  = TimeYmdc date (D.toClock c)
 
 -- | Create time data from the Modified Julian day.
 --
