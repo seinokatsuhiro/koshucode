@@ -1,16 +1,17 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
--- | Date.
+-- | Date using the Modified Julian Day (MJD).
 
 module Koshucode.Baala.Data.Type.Time.Date
   ( -- * Modified Julian Day
-    Mjd, mjd, unMjd,
+    ToMjd (..),
+    Mjd, mjdInteger,
 
     -- * Data type
     Date (..), Ymd,
     Year, Month, Week, Day,
 
-    -- * Construction
+    -- * Creation
     dateFromMjd,
     dateFromYmd,
     dateFromYwd,
@@ -20,7 +21,7 @@ module Koshucode.Baala.Data.Type.Time.Date
     monthly, weekly, yearly,
 
     -- * Utility
-    dateMjd, dateAltMjd, dateAdd,
+    dateAltMjd, dateAdd,
     mix02,
   ) where
 
@@ -34,24 +35,37 @@ import qualified Koshucode.Baala.Data.Type.Message as Msg
 
 -- ----------------------  Modified Julian Day
 
--- | Type for the Modified Julian Day.
+-- | Convert to the Modified Julian Day.
+class ToMjd a where
+    toMjd :: a -> Mjd
+
+instance ToMjd Tim.Day where
+    toMjd = id
+
+-- | Synonym for MJD type.
 type Mjd = Tim.Day
 
--- | Create MJD.
-mjd :: Integer -> Mjd
-mjd = Tim.ModifiedJulianDay
+-- | >>> toMjd (55555 :: Int)
+--   2010-12-25
+instance ToMjd Int where
+    toMjd = Tim.ModifiedJulianDay . fromIntegral
 
--- | Extract MJD integer value.
-unMjd :: Mjd -> Integer
-unMjd = Tim.toModifiedJulianDay
+-- | >>> toMjd (55555 :: Integer)
+--   2010-12-25
+instance ToMjd Integer where
+    toMjd = Tim.ModifiedJulianDay
 
 instance Num Tim.Day where
-    x + y        = mjd (unMjd x + unMjd y)
-    x - y        = mjd (unMjd x - unMjd y)
-    x * y        = mjd (unMjd x * unMjd y)
-    abs          = mjd . abs . unMjd
-    signum       = mjd . signum . unMjd
-    fromInteger  = mjd
+    x + y        = toMjd (mjdInteger x + mjdInteger y)
+    x - y        = toMjd (mjdInteger x - mjdInteger y)
+    x * y        = toMjd (mjdInteger x * mjdInteger y)
+    abs          = toMjd . abs . mjdInteger
+    signum       = toMjd . signum . mjdInteger
+    fromInteger  = toMjd
+
+-- | Extract MJD integer value.
+mjdInteger :: Mjd -> Integer
+mjdInteger = Tim.toModifiedJulianDay
 
 
 -- ----------------------  Type
@@ -59,18 +73,31 @@ instance Num Tim.Day where
 -- | Date.
 data Date
     = Monthly Mjd    -- ^ Date in /YYYY-MM-DD/
-    | Weekly  Mjd    -- ^ Date in /YYYY-#W-D/
+    | Weekly  Mjd    -- ^ Date in /YYYY-#WW-D/
     | Yearly  Mjd    -- ^ Date in /YYYY-##D/
 
-instance Eq  Date where
-    a == b = dateMjd a == dateMjd b
+instance Eq Date where
+    (==) = ordEq
+
+-- | Test equality using 'Ord' method.
+ordEq :: (Ord a) => a -> a -> Bool
+ordEq a b = (a `compare` b) == EQ
 
 instance Ord Date where
-    a `compare` b = dateMjd a `compare` dateMjd b
+    a `compare` b = toMjd a `compare` toMjd b
 
 instance Show Date where
     show d@(Monthly _) = "Date " ++ B.encode d
     show d = "Date " ++ B.encode d ++ " (" ++ B.encode (monthly d) ++ ")"
+
+instance ToMjd Date where
+    toMjd = dateMjd
+    
+-- | Get the internal Modified Julian Day.
+dateMjd :: Date -> Mjd
+dateMjd (Monthly day)  = day
+dateMjd (Weekly  day)  = day
+dateMjd (Yearly  day)  = day
 
 -- | Type for year, month, and day.
 type Ymd = (Year, Month, Day)
@@ -118,15 +145,15 @@ mix02 :: Int -> B.MixText
 mix02 = B.mixDecZero 2
 
 
--- ----------------------  Construction
+-- ----------------------  Creation
 
 -- | Create date from the Modified Julian Day.
 --
---   >>> dateFromMjd 55555
+--   >>> dateFromMjd (55555 :: Int)
 --   Date 2010-12-25
 --
-dateFromMjd :: Integer -> Date
-dateFromMjd = Monthly . Tim.ModifiedJulianDay
+dateFromMjd :: (ToMjd n) => n -> Date
+dateFromMjd = Monthly . toMjd
 
 -- | Create date from year, month, and day.
 --
@@ -173,33 +200,27 @@ dateFromYd y d =
 --   >>> monthly $ dateFromMjd 55555
 --   Date 2010-12-25
 --
-monthly :: O.Map Date
-monthly = Monthly . dateMjd
+monthly :: (ToMjd day) => day -> Date
+monthly = Monthly . toMjd
 
 -- | Convert date into weekly date.
 --
 --   >>> weekly $ dateFromMjd 55555
 --   Date 2010-#51-6 (2010-12-25)
 --
-weekly :: O.Map Date
-weekly  = Weekly . dateMjd
+weekly :: (ToMjd day) => day -> Date
+weekly  = Weekly . toMjd
 
 -- | Convert date into yearly date.
 --
 --   >>> yearly $ dateFromMjd 55555
 --   Date 2010-##359 (2010-12-25)
 --
-yearly :: O.Map Date
-yearly  = Yearly . dateMjd
+yearly :: (ToMjd day) => day -> Date
+yearly  = Yearly . toMjd
 
 
 -- ----------------------  Utility
-
--- | Get the internal Modified Julian Day.
-dateMjd :: Date -> Mjd
-dateMjd (Monthly day)  = day
-dateMjd (Weekly  day)  = day
-dateMjd (Yearly  day)  = day
 
 -- | Alter the Modified Julian Day of date.
 dateAltMjd :: O.Map Mjd -> O.Map Date

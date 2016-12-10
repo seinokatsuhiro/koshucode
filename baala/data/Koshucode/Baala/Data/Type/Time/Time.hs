@@ -62,9 +62,9 @@ timeMjd = Tim.toModifiedJulianDay . timeDay
 
 -- Get the Modified Julian Day of time.
 timeDay :: Time -> D.Mjd
-timeDay (TimeYmdcz d _ _)   = D.dateMjd d
-timeDay (TimeYmdc  d _)     = D.dateMjd d
-timeDay (TimeYmd   d)       = D.dateMjd d
+timeDay (TimeYmdcz d _ _)   = D.toMjd d
+timeDay (TimeYmdc  d _)     = D.toMjd d
+timeDay (TimeYmd   d)       = D.toMjd d
 timeDay (TimeYw    d)       = d
 timeDay (TimeYm    d)       = d
 
@@ -302,10 +302,10 @@ timeFromZonedTime zt = time where
 timeDaysSec :: Time -> D.DaysSec
 timeDaysSec (TimeYmdcz d c _)  = dateClockDaysSec d c
 timeDaysSec (TimeYmdc d c)     = dateClockDaysSec d c
-timeDaysSec (TimeYmd d)        = (D.unMjd $ D.dateMjd d, 0)
-timeDaysSec (TimeYw d)         = (D.unMjd d, 0)
-timeDaysSec (TimeYm d)         = (D.unMjd d, 0)
+timeDaysSec (TimeYmd d)        = (D.mjdInteger $ D.toMjd d, 0)
+timeDaysSec (TimeYw d)         = (D.mjdInteger d, 0)
+timeDaysSec (TimeYm d)         = (D.mjdInteger d, 0)
 
 dateClockDaysSec :: D.Date -> D.Clock -> D.DaysSec
 dateClockDaysSec d c = let (d', s) = D.clockDaysSec c
-                       in (D.unMjd (D.dateMjd d) + d', s)
+                       in (D.mjdInteger (D.toMjd d) + d', s)
