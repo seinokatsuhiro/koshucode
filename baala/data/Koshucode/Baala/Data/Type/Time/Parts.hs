@@ -12,10 +12,12 @@ module Koshucode.Baala.Data.Type.Time.Parts
     -- * Date parts
     Year, Month, Week, Day,
     DateParts (..),
+    dateYmd, dateYwd, dateYd,
 
     -- * Clock parts
     Days, Hour, Min, Sec,
     ClockParts (..),
+    clockDhms, clockDhm, clockDh, clockD,
   ) where
 
 import qualified Data.Time.Calendar                 as Tim
@@ -89,6 +91,18 @@ data DateParts
     | DateMjd Mjd             -- ^ MJD date
       deriving (Show, Eq, Ord)
 
+-- | Monthly date parts.
+dateYmd :: Year -> Month -> Day -> DateParts
+dateYmd = DateYmd
+
+-- | Weekly date parts.
+dateYwd :: Year -> Week -> Day -> DateParts
+dateYwd = DateYwd
+
+-- | Yearly date parts.
+dateYd :: Year -> Day -> DateParts
+dateYd = DateYd
+
 instance ToMjdClip DateParts where
     toMjdClip (DateYmd y m d)  = Tim.fromGregorian   y m d
     toMjdClip (DateYwd y w d)  = Tim.fromWeekDate    y w d
@@ -126,3 +140,19 @@ data ClockParts
     | ClockPartsHour Days Hour
     | ClockPartsDays Days
       deriving (Show, Eq, Ord)
+
+-- | Clock parts of days, hour, minute, and second.
+clockDhms :: Days -> Hour -> Min -> Sec -> ClockParts
+clockDhms = ClockPartsSec
+
+-- | Clock parts of days, hour, and minute.
+clockDhm :: Days -> Hour -> Min -> ClockParts
+clockDhm = ClockPartsMin
+
+-- | Clock parts of days and hour.
+clockDh :: Days -> Hour -> ClockParts
+clockDh = ClockPartsHour
+
+-- | Clock parts of days only.
+clockD :: Days -> ClockParts
+clockD = ClockPartsDays

@@ -122,17 +122,17 @@ relkitClockGet (cops, cox, ns) (Just he1) = Right kit2 where
       he2       = B.catMaybes ns `D.headAppend` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do clock <- D.getClock $ D.coxRunCox cops he1 cs1 cox
-                     let cs2 = B.zipMaybe2 ns $ clockProps clock
+                     let cs2 = B.zipMaybe2 ns $ clockContents clock
                      Right $ cs2 ++ cs1
 
-clockProps :: (D.CContent c) => D.Clock -> [c]
-clockProps clock = [sign, day, hour, minute, sec] where
+clockContents :: (D.CContent c) => D.Clock -> [c]
+clockContents clock = [sign, day, hour, minute, sec] where
     sign          = D.pInt $ D.clockSign clock
     day           = D.pInteger d
     hour          = D.maybeEmpty D.pInt h
     minute        = D.maybeEmpty D.pInt m
     sec           = D.maybeEmpty D.pInt s
-    (d, h, m, s)  = D.clockDhms clock
+    (d, h, m, s)  = D.clockAtts clock
 
 
 -- ----------------------  clock-alter

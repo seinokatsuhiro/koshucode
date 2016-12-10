@@ -18,7 +18,7 @@ module Koshucode.Baala.Data.Type.Time.Clock
     clockDaysClock,
     clockSign, 
     clockPrecision,
-    clockDhms, clockAlter,
+    clockAtts, clockAlter,
 
     -- * Conversion
     clockMap,
@@ -143,9 +143,9 @@ clockPrecision (ClockDhm  _ _)   = "min"
 clockPrecision (ClockDh   _ _)   = "hour"
 clockPrecision (ClockD    _)     = "day"
 
--- | Extract elements of clock.
-clockDhms :: Clock -> (D.Days, Maybe D.Hour, Maybe D.Min, Maybe D.Sec)
-clockDhms clock =
+-- | All attributes of clock.
+clockAtts :: Clock -> (D.Days, Maybe D.Hour, Maybe D.Min, Maybe D.Sec)
+clockAtts clock =
     case clock of
       ClockDhms _ _  -> (day + d, Just h, Just m, Just s)
       ClockDhm  _ _  -> (day + d, Just h, Just m, Nothing)
@@ -164,7 +164,7 @@ map2 f g (x, y) = (f x, g y)
 -- | Replace elements of clock.
 clockAlter :: Maybe D.Days -> Maybe D.Hour -> Maybe D.Min -> Maybe D.Sec -> O.Map Clock
 clockAlter d' h' m' s' clock =
-    case clockDhms clock of
+    case clockAtts clock of
       (d, Just h,  Just m,  Just s)  -> clockFromDhms (d' ! d) (h' ! h) (m' ! m) (s' ! s)
       (d, Just h,  Just m,  Nothing) -> clockFromDhm  (d' ! d) (h' ! h) (m' ! m)
       (d, Just h,  Nothing, Nothing) -> clockFromDh   (d' ! d) (h' ! h)
