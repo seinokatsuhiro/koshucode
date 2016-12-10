@@ -9,6 +9,11 @@ module Koshucode.Baala.Data.Type.Time.Parts
     ToMjd (..),
     ToMjdClip (..),
 
+    -- * Day of week
+    Dayw (..),
+    mjdDayw,
+    daywDiff,
+
     -- * Date parts
     Year, Month, Week, Day,
     DateParts (..),
@@ -69,6 +74,61 @@ class ToMjdClip a where
     toMjdAb = Right . toMjdClip
 
 
+-- ---------------------------------  Day of wekk
+
+-- | Symbol of day of week.
+data Dayw
+    = Monday      -- ^ __1.__ Day of the moon.
+    | Tuesday     -- ^ __2.__ Day of Mars
+    | Wednesday   -- ^ __3.__ Day between Tuesday and Thursday.
+    | Thursday    -- ^ __4.__ Day of thunder.
+    | Friday      -- ^ __5.__ Day of Venus.
+    | Saturday    -- ^ __6.__ Day of Saturn.
+    | Sunday      -- ^ __7.__ Day of the sun.
+      deriving (Show, Eq, Ord)
+
+instance Enum Dayw where
+    fromEnum Monday     = 1
+    fromEnum Tuesday    = 2
+    fromEnum Wednesday  = 3
+    fromEnum Thursday   = 4
+    fromEnum Friday     = 5
+    fromEnum Saturday   = 6
+    fromEnum Sunday     = 7
+
+    toEnum 0 = Sunday
+    toEnum 1 = Monday
+    toEnum 2 = Thursday
+    toEnum 3 = Wednesday
+    toEnum 4 = Thursday
+    toEnum 5 = Friday
+    toEnum 6 = Saturday
+    toEnum 7 = Sunday
+    toEnum n = toEnum $ mod n 7
+
+-- | Day of week.
+--
+--   >>> mjdDayw (55555 :: Int)
+--   Saturday
+--
+mjdDayw :: (ToMjd day) => day -> Dayw
+mjdDayw day = let (_, _, d) = Tim.toWeekDate $ toMjd day
+              in toEnum d
+
+-- | Interval of weekday to next weekday.
+--
+--   >>> daywDiff Wednesday Saturday
+--   3
+--
+--   >>> daywDiff Saturday Wednesday
+--   4
+--
+daywDiff :: Dayw -> Dayw -> Int
+daywDiff from to
+    | from > to  = fromEnum to - fromEnum from + 7
+    | otherwise  = fromEnum to - fromEnum from
+
+
 -- ---------------------------------  Date
 
 -- | Year type.
@@ -85,12 +145,12 @@ type Day = Int
 
 -- | Decomposed date.
 data DateParts
-    = DateMjd  Mjd                 -- ^ MJD date
-    | DateYmd  Year Month Day      -- ^ Monthly date
-    | DateYwd  Year Week Day       -- ^ Weekly date
-    | DateYd   Year Day            -- ^ Yearly date
-    | DateEom  Year Month          -- ^ End of month
-    | DateYmnd Year Month Int Day  -- ^ /N/\'th day of week in a month
+    = DateMjd  Mjd                  -- ^ MJD date
+    | DateYmd  Year Month Day       -- ^ Monthly date
+    | DateYwd  Year Week Dayw       -- ^ Weekly date
+    | DateYd   Year Day             -- ^ Yearly date
+    | DateEom  Year Month           -- ^ End of month
+    | DateYmnd Year Month Int Dayw  -- ^ /N/\'th day of week in a month
       deriving (Show, Eq, Ord)
 
 -- | Monthly date parts.
@@ -98,7 +158,7 @@ dateYmd :: Year -> Month -> Day -> DateParts
 dateYmd = DateYmd
 
 -- | Weekly date parts.
-dateYwd :: Year -> Week -> Day -> DateParts
+dateYwd :: Year -> Week -> Dayw -> DateParts
 dateYwd = DateYwd
 
 -- | Yearly date parts.
@@ -111,23 +171,24 @@ dateEom = DateEom
 
 -- | /N/\'th day of week in a month
 --
---   >>> toMjdClip (dateYmnd 2013 4 3 4)
+--   >>> toMjdClip $ dateYmnd 2013 4 3 Thursday
 --   2013-04-18
 --
-dateYmnd :: Year -> Month -> Int -> Day -> DateParts
+dateYmnd :: Year -> Month -> Int -> Dayw -> DateParts
 dateYmnd = DateYmnd
 
 instance ToMjdClip DateParts where
     toMjdClip (DateMjd mjd)       = mjd
     toMjdClip (DateYmd  y m d)    = Tim.fromGregorian   y m d
-    toMjdClip (DateYwd  y w d)    = Tim.fromWeekDate    y w d
+    toMjdClip (DateYwd  y w d)    = Tim.fromWeekDate    y w (fromEnum d)
     toMjdClip (DateYd   y d)      = Tim.fromOrdinalDate y d
     toMjdClip (DateEom  y m)      = Tim.fromGregorian   y m 31
     toMjdClip (DateYmnd y m n d)  = toMjdClip $ monthlyYmnd y m n d
 
     toMjdAb (DateMjd   mjd)      = Right mjd
     toMjdAb (DateYmd   y m d)    = abMjd (Msg.notMonthlyDate y m d) $ Tim.fromGregorianValid   y m d
-    toMjdAb (DateYwd   y w d)    = abMjd (Msg.notWeeklyDate  y w d) $ Tim.fromWeekDateValid    y w d
+    toMjdAb (DateYwd   y w d)    = let d' = fromEnum d
+                                   in abMjd (Msg.notWeeklyDate y w d') $ Tim.fromWeekDateValid y w d'
     toMjdAb (DateYd    y d)      = abMjd (Msg.notYearlyDate  y d)   $ Tim.fromOrdinalDateValid y d
     toMjdAb d@(DateEom _ _)      = Right $ toMjdClip d
     toMjdAb (DateYmnd  y m n d)  = toMjdAb $ monthlyYmnd y m n d
@@ -136,28 +197,13 @@ abMjd :: B.Ab Mjd -> Maybe Mjd -> B.Ab Mjd
 abMjd _ (Just mjd) = Right mjd
 abMjd a (Nothing)  = a
 
-monthlyYmnd :: Year -> Month -> Int -> Day -> DateParts
-monthlyYmnd y m n d = let diff = diffDayW (bomDayW y m) d
+monthlyYmnd :: Year -> Month -> Int -> Dayw -> DateParts
+monthlyYmnd y m n d = let diff = daywDiff (bomDayw y m) d
                       in DateYmd y m (diff + 1 + 7 * (n - 1))
 
 -- | Day of week of the beginning of month.
-bomDayW :: Year -> Month -> Day
-bomDayW y m = d where
-    mjd = Tim.fromGregorian y m 1
-    (_, _, d) = Tim.toWeekDate mjd
-
--- | Interval of weekday to next weekday.
---
---   >>> diffDayW (fromEnum Wednesday) (fromEnum Saturday)
---   3
---
---   >>> diffDayW (fromEnum Saturday) (fromEnum Wednesday)
---   4
---
-diffDayW :: Day -> Day -> Int
-diffDayW from to
-    | from > to  = to + 7 - from
-    | otherwise  = to - from
+bomDayw :: Year -> Month -> Dayw
+bomDayw y m = mjdDayw $ Tim.fromGregorian y m 1
 
 
 -- ---------------------------------  Clock
