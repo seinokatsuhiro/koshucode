@@ -115,10 +115,7 @@ data TermPicker c = TermPicker
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
 termPicker left right = termPickerBody (li, ri) (ln, rn) where
     (ln, rn) = getTermNamesUnique2 left right
-    (li, ri) = doubleIndex ln rn $ B.snipShare ln rn
-
-doubleIndex :: (Ord a) => [a] -> [a] -> [a] -> Dbl [Int]
-doubleIndex ln rn xn = (B.snipIndex xn ln, B.snipIndex xn rn)
+    (li, ri) = B.selectIndexBoth ln rn
 
 -- | Double of something.
 type Dbl a = (a, a)
@@ -129,10 +126,10 @@ getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 
 termPickerBody :: Dbl [Int] -> Dbl [S.TermName] -> TermPicker a
 termPickerBody (li, ri) (ln, rn) = ss where
-    lside      = B.snipOff  li
-    lshare     = B.snipFrom li
-    rshare     = B.snipFrom ri
-    rside      = B.snipOff  ri
+    lside      = B.selectOthers li
+    lshare     = B.selectElems  li
+    rshare     = B.selectElems  ri
+    rside      = B.selectOthers ri
     rfor       = B.snipForward  ri
     rback      = B.snipBackward ri
     rsplit xs  = (rshare xs, rside xs)

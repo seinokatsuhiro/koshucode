@@ -84,7 +84,7 @@ unionUp xs ys = (xs List.\\ ys) ++ ys
 --   >>> keepMember "abcdefg" "cba"
 --   "cba"
 --
-{-# DEPRECATED keepMember "Use 'snipShare' instead." #-}
+{-# DEPRECATED keepMember "Use 'selectShare' instead." #-}
 keepMember :: (Ord a) => [a] -> [a] -> [a]
 keepMember xs = filter (`Set.member` Set.fromList xs)
 
@@ -98,7 +98,7 @@ keepMember xs = filter (`Set.member` Set.fromList xs)
 --   >>> omitMember "abcdefg" "cba"
 --   ""
 --
-{-# DEPRECATED omitMember "Use 'snipRight' instead." #-}
+{-# DEPRECATED omitMember "Use 'selectRight' instead." #-}
 omitMember :: (Ord a) => [a] -> [a] -> [a]
 omitMember xs = filter (`Set.notMember` Set.fromList xs)
 

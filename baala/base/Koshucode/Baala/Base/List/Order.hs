@@ -63,9 +63,9 @@ sortByNameOrder :: (Ord a, Eq n) => [OrderCap n] -> [n] -> [[a]] -> [([OrderCap 
 sortByNameOrder ords ns xs = sortBy ords2 xs2 where
     ords2  = map cap   ords
     ns2    = map uncap ords
-    p      = ns2 `B.snipIndex` ns
+    p      = ns2 `B.selectIndex` ns
     xs2    = map f xs
-    f x    = (B.snipFrom p x, x)
+    f x    = (B.selectElems p x, x)
 
 sortBy :: (Ord a, Ord b) => [OrderCapping a] -> [([a], b)] -> [([OrderCap a], b)]
 sortBy ords = B.sort . B.mapFstTo (caps ords)

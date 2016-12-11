@@ -59,7 +59,7 @@ relkitCheckTermHas  :: [S.TermName] -> C.RelkitFlow c
 relkitCheckTermBut  :: [S.TermName] -> C.RelkitFlow c
 relkitCheckTermJust = checkTerm "Just" (\ns he1 -> D.headFrom ns `D.headEquiv` he1)
 relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> D.headFrom ns `D.isSubhead` he1)
-relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` D.getTermNames he1)
+relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.selectShare` D.getTermNames he1)
 
 checkTerm :: String -> ([S.TermName] -> D.Head -> Bool) -> [S.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing

@@ -96,7 +96,7 @@ relkitMemberCheck :: (Eq c, D.CSet c, D.CList c)
   => Int -> Int -> C.RelkitFlow c
 relkitMemberCheck xi xsi he1' = Right kit2 where
     kit2 = C.relkit he1' $ C.RelkitTest kitf2
-    kitf2 cs = let [xc, xsc] = [xi, xsi] `B.snipFrom` cs
+    kitf2 cs = let [xc, xsc] = [xi, xsi] `B.selectElems` cs
                in xc `D.isMember` xsc
 
 relkitMemberExpand :: (Ord c, D.CSet c, D.CList c, D.CText c)
@@ -105,7 +105,7 @@ relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
     he2      = D.headCons x he1
     kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
-    kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
+    kitf2 cs = let [xsc] = [xsi] `B.selectElems` cs
                in case xsc of
                     _ | D.isSet  xsc -> map (: cs) $ D.gSet xsc
                     _ | D.isList xsc -> map (: cs) $ B.unique $ D.gList xsc
@@ -140,7 +140,7 @@ relkitIndexElem from (i, x, xs) he1'@(Just he1) = kit2 where
     [ii, xi, xsi] = headIndex he1 [i, x, xs]
 
 headIndex :: D.Head -> [S.TermName] -> [Int]
-headIndex he ns = ns `B.snipIndexFull` D.getTermNames he
+headIndex he ns = ns `B.selectIndexFull` D.getTermNames he
 
 relkitIndexElemExpand :: forall c. (Ord c, D.CContent c)
   => Int -> S.TermName -> S.TermName -> Int -> C.RelkitFlow c
@@ -148,7 +148,7 @@ relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
 relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = D.headAppend [i, x] he1
     kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
-    kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
+    kitf2 cs = let [xsc] = [xsi] `B.selectElems` cs
                in case xsc of
                     _ | D.isSet  xsc -> indexElem cs $ B.sort $ D.gSet xsc
                     _ | D.isList xsc -> indexElem cs $ D.gList xsc
@@ -191,8 +191,8 @@ relkitUnroll (t, c, from) (Just he1) = kit2 where
          | otherwise                 = Msg.unkTerm (t : c : from) he1
     [ti, ci] = headIndex he1 [t, c]
     fromi    = headIndex he1 from
-    he2      = D.headAppend [t, c] $ D.headMap (B.snipOff fromi) he1
-    kitf2 cs = let (fromc, cs') = fromi `B.snipBoth` cs
+    he2      = D.headAppend [t, c] $ D.headMap (B.selectOthers fromi) he1
+    kitf2 cs = let (fromc, cs') = fromi `B.selectBoth` cs
                    cons (term, cont) = D.pTerm term : cont : cs'
                in cons <$> zip from fromc
 
@@ -237,7 +237,7 @@ relkitElemBy f (coll, to) (Just he1) = kit2 where
     [colli]  = headIndex he1 [coll]
     toi      = headIndex he1 to
     he2      = D.headAppend to he1
-    kitf2 cs = let [collc] = [colli] `B.snipFrom` cs
+    kitf2 cs = let [collc] = [colli] `B.selectElems` cs
                in f D.empty (length to) (list collc) ++ cs
     list c | D.isSet  c   = D.gSetSort c
            | D.isList c   = D.gList c
@@ -269,7 +269,7 @@ relkitUncollect (coll, to) (Just he1) = kit2 where
     icoll    = headIndex he1 [coll]
     ito      = headIndex he1 to
     he2      = D.headAppend to he1
-    kitf2 cs = let [xsc]    = icoll `B.snipFrom` cs
+    kitf2 cs = let [xsc]    = icoll `B.selectElems` cs
                    char     = D.pText . B.list1
                    ys << xs = appendCount D.empty (length to) xs ys
                in case () of
