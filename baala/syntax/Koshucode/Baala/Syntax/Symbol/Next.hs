@@ -65,13 +65,14 @@ nextSpace = loop 0 where
 --   Right (" ghi","abc\"def")
 --
 nextQQ :: AbNext String
-nextQQ = loop "" where
-    loop w (c:cs) | isQQ c        = qq w cs
-                  | otherwise     = loop (c:w) cs
+nextQQ cs0 = loop (0 :: Int) cs0 where
+    loop n (c:cs) | isQQ c        = qq n cs
+                  | otherwise     = loop (n + 1) cs
     loop _ _                      = Msg.quotNotEnd
 
-    qq w (c:cs)   | isQQ c        = loop (c:w) cs
-    qq w cs                       = Right (cs, reverse w)
+    qq n (c:cs)   | isQQ c        = do (cs', s') <- nextQQ cs
+                                       Right (cs', take (n + 1) cs0 ++ s')
+    qq n cs                       = Right (cs, take n cs0)
 
 
 -- --------------------------------------------  Symbol
@@ -110,12 +111,12 @@ nextQQ = loop "" where
 -- >            ................ Unknown
 
 data Symbol
-    = SymbolCommon    String           -- ^ General-plain-numeric symbol
-    | SymbolGeneral   String           -- ^ General symbol
-    | SymbolPlain     String           -- ^ Plain symbol
-    | SymbolNumeric   String           -- ^ Numeric symbol
-    | SymbolShort     String String    -- ^ Short symbol (Plain @"."@ Plain)
-    | SymbolUnknown   String           -- ^ Unknown symbol
+    = SymbolCommon    String         -- ^ __1.__ General-plain-numeric symbol
+    | SymbolGeneral   String         -- ^ __2.__ General symbol
+    | SymbolPlain     String         -- ^ __3.__ Plain symbol
+    | SymbolNumeric   String         -- ^ __4.__ Numeric symbol
+    | SymbolShort     String String  -- ^ __5.__ Short symbol (Plain @"."@ Plain)
+    | SymbolUnknown   String         -- ^ __6.__ Unknown symbol
       deriving (Show, Eq, Ord)
 
 
