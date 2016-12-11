@@ -3,12 +3,7 @@
 -- | Clip token text.
 
 module Koshucode.Baala.Syntax.Token.Clip
-  ( -- * Type
-    TokenScan, TokenScanMap,
-    TokenNip, TokenNipW, TokenNipLW,
-    TokenNipResult, TokenNipWResult, TokenNipLWResult,
-
-    -- * Utility
+  ( -- * Char test
     isSymbol,
     isSpace,
     isQQ,
@@ -16,9 +11,14 @@ module Koshucode.Baala.Syntax.Token.Clip
     isJudge,
     isClock,
 
-    -- * Nipper
+    -- * Type
+    TokenScan, TokenScanMap,
+    ClipResult, ClipResultC, ClipResultCL,
+    ClipToken, ClipTokenC, ClipTokenCL,
+
+    -- * Clip
     -- ** Updater
-    nipUpdate, nipUpdateW, nipUpdateLW,
+    clipUpdate, clipUpdateC, clipUpdateCL,
     -- ** Textual
     nipSpace,
     nipQ, nipQQ,
@@ -43,34 +43,7 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 import qualified Koshucode.Baala.Syntax.Token.Message   as Msg
 
 
--- --------------------------------------------  Type
-
--- | Code roll for token.
-type TokenScan = B.CodeScan String S.Token
-
--- | Read single token.
-type TokenScanMap = O.Map TokenScan
-
--- | Nip result.
-type TokenNipResult = (S.InputText, S.Token)
-
--- | Nip result with word table.
-type TokenNipWResult = (B.WordCache, S.InputText, S.Token)
-
--- | Nip result with word table.
-type TokenNipLWResult = (B.WordCache, S.InputText, [S.Token])
-
--- | Nip off a next token.
-type TokenNip = B.CodePos -> S.InputText -> TokenNipResult
-
--- | Nip off a next token with word table.
-type TokenNipW = B.CodePos -> B.WordCache -> S.InputText -> TokenNipWResult
-
--- | Nip off a next token with word table.
-type TokenNipLW = B.CodePos -> B.WordCache -> S.InputText -> TokenNipLWResult
-
-
--- --------------------------------------------  Utility
+-- ============================================  Char test
 
 -- | Test character is symbolic.
 isSymbol :: O.Test Char
@@ -96,28 +69,56 @@ isJudge = ( `elem` "-=" )  -- Punctuation | Symbol
 isClock :: O.Test Char
 isClock c = Ch.isDigit c || c `elem` ".:'+-"
 
--- --------------------------------------------  Nipper
 
--- | Update token scanner by nipper result.
-nipUpdate :: TokenScan -> TokenNipResult -> TokenScan
-nipUpdate r (cs, tok) = B.codeUpdate cs tok r
+-- ============================================  Type
 
--- | Update token scanner by nipper result with word table.
-nipUpdateW :: TokenScan -> TokenNipWResult -> TokenScan
-nipUpdateW r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
+-- | Code scanner for token list.
+type TokenScan = B.CodeScan String S.Token
 
--- | Update token scanner by nipper result with word table.
-nipUpdateLW :: TokenScan -> TokenNipLWResult -> TokenScan
-nipUpdateLW r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
+-- | Read single token.
+type TokenScanMap = O.Map TokenScan
 
--- ----------------------  Textual
+-- | Clip single-token result.
+type ClipResult = (S.InputText, S.Token)
+
+-- | Clip single-token result with word cache.
+type ClipResultC = (B.WordCache, S.InputText, S.Token)
+
+-- | Clip multiple-tokens result with word cache.
+type ClipResultCL = (B.WordCache, S.InputText, [S.Token])
+
+-- | Clip a next token.
+type ClipToken = B.CodePos -> S.InputText -> ClipResult
+
+-- | Clip a next token with word cache.
+type ClipTokenC = B.CodePos -> B.WordCache -> S.InputText -> ClipResultC
+
+-- | Clip a next token with word cache.
+type ClipTokenCL = B.CodePos -> B.WordCache -> S.InputText -> ClipResultCL
+
+
+-- ============================================  Clip
+
+-- | Update token scanner by clip result.
+clipUpdate :: TokenScan -> ClipResult -> TokenScan
+clipUpdate r (cs, tok) = B.codeUpdate cs tok r
+
+-- | Update token scanner by clip result with word cache.
+clipUpdateC :: TokenScan -> ClipResultC -> TokenScan
+clipUpdateC r (wtab, cs, tok) = B.codeUpdateWords wtab cs tok r
+
+-- | Update token scanner by clip result with word cache.
+clipUpdateCL :: TokenScan -> ClipResultCL -> TokenScan
+clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
+
+-- ---------------------------------  Textual
 
 -- | Nip off space token.
 --
 --   >>> nipSpace B.def "  foo bar baz"
 --   ("foo bar baz", TSpace <I0-L0-C0> 3)
 --
-nipSpace :: TokenNip
+nipSpace :: ClipToken
 nipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
@@ -127,7 +128,7 @@ nipSpace cp cs =
 --   >>> nipQ B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --
-nipQ :: TokenNipW
+nipQ :: ClipTokenC
 nipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken S.TextQ w cp wtab cs'
@@ -138,21 +139,21 @@ nipQ cp wtab cs =
 --   >>> nipQQ B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-nipQQ :: TokenNipW
+nipQQ :: ClipTokenC
 nipQQ cp wtab cs =
     case S.nextQQ cs of
       Left a         -> (wtab, [], S.TUnknown cp cs a)
       Right (cs', w) -> case O.cacheGet wtab w of
                           (wtab', w') -> (wtab', cs', S.TText cp S.TextQQ w')
 
--- ----------------------  Identifier
+-- ---------------------------------  Identifier
 
 -- | Nip off symbolic token.
 --
 --   >>> nipSymbol B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --
-nipSymbol :: TokenNipW
+nipSymbol :: ClipTokenC
 nipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
@@ -164,7 +165,7 @@ nipSymbol cp wtab cs =
          S.SymbolUnknown   w  -> (wtab, [], S.unknownToken cp cs $ Msg.forbiddenInput w)
 
 -- | Create symbolic token.
-symbolToken :: S.TextForm -> String -> TokenNipW
+symbolToken :: S.TextForm -> String -> ClipTokenC
 symbolToken f w cp wtab cs =
     case O.cacheGet wtab w of
       (wtab', w') -> (wtab', cs, S.TText cp f w')
@@ -174,20 +175,20 @@ symbolToken f w cp wtab cs =
 --   >>> nipSlot 1 B.def "foo bar baz"
 --   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --
-nipSlot :: Int -> TokenNip
+nipSlot :: Int -> ClipToken
 nipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
       Left a         -> ([], S.TUnknown cp cs a)
 
--- ----------------------  Term
+-- ---------------------------------  Term
 
 -- | Nip off a signed term name.
 --
 --   >>> nipTermSign "+/" B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "+/foo"])
 --
-nipTermSign :: String -> TokenNipLW
+nipTermSign :: String -> ClipTokenCL
 nipTermSign = nipTerm False
 
 -- | Nip off a term name.
@@ -195,7 +196,7 @@ nipTermSign = nipTerm False
 --   >>> nipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
-nipTermName :: TokenNipLW
+nipTermName :: ClipTokenCL
 nipTermName = nipTerm False "/"
 
 -- | Nip off a quoted term.
@@ -203,11 +204,11 @@ nipTermName = nipTerm False "/"
 --   >>> nipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
-nipTermQ :: TokenNipLW
+nipTermQ :: ClipTokenCL
 nipTermQ = nipTerm True "/"
 
 -- | Nip off a term name or a term path.
-nipTerm :: Bool -> String -> TokenNipLW
+nipTerm :: Bool -> String -> ClipTokenCL
 nipTerm q slash cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='     = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
@@ -234,11 +235,10 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
     termPath [t]       = [t]
     termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]
 
-
--- ----------------------  Symbol
+-- ---------------------------------  Symbol
 
 -- | Nip off token beginning with @"|"@.
-nipBar :: B.CodePos -> String -> String -> TokenNipResult
+nipBar :: B.CodePos -> String -> String -> ClipResult
 nipBar cp = bar where
     bar (c:cs) w
         | c == '|'                   = bar cs (c:w)

@@ -85,9 +85,9 @@ isCodePointDigit c = isPM c || Ch.isDigit c
 scanRel :: S.Scanner
 scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
-    nip          = S.nipUpdate   sc
-    nipw         = S.nipUpdateW  sc
-    niplw        = S.nipUpdateLW sc
+    nip          = S.clipUpdate   sc
+    nipw         = S.clipUpdateC  sc
+    niplw        = S.clipUpdateCL sc
     upd cs tok   = B.codeUpdate cs tok sc
     updEnd       = upd ""
     int cs tok   = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
@@ -138,7 +138,7 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
 
 -- | Nip off token beginning with @<@.
-nipAngle :: B.CodePos -> String -> String -> S.TokenNipResult
+nipAngle :: B.CodePos -> String -> String -> S.ClipResult
 nipAngle cp = angle where
     raw = S.TText cp S.TextRaw
 
@@ -165,14 +165,14 @@ nipAngle cp = angle where
                           Nothing  -> S.TText cp S.TextUnk s
 
 -- | Nip off token beginning with "@".
-nipAt :: B.CodePos -> String -> Int -> S.TokenNipResult
+nipAt :: B.CodePos -> String -> Int -> S.ClipResult
 nipAt cp = at where
     at (c:cs) n | c == '@'           = at cs $ n + 1
                 | c == '\''          = S.nipSlot 0 cp cs  -- positional
     at cs n                          = S.nipSlot n cp cs
 
 -- | Nip off local reference token, like @^/g@.
-nipHat :: B.CodePos -> String -> S.TokenNipResult
+nipHat :: B.CodePos -> String -> S.ClipResult
 nipHat cp = hat where
     hat ('/' : cs)                   = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
@@ -189,8 +189,8 @@ nipHat cp = hat where
 scanInterp :: S.Scanner
 scanInterp change sc@B.CodeScan { B.codeInputPt = cp
                                 , B.codeWords = wtab } = S.section change int sc where
-    nip         = S.nipUpdate   sc
-    niplw       = S.nipUpdateLW sc
+    nip         = S.clipUpdate   sc
+    niplw       = S.clipUpdateCL sc
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
     raw         = S.TText cp S.TextRaw

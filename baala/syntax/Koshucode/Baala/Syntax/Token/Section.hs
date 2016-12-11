@@ -46,8 +46,8 @@ selectSection change prev
                             , B.codeInput    = cs0
                             , B.codeWords    = ws
                             } = sec cs0 where
-    nip    = S.nipUpdate  sc
-    nipw   = S.nipUpdateW sc
+    nip    = S.clipUpdate  sc
+    nipw   = S.clipUpdateC sc
     out    = reverse $ S.sweepToken $ B.codeOutput sc
     --toPrev = B.codeChange prev
 
@@ -110,7 +110,7 @@ scanLineInClause :: S.TextForm -> Scanner
 scanLineInClause form change sc = section change text sc where
     text "" = sc
     text cs@(c:_)
-        | S.isSpace c = S.nipUpdate sc $ S.nipSpace (B.getCP sc) cs
+        | S.isSpace c = S.clipUpdate sc $ S.nipSpace (B.getCP sc) cs
         | B.isBol sc  = B.codeScanRestore sc
         | otherwise   = let tok = S.TText (B.getCP sc) form cs
                         in B.codeUpdate "" tok sc
@@ -122,12 +122,12 @@ scanTextAssert change sc = section change text sc where
     raw = S.TText cp S.TextRaw
     text "" = sc
     text ccs@(c:cs)
-        | S.isSpace c  = S.nipUpdate  sc $ S.nipSpace cp ccs
-        | c == '|'     = S.nipUpdate  sc $ S.nipBar cp cs [c]
+        | S.isSpace c  = S.clipUpdate  sc $ S.nipSpace cp ccs
+        | c == '|'     = S.clipUpdate  sc $ S.nipBar cp cs [c]
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
-                           $ B.codeScanSave $ S.nipUpdate sc (cs, raw [c])
+                           $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
         | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
                            (ws', _, P.TRaw "") ->
-                               S.nipUpdateW sc (ws', cs, raw [c])
-                           nip -> S.nipUpdateW sc nip
+                               S.clipUpdateC sc (ws', cs, raw [c])
+                           nip -> S.clipUpdateC sc nip
 
