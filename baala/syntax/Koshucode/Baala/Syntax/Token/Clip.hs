@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Token nipper.
+-- | Clip token text.
 
-module Koshucode.Baala.Syntax.Token.Nipper
+module Koshucode.Baala.Syntax.Token.Clip
   ( -- * Type
     TokenScan, TokenScanMap,
     TokenNip, TokenNipW, TokenNipLW,

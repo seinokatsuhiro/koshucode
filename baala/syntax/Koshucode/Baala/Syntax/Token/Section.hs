@@ -19,7 +19,7 @@ module Koshucode.Baala.Syntax.Token.Section
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
-import qualified Koshucode.Baala.Syntax.Token.Nipper    as S
+import qualified Koshucode.Baala.Syntax.Token.Clip      as S
 import qualified Koshucode.Baala.Syntax.Token.Token     as S
 import qualified Koshucode.Baala.Syntax.Token.Utility   as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern   as P
