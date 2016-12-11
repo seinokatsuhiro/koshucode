@@ -9,14 +9,16 @@ module Koshucode.Baala.Base.List.Select
     -- * Index
     selectIndex, selectIndexFull, selectIndexBoth,
   
-    -- * Picking elements
+    -- * Selection
     selectElems, selectOthers, selectBoth,
+
+    -- * Trisection
     selectShare, selectLeft, selectRight,
 
-    -- * Reorder elements
-    snipForward, snipBackward, 
-    snipForward2, snipBackward2,
-    snipOrder,
+    -- * Permutaion
+    permuteForward, permuteBackward, 
+    permuteForward2, permuteBackward2,
+    permuteOrder,
   ) where
 
 import qualified Data.List                           as List
@@ -63,7 +65,7 @@ selectIndexBoth xs1 xs2 =
     in (selectIndex sh xs1, selectIndex sh xs2)
 
 
--- --------------------------------------------  Picking elements
+-- --------------------------------------------  Selection
 
 -- | Pick up indexed elements.
 --
@@ -110,6 +112,9 @@ selectOthers ps xs = loop 0 xs where
 selectBoth :: [Int] -> [a] -> ([a], [a])
 selectBoth ps xs = (selectElems ps xs, selectOthers ps xs)
 
+
+-- --------------------------------------------  Trisection
+
 -- | Take shared elements.
 --
 --   >>> "abcd" `selectShare` "cbefg"
@@ -138,40 +143,40 @@ selectRight :: (Ord a) => O.Bin [a]
 selectRight xs = filter (`Set.notMember` Set.fromList xs)
 
 
--- --------------------------------------------  Reorder elements
+-- --------------------------------------------  Permutation
 
 -- | Move indexed elements to the front.
 --
---   >>> selectIndex "cd" "abcdefg" `snipForward` "ABCDEFG"
+--   >>> selectIndex "cd" "abcdefg" `permuteForward` "ABCDEFG"
 --   "CDABEFG"
 --
-snipForward :: Select a
-snipForward ps xs = case selectBoth ps xs of
-                      (snip, rest) -> snip ++ rest
+permuteForward :: Select a
+permuteForward ps xs = case selectBoth ps xs of
+                         (select, others) -> select ++ others
 
 -- | Move indexed elements to the rear.
 --
---   >>> selectIndex "cd" "abcdefg" `snipBackward` "ABCDEFG"
+--   >>> selectIndex "cd" "abcdefg" `permuteBackward` "ABCDEFG"
 --   "ABEFGCD"
 --
-snipBackward :: Select a
-snipBackward ps xs = case selectBoth ps xs of
-                       (snip, rest) -> rest ++ snip
+permuteBackward :: Select a
+permuteBackward ps xs = case selectBoth ps xs of
+                          (select, others) -> others ++ select
 
 -- | Double forward.
-snipForward2 :: Select2 a b
-snipForward2 = (snipForward, snipForward)
+permuteForward2 :: Select2 a b
+permuteForward2 = (permuteForward, permuteForward)
 
 -- | Double backward.
-snipBackward2 :: Select2 a b
-snipBackward2 = (snipBackward, snipBackward)
+permuteBackward2 :: Select2 a b
+permuteBackward2 = (permuteBackward, permuteBackward)
 
 -- | Reorder elements.
 --
---   >>> snipOrder "bca" "abc" "ABC"
+--   >>> permuteOrder "bca" "abc" "ABC"
 --   "BCA"
 --
-snipOrder :: (Eq a) => [a] -> [a] -> O.Map [c]
-snipOrder to from
+permuteOrder :: (Eq a) => [a] -> [a] -> O.Map [c]
+permuteOrder to from
     | to == from = id
     | otherwise  = selectElems $ selectIndex to from

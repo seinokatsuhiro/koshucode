@@ -160,9 +160,9 @@ relkitClockAlter _ Nothing = Right C.relkitNothing
 relkitClockAlter (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 where
       ns1       = D.getTermNames he1
       ind       = [n] `B.selectIndex` ns1
-      pick      = B.selectElems ind
-      cut       = B.selectOthers ind
-      fore      = B.snipForward ind
+      pick      = B.selectElems    ind
+      cut       = B.selectOthers   ind
+      fore      = B.permuteForward ind
       he2       = D.headMap fore he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do let run    = D.coxRunCox cops he1 cs1

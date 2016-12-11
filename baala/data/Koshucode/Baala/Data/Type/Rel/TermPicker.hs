@@ -126,12 +126,12 @@ getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 
 termPickerBody :: Dbl [Int] -> Dbl [S.TermName] -> TermPicker a
 termPickerBody (li, ri) (ln, rn) = ss where
-    lside      = B.selectOthers li
-    lshare     = B.selectElems  li
-    rshare     = B.selectElems  ri
-    rside      = B.selectOthers ri
-    rfor       = B.snipForward  ri
-    rback      = B.snipBackward ri
+    lside      = B.selectOthers    li
+    lshare     = B.selectElems     li
+    rshare     = B.selectElems     ri
+    rside      = B.selectOthers    ri
+    rfor       = B.permuteForward  ri
+    rback      = B.permuteBackward ri
     rsplit xs  = (rshare xs, rside xs)
     rassoc xs  = (rshare xs, xs)
 
