@@ -197,59 +197,83 @@ isCharN'  c  = isCharGn' c || isCharN  c
 -- ---------------------- Next symbol
 
 -- | Get next symbol.
+--
+--   >>> nextSymbol "foo bar"
+--   (" bar", SymbolPlain "foo")
+--
+--   >>> nextSymbol "0.50"
+--   ("", SymbolNumeric "0.50")
+--
+--   >>> nextSymbol "= /a"
+--   (" /a", SymbolGeneral "=")
+--
 nextSymbol :: Next Symbol
-nextSymbol = symbolGpn "" where
-
-    done w cs k           = (cs, k $ reverse w)
+nextSymbol cs0 = symbolGpn (0 :: Int) cs0 where
+    done n cs k           = (cs, k $ take n cs0)
 
     -- General and Plain and Numeric
-    symbolGpn w (c:cs)
-        | isCharGpn c     = symbolGpn (c:w) cs
-        | isCharGp  c     = symbolGp  (c:w) cs
-        | isCharGn  c     = symbolGn  (c:w) cs
-        | isCharG   c     = symbolG   (c:w) cs
-        | isCharN   c     = symbolN   (c:w) cs
-        | isSymbolChar  c     = symbolUnk (c:w) cs
-    symbolGpn w cs        = done w cs SymbolCommon
+    symbolGpn n (c:cs)
+        | isCharGpn c     = symbolGpn n' cs
+        | isCharGp  c     = symbolGp  n' cs
+        | isCharGn  c     = symbolGn  n' cs
+        | isCharG   c     = symbolG   n' cs
+        | isCharN   c     = symbolN   n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    symbolGpn n cs        = done n cs SymbolCommon
 
     -- General and Plain
-    symbolGp w (c:cs)
-        | c == '.'        = short (reverse w) "" cs
-        | isCharGp' c     = symbolGp  (c:w) cs
-        | isCharG   c     = symbolG   (c:w) cs
-        | isSymbolChar  c     = symbolUnk (c:w) cs
-    symbolGp w cs         = done w cs SymbolPlain
-
-    -- Plain "." Plain
-    short pre w (c:cs)
-        | isCharGp' c     = short pre (c:w) cs
-        | isSymbolChar  c     = symbolUnk (c:w) cs
-    short pre w cs        = done w cs $ SymbolShort pre
+    symbolGp n (c:cs)
+        | c == '.'        = shortBody (take n cs0) cs
+        | isCharGp' c     = symbolGp  n' cs
+        | isCharG   c     = symbolG   n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    symbolGp n cs         = done n cs SymbolPlain
 
     -- General and Numeric
-    symbolGn w (c:cs)
-        | isCharGn' c     = symbolGn  (c:w) cs
-        | isCharG   c     = symbolG   (c:w) cs
-        | isCharN   c     = symbolN   (c:w) cs
-        | isSymbolChar  c     = symbolUnk (c:w) cs
-    symbolGn w cs         = done w cs SymbolNumeric
+    symbolGn n (c:cs)
+        | isCharGn' c     = symbolGn  n' cs
+        | isCharG   c     = symbolG   n' cs
+        | isCharN   c     = symbolN   n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    symbolGn n cs         = done n cs SymbolNumeric
 
     -- General
-    symbolG w (c:cs)
-        | isCharG' c      = symbolG   (c:w) cs
-        | isSymbolChar c      = symbolUnk (c:w) cs
-    symbolG w cs          = done w cs SymbolGeneral
+    symbolG n (c:cs)
+        | isCharG' c      = symbolG   n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    symbolG n cs          = done n cs SymbolGeneral
 
     -- Numeric
-    symbolN w (c:cs)
-        | isCharN' c      = symbolN   (c:w) cs
-        | isSymbolChar c      = symbolUnk (c:w) cs
-    symbolN w cs          = done w cs SymbolNumeric
+    symbolN n (c:cs)
+        | isCharN' c      = symbolN   n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    symbolN n cs          = done n cs SymbolNumeric
 
     -- Unknown symbol
-    symbolUnk w (c:cs)
-        | isSymbolChar c      = symbolUnk (c:w) cs
-    symbolUnk w cs        = done w cs SymbolUnknown
+    symbolUnk n (c:cs)
+        | isSymbolChar c  = symbolUnk (n + 1) cs
+    symbolUnk n cs        = done n cs SymbolUnknown
+
+shortBody :: String -> Next Symbol
+shortBody pre cs0 = short (0 :: Int) cs0 where
+    done n cs k           = (cs, k $ take n cs0)
+
+    -- Plain "." Plain
+    short n (c:cs)
+        | isCharGp' c     = short n' cs
+        | isSymbolChar c  = symbolUnk n' cs
+        where n' = n + 1
+    short n cs            = done n cs $ SymbolShort pre
+
+    -- Unknown symbol
+    symbolUnk n (c:cs)
+        | isSymbolChar c  = symbolUnk (n + 1) cs
+    symbolUnk n cs        = done n cs SymbolUnknown
 
 -- | Get next plain symbol.
 nextSymbolPlain :: AbNext String
