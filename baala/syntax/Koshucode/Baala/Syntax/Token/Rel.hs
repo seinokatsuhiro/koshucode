@@ -82,9 +82,9 @@ isCodePointDigit c = isPM c || Ch.isDigit c
 scanRel :: S.Scanner
 scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' where
 
-    nip          = S.clipUpdate   sc
-    nipw         = S.clipUpdateC  sc
-    niplw        = S.clipUpdateCL sc
+    clip         = S.clipUpdate   sc
+    clipw        = S.clipUpdateC  sc
+    clipcl       = S.clipUpdateCL sc
     upd cs tok   = B.codeUpdate cs tok sc
     updEnd       = upd ""
     int cs tok   = B.codeChange (scanInterp change) $ B.codeScanSave $ upd cs tok
@@ -95,61 +95,61 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
     sc' = S.section change (uncons3 '\0' dispatch) sc
 
     dispatch n a b c bs cs ds
-        | S.isSpace a            = nip             $ S.nipSpace    cp bs
-        | S.isTerm a             = niplw           $ S.nipTermName cp wtab bs
-        | isPM a && S.isTerm b   = niplw           $ S.nipTermSign [a,b] cp wtab cs
-        | S.isQQ a               = nipw            $ S.nipQQ       cp wtab bs
-        | isQ a && S.isTerm b    = niplw           $ S.nipTermQ    cp wtab cs
-        | isQ a                  = nipw            $ S.nipQ        cp wtab bs
+        | S.isSpace a            = clip    $ S.clipSpace    cp bs
+        | S.isTerm a             = clipcl  $ S.clipTermName cp wtab bs
+        | isPM a && S.isTerm b   = clipcl  $ S.clipTermSign [a,b] cp wtab cs
+        | S.isQQ a               = clipw   $ S.clipQQ       cp wtab bs
+        | isQ a && S.isTerm b    = clipcl  $ S.clipTermQ    cp wtab cs
+        | isQ a                  = clipw   $ S.clipQ        cp wtab bs
 
         | a == '(' && c == ')' && b `elem` "+-/=#"
-                                 = upd ds          $ raw             [a,b,c]
-        | a == '{' && b == '|'   = int cs          $ S.TOpen      cp [a,b]
-        | isOpen a && isGrip b   = upd cs          $ S.TOpen      cp [a,b]
-        | isGrip a && isClose b  = upd cs          $ S.TClose     cp [a,b]
-        | isOpen a               = upd bs          $ S.TOpen      cp [a]
-        | isClose a              = upd bs          $ S.TClose     cp [a]
+                                 = upd ds  $ raw             [a,b,c]
+        | a == '{' && b == '|'   = int cs  $ S.TOpen      cp [a,b]
+        | isOpen a && isGrip b   = upd cs  $ S.TOpen      cp [a,b]
+        | isGrip a && isClose b  = upd cs  $ S.TClose     cp [a,b]
+        | isOpen a               = upd bs  $ S.TOpen      cp [a]
+        | isClose a              = upd bs  $ S.TClose     cp [a]
 
         | a == '*'               = aster bs [a]
-        | a == '<'               = nip $ nipAngle cp bs
-        | a == '@'               = nip $ nipAt    cp bs 1
-        | a == '|'               = nip $ S.nipBar cp bs
-        | a == '^'               = nip $ nipHat   cp bs
-        | a == '#' && b == '!'   = updEnd          $ S.TComment   cp bs
+        | a == '<'               = clip    $ clipAngle cp bs
+        | a == '@'               = clip    $ clipAt    cp bs 1
+        | a == '|'               = clip    $ S.clipBar cp bs
+        | a == '^'               = clip    $ clipHat   cp bs
+        | a == '#' && b == '!'   = updEnd  $ S.TComment   cp bs
         | a == '-' && b == '*' && c == '-'
-                                 = updEnd          $ S.TComment   cp bs
+                                 = updEnd  $ S.TComment   cp bs
 
-        | isSingle a             = upd bs          $ raw [a]
-        | S.isSymbol a           = nipw            $ S.nipSymbol cp wtab $ a : bs
+        | isSingle a             = upd bs  $ raw [a]
+        | S.isSymbol a           = clipw   $ S.clipSymbol cp wtab $ a : bs
         | n == 0                 = sc
-        | otherwise              = upd []          $ S.unknownToken cp cs
-                                                   $ Msg.forbiddenInput $ S.angleQuote [a]
+        | otherwise              = upd []  $ S.unknownToken cp cs
+                                           $ Msg.forbiddenInput $ S.angleQuote [a]
 
     aster :: String -> String -> S.TokenScan
     aster (c:cs) w
-        | w == "****"         = upd (c:cs)      $ raw w
-        | c == '*'            = aster cs (c:w)
+        | w == "****"            = upd (c:cs) $ raw w
+        | c == '*'               = aster cs (c:w)
     aster cs w
-        | w == "**"           = updEnd          $ S.TComment cp cs
-        | w == "***"          = updEnd          $ S.TComment cp cs
-        | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
+        | w == "**"              = updEnd  $ S.TComment cp cs
+        | w == "***"             = updEnd  $ S.TComment cp cs
+        | otherwise              = clipw   $ S.clipSymbol cp wtab $ w ++ cs
 
--- | Nip off token beginning with @'<'@.
+-- | Clip token beginning with @'<'@.
 --
---   >>> nipAngle B.def "crlf> ..."
+--   >>> clipAngle B.def "crlf> ..."
 --   (" ...", TText /0.0.0/ TextKey "\r\n")
 --
---   >>> nipAngle B.def "> 0"
+--   >>> clipAngle B.def "> 0"
 --   (" 0", TText /0.0.0/ TextRaw "<>")
 --
---   >>> nipAngle B.def "<< 0"
+--   >>> clipAngle B.def "<< 0"
 --   (" 0",TText /0.0.0/ TextRaw "<<<")
 --
---   >>> nipAngle B.def "U+4B> ..."
+--   >>> clipAngle B.def "U+4B> ..."
 --   (" ...", TText /0.0.0/ TextKey "K")
 --
-nipAngle :: B.CodePos -> String -> S.ClipResult
-nipAngle cp cs0 = angle (0 :: Int) cs0 where
+clipAngle :: B.CodePos -> String -> S.ClipResult
+clipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
     text n = take n cs0
 
@@ -183,16 +183,16 @@ nipAngle cp cs0 = angle (0 :: Int) cs0 where
                           Just ns  -> S.TText cp S.TextKey (toEnum <$> ns)
                           Nothing  -> S.TText cp S.TextUnk s
 
--- | Nip off token beginning with "@".
-nipAt :: B.CodePos -> String -> Int -> S.ClipResult
-nipAt cp = at where
+-- | Clip token beginning with "@".
+clipAt :: B.CodePos -> String -> Int -> S.ClipResult
+clipAt cp = at where
     at (c:cs) n | c == '@'           = at cs $ n + 1
-                | c == '\''          = S.nipSlot 0 cp cs  -- positional
-    at cs n                          = S.nipSlot n cp cs
+                | c == '\''          = S.clipSlot 0 cp cs  -- positional
+    at cs n                          = S.clipSlot n cp cs
 
--- | Nip off local reference token, like @^/g@.
-nipHat :: B.CodePos -> String -> S.ClipResult
-nipHat cp = hat where
+-- | Clip local reference token, like @^/g@.
+clipHat :: B.CodePos -> String -> S.ClipResult
+clipHat cp = hat where
     hat ('/' : cs)                   = localToken cs (S.LocalNest . S.toTermName)
     hat cs@(c : _) | S.isSymbol c    = localToken cs S.LocalSymbol
     hat cs                           = ([], S.unknownToken cp cs $ Msg.adlib "local")
@@ -208,14 +208,14 @@ nipHat cp = hat where
 scanInterp :: S.Scanner
 scanInterp change sc@B.CodeScan { B.codeInputPt = cp
                                 , B.codeWords = wtab } = S.section change int sc where
-    nip         = S.clipUpdate   sc
-    niplw       = S.clipUpdateCL sc
+    clip        = S.clipUpdate   sc
+    clipcl      = S.clipUpdateCL sc
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
 
     int ""                     = sc
-    int (c:cs) | S.isSpace c   = nip   $ S.nipSpace    cp cs
-               | S.isTerm c    = niplw $ S.nipTermName cp wtab cs
+    int (c:cs) | S.isSpace c   = clip   $ S.clipSpace    cp cs
+               | S.isTerm c    = clipcl $ S.clipTermName cp wtab cs
                | otherwise     = word (c:cs)
 
     word cs0 = loop (0 :: Int) cs0 where

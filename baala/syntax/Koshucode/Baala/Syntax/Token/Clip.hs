@@ -20,18 +20,18 @@ module Koshucode.Baala.Syntax.Token.Clip
     -- ** Updater
     clipUpdate, clipUpdateC, clipUpdateCL,
     -- ** Textual
-    nipSpace,
-    nipQ, nipQQ,
+    clipSpace,
+    clipQ, clipQQ,
     -- ** Identifier
-    nipSymbol,
+    clipSymbol,
     --symbolToken,
-    nipSlot,
+    clipSlot,
     -- ** Term name
-    nipTermSign,
-    nipTermName,
-    nipTermQ,
+    clipTermSign,
+    clipTermName,
+    clipTermQ,
     -- ** Symbol
-    nipBar,
+    clipBar,
   ) where
 
 import qualified Data.Char                              as Ch
@@ -113,34 +113,34 @@ clipUpdateCL r (wtab, cs, toks) = B.codeUpdateListWords wtab cs toks r
 
 -- ---------------------------------  Textual
 
--- | Nip off space token.
+-- | Clip space token.
 --
---   >>> nipSpace B.def "  foo bar baz"
---   ("foo bar baz", TSpace <I0-L0-C0> 3)
+--   >>> clipSpace B.def "  foo bar baz"
+--   ("foo bar baz", TSpace /0.0.0/ 3)
 --
-nipSpace :: ClipToken
-nipSpace cp cs =
+clipSpace :: ClipToken
+clipSpace cp cs =
     let (cs', n) = S.nextSpace cs
     in (cs', S.TSpace cp $ n + 1)
 
--- | Nip off a single-quoted text.
+-- | Clip single-quoted text.
 --
---   >>> nipQ B.def O.emptyWordCache "foo bar baz"
+--   >>> clipQ B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --
-nipQ :: ClipTokenC
-nipQ cp wtab cs =
+clipQ :: ClipTokenC
+clipQ cp wtab cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> symbolToken S.TextQ w cp wtab cs'
       Left a         -> (wtab, [], S.TUnknown cp cs a)
 
--- | Nip off a double-quoted text.
+-- | Clip double-quoted text.
 --
---   >>> nipQQ B.def O.emptyWordCache "foo\" bar baz"
+--   >>> clipQQ B.def O.emptyWordCache "foo\" bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --
-nipQQ :: ClipTokenC
-nipQQ cp wtab cs =
+clipQQ :: ClipTokenC
+clipQQ cp wtab cs =
     case S.nextQQ cs of
       Left a         -> (wtab, [], S.TUnknown cp cs a)
       Right (cs', w) -> case O.cacheGet wtab w of
@@ -148,13 +148,13 @@ nipQQ cp wtab cs =
 
 -- ---------------------------------  Identifier
 
--- | Nip off symbolic token.
+-- | Clip symbolic token.
 --
---   >>> nipSymbol B.def O.emptyWordCache "foo bar baz"
+--   >>> clipSymbol B.def O.emptyWordCache "foo bar baz"
 --   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --
-nipSymbol :: ClipTokenC
-nipSymbol cp wtab cs =
+clipSymbol :: ClipTokenC
+clipSymbol cp wtab cs =
     let (cs', sym) = S.nextSymbol cs
     in case sym of
          S.SymbolShort pre w  -> (wtab, cs', S.TShort cp pre w)
@@ -170,46 +170,46 @@ symbolToken f w cp wtab cs =
     case O.cacheGet wtab w of
       (wtab', w') -> (wtab', cs, S.TText cp f w')
 
--- | Nip off a slot name, like @\@foo@.
+-- | Clip slot name, like @\@foo@.
 --
---   >>> nipSlot 1 B.def "foo bar baz"
+--   >>> clipSlot 1 B.def "foo bar baz"
 --   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --
-nipSlot :: Int -> ClipToken
-nipSlot n cp cs =
+clipSlot :: Int -> ClipToken
+clipSlot n cp cs =
     case S.nextSymbolPlain cs of
       Right (cs', w) -> (cs', S.TSlot cp n w)
       Left a         -> ([], S.TUnknown cp cs a)
 
 -- ---------------------------------  Term
 
--- | Nip off a signed term name.
+-- | Clip signed term name.
 --
---   >>> nipTermSign "+/" B.def Map.empty "foo bar baz"
+--   >>> clipTermSign "+/" B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "+/foo"])
 --
-nipTermSign :: String -> ClipTokenCL
-nipTermSign = nipTerm False
+clipTermSign :: String -> ClipTokenCL
+clipTermSign = clipTerm False
 
--- | Nip off a term name.
+-- | Clip term name.
 --
---   >>> nipTermName B.def Map.empty "foo bar baz"
+--   >>> clipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm <I0-L0-C0> "/foo"])
 --
-nipTermName :: ClipTokenCL
-nipTermName = nipTerm False "/"
+clipTermName :: ClipTokenCL
+clipTermName = clipTerm False "/"
 
--- | Nip off a quoted term.
+-- | Clip quoted term.
 --
---   >>> nipTermQ B.def Map.empty "foo bar baz"
+--   >>> clipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText <I0-L0-C0> TextTerm "foo"])
 --
-nipTermQ :: ClipTokenCL
-nipTermQ = nipTerm True "/"
+clipTermQ :: ClipTokenCL
+clipTermQ = clipTerm True "/"
 
--- | Nip off a term name or a term path.
-nipTerm :: Bool -> String -> ClipTokenCL
-nipTerm q slash cp wtab cs0 = word [] cs0 where
+-- | Clip term name or a term path.
+clipTerm :: Bool -> String -> ClipTokenCL
+clipTerm q slash cp wtab cs0 = word [] cs0 where
     word ns ccs@(c:cs)
         | c == '='     = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
         | isSymbol c   = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
@@ -237,19 +237,19 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
 
 -- ---------------------------------  Symbol
 
--- | Nip off token beginning with @"|"@.
+-- | Clip token beginning with @"|"@.
 --
---   >>> nipBar B.def "-- C"
+--   >>> clipBar B.def "-- C"
 --   (" C", TText /0.0.0/ TextBar "|--")
 --
---   >>> nipBar B.def "| ..."
+--   >>> clipBar B.def "| ..."
 --   ("...", TText /0.0.0/ TextRaw "||")
 --
---   >>> nipBar B.def "12:00| ..."
+--   >>> clipBar B.def "12:00| ..."
 --   (" ...", TText /0.0.0/ TextBar "|12:00|")
 --
-nipBar :: B.CodePos -> String -> ClipResult
-nipBar cp cs0 = bar (0 :: Int) cs0 where
+clipBar :: B.CodePos -> String -> ClipResult
+clipBar cp cs0 = bar (0 :: Int) cs0 where
     text n = '|' : take n cs0
     barToken n = S.TText cp S.TextBar $ text n
     rawToken n = S.TText cp S.TextRaw $ text n

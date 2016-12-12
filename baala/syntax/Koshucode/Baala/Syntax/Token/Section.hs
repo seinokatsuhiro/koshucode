@@ -46,16 +46,16 @@ selectSection change prev
                             , B.codeInput    = cs0
                             , B.codeWords    = ws
                             } = sec cs0 where
-    nip    = S.clipUpdate  sc
-    nipw   = S.clipUpdateC sc
+    clip   = S.clipUpdate  sc
+    clipw  = S.clipUpdateC sc
     out    = reverse $ S.sweepToken $ B.codeOutput sc
     --toPrev = B.codeChange prev
 
     sec ""               = dispatch out  -- end of line
     sec ('*' : '*' : _)  = dispatch out  -- end of effective text
     sec ccs@(c:cs)
-        | S.isSpace c    = nip  $ S.nipSpace  cp cs
-        | S.isSymbol c   = nipw $ S.nipSymbol cp ws ccs
+        | S.isSpace c    = clip  $ S.clipSpace  cp cs
+        | S.isSymbol c   = clipw $ S.clipSymbol cp ws ccs
         | otherwise      = sectionUnexp [] sc
 
     dispatch :: [S.Token] -> S.TokenScan
@@ -110,7 +110,7 @@ scanLineInClause :: S.TextForm -> Scanner
 scanLineInClause form change sc = section change text sc where
     text "" = sc
     text cs@(c:_)
-        | S.isSpace c = S.clipUpdate sc $ S.nipSpace (B.getCP sc) cs
+        | S.isSpace c = S.clipUpdate sc $ S.clipSpace (B.getCP sc) cs
         | B.isBol sc  = B.codeScanRestore sc
         | otherwise   = let tok = S.TText (B.getCP sc) form cs
                         in B.codeUpdate "" tok sc
@@ -122,12 +122,12 @@ scanTextAssert change sc = section change text sc where
     raw = S.TText cp S.TextRaw
     text "" = sc
     text ccs@(c:cs)
-        | S.isSpace c  = S.clipUpdate  sc $ S.nipSpace cp ccs
-        | c == '|'     = S.clipUpdate  sc $ S.nipBar cp cs
+        | S.isSpace c  = S.clipUpdate  sc $ S.clipSpace cp ccs
+        | c == '|'     = S.clipUpdate  sc $ S.clipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
                            $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
-        | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
+        | otherwise    = case S.clipSymbol cp (B.codeWords sc) ccs of
                            (ws', _, P.TRaw "") ->
                                S.clipUpdateC sc (ws', cs, raw [c])
-                           nip -> S.clipUpdateC sc nip
+                           sym -> S.clipUpdateC sc sym
 
