@@ -6,6 +6,8 @@
 module Koshucode.Baala.Overture.Misc
  ( IOPath, GetIOPath (..),
    OrElse (..),
+   uncons,
+   zero,
    ints,
    printList,
    truncateString,
@@ -77,6 +79,21 @@ instance OrElse (Either a b) where
     orElse a _         = a
 
 -- ---------------------------------
+
+-- | Head and tail of list.
+--   This is a list version of text 'Data.Text.uncons'.
+--
+--   >>> uncons "abcdefg"
+--   Just ('a', "bcdefg")
+--
+{-# INLINE uncons #-}
+uncons :: [a] -> Maybe (a, [a])
+uncons (x : xs)  = Just (x, xs)
+uncons []        = Nothing
+
+-- | 0 of type 'Int'.
+zero :: Int
+zero = 0
 
 -- | Inteeger list start with given integer.
 --
