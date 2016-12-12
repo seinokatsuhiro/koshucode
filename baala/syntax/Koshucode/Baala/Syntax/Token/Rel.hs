@@ -60,9 +60,6 @@ stringIntList = mapM O.stringInt . B.omit null . B.divide '-'
 stringHexIntList :: S.InputText -> Maybe [Int]
 stringHexIntList = mapM O.stringHexInt . B.omit null . B.divide '+'
 
-rv :: O.Map [a]
-rv = reverse
-
 -- Punctuations
 isOpen, isClose, isGrip, isSingle, isQ, isPM :: O.Test Char
 isOpen     = ( `elem` "([{"    )  -- Punctuation
@@ -114,9 +111,9 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | isClose a              = upd bs          $ S.TClose     cp [a]
 
         | a == '*'               = aster bs [a]
-        | a == '<'               = nip $ nipAngle cp bs [a]
+        | a == '<'               = nip $ nipAngle cp bs
         | a == '@'               = nip $ nipAt    cp bs 1
-        | a == '|'               = nip $ S.nipBar cp bs [a]
+        | a == '|'               = nip $ S.nipBar cp bs
         | a == '^'               = nip $ nipHat   cp bs
         | a == '#' && b == '!'   = updEnd          $ S.TComment   cp bs
         | a == '-' && b == '*' && c == '-'
@@ -137,28 +134,50 @@ scanRel change sc@B.CodeScan { B.codeInputPt = cp, B.codeWords = wtab } = sc' wh
         | w == "***"          = updEnd          $ S.TComment cp cs
         | otherwise           = nipw            $ S.nipSymbol cp wtab $ w ++ cs
 
--- | Nip off token beginning with @<@.
-nipAngle :: B.CodePos -> String -> String -> S.ClipResult
-nipAngle cp = angle where
+-- | Nip off token beginning with @'<'@.
+--
+--   >>> nipAngle B.def "crlf> ..."
+--   (" ...", TText /0.0.0/ TextKey "\r\n")
+--
+--   >>> nipAngle B.def "> 0"
+--   (" 0", TText /0.0.0/ TextRaw "<>")
+--
+--   >>> nipAngle B.def "<< 0"
+--   (" 0",TText /0.0.0/ TextRaw "<<<")
+--
+--   >>> nipAngle B.def "U+4B> ..."
+--   (" ...", TText /0.0.0/ TextKey "K")
+--
+nipAngle :: B.CodePos -> String -> S.ClipResult
+nipAngle cp cs0 = angle (0 :: Int) cs0 where
     raw = S.TText cp S.TextRaw
+    text n = take n cs0
 
-    angle (c:cs) w | c == '<'        = angle cs (c:w)
-    angle cs w     | w == "<"        = angleMid cs ""
-                   | otherwise       = (cs, raw w)
+    -- <...
+    angle :: Int -> String -> S.ClipResult
+    angle n (c:cs) | S.isSymbol c  = sym n (c:cs)
+    angle n cs                     = (cs, raw $ '<' : text n)
 
-    -- read keyword, like <crlf>
-    angleMid (c:cs) w
-        | c == '>'                   = (cs, angleToken $ rv w)
-        | S.isSymbol c               = angleMid cs (c:w)
-    angleMid cs w                    = (cs, raw $ '<' : rv w)
+    -- <symbol ...
+    sym :: Int -> String -> S.ClipResult
+    sym n (c:cs) | c == '>'      = close n cs
+                 | S.isSymbol c  = sym (n + 1) cs
+    sym n cs                     = (cs, raw $ '<' : text n) -- '<<'
 
-    angleToken ""                = raw "<>"
-    angleToken ('U' : '+' : s)   = fromCodePoint stringHexIntList s
-    angleToken ('c' : s) | isCodePoint s
-                                 = fromCodePoint stringIntList s
-    angleToken s                 = case lookup s S.angleTexts of
-                                     Just w   -> S.TText cp S.TextKey w
-                                     Nothing  -> S.TText cp S.TextUnk s
+    -- <symbol> ...
+    close :: Int -> String -> S.ClipResult
+    close n (c:cs) | c == '>'    = close (n + 1) cs
+    close n cs                   = (cs, key $ text n)
+
+    -- symbol in '<symbol>'
+    key :: String -> S.Token
+    key ('U' : '+' : s)      = fromCodePoint stringHexIntList s
+    key ('c' : s) | isCodePoint s
+                             = fromCodePoint stringIntList s -- obsolete
+    key ""                   = raw "<>"
+    key s                    = case lookup s S.angleTexts of
+                                 Just w   -> S.TText cp S.TextKey w
+                                 Nothing  -> S.TText cp S.TextUnk s
 
     fromCodePoint f s = case f s of
                           Just ns  -> S.TText cp S.TextKey (toEnum <$> ns)
@@ -193,18 +212,19 @@ scanInterp change sc@B.CodeScan { B.codeInputPt = cp
     niplw       = S.clipUpdateCL sc
     upd cs tok  = B.codeUpdate cs tok sc
     gen cs tok  = B.codeScanRestore $ upd cs tok
-    raw         = S.TText cp S.TextRaw
 
-    int ""                           = sc
-    int (c:cs)    | S.isSpace c      = nip         $ S.nipSpace    cp cs
-                  | S.isTerm c       = niplw       $ S.nipTermName cp wtab cs
-                  | otherwise        = word (c:cs) ""
+    int ""                     = sc
+    int (c:cs) | S.isSpace c   = nip   $ S.nipSpace    cp cs
+               | S.isTerm c    = niplw $ S.nipTermName cp wtab cs
+               | otherwise     = word (c:cs)
 
-    word cs@('|':'}':_) w            = gen cs      $ raw $ rv w
-    word (c:cs) w | S.isSpace c      = upd (c:cs)  $ raw $ rv w
-                  | S.isTerm c       = upd (c:cs)  $ raw $ rv w
-                  | otherwise        = word cs     $ c:w
-    word cs w                        = upd cs      $ raw $ rv w
+    word cs0 = loop (0 :: Int) cs0 where
+        raw n = S.TText cp S.TextRaw $ take n cs0
+        loop n cs@('|':'}':_)        = gen  cs      $ raw n
+        loop n (c:cs) | S.isSpace c  = upd  (c:cs)  $ raw n
+                      | S.isTerm c   = upd  (c:cs)  $ raw n
+                      | otherwise    = loop (n + 1) cs
+        loop n cs                    = upd  cs      $ raw n
 
 
 -- ------------------------------------------------------------------

@@ -238,24 +238,35 @@ nipTerm q slash cp wtab cs0 = word [] cs0 where
 -- ---------------------------------  Symbol
 
 -- | Nip off token beginning with @"|"@.
-nipBar :: B.CodePos -> String -> String -> ClipResult
-nipBar cp = bar where
-    bar (c:cs) w
-        | c == '|'                   = bar cs (c:w)
-        | w == "|" && isJudge c      = judge cs [c, '|']
-        | w == "|" && isSymbol c     = clock cs [c, '|']
-    bar cs w                         = let cs' = O.trimBegin cs
-                                       in (cs', S.TText cp S.TextRaw w)
+--
+--   >>> nipBar B.def "-- C"
+--   (" C", TText /0.0.0/ TextBar "|--")
+--
+--   >>> nipBar B.def "| ..."
+--   ("...", TText /0.0.0/ TextRaw "||")
+--
+--   >>> nipBar B.def "12:00| ..."
+--   (" ...", TText /0.0.0/ TextBar "|12:00|")
+--
+nipBar :: B.CodePos -> String -> ClipResult
+nipBar cp cs0 = bar (0 :: Int) cs0 where
+    text n = '|' : take n cs0
+    barToken n = S.TText cp S.TextBar $ text n
+    rawToken n = S.TText cp S.TextRaw $ text n
+
+    bar n (c:cs)
+        | c == '|'              = bar   (n + 1) cs
+        | n == 0 && isJudge c   = judge (n + 1) cs
+        | n == 0 && isSymbol c  = clock (n + 1) cs
+    bar n cs = (O.trimBegin cs, rawToken n)   -- '||'
 
     -- read judgement sign, like |--, |-x
-    judge (c:cs) w
-        | isJudge c || Ch.isAlpha c  = judge cs (c:w)
-        | isSymbol c                 = clock (c:cs) w
-    judge cs w                       = (cs, token w)
+    judge n (c:cs)
+        | isJudge c || Ch.isAlpha c  = judge (n + 1) cs
+        | isSymbol c                 = clock n (c:cs)
+    judge n cs                       = (cs, barToken n)
 
     -- read clock, like |03:30|
-    clock (c:cs) w | c == '|'        = (cs, token (c:w))
-                   | isClock c       = clock cs (c:w)
-    clock cs w                       = (cs, token w)
-
-    token w = S.TText cp S.TextBar $ reverse w
+    clock n (c:cs) | c == '|'        = (cs, barToken (n + 1))
+                   | isClock c       = clock (n + 1) cs
+    clock n cs                       = (cs, barToken n)

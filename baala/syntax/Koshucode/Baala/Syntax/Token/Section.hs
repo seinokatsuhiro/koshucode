@@ -123,7 +123,7 @@ scanTextAssert change sc = section change text sc where
     text "" = sc
     text ccs@(c:cs)
         | S.isSpace c  = S.clipUpdate  sc $ S.nipSpace cp ccs
-        | c == '|'     = S.clipUpdate  sc $ S.nipBar cp cs [c]
+        | c == '|'     = S.clipUpdate  sc $ S.nipBar cp cs
         | c == ':'     = B.codeChange (scanLineInClause S.TextRaw change)
                            $ B.codeScanSave $ S.clipUpdate sc (cs, raw [c])
         | otherwise    = case S.nipSymbol cp (B.codeWords sc) ccs of
