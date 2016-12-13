@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Next character sequence.
@@ -34,10 +35,9 @@ type Next a = InputText -> (InputText, a)
 -- | Split next character sequence from input text.
 type AbNext a = InputText -> B.Ab (InputText, a)
 
--- Punctuations
-isQQ, isSpace :: O.Test Char
-isQQ       = (== '"')
-isSpace    = Ch.isSpace
+-- | Test double punctuation character.
+isQQ :: O.Test Char
+isQQ = (== '"')
 
 -- | Get next spaces.
 --   Space character is decided by 'Ch.isSpace'.
@@ -50,8 +50,9 @@ isSpace    = Ch.isSpace
 --
 nextSpace :: Next Int
 nextSpace = loop 0 where
-    loop n (c:cs) | isSpace c   = loop (n + 1) cs
-    loop n cs                   = (cs, n)
+    loop n (O.uncons -> Just (c, cs))
+        | Ch.isSpace c   = loop (n + 1) cs
+    loop n cs            = (cs, n)
 
 -- | Get next double quoted text.
 --   A single double quote ends text.
@@ -65,14 +66,16 @@ nextSpace = loop 0 where
 --   Right (" ghi","abc\"def")
 --
 nextQQ :: AbNext String
-nextQQ cs0 = loop (0 :: Int) cs0 where
-    loop n (c:cs) | isQQ c        = qq n cs
-                  | otherwise     = loop (n + 1) cs
-    loop _ _                      = Msg.quotNotEnd
+nextQQ cs0 = loop O.zero cs0 where
+    loop n (O.uncons -> Just (c, cs))
+        | isQQ c      = qq n cs
+        | otherwise   = loop (n + 1) cs
+    loop _ _          = Msg.quotNotEnd
 
-    qq n (c:cs)   | isQQ c        = do (cs', s') <- nextQQ cs
-                                       Right (cs', take (n + 1) cs0 ++ s')
-    qq n cs                       = Right (cs, take n cs0)
+    qq n (O.uncons -> Just (c, cs))
+        | isQQ c      = do (cs', s') <- nextQQ cs
+                           Right (cs', take (n + 1) cs0 ++ s')
+    qq n cs           = Right (cs, take n cs0)
 
 
 -- --------------------------------------------  Symbol
