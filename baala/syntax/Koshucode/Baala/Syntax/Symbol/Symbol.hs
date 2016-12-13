@@ -31,19 +31,19 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 -- The char class @number'@ means Unicode number except for @0-9@.
 -- @G@ for general symbol, @P@ for plain, @N@ for numeric.
 --
--- >   Char class   Symbol class
--- >   ------------ -----------------
--- >   "0-9"        ( G ) ( P ) ( N )
--- >   "-"          ( G ) ( P ) ( N )
--- >   letter       ( G )   P
--- >   mark         ( G )   P
--- >   number'      ( G )   P
--- >   "_?"         ( G )   P
--- >   "+"          ( G )         N
--- >   "*=<>~"        G
--- >   ".#"                       N
+-- >   Char class   Symbol class        Symbol type
+-- >   ------------ ------------------- -----------------
+-- >   "0-9"        ( G ) ( P ) ( N )   SymbolCommon
+-- >   "-"          ( G ) ( P ) ( N )   SymbolCommon
+-- >   letter       ( G )   P           SymbolPlain
+-- >   mark         ( G )   P           SymbolPlain
+-- >   number'      ( G )   P           SymbolPlain
+-- >   "_?"         ( G )   P           SymbolPlain
+-- >   "+"          ( G )         N     SymbolNumeric
+-- >   "*=<>~"        G                 SymbolGeneral
+-- >   ".#"                       N     SymbolNumeric
 --
--- Partial order of symbol classes.
+-- Partial order between the symbol classes.
 --
 -- >                     ( GPN ) Common
 -- >                    /      |
@@ -58,11 +58,35 @@ import qualified Koshucode.Baala.Syntax.Symbol.Message  as Msg
 
 data Symbol
     = SymbolCommon    String         -- ^ __1.__ General-plain-numeric symbol
-    | SymbolGeneral   String         -- ^ __2.__ General symbol
-    | SymbolPlain     String         -- ^ __3.__ Plain symbol
-    | SymbolNumeric   String         -- ^ __4.__ Numeric symbol
+                                     --
+                                     --   >>> nextSymbol "1"
+                                     --   ("", SymbolCommon "1")
+
+    | SymbolPlain     String         -- ^ __2.__ Plain (include general) symbol
+                                     --
+                                     --   >>> nextSymbol "a"
+                                     --   ("", SymbolPlain "a")
+
+    | SymbolNumeric   String         -- ^ __3.__ Numeric (include general) symbol
+                                     --
+                                     --   >>> nextSymbol "+"
+                                     --   ("", SymbolNumeric "+")
+
+    | SymbolGeneral   String         -- ^ __4.__ General (not plain nor numeric) symbol
+                                     --
+                                     --   >>> nextSymbol "="
+                                     --   ("", SymbolGeneral "=")
+
     | SymbolShort     String String  -- ^ __5.__ Short symbol (Plain @"."@ Plain)
+                                     --
+                                     --   >>> nextSymbol "a.xxx"
+                                     --   ("", SymbolShort "a" "xxx")
+
     | SymbolUnknown   String         -- ^ __6.__ Unknown symbol
+                                     --
+                                     --   >>> nextSymbol "a+"
+                                     --   ("", SymbolUnknown "a+")
+
       deriving (Show, Eq, Ord)
 
 
@@ -154,11 +178,11 @@ isCharN'  c  = isCharGn' c || isCharN  c
 --   (" /a", SymbolGeneral "=")
 --
 nextSymbol :: S.Next Symbol
-nextSymbol cs0 = symbolGpn (0 :: Int) cs0 where
+nextSymbol cs0 = symbolGpn O.zero cs0 where
     done n cs k           = (cs, k $ take n cs0)
 
     -- General and Plain and Numeric
-    symbolGpn n (c:cs)
+    symbolGpn n (O.uncons -> Just (c, cs))
         | isCharGpn c     = symbolGpn n' cs
         | isCharGp  c     = symbolGp  n' cs
         | isCharGn  c     = symbolGn  n' cs
@@ -169,7 +193,7 @@ nextSymbol cs0 = symbolGpn (0 :: Int) cs0 where
     symbolGpn n cs        = done n cs SymbolCommon
 
     -- General and Plain
-    symbolGp n (c:cs)
+    symbolGp n (O.uncons -> Just (c, cs))
         | c == '.'        = shortBody (take n cs0) cs
         | isCharGp' c     = symbolGp  n' cs
         | isCharG   c     = symbolG   n' cs
@@ -178,7 +202,7 @@ nextSymbol cs0 = symbolGpn (0 :: Int) cs0 where
     symbolGp n cs         = done n cs SymbolPlain
 
     -- General and Numeric
-    symbolGn n (c:cs)
+    symbolGn n (O.uncons -> Just (c, cs))
         | isCharGn' c     = symbolGn  n' cs
         | isCharG   c     = symbolG   n' cs
         | isCharN   c     = symbolN   n' cs
@@ -187,41 +211,49 @@ nextSymbol cs0 = symbolGpn (0 :: Int) cs0 where
     symbolGn n cs         = done n cs SymbolNumeric
 
     -- General
-    symbolG n (c:cs)
+    symbolG n (O.uncons -> Just (c, cs))
         | isCharG' c      = symbolG   n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     symbolG n cs          = done n cs SymbolGeneral
 
     -- Numeric
-    symbolN n (c:cs)
+    symbolN n (O.uncons -> Just (c, cs))
         | isCharN' c      = symbolN   n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     symbolN n cs          = done n cs SymbolNumeric
 
     -- Unknown symbol
-    symbolUnk n (c:cs)
+    symbolUnk n (O.uncons -> Just (c, cs))
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 
 shortBody :: String -> S.Next Symbol
-shortBody pre cs0 = short (0 :: Int) cs0 where
+shortBody pre cs0 = short O.zero cs0 where
     done n cs k           = (cs, k $ take n cs0)
 
     -- Plain "." Plain
-    short n (c:cs)
+    short n (O.uncons -> Just (c, cs))
         | isCharGp' c     = short n' cs
         | isSymbolChar c  = symbolUnk n' cs
         where n' = n + 1
     short n cs            = done n cs $ SymbolShort pre
 
     -- Unknown symbol
-    symbolUnk n (c:cs)
+    symbolUnk n (O.uncons -> Just (c, cs))
         | isSymbolChar c  = symbolUnk (n + 1) cs
     symbolUnk n cs        = done n cs SymbolUnknown
 
--- | Get next plain symbol.
+-- | Get next plain symbol, i.e.,
+--   'SymbolCommon' or 'SymbolPlain'.
+--
+--   >>> nextSymbolPlain "foo bar"
+--   Right (" bar","foo")
+--
+--   >>> nextSymbolPlain "12.0"
+--   Left (AbortReason "Expect ordinary symbol" ...)
+--
 nextSymbolPlain :: S.AbNext String
 nextSymbolPlain cs =
     case nextSymbol cs of
