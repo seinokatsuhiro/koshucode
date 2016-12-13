@@ -20,7 +20,7 @@ import qualified Data.List                                as L
 import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax.Symbol.AngleText  as S
-import qualified Koshucode.Baala.Syntax.Symbol.Next       as S
+import qualified Koshucode.Baala.Syntax.Symbol.Symbol     as S
 
 
 -- ----------------------  Data type

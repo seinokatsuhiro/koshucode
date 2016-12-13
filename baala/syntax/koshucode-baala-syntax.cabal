@@ -66,6 +66,7 @@ library
         Koshucode.Baala.Syntax.Symbol.Message
         Koshucode.Baala.Syntax.Symbol.Next
         Koshucode.Baala.Syntax.Symbol.Short
+        Koshucode.Baala.Syntax.Symbol.Symbol
         Koshucode.Baala.Syntax.Symbol.Term
 
         Koshucode.Baala.Syntax.TTree
