@@ -7,11 +7,19 @@ module Koshucode.Baala.Cop.Type
     copsType,
 
     -- * Implementation
+    -- ** Type conversion
     copToDec,
 
+    -- ** Type test
+    -- *** Edge type
     copIsEmpty, copIsEnd,
+    -- *** Simple type
     copIsBool, copIsDec, copIsClock, copIsTime,
     copIsCode, copIsTerm, copIsText,
+    -- *** Complex type
+    copIsList, copIsSet,
+    copIsTie, copIsRel, copIsInterp,
+    copIsType,
   ) where
 
 import qualified Koshucode.Baala.Overture        as O
@@ -48,8 +56,16 @@ copsType =
     , D.CopCalc  (D.copNormal "code?")        copIsCode
     , D.CopCalc  (D.copNormal "term?")        copIsTerm
     , D.CopCalc  (D.copNormal "text?")        copIsText
+    , D.CopCalc  (D.copNormal "list?")        copIsList
+    , D.CopCalc  (D.copNormal "set?")         copIsSet
+    , D.CopCalc  (D.copNormal "tie?")         copIsTie
+    , D.CopCalc  (D.copNormal "rel?")         copIsRel
+    , D.CopCalc  (D.copNormal "interp?")      copIsInterp
+    , D.CopCalc  (D.copNormal "type?")        copIsType
     , D.CopCalc  (D.copNormal "end?")         copIsEnd
     ]
+
+-- ============================================  Conversion
 
 -- | Convert to decimal.
 --
@@ -87,7 +103,7 @@ copToSet = op where
                  | otherwise   = Right c
     op xs = Msg.badArg xs
 
--- ---------------------------------  Type test
+-- ============================================  Type test
 
 copTestType :: (D.CBool c) => O.Test c -> D.CopCalc c
 copTestType test [Right c] | test c  = D.putTrue
@@ -191,4 +207,70 @@ copIsTerm = copTestType D.isTerm
 --
 copIsText :: (D.CBool c, D.CText c) => D.CopCalc c
 copIsText = copTestType D.isText
+
+-- | Test content is a list.
+--
+--   >>> list? [ 0 | 1 ]
+--   (+)
+--
+--   >>> list? "a"
+--   (-)
+--
+copIsList :: (D.CBool c, D.CList c) => D.CopCalc c
+copIsList = copTestType D.isList
+
+-- | Test content is a set.
+--
+--   >>> set? { 0 | 1 }
+--   (+)
+--
+--   >>> set? "a"
+--   (-)
+--
+copIsSet :: (D.CBool c, D.CSet c) => D.CopCalc c
+copIsSet = copTestType D.isSet
+
+-- | Test content is a tie.
+--
+--   >>> tie? {- /a 0 /b 1 -}
+--   (+)
+--
+--   >>> tie? "a"
+--   (-)
+--
+copIsTie :: (D.CBool c, D.CTie c) => D.CopCalc c
+copIsTie = copTestType D.isTie
+
+-- | Test content is a rel.
+--
+--   >>> rel? {= /a /b [ 0 | 1 ] =}
+--   (+)
+--
+--   >>> rel? "a"
+--   (-)
+--
+copIsRel :: (D.CBool c, D.CRel c) => D.CopCalc c
+copIsRel = copTestType D.isRel
+
+-- | Test content is a interp.
+--
+--   >>> interp? {| /x is equal to /y . |}
+--   (+)
+--
+--   >>> interp? "a"
+--   (-)
+--
+copIsInterp :: (D.CBool c, D.CInterp c) => D.CopCalc c
+copIsInterp = copTestType D.isInterp
+
+-- | Test content is a type.
+--
+--   >>> type? [- text -]
+--   (+)
+--
+--   >>> type? "a"
+--   (-)
+--
+copIsType :: (D.CBool c, D.CType c) => D.CopCalc c
+copIsType = copTestType D.isType
 
