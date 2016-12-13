@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Clip token text.
@@ -210,30 +211,31 @@ clipTermQ = clipTerm True "/"
 -- | Clip term name or a term path.
 clipTerm :: Bool -> String -> ClipTokenCL
 clipTerm q slash cp wtab cs0 = word [] cs0 where
-    word ns ccs@(c:cs)
-        | c == '='     = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
-        | isSymbol c   = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
-        | isQQ c       = call (S.nextQQ cs)           (\w -> term (w : ns))
-    word _ _           = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
-    call e f           = case e of
-                           Right (cs', w) -> f w cs'
-                           Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
+    word ns ccs@(O.uncons -> Just (c, cs))
+        | c == '='    = call (S.nextSymbolPlain cs)  (\w -> nterm ns w)
+        | isSymbol c  = call (S.nextSymbolPlain ccs) (\w -> term (w : ns))
+        | isQQ c      = call (S.nextQQ cs)           (\w -> term (w : ns))
+    word _ _          = (wtab, [], [S.unknownToken cp cs0 Msg.expOrdSym])
+    call e f          = case e of
+                          Right (cs', w) -> f w cs'
+                          Left a         -> (wtab, [], [S.TUnknown cp cs0 a])
 
-    nterm ns w cs'     = let w' = show (O.getIx cp) ++ ('=' : w)
-                         in term (w' : ns) cs'
+    nterm ns w cs'    = let w' = show (O.getIx cp) ++ ('=' : w)
+                        in term (w' : ns) cs'
 
-    term ns (c:cs) | isTerm c = word ns cs
+    term ns (O.uncons -> Just (c, cs))
+        | isTerm c    = word ns cs
     term [n] cs
-        | not q        = case O.cacheGet wtab $ slash ++ n of
-                           (wtab', n') -> (wtab', cs, [S.TTerm cp n'])
+        | not q       = case O.cacheGet wtab $ slash ++ n of
+                          (wtab', n') -> (wtab', cs, [S.TTerm cp n'])
     term ns cs
-        | q            = case ns of
-                           [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
-                           _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
-        | otherwise    = (wtab, cs, termPath (S.TTerm cp <$> ns))
+        | q           = case ns of
+                          [n] -> (wtab, cs, [S.TText cp S.TextTerm n])
+                          _   -> (wtab, cs, [S.unknownToken cp cs0 Msg.expOrdSym])
+        | otherwise   = (wtab, cs, termPath (S.TTerm cp <$> ns))
 
-    termPath [t]       = [t]
-    termPath ts        = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]
+    termPath [t]      = [t]
+    termPath ts       = [S.TClose cp "-)"] ++ ts ++ [S.TOpen cp "(-"]
 
 -- ---------------------------------  Symbol
 
@@ -254,19 +256,20 @@ clipBar cp cs0 = bar (0 :: Int) cs0 where
     barToken n = S.TText cp S.TextBar $ text n
     rawToken n = S.TText cp S.TextRaw $ text n
 
-    bar n (c:cs)
+    bar n (O.uncons -> Just (c, cs))
         | c == '|'              = bar   (n + 1) cs
         | n == 0 && isJudge c   = judge (n + 1) cs
         | n == 0 && isSymbol c  = clock (n + 1) cs
     bar n cs = (O.trimBegin cs, rawToken n)   -- '||'
 
-    -- read judgement sign, like |--, |-x
-    judge n (c:cs)
+    -- judgement sign, like |--, |-x
+    judge n (O.uncons -> Just (c, cs))
         | isJudge c || Ch.isAlpha c  = judge (n + 1) cs
         | isSymbol c                 = clock n (c:cs)
     judge n cs                       = (cs, barToken n)
 
-    -- read clock, like |03:30|
-    clock n (c:cs) | c == '|'        = (cs, barToken (n + 1))
-                   | isClock c       = clock (n + 1) cs
+    -- clock, like |03:30|
+    clock n (O.uncons -> Just (c, cs))
+        | c == '|'                   = (cs, barToken (n + 1))
+        | isClock c                  = clock (n + 1) cs
     clock n cs                       = (cs, barToken n)
