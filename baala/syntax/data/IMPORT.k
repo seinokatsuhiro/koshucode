@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    140 judges
+**    145 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Koshucode.Baala.Overture"
@@ -89,7 +89,12 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Syntax.Symbol.AngleText"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Syntax.Symbol.Next"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Short"       /import "Koshucode.Baala.Syntax.Symbol.Symbol"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Symbol"      /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Symbol"      /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Symbol"      /import "Koshucode.Baala.Syntax.Symbol.Next"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Symbol"      /import "Koshucode.Baala.Syntax.Symbol.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.String"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.Term"        /import "Data.Text"
@@ -99,28 +104,29 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.AngleText"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Next"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Short"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol"             /import "Koshucode.Baala.Syntax.Symbol.Term"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Symbol"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Nipper"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Clip"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Rel"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Section"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Syntax.Token.Utility"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clause"       /import "Koshucode.Baala.Base.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Message"      /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Syntax.Symbol"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Syntax.Token.Token"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Syntax.Symbol.Message"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Clip"         /import "Koshucode.Baala.Syntax.Token.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Data.Char"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Syntax.Symbol"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Syntax.Token.Token"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Syntax.Symbol.Message"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Nipper"       /import "Koshucode.Baala.Syntax.Token.Message"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Message"      /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Pattern"      /import "Koshucode.Baala.Syntax.Token.Token"
 
@@ -128,7 +134,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Symbol"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Token.Nipper"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Token.Clip"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Syntax.Token.Section"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Rel"          /import "Koshucode.Baala.Base.Message"
@@ -136,7 +142,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Symbol"
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Nipper"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Clip"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Utility"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Token.Section"      /import "Koshucode.Baala.Syntax.Token.Pattern"

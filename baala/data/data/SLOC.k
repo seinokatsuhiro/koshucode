@@ -10,11 +10,11 @@ about /package 'data
 |-- DIR  /code 229  /comment 175  /dir "data/Koshucode/Baala/Data/Type"
 |-- DIR  /code 484  /comment 415  /dir "data/Koshucode/Baala/Data/Type/Decimal"
 |-- DIR  /code 203  /comment 149  /dir "data/Koshucode/Baala/Data/Type/Judge"
-|-- DIR  /code 335  /comment 413  /dir "data/Koshucode/Baala/Data/Type/Rel"
+|-- DIR  /code 333  /comment 412  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- DIR  /code 712  /comment 610  /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- DIR-TOTAL  /code 3802  /comment 3069
+|-- DIR-TOTAL  /code 3800  /comment 3068
 
 |-- FILE  /code 13   /comment 5    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 5    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -57,7 +57,7 @@ about /package 'data
 |-- FILE  /code 90   /comment 132  /file "Head.hs"        /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- FILE  /code 30   /comment 24   /file "Mono.hs"        /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- FILE  /code 72   /comment 76   /file "Rel.hs"         /dir "data/Koshucode/Baala/Data/Type/Rel"
-|-- FILE  /code 95   /comment 151  /file "TermPicker.hs"  /dir "data/Koshucode/Baala/Data/Type/Rel"
+|-- FILE  /code 93   /comment 150  /file "TermPicker.hs"  /dir "data/Koshucode/Baala/Data/Type/Rel"
 |-- FILE  /code 14   /comment 5    /file "Time.hs"        /dir "data/Koshucode/Baala/Data/Type"
 |-- FILE  /code 166  /comment 131  /file "Clock.hs"       /dir "data/Koshucode/Baala/Data/Type/Time"
 |-- FILE  /code 44   /comment 38   /file "ClockCalc.hs"   /dir "data/Koshucode/Baala/Data/Type/Time"
@@ -69,4 +69,4 @@ about /package 'data
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "data/Koshucode/Baala/Data/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "data/Koshucode/Baala/Data/Type/Type"
 
-|-- FILE-TOTAL  /code 3802  /comment 3069
+|-- FILE-TOTAL  /code 3800  /comment 3068

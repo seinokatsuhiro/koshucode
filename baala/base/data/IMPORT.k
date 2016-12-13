@@ -100,32 +100,27 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Assoc"           /import "Data.Maybe"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Assoc"           /import "Koshucode.Baala.Overture"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Dots"            /import "Data.Char"
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Dots"            /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Dots"            /import "Koshucode.Baala.Base.List.Split"
-
 |-- IMPORT  /module "Koshucode.Baala.Base.List.List"            /import "Koshucode.Baala.Overture"
 
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.List.Snip"
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.List.Select"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.Set"
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Set"             /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Set"             /import "Data.Set"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Set"             /import "Koshucode.Baala.Overture"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Snip"            /import "Data.List"
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Snip"            /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Base.List.Snip"            /import "Koshucode.Baala.Base.Prelude"
-
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Assoc"
-|-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Dots"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Order"
+|-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Select"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Set"
-|-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Snip"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Split"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Message"              /import "Koshucode.Baala.Base.Abort.Message"
@@ -198,6 +193,10 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "Koshucode.Baala.Overture"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Dots"            /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Dots"            /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Dots"            /import "Koshucode.Baala.Base.List"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.PPrint"          /import "Koshucode.Baala.Base.Prelude"
@@ -211,6 +210,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Dots"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.PPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Suffix"
