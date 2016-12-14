@@ -5,6 +5,7 @@
 module Koshucode.Baala.Data.Class.Singleton
   ( -- * Type
     CTypeOf (..),
+    GetContent,
     getContent,
   
     -- * Empty and End
@@ -34,13 +35,15 @@ class CTypeOf c where
     sameType :: O.Test2 c c
     sameType c1 c2 = typeOf c1 == typeOf c2
 
+-- | Get content in calculation.
+type GetContent b c = B.Ab c -> B.Ab b
+
 -- | Get content which may be aborted.
-getContent :: (CTypeOf c) => O.Test c -> (c -> b) -> B.Ab c -> B.Ab b
-getContent _ _    (Left a) = Left a
+getContent :: (CTypeOf c) => O.Test c -> (c -> b) -> GetContent b c
 getContent is get (Right c)
     | is c      = Right $ get c
-    | otherwise = let s = B.mixToFlatString $ B.mixEncode $ typeOf c
-                  in Msg.unmatchType s
+    | otherwise = Msg.unmatchType $ B.encode $ typeOf c
+getContent _ _ (Left a) = Left a
 
 
 -- --------------------------------------------  Empty and End

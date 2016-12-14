@@ -28,9 +28,9 @@ import qualified Koshucode.Baala.Data.Class.Singleton    as D
 import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 
--- --------------------------------------------  Simple contents
+-- ============================================  Simple contents
 
--- ----------------------  Bool
+-- ---------------------------------  Bool
 
 -- | True or false, affirmed or denied.
 class (D.CTypeOf c) => CBool c where
@@ -38,7 +38,7 @@ class (D.CTypeOf c) => CBool c where
     pBool       ::    Bool -> c
     gBool       ::       c -> Bool
 
-    getBool     ::  B.Ab c -> B.Ab Bool
+    getBool     ::  D.GetContent Bool c
     getBool     =   D.getContent isBool gBool
 
     putBool     ::    Bool -> B.Ab c
@@ -60,7 +60,7 @@ putTrue  = putBool True
 putFalse :: (CBool c) => B.Ab c
 putFalse = putBool False
 
--- ----------------------  Dec
+-- ---------------------------------  Dec
 
 -- | Decimal number.
 class (D.CTypeOf c) => CDec c where
@@ -68,7 +68,7 @@ class (D.CTypeOf c) => CDec c where
     gDec        ::           c -> D.Decimal
     pDec        ::   D.Decimal -> c
 
-    getDec      ::     B.Ab c -> B.Ab D.Decimal
+    getDec      ::     D.GetContent D.Decimal c
     getDec      =      D.getContent isDec gDec
 
     putDec      ::   D.Decimal -> B.Ab c
@@ -95,7 +95,7 @@ gRational :: (CDec c) => c -> Rational
 gRational = toRational . gDec
 
 -- | Get rational number from decimal content.
-getRational :: (B.MixEncode c, CDec c) => B.Ab c -> B.Ab Rational
+getRational :: (B.MixEncode c, CDec c) => D.GetContent Rational c
 getRational (Right c) | isDec c  = Right $ gRational c
 getRational (Right c)            = Msg.notDec c
 getRational (Left a)             = Left a
@@ -105,12 +105,12 @@ gIntegral :: (CDec c, Integral n) => c -> n
 gIntegral = truncate . gRational
 
 -- | Get truncated integer from decimal content.
-getIntegral :: (B.MixEncode c, CDec c, Integral n) => B.Ab c -> B.Ab n
+getIntegral :: (B.MixEncode c, CDec c, Integral n) => D.GetContent n c
 getIntegral (Right c) | isDec c  = Right $ gIntegral c
 getIntegral (Right c)            = Msg.notDec c
 getIntegral (Left a)             = Left a
 
--- ----------------------  Clock
+-- ---------------------------------  Clock
 
 -- | Distance between two points in timeline.
 class (D.CTypeOf c) => CClock c where
@@ -118,13 +118,13 @@ class (D.CTypeOf c) => CClock c where
     gClock       ::           c -> D.Clock
     pClock       ::     D.Clock -> c
 
-    getClock     ::      B.Ab c -> B.Ab D.Clock
+    getClock     ::      D.GetContent D.Clock c
     getClock     =       D.getContent isClock gClock
 
     putClock     ::     D.Clock -> B.Ab c
     putClock     =      Right . pClock
 
--- ----------------------  Time
+-- ---------------------------------  Time
 
 -- | Point in timeline.
 class (D.CTypeOf c) => CTime c where
@@ -132,13 +132,13 @@ class (D.CTypeOf c) => CTime c where
     gTime        ::           c -> D.Time
     pTime        ::      D.Time -> c
 
-    getTime      ::     B.Ab c -> B.Ab D.Time
+    getTime      ::     D.GetContent D.Time c
     getTime      =      D.getContent isTime gTime
 
     putTime      ::   D.Time -> B.Ab c
     putTime      =    Right . pTime
 
--- ----------------------  Code
+-- ---------------------------------  Code
 
 -- | Code.
 class (D.CTypeOf c) => CCode c where
@@ -146,13 +146,13 @@ class (D.CTypeOf c) => CCode c where
     gCode        ::           c -> String
     pCode        ::      String -> c
 
-    getCode      ::      B.Ab c -> B.Ab String
+    getCode      ::      D.GetContent String c
     getCode      =       D.getContent isCode gCode
 
     putCode      ::      String -> B.Ab c
     putCode      =       Right . pCode
 
--- ----------------------  Term
+-- ---------------------------------  Term
 
 -- | Term name.
 class (D.CTypeOf c) => CTerm c where
@@ -160,14 +160,14 @@ class (D.CTypeOf c) => CTerm c where
     gTerm        ::           c -> S.TermName
     pTerm        ::  S.TermName -> c
 
-    getTerm      ::      B.Ab c -> B.Ab S.TermName
+    getTerm      ::      D.GetContent S.TermName c
     getTerm      =       D.getContent isTerm gTerm
 
     putTerm      ::  S.TermName -> B.Ab c
     putTerm      =       Right . pTerm
 
 
--- ----------------------  Text
+-- ---------------------------------  Text
 
 -- | Double-quoted text content.
 class (D.CTypeOf c) => CText c where
@@ -175,7 +175,7 @@ class (D.CTypeOf c) => CText c where
     gText       :: c -> String
     pText       :: String -> c
 
-    getText     :: B.Ab c -> B.Ab String
+    getText     :: D.GetContent String c
     getText      = D.getContent isText gText
 
     putText     :: String -> B.Ab c
