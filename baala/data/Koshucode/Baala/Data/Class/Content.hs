@@ -8,9 +8,9 @@ module Koshucode.Baala.Data.Class.Content
   ) where
 
 import qualified Koshucode.Baala.Base                     as B
-import qualified Koshucode.Baala.Data.Class.Singleton     as D
-import qualified Koshucode.Baala.Data.Class.Simple        as D
 import qualified Koshucode.Baala.Data.Class.Complex       as D
+import qualified Koshucode.Baala.Data.Class.Edge          as D
+import qualified Koshucode.Baala.Data.Class.Simple        as D
 
 {-# DEPRECATED appendContent "Do not use it." #-}
 {-# DEPRECATED joinContent "Do not use it." #-}

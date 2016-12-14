@@ -1,15 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Singleton content type.
+-- | Edge content type.
 
-module Koshucode.Baala.Data.Class.Singleton
+module Koshucode.Baala.Data.Class.Edge
   ( -- * Type
     CTypeOf (..),
     GetContent,
     getContent,
   
-    -- * Empty and End
+    -- * Empty
     CEmpty (..), maybeEmpty, omitEmpty, contMaximum,
+    -- * End
     CEnd (..), contMinimum, 
   ) where
 
