@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Class.Simple
     CBool (..), true, false, putTrue, putFalse,
     -- ** Decimal
     CDec (..), pInt, pInteger, pIntegral, gRational, gIntegral,
+    getRational, getIntegral,
     -- ** Clock and time
     CClock (..),
     CTime (..),
@@ -93,9 +94,21 @@ pIntegral = pInteger . toInteger
 gRational :: (CDec c) => c -> Rational
 gRational = toRational . gDec
 
+-- | Get rational number from decimal content.
+getRational :: (B.MixEncode c, CDec c) => B.Ab c -> B.Ab Rational
+getRational (Right c) | isDec c  = Right $ gRational c
+getRational (Right c)            = Msg.notDec c
+getRational (Left a)             = Left a
+
 -- | Get truncated integer from decimal content.
 gIntegral :: (CDec c, Integral n) => c -> n
 gIntegral = truncate . gRational
+
+-- | Get truncated integer from decimal content.
+getIntegral :: (B.MixEncode c, CDec c, Integral n) => B.Ab c -> B.Ab n
+getIntegral (Right c) | isDec c  = Right $ gIntegral c
+getIntegral (Right c)            = Msg.notDec c
+getIntegral (Left a)             = Left a
 
 -- ----------------------  Clock
 

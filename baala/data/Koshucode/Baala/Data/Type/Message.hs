@@ -11,6 +11,7 @@ module Koshucode.Baala.Data.Type.Message
     tooLargeDigit,
     notNumber,
     abortEncodables,
+    encodableLines,
   ) where
 
 import qualified Koshucode.Baala.Overture   as O
@@ -61,6 +62,9 @@ notNumber = Left . B.abortLine "Can't read as number"
 
 -- | Abort reason with encodable values.
 abortEncodables :: (B.MixEncode c) => String -> [c] -> B.AbortReason
-abortEncodables msg cs = B.abortLines msg (zipWith f (O.ints 1) cs) where
+abortEncodables msg cs = B.abortLines msg $ encodableLines cs
+
+-- | Numbered lines of encodables.
+encodableLines :: (B.MixEncode c) => [c] -> [String]
+encodableLines = zipWith f (O.ints 1) where
     f i c = "#" ++ show i ++ " = " ++ B.encode c
-          
