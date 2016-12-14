@@ -98,7 +98,7 @@ instance Enum Dayw where
 
     toEnum 0 = Sunday
     toEnum 1 = Monday
-    toEnum 2 = Thursday
+    toEnum 2 = Tuesday
     toEnum 3 = Wednesday
     toEnum 4 = Thursday
     toEnum 5 = Friday

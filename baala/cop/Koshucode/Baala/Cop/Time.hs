@@ -12,6 +12,7 @@ module Koshucode.Baala.Cop.Time
     copMjd,
     copTime,
     copClock,
+    copDayw,
   ) where
 
 import qualified Koshucode.Baala.Overture     as O
@@ -33,6 +34,7 @@ copsTime =
     , D.CopCalc  (D.copNormal "weekly")     $ copDateForm D.weekly
     , D.CopCalc  (D.copNormal "monthly")    $ copDateForm D.monthly
     , D.CopCalc  (D.copNormal "yearly")     $ copDateForm D.yearly
+    , D.CopCalc  (D.copNormal "dayw")       $ copDayw
     ]
 
 -- | Add day\/week\/month\/year to time.
@@ -93,7 +95,7 @@ copTime = arg2 where
 --   >>> clock ( 0 )( 12 )( 45 )( 30 )
 --   |12:45:30|
 --
-copClock :: (D.CContent c) => [B.Ab c] -> B.Ab c
+copClock :: (D.CContent c) => D.CopCalc c
 copClock = arg1 where
     arg1       ((i -> Just d) : cs)  = arg2 d cs
     arg1       cs                    = Msg.badArg cs
@@ -114,3 +116,14 @@ i :: (D.CDec c, Integral n) => B.Ab c -> Maybe n
 i (Right c) | D.isDec c  = Just $ truncate $ toRational $ D.gDec c
 i _ = Nothing
 
+-- | Day of week.
+--
+--   >>> dayw 2013-04-18
+--   4
+--
+copDayw :: (D.CContent c) => D.CopCalc c
+copDayw [D.getTime -> Right t] = Right $ daywContent $ D.mjdDayw t
+copDayw cs = Msg.badArg cs
+
+daywContent :: (D.CDec c) => D.Dayw -> c
+daywContent = D.pInt . fromEnum
