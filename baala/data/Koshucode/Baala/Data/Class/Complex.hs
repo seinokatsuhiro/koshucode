@@ -25,7 +25,7 @@ module Koshucode.Baala.Data.Class.Complex
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Type                    as D
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class.Edge         as D
 import qualified Koshucode.Baala.Data.Class.Simple       as D
 
@@ -101,35 +101,35 @@ class (D.CTypeOf c) => CTie c where
 -- | Relation of terms.
 class (D.CTypeOf c) => CRel c where
     isRel       ::           c -> Bool
-    gRel        ::           c -> D.Rel c
-    pRel        ::     D.Rel c -> c
+    gRel        ::           c -> T.Rel c
+    pRel        ::     T.Rel c -> c
 
-    getRel      ::      D.GetContent (D.Rel c) c
+    getRel      ::      D.GetContent (T.Rel c) c
     getRel      =       D.getContent isRel gRel
 
-    putRel      ::     D.Rel c -> B.Ab c
+    putRel      ::     T.Rel c -> B.Ab c
     putRel      =      Right . pRel
 
 -- | The nullary full relation.
 dee :: (CRel c) => c
-dee = pRel D.reldee
+dee = pRel T.reldee
 
 -- | The nullary empty relation.
 dum :: (CRel c) => c
-dum = pRel D.reldum
+dum = pRel T.reldum
 
 -- ---------------------------------  Interp
 
 -- | Data intepretation.
 class (D.CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
-    gInterp     ::           c -> D.Interp
-    pInterp     ::    D.Interp -> c
+    gInterp     ::           c -> T.Interp
+    pInterp     ::    T.Interp -> c
 
-    getInterp   ::      D.GetContent D.Interp c
+    getInterp   ::      D.GetContent T.Interp c
     getInterp   =       D.getContent isInterp gInterp
 
-    putInterp   ::    D.Interp -> B.Ab c
+    putInterp   ::    T.Interp -> B.Ab c
     putInterp   =     Right . pInterp
 
 -- ---------------------------------  Type
@@ -137,12 +137,12 @@ class (D.CTypeOf c) => CInterp c where
 -- | Type of content.
 class (D.CTypeOf c) => CType c where
     isType      ::           c -> Bool
-    gType       ::           c -> D.Type
-    pType       ::      D.Type -> c
+    gType       ::           c -> T.Type
+    pType       ::      T.Type -> c
 
-    getType     ::      D.GetContent D.Type c
+    getType     ::      D.GetContent T.Type c
     getType     =       D.getContent isType gType
 
-    putType     ::      D.Type -> B.Ab c
+    putType     ::      T.Type -> B.Ab c
     putType     =       Right . pType
 

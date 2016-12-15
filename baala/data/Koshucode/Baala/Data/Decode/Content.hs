@@ -17,7 +17,7 @@ module Koshucode.Baala.Data.Decode.Content
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Type                    as D
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Numeric     as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
@@ -65,7 +65,7 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
     group []                 = Right D.empty
     group _                  = Msg.unkContent
 
-    putDecimal = D.putDec B.<.> D.decodeDecimal
+    putDecimal = D.putDec B.<.> T.decodeDecimal
 
 tokenContent :: (D.CContent c) => S.Token -> B.Ab c
 tokenContent (P.T f w)
@@ -129,14 +129,14 @@ treesTerms cons = mapM p B.<.> D.treesTerms1 where
 treesJudge ::
     (D.CContent c)
     => D.CacheT           -- ^ Term name cache
-    -> D.AssertType       -- ^ Assertion type
-    -> D.JudgeClass       -- ^ Judgement class
+    -> T.AssertType       -- ^ Assertion type
+    -> T.JudgeClass       -- ^ Judgement class
     -> [S.TTree]          -- ^ Trees of terms
-    -> B.Ab (D.CacheT, D.Judge c)   -- ^ Error or decoded judgement
+    -> B.Ab (D.CacheT, T.Judge c)   -- ^ Error or decoded judgement
 treesJudge cc q cl trees =
     do (cc', ts) <- D.treesTermsCached cc trees
        terms <- mapM term ts
-       Right (cc', D.assertAs q cl terms)
+       Right (cc', T.assertAs q cl terms)
     where
       term (n, ts) = do c <- treeContent $ S.ttreeGroup ts
                         Right (n, c)
@@ -153,14 +153,14 @@ treesJudge cc q cl trees =
 --        treesTermNames
 --
 --
-treesRel :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab (D.Rel c)
+treesRel :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab (T.Rel c)
 treesRel cons xs =
     do bo <- treeTuple cons n `mapM` xs'
-       Right $ D.Rel he $ B.unique bo
+       Right $ T.Rel he $ B.unique bo
     where
       (ns, xs')  = treesTermNames xs
       n          = length ns
-      he         = D.headFrom ns
+      he         = T.headFrom ns
 
 -- | Split term names.
 treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])

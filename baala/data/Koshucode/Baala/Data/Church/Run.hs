@@ -16,7 +16,7 @@ module Koshucode.Baala.Data.Church.Run
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
-import qualified Koshucode.Baala.Type                   as D
+import qualified Koshucode.Baala.Type                   as T
 import qualified Koshucode.Baala.Data.Class             as D
 import qualified Koshucode.Baala.Data.Decode            as D
 import qualified Koshucode.Baala.Data.Church.Build      as D
@@ -48,7 +48,7 @@ instance B.GetCodePos (Beta c) where
     getCPs (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
-beta :: (B.MixEncode c) => D.CopSet c -> D.Head -> D.Cox c -> B.Ab (Beta c)
+beta :: (B.MixEncode c) => D.CopSet c -> T.Head -> D.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = D.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
@@ -129,11 +129,11 @@ link copset deriv = li where
     normal (n, cop) = (S.BlankNormal n, cop)
 
 -- put term positions for actural heading
-position :: D.Head -> D.Cox c -> B.Ab (D.Cox c)
+position :: T.Head -> D.Cox c -> B.Ab (D.Cox c)
 position he = spos where
     spos e = Msg.abCoxPosition e $ pos e
     pos (D.CoxTerm cp ns _) =
-        let index = D.headIndex1 he ns
+        let index = T.headIndex1 he ns
         in if all (>= 0) index
            then Right $ D.CoxTerm cp ns index
            else Msg.unkTerm ns he  -- todo: term path
@@ -151,14 +151,14 @@ position he = spos where
 type RunList c = [c] -> B.Ab c
 
 -- | Calculate content expression with specific tuple.
-coxRunCox :: (D.CContent c) => D.CopSet c -> D.Head -> [c] -> D.Cox c -> B.Ab c
+coxRunCox :: (D.CContent c) => D.CopSet c -> T.Head -> [c] -> D.Cox c -> B.Ab c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
 coxRunPure :: (D.CContent c) => D.CopSet c -> D.Cox c -> B.Ab c
 coxRunPure cops cox = coxRunList cops mempty cox []
 
 -- | Calculate content expression with specific tuple.
-coxRunList :: (D.CContent c) => D.CopSet c -> D.Head -> D.Cox c -> RunList c
+coxRunList :: (D.CContent c) => D.CopSet c -> T.Head -> D.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 -- | Calculate content expression.
@@ -191,8 +191,8 @@ coxRun args = run 0 where
            then rel ps $ D.gRel c
            else Right c
 
-    rel :: [S.TermIndex] -> D.Rel c -> B.Ab c
-    rel ps (D.Rel _ args2) =
+    rel :: [S.TermIndex] -> T.Rel c -> B.Ab c
+    rel ps (T.Rel _ args2) =
         D.putList =<< mapM (term ps) args2
 
 (!!!) :: (B.MixEncode c) => [c] -> S.TermIndex -> c

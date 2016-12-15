@@ -11,7 +11,7 @@ module Koshucode.Baala.Data.Decode.Type
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Type                  as D
+import qualified Koshucode.Baala.Type                  as T
 import qualified Koshucode.Baala.Data.Decode.Term      as D
 import qualified Koshucode.Baala.Syntax.Pattern        as P
 import qualified Koshucode.Baala.Data.Decode.Message   as Msg
@@ -54,32 +54,32 @@ tokenString _ _  = Msg.nothing
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesInterp :: [S.TTree] -> B.Ab D.Interp
-treesInterp = Right . D.interp B.<.> mapM treeInterpWord
+treesInterp :: [S.TTree] -> B.Ab T.Interp
+treesInterp = Right . T.interp B.<.> mapM treeInterpWord
 
-treeInterpWord :: S.TTree -> B.Ab D.InterpWord
+treeInterpWord :: S.TTree -> B.Ab T.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
-      S.TText _ _ w   -> Right $ D.InterpText w
-      S.TTerm _ n     -> Right $ D.InterpTerm $ S.toTermName n
+      S.TText _ _ w   -> Right $ T.InterpText w
+      S.TTerm _ n     -> Right $ T.InterpTerm $ S.toTermName n
       _               -> Msg.nothing
 
 
 -- ----------------------  Type
 
 -- | Decode type content.
-treesType :: [S.TTree] -> B.Ab D.Type
+treesType :: [S.TTree] -> B.Ab T.Type
 treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x
-               xs2 ->  Right . D.TypeSum =<< mapM gen xs2
+               xs2 ->  Right . T.TypeSum =<< mapM gen xs2
 
     single [P.B _ xs]        = gen xs
     single (P.LText f n : xs)
         | f == S.TextRaw     = dispatch n xs
         | otherwise          = Msg.quoteType n
-    single []                = Right $ D.TypeSum []
+    single []                = Right $ T.TypeSum []
     single _                 = Msg.unkType ""
 
     precision ws [P.LRaw w] | w `elem` ws = Right $ Just w
@@ -89,34 +89,34 @@ treesType = gen where
     clock = ["sec", "min", "hour", "day"]
     time  = "month" : clock
 
-    dispatch "any"     _    = Right D.TypeAny
-    dispatch "empty"   _    = Right D.TypeEmpty
-    dispatch "boolean" _    = Right D.TypeBool
-    dispatch "text"    _    = Right D.TypeText
-    dispatch "code"    _    = Right D.TypeCode
-    dispatch "decimal" _    = Right D.TypeDec
-    dispatch "clock"   xs   = Right . D.TypeClock  =<< precision clock xs
-    dispatch "time"    xs   = Right . D.TypeTime   =<< precision time  xs
-    dispatch "binary"  _    = Right D.TypeBin
-    dispatch "term"    _    = Right D.TypeTerm
-    dispatch "type"    _    = Right D.TypeType
-    dispatch "interp"  _    = Right D.TypeInterp
+    dispatch "any"     _    = Right T.TypeAny
+    dispatch "empty"   _    = Right T.TypeEmpty
+    dispatch "boolean" _    = Right T.TypeBool
+    dispatch "text"    _    = Right T.TypeText
+    dispatch "code"    _    = Right T.TypeCode
+    dispatch "decimal" _    = Right T.TypeDec
+    dispatch "clock"   xs   = Right . T.TypeClock  =<< precision clock xs
+    dispatch "time"    xs   = Right . T.TypeTime   =<< precision time  xs
+    dispatch "binary"  _    = Right T.TypeBin
+    dispatch "term"    _    = Right T.TypeTerm
+    dispatch "type"    _    = Right T.TypeType
+    dispatch "interp"  _    = Right T.TypeInterp
 
     dispatch "tag"   xs     = case xs of
                                 [tag, colon, typ]
                                     | treeText False colon == Right ":"
                                       -> do tag' <- treeText False tag
                                             typ' <- gen [typ]
-                                            Right $ D.TypeTag tag' typ'
+                                            Right $ T.TypeTag tag' typ'
                                 _   -> Msg.unkType "tag"
-    dispatch "list"  xs     = Right . D.TypeList =<< gen xs
-    dispatch "set"   xs     = Right . D.TypeSet  =<< gen xs
+    dispatch "list"  xs     = Right . T.TypeList =<< gen xs
+    dispatch "set"   xs     = Right . T.TypeSet  =<< gen xs
     dispatch "tuple" xs     = do ts <- mapM (gen. B.list1) xs
-                                 Right $ D.TypeTuple ts
+                                 Right $ T.TypeTuple ts
     dispatch "tie"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ D.TypeTie ts2
+                                 Right $ T.TypeTie ts2
     dispatch "rel"   xs     = do ts1 <- D.treesTerms xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ D.TypeRel ts2
+                                 Right $ T.TypeRel ts2
     dispatch n _            = Msg.unkType n

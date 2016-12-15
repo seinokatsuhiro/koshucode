@@ -23,7 +23,7 @@ import qualified Data.Text.Lazy                          as Tz
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Type                    as D
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class.Edge         as D
 import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
@@ -65,13 +65,13 @@ putFalse = putBool False
 -- | Decimal number.
 class (D.CTypeOf c) => CDec c where
     isDec       ::           c -> Bool
-    gDec        ::           c -> D.Decimal
-    pDec        ::   D.Decimal -> c
+    gDec        ::           c -> T.Decimal
+    pDec        ::   T.Decimal -> c
 
-    getDec      ::     D.GetContent D.Decimal c
+    getDec      ::     D.GetContent T.Decimal c
     getDec      =      D.getContent isDec gDec
 
-    putDec      ::   D.Decimal -> B.Ab c
+    putDec      ::   T.Decimal -> B.Ab c
     putDec      =    Right . pDec
 
 -- | Create decimal content.
@@ -115,13 +115,13 @@ getIntegral (Left a)             = Left a
 -- | Distance between two points in timeline.
 class (D.CTypeOf c) => CClock c where
     isClock      ::           c -> Bool
-    gClock       ::           c -> D.Clock
-    pClock       ::     D.Clock -> c
+    gClock       ::           c -> T.Clock
+    pClock       ::     T.Clock -> c
 
-    getClock     ::      D.GetContent D.Clock c
+    getClock     ::      D.GetContent T.Clock c
     getClock     =       D.getContent isClock gClock
 
-    putClock     ::     D.Clock -> B.Ab c
+    putClock     ::     T.Clock -> B.Ab c
     putClock     =      Right . pClock
 
 -- ---------------------------------  Time
@@ -129,13 +129,13 @@ class (D.CTypeOf c) => CClock c where
 -- | Point in timeline.
 class (D.CTypeOf c) => CTime c where
     isTime       ::           c -> Bool
-    gTime        ::           c -> D.Time
-    pTime        ::      D.Time -> c
+    gTime        ::           c -> T.Time
+    pTime        ::      T.Time -> c
 
-    getTime      ::     D.GetContent D.Time c
+    getTime      ::     D.GetContent T.Time c
     getTime      =      D.getContent isTime gTime
 
-    putTime      ::   D.Time -> B.Ab c
+    putTime      ::   T.Time -> B.Ab c
     putTime      =    Right . pTime
 
 -- ---------------------------------  Code

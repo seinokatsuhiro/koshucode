@@ -10,7 +10,7 @@ module Koshucode.Baala.Data.Class.Encode
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
-import qualified Koshucode.Baala.Type                     as D
+import qualified Koshucode.Baala.Type                     as T
 import qualified Koshucode.Baala.Data.Class.Complex       as D
 import qualified Koshucode.Baala.Data.Class.Content       as D
 import qualified Koshucode.Baala.Data.Class.Edge          as D
@@ -33,7 +33,7 @@ contentStringMix c
     | D.isCode   c  = B.mixString $ D.gCode c
     | D.isText   c  = B.mixString $ D.gText c
     | D.isTerm   c  = B.mixString $ S.termNameString $ D.gTerm c
-    | D.isDec    c  = B.mixString $ D.encodeDecimalCompact $ D.gDec c
+    | D.isDec    c  = B.mixString $ T.encodeDecimalCompact $ D.gDec c
     | D.isClock  c  = B.mixEncode $ D.gClock c
     | D.isTime   c  = B.mixEncode $ D.gTime c
     | D.isBool   c  = B.mixEncode $ D.gBool c

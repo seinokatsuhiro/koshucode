@@ -8,7 +8,7 @@ module Koshucode.Baala.Data.Decode.Read
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Type                    as D
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Data.Decode.Content     as D
@@ -29,10 +29,10 @@ readDataset path =
                        Left a   -> return $ Left a
                        Right js -> return $ Right $ D.dataset js
 
-clauseJudges :: (D.CContent c) => [[S.TTree]] -> B.Ab [D.Judge c]
+clauseJudges :: (D.CContent c) => [[S.TTree]] -> B.Ab [T.Judge c]
 clauseJudges = loop D.cacheT [] where
     loop cc js ((P.L (P.TBar "|--") : P.LRaw cl : ts) : ls) =
-        do (cc', j) <- D.treesJudge cc D.AssertAffirm cl ts
+        do (cc', j) <- D.treesJudge cc T.AssertAffirm cl ts
            loop cc' (j : js) ls
     loop _ js [] = Right js
     loop _ _ ls  = B.abortable "clause" ls $ Left $ B.abortBecause "Except judgement"

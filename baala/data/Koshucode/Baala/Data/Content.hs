@@ -24,7 +24,7 @@ import qualified Data.Set                                as Set
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Type                    as D
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode             as D
 import qualified Koshucode.Baala.Data.Class.Message      as Msg
@@ -52,9 +52,9 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 data Content
     = ContentEmpty                -- ^ /Edge:/        Sign of no ordinary type
     | ContentBool    Bool         -- ^ /Numeric:/     Boolean type
-    | ContentDec     D.Decimal    -- ^ /Numeric:/     Decimal number type
-    | ContentClock   D.Clock      -- ^ /Numeric:/     Clock type
-    | ContentTime    D.Time       -- ^ /Numeric:/     Time type
+    | ContentDec     T.Decimal    -- ^ /Numeric:/     Decimal number type
+    | ContentClock   T.Clock      -- ^ /Numeric:/     Clock type
+    | ContentTime    T.Time       -- ^ /Numeric:/     Time type
     | ContentCode    String       -- ^ /Textual:/     Code type
     | ContentTerm    S.TermName   -- ^ /Textual:/     Term name type
     | ContentText    String       -- ^ /Textual:/     Text type
@@ -62,8 +62,8 @@ data Content
     | ContentSet     [Content]    -- ^ /Recursive, Collective:/  Set type
     | ContentTie     [TermC]      -- ^ /Recursive, Relational:/  Tie type (set of terms)
     | ContentRel     RelC         -- ^ /Recursive, Relational:/  Relation type
-    | ContentInterp  D.Interp     -- ^ /Meta, Relational:/  Interpretation type
-    | ContentType    D.Type       -- ^ /Meta:/        Type for type
+    | ContentInterp  T.Interp     -- ^ /Meta, Relational:/  Interpretation type
+    | ContentType    T.Type       -- ^ /Meta:/        Type for type
     | ContentEnd                  -- ^ /Edge:/        The end of everything
     deriving (Show)
 
@@ -101,26 +101,26 @@ instance B.Default Content where
     def = D.empty
 
 instance D.CTypeOf Content where
-    typeOf (ContentEmpty    )  = D.TypeEmpty
-    typeOf (ContentBool    _)  = D.TypeBool
-    typeOf (ContentDec     _)  = D.TypeDec
-    typeOf (ContentClock   c)  = D.TypeClock $ Just $ D.clockPrecision c
-    typeOf (ContentTime    t)  = D.TypeTime  $ Just $ D.timePrecision t
-    typeOf (ContentCode    _)  = D.TypeCode
-    typeOf (ContentTerm    _)  = D.TypeTerm
-    typeOf (ContentText    _)  = D.TypeText
-    typeOf (ContentList   cs)  = D.TypeList $ typeSum cs
-    typeOf (ContentSet    cs)  = D.TypeSet  $ typeSum cs
-    typeOf (ContentTie    cs)  = D.TypeTie  $ B.mapSndTo D.typeOf cs
-    typeOf (ContentRel     _)  = D.TypeRel []
-    typeOf (ContentInterp  _)  = D.TypeInterp
-    typeOf (ContentType    _)  = D.TypeType
-    typeOf (ContentEnd      )  = D.TypeEnd
+    typeOf (ContentEmpty    )  = T.TypeEmpty
+    typeOf (ContentBool    _)  = T.TypeBool
+    typeOf (ContentDec     _)  = T.TypeDec
+    typeOf (ContentClock   c)  = T.TypeClock $ Just $ T.clockPrecision c
+    typeOf (ContentTime    t)  = T.TypeTime  $ Just $ T.timePrecision t
+    typeOf (ContentCode    _)  = T.TypeCode
+    typeOf (ContentTerm    _)  = T.TypeTerm
+    typeOf (ContentText    _)  = T.TypeText
+    typeOf (ContentList   cs)  = T.TypeList $ typeSum cs
+    typeOf (ContentSet    cs)  = T.TypeSet  $ typeSum cs
+    typeOf (ContentTie    cs)  = T.TypeTie  $ B.mapSndTo D.typeOf cs
+    typeOf (ContentRel     _)  = T.TypeRel []
+    typeOf (ContentInterp  _)  = T.TypeInterp
+    typeOf (ContentType    _)  = T.TypeType
+    typeOf (ContentEnd      )  = T.TypeEnd
 
-typeSum :: D.CTypeOf c => [c] -> D.Type
+typeSum :: D.CTypeOf c => [c] -> T.Type
 typeSum cs = case B.unique $ map D.typeOf cs of
                [t] -> t
-               ts  -> D.TypeSum ts
+               ts  -> T.TypeSum ts
 
 instance D.CContent Content where
     appendContent (ContentEmpty) x     = Right x
@@ -134,7 +134,7 @@ instance B.MixEncode Content where
           ContentCode  s   -> B.mixString $ quote  (sh s) s
           ContentText  s   -> B.mixString $ qquote (sh s) s
           ContentTerm  s   -> B.mixString $ "'" ++ S.termNameString s
-          ContentDec   n   -> B.mixString $ D.encodeDecimal n
+          ContentDec   n   -> B.mixString $ T.encodeDecimal n
           ContentClock t   -> B.mixEncode t
           ContentTime  t   -> B.mixEncode t
           ContentBool  b   -> B.mixEncode b
@@ -143,7 +143,7 @@ instance B.MixEncode Content where
 
           ContentList cs   -> D.mixBracketList $ mixBar cs
           ContentSet  cs   -> D.mixBracketSet  $ mixBar cs
-          ContentTie  ts   -> B.mixBracketS S.bracketTie $ D.termsToMix1 sh ts
+          ContentTie  ts   -> B.mixBracketS S.bracketTie $ T.termsToMix1 sh ts
           ContentRel  r    -> B.mixTransEncode sh r
           ContentInterp i  -> B.mixEncode i
           ContentType t    -> B.mixBracketS S.bracketType $ B.mixEncode t
@@ -276,9 +276,9 @@ type DispatchEdge a = ( a, a )
 --   boolean, decimal, clock, time, code, term, and text.
 type DispatchSimple a =
     ( Bool        -> a
-    , D.Decimal   -> a
-    , D.Clock     -> a
-    , D.Time      -> a
+    , T.Decimal   -> a
+    , T.Clock     -> a
+    , T.Time      -> a
     , String      -> a
     , S.TermName  -> a
     , String      -> a
@@ -291,8 +291,8 @@ type DispatchComplex a =
     , [Content]   -> a
     , [TermC]     -> a
     , RelC        -> a
-    , D.Interp    -> a
-    , D.Type      -> a
+    , T.Interp    -> a
+    , T.Type      -> a
     )
 
 -- | Call type-specific functions on empty or end content.
@@ -340,13 +340,13 @@ dispatchContent e s c = simple where
 -- ----------------------  Concrete type
 
 -- | @Judge@ for concrete baala content.
-type JudgeC = D.Judge Content
+type JudgeC = T.Judge Content
 
 -- | @Term@ for concrete baala content.
 type TermC = S.Term Content
 
 -- | @Rel@ for concrete baala content.
-type RelC = D.Rel Content
+type RelC = T.Rel Content
 
 -- | Abortable content.
 type AbC = B.Ab Content

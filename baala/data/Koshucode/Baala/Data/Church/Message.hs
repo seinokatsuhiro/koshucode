@@ -31,7 +31,7 @@ module Koshucode.Baala.Data.Church.Message
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
-import qualified Koshucode.Baala.Type                 as D
+import qualified Koshucode.Baala.Type                 as T
 
 
 -- --------------------------------------------  Abortable scope
@@ -102,7 +102,7 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
+unkTerm :: (T.GetTermNames t1, T.GetTermNames t2) => t1 -> t2 -> B.Ab a
 unkTerm t1 t2 =
     Left $ B.abortLines "Unknown term name"
          $ msgTerms2 "Unknown" t1 "in the terms" t2
@@ -124,17 +124,17 @@ args :: [String] -> String
 args vs = unwords $ map var $ zip vs [1..]
 
 -- | Terms and input relation heading.
-detailTermRel :: String -> [S.TermName] -> D.Head -> [String]
+detailTermRel :: String -> [S.TermName] -> T.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indentLines ns' ++ ["Input relation"] ++ indentLines ns1
     ns'    = map S.termNameString ns
-    ns1    = linesFrom $ D.headExplain he1
+    ns1    = linesFrom $ T.headExplain he1
 
 linesFrom :: (Show a) => a -> [String]
 linesFrom = lines . show
 
 -- | Create message lines from double term names.
-msgTerms2 :: (D.GetTermNames t1, D.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
+msgTerms2 :: (T.GetTermNames t1, T.GetTermNames t2) => String -> t1 -> String -> t2 -> [String]
 msgTerms2 s1 t1 s2 t2 = detail where
     detail = [s1] ++ msg1 t1 ++ [s2] ++ msg2 t2
     msg1 = indentLines . B.sort . termNameStrings
@@ -145,8 +145,8 @@ indentLines :: [String] -> [String]
 indentLines = map ("  " ++)
 
 -- | Lines of term names.
-termNameStrings :: (D.GetTermNames t) => t -> [String]
-termNameStrings = msg . D.getTermNames where
+termNameStrings :: (T.GetTermNames t) => t -> [String]
+termNameStrings = msg . T.getTermNames where
     msg [] = ["(no terms)"]
     msg ns = map S.termNameString ns
 

@@ -17,7 +17,7 @@ module Koshucode.Baala.Data.Class.Edge
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
-import qualified Koshucode.Baala.Type                 as D
+import qualified Koshucode.Baala.Type                 as T
 import qualified Koshucode.Baala.Data.Class.Message   as Msg
 
 
@@ -26,10 +26,10 @@ import qualified Koshucode.Baala.Data.Class.Message   as Msg
 -- | Classifiable into 'D.Type'.
 class CTypeOf c where
     -- | Get type of content.
-    typeOf :: c -> D.Type
+    typeOf :: c -> T.Type
 
     -- | Test content is a some type.
-    isA :: O.Test2 c D.Type
+    isA :: O.Test2 c T.Type
     isA c t = typeOf c == t
 
     -- | Test two contents are same type.

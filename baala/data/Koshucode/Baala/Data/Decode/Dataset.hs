@@ -17,11 +17,11 @@ import qualified Data.Map.Strict                     as Ms
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
-import qualified Koshucode.Baala.Type                as D
+import qualified Koshucode.Baala.Type                as T
 
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Ms.Map D.JudgeClass [[S.Term c]])
+data Dataset c = Dataset (Ms.Map T.JudgeClass [[S.Term c]])
 
 instance Show (Dataset c) where
     show = showDataset
@@ -38,34 +38,34 @@ showDataset (Dataset ds) =
 instance B.Default (Dataset c) where
     def = Dataset Ms.empty
 
-instance D.SelectRel Dataset where
+instance T.SelectRel Dataset where
     selectRel = datasetSelect B.def
 
 -- | Retrieve judgement class and its term names.
-datasetClasses :: Dataset c -> Ms.Map D.JudgeClass [S.TermName]
+datasetClasses :: Dataset c -> Ms.Map T.JudgeClass [S.TermName]
 datasetClasses (Dataset ds) = Ms.map termName ds where
     termName ts = B.uniqueConcat (fst O.<$$> ts)
 
 -- | Gather judges into a dataset.
-dataset :: [D.Judge c] -> Dataset c
+dataset :: [T.Judge c] -> Dataset c
 dataset js = datasetAdd js B.def
 
 -- | Add judges to dataset.
-datasetAdd :: [D.Judge c] -> O.Map (Dataset c)
+datasetAdd :: [T.Judge c] -> O.Map (Dataset c)
 datasetAdd js ds = foldr addJudge ds js
 
 -- | Add a judge to dataset.
-addJudge :: D.Judge c -> O.Map (Dataset c)
-addJudge (D.JudgeAffirm cl xs) (Dataset ds1) = Dataset ds2 where
+addJudge :: T.Judge c -> O.Map (Dataset c)
+addJudge (T.JudgeAffirm cl xs) (Dataset ds1) = Dataset ds2 where
     ds2 = Ms.insertWith add cl [xs] ds1
     add new old = new ++ old
 addJudge _ _ = undefined
 
 -- | Select relation from dataset.
 --   If a given term is not in judges, first argument is used.
-datasetSelect :: (Ord c) => c -> Dataset c -> D.RelSelect c
-datasetSelect filler (Dataset ds) cl ns = D.Rel he bo where
-    he = D.headFrom ns
+datasetSelect :: (Ord c) => c -> Dataset c -> T.RelSelect c
+datasetSelect filler (Dataset ds) cl ns = T.Rel he bo where
+    he = T.headFrom ns
     bo = case Ms.lookup cl ds of
            Just set -> B.unique (pickContents filler ns <$> set)
            Nothing  -> []

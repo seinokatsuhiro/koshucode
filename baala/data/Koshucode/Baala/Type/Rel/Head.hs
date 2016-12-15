@@ -37,7 +37,7 @@ module Koshucode.Baala.Type.Rel.Head
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Type.Type             as D
+import qualified Koshucode.Baala.Type.Type             as T
 import qualified Koshucode.Baala.Type.Judge            as D
 import qualified Koshucode.Baala.Type.Rel.TermPicker   as D
 
@@ -46,20 +46,20 @@ import qualified Koshucode.Baala.Type.Rel.TermPicker   as D
 
 -- | Heading of relations.
 data Head =
-    Head { headType :: D.Type
+    Head { headType :: T.Type
          } deriving (Show, Eq, Ord)
 
 instance Monoid Head where
     mempty = headFrom ([] :: [String])
     mappend he1 he2 = headOf $ headType he1 `a` headType he2
-        where a (D.TypeRel ts1) (D.TypeRel ts2) = D.TypeRel $ B.unionUp ts1 ts2
-              a _ _ = D.TypeAny
+        where a (T.TypeRel ts1) (T.TypeRel ts2) = T.TypeRel $ B.unionUp ts1 ts2
+              a _ _ = T.TypeAny
 
 instance D.GetTermNames Head where
-    getTermNames = D.typeRelTermNames . headType
+    getTermNames = T.typeRelTermNames . headType
 
 instance B.MixEncode Head where
-    mixEncode = D.typeTermMix . headType
+    mixEncode = T.typeTermMix . headType
 
 -- | Pretty print head of relation.
 --
@@ -68,13 +68,13 @@ instance B.MixEncode Head where
 --       /b any
 --
 headExplain :: Head -> B.Doc
-headExplain = D.typeExplain . headType
+headExplain = T.typeExplain . headType
 
 
 -- ----------------------  Constructor
 
 -- | Make head of given type..
-headOf :: D.Type -> Head
+headOf :: T.Type -> Head
 headOf ty = Head { headType = ty }
 
 -- | Make head from term names.
@@ -86,7 +86,7 @@ headOf ty = Head { headType = ty }
 --   MixText "/a /b"
 --
 headFrom :: (S.ToTermName n) => [n] -> Head
-headFrom = headOf . D.typeFlatRel . map S.toTermName
+headFrom = headOf . T.typeFlatRel . map S.toTermName
 
 
 -- ----------------------  Selector
@@ -105,7 +105,7 @@ headFrom = headOf . D.typeFlatRel . map S.toTermName
 -- | Test two heads are equivalent.
 headEquiv :: Head -> Head -> Bool
 headEquiv he1 he2 = ts he1 == ts he2 where
-    ts = B.sort . D.typeRelTermNames . headType
+    ts = B.sort . T.typeRelTermNames . headType
 
 -- | Test heading is subset of another heading.
 --
@@ -127,21 +127,21 @@ isSuperhead he1 he2 = isSubhead he2 he1
 --   2
 --
 headDegree :: Head -> Int
-headDegree = D.typeRelDegree . headType
+headDegree = T.typeRelDegree . headType
 
 -- | Index of a term.
 headIndex1 :: Head -> S.TermPath -> [Int]
-headIndex1 = D.typeRelIndex . headType
+headIndex1 = T.typeRelIndex . headType
 
 -- | Select nested terms.
 headNested :: Head -> [(S.TermName, Head)]
 headNested he = ts2 where
-    ts2 = map h $ filter (D.isTypeRel . snd) $ D.typeTerms $ headType he
+    ts2 = map h $ filter (T.isTypeRel . snd) $ T.typeTerms $ headType he
     h (n, t) = (n, headOf t)
 
 -- | Get types of relation terms.
-headTypes :: Head -> [D.Type]
-headTypes (Head (D.TypeRel ts)) = map snd ts
+headTypes :: Head -> [T.Type]
+headTypes (Head (T.TypeRel ts)) = map snd ts
 headTypes _ = B.bug "headTypes"
 
 
@@ -153,16 +153,16 @@ headTypes _ = B.bug "headTypes"
 --   Head { headType = TypeRel [("c",TypeAny), ("a",TypeAny), ("b",TypeAny)] }
 --
 headCons :: S.TermName -> O.Map Head
-headCons n1 = headOf . D.typeConsRel n1 . headType
+headCons n1 = headOf . T.typeConsRel n1 . headType
 
 -- | Add term names to head.
 headAppend :: [S.TermName] -> O.Map Head
-headAppend ns1 = headOf . D.typeAppendRel ns1 . headType
+headAppend ns1 = headOf . T.typeAppendRel ns1 . headType
 
 -- | Add term name for nested relation.
 headConsNest :: S.TermName -> Head -> O.Map Head
 headConsNest n1 Head { headType = t1 } Head { headType = t } =
-    headOf $ D.typeConsNest n1 t1 t
+    headOf $ T.typeConsNest n1 t1 t
 
 -- | Create nested relation terms.
 --
@@ -171,14 +171,14 @@ headConsNest n1 Head { headType = t1 } Head { headType = t } =
 --
 headNests :: [S.TermName] -> O.Map Head
 headNests ns1 Head { headType = t } =
-    headOf $ D.TypeRel $ map nest ns1
+    headOf $ T.TypeRel $ map nest ns1
         where nest n = (n, t)
 
 
 -- ----------------------  Mapping
 
 -- | Term whose content is type.
-type TypeTerm = S.Term D.Type
+type TypeTerm = S.Term T.Type
 
 -- | Reconstruct head.
 --
@@ -186,7 +186,7 @@ type TypeTerm = S.Term D.Type
 --   Head {headType = TypeRel [("b",TypeAny),("a",TypeAny)]}
 --
 headMap :: O.Map [TypeTerm] -> O.Map Head
-headMap = headMapBy D.typeRelMapTerms
+headMap = headMapBy T.typeRelMapTerms
 
 -- | Convert term names.
 --
@@ -194,15 +194,15 @@ headMap = headMapBy D.typeRelMapTerms
 --   Head { headType = TypeRel [("xa",TypeAny), ("xb",TypeAny)] }
 --
 headMapName :: O.Map S.TermName -> O.Map Head
-headMapName = headMapBy D.typeRelMapName
+headMapName = headMapBy T.typeRelMapName
 
-headMapBy :: (a -> O.Map D.Type) -> a -> O.Map Head
+headMapBy :: (a -> O.Map T.Type) -> a -> O.Map Head
 headMapBy g f he = headOf $ g f $ headType he
 
 -- | Move up nested relation.
 headUp :: O.Map Head
 headUp = headOf . up . headType where
-    up (D.TypeRel [(_, ty)]) = ty
+    up (T.TypeRel [(_, ty)]) = ty
     up ty                    = ty
 
 -- | Move terms forward.
