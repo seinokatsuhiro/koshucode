@@ -28,6 +28,7 @@ goto :EOF
         cabal sandbox add-source ..\subtext
         cabal sandbox add-source ..\base
         cabal sandbox add-source ..\syntax
+        cabal sandbox add-source ..\type
         cabal sandbox add-source ..\data
         cabal sandbox add-source ..\data-plus
         cabal sandbox add-source ..\core
