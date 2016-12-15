@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-data
+name:                koshucode-baala-type
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,13 +10,10 @@ name:                koshucode-baala-data
 version:             0.184.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            A notational system for relational model
+synopsis:            Additional data types for Koshucode
 
 -- A longer description of the package.
-description:         Koshucode is a notation for people and computers
-                     who read, write, and calculate relational data.
-                     This library provides functions for handling
-                     koshucode on computers.
+description:         
 
 -- The license under which the package is released.
 license:             BSD3
@@ -32,7 +29,7 @@ author:              SEINO Katsuhiro
 maintainer:
 
 -- A copyright notice.
-copyright:           2013, 2015, SEINO Katsuhiro
+copyright:           2013, 2016, SEINO Katsuhiro
 
 category:            Data, Database, Language, Text
 
@@ -46,35 +43,36 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Data
-        Koshucode.Baala.Data.Message
+        Koshucode.Baala.Type
+        Koshucode.Baala.Type.Decimal
+        Koshucode.Baala.Type.Decimal.BinaryAb
+        Koshucode.Baala.Type.Decimal.Coder
+        Koshucode.Baala.Type.Decimal.Decimal
+        Koshucode.Baala.Type.Decimal.Fraction
+        Koshucode.Baala.Type.Decimal.Rational
 
-        Koshucode.Baala.Data.Church
-        Koshucode.Baala.Data.Church.Build
-        Koshucode.Baala.Data.Church.Cop
-        Koshucode.Baala.Data.Church.Cox
-        Koshucode.Baala.Data.Church.Message
-        Koshucode.Baala.Data.Church.Run
+        Koshucode.Baala.Type.Judge
+        Koshucode.Baala.Type.Judge.Interp
+        Koshucode.Baala.Type.Judge.Judge
+        Koshucode.Baala.Type.Judge.JudgeClass
 
-        Koshucode.Baala.Data.Content
+        Koshucode.Baala.Type.Message
 
-        Koshucode.Baala.Data.Decode
-        Koshucode.Baala.Data.Decode.Content
-        Koshucode.Baala.Data.Decode.Dataset
-        Koshucode.Baala.Data.Decode.Message
-        Koshucode.Baala.Data.Decode.Numeric
-        Koshucode.Baala.Data.Decode.Read
-        Koshucode.Baala.Data.Decode.Term
-        Koshucode.Baala.Data.Decode.Type
+        Koshucode.Baala.Type.Rel
+        Koshucode.Baala.Type.Rel.Head
+        Koshucode.Baala.Type.Rel.Mono
+        Koshucode.Baala.Type.Rel.Rel
+        Koshucode.Baala.Type.Rel.TermPicker
 
-        Koshucode.Baala.Data.Class
-        Koshucode.Baala.Data.Class.Complex
-        Koshucode.Baala.Data.Class.Content
-        Koshucode.Baala.Data.Class.Edge
-        Koshucode.Baala.Data.Class.Encode
-        Koshucode.Baala.Data.Class.Map
-        Koshucode.Baala.Data.Class.Message
-        Koshucode.Baala.Data.Class.Simple
+        Koshucode.Baala.Type.Time
+        Koshucode.Baala.Type.Time.Clock
+        Koshucode.Baala.Type.Time.ClockCalc
+        Koshucode.Baala.Type.Time.Date
+        Koshucode.Baala.Type.Time.Parts
+        Koshucode.Baala.Type.Time.Time
+        Koshucode.Baala.Type.Time.TimeCalc
+
+        Koshucode.Baala.Type.Type
 
   -- Modules included in this library but not exported.
   --other-modules:       
@@ -88,7 +86,6 @@ library
        , koshucode-baala-overture  == 0.184.0.0
        , koshucode-baala-base      == 0.184.0.0
        , koshucode-baala-syntax    == 0.184.0.0
-       , koshucode-baala-type      == 0.184.0.0
 
   ghc-options:         -Wall
 
