@@ -12,6 +12,7 @@ import qualified Koshucode.Baala.Type                    as D
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Data.Decode.Content     as D
+import qualified Koshucode.Baala.Data.Decode.Dataset     as D
 import qualified Koshucode.Baala.Syntax.Pattern          as P
 
 -- | Read file and convert to dataset.

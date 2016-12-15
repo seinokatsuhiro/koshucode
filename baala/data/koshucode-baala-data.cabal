@@ -60,6 +60,7 @@ library
 
         Koshucode.Baala.Data.Decode
         Koshucode.Baala.Data.Decode.Content
+        Koshucode.Baala.Data.Decode.Dataset
         Koshucode.Baala.Data.Decode.Message
         Koshucode.Baala.Data.Decode.Numeric
         Koshucode.Baala.Data.Decode.Read
@@ -91,7 +92,6 @@ library
         Koshucode.Baala.Type.Message
 
         Koshucode.Baala.Type.Rel
-        Koshucode.Baala.Type.Rel.Dataset
         Koshucode.Baala.Type.Rel.Head
         Koshucode.Baala.Type.Rel.Mono
         Koshucode.Baala.Type.Rel.Rel
