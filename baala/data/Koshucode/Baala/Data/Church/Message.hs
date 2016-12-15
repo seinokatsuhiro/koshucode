@@ -31,7 +31,7 @@ module Koshucode.Baala.Data.Church.Message
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
-import qualified Koshucode.Baala.Data.Type            as D
+import qualified Koshucode.Baala.Type                 as D
 
 
 -- --------------------------------------------  Abortable scope

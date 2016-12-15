@@ -8,7 +8,7 @@ module Koshucode.Baala.Data.Decode.Read
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
-import qualified Koshucode.Baala.Data.Type               as D
+import qualified Koshucode.Baala.Type                    as D
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Data.Decode.Content     as D

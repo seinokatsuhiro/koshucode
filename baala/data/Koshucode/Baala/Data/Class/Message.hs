@@ -11,7 +11,7 @@ module Koshucode.Baala.Data.Class.Message
   ) where
 
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data.Type.Message   as Msg
+import qualified Koshucode.Baala.Type.Message        as Msg
 
 -- | Type unmatch
 unmatchType :: String -> B.Ab a

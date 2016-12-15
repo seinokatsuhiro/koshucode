@@ -10,7 +10,7 @@ module Koshucode.Baala.Data.Class.Encode
 
 import qualified Koshucode.Baala.Base                     as B
 import qualified Koshucode.Baala.Syntax                   as S
-import qualified Koshucode.Baala.Data.Type                as D
+import qualified Koshucode.Baala.Type                     as D
 import qualified Koshucode.Baala.Data.Class.Complex       as D
 import qualified Koshucode.Baala.Data.Class.Content       as D
 import qualified Koshucode.Baala.Data.Class.Edge          as D

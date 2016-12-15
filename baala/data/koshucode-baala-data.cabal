@@ -75,38 +75,38 @@ library
         Koshucode.Baala.Data.Class.Message
         Koshucode.Baala.Data.Class.Simple
 
-        Koshucode.Baala.Data.Type
-        Koshucode.Baala.Data.Type.Decimal
-        Koshucode.Baala.Data.Type.Decimal.BinaryAb
-        Koshucode.Baala.Data.Type.Decimal.Coder
-        Koshucode.Baala.Data.Type.Decimal.Decimal
-        Koshucode.Baala.Data.Type.Decimal.Fraction
-        Koshucode.Baala.Data.Type.Decimal.Rational
+        Koshucode.Baala.Type
+        Koshucode.Baala.Type.Decimal
+        Koshucode.Baala.Type.Decimal.BinaryAb
+        Koshucode.Baala.Type.Decimal.Coder
+        Koshucode.Baala.Type.Decimal.Decimal
+        Koshucode.Baala.Type.Decimal.Fraction
+        Koshucode.Baala.Type.Decimal.Rational
 
-        Koshucode.Baala.Data.Type.Judge
-        Koshucode.Baala.Data.Type.Judge.Interp
-        Koshucode.Baala.Data.Type.Judge.Judge
-        Koshucode.Baala.Data.Type.Judge.JudgeClass
+        Koshucode.Baala.Type.Judge
+        Koshucode.Baala.Type.Judge.Interp
+        Koshucode.Baala.Type.Judge.Judge
+        Koshucode.Baala.Type.Judge.JudgeClass
 
-        Koshucode.Baala.Data.Type.Message
+        Koshucode.Baala.Type.Message
 
-        Koshucode.Baala.Data.Type.Rel
-        Koshucode.Baala.Data.Type.Rel.Dataset
-        Koshucode.Baala.Data.Type.Rel.Head
-        Koshucode.Baala.Data.Type.Rel.Mono
-        Koshucode.Baala.Data.Type.Rel.Rel
-        Koshucode.Baala.Data.Type.Rel.TermPicker
+        Koshucode.Baala.Type.Rel
+        Koshucode.Baala.Type.Rel.Dataset
+        Koshucode.Baala.Type.Rel.Head
+        Koshucode.Baala.Type.Rel.Mono
+        Koshucode.Baala.Type.Rel.Rel
+        Koshucode.Baala.Type.Rel.TermPicker
 
-        Koshucode.Baala.Data.Type.Time
-        Koshucode.Baala.Data.Type.Time.Clock
-        Koshucode.Baala.Data.Type.Time.ClockCalc
-        Koshucode.Baala.Data.Type.Time.Date
-        Koshucode.Baala.Data.Type.Time.Parts
-        Koshucode.Baala.Data.Type.Time.Time
-        Koshucode.Baala.Data.Type.Time.TimeCalc
+        Koshucode.Baala.Type.Time
+        Koshucode.Baala.Type.Time.Clock
+        Koshucode.Baala.Type.Time.ClockCalc
+        Koshucode.Baala.Type.Time.Date
+        Koshucode.Baala.Type.Time.Parts
+        Koshucode.Baala.Type.Time.Time
+        Koshucode.Baala.Type.Time.TimeCalc
 
-        Koshucode.Baala.Data.Type.Type
-        Koshucode.Baala.Data.Type.Type.Genus
+        Koshucode.Baala.Type.Type
+        Koshucode.Baala.Type.Type.Genus
 
   -- Modules included in this library but not exported.
   --other-modules:       
