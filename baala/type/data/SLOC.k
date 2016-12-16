@@ -1,0 +1,43 @@
+-*- koshu -*-
+
+about /package 'type
+
+|-- DIR  /code 12   /comment 5    /dir "type/Koshucode/Baala"
+|-- DIR  /code 230  /comment 176  /dir "type/Koshucode/Baala/Type"
+|-- DIR  /code 484  /comment 415  /dir "type/Koshucode/Baala/Type/Decimal"
+|-- DIR  /code 203  /comment 149  /dir "type/Koshucode/Baala/Type/Judge"
+|-- DIR  /code 285  /comment 382  /dir "type/Koshucode/Baala/Type/Rel"
+|-- DIR  /code 712  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
+|-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
+
+|-- DIR-TOTAL  /code 2028  /comment 1893
+
+|-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
+|-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 52   /comment 42   /file "BinaryAb.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 132  /comment 88   /file "Coder.hs"       /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 88   /comment 91   /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 133  /comment 104  /file "Fraction.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 79   /comment 90   /file "Rational.hs"    /dir "type/Koshucode/Baala/Type/Decimal"
+|-- FILE  /code 8    /comment 6    /file "Judge.hs"       /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 34   /comment 16   /file "Interp.hs"      /dir "type/Koshucode/Baala/Type/Judge"
+|-- FILE  /code 149  /comment 116  /file "Judge.hs"       /dir "type/Koshucode/Baala/Type/Judge"
+|-- FILE  /code 20   /comment 17   /file "JudgeClass.hs"  /dir "type/Koshucode/Baala/Type/Judge"
+|-- FILE  /code 44   /comment 26   /file "Message.hs"     /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 10   /comment 6    /file "Rel.hs"         /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 90   /comment 132  /file "Head.hs"        /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 30   /comment 24   /file "Mono.hs"        /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 72   /comment 76   /file "Rel.hs"         /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 93   /comment 150  /file "TermPicker.hs"  /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 14   /comment 5    /file "Time.hs"        /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 166  /comment 131  /file "Clock.hs"       /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 44   /comment 38   /file "ClockCalc.hs"   /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 84   /comment 102  /file "Date.hs"        /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 138  /comment 107  /file "Parts.hs"       /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 191  /comment 149  /file "Time.hs"        /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 89   /comment 83   /file "TimeCalc.hs"    /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 142  /comment 127  /file "Type.hs"        /dir "type/Koshucode/Baala/Type"
+|-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
+|-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
+
+|-- FILE-TOTAL  /code 2028  /comment 1893
