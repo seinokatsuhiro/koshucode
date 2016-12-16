@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Type.Time.ClockCalc</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('type', 'koshucode-baala-type', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-Time-ClockCalc.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-type-0.185.0.0: Additional data types for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Type.Time.ClockCalc</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Calculation on clock.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:clockPos"
+	    >clockPos</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockNeg"
+	    >clockNeg</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockCutDay"
+	    >clockCutDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockAddDay"
+	    >clockAddDay</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockAddSec"
+	    >clockAddSec</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockAdd"
+	    >clockAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockSub"
+	    >clockSub</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockTimes"
+	    >clockTimes</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockRangeBy"
+	    >clockRangeBy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-List-List.html#t:RangeBy"
+	    >RangeBy</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockStep"
+	    >clockStep</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    >)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockPos" class="def"
+	    >clockPos</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockPos');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert clock to positive clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockNeg" class="def"
+	    >clockNeg</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockNeg');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert clock to negative clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockCutDay" class="def"
+	    >clockCutDay</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockCutDay');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Set MJD to zero.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockAddDay" class="def"
+	    >clockAddDay</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockAddDay');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add MJD.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockAddSec" class="def"
+	    >clockAddSec</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockAddSec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add second.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockAdd" class="def"
+	    >clockAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockAdd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculation of clock plus clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockSub" class="def"
+	    >clockSub</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:BinAb"
+	    >BinAb</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockSub');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculation of clock minus clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockTimes" class="def"
+	    >clockTimes</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockTimes');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Multiplication of clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockRangeBy" class="def"
+	    >clockRangeBy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-List-List.html#t:RangeBy"
+	    >RangeBy</a
+	    > <a href="Koshucode-Baala-Type-Time-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockRangeBy');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create sequence between two clocks.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clockRangeBy (clockStep 120) (clockFromDhm 0 0 0) (clockFromDhm 0 0 5)
+</code
+		></strong
+	      >[|00:00:00|, |00:02:00|, |00:04:00|]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockStep" class="def"
+	    >clockStep</a
+	    > :: <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Time-Parts.html#t:Days"
+	    >Days</a
+	    >, <a href="Koshucode-Baala-Type-Time-Parts.html#t:Sec"
+	    >Sec</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Type-Time-ClockCalc.html#clockStep');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create clock step of given second.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,0 +1,1230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Type.Judge.Judge</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('type', 'koshucode-baala-type', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-Judge-Judge.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-type-0.185.0.0: Additional data types for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Type.Judge.Judge</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Datatype</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Logical quality</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Encode</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Judgements: a symbolic representations of
+   affirmed or denied statements.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Judge"
+	    >Judge</a
+	    > c<ul class="subs"
+	    ><li
+	      >= <a href="#v:JudgeAffirm"
+		>JudgeAffirm</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ><li
+	      >| <a href="#v:JudgeDeny"
+		>JudgeDeny</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ><li
+	      >| <a href="#v:JudgeMultiDeny"
+		>JudgeMultiDeny</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ><li
+	      >| <a href="#v:JudgeChange"
+		>JudgeChange</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c] [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ><li
+	      >| <a href="#v:JudgeMultiChange"
+		>JudgeMultiChange</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c] [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ><li
+	      >| <a href="#v:JudgeViolate"
+		>JudgeViolate</a
+		> <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		>JudgeClass</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		>Term</a
+		> c]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeTermsMap"
+	    >judgeTermsMap</a
+	    > :: ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > a] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > b]) -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > a -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > b</li
+	  ><li class="src short"
+	  ><a href="#v:judgeAdd"
+	    >judgeAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:JudgeOf"
+	    >JudgeOf</a
+	    > c = <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:affirm"
+	    >affirm</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:deny"
+	    >deny</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:affirmJudge"
+	    >affirmJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:denyJudge"
+	    >denyJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:isAffirmative"
+	    >isAffirmative</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:isDenial"
+	    >isDenial</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:isViolative"
+	    >isViolative</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:AssertType"
+	    >AssertType</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:AssertAffirm"
+		>AssertAffirm</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertDeny"
+		>AssertDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertMultiDeny"
+		>AssertMultiDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertChange"
+		>AssertChange</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertMultiChange"
+		>AssertMultiChange</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertViolate"
+		>AssertViolate</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:assertAs"
+	    >assertAs</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:assertSymbol"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeBreak"
+	    >judgeBreak</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-LineBreak.html#t:LineBreak"
+	    >LineBreak</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:judgeMix"
+	    >judgeMix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:judgeMix2"
+	    >judgeMix2</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:judgeMixTab"
+	    >judgeMixTab</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:judgeMix2Tab"
+	    >judgeMix2Tab</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:termNameToMix"
+	    >termNameToMix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termsToMix1"
+	    >termsToMix1</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:termsToMix2"
+	    >termsToMix2</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Datatype</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Judge" class="def"
+	    >Judge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#Judge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Judgement on type <code
+	      >c</code
+	      >.</p
+	    ><p
+	    >Judgement (or judge for short) is divided into three parts:
+   logical quality, name of class, and argument.
+   Boolean values <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      > or <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:False"
+		>False</a
+		></code
+	      > of logical quality
+   corresponds to affirmed or denied judge.
+   A name of judgement class represents
+   certain sentence class that gives intepretation of data.
+   Sentence class has placeholders filled by
+   <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		>Named</a
+		></code
+	      > <code
+	      >c</code
+	      > in argument.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:JudgeAffirm" class="def"
+		  >JudgeAffirm</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-- P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeDeny" class="def"
+		  >JudgeDeny</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-x P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeMultiDeny" class="def"
+		  >JudgeMultiDeny</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-xx P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeChange" class="def"
+		  >JudgeChange</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c] [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-c P /x 10 +/y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeMultiChange" class="def"
+		  >JudgeMultiChange</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c] [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-cc P /x 10 +/y 20</pre
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:JudgeViolate" class="def"
+		  >JudgeViolate</a
+		  > <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+		  >JudgeClass</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+		  >Term</a
+		  > c]</td
+		><td class="doc"
+		><pre
+		  >|-v P /x 10 /y 20</pre
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Judge" class="caption collapser" onclick="toggleSection('i:Judge')"
+	    >Instances</p
+	    ><div id="section.i:Judge" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
+		      >Functor</a
+		      > <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-74');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTerms"
+		      >GetTerms</a
+		      > <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-184');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-59');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-63');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-57');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+		      >MixEncode</a
+		      > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+		      >MixEncode</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-208');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+		      >GetTermNames</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-181');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetClass"
+		      >GetClass</a
+		      > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+		      >Judge</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-178');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeTermsMap" class="def"
+	    >judgeTermsMap</a
+	    > :: ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > a] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > b]) -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > a -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > b <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeTermsMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Map function to terms.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeAdd" class="def"
+	    >judgeAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeAdd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add a term into judgement.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Logical quality</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:JudgeOf" class="def"
+	    >JudgeOf</a
+	    > c = <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#JudgeOf');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct judgement from its class and terms.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:affirm" class="def"
+	    >affirm</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#affirm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct affirmative judgement.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>affirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)] :: Judge Int
+</code
+		></strong
+	      >JudgeAffirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:deny" class="def"
+	    >deny</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#deny');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct denial judgement.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:affirmJudge" class="def"
+	    >affirmJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#affirmJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Affirm judgement, i.e., change logical quality to affirmative.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:denyJudge" class="def"
+	    >denyJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#denyJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Deny judgement, i.e., change logical quality to denial.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>denyJudge $ affirm &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)] :: Judge Int
+</code
+		></strong
+	      >JudgeDeny &quot;P&quot; [(&quot;x&quot;,10), (&quot;y&quot;,20)]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isAffirmative" class="def"
+	    >isAffirmative</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#isAffirmative');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is affirmed.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isDenial" class="def"
+	    >isDenial</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#isDenial');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is denied.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isViolative" class="def"
+	    >isViolative</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > (<a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#isViolative');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test which judgement is for violation.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:AssertType" class="def"
+	    >AssertType</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#AssertType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type of assertions.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:AssertAffirm" class="def"
+		  >AssertAffirm</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|==</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates affirmative judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertDeny" class="def"
+		  >AssertDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=x</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates denial judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiDeny" class="def"
+		  >AssertMultiDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=xx</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates multiple-denial judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertChange" class="def"
+		  >AssertChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=c</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates changement judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiChange" class="def"
+		  >AssertMultiChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=cc</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates multiple-changement judges.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertViolate" class="def"
+		  >AssertViolate</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=v</code
+		    > <em
+		    >C</em
+		    > <code
+		    >:</code
+		    > <em
+		    >R</em
+		    > generates violation judges.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:AssertType" class="caption collapser" onclick="toggleSection('i:AssertType')"
+	    >Instances</p
+	    ><div id="section.i:AssertType" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		      >Eq</a
+		      > <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-151');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		      >Ord</a
+		      > <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-151');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+		      >AssertType</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#line-151');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertAs" class="def"
+	    >assertAs</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#assertAs');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create judgement corresponding to assertion type.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertSymbol" class="def"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Type-Judge-Judge.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#assertSymbol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Frege's stroke and various assertion lines.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>assertSymbol AssertAffirm
+</code
+		></strong
+	      >&quot;|==&quot;
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Encode</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:EncodeJudge" class="def"
+	    >EncodeJudge</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#EncodeJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode judgement with short sign converter.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeBreak" class="def"
+	    >judgeBreak</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-LineBreak.html#t:LineBreak"
+	    >LineBreak</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeBreak');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Conventional line-break setting for judges:
+   4-spaces indent and 120-columns line.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeMix" class="def"
+	    >judgeMix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode judgement with term separator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeMix2" class="def"
+	    >judgeMix2</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeMix2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode judgement with two-spaces term separator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeMixTab" class="def"
+	    >judgeMixTab</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeMixTab');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode judgement with tab term separator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:judgeMix2Tab" class="def"
+	    >judgeMix2Tab</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="Koshucode-Baala-Type-Judge-Judge.html#t:EncodeJudge"
+	    >EncodeJudge</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#judgeMix2Tab');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Conditional judgement encoder.
+   If the first argument is true, <code
+	      ><a href="Koshucode-Baala-Type-Judge-Judge.html#v:judgeMix2"
+		>judgeMix2</a
+		></code
+	      > is used, otherwise <code
+	      ><a href="Koshucode-Baala-Type-Judge-Judge.html#v:judgeMixTab"
+		>judgeMixTab</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNameToMix" class="def"
+	    >termNameToMix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#termNameToMix');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termNameToMix &quot;foo&quot;
+</code
+		></strong
+	      >MixText &quot;/foo&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsToMix1" class="def"
+	    >termsToMix1</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#termsToMix1');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term list with one-space separator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsToMix2" class="def"
+	    >termsToMix2</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	    >TransString</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	    >MixText</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Type-Judge-Judge.html#termsToMix2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Encode term list with two-spaces separator.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

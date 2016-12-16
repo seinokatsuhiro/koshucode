@@ -2,13 +2,13 @@
 
 var Haddock = (function ($) {
 
-    // Switch for develempment mode.
+    // Switch for development mode.
     var development = false;
 
     // Package list.
     var packages =
-        [ 'overture', 'subtext', 'base', 'syntax', 'data', 'core',
-          'writer', 'rop-flat', 'rop-nested', 'rop-cox', 'cop',
+        [ 'overture', 'subtext', 'base', 'syntax', 'type', 'data', 'data-plus',
+          'core', 'writer', 'rop-flat', 'rop-nested', 'rop-cox', 'cop',
           'calculator', 'toolkit' ];
 
     function init (p) {
