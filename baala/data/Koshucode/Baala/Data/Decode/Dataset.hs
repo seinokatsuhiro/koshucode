@@ -11,14 +11,19 @@ module Koshucode.Baala.Data.Decode.Dataset
     datasetClasses,
     dataset,
     datasetAdd,
+    readDataset,
   ) where
 
-import qualified Data.Map.Strict                     as Ms
-import qualified Koshucode.Baala.Overture            as O
-import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Syntax              as S
-import qualified Koshucode.Baala.Type                as T
-
+import qualified Data.Map.Strict                         as Ms
+import qualified Koshucode.Baala.Overture                as O
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
+import qualified Koshucode.Baala.Data.Class              as D
+import qualified Koshucode.Baala.Data.Decode.Content     as D
+import qualified Koshucode.Baala.Data.Decode.Content     as D
+import qualified Koshucode.Baala.Data.Decode.Term        as D
+import qualified Koshucode.Baala.Syntax.Pattern          as P
 
 -- | Dataset is a set of judges.
 data Dataset c = Dataset (Ms.Map T.JudgeClass [[S.Term c]])
@@ -73,4 +78,26 @@ datasetSelect filler (Dataset ds) cl ns = T.Rel he bo where
 pickContents :: c -> [S.TermName] -> [S.Term c] -> [c]
 pickContents filler ns ts = map pick ns where
     pick n = B.fromMaybe filler $ lookup n ts
+
+-- | Read file and convert to dataset.
+--
+--   >>> readDataset "foo.k" :: Koshucode.Baala.Base.IOAb DatasetC
+--   Right Dataset { 3 * A /x /y | 2 * B /y /z | 1 * C /z }
+--
+readDataset :: (D.CContent c) => FilePath -> B.IOAb (Dataset c)
+readDataset path =
+    do ts' <- S.readClauseTrees path
+       case ts' of
+         Left a   -> return $ Left a
+         Right ts -> case clauseJudges ts of
+                       Left a   -> return $ Left a
+                       Right js -> return $ Right $ dataset js
+
+clauseJudges :: (D.CContent c) => [[S.TTree]] -> B.Ab [T.Judge c]
+clauseJudges = loop D.cacheT [] where
+    loop cc js ((P.L (P.TBar "|--") : P.LRaw cl : ts) : ls) =
+        do (cc', j) <- D.treesJudge cc T.AssertAffirm cl ts
+           loop cc' (j : js) ls
+    loop _ js [] = Right js
+    loop _ _ ls  = B.abortable "clause" ls $ Left $ B.abortBecause "Except judgement"
 

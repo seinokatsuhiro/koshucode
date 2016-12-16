@@ -63,7 +63,6 @@ library
         Koshucode.Baala.Data.Decode.Dataset
         Koshucode.Baala.Data.Decode.Message
         Koshucode.Baala.Data.Decode.Numeric
-        Koshucode.Baala.Data.Decode.Read
         Koshucode.Baala.Data.Decode.Term
         Koshucode.Baala.Data.Decode.Type
 
