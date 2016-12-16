@@ -89,136 +89,140 @@
 <a class="number" name="line-80">80</a><a name="instance%20ToTermName%20Tz.Text"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>ToTermName</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-81">81</a>    <span class='hs-varid'>toTermName</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>toTermName</span> <span class='hs-varop'>.</span> <span class='hs-conid'>Tz</span><span class='hs-varop'>.</span><span class='hs-varid'>unpack</span>
 <a class="number" name="line-82">82</a>
-<a class="number" name="line-83">83</a><a name="enslash"></a><span class='hs-comment'>-- | Add necessary slash character indicating term name.</span>
-<a class="number" name="line-84">84</a><span class='hs-comment'>--</span>
-<a class="number" name="line-85">85</a><span class='hs-comment'>--   &gt;&gt;&gt; enslash &lt;$&gt; ["foo", "/bar", "+/baz", "-/qux"]</span>
-<a class="number" name="line-86">86</a><span class='hs-comment'>--   ["/foo", "/bar", "+/baz", "-/qux"]</span>
-<a class="number" name="line-87">87</a><span class='hs-comment'>--</span>
-<a class="number" name="line-88">88</a><span class='hs-definition'>enslash</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-89">89</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-90">90</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-91">91</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-92">92</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span>                  <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-93">93</a>
-<a class="number" name="line-94">94</a><a name="stringTermName"></a><span class='hs-comment'>-- | Decode term name from string.</span>
-<a class="number" name="line-95">95</a><span class='hs-comment'>--</span>
-<a class="number" name="line-96">96</a><span class='hs-comment'>--   &gt;&gt;&gt; stringTermName "/a"</span>
-<a class="number" name="line-97">97</a><span class='hs-comment'>--   TermName EQ "a"</span>
-<a class="number" name="line-98">98</a><span class='hs-comment'>--</span>
-<a class="number" name="line-99">99</a><span class='hs-comment'>--   &gt;&gt;&gt; stringTermName "+/a"</span>
-<a class="number" name="line-100">100</a><span class='hs-comment'>--   TermName GT "a"</span>
-<a class="number" name="line-101">101</a><span class='hs-comment'>-- </span>
-<a class="number" name="line-102">102</a><span class='hs-definition'>stringTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TermName</span>
-<a class="number" name="line-103">103</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-104">104</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>GT</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-105">105</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>LT</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-106">106</a><span class='hs-definition'>stringTermName</span> <span class='hs-varid'>n</span>                <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-107">107</a>
-<a class="number" name="line-108">108</a><a name="termNameString"></a><span class='hs-comment'>-- | Encode term name into string.</span>
-<a class="number" name="line-109">109</a><span class='hs-comment'>--</span>
-<a class="number" name="line-110">110</a><span class='hs-comment'>--   &gt;&gt;&gt; termNameString $ stringTermName "/size"</span>
-<a class="number" name="line-111">111</a><span class='hs-comment'>--   "/size"</span>
-<a class="number" name="line-112">112</a><span class='hs-comment'>--</span>
-<a class="number" name="line-113">113</a><span class='hs-definition'>termNameString</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-114">114</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-115">115</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>GT</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-116">116</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>LT</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-117">117</a>
-<a class="number" name="line-118">118</a><a name="termNameContent"></a><span class='hs-comment'>-- | Extract internal name.</span>
-<a class="number" name="line-119">119</a><span class='hs-comment'>--</span>
-<a class="number" name="line-120">120</a><span class='hs-comment'>--   &gt;&gt;&gt; termNameContent $ stringTermName "/size"</span>
-<a class="number" name="line-121">121</a><span class='hs-comment'>--   "size"</span>
-<a class="number" name="line-122">122</a><span class='hs-comment'>--</span>
-<a class="number" name="line-123">123</a><span class='hs-definition'>termNameContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-124">124</a><span class='hs-definition'>termNameContent</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
-<a class="number" name="line-125">125</a>
-<a class="number" name="line-126">126</a><a name="termPathString"></a><span class='hs-comment'>-- | Encode term path into string.</span>
-<a class="number" name="line-127">127</a><span class='hs-comment'>--</span>
-<a class="number" name="line-128">128</a><span class='hs-comment'>--   &gt;&gt;&gt; termPathString [stringTermName "r", stringTermName "x"]</span>
-<a class="number" name="line-129">129</a><span class='hs-comment'>--   "/r/x"</span>
-<a class="number" name="line-130">130</a><span class='hs-comment'>--</span>
-<a class="number" name="line-131">131</a><span class='hs-definition'>termPathString</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermPath</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-132">132</a><span class='hs-definition'>termPathString</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>termNameString</span>
-<a class="number" name="line-133">133</a>
-<a class="number" name="line-134">134</a><a name="termNameSign"></a><span class='hs-comment'>-- | Sign of term name.</span>
-<a class="number" name="line-135">135</a><span class='hs-definition'>termNameSign</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Ordering</span>
-<a class="number" name="line-136">136</a><span class='hs-definition'>termNameSign</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sign</span>
+<a class="number" name="line-83">83</a><a name="instance%20ToTermName%20Int"></a><span class='hs-comment'>-- | Integer term name.</span>
+<a class="number" name="line-84">84</a><a name="instance%20ToTermName%20Int"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>ToTermName</span> <span class='hs-conid'>Int</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-85">85</a>    <span class='hs-varid'>toTermName</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>toTermName</span> <span class='hs-varop'>.</span> <span class='hs-varid'>show</span>
+<a class="number" name="line-86">86</a>
+<a class="number" name="line-87">87</a><a name="enslash"></a><span class='hs-comment'>-- | Add necessary slash character indicating term name.</span>
+<a class="number" name="line-88">88</a><span class='hs-comment'>--</span>
+<a class="number" name="line-89">89</a><span class='hs-comment'>--   &gt;&gt;&gt; enslash &lt;$&gt; ["foo", "/bar", "+/baz", "-/qux"]</span>
+<a class="number" name="line-90">90</a><span class='hs-comment'>--   ["/foo", "/bar", "+/baz", "-/qux"]</span>
+<a class="number" name="line-91">91</a><span class='hs-comment'>--</span>
+<a class="number" name="line-92">92</a><span class='hs-definition'>enslash</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-93">93</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-94">94</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-95">95</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-96">96</a><span class='hs-definition'>enslash</span> <span class='hs-varid'>n</span>                  <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-97">97</a>
+<a class="number" name="line-98">98</a><a name="stringTermName"></a><span class='hs-comment'>-- | Decode term name from string.</span>
+<a class="number" name="line-99">99</a><span class='hs-comment'>--</span>
+<a class="number" name="line-100">100</a><span class='hs-comment'>--   &gt;&gt;&gt; stringTermName "/a"</span>
+<a class="number" name="line-101">101</a><span class='hs-comment'>--   TermName EQ "a"</span>
+<a class="number" name="line-102">102</a><span class='hs-comment'>--</span>
+<a class="number" name="line-103">103</a><span class='hs-comment'>--   &gt;&gt;&gt; stringTermName "+/a"</span>
+<a class="number" name="line-104">104</a><span class='hs-comment'>--   TermName GT "a"</span>
+<a class="number" name="line-105">105</a><span class='hs-comment'>-- </span>
+<a class="number" name="line-106">106</a><span class='hs-definition'>stringTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TermName</span>
+<a class="number" name="line-107">107</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-108">108</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>GT</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-109">109</a><span class='hs-definition'>stringTermName</span> <span class='hs-layout'>(</span><span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-chr'>'/'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>LT</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-110">110</a><span class='hs-definition'>stringTermName</span> <span class='hs-varid'>n</span>                <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-111">111</a>
+<a class="number" name="line-112">112</a><a name="termNameString"></a><span class='hs-comment'>-- | Encode term name into string.</span>
+<a class="number" name="line-113">113</a><span class='hs-comment'>--</span>
+<a class="number" name="line-114">114</a><span class='hs-comment'>--   &gt;&gt;&gt; termNameString $ stringTermName "/size"</span>
+<a class="number" name="line-115">115</a><span class='hs-comment'>--   "/size"</span>
+<a class="number" name="line-116">116</a><span class='hs-comment'>--</span>
+<a class="number" name="line-117">117</a><span class='hs-definition'>termNameString</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-118">118</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>EQ</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-119">119</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>GT</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'+'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-120">120</a><span class='hs-definition'>termNameString</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-conid'>LT</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-chr'>'-'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>enslash</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-121">121</a>
+<a class="number" name="line-122">122</a><a name="termNameContent"></a><span class='hs-comment'>-- | Extract internal name.</span>
+<a class="number" name="line-123">123</a><span class='hs-comment'>--</span>
+<a class="number" name="line-124">124</a><span class='hs-comment'>--   &gt;&gt;&gt; termNameContent $ stringTermName "/size"</span>
+<a class="number" name="line-125">125</a><span class='hs-comment'>--   "size"</span>
+<a class="number" name="line-126">126</a><span class='hs-comment'>--</span>
+<a class="number" name="line-127">127</a><span class='hs-definition'>termNameContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-128">128</a><span class='hs-definition'>termNameContent</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-129">129</a>
+<a class="number" name="line-130">130</a><a name="termPathString"></a><span class='hs-comment'>-- | Encode term path into string.</span>
+<a class="number" name="line-131">131</a><span class='hs-comment'>--</span>
+<a class="number" name="line-132">132</a><span class='hs-comment'>--   &gt;&gt;&gt; termPathString [stringTermName "r", stringTermName "x"]</span>
+<a class="number" name="line-133">133</a><span class='hs-comment'>--   "/r/x"</span>
+<a class="number" name="line-134">134</a><span class='hs-comment'>--</span>
+<a class="number" name="line-135">135</a><span class='hs-definition'>termPathString</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermPath</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-136">136</a><span class='hs-definition'>termPathString</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>termNameString</span>
 <a class="number" name="line-137">137</a>
-<a class="number" name="line-138">138</a><a name="termNameAltSign"></a><span class='hs-comment'>-- | Alter sign of term name.</span>
-<a class="number" name="line-139">139</a><span class='hs-definition'>termNameAltSign</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ordering</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>TermName</span>
-<a class="number" name="line-140">140</a><span class='hs-definition'>termNameAltSign</span> <span class='hs-varid'>sign</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-varid'>n</span>
+<a class="number" name="line-138">138</a><a name="termNameSign"></a><span class='hs-comment'>-- | Sign of term name.</span>
+<a class="number" name="line-139">139</a><span class='hs-definition'>termNameSign</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Ordering</span>
+<a class="number" name="line-140">140</a><span class='hs-definition'>termNameSign</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sign</span>
 <a class="number" name="line-141">141</a>
-<a class="number" name="line-142">142</a><a name="orderingTermName"></a><span class='hs-comment'>-- | Convert to ordering pair.</span>
-<a class="number" name="line-143">143</a><span class='hs-definition'>orderingTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ordering</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-144">144</a><span class='hs-definition'>orderingTermName</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>sign</span><span class='hs-layout'>,</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>
+<a class="number" name="line-142">142</a><a name="termNameAltSign"></a><span class='hs-comment'>-- | Alter sign of term name.</span>
+<a class="number" name="line-143">143</a><span class='hs-definition'>termNameAltSign</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Ordering</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>TermName</span>
+<a class="number" name="line-144">144</a><span class='hs-definition'>termNameAltSign</span> <span class='hs-varid'>sign</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-varid'>n</span>
 <a class="number" name="line-145">145</a>
-<a class="number" name="line-146">146</a>
-<a class="number" name="line-147">147</a><span class='hs-comment'>-- ----------------------  Term name tuple</span>
-<a class="number" name="line-148">148</a>
-<a class="number" name="line-149">149</a><a name="TermName2"></a><span class='hs-comment'>-- | Tuple of 2 term names.</span>
-<a class="number" name="line-150">150</a><a name="TermName2"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName2</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-151">151</a>
-<a class="number" name="line-152">152</a><a name="TermName3"></a><span class='hs-comment'>-- | Tuple of 3 term names.</span>
-<a class="number" name="line-153">153</a><a name="TermName3"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName3</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-154">154</a>
-<a class="number" name="line-155">155</a><a name="TermName4"></a><span class='hs-comment'>-- | Tuple of 4 term names.</span>
-<a class="number" name="line-156">156</a><a name="TermName4"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName4</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-157">157</a>
-<a class="number" name="line-158">158</a><a name="TermName5"></a><span class='hs-comment'>-- | Tuple of 5 term names.</span>
-<a class="number" name="line-159">159</a><a name="TermName5"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName5</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-160">160</a>
-<a class="number" name="line-161">161</a><a name="TermName6"></a><span class='hs-comment'>-- | Tuple of 6 term names.</span>
-<a class="number" name="line-162">162</a><a name="TermName6"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName6</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
-<a class="number" name="line-163">163</a>
+<a class="number" name="line-146">146</a><a name="orderingTermName"></a><span class='hs-comment'>-- | Convert to ordering pair.</span>
+<a class="number" name="line-147">147</a><span class='hs-definition'>orderingTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TermName</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ordering</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
+<a class="number" name="line-148">148</a><span class='hs-definition'>orderingTermName</span> <span class='hs-varid'>n</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>TermName</span> <span class='hs-varid'>sign</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>sign</span><span class='hs-layout'>,</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>
+<a class="number" name="line-149">149</a>
+<a class="number" name="line-150">150</a>
+<a class="number" name="line-151">151</a><span class='hs-comment'>-- ----------------------  Term name tuple</span>
+<a class="number" name="line-152">152</a>
+<a class="number" name="line-153">153</a><a name="TermName2"></a><span class='hs-comment'>-- | Tuple of 2 term names.</span>
+<a class="number" name="line-154">154</a><a name="TermName2"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName2</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
+<a class="number" name="line-155">155</a>
+<a class="number" name="line-156">156</a><a name="TermName3"></a><span class='hs-comment'>-- | Tuple of 3 term names.</span>
+<a class="number" name="line-157">157</a><a name="TermName3"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName3</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
+<a class="number" name="line-158">158</a>
+<a class="number" name="line-159">159</a><a name="TermName4"></a><span class='hs-comment'>-- | Tuple of 4 term names.</span>
+<a class="number" name="line-160">160</a><a name="TermName4"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName4</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
+<a class="number" name="line-161">161</a>
+<a class="number" name="line-162">162</a><a name="TermName5"></a><span class='hs-comment'>-- | Tuple of 5 term names.</span>
+<a class="number" name="line-163">163</a><a name="TermName5"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName5</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
 <a class="number" name="line-164">164</a>
-<a class="number" name="line-165">165</a><span class='hs-comment'>-- ----------------------  Term index</span>
-<a class="number" name="line-166">166</a>
-<a class="number" name="line-167">167</a><a name="TermIndex"></a><span class='hs-comment'>-- | Term index.</span>
-<a class="number" name="line-168">168</a><a name="TermIndex"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermIndex</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
-<a class="number" name="line-169">169</a>
-<a class="number" name="line-170">170</a><a name="IndexTerm"></a><span class='hs-comment'>-- | Term name and index.</span>
-<a class="number" name="line-171">171</a><a name="IndexTerm"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>IndexTerm</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermIndex</span><span class='hs-layout'>)</span>
-<a class="number" name="line-172">172</a>
-<a class="number" name="line-173">173</a><a name="termP"></a><span class='hs-comment'>-- | Test present term.</span>
-<a class="number" name="line-174">174</a><span class='hs-comment'>--</span>
-<a class="number" name="line-175">175</a><span class='hs-comment'>--   &gt;&gt;&gt; termP 2</span>
-<a class="number" name="line-176">176</a><span class='hs-comment'>--   True</span>
-<a class="number" name="line-177">177</a><span class='hs-comment'>--</span>
-<a class="number" name="line-178">178</a><span class='hs-comment'>--   &gt;&gt;&gt; termP 0</span>
-<a class="number" name="line-179">179</a><span class='hs-comment'>--   True</span>
-<a class="number" name="line-180">180</a><span class='hs-comment'>--</span>
-<a class="number" name="line-181">181</a><span class='hs-comment'>--   &gt;&gt;&gt; termP (-1)</span>
-<a class="number" name="line-182">182</a><span class='hs-comment'>--   False</span>
-<a class="number" name="line-183">183</a><span class='hs-comment'>--</span>
-<a class="number" name="line-184">184</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>TermIndex</span>
-<a class="number" name="line-185">185</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;=</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
-<a class="number" name="line-186">186</a>
-<a class="number" name="line-187">187</a><a name="termN"></a><span class='hs-comment'>-- | Test new term.</span>
-<a class="number" name="line-188">188</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>TermIndex</span>
-<a class="number" name="line-189">189</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
+<a class="number" name="line-165">165</a><a name="TermName6"></a><span class='hs-comment'>-- | Tuple of 6 term names.</span>
+<a class="number" name="line-166">166</a><a name="TermName6"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermName6</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermName</span><span class='hs-layout'>)</span>
+<a class="number" name="line-167">167</a>
+<a class="number" name="line-168">168</a>
+<a class="number" name="line-169">169</a><span class='hs-comment'>-- ----------------------  Term index</span>
+<a class="number" name="line-170">170</a>
+<a class="number" name="line-171">171</a><a name="TermIndex"></a><span class='hs-comment'>-- | Term index.</span>
+<a class="number" name="line-172">172</a><a name="TermIndex"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TermIndex</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-173">173</a>
+<a class="number" name="line-174">174</a><a name="IndexTerm"></a><span class='hs-comment'>-- | Term name and index.</span>
+<a class="number" name="line-175">175</a><a name="IndexTerm"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>IndexTerm</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>TermName</span><span class='hs-layout'>,</span> <span class='hs-conid'>TermIndex</span><span class='hs-layout'>)</span>
+<a class="number" name="line-176">176</a>
+<a class="number" name="line-177">177</a><a name="termP"></a><span class='hs-comment'>-- | Test present term.</span>
+<a class="number" name="line-178">178</a><span class='hs-comment'>--</span>
+<a class="number" name="line-179">179</a><span class='hs-comment'>--   &gt;&gt;&gt; termP 2</span>
+<a class="number" name="line-180">180</a><span class='hs-comment'>--   True</span>
+<a class="number" name="line-181">181</a><span class='hs-comment'>--</span>
+<a class="number" name="line-182">182</a><span class='hs-comment'>--   &gt;&gt;&gt; termP 0</span>
+<a class="number" name="line-183">183</a><span class='hs-comment'>--   True</span>
+<a class="number" name="line-184">184</a><span class='hs-comment'>--</span>
+<a class="number" name="line-185">185</a><span class='hs-comment'>--   &gt;&gt;&gt; termP (-1)</span>
+<a class="number" name="line-186">186</a><span class='hs-comment'>--   False</span>
+<a class="number" name="line-187">187</a><span class='hs-comment'>--</span>
+<a class="number" name="line-188">188</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>TermIndex</span>
+<a class="number" name="line-189">189</a><span class='hs-definition'>termP</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;=</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
 <a class="number" name="line-190">190</a>
-<a class="number" name="line-191">191</a><a name="termsP"></a><span class='hs-comment'>-- | Test all terms are present.</span>
-<a class="number" name="line-192">192</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-193">193</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termP</span>
+<a class="number" name="line-191">191</a><a name="termN"></a><span class='hs-comment'>-- | Test new term.</span>
+<a class="number" name="line-192">192</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>TermIndex</span>
+<a class="number" name="line-193">193</a><span class='hs-definition'>termN</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span>
 <a class="number" name="line-194">194</a>
-<a class="number" name="line-195">195</a><a name="termsN"></a><span class='hs-comment'>-- | Test all terms are new.</span>
-<a class="number" name="line-196">196</a><span class='hs-comment'>--</span>
-<a class="number" name="line-197">197</a><span class='hs-comment'>--   &gt;&gt;&gt; termsN [-1, -1]</span>
-<a class="number" name="line-198">198</a><span class='hs-comment'>--   True</span>
-<a class="number" name="line-199">199</a><span class='hs-comment'>--</span>
-<a class="number" name="line-200">200</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-201">201</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termN</span>
-<a class="number" name="line-202">202</a>
-<a class="number" name="line-203">203</a><a name="termsPN"></a><span class='hs-comment'>-- | Test present and new terms.</span>
-<a class="number" name="line-204">204</a><span class='hs-comment'>--</span>
-<a class="number" name="line-205">205</a><span class='hs-comment'>--   &gt;&gt;&gt; termsPN [1,2] [-1]</span>
-<a class="number" name="line-206">206</a><span class='hs-comment'>--   True</span>
-<a class="number" name="line-207">207</a><span class='hs-comment'>--</span>
-<a class="number" name="line-208">208</a><span class='hs-comment'>--   &gt;&gt;&gt; termsPN [1,2] [-1,0]</span>
-<a class="number" name="line-209">209</a><span class='hs-comment'>--   False</span>
-<a class="number" name="line-210">210</a><span class='hs-comment'>--</span>
-<a class="number" name="line-211">211</a><span class='hs-definition'>termsPN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test2</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
-<a class="number" name="line-212">212</a><span class='hs-definition'>termsPN</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>termsP</span> <span class='hs-varid'>ps</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>termsN</span> <span class='hs-varid'>ns</span>
-<a class="number" name="line-213">213</a>
+<a class="number" name="line-195">195</a><a name="termsP"></a><span class='hs-comment'>-- | Test all terms are present.</span>
+<a class="number" name="line-196">196</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-197">197</a><span class='hs-definition'>termsP</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termP</span>
+<a class="number" name="line-198">198</a>
+<a class="number" name="line-199">199</a><a name="termsN"></a><span class='hs-comment'>-- | Test all terms are new.</span>
+<a class="number" name="line-200">200</a><span class='hs-comment'>--</span>
+<a class="number" name="line-201">201</a><span class='hs-comment'>--   &gt;&gt;&gt; termsN [-1, -1]</span>
+<a class="number" name="line-202">202</a><span class='hs-comment'>--   True</span>
+<a class="number" name="line-203">203</a><span class='hs-comment'>--</span>
+<a class="number" name="line-204">204</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-205">205</a><span class='hs-definition'>termsN</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>all</span> <span class='hs-varid'>termN</span>
+<a class="number" name="line-206">206</a>
+<a class="number" name="line-207">207</a><a name="termsPN"></a><span class='hs-comment'>-- | Test present and new terms.</span>
+<a class="number" name="line-208">208</a><span class='hs-comment'>--</span>
+<a class="number" name="line-209">209</a><span class='hs-comment'>--   &gt;&gt;&gt; termsPN [1,2] [-1]</span>
+<a class="number" name="line-210">210</a><span class='hs-comment'>--   True</span>
+<a class="number" name="line-211">211</a><span class='hs-comment'>--</span>
+<a class="number" name="line-212">212</a><span class='hs-comment'>--   &gt;&gt;&gt; termsPN [1,2] [-1,0]</span>
+<a class="number" name="line-213">213</a><span class='hs-comment'>--   False</span>
+<a class="number" name="line-214">214</a><span class='hs-comment'>--</span>
+<a class="number" name="line-215">215</a><span class='hs-definition'>termsPN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test2</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TermIndex</span><span class='hs-keyglyph'>]</span>
+<a class="number" name="line-216">216</a><span class='hs-definition'>termsPN</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>termsP</span> <span class='hs-varid'>ps</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>termsN</span> <span class='hs-varid'>ns</span>
+<a class="number" name="line-217">217</a>
 </pre></body>
 </html>

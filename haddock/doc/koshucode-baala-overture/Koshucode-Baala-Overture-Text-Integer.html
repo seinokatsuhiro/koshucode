@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.178.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.185.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -143,6 +143,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Integer</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:stringCustomInteger"
+	    >stringCustomInteger</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringCountInteger"
+	    >stringCountInteger</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:intLowerHexString"
 	    >intLowerHexString</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
@@ -169,8 +193,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:integralReckonString"
-	    >integralReckonString</a
+	  ><a href="#v:integralCountString"
+	    >integralCountString</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
 	    >Integral</a
 	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -371,6 +395,66 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 </pre
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringCustomInteger" class="def"
+	    >stringCustomInteger</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringCustomInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode custom digits to integer.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>stringCustomInteger &quot;01234567&quot; &quot;144&quot;
+</code
+		></strong
+	      >Just 100
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringCountInteger" class="def"
+	    >stringCountInteger</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#stringCountInteger');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode counting digits to integer.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>stringCountInteger ['A'..'Z'] &lt;$&gt; [&quot;&quot;, &quot;A&quot;, &quot;B&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;AA&quot;, &quot;AZ&quot;, &quot;BA&quot;, &quot;CV&quot;, &quot;ALL&quot;, &quot;KOSHU&quot;]
+</code
+		></strong
+	      >[Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
+</pre
+	    ></div
+	  ></div
 	><h1 id="g:2"
 	>Encoder</h1
 	><div class="top"
@@ -455,20 +539,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:integralReckonString" class="def"
-	    >integralReckonString</a
+	  ><a name="v:integralCountString" class="def"
+	    >integralCountString</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
 	    >Integral</a
 	    > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#integralReckonString');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#integralCountString');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Encode integer to reckoning string.</p
+	    >Encode integer to counting string.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code

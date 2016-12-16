@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Result of relational calculation.
@@ -195,7 +195,7 @@ instance GHC.Show.Show Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 instance GHC.Classes.Ord Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Classes.Eq Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
 instance GHC.Show.Show Koshucode.Baala.Core.Lexmap.Lexmap.LexmapType
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 instance Data.Default.Class.Default Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 
 
@@ -203,34 +203,13 @@ instance Data.Default.Class.Default Koshucode.Baala.Core.Lexmap.Lexmap.Lexmap
 module Koshucode.Baala.Core.Assert.RelTable
 
 -- | Render relation in table layout.
-relTable :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> String
+relTable :: (CRel c, MixEncode c) => [ShortDef] -> Rel c -> String
 
 -- | Render relation in table layout.
-relTableLines :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> [String]
+relTableLines :: (CRel c, MixEncode c) => [ShortDef] -> Rel c -> [String]
 
 -- | Convert contents of relation into strings.
-relText :: (CRel c, MixShortEncode c) => [ShortDef] -> Rel c -> RelText
-
-
--- | Dataset as a set of judges.
---   
---   Dataset is like a bridge of judges and relations. We can get a
---   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Core.Assert.Dataset
-
--- | Dataset is a set of judges.
-data Dataset c
-
--- | Gather judges into a dataset.
-dataset :: [Judge c] -> Dataset c
-
--- | Add judges to dataset.
-datasetAdd :: [Judge c] -> Map (Dataset c)
-
--- | Select relation from dataset. If a giving term is not in judges,
---   <tt>CEmpty</tt> sign is used.
-datasetSelect :: (Ord c, CEmpty c) => Dataset c -> RelSelect c
-instance Data.Default.Class.Default (Koshucode.Baala.Core.Assert.Dataset.Dataset c)
+relText :: (CRel c, MixEncode c) => [ShortDef] -> Rel c -> RelText
 
 
 -- | Message list.
@@ -544,7 +523,7 @@ module Koshucode.Baala.Core.Relkit.Run
 relkitLink :: (Ord c) => RelkitTable c -> Map (Relkit c)
 
 -- | Run relkit.
-relkitRun :: (Ord c, CRel c, SelectRel h) => h c -> [LocalTable c] -> RelkitBody c -> AbMap [[c]]
+relkitRun :: (CContent c, SelectRel h) => h c -> [LocalTable c] -> RelkitBody c -> AbMap [[c]]
 
 -- | Calculate fixed relation.
 fixedRelation :: (Ord c) => Map (AbMap [[c]])
@@ -608,7 +587,7 @@ instance GHC.Classes.Ord (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance GHC.Classes.Eq (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance GHC.Base.Monoid (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Relmap.Relmap' h c)
 
 
 -- | Relmap operators.
@@ -662,7 +641,7 @@ Intmed :: h c -> Lexmap -> [(String, Relmap' h c)] -> Intmed' h c
 instance GHC.Show.Show (h c) => GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
 
 
 -- | Construction of relmaps.
@@ -715,7 +694,7 @@ module Koshucode.Baala.Core.Relmap.Global
 
 -- | Global parameters
 data Global' h c
-Global :: String -> Version -> OpSet' h c -> Feature -> String -> [String] -> [HttpProxy] -> Time -> Result c -> Option c -> Int -> Int -> [NIOPoint] -> h c -> Global' h c
+Global :: String -> Version -> OpSet' h c -> Feature -> String -> [String] -> [HttpProxy] -> Time -> Result c -> Option c -> Int -> Int -> [IxIOPoint] -> h c -> Global' h c
 
 -- | One-line description of calculator
 [globalSynopsis] :: Global' h c -> String
@@ -754,7 +733,7 @@ Global :: String -> Version -> OpSet' h c -> Feature -> String -> [String] -> [H
 [globalSourceCount] :: Global' h c -> Int
 
 -- | Included sources
-[globalSources] :: Global' h c -> [NIOPoint]
+[globalSources] :: Global' h c -> [IxIOPoint]
 
 -- | Usually, data resource is used as hook
 [globalHook] :: Global' h c -> h c
@@ -892,7 +871,7 @@ assertNormal :: Map [ShortAssert' h c]
 -- | Select violated assertions.
 assertViolated :: Map [ShortAssert' h c]
 instance GHC.Show.Show (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Assert.Assert.Assert' h c)
 
 
 -- | Running relational calculation.
@@ -996,8 +975,8 @@ instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.Clause
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseBody
 instance GHC.Show.Show Koshucode.Baala.Core.Resource.Clause.ClauseHead
 instance Data.Default.Class.Default Koshucode.Baala.Core.Resource.Clause.ClauseHead
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.Clause
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.ClauseHead
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.Clause
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Core.Resource.Clause.ClauseHead
 
 
 -- | Affirming or denying proposition.
@@ -1014,7 +993,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
 -- | Relational data resource
 data Resource c
-Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> [Judge c] -> InputQueue -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> SecNo -> CacheT -> RelSelect c -> Resource c
+Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> [Judge c] -> Dataset c -> InputQueue -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> SecNo -> CacheT -> Resource c
 
 -- | Global parameter
 [resGlobal] :: Resource c -> Global c
@@ -1040,6 +1019,9 @@ Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> 
 -- | Affirmative or denial judgements
 [resJudge] :: Resource c -> [Judge c]
 
+-- | Dataset
+[resDataset] :: Resource c -> Dataset c
+
 -- | Input points
 [resInputQueue] :: Resource c -> InputQueue
 
@@ -1061,14 +1043,11 @@ Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> 
 -- | Term name cache
 [resCacheT] :: Resource c -> CacheT
 
--- | Relation selector
-[resSelect] :: Resource c -> RelSelect c
-
 -- | Abort or resource.
 type AbResource c = Ab (Resource c)
 
 -- | Included sources, i.e., done-part of input queue.
-resIncluded :: Resource c -> [NIOPoint]
+resIncluded :: Resource c -> [IxIOPoint]
 
 -- | <a>IOPoint</a> of all inputs.
 resInput :: Resource c -> [IOPoint]
@@ -1086,13 +1065,13 @@ resFeature :: Resource c -> Feature
 resMessagesAdd :: [String] -> Map (Resource c)
 
 -- | Queue for input code: <i>todo</i>, <i>ready</i> and <i>done</i>.
-type InputQueue = (Queue InputPoint, [NIOPoint])
+type InputQueue = (Queue InputPoint, [IxIOPoint])
 
 -- | Add input to todo-part of input queue.
 resQueueTodo :: InputPoint -> Map (Resource c)
 
 -- | Add input to done-part of input queue.
-resQueueDone :: NIOPoint -> Map (Resource c)
+resQueueDone :: IxIOPoint -> Map (Resource c)
 
 -- | Assertion of relation.
 type Assert c = Assert' Resource c
@@ -1130,7 +1109,7 @@ type ShortAsserts c = ShortAsserts' Resource c
 -- | Default global parameter.
 global :: (CContent c) => Global c
 instance GHC.Show.Show (Koshucode.Baala.Core.Resource.Resource.Resource c)
-instance Koshucode.Baala.Data.Type.Rel.Rel.SelectRel Koshucode.Baala.Core.Resource.Resource.Resource
+instance Koshucode.Baala.Type.Rel.Rel.SelectRel Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Core.Relmap.Global.GetGlobal Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Data.Class.Content.CContent c => Data.Default.Class.Default (Koshucode.Baala.Core.Resource.Resource.Resource c)
 
@@ -1163,13 +1142,14 @@ type ResultC = Result Content
 -- | <tt>ResultWriter</tt> for concrete baala content.
 type ResultWriterC = ResultWriter Content
 instance GHC.Show.Show c => GHC.Show.Show (Koshucode.Baala.Core.Resource.Concrete.About c)
+instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode c => Koshucode.Baala.Base.MixText.MixEncode.MixEncode (Koshucode.Baala.Core.Resource.Concrete.About c)
 
 
 -- | Resource as bundle of relational expressions.
 module Koshucode.Baala.Core.Resource.Include
 
 -- | Include source code into resource.
-resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> NIOPoint -> Bz -> AbResource c
+resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> IxIOPoint -> Bz -> AbResource c
 
 -- | Build content expression with global parameter.
 treeCoxG :: (CContent c) => Global c -> TTree -> Ab (Cox c)

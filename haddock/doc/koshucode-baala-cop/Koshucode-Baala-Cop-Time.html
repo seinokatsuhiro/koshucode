@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ti
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-cop-0.178.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-cop-0.185.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -52,6 +52,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ti
 	><p class="caption"
 	>Koshucode.Baala.Cop.Time</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operators</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Implementations</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -67,27 +81,81 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ti
 	><li class="src short"
 	  ><a href="#v:copsTime"
 	    >copsTime</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTime"
-	    >CTime</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CDec"
-	    >CDec</a
-	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 	    >Cop</a
 	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:copTimeAdd"
+	    >copTimeAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copDateForm"
+	    >copDateForm</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copMjd"
+	    >copMjd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copTime"
+	    >copTime</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copClock"
+	    >copClock</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copDayw"
+	    >copDayw</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Operators</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:copsTime" class="def"
 	    >copsTime</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTime"
-	    >CTime</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CDec"
-	    >CDec</a
-	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 	    >Cop</a
 	    > c] <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copsTime');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -97,39 +165,183 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ti
 	    >Content operators on clocks and times.</p
 	    ></div
 	  ></div
-	><div class="doc"
-	><dl
-	  ><dt
-	    ><code
-	      >add-day</code
-	      ></dt
-	    ><dd
-	    >Add days to time.</dd
-	    ><dt
-	    ><code
-	      >add-week</code
-	      ></dt
-	    ><dd
-	    >Add weeks to time.</dd
-	    ><dt
-	    ><code
-	      >add-month</code
-	      ></dt
-	    ><dd
-	    >Add months to time.</dd
-	    ><dt
-	    ><code
-	      >add-year</code
-	      ></dt
-	    ><dd
-	    >Add years to time.</dd
-	    ><dt
-	    ><code
-	      >mjd</code
-	      ></dt
-	    ><dd
-	    >Modified Jurian Day of time.</dd
-	    ></dl
+	><h1 id="g:2"
+	>Implementations</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copTimeAdd" class="def"
+	    >copTimeAdd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integer"
+	    >Integer</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Time-Time.html#t:Time"
+	    >Time</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copTimeAdd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add day/week/month/year to time.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>add-week ( 5 )( 2013-04-18 )
+</code
+		></strong
+	      >2013-05-23
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>add-month ( 1 )( 2013-04-18 )
+</code
+		></strong
+	      >2013-05-18
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copDateForm" class="def"
+	    >copDateForm</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Time-Date.html#t:Date"
+	    >Date</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copDateForm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert format of date.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>weekly 2013-04-18
+</code
+		></strong
+	      >2013-#16-4
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copMjd" class="def"
+	    >copMjd</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copMjd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert time to the modified Jurian day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mjd 2013-04-18
+</code
+		></strong
+	      >56400
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copTime" class="def"
+	    >copTime</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copTime');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create time from year, month, and day.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>time ( 2013 )( 4 )( 18 )
+</code
+		></strong
+	      >2013-04-18
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copClock" class="def"
+	    >copClock</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copClock');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create clock from day, hour, minute, and second.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clock ( 0 )( 12 )( 45 )( 30 )
+</code
+		></strong
+	      >|12:45:30|
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copDayw" class="def"
+	    >copDayw</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Time.html#copDayw');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Day of week.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dayw 2013-04-18
+</code
+		></strong
+	      >4
+</pre
+	    ></div
 	  ></div
 	></div
       ></div

@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Data.Decode.Dataset</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('data', 'koshucode-baala-data', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-Decode-Dataset.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-data-0.185.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Data.Decode.Dataset</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Dataset as a set of judges.</p
+	  ><p
+	  >Dataset is like a bridge of judges and relations.
+   We can get a relation from a dataset,
+   that dataset is build from judges.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Dataset"
+	    >Dataset</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:datasetClasses"
+	    >datasetClasses</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:dataset"
+	    >dataset</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:datasetAdd"
+	    >datasetAdd</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:readDataset"
+	    >readDataset</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:IOAb"
+	    >IOAb</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c)</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Dataset" class="def"
+	    >Dataset</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#Dataset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Dataset is a set of judges.</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Dataset" class="caption collapser" onclick="toggleSection('i:Dataset')"
+	    >Instances</p
+	    ><div id="section.i:Dataset" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:SelectRel"
+		      >SelectRel</a
+		      > <a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+		      >Dataset</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#line-46');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+		      >Dataset</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#line-31');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+		      >Dataset</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#line-43');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Dataset that has no judges.</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:datasetClasses" class="def"
+	    >datasetClasses</a
+	    > :: <a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c -&gt; <a href="http://hackage.haskell.org/package/containers/docs/Data-Map-Lazy.html#t:Map"
+	    >Map</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
+	    >JudgeClass</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#datasetClasses');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Retrieve judgement class and its term names.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dataset" class="def"
+	    >dataset</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#dataset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Gather judges into a dataset.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:datasetAdd" class="def"
+	    >datasetAdd</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#datasetAdd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Add judges to dataset.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readDataset" class="def"
+	    >readDataset</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:IOAb"
+	    >IOAb</a
+	    > (<a href="Koshucode-Baala-Data-Decode-Dataset.html#t:Dataset"
+	    >Dataset</a
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Dataset.html#readDataset');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read file and convert to dataset.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>readDataset &quot;foo.k&quot; :: Koshucode.Baala.Base.IOAb DatasetC
+</code
+		></strong
+	      >Right Dataset { 3 * A /x /y | 2 * B /y /z | 1 * C /z }
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

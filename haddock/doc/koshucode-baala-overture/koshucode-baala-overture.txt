@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Exit process.
@@ -88,6 +88,10 @@ parse :: [Option] -> [String] -> Parsed
 
 -- | Parse command-line parameters of the current process.
 parseCommand :: [Option] -> IO Parsed
+
+-- | Program name and command-line arguments. This function removes carrige
+--   returns from the arguments.
+progAndArgs :: IO (String, [String])
 
 -- | Actual optional parameter.
 data Para
@@ -277,6 +281,22 @@ stringHexInt :: String -> Maybe Int
 --   </pre>
 stringHexInteger :: String -> Maybe Integer
 
+-- | Decode custom digits to integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringCustomInteger "01234567" "144"
+--   Just 100
+--   </pre>
+stringCustomInteger :: String -> String -> Maybe Integer
+
+-- | Decode counting digits to integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringCountInteger ['A'..'Z'] &lt;$&gt; ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
+--   [Just 0, Just 1, Just 2, Just 25, Just 26, Just 27, Just 52, Just 53, Just 100, Just 1000, Just 5303449]
+--   </pre>
+stringCountInteger :: String -> String -> Maybe Integer
+
 -- | Encode integer to hexadecimal string.
 --   
 --   <pre>
@@ -301,13 +321,13 @@ intUpperHexString :: Int -> String
 --   </pre>
 integralCustomString :: (Integral n) => String -> n -> String
 
--- | Encode integer to reckoning string.
+-- | Encode integer to counting string.
 --   
 --   <pre>
 --   &gt;&gt;&gt; intReckonString ['A'..'Z'] &lt;$&gt; [0, 1, 2, 25, 26, 27, 52, 53, 100, 1000, 5303449]
 --   ["", "A", "B", "Y", "Z", "AA", "AZ", "BA", "CV", "ALL", "KOSHU"]
 --   </pre>
-integralReckonString :: (Integral n) => String -> n -> String
+integralCountString :: (Integral n) => String -> n -> String
 
 
 -- | Unicode general category.
@@ -578,6 +598,9 @@ module Koshucode.Baala.Overture.Shorthand
 --   <tt>&lt;&gt;</tt>.
 (++) :: (Monoid a) => a -> a -> a
 
+-- | Double fmap.
+(<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+
 -- | <a>Int</a> shorthand.
 --   
 --   <pre>
@@ -615,6 +638,87 @@ integer :: Map Integer
 --   Nothing
 --   </pre>
 nothing :: a -> Maybe b
+
+
+-- | Miscellaneous functions.
+module Koshucode.Baala.Overture.Misc
+
+-- | URI, file path, etc.
+type IOPath = String
+
+-- | Type which has I/O path.
+class GetIOPath a
+getIOPath :: GetIOPath a => a -> IOPath
+
+-- | Or-else pattern. This is similar to <a>Alternative</a>.
+class OrElse a where (<||>) = orElse
+orElse :: OrElse a => a -> a -> a
+(<||>) :: (OrElse a, OrElse a) => a -> a -> a
+
+-- | Head and tail of list. This is a list version of text <a>uncons</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; uncons "abcdefg"
+--   Just ('a', "bcdefg")
+--   </pre>
+uncons :: [a] -> Maybe (a, [a])
+
+-- | 0 of type <a>Int</a>.
+zero :: Int
+
+-- | Inteeger list start with given integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; take 4 $ ints 1
+--   [1,2,3,4]
+--   </pre>
+ints :: Int -> [Int]
+
+-- | Print list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; printList ["foo", "bar", "baz"]
+--   "foo"
+--   "bar"
+--   "baz"
+--   </pre>
+printList :: (Show a) => [a] -> IO ()
+
+-- | Truncate end of long string.
+--   
+--   <pre>
+--   &gt;&gt;&gt; truncateString 10 "abcdefg"
+--   "abcdefg"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; truncateString 10 "abcdefg hijklmn"
+--   "abcdefg..."
+--   </pre>
+truncateString :: Int -> StringMap
+instance Koshucode.Baala.Overture.Misc.GetIOPath GHC.Base.String
+instance Koshucode.Baala.Overture.Misc.OrElse GHC.Types.Bool
+instance Koshucode.Baala.Overture.Misc.OrElse [a]
+instance Koshucode.Baala.Overture.Misc.OrElse (GHC.Base.Maybe a)
+instance Koshucode.Baala.Overture.Misc.OrElse (Data.Either.Either a b)
+
+
+-- | Indexed value.
+module Koshucode.Baala.Overture.Index
+
+-- | Numerical index.
+type Ix = Int
+
+-- | <a>Int</a>-indexed type.
+class GetIx a
+getIx :: GetIx a => a -> Ix
+
+-- | Numerical index.
+type Index = Int
+
+-- | <a>Integer</a>-indexed type.
+class GetIndex a
+getIndex :: GetIndex a => a -> Index
 
 
 -- | Cache.

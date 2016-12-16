@@ -1,0 +1,934 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Token.Clip</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Token-Clip.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.185.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Token.Clip</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Char test</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Clip</a
+	    ><ul
+	    ><li
+	      ><a href="#g:4"
+		>Updater</a
+		></li
+	      ><li
+	      ><a href="#g:5"
+		>Textual</a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Identifier</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>Term name</a
+		></li
+	      ><li
+	      ><a href="#g:8"
+		>Symbol</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Clip token text.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:isSymbol"
+	    >isSymbol</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isSpace"
+	    >isSpace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isQQ"
+	    >isQQ</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isTerm"
+	    >isTerm</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isJudge"
+	    >isJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isClock"
+	    >isClock</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TokenScan"
+	    >TokenScan</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TokenScanMap"
+	    >TokenScanMap</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipResult"
+	    >ClipResult</a
+	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipResultC"
+	    >ClipResultC</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipResultCL"
+	    >ClipResultCL</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >])</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipToken"
+	    >ClipToken</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipTokenC"
+	    >ClipTokenC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultC"
+	    >ClipResultC</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultCL"
+	    >ClipResultCL</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipUpdate"
+	    >clipUpdate</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipUpdateC"
+	    >clipUpdateC</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultC"
+	    >ClipResultC</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipUpdateCL"
+	    >clipUpdateCL</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultCL"
+	    >ClipResultCL</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipSpace"
+	    >clipSpace</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipToken"
+	    >ClipToken</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipQ"
+	    >clipQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipQQ"
+	    >clipQQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipSymbol"
+	    >clipSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipSlot"
+	    >clipSlot</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipToken"
+	    >ClipToken</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipTermSign"
+	    >clipTermSign</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipTermName"
+	    >clipTermName</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipTermQ"
+	    >clipTermQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clipBar"
+	    >clipBar</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Char test</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSymbol" class="def"
+	    >isSymbol</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isSymbol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is symbolic.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSpace" class="def"
+	    >isSpace</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isSpace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is space.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isQQ" class="def"
+	    >isQQ</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isQQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is double-quote.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isTerm" class="def"
+	    >isTerm</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is term slash.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isJudge" class="def"
+	    >isJudge</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isJudge');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is content line, i.e., <code
+	      >'-'</code
+	      > or <code
+	      >'='</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isClock" class="def"
+	    >isClock</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-Char.html#t:Char"
+	    >Char</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#isClock');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test character is component of clock text.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TokenScan" class="def"
+	    >TokenScan</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:CodeScan"
+	    >CodeScan</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#TokenScan');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Code scanner for token list.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TokenScanMap" class="def"
+	    >TokenScanMap</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#TokenScanMap');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read single token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipResult" class="def"
+	    >ClipResult</a
+	    > = (<a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipResult');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip single-token result.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipResultC" class="def"
+	    >ClipResultC</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, <a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipResultC');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip single-token result with word cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipResultCL" class="def"
+	    >ClipResultCL</a
+	    > = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    >, <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    >, [<a href="Koshucode-Baala-Syntax-Token-Token.html#t:Token"
+	    >Token</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipResultCL');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip multiple-tokens result with word cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipToken" class="def"
+	    >ClipToken</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipToken');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip a next token.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipTokenC" class="def"
+	    >ClipTokenC</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultC"
+	    >ClipResultC</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipTokenC');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip a next token with word cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ClipTokenCL" class="def"
+	    >ClipTokenCL</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Code-Scan.html#t:WordCache"
+	    >WordCache</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Next.html#t:InputText"
+	    >InputText</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultCL"
+	    >ClipResultCL</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#ClipTokenCL');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip a next token with word cache.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Clip</h1
+	><h2 id="g:4"
+	>Updater</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipUpdate" class="def"
+	    >clipUpdate</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipUpdate');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update token scanner by clip result.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipUpdateC" class="def"
+	    >clipUpdateC</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultC"
+	    >ClipResultC</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipUpdateC');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update token scanner by clip result with word cache.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipUpdateCL" class="def"
+	    >clipUpdateCL</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResultCL"
+	    >ClipResultCL</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:TokenScan"
+	    >TokenScan</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipUpdateCL');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Update token scanner by clip result with word cache.</p
+	    ></div
+	  ></div
+	><h2 id="g:5"
+	>Textual</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipSpace" class="def"
+	    >clipSpace</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipToken"
+	    >ClipToken</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipSpace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip space token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipSpace B.def &quot;  foo bar baz&quot;
+</code
+		></strong
+	      >(&quot;foo bar baz&quot;, TSpace /0.0.0/ 3)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipQ" class="def"
+	    >clipQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip single-quoted text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipQ B.def O.emptyWordCache &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(Cache 8 [&quot;foo&quot;] [], &quot; bar baz&quot;, TText /0.0.0/ TextQ &quot;foo&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipQQ" class="def"
+	    >clipQQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipQQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip double-quoted text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipQQ B.def O.emptyWordCache &quot;foo\&quot; bar baz&quot;
+</code
+		></strong
+	      >(Cache 8 [&quot;foo&quot;] [], &quot; bar baz&quot;, TText /0.0.0/ TextQQ &quot;foo&quot;)
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:6"
+	>Identifier</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipSymbol" class="def"
+	    >clipSymbol</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenC"
+	    >ClipTokenC</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipSymbol');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip symbolic token.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipSymbol B.def O.emptyWordCache &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(Cache 8 [&quot;foo&quot;] [], &quot; bar baz&quot;, TText /0.0.0/ TextRaw &quot;foo&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipSlot" class="def"
+	    >clipSlot</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipToken"
+	    >ClipToken</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipSlot');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip slot name, like <code
+	      >@foo</code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipSlot 1 B.def &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(&quot; bar baz&quot;, TSlot /0.0.0/ 1 &quot;foo&quot;)
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:7"
+	>Term name</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipTermSign" class="def"
+	    >clipTermSign</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipTermSign');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip signed term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipTermSign &quot;+/&quot; B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, [TTerm &lt;I0-L0-C0&gt; &quot;+/foo&quot;])
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipTermName" class="def"
+	    >clipTermName</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipTermName');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipTermName B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [(&quot;foo&quot;,&quot;foo&quot;)], &quot; bar baz&quot;, [TTerm &lt;I0-L0-C0&gt; &quot;/foo&quot;])
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipTermQ" class="def"
+	    >clipTermQ</a
+	    > :: <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipTokenCL"
+	    >ClipTokenCL</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipTermQ');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip quoted term.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipTermQ B.def Map.empty &quot;foo bar baz&quot;
+</code
+		></strong
+	      >(fromList [], &quot; bar baz&quot;, [TText &lt;I0-L0-C0&gt; TextTerm &quot;foo&quot;])
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:8"
+	>Symbol</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clipBar" class="def"
+	    >clipBar</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Token-Clip.html#t:ClipResult"
+	    >ClipResult</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Token-Clip.html#clipBar');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Clip token beginning with <code
+	      >&quot;|&quot;</code
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipBar B.def &quot;-- C&quot;
+</code
+		></strong
+	      >(&quot; C&quot;, TText /0.0.0/ TextBar &quot;|--&quot;)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipBar B.def &quot;| ...&quot;
+</code
+		></strong
+	      >(&quot;...&quot;, TText /0.0.0/ TextRaw &quot;||&quot;)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clipBar B.def &quot;12:00| ...&quot;
+</code
+		></strong
+	      >(&quot; ...&quot;, TText /0.0.0/ TextBar &quot;|12:00|&quot;)
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

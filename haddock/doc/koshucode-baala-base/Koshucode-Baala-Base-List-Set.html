@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -84,6 +84,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:uniqueConcat"
+	    >uniqueConcat</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [[a]] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:unionUp"
 	    >unionUp</a
@@ -241,6 +247,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:uniqueConcat" class="def"
+	    >uniqueConcat</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [[a]] -&gt; [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Set.html#uniqueConcat');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Collect elements in occurence order.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>uniqueConcat [&quot;apple&quot;, &quot;banana&quot;, &quot;cocoa&quot;]
+</code
+		></strong
+	      >&quot;aplebnco&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:unionUp" class="def"
 	    >unionUp</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
@@ -283,7 +313,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		>selectShare</code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Filter by set membership.
    <code
 	      >keepMember</code
@@ -331,7 +367,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		>selectRight</code
+		> instead.</p
+	      ></div
+	    ><p
 	    >Anti-filter by set membership.
    <code
 	      >omitMember</code

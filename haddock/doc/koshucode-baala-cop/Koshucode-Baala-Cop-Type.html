@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ty
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-cop-0.178.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-cop-0.185.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ty
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Cop.Type</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operator</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Implementation</a
+	    ><ul
+	    ><li
+	      ><a href="#g:3"
+		>Type conversion</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>Type test</a
+		><ul
+		><li
+		  ><a href="#g:5"
+		    >Edge type</a
+		    ></li
+		  ><li
+		  ><a href="#g:6"
+		    >Simple type</a
+		    ></li
+		  ><li
+		  ><a href="#g:7"
+		    >Complex type</a
+		    ></li
+		  ></ul
+		></li
+	      ></ul
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -72,11 +110,167 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ty
 	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 	    >Cop</a
 	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:copToDec"
+	    >copToDec</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsEmpty"
+	    >copIsEmpty</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsEnd"
+	    >copIsEnd</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
+	    >CEnd</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsBool"
+	    >copIsBool</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsDec"
+	    >copIsDec</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CDec"
+	    >CDec</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsClock"
+	    >copIsClock</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CClock"
+	    >CClock</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsTime"
+	    >copIsTime</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTime"
+	    >CTime</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsCode"
+	    >copIsCode</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CCode"
+	    >CCode</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsTerm"
+	    >copIsTerm</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsText"
+	    >copIsText</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsList"
+	    >copIsList</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsSet"
+	    >copIsSet</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsTie"
+	    >copIsTie</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CTie"
+	    >CTie</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsRel"
+	    >copIsRel</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsInterp"
+	    >copIsInterp</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CInterp"
+	    >CInterp</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:copIsType"
+	    >copIsType</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CType"
+	    >CType</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Operator</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:copsType" class="def"
@@ -93,33 +287,621 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Cop-Ty
 	    >Content operators on types.</p
 	    ></div
 	  ></div
-	><div class="doc"
-	><dl
-	  ><dt
-	    ><code
-	      >to-dec</code
-	      ></dt
-	    ><dd
-	    >Convert to decimal.</dd
-	    ><dt
-	    ><code
-	      >to-list</code
-	      ></dt
-	    ><dd
-	    >Convert to list.</dd
-	    ><dt
-	    ><code
-	      >to-set</code
-	      ></dt
-	    ><dd
-	    >Convert to set.</dd
-	    ><dt
-	    ><code
-	      >to-text</code
-	      ></dt
-	    ><dd
-	    >Convert to text.</dd
-	    ></dl
+	><h1 id="g:2"
+	>Implementation</h1
+	><h2 id="g:3"
+	>Type conversion</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copToDec" class="def"
+	    >copToDec</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copToDec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert to decimal.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>to-dec &quot;12.5&quot;
+</code
+		></strong
+	      >12.5
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>to-dec &quot;a&quot;
+</code
+		></strong
+	      >&quot;a&quot;
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>Type test</h2
+	><h3 id="g:5"
+	>Edge type</h3
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsEmpty" class="def"
+	    >copIsEmpty</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsEmpty');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is the empty.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>empty? ()
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>empty? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsEnd" class="def"
+	    >copIsEnd</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
+	    >CEnd</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsEnd');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is the end.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>end? (/)
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>end? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><h3 id="g:6"
+	>Simple type</h3
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsBool" class="def"
+	    >copIsBool</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsBool');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a boolean.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>bool? (+)
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>bool? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsDec" class="def"
+	    >copIsDec</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CDec"
+	    >CDec</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsDec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a decimal number.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dec? 12.5
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>dec? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsClock" class="def"
+	    >copIsClock</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CClock"
+	    >CClock</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsClock');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a clock.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clock? |12:00|
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>clock? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsTime" class="def"
+	    >copIsTime</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTime"
+	    >CTime</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsTime');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a time.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>time? 2013-04-18
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>time? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsCode" class="def"
+	    >copIsCode</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CCode"
+	    >CCode</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsCode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a code.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>code? 'a
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>code? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsTerm" class="def"
+	    >copIsTerm</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CTerm"
+	    >CTerm</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a term name.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>term? '/a
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>term? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsText" class="def"
+	    >copIsText</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CText"
+	    >CText</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsText');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a text.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>text? 12.5
+</code
+		></strong
+	      >(-)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>text? &quot;a&quot;
+</code
+		></strong
+	      >(+)
+</pre
+	    ></div
+	  ></div
+	><h3 id="g:7"
+	>Complex type</h3
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsList" class="def"
+	    >copIsList</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a list.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>list? [ 0 | 1 ]
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>list? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsSet" class="def"
+	    >copIsSet</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsSet');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a set.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>set? { 0 | 1 }
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>set? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsTie" class="def"
+	    >copIsTie</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CTie"
+	    >CTie</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsTie');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a tie.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tie? {- /a 0 /b 1 -}
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tie? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsRel" class="def"
+	    >copIsRel</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a rel.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>rel? {= /a /b [ 0 | 1 ] =}
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>rel? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsInterp" class="def"
+	    >copIsInterp</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CInterp"
+	    >CInterp</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsInterp');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a interp.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>interp? {| /x is equal to /y . |}
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>interp? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:copIsType" class="def"
+	    >copIsType</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Simple.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CType"
+	    >CType</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:CopCalc"
+	    >CopCalc</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Cop-Type.html#copIsType');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test content is a type.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>type? [- text -]
+</code
+		></strong
+	      >(+)
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>type? &quot;a&quot;
+</code
+		></strong
+	      >(-)
+</pre
+	    ></div
 	  ></div
 	></div
       ></div

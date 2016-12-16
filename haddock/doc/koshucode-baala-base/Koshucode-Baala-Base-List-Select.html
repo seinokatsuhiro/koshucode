@@ -1,0 +1,614 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.List.Select</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-List-Select.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.List.Select</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Type</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Index</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Selection</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Trisection</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >Permutaion</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Select elements.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Select"
+	    >Select</a
+	    > a = [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Select2"
+	    >Select2</a
+	    > a b = (<a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a, <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > b)</li
+	  ><li class="src short"
+	  ><a href="#v:selectIndex"
+	    >selectIndex</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:selectIndexFull"
+	    >selectIndexFull</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:selectIndexBoth"
+	    >selectIndexBoth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:selectElems"
+	    >selectElems</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:selectOthers"
+	    >selectOthers</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:selectBoth"
+	    >selectBoth</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; ([a], [a])</li
+	  ><li class="src short"
+	  ><a href="#v:selectShare"
+	    >selectShare</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:selectLeft"
+	    >selectLeft</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:selectRight"
+	    >selectRight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:permuteForward"
+	    >permuteForward</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:permuteBackward"
+	    >permuteBackward</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:permuteForward2"
+	    >permuteForward2</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select2"
+	    >Select2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:permuteBackward2"
+	    >permuteBackward2</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select2"
+	    >Select2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:permuteOrder"
+	    >permuteOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [c]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Select" class="def"
+	    >Select</a
+	    > a = [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#Select');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Select elements using indicies.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Select2" class="def"
+	    >Select2</a
+	    > a b = (<a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a, <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > b) <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#Select2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Selection for different types.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Index</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectIndex" class="def"
+	    >selectIndex</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectIndex');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Indices of shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndex &quot;bdk&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >[1,3]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectIndexFull" class="def"
+	    >selectIndexFull</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectIndexFull');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Indicies of shared-and-unknown elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndexFull &quot;bcx&quot; &quot;abcdefg&quot;
+</code
+		></strong
+	      >[1,2,-1]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectIndexBoth" class="def"
+	    >selectIndexBoth</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a] -&gt; ([<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >], [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectIndexBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Left-and-right indices of shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndexBoth &quot;abc&quot; &quot;bcd&quot;
+</code
+		></strong
+	      >([1,2], [0,1])
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Selection</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectElems" class="def"
+	    >selectElems</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectElems');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pick up indexed elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[1,3] `selectElems` &quot;abcdefg&quot;
+</code
+		></strong
+	      >&quot;bd&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>[1,3] `selectElems` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;BD&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectOthers" class="def"
+	    >selectOthers</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectOthers');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Cut off indexed elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndex &quot;ce&quot; &quot;abcdefg&quot; `selectOthers` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;ABDFG&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectBoth" class="def"
+	    >selectBoth</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] -&gt; [a] -&gt; ([a], [a]) <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectBoth');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pair of picking-up and cutting-off elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndex &quot;ce&quot; &quot;abcdefg&quot; `selectBoth` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >(&quot;CE&quot;, &quot;ABDFG&quot;)
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Trisection</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectShare" class="def"
+	    >selectShare</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectShare');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take shared elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `selectShare` &quot;cbefg&quot;
+</code
+		></strong
+	      >&quot;bc&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectLeft" class="def"
+	    >selectLeft</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectLeft');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take left-side elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `selectLeft` &quot;bcefg&quot;
+</code
+		></strong
+	      >&quot;ad&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:selectRight" class="def"
+	    >selectRight</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Bin"
+	    >Bin</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#selectRight');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Take right-side elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>&quot;abcd&quot; `selectRight` &quot;bcefg&quot;
+</code
+		></strong
+	      >&quot;efg&quot;
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:5"
+	>Permutaion</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:permuteForward" class="def"
+	    >permuteForward</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#permuteForward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Move indexed elements to the front.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndex &quot;cd&quot; &quot;abcdefg&quot; `permuteForward` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;CDABEFG&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:permuteBackward" class="def"
+	    >permuteBackward</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select"
+	    >Select</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#permuteBackward');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Move indexed elements to the rear.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>selectIndex &quot;cd&quot; &quot;abcdefg&quot; `permuteBackward` &quot;ABCDEFG&quot;
+</code
+		></strong
+	      >&quot;ABEFGCD&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:permuteForward2" class="def"
+	    >permuteForward2</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select2"
+	    >Select2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#permuteForward2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double forward.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:permuteBackward2" class="def"
+	    >permuteBackward2</a
+	    > :: <a href="Koshucode-Baala-Base-List-Select.html#t:Select2"
+	    >Select2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#permuteBackward2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double backward.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:permuteOrder" class="def"
+	    >permuteOrder</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [c] <a onclick="showSource('src/Koshucode-Baala-Base-List-Select.html#permuteOrder');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Reorder elements.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>permuteOrder &quot;bca&quot; &quot;abc&quot; &quot;ABC&quot;
+</code
+		></strong
+	      >&quot;BCA&quot;
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

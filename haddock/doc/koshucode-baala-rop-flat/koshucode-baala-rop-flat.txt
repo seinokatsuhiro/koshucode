@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Partial-order scale.
@@ -77,7 +77,7 @@ dupTerm :: (GetTermNames t) => t -> Ab a
 dumpCox :: (Show c) => c -> Ab a
 
 -- | Dump relation
-dumpRel :: (CRel c, MixShortEncode c) => Rel c -> Ab a
+dumpRel :: (CRel c, MixEncode c) => Rel c -> Ab a
 
 -- | Dump token trees
 dumpTrees :: [TTree] -> Ab a
@@ -895,7 +895,7 @@ consExclude :: (Ord c) => RopCons c
 -- | <b>dump</b>
 --   
 --   Dump input relation and abort.
-consDump :: (CRel c, MixShortEncode c) => RopCons c
+consDump :: (CRel c, MixEncode c) => RopCons c
 
 
 -- | Conditional relmaps.

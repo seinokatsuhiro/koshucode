@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.178.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.185.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -63,13 +63,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><li
 	      ><a href="#g:2"
 		>Collection</a
+		><ul
+		><li
+		  ><a href="#g:3"
+		    >List</a
+		    ></li
+		  ><li
+		  ><a href="#g:4"
+		    >Set</a
+		    ></li
+		  ></ul
 		></li
 	      ><li
-	      ><a href="#g:3"
+	      ><a href="#g:5"
 		>Relational</a
+		><ul
+		><li
+		  ><a href="#g:6"
+		    >Tie</a
+		    ></li
+		  ><li
+		  ><a href="#g:7"
+		    >Relation</a
+		    ></li
+		  ><li
+		  ><a href="#g:8"
+		    >Interpretation</a
+		    ></li
+		  ></ul
 		></li
 	      ><li
-	      ><a href="#g:4"
+	      ><a href="#g:9"
 		>Type</a
 		></li
 	      ></ul
@@ -91,7 +115,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CList"
 	    >CList</a
@@ -115,11 +139,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:getList"
 		>getList</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> [c]</li
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
+		> [c] c</li
 	      ><li
 	      ><a href="#v:putList"
 		>putList</a
@@ -141,7 +163,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CSet"
 	    >CSet</a
@@ -165,11 +187,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:getSet"
 		>getSet</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> [c]</li
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
+		> [c] c</li
 	      ><li
 	      ><a href="#v:putSet"
 		>putSet</a
@@ -221,7 +241,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CTie"
 	    >CTie</a
@@ -249,13 +269,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:getTie"
 		>getTie</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
 		> [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 		>Term</a
-		> c]</li
+		> c] c</li
 	      ><li
 	      ><a href="#v:putTie"
 		>putTie</a
@@ -269,7 +287,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CRel"
 	    >CRel</a
@@ -285,29 +303,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:gRel"
 		>gRel</a
-		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 		>Rel</a
 		> c</li
 	      ><li
 	      ><a href="#v:pRel"
 		>pRel</a
-		> :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 		>Rel</a
 		> c -&gt; c</li
 	      ><li
 	      ><a href="#v:getRel"
 		>getRel</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
+		> (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 		>Rel</a
-		> c)</li
+		> c) c</li
 	      ><li
 	      ><a href="#v:putRel"
 		>putRel</a
-		> :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 		>Rel</a
 		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		>Ab</a
@@ -329,7 +345,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CInterp"
 	    >CInterp</a
@@ -345,29 +361,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:gInterp"
 		>gInterp</a
-		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 		>Interp</a
 		></li
 	      ><li
 	      ><a href="#v:pInterp"
 		>pInterp</a
-		> :: <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 		>Interp</a
 		> -&gt; c</li
 	      ><li
 	      ><a href="#v:getInterp"
 		>getInterp</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 		>Interp</a
-		></li
+		> c</li
 	      ><li
 	      ><a href="#v:putInterp"
 		>putInterp</a
-		> :: <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 		>Interp</a
 		> -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		>Ab</a
@@ -377,7 +391,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a href="#t:CType"
 	    >CType</a
@@ -393,29 +407,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><li
 	      ><a href="#v:gType"
 		>gType</a
-		> :: c -&gt; <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 		>Type</a
 		></li
 	      ><li
 	      ><a href="#v:pType"
 		>pType</a
-		> :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 		>Type</a
 		> -&gt; c</li
 	      ><li
 	      ><a href="#v:getType"
 		>getType</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		>Ab</a
-		> <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		> :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+		>GetContent</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 		>Type</a
-		></li
+		> c</li
 	      ><li
 	      ><a href="#v:putType"
 		>putType</a
-		> :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 		>Type</a
 		> -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		>Ab</a
@@ -429,11 +441,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	>Complex contents</h1
 	><h2 id="g:2"
 	>Collection</h2
+	><h3 id="g:3"
+	>List</h3
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CList" class="def"
 	    >CList</a
@@ -484,11 +498,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getList" class="def"
 	      >getList</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getList');" href="javascript:void(0);" class="link"
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
+	      > [c] c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getList');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -513,7 +525,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-224');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-228');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -541,11 +553,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Create list of text contents.</p
 	    ></div
 	  ></div
+	><h3 id="g:4"
+	>Set</h3
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CSet" class="def"
 	    >CSet</a
@@ -596,11 +610,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getSet" class="def"
 	      >getSet</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getSet');" href="javascript:void(0);" class="link"
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
+	      > [c] c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getSet');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -625,7 +637,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-231');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-235');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -711,13 +723,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Test membership between element and collection contents.</p
 	    ></div
 	  ></div
-	><h2 id="g:3"
+	><h2 id="g:5"
 	>Relational</h2
+	><h3 id="g:6"
+	>Tie</h3
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CTie" class="def"
 	    >CTie</a
@@ -772,13 +786,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getTie" class="def"
 	      >getTie</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
 	      > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	      >Term</a
-	      > c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getTie');" href="javascript:void(0);" class="link"
+	      > c] c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getTie');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -805,7 +817,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-238');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-242');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -815,11 +827,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></div
 	    ></div
 	  ></div
+	><h3 id="g:7"
+	>Relation</h3
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CRel" class="def"
 	    >CRel</a
@@ -858,7 +872,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:gRel" class="def"
 	      >gRel</a
-	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
 	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gRel');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -866,7 +880,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:pRel" class="def"
 	      >pRel</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
 	      > c -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pRel');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -874,19 +888,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getRel" class="def"
 	      >getRel</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > (<a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
+	      > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
-	      > c) <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getRel');" href="javascript:void(0);" class="link"
+	      > c) c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getRel');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:putRel" class="def"
 	      >putRel</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Rel-Rel.html#t:Rel"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 	      >Rel</a
 	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
@@ -907,7 +919,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-245');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-249');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -945,11 +957,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >The nullary empty relation.</p
 	    ></div
 	  ></div
+	><h3 id="g:8"
+	>Interpretation</h3
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CInterp" class="def"
 	    >CInterp</a
@@ -988,7 +1002,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:gInterp" class="def"
 	      >gInterp</a
-	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 	      >Interp</a
 	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -996,7 +1010,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:pInterp" class="def"
 	      >pInterp</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 	      >Interp</a
 	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -1004,19 +1018,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getInterp" class="def"
 	      >getInterp</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
+	      > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 	      >Interp</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getInterp');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getInterp');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:putInterp" class="def"
 	      >putInterp</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Judge-Interp.html#t:Interp"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-Interp.html#t:Interp"
 	      >Interp</a
 	      > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
@@ -1037,7 +1049,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-252');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-256');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1047,13 +1059,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></div
 	    ></div
 	  ></div
-	><h2 id="g:4"
+	><h2 id="g:9"
 	>Type</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Singleton.html#t:CTypeOf"
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
 	    >CTypeOf</a
 	    > c =&gt; <a name="t:CType" class="def"
 	    >CType</a
@@ -1092,7 +1104,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:gType" class="def"
 	      >gType</a
-	      > :: c -&gt; <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 	      >Type</a
 	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#gType');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -1100,7 +1112,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:pType" class="def"
 	      >pType</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 	      >Type</a
 	      > -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#pType');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -1108,19 +1120,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    ><p class="src"
 	    ><a name="v:getType" class="def"
 	      >getType</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	      >Ab</a
-	      > <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
+	      >GetContent</a
+	      > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 	      >Type</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getType');" href="javascript:void(0);" class="link"
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#getType');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:putType" class="def"
 	      >putType</a
-	      > :: <a href="Koshucode-Baala-Data-Type-Type.html#t:Type"
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Type.html#t:Type"
 	      >Type</a
 	      > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	      >Ab</a
@@ -1141,7 +1151,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-259');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Complex.html#line-263');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

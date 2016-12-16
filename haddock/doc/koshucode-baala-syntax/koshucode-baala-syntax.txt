@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Term types and related functions.
@@ -161,6 +161,7 @@ instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Koshucode.Baala.Syntax.Sy
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName GHC.Base.String
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Data.Text.Internal.Text
 instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName Data.Text.Internal.Lazy.Text
+instance Koshucode.Baala.Syntax.Symbol.Term.ToTermName GHC.Types.Int
 
 
 -- | Text enclosed in angle brackets.
@@ -687,6 +688,10 @@ nextSpace :: Next Int
 --   </pre>
 nextQQ :: AbNext String
 
+
+-- | Symbol type.
+module Koshucode.Baala.Syntax.Symbol.Symbol
+
 -- | Symbol class.
 --   
 --   Relation between character classes and symbol classes. The char class
@@ -695,20 +700,20 @@ nextQQ :: AbNext String
 --   numeric.
 --   
 --   <pre>
---   Char class   Symbol class
---   ------------ -----------------
---   "0-9"        ( G ) ( P ) ( N )
---   "-"          ( G ) ( P ) ( N )
---   letter       ( G )   P
---   mark         ( G )   P
---   number'      ( G )   P
---   "_?"         ( G )   P
---   "+"          ( G )         N
---   "*=&lt;&gt;~"        G
---   ".#"                       N
+--   Char class   Symbol class        Symbol type
+--   ------------ ------------------- -----------------
+--   "0-9"        ( G ) ( P ) ( N )   SymbolCommon
+--   "-"          ( G ) ( P ) ( N )   SymbolCommon
+--   letter       ( G )   P           SymbolPlain
+--   mark         ( G )   P           SymbolPlain
+--   number'      ( G )   P           SymbolPlain
+--   "_?"         ( G )   P           SymbolPlain
+--   "+"          ( G )         N     SymbolNumeric
+--   "*=&lt;&gt;~"        G                 SymbolGeneral
+--   ".#"                       N     SymbolNumeric
 --   </pre>
 --   
---   Partial order of symbol classes.
+--   Partial order between the symbol classes.
 --   
 --   <pre>
 --                     ( GPN ) Common
@@ -724,22 +729,52 @@ nextQQ :: AbNext String
 --   </pre>
 data Symbol
 
--- | General-plain-numeric symbol
+-- | <b>1.</b> General-plain-numeric symbol
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "1"
+--   ("", SymbolCommon "1")
+--   </pre>
 SymbolCommon :: String -> Symbol
 
--- | General symbol
-SymbolGeneral :: String -> Symbol
-
--- | Plain symbol
+-- | <b>2.</b> Plain (include general) symbol
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "a"
+--   ("", SymbolPlain "a")
+--   </pre>
 SymbolPlain :: String -> Symbol
 
--- | Numeric symbol
+-- | <b>3.</b> Numeric (include general) symbol
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "+"
+--   ("", SymbolNumeric "+")
+--   </pre>
 SymbolNumeric :: String -> Symbol
 
--- | Short symbol (Plain <tt>"."</tt> Plain)
+-- | <b>4.</b> General (not plain nor numeric) symbol
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "="
+--   ("", SymbolGeneral "=")
+--   </pre>
+SymbolGeneral :: String -> Symbol
+
+-- | <b>5.</b> Short symbol (Plain <tt>"."</tt> Plain)
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "a.xxx"
+--   ("", SymbolShort "a" "xxx")
+--   </pre>
 SymbolShort :: String -> String -> Symbol
 
--- | Unknown symbol
+-- | <b>6.</b> Unknown symbol
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "a+"
+--   ("", SymbolUnknown "a+")
+--   </pre>
 SymbolUnknown :: String -> Symbol
 
 -- | Test symbol is general, in other words, <a>SymbolCommon</a>,
@@ -770,13 +805,39 @@ isPlainChar :: Test Char
 isNumericChar :: Test Char
 
 -- | Get next symbol.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "foo bar"
+--   (" bar", SymbolPlain "foo")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "0.50"
+--   ("", SymbolNumeric "0.50")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbol "= /a"
+--   (" /a", SymbolGeneral "=")
+--   </pre>
 nextSymbol :: Next Symbol
 
--- | Get next plain symbol.
+-- | Get next plain symbol, i.e., <a>SymbolCommon</a> or
+--   <a>SymbolPlain</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbolPlain "foo bar"
+--   Right (" bar","foo")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; nextSymbolPlain "12.0"
+--   Left (AbortReason "Expect ordinary symbol" ...)
+--   </pre>
 nextSymbolPlain :: AbNext String
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Symbol.Next.Symbol
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Symbol.Next.Symbol
-instance GHC.Show.Show Koshucode.Baala.Syntax.Symbol.Next.Symbol
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
+instance GHC.Show.Show Koshucode.Baala.Syntax.Symbol.Symbol.Symbol
 
 
 -- | Short sign.
@@ -808,7 +869,7 @@ shortListM :: (Monad m) => [Short (m a)] -> m [Short a]
 shortGroup :: [Short a] -> [Short [a]]
 
 -- | String shortener.
-shortText :: [ShortDef] -> Shorten
+shortText :: [ShortDef] -> TransString
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Koshucode.Baala.Syntax.Symbol.Short.Short a)
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Koshucode.Baala.Syntax.Symbol.Short.Short a)
 instance GHC.Show.Show a => GHC.Show.Show (Koshucode.Baala.Syntax.Symbol.Short.Short a)
@@ -916,30 +977,6 @@ BlankInternal :: String -> BlankName
 BlankPrefix :: String -> BlankName
 BlankInfix :: String -> BlankName
 BlankPostfix :: String -> BlankName
-
--- | Unknown text token.
-
--- | <i>Deprecated: Use TUnk instead.</i>
-
--- | Raw text token.
-
--- | <i>Deprecated: Use TRaw instead.</i>
-
--- | Quoted text token.
-
--- | <i>Deprecated: Use TQq instead.</i>
-
--- | Dobule-quoted text token.
-
--- | <i>Deprecated: Use TQq instead.</i>
-
--- | Keyword token.
-
--- | <i>Deprecated: Use TKey instead.</i>
-
--- | Bar-enclosed token.
-
--- | <i>Deprecated: Use TBar instead.</i>
 instance GHC.Classes.Ord Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.Token
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.Token
@@ -954,7 +991,7 @@ instance GHC.Classes.Eq Koshucode.Baala.Syntax.Token.Token.TextForm
 instance GHC.Show.Show Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.Token
-instance Koshucode.Baala.Base.IO.CodePos.GetCodePos Koshucode.Baala.Syntax.Token.Token.Token
+instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Base.Text.PPrint.PPrint Koshucode.Baala.Syntax.Token.Token.Token
 instance Koshucode.Baala.Syntax.Token.Token.SubtypeName Koshucode.Baala.Syntax.Token.Token.TextForm
 instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Token.Token.LocalRef
@@ -1042,32 +1079,8 @@ isBracketTokenOf :: (String, String) -> (Test Token, Test Token)
 isUnknownToken :: Test Token
 
 
--- | Token nipper.
-module Koshucode.Baala.Syntax.Token.Nipper
-
--- | Code roll for token.
-type TokenScan = CodeScan String Token
-
--- | Read single token.
-type TokenScanMap = Map TokenScan
-
--- | Nip off a next token.
-type TokenNip = CodePos -> InputText -> TokenNipResult
-
--- | Nip off a next token with word table.
-type TokenNipW = CodePos -> WordTable -> InputText -> TokenNipWResult
-
--- | Nip off a next token with word table.
-type TokenNipLW = CodePos -> WordTable -> InputText -> TokenNipLWResult
-
--- | Nip result.
-type TokenNipResult = (InputText, Token)
-
--- | Nip result with word table.
-type TokenNipWResult = (WordTable, InputText, Token)
-
--- | Nip result with word table.
-type TokenNipLWResult = (WordTable, InputText, [Token])
+-- | Clip token text.
+module Koshucode.Baala.Syntax.Token.Clip
 
 -- | Test character is symbolic.
 isSymbol :: Test Char
@@ -1087,81 +1100,120 @@ isJudge :: Test Char
 -- | Test character is component of clock text.
 isClock :: Test Char
 
--- | Update token scanner by nipper result.
-nipUpdate :: TokenScan -> TokenNipResult -> TokenScan
+-- | Code scanner for token list.
+type TokenScan = CodeScan String Token
 
--- | Update token scanner by nipper result with word table.
-nipUpdateW :: TokenScan -> TokenNipWResult -> TokenScan
+-- | Read single token.
+type TokenScanMap = Map TokenScan
 
--- | Update token scanner by nipper result with word table.
-nipUpdateLW :: TokenScan -> TokenNipLWResult -> TokenScan
+-- | Clip single-token result.
+type ClipResult = (InputText, Token)
 
--- | Nip off space token.
+-- | Clip single-token result with word cache.
+type ClipResultC = (WordCache, InputText, Token)
+
+-- | Clip multiple-tokens result with word cache.
+type ClipResultCL = (WordCache, InputText, [Token])
+
+-- | Clip a next token.
+type ClipToken = CodePos -> InputText -> ClipResult
+
+-- | Clip a next token with word cache.
+type ClipTokenC = CodePos -> WordCache -> InputText -> ClipResultC
+
+-- | Clip a next token with word cache.
+type ClipTokenCL = CodePos -> WordCache -> InputText -> ClipResultCL
+
+-- | Update token scanner by clip result.
+clipUpdate :: TokenScan -> ClipResult -> TokenScan
+
+-- | Update token scanner by clip result with word cache.
+clipUpdateC :: TokenScan -> ClipResultC -> TokenScan
+
+-- | Update token scanner by clip result with word cache.
+clipUpdateCL :: TokenScan -> ClipResultCL -> TokenScan
+
+-- | Clip space token.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipSpace B.def "  foo bar baz"
---   ("foo bar baz", TSpace &lt;I0-L0-C0&gt; 3)
+--   &gt;&gt;&gt; clipSpace B.def "  foo bar baz"
+--   ("foo bar baz", TSpace /0.0.0/ 3)
 --   </pre>
-nipSpace :: TokenNip
+clipSpace :: ClipToken
 
--- | Nip off a single-quoted text.
+-- | Clip single-quoted text.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipQ B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TText &lt;I0-L0-C0&gt; TextQ "foo")
+--   &gt;&gt;&gt; clipQ B.def O.emptyWordCache "foo bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQ "foo")
 --   </pre>
-nipQ :: TokenNipW
+clipQ :: ClipTokenC
 
--- | Nip off a double-quoted text.
+-- | Clip double-quoted text.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipQQ B.def "foo\" bar baz"
---   (" bar baz", TText &lt;I0-L0-C0&gt; TextQQ "foo")
+--   &gt;&gt;&gt; clipQQ B.def O.emptyWordCache "foo\" bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextQQ "foo")
 --   </pre>
-nipQQ :: TokenNip
+clipQQ :: ClipTokenC
 
--- | Nip off symbolic token.
+-- | Clip symbolic token.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipSymbol B.def Map.empty "foo bar baz"
---   (fromList [("foo","foo")], " bar baz", TText &lt;I0-L0-C0&gt; TextRaw "foo")
+--   &gt;&gt;&gt; clipSymbol B.def O.emptyWordCache "foo bar baz"
+--   (Cache 8 ["foo"] [], " bar baz", TText /0.0.0/ TextRaw "foo")
 --   </pre>
-nipSymbol :: TokenNipW
+clipSymbol :: ClipTokenC
 
--- | Nip off a slot name, like <tt>@foo</tt>.
+-- | Clip slot name, like <tt>@foo</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipSlot 1 B.def "foo bar baz"
---   (" bar baz", TSlot &lt;I0-L0-C0&gt; 1 "foo")
+--   &gt;&gt;&gt; clipSlot 1 B.def "foo bar baz"
+--   (" bar baz", TSlot /0.0.0/ 1 "foo")
 --   </pre>
-nipSlot :: Int -> TokenNip
+clipSlot :: Int -> ClipToken
 
--- | Nip off a signed term name.
+-- | Clip signed term name.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipTermSign "+/" B.def Map.empty "foo bar baz"
+--   &gt;&gt;&gt; clipTermSign "+/" B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "+/foo"])
 --   </pre>
-nipTermSign :: String -> TokenNipLW
+clipTermSign :: String -> ClipTokenCL
 
--- | Nip off a term name.
+-- | Clip term name.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipTermName B.def Map.empty "foo bar baz"
+--   &gt;&gt;&gt; clipTermName B.def Map.empty "foo bar baz"
 --   (fromList [("foo","foo")], " bar baz", [TTerm &lt;I0-L0-C0&gt; "/foo"])
 --   </pre>
-nipTermName :: TokenNipLW
+clipTermName :: ClipTokenCL
 
--- | Nip off a quoted term.
+-- | Clip quoted term.
 --   
 --   <pre>
---   &gt;&gt;&gt; nipTermQ B.def Map.empty "foo bar baz"
+--   &gt;&gt;&gt; clipTermQ B.def Map.empty "foo bar baz"
 --   (fromList [], " bar baz", [TText &lt;I0-L0-C0&gt; TextTerm "foo"])
 --   </pre>
-nipTermQ :: TokenNipLW
+clipTermQ :: ClipTokenCL
 
--- | Nip off token beginning with <tt>"|"</tt>.
-nipBar :: CodePos -> String -> String -> TokenNipResult
+-- | Clip token beginning with <tt>"|"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clipBar B.def "-- C"
+--   (" C", TText /0.0.0/ TextBar "|--")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; clipBar B.def "| ..."
+--   ("...", TText /0.0.0/ TextRaw "||")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; clipBar B.def "12:00| ..."
+--   (" ...", TText /0.0.0/ TextBar "|12:00|")
+--   </pre>
+clipBar :: CodePos -> String -> ClipResult
 
 
 -- | Code section.
@@ -1202,8 +1254,23 @@ scanRel :: Scanner
 scanInterp :: Scanner
 
 
--- | Token clause.
+-- | Token line and clause.
 module Koshucode.Baala.Syntax.Token.Clause
+
+-- | Token list on a line.
+type TokenLine = CodeLine Token
+
+-- | Tokenize lazy bytestring.
+tokenLines :: (ToCode code) => IxIOPoint -> code -> [TokenLine]
+
+-- | Tokenize lazy bytestring.
+tokenLinesTextAssert :: (ToCode code) => IxIOPoint -> code -> [TokenLine]
+
+-- | Test string is short prefix.
+isShortPrefix :: Test String
+
+-- | Read token lines from file.
+readTokenLines :: FilePath -> IOAb [TokenLine]
 
 -- | Code clause of tokens.
 type TokenClause = CodeClause Token
@@ -1211,23 +1278,123 @@ type TokenClause = CodeClause Token
 -- | Convert token lines into token clauses
 tokenClauses :: [TokenLine] -> [TokenClause]
 
--- | Token list on a line.
-type TokenLine = CodeLine Token
+-- | Read clause list from file.
+--   
+--   Content of file <tt>clause.txt</tt>:
+--   
+--   <pre>
+--   **
+--   **  This is an example file for 'readClauses' function
+--   **  defined in Koshucode.Baala.Syntax.Token.Clause module.
+--   **
+--   
+--   aa
+--   bb
+--    cc
+--   
+--   ** dd
+--   ee
+--   </pre>
+--   
+--   Read this file and parse to token clauses.
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.printList =&lt;&lt; B.abortLeft =&lt;&lt; readClauses "clause.txt"
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.1.0/ TextRaw "aa"]}
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.2.0/ TextRaw "bb",
+--                                                  TText /0.3.1/ TextRaw "cc"]}
+--   CodeClause {clauseLines = ..., clauseTokens = [TText /0.6.0/ TextRaw "ee"]}
+--   </pre>
+readClauses :: FilePath -> IOAb [TokenClause]
+
+-- | Read clauses and extract tokens.
+readClauseTokens :: FilePath -> IOAb [[Token]]
 
 -- | Abbreviated tokenizer.
-toks :: InputText -> [Token]
+toks :: String -> [Token]
 
--- | Tokenize text.
-tokenLines :: NIOPoint -> InputText -> [TokenLine]
+-- | Tokenize and print for debug.
+--   
+--   Words and quotations.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toksPrint ["aa", "'bb", "\"cc\"", "&lt;dd&gt;", "'/ee", "|012|"]
+--   TText /0.1.0/ TextRaw "aa"
+--   TText /0.2.0/ TextQ "bb"
+--   TText /0.3.0/ TextQQ "cc"
+--   TText /0.4.0/ TextUnk "dd"
+--   TText /0.5.0/ TextTerm "ee"
+--   TText /0.6.0/ TextBar "|012|"
+--   </pre>
+--   
+--   Judgement.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toksPrint ["|-- R  /a A0 /b 31"]
+--   TText /0.1.0/ TextBar "|--"
+--   TSpace /0.1.3/ 1
+--   TText /0.1.4/ TextRaw "R"
+--   TSpace /0.1.5/ 2
+--   TTerm /0.1.7/ "/a"
+--   TSpace /0.1.9/ 1
+--   TText /0.1.10/ TextRaw "A0"
+--   TSpace /0.1.12/ 1
+--   TTerm /0.1.13/ "/b"
+--   TSpace /0.1.15/ 1
+--   TText /0.1.16/ TextRaw "31"
+--   </pre>
+--   
+--   Brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toksPrint ["aa (bb x y (z))"]
+--   TText /0.1.0/ TextRaw "aa"
+--   TSpace /0.1.2/ 1
+--   TOpen /0.1.3/ "("
+--   TText /0.1.4/ TextRaw "bb"
+--   TSpace /0.1.6/ 1
+--   TText /0.1.7/ TextRaw "x"
+--   TSpace /0.1.8/ 1
+--   TText /0.1.9/ TextRaw "y"
+--   TSpace /0.1.10/ 1
+--   TOpen /0.1.11/ "("
+--   TText /0.1.12/ TextRaw "z"
+--   TClose /0.1.13/ ")"
+--   TClose /0.1.14/ ")"
+--   </pre>
+--   
+--   Comment.
+--   
+--   <pre>
+--   &gt;&gt;&gt; toksPrint ["abc ** this is a comment", "def",""]
+--   TText /0.1.0/ TextRaw "abc"
+--   TSpace /0.1.3/ 1
+--   TComment /0.1.4/ " this is a comment"
+--   TText /0.2.0/ TextRaw "def"
+--   </pre>
+toksPrint :: [String] -> IO ()
 
--- | Tokenize lazy bytestring.
-tokenLinesBz :: NIOPoint -> Bz -> [TokenLine]
-
--- | Tokenize lazy bytestring.
-tokenLinesBzTextAssert :: NIOPoint -> Bz -> [TokenLine]
-
--- | Test string is short prefix.
-isShortPrefix :: Test String
+-- | Parse string to clause and print it for inspection.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clausePrint ["|-- A /x 0 /y 1", "", "|== B : ", "  source A /x /y"]
+--   ********** |-- A /x 0 /y 1
+--   TText /0.1.0/ TextBar "|--"
+--   TText /0.1.4/ TextRaw "A"
+--   TTerm /0.1.6/ "/x"
+--   TText /0.1.9/ TextRaw "0"
+--   TTerm /0.1.11/ "/y"
+--   TText /0.1.14/ TextRaw "1"
+--   ********** |== B : 
+--   TText /0.3.0/ TextBar "|=="
+--   TText /0.3.4/ TextRaw "B"
+--   TText /0.3.6/ TextRaw ":"
+--   TText /0.4.2/ TextRaw "source"
+--   TText /0.4.9/ TextRaw "A"
+--   TTerm /0.4.11/ "/x"
+--   TTerm /0.4.14/ "/y"
+--   </pre>
+clausePrint :: [String] -> IO ()
 
 
 -- | Token and tokenizer.
@@ -1240,34 +1407,67 @@ module Koshucode.Baala.Syntax.TTree.Bracket
 -- | Type of bracket.
 data BracketType
 
--- | <b>1.</b> Round brackets for grouping: <tt>( E ... )</tt>
+-- | <b>1.</b> Round brackets for grouping:
+--   
+--   <pre>
+--   ( E ... )
+--   </pre>
 BracketGroup :: BracketType
 
--- | <b>2.</b> Round-single brackets for term path: <tt>(- /P ... -)</tt>
+-- | <b>2.</b> Round-single brackets for term path:
+--   
+--   <pre>
+--   (- /N ... -)
+--   </pre>
 BracketTerm :: BracketType
 
--- | <b>3.</b> Square brackets for lists: <tt>[ C | ... ]</tt>
+-- | <b>3.</b> Square brackets for lists:
+--   
+--   <pre>
+--   [ C | ... ]
+--   </pre>
 BracketList :: BracketType
 
--- | <b>4.</b> Curely braces for sets: <tt>{ C | ... }</tt>
+-- | <b>4.</b> Curely braces for sets:
+--   
+--   <pre>
+--   { C | ... }
+--   </pre>
 BracketSet :: BracketType
 
--- | <b>5.</b> Curely-single braces for ties: <tt>{- /N C ... -}</tt>
+-- | <b>5.</b> Curely-single braces for ties:
+--   
+--   <pre>
+--   {- /N C ... -}
+--   </pre>
 BracketTie :: BracketType
 
--- | <b>6.</b> Curely-double braces for relations: <tt>{= /N ... [ C | ...
---   ][ C | ... ] =}</tt>
+-- | <b>6.</b> Curely-double braces for relations:
+--   
+--   <pre>
+--   {= /N ... [ C | ... ][ C | ... ] =}
+--   </pre>
 BracketRel :: BracketType
 
--- | <b>7.</b> Curely-bar braces for data interpretation: <tt>{| ... /N ...
---   |}</tt>
+-- | <b>7.</b> Curely-bar braces for data interpretation:
+--   
+--   <pre>
+--   {| ... /N ... |}
+--   </pre>
 BracketInterp :: BracketType
 
--- | <b>8.</b> Square-single brackets for type: <tt>[- ... -]</tt>
+-- | <b>8.</b> Square-single brackets for type:
+--   
+--   <pre>
+--   [- ... -]
+--   </pre>
 BracketType :: BracketType
 
--- | <b>9.</b> Round-bar brackets for calculation form: <tt>(| V ... | E
---   ... |)</tt>
+-- | <b>9.</b> Round-bar brackets for calculation form:
+--   
+--   <pre>
+--   (| V ... | E ... |)
+--   </pre>
 BracketForm :: BracketType
 
 -- | <b>10.</b> Unknown bracket
@@ -1291,10 +1491,10 @@ bracketSet :: (String, String)
 -- | Tie bracket — <tt>"{-"</tt> and <tt>"-}"</tt>
 bracketTie :: (String, String)
 
--- | Rel bracket — <tt>"{="</tt> and <tt>"=}"</tt>
+-- | Relation bracket — <tt>"{="</tt> and <tt>"=}"</tt>
 bracketRel :: (String, String)
 
--- | Interp bracket — <tt>"{|"</tt> and <tt>"|}"</tt>
+-- | Interpretation bracket — <tt>"{|"</tt> and <tt>"|}"</tt>
 bracketInterp :: (String, String)
 
 -- | Type bracket — <tt>"[-"</tt> and <tt>"-]"</tt>
@@ -1344,37 +1544,20 @@ module Koshucode.Baala.Syntax.TTree.Pattern
 module Koshucode.Baala.Syntax.Pattern
 
 
--- | Tree of tokens
-module Koshucode.Baala.Syntax.TTree.TokenTree
+-- | Parser for token tree.
+module Koshucode.Baala.Syntax.TTree.Parse
 
 -- | Tree of tokens.
 type TTree = CodeTree BracketType Token
 
--- | Pair of token tree and its name.
-type NamedTree = Named TTree
-
 -- | Pair of token trees and its name.
 type NamedTrees = Named [TTree]
 
--- | Term leaf.
+-- | Wrap trees in group.
+ttreeGroup :: [TTree] -> TTree
 
--- | <i>Deprecated: Use LTerm instead.</i>
-
--- | Text leaf.
-
--- | <i>Deprecated: Use LText instead.</i>
-
--- | Text leaf of <a>TextRaw</a>.
-
--- | <i>Deprecated: Use LRaw instead.</i>
-
--- | Text leaf of <a>TextQ</a>.
-
--- | <i>Deprecated: Use LQ instead.</i>
-
-
--- | Parser for token tree.
-module Koshucode.Baala.Syntax.TTree.Parse
+-- | Get <a>Doc</a> value of token trees for pretty printing.
+ttDoc :: [TTree] -> Doc
 
 -- | Convert to token trees.
 class ToTrees a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree ppTrees a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right ts -> print $ ttDoc ts } ppTree a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right [] -> return () Right [t] -> print $ ttDoc [t] Right ts -> print $ ttDoc [ttreeGroup ts] }
@@ -1397,32 +1580,15 @@ ppTrees :: ToTrees a => a -> IO ()
 -- | Pretty print token tree.
 ppTree :: ToTrees a => a -> IO ()
 
--- | Parse tokens with brackets into trees. Blank tokens and comments are
---   excluded.
+-- | Read clauses and convert to token trees.
+readClauseTrees :: FilePath -> IOAb [[TTree]]
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees GHC.Base.String
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.Parse.TTree]
 
--- | <i>Deprecated: Use <a>toTrees</a> instead.</i>
-ttrees :: [Token] -> Ab [TTree]
 
--- | Wrap trees in group.
-ttreeGroup :: [TTree] -> TTree
-
--- | Convert string to token trees.
-
--- | <i>Deprecated: Use <a>toTrees</a> instead.</i>
-tt :: String -> Ab [TTree]
-
--- | Parse string and group it.
-
--- | <i>Deprecated: Use <a>toTree</a> instead.</i>
-tt1 :: String -> Ab TTree
-
--- | Parse string and print it.
-
--- | <i>Deprecated: Use <a>ppTree</a> instead.</i>
-ttPrint :: String -> IO ()
-
--- | Get <a>Doc</a> value of token trees for pretty printing.
-ttDoc :: [TTree] -> Doc
+-- | Split token trees.
+module Koshucode.Baala.Syntax.TTree.Split
 
 -- | Split token list by unquoted word. If token list contains the word,
 --   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
@@ -1465,9 +1631,6 @@ divideTreesByColon :: [TTree] -> [[TTree]]
 
 -- | Divide token trees by equal sign <tt>"="</tt>.
 divideTreesByEqual :: [TTree] -> [[TTree]]
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees GHC.Base.String
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.TokenTree.TTree]
 
 
 -- | Token trees.

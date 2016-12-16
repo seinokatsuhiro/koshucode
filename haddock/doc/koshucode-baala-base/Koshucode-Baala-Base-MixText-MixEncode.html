@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,16 +51,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Base.MixText.MixEncode</p
-	></div
-      ><div id="table-of-contents"
-      ><p class="caption"
-	>Contents</p
-	><ul
-	><li
-	  ><a href="#g:1"
-	    >Encode</a
-	    ></li
-	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -88,39 +78,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 		> :: a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 		>MixText</a
 		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="#t:MixShortEncode"
-	    >MixShortEncode</a
-	    > a <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:mixShortEncode"
-		>mixShortEncode</a
-		> :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:Shorten"
-		>Shorten</a
+	      ><li
+	      ><a href="#v:mixTransEncode"
+		>mixTransEncode</a
+		> :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+		>TransString</a
 		> -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 		>MixText</a
 		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:mixIdEncode"
-	    >mixIdEncode</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixShortEncode"
-	    >MixShortEncode</a
-	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
-	    >MixText</a
-	    ></li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:Shorten"
-	    >Shorten</a
+	    > <a href="#t:TransString"
+	    >TransString</a
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
@@ -129,16 +101,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:noShorten"
-	    >noShorten</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:Shorten"
-	    >Shorten</a
+	  ><a href="#v:encode"
+	    >encode</a
+	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:plainEncode"
+	    >plainEncode</a
+	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1 id="g:1"
-	>Encode</h1
+      ><h1
+	>Documentation</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -154,6 +136,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ><p
 	    >Encode via mix text.</p
 	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    >Nothing</p
+	    ></div
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
@@ -163,6 +151,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	      > :: a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
 	      >MixText</a
 	      > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#mixEncode');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:mixTransEncode" class="def"
+	      >mixTransEncode</a
+	      > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:TransString"
+	      >TransString</a
+	      > -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
+	      >MixText</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#mixTransEncode');" href="javascript:void(0);" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -179,7 +177,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		      >Bool</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#line-20');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#line-24');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -198,85 +196,61 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >class</span
-	    > <a name="t:MixShortEncode" class="def"
-	    >MixShortEncode</a
-	    > a <span class="keyword"
-	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#MixShortEncode');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Encode with shortener.</p
-	    ></div
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:mixShortEncode" class="def"
-	      >mixShortEncode</a
-	      > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:Shorten"
-	      >Shorten</a
-	      > -&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
-	      >MixText</a
-	      > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#mixShortEncode');" href="javascript:void(0);" class="link"
-	      >Source</a
-	      ></p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:mixIdEncode" class="def"
-	    >mixIdEncode</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixShortEncode"
-	    >MixShortEncode</a
-	    > a =&gt; a -&gt; <a href="Koshucode-Baala-Base-MixText-MixText.html#t:MixText"
-	    >MixText</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#mixIdEncode');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    ><code
-	      ><a href="Koshucode-Baala-Base-MixText-MixEncode.html#v:mixShortEncode"
-		>mixShortEncode</a
-		></code
-	      > with no shortener.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:Shorten" class="def"
-	    >Shorten</a
+	    > <a name="t:TransString" class="def"
+	    >TransString</a
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#Shorten');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#TransString');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert string to short sign.</p
+	    >Transform string to another form.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:noShorten" class="def"
-	    >noShorten</a
-	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:Shorten"
-	    >Shorten</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#noShorten');" href="javascript:void(0);" class="link"
+	  ><a name="v:encode" class="def"
+	    >encode</a
+	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#encode');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Shorten which does not shorten strings.</p
+	    >Encode to string.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:plainEncode" class="def"
+	    >plainEncode</a
+	    > :: <a href="Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-MixText-MixEncode.html#plainEncode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Base-MixText-MixEncode.html#v:encode"
+		  >encode</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
+	    >Encode to string.</p
 	    ></div
 	  ></div
 	></div

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -115,11 +115,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      ><a href="#v:abortPoint"
 		>abortPoint</a
-		> :: [(<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
-		>AbortTag</a
-		>, <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
-		>CodePos</a
-		>)]</li
+		> :: [<a href="Koshucode-Baala-Base-Abort-Reason.html#t:CodePosInfo"
+		>CodePosInfo</a
+		>]</li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
@@ -130,6 +128,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CodePosInfo"
+	    >CodePosInfo</a
+	    > = (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    >, <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -243,7 +251,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><li class="src short"
 	  ><a href="#v:abortable"
 	    >abortable</a
-	    > :: <a href="Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 	    >GetCodePos</a
 	    > cp =&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
 	    >AbortTag</a
@@ -325,11 +333,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      ><dt class="src"
 		      ><a name="v:abortPoint" class="def"
 			>abortPoint</a
-			> :: [(<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
-			>AbortTag</a
-			>, <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
-			>CodePos</a
-			>)]</dt
+			> :: [<a href="Koshucode-Baala-Base-Abort-Reason.html#t:CodePosInfo"
+			>CodePosInfo</a
+			>]</dt
 		      ><dd class="doc"
 		      ><p
 			>Tag and aborting point</p
@@ -355,7 +361,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 		      >AbortReason</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -369,7 +375,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 		      >AbortReason</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -383,7 +389,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		      > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 		      >AbortReason</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -407,6 +413,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><div class="doc"
 	  ><p
 	    >Tag on aborting point.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CodePosInfo" class="def"
+	    >CodePosInfo</a
+	    > = (<a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    >, <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
+	    >AbortTag</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Reason.html#CodePosInfo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Source code position information.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -625,7 +649,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="src"
 	  ><a name="v:abortable" class="def"
 	    >abortable</a
-	    > :: <a href="Koshucode-Baala-Base-IO-CodePos.html#t:GetCodePos"
+	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 	    >GetCodePos</a
 	    > cp =&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
 	    >AbortTag</a

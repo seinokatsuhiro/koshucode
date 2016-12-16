@@ -9,20 +9,20 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Judgement writer.
 module Koshucode.Baala.Writer.Judge
 
 -- | Print list of judgements.
-putJudges :: (Show c, MixShortEncode c) => [Judge c] -> IO ()
+putJudges :: (Show c, MixEncode c) => [Judge c] -> IO ()
 
 -- | <a>stdout</a> version of <a>hPutJudgesWith</a>.
-putJudgesWith :: (Show c, MixShortEncode c) => ExitCode -> [Judge c] -> IO ExitCode
+putJudgesWith :: (Show c, MixEncode c) => ExitCode -> [Judge c] -> IO ExitCode
 
 -- | Print list of judges.
-hPutJudgesWith :: (MixShortEncode c) => ResultWriterJudge c
+hPutJudgesWith :: (MixEncode c) => ResultWriterJudge c
 
 -- | Edit judgements to mix text.
 judgesCountMix :: Result c -> (Judge c -> MixText) -> [Judge c] -> Map JudgeCountMix
@@ -63,15 +63,15 @@ judgeSummary :: ExitCode -> JudgeCount -> [String]
 module Koshucode.Baala.Writer.Koshu
 
 -- | Koshucode writer.
-resultKoshu :: (MixShortEncode c) => ResultWriter c
+resultKoshu :: (MixEncode c) => ResultWriter c
 
 -- | Koshucode writer with two-space separator. This function uses
 --   <a>judgeMix2</a>.
-resultKoshu2 :: (MixShortEncode c) => ResultWriter c
+resultKoshu2 :: (MixEncode c) => ResultWriter c
 
 -- | Koshucode writer with tab separator. This function uses
 --   <a>judgeMixTab</a>.
-resultKoshuTab :: (MixShortEncode c) => ResultWriter c
+resultKoshuTab :: (MixEncode c) => ResultWriter c
 
 
 -- | JSON output.
@@ -95,9 +95,9 @@ resultGeoJson :: (ToJSON c) => ResultWriter c
 -- | Convert to GeoJSON.
 class ToGeoJSON a
 toGeoJSON :: ToGeoJSON a => a -> Value
-instance Data.Aeson.Types.Class.ToJSON c => Data.Aeson.Types.Class.ToJSON (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance Data.Aeson.Types.Class.ToJSON c => Data.Aeson.Types.Class.ToJSON (Koshucode.Baala.Type.Judge.Judge.Judge c)
 instance Data.Aeson.Types.Class.ToJSON Koshucode.Baala.Data.Content.Content
-instance Data.Aeson.Types.Class.ToJSON c => Koshucode.Baala.Writer.Json.ToGeoJSON (Koshucode.Baala.Data.Type.Judge.Judge.Judge c)
+instance Data.Aeson.Types.Class.ToJSON c => Koshucode.Baala.Writer.Json.ToGeoJSON (Koshucode.Baala.Type.Judge.Judge.Judge c)
 
 
 -- | HTML output.
@@ -110,7 +110,7 @@ resultHtmlIndented :: (CContent c) => ResultWriter c
 resultHtmlCompact :: (CContent c) => ResultWriter c
 
 -- | Encode term content in HTML.
-contToHtml :: (CContent c) => Shorten -> c -> Html
+contToHtml :: (CContent c) => TransString -> c -> Html
 instance Text.Blaze.ToMarkup Koshucode.Baala.Base.Abort.Reason.AbortReason
 
 

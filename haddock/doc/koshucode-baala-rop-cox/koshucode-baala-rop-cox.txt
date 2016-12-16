@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates

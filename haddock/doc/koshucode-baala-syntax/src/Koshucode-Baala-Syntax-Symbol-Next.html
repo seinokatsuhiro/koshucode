@@ -7,269 +7,74 @@
 <link type='text/css' rel='stylesheet' href='hscolour.css' />
 </head>
 <body>
-<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
-<a class="number" name="line-2">2</a>
-<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Next character sequence.</span>
-<a class="number" name="line-4">4</a>
-<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Next</span>
-<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Next</span>
-<a class="number" name="line-7">7</a>    <span class='hs-conid'>InputText</span><span class='hs-layout'>,</span>
-<a class="number" name="line-8">8</a>    <span class='hs-conid'>Next</span><span class='hs-layout'>,</span> <span class='hs-conid'>AbNext</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-varid'>nextSpace</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>    <span class='hs-varid'>nextQQ</span><span class='hs-layout'>,</span>
-<a class="number" name="line-11">11</a>
-<a class="number" name="line-12">12</a>    <span class='hs-comment'>-- * Symbol</span>
-<a class="number" name="line-13">13</a>    <span class='hs-comment'>-- ** Data type</span>
-<a class="number" name="line-14">14</a>    <span class='hs-conid'>Symbol</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-15">15</a>    <span class='hs-comment'>-- ** Symbol test</span>
-<a class="number" name="line-16">16</a>    <span class='hs-varid'>isGeneralSymbol</span><span class='hs-layout'>,</span> <span class='hs-varid'>isPlainSymbol</span><span class='hs-layout'>,</span> <span class='hs-varid'>isNumericSymbol</span><span class='hs-layout'>,</span> <span class='hs-varid'>isShortSymbol</span><span class='hs-layout'>,</span>
-<a class="number" name="line-17">17</a>    <span class='hs-comment'>-- ** Char test</span>
-<a class="number" name="line-18">18</a>    <span class='hs-varid'>isSymbolChar</span><span class='hs-layout'>,</span> <span class='hs-varid'>isGeneralChar</span><span class='hs-layout'>,</span> <span class='hs-varid'>isPlainChar</span><span class='hs-layout'>,</span> <span class='hs-varid'>isNumericChar</span><span class='hs-layout'>,</span>
-<a class="number" name="line-19">19</a>    <span class='hs-comment'>-- ** Next symbol</span>
-<a class="number" name="line-20">20</a>    <span class='hs-varid'>nextSymbol</span><span class='hs-layout'>,</span> <span class='hs-varid'>nextSymbolPlain</span><span class='hs-layout'>,</span>
-<a class="number" name="line-21">21</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-22">22</a>
-<a class="number" name="line-23">23</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                              <span class='hs-keyword'>as</span> <span class='hs-conid'>Ch</span>
-<a class="number" name="line-24">24</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>               <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-25">25</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                   <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a class="number" name="line-26">26</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
+<pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# LANGUAGE ViewPatterns #-}</span>
+<a class="number" name="line-2">2</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
+<a class="number" name="line-3">3</a>
+<a class="number" name="line-4">4</a><span class='hs-comment'>-- | Next character sequence.</span>
+<a class="number" name="line-5">5</a>
+<a class="number" name="line-6">6</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Next</span>
+<a class="number" name="line-7">7</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Next</span>
+<a class="number" name="line-8">8</a>    <span class='hs-conid'>InputText</span><span class='hs-layout'>,</span>
+<a class="number" name="line-9">9</a>    <span class='hs-conid'>Next</span><span class='hs-layout'>,</span> <span class='hs-conid'>AbNext</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>    <span class='hs-varid'>nextSpace</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>    <span class='hs-varid'>nextQQ</span><span class='hs-layout'>,</span>
+<a class="number" name="line-12">12</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-13">13</a>
+<a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                              <span class='hs-keyword'>as</span> <span class='hs-conid'>Ch</span>
+<a class="number" name="line-15">15</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>               <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-16">16</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                   <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-17">17</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Symbol</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>Msg</span>
+<a class="number" name="line-18">18</a>
+<a class="number" name="line-19">19</a><a name="InputText"></a><span class='hs-comment'>-- | Input data type.</span>
+<a class="number" name="line-20">20</a><a name="InputText"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a><a name="Next"></a><span class='hs-comment'>-- | Split next character sequence from input text.</span>
+<a class="number" name="line-23">23</a><a name="Next"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Next</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>InputText</span><span class='hs-layout'>,</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
+<a class="number" name="line-24">24</a>
+<a class="number" name="line-25">25</a><a name="AbNext"></a><span class='hs-comment'>-- | Split next character sequence from input text.</span>
+<a class="number" name="line-26">26</a><a name="AbNext"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>AbNext</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>InputText</span><span class='hs-layout'>,</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
 <a class="number" name="line-27">27</a>
-<a class="number" name="line-28">28</a><a name="InputText"></a><span class='hs-comment'>-- | Input data type.</span>
-<a class="number" name="line-29">29</a><a name="InputText"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-30">30</a>
-<a class="number" name="line-31">31</a><a name="Next"></a><span class='hs-comment'>-- | Split next character sequence from input text.</span>
-<a class="number" name="line-32">32</a><a name="Next"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Next</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>InputText</span><span class='hs-layout'>,</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
-<a class="number" name="line-33">33</a>
-<a class="number" name="line-34">34</a><a name="AbNext"></a><span class='hs-comment'>-- | Split next character sequence from input text.</span>
-<a class="number" name="line-35">35</a><a name="AbNext"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>AbNext</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>InputText</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>InputText</span><span class='hs-layout'>,</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span>
-<a class="number" name="line-36">36</a>
-<a class="number" name="line-37">37</a><a name="isQQ"></a><span class='hs-comment'>-- Punctuations</span>
-<a class="number" name="line-38">38</a><span class='hs-definition'>isQQ</span><span class='hs-layout'>,</span> <span class='hs-varid'>isSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-39">39</a><span class='hs-definition'>isQQ</span>       <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-chr'>'"'</span><span class='hs-layout'>)</span>
-<a class="number" name="line-40">40</a><a name="isSpace"></a><span class='hs-definition'>isSpace</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span>
-<a class="number" name="line-41">41</a>
-<a class="number" name="line-42">42</a><a name="nextSpace"></a><span class='hs-comment'>-- | Get next spaces.</span>
-<a class="number" name="line-43">43</a><span class='hs-comment'>--   Space character is decided by 'Ch.isSpace'.</span>
-<a class="number" name="line-44">44</a><span class='hs-comment'>--</span>
-<a class="number" name="line-45">45</a><span class='hs-comment'>--   &gt;&gt;&gt; nextSpace " abc"</span>
-<a class="number" name="line-46">46</a><span class='hs-comment'>--   ("abc", 1)</span>
-<a class="number" name="line-47">47</a><span class='hs-comment'>--</span>
-<a class="number" name="line-48">48</a><span class='hs-comment'>--   &gt;&gt;&gt; nextSpace " \tabc"</span>
-<a class="number" name="line-49">49</a><span class='hs-comment'>--   ("abc", 2)</span>
-<a class="number" name="line-50">50</a><span class='hs-comment'>--</span>
-<a class="number" name="line-51">51</a><span class='hs-definition'>nextSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Next</span> <span class='hs-conid'>Int</span>
-<a class="number" name="line-52">52</a><span class='hs-definition'>nextSpace</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>0</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-53">53</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-54">54</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-varid'>cs</span>                   <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>
-<a class="number" name="line-55">55</a>
-<a class="number" name="line-56">56</a><a name="nextQQ"></a><span class='hs-comment'>-- | Get next double quoted text.</span>
-<a class="number" name="line-57">57</a><span class='hs-comment'>--   A single double quote ends text.</span>
-<a class="number" name="line-58">58</a><span class='hs-comment'>--   A double double quote does not end text,</span>
-<a class="number" name="line-59">59</a><span class='hs-comment'>--   but it is converted to double quote.</span>
-<a class="number" name="line-60">60</a><span class='hs-comment'>--</span>
-<a class="number" name="line-61">61</a><span class='hs-comment'>--   &gt;&gt;&gt; nextQQ "abc\" def"</span>
-<a class="number" name="line-62">62</a><span class='hs-comment'>--   Right (" def","abc")</span>
-<a class="number" name="line-63">63</a><span class='hs-comment'>--</span>
-<a class="number" name="line-64">64</a><span class='hs-comment'>--   &gt;&gt;&gt; nextQQ "abc\"\"def\" ghi"</span>
-<a class="number" name="line-65">65</a><span class='hs-comment'>--   Right (" ghi","abc\"def")</span>
-<a class="number" name="line-66">66</a><span class='hs-comment'>--</span>
-<a class="number" name="line-67">67</a><span class='hs-definition'>nextQQ</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AbNext</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-68">68</a><span class='hs-definition'>nextQQ</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-str'>""</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-69">69</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isQQ</span> <span class='hs-varid'>c</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>qq</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-70">70</a>                  <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-71">71</a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span>                      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>quotNotEnd</span>
-<a class="number" name="line-72">72</a>
-<a class="number" name="line-73">73</a>    <span class='hs-varid'>qq</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isQQ</span> <span class='hs-varid'>c</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-74">74</a>    <span class='hs-varid'>qq</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>                       <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>reverse</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
-<a class="number" name="line-75">75</a>
-<a class="number" name="line-76">76</a>
-<a class="number" name="line-77">77</a><span class='hs-comment'>-- --------------------------------------------  Symbol</span>
-<a class="number" name="line-78">78</a>
-<a class="number" name="line-79">79</a><span class='hs-comment'>-- ----------------------  Data type</span>
-<a class="number" name="line-80">80</a>
-<a class="number" name="line-81">81</a><span class='hs-comment'>-- | Symbol class.</span>
-<a class="number" name="line-82">82</a><span class='hs-comment'>--</span>
-<a class="number" name="line-83">83</a><span class='hs-comment'>-- Relation between character classes and symbol classes.</span>
-<a class="number" name="line-84">84</a><span class='hs-comment'>-- The char class @number'@ means Unicode number except for @0-9@.</span>
-<a class="number" name="line-85">85</a><span class='hs-comment'>-- @G@ for general symbol, @P@ for plain, @N@ for numeric.</span>
-<a class="number" name="line-86">86</a><span class='hs-comment'>--</span>
-<a class="number" name="line-87">87</a><span class='hs-comment'>-- &gt;   Char class   Symbol class</span>
-<a class="number" name="line-88">88</a><span class='hs-comment'>-- &gt;   ------------ -----------------</span>
-<a class="number" name="line-89">89</a><span class='hs-comment'>-- &gt;   "0-9"        ( G ) ( P ) ( N )</span>
-<a class="number" name="line-90">90</a><span class='hs-comment'>-- &gt;   "-"          ( G ) ( P ) ( N )</span>
-<a class="number" name="line-91">91</a><span class='hs-comment'>-- &gt;   letter       ( G )   P</span>
-<a class="number" name="line-92">92</a><span class='hs-comment'>-- &gt;   mark         ( G )   P</span>
-<a class="number" name="line-93">93</a><span class='hs-comment'>-- &gt;   number'      ( G )   P</span>
-<a class="number" name="line-94">94</a><span class='hs-comment'>-- &gt;   "_?"         ( G )   P</span>
-<a class="number" name="line-95">95</a><span class='hs-comment'>-- &gt;   "+"          ( G )         N</span>
-<a class="number" name="line-96">96</a><span class='hs-comment'>-- &gt;   "*=&lt;&gt;~"        G</span>
-<a class="number" name="line-97">97</a><span class='hs-comment'>-- &gt;   ".#"                       N</span>
-<a class="number" name="line-98">98</a><span class='hs-comment'>--</span>
-<a class="number" name="line-99">99</a><span class='hs-comment'>-- Partial order of symbol classes.</span>
-<a class="number" name="line-100">100</a><span class='hs-comment'>--</span>
-<a class="number" name="line-101">101</a><span class='hs-comment'>-- &gt;                     ( GPN ) Common</span>
-<a class="number" name="line-102">102</a><span class='hs-comment'>-- &gt;                    /      |</span>
-<a class="number" name="line-103">103</a><span class='hs-comment'>-- &gt;           Plain ( GP )  ( GN ) Numeric</span>
-<a class="number" name="line-104">104</a><span class='hs-comment'>-- &gt;                /  |    /  |</span>
-<a class="number" name="line-105">105</a><span class='hs-comment'>-- &gt;   Short ( P.P )   |   /   |</span>
-<a class="number" name="line-106">106</a><span class='hs-comment'>-- &gt;            :      |  /    |</span>
-<a class="number" name="line-107">107</a><span class='hs-comment'>-- &gt;         General ( G )     |</span>
-<a class="number" name="line-108">108</a><span class='hs-comment'>-- &gt;            :      :     ( N ) Numeric</span>
-<a class="number" name="line-109">109</a><span class='hs-comment'>-- &gt;            :      :       :</span>
-<a class="number" name="line-110">110</a><span class='hs-comment'>-- &gt;            ................ Unknown</span>
-<a class="number" name="line-111">111</a>
-<a class="number" name="line-112">112</a><a name="Symbol"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-113">113</a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SymbolCommon</span>    <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ General-plain-numeric symbol</span>
-<a class="number" name="line-114">114</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>SymbolGeneral</span>   <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ General symbol</span>
-<a class="number" name="line-115">115</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>SymbolPlain</span>     <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ Plain symbol</span>
-<a class="number" name="line-116">116</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>SymbolNumeric</span>   <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ Numeric symbol</span>
-<a class="number" name="line-117">117</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>SymbolShort</span>     <span class='hs-conid'>String</span> <span class='hs-conid'>String</span>    <span class='hs-comment'>-- ^ Short symbol (Plain @"."@ Plain)</span>
-<a class="number" name="line-118">118</a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>SymbolUnknown</span>   <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ Unknown symbol</span>
-<a class="number" name="line-119">119</a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>)</span>
-<a class="number" name="line-120">120</a>
-<a class="number" name="line-121">121</a>
-<a class="number" name="line-122">122</a><span class='hs-comment'>-- ----------------------  Symbol test</span>
-<a class="number" name="line-123">123</a>
-<a class="number" name="line-124">124</a><a name="isGeneralSymbol"></a><span class='hs-comment'>-- | Test symbol is general, in other words,</span>
-<a class="number" name="line-125">125</a><span class='hs-comment'>--   'SymbolCommon', 'SymbolPlain' or 'SymbolGeneral'.</span>
-<a class="number" name="line-126">126</a><span class='hs-definition'>isGeneralSymbol</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-127">127</a><span class='hs-definition'>isGeneralSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolCommon</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-128">128</a><span class='hs-definition'>isGeneralSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolPlain</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-129">129</a><span class='hs-definition'>isGeneralSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolGeneral</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-130">130</a><span class='hs-definition'>isGeneralSymbol</span> <span class='hs-keyword'>_</span>                  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-131">131</a>
-<a class="number" name="line-132">132</a><a name="isPlainSymbol"></a><span class='hs-comment'>-- | Test symbol is plain, in other words,</span>
-<a class="number" name="line-133">133</a><span class='hs-comment'>--   'SymbolCommon' or 'SymbolPlain'.</span>
-<a class="number" name="line-134">134</a><span class='hs-definition'>isPlainSymbol</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-135">135</a><span class='hs-definition'>isPlainSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolCommon</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-136">136</a><span class='hs-definition'>isPlainSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolPlain</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-137">137</a><span class='hs-definition'>isPlainSymbol</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-138">138</a>
-<a class="number" name="line-139">139</a><a name="isNumericSymbol"></a><span class='hs-comment'>-- | Test symbol is numeric, in other words,</span>
-<a class="number" name="line-140">140</a><span class='hs-comment'>--   'SymbolCommon' or 'SymbolNumeric'.</span>
-<a class="number" name="line-141">141</a><span class='hs-definition'>isNumericSymbol</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-142">142</a><span class='hs-definition'>isNumericSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolCommon</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-143">143</a><span class='hs-definition'>isNumericSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolNumeric</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-144">144</a><span class='hs-definition'>isNumericSymbol</span> <span class='hs-keyword'>_</span>                  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-145">145</a>
-<a class="number" name="line-146">146</a><a name="isShortSymbol"></a><span class='hs-comment'>-- | Test symbol is 'SymbolShort'.</span>
-<a class="number" name="line-147">147</a><span class='hs-definition'>isShortSymbol</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-148">148</a><span class='hs-definition'>isShortSymbol</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolShort</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-149">149</a><span class='hs-definition'>isShortSymbol</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a class="number" name="line-150">150</a>
-<a class="number" name="line-151">151</a>
-<a class="number" name="line-152">152</a><span class='hs-comment'>-- ----------------------  Char test</span>
-<a class="number" name="line-153">153</a>
-<a class="number" name="line-154">154</a><a name="isSymbolChar"></a><span class='hs-comment'>-- | Test character is a symbol component.</span>
-<a class="number" name="line-155">155</a><span class='hs-definition'>isSymbolChar</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-156">156</a><span class='hs-definition'>isSymbolChar</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isGeneralChar</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isNumericChar</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-157">157</a>
-<a class="number" name="line-158">158</a><a name="isGeneralChar"></a><span class='hs-comment'>-- | Test character is a general-symbol component.</span>
-<a class="number" name="line-159">159</a><span class='hs-definition'>isGeneralChar</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-160">160</a><span class='hs-definition'>isGeneralChar</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharG'</span>
-<a class="number" name="line-161">161</a>
-<a class="number" name="line-162">162</a><a name="isPlainChar"></a><span class='hs-comment'>-- | Test character is a plain-symbol component.</span>
-<a class="number" name="line-163">163</a><span class='hs-definition'>isPlainChar</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-164">164</a><span class='hs-definition'>isPlainChar</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharP'</span>
-<a class="number" name="line-165">165</a>
-<a class="number" name="line-166">166</a><a name="isNumericChar"></a><span class='hs-comment'>-- | Test character is a numeric-symbol component.</span>
-<a class="number" name="line-167">167</a><span class='hs-definition'>isNumericChar</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-168">168</a><span class='hs-definition'>isNumericChar</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharN'</span>
-<a class="number" name="line-169">169</a>
-<a class="number" name="line-170">170</a><a name="isCharGpn"></a><span class='hs-definition'>isCharGpn</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharDigit</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharHyphen</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-171">171</a><span class='hs-definition'>isCharGpn</span>    <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharDigit</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharHyphen</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-172">172</a><a name="isCharDigit"></a><span class='hs-definition'>isCharDigit</span>  <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span> <span class='hs-varop'>&gt;=</span> <span class='hs-chr'>'0'</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>c</span> <span class='hs-varop'>&lt;=</span> <span class='hs-chr'>'9'</span>
-<a class="number" name="line-173">173</a><a name="isCharHyphen"></a><span class='hs-definition'>isCharHyphen</span> <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'-'</span>
-<a class="number" name="line-174">174</a>
-<a class="number" name="line-175">175</a><a name="isCharGp"></a><span class='hs-definition'>isCharGp</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-176">176</a><span class='hs-definition'>isCharGp</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-177">177</a>    <span class='hs-keyword'>case</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>majorGeneralCategory</span> <span class='hs-varid'>c</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-178">178</a>      <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>UnicodeLetter</span>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-179">179</a>      <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>UnicodeMark</span>      <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>True</span>
-<a class="number" name="line-180">180</a>      <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>UnicodeNumber</span>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>True</span>      <span class='hs-comment'>-- include isCharDigit</span>
-<a class="number" name="line-181">181</a>      <span class='hs-keyword'>_</span>                  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'_'</span> <span class='hs-varop'>||</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'?'</span>
-<a class="number" name="line-182">182</a>
-<a class="number" name="line-183">183</a><a name="isCharGn"></a><span class='hs-definition'>isCharGn</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharG</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharN</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-184">184</a><span class='hs-definition'>isCharGn</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'+'</span>
-<a class="number" name="line-185">185</a><a name="isCharG"></a><span class='hs-definition'>isCharG</span>  <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>"*=&lt;&gt;~"</span>
-<a class="number" name="line-186">186</a><a name="isCharN"></a><span class='hs-definition'>isCharN</span>  <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'.'</span> <span class='hs-varop'>||</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'#'</span>
-<a class="number" name="line-187">187</a>
-<a class="number" name="line-188">188</a><a name="isCharGp'"></a><span class='hs-definition'>isCharGp'</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharP'</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharGn'</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharG'</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCharN'</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
-<a class="number" name="line-189">189</a><span class='hs-definition'>isCharGp'</span> <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharGp</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharHyphen</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-190">190</a><a name="isCharP'"></a><span class='hs-definition'>isCharP'</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharGp'</span>
-<a class="number" name="line-191">191</a><a name="isCharGn'"></a><span class='hs-definition'>isCharGn'</span> <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharGpn</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharGn</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-192">192</a><a name="isCharG'"></a><span class='hs-definition'>isCharG'</span>  <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharGp'</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharGn</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharG</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-193">193</a><a name="isCharN'"></a><span class='hs-definition'>isCharN'</span>  <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>isCharGn'</span> <span class='hs-varid'>c</span> <span class='hs-varop'>||</span> <span class='hs-varid'>isCharN</span>  <span class='hs-varid'>c</span>
-<a class="number" name="line-194">194</a>
-<a class="number" name="line-195">195</a>
-<a class="number" name="line-196">196</a><span class='hs-comment'>-- ---------------------- Next symbol</span>
-<a class="number" name="line-197">197</a>
-<a class="number" name="line-198">198</a><a name="nextSymbol"></a><span class='hs-comment'>-- | Get next symbol.</span>
-<a class="number" name="line-199">199</a><span class='hs-definition'>nextSymbol</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Next</span> <span class='hs-conid'>Symbol</span>
-<a class="number" name="line-200">200</a><span class='hs-definition'>nextSymbol</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGpn</span> <span class='hs-str'>""</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-201">201</a>
-<a class="number" name="line-202">202</a>    <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-varid'>k</span>           <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>k</span> <span class='hs-varop'>$</span> <span class='hs-varid'>reverse</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
-<a class="number" name="line-203">203</a>
-<a class="number" name="line-204">204</a>    <span class='hs-comment'>-- General and Plain and Numeric</span>
-<a class="number" name="line-205">205</a>    <span class='hs-varid'>symbolGpn</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-206">206</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGpn</span> <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGpn</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-207">207</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGp</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGp</span>  <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-208">208</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGn</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGn</span>  <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-209">209</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharG</span>   <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolG</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-210">210</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharN</span>   <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolN</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-211">211</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-212">212</a>    <span class='hs-varid'>symbolGpn</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolCommon</span>
-<a class="number" name="line-213">213</a>
-<a class="number" name="line-214">214</a>    <span class='hs-comment'>-- General and Plain</span>
-<a class="number" name="line-215">215</a>    <span class='hs-varid'>symbolGp</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-216">216</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'.'</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>short</span> <span class='hs-layout'>(</span><span class='hs-varid'>reverse</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-str'>""</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-217">217</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGp'</span> <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGp</span>  <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-218">218</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharG</span>   <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolG</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-219">219</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-220">220</a>    <span class='hs-varid'>symbolGp</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>         <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolPlain</span>
-<a class="number" name="line-221">221</a>
-<a class="number" name="line-222">222</a>    <span class='hs-comment'>-- Plain "." Plain</span>
-<a class="number" name="line-223">223</a>    <span class='hs-varid'>short</span> <span class='hs-varid'>pre</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-224">224</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGp'</span> <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>short</span> <span class='hs-varid'>pre</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-225">225</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-226">226</a>    <span class='hs-varid'>short</span> <span class='hs-varid'>pre</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-varop'>$</span> <span class='hs-conid'>SymbolShort</span> <span class='hs-varid'>pre</span>
-<a class="number" name="line-227">227</a>
-<a class="number" name="line-228">228</a>    <span class='hs-comment'>-- General and Numeric</span>
-<a class="number" name="line-229">229</a>    <span class='hs-varid'>symbolGn</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-230">230</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharGn'</span> <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolGn</span>  <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-231">231</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharG</span>   <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolG</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-232">232</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharN</span>   <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolN</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-233">233</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span>  <span class='hs-varid'>c</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-234">234</a>    <span class='hs-varid'>symbolGn</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>         <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolNumeric</span>
-<a class="number" name="line-235">235</a>
-<a class="number" name="line-236">236</a>    <span class='hs-comment'>-- General</span>
-<a class="number" name="line-237">237</a>    <span class='hs-varid'>symbolG</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-238">238</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharG'</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolG</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-239">239</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-240">240</a>    <span class='hs-varid'>symbolG</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolGeneral</span>
-<a class="number" name="line-241">241</a>
-<a class="number" name="line-242">242</a>    <span class='hs-comment'>-- Numeric</span>
-<a class="number" name="line-243">243</a>    <span class='hs-varid'>symbolN</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-244">244</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isCharN'</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolN</span>   <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-245">245</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-246">246</a>    <span class='hs-varid'>symbolN</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>          <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolNumeric</span>
-<a class="number" name="line-247">247</a>
-<a class="number" name="line-248">248</a>    <span class='hs-comment'>-- Unknown symbol</span>
-<a class="number" name="line-249">249</a>    <span class='hs-varid'>symbolUnk</span> <span class='hs-varid'>w</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>
-<a class="number" name="line-250">250</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSymbolChar</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>symbolUnk</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>w</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
-<a class="number" name="line-251">251</a>    <span class='hs-varid'>symbolUnk</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span>        <span class='hs-keyglyph'>=</span> <span class='hs-varid'>done</span> <span class='hs-varid'>w</span> <span class='hs-varid'>cs</span> <span class='hs-conid'>SymbolUnknown</span>
-<a class="number" name="line-252">252</a>
-<a class="number" name="line-253">253</a><a name="nextSymbolPlain"></a><span class='hs-comment'>-- | Get next plain symbol.</span>
-<a class="number" name="line-254">254</a><span class='hs-definition'>nextSymbolPlain</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AbNext</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-255">255</a><span class='hs-definition'>nextSymbolPlain</span> <span class='hs-varid'>cs</span> <span class='hs-keyglyph'>=</span>
-<a class="number" name="line-256">256</a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>nextSymbol</span> <span class='hs-varid'>cs</span> <span class='hs-keyword'>of</span>
-<a class="number" name="line-257">257</a>      <span class='hs-layout'>(</span><span class='hs-varid'>cs'</span><span class='hs-layout'>,</span> <span class='hs-varid'>sym</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>getSymbolPlain</span> <span class='hs-varid'>sym</span>
-<a class="number" name="line-258">258</a>                       <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs'</span><span class='hs-layout'>,</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
-<a class="number" name="line-259">259</a>
-<a class="number" name="line-260">260</a><a name="getSymbolPlain"></a><span class='hs-definition'>getSymbolPlain</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Symbol</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>String</span>
-<a class="number" name="line-261">261</a><span class='hs-definition'>getSymbolPlain</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolCommon</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>w</span>
-<a class="number" name="line-262">262</a><span class='hs-definition'>getSymbolPlain</span> <span class='hs-layout'>(</span><span class='hs-conid'>SymbolPlain</span>  <span class='hs-varid'>w</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>w</span>
-<a class="number" name="line-263">263</a><span class='hs-definition'>getSymbolPlain</span> <span class='hs-keyword'>_</span>                 <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>expOrdSym</span>
-<a class="number" name="line-264">264</a>
+<a class="number" name="line-28">28</a><a name="isQQ"></a><span class='hs-comment'>-- | Test double punctuation character.</span>
+<a class="number" name="line-29">29</a><span class='hs-definition'>isQQ</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Test</span> <span class='hs-conid'>Char</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>isQQ</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-chr'>'"'</span><span class='hs-layout'>)</span>
+<a class="number" name="line-31">31</a>
+<a class="number" name="line-32">32</a><a name="nextSpace"></a><span class='hs-comment'>-- | Get next spaces.</span>
+<a class="number" name="line-33">33</a><span class='hs-comment'>--   Space character is decided by 'Ch.isSpace'.</span>
+<a class="number" name="line-34">34</a><span class='hs-comment'>--</span>
+<a class="number" name="line-35">35</a><span class='hs-comment'>--   &gt;&gt;&gt; nextSpace " abc"</span>
+<a class="number" name="line-36">36</a><span class='hs-comment'>--   ("abc", 1)</span>
+<a class="number" name="line-37">37</a><span class='hs-comment'>--</span>
+<a class="number" name="line-38">38</a><span class='hs-comment'>--   &gt;&gt;&gt; nextSpace " \tabc"</span>
+<a class="number" name="line-39">39</a><span class='hs-comment'>--   ("abc", 2)</span>
+<a class="number" name="line-40">40</a><span class='hs-comment'>--</span>
+<a class="number" name="line-41">41</a><span class='hs-definition'>nextSpace</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Next</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-42">42</a><span class='hs-definition'>nextSpace</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>0</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-43">43</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-44">44</a>        <span class='hs-keyglyph'>|</span> <span class='hs-conid'>Ch</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-45">45</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-varid'>cs</span>            <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>
+<a class="number" name="line-46">46</a>
+<a class="number" name="line-47">47</a><a name="nextQQ"></a><span class='hs-comment'>-- | Get next double quoted text.</span>
+<a class="number" name="line-48">48</a><span class='hs-comment'>--   A single double quote ends text.</span>
+<a class="number" name="line-49">49</a><span class='hs-comment'>--   A double double quote does not end text,</span>
+<a class="number" name="line-50">50</a><span class='hs-comment'>--   but it is converted to double quote.</span>
+<a class="number" name="line-51">51</a><span class='hs-comment'>--</span>
+<a class="number" name="line-52">52</a><span class='hs-comment'>--   &gt;&gt;&gt; nextQQ "abc\" def"</span>
+<a class="number" name="line-53">53</a><span class='hs-comment'>--   Right (" def","abc")</span>
+<a class="number" name="line-54">54</a><span class='hs-comment'>--</span>
+<a class="number" name="line-55">55</a><span class='hs-comment'>--   &gt;&gt;&gt; nextQQ "abc\"\"def\" ghi"</span>
+<a class="number" name="line-56">56</a><span class='hs-comment'>--   Right (" ghi","abc\"def")</span>
+<a class="number" name="line-57">57</a><span class='hs-comment'>--</span>
+<a class="number" name="line-58">58</a><span class='hs-definition'>nextQQ</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AbNext</span> <span class='hs-conid'>String</span>
+<a class="number" name="line-59">59</a><span class='hs-definition'>nextQQ</span> <span class='hs-varid'>cs0</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>zero</span> <span class='hs-varid'>cs0</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-60">60</a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-61">61</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isQQ</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>qq</span> <span class='hs-varid'>n</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-62">62</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-63">63</a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Msg</span><span class='hs-varop'>.</span><span class='hs-varid'>quotNotEnd</span>
+<a class="number" name="line-64">64</a>
+<a class="number" name="line-65">65</a>    <span class='hs-varid'>qq</span> <span class='hs-varid'>n</span> <span class='hs-layout'>(</span><span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-varid'>uncons</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Just</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-66">66</a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isQQ</span> <span class='hs-varid'>c</span>      <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs'</span><span class='hs-layout'>,</span> <span class='hs-varid'>s'</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>nextQQ</span> <span class='hs-varid'>cs</span>
+<a class="number" name="line-67">67</a>                           <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs'</span><span class='hs-layout'>,</span> <span class='hs-varid'>take</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs0</span> <span class='hs-varop'>++</span> <span class='hs-varid'>s'</span><span class='hs-layout'>)</span>
+<a class="number" name="line-68">68</a>    <span class='hs-varid'>qq</span> <span class='hs-varid'>n</span> <span class='hs-varid'>cs</span>           <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>take</span> <span class='hs-varid'>n</span> <span class='hs-varid'>cs0</span><span class='hs-layout'>)</span>
+<a class="number" name="line-69">69</a>
 </pre></body>
 </html>

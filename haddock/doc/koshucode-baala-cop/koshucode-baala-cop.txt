@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.178.0.0
+@version 0.185.0.0
 
 
 -- | Replace sublists.
@@ -161,7 +161,7 @@ copsText :: (CContent c) => [Cop c]
 
 -- | <b>suffix LIST</b> adds unique suffixes to text elements of
 --   <i>LIST</i>.
-copSuffix :: (CText c, CList c) => CopCalc c
+copSuffix :: (CContent c) => CopCalc c
 
 -- | <b>unsuffix C</b> remove integer suffixes from <i>C</i>.
 copUnsuffix :: (CContent c) => CopCalc c
@@ -173,12 +173,273 @@ module Koshucode.Baala.Cop.Type
 -- | Content operators on types.
 copsType :: (CContent c) => [Cop c]
 
+-- | Convert to decimal.
+--   
+--   <pre>
+--   &gt;&gt;&gt; to-dec "12.5"
+--   12.5
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; to-dec "a"
+--   "a"
+--   </pre>
+copToDec :: (CContent c) => CopCalc c
+
+-- | Test content is the empty.
+--   
+--   <pre>
+--   &gt;&gt;&gt; empty? ()
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; empty? "a"
+--   (-)
+--   </pre>
+copIsEmpty :: (CBool c, CEmpty c) => CopCalc c
+
+-- | Test content is the end.
+--   
+--   <pre>
+--   &gt;&gt;&gt; end? (/)
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; end? "a"
+--   (-)
+--   </pre>
+copIsEnd :: (CBool c, CEnd c) => CopCalc c
+
+-- | Test content is a boolean.
+--   
+--   <pre>
+--   &gt;&gt;&gt; bool? (+)
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; bool? "a"
+--   (-)
+--   </pre>
+copIsBool :: (CBool c) => CopCalc c
+
+-- | Test content is a decimal number.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dec? 12.5
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; dec? "a"
+--   (-)
+--   </pre>
+copIsDec :: (CBool c, CDec c) => CopCalc c
+
+-- | Test content is a clock.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clock? |12:00|
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; clock? "a"
+--   (-)
+--   </pre>
+copIsClock :: (CBool c, CClock c) => CopCalc c
+
+-- | Test content is a time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; time? 2013-04-18
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; time? "a"
+--   (-)
+--   </pre>
+copIsTime :: (CBool c, CTime c) => CopCalc c
+
+-- | Test content is a code.
+--   
+--   <pre>
+--   &gt;&gt;&gt; code? 'a
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; code? "a"
+--   (-)
+--   </pre>
+copIsCode :: (CBool c, CCode c) => CopCalc c
+
+-- | Test content is a term name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; term? '/a
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; term? "a"
+--   (-)
+--   </pre>
+copIsTerm :: (CBool c, CTerm c) => CopCalc c
+
+-- | Test content is a text.
+--   
+--   <pre>
+--   &gt;&gt;&gt; text? 12.5
+--   (-)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; text? "a"
+--   (+)
+--   </pre>
+copIsText :: (CBool c, CText c) => CopCalc c
+
+-- | Test content is a list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; list? [ 0 | 1 ]
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; list? "a"
+--   (-)
+--   </pre>
+copIsList :: (CBool c, CList c) => CopCalc c
+
+-- | Test content is a set.
+--   
+--   <pre>
+--   &gt;&gt;&gt; set? { 0 | 1 }
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; set? "a"
+--   (-)
+--   </pre>
+copIsSet :: (CBool c, CSet c) => CopCalc c
+
+-- | Test content is a tie.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tie? {- /a 0 /b 1 -}
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; tie? "a"
+--   (-)
+--   </pre>
+copIsTie :: (CBool c, CTie c) => CopCalc c
+
+-- | Test content is a rel.
+--   
+--   <pre>
+--   &gt;&gt;&gt; rel? {= /a /b [ 0 | 1 ] =}
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; rel? "a"
+--   (-)
+--   </pre>
+copIsRel :: (CBool c, CRel c) => CopCalc c
+
+-- | Test content is a interp.
+--   
+--   <pre>
+--   &gt;&gt;&gt; interp? {| /x is equal to /y . |}
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; interp? "a"
+--   (-)
+--   </pre>
+copIsInterp :: (CBool c, CInterp c) => CopCalc c
+
+-- | Test content is a type.
+--   
+--   <pre>
+--   &gt;&gt;&gt; type? [- text -]
+--   (+)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; type? "a"
+--   (-)
+--   </pre>
+copIsType :: (CBool c, CType c) => CopCalc c
+
 
 -- | Content operators on clocks and times.
 module Koshucode.Baala.Cop.Time
 
 -- | Content operators on clocks and times.
-copsTime :: (CTime c, CDec c) => [Cop c]
+copsTime :: (CContent c) => [Cop c]
+
+-- | Add day/week/month/year to time.
+--   
+--   <pre>
+--   &gt;&gt;&gt; add-week ( 5 )( 2013-04-18 )
+--   2013-05-23
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; add-month ( 1 )( 2013-04-18 )
+--   2013-05-18
+--   </pre>
+copTimeAdd :: (CContent c) => (Integer -> Map Time) -> CopCalc c
+
+-- | Convert format of date.
+--   
+--   <pre>
+--   &gt;&gt;&gt; weekly 2013-04-18
+--   2013-#16-4
+--   </pre>
+copDateForm :: (CContent c) => Map Date -> CopCalc c
+
+-- | Convert time to the modified Jurian day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mjd 2013-04-18
+--   56400
+--   </pre>
+copMjd :: (CContent c) => CopCalc c
+
+-- | Create time from year, month, and day.
+--   
+--   <pre>
+--   &gt;&gt;&gt; time ( 2013 )( 4 )( 18 )
+--   2013-04-18
+--   </pre>
+copTime :: (CContent c) => CopCalc c
+
+-- | Create clock from day, hour, minute, and second.
+--   
+--   <pre>
+--   &gt;&gt;&gt; clock ( 0 )( 12 )( 45 )( 30 )
+--   |12:45:30|
+--   </pre>
+copClock :: (CContent c) => CopCalc c
+
+-- | Day of week.
+--   
+--   <pre>
+--   &gt;&gt;&gt; dayw 2013-04-18
+--   4
+--   </pre>
+copDayw :: (CContent c) => CopCalc c
 
 
 -- | Operators on content order.

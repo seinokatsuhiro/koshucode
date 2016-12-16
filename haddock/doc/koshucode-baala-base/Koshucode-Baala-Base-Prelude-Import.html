@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.178.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -203,6 +203,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
 	    >Bz</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:bzString"
+	    >bzString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -675,7 +683,29 @@ function' are not commutative.</p
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert string into lazy bytestring.</p
+	    >Convert string into lazy bytestring.
+   This is same as <code
+	      >fromString</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bzString" class="def"
+	    >bzString</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Bz"
+	    >Bz</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Import.html#bzString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert lazy bytestring to string.
+   This is same as <code
+	      >toString</code
+	      >.</p
 	    ></div
 	  ></div
 	><h1 id="g:5"
@@ -739,8 +769,8 @@ function' are not commutative.</p
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:NIOPoint"
-		      >NIOPoint</a
+		      > <a href="Koshucode-Baala-Base-IO-IOPoint.html#t:IxIOPoint"
+		      >IxIOPoint</a
 		      ></span
 		    ></td
 		  ><td class="doc"
@@ -753,7 +783,7 @@ function' are not commutative.</p
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
-		      > <a href="Koshucode-Baala-Base-IO-CodePos.html#t:CodePos"
+		      > <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
 		      >CodePos</a
 		      ></span
 		    ></td
@@ -774,6 +804,20 @@ function' are not commutative.</p
 		  ><td class="doc"
 		  ><p
 		    >Empty queue</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Default"
+		      >Default</a
+		      > (<a href="Koshucode-Baala-Base-Code-Clause.html#t:CodeClause"
+		      >CodeClause</a
+		      > a)</span
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >No lines, no tokens.</p
 		    ></td
 		  ></tr
 		></table
