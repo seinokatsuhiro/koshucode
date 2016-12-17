@@ -32,17 +32,18 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Implementation of relational operators.
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Rop.ropList "peripheral"
-    --        CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Rop.def consNow           "now /N"                 $ unwords
-                                                        [ "local : -term"
-                                                        , "| utc : -term . -utc"
-                                                        , "| zoned : -term . -zoned" ]
-    , Rop.def consRdf           "rdf P /S /O"              " -pattern -term*"
-    , Rop.def consTermName      "term-name /N"             "-term"
-    , Rop.def consTie           "tie /P ... -to N"         "-term* . -to"
-    , Rop.def consToday         "today /N"                 "-term"
-    , Rop.def consUntie         "untie /P -only /P ..."    "-from . -only"
-    ]
+    --    CONSTRUCTOR    USAGE                    ATTRIBUTE
+    [ rop consNow        "now /N"                 [ "local : -term"
+                                                  , "utc : -term . -utc"
+                                                  , "zoned : -term . -zoned" ]
+    , rop consRdf        "rdf P /S /O"            [ " -pattern -term*" ]
+    , rop consTermName   "term-name /N"           [ "-term" ]
+    , rop consTie        "tie /P ... -to N"       [ "-term* . -to" ]
+    , rop consToday      "today /N"               [ "-term" ]
+    , rop consUntie      "untie /P -only /P ..."  [ "-from . -only" ]
+    ] where
+      rop :: C.RopCons c -> C.RopUsage -> [String] -> Rop.RopDefine c
+      rop = Rop.def
 
 
 -- ----------------------  RDF

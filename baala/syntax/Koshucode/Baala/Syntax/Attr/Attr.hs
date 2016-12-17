@@ -6,9 +6,9 @@
 
 module Koshucode.Baala.Syntax.Attr.Attr
   ( -- * Attribute layout
-    AttrParaSpec,
     AttrLayout (..),
     AttrBranch (..),
+    AttrParaSpec,
     attrBranch,
   
     -- * Attribute parameter
@@ -118,7 +118,7 @@ maybeDoubleHyphen _           = Nothing
 
 -- --------------------------------------------  Parser
 
--- | Parse relmap attribute layout.
+-- | Convertible to attribute layout.
 --
 --   * __@-@Word__        — Normal attribute
 --   * __@-@Word@/@__     — Relmap attribute
@@ -133,8 +133,17 @@ maybeDoubleHyphen _           = Nothing
 --              , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
 --              ))]
 --
-parseAttrLayout :: String -> AttrLayout
-parseAttrLayout = toAttrLayout
+class ToAttrLayout a where
+    toAttrLayout :: a -> AttrLayout
+
+instance ToAttrLayout AttrLayout where
+    toAttrLayout = id
+
+instance ToAttrLayout String where
+    toAttrLayout = toAttrLayout . B.divideBy (== '|')
+
+instance ToAttrLayout [String] where
+    toAttrLayout = AttrLayout . map (fmap toBranch) . S.parseParaSpecs
 
 toBranch :: S.ParaSpec String -> AttrBranch
 toBranch = attrBranch . trunk . fmap attrName where
@@ -150,16 +159,8 @@ unhyphen :: O.StringMap
 unhyphen ('-' : n) = n
 unhyphen n         = S.paraBug "no hyphen" n
 
--- | Convertible to attribute layout.
-class ToAttrLayout a where
-    toAttrLayout :: a -> AttrLayout
-
-instance ToAttrLayout AttrLayout where
-    toAttrLayout = id
-
-instance ToAttrLayout String where
-    toAttrLayout = toAttrLayout . B.divideBy (== '|')
-
-instance ToAttrLayout [String] where
-    toAttrLayout = AttrLayout . map (fmap toBranch) . S.parseParaSpecs
+-- | Parse relmap attribute layout.
+{-# DEPRECATED parseAttrLayout "Use 'toAttrLayout' instead." #-}
+parseAttrLayout :: String -> AttrLayout
+parseAttrLayout = toAttrLayout
 

@@ -27,11 +27,12 @@ ropList group = map rop where
         in C.Rop name group usage attr sorter cons
 
 -- | Make definition of relmap operator.
-def :: C.RopCons c    -- ^ Constructor
+def :: (S.ToAttrLayout layout)
+    => C.RopCons c    -- ^ Constructor
     -> C.RopUsage     -- ^ Rop usage
-    -> String         -- ^ Attribute layout
+    -> layout         -- ^ Attribute layout
     -> RopDefine c    -- ^ Operator definition
-def cons usage attr = (cons, usage, S.parseAttrLayout attr)
+def cons usage layout = (cons, usage, S.toAttrLayout layout)
 
 -- | Add aliases of relmap operator.
 ropAlias
