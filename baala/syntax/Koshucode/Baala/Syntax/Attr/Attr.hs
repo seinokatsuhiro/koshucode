@@ -64,10 +64,10 @@ attrClassify spec n = n' where
 -- ----------------------  Attribute sorter
 
 -- | Attribute parameter.
-type AttrPara = S.Para S.AttrName S.TTree
+type AttrPara = S.Para S.AttrName S.Tree
 
 -- | Parameterizer for attribute of relmap operator.
-type AttrParaze = [S.TTree] -> B.Ab AttrPara
+type AttrParaze = [S.Tree] -> B.Ab AttrPara
 
 -- | Parameterize named attributes.
 attrPara :: AttrParaze
@@ -97,16 +97,16 @@ attrMatch (AttrLayout branches) p = loop [] branches where
 
 -- ----------------------  Name
 
-byHyphen :: S.TTree -> Maybe S.AttrName
+byHyphen :: S.Tree -> Maybe S.AttrName
 byHyphen = fmap S.AttrNormal . maybeSingleHyphen
 
 -- | Take out hyphened text (like @"-x"@) from token tree.
-maybeSingleHyphen :: S.TTree -> Maybe String
+maybeSingleHyphen :: S.Tree -> Maybe String
 maybeSingleHyphen (P.LAtt1 n) = Just n
 maybeSingleHyphen _           = Nothing
 
 -- | Take out double-hyphened text (like @"--xyz"@) from token tree.
-maybeDoubleHyphen :: S.TTree -> Maybe String
+maybeDoubleHyphen :: S.Tree -> Maybe String
 maybeDoubleHyphen (P.LAtt2 n) = Just n
 maybeDoubleHyphen _           = Nothing
 

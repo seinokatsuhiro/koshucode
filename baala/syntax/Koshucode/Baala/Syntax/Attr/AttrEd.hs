@@ -25,19 +25,19 @@ type AttrEd = B.Codic AttrEdBody
 
 -- | Operators for attribute editors.
 data AttrEdBody
-    = AttrEdId                             -- ^ __id:__ Identity editor
-    | AttrEdAdd     Bool String [S.TTree]  -- ^ __add:__ Add attribute
-    | AttrEdRename  (String, String)       -- ^ __rename:__ Rename attribute keyword
-    | AttrEdFill    [Maybe S.TTree]        -- ^ __fill:__ Fill positional attributes
-    | AttrEdNest    String [S.TTree]       -- ^ __nest:__ Nested relation reference
-    | AttrEdAppend  [AttrEd]               -- ^ Append editors
+    = AttrEdId                            -- ^ __id:__ Identity editor
+    | AttrEdAdd     Bool String [S.Tree]  -- ^ __add:__ Add attribute
+    | AttrEdRename  (String, String)      -- ^ __rename:__ Rename attribute keyword
+    | AttrEdFill    [Maybe S.Tree]        -- ^ __fill:__ Fill positional attributes
+    | AttrEdNest    String [S.Tree]       -- ^ __nest:__ Nested relation reference
+    | AttrEdAppend  [AttrEd]              -- ^ Append editors
       deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Cons and run
 
 -- | Construct attribute editor.
-consAttrEd :: [S.TTree] -> B.Ab AttrEd
+consAttrEd :: [S.Tree] -> B.Ab AttrEd
 consAttrEd = loop where
     notKeyword ('-' : _)  = False
     notKeyword _          = True
@@ -46,7 +46,7 @@ consAttrEd = loop where
     fill (x : xs)          = Just x  : fill xs
     fill []                = []
 
-    right :: [S.TTree] -> AttrEdBody -> B.Ab AttrEd
+    right :: [S.Tree] -> AttrEdBody -> B.Ab AttrEd
     right trees = Right . B.codic trees
 
     loop trees =
@@ -101,16 +101,16 @@ runAttrEd (B.Codic cp edit) attr = run where
           Just _   -> Right $ B.assocRename1 k' k attr
           Nothing  -> Msg.reqAttr $ S.attrNameText k
 
-    fill :: [S.TTree] -> [Maybe S.TTree] -> B.Ab [S.TTree]
+    fill :: [S.Tree] -> [Maybe S.Tree] -> B.Ab [S.Tree]
     fill (p : ps) (Nothing : xs)   = Right . (p:) =<< fill ps xs
     fill (p : ps) (_       : xs)   = Right . (p:) =<< fill ps xs
     fill []       (Just x  : xs)   = Right . (x:) =<< fill [] xs
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
 
-nestName :: B.AbMap [S.TTree]
+nestName :: B.AbMap [S.Tree]
 nestName [P.LTerm n] = Right $ localNest $ S.toTermName n
 nestName _ = Msg.adlib "require term name"
 
-localNest :: S.TermName -> [S.TTree]
+localNest :: S.TermName -> [S.Tree]
 localNest n = [B.TreeL $ S.TLocal B.def (S.LocalNest n) (-1) []]

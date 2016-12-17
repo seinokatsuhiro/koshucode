@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 --   >>> S.toTrees "\"aa\" \"bb\"" >>= treesTexts True
 --   Right ["aabb"]
 --
-treesTexts :: Bool -> [S.TTree] -> B.Ab [String]
+treesTexts :: Bool -> [S.Tree] -> B.Ab [String]
 treesTexts q = mapM $ treeText q
 
 -- | Get text from token tree.
@@ -35,7 +35,7 @@ treesTexts q = mapM $ treeText q
 --   >>> S.toTree "aa" >>= treeText False
 --   Right "aa"
 --
-treeText :: Bool -> S.TTree -> B.Ab String
+treeText :: Bool -> S.Tree -> B.Ab String
 treeText q (P.L tok) = tokenString q tok
 treeText _ _ = Msg.nothing
 
@@ -54,10 +54,10 @@ tokenString _ _  = Msg.nothing
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --
-treesInterp :: [S.TTree] -> B.Ab T.Interp
+treesInterp :: [S.Tree] -> B.Ab T.Interp
 treesInterp = Right . T.interp B.<.> mapM treeInterpWord
 
-treeInterpWord :: S.TTree -> B.Ab T.InterpWord
+treeInterpWord :: S.Tree -> B.Ab T.InterpWord
 treeInterpWord (B.TreeB _ _ _) = Msg.nothing
 treeInterpWord (B.TreeL x) =
     case x of
@@ -69,7 +69,7 @@ treeInterpWord (B.TreeL x) =
 -- ----------------------  Type
 
 -- | Decode type content.
-treesType :: [S.TTree] -> B.Ab T.Type
+treesType :: [S.Tree] -> B.Ab T.Type
 treesType = gen where
     gen xs = case S.divideTreesByBar xs of
                [x] ->  single x

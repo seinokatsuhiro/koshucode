@@ -109,11 +109,11 @@ unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
 unknownCategory :: String -> B.Ab b
 unknownCategory n = Msg.adlib $ "subtext unknown general category " ++ n
 
-divide :: String -> [S.TTree] -> [[S.TTree]]
+divide :: String -> [S.Tree] -> [[S.Tree]]
 divide s = S.divideTreesBy (== s)
 
 -- | Parse token trees into subtext bundle.
-parseBundle :: [S.TTree] -> B.Ab CharBundle
+parseBundle :: [S.Tree] -> B.Ab CharBundle
 parseBundle = bundle where
     bundle xs@[P.BSet sub] =
         case step1 `mapM` divide "|" sub of
@@ -126,21 +126,21 @@ parseBundle = bundle where
     single xs = do e <- parseSubtext [] xs
                    Right $ T.bundle [("start", e)]
 
-    step1 :: [S.TTree] -> B.Ab (String, [S.TTree])
+    step1 :: [S.Tree] -> B.Ab (String, [S.Tree])
     step1 xs = case divide "=" xs of
                  [[P.LRaw n], x] -> Right (n, x)
                  _               -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [S.TTree]) -> B.Ab (String, T.CharExpr)
+    step2 :: [String] -> (String, [S.Tree]) -> B.Ab (String, T.CharExpr)
     step2 ns (n, x) = do e <- parseSubtext ns x
                          Right (n, e)
 
 -- | Parse token trees into subtext expression.
-parseSubtext :: [String] -> [S.TTree] -> B.Ab T.CharExpr
+parseSubtext :: [String] -> [S.Tree] -> B.Ab T.CharExpr
 parseSubtext ns = trees False where
 
     -- Trees
-    trees :: Bool -> [S.TTree] -> B.Ab T.CharExpr
+    trees :: Bool -> [S.Tree] -> B.Ab T.CharExpr
     trees False xs              = opTop xs
     trees True (P.LRaw n : xs)  = pre n xs
     trees True [P.LTerm n, x]   = Right . T.sub n =<< tree x  -- /N E
@@ -150,7 +150,7 @@ parseSubtext ns = trees False where
     trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
-    tree :: S.TTree -> B.Ab T.CharExpr
+    tree :: S.Tree -> B.Ab T.CharExpr
     tree (P.L x)      = leaf x
     tree (P.B g xs)   = branch g xs
     tree x            = unknownSyntax x
@@ -160,7 +160,7 @@ parseSubtext ns = trees False where
     leaf (P.TRaw n)   = pre n []
     leaf x            = unknownSyntax x
 
-    branch :: S.BracketType -> [S.TTree] -> B.Ab T.CharExpr
+    branch :: S.BracketType -> [S.Tree] -> B.Ab T.CharExpr
     branch S.BracketGroup   = opTop            -- ( E )
     branch S.BracketSet     = bracket T.many   -- { E }
     branch S.BracketTie     = bracket T.many1  -- {- E -}
@@ -170,7 +170,7 @@ parseSubtext ns = trees False where
     bracket op xs = do e <- trees False xs
                        Right $ op e
 
-    times :: [S.TTree] -> [S.TTree] -> B.Ab T.CharExpr
+    times :: [S.Tree] -> [S.Tree] -> B.Ab T.CharExpr
     times [ Empty   , To , Empty    ] = bracket (T.many)
     times [ P.LRaw a, To            ] = bracket (T.min (int a))
     times [ P.LRaw a, To , Empty    ] = bracket (T.min (int a))
@@ -189,7 +189,7 @@ parseSubtext ns = trees False where
     text x                     = unknownSyntax x
 
     -- Infix operators
-    opTop :: [S.TTree] -> B.Ab T.CharExpr
+    opTop :: [S.Tree] -> B.Ab T.CharExpr
     opTop [P.BSet xs, P.BGroup m] = times m xs
     opTop xs = opAlt xs
     opAlt    = inf "|"   T.or    opSeq   -- E | E | E

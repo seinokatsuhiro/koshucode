@@ -44,27 +44,27 @@ splitTokensBy p = B.splitBy p2 where
     p2 (P.TRaw x) = p x
     p2 _          = False
 
-raw :: O.Test String -> S.TTree -> Bool
+raw :: O.Test String -> S.Tree -> Bool
 raw p (P.LRaw w) = p w
 raw _ _          = False
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: O.Test String -> B.SplitList3e S.TTree
+splitTreesBy :: O.Test String -> B.SplitList3e S.Tree
 splitTreesBy = B.splitBy . raw
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: O.Test String -> [S.TTree] -> [[S.TTree]]
+divideTreesBy :: O.Test String -> [S.Tree] -> [[S.Tree]]
 divideTreesBy = B.divideBy . raw
 
 -- | Divide token trees by vertical bar @\"|\"@.
-divideTreesByBar :: [S.TTree] -> [[S.TTree]]
+divideTreesByBar :: [S.Tree] -> [[S.Tree]]
 divideTreesByBar = divideTreesBy (== "|")
 
 -- | Divide token trees by colon @\":\"@.
-divideTreesByColon :: [S.TTree] -> [[S.TTree]]
+divideTreesByColon :: [S.Tree] -> [[S.Tree]]
 divideTreesByColon = divideTreesBy (== ":")
 
 -- | Divide token trees by equal sign @\"=\"@.
-divideTreesByEqual :: [S.TTree] -> [[S.TTree]]
+divideTreesByEqual :: [S.Tree] -> [[S.Tree]]
 divideTreesByEqual = divideTreesBy (== "=")
 

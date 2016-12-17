@@ -55,7 +55,7 @@ type LexmapClause = NNamed C.LexmapTrees
 type RopParaze = C.RopName -> Maybe S.AttrParaze
 
 -- | Construct lexmap from token trees.
-type ConsLexmapBody = [S.TTree] -> B.Ab (C.Lexmap, LexmapLinkTable)
+type ConsLexmapBody = [S.Tree] -> B.Ab (C.Lexmap, LexmapLinkTable)
 
 -- | Lexmap and linked lexmap.
 type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
@@ -157,7 +157,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                  []     -> Right (lx, [])  -- no submaps
                  locs   -> submap2 lx locs
 
-        submap2 :: C.Lexmap -> [(S.AttrName, [S.TTree])] -> B.Ab (C.Lexmap, LexmapLinkTable)
+        submap2 :: C.Lexmap -> [(S.AttrName, [S.Tree])] -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap2 lx attr =
             do subs <- namedLexmap `mapM` attr
                let (sublx, tabs) = unzip subs
@@ -174,7 +174,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
                         = S.TLocal cp v eid $ p : ps
         markLocalToken _ loc = loc
 
-        markLocalRelmap :: O.Map S.Token -> O.Map (S.AttrName, [S.TTree])
+        markLocalRelmap :: O.Map S.Token -> O.Map (S.AttrName, [S.Tree])
         markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeLeafMap mark <$> ts)
         markLocalRelmap _ (n, ts) = (n, ts)
 

@@ -51,7 +51,7 @@ dumpRel :: (D.CRel c, B.MixEncode c) => D.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
-dumpTrees :: [S.TTree] -> B.Ab a
+dumpTrees :: [S.Tree] -> B.Ab a
 dumpTrees trees = Left $ B.abortLines "Dump token trees"
                    $ lines $ show $ S.ttDoc trees
 

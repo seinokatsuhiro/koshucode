@@ -49,10 +49,10 @@ getNamedCoxes med = ropNamedAlphas med B.<.> Rop.getWordTrees med
 getTermCoxes :: (D.CContent c) => Rop.RopGet c [S.Term (D.Cox c)]
 getTermCoxes med = ropNamedAlphas med B.<.> Rop.getTermTrees med
 
-ropBuild :: (D.CContent c) => C.Intmed c -> S.TTree -> B.Ab (D.Cox c)
+ropBuild :: (D.CContent c) => C.Intmed c -> S.Tree -> B.Ab (D.Cox c)
 ropBuild = C.treeCoxG . C.ropGlobal
 
-ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [(n, S.TTree)] -> B.Ab [(n, D.Cox c)]
+ropNamedAlphas :: (D.CContent c) => C.Intmed c -> [(n, S.Tree)] -> B.Ab [(n, D.Cox c)]
 ropNamedAlphas med = mapM (B.sndM $ ropBuild med)
 
 
@@ -70,7 +70,7 @@ getWhereBody u name =
     do xs <- Rop.getTreesByColon u name
        getWhereClause u `mapM` xs
 
-getWhereClause :: (D.CContent c) => C.Intmed c -> [S.TTree] -> B.Ab (D.NamedCox c)
+getWhereClause :: (D.CContent c) => C.Intmed c -> [S.Tree] -> B.Ab (D.NamedCox c)
 getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
@@ -80,20 +80,20 @@ getWhereClause u trees =
          [] -> Right (n, cox)
          _  -> Right (n, D.coxForm cp (Just n) vs cox)
 
-getWhereHead :: [S.TTree] -> B.Ab (String, [String])
+getWhereHead :: [S.Tree] -> B.Ab (String, [String])
 getWhereHead [] = Msg.adlib "getWhereHead"
 getWhereHead (n : vs) =
     do n'  <- getTextFromTree n
        vs' <- mapM getTextFromTree vs
        Right (n', vs')
 
-getTreesByEqual :: [S.TTree] -> B.Ab ([S.TTree], [S.TTree])
+getTreesByEqual :: [S.Tree] -> B.Ab ([S.Tree], [S.Tree])
 getTreesByEqual trees =
     case S.divideTreesByEqual trees of
       [left, right] -> Right (left, right)
       _             -> Msg.adlib "getTreesByEqual"
 
-getTextFromTree :: S.TTree -> B.Ab String
+getTextFromTree :: S.Tree -> B.Ab String
 getTextFromTree (P.LRaw n) = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
 

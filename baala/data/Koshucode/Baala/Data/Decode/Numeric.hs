@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Data.Decode.Message   as Msg
 --   >>> S.toTrees "-123 450.00" >>= treesDigits
 --   Right "-123450.00"
 --
-treesDigits :: [S.TTree] -> B.Ab String
+treesDigits :: [S.Tree] -> B.Ab String
 treesDigits = concatDigits B.<.> D.treesTexts False
 
 concatDigits :: [String] -> B.Ab String
@@ -115,7 +115,7 @@ fromDigit _    =  Nothing
 --   >>> S.toTrees "2013-#16" >>= treesTime
 --   Right 2013-#16
 --
-treesTime :: [S.TTree] -> B.Ab T.Time
+treesTime :: [S.Tree] -> B.Ab T.Time
 treesTime = stringsTime B.<.> D.treesTexts False
 
 -- | Get time from string.

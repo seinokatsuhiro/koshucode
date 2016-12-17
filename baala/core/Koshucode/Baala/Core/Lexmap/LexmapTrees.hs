@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Data.Message         as Msg
 
 -- | Tree representation of lexmap.
 data LexmapTrees = LexmapTrees
-    { lexmapTrees   :: [S.TTree]   -- ^ Positional attribute.
+    { lexmapTrees   :: [S.Tree]    -- ^ Positional attribute.
     , lexmapPara    :: TTreePara   -- ^ Parameter
     , lexmapAttrEd  :: S.AttrEd    -- ^ Attribute editor
     } deriving (Show, Eq, Ord)
@@ -44,7 +44,7 @@ consLexmapTrees para =
 -- ----------------------  Parameter of token trees
 
 -- | Token tree parameter.
-type TTreePara = S.SimplePara S.TTree
+type TTreePara = S.SimplePara S.Tree
 
 -- | Make token tree parameter with single-hyphen names.
 ttreePara1 :: [S.Token] -> B.Ab TTreePara
@@ -54,7 +54,7 @@ ttreePara1 = ttreeParaBy S.maybeSingleHyphen
 ttreePara2 :: [S.Token] -> B.Ab TTreePara
 ttreePara2 = ttreeParaBy S.maybeDoubleHyphen
 
-ttreeParaBy :: (S.TTree -> Maybe String) -> [S.Token] -> B.Ab TTreePara
+ttreeParaBy :: (S.Tree -> Maybe String) -> [S.Token] -> B.Ab TTreePara
 ttreeParaBy f toks =
     do trees <- S.toTrees toks
        Right $ S.para f trees

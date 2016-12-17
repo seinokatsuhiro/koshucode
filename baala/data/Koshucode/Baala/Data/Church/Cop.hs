@@ -33,7 +33,7 @@ data Cop c
 type CopCox c = [D.Cox c] -> B.Ab (D.Cox c)
 
 -- | Tree-level syntax.
-type CopTree  = [S.TTree] -> B.Ab S.TTree
+type CopTree  = [S.Tree] -> B.Ab S.Tree
 
 instance Show (Cop c) where
     show (CopCalc n _) = "(CopCalc " ++ show n ++ " _)"

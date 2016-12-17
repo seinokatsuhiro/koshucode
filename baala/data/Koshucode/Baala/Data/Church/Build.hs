@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 -- | Construct content expression from token tree.
-treeCox :: (D.CContent c) => D.CopSet c -> S.TTree -> B.Ab (D.Cox c)
+treeCox :: (D.CContent c) => D.CopSet c -> S.Tree -> B.Ab (D.Cox c)
 treeCox copset =
     convCox findCox            -- convert cox to cox
       B.<.> Right
@@ -76,13 +76,13 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => S.TTree -> B.Ab (D.Cox c)
+construct :: forall c. (D.CContent c) => S.Tree -> B.Ab (D.Cox c)
 construct = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.getCPs $ B.takeFirst $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePos] -> S.TTree -> B.Ab (D.Cox c)
+    cons :: [B.CodePos] -> S.Tree -> B.Ab (D.Cox c)
     cons cp tree@(P.BGroup subtrees)
          = case subtrees of
              f@(P.LText q w) : xs
@@ -127,7 +127,7 @@ construct = expr where
 
     lit cp tree  = D.CoxLit cp <$> D.treeContent tree
 
-    untag :: S.TTree -> (D.CoxTag, S.TTree)
+    untag :: S.Tree -> (D.CoxTag, S.Tree)
     untag (B.TreeB l p (P.LQ tag : vars))
                 = (Just tag, B.TreeB l p $ vars)
     untag vars  = (Nothing, vars)
@@ -144,7 +144,7 @@ isNameFirst c = case O.majorGeneralCategory c of
                   _                -> False
 
 -- convert from infix operator to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap S.TTree
+prefix :: [B.Named B.InfixHeight] -> B.AbMap S.Tree
 prefix htab tree =
     Msg.abCoxPrefix tree $
      case B.infixToPrefix conv ht (B.TreeB S.BracketGroup Nothing) mapper tree of
@@ -183,7 +183,7 @@ undoubleGroup :: O.Map (B.CodeTree S.BracketType a)
 undoubleGroup = B.undouble (== S.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: D.CopFind D.CopTree -> B.AbMap S.TTree
+convTree :: D.CopFind D.CopTree -> B.AbMap S.Tree
 convTree find = expand where
     expand tree@(B.TreeB S.BracketGroup p subtrees) =
         case subtrees of

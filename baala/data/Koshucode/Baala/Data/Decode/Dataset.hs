@@ -93,7 +93,7 @@ readDataset path =
                        Left a   -> return $ Left a
                        Right js -> return $ Right $ dataset js
 
-clauseJudges :: (D.CContent c) => [[S.TTree]] -> B.Ab [T.Judge c]
+clauseJudges :: (D.CContent c) => [[S.Tree]] -> B.Ab [T.Judge c]
 clauseJudges = loop D.cacheT [] where
     loop cc js ((P.L (P.TBar "|--") : P.LRaw cl : ts) : ls) =
         do (cc', j) <- D.treesJudge cc T.AssertAffirm cl ts

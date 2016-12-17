@@ -105,7 +105,7 @@ readQueue limit res@C.Resource { C.resInputQueue = (q, done) }
 
 -- | Read resource from certain source.
 readCode :: forall c. (D.CContent c) =>
-    C.Resource c -> B.IxIOPoint -> [S.TTree] -> ResourceIO c
+    C.Resource c -> B.IxIOPoint -> [S.Tree] -> ResourceIO c
 readCode res src add = dispatch $ B.nioPoint src where
     dispatch (B.IOPointFile cd path) = M.liftIO $ do
          let path' = putDir cd path

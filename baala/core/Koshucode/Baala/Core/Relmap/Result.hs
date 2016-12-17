@@ -50,7 +50,7 @@ data Result c = Result
 -- | Input point of data resource.
 data InputPoint = InputPoint
     { inputPoint      :: B.IOPoint    -- ^ Input point
-    , inputPointAbout :: [S.TTree]    -- ^ Common terms
+    , inputPointAbout :: [S.Tree]     -- ^ Common terms
     } deriving (Show, Eq, Ord)
 
 -- | Empty result.

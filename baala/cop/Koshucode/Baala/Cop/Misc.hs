@@ -74,13 +74,13 @@ toInfix _ = Msg.adlib "require operand"
 
 -- ----------------------  if
 
-nameLeaf :: S.BlankName -> S.TTree
+nameLeaf :: S.BlankName -> S.Tree
 nameLeaf = B.TreeL . S.TName B.def
 
-treeIf :: S.TTree -> S.TTree -> S.TTree -> S.TTree
+treeIf :: S.Tree -> S.Tree -> S.Tree -> S.Tree
 treeIf test con alt = S.ttreeGroup [ nameLeaf $ D.copInternal "#if" , test, con , alt ]
 
-treeOrList :: [S.TTree] -> S.TTree
+treeOrList :: [S.Tree] -> S.Tree
 treeOrList [x] = x
 treeOrList xs = S.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
 
@@ -100,11 +100,11 @@ copFunIf arg =
 
 copTreeIf :: D.CopTree
 copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) trees where
-    folding :: [[S.TTree]] -> B.Ab S.TTree
+    folding :: [[S.Tree]] -> B.Ab S.Tree
     folding []        = Right $ B.TreeL $ S.rawTextToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
-    fore :: [S.TTree] -> B.AbMap S.TTree
+    fore :: [S.Tree] -> B.AbMap S.Tree
     fore trees2 alt =
         case S.divideTreesBy (== "->") trees2 of
           [_]         -> back trees2 alt
@@ -112,7 +112,7 @@ copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) tr
                             Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
-    back :: [S.TTree] -> B.AbMap S.TTree
+    back :: [S.Tree] -> B.AbMap S.Tree
     back trees2 alt =
         case S.divideTreesBy (== "<-") trees2 of
           [alt2]      -> Right $ S.ttreeGroup alt2
@@ -120,12 +120,12 @@ copTreeIf trees = folding $ B.omit null $ S.divideTreesBy (`elem` ["|", ":"]) tr
                             Right $ treeIf test2 (S.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
-    stairs :: String -> String -> [S.TTree] -> B.Ab S.TTree
+    stairs :: String -> String -> [S.Tree] -> B.Ab S.Tree
     stairs del del2 xs =
         do notInclude del2 xs
            Right $ treeOrList $ map S.ttreeGroup $ S.divideTreesBy (== del) xs
 
-    notInclude :: String -> [S.TTree] -> B.Ab ()
+    notInclude :: String -> [S.Tree] -> B.Ab ()
     notInclude del xs =
         case S.divideTreesBy (== del) xs of
           [_] -> Right ()

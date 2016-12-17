@@ -122,12 +122,12 @@ optionComment sh p opt r =
 
 -- ---------------------------------  Option "forward" and "backward"
 
-optionForward, optionBackward :: (Ord c) => [S.TTree] -> B.AbMap (D.Rel c)
+optionForward, optionBackward :: (Ord c) => [S.Tree] -> B.AbMap (D.Rel c)
 optionForward  = optionToward True
 optionBackward = optionToward False
 
 -- | Apply forward and backward option.
-optionToward :: (Ord c) => Bool -> [S.TTree] -> B.AbMap (D.Rel c)
+optionToward :: (Ord c) => Bool -> [S.Tree] -> B.AbMap (D.Rel c)
 optionToward dir opt2 r1 =
     do ns <- D.treesFlatNames opt2
        towardRel dir ns r1
@@ -142,7 +142,7 @@ towardRel dir ns (D.Rel he1 bo1)
       bo2   = D.towardTerms dir pk `map` bo1
 
 -- | lexical option.
-optionLexical :: (Ord c) => [S.TTree] -> B.AbMap (D.Rel c)
+optionLexical :: (Ord c) => [S.Tree] -> B.AbMap (D.Rel c)
 optionLexical _ = lexicalOrderRel
 
 lexicalOrderRel :: (Ord c) => B.AbMap (D.Rel c)
@@ -152,7 +152,7 @@ lexicalOrderRel rel@(D.Rel he1 _) = towardRel True ns' rel where
 
 -- ---------------------------------  Option "order"
 
-optionOrder :: (Ord c, D.CRel c) => [S.TTree] ->  B.AbMap (D.Rel c)
+optionOrder :: (Ord c, D.CRel c) => [S.Tree] ->  B.AbMap (D.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1
 
 relSortDeep :: (Ord c, D.CRel c) => O.Map (D.Rel c)

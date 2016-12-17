@@ -43,19 +43,19 @@ type RopGet c a
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-lookupTree :: String -> C.Intmed c -> Maybe [S.TTree]
+lookupTree :: String -> C.Intmed c -> Maybe [S.Tree]
 lookupTree = lookupAttr S.AttrNormal
 
-lookupAttr :: (String -> S.AttrName) -> String -> C.Intmed c -> Maybe [S.TTree]
+lookupAttr :: (String -> S.AttrName) -> String -> C.Intmed c -> Maybe [S.Tree]
 lookupAttr c ('-' : name) = S.paraLookupSingle (c name) . getPara
 lookupAttr _ _ = B.bug "lookupAttr"
 
-getAbortable :: ([S.TTree] -> B.Ab b) -> RopGet c b
+getAbortable :: ([S.Tree] -> B.Ab b) -> RopGet c b
 getAbortable f med name =
     do trees <- getTrees med name
        Msg.abAttrTrees trees $ f trees
 
-getAbortableOption :: b -> ([S.TTree] -> B.Ab b) -> RopGet c b
+getAbortableOption :: b -> ([S.Tree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f med name =
     do m <- getMaybe getTrees med name
        case m of
@@ -112,26 +112,26 @@ getWord = getAbortable get where
 -- ----------------------  Tree
 
 -- | Get trees as single tree.
-getTree :: RopGet c S.TTree
+getTree :: RopGet c S.Tree
 getTree med name =
     do trees <- getTrees med name
        Right $ S.ttreeGroup trees
 
 -- | Get trees from parameter.
-getTrees :: RopGet c [S.TTree]
+getTrees :: RopGet c [S.Tree]
 getTrees med name =
     case lookupTree name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
 -- | Get word-and-tree list.
-getWordTrees :: RopGet c [B.Named S.TTree]
+getWordTrees :: RopGet c [B.Named S.Tree]
 getWordTrees med name =
     case lookupTree name med of
       Just trees -> wordTrees trees
       Nothing    -> Msg.noAttr name
 
-wordTrees :: [S.TTree] -> B.Ab [B.Named S.TTree]
+wordTrees :: [S.Tree] -> B.Ab [B.Named S.Tree]
 wordTrees []  = Right []
 wordTrees [_] = Msg.unexpAttr "Require word and tree"
 wordTrees (w : tree : xs) =
@@ -139,12 +139,12 @@ wordTrees (w : tree : xs) =
        xs' <- wordTrees xs
        Right $ (w', tree) : xs'
 
-word :: S.TTree -> B.Ab String
+word :: S.Tree -> B.Ab String
 word (P.LText _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
 -- | Get trees delimited by colon.
-getTreesByColon :: RopGet c [[S.TTree]]
+getTreesByColon :: RopGet c [[S.Tree]]
 getTreesByColon med name =
     do trees <- getTrees med name
        Right $ B.omit null $ S.divideTreesByColon trees
@@ -212,5 +212,5 @@ getTermsColon :: RopGet c [[S.TermName]]
 getTermsColon = getAbortable D.treesNamesByColon
 
 -- | Get list of tree terms.
-getTermTrees :: RopGet c [S.Term S.TTree]
+getTermTrees :: RopGet c [S.Term S.Tree]
 getTermTrees = getAbortable D.treesTerms1

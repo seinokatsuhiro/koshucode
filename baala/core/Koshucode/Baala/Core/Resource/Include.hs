@@ -134,7 +134,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 -- | Build content expression with global parameter.
-treeCoxG :: (D.CContent c) => C.Global c -> S.TTree -> B.Ab (D.Cox c)
+treeCoxG :: (D.CContent c) => C.Global c -> S.Tree -> B.Ab (D.Cox c)
 treeCoxG g = D.treeCox (C.globalCopset g)
 
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c

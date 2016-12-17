@@ -44,11 +44,11 @@ cacheT = O.cache [] S.stringTermName
 --   >>> S.toTree "/a/x" >>= treeFlatName
 --   Left ...
 --
-treeFlatName :: S.TTree -> B.Ab S.TermName
+treeFlatName :: S.Tree -> B.Ab S.TermName
 treeFlatName = fmap snd . treeFlatNameCached cacheT
 
 -- | Cached version of 'treeFlatName'.
-treeFlatNameCached :: CacheT -> S.TTree -> B.Ab (CacheT, S.TermName)
+treeFlatNameCached :: CacheT -> S.Tree -> B.Ab (CacheT, S.TermName)
 treeFlatNameCached cc (P.LTerm n) = Right $ O.cacheGet cc n
 treeFlatNameCached _  (P.L t)     = Msg.reqFlatName t
 treeFlatNameCached _  _           = Msg.reqTermName
@@ -58,7 +58,7 @@ treeFlatNameCached _  _           = Msg.reqTermName
 --   >>> S.toTrees "/a +/b -/c" >>= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --
-treesFlatNames :: [S.TTree] -> B.Ab [S.TermName]
+treesFlatNames :: [S.Tree] -> B.Ab [S.TermName]
 treesFlatNames = mapM treeFlatName
 
 -- | Read list of named token trees from token trees.
@@ -67,7 +67,7 @@ treesFlatNames = mapM treeFlatName
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --
-treesTerms :: [S.TTree] -> B.Ab [S.Term [S.TTree]]
+treesTerms :: [S.Tree] -> B.Ab [S.Term [S.Tree]]
 treesTerms = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
@@ -75,13 +75,13 @@ treesTerms = name where
                        xs2' <- name xs2
                        Right $ (n, c) : xs2'
 
-    cont :: [S.TTree] -> ([S.TTree], [S.TTree])
+    cont :: [S.Tree] -> ([S.Tree], [S.Tree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
 -- | Cached version of 'treesTerms'.
-treesTermsCached :: CacheT -> [S.TTree] -> B.Ab (CacheT, [S.Term [S.TTree]])
+treesTermsCached :: CacheT -> [S.Tree] -> B.Ab (CacheT, [S.Term [S.Tree]])
 treesTermsCached = name where
     name cc [] = Right (cc, [])
     name cc (x : xs) =
@@ -90,19 +90,19 @@ treesTermsCached = name where
            (cc2, xs2') <- name cc1 xs2
            Right (cc2, (n, c) : xs2')
 
-    cont :: [S.TTree] -> ([S.TTree], [S.TTree])
+    cont :: [S.Tree] -> ([S.Tree], [S.Tree])
     cont xs@(x : _) | isTermLeaf x  = ([], xs)
     cont []                         = ([], [])
     cont (x : xs)                   = B.consFst x $ cont xs
 
 -- | Test token tree is term leaf.
-isTermLeaf :: O.Test S.TTree
+isTermLeaf :: O.Test S.Tree
 isTermLeaf (P.LTerm _)   = True
 isTermLeaf _             = False
 
 -- | Read list of named token trees from token trees.
 --   This function wraps long branches into group.
-treesTerms1 :: [S.TTree] -> B.Ab [S.Term S.TTree]
+treesTerms1 :: [S.Tree] -> B.Ab [S.Term S.Tree]
 treesTerms1 xs = do xs' <- treesTerms xs
                     Right $ B.mapSndTo S.ttreeGroup xs'
 
@@ -111,7 +111,7 @@ treesTerms1 xs = do xs' <- treesTerms xs
 --   >>> S.toTrees "/a /x /b /y" >>= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --
-treesFlatNamePairs :: [S.TTree] -> B.Ab [S.TermName2]
+treesFlatNamePairs :: [S.Tree] -> B.Ab [S.TermName2]
 treesFlatNamePairs = loop where
     loop (a : b : xs) = do a'  <- treeFlatName a
                            b'  <- treeFlatName b
@@ -127,7 +127,7 @@ treesFlatNamePairs = loop where
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
 --
-treesNamesByColon :: [S.TTree] -> B.Ab [[S.TermName]]
+treesNamesByColon :: [S.Tree] -> B.Ab [[S.TermName]]
 treesNamesByColon = loop [] [] where
     loop ret ns (P.LTerm n  : ts)  = loop ret (S.toTermName n : ns) ts
     loop ret ns (P.LRaw ":" : ts)  = loop (reverse ns : ret) [] ts
@@ -142,14 +142,14 @@ treesNamesByColon = loop [] [] where
 --   >>> S.toTrees "/a /b" >>= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --
-treesFlatNamesCo :: [S.TTree] -> B.Ab (Bool, [S.TermName])
+treesFlatNamesCo :: [S.Tree] -> B.Ab (Bool, [S.TermName])
 treesFlatNamesCo trees =
     do (co, trees2) <- treesTermCo trees
        ns <- mapM treeFlatName trees2
        Right (co, ns)
 
 -- | Term complement symbol.
-treesTermCo :: [S.TTree] -> B.Ab (Bool, [S.TTree])
+treesTermCo :: [S.Tree] -> B.Ab (Bool, [S.Tree])
 treesTermCo (P.LRaw "~" : trees)  = Right (True,  trees)
 treesTermCo trees                 = Right (False, trees)
 

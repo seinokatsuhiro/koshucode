@@ -30,10 +30,10 @@ import qualified Koshucode.Baala.Data.Decode.Message     as Msg
 -- ----------------------  General content
 
 -- | Content decoder.
-type DecodeContent c = S.TTree -> B.Ab c
+type DecodeContent c = S.Tree -> B.Ab c
 
 -- | Content calculator.
-type CalcContent c = S.TTree -> B.Ab c
+type CalcContent c = S.Tree -> B.Ab c
 
 -- | Decode content from string.
 stringContent :: (D.CContent c) => String -> B.Ab c
@@ -59,7 +59,7 @@ treeContent tree = Msg.abLiteral tree $ cons tree where
         _                -> Msg.unkBracket
     cons _ = B.bug "treeContent"
 
-    group :: [S.TTree] -> B.Ab c
+    group :: [S.Tree] -> B.Ab c
     group xs@(P.LRaw _ : _)  = (putDecimal =<< D.treesDigits xs) O.<||>
                                (D.putTime  =<< D.treesTime xs)
     group []                 = Right D.empty
@@ -92,7 +92,7 @@ tokenContent _ = Msg.unkContent
 --     :
 --     treesContents
 --
-treesContents :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [c]
+treesContents :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab [c]
 treesContents _   [] = Right []
 treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
     lt []   = Right D.empty
@@ -106,7 +106,7 @@ treesContents cons cs = lt `mapM` S.divideTreesByBar cs where
 --      :                        :
 --      treesTie                 treesTie
 --
-treesTie :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab c
+treesTie :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab c
 treesTie cons xs@(P.LTerm _ : _) = D.putTie =<< treesTerms cons xs
 treesTie _ [] = D.putTie []
 treesTie _ [P.LRaw "words", P.LQq ws] = D.putList $ map D.pText $ words ws
@@ -119,7 +119,7 @@ treesTie _ _ = Msg.adlib "unknown tie"
 --   :
 --   treesTerms
 --
-treesTerms :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab [S.Term c]
+treesTerms :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab [S.Term c]
 treesTerms cons = mapM p B.<.> D.treesTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
@@ -131,7 +131,7 @@ treesJudge ::
     => D.CacheT           -- ^ Term name cache
     -> T.AssertType       -- ^ Assertion type
     -> T.JudgeClass       -- ^ Judgement class
-    -> [S.TTree]          -- ^ Trees of terms
+    -> [S.Tree]           -- ^ Trees of terms
     -> B.Ab (D.CacheT, T.Judge c)   -- ^ Error or decoded judgement
 treesJudge cc q cl trees =
     do (cc', ts) <- D.treesTermsCached cc trees
@@ -153,7 +153,7 @@ treesJudge cc q cl trees =
 --        treesTermNames
 --
 --
-treesRel :: (D.CContent c) => DecodeContent c -> [S.TTree] -> B.Ab (T.Rel c)
+treesRel :: (D.CContent c) => DecodeContent c -> [S.Tree] -> B.Ab (T.Rel c)
 treesRel cons xs =
     do bo <- treeTuple cons n `mapM` xs'
        Right $ T.Rel he $ B.unique bo
@@ -163,13 +163,13 @@ treesRel cons xs =
       he         = T.headFrom ns
 
 -- | Split term names.
-treesTermNames :: [S.TTree] -> ([S.TermName], [S.TTree])
+treesTermNames :: [S.Tree] -> ([S.TermName], [S.Tree])
 treesTermNames = terms [] where
     terms ns (P.LTerm n : xs) = terms (S.toTermName n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 -- | Decode specific number of contents.
-treeTuple :: (D.CContent c) => DecodeContent c -> Int -> S.TTree -> B.Ab [c]
+treeTuple :: (D.CContent c) => DecodeContent c -> Int -> S.Tree -> B.Ab [c]
 treeTuple cons n g@(P.B S.BracketList xs) =
     do cs <- treesContents cons xs
        let n' = length cs

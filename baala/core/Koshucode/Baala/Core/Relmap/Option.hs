@@ -52,9 +52,9 @@ optionParse calc toks opt =
     do assn <- optionAssn toks
        B.foldM (optionUpdate calc) opt assn
 
-type NamedT a = ((String, [S.TTree]), a)
+type NamedT a = ((String, [S.Tree]), a)
 
-optionAssn :: [S.Token] -> B.Ab [NamedT [S.TTree]]
+optionAssn :: [S.Token] -> B.Ab [NamedT [S.Tree]]
 optionAssn toks =
     do trees <- S.toTrees toks
        case B.assocBy maybeName trees of
@@ -65,7 +65,7 @@ optionAssn toks =
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, D.CBool c, D.CText c)
-   => D.CalcContent c -> Option c -> NamedT [S.TTree] -> B.Ab (Option c)
+   => D.CalcContent c -> Option c -> NamedT [S.Tree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
       case Ms.lookup name opt of
