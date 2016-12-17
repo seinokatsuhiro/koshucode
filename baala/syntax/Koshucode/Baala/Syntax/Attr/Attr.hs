@@ -32,7 +32,7 @@ import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
 type AttrParaSpec = S.ParaSpec S.AttrName
 
 -- | Attribute layout.
-data AttrLayout = AttrLayout [(Maybe String, AttrBranch)]
+data AttrLayout = AttrLayout [(Maybe S.ParaTag, AttrBranch)]
                   deriving (Show)
 
 -- | Single layout.

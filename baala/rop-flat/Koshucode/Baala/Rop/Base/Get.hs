@@ -70,11 +70,11 @@ getPara :: C.Intmed c -> S.AttrPara
 getPara = C.lexAttr . C.medLexmap
 
 -- | Test usage tag.
-getTag :: C.Intmed c -> String -> Bool
+getTag :: C.Intmed c -> S.ParaTag -> Bool
 getTag med tag = tag `elem` getTags med
 
 -- | Get usage tags.
-getTags :: C.Intmed c -> [String]
+getTags :: C.Intmed c -> [S.ParaTag]
 getTags = S.paraTags . getPara
 
 -- | Get optional parameter with default value.

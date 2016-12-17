@@ -22,6 +22,15 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --   * __@-@Word@/@__     — Relmap attribute
 --   * __@-@Word@/^@__    — Local relmap attribute
 --
+--   >>> parseAttrLayout "-a"
+--   AttrLayout [(Nothing, AttrBranch (
+--     ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal "a"]
+--              , paraSpecReqP = [AttrNormal "a"]
+--              , paraSpecOptP = [], paraSpecReqN = []
+--              , paraSpecOptN = [AttrNormal "@trunk"]
+--              , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
+--              ))]
+--
 parseAttrLayout :: String -> S.AttrLayout
 parseAttrLayout = S.AttrLayout . map (fmap branch) . parseParaSpec
 
@@ -99,7 +108,7 @@ unhyphen n         = paraBug "no hyphen" n
 --    * __Empty__                     — Required parameter
 --    * __@?@__                       — Optional parameter
 --
-parseParaSpec :: String -> [(Maybe String, S.ParaSpec String)]
+parseParaSpec :: String -> [(Maybe S.ParaTag, S.ParaSpec String)]
 parseParaSpec = multi where
     divide c  = B.divideBy (== c)
     multi     = map single . divide '|'

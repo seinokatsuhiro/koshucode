@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Syntax.Para.Para
   ( -- * Parameter constructor
-    Para (..), ParaMap, ParaName,
+    Para (..), ParaTag, ParaMap, ParaName,
     para,
     paraNameList,
     paraNames, paraMultipleNames,
@@ -28,16 +28,19 @@ import qualified Koshucode.Baala.Base                  as B
 -- | Named and positional parameter.
 data Para n a
     = Para
-      { paraTags  :: [String]       -- ^ Parameter tags.
+      { paraTags  :: [ParaTag]      -- ^ Parameter tags.
       , paraAll   :: [a]            -- ^ All parameter elements.
       , paraPos   :: [a]            -- ^ Positional parameters.
       , paraName  :: ParaMap n a    -- ^ Named parameters.
       } deriving (Show, Eq, Ord)
 
+-- | Parameter tag.
+type ParaTag = String
+
 -- | Mapping parameter name to its contents.
 type ParaMap n a = Ms.Map n [[a]]
 
--- | Empty parameter
+-- | Empty parameter.
 instance B.Default (Para n a) where
     def = Para { paraTags = []
                , paraAll  = []

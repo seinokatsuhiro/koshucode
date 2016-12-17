@@ -200,7 +200,7 @@ paraSelect def hs p = loop hs where
           Left _   -> loop hs2
 
 -- | Collect parameter tags.
-paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)]
+paraChoose :: (Ord n) => [(Maybe S.ParaTag, ParaSpec n)]
            -> S.Para n a -> ParaOr [ParaUnmatch n] n a
 paraChoose specs p = loop [] specs where
     loop us [] = Left $ reverse us
