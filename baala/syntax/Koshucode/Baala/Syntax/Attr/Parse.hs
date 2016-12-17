@@ -1,57 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Parser for attribute layout.
+-- | Parse parameter specification.
 
 module Koshucode.Baala.Syntax.Attr.Parse
-  ( parseAttrLayout,
-    parseAttrLayoutL,
-    parseParaSpec,
+  ( parseParaSpec,
     parseParaSpecs,
+    paraBug,
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax.Para          as S
-import qualified Koshucode.Baala.Syntax.Attr.Attr     as S
-import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
-
-
--- ----------------------  For relmap attribute
-
--- | Parse relmap attribute layout.
---
---   * __@-@Word__        — Normal attribute
---   * __@-@Word@/@__     — Relmap attribute
---   * __@-@Word@/^@__    — Local relmap attribute
---
---   >>> parseAttrLayout "-a"
---   AttrLayout [(Nothing, AttrBranch (
---     ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal "a"]
---              , paraSpecReqP = [AttrNormal "a"]
---              , paraSpecOptP = [], paraSpecReqN = []
---              , paraSpecOptN = [AttrNormal "@trunk"]
---              , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
---              ))]
---
-parseAttrLayout :: String -> S.AttrLayout
-parseAttrLayout = parseAttrLayoutL . divide '|'
-
-parseAttrLayoutL :: [String] -> S.AttrLayout
-parseAttrLayoutL = S.AttrLayout . map (fmap branch) . parseParaSpecs
-
-branch :: S.ParaSpec String -> S.AttrBranch
-branch = S.attrBranch . trunk . fmap attrName where
-    trunk spec = spec { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec }
-
-attrName :: String -> S.AttrName
-attrName = name . reverse . unhyphen where
-    name ('^' : '/' : n) = S.AttrRelmapLocal  $ reverse n
-    name ('/' : n)       = S.AttrRelmapNormal $ reverse n
-    name n               = S.AttrNormal       $ reverse n
-
-unhyphen :: O.StringMap
-unhyphen ('-' : n) = n
-unhyphen n         = paraBug "no hyphen" n
 
 
 -- ----------------------  For string parameter
@@ -157,6 +116,7 @@ paraSpecPos ns =
       (rs, xs) | all isOpt xs -> S.paraItemOpt  (unror <$> rs) (unror <$> xs)
                | otherwise    -> paraBug "req/opt/rest" $ unwords ns
 
+-- | Report bug of parameter specification.
 paraBug :: String -> String -> a
 paraBug label x = B.bug $ "malformed layout (" ++ label ++ "): " ++ x
 

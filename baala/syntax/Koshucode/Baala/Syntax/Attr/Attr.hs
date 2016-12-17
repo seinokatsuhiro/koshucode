@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -15,16 +16,20 @@ module Koshucode.Baala.Syntax.Attr.Attr
     attrPara, attrParaBy,
     maybeSingleHyphen,
     maybeDoubleHyphen,
+
+    -- * Parse
+    ToAttrLayout (..),
+    parseAttrLayout,
   ) where
 
-import qualified Data.String                           as Str
-import qualified Koshucode.Baala.Overture              as O
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Syntax.Para           as S
-import qualified Koshucode.Baala.Syntax.TTree          as S
-import qualified Koshucode.Baala.Syntax.Attr.AttrName  as S
-import qualified Koshucode.Baala.Syntax.Pattern        as P
-import qualified Koshucode.Baala.Syntax.Attr.Message   as Msg
+import qualified Koshucode.Baala.Overture               as O
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Syntax.Para            as S
+import qualified Koshucode.Baala.Syntax.TTree           as S
+import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
+import qualified Koshucode.Baala.Syntax.Attr.Parse      as S
+import qualified Koshucode.Baala.Syntax.Pattern         as P
+import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 
 
 -- ----------------------  Attribute layout
@@ -113,15 +118,13 @@ maybeDoubleHyphen _           = Nothing
 
 -- --------------------------------------------  Parser
 
--- ----------------------  For relmap attribute
-
 -- | Parse relmap attribute layout.
 --
 --   * __@-@Word__        — Normal attribute
 --   * __@-@Word@/@__     — Relmap attribute
 --   * __@-@Word@/^@__    — Local relmap attribute
 --
---   >>> parseAttrLayout "-a"
+--   >>> toAttrLayout "-a"
 --   AttrLayout [(Nothing, AttrBranch (
 --     ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal "a"]
 --              , paraSpecReqP = [AttrNormal "a"]
@@ -131,13 +134,10 @@ maybeDoubleHyphen _           = Nothing
 --              ))]
 --
 parseAttrLayout :: String -> AttrLayout
-parseAttrLayout = parseAttrLayoutL . B.divideBy (== '|')
+parseAttrLayout = toAttrLayout
 
-parseAttrLayoutL :: [String] -> AttrLayout
-parseAttrLayoutL = AttrLayout . map (fmap branch) . parseParaSpecs
-
-branch :: S.ParaSpec String -> AttrBranch
-branch = attrBranch . trunk . fmap attrName where
+toBranch :: S.ParaSpec String -> AttrBranch
+toBranch = attrBranch . trunk . fmap attrName where
     trunk spec = spec { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec }
 
 attrName :: String -> S.AttrName
@@ -148,4 +148,18 @@ attrName = name . reverse . unhyphen where
 
 unhyphen :: O.StringMap
 unhyphen ('-' : n) = n
-unhyphen n         = paraBug "no hyphen" n
+unhyphen n         = S.paraBug "no hyphen" n
+
+-- | Convertible to attribute layout.
+class ToAttrLayout a where
+    toAttrLayout :: a -> AttrLayout
+
+instance ToAttrLayout AttrLayout where
+    toAttrLayout = id
+
+instance ToAttrLayout String where
+    toAttrLayout = toAttrLayout . B.divideBy (== '|')
+
+instance ToAttrLayout [String] where
+    toAttrLayout = AttrLayout . map (fmap toBranch) . S.parseParaSpecs
+
