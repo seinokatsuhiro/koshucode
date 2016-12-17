@@ -17,6 +17,7 @@ module Koshucode.Baala.Syntax.Attr.Attr
     maybeDoubleHyphen,
   ) where
 
+import qualified Data.String                           as Str
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax.Para           as S
@@ -109,3 +110,42 @@ maybeDoubleHyphen :: S.Tree -> Maybe String
 maybeDoubleHyphen (P.LAtt2 n) = Just n
 maybeDoubleHyphen _           = Nothing
 
+
+-- --------------------------------------------  Parser
+
+-- ----------------------  For relmap attribute
+
+-- | Parse relmap attribute layout.
+--
+--   * __@-@Word__        — Normal attribute
+--   * __@-@Word@/@__     — Relmap attribute
+--   * __@-@Word@/^@__    — Local relmap attribute
+--
+--   >>> parseAttrLayout "-a"
+--   AttrLayout [(Nothing, AttrBranch (
+--     ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal "a"]
+--              , paraSpecReqP = [AttrNormal "a"]
+--              , paraSpecOptP = [], paraSpecReqN = []
+--              , paraSpecOptN = [AttrNormal "@trunk"]
+--              , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
+--              ))]
+--
+parseAttrLayout :: String -> AttrLayout
+parseAttrLayout = parseAttrLayoutL . B.divideBy (== '|')
+
+parseAttrLayoutL :: [String] -> AttrLayout
+parseAttrLayoutL = AttrLayout . map (fmap branch) . parseParaSpecs
+
+branch :: S.ParaSpec String -> AttrBranch
+branch = attrBranch . trunk . fmap attrName where
+    trunk spec = spec { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec }
+
+attrName :: String -> S.AttrName
+attrName = name . reverse . unhyphen where
+    name ('^' : '/' : n) = S.AttrRelmapLocal  $ reverse n
+    name ('/' : n)       = S.AttrRelmapNormal $ reverse n
+    name n               = S.AttrNormal       $ reverse n
+
+unhyphen :: O.StringMap
+unhyphen ('-' : n) = n
+unhyphen n         = paraBug "no hyphen" n

@@ -4,7 +4,9 @@
 
 module Koshucode.Baala.Syntax.Attr.Parse
   ( parseAttrLayout,
+    parseAttrLayoutL,
     parseParaSpec,
+    parseParaSpecs,
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
@@ -32,7 +34,10 @@ import qualified Koshucode.Baala.Syntax.Attr.AttrName as S
 --              ))]
 --
 parseAttrLayout :: String -> S.AttrLayout
-parseAttrLayout = S.AttrLayout . map (fmap branch) . parseParaSpec
+parseAttrLayout = parseAttrLayoutL . divide '|'
+
+parseAttrLayoutL :: [String] -> S.AttrLayout
+parseAttrLayoutL = S.AttrLayout . map (fmap branch) . parseParaSpecs
 
 branch :: S.ParaSpec String -> S.AttrBranch
 branch = S.attrBranch . trunk . fmap attrName where
@@ -109,10 +114,15 @@ unhyphen n         = paraBug "no hyphen" n
 --    * __@?@__                       — Optional parameter
 --
 parseParaSpec :: String -> [(Maybe S.ParaTag, S.ParaSpec String)]
-parseParaSpec = multi where
-    divide c  = B.divideBy (== c)
-    multi     = map single . divide '|'
+parseParaSpec = parseParaSpecs . divide '|'
 
+-- | Parse multiple specifications.
+parseParaSpecs :: [String] -> [(Maybe S.ParaTag, S.ParaSpec String)]
+parseParaSpecs = map parseParaSpec1
+
+-- | Parse single specification.
+parseParaSpec1 :: String -> (Maybe S.ParaTag, S.ParaSpec String)
+parseParaSpec1 = single where
     single s  = case divide ':' s of
                   [n, l]   -> (Just $ O.trimBoth n, layout l)
                   [l]      -> (Nothing, layout l)
@@ -122,6 +132,9 @@ parseParaSpec = multi where
                   [ps]      -> paraSpec ps []
                   [ps, ns]  -> paraSpec ps ns
                   _         -> paraBug "neither P/P.L" l
+
+divide :: (Eq a) => a -> [a] -> [[a]]
+divide c = B.divideBy (== c)
 
 paraSpec :: [String] -> [String] -> S.ParaSpec String
 paraSpec nsP nsN = S.paraSpec $ pos . req . opt where
