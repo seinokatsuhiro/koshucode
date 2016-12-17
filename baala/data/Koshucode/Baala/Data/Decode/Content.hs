@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}

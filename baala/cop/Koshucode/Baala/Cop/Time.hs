@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 

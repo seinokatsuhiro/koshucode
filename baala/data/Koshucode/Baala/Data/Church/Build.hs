@@ -1,5 +1,4 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term-content calcutation.

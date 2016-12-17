@@ -1,5 +1,4 @@
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attributes of relmap operator.

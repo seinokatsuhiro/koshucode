@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Decode specific content.

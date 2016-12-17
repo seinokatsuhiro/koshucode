@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE PatternSynonyms #-}
 
 -- | Data structure for mapping relation to judges
 

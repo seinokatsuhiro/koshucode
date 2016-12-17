@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE PatternSynonyms #-}
 
 -- | Global parameters.
 

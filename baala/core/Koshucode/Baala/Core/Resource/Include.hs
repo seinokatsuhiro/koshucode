@@ -1,5 +1,4 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Resource as bundle of relational expressions.
