@@ -6,12 +6,15 @@
 module Koshucode.Baala.Syntax.TTree.Parse
   ( -- * Type
     Tree, TTree, NamedTrees,
-    ttreeGroup,
-    ttDoc,
 
     -- * Parser
     ToTrees (..),
+    ttreeGroup,
+    withTrees,
     readClauseTrees,
+
+    -- * Pretty print
+    treesDoc, ppTrees,
   ) where
 
 import qualified Text.PrettyPrint                        as P
@@ -36,21 +39,6 @@ type NamedTrees = B.Named [Tree]
 ttreeGroup :: [Tree] -> Tree
 ttreeGroup = B.treeWrap S.BracketGroup
 
--- | Get 'B.Doc' value of token trees for pretty printing.
-ttDoc :: [Tree] -> B.Doc
-ttDoc = dv where
-    dv = B.pprintV . map d
-    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
-    d (B.TreeB br oc xs) =
-        let tag   = "<" ++ B.name br ++ ">"
-            treeB = B.pprint tag B.<+> brackets oc
-        in P.hang treeB 2 $ dv xs
-
-    brackets Nothing = B.pprint ""
-    brackets (Just (open, close)) =
-        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
-
-
 -- --------------------------------------------  Parser
 
 -- | Convert to token trees.
@@ -70,33 +58,29 @@ class ToTrees a where
     toTree' :: a -> Tree
     toTree' = B.unabort . toTree
 
-    -- | Pretty print token trees.
-    ppTrees :: a -> IO ()
-    ppTrees a = case toTrees a of
-                  Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
-                  Right ts  -> print $ ttDoc ts
-
-    -- | Pretty print token tree.
-    ppTree :: a -> IO ()
-    ppTree a = case toTrees a of
-                 Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
-                 Right []  -> return ()
-                 Right [t] -> print $ ttDoc [t]
-                 Right ts  -> print $ ttDoc [ttreeGroup ts]
-
 instance ToTrees String where
-    toTrees = ttrees . S.toks
+    toTrees = tokenTrees . S.toks
 
 instance ToTrees [S.Token] where
-    toTrees = ttrees
+    toTrees = tokenTrees
 
 instance ToTrees [Tree] where
     toTrees = Right
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-ttrees :: [S.Token] -> B.Ab [Tree]
-ttrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
+tokenTrees :: [S.Token] -> B.Ab [Tree]
+tokenTrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
+
+-- | Call function with token trees.
+--
+--   >>> withTrees id "a"
+--   Right [TreeL (TText /0.1.0/ TextRaw "a")]
+--
+withTrees :: (ToTrees a) => ([Tree] -> b) -> a -> B.Ab b
+withTrees f a =
+    do ts <- toTrees a
+       Right $ f ts
 
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> B.IOAb [[Tree]]
@@ -106,3 +90,31 @@ readClauseTrees path =
          Right toks -> mapM toTrees toks
          Left a     -> Left a
 
+-- --------------------------------------------  Pretty print
+
+-- | Convert token trees to 'B.Doc' value for pretty printing.
+treesDoc :: [Tree] -> B.Doc
+treesDoc = dv where
+    dv = B.pprintV . map d
+    d (B.TreeL x) = B.pprint "|" B.<+> B.pprint x
+    d (B.TreeB br oc xs) =
+        let tag   = "<" ++ B.name br ++ ">"
+            treeB = B.pprint tag B.<+> brackets oc
+        in P.hang treeB 2 $ dv xs
+
+    brackets Nothing = B.pprint ""
+    brackets (Just (open, close)) =
+        B.pprintH [B.pprint open, B.pprint "--", B.pprint close]
+
+-- | Pretty print token trees.
+--
+--   >>> ppTrees "a ( b c )"
+--   | TText /1.0/ TextRaw "a"
+--   <group> TOpen /1.2/ "(" -- TClose /1.8/ ")"
+--     | TText /1.4/ TextRaw "b"
+--     | TText /1.6/ TextRaw "c"
+--
+ppTrees :: (ToTrees a) => a -> IO ()
+ppTrees a = case toTrees a of
+              Left ab   -> putStrLn `mapM_` B.abortMessage [] ab
+              Right ts  -> print $ treesDoc ts

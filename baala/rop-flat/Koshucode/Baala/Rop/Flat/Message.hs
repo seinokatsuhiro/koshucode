@@ -53,7 +53,7 @@ dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 -- | Dump token trees
 dumpTrees :: [S.Tree] -> B.Ab a
 dumpTrees trees = Left $ B.abortLines "Dump token trees"
-                   $ lines $ show $ S.ttDoc trees
+                   $ lines $ show $ S.treesDoc trees
 
 -- | Duplicate term name
 dupTerm :: (D.GetTermNames t) => t -> B.Ab a
