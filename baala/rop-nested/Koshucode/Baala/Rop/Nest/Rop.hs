@@ -7,6 +7,7 @@ module Koshucode.Baala.Rop.Nest.Rop
   ) where
 
 import Koshucode.Baala.Overture ((&))
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
@@ -48,22 +49,19 @@ ropsNest = Rop.ropAlias
     [ "sg"   & "self-group"
     , "hier" & "self-group"
     ] $ Rop.ropList "nest"
-    --        CONSTRUCTOR        USAGE                       ATTRIBUTE
-    [ Rop.def Rop.consChunk      "chunk /T ... [-order /P ...]"
-                                                             "-term* . -order"
-    , Rop.def Rop.consCopy       "copy N R"                  "-var -relmap/^"
-    , Rop.def Rop.consDown       "down /N"                   "-term"
-    , Rop.def Rop.consFor        "for /N R"                  "-term -relmap/^"
-    , Rop.def Rop.consGroup      "group R -to /N [-share /P ...]"
-                                                             "-relmap/ . -to -share?"
-    , Rop.def Rop.consJoinUp     "join-up /P ..."            "-term*"
-    , Rop.def Rop.consNest       "nest [~] /P ... -to /N"    "-term* . -to"
-    , Rop.def Rop.consOppGroup   "opp-group R -to /N [-share /P ...]"
-                                                             "-relmap/ . -to -share?"
-    , Rop.def Rop.consSelfGroup  "self-group /P ... -to /N"  "-term* . -to"
-    , Rop.def Rop.consSlice      "slice /N [R]"              "-term -relmap/^?"
-    , Rop.def Rop.consSliceUp    "slice-up R"                "-relmap/^"
-    , Rop.def Rop.consUngroup    "ungroup /P"                "-term"
-    , Rop.def Rop.consUp         "up /N"                     "-term"
+    --        CONSTRUCTOR          USAGE                                    ATTRIBUTE
+    [ Rop.rop Rop.consChunk      [ "chunk /T ... [-order /P ...]"       O.& "-term* . -order" ]
+    , Rop.rop Rop.consCopy       [ "copy N R"                           O.& "-var -relmap/^" ]
+    , Rop.rop Rop.consDown       [ "down /N"                            O.& "-term" ]
+    , Rop.rop Rop.consFor        [ "for /N R"                           O.& "-term -relmap/^" ]
+    , Rop.rop Rop.consGroup      [ "group R -to /N [-share /P ...]"     O.& "-relmap/ . -to -share?" ]
+    , Rop.rop Rop.consJoinUp     [ "join-up /P ..."                     O.& "-term*" ]
+    , Rop.rop Rop.consNest       [ "nest [~] /P ... -to /N"             O.& "-term* . -to" ]
+    , Rop.rop Rop.consOppGroup   [ "opp-group R -to /N [-share /P ...]" O.& "-relmap/ . -to -share?" ]
+    , Rop.rop Rop.consSelfGroup  [ "self-group /P ... -to /N"           O.& "-term* . -to" ]
+    , Rop.rop Rop.consSlice      [ "slice /N [R]"                       O.& "-term -relmap/^?" ]
+    , Rop.rop Rop.consSliceUp    [ "slice-up R"                         O.& "-relmap/^" ]
+    , Rop.rop Rop.consUngroup    [ "ungroup /P"                         O.& "-term" ]
+    , Rop.rop Rop.consUp         [ "up /N"                              O.& "-term" ]
     ]
 
