@@ -18,6 +18,7 @@ module Koshucode.Baala.Rop.Flat.Term
     consRename, relmapRename,
   ) where
 
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
 import qualified Koshucode.Baala.Data             as D
@@ -42,13 +43,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 --
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Rop.ropList "term"  -- GROUP
-    --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Rop.def  consCut            "cut /P ..."               "-term*"
-    , Rop.def  consCutTerm        "cut-term /R"              "-relmap/"
-    , Rop.def  consPick           "pick /P ..."              "-term*"
-    , Rop.def  consPickTerm       "pick-term /R"             "-relmap/"
-    , Rop.def  consRename         "rename /N /P ..."         "-term*"
-    , Rop.def  consMove           "move /P ... -to /N ..."   "-from* . -to"
+    --         CONSTRUCTOR        USAGE                          ATTRIBUTE
+    [ Rop.rop  consCut          [ "cut /P ..."               O.& "-term*" ]
+    , Rop.rop  consCutTerm      [ "cut-term /R"              O.& "-relmap/" ]
+    , Rop.rop  consPick         [ "pick /P ..."              O.& "-term*" ]
+    , Rop.rop  consPickTerm     [ "pick-term /R"             O.& "-relmap/" ]
+    , Rop.rop  consRename       [ "rename /N /P ..."         O.& "-term*" ]
+    , Rop.rop  consMove         [ "move /P ... -to /N ..."   O.& "-from* . -to" ]
     ]
 
 

@@ -24,12 +24,12 @@ import qualified Koshucode.Baala.Rop.Base     as Rop
 -- | Implementation of relational operators.
 ropsSource :: (D.CContent c) => [C.Rop c]
 ropsSource = Rop.ropList "source"
-    --         CONSTRUCTOR     USAGE               ATTRIBUTE
-    [ Rop.def  consDee         "dee"               ""
-    , Rop.def  consDum         "dum"               ""
-    , Rop.def  consEmpty       "empty /N ..."      "-term*"
-    , Rop.def  consSource      "source P /N ..."   "-pattern -term*"
-    , Rop.def  consSourceTerm  "source-term P R"   "-pattern -relmap/"
+    --         CONSTRUCTOR       USAGE                   ATTRIBUTE
+    [ Rop.rop  consDee         [ "dee"              O.&  "" ]
+    , Rop.rop  consDum         [ "dum"              O.&  "" ]
+    , Rop.rop  consEmpty       [ "empty /N ..."     O.&  "-term*" ]
+    , Rop.rop  consSource      [ "source P /N ..."  O.&  "-pattern -term*" ]
+    , Rop.rop  consSourceTerm  [ "source-term P R"  O.&  "-pattern -relmap/" ]
     ]
 
 

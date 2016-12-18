@@ -35,15 +35,15 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 -- | Gadgets
 ropsGadget :: (D.CContent c) => [C.Rop c]
 ropsGadget = Rop.ropList "gadget"  -- GROUP
-    --         CONSTRUCTOR       USAGE                      ATTRIBUTE
-    [ Rop.def  consContents      "contents /N"              "-term*"
-    , Rop.def  consDumpTree      "dump-tree X"              "-tree*"
-    , Rop.def  consEqlize        "eqlize"                   ""
-    , Rop.def  consPoDepth       "partial-order-depth /P /P -to /N /N"     "-x -y . -to"
-    , Rop.def  consPoHeight      "partial-order-height /P /P -to /N /N"    "-x -y . -to"
-    , Rop.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "-relmap/ . -step -to -distance"
-    , Rop.def  consSize          "size /N"                  "-term"
-    , Rop.def  Rop.consSubtext   "subtext /N E"             "-term -subtext . -trim?"
+    --         CONSTRUCTOR          USAGE                                                   ATTRIBUTE
+    [ Rop.rop  consContents       [ "contents /N"                                       O.& "-term*" ]
+    , Rop.rop  consDumpTree       [ "dump-tree X"                                       O.& "-tree*" ]
+    , Rop.rop  consEqlize         [ "eqlize"                                            O.& "" ]
+    , Rop.rop  consPoDepth        [ "partial-order-depth /P /P -to /N /N"               O.& "-x -y . -to" ]
+    , Rop.rop  consPoHeight       [ "partial-order-height /P /P -to /N /N"              O.& "-x -y . -to" ]
+    , Rop.rop  consVisitDistance  [ "visit-distance R -step /P ... -to /N -distance /N" O.& "-relmap/ . -step -to -distance" ]
+    , Rop.rop  consSize           [ "size /N"                                           O.& "-term" ]
+    , Rop.rop  Rop.consSubtext    [ "subtext /N E"                                      O.& "-term -subtext . -trim?" ]
     ]
 
 

@@ -12,6 +12,7 @@ module Koshucode.Baala.Rop.Flat.Resource
     consKoshuResArticle, relkitKoshuResArticle,
   ) where
 
+import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
@@ -22,12 +23,12 @@ import qualified Koshucode.Baala.Rop.Base       as Rop
 -- | Relmap operators about resources.
 ropsResource :: (D.CContent c) => [C.Rop c]
 ropsResource = Rop.ropList "resource"
-    --         CONSTRUCTOR          USAGE                   ATTRIBUTE
-    [ Rop.def  consKoshuResArticle  "koshu-res-article /N"  "-name"
-    , Rop.def  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
-    , Rop.def  consKoshuResSink     "koshu-res-sink /N /N"  "-sec -pat"
-    , Rop.def  Rop.consXxx          "koshu-res-source /N"   "-pat"
-    , Rop.def  Rop.consXxx          "koshu-res-sink-source /N /N" "-sink -source"
+    --        CONSTRUCTOR           USAGE                       ATTRIBUTE
+    [ Rop.rop consKoshuResArticle [ "koshu-res-article /N"  O.& "-name" ]
+    , Rop.rop consKoshuResRop     [ "koshu-res-rop /N /N"   O.& "-sec -name" ]
+    , Rop.rop consKoshuResSink    [ "koshu-res-sink /N /N"  O.& "-sec -pat" ]
+    , Rop.rop Rop.consXxx         [ "koshu-res-source /N"   O.& "-pat" ]
+    , Rop.rop Rop.consXxx         [ "koshu-res-sink-source /N /N" O.& "-sink -source" ]
     ]
 
 

@@ -15,6 +15,7 @@ module Koshucode.Baala.Rop.Flat.Order
   ) where
 
 import Koshucode.Baala.Overture ((&))
+import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
 import qualified Koshucode.Baala.Data              as D
@@ -29,11 +30,11 @@ ropsOrder = Rop.ropAlias
     [ "fw" & "forward"
     , "bw" & "backward"
     ] $ Rop.ropList "order"  -- GROUP
-    --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Rop.def  consBackward       "backward /P ..."          "-term*"
-    , Rop.def  consForward        "forward /P ..."           "-term*"
-    , Rop.def  consLexical        "lexical"                  ""
-    , Rop.def  consOrder          "order /P ..."             "-term*"
+    --         CONSTRUCTOR         USAGE                     ATTRIBUTE
+    [ Rop.rop  consBackward      [ "backward /P ..."     O.& "-term*" ]
+    , Rop.rop  consForward       [ "forward /P ..."      O.& "-term*" ]
+    , Rop.rop  consLexical       [ "lexical"             O.& "" ]
+    , Rop.rop  consOrder         [ "order /P ..."        O.& "-term*" ]
     ]
 
 

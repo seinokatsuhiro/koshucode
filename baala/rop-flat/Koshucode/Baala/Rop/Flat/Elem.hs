@@ -24,6 +24,7 @@ module Koshucode.Baala.Rop.Flat.Elem
     consUncollect, relmapUncollect, relkitUncollect,
   ) where
 
+import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
@@ -34,15 +35,15 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Implementation of relational operators.
 ropsElem :: (D.CContent c) => [C.Rop c]
 ropsElem = Rop.ropList "elem"
-    --        CONSTRUCTOR       USAGE                        ATTRIBUTE
-    [ Rop.def consElem          "elem /P -to /N"             "-coll . -to"
-    , Rop.def consElemBegin     "elem-begin /P -to /N ..."   "-coll . -to"
-    , Rop.def consElemEnd       "elem-end /P -to /N ..."     "-coll . -to"
-    , Rop.def (consIndexElem 1) "ix-elem /P -to /N /N"       "-coll . -to"
-    , Rop.def (consIndexElem 0) "iz-elem /P -to /N /N"       "-coll . -to"
-    , Rop.def consMember        "member /N /N"               "-elem -set"
-    , Rop.def consUncollect     "uncollect /P -to /N ..."    "-coll . -to"
-    , Rop.def consUnroll        "unroll /N /N -from /P ..."  "-term -content . -from"
+    --        CONSTRUCTOR          USAGE                           ATTRIBUTE
+    [ Rop.rop consElem           [ "elem /P -to /N"            O.& "-coll . -to" ]
+    , Rop.rop consElemBegin      [ "elem-begin /P -to /N ..."  O.& "-coll . -to" ]
+    , Rop.rop consElemEnd        [ "elem-end /P -to /N ..."    O.& "-coll . -to" ]
+    , Rop.rop (consIndexElem 1)  [ "ix-elem /P -to /N /N"      O.& "-coll . -to" ]
+    , Rop.rop (consIndexElem 0)  [ "iz-elem /P -to /N /N"      O.& "-coll . -to" ]
+    , Rop.rop consMember         [ "member /N /N"              O.& "-elem -set" ]
+    , Rop.rop consUncollect      [ "uncollect /P -to /N ..."   O.& "-coll . -to" ]
+    , Rop.rop consUnroll         [ "unroll /N /N -from /P ..." O.& "-term -content . -from" ]
     ]
 
 -- ----------------------  member

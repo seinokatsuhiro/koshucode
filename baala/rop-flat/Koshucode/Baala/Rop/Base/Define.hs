@@ -4,10 +4,11 @@
 
 module Koshucode.Baala.Rop.Base.Define
   ( RopDefine,
-    ropList, def,
+    ropList, def, rop,
     ropAlias,
   ) where
 
+import qualified Data.List                  as Ls
 import qualified Koshucode.Baala.Overture   as O
 import qualified Koshucode.Baala.Syntax     as S
 import qualified Koshucode.Baala.Core       as C
@@ -20,8 +21,8 @@ ropList
     :: C.RopGroup     -- ^ Operator group
     -> [RopDefine c]  -- ^ Operator definitions
     -> [C.Rop c]      -- ^ Relmap operators
-ropList group = map rop where
-    rop (cons, usage, attr) =
+ropList group = map make where
+    make (cons, usage, attr) =
         let name   = head $ words usage
             sorter = S.attrParaBy attr
         in C.Rop name group usage attr sorter cons
@@ -33,6 +34,13 @@ def :: (S.ToAttrLayout layout)
     -> layout         -- ^ Attribute layout
     -> RopDefine c    -- ^ Operator definition
 def cons usage layout = (cons, usage, S.toAttrLayout layout)
+
+-- | Make definition of relmap operator.
+rop :: C.RopCons c              -- ^ Constructor
+    -> [(C.RopUsage, String)]   -- ^ Rop usage and attribute layout
+    -> RopDefine c              -- ^ Operator definition
+rop cons ul = (cons, Ls.intercalate " | " usage, S.toAttrLayout layout) where
+    (usage, layout) = unzip ul
 
 -- | Add aliases of relmap operator.
 ropAlias

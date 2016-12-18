@@ -44,16 +44,16 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 -- 
 ropsMeta :: (D.CContent c) => [C.Rop c]
 ropsMeta = Rop.ropList "meta"
-    --         CONSTRUCTOR        USAGE                       ATTRIBUTE
-    [ Rop.def  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text?"
-    , Rop.def  consKoshuCop       "koshu-cop /N"              "-name*"
-    , Rop.def  consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
-                                                             "-name . -height? -dir?"
-    , Rop.def  consKoshuSource    "koshu-source /N [-name /N][-type /N]"
-                                                             "-number . -name? -type?"
-    , Rop.def  consKoshuRop       "koshu-rop /N"              "-name* . -group? -usage?"
-    , Rop.def  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
-    , Rop.def  consKoshuVersion   "koshu-version /N"          "-term* . -version?"
+    --         CONSTRUCTOR          USAGE                           ATTRIBUTE
+    [ Rop.rop  consKoshuAngleText [ "koshu-angle-text /N [/N]"  O.& "-name -text?" ]
+    , Rop.rop  consKoshuCop       [ "koshu-cop /N"              O.& "-name*" ]
+    , Rop.rop  consKoshuCopInfix  [ "koshu-cop-infix /N [-height /N][-dir /N]"
+                                                                O.& "-name . -height? -dir?" ]
+    , Rop.rop  consKoshuSource    [ "koshu-source /N [-name /N][-type /N]"
+                                                                O.& "-number . -name? -type?" ]
+    , Rop.rop  consKoshuRop       [ "koshu-rop /N"              O.& "-name* . -group? -usage?" ]
+    , Rop.rop  consKoshuProxy     [ "koshu-proxy /N /N"         O.& "-proto -uri" ]
+    , Rop.rop  consKoshuVersion   [ "koshu-version /N"          O.& "-term* . -version?" ]
     ]
 
 

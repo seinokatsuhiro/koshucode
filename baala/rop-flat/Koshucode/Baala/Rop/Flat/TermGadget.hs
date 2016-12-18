@@ -15,6 +15,7 @@ module Koshucode.Baala.Rop.Flat.TermGadget
   ) where
 
 import qualified Data.List                      as List
+import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Syntax         as S
 import qualified Koshucode.Baala.Data           as D
 import qualified Koshucode.Baala.Core           as C
@@ -38,11 +39,11 @@ import qualified Koshucode.Baala.Rop.Flat.Term  as Rop
 -- 
 ropsTermGadget :: (Ord c) => [C.Rop c]
 ropsTermGadget = Rop.ropList "term"  -- GROUP
-    --        CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Rop.def consPrefix         "prefix /N -to /P ..."     "pos : -prefix -term* | to : -prefix . -to"
-    , Rop.def consPrefixChange   "prefix-change /P /Q"      "-new -old"
-    , Rop.def consUnprefix       "unprefix /P"              "-prefix"
-    , Rop.def consWipe           "wipe"                     ""
+    --        CONSTRUCTOR          USAGE                        ATTRIBUTE
+    [ Rop.rop consPrefix         [ "prefix /N -to /P ..."   O.& "pos : -prefix -term* | to : -prefix . -to" ]
+    , Rop.rop consPrefixChange   [ "prefix-change /P /Q"    O.& "-new -old" ]
+    , Rop.rop consUnprefix       [ "unprefix /P"            O.& "-prefix" ]
+    , Rop.rop consWipe           [ "wipe"                   O.& "" ]
     ]
 
 
