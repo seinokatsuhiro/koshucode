@@ -5,6 +5,7 @@
 module Koshucode.Baala.Syntax.Attr.Parse
   ( parseParaSpec,
     parseParaSpecs,
+    parseParaSpec1,
     paraBug,
   ) where
 

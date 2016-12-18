@@ -3,8 +3,9 @@
 -- | Relmap operators.
 
 module Koshucode.Baala.Core.Relmap.Rop
-  ( -- * Operator
-    Rop' (..), RopGroup, RopUsage, FindRop',
+  ( -- * Relmap operator
+    Rop' (..), RopGroup, FindRop',
+    ropUsage,
     -- * Constructor
     RopCons', Intmed' (..),
   ) where
@@ -15,13 +16,12 @@ import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
 
 
--- ----------------------  Operator
+-- ----------------------  Relmap operator
 
 -- | Implementation of relmap operator.
 data Rop' h c = Rop
     { ropName     :: C.RopName        -- ^ Operator name
     , ropGroup    :: RopGroup         -- ^ Operator group
-    , ropUsage    :: RopUsage         -- ^ Usage text of operator
     , ropAttr     :: S.AttrLayout     -- ^ Attribute of operator
     , ropParaze   :: S.AttrParaze     -- ^ Attribute parameterizer
     , ropCons     :: RopCons' h c     -- ^ Constructor of operator
@@ -37,11 +37,12 @@ instance B.Name (Rop' h c) where
 -- | Group of operators.
 type RopGroup = String
 
--- | Usage text of operator.
-type RopUsage = String
-
 -- | Find relmap operator based on its name.
 type FindRop' h c = C.RopName -> Maybe (Rop' h c)
+
+-- | Usage text of relmap operator.
+ropUsage :: Rop' h c -> String
+ropUsage = S.attrUsageString . ropAttr
 
 
 -- ----------------------  Constructor

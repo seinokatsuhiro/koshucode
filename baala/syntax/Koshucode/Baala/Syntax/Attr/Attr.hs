@@ -9,7 +9,9 @@ module Koshucode.Baala.Syntax.Attr.Attr
     AttrLayout (..),
     AttrBranch (..),
     AttrParaSpec,
-    attrBranch,
+    AttrUsage,
+    attrUsages,
+    attrUsageString,
   
     -- * Attribute parameter
     AttrPara, AttrParaze,
@@ -22,6 +24,7 @@ module Koshucode.Baala.Syntax.Attr.Attr
     parseAttrLayout,
   ) where
 
+import qualified Data.List                              as Ls
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Para            as S
@@ -37,34 +40,30 @@ import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 -- | Parameter specification for attribute name.
 type AttrParaSpec = S.ParaSpec S.AttrName
 
+-- | Usage text of attribute layout.
+type AttrUsage = String
+
 -- | Attribute layout.
 data AttrLayout = AttrLayout [(Maybe S.ParaTag, AttrBranch)]
                   deriving (Show)
 
 -- | Single layout.
 data AttrBranch = AttrBranch
-    { attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
+    { attrUsage       :: AttrUsage          -- ^ Usage description
+    , attrParaSpec    :: AttrParaSpec       -- ^ Parameter specification
     , attrClassifier  :: O.Map S.AttrName   -- ^ Attribute classifier
     }
 
 instance Show AttrBranch where
     show AttrBranch {..} = "AttrBranch (" ++ show attrParaSpec ++ ")"
 
--- | Construct attribute branch.
-attrBranch :: AttrParaSpec -> AttrBranch
-attrBranch spec = AttrBranch spec $ attrClassify spec
+-- | List of attribute usages.
+attrUsages :: AttrLayout -> [AttrUsage]
+attrUsages (AttrLayout ls) = (attrUsage . snd) <$> ls
 
--- | Set type of attribute name.
-attrClassify :: AttrParaSpec -> O.Map S.AttrName
-attrClassify spec n = n' where
-    n' = case lookup (S.attrNameText n) pairs of
-           Just k  -> k
-           Nothing -> n
-
-    pairs   :: [(String, S.AttrName)]
-    pairs   = map pair $ S.paraSpecNames spec
-    pair k  = (S.attrNameText k, k)
-
+-- | Concatenated attribute usage.
+attrUsageString :: AttrLayout -> String
+attrUsageString = Ls.intercalate " | " . attrUsages
 
 -- ----------------------  Attribute sorter
 
@@ -96,7 +95,8 @@ attrMatch (AttrLayout branches) p = loop [] branches where
                         Nothing -> Right p'
                         Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
 
-    branch (AttrBranch spec classify) =
+    branch AttrBranch { attrParaSpec   = spec
+                      , attrClassifier = classify } =
         S.paraMatch spec $ S.paraNameMapKeys classify p
 
 
@@ -143,11 +143,33 @@ instance ToAttrLayout String where
     toAttrLayout = toAttrLayout . B.divideBy (== '|')
 
 instance ToAttrLayout [String] where
-    toAttrLayout = AttrLayout . map (fmap toBranch) . S.parseParaSpecs
+    toAttrLayout = toAttrLayout . map addUsage where
+                               addUsage spec = ("", spec)
 
-toBranch :: S.ParaSpec String -> AttrBranch
-toBranch = attrBranch . trunk . fmap attrName where
-    trunk spec = spec { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec }
+instance ToAttrLayout [(AttrUsage, String)] where
+    toAttrLayout us =
+        AttrLayout $ map toBranch (S.parseParaSpec1 O.<$$> us)
+
+toBranch :: (String, (Maybe S.ParaTag, S.ParaSpec String)) -> (Maybe S.ParaTag, AttrBranch)
+toBranch (usage, (tag, spec)) = (tag, attrBranch usage $ trunk $ fmap attrName spec) where
+    trunk spec' = spec' { S.paraSpecOptN = S.attrNameTrunk : S.paraSpecOptN spec' }
+
+-- | Construct attribute branch.
+attrBranch :: String -> AttrParaSpec -> AttrBranch
+attrBranch usage spec = AttrBranch { attrUsage      = usage
+                                   , attrParaSpec   = spec
+                                   , attrClassifier = attrClassify spec }
+
+-- | Set type of attribute name.
+attrClassify :: AttrParaSpec -> O.Map S.AttrName
+attrClassify spec n = n' where
+    n' = case lookup (S.attrNameText n) pairs of
+           Just k  -> k
+           Nothing -> n
+
+    pairs   :: [(String, S.AttrName)]
+    pairs   = map pair $ S.paraSpecNames spec
+    pair k  = (S.attrNameText k, k)
 
 attrName :: String -> S.AttrName
 attrName = name . reverse . unhyphen where
