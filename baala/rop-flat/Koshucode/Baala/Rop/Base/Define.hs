@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Rop.Base.Define
   ( RopDefine,
-    ropList, def, rop,
+    ropList, rop,
     ropAlias,
   ) where
 
@@ -26,14 +26,6 @@ ropList group = map make where
         let name   = head $ words usage
             sorter = S.attrParaBy attr
         in C.Rop name group usage attr sorter cons
-
--- | Make definition of relmap operator.
-def :: (S.ToAttrLayout layout)
-    => C.RopCons c    -- ^ Constructor
-    -> C.RopUsage     -- ^ Rop usage
-    -> layout         -- ^ Attribute layout
-    -> RopDefine c    -- ^ Operator definition
-def cons usage layout = (cons, usage, S.toAttrLayout layout)
 
 -- | Make definition of relmap operator.
 rop :: C.RopCons c              -- ^ Constructor

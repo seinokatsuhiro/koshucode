@@ -32,19 +32,16 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- | Implementation of relational operators.
 ropsPeripheral :: (D.CContent c) => [C.Rop c]
 ropsPeripheral = Rop.ropList "peripheral"
-    --    CONSTRUCTOR    USAGE                    ATTRIBUTE
-    [ rop consNow        "now /N"                 [ "local : -term"
-                                                  , "utc : -term . -utc"
-                                                  , "zoned : -term . -zoned" ]
-    , rop consRdf        "rdf P /S /O"            [ " -pattern -term*" ]
-    , rop consTermName   "term-name /N"           [ "-term" ]
-    , rop consTie        "tie /P ... -to N"       [ "-term* . -to" ]
-    , rop consToday      "today /N"               [ "-term" ]
-    , rop consUntie      "untie /P -only /P ..."  [ "-from . -only" ]
-    ] where
-      rop :: C.RopCons c -> C.RopUsage -> [String] -> Rop.RopDefine c
-      rop = Rop.def
-
+    --    CONSTRUCTOR         USAGE                       ATTRIBUTE
+    [ Rop.rop consNow       [ "now /N"                O.& "local : -term"
+                            , "now /N -utc"           O.& "utc : -term . -utc"
+                            , "now /N -zoned"         O.& "zoned : -term . -zoned" ]
+    , Rop.rop consRdf       [ "rdf P /S /O"           O.& "-pattern -term*" ]
+    , Rop.rop consTermName  [ "term-name /N"          O.& "-term" ]
+    , Rop.rop consTie       [ "tie /P ... -to N"      O.& "-term* . -to" ]
+    , Rop.rop consToday     [ "today /N"              O.& "-term" ]
+    , Rop.rop consUntie     [ "untie /P -only /P ..." O.& "-from . -only" ]
+    ]
 
 -- ----------------------  RDF
 
