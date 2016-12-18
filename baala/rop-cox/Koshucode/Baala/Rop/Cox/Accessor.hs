@@ -12,6 +12,7 @@ module Koshucode.Baala.Rop.Cox.Accessor
     relmapClockAlter, relkitClockAlter,
   ) where
 
+import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
 import qualified Koshucode.Baala.Data         as D
@@ -23,14 +24,14 @@ import qualified Koshucode.Baala.Rop.Cox.Get  as Rop
 -- | Implementation of relational operators.
 ropsCoxAccessor :: (D.CContent c) => [C.Rop c]
 ropsCoxAccessor = Rop.ropList "cox-accessor"
-    --        CONSTRUCTOR    USAGE
-    --                       ATTRIBUTE
-    [ Rop.def consClock      "clock /N -PROP E ..."
-                             "-clock . -times? -day? -hour? -min? -sec?"
-    , Rop.def consClockGet   "clock-get E -PROP /N ..."
-                             "-clock* . -sign? -day? -hour? -min? -sec?"
-    , Rop.def consClockAlter "clock-alter /P -PROP E ..."
-                             "-clock . -sign? -day? -hour? -min? -sec?"
+    --        CONSTRUCTOR      USAGE
+    --                         ATTRIBUTE
+    [ Rop.rop consClock      [ "clock /N -PROP E ..."
+                               O.& "-clock . -times? -day? -hour? -min? -sec?" ]
+    , Rop.rop consClockGet   [ "clock-get E -PROP /N ..."
+                               O.& "-clock* . -sign? -day? -hour? -min? -sec?" ]
+    , Rop.rop consClockAlter [ "clock-alter /P -PROP E ..."
+                               O.& "-clock . -sign? -day? -hour? -min? -sec?" ]
     ]
 
 

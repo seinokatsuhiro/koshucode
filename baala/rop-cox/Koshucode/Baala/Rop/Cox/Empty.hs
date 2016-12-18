@@ -33,11 +33,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 -- 
 ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
 ropsCoxEmpty = Rop.ropList "cox-empty"  -- GROUP
-    --        CONSTRUCTOR USAGE                              ATTRIBUTE
-    [ Rop.def consBoth    "both R [-share /P ... -fill E]"   "-relmap/ . -share? -fill?"
-    , Rop.def consComposeMaybe  "compose-maybe R [-share /P ... -fill E]"
-                                                             "-relmap/ . -share? -fill?"
-    , Rop.def consMaybe   "maybe R [-share /P ... -fill E]"  "-relmap/ . -share? -fill?"
+    --        CONSTRUCTOR         USAGE & ATTRIBUTE
+    [ Rop.rop consBoth          [ "both R [-share /P ... -fill E]"
+                                  O.& "-relmap/ . -share? -fill?" ]
+    , Rop.rop consComposeMaybe  [ "compose-maybe R [-share /P ... -fill E]"
+                                  O.& "-relmap/ . -share? -fill?" ]
+    , Rop.rop consMaybe         [ "maybe R [-share /P ... -fill E]"
+                                  O.& "-relmap/ . -share? -fill?" ]
     ]
 
 

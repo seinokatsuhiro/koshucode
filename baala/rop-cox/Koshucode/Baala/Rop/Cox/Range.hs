@@ -22,6 +22,7 @@ module Koshucode.Baala.Rop.Cox.Range
   ) where
 
 import Prelude hiding (getContents)
+import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
 import qualified Koshucode.Baala.Data          as D
@@ -33,14 +34,14 @@ import qualified Koshucode.Baala.Rop.Cox.Get   as Rop
 -- | Implementation of relational operators.
 ropsCoxRange :: (D.CContent c) => [C.Rop c]
 ropsCoxRange = Rop.ropList "cox-calc"
-    --        CONSTRUCTOR       USAGE                             ATTRIBUTE
-    [ Rop.def consRange         "range /N -from E -to E"          "-term . -from -to"
-    , Rop.def consRangeYear     "range-year /N -from /P to /P"    "-term . -from -to"
-    , Rop.def consRangeMonth    "range-month /N -from /P to /P"   "-term . -from -to"
-    , Rop.def consRangeDay      "range-day /N -from /P to /P"     "-term . -from -to"
-    , Rop.def consRangeHour     "range-hour /N -from /P to /P"    "-term . -from -to"
-    , Rop.def consRangeMinute   "range-minute /N -from /P to /P"  "-term . -from -to"
-    , Rop.def consRangeSecond   "range-second /N -from /P to /P"  "-term . -from -to"
+    --        CONSTRUCTOR         USAGE                                 ATTRIBUTE
+    [ Rop.rop consRange         [ "range /N -from E -to E"          O.& "-term . -from -to" ]
+    , Rop.rop consRangeYear     [ "range-year /N -from /P to /P"    O.& "-term . -from -to" ]
+    , Rop.rop consRangeMonth    [ "range-month /N -from /P to /P"   O.& "-term . -from -to" ]
+    , Rop.rop consRangeDay      [ "range-day /N -from /P to /P"     O.& "-term . -from -to" ]
+    , Rop.rop consRangeHour     [ "range-hour /N -from /P to /P"    O.& "-term . -from -to" ]
+    , Rop.rop consRangeMinute   [ "range-minute /N -from /P to /P"  O.& "-term . -from -to" ]
+    , Rop.rop consRangeSecond   [ "range-second /N -from /P to /P"  O.& "-term . -from -to" ]
     ]
 
 

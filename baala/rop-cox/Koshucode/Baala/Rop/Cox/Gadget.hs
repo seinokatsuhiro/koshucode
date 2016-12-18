@@ -36,14 +36,14 @@ import qualified Koshucode.Baala.Rop.Cox.Message    as Msg
 -- | Implementation of relational operators.
 ropsCoxGadget :: (D.CContent c) => [C.Rop c]
 ropsCoxGadget = Rop.ropList "cox-gadget"
-    --        CONSTRUCTOR    USAGE                            ATTRIBUTE
-    [ Rop.def consConst      "const R"                        "-lit"
-    , Rop.def consGeoDatumJp "geo-datum-jp E E E -to /N /N"   "-n -x -y . -to"
-    , Rop.def consGeoDegree  "geo-degree /N /P /P /P"         "-real -deg -min -sec"
-    , Rop.def consInterp     "interp E"                       "-interp . -x?"
-    , Rop.def consNumber     "number /N -order /P ..."        "-term . -order? -from?"
-    , Rop.def consRank       "rank /N -order /P ..."          "-term . -order? -from? -dense?"
-    , Rop.def consRepeat     "repeat I R"                     "-count -relmap/"
+    --        CONSTRUCTOR      USAGE                               ATTRIBUTE
+    [ Rop.rop consConst      [ "const R"                       O.& "-lit" ]
+    , Rop.rop consGeoDatumJp [ "geo-datum-jp E E E -to /N /N"  O.& "-n -x -y . -to" ]
+    , Rop.rop consGeoDegree  [ "geo-degree /N /P /P /P"        O.& "-real -deg -min -sec" ]
+    , Rop.rop consInterp     [ "interp E"                      O.& "-interp . -x?" ]
+    , Rop.rop consNumber     [ "number /N -order /P ..."       O.& "-term . -order? -from?" ]
+    , Rop.rop consRank       [ "rank /N -order /P ..."         O.& "-term . -order? -from? -dense?" ]
+    , Rop.rop consRepeat     [ "repeat I R"                    O.& "-count -relmap/" ]
     ]
 
 

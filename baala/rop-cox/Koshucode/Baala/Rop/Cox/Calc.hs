@@ -23,6 +23,7 @@ module Koshucode.Baala.Rop.Cox.Calc
 
 import Prelude hiding (getContents)
 import Koshucode.Baala.Overture ((&))
+import qualified Koshucode.Baala.Overture        as O
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Syntax          as S
 import qualified Koshucode.Baala.Data            as D
@@ -37,15 +38,15 @@ ropsCoxCalc :: (D.CContent c) => [C.Rop c]
 ropsCoxCalc = Rop.ropAlias
     [ "subst" & "alt"
     ] $ Rop.ropList "cox-calc"
-    --        CONSTRUCTOR       USAGE                          ATTRIBUTE
-    [ Rop.def consAdd           "add /N E ..."                 "-cox* . -where?"
-    , Rop.def consAlt           "alt /N E ..."                 "-cox* . -where?"
-    , Rop.def consFill          "fill /P ... -with E"          "-term* . -with"
-    , Rop.def consReplace       "replace /P ... -by F"         "-term* . -by"
-    , Rop.def consReplaceAll    "replace-all -from E -to E"    ". -from -to"
-    , Rop.def consSplit         "split /N E ..."               "-cox* . -where?"
-    , Rop.def consUnary         "unary /N E ..."               "-term -expr*"
-    , Rop.def consDumpCox       "dump-cox E"                   "-cox*"
+    --        CONSTRUCTOR       USAGE                            ATTRIBUTE
+    [ Rop.rop consAdd         [ "add /N E ..."               O.& "-cox* . -where?" ]
+    , Rop.rop consAlt         [ "alt /N E ..."               O.& "-cox* . -where?" ]
+    , Rop.rop consFill        [ "fill /P ... -with E"        O.& "-term* . -with" ]
+    , Rop.rop consReplace     [ "replace /P ... -by F"       O.& "-term* . -by" ]
+    , Rop.rop consReplaceAll  [ "replace-all -from E -to E"  O.& ". -from -to" ]
+    , Rop.rop consSplit       [ "split /N E ..."             O.& "-cox* . -where?" ]
+    , Rop.rop consUnary       [ "unary /N E ..."             O.& "-term -expr*" ]
+    , Rop.rop consDumpCox     [ "dump-cox E"                 O.& "-cox*" ]
     ]
 
 

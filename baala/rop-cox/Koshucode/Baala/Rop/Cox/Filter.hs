@@ -17,6 +17,7 @@ module Koshucode.Baala.Rop.Cox.Filter
   ) where
 
 import Prelude hiding (getContents)
+import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
@@ -34,11 +35,11 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 -- 
 ropsCoxFilter :: (D.CContent c) => [C.Rop c]
 ropsCoxFilter = Rop.ropList "cox-filter"
-    --        CONSTRUCTOR         USAGE         ATTRIBUTE
-    [ Rop.def consContain         "contain E"   "-expr"
-    , Rop.def (consFilter True)   "keep E"      "-in* . -where?"
-    , Rop.def (consFilter False)  "omit E"      "-in* . -where?"
-    , Rop.def consOmitAll         "omit-all"    ""
+    --        CONSTRUCTOR           USAGE             ATTRIBUTE
+    [ Rop.rop consContain         [ "contain E"   O.& "-expr" ]
+    , Rop.rop (consFilter True)   [ "keep E"      O.& "-in* . -where?" ]
+    , Rop.rop (consFilter False)  [ "omit E"      O.& "-in* . -where?" ]
+    , Rop.rop consOmitAll         [ "omit-all"    O.& "" ]
     ]
 
 
