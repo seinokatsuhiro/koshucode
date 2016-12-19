@@ -147,7 +147,7 @@ instance ToAttrLayout [String] where
 
 instance ToAttrLayout [(AttrUsage, String)] where
     toAttrLayout us =
-        AttrLayout $ map toBranch (S.parseParaSpec1 O.<$$> us)
+        AttrLayout $ map toBranch (S.parseParaSingle O.<$$> us)
 
 toBranch :: (String, (Maybe S.ParaTag, S.ParaSpec String)) -> (Maybe S.ParaTag, AttrBranch)
 toBranch (usage, (tag, spec)) = (tag, attrBranch usage $ trunk $ fmap attrName spec) where

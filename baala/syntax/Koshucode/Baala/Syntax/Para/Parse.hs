@@ -5,8 +5,8 @@
 module Koshucode.Baala.Syntax.Para.Parse
   ( -- * Function
     parseParaSpec,
-    parseParaSpecs,
-    parseParaSpec1,
+    parseParaList,
+    parseParaSingle,
     paraBug,
 
     -- * Layout
@@ -22,25 +22,39 @@ import qualified Koshucode.Baala.Syntax.Para.ParaSpec   as S
 -- ----------------------  For string parameter
 
 -- | Parse parameter layout.
+--   This function divides a given string by vertical bar @"|"@,
+--   then parse each layouts.
 parseParaSpec :: String -> [(Maybe S.ParaTag, S.ParaSpec String)]
-parseParaSpec = parseParaSpecs . B.divide '|'
+parseParaSpec = parseParaList . B.divide '|'
 
--- | Parse multiple specifications.
-parseParaSpecs :: [String] -> [(Maybe S.ParaTag, S.ParaSpec String)]
-parseParaSpecs = map parseParaSpec1
+-- | Parse list of single layout.
+--
+--   >>> parseParaList [ "a : -a", "ab : -a -b" ]
+--   [ (Just "a", ParaSpec { paraSpecPos = ParaItem 1 ["-a"]
+--                         , paraSpecReqP = ["-a"], ... })
+--   , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                          , paraSpecReqP = ["-a","-b"], ... }) ]
+--
+parseParaList :: [String] -> [(Maybe S.ParaTag, S.ParaSpec String)]
+parseParaList = map parseParaSingle
 
--- | Parse single specification.
-parseParaSpec1 :: String -> (Maybe S.ParaTag, S.ParaSpec String)
-parseParaSpec1 = single where
+-- | Parse single layout.
+--
+--   >>> parseParaSingle "ab : -a -b"
+--   (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                        , paraSpecReqP = ["-a","-b"], ...} )
+--
+parseParaSingle :: String -> (Maybe S.ParaTag, S.ParaSpec String)
+parseParaSingle = single where
     single s  = case B.divide ':' s of
                   [n, l]   -> (Just $ O.trimBoth n, layout l)
                   [l]      -> (Nothing, layout l)
-                  _        -> paraBug "neither T:L/L" s
+                  _        -> paraBug "expect T:L or L" s
 
     layout l  = case map words $ B.divide '.' l of
                   [ps]      -> paraSpec ps []
                   [ps, ns]  -> paraSpec ps ns
-                  _         -> paraBug "neither P/P.L" l
+                  _         -> paraBug "expect P or P.N" l
 
 paraSpec :: [String] -> [String] -> S.ParaSpec String
 paraSpec nsP nsN = S.paraSpec $ pos . req . opt where
@@ -61,7 +75,7 @@ paraSpecPos ns =
       (rs, [])                -> S.paraItem (unror <$> rs)
       (rs, [Rest x])          -> S.paraItemRest (unror <$> rs) x
       (rs, xs) | all isOpt xs -> S.paraItemOpt  (unror <$> rs) (unror <$> xs)
-               | otherwise    -> paraBug "req/opt/rest" $ unwords ns
+               | otherwise    -> paraBug "expect N, N?, or N*" $ unwords ns
 
 -- | Report bug of parameter specification.
 paraBug :: String -> String -> a
