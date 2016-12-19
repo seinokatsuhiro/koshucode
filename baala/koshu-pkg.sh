@@ -276,9 +276,31 @@ pkg_toolkit () {
     fi
 }
 
+pkg_list_all () {
+    pkg_list=$1
+    pkg_list baala-dir
+    pkg_list cabal
+    pkg_list cabal-path
+    pkg_list copyright
+    pkg_list dir
+    pkg_list dir-rev
+    pkg_list hoogle
+    pkg_list import
+    pkg_list import-outer
+    pkg_list installed
+    pkg_list installed-koshu
+    pkg_list synopsis
+    pkg_list version
+}
+
 pkg_list () {
     echo "=== $1"
-    "$pkg_self" "$@"
+    echo
+    if [ $pkg_list = all ]; then
+        "$pkg_self" "$@"
+    else
+        "$pkg_self" "$@" | head
+    fi
     echo
 }
 
@@ -330,21 +352,10 @@ case "$1" in
         pkg_cabal_section synopsis ;;
     version)
         pkg_cabal_section version ;;
+    list-head)
+        pkg_list_all head ;;
     list-all)
-        pkg_list baala-dir
-        pkg_list cabal
-        pkg_list cabal-path
-        pkg_list copyright
-        pkg_list dir
-        pkg_list dir-rev
-        pkg_list hoogle
-        pkg_list import
-        pkg_list import-outer
-        pkg_list installed
-        pkg_list installed-koshu
-        pkg_list synopsis
-        pkg_list version
-        ;;
+        pkg_list_all all ;;
 
     # execute
     alt)
