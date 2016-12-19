@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Syntax.Para          as S
 
 -- | Parse parameter layout.
 parseParaSpec :: String -> [(Maybe S.ParaTag, S.ParaSpec String)]
-parseParaSpec = parseParaSpecs . divide '|'
+parseParaSpec = parseParaSpecs . B.divide '|'
 
 -- | Parse multiple specifications.
 parseParaSpecs :: [String] -> [(Maybe S.ParaTag, S.ParaSpec String)]
@@ -31,18 +31,15 @@ parseParaSpecs = map parseParaSpec1
 -- | Parse single specification.
 parseParaSpec1 :: String -> (Maybe S.ParaTag, S.ParaSpec String)
 parseParaSpec1 = single where
-    single s  = case divide ':' s of
+    single s  = case B.divide ':' s of
                   [n, l]   -> (Just $ O.trimBoth n, layout l)
                   [l]      -> (Nothing, layout l)
                   _        -> paraBug "neither T:L/L" s
 
-    layout l  = case map words $ divide '.' l of
+    layout l  = case map words $ B.divide '.' l of
                   [ps]      -> paraSpec ps []
                   [ps, ns]  -> paraSpec ps ns
                   _         -> paraBug "neither P/P.L" l
-
-divide :: (Eq a) => a -> [a] -> [[a]]
-divide c = B.divideBy (== c)
 
 paraSpec :: [String] -> [String] -> S.ParaSpec String
 paraSpec nsP nsN = S.paraSpec $ pos . req . opt where

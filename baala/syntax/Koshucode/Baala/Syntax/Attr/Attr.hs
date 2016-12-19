@@ -140,7 +140,7 @@ instance ToAttrLayout AttrLayout where
     toAttrLayout = id
 
 instance ToAttrLayout String where
-    toAttrLayout = toAttrLayout . B.divideBy (== '|')
+    toAttrLayout = toAttrLayout . B.divide '|'
 
 instance ToAttrLayout [String] where
     toAttrLayout = toAttrLayout . map addUsage where
