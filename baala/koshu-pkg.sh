@@ -276,8 +276,15 @@ pkg_toolkit () {
     fi
 }
 
+pkg_list () {
+    echo "=== $1"
+    "$pkg_self" "$@"
+    echo
+}
+
 # --------------------------------------------  main
 
+pkg_self="$0"
 pkg_prog=koshu-pkg.sh
 pkg_dir=`pwd | sed -n 's:\(.*/koshucode-master/baala\).*:\1:p'`
 
@@ -323,6 +330,21 @@ case "$1" in
         pkg_cabal_section synopsis ;;
     version)
         pkg_cabal_section version ;;
+    list-all)
+        pkg_list baala-dir
+        pkg_list cabal
+        pkg_list cabal-path
+        pkg_list copyright
+        pkg_list dir
+        pkg_list dir-rev
+        pkg_list hoogle
+        pkg_list import
+        pkg_list import-outer
+        pkg_list installed
+        pkg_list installed-koshu
+        pkg_list synopsis
+        pkg_list version
+        ;;
 
     # execute
     alt)
