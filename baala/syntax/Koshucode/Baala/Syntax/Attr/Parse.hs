@@ -3,10 +3,14 @@
 -- | Parse parameter specification.
 
 module Koshucode.Baala.Syntax.Attr.Parse
-  ( parseParaSpec,
+  ( -- * Function
+    parseParaSpec,
     parseParaSpecs,
     parseParaSpec1,
     paraBug,
+
+    -- * Layout
+    -- $Layout
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
@@ -17,62 +21,6 @@ import qualified Koshucode.Baala.Syntax.Para          as S
 -- ----------------------  For string parameter
 
 -- | Parse parameter layout.
---
--- No positional and one named required @c@ attribute.
---
---  >>> parseParaSpec ". c"
---  [(Nothing, ParaSpec { paraSpecReqN = ["c"], ... })]
---
--- Positional required @a@, rest @b@, and one named @c@ attributes.
---
---  >>> parseParaSpec "a b* . c"
---  [(Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 ["a"] "b"
---                      , paraSpecReqP = ["a"]
---                      , paraSpecOptP = ["b"]
---                      , paraSpecReqN = ["c"], ... })]
---
--- Set of named layouts.
---
---  >>> parseParaSpec "a : a | ab : a b"
---  [ (Just "a",  ParaSpec { paraSpecPos = ParaItem 1 ["a"], paraSpecReqP = ["a"], ... })
---  , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["a","b"], paraSpecReqP = ["a","b"], ... })]
---
--- Syntax for parameter layout.
---
---  [Multiple]
---
---    * __Single__                    — Single layout
---    * __Single @|@ Multiple__ ...   — Multiple layout
---
---  [Single]
---
---    * __Layout__                    — Layout without tag
---    * __Word @:@ Layout__           — Layout with tag
---
---  [Layout]
---
---    * __Positional__                — Positional parameters
---    * __Positional @.@ Named__      — Positional and named parameters
---
---  [Positional]
---
---    * __Word ...__                  — Positional required parameters
---    * __Word ... Word@?@ ...__      — Positional required and optional parameters
---    * __Word ... Word@*@__          — Positional required and rest parameters
---
---  [Named]
---
---    * __Name ...__                  — Named parameters
---
---  [Name]
---
---    * __Word Opt__                  — Named parameter
---
---  [Opt]
---
---    * __Empty__                     — Required parameter
---    * __@?@__                       — Optional parameter
---
 parseParaSpec :: String -> [(Maybe S.ParaTag, S.ParaSpec String)]
 parseParaSpec = parseParaSpecs . divide '|'
 
@@ -149,3 +97,83 @@ isOpt _       = False
 initLast :: [a] -> ([a], a)
 initLast n = (init n, last n)
 
+
+-- $Layout
+--
+-- Syntax for parameter layout.
+--
+-- == Multiple (layout)
+--
+--   * __Single__                — Single layout
+--   * __Single @|@ Multiple__   — Multiple layout
+--
+--  Set of tagged layouts.
+--
+--   >>> parseParaSpec "a : -a | ab : -a -b"
+--   [ (Just "a",  ParaSpec { paraSpecPos = ParaItem 1 ["-a"], paraSpecReqP = ["-a"], ... })
+--   , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"], paraSpecReqP = ["-a","-b"], ... }) ]
+--
+-- == Single (layout)
+--
+--   * __Layout__                 — Layout without tag
+--   * __Word @:@ Layout__        — Layout with tag
+--
+-- == Layout
+--
+--   * __Positional__                — Positional parameters
+--   * __Positional @.@ Named__      — Positional and named parameters
+--
+--  Positional @-a@ and @-b@ parameters.
+--
+--   >>> parseParaSpec "-a -b"
+--   [ (Nothing, ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                        , paraSpecReqP = ["-a","-b"], ... }) ]
+--
+--  No positional and one named required @c@ parameters.
+--
+--   >>> parseParaSpec ". -c"
+--   [ (Nothing, ParaSpec { paraSpecReqN = ["-c"], ... }) ]
+--
+--  Positional @a@, @b@, and named @c@ parameters.
+--
+--   >>> parseParaSpec "-a -b . -c"
+--   [ (Nothing, ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                        , paraSpecReqP = ["-a","-b"]
+--                        , paraSpecOptP = []
+--                        , paraSpecReqN = ["-c"], ... }) ]
+--
+-- == Positional (parameter)
+--
+--   * __Word ...__                  — Positional required parameters
+--   * __Word ... Word@?@ ...__      — Positional required and optional parameters
+--   * __Word ... Word@*@__          — Positional required and rest parameters
+--
+--  Positional required @-a@ and optional @-b@ parameters.
+--
+--   >>> parseParaSpec "-a -b?"
+--   [ (Nothing, ParaSpec { paraSpecPos = ParaItemOpt 1 ["-a"] ["-b"]
+--                        , paraSpecReqP = ["-a"]
+--                        , paraSpecOptP = ["-b"] })]
+--
+--  Positional required @-a@ and rest @-b@ parameters.
+--
+--   >>> parseParaSpec "-a -b*"
+--   [ (Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 ["-a"] "-b"
+--                        , paraSpecReqP = ["-a"]
+--                        , paraSpecOptP = ["-b"], ... }) ]
+--
+-- == Named (parameter)
+--
+--   * __Name ...__             — Named parameters
+--
+-- == Name
+--
+--   * __Word__                  — Named required parameter
+--   * __Word@?@__               — Named optional parameter
+--
+--  Named required @-a@ and optional @-b@ parameters.
+--
+--   >>> parseParaSpec ". -a -b?"
+--   [ (Nothing, ParaSpec { paraSpecReqN = ["-a"]
+--                        , paraSpecOptN = ["-b"], ... }) ]
+--
