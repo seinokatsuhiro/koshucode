@@ -86,17 +86,18 @@ attrParaBy lay = attrPara B.>=> attrMatch lay
 --   See 'paraChoose' in ParaSpec module.
 attrMatch :: AttrLayout -> B.AbMap AttrPara
 attrMatch (AttrLayout branches) p = loop [] branches where
-    loop us [] = Msg.unexpAttrMulti $ map (fmap S.attrNameCode) $ reverse us
+    loop us [] = Msg.unexpAttrMulti $ reverse us
     loop us ((tag, b) : bs) =
         case branch b of
-          Left u   -> loop (u:us) bs
-          Right p' -> case tag of
-                        Nothing -> Right p'
-                        Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
+          (usage, Left unmatch) -> loop ((usage, S.attrNameCode <$> unmatch) : us) bs
+          (_, Right p') -> case tag of
+                             Nothing -> Right p'
+                             Just t  -> Right $ p' { S.paraTags = t : S.paraTags p' }
 
-    branch AttrBranch { attrParaSpec   = spec
+    branch AttrBranch { attrUsage      = usage
+                      , attrParaSpec   = spec
                       , attrClassifier = classify } =
-        S.paraMatch spec $ S.paraNameMapKeys classify p
+        (usage, S.paraMatch spec $ S.paraNameMapKeys classify p)
 
 
 -- ----------------------  Name

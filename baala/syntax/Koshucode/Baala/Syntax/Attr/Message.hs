@@ -68,21 +68,16 @@ unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
 
 -- | Unmatch any patterns
-unexpAttrMulti :: [S.ParaUnmatch String] -> B.Ab a
-unexpAttrMulti [u] = Left $ B.abortLines "Unexpected attribute" [attrDetail u]
-unexpAttrMulti us  = Left $ B.abortLines "Unmatch any patterns" $ map attrDetail us
+unexpAttrMulti :: [(String, S.ParaUnmatch String)] -> B.Ab a
+unexpAttrMulti [u] = Left $ B.abortLines "Unexpected attribute" $ attrDetail u
+unexpAttrMulti us  = Left $ B.abortLines "Unmatch any patterns" $ concatMap attrDetail us
 
-attrDetail :: S.ParaUnmatch String -> String
-attrDetail u =
-    case u of
-      S.ParaOutOfRange _ p  -> require $ S.paraMinLength p
-      S.ParaUnknown  ns     -> "Unknown "  ++ unwords ns
-      S.ParaMissing  ns     -> "Missing "  ++ unwords ns
-      S.ParaMultiple ns     -> "Repeated " ++ unwords ns
+attrDetail :: (String, S.ParaUnmatch String) -> [String]
+attrDetail (usage, unmatch) =
+    case unmatch of
+      S.ParaPos n _      -> expect ["Unmatch " ++ show n ++ " positional attributes"]
+      S.ParaUnknown  ns  -> expect ["Unknown "  ++ unwords ns]
+      S.ParaMissing  ns  -> expect ["Missing "  ++ unwords ns]
+      S.ParaMultiple ns  -> expect ["Repeated " ++ unwords ns]
     where
-      require 0 = "Attributes not required"
-      require 1 = "Require one attribute"
-      require 2 = "Require two attributes"
-      require 3 = "Require three attributes"
-      require n = "Require " ++ show n ++ " attributes"
-
+      expect reason = reason ++ ["  against '" ++ usage ++ "'"]

@@ -20,12 +20,12 @@ abAssert = B.abortable "assert"
 unkOption :: S.ParaUnmatch String -> B.Ab a
 unkOption un = Left $ B.abortLines "Unknown option" detail where
     detail = case un of
-               S.ParaOutOfRange n p  -> ["Positional parameter out of range",
-                                         "Expect " ++ expect p ++
-                                         ", but actural " ++ show n]
-               S.ParaUnknown  ns     -> ["Unknown parameter name", unwords ns]
-               S.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
-               S.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
+               S.ParaPos n p       -> ["Positional parameter out of range",
+                                       "Expect " ++ expect p ++
+                                       ", but actural " ++ show n]
+               S.ParaUnknown  ns   -> ["Unknown parameter name", unwords ns]
+               S.ParaMissing  ns   -> ["Missing parameter name", unwords ns]
+               S.ParaMultiple ns   -> ["Repeated parameter name", unwords ns]
 
     expect (S.ParaItem     a _)    = "just " ++ show a
     expect (S.ParaItemOpt  a _ _)  = "minimum " ++ show a

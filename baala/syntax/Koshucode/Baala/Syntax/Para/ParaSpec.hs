@@ -118,17 +118,17 @@ paraMinLength (ParaRange    a _)    = a
 
 -- | Unmatch reason of real parameter and its specifition.
 data ParaUnmatch n
-    = ParaOutOfRange Int (ParaSpecPos n) -- ^ Positional parameter is unmatched.
+    = ParaPos Int (ParaSpecPos n) -- ^ Positional parameter is unmatched.
     | ParaUnknown  [n]    -- ^ Unknown parameter is specified.
     | ParaMissing  [n]    -- ^ Required parameter is missing.
     | ParaMultiple [n]    -- ^ Parameter occurs more than once.
       deriving (Show, Eq, Ord)
 
 instance Functor ParaUnmatch where
-    fmap f (ParaOutOfRange a pos) = ParaOutOfRange a (fmap f pos)
-    fmap f (ParaUnknown  ns)      = ParaUnknown      (fmap f ns)
-    fmap f (ParaMissing  ns)      = ParaMissing      (fmap f ns)
-    fmap f (ParaMultiple ns)      = ParaMultiple     (fmap f ns)
+    fmap f (ParaPos a pos)     = ParaPos        a (fmap f pos)
+    fmap f (ParaUnknown  ns)   = ParaUnknown      (fmap f ns)
+    fmap f (ParaMissing  ns)   = ParaMissing      (fmap f ns)
+    fmap f (ParaMultiple ns)   = ParaMultiple     (fmap f ns)
 
 -- | Either something or parameter.
 type ParaOr left n a = Either left (S.Para n a)
@@ -149,7 +149,7 @@ paraMatchPos spec p = m pos where
     m (ParaItemRest a ns n)  | l >= a      = Right $ paraAddRest ns n ps p
     m (ParaMin a)            | l >= a      = Right p
     m (ParaRange a b)  | l >= a && l <= b  = Right p
-    m _                                    = Left $ ParaOutOfRange l pos
+    m _                                    = Left $ ParaPos l pos
 
     pos = paraSpecPos spec
     ps  = S.paraPos p
@@ -235,7 +235,7 @@ paraCheck spec@ParaSpec {..}
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen ""
--- Left ParaOutOfRange ...
+-- Left ParaPos ...
 --
 paraMin :: Int -> ParaSpecMap n
 paraMin n = paraPos $ ParaMin n
@@ -246,7 +246,7 @@ paraMin n = paraPos $ ParaMin n
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b"
--- Left ParaOutOfRange ...
+-- Left ParaPos ...
 --
 paraMax :: Int -> ParaSpecMap n
 paraMax n = paraPos $ ParaRange 0 n
@@ -257,7 +257,7 @@ paraMax n = paraPos $ ParaRange 0 n
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen ""
--- Left ParaOutOfRange ...
+-- Left ParaPos ...
 --
 paraJust :: Int -> ParaSpecMap n
 paraJust n = paraPos $ ParaRange n n
@@ -268,7 +268,7 @@ paraJust n = paraPos $ ParaRange n n
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a"
 -- Right Para ...
 -- >>> paraMatch s $ S.paraWords S.paraHyphen "a b c"
--- Left ParaOutOfRange ...
+-- Left ParaPos ...
 --
 paraRange :: Int -> Int -> ParaSpecMap n
 paraRange m n = paraPos $ ParaRange m n

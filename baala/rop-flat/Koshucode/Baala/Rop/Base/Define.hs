@@ -22,11 +22,15 @@ ropList
     -> [RopDefine c]  -- ^ Operator definitions
     -> [C.Rop c]      -- ^ Relmap operators
 ropList group = map make where
-    make (cons, attr) =
-        let usage  = S.attrUsageString attr
+    make (cons, layout) =
+        let usage  = S.attrUsageString layout
             name   = head $ words usage
-            sorter = S.attrParaBy attr
-        in C.Rop name group attr sorter cons
+            sorter = S.attrParaBy layout
+        in C.Rop { C.ropName   = name
+                 , C.ropGroup  = group
+                 , C.ropAttr   = layout
+                 , C.ropParaze = sorter
+                 , C.ropCons   = cons }
 
 -- | Make definition of relmap operator.
 rop :: C.RopCons c              -- ^ Constructor
