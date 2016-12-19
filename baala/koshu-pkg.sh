@@ -13,12 +13,12 @@ pkg_help () {
     echo "  cabal-path       List paths of cabal files"
     echo "  copyright        List copyright in cabal files"
     echo "  dir              List package directory names"
+    echo "  hoogle           List Hoogle files"
+    echo "  hoogle P ...     Grep P ... for Hoogle files"
     echo "  import [DIR]     List import lines"
     echo "  import-outer [DIR] List imported modules except for Koshucode"
     echo "  installed        List installed packages in sandbox"
     echo "  installed-koshu  List installed packages named 'koshu'"
-    echo "  hoogle           List Hoogle files"
-    echo "  hoogle P ...     Grep P ... for Hoogle files"
     echo "  synopsis         List synopses in cabal files"
     echo "  version          List version number in cabal files"
     echo
@@ -290,38 +290,45 @@ if [ ! -d "$pkg_dir" ]; then
 fi
 
 case "$1" in
-    alt)
-        pkg_cabal_alt "$2" "$3" ;;
+
+    # list
     baala-dir)
         echo "$pkg_dir" ;;
     cabal)
         pkg_cabal ;;
     cabal-path)
         pkg_cabal_path ;;
-    clean)
-        pkg_exec cabal clean ;;
     copyright)
         pkg_cabal_section copyright ;;
     dir)
         pkg_dirs | xargs -n 1 ;;
     dir-rev)
         pkg_dirs_rev | xargs -n 1 ;;
-    exec)
+    hoogle)
         shift
-        pkg_exec "$@" ;;
-    exec-all)
-        shift
-        pkg_exec_all "$@" ;;
+        if [ $# = 0 ]; then
+            pkg_hoogle
+        else
+            pkg_hoogle_grep "$@"
+        fi ;;
     import)
         pkg_import "$2" ;;
     import-outer)
         pkg_import_outer "$2" ;;
-    init)
-        pkg_exec pkg_sandbox_init ;;
     installed)
         pkg_toolkit pkg_installed "*" ;;
     installed-koshu)
         pkg_toolkit pkg_installed "koshu*" ;;
+    synopsis)
+        pkg_cabal_section synopsis ;;
+    version)
+        pkg_cabal_section version ;;
+
+    # execute
+    alt)
+        pkg_cabal_alt "$2" "$3" ;;
+    clean)
+        pkg_exec cabal clean ;;
     doc0)
         pkg_doc_verbose=0
         pkg_haddock "$2" 2> /dev/null ;;
@@ -331,19 +338,18 @@ case "$1" in
         pkg_exec cabal configure
         pkg_exec cabal build
         pkg_haddock ;;
-    hoogle)
+    exec)
         shift
-        if [ $# = 0 ]; then
-            pkg_hoogle
-        else
-            pkg_hoogle_grep "$@"
-        fi ;;
-    synopsis)
-        pkg_cabal_section synopsis ;;
+        pkg_exec "$@" ;;
+    exec-all)
+        shift
+        pkg_exec_all "$@" ;;
+    init)
+        pkg_exec pkg_sandbox_init ;;
     unreg)
         pkg_toolkit pkg_unreg ;;
-    version)
-        pkg_cabal_section version ;;
+
+    # unknown
     *)
         pkg_help ;;
 esac
