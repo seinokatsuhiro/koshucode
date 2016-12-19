@@ -23,6 +23,7 @@ pkg_help () {
     echo "  version          List version number in cabal files"
     echo
     echo "COMMAND for executing"
+    echo "  alt X Y          Alter X to Y in cabal files"
     echo "  clean            Clean up build result"
     echo "  doc0 [DIR]       Generate Haddock documents less verbosely"
     echo "  doc [DIR]        Generate Haddock documents with default verbosity"
@@ -30,7 +31,6 @@ pkg_help () {
     echo "  exec C           Execute C in each package directories"
     echo "  exec-all C       Same as exec except for ignoring exit status"
     echo "  init             Initilize sandbox"
-    echo "  subst X Y        Substitute X with Y in cabal files"
     echo "  unreg            Unregister koshucode libraries"
     echo
 }
@@ -91,11 +91,11 @@ pkg_cabal_section () {
     done
 }
 
-pkg_cabal_subst () {
+pkg_cabal_alt () {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        echo "Skip substitutions"
+        echo "Skip alteration"
     else
-        echo "Substitute cabal files: $1 -> $2"
+        echo "Alter cabal files: $1 -> $2"
         for cab in `pkg_cabal_path`; do
             perl -i -pe "s/$1/$2/" $cab
         done
@@ -290,6 +290,8 @@ if [ ! -d "$pkg_dir" ]; then
 fi
 
 case "$1" in
+    alt)
+        pkg_cabal_alt "$2" "$3" ;;
     baala-dir)
         echo "$pkg_dir" ;;
     cabal)
@@ -336,8 +338,6 @@ case "$1" in
         else
             pkg_hoogle_grep "$@"
         fi ;;
-    subst)
-        pkg_cabal_subst "$2" "$3" ;;
     synopsis)
         pkg_cabal_section synopsis ;;
     unreg)
