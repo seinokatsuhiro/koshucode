@@ -30,7 +30,6 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Para            as S
 import qualified Koshucode.Baala.Syntax.TTree           as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
-import qualified Koshucode.Baala.Syntax.Attr.Parse      as S
 import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Syntax.Attr.Message    as Msg
 

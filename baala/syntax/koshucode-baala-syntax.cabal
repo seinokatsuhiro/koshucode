@@ -51,13 +51,13 @@ library
         Koshucode.Baala.Syntax.Attr.AttrEd
         Koshucode.Baala.Syntax.Attr.AttrName
         Koshucode.Baala.Syntax.Attr.Message
-        Koshucode.Baala.Syntax.Attr.Parse
         Koshucode.Baala.Syntax.Attr.Slot
 
         Koshucode.Baala.Syntax.Para
         Koshucode.Baala.Syntax.Para.Get
         Koshucode.Baala.Syntax.Para.Para
         Koshucode.Baala.Syntax.Para.ParaSpec
+        Koshucode.Baala.Syntax.Para.Parse
 
         Koshucode.Baala.Syntax.Pattern
 

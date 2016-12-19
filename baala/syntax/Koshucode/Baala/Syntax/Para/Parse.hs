@@ -2,7 +2,7 @@
 
 -- | Parse parameter specification.
 
-module Koshucode.Baala.Syntax.Attr.Parse
+module Koshucode.Baala.Syntax.Para.Parse
   ( -- * Function
     parseParaSpec,
     parseParaSpecs,
@@ -13,9 +13,10 @@ module Koshucode.Baala.Syntax.Attr.Parse
     -- $Layout
   ) where
 
-import qualified Koshucode.Baala.Overture             as O
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Syntax.Para          as S
+import qualified Koshucode.Baala.Overture               as O
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Syntax.Para.Para       as S
+import qualified Koshucode.Baala.Syntax.Para.ParaSpec   as S
 
 
 -- ----------------------  For string parameter
