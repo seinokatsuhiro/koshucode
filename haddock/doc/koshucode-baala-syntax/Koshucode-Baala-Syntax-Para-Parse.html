@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Para.Parse</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Para-Parse.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Parse.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.187.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Para.Parse</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Function</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Layout</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Parse parameter specification.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:parseParaSpec"
+	    >parseParaSpec</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)]</li
+	  ><li class="src short"
+	  ><a href="#v:parseParaList"
+	    >parseParaList</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)]</li
+	  ><li class="src short"
+	  ><a href="#v:parseParaSingle"
+	    >parseParaSingle</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:paraBug"
+	    >paraBug</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Function</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseParaSpec" class="def"
+	    >parseParaSpec</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)] <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Parse.html#parseParaSpec');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse parameter layout.
+   This function divides a given string by vertical bar <code
+	      >&quot;|&quot;</code
+	      >,
+   then parse each layouts.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseParaList" class="def"
+	    >parseParaList</a
+	    > :: [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)] <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Parse.html#parseParaList');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse list of single layout.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>parseParaList [ &quot;a : -a&quot;, &quot;ab : -a -b&quot; ]
+</code
+		></strong
+	      >[ (Just &quot;a&quot;, ParaSpec { paraSpecPos = ParaItem 1 [&quot;-a&quot;]
+                      , paraSpecReqP = [&quot;-a&quot;], ... })
+, (Just &quot;ab&quot;, ParaSpec { paraSpecPos = ParaItem 2 [&quot;-a&quot;,&quot;-b&quot;]
+                       , paraSpecReqP = [&quot;-a&quot;,&quot;-b&quot;], ... }) ]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseParaSingle" class="def"
+	    >parseParaSingle</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
+	    >, <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Parse.html#parseParaSingle');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse single layout.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>parseParaSingle &quot;ab : -a -b&quot;
+</code
+		></strong
+	      >(Just &quot;ab&quot;, ParaSpec { paraSpecPos = ParaItem 2 [&quot;-a&quot;,&quot;-b&quot;]
+                     , paraSpecReqP = [&quot;-a&quot;,&quot;-b&quot;], ...} )
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:paraBug" class="def"
+	    >paraBug</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a <a onclick="showSource('src/Koshucode-Baala-Syntax-Para-Parse.html#paraBug');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Report bug of parameter specification.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Layout</h1
+	><div class="doc"
+	><p
+	  >Syntax for parameter layout.</p
+	  ><h2
+	  >Multiple (layout)</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Single</strong
+	      >                &#8212; Single layout</li
+	    ><li
+	    ><strong
+	      >Single <code
+		>|</code
+		> Multiple</strong
+	      >   &#8212; Multiple layout</li
+	    ></ul
+	  ><p
+	  >Set of tagged layouts.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;a : -a | ab : -a -b&quot;
+</code
+	      ></strong
+	    >[ (Just &quot;a&quot;,  ParaSpec { paraSpecPos = ParaItem 1 [&quot;-a&quot;], paraSpecReqP = [&quot;-a&quot;], ... })
+, (Just &quot;ab&quot;, ParaSpec { paraSpecPos = ParaItem 2 [&quot;-a&quot;,&quot;-b&quot;], paraSpecReqP = [&quot;-a&quot;,&quot;-b&quot;], ... }) ]
+</pre
+	  ><h2
+	  >Single (layout)</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Layout</strong
+	      >                 &#8212; Layout without tag</li
+	    ><li
+	    ><strong
+	      >Word <code
+		>:</code
+		> Layout</strong
+	      >        &#8212; Layout with tag</li
+	    ></ul
+	  ><h2
+	  >Layout</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Positional</strong
+	      >                &#8212; Positional parameters</li
+	    ><li
+	    ><strong
+	      >Positional <code
+		>.</code
+		> Named</strong
+	      >      &#8212; Positional and named parameters</li
+	    ></ul
+	  ><p
+	  >Positional <code
+	    >-a</code
+	    > and <code
+	    >-b</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;-a -b&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecPos = ParaItem 2 [&quot;-a&quot;,&quot;-b&quot;]
+                     , paraSpecReqP = [&quot;-a&quot;,&quot;-b&quot;], ... }) ]
+</pre
+	  ><p
+	  >No positional and one named required <code
+	    >c</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;. -c&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecReqN = [&quot;-c&quot;], ... }) ]
+</pre
+	  ><p
+	  >Positional <code
+	    >a</code
+	    >, <code
+	    >b</code
+	    >, and named <code
+	    >c</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;-a -b . -c&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecPos = ParaItem 2 [&quot;-a&quot;,&quot;-b&quot;]
+                     , paraSpecReqP = [&quot;-a&quot;,&quot;-b&quot;]
+                     , paraSpecOptP = []
+                     , paraSpecReqN = [&quot;-c&quot;], ... }) ]
+</pre
+	  ><h2
+	  >Positional (parameter)</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Word ...</strong
+	      >                  &#8212; Positional required parameters</li
+	    ><li
+	    ><strong
+	      >Word ... Word<code
+		>?</code
+		> ...</strong
+	      >      &#8212; Positional required and optional parameters</li
+	    ><li
+	    ><strong
+	      >Word ... Word<code
+		>*</code
+		></strong
+	      >          &#8212; Positional required and rest parameters</li
+	    ></ul
+	  ><p
+	  >Positional required <code
+	    >-a</code
+	    > and optional <code
+	    >-b</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;-a -b?&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecPos = ParaItemOpt 1 [&quot;-a&quot;] [&quot;-b&quot;]
+                     , paraSpecReqP = [&quot;-a&quot;]
+                     , paraSpecOptP = [&quot;-b&quot;] })]
+</pre
+	  ><p
+	  >Positional required <code
+	    >-a</code
+	    > and rest <code
+	    >-b</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;-a -b*&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 [&quot;-a&quot;] &quot;-b&quot;
+                     , paraSpecReqP = [&quot;-a&quot;]
+                     , paraSpecOptP = [&quot;-b&quot;], ... }) ]
+</pre
+	  ><h2
+	  >Named (parameter)</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Name ...</strong
+	      >             &#8212; Named parameters</li
+	    ></ul
+	  ><h2
+	  >Name</h2
+	  ><ul
+	  ><li
+	    ><strong
+	      >Word</strong
+	      >                  &#8212; Named required parameter</li
+	    ><li
+	    ><strong
+	      >Word<code
+		>?</code
+		></strong
+	      >               &#8212; Named optional parameter</li
+	    ></ul
+	  ><p
+	  >Named required <code
+	    >-a</code
+	    > and optional <code
+	    >-b</code
+	    > parameters.</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >parseParaSpec &quot;. -a -b?&quot;
+</code
+	      ></strong
+	    >[ (Nothing, ParaSpec { paraSpecReqN = [&quot;-a&quot;]
+                     , paraSpecOptN = [&quot;-b&quot;], ... }) ]
+</pre
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

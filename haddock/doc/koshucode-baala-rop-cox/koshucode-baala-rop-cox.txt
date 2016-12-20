@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Conversion geographic point from the plane rectangular coordinates
@@ -135,6 +135,118 @@ relmapRangeSecond :: (CContent c) => Intmed c -> RangeAttr c -> Relmap c
 
 -- | Create <tt>range-second</tt> relkit.
 relkitRangeSecond :: (CContent c) => RangeAttr c -> RelkitFlow c
+
+
+-- | Relmap operators for clock type.
+module Koshucode.Baala.Rop.Cox.Type.Clock
+
+-- | Implementation of relational operators.
+ropsTypeClock :: (CContent c) => [Rop c]
+
+-- | <ul>
+--   <li><i>add-clock /c -day <i>D</i></i> Add term /c as a clock of
+--   <i>D</i> days, i.e., <tt>|D'|</tt>.</li>
+--   <li><i>add-clock /c -hour <i>H</i></i> Add term /c as a clock of
+--   <i>H</i> hours, i.e., <tt>|H|</tt>.</li>
+--   <li><i>add-clock /c -min <i>M</i></i> Add term /c as a clock of
+--   <i>M</i> minutes, i.e., <tt>|00:M|</tt>.</li>
+--   <li><i>add-clock /c -sec <i>S</i></i> Add term /c as a clock of
+--   <i>S</i> seconds, i.e., <tt>|00:00:S|</tt>.</li>
+--   </ul>
+consAddClock :: (CContent c) => RopCons c
+
+-- | Create <tt>clock</tt> relmap.
+relmapAddClock :: (CContent c) => Intmed c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
+
+-- | Create <tt>clock</tt> relkit.
+relkitAddClock :: (CContent c) => (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>of-clock <i>E</i> -day /N</i> Add term /N as decimal days of
+--   clock.</li>
+--   <li><i>of-clock <i>E</i> -hour /N</i> Add term /N as decimal hours of
+--   clock.</li>
+--   <li><i>of-clock <i>E</i> -min /N</i> Add term /N as decimal minutes of
+--   clock.</li>
+--   <li><i>of-clock <i>E</i> -sec /N</i> Add term /N as decimal seconds of
+--   clock.</li>
+--   <li><i>of-clock <i>E</i> -sign /N</i> Add term /N as decimal sign of
+--   clock, i.e., -1, 0, or 1.</li>
+--   </ul>
+consOfClock :: (CContent c) => RopCons c
+
+-- | Create <tt>of-clockt</tt> relmap.
+relmapOfClock :: (CContent c) => Intmed c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
+
+-- | Create <tt>of-clock</tt> relkit.
+relkitOfClock :: (CContent c) => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>alt-clock /P -day <i>D</i></i> Alter days of clock to <i>D</i>
+--   in term /P.</li>
+--   <li><i>alt-clock /P -hour <i>H</i></i> Alter hours of clock to
+--   <i>H</i> in term /P.</li>
+--   <li><i>alt-clock /P -min <i>M</i></i> Alter minutes of clock to
+--   <i>M</i> in term /P.</li>
+--   <li><i>alt-clock /P -sec <i>S</i></i> Alter seconds of clock to
+--   <i>S</i> in term /P.</li>
+--   </ul>
+consAltClock :: (CContent c) => RopCons c
+
+-- | Create <tt>alt-clock</tt> relmap.
+relmapAltClock :: (CContent c) => Intmed c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
+
+-- | Create <tt>alt-clock</tt> relkit.
+relkitAltClock :: (CContent c) => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
+
+
+-- | Relmap operators for dec type.
+module Koshucode.Baala.Rop.Cox.Type.Dec
+
+-- | Implementation of relational operators.
+ropsTypeDec :: (CContent c) => [Rop c]
+
+-- | <ul>
+--   <li><i>of-dec <i>E</i> -fracle /N</i> Add term /N as fracle (fraction
+--   length) of decimal number <i>E</i>.</li>
+--   <li><i>of-dec <i>E</i> -num /N</i> Add term /N as numerator of decimal
+--   number <i>E</i>.</li>
+--   <li><i>of-dec <i>E</i> -denom /N</i> Add term /N as denominator of
+--   decimal number <i>E</i>.</li>
+--   <li><i>of-dec <i>E</i> -sign /N</i> Add term /N as sign of decimal
+--   number <i>E</i>, i.e., -1, 0, or 1.</li>
+--   </ul>
+consOfDec :: (CContent c) => RopCons c
+
+-- | Create <tt>of-dect</tt> relmap.
+relmapOfDec :: (CContent c) => Intmed c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
+
+-- | Create <tt>of-dec</tt> relkit.
+relkitOfDec :: (CContent c) => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>alt-dec /P -fracle <i>F</i></i> Alter fracle of decimal number
+--   to <i>F</i> in term /P.</li>
+--   </ul>
+consAltDec :: (CContent c) => RopCons c
+
+-- | Create <tt>alt-dec</tt> relmap.
+relmapAltDec :: (CContent c) => Intmed c -> (CopSet c, TermName, MaybeCox c) -> Relmap c
+
+-- | Create <tt>alt-dec</tt> relkit.
+relkitAltDec :: (CContent c) => (CopSet c, TermName, MaybeCox c) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>to-dec /P ...</i> Convert content of term /P ... to decimal
+--   number.</li>
+--   </ul>
+consToDec :: (CContent c) => RopCons c
+
+-- | Create <tt>to-dec</tt> relmap.
+relmapToDec :: (CContent c) => Intmed c -> [TermName] -> Relmap c
+
+-- | Create <tt>to-dec</tt> relkit.
+relkitToDec :: (CContent c) => [TermName] -> RelkitFlow c
 
 
 -- | Gadgets with content calculation.
@@ -328,31 +440,6 @@ consUnary :: (CContent c) => RopCons c
 
 -- | Create <tt>unary</tt> relmap.
 relmapUnary :: (CContent c) => Intmed c -> (TermName, [c]) -> Relmap c
-
-
--- | Accessor relmap operators.
-module Koshucode.Baala.Rop.Cox.Accessor
-
--- | Implementation of relational operators.
-ropsCoxAccessor :: (CContent c) => [Rop c]
-
--- | Create <tt>clock</tt> relmap.
-relmapClock :: (CContent c) => Intmed c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
-
--- | Create <tt>clock</tt> relkit.
-relkitClock :: (CContent c) => (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> RelkitFlow c
-
--- | Create <tt>clock-get</tt> relmap.
-relmapClockGet :: (CContent c) => Intmed c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
-
--- | Create <tt>clock-get</tt> relkit.
-relkitClockGet :: (CContent c) => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
-
--- | Create <tt>clock-alter</tt> relmap.
-relmapClockAlter :: (CContent c) => Intmed c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
-
--- | Create <tt>clock-alter</tt> relkit.
-relkitClockAlter :: (CContent c) => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
 
 -- | Relational operators with content calculation.

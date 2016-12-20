@@ -28,14 +28,14 @@
 <a class="number" name="line-19">19</a>
 <a class="number" name="line-20">20</a><a name="forbiddenInput"></a><span class='hs-comment'>-- | Forbidden input</span>
 <a class="number" name="line-21">21</a><span class='hs-definition'>forbiddenInput</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-22">22</a><span class='hs-definition'>forbiddenInput</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Forbidden input"</span>
+<a class="number" name="line-22">22</a><span class='hs-definition'>forbiddenInput</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftLine</span> <span class='hs-str'>"Forbidden input"</span>
 <a class="number" name="line-23">23</a>
 <a class="number" name="line-24">24</a><a name="unexpSect"></a><span class='hs-comment'>-- | Unexpedted section delimiter</span>
 <a class="number" name="line-25">25</a><span class='hs-definition'>unexpSect</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-26">26</a><span class='hs-definition'>unexpSect</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLines</span> <span class='hs-str'>"Unexpedted section delimiter"</span>
+<a class="number" name="line-26">26</a><span class='hs-definition'>unexpSect</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftLines</span> <span class='hs-str'>"Unexpedted section delimiter"</span>
 <a class="number" name="line-27">27</a>
 <a class="number" name="line-28">28</a><a name="unkAngleText"></a><span class='hs-comment'>-- | Unknown bracket text</span>
 <a class="number" name="line-29">29</a><span class='hs-definition'>unkAngleText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-30">30</a><span class='hs-definition'>unkAngleText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unknown bracket text"</span>
+<a class="number" name="line-30">30</a><span class='hs-definition'>unkAngleText</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftLine</span> <span class='hs-str'>"Unknown bracket text"</span>
 </pre></body>
 </html>

@@ -21,15 +21,15 @@
 <a class="number" name="line-12">12</a>
 <a class="number" name="line-13">13</a><a name="bug"></a><span class='hs-comment'>-- | BUG: /reason/</span>
 <a class="number" name="line-14">14</a><span class='hs-definition'>bug</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-15">15</a><span class='hs-definition'>bug</span> <span class='hs-varid'>reason</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-varop'>$</span> <span class='hs-str'>"BUG: "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>reason</span>
+<a class="number" name="line-15">15</a><span class='hs-definition'>bug</span> <span class='hs-varid'>reason</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftBecause</span> <span class='hs-varop'>$</span> <span class='hs-str'>"BUG: "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>reason</span>
 <a class="number" name="line-16">16</a>
-<a class="number" name="line-17">17</a><a name="adlib"></a><span class='hs-comment'>-- | AD-LIB: /reason/</span>
+<a class="number" name="line-17">17</a><a name="adlib"></a><span class='hs-comment'>-- | /reason/</span>
 <a class="number" name="line-18">18</a><span class='hs-definition'>adlib</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-19">19</a><span class='hs-definition'>adlib</span> <span class='hs-varid'>reason</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortBecause</span> <span class='hs-varop'>$</span> <span class='hs-str'>"AD-LIB: "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>reason</span>
+<a class="number" name="line-19">19</a><span class='hs-definition'>adlib</span> <span class='hs-varid'>reason</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftBecause</span> <span class='hs-varid'>reason</span>
 <a class="number" name="line-20">20</a>
 <a class="number" name="line-21">21</a><a name="unsupported"></a><span class='hs-comment'>-- | Unsupported feature.</span>
 <a class="number" name="line-22">22</a><span class='hs-definition'>unsupported</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-23">23</a><span class='hs-definition'>unsupported</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortLine</span> <span class='hs-str'>"Unsupported feature"</span>
+<a class="number" name="line-23">23</a><span class='hs-definition'>unsupported</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>leftLine</span> <span class='hs-str'>"Unsupported feature"</span>
 <a class="number" name="line-24">24</a>
 </pre></body>
 </html>

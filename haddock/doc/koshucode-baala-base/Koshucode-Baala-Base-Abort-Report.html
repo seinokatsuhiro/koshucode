@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.185.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.187.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -133,6 +133,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><li class="src short"
 	  ><a href="#v:cpMessage"
 	    >cpMessage</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    >), <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:cpMessageLines"
+	    >cpMessageLines</a
 	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:CodePosInfo"
 	    >CodePosInfo</a
 	    > -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -217,13 +239,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="src"
 	  ><a name="v:cpMessage" class="def"
 	    >cpMessage</a
+	    > :: <a href="Koshucode-Baala-Base-Abort-CodePos.html#t:CodePos"
+	    >CodePos</a
+	    > -&gt; (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    >), <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    >) <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#cpMessage');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert code position into message text:
+   location, before code, after code, and abort tag.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>cpMessage $ B.CodePos 0 &quot;&lt;stdin&gt;&quot; 1 &quot;abcdefg&quot; &quot;defg&quot;
+</code
+		></strong
+	      >(Just (1,3,&quot;&lt;stdin&gt;&quot;), Just &quot;abc&quot;, Just &quot;defg&quot;)
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cpMessageLines" class="def"
+	    >cpMessageLines</a
 	    > :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:CodePosInfo"
 	    >CodePosInfo</a
 	    > -&gt; [(<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
 	    >, <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTag"
 	    >AbortTag</a
-	    >)] <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#cpMessage');" href="javascript:void(0);" class="link"
+	    >)] <a onclick="showSource('src/Koshucode-Baala-Base-Abort-Report.html#cpMessageLines');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

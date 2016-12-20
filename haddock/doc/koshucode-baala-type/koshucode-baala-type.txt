@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -665,8 +665,8 @@ daysSec :: Sec -> DaysSec
 --   86400
 --   </pre>
 daySeconds :: (Num a) => a
-instance GHC.Classes.Ord Koshucode.Baala.Type.Time.Clock.Clock
 instance GHC.Classes.Eq Koshucode.Baala.Type.Time.Clock.Clock
+instance GHC.Classes.Ord Koshucode.Baala.Type.Time.Clock.Clock
 instance Koshucode.Baala.Type.Time.Clock.ToClock Koshucode.Baala.Type.Time.Clock.Clock
 instance Koshucode.Baala.Type.Time.Clock.ToClock Koshucode.Baala.Type.Time.Parts.ClockParts
 instance GHC.Show.Show Koshucode.Baala.Type.Time.Clock.Clock

@@ -12,78 +12,125 @@
 <a class="number" name="line-3">3</a><span class='hs-comment'>-- | Shorthand functions.</span>
 <a class="number" name="line-4">4</a>
 <a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Shorthand</span>
-<a class="number" name="line-6">6</a> <span class='hs-layout'>(</span> <span class='hs-layout'>(</span><span class='hs-varop'>&amp;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-7">7</a>   <span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-8">8</a>   <span class='hs-layout'>(</span><span class='hs-varop'>&lt;$$&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>   <span class='hs-varid'>int</span><span class='hs-layout'>,</span> <span class='hs-varid'>integer</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>   <span class='hs-varid'>nothing</span><span class='hs-layout'>,</span>
-<a class="number" name="line-11">11</a> <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-12">12</a>
-<a class="number" name="line-13">13</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Prelude</span> <span class='hs-varid'>hiding</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a class="number" name="line-14">14</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-15">15</a>
-<a class="number" name="line-16">16</a><span class='hs-keyword'>infixr</span> <span class='hs-num'>0</span> <span class='hs-varop'>&amp;</span>
+<a class="number" name="line-6">6</a> <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Infix operators</span>
+<a class="number" name="line-7">7</a>   <span class='hs-layout'>(</span><span class='hs-varop'>&amp;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-8">8</a>   <span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-9">9</a>   <span class='hs-layout'>(</span><span class='hs-varop'>&lt;$$&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>   <span class='hs-layout'>(</span><span class='hs-varop'>&lt;#&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;#!&gt;</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>
+<a class="number" name="line-12">12</a>   <span class='hs-comment'>-- * Functions</span>
+<a class="number" name="line-13">13</a>   <span class='hs-varid'>ordEq</span><span class='hs-layout'>,</span> <span class='hs-varid'>compareOn</span><span class='hs-layout'>,</span>
+<a class="number" name="line-14">14</a>   <span class='hs-varid'>int</span><span class='hs-layout'>,</span> <span class='hs-varid'>integer</span><span class='hs-layout'>,</span>
+<a class="number" name="line-15">15</a>   <span class='hs-varid'>nothing</span><span class='hs-layout'>,</span>
+<a class="number" name="line-16">16</a> <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a class="number" name="line-17">17</a>
-<a class="number" name="line-18">18</a><a name="&"></a><span class='hs-comment'>-- | Pairing operator.</span>
-<a class="number" name="line-19">19</a><span class='hs-comment'>--</span>
-<a class="number" name="line-20">20</a><span class='hs-comment'>--   &gt;&gt;&gt; "a" &amp; "b"</span>
-<a class="number" name="line-21">21</a><span class='hs-comment'>--   ("a", "b")</span>
-<a class="number" name="line-22">22</a><span class='hs-comment'>--</span>
-<a class="number" name="line-23">23</a><span class='hs-comment'>--   &gt;&gt;&gt; "a" &amp; "b" &amp; "c"</span>
-<a class="number" name="line-24">24</a><span class='hs-comment'>--   ("a", ("b", "c"))</span>
-<a class="number" name="line-25">25</a><span class='hs-comment'>--</span>
-<a class="number" name="line-26">26</a><span class='hs-comment'>{-# INLINE (&amp;) #-}</span>
-<a class="number" name="line-27">27</a><span class='hs-layout'>(</span><span class='hs-varop'>&amp;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
-<a class="number" name="line-28">28</a><a name="a"></a><span class='hs-definition'>a</span> <span class='hs-varop'>&amp;</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
-<a class="number" name="line-29">29</a>
-<a class="number" name="line-30">30</a><span class='hs-keyword'>infixr</span> <span class='hs-num'>6</span> <span class='hs-varop'>++</span>
-<a class="number" name="line-31">31</a>
-<a class="number" name="line-32">32</a><a name="++"></a><span class='hs-comment'>-- | Associative operator of monoid,</span>
-<a class="number" name="line-33">33</a><span class='hs-comment'>--   same as 'mappend' or infix '&lt;&gt;'.</span>
-<a class="number" name="line-34">34</a><span class='hs-comment'>{-# INLINE (++) #-}</span>
-<a class="number" name="line-35">35</a><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monoid</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span>
-<a class="number" name="line-36">36</a><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mappend</span>
+<a class="number" name="line-18">18</a><span class='hs-keyword'>import</span> <span class='hs-conid'>Prelude</span> <span class='hs-varid'>hiding</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
+<a class="number" name="line-19">19</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-20">20</a>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a><span class='hs-comment'>-- ============================================  Infix operators</span>
+<a class="number" name="line-23">23</a>
+<a class="number" name="line-24">24</a><span class='hs-keyword'>infixr</span> <span class='hs-num'>0</span> <span class='hs-varop'>&amp;</span>
+<a class="number" name="line-25">25</a>
+<a class="number" name="line-26">26</a><a name="&"></a><span class='hs-comment'>-- | Pairing operator.</span>
+<a class="number" name="line-27">27</a><span class='hs-comment'>--</span>
+<a class="number" name="line-28">28</a><span class='hs-comment'>--   &gt;&gt;&gt; "a" &amp; "b"</span>
+<a class="number" name="line-29">29</a><span class='hs-comment'>--   ("a", "b")</span>
+<a class="number" name="line-30">30</a><span class='hs-comment'>--</span>
+<a class="number" name="line-31">31</a><span class='hs-comment'>--   &gt;&gt;&gt; "a" &amp; "b" &amp; "c"</span>
+<a class="number" name="line-32">32</a><span class='hs-comment'>--   ("a", ("b", "c"))</span>
+<a class="number" name="line-33">33</a><span class='hs-comment'>--</span>
+<a class="number" name="line-34">34</a><span class='hs-comment'>{-# INLINE (&amp;) #-}</span>
+<a class="number" name="line-35">35</a><span class='hs-layout'>(</span><span class='hs-varop'>&amp;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
+<a class="number" name="line-36">36</a><a name="a"></a><span class='hs-definition'>a</span> <span class='hs-varop'>&amp;</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
 <a class="number" name="line-37">37</a>
-<a class="number" name="line-38">38</a><span class='hs-keyword'>infixl</span> <span class='hs-num'>4</span> <span class='hs-varop'>&lt;$$&gt;</span>
+<a class="number" name="line-38">38</a><span class='hs-keyword'>infixr</span> <span class='hs-num'>6</span> <span class='hs-varop'>++</span>
 <a class="number" name="line-39">39</a>
-<a class="number" name="line-40">40</a><a name="%3c$$%3e"></a><span class='hs-comment'>-- | Double fmap.</span>
-<a class="number" name="line-41">41</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;$$&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Functor</span> <span class='hs-varid'>f</span><span class='hs-layout'>,</span> <span class='hs-conid'>Functor</span> <span class='hs-varid'>g</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-varid'>g</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-varid'>g</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
-<a class="number" name="line-42">42</a><a name="f"></a><span class='hs-definition'>f</span> <span class='hs-varop'>&lt;$$&gt;</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>fmap</span> <span class='hs-varid'>f</span> <span class='hs-varop'>&lt;$&gt;</span> <span class='hs-varid'>x</span>
-<a class="number" name="line-43">43</a>
-<a class="number" name="line-44">44</a><a name="int"></a><span class='hs-comment'>-- | 'Int' shorthand.</span>
+<a class="number" name="line-40">40</a><a name="++"></a><span class='hs-comment'>-- | Associative operator of monoid,</span>
+<a class="number" name="line-41">41</a><span class='hs-comment'>--   same as 'mappend' or infix '&lt;&gt;'.</span>
+<a class="number" name="line-42">42</a><span class='hs-comment'>--</span>
+<a class="number" name="line-43">43</a><span class='hs-comment'>--   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"</span>
+<a class="number" name="line-44">44</a><span class='hs-comment'>--   Just "abcdef"</span>
 <a class="number" name="line-45">45</a><span class='hs-comment'>--</span>
-<a class="number" name="line-46">46</a><span class='hs-comment'>--   &gt;&gt;&gt; int 12</span>
-<a class="number" name="line-47">47</a><span class='hs-comment'>--   12</span>
-<a class="number" name="line-48">48</a><span class='hs-comment'>--</span>
-<a class="number" name="line-49">49</a><span class='hs-comment'>--   This is same as:</span>
-<a class="number" name="line-50">50</a><span class='hs-comment'>--</span>
-<a class="number" name="line-51">51</a><span class='hs-comment'>--   &gt;&gt;&gt; 12 :: Int</span>
-<a class="number" name="line-52">52</a><span class='hs-comment'>--   12</span>
+<a class="number" name="line-46">46</a><span class='hs-comment'>{-# INLINE (++) #-}</span>
+<a class="number" name="line-47">47</a><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monoid</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span>
+<a class="number" name="line-48">48</a><span class='hs-layout'>(</span><span class='hs-varop'>++</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mappend</span>
+<a class="number" name="line-49">49</a>
+<a class="number" name="line-50">50</a><span class='hs-keyword'>infixl</span> <span class='hs-num'>4</span> <span class='hs-varop'>&lt;$$&gt;</span>
+<a class="number" name="line-51">51</a>
+<a class="number" name="line-52">52</a><a name="%3c$$%3e"></a><span class='hs-comment'>-- | Double fmap.</span>
 <a class="number" name="line-53">53</a><span class='hs-comment'>--</span>
-<a class="number" name="line-54">54</a><span class='hs-comment'>{-# INLINE int #-}</span>
-<a class="number" name="line-55">55</a><span class='hs-definition'>int</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Int</span>
-<a class="number" name="line-56">56</a><span class='hs-definition'>int</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
-<a class="number" name="line-57">57</a>
-<a class="number" name="line-58">58</a><a name="integer"></a><span class='hs-comment'>-- | 'Integer' shorthand.</span>
-<a class="number" name="line-59">59</a><span class='hs-comment'>--</span>
-<a class="number" name="line-60">60</a><span class='hs-comment'>--   &gt;&gt;&gt; integer 12</span>
-<a class="number" name="line-61">61</a><span class='hs-comment'>--   12</span>
-<a class="number" name="line-62">62</a><span class='hs-comment'>--</span>
-<a class="number" name="line-63">63</a><span class='hs-comment'>--   This is same as:</span>
-<a class="number" name="line-64">64</a><span class='hs-comment'>--</span>
-<a class="number" name="line-65">65</a><span class='hs-comment'>--   &gt;&gt;&gt; 12 :: Integer</span>
-<a class="number" name="line-66">66</a><span class='hs-comment'>--   12</span>
-<a class="number" name="line-67">67</a><span class='hs-comment'>--</span>
-<a class="number" name="line-68">68</a><span class='hs-comment'>{-# INLINE integer #-}</span>
-<a class="number" name="line-69">69</a><span class='hs-definition'>integer</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Integer</span>
-<a class="number" name="line-70">70</a><span class='hs-definition'>integer</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
-<a class="number" name="line-71">71</a>
-<a class="number" name="line-72">72</a><a name="nothing"></a><span class='hs-comment'>-- | Function which always returns 'Nothing'.</span>
-<a class="number" name="line-73">73</a><span class='hs-comment'>--</span>
-<a class="number" name="line-74">74</a><span class='hs-comment'>--   &gt;&gt;&gt; nothing True :: Maybe String</span>
-<a class="number" name="line-75">75</a><span class='hs-comment'>--   Nothing</span>
-<a class="number" name="line-76">76</a><span class='hs-comment'>--</span>
-<a class="number" name="line-77">77</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>b</span>
-<a class="number" name="line-78">78</a><span class='hs-definition'>nothing</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
+<a class="number" name="line-54">54</a><span class='hs-comment'>--   &gt;&gt;&gt; length &lt;$$&gt; [("a", "apple"), ("b", "banana"), ("c", "cocoa")]</span>
+<a class="number" name="line-55">55</a><span class='hs-comment'>--   [("a",5), ("b",6), ("c",5)]</span>
+<a class="number" name="line-56">56</a><span class='hs-comment'>--</span>
+<a class="number" name="line-57">57</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;$$&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Functor</span> <span class='hs-varid'>f</span><span class='hs-layout'>,</span> <span class='hs-conid'>Functor</span> <span class='hs-varid'>g</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-varid'>g</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-varid'>g</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
+<a class="number" name="line-58">58</a><a name="f"></a><span class='hs-definition'>f</span> <span class='hs-varop'>&lt;$$&gt;</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>fmap</span> <span class='hs-varid'>f</span> <span class='hs-varop'>&lt;$&gt;</span> <span class='hs-varid'>x</span>
+<a class="number" name="line-59">59</a>
+<a class="number" name="line-60">60</a><a name="%3c%23%3e"></a><span class='hs-comment'>-- | Monadic mapping, same as 'mapM'.</span>
+<a class="number" name="line-61">61</a><span class='hs-comment'>{-# INLINE (&lt;#&gt;) #-}</span>
+<a class="number" name="line-62">62</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;#&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monad</span> <span class='hs-varid'>m</span><span class='hs-layout'>,</span> <span class='hs-conid'>Traversable</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
+<a class="number" name="line-63">63</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;#&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span>
+<a class="number" name="line-64">64</a>
+<a class="number" name="line-65">65</a><a name="%3c%23!%3e"></a><span class='hs-comment'>-- | Execution by monadic mapping, same as 'mapM_'.</span>
+<a class="number" name="line-66">66</a><span class='hs-comment'>{-# INLINE (&lt;#!&gt;) #-}</span>
+<a class="number" name="line-67">67</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;#!&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Monad</span> <span class='hs-varid'>m</span><span class='hs-layout'>,</span> <span class='hs-conid'>Traversable</span> <span class='hs-varid'>t</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>t</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>m</span> <span class='hs-conid'>()</span>
+<a class="number" name="line-68">68</a><span class='hs-layout'>(</span><span class='hs-varop'>&lt;#!&gt;</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM_</span>
+<a class="number" name="line-69">69</a>
+<a class="number" name="line-70">70</a>
+<a class="number" name="line-71">71</a><span class='hs-comment'>-- ============================================  Function</span>
+<a class="number" name="line-72">72</a>
+<a class="number" name="line-73">73</a><a name="ordEq"></a><span class='hs-comment'>-- | Test equality using 'Ord' method.</span>
+<a class="number" name="line-74">74</a><span class='hs-comment'>--   This function can be used for implementing 'Eq' instance.</span>
+<a class="number" name="line-75">75</a><span class='hs-comment'>--</span>
+<a class="number" name="line-76">76</a><span class='hs-comment'>--   &gt; instance Eq X where</span>
+<a class="number" name="line-77">77</a><span class='hs-comment'>--   &gt;   (==) = ordEq</span>
+<a class="number" name="line-78">78</a><span class='hs-comment'>--</span>
+<a class="number" name="line-79">79</a><span class='hs-definition'>ordEq</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a class="number" name="line-80">80</a><span class='hs-definition'>ordEq</span> <span class='hs-varid'>x</span> <span class='hs-varid'>y</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>y</span><span class='hs-layout'>)</span> <span class='hs-varop'>==</span> <span class='hs-conid'>EQ</span>
+<a class="number" name="line-81">81</a>
+<a class="number" name="line-82">82</a><a name="compareOn"></a><span class='hs-comment'>-- | @compareOn@ /f/ /x/ /y/ comapres /f x/ and /f y/</span>
+<a class="number" name="line-83">83</a><span class='hs-comment'>--   instead of /x/ and /y/.</span>
+<a class="number" name="line-84">84</a><span class='hs-comment'>--</span>
+<a class="number" name="line-85">85</a><span class='hs-comment'>--   &gt;&gt;&gt; compareOn length "foo" "bar"</span>
+<a class="number" name="line-86">86</a><span class='hs-comment'>--   EQ</span>
+<a class="number" name="line-87">87</a><span class='hs-comment'>--</span>
+<a class="number" name="line-88">88</a><span class='hs-definition'>compareOn</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Ordering</span>
+<a class="number" name="line-89">89</a><span class='hs-definition'>compareOn</span> <span class='hs-varid'>f</span> <span class='hs-varid'>x</span> <span class='hs-varid'>y</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-varid'>x</span> <span class='hs-varop'>`compare`</span> <span class='hs-varid'>f</span> <span class='hs-varid'>y</span>
+<a class="number" name="line-90">90</a>
+<a class="number" name="line-91">91</a><a name="int"></a><span class='hs-comment'>-- | 'Int' shorthand.</span>
+<a class="number" name="line-92">92</a><span class='hs-comment'>--</span>
+<a class="number" name="line-93">93</a><span class='hs-comment'>--   &gt;&gt;&gt; int 12</span>
+<a class="number" name="line-94">94</a><span class='hs-comment'>--   12</span>
+<a class="number" name="line-95">95</a><span class='hs-comment'>--</span>
+<a class="number" name="line-96">96</a><span class='hs-comment'>--   This is same as:</span>
+<a class="number" name="line-97">97</a><span class='hs-comment'>--</span>
+<a class="number" name="line-98">98</a><span class='hs-comment'>--   &gt;&gt;&gt; 12 :: Int</span>
+<a class="number" name="line-99">99</a><span class='hs-comment'>--   12</span>
+<a class="number" name="line-100">100</a><span class='hs-comment'>--</span>
+<a class="number" name="line-101">101</a><span class='hs-comment'>{-# INLINE int #-}</span>
+<a class="number" name="line-102">102</a><span class='hs-definition'>int</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Int</span>
+<a class="number" name="line-103">103</a><span class='hs-definition'>int</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
+<a class="number" name="line-104">104</a>
+<a class="number" name="line-105">105</a><a name="integer"></a><span class='hs-comment'>-- | 'Integer' shorthand.</span>
+<a class="number" name="line-106">106</a><span class='hs-comment'>--</span>
+<a class="number" name="line-107">107</a><span class='hs-comment'>--   &gt;&gt;&gt; integer 12</span>
+<a class="number" name="line-108">108</a><span class='hs-comment'>--   12</span>
+<a class="number" name="line-109">109</a><span class='hs-comment'>--</span>
+<a class="number" name="line-110">110</a><span class='hs-comment'>--   This is same as:</span>
+<a class="number" name="line-111">111</a><span class='hs-comment'>--</span>
+<a class="number" name="line-112">112</a><span class='hs-comment'>--   &gt;&gt;&gt; 12 :: Integer</span>
+<a class="number" name="line-113">113</a><span class='hs-comment'>--   12</span>
+<a class="number" name="line-114">114</a><span class='hs-comment'>--</span>
+<a class="number" name="line-115">115</a><span class='hs-comment'>{-# INLINE integer #-}</span>
+<a class="number" name="line-116">116</a><span class='hs-definition'>integer</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>O</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>Integer</span>
+<a class="number" name="line-117">117</a><span class='hs-definition'>integer</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
+<a class="number" name="line-118">118</a>
+<a class="number" name="line-119">119</a><a name="nothing"></a><span class='hs-comment'>-- | Function which always returns 'Nothing'.</span>
+<a class="number" name="line-120">120</a><span class='hs-comment'>--</span>
+<a class="number" name="line-121">121</a><span class='hs-comment'>--   &gt;&gt;&gt; nothing True :: Maybe String</span>
+<a class="number" name="line-122">122</a><span class='hs-comment'>--   Nothing</span>
+<a class="number" name="line-123">123</a><span class='hs-comment'>--</span>
+<a class="number" name="line-124">124</a><span class='hs-definition'>nothing</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-varid'>b</span>
+<a class="number" name="line-125">125</a><span class='hs-definition'>nothing</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
 </pre></body>
 </html>

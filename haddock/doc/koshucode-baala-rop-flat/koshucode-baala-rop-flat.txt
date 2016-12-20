@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Partial-order scale.
@@ -80,7 +80,7 @@ dumpCox :: (Show c) => c -> Ab a
 dumpRel :: (CRel c, MixEncode c) => Rel c -> Ab a
 
 -- | Dump token trees
-dumpTrees :: [TTree] -> Ab a
+dumpTrees :: [Tree] -> Ab a
 
 -- | Odd attribute
 oddAttr :: Ab a
@@ -117,10 +117,10 @@ module Koshucode.Baala.Rop.Base.Get
 type RopGet c a = Intmed c  Use of relmap operator -> String  Name of keyword, e.g., @\"-term\"@ -> Ab a  Attribute of relmap
 
 -- | Test usage tag.
-getTag :: Intmed c -> String -> Bool
+getTag :: Intmed c -> ParaTag -> Bool
 
 -- | Get usage tags.
-getTags :: Intmed c -> [String]
+getTags :: Intmed c -> [ParaTag]
 
 -- | Get optional parameter with default value.
 getOption :: a -> RopGet c a -> RopGet c a
@@ -142,16 +142,16 @@ getSwitch :: Intmed c -> String -> Ab Bool
 getWord :: RopGet c String
 
 -- | Get trees as single tree.
-getTree :: RopGet c TTree
+getTree :: RopGet c Tree
 
 -- | Get trees from parameter.
-getTrees :: RopGet c [TTree]
+getTrees :: RopGet c [Tree]
 
 -- | Get word-and-tree list.
-getWordTrees :: RopGet c [Named TTree]
+getWordTrees :: RopGet c [Named Tree]
 
 -- | Get trees delimited by colon.
-getTreesByColon :: RopGet c [[TTree]]
+getTreesByColon :: RopGet c [[Tree]]
 
 -- | Get a relmap from operator use.
 --   
@@ -188,20 +188,25 @@ getTermPairs :: RopGet c [TermName2]
 getTermsColon :: RopGet c [[TermName]]
 
 -- | Get list of tree terms.
-getTermTrees :: RopGet c [Term TTree]
+getTermTrees :: RopGet c [Term Tree]
 
 
 -- | Definition of relmap operators.
 module Koshucode.Baala.Rop.Base.Define
 
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (RopCons c, RopUsage, AttrLayout)
+
+-- | <i>Warning: This is only used in defined module.</i>
+type RopDefine c = (RopCons c, AttrLayout)
 
 -- | Make implementations of relmap operators.
 ropList :: RopGroup -> [RopDefine c] -> [Rop c]
 
+-- | Make implementations of relmap operators.
+rops :: (ToAttrLayout lay) => RopGroup -> [(RopCons c, lay)] -> [Rop c]
+
 -- | Make definition of relmap operator.
-def :: RopCons c -> RopUsage -> String -> RopDefine c
+rop :: RopCons c -> [(AttrUsage, String)] -> RopDefine c
 
 -- | Add aliases of relmap operator.
 ropAlias :: [(RopName, RopName)] -> Map [Rop c]

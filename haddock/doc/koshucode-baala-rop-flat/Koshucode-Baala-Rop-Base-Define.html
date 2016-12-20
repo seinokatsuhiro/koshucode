@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.185.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.187.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -71,9 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >RopDefine</a
 	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 	    >AttrLayout</a
 	    >)</li
 	  ><li class="src short"
@@ -87,15 +85,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >Rop</a
 	    > c]</li
 	  ><li class="src short"
-	  ><a href="#v:def"
-	    >def</a
+	  ><a href="#v:rops"
+	    >rops</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+	    >ToAttrLayout</a
+	    > lay =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopGroup"
+	    >RopGroup</a
+	    > -&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c, lay)] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:rop"
+	    >rop</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    > c -&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+	    >AttrUsage</a
+	    >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Rop-Base-Define.html#t:RopDefine"
+	    >)] -&gt; <a href="Koshucode-Baala-Rop-Base-Define.html#t:RopDefine"
 	    >RopDefine</a
 	    > c</li
 	  ><li class="src short"
@@ -123,15 +133,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >RopDefine</a
 	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 	    >AttrLayout</a
 	    >) <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#RopDefine');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
+	  ><div class="warning"
+	    ><p
+	      >Warning: This is only used in defined module.</p
+	      ></div
+	    ><p
 	    >Constructor, usage, and attribute sorter</p
 	    ></div
 	  ></div
@@ -185,9 +197,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:def" class="def"
-	    >def</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#def');" href="javascript:void(0);" class="link"
+	  ><a name="v:rops" class="def"
+	    >rops</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+	    >ToAttrLayout</a
+	    > lay =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopGroup"
+	    >RopGroup</a
+	    > -&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c, lay)] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#rops');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Make implementations of relmap operators.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:rop" class="def"
+	    >rop</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#rop');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -206,22 +238,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-		  >RopUsage</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Rop usage</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		>-&gt; [(<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+		  >AttrUsage</a
+		  >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		  >String</a
-		  ></td
+		  >)]</td
 		><td class="doc"
 		><p
-		  >Attribute layout</p
+		  >Usage text and attribute layout</p
 		  ></td
 		></tr
 	      ><tr

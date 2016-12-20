@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.185.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.187.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,6 +51,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Overture.Shorthand</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Infix operators</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Functions</a
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -83,6 +97,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >Functor</a
 	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b)</li
 	  ><li class="src short"
+	  ><a href="#v:-60--35--62-"
+	    >(&lt;#&gt;)</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t) =&gt; (a -&gt; m b) -&gt; t a -&gt; m (t b)</li
+	  ><li class="src short"
+	  ><a href="#v:-60--35--33--62-"
+	    >(&lt;#!&gt;)</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t) =&gt; (a -&gt; m b) -&gt; t a -&gt; m ()</li
+	  ><li class="src short"
+	  ><a href="#v:ordEq"
+	    >ordEq</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; a -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:compareOn"
+	    >compareOn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > b =&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:int"
 	    >int</a
 	    > :: <a href="Koshucode-Baala-Overture-Type.html#t:Map"
@@ -107,8 +153,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Infix operators</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:-38-" class="def"
@@ -168,6 +214,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	      > or infix <code
 	      >&lt;&gt;</code
 	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>Just &quot;abc&quot; ++ Nothing ++ Just &quot;def&quot;
+</code
+		></strong
+	      >Just &quot;abcdef&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -188,6 +244,129 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ><div class="doc"
 	  ><p
 	    >Double fmap.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>length &lt;$$&gt; [(&quot;a&quot;, &quot;apple&quot;), (&quot;b&quot;, &quot;banana&quot;), (&quot;c&quot;, &quot;cocoa&quot;)]
+</code
+		></strong
+	      >[(&quot;a&quot;,5), (&quot;b&quot;,6), (&quot;c&quot;,5)]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-60--35--62-" class="def"
+	    >(&lt;#&gt;)</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t) =&gt; (a -&gt; m b) -&gt; t a -&gt; m (t b) <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#%3C%23%3E');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Monadic mapping, same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#v:mapM"
+		>mapM</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-60--35--33--62-" class="def"
+	    >(&lt;#!&gt;)</a
+	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/package/base/docs/Data-Traversable.html#t:Traversable"
+	    >Traversable</a
+	    > t) =&gt; (a -&gt; m b) -&gt; t a -&gt; m () <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#%3C%23%21%3E');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Execution by monadic mapping, same as <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Foldable.html#v:mapM_"
+		>mapM_</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Functions</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ordEq" class="def"
+	    >ordEq</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; a -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#ordEq');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test equality using <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+		>Ord</a
+		></code
+	      > method.
+   This function can be used for implementing <code
+	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+		>Eq</a
+		></code
+	      > instance.</p
+	    ><pre
+	    >instance Eq X where
+  (==) = ordEq</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:compareOn" class="def"
+	    >compareOn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > b =&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ordering"
+	    >Ordering</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Shorthand.html#compareOn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      >compareOn</code
+	      > <em
+	      >f</em
+	      > <em
+	      >x</em
+	      > <em
+	      >y</em
+	      > comapres <em
+	      >f x</em
+	      > and <em
+	      >f y</em
+	      >
+   instead of <em
+	      >x</em
+	      > and <em
+	      >y</em
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>compareOn length &quot;foo&quot; &quot;bar&quot;
+</code
+		></strong
+	      >EQ
+</pre
 	    ></div
 	  ></div
 	><div class="top"

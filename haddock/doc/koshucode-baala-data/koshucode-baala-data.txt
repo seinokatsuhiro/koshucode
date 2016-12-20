@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Message list.
@@ -77,10 +77,10 @@ cacheT :: CacheT
 --   &gt;&gt;&gt; S.toTree "/a/x" &gt;&gt;= treeFlatName
 --   Left ...
 --   </pre>
-treeFlatName :: TTree -> Ab TermName
+treeFlatName :: Tree -> Ab TermName
 
 -- | Cached version of <a>treeFlatName</a>.
-treeFlatNameCached :: CacheT -> TTree -> Ab (CacheT, TermName)
+treeFlatNameCached :: CacheT -> Tree -> Ab (CacheT, TermName)
 
 -- | Read flat term names.
 --   
@@ -88,7 +88,7 @@ treeFlatNameCached :: CacheT -> TTree -> Ab (CacheT, TermName)
 --   &gt;&gt;&gt; S.toTrees "/a +/b -/c" &gt;&gt;= treesFlatNames
 --   Right [TermName EQ "a",TermName GT "b",TermName LT "c"]
 --   </pre>
-treesFlatNames :: [TTree] -> Ab [TermName]
+treesFlatNames :: [Tree] -> Ab [TermName]
 
 -- | Read list of named token trees from token trees.
 --   
@@ -97,14 +97,14 @@ treesFlatNames :: [TTree] -> Ab [TermName]
 --   Right [ (TermName EQ "a", [TreeL ...]),
 --           (TermName EQ "b", [TreeL ...]) ]
 --   </pre>
-treesTerms :: [TTree] -> Ab [Term [TTree]]
+treesTerms :: [Tree] -> Ab [Term [Tree]]
 
 -- | Cached version of <a>treesTerms</a>.
-treesTermsCached :: CacheT -> [TTree] -> Ab (CacheT, [Term [TTree]])
+treesTermsCached :: CacheT -> [Tree] -> Ab (CacheT, [Term [Tree]])
 
 -- | Read list of named token trees from token trees. This function wraps
 --   long branches into group.
-treesTerms1 :: [TTree] -> Ab [Term TTree]
+treesTerms1 :: [Tree] -> Ab [Term Tree]
 
 -- | Decode a list of name-and-name pairs.
 --   
@@ -112,7 +112,7 @@ treesTerms1 :: [TTree] -> Ab [Term TTree]
 --   &gt;&gt;&gt; S.toTrees "/a /x /b /y" &gt;&gt;= treesFlatNamePairs
 --   Right [(TermName EQ "a", TermName EQ "x"), (TermName EQ "b", TermName EQ "y")]
 --   </pre>
-treesFlatNamePairs :: [TTree] -> Ab [TermName2]
+treesFlatNamePairs :: [Tree] -> Ab [TermName2]
 
 -- | Decode term names grouped by colons.
 --   
@@ -122,7 +122,7 @@ treesFlatNamePairs :: [TTree] -> Ab [TermName2]
 --         , [TermName EQ "p", TermName EQ "q"]
 --         , [TermName EQ "x", TermName EQ "y"] ]
 --   </pre>
-treesNamesByColon :: [TTree] -> Ab [[TermName]]
+treesNamesByColon :: [Tree] -> Ab [[TermName]]
 
 -- | Decode term names with optional complement symbol.
 --   
@@ -135,7 +135,7 @@ treesNamesByColon :: [TTree] -> Ab [[TermName]]
 --   &gt;&gt;&gt; S.toTrees "/a /b" &gt;&gt;= treesFlatNamesCo
 --   Right (False, [TermName EQ "a",TermName EQ "b"])
 --   </pre>
-treesFlatNamesCo :: [TTree] -> Ab (Bool, [TermName])
+treesFlatNamesCo :: [Tree] -> Ab (Bool, [TermName])
 
 
 -- | Decode specific content.
@@ -152,7 +152,7 @@ module Koshucode.Baala.Data.Decode.Type
 --   &gt;&gt;&gt; S.toTrees "\"aa\" \"bb\"" &gt;&gt;= treesTexts True
 --   Right ["aabb"]
 --   </pre>
-treesTexts :: Bool -> [TTree] -> Ab [String]
+treesTexts :: Bool -> [Tree] -> Ab [String]
 
 -- | Get text from token tree.
 --   
@@ -160,7 +160,7 @@ treesTexts :: Bool -> [TTree] -> Ab [String]
 --   &gt;&gt;&gt; S.toTree "aa" &gt;&gt;= treeText False
 --   Right "aa"
 --   </pre>
-treeText :: Bool -> TTree -> Ab String
+treeText :: Bool -> Tree -> Ab String
 
 -- | Get interpretation from token trees.
 --   
@@ -169,10 +169,10 @@ treeText :: Bool -> TTree -> Ab String
 --   Right (Interp { interpWords = [InterpText "term", InterpTerm "a"],
 --                   interpTerms = ["a"] })
 --   </pre>
-treesInterp :: [TTree] -> Ab Interp
+treesInterp :: [Tree] -> Ab Interp
 
 -- | Decode type content.
-treesType :: [TTree] -> Ab Type
+treesType :: [Tree] -> Ab Type
 
 
 -- | Decode numeric contents.
@@ -184,7 +184,7 @@ module Koshucode.Baala.Data.Decode.Numeric
 --   &gt;&gt;&gt; S.toTrees "-123 450.00" &gt;&gt;= treesDigits
 --   Right "-123450.00"
 --   </pre>
-treesDigits :: [TTree] -> Ab String
+treesDigits :: [Tree] -> Ab String
 
 -- | Get clock from token.
 --   
@@ -210,7 +210,7 @@ tokenClock :: Token -> Ab Clock
 --   &gt;&gt;&gt; S.toTrees "2013-#16" &gt;&gt;= treesTime
 --   Right 2013-#16
 --   </pre>
-treesTime :: [TTree] -> Ab Time
+treesTime :: [Tree] -> Ab Time
 
 -- | Get time from string.
 --   
@@ -491,6 +491,9 @@ joinContent :: CContent c => [c] -> Ab c
 -- | Order of content type.
 typeOrder :: CContent c => c -> Int
 
+-- | Convert some content to decimal number.
+toDec :: (CContent c) => Map c
+
 
 -- | Content encoder.
 module Koshucode.Baala.Data.Class.Encode
@@ -718,7 +721,7 @@ CopTree :: BlankName -> (CopTree) -> Cop c
 type CopCox c = [Cox c] -> Ab (Cox c)
 
 -- | Tree-level syntax.
-type CopTree = [TTree] -> Ab TTree
+type CopTree = [Tree] -> Ab Tree
 
 -- | Name of content operator.
 copName :: Cop c -> BlankName
@@ -790,10 +793,10 @@ module Koshucode.Baala.Data.Class
 module Koshucode.Baala.Data.Decode.Content
 
 -- | Content decoder.
-type DecodeContent c = TTree -> Ab c
+type DecodeContent c = Tree -> Ab c
 
 -- | Content calculator.
-type CalcContent c = TTree -> Ab c
+type CalcContent c = Tree -> Ab c
 
 -- | Decode content from string.
 stringContent :: (CContent c) => String -> Ab c
@@ -803,7 +806,7 @@ treeContent :: (CContent c) => DecodeContent c
 
 -- | Decode judge from token trees. Judges itself are not content type. It
 --   can be only used in the top-level of resources.
-treesJudge :: (CContent c) => CacheT -> AssertType -> JudgeClass -> [TTree] -> Ab (CacheT, Judge c)
+treesJudge :: (CContent c) => CacheT -> AssertType -> JudgeClass -> [Tree] -> Ab (CacheT, Judge c)
 
 
 -- | Dataset as a set of judges.
@@ -1082,7 +1085,7 @@ instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.C
 module Koshucode.Baala.Data.Church.Build
 
 -- | Construct content expression from token tree.
-treeCox :: (CContent c) => CopSet c -> TTree -> Ab (Cox c)
+treeCox :: (CContent c) => CopSet c -> Tree -> Ab (Cox c)
 
 -- | Insert fresh form into indexed expression.
 coxForm :: [CodePos] -> CoxTag -> [String] -> Map (Cox c)

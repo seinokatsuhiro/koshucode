@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Writer
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-writer-0.185.0.0: Writers for the Koshu calculator</p
+      >koshucode-baala-writer-0.187.0.0: Writers for the Koshu calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,6 +58,66 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Writer
 	><div class="doc"
 	><p
 	  >HTML output.</p
+	  ><p
+	  >Relations (<code
+	    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
+	      >Rel</a
+	      ></code
+	    >) are formatted like:</p
+	  ><pre
+	  >&lt;div class=&quot;named-relation&quot;&gt;
+  &lt;p class=&quot;name&quot;&gt;JUDGEMENT-CLASS
+  &lt;table class=&quot;relation&quot;&gt;
+    &lt;tr class=&quot;heading&quot;&gt;
+      &lt;td class=&quot;term-name&quot;&gt;&lt;span class=&quot;term-slash&quot;&gt;/&lt;/span&gt;TERM-NAME
+      &lt;td class=&quot;term-name&quot;&gt;&lt;span class=&quot;term-slash&quot;&gt;/&lt;/span&gt;TERM-NAME
+      ...
+    &lt;tr class=&quot;tuple&quot;&gt;
+      &lt;td&gt;CONTENT
+      &lt;td&gt;CONTENT
+      ...
+    &lt;tr class=&quot;tuple&quot;&gt;
+      &lt;td&gt;CONTENT
+      &lt;td&gt;CONTENT
+      ...
+    ...</pre
+	  ><p
+	  >Abort reasons (<code
+	    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	      >AbortReason</a
+	      ></code
+	    >) are formatted like:</p
+	  ><pre
+	  >&lt;div class=&quot;abort&quot;&gt;
+  &lt;div class=&quot;abort-title&quot;&gt;Aborted
+  &lt;div class=&quot;abort-reason&quot;&gt;MAIN-REASON
+  &lt;div class=&quot;abort-detail&quot;&gt;
+    &lt;div&gt;DETAILED-REASON
+    &lt;div&gt;DETAILED-REASON
+    ...
+
+  &lt;div class=&quot;abort-source&quot;&gt;
+    &lt;div class=&quot;abort-pos&quot;&gt;
+      &lt;div class=&quot;abort-index&quot;&gt;
+        &lt;span class=&quot;abort-line&quot;&gt;LINE
+        &lt;span class=&quot;abort-char&quot;&gt;CHAR
+        &lt;span class=&quot;abort-path&quot;&gt;PATH
+      &lt;pre class=&quot;abort-before&quot;&gt;BEFORE-CODE
+      &lt;pre class=&quot;abort-after&quot;&gt;AFTER-CODE
+
+    &lt;div class=&quot;abort-pos&quot;&gt;
+      &lt;div class=&quot;abort-index&quot;&gt;
+        &lt;span class=&quot;abort-line&quot;&gt;LINE
+        &lt;span class=&quot;abort-char&quot;&gt;CHAR
+        &lt;span class=&quot;abort-path&quot;&gt;PATH
+      &lt;pre class=&quot;abort-before&quot;&gt;BEFORE-CODE
+      &lt;pre class=&quot;abort-after&quot;&gt;AFTER-CODE
+    ...
+
+  &lt;div class=&quot;abort-note&quot;&gt;
+    &lt;pre&gt;NOTE-LINE
+    &lt;pre&gt;NOTE-LINE
+    ...</pre
 	  ></div
 	></div
       ><div id="synopsis"

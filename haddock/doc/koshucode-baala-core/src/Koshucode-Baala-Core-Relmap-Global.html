@@ -8,38 +8,38 @@
 </head>
 <body>
 <pre><a class="number" name="line-1">1</a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
-<a class="number" name="line-2">2</a><span class='hs-comment'>{-# LANGUAGE PatternSynonyms #-}</span>
-<a class="number" name="line-3">3</a>
-<a class="number" name="line-4">4</a><span class='hs-comment'>-- | Global parameters.</span>
-<a class="number" name="line-5">5</a>
-<a class="number" name="line-6">6</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Global</span>
-<a class="number" name="line-7">7</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Global parameter</span>
-<a class="number" name="line-8">8</a>    <span class='hs-conid'>Global'</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-9">9</a>    <span class='hs-varid'>globalVersionText</span><span class='hs-layout'>,</span>
-<a class="number" name="line-10">10</a>    <span class='hs-varid'>globalCommandLine</span><span class='hs-layout'>,</span>
-<a class="number" name="line-11">11</a>    <span class='hs-varid'>globalFill</span><span class='hs-layout'>,</span>
-<a class="number" name="line-12">12</a>    <span class='hs-varid'>globalRops</span><span class='hs-layout'>,</span> <span class='hs-varid'>globalRopsAdd</span><span class='hs-layout'>,</span>
-<a class="number" name="line-13">13</a>    <span class='hs-varid'>globalCops</span><span class='hs-layout'>,</span> <span class='hs-varid'>globalCopset</span><span class='hs-layout'>,</span>
-<a class="number" name="line-14">14</a>    <span class='hs-varid'>globalInfix</span><span class='hs-layout'>,</span>
-<a class="number" name="line-15">15</a>    <span class='hs-varid'>globalAbort</span><span class='hs-layout'>,</span>
-<a class="number" name="line-16">16</a>    <span class='hs-varid'>global'</span><span class='hs-layout'>,</span>
-<a class="number" name="line-17">17</a>
-<a class="number" name="line-18">18</a>    <span class='hs-comment'>-- * Getting global parameter</span>
-<a class="number" name="line-19">19</a>    <span class='hs-conid'>GetGlobal</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-20">20</a>    <span class='hs-varid'>ropGlobal</span><span class='hs-layout'>,</span>
-<a class="number" name="line-21">21</a>    <span class='hs-varid'>ropCopset</span><span class='hs-layout'>,</span>
-<a class="number" name="line-22">22</a>
-<a class="number" name="line-23">23</a>    <span class='hs-comment'>-- * Operator set</span>
-<a class="number" name="line-24">24</a>    <span class='hs-conid'>OpSet'</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-25">25</a>    <span class='hs-varid'>opsetFill</span><span class='hs-layout'>,</span>
-<a class="number" name="line-26">26</a>
-<a class="number" name="line-27">27</a>    <span class='hs-comment'>-- * Feature</span>
-<a class="number" name="line-28">28</a>    <span class='hs-conid'>Feature</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a class="number" name="line-29">29</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-30">30</a>
-<a class="number" name="line-31">31</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Version</span>                        <span class='hs-keyword'>as</span> <span class='hs-conid'>Ver</span>
-<a class="number" name="line-32">32</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
-<a class="number" name="line-33">33</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-2">2</a>
+<a class="number" name="line-3">3</a><span class='hs-comment'>-- | Global parameters.</span>
+<a class="number" name="line-4">4</a>
+<a class="number" name="line-5">5</a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Global</span>
+<a class="number" name="line-6">6</a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Global parameter</span>
+<a class="number" name="line-7">7</a>    <span class='hs-conid'>Global'</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-8">8</a>    <span class='hs-varid'>globalVersionText</span><span class='hs-layout'>,</span>
+<a class="number" name="line-9">9</a>    <span class='hs-varid'>globalCommandLine</span><span class='hs-layout'>,</span>
+<a class="number" name="line-10">10</a>    <span class='hs-varid'>globalFill</span><span class='hs-layout'>,</span>
+<a class="number" name="line-11">11</a>    <span class='hs-varid'>globalRops</span><span class='hs-layout'>,</span> <span class='hs-varid'>globalRopsAdd</span><span class='hs-layout'>,</span>
+<a class="number" name="line-12">12</a>    <span class='hs-varid'>globalCops</span><span class='hs-layout'>,</span> <span class='hs-varid'>globalCopset</span><span class='hs-layout'>,</span>
+<a class="number" name="line-13">13</a>    <span class='hs-varid'>globalInfix</span><span class='hs-layout'>,</span>
+<a class="number" name="line-14">14</a>    <span class='hs-varid'>globalAbort</span><span class='hs-layout'>,</span>
+<a class="number" name="line-15">15</a>    <span class='hs-varid'>global'</span><span class='hs-layout'>,</span>
+<a class="number" name="line-16">16</a>
+<a class="number" name="line-17">17</a>    <span class='hs-comment'>-- * Getting global parameter</span>
+<a class="number" name="line-18">18</a>    <span class='hs-conid'>GetGlobal</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-19">19</a>    <span class='hs-varid'>ropGlobal</span><span class='hs-layout'>,</span>
+<a class="number" name="line-20">20</a>    <span class='hs-varid'>ropCopset</span><span class='hs-layout'>,</span>
+<a class="number" name="line-21">21</a>
+<a class="number" name="line-22">22</a>    <span class='hs-comment'>-- * Operator set</span>
+<a class="number" name="line-23">23</a>    <span class='hs-conid'>OpSet'</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-24">24</a>    <span class='hs-varid'>opsetFill</span><span class='hs-layout'>,</span>
+<a class="number" name="line-25">25</a>
+<a class="number" name="line-26">26</a>    <span class='hs-comment'>-- * Feature</span>
+<a class="number" name="line-27">27</a>    <span class='hs-conid'>Feature</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a class="number" name="line-28">28</a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a class="number" name="line-29">29</a>
+<a class="number" name="line-30">30</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Version</span>                        <span class='hs-keyword'>as</span> <span class='hs-conid'>Ver</span>
+<a class="number" name="line-31">31</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Overture</span>            <span class='hs-keyword'>as</span> <span class='hs-conid'>O</span>
+<a class="number" name="line-32">32</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a class="number" name="line-33">33</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>T</span>
 <a class="number" name="line-34">34</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>D</span>
 <a class="number" name="line-35">35</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Option</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
 <a class="number" name="line-36">36</a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
@@ -73,7 +73,7 @@
 <a class="number" name="line-64">64</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalProgram</span>      <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>            <span class='hs-comment'>-- ^ Name of invoked program</span>
 <a class="number" name="line-65">65</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalArgs</span>         <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>          <span class='hs-comment'>-- ^ Command line arguments</span>
 <a class="number" name="line-66">66</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalProxy</span>        <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>HttpProxy</span><span class='hs-keyglyph'>]</span>     <span class='hs-comment'>-- ^ Proxy setting from environment variables</span>
-<a class="number" name="line-67">67</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalTime</span>         <span class='hs-keyglyph'>::</span> <span class='hs-conid'>D</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span>            <span class='hs-comment'>-- ^ Invocation time</span>
+<a class="number" name="line-67">67</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalTime</span>         <span class='hs-keyglyph'>::</span> <span class='hs-conid'>T</span><span class='hs-varop'>.</span><span class='hs-conid'>Time</span>            <span class='hs-comment'>-- ^ Invocation time</span>
 <a class="number" name="line-68">68</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalResult</span>       <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Result</span> <span class='hs-varid'>c</span>        <span class='hs-comment'>-- ^ Result template</span>
 <a class="number" name="line-69">69</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalOption</span>       <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Option</span> <span class='hs-varid'>c</span>        <span class='hs-comment'>-- ^ Options</span>
 <a class="number" name="line-70">70</a>      <span class='hs-layout'>,</span> <span class='hs-varid'>globalSourceLimit</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span>               <span class='hs-comment'>-- ^ Limit number of including sources</span>

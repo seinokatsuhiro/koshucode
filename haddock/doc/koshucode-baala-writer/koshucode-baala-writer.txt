@@ -9,7 +9,7 @@
 --   writer is for Koshucode, and other writers are defined for CSV, HTML
 --   table, etc.
 @package koshucode-baala-writer
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Judgement writer.
@@ -101,6 +101,62 @@ instance Data.Aeson.Types.Class.ToJSON c => Koshucode.Baala.Writer.Json.ToGeoJSO
 
 
 -- | HTML output.
+--   
+--   Relations (<a>Rel</a>) are formatted like:
+--   
+--   <pre>
+--   &lt;div class="named-relation"&gt;
+--     &lt;p class="name"&gt;JUDGEMENT-CLASS
+--     &lt;table class="relation"&gt;
+--       &lt;tr class="heading"&gt;
+--         &lt;td class="term-name"&gt;&lt;span class="term-slash"&gt;/&lt;/span&gt;TERM-NAME
+--         &lt;td class="term-name"&gt;&lt;span class="term-slash"&gt;/&lt;/span&gt;TERM-NAME
+--         ...
+--       &lt;tr class="tuple"&gt;
+--         &lt;td&gt;CONTENT
+--         &lt;td&gt;CONTENT
+--         ...
+--       &lt;tr class="tuple"&gt;
+--         &lt;td&gt;CONTENT
+--         &lt;td&gt;CONTENT
+--         ...
+--       ...
+--   </pre>
+--   
+--   Abort reasons (<a>AbortReason</a>) are formatted like:
+--   
+--   <pre>
+--   &lt;div class="abort"&gt;
+--     &lt;div class="abort-title"&gt;Aborted
+--     &lt;div class="abort-reason"&gt;MAIN-REASON
+--     &lt;div class="abort-detail"&gt;
+--       &lt;div&gt;DETAILED-REASON
+--       &lt;div&gt;DETAILED-REASON
+--       ...
+--   
+--     &lt;div class="abort-source"&gt;
+--       &lt;div class="abort-pos"&gt;
+--         &lt;div class="abort-index"&gt;
+--           &lt;span class="abort-line"&gt;LINE
+--           &lt;span class="abort-char"&gt;CHAR
+--           &lt;span class="abort-path"&gt;PATH
+--         &lt;pre class="abort-before"&gt;BEFORE-CODE
+--         &lt;pre class="abort-after"&gt;AFTER-CODE
+--   
+--       &lt;div class="abort-pos"&gt;
+--         &lt;div class="abort-index"&gt;
+--           &lt;span class="abort-line"&gt;LINE
+--           &lt;span class="abort-char"&gt;CHAR
+--           &lt;span class="abort-path"&gt;PATH
+--         &lt;pre class="abort-before"&gt;BEFORE-CODE
+--         &lt;pre class="abort-after"&gt;AFTER-CODE
+--       ...
+--   
+--     &lt;div class="abort-note"&gt;
+--       &lt;pre&gt;NOTE-LINE
+--       &lt;pre&gt;NOTE-LINE
+--       ...
+--   </pre>
 module Koshucode.Baala.Writer.Html
 
 -- | HTML output in indent format.

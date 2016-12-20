@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Text table
@@ -2249,7 +2249,7 @@ AbortReason :: String -> [String] -> [String] -> [CodePosInfo] -> AbortReason
 -- | Additional notes for long description
 [abortNote] :: AbortReason -> [String]
 
--- | Tag and aborting point
+-- | Tag and aborting points
 [abortPoint] :: AbortReason -> [CodePosInfo]
 
 -- | Tag on aborting point.
@@ -2257,6 +2257,9 @@ type AbortTag = String
 
 -- | Source code position information.
 type CodePosInfo = (CodePos, AbortTag)
+
+-- | Upward aborting points, i.e., from callee to caller.
+abortPointUp :: AbortReason -> [CodePosInfo]
 
 -- | Abortable result, i.e., either of right result or abort reason.
 type Ab a = Either AbortReason a
@@ -2290,6 +2293,18 @@ abortLines :: String -> [String] -> AbortReason
 
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
+
+-- | <a>Left</a> plus <a>abortBecause</a>.
+leftBecause :: String -> Ab a
+
+-- | <a>Left</a> plus <a>abortLine</a>.
+leftLine :: String -> String -> Ab a
+
+-- | <a>Left</a> plus <a>abortLines</a>.
+leftLines :: String -> [String] -> Ab a
+
+-- | <a>Left</a> plus <a>abortPage</a>.
+leftPage :: String -> [String] -> Ab a
 
 -- | Abortable process.
 type Abortable cp b = cp -> MapAb b
@@ -2343,8 +2358,17 @@ module Koshucode.Baala.Base.Abort.Report
 -- | Command name and its arguments.
 type CommandLine = [String]
 
+-- | Convert code position into message text: location, before code, after
+--   code, and abort tag.
+--   
+--   <pre>
+--   &gt;&gt;&gt; cpMessage $ B.CodePos 0 "&lt;stdin&gt;" 1 "abcdefg" "defg"
+--   (Just (1,3,"&lt;stdin&gt;"), Just "abc", Just "defg")
+--   </pre>
+cpMessage :: CodePos -> (Maybe (Int, Int, FilePath), Maybe String, Maybe String)
+
 -- | Create position and line information.
-cpMessage :: CodePosInfo -> [(String, AbortTag)]
+cpMessageLines :: CodePosInfo -> [(String, AbortTag)]
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> AbortReason -> [String]
@@ -2397,7 +2421,7 @@ module Koshucode.Baala.Base.Abort
 -- | Message list.
 module Koshucode.Baala.Base.Abort.Message
 
--- | AD-LIB: <i>reason</i>
+-- | <i>reason</i>
 adlib :: String -> Ab a
 
 -- | BUG: <i>reason</i>

@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Term types and related functions.
@@ -199,10 +199,10 @@ module Koshucode.Baala.Syntax.Para.Para
 
 -- | Named and positional parameter.
 data Para n a
-Para :: [String] -> [a] -> [a] -> ParaMap n a -> Para n a
+Para :: [ParaTag] -> [a] -> [a] -> ParaMap n a -> Para n a
 
 -- | Parameter tags.
-[paraTags] :: Para n a -> [String]
+[paraTags] :: Para n a -> [ParaTag]
 
 -- | All parameter elements.
 [paraAll] :: Para n a -> [a]
@@ -212,6 +212,9 @@ Para :: [String] -> [a] -> [a] -> ParaMap n a -> Para n a
 
 -- | Named parameters.
 [paraName] :: Para n a -> ParaMap n a
+
+-- | Parameter tag.
+type ParaTag = String
 
 -- | Mapping parameter name to its contents.
 type ParaMap n a = Map n [[a]]
@@ -364,7 +367,7 @@ paraMinLength :: ParaSpecPos n -> Int
 data ParaUnmatch n
 
 -- | Positional parameter is unmatched.
-ParaOutOfRange :: Int -> (ParaSpecPos n) -> ParaUnmatch n
+ParaPos :: Int -> (ParaSpecPos n) -> ParaUnmatch n
 
 -- | Unknown parameter is specified.
 ParaUnknown :: [n] -> ParaUnmatch n
@@ -385,7 +388,7 @@ paraMatch :: (Eq n, Ord n) => ParaSpec n -> Para n a -> ParaOr (ParaUnmatch n) n
 paraSelect :: (Eq n, Ord n) => b -> [(ParaSpec n, Para n a -> b)] -> Para n a -> b
 
 -- | Collect parameter tags.
-paraChoose :: (Ord n) => [(Maybe String, ParaSpec n)] -> Para n a -> ParaOr [ParaUnmatch n] n a
+paraChoose :: (Ord n) => [(Maybe ParaTag, ParaSpec n)] -> Para n a -> ParaOr [ParaUnmatch n] n a
 
 -- | Mapping of parameter specification.
 type ParaSpecMap n = Map (ParaSpec n)
@@ -402,7 +405,7 @@ paraSpec :: (Show n, Ord n) => ParaSpecMap n -> ParaSpec n
 --   Right Para ...
 --   
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen ""
---   Left ParaOutOfRange ...
+--   Left ParaPos ...
 --   </pre>
 paraMin :: Int -> ParaSpecMap n
 
@@ -415,7 +418,7 @@ paraMin :: Int -> ParaSpecMap n
 --   Right Para ...
 --   
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b"
---   Left ParaOutOfRange ...
+--   Left ParaPos ...
 --   </pre>
 paraMax :: Int -> ParaSpecMap n
 
@@ -428,7 +431,7 @@ paraMax :: Int -> ParaSpecMap n
 --   Right Para ...
 --   
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen ""
---   Left ParaOutOfRange ...
+--   Left ParaPos ...
 --   </pre>
 paraJust :: Int -> ParaSpecMap n
 
@@ -441,7 +444,7 @@ paraJust :: Int -> ParaSpecMap n
 --   Right Para ...
 --   
 --   &gt;&gt;&gt; paraMatch s $ S.paraWords S.paraHyphen "a b c"
---   Left ParaOutOfRange ...
+--   Left ParaPos ...
 --   </pre>
 paraRange :: Int -> Int -> ParaSpecMap n
 
@@ -556,6 +559,40 @@ instance Data.Default.Class.Default (Koshucode.Baala.Syntax.Para.ParaSpec.ParaSp
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpec
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaSpecPos
 instance GHC.Base.Functor Koshucode.Baala.Syntax.Para.ParaSpec.ParaUnmatch
+
+
+-- | Parse parameter specification.
+module Koshucode.Baala.Syntax.Para.Parse
+
+-- | Parse parameter layout. This function divides a given string by
+--   vertical bar <tt>"|"</tt>, then parse each layouts.
+parseParaSpec :: String -> [(Maybe ParaTag, ParaSpec String)]
+
+-- | Parse list of single layout.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseParaList [ "a : -a", "ab : -a -b" ]
+--   [ (Just "a", ParaSpec { paraSpecPos = ParaItem 1 ["-a"]
+--                         , paraSpecReqP = ["-a"], ... })
+--   , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                          , paraSpecReqP = ["-a","-b"], ... }) ]
+--   </pre>
+parseParaList :: [String] -> [(Maybe ParaTag, ParaSpec String)]
+
+-- | Parse single layout.
+--   
+--   <pre>
+--   &gt;&gt;&gt; parseParaSingle "ab : -a -b"
+--   (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["-a","-b"]
+--                        , paraSpecReqP = ["-a","-b"], ...} )
+--   </pre>
+parseParaSingle :: String -> (Maybe ParaTag, ParaSpec String)
+
+-- | Report bug of parameter specification.
+paraBug :: String -> String -> a
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Para.Parse.Ror
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Para.Parse.Ror
+instance GHC.Show.Show Koshucode.Baala.Syntax.Para.Parse.Ror
 
 
 -- | Getters for parameter.
@@ -1548,43 +1585,61 @@ module Koshucode.Baala.Syntax.Pattern
 module Koshucode.Baala.Syntax.TTree.Parse
 
 -- | Tree of tokens.
-type TTree = CodeTree BracketType Token
+type Tree = CodeTree BracketType Token
+
+-- | Tree of tokens.
+
+-- | <i>Deprecated: Use <a>Tree</a> instead.</i>
+type TTree = Tree
 
 -- | Pair of token trees and its name.
-type NamedTrees = Named [TTree]
-
--- | Wrap trees in group.
-ttreeGroup :: [TTree] -> TTree
-
--- | Get <a>Doc</a> value of token trees for pretty printing.
-ttDoc :: [TTree] -> Doc
+type NamedTrees = Named [Tree]
 
 -- | Convert to token trees.
-class ToTrees a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree ppTrees a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right ts -> print $ ttDoc ts } ppTree a = case toTrees a of { Left ab -> putStrLn `mapM_` abortMessage [] ab Right [] -> return () Right [t] -> print $ ttDoc [t] Right ts -> print $ ttDoc [ttreeGroup ts] }
+class ToTrees a where toTree a = ttreeGroup <$> toTrees a toTrees' = unabort . toTrees toTree' = unabort . toTree
 
 -- | Convert to list of token trees.
-toTrees :: ToTrees a => a -> Ab [TTree]
+toTrees :: ToTrees a => a -> Ab [Tree]
 
 -- | Convert to token tree.
-toTree :: ToTrees a => a -> Ab TTree
+toTree :: ToTrees a => a -> Ab Tree
 
 -- | List of token trees or error.
-toTrees' :: ToTrees a => a -> [TTree]
+toTrees' :: ToTrees a => a -> [Tree]
 
 -- | Token tree or error.
-toTree' :: ToTrees a => a -> TTree
+toTree' :: ToTrees a => a -> Tree
 
--- | Pretty print token trees.
-ppTrees :: ToTrees a => a -> IO ()
+-- | Wrap trees in group.
+ttreeGroup :: [Tree] -> Tree
 
--- | Pretty print token tree.
-ppTree :: ToTrees a => a -> IO ()
+-- | Call function with token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; withTrees id "a"
+--   Right [TreeL (TText /0.1.0/ TextRaw "a")]
+--   </pre>
+withTrees :: (ToTrees a) => ([Tree] -> b) -> a -> Ab b
 
 -- | Read clauses and convert to token trees.
-readClauseTrees :: FilePath -> IOAb [[TTree]]
+readClauseTrees :: FilePath -> IOAb [[Tree]]
+
+-- | Convert token trees to <a>Doc</a> value for pretty printing.
+treesDoc :: [Tree] -> Doc
+
+-- | Pretty print token trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ppTrees "a ( b c )"
+--   | TText /1.0/ TextRaw "a"
+--   &lt;group&gt; TOpen /1.2/ "(" -- TClose /1.8/ ")"
+--     | TText /1.4/ TextRaw "b"
+--     | TText /1.6/ TextRaw "c"
+--   </pre>
+ppTrees :: (ToTrees a) => a -> IO ()
 instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees GHC.Base.String
 instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.Parse.TTree]
+instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.Parse.Tree]
 
 
 -- | Split token trees.
@@ -1618,19 +1673,19 @@ module Koshucode.Baala.Syntax.TTree.Split
 splitTokensBy :: Test String -> SplitList3e Token
 
 -- | Split token trees by quoteless token of given string.
-splitTreesBy :: Test String -> SplitList3e TTree
+splitTreesBy :: Test String -> SplitList3e Tree
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: Test String -> [TTree] -> [[TTree]]
+divideTreesBy :: Test String -> [Tree] -> [[Tree]]
 
 -- | Divide token trees by vertical bar <tt>"|"</tt>.
-divideTreesByBar :: [TTree] -> [[TTree]]
+divideTreesByBar :: [Tree] -> [[Tree]]
 
 -- | Divide token trees by colon <tt>":"</tt>.
-divideTreesByColon :: [TTree] -> [[TTree]]
+divideTreesByColon :: [Tree] -> [[Tree]]
 
 -- | Divide token trees by equal sign <tt>"="</tt>.
-divideTreesByEqual :: [TTree] -> [[TTree]]
+divideTreesByEqual :: [Tree] -> [[Tree]]
 
 
 -- | Token trees.
@@ -1675,7 +1730,7 @@ reqAttrName :: String -> Ab a
 unexpAttr :: String -> Ab a
 
 -- | Unmatch any patterns
-unexpAttrMulti :: [ParaUnmatch String] -> Ab a
+unexpAttrMulti :: [(String, ParaUnmatch String)] -> Ab a
 
 
 -- | Bundle of message modules.
@@ -1686,13 +1741,13 @@ module Koshucode.Baala.Syntax.Message
 module Koshucode.Baala.Syntax.Attr.Slot
 
 -- | Attribute name and its contents.
-type AttrTree = (AttrName, [TTree])
+type AttrTree = (AttrName, [Tree])
 
 -- | Global slot name and its content.
 type GlobalSlot = NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> [AttrTree] -> AbMap [TTree]
+substSlot :: [GlobalSlot] -> [AttrTree] -> AbMap [Tree]
 
 
 -- | Attribute editor.
@@ -1708,22 +1763,22 @@ data AttrEdBody
 AttrEdId :: AttrEdBody
 
 -- | <b>add:</b> Add attribute
-AttrEdAdd :: Bool -> String -> [TTree] -> AttrEdBody
+AttrEdAdd :: Bool -> String -> [Tree] -> AttrEdBody
 
 -- | <b>rename:</b> Rename attribute keyword
 AttrEdRename :: (String, String) -> AttrEdBody
 
 -- | <b>fill:</b> Fill positional attributes
-AttrEdFill :: [Maybe TTree] -> AttrEdBody
+AttrEdFill :: [Maybe Tree] -> AttrEdBody
 
 -- | <b>nest:</b> Nested relation reference
-AttrEdNest :: String -> [TTree] -> AttrEdBody
+AttrEdNest :: String -> [Tree] -> AttrEdBody
 
 -- | Append editors
 AttrEdAppend :: [AttrEd] -> AttrEdBody
 
 -- | Construct attribute editor.
-consAttrEd :: [TTree] -> Ab AttrEd
+consAttrEd :: [Tree] -> Ab AttrEd
 
 -- | Edit relmap attributes.
 runAttrEd :: AttrEd -> AbMap [AttrTree]
@@ -1735,16 +1790,16 @@ instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.AttrEd.AttrEdBody
 -- | Attributes of relmap operator.
 module Koshucode.Baala.Syntax.Attr.Attr
 
--- | Parameter specification for attribute name.
-type AttrParaSpec = ParaSpec AttrName
-
 -- | Attribute layout.
 data AttrLayout
-AttrLayout :: [(Maybe String, AttrBranch)] -> AttrLayout
+AttrLayout :: [(Maybe ParaTag, AttrBranch)] -> AttrLayout
 
 -- | Single layout.
 data AttrBranch
-AttrBranch :: AttrParaSpec -> Map AttrName -> AttrBranch
+AttrBranch :: AttrUsage -> AttrParaSpec -> Map AttrName -> AttrBranch
+
+-- | Usage description
+[attrUsage] :: AttrBranch -> AttrUsage
 
 -- | Parameter specification
 [attrParaSpec] :: AttrBranch -> AttrParaSpec
@@ -1752,14 +1807,23 @@ AttrBranch :: AttrParaSpec -> Map AttrName -> AttrBranch
 -- | Attribute classifier
 [attrClassifier] :: AttrBranch -> Map AttrName
 
--- | Construct attribute branch.
-attrBranch :: AttrParaSpec -> AttrBranch
+-- | Parameter specification for attribute name.
+type AttrParaSpec = ParaSpec AttrName
+
+-- | Usage text of attribute layout.
+type AttrUsage = String
+
+-- | List of attribute usages.
+attrUsages :: AttrLayout -> [AttrUsage]
+
+-- | Concatenated attribute usage.
+attrUsageString :: AttrLayout -> String
 
 -- | Attribute parameter.
-type AttrPara = Para AttrName TTree
+type AttrPara = Para AttrName Tree
 
 -- | Parameterizer for attribute of relmap operator.
-type AttrParaze = [TTree] -> Ab AttrPara
+type AttrParaze = [Tree] -> Ab AttrPara
 
 -- | Parameterize named attributes.
 attrPara :: AttrParaze
@@ -1768,124 +1832,42 @@ attrPara :: AttrParaze
 attrParaBy :: AttrLayout -> AttrParaze
 
 -- | Take out hyphened text (like <tt>"-x"</tt>) from token tree.
-maybeSingleHyphen :: TTree -> Maybe String
+maybeSingleHyphen :: Tree -> Maybe String
 
 -- | Take out double-hyphened text (like <tt>"--xyz"</tt>) from token tree.
-maybeDoubleHyphen :: TTree -> Maybe String
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
+maybeDoubleHyphen :: Tree -> Maybe String
 
-
--- | Parser for attribute layout.
-module Koshucode.Baala.Syntax.Attr.Parse
-
--- | Parse relmap attribute layout.
+-- | Convertible to attribute layout.
 --   
 --   <ul>
 --   <li><b><tt>-</tt>Word</b> — Normal attribute</li>
 --   <li><b><tt>-</tt>Word<tt>/</tt></b> — Relmap attribute</li>
 --   <li><b><tt>-</tt>Word<tt>/^</tt></b> — Local relmap attribute</li>
 --   </ul>
-parseAttrLayout :: String -> AttrLayout
+--   
+--   <pre>
+--   &gt;&gt;&gt; toAttrLayout "-a"
+--   AttrLayout [(Nothing, AttrBranch (
+--     ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal "a"]
+--              , paraSpecReqP = [AttrNormal "a"]
+--              , paraSpecOptP = [], paraSpecReqN = []
+--              , paraSpecOptN = [AttrNormal "@trunk"]
+--              , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
+--              ))]
+--   </pre>
+class ToAttrLayout a
+toAttrLayout :: ToAttrLayout a => a -> AttrLayout
 
--- | Parse parameter layout.
---   
---   No positional and one named required <tt>c</tt> attribute.
---   
---   <pre>
---   &gt;&gt;&gt; parseParaSpec ". c"
---   [(Nothing, ParaSpec { paraSpecReqN = ["c"], ... })]
---   </pre>
---   
---   Positional required <tt>a</tt>, rest <tt>b</tt>, and one named
---   <tt>c</tt> attributes.
---   
---   <pre>
---   &gt;&gt;&gt; parseParaSpec "a b* . c"
---   [(Nothing, ParaSpec { paraSpecPos = ParaItemRest 1 ["a"] "b"
---                       , paraSpecReqP = ["a"]
---                       , paraSpecOptP = ["b"]
---                       , paraSpecReqN = ["c"], ... })]
---   </pre>
---   
---   Set of named layouts.
---   
---   <pre>
---   &gt;&gt;&gt; parseParaSpec "a : a | ab : a b"
---   [ (Just "a",  ParaSpec { paraSpecPos = ParaItem 1 ["a"], paraSpecReqP = ["a"], ... })
---   , (Just "ab", ParaSpec { paraSpecPos = ParaItem 2 ["a","b"], paraSpecReqP = ["a","b"], ... })]
---   </pre>
---   
---   Syntax for parameter layout.
---   
---   <ul>
---   <li><i>Multiple</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Single</b> — Single layout</li>
---   <li><b>Single <tt>|</tt> Multiple</b> ... — Multiple layout</li>
---   </ul>
---   
---   <ul>
---   <li><i>Single</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Layout</b> — Layout without tag</li>
---   <li><b>Word <tt>:</tt> Layout</b> — Layout with tag</li>
---   </ul>
---   
---   <ul>
---   <li><i>Layout</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Positional</b> — Positional parameters</li>
---   <li><b>Positional <tt>.</tt> Named</b> — Positional and named
---   parameters</li>
---   </ul>
---   
---   <ul>
---   <li><i>Positional</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Word ...</b> — Positional required parameters</li>
---   <li><b>Word ... Word<tt>?</tt> ...</b> — Positional required and
---   optional parameters</li>
---   <li><b>Word ... Word<tt>*</tt></b> — Positional required and rest
---   parameters</li>
---   </ul>
---   
---   <ul>
---   <li><i>Named</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Name ...</b> — Named parameters</li>
---   </ul>
---   
---   <ul>
---   <li><i>Name</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Word Opt</b> — Named parameter</li>
---   </ul>
---   
---   <ul>
---   <li><i>Opt</i></li>
---   </ul>
---   
---   <ul>
---   <li><b>Empty</b> — Required parameter</li>
---   <li><b><tt>?</tt></b> — Optional parameter</li>
---   </ul>
-parseParaSpec :: String -> [(Maybe String, ParaSpec String)]
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.Attr.Parse.Ror
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.Attr.Parse.Ror
-instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Parse.Ror
+-- | Parse relmap attribute layout.
+
+-- | <i>Deprecated: Use <a>toAttrLayout</a> instead.</i>
+parseAttrLayout :: String -> AttrLayout
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
+instance GHC.Show.Show Koshucode.Baala.Syntax.Attr.Attr.AttrBranch
+instance Koshucode.Baala.Syntax.Attr.Attr.ToAttrLayout Koshucode.Baala.Syntax.Attr.Attr.AttrLayout
+instance Koshucode.Baala.Syntax.Attr.Attr.ToAttrLayout GHC.Base.String
+instance Koshucode.Baala.Syntax.Attr.Attr.ToAttrLayout [GHC.Base.String]
+instance Koshucode.Baala.Syntax.Attr.Attr.ToAttrLayout [(Koshucode.Baala.Syntax.Attr.Attr.AttrUsage, GHC.Base.String)]
 
 
 -- | Syntax for attributes.

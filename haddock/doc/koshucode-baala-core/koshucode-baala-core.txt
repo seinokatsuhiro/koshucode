@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Result of relational calculation.
@@ -32,13 +32,13 @@ Result :: ResultWriter c -> Bool -> Bool -> Int -> Int -> [InputPoint] -> IOPoin
 
 -- | Input point of data resource.
 data InputPoint
-InputPoint :: IOPoint -> [TTree] -> InputPoint
+InputPoint :: IOPoint -> [Tree] -> InputPoint
 
 -- | Input point
 [inputPoint] :: InputPoint -> IOPoint
 
 -- | Common terms
-[inputPointAbout] :: InputPoint -> [TTree]
+[inputPointAbout] :: InputPoint -> [Tree]
 
 -- | Chunk of judgements.
 data ResultChunk c
@@ -109,10 +109,10 @@ module Koshucode.Baala.Core.Lexmap.LexmapTrees
 
 -- | Tree representation of lexmap.
 data LexmapTrees
-LexmapTrees :: [TTree] -> TTreePara -> AttrEd -> LexmapTrees
+LexmapTrees :: [Tree] -> TTreePara -> AttrEd -> LexmapTrees
 
 -- | Positional attribute.
-[lexmapTrees] :: LexmapTrees -> [TTree]
+[lexmapTrees] :: LexmapTrees -> [Tree]
 
 -- | Parameter
 [lexmapPara] :: LexmapTrees -> TTreePara
@@ -124,7 +124,7 @@ LexmapTrees :: [TTree] -> TTreePara -> AttrEd -> LexmapTrees
 consLexmapTrees :: TTreePara -> Ab LexmapTrees
 
 -- | Token tree parameter.
-type TTreePara = SimplePara TTree
+type TTreePara = SimplePara Tree
 
 -- | Make token tree parameter with single-hyphen names.
 ttreePara1 :: [Token] -> Ab TTreePara
@@ -336,7 +336,7 @@ type LexmapClause = NNamed LexmapTrees
 type RopParaze = RopName -> Maybe AttrParaze
 
 -- | Construct lexmap from token trees.
-type ConsLexmapBody = [TTree] -> Ab (Lexmap, LexmapLinkTable)
+type ConsLexmapBody = [Tree] -> Ab (Lexmap, LexmapLinkTable)
 
 -- | Lexmap and linked lexmap.
 type LexmapLinkTable = [(Lexmap, Lexmap)]
@@ -595,16 +595,13 @@ module Koshucode.Baala.Core.Relmap.Rop
 
 -- | Implementation of relmap operator.
 data Rop' h c
-Rop :: RopName -> RopGroup -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h c -> Rop' h c
+Rop :: RopName -> RopGroup -> AttrLayout -> AttrParaze -> RopCons' h c -> Rop' h c
 
 -- | Operator name
 [ropName] :: Rop' h c -> RopName
 
 -- | Operator group
 [ropGroup] :: Rop' h c -> RopGroup
-
--- | Usage text of operator
-[ropUsage] :: Rop' h c -> RopUsage
 
 -- | Attribute of operator
 [ropAttr] :: Rop' h c -> AttrLayout
@@ -618,11 +615,11 @@ Rop :: RopName -> RopGroup -> RopUsage -> AttrLayout -> AttrParaze -> RopCons' h
 -- | Group of operators.
 type RopGroup = String
 
--- | Usage text of operator.
-type RopUsage = String
-
 -- | Find relmap operator based on its name.
 type FindRop' h c = RopName -> Maybe (Rop' h c)
+
+-- | Usage text of relmap operator.
+ropUsage :: Rop' h c -> String
 
 -- | Constructor of relmap operator, i.e., function from intermediate
 --   relamp to generic relmap.
@@ -1152,7 +1149,7 @@ module Koshucode.Baala.Core.Resource.Include
 resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> IxIOPoint -> Bz -> AbResource c
 
 -- | Build content expression with global parameter.
-treeCoxG :: (CContent c) => Global c -> TTree -> Ab (Cox c)
+treeCoxG :: (CContent c) => Global c -> Tree -> Ab (Cox c)
 
 
 -- | Read data resource.

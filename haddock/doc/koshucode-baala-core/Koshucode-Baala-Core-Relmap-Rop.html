@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.185.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.187.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Operator</a
+	    >Relmap operator</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
@@ -99,12 +99,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>RopGroup</a
 		></li
 	      ><li
-	      ><a href="#v:ropUsage"
-		>ropUsage</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-		>RopUsage</a
-		></li
-	      ><li
 	      ><a href="#v:ropAttr"
 		>ropAttr</a
 		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
@@ -135,14 +129,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RopUsage"
-	    >RopUsage</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
 	    > <a href="#t:FindRop-39-"
 	    >FindRop'</a
 	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
@@ -152,6 +138,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Rop-39-"
 	    >Rop'</a
 	    > h c)</li
+	  ><li class="src short"
+	  ><a href="#v:ropUsage"
+	    >ropUsage</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Rop-39-"
+	    >Rop'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -196,7 +190,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Operator</h1
+	>Relmap operator</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -247,16 +241,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dd class="doc"
 		      ><p
 			>Operator group</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ropUsage" class="def"
-			>ropUsage</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-			>RopUsage</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Usage text of operator</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:ropAttr" class="def"
@@ -353,22 +337,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RopUsage" class="def"
-	    >RopUsage</a
-	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#RopUsage');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Usage text of operator.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
 	    > <a name="t:FindRop-39-" class="def"
 	    >FindRop'</a
 	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
@@ -383,6 +351,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >Find relmap operator based on its name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropUsage" class="def"
+	    >ropUsage</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Rop-39-"
+	    >Rop'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#ropUsage');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Usage text of relmap operator.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -490,7 +474,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
 		      >Intmed'</a
 		      > h c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#line-58');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#line-59');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -504,7 +488,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
 		      >Intmed'</a
 		      > h c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#line-60');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Rop.html#line-61');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

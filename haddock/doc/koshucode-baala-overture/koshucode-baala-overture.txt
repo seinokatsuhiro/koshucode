@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.185.0.0
+@version 0.187.0.0
 
 
 -- | Exit process.
@@ -596,10 +596,44 @@ module Koshucode.Baala.Overture.Shorthand
 
 -- | Associative operator of monoid, same as <a>mappend</a> or infix
 --   <tt>&lt;&gt;</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"
+--   Just "abcdef"
+--   </pre>
 (++) :: (Monoid a) => a -> a -> a
 
 -- | Double fmap.
+--   
+--   <pre>
+--   &gt;&gt;&gt; length &lt;$$&gt; [("a", "apple"), ("b", "banana"), ("c", "cocoa")]
+--   [("a",5), ("b",6), ("c",5)]
+--   </pre>
 (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+
+-- | Monadic mapping, same as <a>mapM</a>.
+(<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
+
+-- | Execution by monadic mapping, same as <a>mapM_</a>.
+(<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
+
+-- | Test equality using <a>Ord</a> method. This function can be used for
+--   implementing <a>Eq</a> instance.
+--   
+--   <pre>
+--   instance Eq X where
+--     (==) = ordEq
+--   </pre>
+ordEq :: (Ord a) => a -> a -> Bool
+
+-- | <tt>compareOn</tt> <i>f</i> <i>x</i> <i>y</i> comapres <i>f x</i> and
+--   <i>f y</i> instead of <i>x</i> and <i>y</i>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; compareOn length "foo" "bar"
+--   EQ
+--   </pre>
+compareOn :: (Ord b) => (a -> b) -> a -> a -> Ordering
 
 -- | <a>Int</a> shorthand.
 --   

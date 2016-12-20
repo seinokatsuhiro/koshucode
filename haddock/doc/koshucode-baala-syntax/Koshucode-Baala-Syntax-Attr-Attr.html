@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.185.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.187.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -64,6 +64,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><a href="#g:2"
 	    >Attribute parameter</a
 	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Parse</a
+	    ></li
 	  ></ul
 	></div
       ><div id="description"
@@ -80,16 +84,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:AttrParaSpec"
-	    >AttrParaSpec</a
-	    > = <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
-	    >ParaSpec</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
-	    >AttrName</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
 	    >data</span
 	    > <a href="#t:AttrLayout"
 	    >AttrLayout</a
@@ -97,8 +91,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >AttrLayout</a
 	    > [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
+	    > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+	    >ParaTag</a
 	    >, <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrBranch"
 	    >AttrBranch</a
 	    >)]</li
@@ -111,6 +105,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >AttrBranch</a
 	    > {<ul class="subs"
 	    ><li
+	      ><a href="#v:attrUsage"
+		>attrUsage</a
+		> :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+		>AttrUsage</a
+		></li
+	      ><li
 	      ><a href="#v:attrParaSpec"
 		>attrParaSpec</a
 		> :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSpec"
@@ -127,12 +127,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:attrBranch"
-	    >attrBranch</a
-	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSpec"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AttrParaSpec"
 	    >AttrParaSpec</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrBranch"
-	    >AttrBranch</a
+	    > = <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AttrUsage"
+	    >AttrUsage</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:attrUsages"
+	    >attrUsages</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+	    >AttrUsage</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:attrUsageString"
+	    >attrUsageString</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -143,16 +169,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Para</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
 	    >AttrName</a
-	    > <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:AttrParaze"
 	    >AttrParaze</a
-	    > = [<a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > = [<a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
@@ -175,8 +201,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:maybeSingleHyphen"
 	    >maybeSingleHyphen</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -185,36 +211,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ><li class="src short"
 	  ><a href="#v:maybeDoubleHyphen"
 	    >maybeDoubleHyphen</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:ToAttrLayout"
+	    >ToAttrLayout</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:toAttrLayout"
+		>toAttrLayout</a
+		> :: a -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+		>AttrLayout</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:parseAttrLayout"
+	    >parseAttrLayout</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
 	>Attribute layout</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AttrParaSpec" class="def"
-	    >AttrParaSpec</a
-	    > = <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
-	    >ParaSpec</a
-	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
-	    >AttrName</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrParaSpec');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Parameter specification for attribute name.</p
-	    ></div
-	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -238,8 +270,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		  >AttrLayout</a
 		  > [(<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 		  >Maybe</a
-		  > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-		  >String</a
+		  > <a href="Koshucode-Baala-Syntax-Para-Para.html#t:ParaTag"
+		  >ParaTag</a
 		  >, <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrBranch"
 		  >AttrBranch</a
 		  >)]</td
@@ -261,7 +293,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
 		      >AttrLayout</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-37');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-47');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+		      >ToAttrLayout</a
+		      > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+		      >AttrLayout</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-139');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -303,6 +349,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
+		      ><a name="v:attrUsage" class="def"
+			>attrUsage</a
+			> :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+			>AttrUsage</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Usage description</p
+			></dd
+		      ><dt class="src"
 		      ><a name="v:attrParaSpec" class="def"
 			>attrParaSpec</a
 			> :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSpec"
@@ -345,7 +401,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 		      > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrBranch"
 		      >AttrBranch</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-45');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-56');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -357,18 +413,68 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:attrBranch" class="def"
-	    >attrBranch</a
-	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrParaSpec"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AttrParaSpec" class="def"
 	    >AttrParaSpec</a
-	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrBranch"
-	    >AttrBranch</a
-	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#attrBranch');" href="javascript:void(0);" class="link"
+	    > = <a href="Koshucode-Baala-Syntax-Para-ParaSpec.html#t:ParaSpec"
+	    >ParaSpec</a
+	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
+	    >AttrName</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrParaSpec');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct attribute branch.</p
+	    >Parameter specification for attribute name.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AttrUsage" class="def"
+	    >AttrUsage</a
+	    > = <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrUsage');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Usage text of attribute layout.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:attrUsages" class="def"
+	    >attrUsages</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+	    >AttrUsage</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#attrUsages');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of attribute usages.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:attrUsageString" class="def"
+	    >attrUsageString</a
+	    > :: <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#attrUsageString');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Concatenated attribute usage.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
@@ -383,8 +489,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Para</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-AttrName.html#t:AttrName"
 	    >AttrName</a
-	    > <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#AttrPara');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
@@ -399,8 +505,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >type</span
 	    > <a name="t:AttrParaze" class="def"
 	    >AttrParaze</a
-	    > = [<a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > = [<a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrPara"
@@ -447,8 +553,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:maybeSingleHyphen" class="def"
 	    >maybeSingleHyphen</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -467,8 +573,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	><p class="src"
 	  ><a name="v:maybeDoubleHyphen" class="def"
 	    >maybeDoubleHyphen</a
-	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:TTree"
-	    >TTree</a
+	    > :: <a href="Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
 	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
@@ -481,6 +587,166 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    >Take out double-hyphened text (like <code
 	      >&quot;--xyz&quot;</code
 	      >) from token tree.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Parse</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:ToAttrLayout" class="def"
+	    >ToAttrLayout</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#ToAttrLayout');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convertible to attribute layout.</p
+	    ><ul
+	    ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word</strong
+		>        &#8212; Normal attribute</li
+	      ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word<code
+		  >/</code
+		  ></strong
+		>     &#8212; Relmap attribute</li
+	      ><li
+	      ><strong
+		><code
+		  >-</code
+		  >Word<code
+		  >/^</code
+		  ></strong
+		>    &#8212; Local relmap attribute</li
+	      ></ul
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>toAttrLayout &quot;-a&quot;
+</code
+		></strong
+	      >AttrLayout [(Nothing, AttrBranch (
+  ParaSpec { paraSpecPos = ParaItem 1 [AttrNormal &quot;a&quot;]
+           , paraSpecReqP = [AttrNormal &quot;a&quot;]
+           , paraSpecOptP = [], paraSpecReqN = []
+           , paraSpecOptN = [AttrNormal &quot;@trunk&quot;]
+           , paraSpecFirst = [], paraSpecLast = [], paraSpecMulti = [] }
+           ))]
+</pre
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:toAttrLayout" class="def"
+	      >toAttrLayout</a
+	      > :: a -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	      >AttrLayout</a
+	      > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#toAttrLayout');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:ToAttrLayout" class="caption collapser" onclick="toggleSection('i:ToAttrLayout')"
+	    >Instances</p
+	    ><div id="section.i:ToAttrLayout" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+		      >ToAttrLayout</a
+		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-142');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+		      >ToAttrLayout</a
+		      > <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+		      >AttrLayout</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-139');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+		      >ToAttrLayout</a
+		      > [<a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      >]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-145');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:ToAttrLayout"
+		      >ToAttrLayout</a
+		      > [(<a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrUsage"
+		      >AttrUsage</a
+		      >, <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+		      >String</a
+		      >)]</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#line-149');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:parseAttrLayout" class="def"
+	    >parseAttrLayout</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Syntax-Attr-Attr.html#t:AttrLayout"
+	    >AttrLayout</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Syntax-Attr-Attr.html#parseAttrLayout');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><div class="warning"
+	    ><p
+	      >Deprecated: Use <code
+		><a href="Koshucode-Baala-Syntax-Attr-Attr.html#v:toAttrLayout"
+		  >toAttrLayout</a
+		  ></code
+		> instead.</p
+	      ></div
+	    ><p
+	    >Parse relmap attribute layout.</p
 	    ></div
 	  ></div
 	></div
