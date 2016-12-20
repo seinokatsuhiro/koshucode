@@ -59,6 +59,7 @@ library
         Koshucode.Baala.Rop.Cox.Range
 
         Koshucode.Baala.Rop.Cox.Type.Clock
+        Koshucode.Baala.Rop.Cox.Type.Dec
 
   -- Modules included in this library but not exported.
   --other-modules:       
