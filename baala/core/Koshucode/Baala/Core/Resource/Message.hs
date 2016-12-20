@@ -24,36 +24,36 @@ abClause = B.abortable "clause"
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> B.Ab a
-dupPrefix = Left . B.abortLine "Duplicate prefix" . unwords
+dupPrefix = B.leftLine "Duplicate prefix" . unwords
 
 -- | Duplicate replacement
 dupReplacement :: [String] -> B.Ab a
-dupReplacement = Left . B.abortLine "Duplicate replacement" . unwords
+dupReplacement = B.leftLine "Duplicate replacement" . unwords
 
 -- | HTTP Error
 httpError :: String -> Int -> String -> B.Ab a
-httpError url code msg = Left $ B.abortLines "HTTP Error" detail where
+httpError url code msg = B.leftLines "HTTP Error" detail where
     detail | code == 0  = [msg, url]
            | otherwise  = [show code ++ " " ++ msg, url]
 
 -- | Invalid prefix character
 invalidPrefix :: [String] -> B.Ab a
-invalidPrefix = Left . B.abortLine "Invalid prefix character" . unwords
+invalidPrefix = B.leftLine "Invalid prefix character" . unwords
 
 -- | File not found
 noFile :: FilePath -> String -> B.Ab a
-noFile "" path = Left $ B.abortLine "File not found" path
-noFile cd path = Left $ B.abortLines "File not found" [path, "directory: " ++ cd]
+noFile "" path = B.leftLine "File not found" path
+noFile cd path = B.leftLines "File not found" [path, "directory: " ++ cd]
 
 -- | Same I/O points
 sameIOPoints :: B.IOPoint -> B.Ab a
-sameIOPoints = Left . B.abortLine "Same I/O points" . B.ioPointText
+sameIOPoints = B.leftLine "Same I/O points" . B.ioPointText
 
 -- | Unknown clause
 unkClause :: [String] -> B.Ab a
-unkClause = Left . B.abortLines "Unknown clause"
+unkClause = B.leftLines "Unknown clause"
 
 -- | Unresolved prefix
 unresPrefix :: String -> B.Ab a
-unresPrefix pre = Left $ B.abortLine "Unresolved prefix"
+unresPrefix pre = B.leftLine "Unresolved prefix"
                        $ "Require short definition : short " ++ pre ++ " ..."

@@ -44,7 +44,7 @@ extraAttr = B.leftBecause "Extra attribute"
 
 -- | No slot content
 noSlotName :: Int -> String -> B.Ab a
-noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
+noSlotName n name = B.leftLine "No slot content" $ detail n where
     detail 0 = "Positional attribute @'" ++ name
     detail 1 = "Named attribute -"       ++ name
     detail 2 = "Global slot @@"          ++ name
@@ -52,25 +52,25 @@ noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> B.Ab a
-noSlotIndex xs n = Left $ B.abortLines "No slot content" $
+noSlotIndex xs n = B.leftLines "No slot content" $
                    ("No index @'" ++ show n ++ " in") : xs
 
 -- | Require attribute
 reqAttr :: String -> B.Ab a
-reqAttr = Left . B.abortLine "Require attribute"
+reqAttr = B.leftLine "Require attribute"
 
 -- | Require attribute
 reqAttrName :: String -> B.Ab a
-reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
+reqAttrName = B.leftLine "Require attribute name, e.g., -xxx"
 
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
-unexpAttr = Left . B.abortLine "Unexpected attribute"
+unexpAttr = B.leftLine "Unexpected attribute"
 
 -- | Unmatch any patterns
 unexpAttrMulti :: [(String, S.ParaUnmatch String)] -> B.Ab a
-unexpAttrMulti [u] = Left $ B.abortLines "Unexpected attribute" $ attrDetail u
-unexpAttrMulti us  = Left $ B.abortLines "Unmatch any patterns" $ concatMap attrDetail us
+unexpAttrMulti [u] = B.leftLines "Unexpected attribute" $ attrDetail u
+unexpAttrMulti us  = B.leftLines "Unmatch any patterns" $ concatMap attrDetail us
 
 attrDetail :: (String, S.ParaUnmatch String) -> [String]
 attrDetail (usage, unmatch) =

@@ -18,7 +18,7 @@ abAssert = B.abortable "assert"
 
 -- | Unknown option
 unkOption :: S.ParaUnmatch String -> B.Ab a
-unkOption un = Left $ B.abortLines "Unknown option" detail where
+unkOption un = B.leftLines "Unknown option" detail where
     detail = case un of
                S.ParaPos n p       -> ["Positional parameter out of range",
                                        "Expect " ++ expect p ++

@@ -33,17 +33,17 @@ nothing = B.leftBecause "Nothing"
 
 -- | Odd relation literal
 oddRelation :: Int -> Int -> B.Ab a
-oddRelation e a  = Left $ B.abortLines "Odd relation literal"
+oddRelation e a  = B.leftLines "Odd relation literal"
                         $ expectActual (len e) (len a)
     where len n = show n ++ " contents"
 
 -- | Quoted type name
 quoteType :: String -> B.Ab a
-quoteType = Left . B.abortLine "Quoted type name"
+quoteType = B.leftLine "Quoted type name"
 
 -- | Require flat name
 reqFlatName :: S.Token -> B.Ab a
-reqFlatName tok = Left $ B.abortLine "Require flat name" n where
+reqFlatName tok = B.leftLine "Require flat name" n where
     n = S.tokenContent tok
 
 -- | Require tuple in list
@@ -64,7 +64,7 @@ unkContent = B.leftBecause "Unknown content"
 
 -- | Unknown type name
 unkType :: String -> B.Ab a
-unkType = Left . B.abortLine "Unknown type name"
+unkType = B.leftLine "Unknown type name"
 
 -- | Expect and actual.
 expectActual :: String -> String -> [String]

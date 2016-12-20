@@ -32,7 +32,7 @@ notDate y m d = notMonthlyDate y m d
 -- | Not monthly date
 notMonthlyDate :: Integer -> Int -> Int -> B.Ab a
 notMonthlyDate y m d =
-    Left $ B.abortLines "Not monthly date"
+    B.leftLines "Not monthly date"
              [ "/year  " ++ show y
              , "/month " ++ show m
              , "/day   " ++ show d]
@@ -40,7 +40,7 @@ notMonthlyDate y m d =
 -- | Not weekly date
 notWeeklyDate :: Integer -> Int -> Int -> B.Ab a
 notWeeklyDate y w d =
-    Left $ B.abortLines "Not weekly date"
+    B.leftLines "Not weekly date"
              [ "/year  " ++ show y
              , "/week  " ++ show w
              , "/day   " ++ show d]
@@ -48,17 +48,17 @@ notWeeklyDate y w d =
 -- | Not yearly date
 notYearlyDate :: Integer -> Int -> B.Ab a
 notYearlyDate y d =
-    Left $ B.abortLines "Not yearly date"
+    B.leftLines "Not yearly date"
              [ "/year  " ++ show y
              , "/day   " ++ show d]
 
 -- | Too large digit
 tooLargeDigit :: String -> B.Ab a
-tooLargeDigit = Left . B.abortLine "Too large digit"
+tooLargeDigit = B.leftLine "Too large digit"
 
 -- | Can't read as number
 notNumber :: String -> B.Ab a
-notNumber = Left . B.abortLine "Can't read as number"
+notNumber = B.leftLine "Can't read as number"
 
 -- | Abort reason with encodable values.
 abortEncodables :: (B.MixEncode c) => String -> [c] -> B.AbortReason

@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Type.Message        as Msg
 
 -- | Type unmatch
 unmatchType :: String -> B.Ab a
-unmatchType = Left . B.abortLine "Type unmatch"
+unmatchType = B.leftLine "Type unmatch"
 
 -- | Bad argument
 badArg :: (B.MixEncode c) => [B.Ab c] -> B.Ab a
@@ -31,12 +31,12 @@ unexpArg :: (B.MixEncode c) => [B.Ab c] -> [String] -> B.Ab a
 unexpArg cs' expected =
     case sequence cs' of
       Left a   -> Left a
-      Right cs -> Left $ B.abortLines "Unexpected argument"
+      Right cs -> B.leftLines "Unexpected argument"
                          (["Expect"] ++ indent expected ++
                           ["Actual"] ++ indent (Msg.encodableLines cs))
     where indent = map ("  " ++)
 
 -- | Not a decimal.
 notDec :: (B.MixEncode c) => c -> B.Ab a
-notDec c = Left $ B.abortLine "Not a decimal" (B.encode c)
+notDec c = B.leftLine "Not a decimal" (B.encode c)
 

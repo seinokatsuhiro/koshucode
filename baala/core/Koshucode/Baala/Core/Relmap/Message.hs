@@ -33,7 +33,7 @@ abSpecialize = B.abortable "specialize"
 -- | Unknown nested relation reference.
 unkNestVar :: String -> [S.Token] -> [((S.Token, S.LocalRef), D.Head)] -> B.Ab a
 unkNestVar n ls ds = left where
-    left = Left $ B.abortLines "Unknown nested relation reference"
+    left = B.leftLines "Unknown nested relation reference"
            $ ("search" : map indent dynamic)
           ++ ("for"    : map indent lexical)
     indent  = ("  " ++)
@@ -62,5 +62,5 @@ disabledOutputClause :: B.Ab b
 disabledOutputClause = disabledFeature "output clause"
 
 disabledFeature :: String -> B.Ab b
-disabledFeature = Left . B.abortLine "Disabled feature"
+disabledFeature = B.leftLine "Disabled feature"
 

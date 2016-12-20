@@ -20,7 +20,7 @@ reqRelmap n = B.leftBecause $ "Require " ++ show n ++ " relmap"
 
 -- | Attribute not found
 noAttr :: String -> B.Ab a
-noAttr n = Left $ B.abortLine "Attribute not found" n
+noAttr n = B.leftLine "Attribute not found" n
 
 -- | Not implemented
 notImpl :: B.Ab a

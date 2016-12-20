@@ -15,6 +15,6 @@ import Koshucode.Baala.Rop.Flat.Message
 -- | Not a nested relation
 notNestRel :: [S.TermName] -> D.Head -> B.Ab a
 notNestRel ns he =
-    Left $ B.abortLines "Not a nested relation"
+    B.leftLines "Not a nested relation"
          $ detailTermRel "Given" ns he
 

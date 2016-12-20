@@ -34,16 +34,16 @@ import Koshucode.Baala.Rop.Base.Message
 -- | check-term failed
 checkTerm :: String -> [S.TermName] -> D.Head -> B.Ab a
 checkTerm label ns he =
-    Left $ B.abortLines "check-term failed"
+    B.leftLines "check-term failed"
          $ detailTermRel label ns he
 
 -- | Different headings
 diffHead :: [D.Head] -> B.Ab a
-diffHead = Left . B.abortLines "Different headings" . map showHead
+diffHead = B.leftLines "Different headings" . map showHead
 
 -- | Dump content expression
 dumpCox :: (Show c) => c -> B.Ab a
-dumpCox cox = Left $ B.abortLines "Dump content expression"
+dumpCox cox = B.leftLines "Dump content expression"
                    $ lines $ show cox
 
 -- | Dump relation
@@ -52,13 +52,13 @@ dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
 dumpTrees :: [S.Tree] -> B.Ab a
-dumpTrees trees = Left $ B.abortLines "Dump token trees"
+dumpTrees trees = B.leftLines "Dump token trees"
                    $ lines $ show $ S.treesDoc trees
 
 -- | Duplicate term name
 dupTerm :: (D.GetTermNames t) => t -> B.Ab a
 dupTerm t =
-    Left $ B.abortLines "Duplicate term name"
+    B.leftLines "Duplicate term name"
          $ msgTerms2 "Duplicate" t' "in the terms" t
         where t' = B.duplicates $ D.getTermNames t
 
@@ -85,7 +85,7 @@ reqInterp = B.leftBecause "Require data interpretation"
 -- | Require new term names
 reqNewTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
 reqNewTerm t1 t2 =
-    Left $ B.abortLines "Require new term names"
+    B.leftLines "Require new term names"
          $ Msg.msgTerms2 "Present" t1 "in the terms" t2
 
 -- | Require unary function
@@ -102,7 +102,7 @@ showHead = unwords . map S.termNameString . D.getTermNames
 -- | Unmatch shared terms.
 unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a
 unmatchShare e a =
-    Left $ B.abortLines "Unmatch shared terms"
+    B.leftLines "Unmatch shared terms"
          $ expectActual (ts e) (ts a)
     where ts xs = unwords $ S.termNameString <$> xs
 

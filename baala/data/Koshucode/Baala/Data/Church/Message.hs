@@ -73,44 +73,44 @@ abCoxSyntax = B.abortable "cox-syntax"
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
-ambInfixes = Left . B.abortLines "Ambiguous infix operators"
+ambInfixes = B.leftLines "Ambiguous infix operators"
 
 -- | Lack of argument
 lackArg :: String -> B.Ab a
-lackArg = Left . B.abortLine "Lack of argument"
+lackArg = B.leftLine "Lack of argument"
 
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
-unkCop = Left . B.abortLine "Unknown content operator"
+unkCop = B.leftLine "Unknown content operator"
 
 -- | Unknown expression
 unkCox :: String -> B.Ab a
-unkCox = Left . B.abortLine "Unknown expression"
+unkCox = B.leftLine "Unknown expression"
 
 -- | Unknown global variable
 unkGlobalVar :: String -> B.Ab a
-unkGlobalVar = Left . B.abortLine "Unknown global variable"
+unkGlobalVar = B.leftLine "Unknown global variable"
 
 -- | Unknown reference for variable
 unkRefVar :: (String, Int) -> [String] -> B.Ab a
-unkRefVar (v, k) vs = Left $ B.abortLines "Unknown reference for variable"
+unkRefVar (v, k) vs = B.leftLines "Unknown reference for variable"
                 [ "look up " ++ var (v, k)
                 , "in " ++ args vs ]
 
 -- | Unknown object
 unkShow :: (Show x) => x -> B.Ab a
-unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
+unkShow x = B.leftLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
 unkTerm :: (T.GetTermNames t1, T.GetTermNames t2) => t1 -> t2 -> B.Ab a
 unkTerm t1 t2 =
-    Left $ B.abortLines "Unknown term name"
+    B.leftLines "Unknown term name"
          $ msgTerms2 "Unknown" t1 "in the terms" t2
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
 unmatchBlank v k _ vs =
-    Left $ B.abortLines "Unmatch blank (bug)"
+    B.leftLines "Unmatch blank (bug)"
            [ "look up " ++ var (v, k)
            , "in " ++ args vs ]
 

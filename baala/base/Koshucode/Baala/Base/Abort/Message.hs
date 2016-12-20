@@ -20,5 +20,5 @@ adlib reason = B.leftBecause reason
 
 -- | Unsupported feature.
 unsupported :: String -> B.Ab a
-unsupported = Left . B.abortLine "Unsupported feature"
+unsupported = B.leftLine "Unsupported feature"
 

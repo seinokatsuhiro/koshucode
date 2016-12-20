@@ -18,6 +18,6 @@ abRun = B.abortable "run"
 
 -- | Unknown local relation
 unkLocalRel :: S.Token -> String -> [String] -> B.Ab a
-unkLocalRel p n rs = Left $ B.abortLines "Unknown local relation" $ ref : rs
+unkLocalRel p n rs = B.leftLines "Unknown local relation" $ ref : rs
     where ref = n ++ " in " ++ S.tokenContent p
 

@@ -19,7 +19,7 @@ abLexmap = B.abortable "lexmap"
 
 -- | Ambiguous relmaps
 ambRelmap :: String -> [d] -> B.Ab a
-ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
+ambRelmap name ds = B.leftLine "Ambiguous relmaps"
                          $ name ++ " (" ++ show (length ds) ++ ")"
 
 -- | Require grouping paren
@@ -28,5 +28,5 @@ reqGroup = B.leftBecause "Require grouping parens"
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
-unkRelmap = Left . B.abortLine "Unknown relmap operator"
+unkRelmap = B.leftLine "Unknown relmap operator"
 
