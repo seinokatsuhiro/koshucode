@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Rop.Base.Define
   ( RopDefine,
-    ropList, rop,
+    ropList, rops, rop,
     ropAlias,
   ) where
 
@@ -32,6 +32,10 @@ ropList group = map make where
                  , C.ropParaze = sorter
                  , C.ropCons   = cons }
 
+-- | Make implementations of relmap operators.
+rops :: (S.ToAttrLayout lay) => C.RopGroup -> [(C.RopCons c, lay)] -> [C.Rop c]
+rops group def = ropList group (S.toAttrLayout O.<$$> def)
+
 -- | Make definition of relmap operator.
 rop :: C.RopCons c              -- ^ Constructor
     -> [(S.AttrUsage, String)]  -- ^ Usage text and attribute layout
@@ -42,7 +46,7 @@ rop cons ul = (cons, S.toAttrLayout ul)
 ropAlias
     :: [(C.RopName, C.RopName)]  -- ^ Alias and original rop names
     -> O.Map [C.Rop c]           -- ^ Original rop list to add aliases.
-ropAlias alias rops = foldr ropAliasAdd rops alias
+ropAlias alias rs = foldr ropAliasAdd rs alias
 
 -- | Add alias of relmap operator.
 ropAliasAdd :: (C.RopName, C.RopName) -> O.Map [C.Rop c]
