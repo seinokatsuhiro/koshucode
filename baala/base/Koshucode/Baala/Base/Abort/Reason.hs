@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Abort.Reason
   
     -- * Creation
     abortBecause, abortLine, abortLines, abortPage,
-    leftBecause, leftLine, leftLines,
+    leftBecause, leftLine, leftLines, leftPage,
 
     -- * Alteration
     Abortable,
@@ -82,7 +82,7 @@ abortBecause r = AbortReason r [] [] []
 
 -- | Construct abort reason with reason and detailed text.
 abortLine :: String -> String -> AbortReason
-abortLine  r d = AbortReason r [d] [] []
+abortLine r d = AbortReason r [d] [] []
 
 -- | Construct abort reason with reason and multilined detailed text.
 abortLines :: String -> [String] -> AbortReason
@@ -90,7 +90,7 @@ abortLines r ds = AbortReason r ds [] []
 
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
-abortPage  r n = AbortReason r [] n []
+abortPage r ns = AbortReason r [] ns []
 
 -- | 'Left' plus 'abortBecause'.
 leftBecause :: String -> Ab a
@@ -100,9 +100,13 @@ leftBecause r = Left $ abortBecause r
 leftLine :: String -> String -> Ab a
 leftLine r d = Left $ abortLine r d
 
--- | 'Left' plus 'abortLine'.
+-- | 'Left' plus 'abortLines'.
 leftLines :: String -> [String] -> Ab a
 leftLines r ds = Left $ abortLines r ds
+
+-- | 'Left' plus 'abortPage'.
+leftPage :: String -> [String] -> Ab a
+leftPage r ns = Left $ abortPage r ns
 
 
 -- --------------------------------------------  Alteration
