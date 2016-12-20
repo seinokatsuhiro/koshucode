@@ -76,15 +76,8 @@ copsType =
 --   "a"
 --
 copToDec :: (D.CContent c) => D.CopCalc c
-copToDec = op where
-    op [Right c] | D.isText c  = case D.decodeDecimal $ D.gText c of
-                                   Right n  -> Right $ D.pDec n
-                                   Left _   -> Right c
-                 | D.isBool c  = case D.gBool c of
-                                   True   -> Right $ D.pInt 1
-                                   False  -> Right $ D.pInt 0
-                 | otherwise   = Right c
-    op xs = Msg.badArg xs
+copToDec [Right c] = Right $ D.toDec c
+copToDec xs = Msg.badArg xs
 
 copToText :: (D.CContent c) => D.CopCalc c
 copToText = op where

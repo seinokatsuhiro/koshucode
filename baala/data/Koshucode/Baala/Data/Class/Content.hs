@@ -5,9 +5,12 @@
 module Koshucode.Baala.Data.Class.Content
   ( -- * Generic content
     CContent (..),
+    toDec,
   ) where
 
+import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Type                     as T
 import qualified Koshucode.Baala.Data.Class.Complex       as D
 import qualified Koshucode.Baala.Data.Class.Edge          as D
 import qualified Koshucode.Baala.Data.Class.Simple        as D
@@ -56,4 +59,15 @@ class (Ord c, Show c, B.Default c, B.MixEncode c,
         -- end
         | D.isEnd      c = 31
         | otherwise      = error "unknown content"
+
+-- | Convert some content to decimal number.
+toDec :: (CContent c) => O.Map c
+toDec c
+    | D.isText c  = case T.decodeDecimal $ D.gText c of
+                      Right n  -> D.pDec n
+                      Left _   -> c
+    | D.isBool c  = case D.gBool c of
+                      True   -> D.pInt 1
+                      False  -> D.pInt 0
+    | otherwise   = c
 
