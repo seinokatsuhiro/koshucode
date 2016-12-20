@@ -64,23 +64,23 @@ dupTerm t =
 
 -- | Odd attribute
 oddAttr :: B.Ab a
-oddAttr = Left $ B.abortBecause "Odd attribute"
+oddAttr = B.leftBecause "Odd attribute"
 
 -- | Require Boolean
 reqBool :: B.Ab a
-reqBool = Left $ B.abortBecause "Require Boolean"
+reqBool = B.leftBecause "Require Boolean"
 
 -- | Require relation
 reqRel :: B.Ab a
-reqRel = Left $ B.abortBecause "Require relation"
+reqRel = B.leftBecause "Require relation"
 
 -- | Require collection type
 reqCollection :: B.Ab a
-reqCollection = Left $ B.abortBecause "Require collection type"
+reqCollection = B.leftBecause "Require collection type"
 
 -- | Require data interpretation
 reqInterp :: B.Ab a
-reqInterp = Left $ B.abortBecause "Require data interpretation"
+reqInterp = B.leftBecause "Require data interpretation"
 
 -- | Require new term names
 reqNewTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
@@ -90,11 +90,11 @@ reqNewTerm t1 t2 =
 
 -- | Require unary function
 reqUnaryFn :: B.Ab a
-reqUnaryFn = Left $ B.abortBecause "Require unary function"
+reqUnaryFn = B.leftBecause "Require unary function"
 
 -- | Unexpected term names
 unexpTermName :: B.Ab a
-unexpTermName = Left $ B.abortBecause "Unexpected term names"
+unexpTermName = B.leftBecause "Unexpected term names"
 
 showHead :: D.Head -> String
 showHead = unwords . map S.termNameString . D.getTermNames

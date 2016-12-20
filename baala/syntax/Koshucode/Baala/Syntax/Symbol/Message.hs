@@ -12,9 +12,9 @@ import qualified Koshucode.Baala.Base       as B
 
 -- | Expect ordinary symbol
 expOrdSym :: B.Ab a
-expOrdSym = Left $ B.abortBecause "Expect ordinary symbol"
+expOrdSym = B.leftBecause "Expect ordinary symbol"
 
 -- | Quotation not end in line
 quotNotEnd :: B.Ab a
-quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
+quotNotEnd = B.leftBecause "Quotation not end in line"
 

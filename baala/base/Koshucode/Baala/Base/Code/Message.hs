@@ -18,9 +18,9 @@ abCode = B.abortable "code"
 
 -- | Extra close bracket
 extraCloseBracket :: B.Ab a
-extraCloseBracket = Left $ B.abortBecause "Extra close bracket"
+extraCloseBracket = B.leftBecause "Extra close bracket"
 
 -- | Unclosed open bracket
 extraOpenBracket :: B.Ab a
-extraOpenBracket = Left $ B.abortBecause "Unclosed open bracket"
+extraOpenBracket = B.leftBecause "Unclosed open bracket"
 

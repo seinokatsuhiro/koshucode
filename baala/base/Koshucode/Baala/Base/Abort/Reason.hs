@@ -15,9 +15,8 @@ module Koshucode.Baala.Base.Abort.Reason
     AbTest, IOAb, BinAb,
   
     -- * Creation
-    abortBecause,
-    abortLine, abortLines,
-    abortPage,
+    abortBecause, abortLine, abortLines, abortPage,
+    leftBecause,
 
     -- * Alteration
     Abortable,
@@ -92,6 +91,10 @@ abortLines r d = AbortReason r d [] []
 -- | Construct abort reason with reason and note.
 abortPage :: String -> [String] -> AbortReason
 abortPage  r n = AbortReason r [] n []
+
+-- | 'Left' plus 'abortBecause'.
+leftBecause :: String -> Ab a
+leftBecause r = Left $ abortBecause r
 
 
 -- --------------------------------------------  Alteration

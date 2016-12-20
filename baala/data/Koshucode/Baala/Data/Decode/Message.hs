@@ -29,7 +29,7 @@ abLiteral = B.abortable "literal"
 
 -- | Nothing
 nothing :: B.Ab a
-nothing = Left $ B.abortBecause "Nothing"
+nothing = B.leftBecause "Nothing"
 
 -- | Odd relation literal
 oddRelation :: Int -> Int -> B.Ab a
@@ -48,19 +48,19 @@ reqFlatName tok = Left $ B.abortLine "Require flat name" n where
 
 -- | Require tuple in list
 reqRelTuple :: B.Ab a
-reqRelTuple = Left $ B.abortBecause "Require tuple in list"
+reqRelTuple = B.leftBecause "Require tuple in list"
 
 -- | Require term name
 reqTermName :: B.Ab a
-reqTermName = Left $ B.abortBecause "Require term name"
+reqTermName = B.leftBecause "Require term name"
 
 -- | Unknown bracket
 unkBracket :: B.Ab a
-unkBracket = Left $ B.abortBecause "Unknown bracket"
+unkBracket = B.leftBecause "Unknown bracket"
 
 -- | Unknown content
 unkContent :: B.Ab a
-unkContent = Left $ B.abortBecause "Unknown content"
+unkContent = B.leftBecause "Unknown content"
 
 -- | Unknown type name
 unkType :: String -> B.Ab a

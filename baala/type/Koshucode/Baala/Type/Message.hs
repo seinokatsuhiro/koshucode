@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Base       as B
 
 -- | Divide by zero
 divideByZero :: B.Ab a
-divideByZero = Left $ B.abortBecause "Divide by zero"
+divideByZero = B.leftBecause "Divide by zero"
 
 -- | Different decimal length
 heteroDecimal :: (B.MixEncode c) => c -> c -> B.Ab a

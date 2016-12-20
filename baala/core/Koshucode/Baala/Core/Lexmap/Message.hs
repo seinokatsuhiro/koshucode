@@ -24,7 +24,7 @@ ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
 
 -- | Require grouping paren
 reqGroup :: B.Ab a
-reqGroup = Left $ B.abortBecause "Require grouping parens"
+reqGroup = B.leftBecause "Require grouping parens"
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a

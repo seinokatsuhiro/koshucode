@@ -40,7 +40,7 @@ dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map S.termNameString ns)
 
 -- | Extra attribute
 extraAttr :: B.Ab a
-extraAttr = Left $ B.abortBecause "Extra attribute"
+extraAttr = B.leftBecause "Extra attribute"
 
 -- | No slot content
 noSlotName :: Int -> String -> B.Ab a
