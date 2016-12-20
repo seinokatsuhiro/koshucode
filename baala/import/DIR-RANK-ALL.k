@@ -50,8 +50,8 @@
     | "Match" | [ "Operator" ] ] =}
 
 |-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 10 | "CodePos" |
-    [ "Overture" | "Prelude" | "Text" ] ] [ 11 | "Reason" | [ "Overture" ] ] [ 12 | "Report" | [ "List" | "Overture" |
-    "Text" ] ] [ 14 | "Message" | [ "Abort" ] ] =}
+    [ "Overture" | "Prelude" | "Text" ] ] [ 11 | "Reason" | [ "List" | "Overture" ] ] [ 12 | "Report" | [ "List" |
+    "Overture" | "Text" ] ] [ 14 | "Message" | [ "Abort" ] ] =}
 |-- DIR-RANK  /dir-rank 14  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 6 | "Encoding" | [
     "Prelude" ] ] [ 6 | "Http" | [ "Overture" | "Prelude" ] ] [ 8 | "IOPoint" | [ "List" | "Overture" | "Prelude" ] ] [
     14 | "BzFile" | [ "Abort" | "Prelude" ] ] =}
@@ -291,7 +291,7 @@ TABLE : DIR-RANK
   14        "Koshucode.Baala.Base.Abort"         /rank /base                /import-dir
                                                  ----- -------------------- -----------------------------------------------------------------------------------------
                                                  10    "CodePos"            [ "Overture" | "Prelude" | "Text" ]
-                                                 11    "Reason"             [ "Overture" ]
+                                                 11    "Reason"             [ "List" | "Overture" ]
                                                  12    "Report"             [ "List" | "Overture" | "Text" ]
                                                  14    "Message"            [ "Abort" ]
                                                  

@@ -24,7 +24,7 @@
 
 |-- DIR  /package 'base  /code 16  /comment 6  /dir "base/Koshucode/Baala"
 |-- DIR  /package 'base  /code 86  /comment 44  /dir "base/Koshucode/Baala/Base"
-|-- DIR  /package 'base  /code 227  /comment 223  /dir "base/Koshucode/Baala/Base/Abort"
+|-- DIR  /package 'base  /code 251  /comment 240  /dir "base/Koshucode/Baala/Base/Abort"
 |-- DIR  /package 'base  /code 377  /comment 291  /dir "base/Koshucode/Baala/Base/Code"
 |-- DIR  /package 'base  /code 236  /comment 125  /dir "base/Koshucode/Baala/Base/IO"
 
@@ -55,7 +55,7 @@
 
 |-- DIR  /package 'data  /code 508  /comment 328  /dir "data/Koshucode/Baala/Data/Decode"
 |-- DIR  /package 'overture  /code 20  /comment 10  /dir "overture/Koshucode/Baala"
-|-- DIR  /package 'overture  /code 190  /comment 279  /dir "overture/Koshucode/Baala/Overture"
+|-- DIR  /package 'overture  /code 196  /comment 296  /dir "overture/Koshucode/Baala/Overture"
 |-- DIR  /package 'overture  /code 25  /comment 28  /dir "overture/Koshucode/Baala/Overture/Name"
 |-- DIR  /package 'overture  /code 319  /comment 281  /dir "overture/Koshucode/Baala/Overture/Text"
 
@@ -94,18 +94,18 @@
 |-- DIR  /package 'type  /code 712  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /package 'type  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 |-- DIR  /package 'writer  /code 12  /comment 5  /dir "writer/Koshucode/Baala"
-|-- DIR  /package 'writer  /code 420  /comment 190  /dir "writer/Koshucode/Baala/Writer"
+|-- DIR  /package 'writer  /code 438  /comment 242  /dir "writer/Koshucode/Baala/Writer"
 
 *** 60 judges
 
-|-- DIR-TOTAL  /package 'base  /code 2 264  /comment 2 340
+|-- DIR-TOTAL  /package 'base  /code 2 288  /comment 2 357
 |-- DIR-TOTAL  /package 'calculator  /code 357  /comment 134
 |-- DIR-TOTAL  /package 'cop  /code 1 172  /comment 875
 |-- DIR-TOTAL  /package 'core  /code 2 066  /comment 1 282
 |-- DIR-TOTAL  /package 'data-plus  /code 12  /comment 5
 
 |-- DIR-TOTAL  /package 'data  /code 1 789  /comment 1 184
-|-- DIR-TOTAL  /package 'overture  /code 671  /comment 784
+|-- DIR-TOTAL  /package 'overture  /code 677  /comment 801
 |-- DIR-TOTAL  /package 'rop-cox  /code 946  /comment 578
 |-- DIR-TOTAL  /package 'rop-flat  /code 2 018  /comment 1 543
 |-- DIR-TOTAL  /package 'rop-nested  /code 279  /comment 233
@@ -114,7 +114,7 @@
 |-- DIR-TOTAL  /package 'syntax  /code 2 065  /comment 1 946
 |-- DIR-TOTAL  /package 'toolkit  /code 485  /comment 229
 |-- DIR-TOTAL  /package 'type  /code 2 028  /comment 1 893
-|-- DIR-TOTAL  /package 'writer  /code 432  /comment 195
+|-- DIR-TOTAL  /package 'writer  /code 450  /comment 247
 
 *** 15 judges
 
@@ -122,9 +122,9 @@
 |-- FILE  /package 'base  /code 8  /comment 6  /file "Abort.hs"  /dir "base/Koshucode/Baala/Base"
 |-- FILE  /package 'base  /code 81  /comment 65  /file "CodePos.hs"  /dir "base/Koshucode/Baala/Base/Abort"
 |-- FILE  /package 'base  /code 12  /comment 12  /file "Message.hs"  /dir "base/Koshucode/Baala/Base/Abort"
-|-- FILE  /package 'base  /code 49  /comment 59  /file "Reason.hs"  /dir "base/Koshucode/Baala/Base/Abort"
+|-- FILE  /package 'base  /code 60  /comment 69  /file "Reason.hs"  /dir "base/Koshucode/Baala/Base/Abort"
 
-|-- FILE  /package 'base  /code 85  /comment 87  /file "Report.hs"  /dir "base/Koshucode/Baala/Base/Abort"
+|-- FILE  /package 'base  /code 98  /comment 94  /file "Report.hs"  /dir "base/Koshucode/Baala/Base/Abort"
 |-- FILE  /package 'base  /code 12  /comment 6  /file "Code.hs"  /dir "base/Koshucode/Baala/Base"
 |-- FILE  /package 'base  /code 23  /comment 24  /file "Clause.hs"  /dir "base/Koshucode/Baala/Base/Code"
 |-- FILE  /package 'base  /code 72  /comment 65  /file "Infix.hs"  /dir "base/Koshucode/Baala/Base/Code"
@@ -285,7 +285,7 @@
 |-- FILE  /package 'overture  /code 7  /comment 9  /file "String.hs"  /dir "overture/Koshucode/Baala/Overture/Name"
 
 |-- FILE  /package 'overture  /code 8  /comment 10  /file "Text.hs"  /dir "overture/Koshucode/Baala/Overture/Name"
-|-- FILE  /package 'overture  /code 24  /comment 54  /file "Shorthand.hs"  /dir "overture/Koshucode/Baala/Overture"
+|-- FILE  /package 'overture  /code 30  /comment 71  /file "Shorthand.hs"  /dir "overture/Koshucode/Baala/Overture"
 |-- FILE  /package 'overture  /code 10  /comment 5  /file "Text.hs"  /dir "overture/Koshucode/Baala/Overture"
 |-- FILE  /package 'overture  /code 88  /comment 58  /file "Category.hs"  /dir "overture/Koshucode/Baala/Overture/Text"
 |-- FILE  /package 'overture  /code 73  /comment 101  /file "Integer.hs"  /dir "overture/Koshucode/Baala/Overture/Text"
@@ -451,7 +451,7 @@
 |-- FILE  /package 'type  /code 33  /comment 21  /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /package 'writer  /code 12  /comment 5  /file "Writer.hs"  /dir "writer/Koshucode/Baala"
 |-- FILE  /package 'writer  /code 82  /comment 34  /file "Csv.hs"  /dir "writer/Koshucode/Baala/Writer"
-|-- FILE  /package 'writer  /code 66  /comment 36  /file "Html.hs"  /dir "writer/Koshucode/Baala/Writer"
+|-- FILE  /package 'writer  /code 84  /comment 88  /file "Html.hs"  /dir "writer/Koshucode/Baala/Writer"
 
 |-- FILE  /package 'writer  /code 95  /comment 33  /file "Json.hs"  /dir "writer/Koshucode/Baala/Writer"
 |-- FILE  /package 'writer  /code 75  /comment 56  /file "Judge.hs"  /dir "writer/Koshucode/Baala/Writer"
@@ -459,14 +459,14 @@
 
 *** 268 judges
 
-|-- FILE-TOTAL  /package 'base  /code 2 264  /comment 2 340
+|-- FILE-TOTAL  /package 'base  /code 2 288  /comment 2 357
 |-- FILE-TOTAL  /package 'calculator  /code 357  /comment 134
 |-- FILE-TOTAL  /package 'cop  /code 1 172  /comment 875
 |-- FILE-TOTAL  /package 'core  /code 2 066  /comment 1 282
 |-- FILE-TOTAL  /package 'data-plus  /code 12  /comment 5
 
 |-- FILE-TOTAL  /package 'data  /code 1 789  /comment 1 184
-|-- FILE-TOTAL  /package 'overture  /code 671  /comment 784
+|-- FILE-TOTAL  /package 'overture  /code 677  /comment 801
 |-- FILE-TOTAL  /package 'rop-cox  /code 946  /comment 578
 |-- FILE-TOTAL  /package 'rop-flat  /code 2 018  /comment 1 543
 |-- FILE-TOTAL  /package 'rop-nested  /code 279  /comment 233
@@ -475,7 +475,7 @@
 |-- FILE-TOTAL  /package 'syntax  /code 2 065  /comment 1 946
 |-- FILE-TOTAL  /package 'toolkit  /code 485  /comment 229
 |-- FILE-TOTAL  /package 'type  /code 2 028  /comment 1 893
-|-- FILE-TOTAL  /package 'writer  /code 432  /comment 195
+|-- FILE-TOTAL  /package 'writer  /code 450  /comment 247
 
 *** 15 judges
 

@@ -85,9 +85,9 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Message"        /import "Koshucode.Baala.Base.Abort"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Reason"         /import "Koshucode.Baala.Base.Abort.CodePos"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Report"         /import "Koshucode.Baala.Base.List"
@@ -316,8 +316,8 @@ Command `./dir-rank.k ../base/data/IMPORT.k` produces:
     ] [ 1 | "TextTable" | [ ] ] [ 3 | "PPrint" | [ "Prelude" ] ] [ 5 | "Dots" | [ "List" ] ] [ 5 | "Suffix" | [ "List" ]
     ] =}
 |-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Base.Abort"  /base-rank {= /rank /base /import-dir [ 7 | "CodePos" | [
-    "Prelude" | "Text" ] ] [ 8 | "Reason" | [ ] ] [ 9 | "Report" | [ "List" | "Text" ] ] [ 11 | "Message" | [ "Abort" ]
-    ] =}
+    "Prelude" | "Text" ] ] [ 8 | "Reason" | [ "List" ] ] [ 9 | "Report" | [ "List" | "Text" ] ] [ 11 | "Message" | [
+    "Abort" ] ] =}
 
 |-- DIR-RANK  /dir-rank 11  /dir "Koshucode.Baala.Base.IO"  /base-rank {= /rank /base /import-dir [ 3 | "Encoding" | [
     "Prelude" ] ] [ 3 | "Http" | [ "Prelude" ] ] [ 5 | "IOPoint" | [ "List" | "Prelude" ] ] [ 11 | "BzFile" | [ "Abort"
@@ -376,7 +376,7 @@ TABLE : DIR-RANK
   11        "Koshucode.Baala.Base.Abort"     /rank /base         /import-dir
                                              ----- ------------- -----------------------------------------------------------------------
                                              7     "CodePos"     [ "Prelude" | "Text" ]
-                                             8     "Reason"      [ ]
+                                             8     "Reason"      [ "List" ]
                                              9     "Report"      [ "List" | "Text" ]
                                              11    "Message"     [ "Abort" ]
                                              
