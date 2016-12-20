@@ -13,7 +13,7 @@ import qualified Control.Monad                       as M
 import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as D
+import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Writer.Judge        as W
@@ -25,14 +25,14 @@ resultKoshu = resultKoshu2
 -- | Koshucode writer with two-space separator.
 --   This function uses 'D.judgeMix2'.
 resultKoshu2 :: (B.MixEncode c) => C.ResultWriter c
-resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu (D.judgeBreak, D.judgeMix2)
+resultKoshu2 = C.ResultWriterChunk "koshu-2" $ hPutKoshu (T.judgeBreak, T.judgeMix2)
 
 -- | Koshucode writer with tab separator.
 --   This function uses 'D.judgeMixTab'.
 resultKoshuTab :: (B.MixEncode c) => C.ResultWriter c
-resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, D.judgeMixTab)
+resultKoshuTab = C.ResultWriterChunk "koshu-tab" $ hPutKoshu (B.crlfBreak, T.judgeMixTab)
 
-hPutKoshu :: (B.MixEncode c) => (B.LineBreak, D.EncodeJudge c) -> C.ResultWriterChunk c
+hPutKoshu :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge c) -> C.ResultWriterChunk c
 hPutKoshu output h result status sh =
     do -- head
        B.when (C.resultPrintHead result) $ hPutHead h result
@@ -88,7 +88,7 @@ hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
 -- ----------------------  Chunk
 
 hPutShortChunk
-    :: (B.MixEncode c) => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c
+    :: (B.MixEncode c) => (B.LineBreak, T.EncodeJudge c) -> IO.Handle -> C.Result c
     -> W.JudgeCount -> C.ShortResultChunks c -> IO W.JudgeCount
 hPutShortChunk output h result cnt (S.Short _ def chunks) =
     do hPutShort h def
@@ -109,7 +109,7 @@ hPutShort h def =
 -- | Output result chunk.
 hPutChunks
     :: (B.MixEncode c)
-    => (B.LineBreak, D.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransString 
+    => (B.LineBreak, T.EncodeJudge c) -> IO.Handle -> C.Result c -> B.TransString 
     -> [C.ResultChunk c] -> W.JudgeCount -> IO W.JudgeCount
 hPutChunks (lb, encode) h result sh = loop where
     loop [] cnt                            = return cnt

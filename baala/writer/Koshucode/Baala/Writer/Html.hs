@@ -69,6 +69,7 @@ import qualified Text.Blaze.Html.Renderer.Pretty    as Hi
 import qualified Text.Blaze.Html.Renderer.String    as Hc
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Type               as T
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Core               as C
@@ -102,9 +103,9 @@ contToHtml sh = content where
         | D.isRel c = rel $ D.gRel c
         | otherwise = H.toMarkup $ B.mixToFlatString $ B.mixTransEncode sh c
 
-    rel (D.Rel he bo) =
+    rel (T.Rel he bo) =
         H.table ! class_ "relation" $ do
-          tr_ "heading" (term O.<#!> D.getTermNames he)
+          tr_ "heading" (term O.<#!> T.getTermNames he)
           row O.<#!> bo
 
     row cs = tr_ "tuple" (col O.<#!> cs)

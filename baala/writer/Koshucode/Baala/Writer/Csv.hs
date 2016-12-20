@@ -13,6 +13,7 @@ import qualified Data.Char                 as Ch
 import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
+import qualified Koshucode.Baala.Type      as T
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 
@@ -40,7 +41,7 @@ hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } 
       chunks = concatMap S.shortBody sh
 
       toCsv :: C.ResultChunk c -> [String]
-      toCsv (C.ResultRel _ (D.Rel he bo)) = appendHead he $ map line bo
+      toCsv (C.ResultRel _ (T.Rel he bo)) = appendHead he $ map line bo
       toCsv _ = []
 
       join :: [String] -> String
@@ -50,7 +51,7 @@ hPutXsv setting@XsvSetting { xsvHead = isHead, xsvSep = sep, xsvQuote = quote } 
       line = join . map (csvContent setting)
 
       appendHead he xs
-          | isHead    = join ((quote . S.termNameContent) <$> D.getTermNames he) : xs
+          | isHead    = join ((quote . S.termNameContent) <$> T.getTermNames he) : xs
           | otherwise = xs
 
 csvContent :: (D.CContent c) => XsvSetting -> c -> String
@@ -58,7 +59,7 @@ csvContent setting@XsvSetting { xsvQuote = quote } c
     | D.isCode   c  = quote $ D.gCode c
     | D.isText   c  = quote $ D.gText c
     | D.isTerm   c  = quote $ S.termNameString $ D.gTerm c
-    | D.isDec    c  = D.encodeDecimalCompact $ D.gDec c
+    | D.isDec    c  = T.encodeDecimalCompact $ D.gDec c
     | D.isClock  c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gClock c
     | D.isTime   c  = quote $ B.mixToFlatString $ B.mixEncode $ D.gTime c
     | D.isBool   c  = boolToString $ D.gBool c

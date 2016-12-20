@@ -17,43 +17,43 @@ import qualified Data.Map                            as Map
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.System              as O
 import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Data                as D
+import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Core                as C
 
 
 -- ----------------------  Writer
 
 -- | Print list of judgements.
-putJudges :: (Show c, B.MixEncode c) => [D.Judge c] -> IO ()
+putJudges :: (Show c, B.MixEncode c) => [T.Judge c] -> IO ()
 putJudges js =
     do _ <- putJudgesWith (O.exitCode 0) js
        return ()
 
 -- | `B.stdout` version of `hPutJudgesWith`.
-putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [D.Judge c] -> IO B.ExitCode
+putJudgesWith :: (Show c, B.MixEncode c) => B.ExitCode -> [T.Judge c] -> IO B.ExitCode
 putJudgesWith = hPutJudgesWith B.stdout B.def
 
 -- | Print list of judges.
 hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixEncode js $ judgeCountMix []
-       B.hPutMix D.judgeBreak h mx
+       B.hPutMix T.judgeBreak h mx
        O.hPutLines h $ judgeSummary status (cnt, tab)
        return status
 
 -- | Edit judgements to mix text.
 judgesCountMix :: forall c.
-    C.Result c -> (D.Judge c -> B.MixText) -> [D.Judge c] -> O.Map JudgeCountMix
+    C.Result c -> (T.Judge c -> B.MixText) -> [T.Judge c] -> O.Map JudgeCountMix
 judgesCountMix result writer = loop where
     loop (j : js) cnt  = loop js $ put j cnt
     loop [] (mx, c, tab) =
         let mx' = (B.mixHard `when` (c > 0)) <> B.mixLine (total c)
         in (mx <> mx', c, tab)
 
-    put :: D.Judge c -> O.Map JudgeCountMix
+    put :: T.Judge c -> O.Map JudgeCountMix
     put judge (mx, c, tab) =
         let c'   = c + 1
-            cls  = D.getClass judge
+            cls  = T.getClass judge
             mx'  = gutterMix c <> B.mixLine (writer judge)
             tab' = Map.alter inc cls tab
         in (mx <> mx', c', tab')
@@ -80,21 +80,21 @@ when _ False = mempty
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter.
-type JudgeCount = (Int, Map.Map D.JudgeClass Int)
+type JudgeCount = (Int, Map.Map T.JudgeClass Int)
 
 -- | Mix text and judgement counter.
-type JudgeCountMix = (B.MixText, Int, Map.Map D.JudgeClass Int)
+type JudgeCountMix = (B.MixText, Int, Map.Map T.JudgeClass Int)
 
 -- | Zero counters.
 --
 --   >>> judgeCount $ words "A B C"
 --   (0, fromList [("A",0), ("B",0), ("C",0)])
 --
-judgeCount :: [D.JudgeClass] -> JudgeCount
+judgeCount :: [T.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Empty and zero counters.
-judgeCountMix :: [D.JudgeClass] -> JudgeCountMix
+judgeCountMix :: [T.JudgeClass] -> JudgeCountMix
 judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Generate judgement counter comment.

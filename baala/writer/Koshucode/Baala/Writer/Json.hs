@@ -22,6 +22,7 @@ import qualified Data.ByteString.Lazy              as Byte
 import qualified Data.Text                         as T
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Type              as T
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 
@@ -46,8 +47,8 @@ hPutJSON h _ status (j1:js) =
       cput j = do IO.hPutStr h ", "
                   put j
 
-instance (A.ToJSON c) => A.ToJSON (D.Judge c) where
-    toJSON (D.JudgeAffirm p xs) =
+instance (A.ToJSON c) => A.ToJSON (T.Judge c) where
+    toJSON (T.JudgeAffirm p xs) =
         A.object [ "judge" .= ("|--" :: T.Text)
                  , "name"  .= p
                  , "args"  .= termsJson xs ]
@@ -68,7 +69,7 @@ contentJson c
     | D.isCode    c = A.toJSON    $ D.gCode c
     | D.isText    c = A.toJSON    $ D.gText c
     | D.isTerm    c = A.toJSON    $ S.termNameString $ D.gTerm c
-    | D.isDec     c = A.toJSON    $ D.decimalDouble $ D.gDec c
+    | D.isDec     c = A.toJSON    $ T.decimalDouble $ D.gDec c
     | D.isClock   c = unimpl      $ D.gClock c
     | D.isTime    c = unimpl      $ D.gTime c
     | D.isBool    c = A.toJSON    $ D.gBool c
@@ -114,8 +115,8 @@ hPutGeoJson h _ status (j1:js) =
 class ToGeoJSON a where
     toGeoJSON :: a -> A.Value
 
-instance (A.ToJSON c) => ToGeoJSON (D.Judge c) where
-    toGeoJSON (D.JudgeAffirm _ xs) =
+instance (A.ToJSON c) => ToGeoJSON (T.Judge c) where
+    toGeoJSON (T.JudgeAffirm _ xs) =
         A.object [ "type"       .= ("Feature" :: T.Text)
                  , "properties" .= A.object [ "name" .= name ]
                  , "geometry"   .= geo ]

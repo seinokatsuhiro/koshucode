@@ -67,6 +67,7 @@ library
        , koshucode-baala-overture  == 0.187.0.0
        , koshucode-baala-base      == 0.187.0.0
        , koshucode-baala-syntax    == 0.187.0.0
+       , koshucode-baala-type      == 0.187.0.0
        , koshucode-baala-data      == 0.187.0.0
        , koshucode-baala-core      == 0.187.0.0
 
