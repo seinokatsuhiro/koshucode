@@ -2,6 +2,26 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 -- | HTML output.
+--
+-- Relations are formatted like:
+--
+-- > <div class="named-relation">
+-- >   <p class="name">JUDGEMENT-CLASS
+-- >   <table class="relation">
+-- >     <tr class="heading">
+-- >       <td class="term-name"><span class="term-slash">/</span>TERM-NAME
+-- >       <td class="term-name"><span class="term-slash">/</span>TERM-NAME
+-- >       ...
+-- >     <tr class="tuple">
+-- >       <td>CONTENT
+-- >       <td>CONTENT
+-- >       ...
+-- >     <tr class="tuple">
+-- >       <td>CONTENT
+-- >       <td>CONTENT
+-- >       ...
+-- >     ...
+--
 
 module Koshucode.Baala.Writer.Html
   ( resultHtmlIndented,
@@ -39,7 +59,7 @@ hPutRel h render sh = mapM_ put chunks where
     chunks = concatMap S.shortBody sh
     put (C.ResultRel cl r) = IO.hPutStrLn h $ render $ html cl r
     put _                  = return ()
-    html cl r = H.div ! class_ "named-relation" $ do
+    html cl r = div_ "named-relation" $ do
                   H.p ! class_ "name" $ H.toMarkup cl
                   contToHtml O.nothing $ D.pRel r
 
@@ -52,13 +72,14 @@ contToHtml sh = content where
 
     rel (D.Rel he bo) =
         H.table ! class_ "relation" $ do
-          let terms = term `map` D.getTermNames he
-          H.tr ! class_ "heading" $ mapM_ H.td terms
+          H.tr ! class_ "heading" $ mapM_ term $ D.getTermNames he
           mapM_ row bo
 
     row cs = H.tr ! class_ "tuple" $ mapM_ col cs
     col c  = H.td $ contToHtml sh c
-    term   = (H.span ! class_ "termname") . H.toMarkup . S.termNameString
+    term t = H.td ! class_ "term-name" $ do
+               span_ "term-slash" $ H.toMarkup ("/" :: String)
+               H.toMarkup $ S.termNameContent t
 
 --  HTML
 --
