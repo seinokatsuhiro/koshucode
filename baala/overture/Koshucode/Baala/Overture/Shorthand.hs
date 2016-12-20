@@ -3,9 +3,13 @@
 -- | Shorthand functions.
 
 module Koshucode.Baala.Overture.Shorthand
- ( (&),
+ ( -- * Infix operators
+   (&),
    (++),
    (<$$>),
+   (<#>), (<#!>),
+
+   -- * Functions
    int, integer,
    nothing,
  ) where
@@ -31,6 +35,10 @@ infixr 6 ++
 
 -- | Associative operator of monoid,
 --   same as 'mappend' or infix '<>'.
+--
+--   >>> Just "abc" ++ Nothing ++ Just "def"
+--   Just "abcdef"
+--
 {-# INLINE (++) #-}
 (++) :: (Monoid a) => a -> a -> a
 (++) = mappend
@@ -38,8 +46,23 @@ infixr 6 ++
 infixl 4 <$$>
 
 -- | Double fmap.
+--
+--   >>> length <$$> [("a", "apple"), ("b", "banana"), ("c", "cocoa")]
+--   [("a",5), ("b",6), ("c",5)]
+--
 (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 f <$$> x = fmap f <$> x
+
+-- | Monadic mapping, same as 'mapM'.
+{-# INLINE (<#>) #-}
+(<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
+(<#>) = mapM
+
+-- | Execution by monadic mapping, same as 'mapM_'.
+{-# INLINE (<#!>) #-}
+(<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
+(<#!>) = mapM_
+
 
 -- | 'Int' shorthand.
 --
