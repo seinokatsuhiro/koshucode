@@ -17,7 +17,7 @@ import qualified Data.Char                              as Ch
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
-import qualified Koshucode.Baala.Data                   as D
+import qualified Koshucode.Baala.Type                   as T
 import qualified Koshucode.Baala.Core.Lexmap            as C
 import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Message           as Msg
@@ -42,9 +42,9 @@ data ClauseHead = ClauseHead
 
 -- | Proper part of clause.
 data ClauseBody
-    = CJudge    D.AssertType D.JudgeClass
+    = CJudge    T.AssertType T.JudgeClass
                        [S.Token]    -- ^ __Relational:__ Judge
-    | CAssert   D.AssertType D.JudgeClass
+    | CAssert   T.AssertType T.JudgeClass
                        [S.Token]    -- ^ __Relational:__ Assertion
     | CRelmap   String [S.Token]    -- ^ __Relational:__ Source of relmap
     | CSlot     String [S.Token]    -- ^ __Relational:__ Global slot
@@ -191,19 +191,19 @@ consClauseEach resAbout h@(ClauseHead sec sh about src) = rslt where
     -- ----------------------  Judgement or assertion
 
     -- Frege's content lines, or logical qualities
-    frege "--"     = judge D.AssertAffirm
-    frege "-x"     = judge D.AssertDeny
-    frege "-xx"    = judge D.AssertMultiDeny
-    frege "-c"     = judge D.AssertChange
-    frege "-cc"    = judge D.AssertMultiChange
-    frege "-v"     = judge D.AssertViolate
+    frege "--"     = judge T.AssertAffirm
+    frege "-x"     = judge T.AssertDeny
+    frege "-xx"    = judge T.AssertMultiDeny
+    frege "-c"     = judge T.AssertChange
+    frege "-cc"    = judge T.AssertMultiChange
+    frege "-v"     = judge T.AssertViolate
 
-    frege "=="     = assert D.AssertAffirm
-    frege "=x"     = assert D.AssertDeny
-    frege "=xx"    = assert D.AssertMultiDeny
-    frege "=c"     = assert D.AssertChange
-    frege "=cc"    = assert D.AssertMultiChange
-    frege "=v"     = assert D.AssertViolate
+    frege "=="     = assert T.AssertAffirm
+    frege "=x"     = assert T.AssertDeny
+    frege "=xx"    = assert T.AssertMultiDeny
+    frege "=c"     = assert T.AssertChange
+    frege "=cc"    = assert T.AssertMultiChange
+    frege "=v"     = assert T.AssertViolate
 
     frege s        = const $ CUnknown $ unkEEA
                              "|--, |-x, |-xx, |-c, |-cc, |-v,"

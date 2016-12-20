@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Relmap.Specialize
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
-import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.Type                 as T
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
@@ -29,12 +29,12 @@ type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 --   This function returns relkit and extended table of relkits.
 relmapSpecialize :: forall h. forall c.
     h c -> RelmapLinkTable' h c -> C.RelkitTable c
-    -> Maybe D.Head -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
+    -> Maybe T.Head -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [((S.Token, S.LocalRef), D.Head)]  -- name of local relation, and its heading
+    spec :: [((S.Token, S.LocalRef), T.Head)]  -- name of local relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> C.RelkitTable c      -- list of known specialized relkits
-         -> Maybe D.Head         -- input head feeding into generic relmap
+         -> Maybe T.Head         -- input head feeding into generic relmap
          -> C.Relmap' h c        -- generic relmap to specialize
          -> B.Ab (C.RelkitTable c, C.Relkit c)
     spec local keys kdef he1 rmap = s where
@@ -67,11 +67,11 @@ relmapSpecialize hook links = spec [] [] where
 
               C.RelmapNest lx rmap1 ->
                   do let heJust      = B.fromJust he1
-                         heNest      = D.headNested heJust
+                         heNest      = T.headNested heJust
                          nest        = map fst heNest  -- nest terms
                          p           = C.lexToken lx
                          tk (n, he)  = ((p, S.LocalNest n), he)
-                         heInd       = D.pickTermsIndex $ D.termPicker nest heJust
+                         heInd       = T.pickTermsIndex $ T.termPicker nest heJust
                          local'      = map tk heNest ++ local
                          nestInd     = zip nest heInd
                      (kdef2, kit2)  <- post lx $ spec local' keys kdef he1 rmap1

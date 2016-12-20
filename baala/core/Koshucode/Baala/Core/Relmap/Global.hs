@@ -30,6 +30,7 @@ module Koshucode.Baala.Core.Relmap.Global
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Data                as D
 import qualified Koshucode.Baala.Core.Relmap.Option  as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
@@ -63,7 +64,7 @@ data Global' h c = Global
       , globalProgram      :: String            -- ^ Name of invoked program
       , globalArgs         :: [String]          -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]     -- ^ Proxy setting from environment variables
-      , globalTime         :: D.Time            -- ^ Invocation time
+      , globalTime         :: T.Time            -- ^ Invocation time
       , globalResult       :: C.Result c        -- ^ Result template
       , globalOption       :: C.Option c        -- ^ Options
       , globalSourceLimit  :: Int               -- ^ Limit number of including sources

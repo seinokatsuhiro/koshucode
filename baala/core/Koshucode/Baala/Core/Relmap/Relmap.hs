@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
-import qualified Koshucode.Baala.Data          as D
+import qualified Koshucode.Baala.Type          as T
 import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Relkit   as C
 
@@ -25,9 +25,9 @@ import qualified Koshucode.Baala.Core.Relkit   as C
 
 -- | Generic relmap.
 data Relmap' h c
-    = RelmapConst   C.Lexmap (D.Rel c)
+    = RelmapConst   C.Lexmap (T.Rel c)
                              -- ^ Constant relation
-    | RelmapSource  C.Lexmap D.JudgeClass [S.TermName]
+    | RelmapSource  C.Lexmap T.JudgeClass [S.TermName]
                              -- ^ Retrieve a relation from a dataset
 
     | RelmapCalc    C.Lexmap (C.RelkitConfl c) [Relmap' h c]

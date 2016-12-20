@@ -21,7 +21,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
 import qualified Koshucode.Baala.Overture     as O
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Syntax       as S
-import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.Type         as T
 import qualified Koshucode.Baala.Core.Lexmap  as C
 
 
@@ -30,8 +30,8 @@ import qualified Koshucode.Baala.Core.Lexmap  as C
 
 -- | Specialized relmap.
 data Relkit c = Relkit
-    { relkitInput  :: Maybe D.Head     -- ^ Input heading
-    , relkitOutput :: Maybe D.Head     -- ^ Output heading
+    { relkitInput  :: Maybe T.Head     -- ^ Input heading
+    , relkitOutput :: Maybe T.Head     -- ^ Output heading
     , relkitBody   :: RelkitBody c     -- ^ Calculation function
     }
 
@@ -70,7 +70,7 @@ data RelkitCore c
       --   output input relation without modification.
     | RelkitConst      [[c]]
       -- ^ __Source:__ Ignore input, and output constant relation.
-    | RelkitSource     D.JudgeClass [S.TermName]
+    | RelkitSource     T.JudgeClass [S.TermName]
       -- ^ __Source:__ Ignore input, and output relation from data source.
 
     | RelkitLink       C.RopName RelkitKey (Maybe (RelkitBody c))
@@ -108,13 +108,13 @@ instance Show (RelkitCore c) where
 type RelkitTable c = [(RelkitKey, Relkit c)]
 
 -- | Search key of relkit.
-type RelkitKey = (Maybe D.Head, [C.Lexmap])
+type RelkitKey = (Maybe T.Head, [C.Lexmap])
 
 -- | Mapping for body of relation.
 type BodyMap c = B.AbMap [[c]]
 
 -- | Make 'C.Relkit' from heading of input relation.
-type RelkitFlow c     = Maybe D.Head -> B.Ab (Relkit c)
+type RelkitFlow c     = Maybe T.Head -> B.Ab (Relkit c)
 
 -- | Make 'C.Relkit' from hook data and input heading.
 type RelkitHook' h c  = h c -> RelkitFlow c

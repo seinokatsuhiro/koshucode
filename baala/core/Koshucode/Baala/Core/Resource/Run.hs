@@ -12,6 +12,7 @@ import qualified Data.Map.Strict                         as Ms
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Lexmap             as C
@@ -25,7 +26,7 @@ resRun res =
     do res' <- assembleRelmap $ autoOutputResource res
        let rslt = C.globalResult $ C.resGlobal res'
            js   = C.resJudge res'
-       case filter D.isViolative js of
+       case filter T.isViolative js of
          []  -> resRunBody rslt res'
          jsV -> Right rslt
                   { C.resultOutput   = C.resOutput res
@@ -119,7 +120,7 @@ autoOutputResource res@C.Resource { C.resDataset = ds
     | otherwise  = res
     where a (c, ts) = S.Short [] [] $ C.Assert
             { C.assSection = 0
-            , C.assType    = D.AssertAffirm
+            , C.assType    = T.AssertAffirm
             , C.assClass   = c
             , C.assToken   = []
             , C.assPara    = B.def

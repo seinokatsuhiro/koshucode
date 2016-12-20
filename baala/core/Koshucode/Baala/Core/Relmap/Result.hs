@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.System            as O
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Syntax            as S
-import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Type              as T
 
 
 -- ----------------------  Result
@@ -44,7 +44,7 @@ data Result c = Result
     , resultLicense    :: [[String]]
     , resultViolated   :: [ShortResultChunks c]
     , resultNormal     :: [ShortResultChunks c]
-    , resultClass      :: [D.JudgeClass]
+    , resultClass      :: [T.JudgeClass]
     } deriving (Show, Eq, Ord)
 
 -- | Input point of data resource.
@@ -70,8 +70,8 @@ instance (Show c) => B.Default (Result c) where
 
 -- | Chunk of judgements.
 data ResultChunk c
-    = ResultJudge  [D.Judge c]             -- ^ List of judges
-    | ResultRel    D.JudgeClass (D.Rel c)  -- ^ Named relation instead of judges
+    = ResultJudge  [T.Judge c]             -- ^ List of judges
+    | ResultRel    T.JudgeClass (T.Rel c)  -- ^ Named relation instead of judges
     | ResultNote   [String]                -- ^ Commentary note
       deriving (Show, Eq, Ord)
 
@@ -79,11 +79,11 @@ data ResultChunk c
 type ShortResultChunks c = S.Short [ResultChunk c]
 
 -- | Extract judgement list from result.
-resultChunkJudges :: ResultChunk c -> [D.Judge c]
+resultChunkJudges :: ResultChunk c -> [T.Judge c]
 resultChunkJudges (ResultJudge js) = js
 resultChunkJudges _ = []
 
-shortChunkJudges :: [ShortResultChunks c] -> [D.Judge c]
+shortChunkJudges :: [ShortResultChunks c] -> [T.Judge c]
 shortChunkJudges = concatMap resultChunkJudges . concatMap S.shortBody
 
 resultShortChunks :: Result c -> O.Eith [ShortResultChunks c]
@@ -136,7 +136,7 @@ type ResultWriterRaw c = ResultWriterFrom () c
 type ResultWriterChunk c = ResultWriterFrom [ShortResultChunks c] c
 
 -- | Write result based on its judges.
-type ResultWriterJudge c = ResultWriterFrom [D.Judge c] c
+type ResultWriterJudge c = ResultWriterFrom [T.Judge c] c
 
 -- | Dump result.
 resultDump :: (Show c) => ResultWriter c

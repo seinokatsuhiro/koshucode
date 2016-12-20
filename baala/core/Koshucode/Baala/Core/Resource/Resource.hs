@@ -31,6 +31,7 @@ module Koshucode.Baala.Core.Resource.Resource
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Syntax               as S
+import qualified Koshucode.Baala.Type                 as T
 import qualified Koshucode.Baala.Data                 as D
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Lexmap          as C
@@ -49,7 +50,7 @@ data Resource c = Resource
     , resSlot       :: [S.NamedTrees]      -- ^ Global slots
     , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
-    , resJudge      :: [D.Judge c]         -- ^ Affirmative or denial judgements
+    , resJudge      :: [T.Judge c]         -- ^ Affirmative or denial judgements
     , resDataset    :: D.Dataset c         -- ^ Dataset
     , resInputQueue :: InputQueue          -- ^ Input points
     , resOutput     :: B.IOPoint           -- ^ Output point
@@ -64,8 +65,8 @@ instance Show (Resource c) where
     show Resource { resInputQueue = q }
         = "Resources " ++ show q
 
-instance D.SelectRel Resource where
-    selectRel = D.selectRel . resDataset
+instance T.SelectRel Resource where
+    selectRel = T.selectRel . resDataset
 
 instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
@@ -109,7 +110,7 @@ resInputPoint Resource { resInputQueue = (q, done) } = ps where
     ip p = C.InputPoint p []
 
 -- | List of all judgement classes.
-resClass :: Resource c -> [D.JudgeClass]
+resClass :: Resource c -> [T.JudgeClass]
 resClass Resource {..} = map (C.assClass . S.shortBody) resAssert
 
 -- | Get feature from resource.

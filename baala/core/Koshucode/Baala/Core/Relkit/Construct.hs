@@ -20,7 +20,7 @@ module Koshucode.Baala.Core.Relkit.Construct
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Syntax              as S
-import qualified Koshucode.Baala.Data                as D
+import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
 
@@ -28,15 +28,15 @@ import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
 -- | Construct relkit with output heading
 --   and relation-to-relation calculation.
-relkit :: Maybe D.Head -> C.RelkitCore c -> C.Relkit c
+relkit :: Maybe T.Head -> C.RelkitCore c -> C.Relkit c
 relkit ho = C.Relkit Nothing ho . B.Codic []
 
 -- | Relkit for identity relmap.
-relkitId :: Maybe D.Head -> C.Relkit c
+relkitId :: Maybe T.Head -> C.Relkit c
 relkitId ho = relkit ho C.RelkitId
 
 -- | Determinated relkit.
-relkitJust :: D.Head -> C.RelkitCore c -> C.Relkit c
+relkitJust :: T.Head -> C.RelkitCore c -> C.Relkit c
 relkitJust ho = relkit $ Just ho
 
 -- | Indeterminated relkit.
@@ -49,7 +49,7 @@ relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
     C.Relkit hi ho $ B.codic cp core
 
 instance Monoid (C.Relkit c) where
-    mempty = relkitConst D.reldee
+    mempty = relkitConst T.reldee
     mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
         relkit ho2 $ C.RelkitAppend bo1 bo2
 
@@ -57,8 +57,8 @@ instance Monoid (C.Relkit c) where
 -- ----------------------  Source of relation
 
 -- | Relkit for constant relmap.
-relkitConst :: D.Rel c -> C.Relkit c
-relkitConst (D.Rel he bo) = relkitJust he $ C.RelkitConst bo
+relkitConst :: T.Rel c -> C.Relkit c
+relkitConst (T.Rel he bo) = relkitJust he $ C.RelkitConst bo
 
 -- | Relkit for relmap which output empty relation.
 relkitConstEmpty :: [S.TermName] -> C.Relkit c
@@ -71,13 +71,13 @@ relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
 -- | Relkit for constant relmap.
 relkitConstBody :: [S.TermName] -> [[c]] -> C.Relkit c
 relkitConstBody ns bo = kit where
-    he  = D.headFrom ns
+    he  = T.headFrom ns
     kit = relkitJust he $ C.RelkitConst bo
 
 -- | Relkit for source relmap.
-relkitSource :: D.JudgeClass -> [S.TermName] -> C.Relkit c
+relkitSource :: T.JudgeClass -> [S.TermName] -> C.Relkit c
 relkitSource p ns = relkitJust he kit where
-    he  = D.headFrom ns
+    he  = T.headFrom ns
     kit = C.RelkitSource p ns
 
 
@@ -92,6 +92,6 @@ relkitCopy :: S.Token -> String -> O.Map (C.Relkit c)
 relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
 -- | Relkit for local relation reference.
-relkitLocal :: S.Token -> S.LocalRef -> D.Head -> C.Relkit c
+relkitLocal :: S.Token -> S.LocalRef -> T.Head -> C.Relkit c
 relkitLocal p n he = relkitJust he $ C.RelkitLocal p n
 

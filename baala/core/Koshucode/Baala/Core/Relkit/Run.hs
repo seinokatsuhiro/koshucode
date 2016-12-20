@@ -14,6 +14,7 @@ module Koshucode.Baala.Core.Relkit.Run
 import qualified Koshucode.Baala.Overture               as O
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax                 as S
+import qualified Koshucode.Baala.Type                   as T
 import qualified Koshucode.Baala.Data                   as D
 import qualified Koshucode.Baala.Core.Relkit.Relkit     as C
 import qualified Koshucode.Baala.Core.Lexmap.Message    as Msg
@@ -47,7 +48,7 @@ relkitLink kits = linkKit where
 
 -- todo: optimization
 -- | Run relkit.
-relkitRun :: forall h. forall c. (D.CContent c, D.SelectRel h)
+relkitRun :: forall h. forall c. (D.CContent c, T.SelectRel h)
     => h c -> [LocalTable c] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $
@@ -70,8 +71,8 @@ relkitRun hook rs (B.Codic cp core) bo1 =
                                    -> do bo2 <- run b1 bo1
                                          Msg.abRun cp' $ run b2 bo2
 
-       C.RelkitSource pat ns       -> let r = D.selectRel hook pat ns
-                                      in Right $ D.relBody r
+       C.RelkitSource pat ns       -> let r = T.selectRel hook pat ns
+                                      in Right $ T.relBody r
 
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
@@ -106,7 +107,7 @@ relkitRun hook rs (B.Codic cp core) bo1 =
           in relkitRun hook ((p, cs2) : rs) b [cs]
 
       pickup :: [c] -> S.IndexTerm -> (S.LocalRef, [[c]])
-      pickup cs (n, i) = (S.LocalNest n, D.relBody $ D.gRel $ cs !! i)
+      pickup cs (n, i) = (S.LocalNest n, T.relBody $ D.gRel $ cs !! i)
 
 -- | Calculate fixed relation.
 fixedRelation :: (Ord c) => O.Map (B.AbMap [[c]])
@@ -115,10 +116,10 @@ fixedRelation f = fix where
                  if bo1 == bo2 then Right bo2 else fix bo2
 
 -- | Change term order.
-bmapAlign :: D.Head -> D.Head -> O.Map (B.AbMap [[c]])
+bmapAlign :: T.Head -> T.Head -> O.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
-               Right $ D.bodyForward he1 he2 bo2
+               Right $ T.bodyForward he1 he2 bo2
 
 {-# WARNING LocalTable "This is only used in defined module." #-}
 -- | Lexical point and table of local relations.

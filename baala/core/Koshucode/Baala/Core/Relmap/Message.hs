@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Relmap.Message
 import qualified Koshucode.Baala.Overture      as O
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Syntax        as S
-import qualified Koshucode.Baala.Data          as D
+import qualified Koshucode.Baala.Type          as T
 
 -- | Abortable scope for option.
 abOption :: (B.GetCodePos cp) => B.Abortable cp b
@@ -31,7 +31,7 @@ abSpecialize :: (B.GetCodePos cp) => B.Abortable cp b
 abSpecialize = B.abortable "specialize"
 
 -- | Unknown nested relation reference.
-unkNestVar :: String -> [S.Token] -> [((S.Token, S.LocalRef), D.Head)] -> B.Ab a
+unkNestVar :: String -> [S.Token] -> [((S.Token, S.LocalRef), T.Head)] -> B.Ab a
 unkNestVar n ls ds = left where
     left = B.leftLines "Unknown nested relation reference"
            $ ("search" : map indent dynamic)

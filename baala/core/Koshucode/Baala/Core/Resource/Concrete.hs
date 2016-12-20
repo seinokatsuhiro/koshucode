@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Resource.Concrete
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
@@ -25,10 +26,10 @@ data About c = About [S.Term c] deriving (Show)
 
 instance (B.MixEncode c) => B.MixEncode (About c) where
     mixTransEncode sh (About ts) =
-        B.mixString "about" `B.mixSep2` D.termsToMix2 sh ts
+        B.mixString "about" `B.mixSep2` T.termsToMix2 sh ts
 
 -- | Judges with about setting.
-type AboutJudges c = (Maybe (About c), [D.Judge c])
+type AboutJudges c = (Maybe (About c), [T.Judge c])
 
 
 -- --------------------------------------------  Concrete type

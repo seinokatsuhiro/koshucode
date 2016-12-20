@@ -25,7 +25,7 @@ module Koshucode.Baala.Core.Relmap.Construct
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Data                  as D
+import qualified Koshucode.Baala.Type                  as T
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relkit           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
@@ -37,11 +37,11 @@ import qualified Koshucode.Baala.Core.Relmap.Message   as Msg
 -- ----------------------  Source
 
 -- | Make a constant relmap.
-relmapConst :: C.Intmed' h c -> D.Rel c -> C.Relmap' h c
+relmapConst :: C.Intmed' h c -> T.Rel c -> C.Relmap' h c
 relmapConst = C.RelmapConst . C.medLexmap
 
 -- | Relmap for retrieving relation from dataset.
-relmapSource :: C.Intmed' h c -> D.JudgeClass -> [S.TermName] -> C.Relmap' h c
+relmapSource :: C.Intmed' h c -> T.JudgeClass -> [S.TermName] -> C.Relmap' h c
 relmapSource = C.RelmapSource . C.medLexmap
 
 

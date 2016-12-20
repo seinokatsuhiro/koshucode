@@ -9,6 +9,7 @@ module Koshucode.Baala.Core.Resource.Include
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core.Lexmap             as C
 import qualified Koshucode.Baala.Core.Relmap             as C
@@ -43,7 +44,7 @@ resInclude resAbout cd base xio code =
                  , C.resJudge     = js
                  , C.resDataset   = ds }
 
-createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [D.Judge c], [C.Clause])
+createJudges :: (D.CContent c) => C.Resource c -> [C.Clause] -> B.Ab (D.CacheT, [T.Judge c], [C.Clause])
 createJudges res = loop $ C.resCacheT res where
     loop cc ((C.Clause h (C.CJudge q cl toks)) : cs) =
         Msg.abClause [h] $ do

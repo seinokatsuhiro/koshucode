@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Assert.Assert
 import qualified Koshucode.Baala.Overture       as O
 import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.Type           as T
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relmap    as C
 
@@ -26,8 +26,8 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 --   See also 'B.Judge'
 data Assert' h c = Assert
     { assSection   :: C.SecNo                -- ^ Section number
-    , assType      :: D.AssertType           -- ^ Logical quality
-    , assClass     :: D.JudgeClass           -- ^ Judgement class
+    , assType      :: T.AssertType           -- ^ Logical quality
+    , assClass     :: T.JudgeClass           -- ^ Judgement class
     , assToken     :: [S.Token]              -- ^ Source token list
     , assPara      :: C.TTreePara
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
@@ -55,5 +55,5 @@ assertViolated :: O.Map [ShortAssert' h c]
 assertViolated = filter violated
 
 violated :: ShortAssert' h c -> Bool
-violated = (== D.AssertViolate) . assType . S.shortBody
+violated = (== T.AssertViolate) . assType . S.shortBody
 
