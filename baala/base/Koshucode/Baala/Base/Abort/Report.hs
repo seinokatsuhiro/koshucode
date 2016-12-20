@@ -35,7 +35,7 @@
 module Koshucode.Baala.Base.Abort.Report
   ( -- * Message
     CommandLine,
-    cpMessage,
+    cpMessage, cpMessageLines,
     abortMessage,
     abortPrint,
 
@@ -46,7 +46,6 @@ module Koshucode.Baala.Base.Abort.Report
     bug,
   ) where
 
-import Koshucode.Baala.Overture ((&))
 import qualified Koshucode.Baala.Overture             as O
 import qualified Koshucode.Baala.System               as O
 import qualified Koshucode.Baala.Base.List            as B
@@ -60,25 +59,46 @@ import qualified Koshucode.Baala.Base.Abort.Reason    as B
 -- | Command name and its arguments.
 type CommandLine = [String]
 
--- | Create position and line information.
-cpMessage :: B.CodePosInfo -> [(String, B.AbortTag)]
-cpMessage (cp@B.CodePos { B.cpLineNo = lno }, tag)
-    | lno <= 0      = []
-    | null before'  = [ trunc pos     & ""
-                      , indent after' & tag
-                      , "" & "" ]
-    | otherwise     = [ trunc pos      & ""
-                      , indent before' & ""
-                      , indent after'  & tag
-                      , "" & "" ]
+-- | Convert code position into message text:
+--   location, before code, after code, and abort tag.
+--
+--   >>> cpMessage $ B.CodePos 0 "<stdin>" 1 "abcdefg" "defg"
+--   (Just (1,3,"<stdin>"), Just "abc", Just "defg")
+--
+cpMessage :: B.CodePos -> (Maybe (Int, Int, FilePath),
+                           Maybe String, Maybe String)
+cpMessage cp@B.CodePos { B.cpLineNo = lno }
+    | lno <= 0      = (Nothing, Nothing, Nothing)
+    | null before'  = (Just pos, Nothing, Just after')
+    | otherwise     = (Just pos, Just before', Just after')
     where
-      trunc   = O.truncateString 48
-      indent s = "  " ++ trunc s
-      pos     = show lno ++ "." ++ show cno ++ " " ++ O.getIOPath cp
-      cno     = B.cpColumnNo cp
-      before' = O.trimBegin before
-      after'  = replicate (min 4 $ length before') ' ' ++ O.trimBegin after
-      (before, after) = B.cpSplit cp
+      pos      = (lno, cno, O.getIOPath cp)
+      cno      = B.cpColumnNo cp
+      before'  = O.trimBegin b
+      after'   = O.trimBegin a
+      (b, a)   = B.cpSplit cp
+
+-- | Create position and line information.
+cpMessageLines :: B.CodePosInfo -> [(String, B.AbortTag)]
+cpMessageLines (cp, tag)
+    = case cpMessage cp of
+        (Just p, Nothing, Just a)
+            -> [ no     $ trunc (pos p)
+               , tagged $ indent a
+               , no     $ "" ]
+        (Just p, Just b, Just a)
+            -> [ no     $ trunc (pos p)
+               , no     $ indent b
+               , tagged $ indent (b # a)
+               , no     $ "" ]
+        _   -> []
+    where
+      no         = (O.& "")
+      tagged     = (O.& tag)
+      trunc      = O.truncateString 48
+      indent s   = "  " ++ trunc s
+      b # a      = replicate (min 4 $ length b) ' ' ++ trunc a
+      pos (lno, cno, path) = show lno ++ "." ++ show cno ++ " " ++ path
 
 -- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> B.AbortReason -> [String]
@@ -91,9 +111,9 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     r      = B.textRuleCell '-'
     p text = (text, "")
     rows   = concatMap row
-             [ "Detail"  & detail $ B.abortDetail a
-             , "Source"  & source $ B.abortPoint a
-             , "Command" & p <$> cmd ]
+             [ "Detail"  O.& detail $ B.abortDetail a
+             , "Source"  O.& source $ B.abortPoint a
+             , "Command" O.& p <$> cmd ]
 
     row :: (String, [(String, String)]) -> [[B.Cell]]
     row (_, []) = []
@@ -107,7 +127,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     detail ln = p <$> ln ++ [""]
 
     source :: [B.CodePosInfo] -> [(String, B.AbortTag)]
-    source = concatMap cpMessage . B.unique . reverse
+    source = concatMap cpMessageLines . B.unique . reverse
 
     dots :: O.StringMap
     dots ""   = ""
