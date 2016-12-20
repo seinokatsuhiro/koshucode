@@ -10,12 +10,16 @@ module Koshucode.Baala.Overture.Shorthand
    (<#>), (<#!>),
 
    -- * Functions
+   ordEq, compareOn,
    int, integer,
    nothing,
  ) where
 
 import Prelude hiding ((++))
 import qualified Koshucode.Baala.Overture.Type as O
+
+
+-- ============================================  Infix operators
 
 infixr 0 &
 
@@ -63,6 +67,26 @@ f <$$> x = fmap f <$> x
 (<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
 (<#!>) = mapM_
 
+
+-- ============================================  Function
+
+-- | Test equality using 'Ord' method.
+--   This function can be used for implementing 'Eq' instance.
+--
+--   > instance Eq X where
+--   >   (==) = ordEq
+--
+ordEq :: (Ord a) => a -> a -> Bool
+ordEq x y = (x `compare` y) == EQ
+
+-- | @compareOn@ /f/ /x/ /y/ comapres /f x/ and /f y/
+--   instead of /x/ and /y/.
+--
+--   >>> compareOn length "foo" "bar"
+--   EQ
+--
+compareOn :: (Ord b) => (a -> b) -> a -> a -> Ordering
+compareOn f x y = f x `compare` f y
 
 -- | 'Int' shorthand.
 --

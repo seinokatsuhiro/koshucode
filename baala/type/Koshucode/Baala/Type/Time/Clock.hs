@@ -45,7 +45,12 @@ data Clock
     | ClockDhm  D.Days D.Sec    -- ^ Clock represented by multiple of minute
     | ClockDh   D.Days D.Sec    -- ^ Clock represented by multiple of hour
     | ClockD    D.Days          -- ^ Clock represented by multiple of day
-      deriving (Eq, Ord)
+
+instance Eq Clock where
+    (==) = O.ordEq
+
+instance Ord Clock where
+    compare = O.compareOn clockDaysSec
 
 -- | Convertible to clock.
 class ToClock a where

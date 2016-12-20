@@ -38,11 +38,7 @@ data Date
     | Yearly  D.Mjd    -- ^ Date in /YYYY-##D/
 
 instance Eq Date where
-    (==) = ordEq
-
--- | Test equality using 'Ord' method.
-ordEq :: (Ord a) => a -> a -> Bool
-ordEq a b = (a `compare` b) == EQ
+    (==) = O.ordEq
 
 instance Ord Date where
     a `compare` b = D.toMjd a `compare` D.toMjd b
