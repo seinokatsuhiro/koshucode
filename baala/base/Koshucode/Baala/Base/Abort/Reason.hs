@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Abort.Reason
     AbortReason (..),
     AbortTag,
     CodePosInfo,
+    abortPointUp,
 
     -- * Derived type
     Ab, AbMap, MapAb, AbManyMap,
@@ -25,6 +26,7 @@ module Koshucode.Baala.Base.Abort.Reason
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
+import qualified Koshucode.Baala.Base.List            as B
 import qualified Koshucode.Baala.Base.Abort.CodePos   as B
 
 
@@ -35,7 +37,7 @@ data AbortReason = AbortReason
     { abortReason :: String        -- ^ Reason in one line
     , abortDetail :: [String]      -- ^ Detailed description
     , abortNote   :: [String]      -- ^ Additional notes for long description
-    , abortPoint  :: [CodePosInfo] -- ^ Tag and aborting point
+    , abortPoint  :: [CodePosInfo] -- ^ Tag and aborting points
     } deriving (Show, Eq, Ord)
 
 -- | Tag on aborting point.
@@ -43,6 +45,10 @@ type AbortTag = String
 
 -- | Source code position information.
 type CodePosInfo = (B.CodePos, AbortTag)
+
+-- | Upward aborting points, i.e., from callee to caller.
+abortPointUp :: AbortReason -> [CodePosInfo]
+abortPointUp = reverse . B.unique . abortPoint
 
 
 -- --------------------------------------------  Deriving type

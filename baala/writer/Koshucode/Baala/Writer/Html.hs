@@ -125,7 +125,7 @@ instance H.ToMarkup B.AbortReason where
           div_ "abort-title"   (text "Aborted")
           div_ "abort-reason"  (text $ B.abortReason a)
           div_ "abort-detail"  ((div' . dash) O.<#!> B.abortDetail a)
-          div_ "abort-source"  (loc    O.<#!> B.abortPoint a)
+          div_ "abort-source"  (loc    O.<#!> B.abortPointUp a)
           div_ "abort-note"    (pre'   O.<#!> B.abortNote a)
         where
           text s          = H.toMarkup (s :: String)

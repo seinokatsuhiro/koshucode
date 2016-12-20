@@ -112,7 +112,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     p text = (text, "")
     rows   = concatMap row
              [ "Detail"  O.& detail $ B.abortDetail a
-             , "Source"  O.& source $ B.abortPoint a
+             , "Source"  O.& source $ B.abortPointUp a
              , "Command" O.& p <$> cmd ]
 
     row :: (String, [(String, String)]) -> [[B.Cell]]
@@ -127,7 +127,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map O.trimEnd texts where
     detail ln = p <$> ln ++ [""]
 
     source :: [B.CodePosInfo] -> [(String, B.AbortTag)]
-    source = concatMap cpMessageLines . B.unique . reverse
+    source = concatMap cpMessageLines
 
     dots :: O.StringMap
     dots ""   = ""
