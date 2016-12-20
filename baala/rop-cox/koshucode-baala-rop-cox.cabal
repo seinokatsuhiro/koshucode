@@ -48,7 +48,6 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Rop.Cox
-        Koshucode.Baala.Rop.Cox.Accessor
         Koshucode.Baala.Rop.Cox.Bundle
         Koshucode.Baala.Rop.Cox.Calc
         Koshucode.Baala.Rop.Cox.Empty
