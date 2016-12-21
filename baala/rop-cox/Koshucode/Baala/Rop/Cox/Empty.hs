@@ -21,21 +21,14 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- | Relmap operators that handles empties.
---
---   [@both R@]
---
---   [@maybe R@]
---     Meet input and given relation.
---     It keeps input tuples of which counterparts are totally negated.
--- 
 ropsCoxEmpty :: (K.CContent c) => [C.Rop c]
 ropsCoxEmpty = Rop.rops "cox-empty"
-    [ consBoth          K.& [ "both R [-share /P ... -fill E]"
-                              K.& "-relmap/ . -share? -fill?" ]
-    , consComposeMaybe  K.& [ "compose-maybe R [-share /P ... -fill E]"
-                              K.& "-relmap/ . -share? -fill?" ]
-    , consMaybe         K.& [ "maybe R [-share /P ... -fill E]"
-                              K.& "-relmap/ . -share? -fill?" ]
+    [ consBoth          K.& [ "both R [-fill E] [-share /P ...]"
+                              K.& "-relmap/ . -fill? -share?" ]
+    , consComposeMaybe  K.& [ "compose-maybe R [-fill E] [-share /P ...]"
+                              K.& "-relmap/ . -fill? -share?" ]
+    , consMaybe         K.& [ "maybe R [-fill E] [-share /P ...]"
+                              K.& "-relmap/ . -fill? -share?" ]
     ]
 
 
@@ -79,9 +72,13 @@ relmapMaybe med sh = C.relmapBinary med . relkitMaybe sh
 -- | Create @maybe@ relkit.
 relkitMaybe :: forall c. (Ord c, K.CRel c) => Rop.SharedTerms -> c -> C.RelkitBinary c
 relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr   = K.termPicker he1 he2
+    pk     = K.termPicker he1 he2
+    pick1  = K.pkLShare pk
+    cut2   = K.pkRProper pk
+    split2 = K.pkRSplit pk
+
     he3  = he2 K.++ he1
-    kit3 = case Rop.unmatchShare sh lr of
+    kit3 = case Rop.unmatchShare sh pk of
              Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
              Just (e, a) -> Msg.unmatchShare e a
 
@@ -89,13 +86,13 @@ relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           let b2map = K.gatherToMap $ map (K.pkRSplit lr) bo2
+           let b2map = K.gatherToMap (split2 <$> bo2)
            Right $ step b2map `concatMap` bo1
 
-    heFill = K.pkRProper lr $ K.headTypes he2
-    fills  = selectFiller fill `map` heFill
-    step b2map cs1 = case K.lookupMap (K.pkLShare lr cs1) b2map of
-                       Just b2side -> map (++ cs1) b2side
+    heFill = cut2 $ K.headTypes he2
+    fills  = selectFiller fill <$> heFill
+    step b2map cs1 = case pick1 cs1 `K.lookupMap` b2map of
+                       Just b2prop -> map (++ cs1) b2prop
                        Nothing     -> [fills ++ cs1]
 
 relkitMaybe _ _ _ _ = Right C.relkitNothing

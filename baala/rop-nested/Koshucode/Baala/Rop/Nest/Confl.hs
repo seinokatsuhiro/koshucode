@@ -66,16 +66,16 @@ relmapForInner med n = C.relmapNest med . bin where
 -- | Create @for@ relkit.
 relkitFor :: forall c. (K.CRel c) => K.TermName -> C.RelkitBinary c
 relkitFor n (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
-    lr    = K.termPicker [n] he1
-    side  = K.pkRProper lr
-    he3   = K.headConsNest n he2 $ K.headMap side he1
+    pk    = K.termPicker [n] he1
+    cut   = K.cutTerms pk
+    he3   = K.headConsNest n he2 $ K.headMap cut he1
     kit3  = C.relkitJust he3 $ C.RelkitAbLinear False kitf3 [kitb2]
 
     kitf3 :: [C.BodyMap c] -> K.AbMap [c]
     kitf3 bmaps cs1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 [cs1]
-           Right $ K.pRel (K.Rel he2 bo2) : side cs1
+           Right $ K.pRel (K.Rel he2 bo2) : cut cs1
 
 relkitFor _ _ _ = Right C.relkitNothing
 
@@ -103,21 +103,23 @@ relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 -- | Create @group@ relkit.
 relkitGroup :: forall c. (Ord c, K.CRel c) => Rop.SharedTerms -> K.TermName -> C.RelkitBinary c
 relkitGroup sh n (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr      = K.termPicker he1 he2
-    toMap2  = K.gatherToMap . map (K.pkRAssoc lr)
+    pk      = K.termPicker he1 he2
+    pick1   = K.pkLShare pk
+    assoc2  = K.pkRAssoc pk
+
     he3     = K.headConsNest n he2 he1
-    kit3    = case Rop.unmatchShare sh lr of
+    kit3    = case Rop.unmatchShare sh pk of
                 Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
                 Just (e, a) -> Msg.unmatchShare e a
 
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-           bo2  <- bmap2 bo1
-           let map2 = toMap2 bo2
+           bo2 <- bmap2 bo1
+           let map2 = K.gatherToMap (assoc2 <$> bo2)
            Right $ map (add map2) bo1
 
     add map2 cs1 =
-        let b2maybe = K.lookupMap (K.pkLShare lr cs1) map2
+        let b2maybe = pick1 cs1 `K.lookupMap` map2
             b2sub   = K.fromMaybe [] b2maybe
         in K.pRel (K.Rel he2 b2sub) : cs1
 
