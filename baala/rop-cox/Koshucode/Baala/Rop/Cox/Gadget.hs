@@ -134,7 +134,7 @@ relkitGeoDegree _ Nothing = Right C.relkitNothing
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
     he2       = D.headCons real he1
     kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-    pick      = D.picker [deg, mnt, sec] he1
+    pick      = D.pickDirect [deg, mnt, sec] he1
     pReal     = D.pDec . D.realDecimal 4
 
     f2 _ cs   = do let [cdeg, cmnt, csec] = pick cs

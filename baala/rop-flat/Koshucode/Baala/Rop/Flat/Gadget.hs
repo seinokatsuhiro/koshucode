@@ -103,7 +103,7 @@ relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = K.headFrom [z,r]
     kit2        = C.relkitJust he2 $ C.RelkitFull False f2
-    xyPick      = K.picker [x,y] he1
+    xyPick      = K.pickDirect [x,y] he1
     f2 bo1      = map put $ scale $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  = [cx, K.pInt i]
