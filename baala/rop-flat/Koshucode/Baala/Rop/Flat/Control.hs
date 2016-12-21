@@ -26,14 +26,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 -- | Implementation of relational operators.
 ropsControl :: (D.CContent c) => [C.Rop c]
-ropsControl = Rop.ropList "control"
-    --         CONSTRUCTOR      USAGE            ATTRIBUTE
-    [ Rop.rop  consEqual      [ "equal"      O.& "-relmap/" ]
-    , Rop.rop  consFix        [ "fix R"      O.& "-relmap/" ]
-    , Rop.rop  consFixJoin    [ "fix-join R" O.& "-relmap/" ]
-    , Rop.rop  consIf         [ "if T A B"   O.& "-test/ -then/ -else/" ]
-    , Rop.rop  consUnless     [ "unless T B" O.& "-test/ -else/" ]
-    , Rop.rop  consWhen       [ "when T A"   O.& "-test/ -then/" ]
+ropsControl = Rop.rops "control"
+    [ consEqual    O.& [ "equal"      O.& "-relmap/" ]
+    , consFix      O.& [ "fix R"      O.& "-relmap/" ]
+    , consFixJoin  O.& [ "fix-join R" O.& "-relmap/" ]
+    , consIf       O.& [ "if T A B"   O.& "-test/ -then/ -else/" ]
+    , consUnless   O.& [ "unless T B" O.& "-test/ -else/" ]
+    , consWhen     O.& [ "when T A"   O.& "-test/ -then/" ]
     ]
 
 

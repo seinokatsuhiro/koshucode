@@ -43,17 +43,21 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 --     Get version number of the koshu calculator.
 -- 
 ropsMeta :: (D.CContent c) => [C.Rop c]
-ropsMeta = Rop.ropList "meta"
-    --         CONSTRUCTOR          USAGE                           ATTRIBUTE
-    [ Rop.rop  consKoshuAngleText [ "koshu-angle-text /N [/N]"  O.& "-name -text?" ]
-    , Rop.rop  consKoshuCop       [ "koshu-cop /N"              O.& "-name*" ]
-    , Rop.rop  consKoshuCopInfix  [ "koshu-cop-infix /N [-height /N][-dir /N]"
-                                                                O.& "-name . -height? -dir?" ]
-    , Rop.rop  consKoshuSource    [ "koshu-source /N [-name /N][-type /N]"
-                                                                O.& "-number . -name? -type?" ]
-    , Rop.rop  consKoshuRop       [ "koshu-rop /N"              O.& "-name* . -group? -usage?" ]
-    , Rop.rop  consKoshuProxy     [ "koshu-proxy /N /N"         O.& "-proto -uri" ]
-    , Rop.rop  consKoshuVersion   [ "koshu-version /N"          O.& "-term* . -version?" ]
+ropsMeta = Rop.rops "meta"
+    [ consKoshuAngleText O.& [ "koshu-angle-text /N [/N]"
+                               O.& "-name -text?" ]
+    , consKoshuCop       O.& [ "koshu-cop /N"
+                               O.& "-name*" ]
+    , consKoshuCopInfix  O.& [ "koshu-cop-infix /N [-height /N][-dir /N]"
+                               O.& "-name . -height? -dir?" ]
+    , consKoshuSource    O.& [ "koshu-source /N [-name /N][-type /N]"
+                               O.& "-number . -name? -type?" ]
+    , consKoshuRop       O.& [ "koshu-rop /N"
+                               O.& "-name* . -group? -usage?" ]
+    , consKoshuProxy     O.& [ "koshu-proxy /N /N"
+                               O.& "-proto -uri" ]
+    , consKoshuVersion   O.& [ "koshu-version /N"
+                               O.& "-term* . -version?" ]
     ]
 
 

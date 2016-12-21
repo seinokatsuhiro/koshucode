@@ -29,12 +29,11 @@ ropsOrder :: (Ord c) => [C.Rop c]
 ropsOrder = Rop.ropAlias
     [ "fw" & "forward"
     , "bw" & "backward"
-    ] $ Rop.ropList "order"  -- GROUP
-    --         CONSTRUCTOR         USAGE                     ATTRIBUTE
-    [ Rop.rop  consBackward      [ "backward /P ..."     O.& "-term*" ]
-    , Rop.rop  consForward       [ "forward /P ..."      O.& "-term*" ]
-    , Rop.rop  consLexical       [ "lexical"             O.& "" ]
-    , Rop.rop  consOrder         [ "order /P ..."        O.& "-term*" ]
+    ] $ Rop.rops "order"
+    [ consBackward   O.& [ "backward /P ..."  O.& "-term*" ]
+    , consForward    O.& [ "forward /P ..."   O.& "-term*" ]
+    , consLexical    O.& [ "lexical"          O.& "" ]
+    , consOrder      O.& [ "order /P ..."     O.& "-term*" ]
     ]
 
 

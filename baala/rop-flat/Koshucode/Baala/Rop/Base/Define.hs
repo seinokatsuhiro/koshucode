@@ -33,7 +33,7 @@ ropList group = map make where
                  , C.ropCons   = cons }
 
 -- | Make implementations of relmap operators.
-rops :: (S.ToAttrLayout lay) => C.RopGroup -> [(C.RopCons c, lay)] -> [C.Rop c]
+rops :: C.RopGroup -> [(C.RopCons c, [(String, String)])] -> [C.Rop c]
 rops group def = ropList group (S.toAttrLayout O.<$$> def)
 
 -- | Make definition of relmap operator.

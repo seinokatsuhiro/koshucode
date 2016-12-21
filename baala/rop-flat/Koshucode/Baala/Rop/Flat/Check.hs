@@ -23,13 +23,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsCheck :: (D.CContent c) => [C.Rop c]
-ropsCheck = Rop.ropList "check"
-    [ Rop.rop consCheckTerm  [ "check-term -just /N ..." O.& "just : . -just "
-                             , "check-term -has /N ..."  O.& " has : . -has "
-                             , "check-term -but /N ..."  O.& " but : . -but" ]
-    , Rop.rop consDump       [ "dump"                    O.& "" ]
-    , Rop.rop consDuplicate  [ "duplicate /N ..."        O.& "-term*" ]
-    , Rop.rop consExclude    [ "exclude /N ... -from R"  O.& "-term* . -from/" ]
+ropsCheck = Rop.rops "check"
+    [ consCheckTerm  O.& [ "check-term -just /N ..." O.& "just : . -just "
+                         , "check-term -has /N ..."  O.& " has : . -has "
+                         , "check-term -but /N ..."  O.& " but : . -but" ]
+    , consDump       O.& [ "dump"                    O.& "" ]
+    , consDuplicate  O.& [ "duplicate /N ..."        O.& "-term*" ]
+    , consExclude    O.& [ "exclude /N ... -from R"  O.& "-term* . -from/" ]
     ]
 
 

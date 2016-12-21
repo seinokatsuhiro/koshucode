@@ -38,13 +38,12 @@ import qualified Koshucode.Baala.Rop.Flat.Term  as Rop
 --     Cut working terms.
 -- 
 ropsTermGadget :: (Ord c) => [C.Rop c]
-ropsTermGadget = Rop.ropList "term"  -- GROUP
-    --        CONSTRUCTOR          USAGE                        ATTRIBUTE
-    [ Rop.rop consPrefix         [ "prefix /N -to /P ..."   O.& "to : -prefix . -to"
-                                 , "prefix /N /P ..."       O.& "pos : -prefix -term*" ]
-    , Rop.rop consPrefixChange   [ "prefix-change /P /Q"    O.& "-new -old" ]
-    , Rop.rop consUnprefix       [ "unprefix /P"            O.& "-prefix" ]
-    , Rop.rop consWipe           [ "wipe"                   O.& "" ]
+ropsTermGadget = Rop.rops "term"
+    [ consPrefix        O.& [ "prefix /N -to /P ..."   O.& "to : -prefix . -to"
+                            , "prefix /N /P ..."       O.& "pos : -prefix -term*" ]
+    , consPrefixChange  O.& [ "prefix-change /P /Q"    O.& "-new -old" ]
+    , consUnprefix      O.& [ "unprefix /P"            O.& "-prefix" ]
+    , consWipe          O.& [ "wipe"                   O.& "" ]
     ]
 
 

@@ -34,16 +34,23 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- | Gadgets
 ropsGadget :: (D.CContent c) => [C.Rop c]
-ropsGadget = Rop.ropList "gadget"  -- GROUP
-    --         CONSTRUCTOR          USAGE                                                   ATTRIBUTE
-    [ Rop.rop  consContents       [ "contents /N"                                       O.& "-term*" ]
-    , Rop.rop  consDumpTree       [ "dump-tree X"                                       O.& "-tree*" ]
-    , Rop.rop  consEqlize         [ "eqlize"                                            O.& "" ]
-    , Rop.rop  consPoDepth        [ "partial-order-depth /P /P -to /N /N"               O.& "-x -y . -to" ]
-    , Rop.rop  consPoHeight       [ "partial-order-height /P /P -to /N /N"              O.& "-x -y . -to" ]
-    , Rop.rop  consVisitDistance  [ "visit-distance R -step /P ... -to /N -distance /N" O.& "-relmap/ . -step -to -distance" ]
-    , Rop.rop  consSize           [ "size /N"                                           O.& "-term" ]
-    , Rop.rop  Rop.consSubtext    [ "subtext /N E"                                      O.& "-term -subtext . -trim?" ]
+ropsGadget = Rop.rops "gadget"
+    [ consContents       O.& [ "contents /N"
+                               O.& "-term*" ]
+    , consDumpTree       O.& [ "dump-tree X"
+                               O.& "-tree*" ]
+    , consEqlize         O.& [ "eqlize"
+                               O.& "" ]
+    , consPoDepth        O.& [ "partial-order-depth /P /P -to /N /N"
+                               O.& "-x -y . -to" ]
+    , consPoHeight       O.& [ "partial-order-height /P /P -to /N /N"
+                               O.& "-x -y . -to" ]
+    , consVisitDistance  O.& [ "visit-distance R -step /P ... -to /N -distance /N"
+                               O.& "-relmap/ . -step -to -distance" ]
+    , consSize           O.& [ "size /N"
+                               O.& "-term" ]
+    , Rop.consSubtext    O.& [ "subtext /N E"
+                               O.& "-term -subtext . -trim?" ]
     ]
 
 

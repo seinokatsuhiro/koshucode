@@ -22,13 +22,13 @@ import qualified Koshucode.Baala.Rop.Base       as Rop
 
 -- | Relmap operators about resources.
 ropsResource :: (D.CContent c) => [C.Rop c]
-ropsResource = Rop.ropList "resource"
-    --        CONSTRUCTOR           USAGE                       ATTRIBUTE
-    [ Rop.rop consKoshuResArticle [ "koshu-res-article /N"  O.& "-name" ]
-    , Rop.rop consKoshuResRop     [ "koshu-res-rop /N /N"   O.& "-sec -name" ]
-    , Rop.rop consKoshuResSink    [ "koshu-res-sink /N /N"  O.& "-sec -pat" ]
-    , Rop.rop Rop.consXxx         [ "koshu-res-source /N"   O.& "-pat" ]
-    , Rop.rop Rop.consXxx         [ "koshu-res-sink-source /N /N" O.& "-sink -source" ]
+ropsResource = Rop.rops "resource"
+    [ consKoshuResArticle O.& [ "koshu-res-article /N"  O.& "-name" ]
+    , consKoshuResRop     O.& [ "koshu-res-rop /N /N"   O.& "-sec -name" ]
+    , consKoshuResSink    O.& [ "koshu-res-sink /N /N"  O.& "-sec -pat" ]
+    , Rop.consXxx         O.& [ "koshu-res-source /N"   O.& "-pat" ]
+    , Rop.consXxx         O.& [ "koshu-res-sink-source /N /N"
+                                O.& "-sink -source" ]
     ]
 
 

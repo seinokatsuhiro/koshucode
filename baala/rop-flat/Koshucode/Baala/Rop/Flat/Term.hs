@@ -42,14 +42,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 --   [@move@]       Change heading.
 --
 ropsTerm :: (Ord c) => [C.Rop c]
-ropsTerm = Rop.ropList "term"  -- GROUP
-    --         CONSTRUCTOR        USAGE                          ATTRIBUTE
-    [ Rop.rop  consCut          [ "cut /P ..."               O.& "-term*" ]
-    , Rop.rop  consCutTerm      [ "cut-term /R"              O.& "-relmap/" ]
-    , Rop.rop  consPick         [ "pick /P ..."              O.& "-term*" ]
-    , Rop.rop  consPickTerm     [ "pick-term /R"             O.& "-relmap/" ]
-    , Rop.rop  consRename       [ "rename /N /P ..."         O.& "-term*" ]
-    , Rop.rop  consMove         [ "move /P ... -to /N ..."   O.& "-from* . -to" ]
+ropsTerm = Rop.rops "term"
+    [ consCut        O.& [ "cut /P ..."               O.& "-term*" ]
+    , consCutTerm    O.& [ "cut-term /R"              O.& "-relmap/" ]
+    , consPick       O.& [ "pick /P ..."              O.& "-term*" ]
+    , consPickTerm   O.& [ "pick-term /R"             O.& "-relmap/" ]
+    , consRename     O.& [ "rename /N /P ..."         O.& "-term*" ]
+    , consMove       O.& [ "move /P ... -to /N ..."   O.& "-from* . -to" ]
     ]
 
 

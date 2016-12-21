@@ -34,16 +34,15 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- | Implementation of relational operators.
 ropsElem :: (D.CContent c) => [C.Rop c]
-ropsElem = Rop.ropList "elem"
-    --        CONSTRUCTOR          USAGE                           ATTRIBUTE
-    [ Rop.rop consElem           [ "elem /P -to /N"            O.& "-coll . -to" ]
-    , Rop.rop consElemBegin      [ "elem-begin /P -to /N ..."  O.& "-coll . -to" ]
-    , Rop.rop consElemEnd        [ "elem-end /P -to /N ..."    O.& "-coll . -to" ]
-    , Rop.rop (consIndexElem 1)  [ "ix-elem /P -to /N /N"      O.& "-coll . -to" ]
-    , Rop.rop (consIndexElem 0)  [ "iz-elem /P -to /N /N"      O.& "-coll . -to" ]
-    , Rop.rop consMember         [ "member /N /N"              O.& "-elem -set" ]
-    , Rop.rop consUncollect      [ "uncollect /P -to /N ..."   O.& "-coll . -to" ]
-    , Rop.rop consUnroll         [ "unroll /N /N -from /P ..." O.& "-term -content . -from" ]
+ropsElem = Rop.rops "elem"
+    [ consElem          O.& [ "elem /P -to /N"            O.& "-coll . -to" ]
+    , consElemBegin     O.& [ "elem-begin /P -to /N ..."  O.& "-coll . -to" ]
+    , consElemEnd       O.& [ "elem-end /P -to /N ..."    O.& "-coll . -to" ]
+    , consIndexElem 1   O.& [ "ix-elem /P -to /N /N"      O.& "-coll . -to" ]
+    , consIndexElem 0   O.& [ "iz-elem /P -to /N /N"      O.& "-coll . -to" ]
+    , consMember        O.& [ "member /N /N"              O.& "-elem -set" ]
+    , consUncollect     O.& [ "uncollect /P -to /N ..."   O.& "-coll . -to" ]
+    , consUnroll        O.& [ "unroll /N /N -from /P ..." O.& "-term -content . -from" ]
     ]
 
 -- ----------------------  member
