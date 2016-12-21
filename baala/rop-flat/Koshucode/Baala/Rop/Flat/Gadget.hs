@@ -144,7 +144,7 @@ relkitVisitDistance (step1, step2, to, dist) (C.RelkitOutput he2 kitb2) (Just he
       pkFrom    = K.termPicker step1 he2
       pkTo      = K.termPicker step2 he2
 
-      newDist   = K.ssLSideNames pkDist
+      newDist   = K.ssLProperNames pkDist
 
       lenFrom   = length step1
       lenTo     = length step2

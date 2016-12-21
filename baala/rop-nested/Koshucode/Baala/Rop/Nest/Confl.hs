@@ -70,7 +70,7 @@ relmapForInner med n = C.relmapNest med . bin where
 relkitFor :: forall c. (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitFor n (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
     lr    = D.termPicker [n] he1
-    side  = D.ssRSide lr
+    side  = D.ssRProper lr
     he3   = D.headConsNest n he2 $ D.headMap side he1
     kit3  = C.relkitJust he3 $ C.RelkitAbLinear False kitf3 [kitb2]
 

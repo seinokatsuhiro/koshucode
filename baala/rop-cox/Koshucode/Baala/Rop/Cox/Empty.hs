@@ -94,7 +94,7 @@ relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
            let b2map = B.gatherToMap $ map (D.ssRSplit lr) bo2
            Right $ step b2map `concatMap` bo1
 
-    heFill = D.ssRSide lr $ D.headTypes he2
+    heFill = D.ssRProper lr $ D.headTypes he2
     fills  = selectFiller fill `map` heFill
     step b2map cs1 = case B.lookupMap (D.ssLShare lr cs1) b2map of
                        Just b2side -> map (++ cs1) b2side

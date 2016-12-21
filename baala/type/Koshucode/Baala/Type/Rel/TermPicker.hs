@@ -38,19 +38,19 @@ import qualified Koshucode.Baala.Type.Judge            as D
 --   >>> let pk = termPicker "/a /b /c" "/b /c /d /e"
 --
 data Picker a c = Picker
-    { ssLShareIndex  :: [Int]
+    { ssLShareIndex :: [Int]
       -- ^ Indicies of right-shared part
       --
       --   >>> ssLShareIndex pk
       --   [1, 2]
 
-    , ssRShareIndex  :: [Int]
+    , ssRShareIndex :: [Int]
       -- ^ Indicies of left-shared part
       --
       --   >>> ssRShareIndex pk
       --   [0, 1]
 
-    , ssDisjoint     :: Bool
+    , ssDisjoint :: Bool
       -- ^ Whether shared part is empty
       --
       --   >>> ssDisjoint pk
@@ -59,10 +59,10 @@ data Picker a c = Picker
       --   >>> ssDisjoint $ termPicker "/a /b /c" "/d /e"
       --   True
 
-    , ssLSideNames   :: [a]
+    , ssLProperNames :: [a]
       -- ^ Left-proper term names
       --
-      --   >>> ssLSideNames pk
+      --   >>> ssLProperNames pk
       --   [TermName EQ "a"]
 
     , ssLShareNames  :: [a]
@@ -77,55 +77,55 @@ data Picker a c = Picker
       --   >>> ssRShareNames pk
       --   [TermName EQ "b", TermName EQ "c"]
 
-    , ssRSideNames   :: [a]
+    , ssRProperNames :: [a]
       -- ^ Right-proper term names
       --
-      --   >>> ssRSideNames pk
+      --   >>> ssRProperNames pk
       --   [TermName EQ "d", TermName EQ "e"]
 
-    , ssLSide        :: [c] -> [c]
+    , ssLProper :: [c] -> [c]
       -- ^ Pick left-proper part from left contents
       --
-      --   >>> ssLSide pk "ABC"
+      --   >>> ssLProper pk "ABC"
       --   "A"
 
-    , ssLShare       :: [c] -> [c]
+    , ssLShare :: [c] -> [c]
       -- ^ Pick left-shared part from left contents
       --
       --   >>> ssLShare pk "ABC"
       --   "BC"
 
-    , ssRShare       :: [c] -> [c]
+    , ssRShare :: [c] -> [c]
       -- ^ Pick right-shared part from right contents
       --
       --   >>> ssRShare pk "BCDE"
       --   "BC"
 
-    , ssRSide        :: [c] -> [c]
+    , ssRProper :: [c] -> [c]
       -- ^ Pick right-proper part from right contents
       --
-      --   >>> ssRSide pk "BCDE"
+      --   >>> ssRProper pk "BCDE"
       --   "DE"
 
-    , ssRSplit       :: [c] -> ([c], [c])
+    , ssRSplit :: [c] -> ([c], [c])
       -- ^ Pick right-shared and right-proper part
       --
       --   >>> ssRSplit pk "BCDE"
       --   ("BC", "DE")
 
-    , ssRAssoc       :: [c] -> ([c], [c])
+    , ssRAssoc :: [c] -> ([c], [c])
       -- ^ Pick right-shared part and right contents
       --
       --   >>> ssRAssoc pk "BCDE"
       --   ("BC", "BCDE")
 
-    , ssRForward     :: [c] -> [c]
+    , ssRForward :: [c] -> [c]
       -- ^ Move shared terms forward.
       --
       --   >>> ssRForward pk "BCDE"
       --   "BCDE"
 
-    , ssRBackward    :: [c] -> [c]
+    , ssRBackward :: [c] -> [c]
       -- ^ Move shared terms backward.
       --
       --   >>> ssRBackward pk "BCDE"
@@ -148,21 +148,21 @@ pickerBody (li, ri) (ln, rn) = ss where
     rassoc xs  = (rshare xs, xs)
 
     ss = Picker
-         { ssLShareIndex  = li
-         , ssRShareIndex  = ri
-         , ssDisjoint     = null li
-         , ssLSideNames   = lside  ln
-         , ssLShareNames  = lshare ln
-         , ssRShareNames  = rshare rn
-         , ssRSideNames   = rside  rn
-         , ssLSide        = lside
-         , ssLShare       = lshare
-         , ssRShare       = rshare
-         , ssRSide        = rside
-         , ssRSplit       = rsplit
-         , ssRAssoc       = rassoc
-         , ssRForward     = rfor
-         , ssRBackward    = rback
+         { ssLShareIndex    = li
+         , ssRShareIndex    = ri
+         , ssDisjoint       = null li
+         , ssLProperNames   = lside  ln
+         , ssLShareNames    = lshare ln
+         , ssRShareNames    = rshare rn
+         , ssRProperNames   = rside  rn
+         , ssLProper        = lside
+         , ssLShare         = lshare
+         , ssRShare         = rshare
+         , ssRProper        = rside
+         , ssRSplit         = rsplit
+         , ssRAssoc         = rassoc
+         , ssRForward       = rfor
+         , ssRBackward      = rback
          }
 
 -- | Data for picking shared and proper terms.
@@ -203,7 +203,7 @@ preTerms = ssLShareNames
 --   ["c"]
 --
 newTerms :: TermPicker c -> [S.TermName]
-newTerms = ssLSideNames
+newTerms = ssLProperNames
 
 -- | Test present terms exist.
 --
@@ -252,7 +252,7 @@ pickTerms = ssRShare
 
 -- | Cut terms according to term picker.
 cutTerms :: TermPicker c -> O.Map [c]
-cutTerms = ssRSide
+cutTerms = ssRProper
 
 -- | Move terms forward.
 forwardTerms :: TermPicker c -> O.Map [c]

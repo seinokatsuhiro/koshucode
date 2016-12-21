@@ -86,7 +86,7 @@ relmapCut med = C.relmapFlow med . relkitCut
 
 -- | Create @cut@ relkit.
 relkitCut :: [K.TermName] -> C.RelkitFlow c
-relkitCut = relkitProj (K.ssRSide, K.ssRSide)
+relkitCut = relkitProj (K.ssRProper, K.ssRProper)
 
 
 -- ----------------------  pick-term & cut-term
@@ -127,7 +127,7 @@ relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 -- | Create @cut-term@ relkit.
 relkitCutTerm :: C.RelkitBinary c
-relkitCutTerm = relkitProjTerm (K.ssRSide, K.ssRSide)
+relkitCutTerm = relkitProjTerm (K.ssRProper, K.ssRProper)
 
 relkitProjTerm :: K.TermPick2 K.TypeTerm c -> C.RelkitBinary c
 relkitProjTerm pk (C.RelkitOutput he2 _) = relkitProj pk $ K.getTermNames he2
