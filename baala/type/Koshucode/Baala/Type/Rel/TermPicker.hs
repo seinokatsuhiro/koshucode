@@ -37,21 +37,9 @@ import qualified Koshucode.Baala.Type.Judge            as D
 --
 --   >>> let pk = termPicker "/a /b /c" "/b /c /d /e"
 --
-data Picker a c = Picker
-    { ssLShareIndex :: [Int]
-      -- ^ Indicies of right-shared part
-      --
-      --   >>> ssLShareIndex pk
-      --   [1, 2]
-
-    , ssRShareIndex :: [Int]
-      -- ^ Indicies of left-shared part
-      --
-      --   >>> ssRShareIndex pk
-      --   [0, 1]
-
-    , ssDisjoint :: Bool
-      -- ^ Whether shared part is empty
+data Picker n c = Picker
+    { ssDisjoint :: Bool
+      -- ^ __Test:__ Whether shared part is empty
       --
       --   >>> ssDisjoint pk
       --   False
@@ -59,110 +47,131 @@ data Picker a c = Picker
       --   >>> ssDisjoint $ termPicker "/a /b /c" "/d /e"
       --   True
 
-    , ssLProperNames :: [a]
-      -- ^ Left-proper term names
+    , ssLShareIndex :: [Int]
+      -- ^ __Index:__ Indicies of right-shared part
+      --
+      --   >>> ssLShareIndex pk
+      --   [1, 2]
+
+    , ssRShareIndex :: [Int]
+      -- ^ __Index:__ Indicies of left-shared part
+      --
+      --   >>> ssRShareIndex pk
+      --   [0, 1]
+
+    , ssLProperNames :: [n]
+      -- ^ __Name:__ Left-proper term names
       --
       --   >>> ssLProperNames pk
       --   [TermName EQ "a"]
 
-    , ssLShareNames  :: [a]
-      -- ^ Left-shared term names
+    , ssLShareNames :: [n]
+      -- ^ __Name:__ Left-shared term names
       --
       --   >>> ssLShareNames pk
       --   [TermName EQ "b", TermName EQ "c"]
 
-    , ssRShareNames  :: [a]
-      -- ^ Right-shared term names
-      --
-      --   >>> ssRShareNames pk
-      --   [TermName EQ "b", TermName EQ "c"]
-
-    , ssRProperNames :: [a]
-      -- ^ Right-proper term names
+    , ssRProperNames :: [n]
+      -- ^ __Name:__ Right-proper term names
       --
       --   >>> ssRProperNames pk
       --   [TermName EQ "d", TermName EQ "e"]
 
-    , ssLProper :: [c] -> [c]
-      -- ^ Pick left-proper part from left contents
+    , ssRShareNames :: [n]
+      -- ^ __Name:__ Right-shared term names
+      --
+      --   >>> ssRShareNames pk
+      --   [TermName EQ "b", TermName EQ "c"]
+
+    , ssLProper :: O.Map [c]
+      -- ^ __Map:__ Pick left-proper part from left contents
       --
       --   >>> ssLProper pk "ABC"
       --   "A"
 
-    , ssLShare :: [c] -> [c]
-      -- ^ Pick left-shared part from left contents
+    , ssLShare :: O.Map [c]
+      -- ^ __Map:__ Pick left-shared part from left contents
       --
       --   >>> ssLShare pk "ABC"
       --   "BC"
 
-    , ssRShare :: [c] -> [c]
-      -- ^ Pick right-shared part from right contents
+    , ssRShare :: O.Map [c]
+      -- ^ __Map:__ Pick right-shared part from right contents
       --
       --   >>> ssRShare pk "BCDE"
       --   "BC"
 
-    , ssRProper :: [c] -> [c]
-      -- ^ Pick right-proper part from right contents
+    , ssRProper :: O.Map [c]
+      -- ^ __Map:__ Pick right-proper part from right contents
       --
       --   >>> ssRProper pk "BCDE"
       --   "DE"
 
+    , ssRForward :: O.Map [c]
+      -- ^ __Map:__ Move shared terms forward.
+      --
+      --   >>> ssRForward pk "BCDE"
+      --   "BCDE"
+
+    , ssRBackward :: O.Map [c]
+      -- ^ __Map:__ Move shared terms backward.
+      --
+      --   >>> ssRBackward pk "BCDE"
+      --   "DEBC"
+
     , ssRSplit :: [c] -> ([c], [c])
-      -- ^ Pick right-shared and right-proper part
+      -- ^ __Split:__ Pick right-shared and right-proper part
       --
       --   >>> ssRSplit pk "BCDE"
       --   ("BC", "DE")
 
     , ssRAssoc :: [c] -> ([c], [c])
-      -- ^ Pick right-shared part and right contents
+      -- ^ __Split:__ Pick right-shared part and right contents
       --
       --   >>> ssRAssoc pk "BCDE"
       --   ("BC", "BCDE")
-
-    , ssRForward :: [c] -> [c]
-      -- ^ Move shared terms forward.
-      --
-      --   >>> ssRForward pk "BCDE"
-      --   "BCDE"
-
-    , ssRBackward :: [c] -> [c]
-      -- ^ Move shared terms backward.
-      --
-      --   >>> ssRBackward pk "BCDE"
-      --   "DEBC"
     }
 
+-- | Create picker.
 picker :: (Ord n) => [n] -> [n] -> Picker n c
-picker ls rs = pickerBody (li, ri) (ls, rs) where
-    (li, ri) = B.selectIndexBoth ls rs
+picker ls rs = pk where
+    -- index
+    (li, ri)   = B.selectIndexBoth ls rs
 
-pickerBody :: Dbl [Int] -> Dbl [n] -> Picker n a
-pickerBody (li, ri) (ln, rn) = ss where
-    lside      = B.selectOthers    li
-    lshare     = B.selectElems     li
-    rshare     = B.selectElems     ri
-    rside      = B.selectOthers    ri
-    rfor       = B.permuteForward  ri
-    rback      = B.permuteBackward ri
-    rsplit xs  = (rshare xs, rside xs)
-    rassoc xs  = (rshare xs, xs)
+    -- map
+    properL    = B.selectOthers    li
+    shareL     = B.selectElems     li
+    shareR     = B.selectElems     ri
+    properR    = B.selectOthers    ri
 
-    ss = Picker
-         { ssLShareIndex    = li
+    -- split
+    splitR xs  = (shareR xs, properR xs)
+    assocR xs  = (shareR xs, xs)
+
+    pk = Picker
+         { ssDisjoint       = null li
+
+         -- index
+         , ssLShareIndex    = li
          , ssRShareIndex    = ri
-         , ssDisjoint       = null li
-         , ssLProperNames   = lside  ln
-         , ssLShareNames    = lshare ln
-         , ssRShareNames    = rshare rn
-         , ssRProperNames   = rside  rn
-         , ssLProper        = lside
-         , ssLShare         = lshare
-         , ssRShare         = rshare
-         , ssRProper        = rside
-         , ssRSplit         = rsplit
-         , ssRAssoc         = rassoc
-         , ssRForward       = rfor
-         , ssRBackward      = rback
+
+         -- name
+         , ssLProperNames   = properL ls
+         , ssLShareNames    = shareL  ls
+         , ssRShareNames    = shareR  rs
+         , ssRProperNames   = properR rs
+
+         -- map
+         , ssLProper        = properL
+         , ssLShare         = shareL
+         , ssRShare         = shareR
+         , ssRProper        = properR
+         , ssRForward       = B.permuteForward  ri
+         , ssRBackward      = B.permuteBackward ri
+
+         -- split
+         , ssRSplit         = splitR
+         , ssRAssoc         = assocR
          }
 
 -- | Data for picking shared and proper terms.
