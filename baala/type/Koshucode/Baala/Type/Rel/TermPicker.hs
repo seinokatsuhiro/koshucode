@@ -18,6 +18,7 @@ module Koshucode.Baala.Type.Rel.TermPicker
     termsIndex,
     pickDirect,
     pickTerms, cutTerms,
+    pickTerms2, cutTerms2,
     forwardTerms, backwardTerms, towardTerms,
   ) where
 
@@ -115,7 +116,7 @@ pickDirect target input = pickTerms $ termPicker target input
 --   >>> pickTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
 --   "BD"
 --
-pickTerms :: TermPicker c -> O.Map [c]
+pickTerms :: TermPick c
 pickTerms = B.pkRShare
 
 -- | Cut target terms from input terms.
@@ -123,15 +124,23 @@ pickTerms = B.pkRShare
 --   >>> cutTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
 --   "AC"
 --
-cutTerms :: TermPicker c -> O.Map [c]
+cutTerms :: TermPick c
 cutTerms = B.pkRProper
+
+-- | Double 'pickTerms'.
+pickTerms2 :: TermPick2 a b
+pickTerms2 = (pickTerms, pickTerms)
+
+-- | Double 'cutTerms'.
+cutTerms2 :: TermPick2 a b
+cutTerms2 = (cutTerms, cutTerms)
 
 -- | Move target terms forward.
 --
 --   >>> forwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
 --   "BDAC"
 --
-forwardTerms :: TermPicker c -> O.Map [c]
+forwardTerms :: TermPick c
 forwardTerms = B.pkRForward
 
 -- | Move target terms backward.
@@ -139,11 +148,11 @@ forwardTerms = B.pkRForward
 --   >>> backwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
 --   "ACBD"
 --
-backwardTerms :: TermPicker c -> O.Map [c]
+backwardTerms :: TermPick c
 backwardTerms = B.pkRBackward
 
 -- | Move target terms forward if 'True' or backward if 'False'.
-towardTerms :: Bool -> TermPicker c -> O.Map [c]
+towardTerms :: Bool -> TermPick c
 towardTerms True  = forwardTerms
 towardTerms False = backwardTerms
 
