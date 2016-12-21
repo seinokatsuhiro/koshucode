@@ -48,20 +48,19 @@ ropsNest :: (D.CContent c) => [C.Rop c]
 ropsNest = Rop.ropAlias
     [ "sg"   & "self-group"
     , "hier" & "self-group"
-    ] $ Rop.ropList "nest"
-    --        CONSTRUCTOR          USAGE                                    ATTRIBUTE
-    [ Rop.rop Rop.consChunk      [ "chunk /T ... [-order /P ...]"       O.& "-term* . -order" ]
-    , Rop.rop Rop.consCopy       [ "copy N R"                           O.& "-var -relmap/^" ]
-    , Rop.rop Rop.consDown       [ "down /N"                            O.& "-term" ]
-    , Rop.rop Rop.consFor        [ "for /N R"                           O.& "-term -relmap/^" ]
-    , Rop.rop Rop.consGroup      [ "group R -to /N [-share /P ...]"     O.& "-relmap/ . -to -share?" ]
-    , Rop.rop Rop.consJoinUp     [ "join-up /P ..."                     O.& "-term*" ]
-    , Rop.rop Rop.consNest       [ "nest [~] /P ... -to /N"             O.& "-term* . -to" ]
-    , Rop.rop Rop.consOppGroup   [ "opp-group R -to /N [-share /P ...]" O.& "-relmap/ . -to -share?" ]
-    , Rop.rop Rop.consSelfGroup  [ "self-group /P ... -to /N"           O.& "-term* . -to" ]
-    , Rop.rop Rop.consSlice      [ "slice /N [R]"                       O.& "-term -relmap/^?" ]
-    , Rop.rop Rop.consSliceUp    [ "slice-up R"                         O.& "-relmap/^" ]
-    , Rop.rop Rop.consUngroup    [ "ungroup /P"                         O.& "-term" ]
-    , Rop.rop Rop.consUp         [ "up /N"                              O.& "-term" ]
+    ] $ Rop.rops "nest"
+    [ Rop.consChunk      O.& [ "chunk /T ... [-order /P ...]"       O.& "-term* . -order" ]
+    , Rop.consCopy       O.& [ "copy N R"                           O.& "-var -relmap/^" ]
+    , Rop.consDown       O.& [ "down /N"                            O.& "-term" ]
+    , Rop.consFor        O.& [ "for /N R"                           O.& "-term -relmap/^" ]
+    , Rop.consGroup      O.& [ "group R -to /N [-share /P ...]"     O.& "-relmap/ . -to -share?" ]
+    , Rop.consJoinUp     O.& [ "join-up /P ..."                     O.& "-term*" ]
+    , Rop.consNest       O.& [ "nest [~] /P ... -to /N"             O.& "-term* . -to" ]
+    , Rop.consOppGroup   O.& [ "opp-group R -to /N [-share /P ...]" O.& "-relmap/ . -to -share?" ]
+    , Rop.consSelfGroup  O.& [ "self-group /P ... -to /N"           O.& "-term* . -to" ]
+    , Rop.consSlice      O.& [ "slice /N [R]"                       O.& "-term -relmap/^?" ]
+    , Rop.consSliceUp    O.& [ "slice-up R"                         O.& "-relmap/^" ]
+    , Rop.consUngroup    O.& [ "ungroup /P"                         O.& "-term" ]
+    , Rop.consUp         O.& [ "up /N"                              O.& "-term" ]
     ]
 
