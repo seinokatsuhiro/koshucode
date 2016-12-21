@@ -2,7 +2,7 @@
 
 -- | Basic relmap operators.
 
-module Koshucode.Baala.Rop.Flat.Bundle
+module Koshucode.Baala.Rop.Flat.Rops
   ( ropsFlat,
   ) where
 

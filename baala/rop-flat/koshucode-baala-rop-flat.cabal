@@ -47,7 +47,6 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Rop.Flat
-        Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check
         Koshucode.Baala.Rop.Flat.Control
         Koshucode.Baala.Rop.Flat.Elem
@@ -64,6 +63,7 @@ library
         Koshucode.Baala.Rop.Flat.Peripheral
         Koshucode.Baala.Rop.Flat.PoScale
         Koshucode.Baala.Rop.Flat.Resource
+        Koshucode.Baala.Rop.Flat.Rops
         Koshucode.Baala.Rop.Flat.Source
         Koshucode.Baala.Rop.Flat.Subtext
         Koshucode.Baala.Rop.Flat.Term
