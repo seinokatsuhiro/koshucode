@@ -39,7 +39,8 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- ----------------------  meet
 
--- | Construct relmap to meet relation.
+-- | [meet /R/ &#x5B;-share \/P ...&#x5D;]
+--     Meet input relation and /R/.
 consMeet :: (Ord c) => C.RopCons c
 consMeet med =
   do rmap <- Rop.getRelmap med "-relmap"
@@ -48,18 +49,21 @@ consMeet med =
 
 -- | Meet two relations.
 relmapMeet :: (Ord c)
-    => C.Intmed c          -- ^ Source infomation
-    -> SharedTerms         -- ^ Shared terms
-    -> C.Relmap c          -- ^ Subrelmap of meet operator
+    => C.Intmed c          -- ^ Intermediate relmap
+    -> SharedTerms         -- ^ Shared terms from @-share@ option
+    -> C.Relmap c          -- ^ Subrelmap /R/
     -> C.Relmap c          -- ^ Relmap of meet operator
 relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => SharedTerms -> C.RelkitBinary c
 relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr     = K.termPicker he1 he2
+    pk     = K.termPicker he1 he2
+    pick1  = K.pkLShare pk
+    split2 = K.pkRSplit pk
+
     he3    = he2 K.++ he1
-    kit3   = case unmatchShare sh lr of
+    kit3   = case unmatchShare sh pk of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
@@ -67,17 +71,18 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           case K.pkLShareIndex lr of
-             [] -> Right $ cartesian bo1 bo2
-             _  -> let b2map = K.gatherToMap $ map (K.pkRSplit lr) bo2
-                   in Right $ step b2map `concatMap` bo1
+           case K.pkDisjoint pk of
+             True  -> Right $ cartesian bo1 bo2
+             False -> let b2map = K.gatherToMap (split2 <$> bo2)
+                      in Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case K.pkLShare lr cs1 `K.lookupMap` b2map of
-                       Just b2side -> map (++ cs1) b2side
+    step b2map cs1 = case pick1 cs1 `K.lookupMap` b2map of
+                       Just b2prop -> map (++ cs1) b2prop
                        Nothing     -> []
 
 relkitMeet _ _ _ = Right C.relkitNothing
 
+-- | Cartesian product.
 cartesian :: [[c]] -> [[c]] -> [[c]]
 cartesian bo1 bo2 =
     do cs1 <- bo1
@@ -87,7 +92,8 @@ cartesian bo1 bo2 =
 
 -- ----------------------  join
 
--- | Construct relmap to join relation.
+-- | [join /R/ &#x5B;-share \/P ...&#x5D;]
+--     Join input relation and /R/.
 consJoin :: (Ord c) => C.RopCons c
 consJoin med =
     do rmap <- Rop.getRelmap med "-relmap"
@@ -97,9 +103,9 @@ consJoin med =
 -- | Join two relations.
 relmapJoin
     :: (Ord c)
-    => C.Intmed c          -- ^ Source infomation
-    -> SharedTerms         -- ^ Shared terms
-    -> C.Relmap c          -- ^ Subrelmap of join operator
+    => C.Intmed c          -- ^ Intermediate relmap
+    -> SharedTerms         -- ^ Shared terms from @-share@ option
+    -> C.Relmap c          -- ^ Subrelmap /R/
     -> C.Relmap c          -- ^ Relmap of join operator
 relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
 
@@ -113,19 +119,20 @@ relmapJoinList med (rmap : rmaps) = rmap K.++ rmaps' where
 -- | Join two relations.
 relkitJoin :: SharedTerms -> C.RelkitBinary c
 relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr     = K.termPicker he1 he2
-    he3    = K.pkLShare lr `K.headMap` he1
-    kit3   = case unmatchShare sh lr of
+    pk     = K.termPicker he1 he2
+    pick1  = K.pkLShare pk
+    pick2  = K.pkRShare pk
+
+    he3    = pick1 `K.headMap` he1
+    kit3   = case unmatchShare sh pk of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-               left    = map $ K.pkLShare lr
-               right   = map $ K.pkRShare lr
            bo2 <- bmap2 bo1
-           Right $ left bo1 ++ right bo2
+           Right $ map pick1 bo1 ++ map pick2 bo2
 
 relkitJoin _ _ _ = Right C.relkitNothing
 
@@ -137,13 +144,11 @@ type SharedTerms = Maybe [K.TermName]
 
 -- | Calculate unmatch shared terms.
 unmatchShare :: SharedTerms -> K.TermPicker c -> Maybe ([K.TermName], [K.TermName])
-unmatchShare (Nothing) _ = Nothing
-unmatchShare (Just sh) lr =
-    let e = K.setList sh
-        a = K.setList $ K.pkRShareNames lr
-    in if e == a
-       then Nothing
-       else Just (e, a)
+unmatchShare (Nothing) _              = Nothing
+unmatchShare (Just sh) pk | e == a    = Nothing
+                          | otherwise = Just (e, a)
+                          where e = K.setList sh
+                                a = K.setList $ K.preTerms pk
 
 
 -- ------------------------------------------------------------------
@@ -173,30 +178,28 @@ unmatchShare (Just sh) lr =
 --    Summary of calculating meet of relations like
 --    @(\/a \/b \/c)@ meet @(\/b \/c \/d)@ = @(\/d ++ \/a \/b \/c)@.
 --    In this case, shared terms are @\/b@ and @\/c@,
---    left-sided term is @\/a@, and right-sided term is @\/d@.
+--    left-proper term is @\/a@, and right-proper term is @\/d@.
 --
---    [Input]    Relations @(Rel he1 bo1)@ and @(Rel he2 bo2)@
+--    [Input]    Relations @(Rel head1 body1)@ and @(Rel heea2 body2)@ :: @Rel c@
+--    [Output]   Relation @(Rel head3 body3)@ :: @Rel c@
 --
---    [Output]   Relation @(Rel he3 b3)@
+--    1. Let @s1@ be the shared-term information of @head1@.
 --
---    1. Let @s1@ be shared-term information of @he1@.
+--    2. Let @s2@ be the shared-term information of @head2@.
 --
---    2. Let @s2@ be shared-term information of @he2@.
+--    3. Let @cs1@ :: @[c]@ be an element of @body1@.
 --
---    3. Let @cs1@ :: @[c]@ be element of @bo1@.
+--    4. Let @cs2@ :: @[c]@ be an element of @body2@.
 --
---    4. Let @cs2@ :: @[c]@ be element of @bo2@.
+--    5. Using @s2@, split each @cs2@ into
+--       shared and proper terms :: @([c], [c])@.
 --
---    5. Split each @cs2@, by @s2@,
---       into shared and sided terms :: @([c], [c])@.
+--    6. For each same shared terms, collect the proper terms.
+--       Let it be @(share2, propers2)@ :: @([c], [[c]])@.
 --
---    6. For each same shared terms, collect the sided terms.
---       Let it be @(share2, sides2)@ :: @([c], [[c]])@.
+--    7. Using @s1@, pick shared terms @share1@ :: @[c]@ from each @cs1@.
 --
---    7. Pick shared terms @share1@ :: @[c]@,
---       by @s1@, from each @cs1@.
---
---    8. Concat @cs1@ and each of @sides2@
---       where @share1@ equals @share2@,
+--    8. Concatenate each of @propers2@ and @cs1@
+--       where @share2@ equals @share1@,
 --
 
