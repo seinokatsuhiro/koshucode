@@ -10,7 +10,7 @@ module Koshucode.Baala.Type.Rel.TermPicker
     TermPick2,
     termPicker,
 
-    -- * Pre & new terms
+    -- * Presend & new terms
     preTerms, newTerms, 
     preTermsExist, newTermsExist,
 
@@ -38,7 +38,7 @@ type TermPick c = TermPicker c -> [c] -> [c]
 -- | Double picker.
 type TermPick2 a b = (TermPick a, TermPick b)
 
--- | Create term picker from left and right term names.
+-- | Create term picker from left and right term names
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
 termPicker left right = B.picker ls rs where
     (ls, rs) = getTermNamesUnique2 left right
@@ -51,30 +51,34 @@ getTermNamesUnique2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.
 getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 
 
--- ---------------------- * Pre & new terms
+-- ---------------------- * Present & new terms
 
 -- | List of present terms.
+--   The first argument of 'termPicker' is treated as target terms,
+--   and the second is terms of input heading.
+--   Because firstly target terms are given to relmap operator,
+--   secondly input heading is fixed.
 --
---   >>> preTerms $ termPicker (words "a b c") (words "a b d e")
---   ["a","b"]
+--   >>> preTerms $ termPicker "/a /b /c" "/a /b /d /e"
+--   [TermName EQ "a",TermName EQ "b"]
 --
 preTerms :: TermPicker c -> [S.TermName]
 preTerms = B.pkLShareNames
 
 -- | List of new terms.
 --
---   >>> newTerms $ termPicker (words "a b c") (words "a b d e")
---   ["c"]
+--   >>> newTerms $ termPicker "/a /b /c" "/a /b /d /e"
+--   [TermName EQ "c"]
 --
 newTerms :: TermPicker c -> [S.TermName]
 newTerms = B.pkLProperNames
 
 -- | Test present terms exist.
 --
---   >>> preTermsExist $ termPicker (words "d e") (words "a b c")
+--   >>> preTermsExist $ termPicker "/d /e" "/a /b /c"
 --   False
 --
---   >>> preTermsExist $ termPicker (words "c d e") (words "a b c")
+--   >>> preTermsExist $ termPicker "/c /d /e" "/a /b /c"
 --   True
 --
 preTermsExist :: O.Test (TermPicker c)
@@ -82,10 +86,10 @@ preTermsExist = B.notNull . preTerms
 
 -- | Test new terms exist.
 --
---   >>> newTermsExist $ termPicker (words "a b c") (words "a b d e")
+--   >>> newTermsExist $ termPicker "/a /b /c" "/a /b /d /e"
 --   True
 --
---   >>> newTermsExist $ termPicker (words "a b") (words "a b d e")
+--   >>> newTermsExist $ termPicker "/a /b" "/a /b /d /e"
 --   False
 --
 newTermsExist :: O.Test (TermPicker c)
@@ -104,7 +108,7 @@ pickDirect t1 t2 = pickTerms $ termPicker t1 t2
 
 -- | Extract indices of terms.
 --
---   >>> pickTermsIndex $ termPicker (words "b d") (words "a b d e")
+--   >>> pickTermsIndex $ termPicker "/b /d" "/a /b /d /e"
 --   [1,2]
 --
 pickTermsIndex :: TermPicker c -> [Int]
@@ -128,7 +132,7 @@ backwardTerms = B.pkRBackward
 
 -- | Move terms forward ('True') or backward ('False').
 --
---   >>> let pk = termPicker (words "c b") (words "a b c d")
+--   >>> let pk = termPicker "/c /b" "/a /b /c /d"
 --   >>> towardTerms True pk (words "A B C D")
 --   ["C","B","A","D"]
 --   >>> towardTerms False pk (words "A B C D")
