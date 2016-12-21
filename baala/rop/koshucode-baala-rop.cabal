@@ -49,7 +49,7 @@ library
         Koshucode.Baala.Rop.Base.Get
         Koshucode.Baala.Rop.Base.Message
         Koshucode.Baala.Rop.Base.Rel
-        Koshucode.Baala.Rop.Base.Rop
+        Koshucode.Baala.Rop.Base.Rops
 
   -- Modules included in this library but not exported.
   --other-modules:       
