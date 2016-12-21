@@ -5,14 +5,15 @@
 
 module Koshucode.Baala.Type.Rel.TermPicker
   ( -- * Construct
-    Picker (..),
     TermPicker,
     TermPick,
     TermPick2,
     termPicker,
+
     -- * Pre & new terms
     preTerms, newTerms, 
     preTermsExist, newTermsExist,
+
     -- * Mapping
     pickDirect,
     pickTermsIndex,
@@ -24,158 +25,13 @@ import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Judge            as D
+import qualified Koshucode.Baala.Type.Rel.Picker       as D
 
 
 -- ---------------------- * Construct
 
 -- | Data for picking shared and proper terms.
---
---   For example, __\/a \/b \/c__ and __\/b \/c \/d \/e__
---   have left-proper terms __\/a__,
---   shared terms __\/b \/c__,
---   and right-proper terms __\/d \/e__.
---
---   >>> let pk = termPicker "/a /b /c" "/b /c /d /e"
---
-data Picker n c = Picker
-    { ssDisjoint :: Bool
-      -- ^ __Test:__ Whether shared part is empty
-      --
-      --   >>> ssDisjoint pk
-      --   False
-      --
-      --   >>> ssDisjoint $ termPicker "/a /b /c" "/d /e"
-      --   True
-
-    , ssLShareIndex :: [Int]
-      -- ^ __Index:__ Indicies of right-shared part
-      --
-      --   >>> ssLShareIndex pk
-      --   [1, 2]
-
-    , ssRShareIndex :: [Int]
-      -- ^ __Index:__ Indicies of left-shared part
-      --
-      --   >>> ssRShareIndex pk
-      --   [0, 1]
-
-    , ssLProperNames :: [n]
-      -- ^ __Name:__ Left-proper term names
-      --
-      --   >>> ssLProperNames pk
-      --   [TermName EQ "a"]
-
-    , ssLShareNames :: [n]
-      -- ^ __Name:__ Left-shared term names
-      --
-      --   >>> ssLShareNames pk
-      --   [TermName EQ "b", TermName EQ "c"]
-
-    , ssRProperNames :: [n]
-      -- ^ __Name:__ Right-proper term names
-      --
-      --   >>> ssRProperNames pk
-      --   [TermName EQ "d", TermName EQ "e"]
-
-    , ssRShareNames :: [n]
-      -- ^ __Name:__ Right-shared term names
-      --
-      --   >>> ssRShareNames pk
-      --   [TermName EQ "b", TermName EQ "c"]
-
-    , ssLProper :: O.Map [c]
-      -- ^ __Map:__ Pick left-proper part from left contents
-      --
-      --   >>> ssLProper pk "ABC"
-      --   "A"
-
-    , ssLShare :: O.Map [c]
-      -- ^ __Map:__ Pick left-shared part from left contents
-      --
-      --   >>> ssLShare pk "ABC"
-      --   "BC"
-
-    , ssRShare :: O.Map [c]
-      -- ^ __Map:__ Pick right-shared part from right contents
-      --
-      --   >>> ssRShare pk "BCDE"
-      --   "BC"
-
-    , ssRProper :: O.Map [c]
-      -- ^ __Map:__ Pick right-proper part from right contents
-      --
-      --   >>> ssRProper pk "BCDE"
-      --   "DE"
-
-    , ssRForward :: O.Map [c]
-      -- ^ __Map:__ Move shared terms forward.
-      --
-      --   >>> ssRForward pk "BCDE"
-      --   "BCDE"
-
-    , ssRBackward :: O.Map [c]
-      -- ^ __Map:__ Move shared terms backward.
-      --
-      --   >>> ssRBackward pk "BCDE"
-      --   "DEBC"
-
-    , ssRSplit :: [c] -> ([c], [c])
-      -- ^ __Split:__ Pick right-shared and right-proper part
-      --
-      --   >>> ssRSplit pk "BCDE"
-      --   ("BC", "DE")
-
-    , ssRAssoc :: [c] -> ([c], [c])
-      -- ^ __Split:__ Pick right-shared part and right contents
-      --
-      --   >>> ssRAssoc pk "BCDE"
-      --   ("BC", "BCDE")
-    }
-
--- | Create picker.
-picker :: (Ord n) => [n] -> [n] -> Picker n c
-picker ls rs = pk where
-    -- index
-    (li, ri)   = B.selectIndexBoth ls rs
-
-    -- map
-    properL    = B.selectOthers    li
-    shareL     = B.selectElems     li
-    shareR     = B.selectElems     ri
-    properR    = B.selectOthers    ri
-
-    -- split
-    splitR xs  = (shareR xs, properR xs)
-    assocR xs  = (shareR xs, xs)
-
-    pk = Picker
-         { ssDisjoint       = null li
-
-         -- index
-         , ssLShareIndex    = li
-         , ssRShareIndex    = ri
-
-         -- name
-         , ssLProperNames   = properL ls
-         , ssLShareNames    = shareL  ls
-         , ssRShareNames    = shareR  rs
-         , ssRProperNames   = properR rs
-
-         -- map
-         , ssLProper        = properL
-         , ssLShare         = shareL
-         , ssRShare         = shareR
-         , ssRProper        = properR
-         , ssRForward       = B.permuteForward  ri
-         , ssRBackward      = B.permuteBackward ri
-
-         -- split
-         , ssRSplit         = splitR
-         , ssRAssoc         = assocR
-         }
-
--- | Data for picking shared and proper terms.
-type TermPicker c = Picker S.TermName c
+type TermPicker c = D.Picker S.TermName c
 
 -- | Type for picking terms.
 type TermPick c = TermPicker c -> [c] -> [c]
@@ -185,7 +41,7 @@ type TermPick2 a b = (TermPick a, TermPick b)
 
 -- | Create term picker from left and right term names.
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
-termPicker left right = picker ls rs where
+termPicker left right = D.picker ls rs where
     (ls, rs) = getTermNamesUnique2 left right
 
 -- | Double of something.
@@ -204,7 +60,7 @@ getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 --   ["a","b"]
 --
 preTerms :: TermPicker c -> [S.TermName]
-preTerms = ssLShareNames
+preTerms = D.pkLShareNames
 
 -- | List of new terms.
 --
@@ -212,7 +68,7 @@ preTerms = ssLShareNames
 --   ["c"]
 --
 newTerms :: TermPicker c -> [S.TermName]
-newTerms = ssLProperNames
+newTerms = D.pkLProperNames
 
 -- | Test present terms exist.
 --
@@ -253,23 +109,23 @@ pickDirect t1 t2 = pickTerms $ termPicker t1 t2
 --   [1,2]
 --
 pickTermsIndex :: TermPicker c -> [Int]
-pickTermsIndex = ssRShareIndex
+pickTermsIndex = D.pkRShareIndex
 
 -- | Pick terms according to term picker.
 pickTerms :: TermPicker c -> O.Map [c]
-pickTerms = ssRShare
+pickTerms = D.pkRShare
 
 -- | Cut terms according to term picker.
 cutTerms :: TermPicker c -> O.Map [c]
-cutTerms = ssRProper
+cutTerms = D.pkRProper
 
 -- | Move terms forward.
 forwardTerms :: TermPicker c -> O.Map [c]
-forwardTerms = ssRForward
+forwardTerms = D.pkRForward
 
 -- | Move terms backward.
 backwardTerms :: TermPicker c -> O.Map [c]
-backwardTerms = ssRBackward
+backwardTerms = D.pkRBackward
 
 -- | Move terms forward ('True') or backward ('False').
 --
