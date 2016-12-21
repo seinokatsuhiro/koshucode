@@ -28,7 +28,6 @@ import qualified Koshucode.Baala.Syntax             as S
 import qualified Koshucode.Baala.Data               as D
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
-import qualified Koshucode.Baala.Rop.Cox.Get        as Rop
 import qualified Koshucode.Baala.Rop.Cox.GeoDatumJp as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message    as Msg
 

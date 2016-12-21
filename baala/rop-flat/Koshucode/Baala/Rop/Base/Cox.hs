@@ -2,7 +2,7 @@
 
 -- | Content expressions in relmap attributes.
 
-module Koshucode.Baala.Rop.Cox.Get
+module Koshucode.Baala.Rop.Base.Cox
   ( -- * Cox
     getCox, getMaybeCox, getOptionCox,
     getTermCoxes,
@@ -18,13 +18,13 @@ module Koshucode.Baala.Rop.Cox.Get
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax           as S
-import qualified Koshucode.Baala.Data             as D
-import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Syntax.Pattern   as P
-import qualified Koshucode.Baala.Rop.Base         as Rop
-import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Syntax.Pattern    as P
+import qualified Koshucode.Baala.Rop.Base.Get      as Rop
+import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
 -- --------------------------------------------  Cox

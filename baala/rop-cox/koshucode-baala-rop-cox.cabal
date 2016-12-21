@@ -54,7 +54,6 @@ library
         Koshucode.Baala.Rop.Cox.Filter
         Koshucode.Baala.Rop.Cox.Gadget
         Koshucode.Baala.Rop.Cox.GeoDatumJp
-        Koshucode.Baala.Rop.Cox.Get
         Koshucode.Baala.Rop.Cox.Message
         Koshucode.Baala.Rop.Cox.Range
 

@@ -21,7 +21,6 @@ import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
-import qualified Koshucode.Baala.Rop.Cox.Get      as Rop
 import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 
 

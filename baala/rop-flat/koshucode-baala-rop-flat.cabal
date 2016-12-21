@@ -47,6 +47,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Rop.Base
+        Koshucode.Baala.Rop.Base.Cox
         Koshucode.Baala.Rop.Base.Define
         Koshucode.Baala.Rop.Base.Get
         Koshucode.Baala.Rop.Base.Message

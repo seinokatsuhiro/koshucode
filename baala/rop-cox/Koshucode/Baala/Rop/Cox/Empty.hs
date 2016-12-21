@@ -19,7 +19,6 @@ import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Flat          as Rop
-import qualified Koshucode.Baala.Rop.Cox.Get       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 
