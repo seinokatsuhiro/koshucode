@@ -51,6 +51,7 @@ library
         Koshucode.Baala.Rop.Base.Define
         Koshucode.Baala.Rop.Base.Get
         Koshucode.Baala.Rop.Base.Message
+        Koshucode.Baala.Rop.Base.Rel
         Koshucode.Baala.Rop.Base.Rop
 
         Koshucode.Baala.Rop.Flat
