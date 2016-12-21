@@ -1,7 +1,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Specialize generic relmaps to specialized relmaps
+-- | Specialize generic relmaps.
+--   Generic relmaps are represented by 'C.Relmap',
+--   specialized relmaps by 'C.Relkit'.
 
 module Koshucode.Baala.Core.Relmap.Specialize
   ( relmapSpecialize, 
@@ -21,22 +23,24 @@ import qualified Koshucode.Baala.Core.Relmap.Message  as Msg
 -- | Table for referencing relmap of 'C.RelmapLink'.
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 
--- | Specializes generic relmap to specialized relmap,
---   i.e., 'C.Relmap' to 'C.Relkit'.
+-- | Specializes generic relmap to specialized relmap.
 --   Specialized relmaps have fixed input/output headings.
 --   In constrast, generic relmaps do not.
 --   Specialized relmaps are also called relkits.
 --   This function returns relkit and extended table of relkits.
 relmapSpecialize :: forall h. forall c.
-    h c -> RelmapLinkTable' h c -> C.RelkitTable c
-    -> Maybe T.Head -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
+    h c                      -- ^ Hook.
+    -> RelmapLinkTable' h c  -- ^ Lexmap-to-relmap search table.
+    -> C.RelkitTable c       -- ^ List of known relkits, i.e.,
+                             --   search table from relkit key to actual relkit.
+    -> Maybe T.Head          -- ^ Input heading feeding into generic relmap.
+    -> C.Relmap' h c         -- ^ Generic relmap to specialize.
+    -> B.Ab (C.RelkitTable c, C.Relkit c) -- ^ Extended table and specialized relmap.
 relmapSpecialize hook links = spec [] [] where
-    spec :: [((S.Token, S.LocalRef), T.Head)]  -- name of local relation, and its heading
-         -> [C.RelkitKey]        -- information for detecting cyclic relmap
-         -> C.RelkitTable c      -- list of known specialized relkits
-         -> Maybe T.Head         -- input head feeding into generic relmap
-         -> C.Relmap' h c        -- generic relmap to specialize
-         -> B.Ab (C.RelkitTable c, C.Relkit c)
+    spec :: [((S.Token, S.LocalRef), T.Head)] -- Name of local relation, and its heading
+         -> [C.RelkitKey]                     -- Data for detecting cyclic relmap
+         -> C.RelkitTable c -> Maybe T.Head   -- Arguments of this function
+         -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
     spec local keys kdef he1 rmap = s where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
