@@ -39,6 +39,7 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Type             as T
 import qualified Koshucode.Baala.Type.Judge            as D
+import qualified Koshucode.Baala.Type.Rel.Picker       as D
 import qualified Koshucode.Baala.Type.Rel.TermPicker   as D
 
 
@@ -214,7 +215,7 @@ headUp = headOf . up . headType where
 --   ["y", "x"]
 --
 headForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [c]
-headForward to from = D.ssRForward $ D.termPicker to from
+headForward to from = D.pkRForward $ D.termPicker to from
 
 -- | Move terms forward.
 bodyForward :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [[c]]

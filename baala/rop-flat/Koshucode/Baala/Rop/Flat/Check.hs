@@ -98,7 +98,7 @@ relkitDuplicate ns (Just he1)
       dup    = not . K.isSingleton
 
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = K.gatherToMap $ map (K.ssRAssoc pk) bo1
+      kitf2 bo1 = let bo1map = K.gatherToMap $ map (K.pkRAssoc pk) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 

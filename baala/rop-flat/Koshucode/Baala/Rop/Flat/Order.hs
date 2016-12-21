@@ -46,7 +46,7 @@ consForward med =
 
 -- | Create @forward@ relmap.
 relmapForward :: C.Intmed c -> [K.TermName] -> C.Relmap c
-relmapForward med = C.relmapFlow med . relkitToward (K.ssRForward, K.ssRForward)
+relmapForward med = C.relmapFlow med . relkitToward (K.pkRForward, K.pkRForward)
 
 -- | __backward \/P ...__
 --
@@ -59,7 +59,7 @@ consBackward med =
 
 -- | Create @backward@ relmap.
 relmapBackward :: C.Intmed c -> [K.TermName] -> C.Relmap c
-relmapBackward med = C.relmapFlow med . relkitToward (K.ssRBackward, K.ssRBackward)
+relmapBackward med = C.relmapFlow med . relkitToward (K.pkRBackward, K.pkRBackward)
 
 -- | Create @forward@ or @backward@ relkit.
 relkitToward :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
@@ -89,8 +89,8 @@ relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
     ns    = K.getTermNames he1
     lr    = K.termPicker (K.sort ns) ns
-    he2   = K.headMap (K.ssRForward lr) he1
-    kit2  = C.relkitJust he2 $ C.RelkitLinear False $ K.ssRForward lr
+    he2   = K.headMap (K.pkRForward lr) he1
+    kit2  = C.relkitJust he2 $ C.RelkitLinear False $ K.pkRForward lr
 
 
 -- ----------------------  order

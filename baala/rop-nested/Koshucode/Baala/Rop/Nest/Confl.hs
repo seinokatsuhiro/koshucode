@@ -70,7 +70,7 @@ relmapForInner med n = C.relmapNest med . bin where
 relkitFor :: forall c. (D.CRel c) => S.TermName -> C.RelkitBinary c
 relkitFor n (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
     lr    = D.termPicker [n] he1
-    side  = D.ssRProper lr
+    side  = D.pkRProper lr
     he3   = D.headConsNest n he2 $ D.headMap side he1
     kit3  = C.relkitJust he3 $ C.RelkitAbLinear False kitf3 [kitb2]
 
@@ -107,7 +107,7 @@ relmapGroup med sh = C.relmapBinary med . relkitGroup sh
 relkitGroup :: forall c. (Ord c, D.CRel c) => Rop.SharedTerms -> S.TermName -> C.RelkitBinary c
 relkitGroup sh n (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr      = D.termPicker he1 he2
-    toMap2  = B.gatherToMap . map (D.ssRAssoc lr)
+    toMap2  = B.gatherToMap . map (D.pkRAssoc lr)
     he3     = D.headConsNest n he2 he1
     kit3    = case Rop.unmatchShare sh lr of
                 Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
@@ -120,7 +120,7 @@ relkitGroup sh n (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
            Right $ map (add map2) bo1
 
     add map2 cs1 =
-        let b2maybe = B.lookupMap (D.ssLShare lr cs1) map2
+        let b2maybe = B.lookupMap (D.pkLShare lr cs1) map2
             b2sub   = B.fromMaybe [] b2maybe
         in D.pRel (D.Rel he2 b2sub) : cs1
 

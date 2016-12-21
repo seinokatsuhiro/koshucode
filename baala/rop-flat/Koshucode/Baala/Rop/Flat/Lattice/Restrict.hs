@@ -109,8 +109,8 @@ relkitFilterMeet which sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
            bo2 <- bmap2 bo1
            Right $ test (toSet bo2) `filter` bo1
 
-    toSet = Set.fromList . map (K.ssRShare lr)
-    test b2set cs1 = K.ssLShare lr cs1 `Set.member` b2set == which
+    toSet = Set.fromList . map (K.pkRShare lr)
+    test b2set cs1 = K.pkLShare lr cs1 `Set.member` b2set == which
 
 relkitFilterMeet _ _ _ _ = Right C.relkitNothing
 
@@ -169,4 +169,4 @@ sharedNames he1 he2 = shared where
     ns1     = K.getTermNames he1
     ns2     = K.getTermNames he2
     lr      = K.termPicker ns1 ns2
-    shared  = K.ssRShare lr ns2
+    shared  = K.pkRShare lr ns2

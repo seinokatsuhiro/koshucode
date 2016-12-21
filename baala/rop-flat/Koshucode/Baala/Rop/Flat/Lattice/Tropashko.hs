@@ -67,12 +67,12 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           case K.ssLShareIndex lr of
+           case K.pkLShareIndex lr of
              [] -> Right $ cartesian bo1 bo2
-             _  -> let b2map = K.gatherToMap $ map (K.ssRSplit lr) bo2
+             _  -> let b2map = K.gatherToMap $ map (K.pkRSplit lr) bo2
                    in Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case K.ssLShare lr cs1 `K.lookupMap` b2map of
+    step b2map cs1 = case K.pkLShare lr cs1 `K.lookupMap` b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
@@ -114,7 +114,7 @@ relmapJoinList med (rmap : rmaps) = rmap K.++ rmaps' where
 relkitJoin :: SharedTerms -> C.RelkitBinary c
 relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     lr     = K.termPicker he1 he2
-    he3    = K.ssLShare lr `K.headMap` he1
+    he3    = K.pkLShare lr `K.headMap` he1
     kit3   = case unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -122,8 +122,8 @@ relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-               left    = map $ K.ssLShare lr
-               right   = map $ K.ssRShare lr
+               left    = map $ K.pkLShare lr
+               right   = map $ K.pkRShare lr
            bo2 <- bmap2 bo1
            Right $ left bo1 ++ right bo2
 
@@ -140,7 +140,7 @@ unmatchShare :: SharedTerms -> K.TermPicker c -> Maybe ([K.TermName], [K.TermNam
 unmatchShare (Nothing) _ = Nothing
 unmatchShare (Just sh) lr =
     let e = K.setList sh
-        a = K.setList $ K.ssRShareNames lr
+        a = K.setList $ K.pkRShareNames lr
     in if e == a
        then Nothing
        else Just (e, a)

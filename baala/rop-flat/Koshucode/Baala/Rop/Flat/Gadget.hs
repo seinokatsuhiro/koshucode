@@ -144,7 +144,7 @@ relkitVisitDistance (step1, step2, to, dist) (C.RelkitOutput he2 kitb2) (Just he
       pkFrom    = K.termPicker step1 he2
       pkTo      = K.termPicker step2 he2
 
-      newDist   = K.ssLProperNames pkDist
+      newDist   = K.pkLProperNames pkDist
 
       lenFrom   = length step1
       lenTo     = length step2
@@ -170,7 +170,7 @@ relkitVisitDistanceBody optimize1 pkStart pkFrom pkTo heTo
       calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
           rel    = K.pRel $ K.Rel heTo body
           body   = map tupleX $ Ms.assocs $ vdistX vstep start
-          start  = K.ssRShare pkStart cs1
+          start  = K.pkRShare pkStart cs1
 
       vdistN vstep cs   = visitDistanceFrom vstep cs
       vdist1 vstep [c]  = visitDistanceFrom vstep c
@@ -179,10 +179,10 @@ relkitVisitDistanceBody optimize1 pkStart pkFrom pkTo heTo
       tupleN (cs, n)    = K.pInt n : cs
       tuple1 (c, n)     = [K.pInt n, c]
 
-      addN cs           = insertPush (K.ssRShare pkFrom cs)
-                                     (K.ssRShare pkTo cs)
-      add1 cs           = insertPush (head $ K.ssRShare pkFrom cs)
-                                     (head $ K.ssRShare pkTo cs)
+      addN cs           = insertPush (K.pkRShare pkFrom cs)
+                                     (K.pkRShare pkTo cs)
+      add1 cs           = insertPush (head $ K.pkRShare pkFrom cs)
+                                     (head $ K.pkRShare pkTo cs)
 
 calcBody :: [C.BodyMap c] -> [[c]] -> K.Ab [[[c]]]
 calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps
