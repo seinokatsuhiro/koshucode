@@ -11,8 +11,7 @@ module Koshucode.Baala.Rop.Flat.PoScale
 
 import qualified Data.Map                  as Map
 import qualified Data.Set                  as Set
-import qualified Koshucode.Baala.Overture  as O
-import qualified Koshucode.Baala.Base      as B
+import qualified Koshucode.Baala.DataPlus  as K
 
 -- | Mapping from element to subelements and scale.
 --   Scale of element is defined by
@@ -25,7 +24,7 @@ type PoScaleCalc a = [(a, a)] -> [(a, Int)]
 
 -- | Extract partial-order scale.
 poScale :: PoScale a -> [(a, Int)]
-poScale m = B.mapMaybe f $ Map.assocs m where
+poScale m = K.mapMaybe f $ Map.assocs m where
     f (x, (_, Just r))  = Just (x, r)
     f (_, (_, Nothing)) = Nothing
 
@@ -47,11 +46,11 @@ poScaleDepth = poScale . poDepth
 
 -- | Calculate partial-order height.
 poHeight :: (Ord a) => [(a, a)] -> PoScale a
-poHeight = poScaleBy B.gatherToMapSwap
+poHeight = poScaleBy K.gatherToMapSwap
 
 -- | Calculate partial-order depth.
 poDepth :: (Ord a) => [(a, a)] -> PoScale a
-poDepth = poScaleBy B.gatherToMap
+poDepth = poScaleBy K.gatherToMap
 
 poScaleBy :: (Ord a) => ([(a, a)] -> Map.Map a [a]) -> [(a, a)] -> PoScale a
 poScaleBy gather ord = poScaleUpdate m where
@@ -59,15 +58,15 @@ poScaleBy gather ord = poScaleUpdate m where
     v subs  = (subs, Nothing)
 
 -- | Update partial-order scale for all elements.
-poScaleUpdate :: (Ord a) => O.Map (PoScale a)
+poScaleUpdate :: (Ord a) => K.Map (PoScale a)
 poScaleUpdate m = foldr poScaleUpdate1 m $ Map.keys m
 
 -- | Update partial-order scale for an element.
-poScaleUpdate1 :: forall a. (Ord a) => a -> O.Map (PoScale a)
+poScaleUpdate1 :: forall a. (Ord a) => a -> K.Map (PoScale a)
 poScaleUpdate1 x1 m1 = m2 where
     m2 = loop Set.empty x1 m1
 
-    loop :: Set.Set a -> a -> O.Map (PoScale a)
+    loop :: Set.Set a -> a -> K.Map (PoScale a)
     loop visit x m
         | Set.member x visit = Map.update neg x m
         | otherwise = case Map.lookup x m of
@@ -83,7 +82,7 @@ poScaleUpdate1 x1 m1 = m2 where
     up r (sub, _)  = Just $ p sub (r + 1)
     p sub r        = (sub, Just r)
 
-    scale :: a -> [a] -> O.Map (PoScale a)
+    scale :: a -> [a] -> K.Map (PoScale a)
     scale x sub m =
         case get m `mapM` sub of
           Nothing -> m

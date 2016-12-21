@@ -21,9 +21,7 @@ module Koshucode.Baala.Rop.Flat.Message
     unmatchShare,
   ) where
 
-import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.DataPlus       as K
 import qualified Koshucode.Baala.Core           as C
 import qualified Koshucode.Baala.Data.Message   as Msg
 import Koshucode.Baala.Rop.Base.Message
@@ -32,77 +30,77 @@ import Koshucode.Baala.Rop.Base.Message
 -- ----------------------  Op package
 
 -- | check-term failed
-checkTerm :: String -> [S.TermName] -> D.Head -> B.Ab a
+checkTerm :: String -> [K.TermName] -> K.Head -> K.Ab a
 checkTerm label ns he =
-    B.leftLines "check-term failed"
+    K.leftLines "check-term failed"
          $ detailTermRel label ns he
 
 -- | Different headings
-diffHead :: [D.Head] -> B.Ab a
-diffHead = B.leftLines "Different headings" . map showHead
+diffHead :: [K.Head] -> K.Ab a
+diffHead = K.leftLines "Different headings" . map showHead
 
 -- | Dump content expression
-dumpCox :: (Show c) => c -> B.Ab a
-dumpCox cox = B.leftLines "Dump content expression"
+dumpCox :: (Show c) => c -> K.Ab a
+dumpCox cox = K.leftLines "Dump content expression"
                    $ lines $ show cox
 
 -- | Dump relation
-dumpRel :: (D.CRel c, B.MixEncode c) => D.Rel c -> B.Ab a
-dumpRel r = B.leftPage "Dump relation" $ C.relTableLines [] r
+dumpRel :: (K.CRel c, K.MixEncode c) => K.Rel c -> K.Ab a
+dumpRel r = K.leftPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
-dumpTrees :: [S.Tree] -> B.Ab a
-dumpTrees trees = B.leftLines "Dump token trees"
-                   $ lines $ show $ S.treesDoc trees
+dumpTrees :: [K.Tree] -> K.Ab a
+dumpTrees trees = K.leftLines "Dump token trees"
+                   $ lines $ show $ K.treesDoc trees
 
 -- | Duplicate term name
-dupTerm :: (D.GetTermNames t) => t -> B.Ab a
+dupTerm :: (K.GetTermNames t) => t -> K.Ab a
 dupTerm t =
-    B.leftLines "Duplicate term name"
+    K.leftLines "Duplicate term name"
          $ msgTerms2 "Duplicate" t' "in the terms" t
-        where t' = B.duplicates $ D.getTermNames t
+        where t' = K.duplicates $ K.getTermNames t
 
 -- | Odd attribute
-oddAttr :: B.Ab a
-oddAttr = B.leftBecause "Odd attribute"
+oddAttr :: K.Ab a
+oddAttr = K.leftBecause "Odd attribute"
 
 -- | Require Boolean
-reqBool :: B.Ab a
-reqBool = B.leftBecause "Require Boolean"
+reqBool :: K.Ab a
+reqBool = K.leftBecause "Require Boolean"
 
 -- | Require relation
-reqRel :: B.Ab a
-reqRel = B.leftBecause "Require relation"
+reqRel :: K.Ab a
+reqRel = K.leftBecause "Require relation"
 
 -- | Require collection type
-reqCollection :: B.Ab a
-reqCollection = B.leftBecause "Require collection type"
+reqCollection :: K.Ab a
+reqCollection = K.leftBecause "Require collection type"
 
 -- | Require data interpretation
-reqInterp :: B.Ab a
-reqInterp = B.leftBecause "Require data interpretation"
+reqInterp :: K.Ab a
+reqInterp = K.leftBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> B.Ab a
+reqNewTerm :: (K.GetTermNames t1, K.GetTermNames t2) => t1 -> t2 -> K.Ab a
 reqNewTerm t1 t2 =
-    B.leftLines "Require new term names"
+    K.leftLines "Require new term names"
          $ Msg.msgTerms2 "Present" t1 "in the terms" t2
 
 -- | Require unary function
-reqUnaryFn :: B.Ab a
-reqUnaryFn = B.leftBecause "Require unary function"
+reqUnaryFn :: K.Ab a
+reqUnaryFn = K.leftBecause "Require unary function"
 
 -- | Unexpected term names
-unexpTermName :: B.Ab a
-unexpTermName = B.leftBecause "Unexpected term names"
+unexpTermName :: K.Ab a
+unexpTermName = K.leftBecause "Unexpected term names"
 
-showHead :: D.Head -> String
-showHead = unwords . map S.termNameString . D.getTermNames
+showHead :: K.Head -> String
+showHead = unwords . map K.termNameString . K.getTermNames
 
 -- | Unmatch shared terms.
-unmatchShare :: [S.TermName] -> [S.TermName] -> B.Ab a
+unmatchShare :: [K.TermName] -> [K.TermName] -> K.Ab a
 unmatchShare e a =
-    B.leftLines "Unmatch shared terms"
+    K.leftLines "Unmatch shared terms"
          $ expectActual (ts e) (ts a)
-    where ts xs = unwords $ S.termNameString <$> xs
+    where ts xs = unwords $ K.termNameString <$> xs
 

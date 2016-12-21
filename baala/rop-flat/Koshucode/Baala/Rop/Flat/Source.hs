@@ -14,21 +14,19 @@ module Koshucode.Baala.Rop.Flat.Source
     consSourceTerm, relmapSourceTerm,
   ) where
 
-import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Syntax       as S
-import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.DataPlus     as K
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Rop
 
 
 -- | Implementation of relational operators.
-ropsSource :: (D.CContent c) => [C.Rop c]
+ropsSource :: (K.CContent c) => [C.Rop c]
 ropsSource = Rop.rops "source"
-    [ consDee         O.& [ "dee"              O.&  "" ]
-    , consDum         O.& [ "dum"              O.&  "" ]
-    , consEmpty       O.& [ "empty /N ..."     O.&  "-term*" ]
-    , consSource      O.& [ "source P /N ..."  O.&  "-pattern -term*" ]
-    , consSourceTerm  O.& [ "source-term P R"  O.&  "-pattern -relmap/" ]
+    [ consDee         K.& [ "dee"              K.&  "" ]
+    , consDum         K.& [ "dum"              K.&  "" ]
+    , consEmpty       K.& [ "empty /N ..."     K.&  "-term*" ]
+    , consSource      K.& [ "source P /N ..."  K.&  "-pattern -term*" ]
+    , consSourceTerm  K.& [ "source-term P R"  K.&  "-pattern -relmap/" ]
     ]
 
 
@@ -44,13 +42,13 @@ consEmpty med =
        Right $ relmapEmpty med ns
 
 -- | Create @empty@ relmap.
-relmapEmpty :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapEmpty :: C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapEmpty med = C.relmapFlow med . relkitEmpty
 
 -- | Create @empty@ relkit.
-relkitEmpty :: [S.TermName] -> C.RelkitFlow c
+relkitEmpty :: [K.TermName] -> C.RelkitFlow c
 relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
-    he2 = Just $ D.headFrom ns
+    he2 = Just $ K.headFrom ns
 
 
 -- ----------------------  source
@@ -76,14 +74,14 @@ consSourceTerm med =
      Right $ relmapSourceTerm med pat rmap
 
 -- | Create @source-term@ relmap.
-relmapSourceTerm :: C.Intmed c -> String -> O.Map (C.Relmap c)
+relmapSourceTerm :: C.Intmed c -> String -> K.Map (C.Relmap c)
 relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
 -- | Create @source-term@ relkit.
 relkitSourceTerm :: String -> C.RelkitBinary c
 relkitSourceTerm pat (C.RelkitOutput he2 _) _ = Right kit3 where
     kit3   = C.relkitJust he2 $ C.RelkitSource pat ns2
-    ns2    = D.getTermNames he2
+    ns2    = K.getTermNames he2
 relkitSourceTerm _  _ _ = Right C.relkitNothing
 
 
@@ -94,12 +92,12 @@ relkitSourceTerm _  _ _ = Right C.relkitNothing
 --   Output the nullary full relation.
 --
 consDee :: C.RopCons c
-consDee med = Right $ C.relmapConst med D.reldee
+consDee med = Right $ C.relmapConst med K.reldee
 
 -- | __dum__
 --
 --   Output the nullary empty relation.
 --
 consDum :: C.RopCons c
-consDum med = Right $ C.relmapConst med D.reldum
+consDum med = Right $ C.relmapConst med K.reldum
 

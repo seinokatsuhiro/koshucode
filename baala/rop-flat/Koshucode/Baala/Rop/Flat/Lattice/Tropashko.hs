@@ -31,10 +31,7 @@ module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
     unmatchShare,
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
-import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Syntax             as S
-import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.DataPlus           as K
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
@@ -60,8 +57,8 @@ relmapMeet med sh = C.relmapBinary med $ relkitMeet sh
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => SharedTerms -> C.RelkitBinary c
 relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr     = D.termPicker he1 he2
-    he3    = he2 O.++ he1
+    lr     = K.termPicker he1 he2
+    he3    = he2 K.++ he1
     kit3   = case unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -70,12 +67,12 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           case D.ssLShareIndex lr of
+           case K.ssLShareIndex lr of
              [] -> Right $ cartesian bo1 bo2
-             _  -> let b2map = B.gatherToMap $ map (D.ssRSplit lr) bo2
+             _  -> let b2map = K.gatherToMap $ map (K.ssRSplit lr) bo2
                    in Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case D.ssLShare lr cs1 `B.lookupMap` b2map of
+    step b2map cs1 = case K.ssLShare lr cs1 `K.lookupMap` b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
@@ -108,16 +105,16 @@ relmapJoin med sh = C.relmapBinary med $ relkitJoin sh
 
 -- | Join multiple relations.
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
-relmapJoinList med [] = C.relmapConst med D.reldau
+relmapJoinList med [] = C.relmapConst med K.reldau
 relmapJoinList _ [rmap] = rmap
-relmapJoinList med (rmap : rmaps) = rmap O.++ rmaps' where
+relmapJoinList med (rmap : rmaps) = rmap K.++ rmaps' where
     rmaps' = relmapJoin med Nothing $ relmapJoinList med rmaps
 
 -- | Join two relations.
 relkitJoin :: SharedTerms -> C.RelkitBinary c
 relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
-    lr     = D.termPicker he1 he2
-    he3    = D.ssLShare lr `D.headMap` he1
+    lr     = K.termPicker he1 he2
+    he3    = K.ssLShare lr `K.headMap` he1
     kit3   = case unmatchShare sh lr of
                Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
@@ -125,8 +122,8 @@ relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-               left    = map $ D.ssLShare lr
-               right   = map $ D.ssRShare lr
+               left    = map $ K.ssLShare lr
+               right   = map $ K.ssRShare lr
            bo2 <- bmap2 bo1
            Right $ left bo1 ++ right bo2
 
@@ -136,14 +133,14 @@ relkitJoin _ _ _ = Right C.relkitNothing
 -- ----------------------  Check shared terms
 
 -- | Shared terms for composing check.
-type SharedTerms = Maybe [S.TermName]
+type SharedTerms = Maybe [K.TermName]
 
 -- | Calculate unmatch shared terms.
-unmatchShare :: SharedTerms -> D.TermPicker c -> Maybe ([S.TermName], [S.TermName])
+unmatchShare :: SharedTerms -> K.TermPicker c -> Maybe ([K.TermName], [K.TermName])
 unmatchShare (Nothing) _ = Nothing
 unmatchShare (Just sh) lr =
-    let e = B.setList sh
-        a = B.setList $ D.ssRShareNames lr
+    let e = K.setList sh
+        a = K.setList $ K.ssRShareNames lr
     in if e == a
        then Nothing
        else Just (e, a)

@@ -20,26 +20,23 @@ module Koshucode.Baala.Rop.Flat.Peripheral
     consAdd1, relmapAdd1, relkitAdd1,
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
-import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Syntax             as S
-import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.DataPlus           as K
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Rop.Flat.Term      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 
 -- | Implementation of relational operators.
-ropsPeripheral :: (D.CContent c) => [C.Rop c]
+ropsPeripheral :: (K.CContent c) => [C.Rop c]
 ropsPeripheral = Rop.rops "peripheral"
-    [ consNow       O.& [ "now /N"                O.& "local : -term"
-                        , "now /N -utc"           O.& "utc : -term . -utc"
-                        , "now /N -zoned"         O.& "zoned : -term . -zoned" ]
-    , consRdf       O.& [ "rdf P /S /O"           O.& "-pattern -term*" ]
-    , consTermName  O.& [ "term-name /N"          O.& "-term" ]
-    , consTie       O.& [ "tie /P ... -to N"      O.& "-term* . -to" ]
-    , consToday     O.& [ "today /N"              O.& "-term" ]
-    , consUntie     O.& [ "untie /P -only /P ..." O.& "-from . -only" ]
+    [ consNow       K.& [ "now /N"                K.& "local : -term"
+                        , "now /N -utc"           K.& "utc : -term . -utc"
+                        , "now /N -zoned"         K.& "zoned : -term . -zoned" ]
+    , consRdf       K.& [ "rdf P /S /O"           K.& "-pattern -term*" ]
+    , consTermName  K.& [ "term-name /N"          K.& "-term" ]
+    , consTie       K.& [ "tie /P ... -to N"      K.& "-term* . -to" ]
+    , consToday     K.& [ "today /N"              K.& "-term" ]
+    , consUntie     K.& [ "untie /P -only /P ..." K.& "-from . -only" ]
     ]
 
 -- ----------------------  RDF
@@ -49,7 +46,7 @@ consRdf :: C.RopCons c
 consRdf med =
     do sign  <- Rop.getWord  med "-pattern"
        [s,o] <- Rop.getTerms med "-term"
-       Right $ C.relmapSource med sign ["/s", "/o"] O.++
+       Right $ C.relmapSource med sign ["/s", "/o"] K.++
                Rop.relmapRename med [(s,"/s"), (o,"/o")]
 
 
@@ -57,52 +54,52 @@ consRdf med =
 -- ----------------------  tie
 
 -- | __tie \/P ... -to \/N__
-consTie :: (D.CTie c) => C.RopCons c
+consTie :: (K.CTie c) => C.RopCons c
 consTie med =
   do ns <- Rop.getTerms med "-term"
      to <- Rop.getTerm  med "-to"
      Right $ relmapTie med (ns, to)
 
 -- | Create @tie@ relmap.
-relmapTie :: (D.CTie c) => C.Intmed c -> ([S.TermName], S.TermName) -> C.Relmap c
+relmapTie :: (K.CTie c) => C.Intmed c -> ([K.TermName], K.TermName) -> C.Relmap c
 relmapTie med = C.relmapFlow med . relkitTie
 
 -- | Create @tie@ relkit.
-relkitTie :: (D.CTie c) => ([S.TermName], S.TermName) -> C.RelkitFlow c
+relkitTie :: (K.CTie c) => ([K.TermName], K.TermName) -> C.RelkitFlow c
 relkitTie _ Nothing = Right C.relkitNothing
 relkitTie (ns, to) (Just he1) = Right kit2 where
-    pick      =  D.picker ns he1
-    he2       =  D.headCons to he1
+    pick      =  K.picker ns he1
+    he2       =  K.headCons to he1
     kit2      =  C.relkitJust he2 $ C.RelkitLinear False f2
-    f2 cs1    =  let tie = D.pTie $ zip ns $ pick cs1
+    f2 cs1    =  let tie = K.pTie $ zip ns $ pick cs1
                  in tie : cs1
 
 
 -- ----------------------  untie
 
 -- | __untie \/P -to \/N ...__
-consUntie :: (D.CTie c) => C.RopCons c
+consUntie :: (K.CTie c) => C.RopCons c
 consUntie med =
   do from <- Rop.getTerm  med "-from"
      ns   <- Rop.getTerms med "-only"
      Right $ relmapUntie med (from, ns)
 
 -- | Create @untie@ relmap.
-relmapUntie :: (D.CTie c) => C.Intmed c -> (S.TermName, [S.TermName]) -> C.Relmap c
+relmapUntie :: (K.CTie c) => C.Intmed c -> (K.TermName, [K.TermName]) -> C.Relmap c
 relmapUntie med = C.relmapFlow med . relkitUntie
 
 -- | Create @untie@ relkit.
-relkitUntie :: (D.CTie c) => (S.TermName, [S.TermName]) -> C.RelkitFlow c
+relkitUntie :: (K.CTie c) => (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
-    pick      =  D.picker [from] he1
-    he2       =  D.headAppend ns he1
+    pick      =  K.picker [from] he1
+    he2       =  K.headAppend ns he1
     kit2      =  C.relkitJust he2 $ C.RelkitAbLinear False f2 []
     f2 _ cs1  =  do let [tie] = pick cs1
-                    cs <- tiePick ns $ D.gTie tie
+                    cs <- tiePick ns $ K.gTie tie
                     Right $ cs ++ cs1
 
-tiePick :: [S.TermName] -> [S.Term c] -> B.Ab [c]
+tiePick :: [K.TermName] -> [K.Term c] -> K.Ab [c]
 tiePick ns tie = mapM pick ns where
     pick n = case lookup n tie of
                Just c   ->  Right c
@@ -112,23 +109,23 @@ tiePick ns tie = mapM pick ns where
 -- ----------------------  term-name
 
 -- | __term-name \/N__
-consTermName :: (D.CTerm c) => C.RopCons c
+consTermName :: (K.CTerm c) => C.RopCons c
 consTermName med =
   do n <- Rop.getTerm med "-term"
      Right $ relmapTermName med n
 
 -- | Create @term-name@ relmap.
-relmapTermName :: (D.CTerm c) => C.Intmed c -> S.TermName -> C.Relmap c
+relmapTermName :: (K.CTerm c) => C.Intmed c -> K.TermName -> C.Relmap c
 relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
 -- | Create @term-name@ relkit.
-relkitTermName :: (D.CTerm c) => S.TermName -> C.RelkitFlow c
-relkitTermName n Nothing    = Msg.noAttr $ S.termNameString n
+relkitTermName :: (K.CTerm c) => K.TermName -> C.RelkitFlow c
+relkitTermName n Nothing    = Msg.noAttr $ K.termNameString n
 relkitTermName n (Just he1) = Right kit2 where
-    he2       = D.headFrom [n]
+    he2       = K.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 _   = map term $ D.getTermNames he1
-    term t    = [D.pTerm t]
+    kitf2 _   = map term $ K.getTermNames he1
+    term t    = [K.pTerm t]
 
 
 -- ----------------------  today & now
@@ -137,44 +134,44 @@ relkitTermName n (Just he1) = Right kit2 where
 --
 --   Get today's time at term \/N.
 --
-consToday :: (D.CTime c) => C.RopCons c
+consToday :: (K.CTime c) => C.RopCons c
 consToday med =
   do n <- Rop.getTerm med "-term"
      let t = C.globalTime $ C.ropGlobal med
-     consAdd1 (n, D.pTime $ D.timeCutClock t) med
+     consAdd1 (n, K.pTime $ K.timeCutClock t) med
 
 -- | [now \/N] Get current local time without time zone at term \/N.
 --   [now \/N -zoned] Get current local time with time zone at term \/N.
 --   [now \/N -utc] Get current UTC.
 --
-consNow :: (D.CTime c) => C.RopCons c
+consNow :: (K.CTime c) => C.RopCons c
 consNow med =
   do n <- Rop.getTerm med "-term"
      let tim    = C.globalTime $ C.ropGlobal med
          tag    = (`elem` Rop.getTags med)
-         cons f = consAdd1 (n, D.pTime $ f tim) med
+         cons f = consAdd1 (n, K.pTime $ f tim) med
      case () of
-       _ | tag "local"  -> cons D.timeLocalize
+       _ | tag "local"  -> cons K.timeLocalize
          | tag "zoned"  -> cons id
-         | tag "utc"    -> cons $ D.timeAltZone $ const 0
+         | tag "utc"    -> cons $ K.timeAltZone $ const 0
          | otherwise    -> Msg.adlib "unknown tag"
 
 
 -- ----------------------  Add term
 
 -- | Add single constant term to each tuples.
-consAdd1 :: S.Term c -> C.RopCons c
+consAdd1 :: K.Term c -> C.RopCons c
 consAdd1 term med = Right $ relmapAdd1 term med
 
 -- | Create term-adding relmap.
-relmapAdd1 :: S.Term c -> C.Intmed c -> C.Relmap c
+relmapAdd1 :: K.Term c -> C.Intmed c -> C.Relmap c
 relmapAdd1 term med = C.relmapFlow med $ relkitAdd1 term
 
 -- | Create term-adding relkit.
-relkitAdd1 :: S.Term c -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitAdd1 :: K.Term c -> Maybe K.Head -> K.Ab (C.Relkit c)
 relkitAdd1 _ Nothing = Right C.relkitNothing
 relkitAdd1 (n, c) (Just he1) = Right kit2 where
-    he2   = D.headCons n he1
+    he2   = K.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitLinear False f2
     f2 cs = c : cs
 

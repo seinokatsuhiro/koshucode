@@ -14,11 +14,7 @@ module Koshucode.Baala.Rop.Flat.Order
     consOrder, relmapOrder, relkitOrder,
   ) where
 
-import Koshucode.Baala.Overture ((&))
-import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as S
-import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
@@ -27,13 +23,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 -- | Pseudorelmap operators for term and tuple ordering.
 ropsOrder :: (Ord c) => [C.Rop c]
 ropsOrder = Rop.ropAlias
-    [ "fw" & "forward"
-    , "bw" & "backward"
+    [ "fw" K.& "forward"
+    , "bw" K.& "backward"
     ] $ Rop.rops "order"
-    [ consBackward   O.& [ "backward /P ..."  O.& "-term*" ]
-    , consForward    O.& [ "forward /P ..."   O.& "-term*" ]
-    , consLexical    O.& [ "lexical"          O.& "" ]
-    , consOrder      O.& [ "order /P ..."     O.& "-term*" ]
+    [ consBackward   K.& [ "backward /P ..."  K.& "-term*" ]
+    , consForward    K.& [ "forward /P ..."   K.& "-term*" ]
+    , consLexical    K.& [ "lexical"          K.& "" ]
+    , consOrder      K.& [ "order /P ..."     K.& "-term*" ]
     ]
 
 
@@ -49,8 +45,8 @@ consForward med =
      Right $ relmapForward med ns
 
 -- | Create @forward@ relmap.
-relmapForward :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapForward med = C.relmapFlow med . relkitToward (D.ssRForward, D.ssRForward)
+relmapForward :: C.Intmed c -> [K.TermName] -> C.Relmap c
+relmapForward med = C.relmapFlow med . relkitToward (K.ssRForward, K.ssRForward)
 
 -- | __backward \/P ...__
 --
@@ -62,18 +58,18 @@ consBackward med =
      Right $ relmapBackward med ns
 
 -- | Create @backward@ relmap.
-relmapBackward :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapBackward med = C.relmapFlow med . relkitToward (D.ssRBackward, D.ssRBackward)
+relmapBackward :: C.Intmed c -> [K.TermName] -> C.Relmap c
+relmapBackward med = C.relmapFlow med . relkitToward (K.ssRBackward, K.ssRBackward)
 
 -- | Create @forward@ or @backward@ relkit.
-relkitToward :: D.TermPick2 D.TypeTerm c -> [S.TermName] -> C.RelkitFlow c
+relkitToward :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (hePick, boPick) ns (Just he1)
-    | D.newTermsExist pk   = Msg.unkTerm (D.newTerms pk) he1
+    | K.newTermsExist pk   = Msg.unkTerm (K.newTerms pk) he1
     | otherwise            = Right kit2
     where
-      pk    = D.termPicker ns he1
-      he2   = D.headMap (hePick pk) he1
+      pk    = K.termPicker ns he1
+      he2   = K.headMap (hePick pk) he1
       kit2  = C.relkitJust he2 $ C.RelkitLinear False $ boPick pk
 
 
@@ -91,10 +87,10 @@ relmapLexical med = C.relmapFlow med relkitLexical
 relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
 relkitLexical (Just he1) = Right kit2 where
-    ns    = D.getTermNames he1
-    lr    = D.termPicker (B.sort ns) ns
-    he2   = D.headMap (D.ssRForward lr) he1
-    kit2  = C.relkitJust he2 $ C.RelkitLinear False $ D.ssRForward lr
+    ns    = K.getTermNames he1
+    lr    = K.termPicker (K.sort ns) ns
+    he2   = K.headMap (K.ssRForward lr) he1
+    kit2  = C.relkitJust he2 $ C.RelkitLinear False $ K.ssRForward lr
 
 
 -- ----------------------  order
@@ -106,13 +102,13 @@ consOrder med =
        Right $ relmapOrder med ns
 
 -- | Create @order@ relmap.
-relmapOrder :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapOrder :: (Ord c) => C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapOrder med = C.relmapFlow med . relkitOrder
 
 -- | Create @order@ relkit.
-relkitOrder :: (Ord c) => [S.TermName] -> C.RelkitFlow c
+relkitOrder :: (Ord c) => [K.TermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2
-    kitf2 = D.relBodyOrder ns he1
+    kitf2 = K.relBodyOrder ns he1
 

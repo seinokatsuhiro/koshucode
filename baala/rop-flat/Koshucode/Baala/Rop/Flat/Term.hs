@@ -18,10 +18,7 @@ module Koshucode.Baala.Rop.Flat.Term
     consRename, relmapRename,
   ) where
 
-import qualified Koshucode.Baala.Overture         as O
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax           as S
-import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.DataPlus         as K
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message as Msg
@@ -43,12 +40,12 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 --
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Rop.rops "term"
-    [ consCut        O.& [ "cut /P ..."               O.& "-term*" ]
-    , consCutTerm    O.& [ "cut-term /R"              O.& "-relmap/" ]
-    , consPick       O.& [ "pick /P ..."              O.& "-term*" ]
-    , consPickTerm   O.& [ "pick-term /R"             O.& "-relmap/" ]
-    , consRename     O.& [ "rename /N /P ..."         O.& "-term*" ]
-    , consMove       O.& [ "move /P ... -to /N ..."   O.& "-from* . -to" ]
+    [ consCut        K.& [ "cut /P ..."               K.& "-term*" ]
+    , consCutTerm    K.& [ "cut-term /R"              K.& "-relmap/" ]
+    , consPick       K.& [ "pick /P ..."              K.& "-term*" ]
+    , consPickTerm   K.& [ "pick-term /R"             K.& "-relmap/" ]
+    , consRename     K.& [ "rename /N /P ..."         K.& "-term*" ]
+    , consMove       K.& [ "move /P ... -to /N ..."   K.& "-from* . -to" ]
     ]
 
 
@@ -65,12 +62,12 @@ consPick med =
      Right $ relmapPick med ns
 
 -- | Create @pick@ relmap.
-relmapPick :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapPick :: C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapPick med = C.relmapFlow med . relkitPick
 
 -- | Create @pick@ relkit.
-relkitPick :: [S.TermName] -> C.RelkitFlow c
-relkitPick = relkitProj (D.ssRShare, D.ssRShare)
+relkitPick :: [K.TermName] -> C.RelkitFlow c
+relkitPick = relkitProj (K.ssRShare, K.ssRShare)
 
 -- | __cut \/P ...__
 --
@@ -84,12 +81,12 @@ consCut med =
      Right $ relmapCut med ns
 
 -- | Create @cut@ relmap.
-relmapCut :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapCut :: C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapCut med = C.relmapFlow med . relkitCut
 
 -- | Create @cut@ relkit.
-relkitCut :: [S.TermName] -> C.RelkitFlow c
-relkitCut = relkitProj (D.ssRSide, D.ssRSide)
+relkitCut :: [K.TermName] -> C.RelkitFlow c
+relkitCut = relkitProj (K.ssRSide, K.ssRSide)
 
 
 -- ----------------------  pick-term & cut-term
@@ -111,7 +108,7 @@ relmapPickTerm med = C.relmapBinary med relkitPickTerm
 
 -- | Create @pick-term@ relkit.
 relkitPickTerm :: C.RelkitBinary c
-relkitPickTerm = relkitProjTerm (D.ssRShare, D.ssRShare)
+relkitPickTerm = relkitProjTerm (K.ssRShare, K.ssRShare)
 
 -- | __cut-term R__
 --
@@ -130,20 +127,20 @@ relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 -- | Create @cut-term@ relkit.
 relkitCutTerm :: C.RelkitBinary c
-relkitCutTerm = relkitProjTerm (D.ssRSide, D.ssRSide)
+relkitCutTerm = relkitProjTerm (K.ssRSide, K.ssRSide)
 
-relkitProjTerm :: D.TermPick2 D.TypeTerm c -> C.RelkitBinary c
-relkitProjTerm pk (C.RelkitOutput he2 _) = relkitProj pk $ D.getTermNames he2
+relkitProjTerm :: K.TermPick2 K.TypeTerm c -> C.RelkitBinary c
+relkitProjTerm pk (C.RelkitOutput he2 _) = relkitProj pk $ K.getTermNames he2
 relkitProjTerm _ _ = const $ Right C.relkitNothing
 
-relkitProj :: D.TermPick2 D.TypeTerm c -> [S.TermName] -> C.RelkitFlow c
+relkitProj :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitProj _ _ Nothing = Right C.relkitNothing
 relkitProj (hePick, boPick) ns (Just he1)
-    | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
     | otherwise           = Right kit2
     where
-      pk    = D.termPicker ns he1
-      he2   = hePick pk `D.headMap` he1
+      pk    = K.termPicker ns he1
+      he2   = hePick pk `K.headMap` he1
       kit2  = C.relkitJust he2 $ C.RelkitLinear True $ boPick pk
 
 
@@ -168,27 +165,27 @@ consMove med =
      Right $ relmapMove med (ps, ns)
 
 -- | Create @move@ relmap.
-relmapMove :: C.Intmed c -> ([S.TermName], [S.TermName]) -> C.Relmap c
+relmapMove :: C.Intmed c -> ([K.TermName], [K.TermName]) -> C.Relmap c
 relmapMove med = C.relmapFlow med . relkitMove
 
 -- | Create @move@ relkit.
-relkitMove :: ([S.TermName], [S.TermName]) -> C.RelkitFlow c
+relkitMove :: ([K.TermName], [K.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
-    | B.notSameLength ps ns  = Msg.oddAttr
-    | B.duplicated ps        = Msg.dupTerm ps   -- from terms
-    | B.duplicated ns        = Msg.dupTerm ns   -- to terms
-    | B.duplicated ns2       = Msg.dupTerm ns2  -- output names
-    | D.newTermsExist pk     = Msg.unkTerm (D.newTerms pk) he1
+    | K.notSameLength ps ns  = Msg.oddAttr
+    | K.duplicated ps        = Msg.dupTerm ps   -- from terms
+    | K.duplicated ns        = Msg.dupTerm ns   -- to terms
+    | K.duplicated ns2       = Msg.dupTerm ns2  -- output names
+    | K.newTermsExist pk     = Msg.unkTerm (K.newTerms pk) he1
     | otherwise              = Right kit2
     where
-      pk             = D.termPicker ps he1
-      he2            = D.headMap terms he1
-      ns2            = D.getTermNames he2
+      pk             = K.termPicker ps he1
+      he2            = K.headMap terms he1
+      ns2            = K.getTermNames he2
       kit2           = C.relkitJust he2 C.RelkitId
-      ni             = zip ns $ D.pickTermsIndex pk
+      ni             = zip ns $ K.pickTermsIndex pk
       terms nt       = foldr term nt ni
-      term (n, i)    = move n `B.mapAt` i
+      term (n, i)    = move n `K.mapAt` i
       move n (_, t)  = (n, t) -- name and type
 
 
@@ -206,5 +203,5 @@ consRename med =
      Right $ relmapRename med np
 
 -- | Create @rename@ relmap.
-relmapRename :: C.Intmed c -> [S.TermName2] -> C.Relmap c
-relmapRename med = C.relmapFlow med . relkitMove . unzip . map B.swap
+relmapRename :: C.Intmed c -> [K.TermName2] -> C.Relmap c
+relmapRename med = C.relmapFlow med . relkitMove . unzip . map K.swap

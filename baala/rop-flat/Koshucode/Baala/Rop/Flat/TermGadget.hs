@@ -15,9 +15,7 @@ module Koshucode.Baala.Rop.Flat.TermGadget
   ) where
 
 import qualified Data.List                      as List
-import qualified Koshucode.Baala.Overture       as O
-import qualified Koshucode.Baala.Syntax         as S
-import qualified Koshucode.Baala.Data           as D
+import qualified Koshucode.Baala.DataPlus       as K
 import qualified Koshucode.Baala.Core           as C
 import qualified Koshucode.Baala.Rop.Base       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Term  as Rop
@@ -39,11 +37,11 @@ import qualified Koshucode.Baala.Rop.Flat.Term  as Rop
 -- 
 ropsTermGadget :: (Ord c) => [C.Rop c]
 ropsTermGadget = Rop.rops "term"
-    [ consPrefix        O.& [ "prefix /N -to /P ..."   O.& "to : -prefix . -to"
-                            , "prefix /N /P ..."       O.& "pos : -prefix -term*" ]
-    , consPrefixChange  O.& [ "prefix-change /P /Q"    O.& "-new -old" ]
-    , consUnprefix      O.& [ "unprefix /P"            O.& "-prefix" ]
-    , consWipe          O.& [ "wipe"                   O.& "" ]
+    [ consPrefix        K.& [ "prefix /N -to /P ..."   K.& "to : -prefix . -to"
+                            , "prefix /N /P ..."       K.& "pos : -prefix -term*" ]
+    , consPrefixChange  K.& [ "prefix-change /P /Q"    K.& "-new -old" ]
+    , consUnprefix      K.& [ "unprefix /P"            K.& "-prefix" ]
+    , consWipe          K.& [ "wipe"                   K.& "" ]
     ]
 
 
@@ -58,21 +56,21 @@ consPrefix med =
        Right $ relmapPrefix med pre to
 
 -- | Create @prefix@ relmap.
-relmapPrefix :: C.Intmed c -> S.TermName -> [S.TermName] -> C.Relmap c
+relmapPrefix :: C.Intmed c -> K.TermName -> [K.TermName] -> C.Relmap c
 relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 
 -- | Create @prefix@ relkit.
-relkitPrefix :: S.TermName -> [S.TermName] -> C.RelkitFlow c
+relkitPrefix :: K.TermName -> [K.TermName] -> C.RelkitFlow c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
 relkitPrefix pre ns (Just he1) = Right kit2 where
-    he2 =  D.headMapName f he1
+    he2 =  K.headMapName f he1
     kit2 = C.relkitId $ Just he2
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
 
-prefixName :: S.TermName -> S.TermName -> S.TermName
-prefixName pre n = S.toTermName
-    $ S.termNameContent pre ++ "-" ++ S.termNameContent n
+prefixName :: K.TermName -> K.TermName -> K.TermName
+prefixName pre n = K.toTermName
+    $ K.termNameContent pre ++ "-" ++ K.termNameContent n
 
     
 -- ----------------------  unprefix
@@ -84,20 +82,20 @@ consUnprefix med =
        Right $ relmapUnprefix med pre
 
 -- | Create @unprefix@ relmap.
-relmapUnprefix :: C.Intmed c -> S.TermName -> C.Relmap c
+relmapUnprefix :: C.Intmed c -> K.TermName -> C.Relmap c
 relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 
 -- | Create @unprefix@ relkit.
-relkitUnprefix :: S.TermName -> C.RelkitFlow c
+relkitUnprefix :: K.TermName -> C.RelkitFlow c
 relkitUnprefix _ Nothing = Right C.relkitNothing
 relkitUnprefix pre (Just he1) = Right kit2 where
-    he2  = D.headMapName (unprefixName pre) he1
+    he2  = K.headMapName (unprefixName pre) he1
     kit2 = C.relkitId $ Just he2
 
-unprefixName :: S.TermName -> S.TermName -> S.TermName
+unprefixName :: K.TermName -> K.TermName -> K.TermName
 unprefixName pre n =
-    case List.stripPrefix (S.termNameContent pre) (S.termNameContent n) of
-      Just ('-' : n2) -> S.toTermName n2
+    case List.stripPrefix (K.termNameContent pre) (K.termNameContent n) of
+      Just ('-' : n2) -> K.toTermName n2
       _ -> n
 
 
@@ -111,19 +109,19 @@ consPrefixChange med =
        Right $ relmapPrefixChange med (new, old)
 
 -- | Create @prefix-change@ relmap.
-relmapPrefixChange :: C.Intmed c -> S.TermName2 -> C.Relmap c
+relmapPrefixChange :: C.Intmed c -> K.TermName2 -> C.Relmap c
 relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 
 -- | Create @prefix-change@ relkit.
-relkitPrefixChange :: S.TermName2 -> C.RelkitFlow c
+relkitPrefixChange :: K.TermName2 -> C.RelkitFlow c
 relkitPrefixChange _ Nothing = Right C.relkitNothing
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
-    he2  = D.headMapName f he1
+    he2  = K.headMapName f he1
     kit2 = C.relkitId $ Just he2
-    new' = S.termNameContent new ++ "-"
-    old' = S.termNameContent old ++ "-"
-    f n' = case List.stripPrefix old' (S.termNameContent n') of
-             Just n2 -> S.toTermName $ new' ++ n2
+    new' = K.termNameContent new ++ "-"
+    old' = K.termNameContent old ++ "-"
+    f n' = case List.stripPrefix old' (K.termNameContent n') of
+             Just n2 -> K.toTermName $ new' ++ n2
              Nothing -> n'
 
 
@@ -141,4 +139,4 @@ relmapWipe med = C.relmapFlow med relkitWipe
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing
 relkitWipe (Just he1) = Rop.relkitCut ns1 (Just he1) where
-    ns1 = (\n -> elem '=' $ S.termNameContent n) `filter` D.getTermNames he1
+    ns1 = (\n -> elem '=' $ K.termNameContent n) `filter` K.getTermNames he1

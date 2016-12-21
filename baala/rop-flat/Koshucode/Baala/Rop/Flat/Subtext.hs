@@ -10,11 +10,8 @@ module Koshucode.Baala.Rop.Flat.Subtext
     -- $Subtext
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Subtext            as T
-import qualified Koshucode.Baala.Base               as B
-import qualified Koshucode.Baala.Syntax             as S
-import qualified Koshucode.Baala.Data               as D
+import qualified Koshucode.Baala.DataPlus           as K
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Syntax.Pattern     as P
@@ -24,7 +21,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message   as Msg
 -- --------------------------------------------  Operator
 
 -- | Type of subtext parameters.
-type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
+type SubtextPara = (K.TermName, [T.NameDepth], T.CharMatch, Bool)
 
 -- | __subtext \/P E__
 --
@@ -40,7 +37,7 @@ type SubtextPara = (S.TermName, [T.NameDepth], T.CharMatch, Bool)
 --     Decompose text by bundle of named expressions.
 --     Text decomposition starts from N1.
 --
-consSubtext :: (D.CContent c) => C.RopCons c
+consSubtext :: (K.CContent c) => C.RopCons c
 consSubtext med =
   do term  <- Rop.getTerm   med "-term"
      sub   <- Rop.getTrees  med "-subtext"
@@ -51,40 +48,40 @@ consSubtext med =
      Right $ relmapSubtext med (term, ns, match, trim)
 
 -- | Create @subtext@ relmap.
-relmapSubtext :: (D.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
+relmapSubtext :: (K.CContent c) => C.Intmed c -> SubtextPara -> C.Relmap c
 relmapSubtext med = C.relmapFlow med . relkitSubtext
 
 -- | Create @subtext@ relkit.
-relkitSubtext :: (D.CContent c) => SubtextPara -> Maybe D.Head -> B.Ab (C.Relkit c)
+relkitSubtext :: (K.CContent c) => SubtextPara -> Maybe K.Head -> K.Ab (C.Relkit c)
 relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
-    pick    = D.picker [n] he1
-    he2     = D.headAppend ((S.toTermName . fst) <$> ns) he1
+    pick    = K.picker [n] he1
+    he2     = K.headAppend ((K.toTermName . fst) <$> ns) he1
     kit2    = C.relkitJust he2 $ C.RelkitLinear False f2
     result  = subtextResult trim ns
     f2 cs   = case pick cs of
-               [c] | D.isText c
-                   -> case match $ D.gText c of
+               [c] | K.isText c
+                   -> case match $ K.gText c of
                         Just (_, rs) -> result rs ++ cs
                         Nothing      -> result [] ++ cs
                _ -> result [] ++ cs
 
-subtextResult :: (D.CEmpty c, D.CText c, D.CList c) =>
+subtextResult :: (K.CEmpty c, K.CText c, K.CList c) =>
     Bool -> [T.NameDepth] -> [(String, String)] -> [c]
 subtextResult trim ns rs = result <$> ns where
-    text = D.pText . trimIf trim
+    text = K.pText . trimIf trim
     result (n, depth) =
         case lookup' n rs of
-          ts | depth > 0  -> D.pList (text <$> ts)
+          ts | depth > 0  -> K.pList (text <$> ts)
           t : _           -> text t
-          []              -> D.empty
+          []              -> K.empty
 
 lookup' :: (Eq a) => a -> [(a, b)] -> [b]
 lookup' n ass = snd <$> filter eq ass where
     eq (n', _) = n == n'
 
 trimIf :: Bool -> String -> String
-trimIf True  t = O.trimBoth t
+trimIf True  t = K.trimBoth t
 trimIf False t = t
 
 
@@ -97,23 +94,23 @@ pattern LChar c <- P.LQq [c]
 pattern To      <- P.LRaw "to"
 pattern Empty   <- P.BGroup []
 
-unknownSyntax :: (Show a) => a -> B.Ab b
+unknownSyntax :: (Show a) => a -> K.Ab b
 unknownSyntax x = Msg.adlib $ "subtext syntax error " ++ show x
 
-unknownBracket :: (Show a) => a -> B.Ab b
+unknownBracket :: (Show a) => a -> K.Ab b
 unknownBracket g = Msg.adlib $ "subtext unknown bracket " ++ show g
 
-unknownKeyword :: String -> B.Ab b
+unknownKeyword :: String -> K.Ab b
 unknownKeyword n = Msg.adlib $ "subtext unknown keyword " ++ n
 
-unknownCategory :: String -> B.Ab b
+unknownCategory :: String -> K.Ab b
 unknownCategory n = Msg.adlib $ "subtext unknown general category " ++ n
 
-divide :: String -> [S.Tree] -> [[S.Tree]]
-divide s = S.divideTreesBy (== s)
+divide :: String -> [K.Tree] -> [[K.Tree]]
+divide s = K.divideTreesBy (== s)
 
 -- | Parse token trees into subtext bundle.
-parseBundle :: [S.Tree] -> B.Ab CharBundle
+parseBundle :: [K.Tree] -> K.Ab CharBundle
 parseBundle = bundle where
     bundle xs@[P.BSet sub] =
         case step1 `mapM` divide "|" sub of
@@ -126,21 +123,21 @@ parseBundle = bundle where
     single xs = do e <- parseSubtext [] xs
                    Right $ T.bundle [("start", e)]
 
-    step1 :: [S.Tree] -> B.Ab (String, [S.Tree])
+    step1 :: [K.Tree] -> K.Ab (String, [K.Tree])
     step1 xs = case divide "=" xs of
                  [[P.LRaw n], x] -> Right (n, x)
                  _               -> unknownSyntax xs
 
-    step2 :: [String] -> (String, [S.Tree]) -> B.Ab (String, T.CharExpr)
+    step2 :: [String] -> (String, [K.Tree]) -> K.Ab (String, T.CharExpr)
     step2 ns (n, x) = do e <- parseSubtext ns x
                          Right (n, e)
 
 -- | Parse token trees into subtext expression.
-parseSubtext :: [String] -> [S.Tree] -> B.Ab T.CharExpr
+parseSubtext :: [String] -> [K.Tree] -> K.Ab T.CharExpr
 parseSubtext ns = trees False where
 
     -- Trees
-    trees :: Bool -> [S.Tree] -> B.Ab T.CharExpr
+    trees :: Bool -> [K.Tree] -> K.Ab T.CharExpr
     trees False xs              = opTop xs
     trees True (P.LRaw n : xs)  = pre n xs
     trees True [P.LTerm n, x]   = Right . T.sub n =<< tree x  -- /N E
@@ -150,27 +147,27 @@ parseSubtext ns = trees False where
     trees True  xs              = unknownSyntax $ show xs
 
     -- Leaf or branch
-    tree :: S.Tree -> B.Ab T.CharExpr
+    tree :: K.Tree -> K.Ab T.CharExpr
     tree (P.L x)      = leaf x
     tree (P.B g xs)   = branch g xs
     tree x            = unknownSyntax x
 
-    leaf :: S.Token -> B.Ab T.CharExpr
+    leaf :: K.Token -> K.Ab T.CharExpr
     leaf (P.TQq t)    = Right $ T.equal t     -- "LITERAL"
     leaf (P.TRaw n)   = pre n []
     leaf x            = unknownSyntax x
 
-    branch :: S.BracketType -> [S.Tree] -> B.Ab T.CharExpr
-    branch S.BracketGroup   = opTop            -- ( E )
-    branch S.BracketSet     = bracket T.many   -- { E }
-    branch S.BracketTie     = bracket T.many1  -- {- E -}
-    branch S.BracketList    = bracket T.maybe  -- [ E ]
+    branch :: K.BracketType -> [K.Tree] -> K.Ab T.CharExpr
+    branch K.BracketGroup   = opTop            -- ( E )
+    branch K.BracketSet     = bracket T.many   -- { E }
+    branch K.BracketTie     = bracket T.many1  -- {- E -}
+    branch K.BracketList    = bracket T.maybe  -- [ E ]
     branch br               = const $ unknownBracket br
 
     bracket op xs = do e <- trees False xs
                        Right $ op e
 
-    times :: [S.Tree] -> [S.Tree] -> B.Ab T.CharExpr
+    times :: [K.Tree] -> [K.Tree] -> K.Ab T.CharExpr
     times [ Empty   , To , Empty    ] = bracket (T.many)
     times [ P.LRaw a, To            ] = bracket (T.min (int a))
     times [ P.LRaw a, To , Empty    ] = bracket (T.min (int a))
@@ -180,7 +177,7 @@ parseSubtext ns = trees False where
     times [ P.LRaw a                ] = bracket (T.minMax (int a) (int a))
     times xs = const $ unknownSyntax $ show xs
 
-    int s = case O.stringInt s of
+    int s = case K.stringInt s of
               Just n   -> n
               Nothing  -> error "require integer"
 
@@ -189,7 +186,7 @@ parseSubtext ns = trees False where
     text x                     = unknownSyntax x
 
     -- Infix operators
-    opTop :: [S.Tree] -> B.Ab T.CharExpr
+    opTop :: [K.Tree] -> K.Ab T.CharExpr
     opTop [P.BSet xs, P.BGroup m] = times m xs
     opTop xs = opAlt xs
     opAlt    = inf "|"   T.or    opSeq   -- E | E | E
@@ -240,11 +237,11 @@ parseSubtext ns = trees False where
     pre "ascii"   []        = Right T.ascii
     pre "latin-1" []        = Right T.latin1
     pre "sp"      []        = Right T.space
-    pre "012"     []        = Right $ T.categoryList O.categoryNumber
-    pre "abc"     []        = Right $ T.categoryList O.categoryAlpha
-    pre "+-"      []        = Right $ T.categoryList O.categorySign
-    pre "open"    []        = Right $ T.categoryList O.categoryOpen
-    pre "close"   []        = Right $ T.categoryList O.categoryClose
+    pre "012"     []        = Right $ T.categoryList K.categoryNumber
+    pre "abc"     []        = Right $ T.categoryList K.categoryAlpha
+    pre "+-"      []        = Right $ T.categoryList K.categorySign
+    pre "open"    []        = Right $ T.categoryList K.categoryOpen
+    pre "close"   []        = Right $ T.categoryList K.categoryClose
     pre "koshu-symbol"  []  = Right koshuSymbol
     pre "koshu-general" []  = Right koshuGeneral
     pre "koshu-plain"   []  = Right koshuPlain
@@ -268,16 +265,16 @@ parseSubtext ns = trees False where
     keyword x               = unknownSyntax x
 
 koshuSymbol :: T.CharExpr
-koshuSymbol = T.elem "koshu-symbol" S.isSymbolChar
+koshuSymbol = T.elem "koshu-symbol" K.isSymbolChar
 
 koshuGeneral :: T.CharExpr
-koshuGeneral = T.elem "koshu-general" S.isGeneralChar
+koshuGeneral = T.elem "koshu-general" K.isGeneralChar
 
 koshuPlain :: T.CharExpr
-koshuPlain = T.elem "koshu-plain" S.isPlainChar
+koshuPlain = T.elem "koshu-plain" K.isPlainChar
 
 koshuNumeric :: T.CharExpr
-koshuNumeric = T.elem "koshu-numeric" S.isNumericChar
+koshuNumeric = T.elem "koshu-numeric" K.isNumericChar
 
 
 -- --------------------------------------------  Subtext

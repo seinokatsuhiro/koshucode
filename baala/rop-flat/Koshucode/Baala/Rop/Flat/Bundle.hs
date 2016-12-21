@@ -6,7 +6,7 @@ module Koshucode.Baala.Rop.Flat.Bundle
   ( ropsFlat,
   ) where
 
-import qualified Koshucode.Baala.Data                 as D
+import qualified Koshucode.Baala.DataPlus             as K
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Rop.Base             as Rop
 import qualified Koshucode.Baala.Rop.Flat.Check       as Rop
@@ -23,7 +23,7 @@ import qualified Koshucode.Baala.Rop.Flat.Term        as Rop
 import qualified Koshucode.Baala.Rop.Flat.TermGadget  as Rop
 
 -- | Basic relmap operators.
-ropsFlat :: (D.CContent c) => [C.Rop c]
+ropsFlat :: (K.CContent c) => [C.Rop c]
 ropsFlat = Rop.ropsMeta
         ++ Rop.ropsResource
         ++ Rop.ropsCheck

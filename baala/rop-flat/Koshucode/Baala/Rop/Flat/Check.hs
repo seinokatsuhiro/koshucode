@@ -11,10 +11,7 @@ module Koshucode.Baala.Rop.Flat.Check
   ) where
 
 import qualified Data.Map                          as Map
-import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as S
-import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Flat.Lattice  as Rop
@@ -22,14 +19,14 @@ import qualified Koshucode.Baala.Rop.Flat.Term     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 
 -- | Implementation of relational operators.
-ropsCheck :: (D.CContent c) => [C.Rop c]
+ropsCheck :: (K.CContent c) => [C.Rop c]
 ropsCheck = Rop.rops "check"
-    [ consCheckTerm  O.& [ "check-term -just /N ..." O.& "just : . -just "
-                         , "check-term -has /N ..."  O.& " has : . -has "
-                         , "check-term -but /N ..."  O.& " but : . -but" ]
-    , consDump       O.& [ "dump"                    O.& "" ]
-    , consDuplicate  O.& [ "duplicate /N ..."        O.& "-term*" ]
-    , consExclude    O.& [ "exclude /N ... -from R"  O.& "-term* . -from/" ]
+    [ consCheckTerm  K.& [ "check-term -just /N ..." K.& "just : . -just "
+                         , "check-term -has /N ..."  K.& " has : . -has "
+                         , "check-term -but /N ..."  K.& " but : . -but" ]
+    , consDump       K.& [ "dump"                    K.& "" ]
+    , consDuplicate  K.& [ "duplicate /N ..."        K.& "-term*" ]
+    , consExclude    K.& [ "exclude /N ... -from R"  K.& "-term* . -from/" ]
     ]
 
 
@@ -44,25 +41,25 @@ consCheckTerm med =
     tag | tag "just" -> call relmapCheckTermJust "-just"
         | tag "has"  -> call relmapCheckTermHas  "-has"
         | tag "but"  -> call relmapCheckTermBut  "-but"
-        | otherwise  -> B.bug "check-term"
+        | otherwise  -> K.bug "check-term"
     where call f a = do ns <- Rop.getTerms med a
                         Right $ f med ns
 
-relmapCheckTermJust :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapCheckTermHas  :: C.Intmed c -> [S.TermName] -> C.Relmap c
-relmapCheckTermBut  :: C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapCheckTermJust :: C.Intmed c -> [K.TermName] -> C.Relmap c
+relmapCheckTermHas  :: C.Intmed c -> [K.TermName] -> C.Relmap c
+relmapCheckTermBut  :: C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapCheckTermJust med = C.relmapFlow med . relkitCheckTermJust
 relmapCheckTermHas  med = C.relmapFlow med . relkitCheckTermHas
 relmapCheckTermBut  med = C.relmapFlow med . relkitCheckTermBut
 
-relkitCheckTermJust :: [S.TermName] -> C.RelkitFlow c
-relkitCheckTermHas  :: [S.TermName] -> C.RelkitFlow c
-relkitCheckTermBut  :: [S.TermName] -> C.RelkitFlow c
-relkitCheckTermJust = checkTerm "Just" (\ns he1 -> D.headFrom ns `D.headEquiv` he1)
-relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> D.headFrom ns `D.isSubhead` he1)
-relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.selectShare` D.getTermNames he1)
+relkitCheckTermJust :: [K.TermName] -> C.RelkitFlow c
+relkitCheckTermHas  :: [K.TermName] -> C.RelkitFlow c
+relkitCheckTermBut  :: [K.TermName] -> C.RelkitFlow c
+relkitCheckTermJust = checkTerm "Just" (\ns he1 -> K.headFrom ns `K.headEquiv` he1)
+relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> K.headFrom ns `K.isSubhead` he1)
+relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `K.selectShare` K.getTermNames he1)
 
-checkTerm :: String -> ([S.TermName] -> D.Head -> Bool) -> [S.TermName] -> C.RelkitFlow c
+checkTerm :: String -> ([K.TermName] -> K.Head -> Bool) -> [K.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
@@ -87,21 +84,21 @@ consDuplicate med =
   do ns <- Rop.getTerms med "-term"
      Right $ relmapDuplicate med ns
 
-relmapDuplicate :: (Ord c) => C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapDuplicate :: (Ord c) => C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 
-relkitDuplicate :: (Ord c) => [S.TermName] -> C.RelkitFlow c
+relkitDuplicate :: (Ord c) => [K.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
-    | D.newTermsExist pk  = Msg.unkTerm (D.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
     | otherwise           = Right kit2
     where
-      pk     = D.termPicker ns he1
+      pk     = K.termPicker ns he1
       kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
-      dup    = not . B.isSingleton
+      dup    = not . K.isSingleton
 
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = B.gatherToMap $ map (D.ssRAssoc pk) bo1
+      kitf2 bo1 = let bo1map = K.gatherToMap $ map (K.ssRAssoc pk) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
 
 
@@ -116,11 +113,11 @@ consExclude med =
      m  <- Rop.getRelmap med "-from"
      Right $ relmapExclude med (ns, m)
 
-relmapExclude :: (Ord c) => C.Intmed c -> ([S.TermName], C.Relmap c) -> C.Relmap c
+relmapExclude :: (Ord c) => C.Intmed c -> ([K.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude med (ns, m) = excl where
-    excl = Rop.relmapNone med (pick O.++ meet)
+    excl = Rop.relmapNone med (pick K.++ meet)
     pick = Rop.relmapPick med ns
-    meet = Rop.relmapMeet med Nothing (m O.++ pick)
+    meet = Rop.relmapMeet med Nothing (m K.++ pick)
 
 
 -- ----------------------  dump
@@ -129,12 +126,12 @@ relmapExclude med (ns, m) = excl where
 --
 --   Dump input relation and abort.
 --
-consDump :: (D.CRel c, B.MixEncode c) => C.RopCons c
+consDump :: (K.CRel c, K.MixEncode c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 
-relkitDump :: (D.CRel c, B.MixEncode c) => C.RelkitFlow c
+relkitDump :: (K.CRel c, K.MixEncode c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
-    kitf2 _ bo1 = Msg.dumpRel $ D.Rel he1 bo1
+    kitf2 _ bo1 = Msg.dumpRel $ K.Rel he1 bo1
 
