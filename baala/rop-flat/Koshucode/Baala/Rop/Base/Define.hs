@@ -3,8 +3,7 @@
 -- | Definition of relmap operators.
 
 module Koshucode.Baala.Rop.Base.Define
-  ( RopDefine,
-    ropList, rops, rop,
+  ( rops,
     ropAlias,
   ) where
 
@@ -12,16 +11,12 @@ import qualified Koshucode.Baala.Overture   as O
 import qualified Koshucode.Baala.Syntax     as S
 import qualified Koshucode.Baala.Core       as C
 
--- | Constructor, usage, and attribute sorter
-{-# WARNING RopDefine "This is only used in defined module." #-}
-type RopDefine c = (C.RopCons c, S.AttrLayout)
-
 -- | Make implementations of relmap operators.
-ropList
-    :: C.RopGroup     -- ^ Operator group
-    -> [RopDefine c]  -- ^ Operator definitions
-    -> [C.Rop c]      -- ^ Relmap operators
-ropList group = map make where
+rops :: C.RopGroup     -- ^ Operator group
+     -> [(C.RopCons c, [(S.AttrUsage, String)])]
+                       -- ^ Constructor and list of usage and layout
+     -> [C.Rop c]      -- ^ Operator list
+rops group def = make <$> (S.toAttrLayout O.<$$> def) where
     make (cons, layout) =
         let usage  = S.attrUsageString layout
             name   = head $ words usage
@@ -31,16 +26,6 @@ ropList group = map make where
                  , C.ropAttr   = layout
                  , C.ropParaze = sorter
                  , C.ropCons   = cons }
-
--- | Make implementations of relmap operators.
-rops :: C.RopGroup -> [(C.RopCons c, [(String, String)])] -> [C.Rop c]
-rops group def = ropList group (S.toAttrLayout O.<$$> def)
-
--- | Make definition of relmap operator.
-rop :: C.RopCons c              -- ^ Constructor
-    -> [(S.AttrUsage, String)]  -- ^ Usage text and attribute layout
-    -> RopDefine c              -- ^ Operator definition
-rop cons ul = (cons, S.toAttrLayout ul)
 
 -- | Add aliases of relmap operator.
 ropAlias

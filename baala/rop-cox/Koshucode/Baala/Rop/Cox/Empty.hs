@@ -32,14 +32,13 @@ import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
 --     It keeps input tuples of which counterparts are totally negated.
 -- 
 ropsCoxEmpty :: (D.CContent c) => [C.Rop c]
-ropsCoxEmpty = Rop.ropList "cox-empty"  -- GROUP
-    --        CONSTRUCTOR         USAGE & ATTRIBUTE
-    [ Rop.rop consBoth          [ "both R [-share /P ... -fill E]"
-                                  O.& "-relmap/ . -share? -fill?" ]
-    , Rop.rop consComposeMaybe  [ "compose-maybe R [-share /P ... -fill E]"
-                                  O.& "-relmap/ . -share? -fill?" ]
-    , Rop.rop consMaybe         [ "maybe R [-share /P ... -fill E]"
-                                  O.& "-relmap/ . -share? -fill?" ]
+ropsCoxEmpty = Rop.rops "cox-empty"
+    [ consBoth          O.& [ "both R [-share /P ... -fill E]"
+                              O.& "-relmap/ . -share? -fill?" ]
+    , consComposeMaybe  O.& [ "compose-maybe R [-share /P ... -fill E]"
+                              O.& "-relmap/ . -share? -fill?" ]
+    , consMaybe         O.& [ "maybe R [-share /P ... -fill E]"
+                              O.& "-relmap/ . -share? -fill?" ]
     ]
 
 

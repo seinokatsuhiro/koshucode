@@ -34,12 +34,11 @@ import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
 --     Omit tuples @E@ equals true.
 -- 
 ropsCoxFilter :: (D.CContent c) => [C.Rop c]
-ropsCoxFilter = Rop.ropList "cox-filter"
-    --        CONSTRUCTOR           USAGE             ATTRIBUTE
-    [ Rop.rop consContain         [ "contain E"   O.& "-expr" ]
-    , Rop.rop (consFilter True)   [ "keep E"      O.& "-in* . -where?" ]
-    , Rop.rop (consFilter False)  [ "omit E"      O.& "-in* . -where?" ]
-    , Rop.rop consOmitAll         [ "omit-all"    O.& "" ]
+ropsCoxFilter = Rop.rops "cox-filter"
+    [ consContain       O.& [ "contain E"   O.& "-expr" ]
+    , consFilter True   O.& [ "keep E"      O.& "-in* . -where?" ]
+    , consFilter False  O.& [ "omit E"      O.& "-in* . -where?" ]
+    , consOmitAll       O.& [ "omit-all"    O.& "" ]
     ]
 
 

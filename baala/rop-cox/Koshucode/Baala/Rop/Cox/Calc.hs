@@ -37,16 +37,15 @@ import qualified Koshucode.Baala.Rop.Cox.Message as Msg
 ropsCoxCalc :: (D.CContent c) => [C.Rop c]
 ropsCoxCalc = Rop.ropAlias
     [ "subst" & "alt"
-    ] $ Rop.ropList "cox-calc"
-    --        CONSTRUCTOR       USAGE                            ATTRIBUTE
-    [ Rop.rop consAdd         [ "add /N E ..."               O.& "-cox* . -where?" ]
-    , Rop.rop consAlt         [ "alt /N E ..."               O.& "-cox* . -where?" ]
-    , Rop.rop consFill        [ "fill /P ... -with E"        O.& "-term* . -with" ]
-    , Rop.rop consReplace     [ "replace /P ... -by F"       O.& "-term* . -by" ]
-    , Rop.rop consReplaceAll  [ "replace-all -from E -to E"  O.& ". -from -to" ]
-    , Rop.rop consSplit       [ "split /N E ..."             O.& "-cox* . -where?" ]
-    , Rop.rop consUnary       [ "unary /N E ..."             O.& "-term -expr*" ]
-    , Rop.rop consDumpCox     [ "dump-cox E"                 O.& "-cox*" ]
+    ] $ Rop.rops "cox-calc"
+    [ consAdd         O.& [ "add /N E ..."               O.& "-cox* . -where?" ]
+    , consAlt         O.& [ "alt /N E ..."               O.& "-cox* . -where?" ]
+    , consFill        O.& [ "fill /P ... -with E"        O.& "-term* . -with" ]
+    , consReplace     O.& [ "replace /P ... -by F"       O.& "-term* . -by" ]
+    , consReplaceAll  O.& [ "replace-all -from E -to E"  O.& ". -from -to" ]
+    , consSplit       O.& [ "split /N E ..."             O.& "-cox* . -where?" ]
+    , consUnary       O.& [ "unary /N E ..."             O.& "-term -expr*" ]
+    , consDumpCox     O.& [ "dump-cox E"                 O.& "-cox*" ]
     ]
 
 
