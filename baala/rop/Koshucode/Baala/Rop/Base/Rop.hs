@@ -12,7 +12,7 @@ module Koshucode.Baala.Rop.Base.Rop
     consXxx
   ) where
 
-import qualified Koshucode.Baala.Overture           as O
+import qualified Koshucode.Baala.DataPlus           as K
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base.Define    as Rop
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
@@ -20,8 +20,8 @@ import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 -- | Built-in relmap operators.
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = Rop.rops "builtin"
-    [ consAppend O.& [ "append R R" O.& "-left/ -right/" ]
-    , consId     O.& [ "id"         O.& "" ]
+    [ consAppend K.& [ "append R R" K.& "-left/ -right/" ]
+    , consId     K.& [ "id"         K.& "" ]
     ]
 
 -- | [id] Identity relmap, i.e., output just input relation.
@@ -35,7 +35,7 @@ relmapId med = C.relmapFlow med $ Right . C.relkitId
 -- | [/R/ | /S/] Append two relmaps.
 consAppend :: C.RopCons c
 consAppend = app . map snd . C.medSubmap where
-    app [a,b] = Right (a O.++ b)
+    app [a,b] = Right (a K.++ b)
     app _     = Msg.reqRelmap 2
 
 -- | Placeholder for unimplemented operator.

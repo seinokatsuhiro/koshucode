@@ -18,8 +18,7 @@ module Koshucode.Baala.Rop.Base.Get
     getSwitch, getWord,
   ) where
 
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Syntax           as S
+import qualified Koshucode.Baala.DataPlus         as K
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Syntax.Pattern   as P
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
@@ -31,23 +30,23 @@ import qualified Koshucode.Baala.Rop.Base.Message as Msg
 type RopGet c a
     = C.Intmed c    -- ^ Use of relmap operator
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
-    -> B.Ab a       -- ^ Attribute of relmap
+    -> K.Ab a       -- ^ Attribute of relmap
 
 -- | Lookup parameter tree.
-lookupTree :: String -> C.Intmed c -> Maybe [S.Tree]
-lookupTree = lookupAttr S.AttrNormal
+lookupTree :: String -> C.Intmed c -> Maybe [K.Tree]
+lookupTree = lookupAttr K.AttrNormal
 
-lookupAttr :: (String -> S.AttrName) -> String -> C.Intmed c -> Maybe [S.Tree]
-lookupAttr c ('-' : name) = S.paraLookupSingle (c name) . getPara
-lookupAttr _ _ = B.bug "lookupAttr"
+lookupAttr :: (String -> K.AttrName) -> String -> C.Intmed c -> Maybe [K.Tree]
+lookupAttr c ('-' : name) = K.paraLookupSingle (c name) . getPara
+lookupAttr _ _ = K.bug "lookupAttr"
 
 -- | Get from trees.
-getFromTree :: ([S.Tree] -> B.Ab b) -> RopGet c b
+getFromTree :: ([K.Tree] -> K.Ab b) -> RopGet c b
 getFromTree f med name =
     do trees <- getTrees med name
        Msg.abAttrTrees trees $ f trees
 
-getFromTreeOption :: b -> ([S.Tree] -> B.Ab b) -> RopGet c b
+getFromTreeOption :: b -> ([K.Tree] -> K.Ab b) -> RopGet c b
 getFromTreeOption y f med name =
     do m <- getMaybe getTrees med name
        case m of
@@ -58,26 +57,26 @@ getFromTreeOption y f med name =
 -- ----------------------  Tree
 
 -- | Get trees as single tree.
-getTree :: RopGet c S.Tree
+getTree :: RopGet c K.Tree
 getTree med name =
     do trees <- getTrees med name
-       Right $ S.ttreeGroup trees
+       Right $ K.ttreeGroup trees
 
 -- | Get trees from parameter.
-getTrees :: RopGet c [S.Tree]
+getTrees :: RopGet c [K.Tree]
 getTrees med name =
     case lookupTree name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
 -- | Get word-and-tree list.
-getWordTrees :: RopGet c [B.Named S.Tree]
+getWordTrees :: RopGet c [K.Named K.Tree]
 getWordTrees med name =
     case lookupTree name med of
       Just trees -> wordTrees trees
       Nothing    -> Msg.noAttr name
 
-wordTrees :: [S.Tree] -> B.Ab [B.Named S.Tree]
+wordTrees :: [K.Tree] -> K.Ab [K.Named K.Tree]
 wordTrees []  = Right []
 wordTrees [_] = Msg.unexpAttr "Require word and tree"
 wordTrees (w : tree : xs) =
@@ -85,30 +84,30 @@ wordTrees (w : tree : xs) =
        xs' <- wordTrees xs
        Right $ (w', tree) : xs'
 
-word :: S.Tree -> B.Ab String
+word :: K.Tree -> K.Ab String
 word (P.LText _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
 -- | Get trees delimited by colon.
-getTreesByColon :: RopGet c [[S.Tree]]
+getTreesByColon :: RopGet c [[K.Tree]]
 getTreesByColon med name =
     do trees <- getTrees med name
-       Right $ B.omit null $ S.divideTreesByColon trees
+       Right $ K.omit null $ K.divideTreesByColon trees
 
 
 -- ----------------------  Basic
 
 -- | Get relmap parameter.
-getPara :: C.Intmed c -> S.AttrPara
+getPara :: C.Intmed c -> K.AttrPara
 getPara = C.lexAttr . C.medLexmap
 
 -- | Test usage tag.
-getTag :: C.Intmed c -> S.ParaTag -> Bool
+getTag :: C.Intmed c -> K.ParaTag -> Bool
 getTag med tag = tag `elem` getTags med
 
 -- | Get usage tags.
-getTags :: C.Intmed c -> [S.ParaTag]
-getTags = S.paraTags . getPara
+getTags :: C.Intmed c -> [K.ParaTag]
+getTags = K.paraTags . getPara
 
 -- | Get optional parameter with default value.
 getOption :: a -> RopGet c a -> RopGet c a
@@ -125,7 +124,7 @@ getMaybe get med name =
       Just _  -> Right . Just =<< get med name
 
 -- | Get @True@ when attribute is given, @False@ otherwise.
-getSwitch :: C.Intmed c -> String -> B.Ab Bool
+getSwitch :: C.Intmed c -> String -> K.Ab Bool
 getSwitch med name = getFromTreeOption False get med name where
     get [] = Right True
     get _  = Msg.unexpAttr $ "Just type only " ++ name

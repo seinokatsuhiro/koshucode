@@ -9,20 +9,20 @@ module Koshucode.Baala.Rop.Base.Message
     notImpl,
   ) where
 
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.DataPlus as K
 import Koshucode.Baala.Core.Message
 
 -- | Require /N/ relmaps
-reqRelmap :: Int -> B.Ab a
-reqRelmap 0 = B.leftBecause "Require no relmaps"
-reqRelmap 1 = B.leftBecause "Require one relmap"
-reqRelmap n = B.leftBecause $ "Require " ++ show n ++ " relmap"
+reqRelmap :: Int -> K.Ab a
+reqRelmap 0 = K.leftBecause "Require no relmaps"
+reqRelmap 1 = K.leftBecause "Require one relmap"
+reqRelmap n = K.leftBecause $ "Require " ++ show n ++ " relmap"
 
 -- | Attribute not found
-noAttr :: String -> B.Ab a
-noAttr n = B.leftLine "Attribute not found" n
+noAttr :: String -> K.Ab a
+noAttr n = K.leftLine "Attribute not found" n
 
 -- | Not implemented
-notImpl :: B.Ab a
-notImpl = B.leftBecause "Not implemented"
+notImpl :: K.Ab a
+notImpl = K.leftBecause "Not implemented"
 
