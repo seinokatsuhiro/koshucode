@@ -25,13 +25,12 @@ import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Judge            as D
-import qualified Koshucode.Baala.Type.Rel.Picker       as D
 
 
 -- ---------------------- * Construct
 
 -- | Data for picking shared and proper terms.
-type TermPicker c = D.Picker S.TermName c
+type TermPicker c = B.Picker S.TermName c
 
 -- | Type for picking terms.
 type TermPick c = TermPicker c -> [c] -> [c]
@@ -41,7 +40,7 @@ type TermPick2 a b = (TermPick a, TermPick b)
 
 -- | Create term picker from left and right term names.
 termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
-termPicker left right = D.picker ls rs where
+termPicker left right = B.picker ls rs where
     (ls, rs) = getTermNamesUnique2 left right
 
 -- | Double of something.
@@ -60,7 +59,7 @@ getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
 --   ["a","b"]
 --
 preTerms :: TermPicker c -> [S.TermName]
-preTerms = D.pkLShareNames
+preTerms = B.pkLShareNames
 
 -- | List of new terms.
 --
@@ -68,7 +67,7 @@ preTerms = D.pkLShareNames
 --   ["c"]
 --
 newTerms :: TermPicker c -> [S.TermName]
-newTerms = D.pkLProperNames
+newTerms = B.pkLProperNames
 
 -- | Test present terms exist.
 --
@@ -109,23 +108,23 @@ pickDirect t1 t2 = pickTerms $ termPicker t1 t2
 --   [1,2]
 --
 pickTermsIndex :: TermPicker c -> [Int]
-pickTermsIndex = D.pkRShareIndex
+pickTermsIndex = B.pkRShareIndex
 
 -- | Pick terms according to term picker.
 pickTerms :: TermPicker c -> O.Map [c]
-pickTerms = D.pkRShare
+pickTerms = B.pkRShare
 
 -- | Cut terms according to term picker.
 cutTerms :: TermPicker c -> O.Map [c]
-cutTerms = D.pkRProper
+cutTerms = B.pkRProper
 
 -- | Move terms forward.
 forwardTerms :: TermPicker c -> O.Map [c]
-forwardTerms = D.pkRForward
+forwardTerms = B.pkRForward
 
 -- | Move terms backward.
 backwardTerms :: TermPicker c -> O.Map [c]
-backwardTerms = D.pkRBackward
+backwardTerms = B.pkRBackward
 
 -- | Move terms forward ('True') or backward ('False').
 --

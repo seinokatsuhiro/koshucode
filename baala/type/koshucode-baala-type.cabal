@@ -62,7 +62,6 @@ library
         Koshucode.Baala.Type.Rel.Head
         Koshucode.Baala.Type.Rel.Mono
         Koshucode.Baala.Type.Rel.Rel
-        Koshucode.Baala.Type.Rel.Picker
         Koshucode.Baala.Type.Rel.TermPicker
 
         Koshucode.Baala.Type.Time

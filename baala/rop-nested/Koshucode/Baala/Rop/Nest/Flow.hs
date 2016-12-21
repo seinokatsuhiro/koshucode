@@ -11,9 +11,7 @@ module Koshucode.Baala.Rop.Nest.Flow
     consChunk, relmapChunk, relkitChunk,
   ) where
 
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Syntax            as S
-import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
 import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
@@ -26,22 +24,22 @@ import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
 --   Enclose input relation at term @\/N@.
 --   In other words, relation flows down to nested level.
 --
-consDown :: (D.CRel c) => C.RopCons c
+consDown :: (K.CRel c) => C.RopCons c
 consDown med =
   do n <- Rop.getTerm med "-term"
      Right $ relmapDown med n
 
 -- | Create @down@ relmap.
-relmapDown :: (D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
+relmapDown :: (K.CRel c) => C.Intmed c -> K.TermName -> C.Relmap c
 relmapDown med = C.relmapFlow med . relkitDown
 
 -- | Create @down@ relkit.
-relkitDown :: (D.CRel c) => S.TermName -> C.RelkitFlow c
+relkitDown :: (K.CRel c) => K.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
-    he2       = D.headConsNest n he1 mempty
+    he2       = K.headConsNest n he1 mempty
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ D.pRel $ D.Rel he1 bo1 ]]
+    kitf2 bo1 = [[ K.pRel $ K.Rel he1 bo1 ]]
 
 
 -- ----------------------  up
@@ -50,30 +48,30 @@ relkitDown n (Just he1) = Right kit2 where
 --
 --   Lift nested relation @\/P@ up to current flow.
 --
-consUp :: (D.CRel c) => C.RopCons c
+consUp :: (K.CRel c) => C.RopCons c
 consUp med =
   do n <- Rop.getTerm med "-term"
      Right $ relmapUp med n
 
 -- | Create @up@ relmap.
-relmapUp :: (D.CRel c) => C.Intmed c -> S.TermName -> C.Relmap c
+relmapUp :: (K.CRel c) => C.Intmed c -> K.TermName -> C.Relmap c
 relmapUp med = C.relmapFlow med . relkitUp
 
 -- | Create @up@ relkit.
-relkitUp :: (D.CRel c) => S.TermName -> C.RelkitFlow c
+relkitUp :: (K.CRel c) => K.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
-    | D.pkDisjoint lr    = Msg.unkTerm [n] he1
-    | B.isSingleton t1   = Right kit2
+    | K.pkDisjoint lr    = Msg.unkTerm [n] he1
+    | K.isSingleton t1   = Right kit2
     | otherwise          = Msg.notNestRel [n] he1
     where
-      lr     = D.termPicker [n] he1
-      share  = D.pkRShare lr
-      he1'   = D.headMap share he1
-      t1     = D.headNested he1'
-      he2    = D.headUp he1'
+      lr     = K.termPicker [n] he1
+      share  = K.pkRShare lr
+      he1'   = K.headMap share he1
+      t1     = K.headNested he1'
+      he2    = K.headUp he1'
       kit2   = C.relkitJust he2 $ C.RelkitMany True kitf2
-      kitf2  = D.relBody . D.gRel . head . share
+      kitf2  = K.relBody . K.gRel . head . share
 
 
 -- ----------------------  chunk
@@ -83,26 +81,26 @@ relkitUp n (Just he1)
 --   Split input relation into multiple chunks named \/N ....
 --   The input relation is ordered by \/P ....
 --
-consChunk :: (Ord c, D.CRel c) => C.RopCons c
+consChunk :: (Ord c, K.CRel c) => C.RopCons c
 consChunk med =
   do ns  <- Rop.getTerms med "-term"
      ord <- Rop.getOption [] Rop.getTerms med "-order"
      Right $ relmapChunk med ns ord
 
 -- | Create @chunk@ relmap.
-relmapChunk :: (Ord c, D.CRel c) => C.Intmed c -> [S.TermName] -> [S.TermName] -> C.Relmap c
+relmapChunk :: (Ord c, K.CRel c) => C.Intmed c -> [K.TermName] -> [K.TermName] -> C.Relmap c
 relmapChunk med ns ord = C.relmapFlow med $ relkitChunk ns ord
 
 -- | Create @chunk@ relkit.
-relkitChunk :: (Ord c, D.CRel c) => [S.TermName] -> [S.TermName] -> C.RelkitFlow c
+relkitChunk :: (Ord c, K.CRel c) => [K.TermName] -> [K.TermName] -> C.RelkitFlow c
 relkitChunk _ _ Nothing = Right C.relkitNothing
 relkitChunk ns ord (Just he1) = Right kit2 where
-    he2     = D.headNests ns he1
+    he2     = K.headNests ns he1
     kit2    = C.relkitJust he2 $ C.RelkitFull False f2
     f2 bo1  = let deg    = length bo1 `ceilingRem` length ns
-                  bo1'   = B.sortByName (map B.Asc ord) ns bo1
-                  ch     = B.chunks deg bo1'
-                  rels   = (D.pRel . D.Rel he1) `map` ch
+                  bo1'   = K.sortByName (map K.Asc ord) ns bo1
+                  ch     = K.chunks deg bo1'
+                  rels   = (K.pRel . K.Rel he1) `map` ch
               in [rels]
 
 ceilingRem :: (Integral a) => a -> a -> a

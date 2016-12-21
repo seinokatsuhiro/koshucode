@@ -66,6 +66,7 @@ library
         Koshucode.Baala.Base.List.Assoc
         Koshucode.Baala.Base.List.List
         Koshucode.Baala.Base.List.Order
+        Koshucode.Baala.Base.List.Picker
         Koshucode.Baala.Base.List.Select
         Koshucode.Baala.Base.List.Set
         Koshucode.Baala.Base.List.Split

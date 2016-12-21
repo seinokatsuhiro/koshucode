@@ -3,13 +3,13 @@
 -- | Picker is a data for picking target elements
 --   based on element names.
 
-module Koshucode.Baala.Type.Rel.Picker
+module Koshucode.Baala.Base.List.Picker
   ( picker,
     Picker (..),
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
-import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Base.List.Select      as B
 
 -- | Create picker.
 picker :: (Ord n) => [n] -> [n] -> Picker n c
@@ -53,7 +53,7 @@ picker ls rs = pk where
          , pkRAssoc         = assocR
          }
 
--- | Data for picking shared and proper terms.
+-- | Picker data.
 --
 --   For example, __\/a \/b \/c__ and __\/b \/c \/d \/e__
 --   have left-proper terms __\/a__,
