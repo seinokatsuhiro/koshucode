@@ -15,8 +15,8 @@ module Koshucode.Baala.Type.Rel.TermPicker
     preTermsExist, newTermsExist,
 
     -- * Mapping
+    termsIndex,
     pickDirect,
-    pickTermsIndex,
     pickTerms, cutTerms,
     forwardTerms, backwardTerms, towardTerms,
   ) where
@@ -39,16 +39,11 @@ type TermPick c = TermPicker c -> [c] -> [c]
 type TermPick2 a b = (TermPick a, TermPick b)
 
 -- | Create term picker from left and right term names
-termPicker :: (D.GetTermNames l, D.GetTermNames r) => l -> r -> TermPicker c
-termPicker left right = B.picker ls rs where
-    (ls, rs) = getTermNamesUnique2 left right
-
--- | Double of something.
-type Dbl a = (a, a)
-
--- | Get pair of term names.
-getTermNamesUnique2 :: (D.GetTermNames a, D.GetTermNames b) => a -> b -> Dbl [S.TermName]
-getTermNamesUnique2 l r = (D.getTermNamesUnique l, D.getTermNamesUnique r)
+termPicker :: (D.GetTermNames target, D.GetTermNames input)
+           => target -> input -> TermPicker c
+termPicker target input =
+    B.picker (D.getTermNamesUnique target)
+             (D.getTermNamesUnique input)
 
 
 -- ---------------------- * Present & new terms
@@ -98,46 +93,56 @@ newTermsExist = B.notNull . newTerms
 
 --  ---------------------- * Mapping
 
--- | Pick contents.
+-- | Indices of target terms on input terms.
 --
---   >>> pickDirect "/a /c" "/a /b /c" (words "1 2 3")
---   ["1", "3"]
+--   >>> termsIndex $ termPicker "/b /d" "/a /b /c /d"
+--   [1,3]
 --
-pickDirect :: (D.GetTermNames t1, D.GetTermNames t2) => t1 -> t2 -> O.Map [c]
-pickDirect t1 t2 = pickTerms $ termPicker t1 t2
+termsIndex :: TermPicker c -> [Int]
+termsIndex = B.pkRShareIndex
 
--- | Extract indices of terms.
+-- | Pick contents of target terms.
 --
---   >>> pickTermsIndex $ termPicker "/b /d" "/a /b /d /e"
---   [1,2]
+--   >>> pickDirect "/b /d" "/a /b /c /d" "ABCD"
+--   "BD"
 --
-pickTermsIndex :: TermPicker c -> [Int]
-pickTermsIndex = B.pkRShareIndex
+pickDirect :: (D.GetTermNames target, D.GetTermNames input)
+           => target -> input -> O.Map [c]
+pickDirect target input = pickTerms $ termPicker target input
 
--- | Pick terms according to term picker.
+-- | Pick target terms from input terms.
+--
+--   >>> pickTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "BD"
+--
 pickTerms :: TermPicker c -> O.Map [c]
 pickTerms = B.pkRShare
 
--- | Cut terms according to term picker.
+-- | Cut target terms from input terms.
+--
+--   >>> cutTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "AC"
+--
 cutTerms :: TermPicker c -> O.Map [c]
 cutTerms = B.pkRProper
 
--- | Move terms forward.
+-- | Move target terms forward.
+--
+--   >>> forwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "BDAC"
+--
 forwardTerms :: TermPicker c -> O.Map [c]
 forwardTerms = B.pkRForward
 
--- | Move terms backward.
+-- | Move target terms backward.
+--
+--   >>> backwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "ACBD"
+--
 backwardTerms :: TermPicker c -> O.Map [c]
 backwardTerms = B.pkRBackward
 
--- | Move terms forward ('True') or backward ('False').
---
---   >>> let pk = termPicker "/c /b" "/a /b /c /d"
---   >>> towardTerms True pk (words "A B C D")
---   ["C","B","A","D"]
---   >>> towardTerms False pk (words "A B C D")
---   ["A","D","C","B"]
---
+-- | Move target terms forward if 'True' or backward if 'False'.
 towardTerms :: Bool -> TermPicker c -> O.Map [c]
 towardTerms True  = forwardTerms
 towardTerms False = backwardTerms

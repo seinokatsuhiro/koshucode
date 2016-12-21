@@ -75,7 +75,7 @@ relmapSpecialize hook links = spec [] [] where
                          nest        = map fst heNest  -- nest terms
                          p           = C.lexToken lx
                          tk (n, he)  = ((p, S.LocalNest n), he)
-                         heInd       = T.pickTermsIndex $ T.termPicker nest heJust
+                         heInd       = T.termsIndex $ T.termPicker nest heJust
                          local'      = map tk heNest ++ local
                          nestInd     = zip nest heInd
                      (kdef2, kit2)  <- post lx $ spec local' keys kdef he1 rmap1
