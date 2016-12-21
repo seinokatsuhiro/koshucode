@@ -18,8 +18,11 @@ module Koshucode.Baala.Type.Rel.TermPicker
     termsIndex,
     pickDirect,
     pickTerms, cutTerms,
-    pickTerms2, cutTerms2,
     forwardTerms, backwardTerms, towardTerms,
+
+    -- * Double mapping
+    pickTerms2, cutTerms2,
+    forwardTerms2, backwardTerms2,
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
@@ -28,7 +31,7 @@ import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Judge            as D
 
 
--- ---------------------- * Construct
+-- ============================================  Construct
 
 -- | Data for picking shared and proper terms.
 type TermPicker c = B.Picker S.TermName c
@@ -47,7 +50,7 @@ termPicker target input =
              (D.getTermNamesUnique input)
 
 
--- ---------------------- * Present & new terms
+-- ============================================  Present & new terms
 
 -- | List of present terms.
 --   The first argument of 'termPicker' is treated as target terms,
@@ -92,7 +95,7 @@ newTermsExist :: O.Test (TermPicker c)
 newTermsExist = B.notNull . newTerms
 
 
---  ---------------------- * Mapping
+--  ============================================  Mapping
 
 -- | Indices of target terms on input terms.
 --
@@ -127,14 +130,6 @@ pickTerms = B.pkRShare
 cutTerms :: TermPick c
 cutTerms = B.pkRProper
 
--- | Double 'pickTerms'.
-pickTerms2 :: TermPick2 a b
-pickTerms2 = (pickTerms, pickTerms)
-
--- | Double 'cutTerms'.
-cutTerms2 :: TermPick2 a b
-cutTerms2 = (cutTerms, cutTerms)
-
 -- | Move target terms forward.
 --
 --   >>> forwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
@@ -155,4 +150,23 @@ backwardTerms = B.pkRBackward
 towardTerms :: Bool -> TermPick c
 towardTerms True  = forwardTerms
 towardTerms False = backwardTerms
+
+
+--  ============================================  Double mapping
+
+-- | Double 'pickTerms'.
+pickTerms2 :: TermPick2 a b
+pickTerms2 = (pickTerms, pickTerms)
+
+-- | Double 'cutTerms'.
+cutTerms2 :: TermPick2 a b
+cutTerms2 = (cutTerms, cutTerms)
+
+-- | Double 'forwardTerms'.
+forwardTerms2 :: TermPick2 a b
+forwardTerms2 = (forwardTerms, forwardTerms)
+
+-- | Double 'backwardTerms'.
+backwardTerms2 :: TermPick2 a b
+backwardTerms2 = (backwardTerms, backwardTerms)
 
