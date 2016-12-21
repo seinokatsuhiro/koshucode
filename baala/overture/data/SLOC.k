@@ -3,12 +3,12 @@
 about /package 'overture
 
 |-- DIR  /code 20   /comment 10   /dir "overture/Koshucode/Baala"
-|-- DIR  /code 196  /comment 296  /dir "overture/Koshucode/Baala/Overture"
+|-- DIR  /code 201  /comment 315  /dir "overture/Koshucode/Baala/Overture"
 |-- DIR  /code 25   /comment 28   /dir "overture/Koshucode/Baala/Overture/Name"
 |-- DIR  /code 319  /comment 281  /dir "overture/Koshucode/Baala/Overture/Text"
 |-- DIR  /code 117  /comment 186  /dir "overture/Koshucode/Baala/System"
 
-|-- DIR-TOTAL  /code 677  /comment 801
+|-- DIR-TOTAL  /code 682  /comment 820
 
 |-- FILE  /code 14   /comment 5    /file "Overture.hs"    /dir "overture/Koshucode/Baala"
 |-- FILE  /code 56   /comment 67   /file "Cache.hs"       /dir "overture/Koshucode/Baala/Overture"
@@ -18,7 +18,7 @@ about /package 'overture
 |-- FILE  /code 10   /comment 9    /file "IntString.hs"   /dir "overture/Koshucode/Baala/Overture/Name"
 |-- FILE  /code 7    /comment 9    /file "String.hs"      /dir "overture/Koshucode/Baala/Overture/Name"
 |-- FILE  /code 8    /comment 10   /file "Text.hs"        /dir "overture/Koshucode/Baala/Overture/Name"
-|-- FILE  /code 30   /comment 71   /file "Shorthand.hs"   /dir "overture/Koshucode/Baala/Overture"
+|-- FILE  /code 35   /comment 90   /file "Shorthand.hs"   /dir "overture/Koshucode/Baala/Overture"
 |-- FILE  /code 10   /comment 5    /file "Text.hs"        /dir "overture/Koshucode/Baala/Overture"
 |-- FILE  /code 88   /comment 58   /file "Category.hs"    /dir "overture/Koshucode/Baala/Overture/Text"
 |-- FILE  /code 73   /comment 101  /file "Integer.hs"     /dir "overture/Koshucode/Baala/Overture/Text"
@@ -29,4 +29,4 @@ about /package 'overture
 |-- FILE  /code 83   /comment 158  /file "CliParser.hs"   /dir "overture/Koshucode/Baala/System"
 |-- FILE  /code 34   /comment 28   /file "Exit.hs"        /dir "overture/Koshucode/Baala/System"
 
-|-- FILE-TOTAL  /code 677  /comment 801
+|-- FILE-TOTAL  /code 682  /comment 820

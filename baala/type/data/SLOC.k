@@ -7,10 +7,10 @@ about /package 'type
 |-- DIR  /code 484  /comment 415  /dir "type/Koshucode/Baala/Type/Decimal"
 |-- DIR  /code 203  /comment 149  /dir "type/Koshucode/Baala/Type/Judge"
 |-- DIR  /code 285  /comment 382  /dir "type/Koshucode/Baala/Type/Rel"
-|-- DIR  /code 712  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
+|-- DIR  /code 713  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- DIR-TOTAL  /code 2028  /comment 1893
+|-- DIR-TOTAL  /code 2029  /comment 1893
 
 |-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
@@ -30,9 +30,9 @@ about /package 'type
 |-- FILE  /code 72   /comment 76   /file "Rel.hs"         /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 93   /comment 150  /file "TermPicker.hs"  /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 14   /comment 5    /file "Time.hs"        /dir "type/Koshucode/Baala/Type"
-|-- FILE  /code 166  /comment 131  /file "Clock.hs"       /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 169  /comment 133  /file "Clock.hs"       /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 44   /comment 38   /file "ClockCalc.hs"   /dir "type/Koshucode/Baala/Type/Time"
-|-- FILE  /code 84   /comment 102  /file "Date.hs"        /dir "type/Koshucode/Baala/Type/Time"
+|-- FILE  /code 82   /comment 100  /file "Date.hs"        /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 138  /comment 107  /file "Parts.hs"       /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 191  /comment 149  /file "Time.hs"        /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 89   /comment 83   /file "TimeCalc.hs"    /dir "type/Koshucode/Baala/Type/Time"
@@ -40,4 +40,4 @@ about /package 'type
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- FILE-TOTAL  /code 2028  /comment 1893
+|-- FILE-TOTAL  /code 2029  /comment 1893

@@ -2,21 +2,22 @@
 
 about /package 'rop-cox
 
-|-- DIR  /code 18   /comment 6    /dir "rop-cox/Koshucode/Baala/Rop"
-|-- DIR  /code 928  /comment 572  /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- DIR  /code 14   /comment 6    /dir "rop-cox/Koshucode/Baala/Rop"
+|-- DIR  /code 706  /comment 475  /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- DIR  /code 242  /comment 102  /dir "rop-cox/Koshucode/Baala/Rop/Cox/Type"
 
-|-- DIR-TOTAL  /code 946  /comment 578
+|-- DIR-TOTAL  /code 962  /comment 583
 
-|-- FILE  /code 18   /comment 6    /file "Cox.hs"         /dir "rop-cox/Koshucode/Baala/Rop"
-|-- FILE  /code 135  /comment 42   /file "Accessor.hs"    /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 18   /comment 8    /file "Bundle.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 172  /comment 99   /file "Calc.hs"        /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 74   /comment 55   /file "Empty.hs"       /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 52   /comment 63   /file "Filter.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 180  /comment 109  /file "Gadget.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 14   /comment 6    /file "Cox.hs"         /dir "rop-cox/Koshucode/Baala/Rop"
+|-- FILE  /code 20   /comment 8    /file "Bundle.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 171  /comment 98   /file "Calc.hs"        /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 73   /comment 54   /file "Empty.hs"       /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 51   /comment 62   /file "Filter.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 179  /comment 108  /file "Gadget.hs"      /dir "rop-cox/Koshucode/Baala/Rop/Cox"
 |-- FILE  /code 102  /comment 58   /file "GeoDatumJp.hs"  /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 84   /comment 50   /file "Get.hs"         /dir "rop-cox/Koshucode/Baala/Rop/Cox"
 |-- FILE  /code 4    /comment 6    /file "Message.hs"     /dir "rop-cox/Koshucode/Baala/Rop/Cox"
-|-- FILE  /code 107  /comment 82   /file "Range.hs"       /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 106  /comment 81   /file "Range.hs"       /dir "rop-cox/Koshucode/Baala/Rop/Cox"
+|-- FILE  /code 136  /comment 55   /file "Clock.hs"       /dir "rop-cox/Koshucode/Baala/Rop/Cox/Type"
+|-- FILE  /code 106  /comment 47   /file "Dec.hs"         /dir "rop-cox/Koshucode/Baala/Rop/Cox/Type"
 
-|-- FILE-TOTAL  /code 946  /comment 578
+|-- FILE-TOTAL  /code 962  /comment 583

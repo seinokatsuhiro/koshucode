@@ -438,13 +438,13 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    203 judges
+**    211 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Relmap"
 
@@ -456,11 +456,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.RelTable"      /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.RelTable"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.RelTable"      /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.RelTable"      /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.RelTable"      /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Relkit"
@@ -508,7 +510,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Construct"     /import "Koshucode.Baala.Core.Relkit.Relkit"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Message"       /import "Koshucode.Baala.Base"
@@ -517,12 +519,13 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Relkit"        /import "Koshucode.Baala.Core.Lexmap"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Relkit.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relkit.Run"           /import "Koshucode.Baala.Core.Lexmap.Message"
@@ -535,7 +538,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Core.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Construct"     /import "Koshucode.Baala.Core.Relmap.Relmap"
@@ -546,6 +549,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Data.Version"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Core.Relmap.Option"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Core.Relmap.Rop"
@@ -554,7 +558,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Message"       /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Message"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Message"       /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Message"       /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Message"       /import "Koshucode.Baala.Type"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Option"        /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Option"        /import "Koshucode.Baala.Base"
@@ -567,7 +571,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Relmap"        /import "Koshucode.Baala.Core.Relkit"
 
@@ -576,7 +580,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Result"        /import "Koshucode.Baala.Type"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Rop"           /import "Koshucode.Baala.Syntax"
@@ -586,7 +590,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Specialize"    /import "Koshucode.Baala.Core.Relmap.Relmap"
@@ -605,7 +609,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Syntax.Pattern"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Data.Message"
@@ -613,12 +617,14 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Concrete"    /import "Koshucode.Baala.Core.Resource.Resource"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Relmap"
@@ -648,6 +654,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Assert"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Lexmap"
@@ -658,6 +665,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Assert"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Lexmap"
@@ -719,7 +727,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    140 judges
+**    142 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Data.Church.Build"         /import "Koshucode.Baala.Overture"
@@ -770,7 +778,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Complex"        /import "Koshucode.Baala.Data.Class.Edge"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Complex"        /import "Koshucode.Baala.Data.Class.Simple"
 
+|-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Data.Class.Complex"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Data.Class.Edge"
 |-- IMPORT  /module "Koshucode.Baala.Data.Class.Content"        /import "Koshucode.Baala.Data.Class.Simple"
@@ -974,25 +984,18 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    75 judges
+**    67 judges
 **
-
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Overture"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Accessor"          /import "Koshucode.Baala.Rop.Cox.Get"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Accessor"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Calc"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Empty"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Filter"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Gadget"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Range"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Type.Clock"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Bundle"            /import "Koshucode.Baala.Rop.Cox.Type.Dec"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Overture"
@@ -1002,7 +1005,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Cox.Get"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Cox.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Overture"
@@ -1011,7 +1013,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Cox.Get"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Prelude"
@@ -1019,7 +1020,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Cox.Get"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Cox.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Prelude"
@@ -1029,19 +1029,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.Get"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.GeoDatumJp"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.Message"
 
-
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Data"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Syntax.Pattern"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Get"               /import "Koshucode.Baala.Rop.Cox.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Message"           /import "Koshucode.Baala.Rop.Flat.Message"
 
@@ -1052,15 +1042,27 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.Rop.Cox.Get"
 
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Accessor"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Rop.Base"
+
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Data.Ratio"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.Rop.Base"
+
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Calc"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Empty"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Filter"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Gadget"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Get"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox"                   /import "Koshucode.Baala.Rop.Cox.Range"
 
 ```
@@ -1079,17 +1081,25 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    173 judges
+**    188 judges
 **
+
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Syntax.Pattern"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Rop.Base.Get"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Rop.Base.Rel"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Cox"              /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Define"           /import "Koshucode.Baala.Core"
 
-|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Syntax"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Syntax.Pattern"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Get"              /import "Koshucode.Baala.Rop.Base.Message"
@@ -1097,13 +1107,22 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Message"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Message"          /import "Koshucode.Baala.Core.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Rop.Base.Get"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rel"              /import "Koshucode.Baala.Rop.Base.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rop"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rop"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rop"              /import "Koshucode.Baala.Rop.Base.Define"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base.Rop"              /import "Koshucode.Baala.Rop.Base.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base"                  /import "Koshucode.Baala.Rop.Base.Cox"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base"                  /import "Koshucode.Baala.Rop.Base.Define"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base"                  /import "Koshucode.Baala.Rop.Base.Get"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Base"                  /import "Koshucode.Baala.Rop.Base.Rel"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Base"                  /import "Koshucode.Baala.Rop.Base.Rop"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Flat.Bundle"           /import "Koshucode.Baala.Data"
@@ -1873,13 +1892,14 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    45 judges
+**    48 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Csv"                /import "Koshucode.Baala.Core"
 
@@ -1891,6 +1911,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Text.Blaze.Html.Renderer.String"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Html"               /import "Koshucode.Baala.Core"
@@ -1901,6 +1922,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Data.Text"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Json"               /import "Koshucode.Baala.Core"
 
@@ -1909,14 +1931,14 @@
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.System"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Judge"              /import "Koshucode.Baala.Core"
 
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Data"
+|-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Writer.Koshu"              /import "Koshucode.Baala.Writer.Judge"
@@ -2137,111 +2159,123 @@ Command `./import-rank.k ../base/data/IMPORT.k ../calculator/data/IMPORT.k ../co
 |-- IMPORT-RANK  /rank 46  /module "Koshucode.Baala.Type.Rel.Mono"
 |-- IMPORT-RANK  /rank 47  /module "Koshucode.Baala.Type.Rel"
 |-- IMPORT-RANK  /rank 48  /module "Koshucode.Baala.Type"
+|-- IMPORT-RANK  /rank 49  /module "Koshucode.Baala.Core.Relmap.Message"
+|-- IMPORT-RANK  /rank 49  /module "Koshucode.Baala.Core.Relmap.Result"
+
 |-- IMPORT-RANK  /rank 49  /module "Koshucode.Baala.Data.Church.Message"
 |-- IMPORT-RANK  /rank 49  /module "Koshucode.Baala.Data.Class.Edge"
-
 |-- IMPORT-RANK  /rank 49  /module "Koshucode.Baala.Data.Decode.Type"
 |-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Church.Cox"
 |-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Class.Simple"
-|-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Decode.Numeric"
-|-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Message"
 *** 150
 
+|-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Decode.Numeric"
+|-- IMPORT-RANK  /rank 50  /module "Koshucode.Baala.Data.Message"
 |-- IMPORT-RANK  /rank 51  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"
+|-- IMPORT-RANK  /rank 51  /module "Koshucode.Baala.Core.Message"
 |-- IMPORT-RANK  /rank 51  /module "Koshucode.Baala.Data.Church.Cop"
+
 |-- IMPORT-RANK  /rank 51  /module "Koshucode.Baala.Data.Class.Complex"
 |-- IMPORT-RANK  /rank 52  /module "Koshucode.Baala.Core.Lexmap.Construct"
 |-- IMPORT-RANK  /rank 52  /module "Koshucode.Baala.Data.Class.Content"
-
 |-- IMPORT-RANK  /rank 52  /module "Koshucode.Baala.Data.Class.Map"
+|-- IMPORT-RANK  /rank 52  /module "Koshucode.Baala.Rop.Base.Message"
+
 |-- IMPORT-RANK  /rank 53  /module "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT-RANK  /rank 53  /module "Koshucode.Baala.Data.Class.Encode"
+|-- IMPORT-RANK  /rank 54  /module "Koshucode.Baala.Core.Relkit.Relkit"
+|-- IMPORT-RANK  /rank 54  /module "Koshucode.Baala.Core.Resource.Clause"
 |-- IMPORT-RANK  /rank 54  /module "Koshucode.Baala.Data.Class"
-|-- IMPORT-RANK  /rank 55  /module "Koshucode.Baala.Data.Decode.Content"
 
+|-- IMPORT-RANK  /rank 55  /module "Koshucode.Baala.Core.Relkit.Construct"
+|-- IMPORT-RANK  /rank 55  /module "Koshucode.Baala.Data.Decode.Content"
 |-- IMPORT-RANK  /rank 55  /module "Koshucode.Baala.Type.Type.Genus"
 |-- IMPORT-RANK  /rank 56  /module "Koshucode.Baala.Data.Decode.Dataset"
 |-- IMPORT-RANK  /rank 57  /module "Koshucode.Baala.Data.Decode"
+
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Data.Church.Build"
 |-- IMPORT-RANK  /rank 58  /module "Koshucode.Baala.Data.Content"
-
 |-- IMPORT-RANK  /rank 59  /module "Koshucode.Baala.Data.Church.Run"
 |-- IMPORT-RANK  /rank 60  /module "Koshucode.Baala.Data.Church"
 |-- IMPORT-RANK  /rank 61  /module "Koshucode.Baala.Data"
+*** 175
+
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Cop.Coxhand"
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Assert.RelTable"
-
-|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Relkit.Relkit"
-|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Relmap.Message"
-|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Relmap.Result"
-|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Resource.Clause"
+|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Relkit.Run"
+|-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Core.Relmap.Option"
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.DataPlus"
-*** 175
 
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Toolkit.Library.RDF"
 |-- IMPORT-RANK  /rank 62  /module "Koshucode.Baala.Type.Type.Predefined where"
 |-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Cop.Logic"
-|-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Core.Message"
-|-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Core.Relkit.Construct"
-
-|-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Core.Relkit.Run"
-|-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Core.Relmap.Option"
+|-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Core.Relkit"
 |-- IMPORT-RANK  /rank 63  /module "Koshucode.Baala.Toolkit.Main.KoshuRdf"
-|-- IMPORT-RANK  /rank 64  /module "Koshucode.Baala.Core.Relkit"
-|-- IMPORT-RANK  /rank 64  /module "Koshucode.Baala.Rop.Base.Message"
 
-|-- IMPORT-RANK  /rank 65  /module "Koshucode.Baala.Core.Relmap.Relmap"
-|-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Core.Relmap.Rop"
-|-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Core.Relmap.Specialize"
-|-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Core.Relmap.Construct"
-|-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Core.Relmap.Global"
+|-- IMPORT-RANK  /rank 64  /module "Koshucode.Baala.Core.Relmap.Relmap"
+|-- IMPORT-RANK  /rank 65  /module "Koshucode.Baala.Core.Relmap.Rop"
+|-- IMPORT-RANK  /rank 65  /module "Koshucode.Baala.Core.Relmap.Specialize"
+|-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Core.Relmap.Construct"
+|-- IMPORT-RANK  /rank 66  /module "Koshucode.Baala.Core.Relmap.Global"
 
-|-- IMPORT-RANK  /rank 68  /module "Koshucode.Baala.Core.Relmap"
-|-- IMPORT-RANK  /rank 69  /module "Koshucode.Baala.Core.Assert.Assert"
-|-- IMPORT-RANK  /rank 70  /module "Koshucode.Baala.Core.Assert.Run"
-|-- IMPORT-RANK  /rank 71  /module "Koshucode.Baala.Core.Assert"
-|-- IMPORT-RANK  /rank 72  /module "Koshucode.Baala.Core.Resource.Resource"
+|-- IMPORT-RANK  /rank 67  /module "Koshucode.Baala.Core.Relmap"
+|-- IMPORT-RANK  /rank 68  /module "Koshucode.Baala.Core.Assert.Assert"
+|-- IMPORT-RANK  /rank 69  /module "Koshucode.Baala.Core.Assert.Run"
+|-- IMPORT-RANK  /rank 70  /module "Koshucode.Baala.Core.Assert"
+|-- IMPORT-RANK  /rank 71  /module "Koshucode.Baala.Core.Resource.Resource"
 
-|-- IMPORT-RANK  /rank 73  /module "Koshucode.Baala.Core.Resource.Concrete"
-|-- IMPORT-RANK  /rank 73  /module "Koshucode.Baala.Core.Resource.Include"
-|-- IMPORT-RANK  /rank 73  /module "Koshucode.Baala.Core.Resource.Run"
-|-- IMPORT-RANK  /rank 74  /module "Koshucode.Baala.Core.Resource.Read"
-|-- IMPORT-RANK  /rank 75  /module "Koshucode.Baala.Core.Resource"
+|-- IMPORT-RANK  /rank 72  /module "Koshucode.Baala.Core.Resource.Concrete"
+|-- IMPORT-RANK  /rank 72  /module "Koshucode.Baala.Core.Resource.Include"
+|-- IMPORT-RANK  /rank 72  /module "Koshucode.Baala.Core.Resource.Run"
+|-- IMPORT-RANK  /rank 73  /module "Koshucode.Baala.Core.Resource.Read"
+|-- IMPORT-RANK  /rank 74  /module "Koshucode.Baala.Core.Resource"
 *** 200
 
-|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Core"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Base.Define"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Base.Get"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Flat.Message"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Toolkit.Library.Element"
+|-- IMPORT-RANK  /rank 75  /module "Koshucode.Baala.Core"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Rop.Base.Define"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Rop.Base.Get"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Rop.Flat.Message"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Toolkit.Library.Element"
 
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Toolkit.Library.Input"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Writer.Csv"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Writer.Html"
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Writer.Json"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Toolkit.Library.Input"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Toolkit.Main.KoshuSyntax"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Writer.Csv"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Writer.Html"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Writer.Json"
 
-|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Writer.Judge"
-|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Message"
-|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Rop.Base.Rop"
-|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Rop.Cox.Message"
-|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Rop.Nest.Message"
+|-- IMPORT-RANK  /rank 76  /module "Koshucode.Baala.Writer.Judge"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Cop.Message"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Base.Rel"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Base.Rop"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Cox.Message"
 
-|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Writer.Koshu"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Arith"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.List"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Misc"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Order"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Rop.Nest.Message"
+|-- IMPORT-RANK  /rank 77  /module "Koshucode.Baala.Writer.Koshu"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Arith"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.List"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Misc"
 
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Text"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Time"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Type"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Rop.Base"
-|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Writer"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Order"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Text"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Time"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Cop.Type"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Rop.Base.Cox"
 *** 225
 
-|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Cop.Bundle"
-|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Get"
+|-- IMPORT-RANK  /rank 78  /module "Koshucode.Baala.Writer"
+|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Cop.Bundle"
+|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Rop.Base"
+|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Toolkit.Library.Change"
+|-- IMPORT-RANK  /rank 79  /module "Koshucode.Baala.Toolkit.Library.Run"
+
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Cop"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Calc"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Filter"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Gadget"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Range"
+
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Type.Clock"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Cox.Type.Dec"
 |-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Flat.Elem"
 |-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Flat.Lattice.Tropashko"
 |-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Flat.Meta"
@@ -2253,48 +2287,39 @@ Command `./import-rank.k ../base/data/IMPORT.k ../calculator/data/IMPORT.k ../co
 |-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Flat.Term"
 
 |-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Rop.Nest.Flow"
-|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Toolkit.Library.Change"
-|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Toolkit.Library.Run"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Cop"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Cox.Accessor"
-
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Cox.Calc"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Cox.Filter"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Cox.Gadget"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Cox.Range"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"
+|-- IMPORT-RANK  /rank 80  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"
 |-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Flat.Gadget"
+*** 250
 
 |-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Flat.Lattice.Restrict"
 |-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Flat.Peripheral"
 |-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Rop.Flat.TermGadget"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Toolkit.Main.KoshuChange"
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Toolkit.Main.KoshuFilter"
-*** 250
-
-|-- IMPORT-RANK  /rank 81  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"
 |-- IMPORT-RANK  /rank 82  /module "Koshucode.Baala.Rop.Flat.Lattice.Rop"
 |-- IMPORT-RANK  /rank 83  /module "Koshucode.Baala.Rop.Flat.Lattice"
+
 |-- IMPORT-RANK  /rank 84  /module "Koshucode.Baala.Rop.Flat.Check"
 |-- IMPORT-RANK  /rank 84  /module "Koshucode.Baala.Rop.Flat.Control"
-
 |-- IMPORT-RANK  /rank 85  /module "Koshucode.Baala.Rop.Flat.Bundle"
 |-- IMPORT-RANK  /rank 86  /module "Koshucode.Baala.Rop.Flat"
 |-- IMPORT-RANK  /rank 87  /module "Koshucode.Baala.Rop.Cox.Empty"
+
 |-- IMPORT-RANK  /rank 87  /module "Koshucode.Baala.Rop.Nest.Confl"
 |-- IMPORT-RANK  /rank 88  /module "Koshucode.Baala.Rop.Cox.Bundle"
-
 |-- IMPORT-RANK  /rank 88  /module "Koshucode.Baala.Rop.Nest.Deriv"
 |-- IMPORT-RANK  /rank 89  /module "Koshucode.Baala.Rop.Cox"
 |-- IMPORT-RANK  /rank 89  /module "Koshucode.Baala.Rop.Nest.Rop"
+
 |-- IMPORT-RANK  /rank 90  /module "Koshucode.Baala.Rop.Nest"
 |-- IMPORT-RANK  /rank 91  /module "Koshucode.Baala.Toolkit.Library.Global"
 
-*** 265 judges
+*** 267 judges
 
 **
 **  SUMMARY
-**     265 judges on IMPORT-RANK
-**     265 judges in total
+**     267 judges on IMPORT-RANK
+**     267 judges in total
 **
 ```
 
