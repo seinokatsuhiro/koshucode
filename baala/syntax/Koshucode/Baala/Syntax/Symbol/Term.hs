@@ -11,7 +11,7 @@ module Koshucode.Baala.Syntax.Symbol.Term
     TermName, TermPath,
     ToTermName (..),
     enslash,
-    stringTermName,
+    stringTermName, stringTermNames,
     termNameString, termPathString,
     termNameContent,
     termNameSign, termNameAltSign,
@@ -108,6 +108,14 @@ stringTermName ('/' : n)        = TermName EQ n
 stringTermName ('+' : '/' : n)  = TermName GT n
 stringTermName ('-' : '/' : n)  = TermName LT n
 stringTermName n                = TermName EQ n
+
+-- | Convert string to multiple term names.
+--
+--   >>> stringTermNames "/a /b /c"
+--   [TermName EQ "a", TermName EQ "b", TermName EQ "c"]
+--
+stringTermNames :: String -> [TermName]
+stringTermNames = fmap stringTermName . words
 
 -- | Encode term name into string.
 --

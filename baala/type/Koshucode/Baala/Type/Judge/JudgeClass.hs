@@ -32,6 +32,9 @@ class GetTermNames a where
 instance GetTermNames [S.TermName] where
     getTermNames = id
 
+instance GetTermNames String where
+    getTermNames = S.stringTermNames
+
 -- | Get unique list of term names.
 getTermNamesUnique :: (GetTermNames a) => a -> [S.TermName]
 getTermNamesUnique = B.unique . getTermNames
