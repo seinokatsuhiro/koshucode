@@ -65,7 +65,7 @@ relmapBackward med = C.relmapFlow med . relkitToward K.backwardTerms2
 relkitToward :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (hePick, boPick) ns (Just he1)
-    | K.newTermsExist pk   = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk   = Msg.newTerm pk he1
     | otherwise            = Right kit2
     where
       pk    = K.termPicker ns he1

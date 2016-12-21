@@ -90,7 +90,7 @@ relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 relkitDuplicate :: (Ord c) => [K.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
-    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit2
     where
       pk     = K.termPicker ns he1

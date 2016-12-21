@@ -61,17 +61,17 @@ relmapUp med = C.relmapFlow med . relkitUp
 relkitUp :: (K.CRel c) => K.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
-    | K.pkDisjoint lr    = Msg.unkTerm [n] he1
-    | K.isSingleton t1   = Right kit2
-    | otherwise          = Msg.notNestRel [n] he1
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | K.isSingleton t1    = Right kit2
+    | otherwise           = Msg.notNestRel [n] he1
     where
-      lr     = K.termPicker [n] he1
-      share  = K.pkRShare lr
-      he1'   = K.headMap share he1
+      pk     = K.termPicker [n] he1
+      pick   = K.pickTerms pk
+      he1'   = K.headMap pick he1
       t1     = K.headNested he1'
       he2    = K.headUp he1'
       kit2   = C.relkitJust he2 $ C.RelkitMany True kitf2
-      kitf2  = K.relBody . K.gRel . head . share
+      kitf2  = K.relBody . K.gRel . head . pick
 
 
 -- ----------------------  chunk

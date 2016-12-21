@@ -97,7 +97,7 @@ relkitAlt :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow 
 relkitAlt _ Nothing = Right C.relkitNothing
 relkitAlt (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
-    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit2
     where
       (ns, xs)  = unzip cox               -- names and expressions
@@ -130,7 +130,7 @@ relkitFill :: (K.CContent c) => ([K.TermName], K.CopSet c, K.Cox c) -> C.RelkitF
 relkitFill _ Nothing = Right C.relkitNothing
 relkitFill (ns, cops, coxTo) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
-    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit2
     where
       pk        = K.termPicker ns he1

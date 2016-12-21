@@ -134,7 +134,7 @@ optionToward dir opt2 r1 =
 
 towardRel :: (Ord c) => Bool -> [S.TermName] -> B.AbMap (T.Rel c)
 towardRel dir ns (T.Rel he1 bo1)
-    | T.newTermsExist pk  = Msg.unkTerm (T.newTerms pk) he1
+    | T.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right $ T.Rel he2 bo2
     where
       pk    = T.termPicker ns he1

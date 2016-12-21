@@ -21,7 +21,7 @@ module Koshucode.Baala.Data.Church.Message
     unkGlobalVar,
     unkRefVar,
     unkShow,
-    unkTerm,
+    unkTerm, newTerm,
     unmatchBlank,
 
     -- * Utility
@@ -106,6 +106,10 @@ unkTerm :: (T.GetTermNames t1, T.GetTermNames t2) => t1 -> t2 -> B.Ab a
 unkTerm t1 t2 =
     B.leftLines "Unknown term name"
          $ msgTerms2 "Unknown" t1 "in the terms" t2
+
+-- | Unknown term name
+newTerm :: (T.GetTermNames t2) => T.TermPicker c -> t2 -> B.Ab a
+newTerm pk = unkTerm $ T.newTerms pk
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a

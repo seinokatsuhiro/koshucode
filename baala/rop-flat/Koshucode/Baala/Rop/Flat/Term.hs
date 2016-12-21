@@ -136,7 +136,7 @@ relkitProjTerm _ _ = const $ Right C.relkitNothing
 relkitProj :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitProj _ _ Nothing = Right C.relkitNothing
 relkitProj (hePick, boPick) ns (Just he1)
-    | K.newTermsExist pk  = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit2
     where
       pk    = K.termPicker ns he1
@@ -176,7 +176,7 @@ relkitMove (ps, ns) (Just he1)
     | K.duplicated ps        = Msg.dupTerm ps   -- from terms
     | K.duplicated ns        = Msg.dupTerm ns   -- to terms
     | K.duplicated ns2       = Msg.dupTerm ns2  -- output names
-    | K.newTermsExist pk     = Msg.unkTerm (K.newTerms pk) he1
+    | K.newTermsExist pk     = Msg.newTerm pk he1
     | otherwise              = Right kit2
     where
       pk             = K.termPicker ps he1
