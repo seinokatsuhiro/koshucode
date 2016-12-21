@@ -64,7 +64,7 @@ relkitAdd :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow 
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
-    | K.preTermsExist pk  = Msg.reqNewTerm (K.pkLShareNames pk) he1
+    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
     | otherwise           = Right kit2
     where
       (ns, xs)   = unzip cox       -- names and expressions
@@ -204,7 +204,7 @@ relkitSplit :: forall c. (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
-    | K.preTermsExist pk  = Msg.reqNewTerm (K.pkLShareNames pk) he1
+    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
     | otherwise           = Right kit2
     where
       (ns, xs)   = unzip cox               -- names and expressions

@@ -81,10 +81,10 @@ reqInterp :: K.Ab a
 reqInterp = K.leftBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: (K.GetTermNames t1, K.GetTermNames t2) => t1 -> t2 -> K.Ab a
-reqNewTerm t1 t2 =
+reqNewTerm :: (K.GetTermNames t) => K.TermPicker c -> t -> K.Ab a
+reqNewTerm pk input =
     K.leftLines "Require new term names"
-         $ Msg.msgTerms2 "Present" t1 "in the terms" t2
+         $ Msg.msgTerms2 "Present" (K.preTerms pk) "in the terms" input
 
 -- | Require unary function
 reqUnaryFn :: K.Ab a
