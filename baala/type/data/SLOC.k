@@ -5,12 +5,12 @@ about /package 'type
 |-- DIR  /code 12   /comment 5    /dir "type/Koshucode/Baala"
 |-- DIR  /code 230  /comment 176  /dir "type/Koshucode/Baala/Type"
 |-- DIR  /code 484  /comment 415  /dir "type/Koshucode/Baala/Type/Decimal"
-|-- DIR  /code 203  /comment 149  /dir "type/Koshucode/Baala/Type/Judge"
-|-- DIR  /code 285  /comment 382  /dir "type/Koshucode/Baala/Type/Rel"
+|-- DIR  /code 205  /comment 150  /dir "type/Koshucode/Baala/Type/Judge"
+|-- DIR  /code 241  /comment 332  /dir "type/Koshucode/Baala/Type/Rel"
 |-- DIR  /code 713  /comment 610  /dir "type/Koshucode/Baala/Type/Time"
 |-- DIR  /code 102  /comment 156  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- DIR-TOTAL  /code 2029  /comment 1893
+|-- DIR-TOTAL  /code 1987  /comment 1844
 
 |-- FILE  /code 12   /comment 5    /file "Type.hs"        /dir "type/Koshucode/Baala"
 |-- FILE  /code 12   /comment 6    /file "Decimal.hs"     /dir "type/Koshucode/Baala/Type"
@@ -22,13 +22,13 @@ about /package 'type
 |-- FILE  /code 8    /comment 6    /file "Judge.hs"       /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 34   /comment 16   /file "Interp.hs"      /dir "type/Koshucode/Baala/Type/Judge"
 |-- FILE  /code 149  /comment 116  /file "Judge.hs"       /dir "type/Koshucode/Baala/Type/Judge"
-|-- FILE  /code 20   /comment 17   /file "JudgeClass.hs"  /dir "type/Koshucode/Baala/Type/Judge"
+|-- FILE  /code 22   /comment 18   /file "JudgeClass.hs"  /dir "type/Koshucode/Baala/Type/Judge"
 |-- FILE  /code 44   /comment 26   /file "Message.hs"     /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 10   /comment 6    /file "Rel.hs"         /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 90   /comment 132  /file "Head.hs"        /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 30   /comment 24   /file "Mono.hs"        /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 72   /comment 76   /file "Rel.hs"         /dir "type/Koshucode/Baala/Type/Rel"
-|-- FILE  /code 93   /comment 150  /file "TermPicker.hs"  /dir "type/Koshucode/Baala/Type/Rel"
+|-- FILE  /code 49   /comment 100  /file "TermPicker.hs"  /dir "type/Koshucode/Baala/Type/Rel"
 |-- FILE  /code 14   /comment 5    /file "Time.hs"        /dir "type/Koshucode/Baala/Type"
 |-- FILE  /code 169  /comment 133  /file "Clock.hs"       /dir "type/Koshucode/Baala/Type/Time"
 |-- FILE  /code 44   /comment 38   /file "ClockCalc.hs"   /dir "type/Koshucode/Baala/Type/Time"
@@ -40,4 +40,4 @@ about /package 'type
 |-- FILE  /code 69   /comment 135  /file "Genus.hs"       /dir "type/Koshucode/Baala/Type/Type"
 |-- FILE  /code 33   /comment 21   /file "Predefined.hs"  /dir "type/Koshucode/Baala/Type/Type"
 
-|-- FILE-TOTAL  /code 2029  /comment 1893
+|-- FILE-TOTAL  /code 1987  /comment 1844

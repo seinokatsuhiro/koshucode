@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    168 judges
+**    171 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -107,6 +107,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.List.Select"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Picker"          /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Picker"          /import "Koshucode.Baala.Base.List.Select"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.Set"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Koshucode.Baala.Overture"
@@ -119,6 +122,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Assoc"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Order"
+|-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Picker"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Select"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Set"
 |-- IMPORT  /module "Koshucode.Baala.Base.List"                 /import "Koshucode.Baala.Base.List.Split"
