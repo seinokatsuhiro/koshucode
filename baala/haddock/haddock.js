@@ -8,7 +8,7 @@ var Haddock = (function ($) {
     // Package list.
     var packages =
         [ 'overture', 'subtext', 'base', 'syntax', 'type', 'data', 'data-plus',
-          'core', 'writer', 'rop-flat', 'rop-nested', 'rop-cox', 'cop',
+          'core', 'writer', 'rop', 'rop-flat', 'rop-nested', 'rop-cox', 'cop',
           'calculator', 'toolkit' ];
 
     function init (p) {

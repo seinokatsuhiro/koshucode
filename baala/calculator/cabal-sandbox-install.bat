@@ -33,6 +33,7 @@ goto :EOF
         cabal sandbox add-source ..\data-plus
         cabal sandbox add-source ..\core
         cabal sandbox add-source ..\writer
+        cabal sandbox add-source ..\rop
         cabal sandbox add-source ..\rop-flat
         cabal sandbox add-source ..\rop-nested
         cabal sandbox add-source ..\rop-cox

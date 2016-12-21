@@ -52,11 +52,11 @@ pkg_section () {
 
 pkg_dirs () {
     echo overture subtext base syntax type data data-plus core writer \
-        rop-flat rop-nested rop-cox cop calculator toolkit
+        rop rop-flat rop-nested rop-cox cop calculator toolkit
 }
 
 pkg_dirs_rev () {
-    echo toolkit calculator cop rop-cox rop-nested rop-flat \
+    echo toolkit calculator cop rop-cox rop-nested rop-flat rop \
         writer core data-plus data type syntax base subtext overture
 }
 
