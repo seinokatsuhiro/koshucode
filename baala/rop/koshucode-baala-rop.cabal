@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-rop-nested
+name:                koshucode-baala-rop
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,13 +10,10 @@ name:                koshucode-baala-rop-nested
 version:             0.188.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            Relation-mapping operators for nested relations
+synopsis:            Facility for implementing relation-mapping operators
 
 -- A longer description of the package.
-description:         An impelemntation of relation-mapping operators.
-                     Operators are used in the @koshu@ calculator
-                     that is contained in the
-                     @koshucode-baala-calculator@ package.
+description:         
 
 -- The license under which the package is released.
 license:             BSD3
@@ -32,7 +29,7 @@ author:              SEINO Katsuhiro
 maintainer:
 
 -- A copyright notice.
-copyright:           2013, 2015, SEINO Katsuhiro
+copyright:           2013, 2016, SEINO Katsuhiro
 
 category:            Data, Database, Language, Text
 
@@ -46,24 +43,23 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Rop.Nest
-        Koshucode.Baala.Rop.Nest.Confl
-        Koshucode.Baala.Rop.Nest.Deriv
-        Koshucode.Baala.Rop.Nest.Flow
-        Koshucode.Baala.Rop.Nest.Rop
-        Koshucode.Baala.Rop.Nest.Message
+        Koshucode.Baala.Rop.Base
+        Koshucode.Baala.Rop.Base.Cox
+        Koshucode.Baala.Rop.Base.Define
+        Koshucode.Baala.Rop.Base.Get
+        Koshucode.Baala.Rop.Base.Message
+        Koshucode.Baala.Rop.Base.Rel
+        Koshucode.Baala.Rop.Base.Rop
 
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                      == 4.*
-       , koshucode-baala-overture  == 0.188.0.0
-       , koshucode-baala-base      == 0.188.0.0
-       , koshucode-baala-syntax    == 0.188.0.0
-       , koshucode-baala-data      == 0.188.0.0
-       , koshucode-baala-core      == 0.188.0.0
-       , koshucode-baala-rop       == 0.188.0.0
-       , koshucode-baala-rop-flat  == 0.188.0.0
-
+         base                     == 4.*
+       , containers               == 0.5.*
+       , koshucode-baala-overture == 0.188.0.0
+       , koshucode-baala-base     == 0.188.0.0
+       , koshucode-baala-syntax   == 0.188.0.0
+       , koshucode-baala-data     == 0.188.0.0
+       , koshucode-baala-core     == 0.188.0.0

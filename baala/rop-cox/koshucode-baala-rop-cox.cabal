@@ -71,5 +71,6 @@ library
        , koshucode-baala-syntax      == 0.188.0.0
        , koshucode-baala-data        == 0.188.0.0
        , koshucode-baala-core        == 0.188.0.0
+       , koshucode-baala-rop         == 0.188.0.0
        , koshucode-baala-rop-flat    == 0.188.0.0
 

@@ -46,14 +46,6 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Rop.Base
-        Koshucode.Baala.Rop.Base.Cox
-        Koshucode.Baala.Rop.Base.Define
-        Koshucode.Baala.Rop.Base.Get
-        Koshucode.Baala.Rop.Base.Message
-        Koshucode.Baala.Rop.Base.Rel
-        Koshucode.Baala.Rop.Base.Rop
-
         Koshucode.Baala.Rop.Flat
         Koshucode.Baala.Rop.Flat.Bundle
         Koshucode.Baala.Rop.Flat.Check
@@ -85,9 +77,10 @@ library
          base                     == 4.*
        , containers               == 0.5.*
        , koshucode-baala-overture == 0.188.0.0
+       , koshucode-baala-subtext  == 0.188.0.0
        , koshucode-baala-base     == 0.188.0.0
        , koshucode-baala-syntax   == 0.188.0.0
        , koshucode-baala-data     == 0.188.0.0
        , koshucode-baala-core     == 0.188.0.0
-       , koshucode-baala-subtext  == 0.188.0.0
+       , koshucode-baala-rop      == 0.188.0.0
 
