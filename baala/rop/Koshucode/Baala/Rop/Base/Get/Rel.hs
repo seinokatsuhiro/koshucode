@@ -2,7 +2,7 @@
 
 -- | Attribute getters: Extract attribute from use of relmap.
 
-module Koshucode.Baala.Rop.Base.Rel
+module Koshucode.Baala.Rop.Base.Get.Rel
   ( -- * Relmap
     getRelmap, getOptRelmap,
 
@@ -15,7 +15,7 @@ module Koshucode.Baala.Rop.Base.Rel
 
 import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base.Get      as Rop
+import qualified Koshucode.Baala.Rop.Base.Get.Get  as Rop
 import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 

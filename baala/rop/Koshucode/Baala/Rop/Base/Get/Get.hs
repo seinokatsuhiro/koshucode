@@ -2,7 +2,7 @@
 
 -- | Attribute getters: Extract attribute from use of relmap.
 
-module Koshucode.Baala.Rop.Base.Get
+module Koshucode.Baala.Rop.Base.Get.Get
   ( -- * Datatype
     RopGet,
     getFromTree,
