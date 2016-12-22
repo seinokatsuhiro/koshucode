@@ -79,11 +79,11 @@ relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
 
     he3  = he2 K.++ he1
     kit3 = case Rop.unmatchShare sh pk of
-             Nothing     -> Right $ C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+             Nothing     -> Right $ C.relkitConfl he3 False f [kitb2]
              Just (e, a) -> Msg.unmatchShare e a
 
-    kitf3 :: [C.BodyMap c] -> C.BodyMap c
-    kitf3 bmaps bo1 =
+    f :: [C.BodyMap c] -> C.BodyMap c
+    f bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
            let b2map = K.gatherToMap (split2 <$> bo2)

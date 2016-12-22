@@ -7,6 +7,8 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkit, relkitId,
     relkitJust, relkitNothing,
     relkitSetSource,
+    relkitAbLinear,
+    relkitConfl,
 
     -- * Source of relation
     relkitConst, relkitConstEmpty,
@@ -23,6 +25,11 @@ import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
+
+instance Monoid (C.Relkit c) where
+    mempty = relkitConst T.reldee
+    mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
+        relkit ho2 $ C.RelkitAppend bo1 bo2
 
 -- ----------------------  General constructor
 
@@ -48,10 +55,13 @@ relkitSetSource :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)
 relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
     C.Relkit hi ho $ B.codic cp core
 
-instance Monoid (C.Relkit c) where
-    mempty = relkitConst T.reldee
-    mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
-        relkit ho2 $ C.RelkitAppend bo1 bo2
+-- | Create abortable linear relkit.
+relkitAbLinear :: T.Head -> Bool -> B.AbMap [c] -> C.Relkit c
+relkitAbLinear ho uniq f = relkitJust ho $ C.RelkitAbLinear uniq (const f) []
+
+-- | Create (abortable) confluent relkit.
+relkitConfl :: T.Head -> Bool -> ([C.BodyMap c] -> B.AbMap [[c]]) -> [C.RelkitBody c] -> C.Relkit c
+relkitConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbFull uniq f bodies
 
 
 -- ----------------------  Source of relation
