@@ -27,7 +27,6 @@ import qualified Koshucode.Baala.Syntax                  as S
 import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data.Class              as D
 import qualified Koshucode.Baala.Data.Decode             as D
-import qualified Koshucode.Baala.Data.Class.Message      as Msg
 
 
 -- ----------------------  Content type
@@ -123,10 +122,6 @@ typeSum cs = case B.unique $ map D.typeOf cs of
                ts  -> T.TypeSum ts
 
 instance D.CContent Content where
-    appendContent (ContentEmpty) x     = Right x
-    appendContent x (ContentEmpty)     = Right x
-    appendContent (ContentText x) (ContentText y) = Right . ContentText $ x ++ y
-    appendContent x y                  = Msg.unmatchType (show (x, y))
 
 instance B.MixEncode Content where
     mixTransEncode sh c =

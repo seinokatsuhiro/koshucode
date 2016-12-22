@@ -15,9 +15,6 @@ import qualified Koshucode.Baala.Data.Class.Complex       as D
 import qualified Koshucode.Baala.Data.Class.Edge          as D
 import qualified Koshucode.Baala.Data.Class.Simple        as D
 
-{-# DEPRECATED appendContent "Do not use it." #-}
-{-# DEPRECATED joinContent "Do not use it." #-}
-
 -- | Generic content class.
 class (Ord c, Show c, B.Default c, B.MixEncode c,
        D.CTypeOf c, D.CEmpty c, D.CEnd c,
@@ -25,11 +22,6 @@ class (Ord c, Show c, B.Default c, B.MixEncode c,
        D.CTerm c, D.CDec c, D.CType c, D.CInterp c,
        D.CList c, D.CSet c, D.CTie c, D.CRel c) =>
     CContent c where
-
-    appendContent :: c -> c -> B.Ab c
-
-    joinContent :: [c] -> B.Ab c
-    joinContent = B.foldM appendContent D.empty
 
     -- | Order of content type.
     typeOrder :: c -> Int

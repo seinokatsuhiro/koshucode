@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Data.Class.Message
   ( -- * Message
-    unmatchType,
     typeUnmatched,
     badArg,
     unexpArg,
@@ -13,10 +12,6 @@ module Koshucode.Baala.Data.Class.Message
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Type.Message        as Msg
-
--- | [Type unmatch]
-unmatchType :: String -> B.Ab a
-unmatchType = B.leftLine "Type unmatch"
 
 -- | [Type unmatch] Content = /C/
 typeUnmatched :: (B.MixEncode c) => c -> B.Ab a
