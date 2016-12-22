@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Edge content type.
+-- | Edge content types.
 
 module Koshucode.Baala.Data.Class.Edge
-  ( -- * Type
-    CTypeOf (..),
+  ( -- * Basis
+    Basis (..),
     GetContent,
     getContent,
   
@@ -21,10 +21,10 @@ import qualified Koshucode.Baala.Type                 as T
 import qualified Koshucode.Baala.Data.Class.Message   as Msg
 
 
--- --------------------------------------------  Type
+-- --------------------------------------------  Basis
 
--- | Classifiable into 'D.Type'.
-class (B.MixEncode c) => CTypeOf c where
+-- | Basis of contents.
+class (Eq c, Ord c, B.MixEncode c) => Basis c where
     -- | Get type of content.
     typeOf :: c -> T.Type
 
@@ -40,7 +40,7 @@ class (B.MixEncode c) => CTypeOf c where
 type GetContent b c = B.Ab c -> B.Ab b
 
 -- | Get content which may be aborted.
-getContent :: (CTypeOf c) => O.Test c -> (c -> b) -> GetContent b c
+getContent :: (Basis c) => O.Test c -> (c -> b) -> GetContent b c
 getContent test get (Right c) | test c     = Right $ get c
                               | otherwise  = Msg.typeUnmatched c
 getContent _ _ (Left a)                    = Left a
@@ -49,7 +49,7 @@ getContent _ _ (Left a)                    = Left a
 -- --------------------------------------------  Empty and End
 
 -- | Empty: the minimum content.
-class (CTypeOf c) => CEmpty c where
+class (Basis c) => CEmpty c where
     isEmpty     :: c -> Bool
     empty       :: c
 
@@ -63,15 +63,15 @@ omitEmpty :: (CEmpty c) => O.Map [S.Term c]
 omitEmpty = B.omit (isEmpty . snd)
 
 -- | Maximum content of contents list.
-contMaximum :: (Ord c, CEmpty c) => [c] -> c
+contMaximum :: (CEmpty c) => [c] -> c
 contMaximum = B.maximumNull empty
 
 -- | End of everything: the maximum content.
-class (CTypeOf c) => CEnd c where
+class (Basis c) => CEnd c where
     isEnd       :: c -> Bool
     end         :: c
 
 -- | Minimum content of contents list.
-contMinimum :: (Ord c, CEnd c) => [c] -> c
+contMinimum :: (CEnd c) => [c] -> c
 contMinimum = B.minimumNull end
 

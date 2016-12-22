@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Data.Class.Simple       as D
 -- ---------------------------------  List
 
 -- | List of contents.
-class (D.CTypeOf c) => CList c where
+class (D.Basis c) => CList c where
     isList      ::       c -> Bool
     gList       ::       c -> [c]
     pList       ::     [c] -> c
@@ -53,7 +53,7 @@ pTextList = pList . map D.pText
 -- ---------------------------------  Set
 
 -- | Set of contents.
-class (D.CTypeOf c) => CSet c where
+class (D.Basis c) => CSet c where
     isSet       ::          c -> Bool
     gSet        ::          c -> [c]
     pSet        ::        [c] -> c
@@ -73,11 +73,11 @@ pTextSet :: (D.CText c, CSet c) => [String] -> c
 pTextSet = pSet . map D.pText
 
 -- | Sorted version of 'gSet'.
-gSetSort :: (Ord c, CSet c) => c -> [c]
+gSetSort :: (CSet c) => c -> [c]
 gSetSort = B.sort . gSet
 
 -- | Test membership between element and collection contents.
-isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
+isMember :: (CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
 isMember x xs | isList xs = x `elem` gList xs
 isMember _ _ = False
@@ -85,7 +85,7 @@ isMember _ _ = False
 -- ---------------------------------  Tie
 
 -- | Tie of terms.
-class (D.CTypeOf c) => CTie c where
+class (D.Basis c) => CTie c where
     isTie       ::           c -> Bool
     gTie        ::           c -> [S.Term c]
     pTie        ::  [S.Term c] -> c
@@ -99,7 +99,7 @@ class (D.CTypeOf c) => CTie c where
 -- ---------------------------------  Rel
 
 -- | Relation of terms.
-class (D.CTypeOf c) => CRel c where
+class (D.Basis c) => CRel c where
     isRel       ::           c -> Bool
     gRel        ::           c -> T.Rel c
     pRel        ::     T.Rel c -> c
@@ -121,7 +121,7 @@ dum = pRel T.reldum
 -- ---------------------------------  Interp
 
 -- | Data intepretation.
-class (D.CTypeOf c) => CInterp c where
+class (D.Basis c) => CInterp c where
     isInterp    ::           c -> Bool
     gInterp     ::           c -> T.Interp
     pInterp     ::    T.Interp -> c
@@ -135,7 +135,7 @@ class (D.CTypeOf c) => CInterp c where
 -- ---------------------------------  Type
 
 -- | Type of content.
-class (D.CTypeOf c) => CType c where
+class (D.Basis c) => CType c where
     isType      ::           c -> Bool
     gType       ::           c -> T.Type
     pType       ::      T.Type -> c

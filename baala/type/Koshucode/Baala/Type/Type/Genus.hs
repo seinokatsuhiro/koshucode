@@ -53,24 +53,24 @@ instance (Show c) => Show (Genus c) where
                          | otherwise   = sign ++ s zs
 
 -- | Create genus with trimming unnecessary contents.
-genusFrom :: (D.CTypeOf c) => Set.Set c -> Set.Set c -> Set.Set c -> Genus c
+genusFrom :: (D.Basis c) => Set.Set c -> Set.Set c -> Set.Set c -> Genus c
 genusFrom cs xs ys = Genus cs xs' ys' where
     xs' = keepType cs xs  -- Keep related exclusives
     ys' = omitType cs ys  -- Omit absorbed inclusives
 
 -- | Create genus of single type.
-genusType :: (Ord c, D.CTypeOf c) => c -> Genus c
+genusType :: (Ord c, D.Basis c) => c -> Genus c
 genusType c = genusFrom (Set.singleton c) Set.empty Set.empty
 
 -- | Create genus of single inclusives content.
-genusOf :: (Ord c, D.CTypeOf c) => c -> Genus c
+genusOf :: (Ord c, D.Basis c) => c -> Genus c
 genusOf c = genusFrom Set.empty Set.empty (Set.singleton c)
 
-keepType :: (D.CTypeOf c) => O.Bin (Set.Set c)
+keepType :: (D.Basis c) => O.Bin (Set.Set c)
 keepType ts = Set.filter p where
     p c = D.typeOf c `Set.member` Set.map D.typeOf ts
 
-omitType :: (D.CTypeOf c) => O.Bin (Set.Set c)
+omitType :: (D.Basis c) => O.Bin (Set.Set c)
 omitType ts = Set.filter p where
     p c = D.typeOf c `Set.notMember` Set.map D.typeOf ts
 
@@ -79,13 +79,13 @@ genusVoid :: Genus c
 genusVoid = Genus Set.empty Set.empty Set.empty
 
 -- | Test membership of content to genus.
-genusMember :: (Ord c, D.CTypeOf c) => c -> Genus c -> Bool
+genusMember :: (Ord c, D.Basis c) => c -> Genus c -> Bool
 genusMember c (Genus ts xs ys)
     | c `Set.member` xs  = False
     | c `Set.member` ys  = True
     | otherwise          = isAnyType c ts
 
-isAnyType :: (D.CTypeOf c) => c -> Set.Set c -> Bool
+isAnyType :: (D.Basis c) => c -> Set.Set c -> Bool
 isAnyType c ts = any (c `D.sameType`) ts
 
 
@@ -118,7 +118,7 @@ isAnyType c ts = any (c `D.sameType`) ts
 --   > Y3           y2                              y1
 --   >         <A * Y2 - X1>                   <B * Y1 - X2>
 --
-genusMeet :: (Ord c, D.CTypeOf c) => O.Bin (Genus c)
+genusMeet :: (Ord c, D.Basis c) => O.Bin (Genus c)
 genusMeet (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
     c  = Set.intersection a b
     x3 = Set.union x1 x2
@@ -150,7 +150,7 @@ genusMeet (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
 --   > X3        x1 y2       (x1) : (x1)        :         (y2) :
 --   > Y3                         x2            y1             y1
 --
-genusDiff :: (Ord c, D.CTypeOf c) => O.Bin (Genus c)
+genusDiff :: (Ord c, D.Basis c) => O.Bin (Genus c)
 genusDiff (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
     c  = Set.difference a b
     x3 = Set.union x1 y2
@@ -183,7 +183,7 @@ genusDiff (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
 --   >       <X1 - B - Y2>    <X1 * X2>      <X2 - A - Y1> :
 --   > Y3          (y2)                                    y2
 --
-genusJoin :: (Ord c, D.CTypeOf c) => O.Bin (Genus c)
+genusJoin :: (Ord c, D.Basis c) => O.Bin (Genus c)
 genusJoin (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
     c       = Set.union a b
     x3      = Set.unions [omitType b x1, Set.intersection x1 x2, omitType a x2]
@@ -191,14 +191,14 @@ genusJoin (Genus a x1 y1) (Genus b x2 y2) = genusFrom c x3 y3 where
     y3      = Set.union y1 y2
 
 -- | Split acceptable genus by actual genus.
-genusSplit :: (Ord c, D.CTypeOf c) => Genus c -> Genus c -> (Genus c, Genus c)
+genusSplit :: (Ord c, D.Basis c) => Genus c -> Genus c -> (Genus c, Genus c)
 genusSplit p a = (genusMeet a p, genusDiff a p)
 
 -- | Include specific contents.
-genusInclude :: (Ord c, D.CTypeOf c) => Genus c -> [c] -> Genus c
+genusInclude :: (Ord c, D.Basis c) => Genus c -> [c] -> Genus c
 genusInclude g ys = g `genusJoin` Genus Set.empty Set.empty (Set.fromList ys)
 
 -- | Exclude specific contents.
-genusExclude :: (Ord c, D.CTypeOf c) => Genus c -> [c] -> Genus c
+genusExclude :: (Ord c, D.Basis c) => Genus c -> [c] -> Genus c
 genusExclude g xs = g `genusJoin` Genus Set.empty (Set.fromList xs) Set.empty
 

@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Data.Class.Message      as Msg
 -- ---------------------------------  Bool
 
 -- | True or false, affirmed or denied.
-class (D.CTypeOf c) => CBool c where
+class (D.Basis c) => CBool c where
     isBool      ::       c -> Bool
     pBool       ::    Bool -> c
     gBool       ::       c -> Bool
@@ -63,7 +63,7 @@ putFalse = putBool False
 -- ---------------------------------  Dec
 
 -- | Decimal number.
-class (D.CTypeOf c) => CDec c where
+class (D.Basis c) => CDec c where
     isDec       ::           c -> Bool
     gDec        ::           c -> T.Decimal
     pDec        ::   T.Decimal -> c
@@ -95,7 +95,7 @@ gRational :: (CDec c) => c -> Rational
 gRational = toRational . gDec
 
 -- | Get rational number from decimal content.
-getRational :: (B.MixEncode c, CDec c) => D.GetContent Rational c
+getRational :: (CDec c) => D.GetContent Rational c
 getRational (Right c) | isDec c  = Right $ gRational c
 getRational (Right c)            = Msg.notDec c
 getRational (Left a)             = Left a
@@ -105,7 +105,7 @@ gIntegral :: (CDec c, Integral n) => c -> n
 gIntegral = truncate . gRational
 
 -- | Get truncated integer from decimal content.
-getIntegral :: (B.MixEncode c, CDec c, Integral n) => D.GetContent n c
+getIntegral :: (CDec c, Integral n) => D.GetContent n c
 getIntegral (Right c) | isDec c  = Right $ gIntegral c
 getIntegral (Right c)            = Msg.notDec c
 getIntegral (Left a)             = Left a
@@ -113,7 +113,7 @@ getIntegral (Left a)             = Left a
 -- ---------------------------------  Clock
 
 -- | Distance between two points in timeline.
-class (D.CTypeOf c) => CClock c where
+class (D.Basis c) => CClock c where
     isClock      ::           c -> Bool
     gClock       ::           c -> T.Clock
     pClock       ::     T.Clock -> c
@@ -127,7 +127,7 @@ class (D.CTypeOf c) => CClock c where
 -- ---------------------------------  Time
 
 -- | Point in timeline.
-class (D.CTypeOf c) => CTime c where
+class (D.Basis c) => CTime c where
     isTime       ::           c -> Bool
     gTime        ::           c -> T.Time
     pTime        ::      T.Time -> c
@@ -141,7 +141,7 @@ class (D.CTypeOf c) => CTime c where
 -- ---------------------------------  Code
 
 -- | Code.
-class (D.CTypeOf c) => CCode c where
+class (D.Basis c) => CCode c where
     isCode       ::           c -> Bool
     gCode        ::           c -> String
     pCode        ::      String -> c
@@ -155,7 +155,7 @@ class (D.CTypeOf c) => CCode c where
 -- ---------------------------------  Term
 
 -- | Term name.
-class (D.CTypeOf c) => CTerm c where
+class (D.Basis c) => CTerm c where
     isTerm       ::           c -> Bool
     gTerm        ::           c -> S.TermName
     pTerm        ::  S.TermName -> c
@@ -170,7 +170,7 @@ class (D.CTypeOf c) => CTerm c where
 -- ---------------------------------  Text
 
 -- | Double-quoted text content.
-class (D.CTypeOf c) => CText c where
+class (D.Basis c) => CText c where
     isText      :: c -> Bool
     gText       :: c -> String
     pText       :: String -> c

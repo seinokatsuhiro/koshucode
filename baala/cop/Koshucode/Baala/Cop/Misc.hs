@@ -46,7 +46,7 @@ copsMisc =
 -- ----------------------  type
 
 -- /input [- X -]  /output [- type -]
-copType :: (D.CType c, D.CTypeOf c) => D.CopCalc c
+copType :: (D.CType c, D.Basis c) => D.CopCalc c
 copType arg =
     do x <- D.getRightArg1 arg
        D.putType $ D.typeOf x

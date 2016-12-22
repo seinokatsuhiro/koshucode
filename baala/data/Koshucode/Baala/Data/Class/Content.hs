@@ -16,8 +16,8 @@ import qualified Koshucode.Baala.Data.Class.Edge          as D
 import qualified Koshucode.Baala.Data.Class.Simple        as D
 
 -- | Generic content class.
-class (Ord c, Show c, B.Default c, B.MixEncode c,
-       D.CTypeOf c, D.CEmpty c, D.CEnd c,
+class (Show c, B.Default c,
+       D.CEmpty c, D.CEnd c,
        D.CBool c, D.CCode c, D.CText c, D.CClock c, D.CTime c,
        D.CTerm c, D.CDec c, D.CType c, D.CInterp c,
        D.CList c, D.CSet c, D.CTie c, D.CRel c) =>

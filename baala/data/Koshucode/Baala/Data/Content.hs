@@ -99,7 +99,7 @@ compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 instance B.Default Content where
     def = D.empty
 
-instance D.CTypeOf Content where
+instance D.Basis Content where
     typeOf (ContentEmpty    )  = T.TypeEmpty
     typeOf (ContentBool    _)  = T.TypeBool
     typeOf (ContentDec     _)  = T.TypeDec
@@ -116,7 +116,7 @@ instance D.CTypeOf Content where
     typeOf (ContentType    _)  = T.TypeType
     typeOf (ContentEnd      )  = T.TypeEnd
 
-typeSum :: D.CTypeOf c => [c] -> T.Type
+typeSum :: D.Basis c => [c] -> T.Type
 typeSum cs = case B.unique $ map D.typeOf cs of
                [t] -> t
                ts  -> T.TypeSum ts
