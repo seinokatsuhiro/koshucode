@@ -110,6 +110,6 @@ relmapOrder med = C.relmapFlow med . relkitOrder
 relkitOrder :: (Ord c) => [K.TermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
 relkitOrder ns (Just he1) = Right kit2 where
-    kit2  = C.relkitJust he1 $ C.RelkitFull False kitf2
-    kitf2 = K.relBodyOrder ns he1
+    kit2  = C.relkitFull he1 False flow
+    flow  = K.relBodyOrder ns he1
 

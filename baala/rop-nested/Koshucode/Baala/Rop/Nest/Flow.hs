@@ -38,8 +38,8 @@ relkitDown :: (K.CRel c) => K.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
     he2       = K.headConsNest n he1 mempty
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ K.pRel $ K.Rel he1 bo1 ]]
+    kit2      = C.relkitFull he2 False flow
+    flow bo1  = [[ K.pRel $ K.Rel he1 bo1 ]]
 
 
 -- ----------------------  up
@@ -95,13 +95,13 @@ relmapChunk med ns ord = C.relmapFlow med $ relkitChunk ns ord
 relkitChunk :: (Ord c, K.CRel c) => [K.TermName] -> [K.TermName] -> C.RelkitFlow c
 relkitChunk _ _ Nothing = Right C.relkitNothing
 relkitChunk ns ord (Just he1) = Right kit2 where
-    he2     = K.headNests ns he1
-    kit2    = C.relkitJust he2 $ C.RelkitFull False f2
-    f2 bo1  = let deg    = length bo1 `ceilingRem` length ns
-                  bo1'   = K.sortByName (map K.Asc ord) ns bo1
-                  ch     = K.chunks deg bo1'
-                  rels   = (K.pRel . K.Rel he1) `map` ch
-              in [rels]
+    he2       = K.headNests ns he1
+    kit2      = C.relkitFull he2 False flow
+    flow bo1  = let deg    = length bo1 `ceilingRem` length ns
+                    bo1'   = K.sortByName (map K.Asc ord) ns bo1
+                    ch     = K.chunks deg bo1'
+                    rels   = (K.pRel . K.Rel he1) `map` ch
+                in [rels]
 
 ceilingRem :: (Integral a) => a -> a -> a
 ceilingRem a b =

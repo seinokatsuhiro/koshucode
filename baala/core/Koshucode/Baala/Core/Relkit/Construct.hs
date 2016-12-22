@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     -- * Flow and confluent
     relkitLinear,
     relkitMany,
+    relkitFull,
     relkitAbLinear,
     relkitConfl,
 
@@ -69,6 +70,10 @@ relkitLinear ho uniq f = relkitJust ho $ C.RelkitLinear uniq f
 -- | Create non-abortble one-to-many relkit.
 relkitMany :: T.Head -> Bool -> (C.Flow [c] [[c]]) -> C.Relkit c
 relkitMany ho uniq f = relkitJust ho $ C.RelkitMany uniq f
+
+-- | Create non-abortble full-mapping relkit.
+relkitFull :: T.Head -> Bool -> (C.Flow [[c]] [[c]]) -> C.Relkit c
+relkitFull ho uniq f = relkitJust ho $ C.RelkitFull uniq f
 
 -- | Create abortable one-to-one relkit.
 relkitAbLinear :: T.Head -> Bool -> (C.FlowAb [c] [c]) -> C.Relkit c

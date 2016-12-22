@@ -68,9 +68,9 @@ relmapContents med = C.relmapFlow med . relkitContents
 
 -- | Create @contents@ relkit.
 relkitContents :: (Ord c) => K.TermName -> C.RelkitFlow c
-relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
+relkitContents n _ = Right $ C.relkitFull he2 False flow where
     he2  = K.headFrom [n]
-    kitf = map K.list1 . K.unique . concat
+    flow = map K.list1 . K.unique . concat
 
 
 -- ----------------------  partial-order
@@ -102,9 +102,9 @@ relkitPoScale :: (Ord c, K.CDec c) => Rop.PoScaleCalc c -> K.TermName4 -> C.Relk
 relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = K.headFrom [z,r]
-    kit2        = C.relkitJust he2 $ C.RelkitFull False f2
+    kit2        = C.relkitFull he2 False flow
     xyPick      = K.pickDirect [x,y] he1
-    f2 bo1      = map put $ scale $ map get bo1
+    flow bo1    = map put $ scale $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  = [cx, K.pInt i]
 
@@ -237,8 +237,8 @@ relmapSize med n = C.relmapFlow med $ relkitSize n
 relkitSize :: (K.CDec c) => K.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = K.headFrom [n]
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ K.pInt $ length bo1 ]]
+    kit2      = C.relkitFull he2 False flow
+    flow bo1  = [[ K.pInt $ length bo1 ]]
 
 
 -- ----------------------  eqlize
@@ -255,9 +255,9 @@ relmapEqlize med = C.relmapFlow med relkitEqlize
 relkitEqlize :: (Ord c) => C.RelkitFlow c
 relkitEqlize Nothing = Right C.relkitNothing
 relkitEqlize (Just he1) = Right kit2 where
-    kit2       = C.relkitJust he1 $ C.RelkitFull False kitf2
-    kitf2 bo1  = case eqlizeBody Ms.empty bo1 of
-                   (_, bo2) -> bo2
+    kit2      = C.relkitFull he1 False flow
+    flow bo1  = case eqlizeBody Ms.empty bo1 of
+                  (_, bo2) -> bo2
 
 eqlize :: (Ord c) => Ms.Map c c -> c -> (Ms.Map c c, c)
 eqlize m c = case Ms.lookup c m of

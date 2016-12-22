@@ -123,8 +123,8 @@ relkitTermName :: (K.CTerm c) => K.TermName -> C.RelkitFlow c
 relkitTermName n Nothing    = Msg.noAttr $ K.termNameString n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = K.headFrom [n]
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 _   = map term $ K.getTermNames he1
+    kit2      = C.relkitFull he2 False flow
+    flow _    = map term $ K.getTermNames he1
     term t    = [K.pTerm t]
 
 
