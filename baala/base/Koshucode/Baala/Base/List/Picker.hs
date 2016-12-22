@@ -35,6 +35,8 @@ picker ls rs = pk where
          , pkRShareIndex    = ri
 
          -- name
+         , pkLNames         = ls
+         , pkRNames         = rs
          , pkLProperNames   = properL ls
          , pkLShareNames    = shareL  ls
          , pkRShareNames    = shareR  rs
@@ -56,9 +58,9 @@ picker ls rs = pk where
 -- | Picker data.
 --
 --   For example, __\/a \/b \/c__ and __\/b \/c \/d \/e__
---   have left-proper terms __\/a__,
---   shared terms __\/b \/c__,
---   and right-proper terms __\/d \/e__.
+--   have left-proper names __\/a__,
+--   shared names __\/b \/c__,
+--   and right-proper names __\/d \/e__.
 --
 --   >>> let pk = picker (words "/a /b /c") (words "/b /c /d /e")
 --
@@ -84,26 +86,38 @@ data Picker n c = Picker
       --   >>> pkRShareIndex pk
       --   [0, 1]
 
+    , pkLNames :: [n]
+      -- ^ __Name:__ Left names
+      --
+      --   >>> pkLNames pk
+      --   ["/a","/b","/c"]
+
+    , pkRNames :: [n]
+      -- ^ __Name:__ Right names
+      --
+      --   >>> pkRNames pk
+      --   ["/b","/c","/d","/e"]
+
     , pkLProperNames :: [n]
-      -- ^ __Name:__ Left-proper term names
+      -- ^ __Name:__ Left-proper names
       --
       --   >>> pkLProperNames pk
       --   ["/a"]
 
     , pkLShareNames :: [n]
-      -- ^ __Name:__ Left-shared term names
+      -- ^ __Name:__ Left-shared names
       --
       --   >>> pkLShareNames pk
       --   ["/b","/c"]
 
     , pkRProperNames :: [n]
-      -- ^ __Name:__ Right-proper term names
+      -- ^ __Name:__ Right-proper names
       --
       --   >>> pkRProperNames pk
       --   ["/d","/e"]
 
     , pkRShareNames :: [n]
-      -- ^ __Name:__ Right-shared term names
+      -- ^ __Name:__ Right-shared names
       --
       --   >>> pkRShareNames pk
       --   ["/b","/c"]
@@ -133,13 +147,13 @@ data Picker n c = Picker
       --   "DE"
 
     , pkRForward :: O.Map [c]
-      -- ^ __Map:__ Move shared terms forward.
+      -- ^ __Map:__ Move shared names forward.
       --
       --   >>> pkRForward pk "BCDE"
       --   "BCDE"
 
     , pkRBackward :: O.Map [c]
-      -- ^ __Map:__ Move shared terms backward.
+      -- ^ __Map:__ Move shared names backward.
       --
       --   >>> pkRBackward pk "BCDE"
       --   "DEBC"
@@ -156,4 +170,14 @@ data Picker n c = Picker
       --   >>> pkRAssoc pk "BCDE"
       --   ("BC", "BCDE")
     }
+
+-- | @Picker (@ left-proper @:@ left-shared @|@ right-shared @:@ right-proper @)@
+instance (Show n) => Show (Picker n c) where
+    show Picker { pkLProperNames  = lp
+                , pkLShareNames   = ls
+                , pkRShareNames   = rs
+                , pkRProperNames  = rp }
+        = "Picker ( " ++ ws lp ++ " : " ++ ws ls ++
+                " | " ++ ws rs ++ " : " ++ ws rp ++ " )"
+          where ws = unwords . map show
 
