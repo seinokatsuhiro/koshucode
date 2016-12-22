@@ -149,8 +149,7 @@
     [ 53 | "Lexmap" | [ ] ] [ 63 | "Relkit" | [ ] ] [ 67 | "Relmap" | [ ] ] [ 70 | "Assert" | [ ] ] [ 74 | "Resource" |
     [ ] ] =}
 |-- DIR-RANK  /dir-rank 76  /dir "Koshucode.Baala.Rop.Cox.Type"  /base-rank {= /rank /base /import-dir [ 76 | "Clock" |
-    [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ] ] [ 76 | "Dec" | [ "Base" | "Core" | "Data" | "Overture" |
-    "Syntax" ] ] =}
+    [ "Core" ] ] [ 76 | "Dec" | [ "Core" ] ] =}
 |-- DIR-RANK  /dir-rank 77  /dir "Koshucode.Baala.Writer"  /base-rank {= /rank /base /import-dir [ 76 | "Csv" | [ "Base"
     | "Core" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 76 | "Html" | [ "Base" | "Core" | "Data" | "Overture" |
     "Syntax" | "Type" ] ] [ 76 | "Json" | [ "Core" | "Data" | "Syntax" | "Type" ] ] [ 76 | "Judge" | [ "Base" | "Core" |
@@ -181,13 +180,12 @@
     [ "Core" ] ] [ 80 | "Lattice" | [ ] ] [ 81 | "Check" | [ "Core" | "Lattice" ] ] [ 81 | "Control" | [ "Core" |
     "Lattice" ] ] [ 82 | "Rops" | [ "Core" | "Lattice" ] ] =}
 |-- DIR-RANK  /dir-rank 85  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
-    ] ] [ 76 | "Range" | [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ] ] [ 77 | "Message" | [ ] ] [ 78 | "Calc" |
-    [ "Core" ] ] [ 78 | "Filter" | [ "Core" | "Data" | "Overture" ] ] [ 78 | "Gadget" | [ "Base" | "Core" | "Data" |
-    "Overture" | "Syntax" ] ] [ 84 | "Empty" | [ "Core" | "Flat" ] ] [ 85 | "Bundle" | [ "Core" | "Data" ] ] =}
+    ] ] [ 76 | "Range" | [ "Core" ] ] [ 77 | "Message" | [ ] ] [ 78 | "Calc" | [ "Core" ] ] [ 78 | "Filter" | [ "Core" ]
+    ] [ 78 | "Gadget" | [ "Core" ] ] [ 84 | "Empty" | [ "Core" | "Flat" ] ] [ 85 | "Rops" | [ "Core" ] ] =}
 
-|-- DIR-RANK  /dir-rank 86  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 77 | "Message" | [
-    "Base" | "Data" | "Syntax" ] ] [ 78 | "Flow" | [ "Core" ] ] [ 84 | "Confl" | [ "Core" | "Flat" ] ] [ 85 | "Deriv" |
-    [ "Core" | "Data" | "Flat" | "Overture" | "Syntax" ] ] [ 86 | "Rop" | [ "Core" | "Data" | "Overture" ] ] =}
+|-- DIR-RANK  /dir-rank 86  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 76 | "Flow" | [
+    "Core" ] ] [ 84 | "Confl" | [ "Core" | "Flat" ] ] [ 85 | "Deriv" | [ "Core" | "Flat" ] ] [ 86 | "Rops" | [ "Core" ]
+    ] =}
 |-- DIR-RANK  /dir-rank 87  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 83
     | "Flat" | [ "Lattice" ] ] [ 86 | "Cox" | [ ] ] [ 87 | "Nest" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 88  /dir "Koshucode.Baala.Toolkit.Library"  /base-rank {= /rank /base /import-dir [ 0 |
@@ -502,8 +500,8 @@ TABLE : DIR-RANK
                                                  
   76        "Koshucode.Baala.Rop.Cox.Type"       /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 76    "Clock"              [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ]
-                                                 76    "Dec"                [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ]
+                                                 76    "Clock"              [ "Core" ]
+                                                 76    "Dec"                [ "Core" ]
                                                  
   77        "Koshucode.Baala.Writer"             /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
@@ -578,21 +576,20 @@ TABLE : DIR-RANK
   85        "Koshucode.Baala.Rop.Cox"            /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  0     "GeoDatumJp"         [ ]
-                                                 76    "Range"              [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ]
+                                                 76    "Range"              [ "Core" ]
                                                  77    "Message"            [ ]
                                                  78    "Calc"               [ "Core" ]
-                                                 78    "Filter"             [ "Core" | "Data" | "Overture" ]
-                                                 78    "Gadget"             [ "Base" | "Core" | "Data" | "Overture" | "Syntax" ]
+                                                 78    "Filter"             [ "Core" ]
+                                                 78    "Gadget"             [ "Core" ]
                                                  84    "Empty"              [ "Core" | "Flat" ]
-                                                 85    "Bundle"             [ "Core" | "Data" ]
+                                                 85    "Rops"               [ "Core" ]
                                                  
   86        "Koshucode.Baala.Rop.Nest"           /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 77    "Message"            [ "Base" | "Data" | "Syntax" ]
-                                                 78    "Flow"               [ "Core" ]
+                                                 76    "Flow"               [ "Core" ]
                                                  84    "Confl"              [ "Core" | "Flat" ]
-                                                 85    "Deriv"              [ "Core" | "Data" | "Flat" | "Overture" | "Syntax" ]
-                                                 86    "Rop"                [ "Core" | "Data" | "Overture" ]
+                                                 85    "Deriv"              [ "Core" | "Flat" ]
+                                                 86    "Rops"               [ "Core" ]
                                                  
   87        "Koshucode.Baala.Rop"                /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
