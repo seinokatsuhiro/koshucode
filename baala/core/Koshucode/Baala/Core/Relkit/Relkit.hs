@@ -12,7 +12,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
 
     -- * Derived types
     RelkitTable, RelkitKey,
-    BodyMap,
+    Flow, FlowAb, Confl, BodyMap,
 
     -- * Calculation type
     RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
@@ -43,44 +43,47 @@ type RelkitBody c = B.Codic (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
-    = RelkitFull       Bool (                O.Map       [[c]] )
-      -- ^ __Safe flow:__ Arbitrary relation mapping, i.e.,
-      --   mapping from multiple tuples to multiple tuples.
-    | RelkitMany       Bool (                O.ManyMap    [c]  )
-      -- ^ __Safe flow:__ Mapping from single tuple to multiple tuples, include no tuples.
-    | RelkitLinear     Bool (                O.Map        [c]  )
-      -- ^ __Safe flow:__ Mapping from single tuple to single tuple.
-    | RelkitTest            (                O.Test       [c]  )
-      -- ^ __Safe flow:__ Filter tuples
-    | RelkitAbTest          (                B.AbTest     [c]  )
-      -- ^ __Abortable flow:__ Filter by calculation.
-    | RelkitAbSemi          (                B.AbTest    [[c]] ) (RelkitBody c)
-      -- ^ __Abortable flow:__ Filter by data.
-    | RelkitAbFull     Bool ( [BodyMap c] -> B.AbMap     [[c]] ) [RelkitBody c]
-      -- ^ __Abortable confluence:__ Multiple to multiple.
-    | RelkitAbMany     Bool ( [BodyMap c] -> B.AbManyMap  [c]  ) [RelkitBody c]
-      -- ^ __Abortable confluence:__ Single to multiple.
-    | RelkitAbLinear   Bool ( [BodyMap c] -> B.AbMap      [c]  ) [RelkitBody c]
-      -- ^ __Abortable confluence:__ Single to single.
+    = RelkitFull     Bool ( Flow [[c]] [[c]] )
+                     -- ^ __Safe flow:__ Arbitrary relation mapping, i.e.,
+                     --   mapping from multiple tuples to multiple tuples.
+    | RelkitMany     Bool ( Flow  [c]  [[c]] )
+                     -- ^ __Safe flow:__ Mapping from single tuple to multiple tuples,
+                     --   include no tuples.
+    | RelkitLinear   Bool ( Flow  [c]   [c]  )
+                     -- ^ __Safe flow:__ Mapping from single tuple to single tuple.
 
-    | RelkitAppend     (RelkitBody c) (RelkitBody c)
-      -- ^ __Connection:__ Append two mapping.
+    | RelkitTest          ( O.Test    [c] )
+                     -- ^ __Safe flow:__ Filter tuples
+    | RelkitAbTest        ( B.AbTest  [c] )
+                     -- ^ __Abortable flow:__ Filter by calculation.
+    | RelkitAbSemi        ( B.AbTest  [[c]] ) (RelkitBody c)
+                     -- ^ __Abortable flow:__ Filter by data.
+
+    | RelkitAbFull   Bool ( Confl c [[c]] [[c]] ) [RelkitBody c]
+                     -- ^ __Abortable confluence:__ Multiple to multiple.
+    | RelkitAbMany   Bool ( Confl c  [c]  [[c]] ) [RelkitBody c]
+                     -- ^ __Abortable confluence:__ Single to multiple.
+    | RelkitAbLinear Bool ( Confl c  [c]   [c] ) [RelkitBody c]
+                     -- ^ __Abortable confluence:__ Single to single.
+
+    | RelkitAppend   (RelkitBody c) (RelkitBody c)
+                     -- ^ __Connection:__ Append two mapping.
     | RelkitId
-      -- ^ __Connection:__ Identity mapping, i.e.,
-      --   output input relation without modification.
-    | RelkitConst      [[c]]
-      -- ^ __Source:__ Ignore input, and output constant relation.
-    | RelkitSource     T.JudgeClass [S.TermName]
-      -- ^ __Source:__ Ignore input, and output relation from data source.
+                     -- ^ __Connection:__ Identity mapping, i.e.,
+                     --   output input relation without modification.
+    | RelkitConst    [[c]]
+                     -- ^ __Source:__ Ignore input, and output constant relation.
+    | RelkitSource   T.JudgeClass [S.TermName]
+                     -- ^ __Source:__ Ignore input, and output relation from data source.
 
-    | RelkitLink       C.RopName RelkitKey (Maybe (RelkitBody c))
-      -- ^ __Reference:__ Link point to other relmap.
-    | RelkitNest       S.Token [S.IndexTerm] (RelkitBody c)
-      -- ^ __Reference:__ Give indecies to nested relations.
-    | RelkitCopy       S.Token C.RopName (RelkitBody c)
-      -- ^ __Reference:__ Give a name to input relation.
-    | RelkitLocal      S.Token S.LocalRef
-      -- ^ __Reference:__ Local relation reference, i.e., @^/r@ or @^r@.
+    | RelkitLink     C.RopName RelkitKey (Maybe (RelkitBody c))
+                     -- ^ __Reference:__ Link point to other relmap.
+    | RelkitNest     S.Token [S.IndexTerm] (RelkitBody c)
+                     -- ^ __Reference:__ Give indecies to nested relations.
+    | RelkitCopy     S.Token C.RopName (RelkitBody c)
+                     -- ^ __Reference:__ Give a name to input relation.
+    | RelkitLocal    S.Token S.LocalRef
+                     -- ^ __Reference:__ Local relation reference, i.e., @^/r@ or @^r@.
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
@@ -109,6 +112,15 @@ type RelkitTable c = [(RelkitKey, Relkit c)]
 
 -- | Search key of relkit.
 type RelkitKey = (Maybe T.Head, [C.Lexmap])
+
+-- | Flow mapping.
+type Flow from to = from -> to
+
+-- | Abortable flow mapping.
+type FlowAb from to = from -> B.Ab to
+
+-- | Confluent mapping.
+type Confl c from to = [BodyMap c] -> from -> B.Ab to
 
 -- | Mapping for body of relation.
 type BodyMap c = B.AbMap [[c]]

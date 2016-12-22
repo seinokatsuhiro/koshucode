@@ -62,15 +62,15 @@ relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
 -- ----------------------  Flow and confluent
 
 -- | Create non-abortble linear relkit.
-relkitLinear :: T.Head -> Bool -> O.Map [c] -> C.Relkit c
+relkitLinear :: T.Head -> Bool -> (C.Flow [c] [c]) -> C.Relkit c
 relkitLinear ho uniq f = relkitJust ho $ C.RelkitLinear uniq f
 
 -- | Create abortable linear relkit.
-relkitAbLinear :: T.Head -> Bool -> B.AbMap [c] -> C.Relkit c
+relkitAbLinear :: T.Head -> Bool -> (C.FlowAb [c] [c]) -> C.Relkit c
 relkitAbLinear ho uniq f = relkitJust ho $ C.RelkitAbLinear uniq (const f) []
 
 -- | Create (abortable) confluent relkit.
-relkitConfl :: T.Head -> Bool -> ([C.BodyMap c] -> B.AbMap [[c]]) -> [C.RelkitBody c] -> C.Relkit c
+relkitConfl :: T.Head -> Bool -> (C.Confl c [[c]] [[c]]) -> [C.RelkitBody c] -> C.Relkit c
 relkitConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbFull uniq f bodies
 
 
