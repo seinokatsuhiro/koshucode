@@ -6,11 +6,9 @@ module Koshucode.Baala.Rop.Flat.Message
   ( module Koshucode.Baala.Rop.Base.Message,
     checkTerm,
     diffHead,
-    dupTerm,
     dumpCox,
     dumpRel,
     dumpTrees,
-    oddAttr,
     reqBool,
     reqRel,
     reqCollection,
@@ -52,17 +50,6 @@ dumpRel r = K.leftPage "Dump relation" $ C.relTableLines [] r
 dumpTrees :: [K.Tree] -> K.Ab a
 dumpTrees trees = K.leftLines "Dump token trees"
                    $ lines $ show $ K.treesDoc trees
-
--- | Duplicate term name
-dupTerm :: (K.GetTermNames t) => t -> K.Ab a
-dupTerm t =
-    K.leftLines "Duplicate term name"
-         $ msgTerms2 "Duplicate" t' "in the terms" t
-        where t' = K.duplicates $ K.getTermNames t
-
--- | Odd attribute
-oddAttr :: K.Ab a
-oddAttr = K.leftBecause "Odd attribute"
 
 -- | Require Boolean
 reqBool :: K.Ab a

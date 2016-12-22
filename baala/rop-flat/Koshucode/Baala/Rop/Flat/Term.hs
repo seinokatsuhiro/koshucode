@@ -25,37 +25,21 @@ import qualified Koshucode.Baala.Rop.Flat.Message as Msg
 
 
 -- | Relmap operators for manipulating term names.
---
---   [@cut@]        Project relation to unspecified terms.
---
---   [@cut-term@]   Project relation to terms not in relmap output.
---
---   [@pick@]       Project relation to specified terms.
---
---   [@pick-term@]  Project relation to terms in relmap output.
---
---   [@rename@]     Change term name.
---
---   [@move@]       Change heading.
---
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Rop.rops "term"
     [ consCut        K.& [ "cut /P ..."               K.& "-term*" ]
-    , consCutTerm    K.& [ "cut-term /R"              K.& "-relmap/" ]
-    , consPick       K.& [ "pick /P ..."              K.& "-term*" ]
-    , consPickTerm   K.& [ "pick-term /R"             K.& "-relmap/" ]
-    , consRename     K.& [ "rename /N /P ..."         K.& "-term*" ]
+    , consCutTerm    K.& [ "cut-term R"               K.& "-relmap/" ]
     , consMove       K.& [ "move /P ... -to /N ..."   K.& "-from* . -to" ]
+    , consPick       K.& [ "pick /P ..."              K.& "-term*" ]
+    , consPickTerm   K.& [ "pick-term R"              K.& "-relmap/" ]
+    , consRename     K.& [ "rename /N /P ..."         K.& "-term*" ]
     ]
 
 
 -- ----------------------  pick & cut
 
--- | __pick \/P ...__
---
---   Construct @pick@ relmap operator
---   for relational projection by picking terms.
---
+-- | [pick \/P ...]
+--    Project relation to specified terms.
 consPick :: C.RopCons c
 consPick med =
   do ns <- Rop.getTerms med "-term"
@@ -69,12 +53,9 @@ relmapPick med = C.relmapFlow med . relkitPick
 relkitPick :: [K.TermName] -> C.RelkitFlow c
 relkitPick = relkitProj K.pickTerms2
 
--- | __cut \/P ...__
---
---   Construct @cut@ relmap operator
---   for relational projection by cutting terms.
---   This operator is an inversion of @pick@.
---
+-- | [cut \/P ...]
+--    Project relation to unspecified terms.
+--    This operator is an inversion of @pick@.
 consCut :: C.RopCons c
 consCut med =
   do ns <- Rop.getTerms med "-term"
@@ -91,7 +72,7 @@ relkitCut = relkitProj K.cutTerms2
 
 -- ----------------------  pick-term & cut-term
 
--- | __pick-term R__
+-- | [pick-term /R/]
 --
 --   Construct @pick-term@ relmap operator.
 --   This operator is similar to @pick@
@@ -110,7 +91,7 @@ relmapPickTerm med = C.relmapBinary med relkitPickTerm
 relkitPickTerm :: C.RelkitBinary c
 relkitPickTerm = relkitProjTerm K.pickTerms2
 
--- | __cut-term R__
+-- | [cut-term /R/]
 --
 --   Construct @cut-term@ relmap operator.
 --   This operator is similar to @cut@
@@ -146,17 +127,17 @@ relkitProj (hePick, boPick) ns (Just he1)
 
 -- ----------------------  move
 
--- | __move \/P ... -to \/N ...__
+-- | [move \/P ... -to \/N ...]
 --
---   Construct @move@ relmap operator for renaming term names.
---   Terms \/P ... of input relation are renamed corresponding terms \/N ....
---   The @move@ operator provides same functionality as @rename@.
---   Operator @move@ is suitable for renaming few terms,
---   operator @rename@ for many terms.
---   The following relmaps have same effect:
+--    Rename term names.
+--    Terms \/P ... of input relation are renamed corresponding terms \/N ....
+--    The @move@ operator provides same functionality as @rename@.
+--    Operator @move@ is suitable for renaming few terms,
+--    operator @rename@ for many terms.
+--    The following relmaps have same effect:
 --
---   > rename /N /P /N /P ...
---   > move /P ... -to /N ...
+--    > rename /N /P /N /P ...
+--    > move /P ... -to /N ...
 --
 consMove :: C.RopCons c
 consMove med =
@@ -172,7 +153,7 @@ relmapMove med = C.relmapFlow med . relkitMove
 relkitMove :: ([K.TermName], [K.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
-    | K.notSameLength ps ns  = Msg.oddAttr
+    | K.notSameLength ps ns  = Msg.unevenTerms ps ns
     | K.duplicated ps        = Msg.dupTerm ps   -- from terms
     | K.duplicated ns        = Msg.dupTerm ns   -- to terms
     | K.duplicated ns2       = Msg.dupTerm ns2  -- output names
@@ -191,11 +172,11 @@ relkitMove (ps, ns) (Just he1)
 
 -- ----------------------  rename
 
--- | __rename \/N \/P \/N \/P ...__
+-- | [rename \/N \/P \/N \/P ...]
 --
---   Construct @rename@ relmap operator for renaming term names.
---   Term \/P is renamed to term \/N for each pair of terms \/N \/P.
---   The @rename@ operator provides same functionality as @move@.
+--    Rename term names.
+--    Term \/P is renamed to term \/N for each pair of terms \/N \/P.
+--    The @rename@ operator provides same functionality as @move@.
 --
 consRename :: C.RopCons c
 consRename med =
