@@ -12,25 +12,22 @@ module Koshucode.Baala.Rop.Cox.Type.Clock
     consAltClock, relmapAltClock, relkitAltClock,
   ) where
 
-import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as S
-import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.DataPlus     as K
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Rop
 
 -- | Implementation of relational operators.
-ropsTypeClock :: (D.CContent c) => [C.Rop c]
+ropsTypeClock :: (K.CContent c) => [C.Rop c]
 ropsTypeClock = Rop.rops "type"
     [ consAddClock
-      O.& [ "add-clock /N [-day E] [-hour E] [-min E] [-sec E]"
-            O.& "-clock . -times? -day? -hour? -min? -sec?" ]
+      K.& [ "add-clock /N [-day E] [-hour E] [-min E] [-sec E]"
+            K.& "-clock . -times? -day? -hour? -min? -sec?" ]
     , consOfClock
-      O.& [ "of-clock E [-sign /N] [-day /N] [-hour /N] [-min /N] [-sec /N]"
-            O.& "-content . -sign? -day? -hour? -min? -sec?" ]
+      K.& [ "of-clock E [-sign /N] [-day /N] [-hour /N] [-min /N] [-sec /N]"
+            K.& "-content . -sign? -day? -hour? -min? -sec?" ]
     , consAltClock
-      O.&  [ "alt-clock /P [-sign E] [-day E] [-hour E] [-min E] [-sec E]"
-             O.& "-clock . -sign? -day? -hour? -min? -sec?" ]
+      K.&  [ "alt-clock /P ... [-sign E] [-day E] [-hour E] [-min E] [-sec E]"
+             K.& "-clock* . -sign? -day? -hour? -min? -sec?" ]
     ]
 
 
@@ -41,61 +38,61 @@ ropsTypeClock = Rop.rops "type"
 --   [add-clock \/c -min /M/]   Add term \/c as a clock of /M/ minutes, i.e., @|00:M|@.
 --   [add-clock \/c -sec /S/]   Add term \/c as a clock of /S/ seconds, i.e., @|00:00:S|@.
 --
-consAddClock :: (D.CContent c) => C.RopCons c
+consAddClock :: (K.CContent c) => C.RopCons c
 consAddClock med =
     do cops     <- Rop.getWhere    med "-where"
        clock    <- Rop.getTerm     med "-clock"
-       times    <- Rop.getOptionCox (D.pInt 1) med "-times"
-       day      <- Rop.getOptionCox (D.pInt 0) med "-day"
+       times    <- Rop.getOptionCox (K.pInt 1) med "-times"
+       day      <- Rop.getOptionCox (K.pInt 0) med "-day"
        hour     <- Rop.getMaybeCox med "-hour"
        minute   <- Rop.getMaybeCox med "-min"
        sec      <- Rop.getMaybeCox med "-sec"
        let hms   = fill (hour, minute, sec)
        Right $ relmapAddClock med (cops, clock, (times, day, hms))
     where
-      zero = D.coxLit $ D.pInt 0
+      zero = K.coxLit $ K.pInt 0
       fill (h, Nothing, Just s) = fill (h, Just zero, Just s)
       fill (Nothing, Just m, s) = fill (Just zero, Just m, s)
       fill hms = hms
 
 -- | Create @clock@ relmap.
-relmapAddClock :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))) -> C.Relmap c
+relmapAddClock :: (K.CContent c) =>
+  C.Intmed c -> (K.CopSet c, K.TermName, (K.Cox c, K.Cox c, (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c))) -> C.Relmap c
 relmapAddClock med = C.relmapFlow med . relkitAddClock
 
 -- | Create @clock@ relkit.
-relkitAddClock :: (D.CContent c)
-  => (D.CopSet c, S.TermName, (D.Cox c, D.Cox c, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)))
+relkitAddClock :: (K.CContent c)
+  => (K.CopSet c, K.TermName, (K.Cox c, K.Cox c, (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c)))
   -> C.RelkitFlow c
 relkitAddClock _ Nothing = Right C.relkitNothing
 relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = Right kit2 where
-      he2       = n `D.headCons` he1
+      he2       = n `K.headCons` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do let run = D.coxRunCox cops he1 cs1
+      f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
                      t <- getInt     $ run times
                      d <- getInteger $ run day
                      h <- getMaybe (getInt . run) hour
                      m <- getMaybe (getInt . run) minute
                      s <- getMaybe (getInt . run) sec
-                     let clock = D.clockTimes t $ clockFrom d h m s
-                     Right $ D.pClock clock : cs1
+                     let clock = K.clockTimes t $ clockFrom d h m s
+                     Right $ K.pClock clock : cs1
 
-clockFrom :: Integer -> Maybe Int -> Maybe Int -> Maybe Int -> D.Clock
-clockFrom d (Just h)  (Just m)  (Just s)   = D.clockFromDhms d h m s
-clockFrom d (Just h)  (Just m)  (Nothing)  = D.clockFromDhm  d h m
-clockFrom d (Just h)  (Nothing) (Nothing)  = D.clockFromDh   d h
-clockFrom d (Nothing) (Nothing) (Nothing)  = D.clockFromD    d
-clockFrom _ _ _ _ = B.bug "clockFrom"
+clockFrom :: Integer -> Maybe Int -> Maybe Int -> Maybe Int -> K.Clock
+clockFrom d (Just h)  (Just m)  (Just s)   = K.clockFromDhms d h m s
+clockFrom d (Just h)  (Just m)  (Nothing)  = K.clockFromDhm  d h m
+clockFrom d (Just h)  (Nothing) (Nothing)  = K.clockFromDh   d h
+clockFrom d (Nothing) (Nothing) (Nothing)  = K.clockFromD    d
+clockFrom _ _ _ _ = K.bug "clockFrom"
 
-getMaybe :: (c -> B.Ab a) -> Maybe c -> B.Ab (Maybe a)
+getMaybe :: (c -> K.Ab a) -> Maybe c -> K.Ab (Maybe a)
 getMaybe f (Just c)  = return . Just =<< f c
 getMaybe _ _         = return Nothing
 
-getInt :: (D.CContent c) => B.Ab c -> B.Ab Int
-getInt c = do d <- D.getDec c
-              return $ fromInteger $ D.decimalNum d
+getInt :: (K.CContent c) => K.Ab c -> K.Ab Int
+getInt c = do d <- K.getDec c
+              return $ fromInteger $ K.decimalNum d
 
-getInteger :: (D.CContent c) => B.Ab c -> B.Ab Integer
+getInteger :: (K.CContent c) => K.Ab c -> K.Ab Integer
 getInteger c = do i <- getInt c
                   return $ toInteger i
 
@@ -108,7 +105,7 @@ getInteger c = do i <- getInt c
 --   [of-clock /E/ -sec \/N]    Add term \/N as decimal seconds of clock.
 --   [of-clock /E/ -sign \/N]   Add term \/N as decimal sign of clock, i.e., -1, 0, or 1.
 --
-consOfClock :: (D.CContent c) => C.RopCons c
+consOfClock :: (K.CContent c) => C.RopCons c
 consOfClock med =
   do cops     <- Rop.getWhere   med "-where"
      content  <- Rop.getCox     med "-content"
@@ -120,72 +117,68 @@ consOfClock med =
      Right $ relmapOfClock med (cops, content, [sign, day, hour, minute, sec])
 
 -- | Create @of-clockt@ relmap.
-relmapOfClock :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.Relmap c
+relmapOfClock :: (K.CContent c) =>
+  C.Intmed c -> (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.Relmap c
 relmapOfClock med = C.relmapFlow med . relkitOfClock
 
 -- | Create @of-clock@ relkit.
-relkitOfClock :: (D.CContent c) =>
-  (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.RelkitFlow c
+relkitOfClock :: (K.CContent c) =>
+  (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
 relkitOfClock _ Nothing = Right C.relkitNothing
 relkitOfClock (cops, cox, ns) (Just he1) = Right kit2 where
-      he2       = B.catMaybes ns `D.headAppend` he1
+      he2       = K.catMaybes ns `K.headAppend` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do clock <- D.getClock $ D.coxRunCox cops he1 cs1 cox
-                     let cs2 = B.zipMaybe2 ns $ clockContents clock
+      f2 _ cs1  = do clock <- K.getClock $ K.coxRunCox cops he1 cs1 cox
+                     let cs2 = K.zipMaybe2 ns $ clockContents clock
                      Right $ cs2 ++ cs1
 
-clockContents :: (D.CContent c) => D.Clock -> [c]
+clockContents :: (K.CContent c) => K.Clock -> [c]
 clockContents clock = [sign, day, hour, minute, sec] where
-    sign          = D.pInt $ D.clockSign clock
-    day           = D.pInteger d
-    hour          = D.maybeEmpty D.pInt h
-    minute        = D.maybeEmpty D.pInt m
-    sec           = D.maybeEmpty D.pInt s
-    (d, h, m, s)  = D.clockAtts clock
+    sign          = K.pInt $ K.clockSign clock
+    day           = K.pInteger d
+    hour          = K.maybeEmpty K.pInt h
+    minute        = K.maybeEmpty K.pInt m
+    sec           = K.maybeEmpty K.pInt s
+    (d, h, m, s)  = K.clockAtts clock
 
 
 -- ----------------------  alt-clock
 
--- | [alt-clock \/P -day /D/]    Alter days of clock to /D/ in term \/P.
---   [alt-clock \/P -hour /H/]   Alter hours of clock to /H/ in term \/P.
---   [alt-clock \/P -min /M/]    Alter minutes of clock to /M/ in term \/P.
---   [alt-clock \/P -sec /S/]    Alter seconds of clock to /S/ in term \/P.
+-- | [alt-clock \/P ... -day /D/]   Alter days of clock to /D/ in term \/P ....
+--   [alt-clock \/P ... -hour /H/]  Alter hours of clock to /H/ in term \/P ....
+--   [alt-clock \/P ... -min /M/]   Alter minutes of clock to /M/ in term \/P ....
+--   [alt-clock \/P ... -sec /S/]   Alter seconds of clock to /S/ in term \/P ....
 --
-consAltClock :: (D.CContent c) => C.RopCons c
+consAltClock :: (K.CContent c) => C.RopCons c
 consAltClock med =
-    do cops     <- Rop.getWhere    med "-where"
-       clock    <- Rop.getTerm     med "-clock"
-       day      <- Rop.getMaybeCox med "-day"
-       hour     <- Rop.getMaybeCox med "-hour"
-       minute   <- Rop.getMaybeCox med "-min"
-       sec      <- Rop.getMaybeCox med "-sec"
-       Right $ relmapAltClock med (cops, clock, (day, hour, minute, sec))
+    do cops   <- Rop.getWhere    med "-where"
+       ts     <- Rop.getTerms    med "-clock"
+       day    <- Rop.getMaybeCox med "-day"
+       hour   <- Rop.getMaybeCox med "-hour"
+       minute <- Rop.getMaybeCox med "-min"
+       sec    <- Rop.getMaybeCox med "-sec"
+       Right $ relmapAltClock med (cops, ts, (day, hour, minute, sec))
 
 -- | Create @alt-clock@ relmap.
-relmapAltClock :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c)) -> C.Relmap c
+relmapAltClock :: (K.CContent c) =>
+  C.Intmed c -> (K.CopSet c, [K.TermName], (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c, K.MaybeCox c)) -> C.Relmap c
 relmapAltClock med = C.relmapFlow med . relkitAltClock
 
 -- | Create @alt-clock@ relkit.
-relkitAltClock :: (D.CContent c)
-  => (D.CopSet c, S.TermName, (D.MaybeCox c, D.MaybeCox c, D.MaybeCox c, D.MaybeCox c))
+relkitAltClock :: (K.CContent c)
+  => (K.CopSet c, [K.TermName], (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c, K.MaybeCox c))
   -> C.RelkitFlow c
 relkitAltClock _ Nothing = Right C.relkitNothing
-relkitAltClock (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 where
-      ns1       = D.getTermNames he1
-      ind       = [n] `B.selectIndex` ns1
-      pick      = B.selectElems    ind
-      cut       = B.selectOthers   ind
-      fore      = B.permuteForward ind
-      he2       = D.headMap fore he1
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do let run    = D.coxRunCox cops he1 cs1
-                         [c]    = pick cs1
-                     clock <- D.getClock $ Right c
-                     d <- getMaybe (getInteger . run) day
-                     h <- getMaybe (getInt . run) hour
-                     m <- getMaybe (getInt . run) minute
-                     s <- getMaybe (getInt . run) sec
-                     let clock' = D.clockAlter d h m s clock
-                     Right $ D.pClock clock' : cut cs1
+relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = Right kit2 where
+    pk        = K.termPicker ns he1
+    he2       = K.forwardTerms pk `K.headMap` he1
+    kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
+    f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
+                       cs  = K.pickTerms pk cs1
+                   d <- getMaybe (getInteger . run) day
+                   h <- getMaybe (getInt . run) hour
+                   m <- getMaybe (getInt . run) minute
+                   s <- getMaybe (getInt . run) sec
+                   clocks <- (K.getClock . Right) K.<#> cs
+                   let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
+                   Right (clocks' ++ K.cutTerms pk cs1)
