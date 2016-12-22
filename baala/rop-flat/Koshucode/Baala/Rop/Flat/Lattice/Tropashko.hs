@@ -64,7 +64,7 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
 
     he3    = he2 K.++ he1
     kit3   = case unmatchShare sh pk of
-               Nothing     -> Right $ C.relkitConfl he3 False f [kitb2]
+               Nothing     -> Right $ C.relkitConflWhole False he3 f [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
     f :: [C.BodyMap c] -> C.BodyMap c
@@ -125,7 +125,7 @@ relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
 
     he3    = pick1 `K.headMap` he1
     kit3   = case unmatchShare sh pk of
-               Nothing     -> Right $ C.relkitConfl he3 True f [kitb2]
+               Nothing     -> Right $ C.relkitConflWhole True he3 f [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
     f :: [C.BodyMap c] -> C.BodyMap c

@@ -99,7 +99,7 @@ relkitFilterMeet :: forall c. (Ord c) => Bool -> Rop.SharedTerms -> C.RelkitBina
 relkitFilterMeet which sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     pk     = K.termPicker he1 he2
     kit3   = case Rop.unmatchShare sh pk of
-               Nothing     -> Right $ C.relkitConfl he1 False f [kitb2]
+               Nothing     -> Right $ C.relkitConflWhole False he1 f [kitb2]
                Just (e, a) -> Msg.unmatchShare e a
 
     f :: [C.BodyMap c] -> C.BodyMap c

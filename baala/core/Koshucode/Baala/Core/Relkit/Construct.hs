@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkitAbFilter,
 
     -- * Confluent relkit
-    relkitLinearConfl, relkitManyConfl, relkitConfl,
+    relkitConflLine, relkitConflMany, relkitConflWhole,
     relkitConflFilter,
 
     -- * Source of relation
@@ -103,22 +103,22 @@ relkitAbFilter ho test = relkitJust ho $ C.RelkitAbTest test
 
 -- ----------------------  Confluent
 
--- | Create abortable one-to-one confluent relkit.
-relkitLinearConfl
-    :: T.Head             -- ^ Heading of output relation
-    -> Bool               -- ^ Remove duplication or not
+-- | Create abortable one-to-one (linear) confluent relkit.
+relkitConflLine
+    :: Bool               -- ^ Remove duplication or not
+    -> T.Head             -- ^ Heading of output relation
     -> C.Confl c [c] [c]  -- ^ Confluent function which merges multiple relations
     -> [C.RelkitBody c]   -- ^ Relkit of subrelmaps
     -> C.Relkit c         -- ^ Result relkit
-relkitLinearConfl ho u confl subs = relkitJust ho $ C.RelkitAbLinear u confl subs
+relkitConflLine u ho confl subs = relkitJust ho $ C.RelkitAbLinear u confl subs
 
 -- | Create abortable one-to-many confluent relkit.
-relkitManyConfl :: T.Head -> Bool -> C.Confl c [c] [[c]] -> [C.RelkitBody c] -> C.Relkit c
-relkitManyConfl ho u confl subs = relkitJust ho $ C.RelkitAbMany u confl subs
+relkitConflMany :: Bool -> T.Head -> C.Confl c [c] [[c]] -> [C.RelkitBody c] -> C.Relkit c
+relkitConflMany u ho confl subs = relkitJust ho $ C.RelkitAbMany u confl subs
 
--- | Create abortable full-mapping confluent relkit.
-relkitConfl :: T.Head -> Bool -> C.Confl c [[c]] [[c]] -> [C.RelkitBody c] -> C.Relkit c
-relkitConfl ho u confl subs = relkitJust ho $ C.RelkitAbFull u confl subs
+-- | Create abortable whole-mapping confluent relkit.
+relkitConflWhole :: Bool -> T.Head -> C.Confl c [[c]] [[c]] -> [C.RelkitBody c] -> C.Relkit c
+relkitConflWhole u ho confl subs = relkitJust ho $ C.RelkitAbFull u confl subs
 
 -- | Create abortable confluent filtering relkit.
 relkitConflFilter :: T.Head -> B.AbTest [[c]] -> C.RelkitBody c -> C.Relkit c

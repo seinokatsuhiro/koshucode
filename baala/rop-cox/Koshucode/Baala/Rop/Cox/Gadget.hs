@@ -269,7 +269,7 @@ relkitRepeat cnt (C.RelkitOutput he2 kitb2) (Just he1)
     | K.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
-    kit3 = C.relkitConfl he1 True f [kitb2]
+    kit3 = C.relkitConflWhole True he1 f [kitb2]
     f bmaps bo1 =
         do let [bmap2] = bmaps
                bmap2'  = C.bmapAlign he2 he1 bmap2
