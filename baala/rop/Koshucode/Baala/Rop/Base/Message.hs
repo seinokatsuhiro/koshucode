@@ -15,10 +15,12 @@ module Koshucode.Baala.Rop.Base.Message
     noAttr,
     notImpl,
     reqRelmap,
+    notNestRel,
   ) where
 
 import Koshucode.Baala.Core.Message
 import qualified Koshucode.Baala.DataPlus as K
+
 
 -- ============================================  Messages
 
@@ -61,4 +63,10 @@ reqRelmap :: Int -> K.Ab a
 reqRelmap 0 = K.leftBecause "Require no relmaps"
 reqRelmap 1 = K.leftBecause "Require one relmap"
 reqRelmap n = K.leftBecause $ "Require " ++ show n ++ " relmaps"
+
+-- | [Not a nested relation]
+notNestRel :: (K.GetTermNames t) => t -> K.Head -> K.Ab a
+notNestRel t he =
+    K.leftLines "Not a nested relation"
+         $ detailTermRel "Given" (K.getTermNames t) he
 
