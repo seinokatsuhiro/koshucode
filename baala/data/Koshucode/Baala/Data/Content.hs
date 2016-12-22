@@ -49,21 +49,21 @@ import qualified Koshucode.Baala.Data.Decode             as D
 
 -- | The Baala content type.
 data Content
-    = ContentEmpty                -- ^ /Edge:/        Sign of no ordinary type
-    | ContentBool    Bool         -- ^ /Numeric:/     Boolean type
-    | ContentDec     T.Decimal    -- ^ /Numeric:/     Decimal number type
-    | ContentClock   T.Clock      -- ^ /Numeric:/     Clock type
-    | ContentTime    T.Time       -- ^ /Numeric:/     Time type
-    | ContentCode    String       -- ^ /Textual:/     Code type
-    | ContentTerm    S.TermName   -- ^ /Textual:/     Term name type
-    | ContentText    String       -- ^ /Textual:/     Text type
-    | ContentList    [Content]    -- ^ /Recursive, Collective:/  List type
-    | ContentSet     [Content]    -- ^ /Recursive, Collective:/  Set type
-    | ContentTie     [TermC]      -- ^ /Recursive, Relational:/  Tie type (set of terms)
-    | ContentRel     RelC         -- ^ /Recursive, Relational:/  Relation type
-    | ContentInterp  T.Interp     -- ^ /Meta, Relational:/  Interpretation type
-    | ContentType    T.Type       -- ^ /Meta:/        Type for type
-    | ContentEnd                  -- ^ /Edge:/        The end of everything
+    = ContentEmpty              -- ^ __1.  Edge:__                   Sign of no ordinary type
+    | ContentBool   Bool        -- ^ __2.  Numeric:__                Boolean type
+    | ContentDec    T.Decimal   -- ^ __3.  Numeric:__                Decimal number type
+    | ContentClock  T.Clock     -- ^ __4.  Numeric:__                Clock type
+    | ContentTime   T.Time      -- ^ __5.  Numeric:__                Time type
+    | ContentCode   String      -- ^ __6.  Textual:__                Code type
+    | ContentTerm   S.TermName  -- ^ __7.  Textual:__                Term name type
+    | ContentText   String      -- ^ __8.  Textual:__                Text type
+    | ContentList   [Content]   -- ^ __9.  Recursive, Collective:__  List type
+    | ContentSet    [Content]   -- ^ __10. Recursive, Collective:__  Set type
+    | ContentTie    [TermC]     -- ^ __11. Recursive, Relational:__  Tie type (set of terms)
+    | ContentRel    RelC        -- ^ __12. Recursive, Relational:__  Relation type
+    | ContentInterp T.Interp    -- ^ __13. Meta, Relational:__       Interpretation type
+    | ContentType   T.Type      -- ^ __14. Meta:__                   Type for type
+    | ContentEnd                -- ^ __15. Edge:__                   The end of everything
     deriving (Show)
 
 instance Eq Content where
