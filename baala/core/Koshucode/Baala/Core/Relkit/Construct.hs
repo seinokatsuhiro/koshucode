@@ -11,9 +11,11 @@ module Koshucode.Baala.Core.Relkit.Construct
     -- * Flow relkit
     relkitLinear, relkitMany, relkitFull,
     relkitAbLinear, relkitAbMany, relkitAbFull,
+    relkitAbFilter,
 
     -- * Confluent relkit
     relkitLinearConfl, relkitManyConfl, relkitConfl,
+    relkitConflFilter,
 
     -- * Source of relation
     relkitConst, relkitConstEmpty,
@@ -63,44 +65,64 @@ relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
 
 -- ----------------------  Flow
 
--- | Create non-abortble one-to-one relkit.
-relkitLinear :: T.Head -> Bool -> (C.Flow [c] [c]) -> C.Relkit c
-relkitLinear ho uniq f = relkitJust ho $ C.RelkitLinear uniq f
+-- | Create non-abortble one-to-one (linear) relkit.
+relkitLinear
+    :: T.Head             -- ^ Heading of output relation
+    -> Bool               -- ^ Remove duplication or not
+    -> C.Flow [c] [c]     -- ^ Flow function which converts tuples of relation
+    -> C.Relkit c         -- ^ Result relkit
+relkitLinear ho u flow = relkitJust ho $ C.RelkitLinear u flow
 
 -- | Create non-abortble one-to-many relkit.
-relkitMany :: T.Head -> Bool -> (C.Flow [c] [[c]]) -> C.Relkit c
-relkitMany ho uniq f = relkitJust ho $ C.RelkitMany uniq f
+relkitMany :: T.Head -> Bool -> C.Flow [c] [[c]] -> C.Relkit c
+relkitMany ho u flow = relkitJust ho $ C.RelkitMany u flow
 
 -- | Create non-abortble full-mapping relkit.
-relkitFull :: T.Head -> Bool -> (C.Flow [[c]] [[c]]) -> C.Relkit c
-relkitFull ho uniq f = relkitJust ho $ C.RelkitFull uniq f
+relkitFull :: T.Head -> Bool -> C.Flow [[c]] [[c]] -> C.Relkit c
+relkitFull ho u flow = relkitJust ho $ C.RelkitFull u flow
 
--- | Create abortable one-to-one relkit.
-relkitAbLinear :: T.Head -> Bool -> (C.FlowAb [c] [c]) -> C.Relkit c
-relkitAbLinear ho uniq f = relkitJust ho $ C.RelkitAbLinear uniq (const f) []
+-- | Create abortable one-to-one (linear) relkit.
+relkitAbLinear :: T.Head -> Bool -> C.FlowAb [c] [c] -> C.Relkit c
+relkitAbLinear ho u flow = relkitJust ho $ C.RelkitAbLinear u (const flow) []
 
 -- | Create abortable one-to-many relkit.
-relkitAbMany :: T.Head -> Bool -> (C.FlowAb [c] [[c]]) -> C.Relkit c
-relkitAbMany ho uniq f = relkitJust ho $ C.RelkitAbMany uniq (const f) []
+relkitAbMany :: T.Head -> Bool -> C.FlowAb [c] [[c]] -> C.Relkit c
+relkitAbMany ho u flow = relkitJust ho $ C.RelkitAbMany u (const flow) []
 
 -- | Create abortable full-mapping relkit.
-relkitAbFull :: T.Head -> Bool -> (C.FlowAb [[c]] [[c]]) -> C.Relkit c
-relkitAbFull ho uniq f = relkitJust ho $ C.RelkitAbFull uniq (const f) []
+relkitAbFull :: T.Head -> Bool -> C.FlowAb [[c]] [[c]] -> C.Relkit c
+relkitAbFull ho u flow = relkitJust ho $ C.RelkitAbFull u (const flow) []
+
+-- | Create abortable filtering relkit.
+relkitAbFilter
+    :: T.Head             -- ^ Heading of output relation
+    -> B.AbTest [c]       -- ^ Teset function which determins keeping/omitting tuples
+    -> C.Relkit c         -- ^ Result relkit
+relkitAbFilter ho test = relkitJust ho $ C.RelkitAbTest test
 
 
 -- ----------------------  Confluent
 
--- | Create (abortable) one-to-one confluent relkit.
-relkitLinearConfl :: T.Head -> Bool -> (C.Confl c [c] [c]) -> [C.RelkitBody c] -> C.Relkit c
-relkitLinearConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbLinear uniq f bodies
+-- | Create abortable one-to-one confluent relkit.
+relkitLinearConfl
+    :: T.Head             -- ^ Heading of output relation
+    -> Bool               -- ^ Remove duplication or not
+    -> C.Confl c [c] [c]  -- ^ Confluent function which merges multiple relations
+    -> [C.RelkitBody c]   -- ^ Relkit of subrelmaps
+    -> C.Relkit c         -- ^ Result relkit
+relkitLinearConfl ho u confl subs = relkitJust ho $ C.RelkitAbLinear u confl subs
 
--- | Create (abortable) one-to-many confluent relkit.
-relkitManyConfl :: T.Head -> Bool -> (C.Confl c [c] [[c]]) -> [C.RelkitBody c] -> C.Relkit c
-relkitManyConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbMany uniq f bodies
+-- | Create abortable one-to-many confluent relkit.
+relkitManyConfl :: T.Head -> Bool -> C.Confl c [c] [[c]] -> [C.RelkitBody c] -> C.Relkit c
+relkitManyConfl ho u confl subs = relkitJust ho $ C.RelkitAbMany u confl subs
 
--- | Create (abortable) full-mapping confluent relkit.
-relkitConfl :: T.Head -> Bool -> (C.Confl c [[c]] [[c]]) -> [C.RelkitBody c] -> C.Relkit c
-relkitConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbFull uniq f bodies
+-- | Create abortable full-mapping confluent relkit.
+relkitConfl :: T.Head -> Bool -> C.Confl c [[c]] [[c]] -> [C.RelkitBody c] -> C.Relkit c
+relkitConfl ho u confl subs = relkitJust ho $ C.RelkitAbFull u confl subs
+
+-- | Create abortable confluent filtering relkit.
+relkitConflFilter :: T.Head -> B.AbTest [[c]] -> C.RelkitBody c -> C.Relkit c
+relkitConflFilter ho test sub = relkitJust ho $ C.RelkitAbSemi test sub
 
 
 -- ----------------------  Source of relation

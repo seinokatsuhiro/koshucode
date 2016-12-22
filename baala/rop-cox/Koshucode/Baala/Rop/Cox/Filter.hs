@@ -62,12 +62,12 @@ relmapFilter med = C.relmapFlow med . relkitFilter
 -- | Create @keep@ and @omit@ relkit.
 relkitFilter :: (K.CContent c) => (Bool, K.CopSet c, K.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
-relkitFilter (which, cops, body) (Just he1) = Right kit2 where
-    kit2  = C.relkitJust he1 $ C.RelkitAbTest p
-    p cs1 = do c <- K.coxRunCox cops he1 cs1 body
-               case K.isBool c of
-                 True  -> Right $ K.gBool c == which
-                 False -> Msg.reqBool
+relkitFilter (which, cops, body) (Just he1) = kit where
+    kit  = Right $ C.relkitAbFilter he1 test
+    test cs1 = do c <- K.coxRunCox cops he1 cs1 body
+                  case K.isBool c of
+                    True  -> Right $ K.gBool c == which
+                    False -> Msg.reqBool
 
 
 -- ----------------------  contain
@@ -88,9 +88,9 @@ relmapContain med = C.relmapFlow med . relkitContain
 -- | Create @contain@ relkit.
 relkitContain :: (Eq c) => c -> C.RelkitFlow c
 relkitContain _ Nothing = Right C.relkitNothing
-relkitContain c (Just he1) = Right kit2 where
-    kit2  = C.relkitJust he1 $ C.RelkitAbTest p
-    p cs1 = Right $ c `elem` cs1
+relkitContain c (Just he1) = kit where
+    kit  = Right $ C.relkitAbFilter he1 test
+    test cs1 = Right $ c `elem` cs1
 
 
 -- ----------------------  omit-all

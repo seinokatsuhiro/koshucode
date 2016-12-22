@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Rop.Flat.Message           as Msg
 
 -- ----------------------  some
 
--- | Construct relmap of existential filter.
+-- | [some /R/] Existential filter.
 consSome :: (Ord c) => C.RopCons c
 consSome med = 
     do rmap <- Rop.getRelmap med "-relmap"
@@ -44,14 +44,15 @@ relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
 relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
-relkitSemi isEmpty (C.Relkit _ _ kitb2) he1 =
-    Right $ C.relkit he1 $ C.RelkitAbSemi p kitb2
-    where p bo2 = Right $ null bo2 == isEmpty
+relkitSemi _ _ Nothing = Right C.relkitNothing
+relkitSemi isEmpty (C.Relkit _ _ kit2) (Just he1) = kit where
+    kit = Right $ C.relkitConflFilter he1 test kit2
+    test bo2 = Right $ null bo2 == isEmpty
 
 
 -- ----------------------  none
 
--- | Construct relmap of non-existential filter.
+-- | [none /R/] Non-existential filter.
 consNone :: (Ord c) => C.RopCons c
 consNone med =
     do rmap <- Rop.getRelmap med "-relmap"
