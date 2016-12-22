@@ -62,7 +62,7 @@ relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `K.selectShare` K.g
 checkTerm :: String -> ([K.TermName] -> K.Head -> Bool) -> [K.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
-    | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
+    | check ns he1 = Right $ C.relkitId (Just he1)
     | otherwise    = Msg.checkTerm opt ns he1
 
 

@@ -64,8 +64,7 @@ relmapConst med = C.relmapFlow med . relkitConst
 -- | Create @const@ relkit.
 relkitConst :: K.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
-relkitConst (K.Rel he bo) _ = Right kit2 where
-    kit2 = C.relkitJust he $ C.RelkitConst bo
+relkitConst r _ = Right $ C.relkitConstRel r
 
 
 -- ----------------------  geo-datum-jp
@@ -173,7 +172,7 @@ relmapInterp med = C.relmapFlow med . relkitInterp
 relkitInterp :: (K.CContent c) => K.Interp -> C.RelkitFlow c
 relkitInterp _ Nothing = Right C.relkitNothing
 relkitInterp interp (Just he1)
-    | interpMatch interp he1 = Right $ C.relkitJust he1 C.RelkitId
+    | interpMatch interp he1 = Right $ C.relkitId (Just he1)
     | otherwise              = Msg.unkTerm (K.interpTerms interp) he1
 
 interpMatch :: K.Interp -> K.Head -> Bool

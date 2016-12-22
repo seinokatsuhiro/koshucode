@@ -163,7 +163,7 @@ relkitMove (ps, ns) (Just he1)
       pk             = K.termPicker ps he1
       he2            = K.headMap terms he1
       ns2            = K.getTermNames he2
-      kit2           = C.relkitJust he2 C.RelkitId
+      kit2           = C.relkitId (Just he2)
       ni             = zip ns $ K.termsIndex pk
       terms nt       = foldr term nt ni
       term (n, i)    = move n `K.mapAt` i

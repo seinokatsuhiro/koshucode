@@ -132,7 +132,7 @@ relkitSub :: (Ord c) => Rop.SharedTerms -> C.RelkitBinary c
 relkitSub sh kit2@(C.RelkitOutput he2 _) he1'@(Just he1)
     | he1 `K.isSuperhead` he2 = kit
     | otherwise = case Rop.unmatchShare sh pk of
-                    Nothing     -> Right $ C.relkitJust he1 $ C.RelkitConst []
+                    Nothing     -> Right $ C.relkitConst he1 []
                     Just (e, a) -> Msg.unmatchShare e a
     where
       pk  = K.termPicker he1 he2

@@ -44,7 +44,7 @@ relmapSpecialize hook links = spec [] [] where
     spec local keys kdef he1 rmap = s where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
-              C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
+              C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConstRel rel)
 
               C.RelmapAppend rmap1 rmap2 ->
                   do (kdef2, kit2) <- spec local keys kdef he1 rmap1

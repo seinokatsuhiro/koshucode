@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkitConflFilter,
 
     -- * Source of relation
-    relkitConst, relkitConstEmpty,
+    relkitConst, relkitConstRel, relkitConstEmpty,
     relkitConstSingleton, relkitConstBody,
     relkitSource,
 
@@ -34,7 +34,7 @@ import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 
 
 instance Monoid (C.Relkit c) where
-    mempty = relkitConst T.reldee
+    mempty = relkitConstRel T.reldee
     mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
         relkit ho2 $ C.RelkitAppend bo1 bo2
 
@@ -128,8 +128,12 @@ relkitConflFilter ho test sub = relkitJust ho $ C.RelkitAbSemi test sub
 -- ----------------------  Source of relation
 
 -- | Relkit for constant relmap.
-relkitConst :: T.Rel c -> C.Relkit c
-relkitConst (T.Rel he bo) = relkitJust he $ C.RelkitConst bo
+relkitConst :: T.Head -> [[c]] -> C.Relkit c
+relkitConst he bo = relkitJust he $ C.RelkitConst bo
+
+-- | Relkit outputs constant relation.
+relkitConstRel :: T.Rel c -> C.Relkit c
+relkitConstRel (T.Rel he bo) = relkitConst he bo
 
 -- | Relkit for relmap which output empty relation.
 relkitConstEmpty :: [S.TermName] -> C.Relkit c
@@ -147,9 +151,9 @@ relkitConstBody ns bo = kit where
 
 -- | Relkit for source relmap.
 relkitSource :: T.JudgeClass -> [S.TermName] -> C.Relkit c
-relkitSource p ns = relkitJust he kit where
+relkitSource cl ns = relkitJust he kit where
     he  = T.headFrom ns
-    kit = C.RelkitSource p ns
+    kit = C.RelkitSource cl ns
 
 
 -- ----------------------  Relation reference

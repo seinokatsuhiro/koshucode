@@ -95,7 +95,7 @@ relmapKoshuCopInfix med = C.relmapHook med . relkitKoshuCopInfix
 relkitKoshuCopInfix :: (K.CContent c) => (K.TermName, Maybe K.TermName, Maybe K.TermName) -> C.RelkitHook c
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     g     = C.getGlobal res
-    kit2  = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
+    kit2  = C.relkitConst he2 (map put $ C.globalInfix g)
     he2   = K.headFrom $ [name] ++ heightMaybe K.list1        ++ dirMaybe K.list1
     put (n, ih)  = [K.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 

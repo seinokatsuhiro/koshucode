@@ -79,8 +79,8 @@ relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
 -- | Create @source-term@ relkit.
 relkitSourceTerm :: String -> C.RelkitBinary c
-relkitSourceTerm pat (C.RelkitOutput he2 _) _ = Right kit3 where
-    kit3   = C.relkitJust he2 $ C.RelkitSource pat ns2
+relkitSourceTerm cl (C.RelkitOutput he2 _) _ = Right kit3 where
+    kit3   = C.relkitJust he2 $ C.RelkitSource cl ns2
     ns2    = K.getTermNames he2
 relkitSourceTerm _  _ _ = Right C.relkitNothing
 
