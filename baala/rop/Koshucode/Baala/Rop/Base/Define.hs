@@ -5,10 +5,12 @@
 module Koshucode.Baala.Rop.Base.Define
   ( rops,
     ropAlias,
+    preCheck,
   ) where
 
-import qualified Koshucode.Baala.DataPlus   as K
-import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.DataPlus          as K
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Make implementations of relmap operators.
 rops :: C.RopGroup     -- ^ Operator group
@@ -39,3 +41,18 @@ ropAliasAdd (name, orig) = loop where
     loop (r : rs) | C.ropName r == orig  = r { C.ropName = name } : r : rs
                   | otherwise            = r : loop rs
     
+-- | Term presence check.
+--
+--   * Present in input,
+--     e.g., abort if target terms are __\/a__ and input are __\/b \/c__.
+--   * Not duplicated,
+--     e.g., abort if target terms are __\/b \/b__ and input are __\/b \/c__.
+--
+preCheck :: K.TermPicker c -> K.MapAb a
+preCheck pk body
+    | K.newTermsExist pk   = Msg.newTerm pk input
+    | K.duplicated target  = Msg.dupTerm target
+    | otherwise            = body
+    where target = K.pkLNames pk
+          input  = K.pkRNames pk
+

@@ -180,15 +180,12 @@ relkitAltClock :: (K.CContent c)
   => (K.CopSet c, [K.TermName], (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c, K.MaybeCox c))
   -> C.RelkitFlow c
 relkitAltClock _ Nothing = Right C.relkitNothing
-relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1)
-    | K.duplicated ns     = Msg.dupTerm ns
-    | K.newTermsExist pk  = Msg.newTerm pk he1
-    | otherwise           = Right kit2
-    where
+relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = body where
+      body      = Rop.preCheck pk $ Right kit
       pk        = K.termPicker ns he1
       he2       = K.forwardTerms pk `K.headMap` he1
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
+      kit       = C.relkitJust he2 $ C.RelkitAbLinear False f []
+      f _ cs1   = do let run = K.coxRunCox cops he1 cs1
                          cs  = K.pickTerms pk cs1
                      d <- getMaybe (getInteger . run) day
                      h <- getMaybe (getInt . run) hour
@@ -197,3 +194,4 @@ relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1)
                      clocks <- (K.getClock . Right) K.<#> cs
                      let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
                      Right (clocks' ++ K.cutTerms pk cs1)
+

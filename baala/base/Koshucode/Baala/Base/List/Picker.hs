@@ -10,18 +10,21 @@ module Koshucode.Baala.Base.List.Picker
 
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.List.Select      as B
+import qualified Koshucode.Baala.Base.List.Set         as B
 
 -- | Create picker.
 picker :: (Ord n) => [n] -> [n] -> Picker n c
 picker ls rs = pk where
     -- index
-    (li, ri)   = B.selectIndexBoth ls rs
+    ls'        = B.unique ls
+    rs'        = B.unique rs
+    (li, ri)   = B.selectIndexBoth ls' rs'
 
     -- map
-    properL    = B.selectOthers    li
-    shareL     = B.selectElems     li
-    shareR     = B.selectElems     ri
-    properR    = B.selectOthers    ri
+    properL    = B.selectOthers li
+    shareL     = B.selectElems  li
+    shareR     = B.selectElems  ri
+    properR    = B.selectOthers ri
 
     -- split
     splitR xs  = (shareR xs, properR xs)
@@ -37,10 +40,10 @@ picker ls rs = pk where
          -- name
          , pkLNames         = ls
          , pkRNames         = rs
-         , pkLProperNames   = properL ls
-         , pkLShareNames    = shareL  ls
-         , pkRShareNames    = shareR  rs
-         , pkRProperNames   = properR rs
+         , pkLProperNames   = properL ls'
+         , pkLShareNames    = shareL  ls'
+         , pkRShareNames    = shareR  rs'
+         , pkRProperNames   = properR rs'
 
          -- map
          , pkLProper        = properL

@@ -46,8 +46,8 @@ type TermPick2 a b = (TermPick a, TermPick b)
 termPicker :: (D.GetTermNames target, D.GetTermNames input)
            => target -> input -> TermPicker c
 termPicker target input =
-    B.picker (D.getTermNamesUnique target)
-             (D.getTermNamesUnique input)
+    B.picker (D.getTermNames target)
+             (D.getTermNames input)
 
 
 -- ============================================  Present & new terms
