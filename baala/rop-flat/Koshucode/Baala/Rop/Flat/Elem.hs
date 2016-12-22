@@ -100,15 +100,15 @@ relkitMemberExpand :: (Ord c, K.CSet c, K.CList c, K.CText c)
   => K.TermName -> Int -> C.RelkitFlow c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
-    he2      = K.headCons x he1
-    kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
-    kitf2 cs = let [xsc] = [xsi] `K.selectElems` cs
-               in case xsc of
-                    _ | K.isSet  xsc -> map (: cs) $ K.gSet xsc
-                    _ | K.isList xsc -> map (: cs) $ K.unique $ K.gList xsc
-                    _ | K.isText xsc -> map (: cs) $ map (K.pText . K.list1)
-                                                   $ K.unique $ K.gText xsc
-                    _                -> [xsc : cs]
+    he2    = K.headCons x he1
+    kit2   = C.relkitMany he2 False f
+    f cs   = let [xsc] = [xsi] `K.selectElems` cs
+             in case xsc of
+                  _ | K.isSet  xsc -> map (: cs) $ K.gSet xsc
+                  _ | K.isList xsc -> map (: cs) $ K.unique $ K.gList xsc
+                  _ | K.isText xsc -> map (: cs) $ map (K.pText . K.list1)
+                                                 $ K.unique $ K.gText xsc
+                  _                -> [xsc : cs]
 
 
 -- ----------------------  index-elem
@@ -144,8 +144,8 @@ relkitIndexElemExpand :: forall c. (Ord c, K.CContent c)
 relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
 relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = K.headAppend [i, x] he1
-    kit2     = C.relkitJust he2 $ C.RelkitMany False kitf2
-    kitf2 cs = let [xsc] = [xsi] `K.selectElems` cs
+    kit2     = C.relkitMany he2 False flow
+    flow cs  = let [xsc] = [xsi] `K.selectElems` cs
                in case xsc of
                     _ | K.isSet  xsc -> indexElem cs $ K.sort $ K.gSet xsc
                     _ | K.isList xsc -> indexElem cs $ K.gList xsc
@@ -184,12 +184,12 @@ relmapUnroll med = C.relmapFlow med . relkitUnroll
 relkitUnroll :: (K.CTerm c) =>  (K.TermName, K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUnroll _ Nothing = Right C.relkitNothing
 relkitUnroll (t, c, from) (Just he1) = kit2 where
-    kit2 | K.termsPN fromi [ti, ci]  = Right $ C.relkitJust he2 $ C.RelkitMany False kitf2
+    kit2 | K.termsPN fromi [ti, ci]  = Right $ C.relkitMany he2 False flow
          | otherwise                 = Msg.unkTerm (t : c : from) he1
     [ti, ci] = headIndex he1 [t, c]
     fromi    = headIndex he1 from
     he2      = K.headAppend [t, c] $ K.headMap (K.selectOthers fromi) he1
-    kitf2 cs = let (fromc, cs') = fromi `K.selectBoth` cs
+    flow cs  = let (fromc, cs') = fromi `K.selectBoth` cs
                    cons (term, cont) = K.pTerm term : cont : cs'
                in cons <$> zip from fromc
 

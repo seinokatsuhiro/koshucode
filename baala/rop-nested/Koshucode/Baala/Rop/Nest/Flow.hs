@@ -70,8 +70,8 @@ relkitUp n (Just he1)
       he1'   = K.headMap pick he1
       t1     = K.headNested he1'
       he2    = K.headUp he1'
-      kit2   = C.relkitJust he2 $ C.RelkitMany True kitf2
-      kitf2  = K.relBody . K.gRel . head . pick
+      kit2   = C.relkitMany he2 True flow
+      flow   = K.relBody . K.gRel . head . pick
 
 
 -- ----------------------  chunk
