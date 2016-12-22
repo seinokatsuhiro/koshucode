@@ -14,7 +14,7 @@ module Koshucode.Baala.Rop.Nest.Flow
 import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
-import qualified Koshucode.Baala.Rop.Nest.Message  as Msg
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 -- ----------------------  down
