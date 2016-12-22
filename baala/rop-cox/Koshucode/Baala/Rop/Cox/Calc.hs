@@ -210,8 +210,8 @@ relkitSplit (cops, cox) (Just he1)
       (ns, xs)   = unzip cox               -- names and expressions
       pk         = K.termPicker ns he1
       he2        = K.headNests ns he1
-      kit2       = C.relkitJust he2 $ C.RelkitAbFull False f2 []
-      f2 _ bo1   = do let fs2 = K.coxRunList cops he1 `map` xs
+      kit2       = C.relkitAbFull he2 False flow
+      flow bo1   = do let fs2 = K.coxRunList cops he1 <$> xs
                       cs2 <- split fs2 bo1
                       Right [cs2]
 
@@ -249,8 +249,8 @@ relmapUnary med = C.relmapFlow med . relkitUnary
 relkitUnary :: (K.CContent c) => (K.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
     he2    = K.headFrom [n]
-    kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []
-    f2 _ _ = Right $ map K.list1 cs
+    kit2   = C.relkitAbFull he2 True flow
+    flow _ = Right $ map K.list1 cs
 
 
 

@@ -151,8 +151,8 @@ relkitVisitDistance (step1, step2, to, dist) (C.RelkitOutput he2 kitb2) (Just he
       dup       = K.duplicates $ dist : step1
       he3       = K.headConsNest to heTo he1
       heTo      = K.headFrom $ dist : step1
-      kit3      = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
-      kitf3     = relkitVisitDistanceBody (lenFrom == 1) pkStart pkFrom pkTo heTo
+      kit3      = C.relkitConfl he3 False confl [kitb2]
+      confl     = relkitVisitDistanceBody (lenFrom == 1) pkStart pkFrom pkTo heTo
 
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 

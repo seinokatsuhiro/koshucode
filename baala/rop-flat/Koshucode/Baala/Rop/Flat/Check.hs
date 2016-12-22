@@ -130,6 +130,6 @@ consDump med = Right $ C.relmapFlow med $ relkitDump
 relkitDump :: (K.CRel c, K.MixEncode c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
-    kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
-    kitf2 _ bo1 = Msg.dumpRel $ K.Rel he1 bo1
+    kit2 = C.relkitAbFull he1 False flow
+    flow bo1 = Msg.dumpRel $ K.Rel he1 bo1
 

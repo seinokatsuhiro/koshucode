@@ -66,8 +66,8 @@ relkitRange :: (K.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
-    f2 _ cs  = do decLow    <- K.getDec $ K.coxRunCox cops he1 cs coxLow
+    kit2     = C.relkitAbMany he2 False flow
+    flow cs  = do decLow    <- K.getDec $ K.coxRunCox cops he1 cs coxLow
                   decHigh   <- K.getDec $ K.coxRunCox cops he1 cs coxHigh
 
                   let low    = K.decimalNum decLow
@@ -123,10 +123,10 @@ relkitRangeBy :: (K.CContent c) => K.RangeBy K.Time -> RangeAttr c -> C.RelkitFl
 relkitRangeBy _ _ Nothing = Right C.relkitNothing
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
-    f2 _ cs  = do timeFrom  <-  K.getTime $ K.coxRunCox cops he1 cs from
-                  timeTo    <-  K.getTime $ K.coxRunCox cops he1 cs to
-                  let ts    =   map K.pTime $ range timeFrom timeTo
+    kit2     = C.relkitAbMany he2 False flow
+    flow cs  = do timeFrom  <- K.getTime $ K.coxRunCox cops he1 cs from
+                  timeTo    <- K.getTime $ K.coxRunCox cops he1 cs to
+                  let ts     = map K.pTime $ range timeFrom timeTo
                   Right $ map (: cs) ts
 
 
@@ -176,8 +176,8 @@ relkitRangeClock :: (K.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
 relkitRangeClock _ _ Nothing = Right C.relkitNothing
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitAbMany False f2 []
-    f2 _ cs  = do clockFrom  <- K.getClock $ K.coxRunCox cops he1 cs from
+    kit2     = C.relkitAbMany he2 False flow
+    flow cs  = do clockFrom  <- K.getClock $ K.coxRunCox cops he1 cs from
                   clockTo    <- K.getClock $ K.coxRunCox cops he1 cs to
                   let range   = K.clockRangeBy $ K.clockStep sec
                       clocks  = map K.pClock $ range clockFrom clockTo

@@ -8,12 +8,12 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkitJust, relkitNothing,
     relkitSetSource,
 
-    -- * Flow and confluent
-    relkitLinear,
-    relkitMany,
-    relkitFull,
-    relkitAbLinear,
-    relkitConfl,
+    -- * Flow relkit
+    relkitLinear, relkitMany, relkitFull,
+    relkitAbLinear, relkitAbMany, relkitAbFull,
+
+    -- * Confluent relkit
+    relkitLinearConfl, relkitManyConfl, relkitConfl,
 
     -- * Source of relation
     relkitConst, relkitConstEmpty,
@@ -61,7 +61,7 @@ relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
     C.Relkit hi ho $ B.codic cp core
 
 
--- ----------------------  Flow and confluent
+-- ----------------------  Flow
 
 -- | Create non-abortble one-to-one relkit.
 relkitLinear :: T.Head -> Bool -> (C.Flow [c] [c]) -> C.Relkit c
@@ -79,7 +79,26 @@ relkitFull ho uniq f = relkitJust ho $ C.RelkitFull uniq f
 relkitAbLinear :: T.Head -> Bool -> (C.FlowAb [c] [c]) -> C.Relkit c
 relkitAbLinear ho uniq f = relkitJust ho $ C.RelkitAbLinear uniq (const f) []
 
--- | Create (abortable) confluent relkit.
+-- | Create abortable one-to-many relkit.
+relkitAbMany :: T.Head -> Bool -> (C.FlowAb [c] [[c]]) -> C.Relkit c
+relkitAbMany ho uniq f = relkitJust ho $ C.RelkitAbMany uniq (const f) []
+
+-- | Create abortable full-mapping relkit.
+relkitAbFull :: T.Head -> Bool -> (C.FlowAb [[c]] [[c]]) -> C.Relkit c
+relkitAbFull ho uniq f = relkitJust ho $ C.RelkitAbFull uniq (const f) []
+
+
+-- ----------------------  Confluent
+
+-- | Create (abortable) one-to-one confluent relkit.
+relkitLinearConfl :: T.Head -> Bool -> (C.Confl c [c] [c]) -> [C.RelkitBody c] -> C.Relkit c
+relkitLinearConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbLinear uniq f bodies
+
+-- | Create (abortable) one-to-many confluent relkit.
+relkitManyConfl :: T.Head -> Bool -> (C.Confl c [c] [[c]]) -> [C.RelkitBody c] -> C.Relkit c
+relkitManyConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbMany uniq f bodies
+
+-- | Create (abortable) full-mapping confluent relkit.
 relkitConfl :: T.Head -> Bool -> (C.Confl c [[c]] [[c]]) -> [C.RelkitBody c] -> C.Relkit c
 relkitConfl ho uniq f bodies = relkitJust ho $ C.RelkitAbFull uniq f bodies
 

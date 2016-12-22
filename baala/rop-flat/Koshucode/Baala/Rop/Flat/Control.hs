@@ -59,8 +59,8 @@ relkitIf [C.Relkit _ _ kitbT, C.RelkitOutput heA kitbA, C.RelkitOutput heB kitbB
     | K.headEquiv heA heB = Right $ kit3
     | otherwise = Msg.diffHead [heA, heB]
     where
-      kit3 = C.relkitJust heA $ C.RelkitAbFull True kitf3 [kitbT, kitbA, kitbB]
-      kitf3 bmaps bo1 =
+      kit3 = C.relkitConfl heA True confl [kitbT, kitbA, kitbB]
+      confl bmaps bo1 =
           do let [bmapT, bmapA, bmapB] = bmaps
              boT <- bmapT bo1
              case boT of
@@ -125,8 +125,8 @@ relkitFix (C.RelkitOutput he2 kitb2) (Just he1)
     | K.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
-      kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
-      kitf3 bmaps = let [bmap2] = bmaps
+      kit3 = C.relkitConfl he1 True confl [kitb2]
+      confl bmaps = let [bmap2] = bmaps
                         bmap2'  = C.bmapAlign he2 he1 bmap2
                     in C.fixedRelation bmap2'
 relkitFix _ _ = Right C.relkitNothing
@@ -147,8 +147,8 @@ relmapEqual med = C.relmapBinary med relkitEqual
 -- | Create @equal@ relkit.
 relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
-    kit3 = C.relkitJust mempty $ C.RelkitAbFull False kitf3 [kitb2]
-    kitf3 bmaps bo1 =
+    kit3 = C.relkitConfl mempty False confl [kitb2]
+    confl bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
            Right $ if K.Rel he1 bo1 == K.Rel he2 bo2
