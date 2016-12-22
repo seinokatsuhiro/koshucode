@@ -15,7 +15,6 @@ module Koshucode.Baala.Rop.Cox.Type.Clock
 import qualified Koshucode.Baala.DataPlus          as K
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Rop.Base          as Rop
-import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsTypeClock :: (K.CContent c) => [C.Rop c]
@@ -66,21 +65,19 @@ relkitAddClock :: (K.CContent c)
   => (K.CopSet c, K.TermName, (K.Cox c, K.Cox c, (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c)))
   -> C.RelkitFlow c
 relkitAddClock _ Nothing = Right C.relkitNothing
-relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1)
-    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
-    | otherwise           = Right kit2
-    where
-      pk        = K.termPicker [n] he1
-      he2       = n `K.headCons` he1
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
-                     t <- getInt     $ run times
-                     d <- getInteger $ run day
-                     h <- getMaybe (getInt . run) hour
-                     m <- getMaybe (getInt . run) minute
-                     s <- getMaybe (getInt . run) sec
-                     let clock = K.clockTimes t $ clockFrom d h m s
-                     Right $ K.pClock clock : cs1
+relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = body where
+    body      = Rop.newCheck pk $ Right kit
+    pk        = K.termPicker [n] he1
+    he2       = n `K.headCons` he1
+    kit       = C.relkitJust he2 $ C.RelkitAbLinear False f []
+    f _ cs1   = do let run = K.coxRunCox cops he1 cs1
+                   t <- getInt     $ run times
+                   d <- getInteger $ run day
+                   h <- getMaybe (getInt . run) hour
+                   m <- getMaybe (getInt . run) minute
+                   s <- getMaybe (getInt . run) sec
+                   let clock = K.clockTimes t $ clockFrom d h m s
+                   Right $ K.pClock clock : cs1
 
 clockFrom :: Integer -> Maybe Int -> Maybe Int -> Maybe Int -> K.Clock
 clockFrom d (Just h)  (Just m)  (Just s)   = K.clockFromDhms d h m s
@@ -130,18 +127,15 @@ relmapOfClock med = C.relmapFlow med . relkitOfClock
 relkitOfClock :: (K.CContent c) =>
   (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
 relkitOfClock _ Nothing = Right C.relkitNothing
-relkitOfClock (cops, cox, ns) (Just he1)
-    | K.duplicated ns'    = Msg.dupTerm ns'
-    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
-    | otherwise           = Right kit2
-    where
-      ns'       = K.catMaybes ns
-      pk        = K.termPicker ns' he1
-      he2       = ns' `K.headAppend` he1
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do clock <- K.getClock $ K.coxRunCox cops he1 cs1 cox
-                     let cs2 = K.zipMaybe2 ns $ clockContents clock
-                     Right $ cs2 ++ cs1
+relkitOfClock (cops, cox, ns) (Just he1) = body where
+    body      = Rop.newCheck pk $ Right kit
+    ns'       = K.catMaybes ns
+    pk        = K.termPicker ns' he1
+    he2       = ns' `K.headAppend` he1
+    kit       = C.relkitJust he2 $ C.RelkitAbLinear False f []
+    f _ cs1   = do clock <- K.getClock $ K.coxRunCox cops he1 cs1 cox
+                   let cs2 = K.zipMaybe2 ns $ clockContents clock
+                   Right $ cs2 ++ cs1
 
 clockContents :: (K.CContent c) => K.Clock -> [c]
 clockContents clock = [sign, day, hour, minute, sec] where
@@ -181,17 +175,17 @@ relkitAltClock :: (K.CContent c)
   -> C.RelkitFlow c
 relkitAltClock _ Nothing = Right C.relkitNothing
 relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = body where
-      body      = Rop.preCheck pk $ Right kit
-      pk        = K.termPicker ns he1
-      he2       = K.forwardTerms pk `K.headMap` he1
-      kit       = C.relkitJust he2 $ C.RelkitAbLinear False f []
-      f _ cs1   = do let run = K.coxRunCox cops he1 cs1
-                         cs  = K.pickTerms pk cs1
-                     d <- getMaybe (getInteger . run) day
-                     h <- getMaybe (getInt . run) hour
-                     m <- getMaybe (getInt . run) minute
-                     s <- getMaybe (getInt . run) sec
-                     clocks <- (K.getClock . Right) K.<#> cs
-                     let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
-                     Right (clocks' ++ K.cutTerms pk cs1)
+    body      = Rop.preCheck pk $ Right kit
+    pk        = K.termPicker ns he1
+    he2       = K.forwardTerms pk `K.headMap` he1
+    kit       = C.relkitJust he2 $ C.RelkitAbLinear False f []
+    f _ cs1   = do let run = K.coxRunCox cops he1 cs1
+                       cs  = K.pickTerms pk cs1
+                   d <- getMaybe (getInteger . run) day
+                   h <- getMaybe (getInt . run) hour
+                   m <- getMaybe (getInt . run) minute
+                   s <- getMaybe (getInt . run) sec
+                   clocks <- (K.getClock . Right) K.<#> cs
+                   let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
+                   Right (clocks' ++ K.cutTerms pk cs1)
 

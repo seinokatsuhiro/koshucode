@@ -5,6 +5,7 @@
 module Koshucode.Baala.Rop.Base.Define
   ( rops,
     ropAlias,
+    newCheck,
     preCheck,
   ) where
 
@@ -41,12 +42,27 @@ ropAliasAdd (name, orig) = loop where
     loop (r : rs) | C.ropName r == orig  = r { C.ropName = name } : r : rs
                   | otherwise            = r : loop rs
     
+-- | New term check.
+--
+--   * Target terms are not present in input terms,
+--     e.g., abort if targets are __\/a__ and inputs are __\/a \/b__.
+--   * Target terms are not duplicated,
+--     e.g., abort if targets are __\/a \/a__ and inputs are __\/a \/b__.
+--
+newCheck :: K.TermPicker c -> K.MapAb a
+newCheck pk body
+    | K.preTermsExist pk   = Msg.reqNewTerm pk input
+    | K.duplicated target  = Msg.dupTerm target
+    | otherwise            = body
+    where target = K.pkLNames pk
+          input  = K.pkRNames pk
+
 -- | Term presence check.
 --
---   * Present in input,
---     e.g., abort if target terms are __\/a__ and input are __\/b \/c__.
---   * Not duplicated,
---     e.g., abort if target terms are __\/b \/b__ and input are __\/b \/c__.
+--   * Terget terms are present in input terms,
+--     e.g., abort if targets are __\/c__ and inputs are __\/a \/b__.
+--   * Target terms are not duplicated,
+--     e.g., abort if targets are __\/a \/a__ and inputs are __\/a \/b__.
 --
 preCheck :: K.TermPicker c -> K.MapAb a
 preCheck pk body
