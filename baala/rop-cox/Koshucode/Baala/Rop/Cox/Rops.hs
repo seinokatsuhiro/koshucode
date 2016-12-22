@@ -2,7 +2,7 @@
 
 -- | Relational operators with content calculation.
 
-module Koshucode.Baala.Rop.Cox.Bundle
+module Koshucode.Baala.Rop.Cox.Rops
   ( ropsCox,
   ) where
 

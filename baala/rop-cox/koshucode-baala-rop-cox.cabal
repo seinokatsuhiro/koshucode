@@ -48,7 +48,6 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Rop.Cox
-        Koshucode.Baala.Rop.Cox.Bundle
         Koshucode.Baala.Rop.Cox.Calc
         Koshucode.Baala.Rop.Cox.Empty
         Koshucode.Baala.Rop.Cox.Filter
@@ -56,6 +55,7 @@ library
         Koshucode.Baala.Rop.Cox.GeoDatumJp
         Koshucode.Baala.Rop.Cox.Message
         Koshucode.Baala.Rop.Cox.Range
+        Koshucode.Baala.Rop.Cox.Rops
 
         Koshucode.Baala.Rop.Cox.Type.Clock
         Koshucode.Baala.Rop.Cox.Type.Dec
