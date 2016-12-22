@@ -118,11 +118,11 @@ relkitProj :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitProj _ _ Nothing = Right C.relkitNothing
 relkitProj (hePick, boPick) ns (Just he1)
     | K.newTermsExist pk  = Msg.newTerm pk he1
-    | otherwise           = Right kit2
+    | otherwise           = Right kit
     where
       pk    = K.termPicker ns he1
       he2   = hePick pk `K.headMap` he1
-      kit2  = C.relkitLinear he2 True $ boPick pk
+      kit   = C.relkitLine True he2 $ boPick pk
 
 
 -- ----------------------  move

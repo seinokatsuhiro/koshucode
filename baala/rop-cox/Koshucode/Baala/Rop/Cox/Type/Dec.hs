@@ -141,11 +141,11 @@ relkitToDec _ Nothing = Right C.relkitNothing
 relkitToDec ns (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.newTermsExist pk  = Msg.newTerm pk he1
-    | otherwise           = Right kit2
+    | otherwise           = Right kit
     where
-      pk     = K.termPicker ns he1
-      he2    = K.headMap (K.forwardTerms pk) he1
-      kit2   = C.relkitLinear he2 False f
-      f cs1  = let cs = K.toDec <$> K.pickTerms pk cs1
-               in cs ++ K.cutTerms pk cs1
+      pk        = K.termPicker ns he1
+      he2       = K.headMap (K.forwardTerms pk) he1
+      kit       = C.relkitLine False he2 flow
+      flow cs1  = let cs = K.toDec <$> K.pickTerms pk cs1
+                  in cs ++ K.cutTerms pk cs1
 

@@ -94,7 +94,7 @@ relkitDuplicate ns (Just he1)
     | otherwise           = Right kit2
     where
       pk     = K.termPicker ns he1
-      kit2   = C.relkitFull he1 False flow
+      kit2   = C.relkitWhole False he1 flow
       dup    = not . K.isSingleton
       flow bo1 = let bo1map = K.gatherToMap $ map (K.pkRAssoc pk) bo1
                  in concat $ Map.elems $ Map.filter dup bo1map

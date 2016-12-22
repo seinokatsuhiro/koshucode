@@ -206,7 +206,7 @@ relkitRanking
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = K.headCons n he1
-    kit2  = C.relkitFull he2 False flow
+    kit2  = C.relkitWhole False he2 flow
     flow bo1  = let (rank, bo2) = ranking from ords (K.getTermNames he1) bo1
                 in zipWith (:) (map K.pInt rank) bo2
     ords  = (K.orderingCap . K.orderingTermName) <$> ns

@@ -68,7 +68,7 @@ relmapContents med = C.relmapFlow med . relkitContents
 
 -- | Create @contents@ relkit.
 relkitContents :: (Ord c) => K.TermName -> C.RelkitFlow c
-relkitContents n _ = Right $ C.relkitFull he2 False flow where
+relkitContents n _ = Right $ C.relkitWhole False he2 flow where
     he2  = K.headFrom [n]
     flow = map K.list1 . K.unique . concat
 
@@ -102,7 +102,7 @@ relkitPoScale :: (Ord c, K.CDec c) => Rop.PoScaleCalc c -> K.TermName4 -> C.Relk
 relkitPoScale _ _ Nothing = Right C.relkitNothing
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = K.headFrom [z,r]
-    kit2        = C.relkitFull he2 False flow
+    kit2        = C.relkitWhole False he2 flow
     xyPick      = K.pickDirect [x,y] he1
     flow bo1    = map put $ scale $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
@@ -237,7 +237,7 @@ relmapSize med n = C.relmapFlow med $ relkitSize n
 relkitSize :: (K.CDec c) => K.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = K.headFrom [n]
-    kit2      = C.relkitFull he2 False flow
+    kit2      = C.relkitWhole False he2 flow
     flow bo1  = [[ K.pInt $ length bo1 ]]
 
 
@@ -255,7 +255,7 @@ relmapEqlize med = C.relmapFlow med relkitEqlize
 relkitEqlize :: (Ord c) => C.RelkitFlow c
 relkitEqlize Nothing = Right C.relkitNothing
 relkitEqlize (Just he1) = Right kit2 where
-    kit2      = C.relkitFull he1 False flow
+    kit2      = C.relkitWhole False he1 flow
     flow bo1  = case eqlizeBody Ms.empty bo1 of
                   (_, bo2) -> bo2
 

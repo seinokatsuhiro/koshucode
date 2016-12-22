@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkitSetSource,
 
     -- * Flow relkit
-    relkitLinear, relkitMany, relkitFull,
+    relkitLine, relkitMany, relkitWhole,
     relkitLineAb, relkitManyAb, relkitWholeAb,
     relkitFilterAb,
 
@@ -66,20 +66,20 @@ relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
 -- ----------------------  Flow
 
 -- | Create non-abortble one-to-one (linear) relkit.
-relkitLinear
-    :: T.Head             -- ^ Heading of output relation
-    -> Bool               -- ^ Remove duplication or not
+relkitLine
+    :: Bool               -- ^ Remove duplication or not
+    -> T.Head             -- ^ Heading of output relation
     -> C.Flow [c] [c]     -- ^ Flow function which converts tuples of relation
     -> C.Relkit c         -- ^ Result relkit
-relkitLinear ho u flow = relkitJust ho $ C.RelkitLinear u flow
+relkitLine u ho flow = relkitJust ho $ C.RelkitLinear u flow
 
 -- | Create non-abortble one-to-many relkit.
-relkitMany :: T.Head -> Bool -> C.Flow [c] [[c]] -> C.Relkit c
-relkitMany ho u flow = relkitJust ho $ C.RelkitMany u flow
+relkitMany :: Bool -> T.Head -> C.Flow [c] [[c]] -> C.Relkit c
+relkitMany u ho flow = relkitJust ho $ C.RelkitMany u flow
 
--- | Create non-abortble full-mapping relkit.
-relkitFull :: T.Head -> Bool -> C.Flow [[c]] [[c]] -> C.Relkit c
-relkitFull ho u flow = relkitJust ho $ C.RelkitFull u flow
+-- | Create non-abortble whole-mapping relkit.
+relkitWhole :: Bool -> T.Head -> C.Flow [[c]] [[c]] -> C.Relkit c
+relkitWhole u ho flow = relkitJust ho $ C.RelkitFull u flow
 
 -- | Create abortable one-to-one (linear) relkit.
 relkitLineAb :: Bool -> T.Head -> C.FlowAb [c] [c] -> C.Relkit c

@@ -67,12 +67,12 @@ relmapTie med = C.relmapFlow med . relkitTie
 -- | Create @tie@ relkit.
 relkitTie :: (K.CTie c) => ([K.TermName], K.TermName) -> C.RelkitFlow c
 relkitTie _ Nothing = Right C.relkitNothing
-relkitTie (ns, to) (Just he1) = Right kit2 where
-    pick    = K.pickDirect ns he1
-    he2     = K.headCons to he1
-    kit2    = C.relkitLinear he2 False f
-    f cs1   = let tie = K.pTie $ zip ns $ pick cs1
-              in tie : cs1
+relkitTie (ns, to) (Just he1) = Right kit where
+    pick      = K.pickDirect ns he1
+    he2       = K.headCons to he1
+    kit       = C.relkitLine False he2 flow
+    flow cs1  = let tie = K.pTie $ zip ns $ pick cs1
+                in tie : cs1
 
 
 -- ----------------------  untie
@@ -123,7 +123,7 @@ relkitTermName :: (K.CTerm c) => K.TermName -> C.RelkitFlow c
 relkitTermName n Nothing    = Msg.noAttr $ K.termNameString n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = K.headFrom [n]
-    kit2      = C.relkitFull he2 False flow
+    kit2      = C.relkitWhole False he2 flow
     flow _    = map term $ K.getTermNames he1
     term t    = [K.pTerm t]
 
@@ -170,7 +170,7 @@ relmapAdd1 term med = C.relmapFlow med $ relkitAdd1 term
 -- | Create term-adding relkit.
 relkitAdd1 :: K.Term c -> Maybe K.Head -> K.Ab (C.Relkit c)
 relkitAdd1 _ Nothing = Right C.relkitNothing
-relkitAdd1 (n, c) (Just he1) = Right kit2 where
+relkitAdd1 (n, c) (Just he1) = Right kit where
     he2   = K.headCons n he1
-    kit2  = C.relkitLinear he2 False (c :)
+    kit   = C.relkitLine False he2 (c :)
 

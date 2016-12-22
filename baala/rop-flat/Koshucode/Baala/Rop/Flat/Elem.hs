@@ -99,16 +99,16 @@ relkitMemberCheck xi xsi he1' = Right kit2 where
 relkitMemberExpand :: (Ord c, K.CSet c, K.CList c, K.CText c)
   => K.TermName -> Int -> C.RelkitFlow c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
-relkitMemberExpand x xsi (Just he1) = Right kit2 where
-    he2    = K.headCons x he1
-    kit2   = C.relkitMany he2 False f
-    f cs   = let [xsc] = [xsi] `K.selectElems` cs
-             in case xsc of
-                  _ | K.isSet  xsc -> map (: cs) $ K.gSet xsc
-                  _ | K.isList xsc -> map (: cs) $ K.unique $ K.gList xsc
-                  _ | K.isText xsc -> map (: cs) $ map (K.pText . K.list1)
-                                                 $ K.unique $ K.gText xsc
-                  _                -> [xsc : cs]
+relkitMemberExpand x xsi (Just he1) = Right kit where
+    he2     = K.headCons x he1
+    kit     = C.relkitMany False he2 flow
+    flow cs = let [xsc] = [xsi] `K.selectElems` cs
+              in case xsc of
+                   _ | K.isSet  xsc -> map (: cs) $ K.gSet xsc
+                   _ | K.isList xsc -> map (: cs) $ K.unique $ K.gList xsc
+                   _ | K.isText xsc -> map (: cs) $ map (K.pText . K.list1)
+                                         $ K.unique $ K.gText xsc
+                   _                -> [xsc : cs]
 
 
 -- ----------------------  index-elem
@@ -144,7 +144,7 @@ relkitIndexElemExpand :: forall c. (Ord c, K.CContent c)
 relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
 relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = K.headAppend [i, x] he1
-    kit2     = C.relkitMany he2 False flow
+    kit2     = C.relkitMany False he2 flow
     flow cs  = let [xsc] = [xsi] `K.selectElems` cs
                in case xsc of
                     _ | K.isSet  xsc -> indexElem cs $ K.sort $ K.gSet xsc
@@ -184,7 +184,7 @@ relmapUnroll med = C.relmapFlow med . relkitUnroll
 relkitUnroll :: (K.CTerm c) =>  (K.TermName, K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUnroll _ Nothing = Right C.relkitNothing
 relkitUnroll (t, c, from) (Just he1) = kit2 where
-    kit2 | K.termsPN fromi [ti, ci]  = Right $ C.relkitMany he2 False flow
+    kit2 | K.termsPN fromi [ti, ci]  = Right $ C.relkitMany False he2 flow
          | otherwise                 = Msg.unkTerm (t : c : from) he1
     [ti, ci] = headIndex he1 [t, c]
     fromi    = headIndex he1 from
@@ -228,13 +228,13 @@ relmapElemEnd med = C.relmapFlow med . relkitElemBy K.takeTailFill
 relkitElemBy :: (Ord c, K.CContent c) => (c -> Int -> [c] -> [c]) -> (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitElemBy _ _ Nothing = Right C.relkitNothing
 relkitElemBy f (coll, to) (Just he1) = kit2 where
-    kit2 | K.termsPN [colli] toi = Right $ C.relkitLinear he2 False f'
+    kit2 | K.termsPN [colli] toi = Right $ C.relkitLine False he2 flow
          | otherwise = Msg.unkTerm [coll] he1
 
     [colli]  = headIndex he1 [coll]
     toi      = headIndex he1 to
     he2      = K.headAppend to he1
-    f' cs    = let [collc] = [colli] `K.selectElems` cs
+    flow cs  = let [collc] = [colli] `K.selectElems` cs
                in f K.empty (length to) (list collc) ++ cs
     list c | K.isSet  c   = K.gSetSort c
            | K.isList c   = K.gList c
@@ -260,13 +260,13 @@ relkitUncollect :: (Ord c, K.CSet c, K.CList c, K.CText c, K.CDec c, K.CEmpty c)
   => (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUncollect _ Nothing = Right C.relkitNothing
 relkitUncollect (coll, to) (Just he1) = kit2 where
-    kit2 | K.termsPN icoll ito  = Right $ C.relkitLinear he2 False f
+    kit2 | K.termsPN icoll ito  = Right $ C.relkitLine False he2 flow
          | otherwise            = Msg.unkTerm (coll : to) he1
 
     icoll    = headIndex he1 [coll]
     ito      = headIndex he1 to
     he2      = K.headAppend to he1
-    f cs     = let [xsc]    = icoll `K.selectElems` cs
+    flow cs  = let [xsc]    = icoll `K.selectElems` cs
                    char     = K.pText . K.list1
                    ys << xs = appendCount K.empty (length to) xs ys
                in case () of

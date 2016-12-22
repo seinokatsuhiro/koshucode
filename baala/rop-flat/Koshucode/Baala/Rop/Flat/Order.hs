@@ -66,11 +66,11 @@ relkitToward :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
 relkitToward (hePick, boPick) ns (Just he1)
     | K.newTermsExist pk   = Msg.newTerm pk he1
-    | otherwise            = Right kit2
+    | otherwise            = Right kit
     where
       pk    = K.termPicker ns he1
       he2   = K.headMap (hePick pk) he1
-      kit2  = C.relkitLinear he2 False $ boPick pk
+      kit   = C.relkitLine False he2 $ boPick pk
 
 
 -- ----------------------  lexical
@@ -86,12 +86,12 @@ relmapLexical med = C.relmapFlow med relkitLexical
 -- | Create @lexical@ relkit.
 relkitLexical :: C.RelkitFlow c
 relkitLexical Nothing = Right C.relkitNothing
-relkitLexical (Just he1) = Right kit2 where
+relkitLexical (Just he1) = Right kit where
     ns    = K.getTermNames he1
     pk    = K.termPicker (K.sort ns) ns
     fw    = K.forwardTerms pk
     he2   = K.headMap fw he1
-    kit2  = C.relkitLinear he2 False fw
+    kit   = C.relkitLine False he2 fw
 
 
 -- ----------------------  order
@@ -109,7 +109,7 @@ relmapOrder med = C.relmapFlow med . relkitOrder
 -- | Create @order@ relkit.
 relkitOrder :: (Ord c) => [K.TermName] -> C.RelkitFlow c
 relkitOrder _ Nothing = Right C.relkitNothing
-relkitOrder ns (Just he1) = Right kit2 where
-    kit2  = C.relkitFull he1 False flow
+relkitOrder ns (Just he1) = Right kit where
+    kit   = C.relkitWhole False he1 flow
     flow  = K.relBodyOrder ns he1
 
