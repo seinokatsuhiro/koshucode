@@ -17,10 +17,10 @@ module Koshucode.Baala.Rop.Cox.Filter
   ) where
 
 import Prelude hiding (getContents)
-import qualified Koshucode.Baala.DataPlus         as K
-import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Rop.Base         as Rop
-import qualified Koshucode.Baala.Rop.Cox.Message  as Msg
+import qualified Koshucode.Baala.DataPlus          as K
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 -- | Implementation of relational operators.
