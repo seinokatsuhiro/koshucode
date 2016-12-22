@@ -13,25 +13,22 @@ module Koshucode.Baala.Rop.Cox.Type.Dec
   ) where
 
 import qualified Data.Ratio                   as R
-import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Syntax       as S
-import qualified Koshucode.Baala.Data         as D
+import qualified Koshucode.Baala.DataPlus     as K
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Rop.Base     as Rop
 
 -- | Implementation of relational operators.
-ropsTypeDec :: (D.CContent c) => [C.Rop c]
+ropsTypeDec :: (K.CContent c) => [C.Rop c]
 ropsTypeDec = Rop.rops "type"
     [ consOfDec
-      O.& [ "of-dec E [-sign /N] [-fracle /N] [-num /N] [-denom /N]"
-            O.& "-content . -sign? -fracle? -num? -denom?" ]
+      K.& [ "of-dec E [-sign /N] [-fracle /N] [-num /N] [-denom /N]"
+            K.& "-content . -sign? -fracle? -num? -denom?" ]
     , consAltDec
-      O.& [ "alt-dec /P [-fracle F]"
-            O.& "-term . -fracle?" ]
+      K.& [ "alt-dec /P [-fracle F]"
+            K.& "-term . -fracle?" ]
     , consToDec
-      O.& [ "to-dec /P ..."
-            O.& "-term*" ]
+      K.& [ "to-dec /P ..."
+            K.& "-term*" ]
     ]
 
 
@@ -42,7 +39,7 @@ ropsTypeDec = Rop.rops "type"
 --   [of-dec /E/ -denom \/N]   Add term \/N as denominator of decimal number /E/.
 --   [of-dec /E/ -sign \/N]    Add term \/N as sign of decimal number /E/, i.e., -1, 0, or 1.
 --
-consOfDec :: (D.CContent c) => C.RopCons c
+consOfDec :: (K.CContent c) => C.RopCons c
 consOfDec med =
   do cops     <- Rop.getWhere   med "-where"
      content  <- Rop.getCox     med "-content"
@@ -53,35 +50,35 @@ consOfDec med =
      Right $ relmapOfDec med (cops, content, [sign, fracle, num, denom])
 
 -- | Create @of-dect@ relmap.
-relmapOfDec :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.Relmap c
+relmapOfDec :: (K.CContent c) =>
+  C.Intmed c -> (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.Relmap c
 relmapOfDec med = C.relmapFlow med . relkitOfDec
 
 -- | Create @of-dec@ relkit.
-relkitOfDec :: (D.CContent c) =>
-  (D.CopSet c, D.Cox c, [Maybe S.TermName]) -> C.RelkitFlow c
+relkitOfDec :: (K.CContent c) =>
+  (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
 relkitOfDec _ Nothing = Right C.relkitNothing
 relkitOfDec (cops, cox, ns) (Just he1) = Right kit2 where
-      he2       = B.catMaybes ns `D.headAppend` he1
+      he2       = K.catMaybes ns `K.headAppend` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do dec <- D.getDec $ D.coxRunCox cops he1 cs1 cox
-                     let cs2 = B.zipMaybe2 ns $ decContents dec
+      f2 _ cs1  = do dec <- K.getDec $ K.coxRunCox cops he1 cs1 cox
+                     let cs2 = K.zipMaybe2 ns $ decContents dec
                      Right $ cs2 ++ cs1
 
-decContents :: (D.CDec c) => D.Decimal -> [c]
+decContents :: (K.CDec c) => K.Decimal -> [c]
 decContents dec = [sign, fracle, num, denom] where
-    sign    = D.pDec $ signum dec
-    fracle  = D.pInt $ D.decimalFracle dec
-    num     = D.pInteger $ abs $ R.numerator ratio
-    denom   = D.pInteger $ abs $ R.denominator ratio
-    ratio   = D.decimalRatio dec
+    sign    = K.pDec $ signum dec
+    fracle  = K.pInt $ K.decimalFracle dec
+    num     = K.pInteger $ abs $ R.numerator ratio
+    denom   = K.pInteger $ abs $ R.denominator ratio
+    ratio   = K.decimalRatio dec
 
 
 -- ----------------------  alt-dec
 
 -- | [alt-dec \/P -fracle /F/]    Alter fracle of decimal number to /F/ in term \/P.
 --
-consAltDec :: (D.CContent c) => C.RopCons c
+consAltDec :: (K.CContent c) => C.RopCons c
 consAltDec med =
     do cops    <- Rop.getWhere    med "-where"
        term    <- Rop.getTerm     med "-term"
@@ -89,65 +86,65 @@ consAltDec med =
        Right $ relmapAltDec med (cops, term, fracle)
 
 -- | Create @alt-dec@ relmap.
-relmapAltDec :: (D.CContent c) =>
-  C.Intmed c -> (D.CopSet c, S.TermName, D.MaybeCox c) -> C.Relmap c
+relmapAltDec :: (K.CContent c) =>
+  C.Intmed c -> (K.CopSet c, K.TermName, K.MaybeCox c) -> C.Relmap c
 relmapAltDec med = C.relmapFlow med . relkitAltDec
 
 -- | Create @alt-dec@ relkit.
-relkitAltDec :: (D.CContent c)
-  => (D.CopSet c, S.TermName, D.MaybeCox c)
+relkitAltDec :: (K.CContent c)
+  => (K.CopSet c, K.TermName, K.MaybeCox c)
   -> C.RelkitFlow c
 relkitAltDec _ Nothing = Right C.relkitNothing
 relkitAltDec (cops, n, fracle) (Just he1) = Right kit2 where
-      ns1       = D.getTermNames he1
-      ind       = [n] `B.selectIndex` ns1
-      pick      = B.selectElems    ind
-      cut       = B.selectOthers   ind
-      fore      = B.permuteForward ind
-      he2       = D.headMap fore he1
+      ns1       = K.getTermNames he1
+      ind       = [n] `K.selectIndex` ns1
+      pick      = K.selectElems    ind
+      cut       = K.selectOthers   ind
+      fore      = K.permuteForward ind
+      he2       = K.headMap fore he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1  = do let run    = D.coxRunCox cops he1 cs1
+      f2 _ cs1  = do let run    = K.coxRunCox cops he1 cs1
                          [c]    = pick cs1
-                         dec    = D.gDec c
+                         dec    = K.gDec c
                      f' <- getMaybe (getInt . run) fracle
                      let dec' = case f' of
                                   Nothing -> dec
-                                  Just f  -> dec { D.decimalFracle = f }
-                     Right $ D.pDec dec' : cut cs1
+                                  Just f  -> dec { K.decimalFracle = f }
+                     Right $ K.pDec dec' : cut cs1
 
-getMaybe :: (c -> B.Ab a) -> Maybe c -> B.Ab (Maybe a)
+getMaybe :: (c -> K.Ab a) -> Maybe c -> K.Ab (Maybe a)
 getMaybe f (Just c)  = return . Just =<< f c
 getMaybe _ _         = return Nothing
 
-getInt :: (D.CContent c) => B.Ab c -> B.Ab Int
-getInt c = do d <- D.getDec c
-              return $ fromInteger $ D.decimalNum d
+getInt :: (K.CContent c) => K.Ab c -> K.Ab Int
+getInt c = do d <- K.getDec c
+              return $ fromInteger $ K.decimalNum d
 
 
 -- ----------------------  to-dec
 
 -- | [to-dec \/P ...]    Convert content of term \/P ... to decimal number.
 --
-consToDec :: (D.CContent c) => C.RopCons c
+consToDec :: (K.CContent c) => C.RopCons c
 consToDec med =
     do ns <- Rop.getTerms med "-term"
        Right $ relmapToDec med ns
 
 -- | Create @to-dec@ relmap.
-relmapToDec :: (D.CContent c) => C.Intmed c -> [S.TermName] -> C.Relmap c
+relmapToDec :: (K.CContent c) => C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapToDec med = C.relmapFlow med . relkitToDec
 
 -- | Create @to-dec@ relkit.
-relkitToDec :: (D.CContent c) => [S.TermName] -> C.RelkitFlow c
+relkitToDec :: (K.CContent c) => [K.TermName] -> C.RelkitFlow c
 relkitToDec _ Nothing = Right C.relkitNothing
 relkitToDec ns (Just he1) = Right kit2 where
-      ns1       = D.getTermNames he1
-      ind       = B.selectIndex ns ns1
-      pick      = B.selectElems    ind
-      cut       = B.selectOthers   ind
-      fore      = B.permuteForward ind
-      he2       = D.headMap fore he1
+      ns1       = K.getTermNames he1
+      ind       = K.selectIndex ns ns1
+      pick      = K.selectElems    ind
+      cut       = K.selectOthers   ind
+      fore      = K.permuteForward ind
+      he2       = K.headMap fore he1
       kit2      = C.relkitJust he2 $ C.RelkitLinear False f2
-      f2 cs1    = let cs = D.toDec <$> pick cs1
+      f2 cs1    = let cs = K.toDec <$> pick cs1
                   in cs ++ cut cs1
 

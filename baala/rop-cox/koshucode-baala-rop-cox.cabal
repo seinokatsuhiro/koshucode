@@ -66,10 +66,6 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                        == 4.*
-       , koshucode-baala-overture    == 0.189.0.0
-       , koshucode-baala-base        == 0.189.0.0
-       , koshucode-baala-syntax      == 0.189.0.0
-       , koshucode-baala-data        == 0.189.0.0
        , koshucode-baala-data-plus   == 0.189.0.0
        , koshucode-baala-core        == 0.189.0.0
        , koshucode-baala-rop         == 0.189.0.0

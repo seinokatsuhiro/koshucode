@@ -6,7 +6,7 @@ module Koshucode.Baala.Rop.Cox.Bundle
   ( ropsCox,
   ) where
 
-import qualified Koshucode.Baala.Data                as D
+import qualified Koshucode.Baala.DataPlus            as K
 import qualified Koshucode.Baala.Core                as C
 import qualified Koshucode.Baala.Rop.Cox.Calc        as Rop
 import qualified Koshucode.Baala.Rop.Cox.Empty       as Rop
@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Rop.Cox.Type.Clock  as Rop
 import qualified Koshucode.Baala.Rop.Cox.Type.Dec    as Rop
 
 -- | Relational operators with content calculation.
-ropsCox :: (D.CContent c) => [C.Rop c]
+ropsCox :: (K.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxCalc
           ++ Rop.ropsCoxEmpty
           ++ Rop.ropsCoxFilter
