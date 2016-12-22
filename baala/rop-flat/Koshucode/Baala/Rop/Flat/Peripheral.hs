@@ -92,12 +92,12 @@ relmapUntie med = C.relmapFlow med . relkitUntie
 relkitUntie :: (K.CTie c) => (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
-    pick      =  K.pickDirect [from] he1
-    he2       =  K.headAppend ns he1
-    kit2      =  C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-    f2 _ cs1  =  do let [tie] = pick cs1
-                    cs <- tiePick ns $ K.gTie tie
-                    Right $ cs ++ cs1
+    pick      = K.pickDirect [from] he1
+    he2       = K.headAppend ns he1
+    kit2      = C.relkitAbLinear he2 False flow
+    flow cs1  = do let [tie] = pick cs1
+                   cs <- tiePick ns $ K.gTie tie
+                   Right $ cs ++ cs1
 
 tiePick :: [K.TermName] -> [K.Term c] -> K.Ab [c]
 tiePick ns tie = mapM pick ns where

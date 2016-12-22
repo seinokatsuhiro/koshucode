@@ -70,8 +70,8 @@ relkitAdd (cops, cox) (Just he1)
       (ns, xs)   = unzip cox       -- names and expressions
       pk         = K.termPicker ns he1
       he2        = ns `K.headAppend` he1
-      kit2       = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-      f2 _ cs1   = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
+      kit2       = C.relkitAbLinear he2 False flow
+      flow cs1   = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cs1
 
 
@@ -103,8 +103,8 @@ relkitAlt (cops, cox) (Just he1)
       (ns, xs)  = unzip cox               -- names and expressions
       pk        = K.termPicker ns he1
       he2       = K.forwardTerms pk `K.headMap` he1  -- heading of output relation
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear True f2 []
-      f2 _ cs1  = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
+      kit2      = C.relkitAbLinear he2 True flow
+      flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
                      Right $ cs2 ++ K.cutTerms pk cs1
 
 
@@ -135,8 +135,8 @@ relkitFill (ns, cops, coxTo) (Just he1)
     where
       pk        = K.termPicker ns he1
       he2       = K.forwardTerms pk `K.headMap` he1
-      kit2      = C.relkitJust he2 $ C.RelkitAbLinear True f2 []
-      f2 _ cs1  = do cTo  <- K.coxRunCox cops he1 cs1 coxTo
+      kit2      = C.relkitAbLinear he2 True flow
+      flow cs1  = do cTo  <- K.coxRunCox cops he1 cs1 coxTo
                      let fill c | K.isEmpty c = cTo
                                 | otherwise   = c
                      Right $ map fill (K.pickTerms pk cs1) ++ (K.cutTerms pk cs1)
@@ -174,9 +174,9 @@ relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 relkitReplaceAll :: (K.CContent c) => (K.CopSet c, K.Cox c, K.Cox c) -> C.RelkitFlow c
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
-    kit2     = C.relkitJust he1 $ C.RelkitAbLinear False f2 []
-    f2 _ cs  = do cFrom    <-  K.coxRunCox cops he1 cs coxFrom
-                  cTo      <-  K.coxRunCox cops he1 cs coxTo
+    kit2     = C.relkitAbLinear he1 False flow
+    flow cs  = do cFrom  <- K.coxRunCox cops he1 cs coxFrom
+                  cTo    <- K.coxRunCox cops he1 cs coxTo
                   let replace c | c == cFrom = cTo
                                 | otherwise  = c
                   Right $ map replace cs
