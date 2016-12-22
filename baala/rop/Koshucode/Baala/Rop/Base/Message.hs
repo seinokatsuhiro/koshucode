@@ -8,6 +8,7 @@ module Koshucode.Baala.Rop.Base.Message
     -- * Messages
     -- ** Terms
     dupTerm,
+    reqNewTerm,
     unevenTerms,
 
     -- ** Others
@@ -23,12 +24,18 @@ import qualified Koshucode.Baala.DataPlus as K
 
 -- ---------------------------------  Terms
 
--- | [Duplicate term name] Duplicate ... in the terms ...
+-- | [Duplicate term names] Duplicate ... in the terms ...
 dupTerm :: (K.GetTermNames t) => t -> K.Ab a
 dupTerm t =
-    K.leftLines "Duplicate term name"
+    K.leftLines "Duplicate term names"
          $ msgTerms2 "Duplicate" t' "in the terms" t
         where t' = K.duplicates $ K.getTermNames t
+
+-- | [Require new term names] Present ... in the terms ...
+reqNewTerm :: (K.GetTermNames t) => K.TermPicker c -> t -> K.Ab a
+reqNewTerm pk input =
+    K.leftLines "Require new term names"
+         $ msgTerms2 "Present" (K.preTerms pk) "in the terms" input
 
 -- | [Uneven terms] /N/ and /N/ terms
 unevenTerms :: (K.GetTermNames t1, K.GetTermNames t2) => t1 -> t2 -> K.Ab a

@@ -12,9 +12,10 @@ module Koshucode.Baala.Rop.Cox.Type.Clock
     consAltClock, relmapAltClock, relkitAltClock,
   ) where
 
-import qualified Koshucode.Baala.DataPlus     as K
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Rop
+import qualified Koshucode.Baala.DataPlus          as K
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsTypeClock :: (K.CContent c) => [C.Rop c]
@@ -65,7 +66,11 @@ relkitAddClock :: (K.CContent c)
   => (K.CopSet c, K.TermName, (K.Cox c, K.Cox c, (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c)))
   -> C.RelkitFlow c
 relkitAddClock _ Nothing = Right C.relkitNothing
-relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = Right kit2 where
+relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1)
+    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
+    | otherwise           = Right kit2
+    where
+      pk        = K.termPicker [n] he1
       he2       = n `K.headCons` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
@@ -125,8 +130,14 @@ relmapOfClock med = C.relmapFlow med . relkitOfClock
 relkitOfClock :: (K.CContent c) =>
   (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
 relkitOfClock _ Nothing = Right C.relkitNothing
-relkitOfClock (cops, cox, ns) (Just he1) = Right kit2 where
-      he2       = K.catMaybes ns `K.headAppend` he1
+relkitOfClock (cops, cox, ns) (Just he1)
+    | K.duplicated ns'    = Msg.dupTerm ns'
+    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
+    | otherwise           = Right kit2
+    where
+      ns'       = K.catMaybes ns
+      pk        = K.termPicker ns' he1
+      he2       = ns' `K.headAppend` he1
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do clock <- K.getClock $ K.coxRunCox cops he1 cs1 cox
                      let cs2 = K.zipMaybe2 ns $ clockContents clock
@@ -169,16 +180,20 @@ relkitAltClock :: (K.CContent c)
   => (K.CopSet c, [K.TermName], (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c, K.MaybeCox c))
   -> C.RelkitFlow c
 relkitAltClock _ Nothing = Right C.relkitNothing
-relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = Right kit2 where
-    pk        = K.termPicker ns he1
-    he2       = K.forwardTerms pk `K.headMap` he1
-    kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
-    f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
-                       cs  = K.pickTerms pk cs1
-                   d <- getMaybe (getInteger . run) day
-                   h <- getMaybe (getInt . run) hour
-                   m <- getMaybe (getInt . run) minute
-                   s <- getMaybe (getInt . run) sec
-                   clocks <- (K.getClock . Right) K.<#> cs
-                   let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
-                   Right (clocks' ++ K.cutTerms pk cs1)
+relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1)
+    | K.duplicated ns     = Msg.dupTerm ns
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | otherwise           = Right kit2
+    where
+      pk        = K.termPicker ns he1
+      he2       = K.forwardTerms pk `K.headMap` he1
+      kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
+      f2 _ cs1  = do let run = K.coxRunCox cops he1 cs1
+                         cs  = K.pickTerms pk cs1
+                     d <- getMaybe (getInteger . run) day
+                     h <- getMaybe (getInt . run) hour
+                     m <- getMaybe (getInt . run) minute
+                     s <- getMaybe (getInt . run) sec
+                     clocks <- (K.getClock . Right) K.<#> cs
+                     let clocks' = (K.pClock . K.clockAlter d h m s) <$> clocks
+                     Right (clocks' ++ K.cutTerms pk cs1)

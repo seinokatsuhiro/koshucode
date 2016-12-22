@@ -13,7 +13,6 @@ module Koshucode.Baala.Rop.Flat.Message
     reqRel,
     reqCollection,
     reqInterp,
-    reqNewTerm,
     reqUnaryFn,
     unexpTermName,
     unmatchShare,
@@ -21,7 +20,6 @@ module Koshucode.Baala.Rop.Flat.Message
 
 import qualified Koshucode.Baala.DataPlus       as K
 import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Data.Message   as Msg
 import Koshucode.Baala.Rop.Base.Message
 
 
@@ -66,12 +64,6 @@ reqCollection = K.leftBecause "Require collection type"
 -- | Require data interpretation
 reqInterp :: K.Ab a
 reqInterp = K.leftBecause "Require data interpretation"
-
--- | Require new term names
-reqNewTerm :: (K.GetTermNames t) => K.TermPicker c -> t -> K.Ab a
-reqNewTerm pk input =
-    K.leftLines "Require new term names"
-         $ Msg.msgTerms2 "Present" (K.preTerms pk) "in the terms" input
 
 -- | Require unary function
 reqUnaryFn :: K.Ab a
