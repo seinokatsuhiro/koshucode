@@ -49,7 +49,7 @@ data RelkitCore c
     | RelkitMany     Bool ( Flow  [c]  [[c]] )
                      -- ^ __Safe flow:__ Mapping from single tuple to multiple tuples,
                      --   include no tuples.
-    | RelkitLinear   Bool ( Flow  [c]   [c]  )
+    | RelkitLine     Bool ( Flow  [c]   [c]  )
                      -- ^ __Safe flow:__ Mapping from single tuple to single tuple.
 
     | RelkitTest          ( O.Test    [c] )
@@ -63,7 +63,7 @@ data RelkitCore c
                      -- ^ __Abortable confluence:__ Multiple to multiple.
     | RelkitAbMany   Bool ( Confl c  [c]  [[c]] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Single to multiple.
-    | RelkitAbLinear Bool ( Confl c  [c]   [c] ) [RelkitBody c]
+    | RelkitAbLine  Bool ( Confl c  [c]   [c] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Single to single.
 
     | RelkitAppend   (RelkitBody c) (RelkitBody c)
@@ -88,12 +88,12 @@ data RelkitCore c
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
     show (RelkitMany        _ _)   = "RelkitMany"
-    show (RelkitLinear      _ _)   = "RelkitLinear"
+    show (RelkitLine        _ _)   = "RelkitLine"
     show (RelkitTest          _)   = "RelkitTest"
 
     show (RelkitAbFull    _ _ _)   = "RelkitAbFull"
     show (RelkitAbMany    _ _ _)   = "RelkitAbMany"
-    show (RelkitAbLinear  _ _ _)   = "RelkitAbLinear"
+    show (RelkitAbLine    _ _ _)   = "RelkitAbLine"
     show (RelkitAbSemi      _ _)   = "RelkitAbSemi"
     show (RelkitAbTest        _)   = "RelkitAbTest"
 

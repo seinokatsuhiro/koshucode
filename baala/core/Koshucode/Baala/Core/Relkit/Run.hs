@@ -33,13 +33,13 @@ relkitLink kits = linkKit where
     link (B.Codic cp core) =
         B.Codic cp $
          case core of
-           C.RelkitAbFull      u f bs    -> C.RelkitAbFull      u f $ map link bs
-           C.RelkitAbMany      u f bs    -> C.RelkitAbMany      u f $ map link bs
-           C.RelkitAbLinear    u f bs    -> C.RelkitAbLinear    u f $ map link bs
-           C.RelkitAbSemi        f b     -> C.RelkitAbSemi        f $ link  b
-           C.RelkitAppend        b1 b2   -> C.RelkitAppend (link b1) (link b2)
-           C.RelkitNest        p nest b  -> C.RelkitNest     p nest $ link  b
-           C.RelkitCopy        p copy b  -> C.RelkitCopy     p copy $ link  b
+           C.RelkitAbFull   u f bs    -> C.RelkitAbFull      u f $ map link bs
+           C.RelkitAbMany   u f bs    -> C.RelkitAbMany      u f $ map link bs
+           C.RelkitAbLine   u f bs    -> C.RelkitAbLine      u f $ map link bs
+           C.RelkitAbSemi     f b     -> C.RelkitAbSemi        f $ link  b
+           C.RelkitAppend     b1 b2   -> C.RelkitAppend (link b1) (link b2)
+           C.RelkitNest     p nest b  -> C.RelkitNest     p nest $ link  b
+           C.RelkitCopy     p copy b  -> C.RelkitCopy     p copy $ link  b
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
                  Just (C.Relkit _ _ b)   -> C.RelkitLink n key $ Just b
@@ -53,26 +53,26 @@ relkitRun :: forall h. forall c. (D.CContent c, T.SelectRel h)
 relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $
      case core of
-       C.RelkitFull        u f     -> right u $ f             bo1
-       C.RelkitMany        u f     -> right u $ f `concatMap` bo1
-       C.RelkitLinear      u f     -> right u $ f `map`       bo1
-       C.RelkitTest          f     -> Right   $ filter f      bo1
+       C.RelkitFull      u f     -> right u $ f             bo1
+       C.RelkitMany      u f     -> right u $ f `concatMap` bo1
+       C.RelkitLine      u f     -> right u $ f `map`       bo1
+       C.RelkitTest        f     -> Right   $ filter f      bo1
 
-       C.RelkitAbFull      u f bs  -> monad u $            f (mrun bs)        bo1
-       C.RelkitAbLinear    u f bs  -> monad u $            f (mrun bs) `mapM` bo1
-       C.RelkitAbMany      u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
-       C.RelkitAbSemi        f b   -> B.filterM (semi f b) bo1
-       C.RelkitAbTest        f     -> B.filterM f bo1
+       C.RelkitAbFull    u f bs  -> monad u $            f (mrun bs)        bo1
+       C.RelkitAbLine    u f bs  -> monad u $            f (mrun bs) `mapM` bo1
+       C.RelkitAbMany    u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
+       C.RelkitAbSemi      f b   -> B.filterM (semi f b) bo1
+       C.RelkitAbTest      f     -> B.filterM f bo1
 
-       C.RelkitConst           bo  -> Right bo
-       C.RelkitId                  -> Right bo1
+       C.RelkitConst         bo  -> Right bo
+       C.RelkitId                -> Right bo1
 
        C.RelkitAppend b1@(B.Codic cp' _) b2
-                                   -> do bo2 <- run b1 bo1
-                                         Msg.abRun cp' $ run b2 bo2
+                                 -> do bo2 <- run b1 bo1
+                                       Msg.abRun cp' $ run b2 bo2
 
-       C.RelkitSource pat ns       -> let r = T.selectRel hook pat ns
-                                      in Right $ T.relBody r
+       C.RelkitSource pat ns     -> let r = T.selectRel hook pat ns
+                                    in Right $ T.relBody r
 
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n

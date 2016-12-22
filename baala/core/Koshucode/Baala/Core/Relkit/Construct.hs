@@ -71,7 +71,7 @@ relkitLine
     -> T.Head             -- ^ Heading of output relation
     -> C.Flow [c] [c]     -- ^ Flow function which converts tuples of relation
     -> C.Relkit c         -- ^ Result relkit
-relkitLine u ho flow = relkitJust ho $ C.RelkitLinear u flow
+relkitLine u ho flow = relkitJust ho $ C.RelkitLine u flow
 
 -- | Create non-abortble one-to-many relkit.
 relkitMany :: Bool -> T.Head -> C.Flow [c] [[c]] -> C.Relkit c
@@ -83,7 +83,7 @@ relkitWhole u ho flow = relkitJust ho $ C.RelkitFull u flow
 
 -- | Create abortable one-to-one (linear) relkit.
 relkitLineAb :: Bool -> T.Head -> C.FlowAb [c] [c] -> C.Relkit c
-relkitLineAb u ho flow = relkitJust ho $ C.RelkitAbLinear u (const flow) []
+relkitLineAb u ho flow = relkitJust ho $ C.RelkitAbLine u (const flow) []
 
 -- | Create abortable one-to-many relkit.
 relkitManyAb :: Bool -> T.Head -> C.FlowAb [c] [[c]] -> C.Relkit c
@@ -110,7 +110,7 @@ relkitConflLine
     -> C.Confl c [c] [c]  -- ^ Confluent function which merges multiple relations
     -> [C.RelkitBody c]   -- ^ Relkit of subrelmaps
     -> C.Relkit c         -- ^ Result relkit
-relkitConflLine u ho confl subs = relkitJust ho $ C.RelkitAbLinear u confl subs
+relkitConflLine u ho confl subs = relkitJust ho $ C.RelkitAbLine u confl subs
 
 -- | Create abortable one-to-many confluent relkit.
 relkitConflMany :: Bool -> T.Head -> C.Confl c [c] [[c]] -> [C.RelkitBody c] -> C.Relkit c
