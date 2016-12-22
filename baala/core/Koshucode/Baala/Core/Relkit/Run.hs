@@ -33,7 +33,7 @@ relkitLink kits = linkKit where
     link (B.Codic cp core) =
         B.Codic cp $
          case core of
-           C.RelkitAbFull   u f bs    -> C.RelkitAbFull      u f $ map link bs
+           C.RelkitAbWhole  u f bs    -> C.RelkitAbWhole     u f $ map link bs
            C.RelkitAbMany   u f bs    -> C.RelkitAbMany      u f $ map link bs
            C.RelkitAbLine   u f bs    -> C.RelkitAbLine      u f $ map link bs
            C.RelkitAbSemi     f b     -> C.RelkitAbSemi        f $ link  b
@@ -53,12 +53,12 @@ relkitRun :: forall h. forall c. (D.CContent c, T.SelectRel h)
 relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $
      case core of
-       C.RelkitFull      u f     -> right u $ f             bo1
+       C.RelkitWhole     u f     -> right u $ f             bo1
        C.RelkitMany      u f     -> right u $ f `concatMap` bo1
        C.RelkitLine      u f     -> right u $ f `map`       bo1
        C.RelkitTest        f     -> Right   $ filter f      bo1
 
-       C.RelkitAbFull    u f bs  -> monad u $            f (mrun bs)        bo1
+       C.RelkitAbWhole   u f bs  -> monad u $            f (mrun bs)        bo1
        C.RelkitAbLine    u f bs  -> monad u $            f (mrun bs) `mapM` bo1
        C.RelkitAbMany    u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
        C.RelkitAbSemi      f b   -> B.filterM (semi f b) bo1

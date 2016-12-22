@@ -43,7 +43,7 @@ type RelkitBody c = B.Codic (RelkitCore c)
 
 -- | Calculation of relation-to-relation mapping.
 data RelkitCore c
-    = RelkitFull     Bool ( Flow [[c]] [[c]] )
+    = RelkitWhole    Bool ( Flow [[c]] [[c]] )
                      -- ^ __Safe flow:__ Arbitrary relation mapping, i.e.,
                      --   mapping from multiple tuples to multiple tuples.
     | RelkitMany     Bool ( Flow  [c]  [[c]] )
@@ -59,7 +59,7 @@ data RelkitCore c
     | RelkitAbSemi        ( B.AbTest  [[c]] ) (RelkitBody c)
                      -- ^ __Abortable flow:__ Filter by data.
 
-    | RelkitAbFull   Bool ( Confl c [[c]] [[c]] ) [RelkitBody c]
+    | RelkitAbWhole  Bool ( Confl c [[c]] [[c]] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Multiple to multiple.
     | RelkitAbMany   Bool ( Confl c  [c]  [[c]] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Single to multiple.
@@ -86,12 +86,12 @@ data RelkitCore c
                      -- ^ __Reference:__ Local relation reference, i.e., @^/r@ or @^r@.
 
 instance Show (RelkitCore c) where
-    show (RelkitFull        _ _)   = "RelkitFull"
+    show (RelkitWhole       _ _)   = "RelkitWhole"
     show (RelkitMany        _ _)   = "RelkitMany"
     show (RelkitLine        _ _)   = "RelkitLine"
     show (RelkitTest          _)   = "RelkitTest"
 
-    show (RelkitAbFull    _ _ _)   = "RelkitAbFull"
+    show (RelkitAbWhole   _ _ _)   = "RelkitAbWhole"
     show (RelkitAbMany    _ _ _)   = "RelkitAbMany"
     show (RelkitAbLine    _ _ _)   = "RelkitAbLine"
     show (RelkitAbSemi      _ _)   = "RelkitAbSemi"

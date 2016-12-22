@@ -79,7 +79,7 @@ relkitMany u ho flow = relkitJust ho $ C.RelkitMany u flow
 
 -- | Create non-abortble whole-mapping relkit.
 relkitWhole :: Bool -> T.Head -> C.Flow [[c]] [[c]] -> C.Relkit c
-relkitWhole u ho flow = relkitJust ho $ C.RelkitFull u flow
+relkitWhole u ho flow = relkitJust ho $ C.RelkitWhole u flow
 
 -- | Create abortable one-to-one (linear) relkit.
 relkitLineAb :: Bool -> T.Head -> C.FlowAb [c] [c] -> C.Relkit c
@@ -91,7 +91,7 @@ relkitManyAb u ho flow = relkitJust ho $ C.RelkitAbMany u (const flow) []
 
 -- | Create abortable whole-mapping relkit.
 relkitWholeAb :: Bool -> T.Head -> C.FlowAb [[c]] [[c]] -> C.Relkit c
-relkitWholeAb u ho flow = relkitJust ho $ C.RelkitAbFull u (const flow) []
+relkitWholeAb u ho flow = relkitJust ho $ C.RelkitAbWhole u (const flow) []
 
 -- | Create abortable filtering relkit.
 relkitFilterAb
@@ -118,7 +118,7 @@ relkitConflMany u ho confl subs = relkitJust ho $ C.RelkitAbMany u confl subs
 
 -- | Create abortable whole-mapping confluent relkit.
 relkitConflWhole :: Bool -> T.Head -> C.Confl c [[c]] [[c]] -> [C.RelkitBody c] -> C.Relkit c
-relkitConflWhole u ho confl subs = relkitJust ho $ C.RelkitAbFull u confl subs
+relkitConflWhole u ho confl subs = relkitJust ho $ C.RelkitAbWhole u confl subs
 
 -- | Create abortable confluent filtering relkit.
 relkitConflFilter :: T.Head -> B.AbTest [[c]] -> C.RelkitBody c -> C.Relkit c
