@@ -182,7 +182,7 @@ relkitAltClock (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 where
       kit2      = C.relkitJust he2 $ C.RelkitAbLinear False f2 []
       f2 _ cs1  = do let run    = D.coxRunCox cops he1 cs1
                          [c]    = pick cs1
-                         clock  = D.gClock c
+                     clock <- D.getClock $ Right c
                      d <- getMaybe (getInteger . run) day
                      h <- getMaybe (getInt . run) hour
                      m <- getMaybe (getInt . run) minute

@@ -206,29 +206,29 @@ list !!! index = loop index list where
 -- --------------------------------------------  getArgN
 
 -- | Extract single argument.
-getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
+getArg1 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab (B.Ab c)
 getArg1 [x]       = Right x
-getArg1 _         = Msg.unmatchType ""
+getArg1 xs        = Msg.badArg xs
 
 -- | Extract two arguments.
-getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
+getArg2 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
 getArg2 [x, y]    = Right (x, y)
-getArg2 _         = Msg.unmatchType ""
+getArg2 xs        = Msg.badArg xs
 
 -- | Extract three arguments.
-getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
+getArg3 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
-getArg3 _         = Msg.unmatchType ""
+getArg3 xs        = Msg.badArg xs
 
 -- | Extract single non-abortable argument.
-getRightArg1 :: [B.Ab c] -> B.Ab c
+getRightArg1 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab c
 getRightArg1 = getArg1 B.>=> id
 
 -- | Extract two non-abortable arguments.
-getRightArg2 :: [B.Ab c] -> B.Ab (c, c)
+getRightArg2 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab (c, c)
 getRightArg2 = getArg2 B.>=> B.right2
 
 -- | Extract three non-abortable arguments.
-getRightArg3 :: [B.Ab c] -> B.Ab (c, c, c)
+getRightArg3 :: (D.CTypeOf c) => [B.Ab c] -> B.Ab (c, c, c)
 getRightArg3 = getArg3 B.>=> B.right3
 

@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Data.Class.Message   as Msg
 -- --------------------------------------------  Type
 
 -- | Classifiable into 'D.Type'.
-class CTypeOf c where
+class (B.MixEncode c) => CTypeOf c where
     -- | Get type of content.
     typeOf :: c -> T.Type
 
@@ -41,10 +41,9 @@ type GetContent b c = B.Ab c -> B.Ab b
 
 -- | Get content which may be aborted.
 getContent :: (CTypeOf c) => O.Test c -> (c -> b) -> GetContent b c
-getContent is get (Right c)
-    | is c      = Right $ get c
-    | otherwise = Msg.unmatchType $ B.encode $ typeOf c
-getContent _ _ (Left a) = Left a
+getContent test get (Right c) | test c     = Right $ get c
+                              | otherwise  = Msg.typeUnmatched c
+getContent _ _ (Left a)                    = Left a
 
 
 -- --------------------------------------------  Empty and End
