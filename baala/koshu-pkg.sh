@@ -64,7 +64,7 @@ pkg_dirs_or () {
     if [ -z "$1" ]; then
         pkg_dirs
     else
-        echo "$1" | sed 's:/$::'
+        echo "$@" | sed 's:/::g'
     fi
 }
 
@@ -152,7 +152,7 @@ pkg_import_outer () {
 }
 
 pkg_haddock () {
-    for pkg in `pkg_dirs_or $1`; do
+    for pkg in `pkg_dirs_or "$@"`; do
         ( cd "$pkg"
           pkg_section "haddock (in $pkg)"
           cabal haddock \
@@ -364,9 +364,11 @@ case "$1" in
         pkg_exec cabal clean ;;
     doc0)
         pkg_doc_verbose=0
-        pkg_haddock "$2" 2> /dev/null ;;
+        shift
+        pkg_haddock "$@" 2> /dev/null ;;
     doc)
-        pkg_haddock "$2" ;;
+        shift
+        pkg_haddock "$@" ;;
     doc2)
         pkg_exec cabal configure
         pkg_exec cabal build
