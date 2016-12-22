@@ -7,6 +7,9 @@ module Koshucode.Baala.Core.Relkit.Construct
     relkit, relkitId,
     relkitJust, relkitNothing,
     relkitSetSource,
+
+    -- * Flow and confluent
+    relkitLinear,
     relkitAbLinear,
     relkitConfl,
 
@@ -54,6 +57,13 @@ relkitNothing = relkit Nothing C.RelkitId
 relkitSetSource :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)
 relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
     C.Relkit hi ho $ B.codic cp core
+
+
+-- ----------------------  Flow and confluent
+
+-- | Create non-abortble linear relkit.
+relkitLinear :: T.Head -> Bool -> O.Map [c] -> C.Relkit c
+relkitLinear ho uniq f = relkitJust ho $ C.RelkitLinear uniq f
 
 -- | Create abortable linear relkit.
 relkitAbLinear :: T.Head -> Bool -> B.AbMap [c] -> C.Relkit c

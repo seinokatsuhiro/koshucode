@@ -122,7 +122,7 @@ relkitProj (hePick, boPick) ns (Just he1)
     where
       pk    = K.termPicker ns he1
       he2   = hePick pk `K.headMap` he1
-      kit2  = C.relkitJust he2 $ C.RelkitLinear True $ boPick pk
+      kit2  = C.relkitLinear he2 True $ boPick pk
 
 
 -- ----------------------  move

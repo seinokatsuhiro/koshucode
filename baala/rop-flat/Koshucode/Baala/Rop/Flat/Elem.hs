@@ -228,13 +228,13 @@ relmapElemEnd med = C.relmapFlow med . relkitElemBy K.takeTailFill
 relkitElemBy :: (Ord c, K.CContent c) => (c -> Int -> [c] -> [c]) -> (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitElemBy _ _ Nothing = Right C.relkitNothing
 relkitElemBy f (coll, to) (Just he1) = kit2 where
-    kit2 | K.termsPN [colli] toi = Right $ C.relkitJust he2 $ C.RelkitLinear False kitf2
+    kit2 | K.termsPN [colli] toi = Right $ C.relkitLinear he2 False f'
          | otherwise = Msg.unkTerm [coll] he1
 
     [colli]  = headIndex he1 [coll]
     toi      = headIndex he1 to
     he2      = K.headAppend to he1
-    kitf2 cs = let [collc] = [colli] `K.selectElems` cs
+    f' cs    = let [collc] = [colli] `K.selectElems` cs
                in f K.empty (length to) (list collc) ++ cs
     list c | K.isSet  c   = K.gSetSort c
            | K.isList c   = K.gList c
@@ -260,13 +260,13 @@ relkitUncollect :: (Ord c, K.CSet c, K.CList c, K.CText c, K.CDec c, K.CEmpty c)
   => (K.TermName, [K.TermName]) -> C.RelkitFlow c
 relkitUncollect _ Nothing = Right C.relkitNothing
 relkitUncollect (coll, to) (Just he1) = kit2 where
-    kit2 | K.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitLinear False kitf2
+    kit2 | K.termsPN icoll ito  = Right $ C.relkitLinear he2 False f
          | otherwise            = Msg.unkTerm (coll : to) he1
 
     icoll    = headIndex he1 [coll]
     ito      = headIndex he1 to
     he2      = K.headAppend to he1
-    kitf2 cs = let [xsc]    = icoll `K.selectElems` cs
+    f cs     = let [xsc]    = icoll `K.selectElems` cs
                    char     = K.pText . K.list1
                    ys << xs = appendCount K.empty (length to) xs ys
                in case () of

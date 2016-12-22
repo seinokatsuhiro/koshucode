@@ -70,7 +70,7 @@ relkitToward (hePick, boPick) ns (Just he1)
     where
       pk    = K.termPicker ns he1
       he2   = K.headMap (hePick pk) he1
-      kit2  = C.relkitJust he2 $ C.RelkitLinear False $ boPick pk
+      kit2  = C.relkitLinear he2 False $ boPick pk
 
 
 -- ----------------------  lexical
@@ -91,7 +91,7 @@ relkitLexical (Just he1) = Right kit2 where
     pk    = K.termPicker (K.sort ns) ns
     fw    = K.forwardTerms pk
     he2   = K.headMap fw he1
-    kit2  = C.relkitJust he2 $ C.RelkitLinear False fw
+    kit2  = C.relkitLinear he2 False fw
 
 
 -- ----------------------  order

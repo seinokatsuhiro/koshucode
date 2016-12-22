@@ -57,9 +57,9 @@ relkitSubtext _ Nothing = Right C.relkitNothing
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit2 where
     pick    = K.pickDirect [n] he1
     he2     = K.headAppend ((K.toTermName . fst) <$> ns) he1
-    kit2    = C.relkitJust he2 $ C.RelkitLinear False f2
+    kit2    = C.relkitLinear he2 False f
     result  = subtextResult trim ns
-    f2 cs   = case pick cs of
+    f cs    = case pick cs of
                [c] | K.isText c
                    -> case match $ K.gText c of
                         Just (_, rs) -> result rs ++ cs
