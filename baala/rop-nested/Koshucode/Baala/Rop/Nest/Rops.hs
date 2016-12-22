@@ -2,7 +2,7 @@
 
 -- | Relational operators for nested relations.
 
-module Koshucode.Baala.Rop.Nest.Rop
+module Koshucode.Baala.Rop.Nest.Rops
   ( ropsNest,
   ) where
 

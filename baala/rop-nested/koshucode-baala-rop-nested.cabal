@@ -50,7 +50,7 @@ library
         Koshucode.Baala.Rop.Nest.Confl
         Koshucode.Baala.Rop.Nest.Deriv
         Koshucode.Baala.Rop.Nest.Flow
-        Koshucode.Baala.Rop.Nest.Rop
+        Koshucode.Baala.Rop.Nest.Rops
 
   -- Modules included in this library but not exported.
   --other-modules:       
