@@ -63,7 +63,7 @@ relmapFilter med = C.relmapFlow med . relkitFilter
 relkitFilter :: (K.CContent c) => (Bool, K.CopSet c, K.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, cops, body) (Just he1) = kit where
-    kit  = Right $ C.relkitAbFilter he1 test
+    kit  = Right $ C.relkitFilterAb he1 test
     test cs1 = do c <- K.coxRunCox cops he1 cs1 body
                   case K.isBool c of
                     True  -> Right $ K.gBool c == which
@@ -89,7 +89,7 @@ relmapContain med = C.relmapFlow med . relkitContain
 relkitContain :: (Eq c) => c -> C.RelkitFlow c
 relkitContain _ Nothing = Right C.relkitNothing
 relkitContain c (Just he1) = kit where
-    kit  = Right $ C.relkitAbFilter he1 test
+    kit  = Right $ C.relkitFilterAb he1 test
     test cs1 = Right $ c `elem` cs1
 
 

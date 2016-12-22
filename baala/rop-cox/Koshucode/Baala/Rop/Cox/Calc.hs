@@ -70,7 +70,7 @@ relkitAdd (cops, cox) (Just he1)
       (ns, xs)   = unzip cox       -- names and expressions
       pk         = K.termPicker ns he1
       he2        = ns `K.headAppend` he1
-      kit2       = C.relkitAbLinear he2 False flow
+      kit2       = C.relkitLineAb False he2 flow
       flow cs1   = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cs1
 
@@ -103,7 +103,7 @@ relkitAlt (cops, cox) (Just he1)
       (ns, xs)  = unzip cox               -- names and expressions
       pk        = K.termPicker ns he1
       he2       = K.forwardTerms pk `K.headMap` he1  -- heading of output relation
-      kit2      = C.relkitAbLinear he2 True flow
+      kit2      = C.relkitLineAb True he2 flow
       flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
                      Right $ cs2 ++ K.cutTerms pk cs1
 
@@ -135,7 +135,7 @@ relkitFill (ns, cops, coxTo) (Just he1)
     where
       pk        = K.termPicker ns he1
       he2       = K.forwardTerms pk `K.headMap` he1
-      kit2      = C.relkitAbLinear he2 True flow
+      kit2      = C.relkitLineAb True he2 flow
       flow cs1  = do cTo  <- K.coxRunCox cops he1 cs1 coxTo
                      let fill c | K.isEmpty c = cTo
                                 | otherwise   = c
@@ -174,7 +174,7 @@ relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 relkitReplaceAll :: (K.CContent c) => (K.CopSet c, K.Cox c, K.Cox c) -> C.RelkitFlow c
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
-    kit2     = C.relkitAbLinear he1 False flow
+    kit2     = C.relkitLineAb False he1 flow
     flow cs  = do cFrom  <- K.coxRunCox cops he1 cs coxFrom
                   cTo    <- K.coxRunCox cops he1 cs coxTo
                   let replace c | c == cFrom = cTo
@@ -210,7 +210,7 @@ relkitSplit (cops, cox) (Just he1)
       (ns, xs)   = unzip cox               -- names and expressions
       pk         = K.termPicker ns he1
       he2        = K.headNests ns he1
-      kit2       = C.relkitAbFull he2 False flow
+      kit2       = C.relkitWholeAb False he2 flow
       flow bo1   = do let fs2 = K.coxRunList cops he1 <$> xs
                       cs2 <- split fs2 bo1
                       Right [cs2]
@@ -249,7 +249,7 @@ relmapUnary med = C.relmapFlow med . relkitUnary
 relkitUnary :: (K.CContent c) => (K.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
     he2    = K.headFrom [n]
-    kit2   = C.relkitAbFull he2 True flow
+    kit2   = C.relkitWholeAb True he2 flow
     flow _ = Right $ map K.list1 cs
 
 

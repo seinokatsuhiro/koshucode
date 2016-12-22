@@ -10,8 +10,8 @@ module Koshucode.Baala.Core.Relkit.Construct
 
     -- * Flow relkit
     relkitLinear, relkitMany, relkitFull,
-    relkitAbLinear, relkitAbMany, relkitAbFull,
-    relkitAbFilter,
+    relkitLineAb, relkitManyAb, relkitWholeAb,
+    relkitFilterAb,
 
     -- * Confluent relkit
     relkitConflLine, relkitConflMany, relkitConflWhole,
@@ -82,23 +82,23 @@ relkitFull :: T.Head -> Bool -> C.Flow [[c]] [[c]] -> C.Relkit c
 relkitFull ho u flow = relkitJust ho $ C.RelkitFull u flow
 
 -- | Create abortable one-to-one (linear) relkit.
-relkitAbLinear :: T.Head -> Bool -> C.FlowAb [c] [c] -> C.Relkit c
-relkitAbLinear ho u flow = relkitJust ho $ C.RelkitAbLinear u (const flow) []
+relkitLineAb :: Bool -> T.Head -> C.FlowAb [c] [c] -> C.Relkit c
+relkitLineAb u ho flow = relkitJust ho $ C.RelkitAbLinear u (const flow) []
 
 -- | Create abortable one-to-many relkit.
-relkitAbMany :: T.Head -> Bool -> C.FlowAb [c] [[c]] -> C.Relkit c
-relkitAbMany ho u flow = relkitJust ho $ C.RelkitAbMany u (const flow) []
+relkitManyAb :: Bool -> T.Head -> C.FlowAb [c] [[c]] -> C.Relkit c
+relkitManyAb u ho flow = relkitJust ho $ C.RelkitAbMany u (const flow) []
 
--- | Create abortable full-mapping relkit.
-relkitAbFull :: T.Head -> Bool -> C.FlowAb [[c]] [[c]] -> C.Relkit c
-relkitAbFull ho u flow = relkitJust ho $ C.RelkitAbFull u (const flow) []
+-- | Create abortable whole-mapping relkit.
+relkitWholeAb :: Bool -> T.Head -> C.FlowAb [[c]] [[c]] -> C.Relkit c
+relkitWholeAb u ho flow = relkitJust ho $ C.RelkitAbFull u (const flow) []
 
 -- | Create abortable filtering relkit.
-relkitAbFilter
+relkitFilterAb
     :: T.Head             -- ^ Heading of output relation
     -> B.AbTest [c]       -- ^ Teset function which determins keeping/omitting tuples
     -> C.Relkit c         -- ^ Result relkit
-relkitAbFilter ho test = relkitJust ho $ C.RelkitAbTest test
+relkitFilterAb ho test = relkitJust ho $ C.RelkitAbTest test
 
 
 -- ----------------------  Confluent

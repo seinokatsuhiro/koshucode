@@ -61,7 +61,7 @@ relkitOfDec :: (K.CContent c) =>
 relkitOfDec _ Nothing = Right C.relkitNothing
 relkitOfDec (cops, cox, ns) (Just he1) = Right kit2 where
       he2       = K.catMaybes ns `K.headAppend` he1
-      kit2      = C.relkitAbLinear he2 False flow
+      kit2      = C.relkitLineAb False he2 flow
       flow cs1  = do dec <- K.getDec $ K.coxRunCox cops he1 cs1 cox
                      let cs2 = K.zipMaybe2 ns $ decContents dec
                      Right $ cs2 ++ cs1
@@ -103,7 +103,7 @@ relkitAltDec (cops, n, fracle) (Just he1) = Right kit2 where
       cut       = K.selectOthers   ind
       fore      = K.permuteForward ind
       he2       = K.headMap fore he1
-      kit2      = C.relkitAbLinear he2 False flow
+      kit2      = C.relkitLineAb False he2 flow
       flow cs1  = do let run    = K.coxRunCox cops he1 cs1
                          [c]    = pick cs1
                          dec    = K.gDec c

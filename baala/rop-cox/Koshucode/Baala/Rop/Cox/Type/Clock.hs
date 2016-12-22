@@ -68,7 +68,7 @@ relkitAddClock _ Nothing = Right C.relkitNothing
 relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = kit where
     pk     = K.termPicker [n] he1
     he2    = n `K.headCons` he1
-    kit    = Rop.newCheck pk $ Right $ C.relkitAbLinear he2 False f
+    kit    = Rop.newCheck pk $ Right $ C.relkitLineAb False he2 f
     f cs1  = do let run = K.coxRunCox cops he1 cs1
                 t <- getInt     $ run times
                 d <- getInteger $ run day
@@ -130,7 +130,7 @@ relkitOfClock (cops, cox, ns) (Just he1) = kit where
     ns'    = K.catMaybes ns
     pk     = K.termPicker ns' he1
     he2    = ns' `K.headAppend` he1
-    kit    = Rop.newCheck pk $ Right $ C.relkitAbLinear he2 False f
+    kit    = Rop.newCheck pk $ Right $ C.relkitLineAb False he2 f
     f cs1  = do clock <- K.getClock $ K.coxRunCox cops he1 cs1 cox
                 let cs2 = K.zipMaybe2 ns $ clockContents clock
                 Right $ cs2 ++ cs1
@@ -175,7 +175,7 @@ relkitAltClock _ Nothing = Right C.relkitNothing
 relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = kit where
     pk     = K.termPicker ns he1
     he2    = K.forwardTerms pk `K.headMap` he1
-    kit    = Rop.preCheck pk $ Right $ C.relkitAbLinear he2 False f
+    kit    = Rop.preCheck pk $ Right $ C.relkitLineAb False he2 f
     f cs1  = do let run = K.coxRunCox cops he1 cs1
                     cs  = K.pickTerms pk cs1
                 d <- getMaybe (getInteger . run) day

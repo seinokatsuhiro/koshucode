@@ -94,7 +94,7 @@ relkitUntie _ Nothing = Right C.relkitNothing
 relkitUntie (from, ns) (Just he1) = Right kit2 where
     pick      = K.pickDirect [from] he1
     he2       = K.headAppend ns he1
-    kit2      = C.relkitAbLinear he2 False flow
+    kit2      = C.relkitLineAb False he2 flow
     flow cs1  = do let [tie] = pick cs1
                    cs <- tiePick ns $ K.gTie tie
                    Right $ cs ++ cs1
