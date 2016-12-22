@@ -1,0 +1,587 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.List.Picker</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('base', 'koshucode-baala-base', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-List-Picker.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Base-List-Picker.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.190.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.List.Picker</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Picker is a data for picking target elements
+   based on element names.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:picker"
+	    >picker</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n =&gt; [n] -&gt; [n] -&gt; <a href="Koshucode-Baala-Base-List-Picker.html#t:Picker"
+	    >Picker</a
+	    > n c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Picker"
+	    >Picker</a
+	    > n c = <a href="#v:Picker"
+	    >Picker</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:pkDisjoint"
+		>pkDisjoint</a
+		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:pkLShareIndex"
+		>pkLShareIndex</a
+		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		>]</li
+	      ><li
+	      ><a href="#v:pkRShareIndex"
+		>pkRShareIndex</a
+		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+		>Int</a
+		>]</li
+	      ><li
+	      ><a href="#v:pkLProperNames"
+		>pkLProperNames</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:pkLShareNames"
+		>pkLShareNames</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:pkRProperNames"
+		>pkRProperNames</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:pkRShareNames"
+		>pkRShareNames</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:pkLProper"
+		>pkLProper</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkLShare"
+		>pkLShare</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkRShare"
+		>pkRShare</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkRProper"
+		>pkRProper</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkRForward"
+		>pkRForward</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkRBackward"
+		>pkRBackward</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+		>Map</a
+		> [c]</li
+	      ><li
+	      ><a href="#v:pkRSplit"
+		>pkRSplit</a
+		> :: [c] -&gt; ([c], [c])</li
+	      ><li
+	      ><a href="#v:pkRAssoc"
+		>pkRAssoc</a
+		> :: [c] -&gt; ([c], [c])</li
+	      ></ul
+	    >}</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:picker" class="def"
+	    >picker</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > n =&gt; [n] -&gt; [n] -&gt; <a href="Koshucode-Baala-Base-List-Picker.html#t:Picker"
+	    >Picker</a
+	    > n c <a onclick="showSource('src/Koshucode-Baala-Base-List-Picker.html#picker');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create picker.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:Picker" class="def"
+	    >Picker</a
+	    > n c <a onclick="showSource('src/Koshucode-Baala-Base-List-Picker.html#Picker');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Picker data.</p
+	    ><p
+	    >For example, <strong
+	      >/a /b /c</strong
+	      > and <strong
+	      >/b /c /d /e</strong
+	      >
+   have left-proper terms <strong
+	      >/a</strong
+	      >,
+   shared terms <strong
+	      >/b /c</strong
+	      >,
+   and right-proper terms <strong
+	      >/d /e</strong
+	      >.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let pk = picker (words &quot;/a /b /c&quot;) (words &quot;/b /c /d /e&quot;)
+</code
+		></strong
+	      ></pre
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Picker" class="def"
+		  >Picker</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:pkDisjoint" class="def"
+			>pkDisjoint</a
+			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+			>Bool</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Test:</strong
+			  > Whether shared part is empty</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkDisjoint pk
+</code
+			    ></strong
+			  >False
+</pre
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkDisjoint $ picker (words &quot;/a /b /c&quot;) (words &quot;/d /e&quot;)
+</code
+			    ></strong
+			  >True
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkLShareIndex" class="def"
+			>pkLShareIndex</a
+			> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Index:</strong
+			  > Indicies of right-shared part</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLShareIndex pk
+</code
+			    ></strong
+			  >[1, 2]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRShareIndex" class="def"
+			>pkRShareIndex</a
+			> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+			>Int</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Index:</strong
+			  > Indicies of left-shared part</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRShareIndex pk
+</code
+			    ></strong
+			  >[0, 1]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkLProperNames" class="def"
+			>pkLProperNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Left-proper term names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLProperNames pk
+</code
+			    ></strong
+			  >[&quot;/a&quot;]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkLShareNames" class="def"
+			>pkLShareNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Left-shared term names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLShareNames pk
+</code
+			    ></strong
+			  >[&quot;/b&quot;,&quot;/c&quot;]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRProperNames" class="def"
+			>pkRProperNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Right-proper term names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRProperNames pk
+</code
+			    ></strong
+			  >[&quot;/d&quot;,&quot;/e&quot;]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRShareNames" class="def"
+			>pkRShareNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Right-shared term names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRShareNames pk
+</code
+			    ></strong
+			  >[&quot;/b&quot;,&quot;/c&quot;]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkLProper" class="def"
+			>pkLProper</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Pick left-proper part from left contents</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLProper pk &quot;ABC&quot;
+</code
+			    ></strong
+			  >&quot;A&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkLShare" class="def"
+			>pkLShare</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Pick left-shared part from left contents</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLShare pk &quot;ABC&quot;
+</code
+			    ></strong
+			  >&quot;BC&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRShare" class="def"
+			>pkRShare</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Pick right-shared part from right contents</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRShare pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >&quot;BC&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRProper" class="def"
+			>pkRProper</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Pick right-proper part from right contents</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRProper pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >&quot;DE&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRForward" class="def"
+			>pkRForward</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Move shared terms forward.</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRForward pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >&quot;BCDE&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRBackward" class="def"
+			>pkRBackward</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+			>Map</a
+			> [c]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Map:</strong
+			  > Move shared terms backward.</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRBackward pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >&quot;DEBC&quot;
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRSplit" class="def"
+			>pkRSplit</a
+			> :: [c] -&gt; ([c], [c])</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Split:</strong
+			  > Pick right-shared and right-proper part</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRSplit pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >(&quot;BC&quot;, &quot;DE&quot;)
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRAssoc" class="def"
+			>pkRAssoc</a
+			> :: [c] -&gt; ([c], [c])</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Split:</strong
+			  > Pick right-shared part and right contents</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRAssoc pk &quot;BCDE&quot;
+</code
+			    ></strong
+			  >(&quot;BC&quot;, &quot;BCDE&quot;)
+</pre
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

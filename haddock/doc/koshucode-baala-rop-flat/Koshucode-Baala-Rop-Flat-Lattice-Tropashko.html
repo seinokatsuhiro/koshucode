@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.187.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.190.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -267,8 +267,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    >Construct relmap to meet relation.</p
+	  ><dl
+	    ><dt
+	      >meet <em
+		>R</em
+		> [-share /P ...]</dt
+	      ><dd
+	      >Meet input relation and <em
+		>R</em
+		>.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -297,7 +305,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  > c</td
 		><td class="doc"
 		><p
-		  >Source infomation</p
+		  >Intermediate relmap</p
 		  ></td
 		></tr
 	      ><tr
@@ -307,7 +315,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  ></td
 		><td class="doc"
 		><p
-		  >Shared terms</p
+		  >Shared terms from <code
+		    >-share</code
+		    > option</p
 		  ></td
 		></tr
 	      ><tr
@@ -317,7 +327,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  > c</td
 		><td class="doc"
 		><p
-		  >Subrelmap of meet operator</p
+		  >Subrelmap <em
+		    >R</em
+		    ></p
 		  ></td
 		></tr
 	      ><tr
@@ -372,9 +384,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    > and <code
 	    >/c</code
 	    >,
-    left-sided term is <code
+    left-proper term is <code
 	    >/a</code
-	    >, and right-sided term is <code
+	    >, and right-proper term is <code
 	    >/d</code
 	    >.</p
 	  ><dl
@@ -382,83 +394,86 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Input</dt
 	    ><dd
 	    >Relations <code
-	      >(Rel he1 bo1)</code
+	      >(Rel head1 body1)</code
 	      > and <code
-	      >(Rel he2 bo2)</code
+	      >(Rel heea2 body2)</code
+	      > :: <code
+	      >Rel c</code
 	      ></dd
 	    ><dt
 	    >Output</dt
 	    ><dd
 	    >Relation <code
-	      >(Rel he3 b3)</code
+	      >(Rel head3 body3)</code
+	      > :: <code
+	      >Rel c</code
 	      ></dd
 	    ></dl
 	  ><ol
 	  ><li
 	    >Let <code
 	      >s1</code
-	      > be shared-term information of <code
-	      >he1</code
+	      > be the shared-term information of <code
+	      >head1</code
 	      >.</li
 	    ><li
 	    >Let <code
 	      >s2</code
-	      > be shared-term information of <code
-	      >he2</code
+	      > be the shared-term information of <code
+	      >head2</code
 	      >.</li
 	    ><li
 	    >Let <code
 	      >cs1</code
 	      > :: <code
 	      >[c]</code
-	      > be element of <code
-	      >bo1</code
+	      > be an element of <code
+	      >body1</code
 	      >.</li
 	    ><li
 	    >Let <code
 	      >cs2</code
 	      > :: <code
 	      >[c]</code
-	      > be element of <code
-	      >bo2</code
+	      > be an element of <code
+	      >body2</code
 	      >.</li
 	    ><li
-	    >Split each <code
-	      >cs2</code
-	      >, by <code
+	    >Using <code
 	      >s2</code
-	      >,
-       into shared and sided terms :: <code
+	      >, split each <code
+	      >cs2</code
+	      > into
+       shared and proper terms :: <code
 	      >([c], [c])</code
 	      >.</li
 	    ><li
-	    >For each same shared terms, collect the sided terms.
+	    >For each same shared terms, collect the proper terms.
        Let it be <code
-	      >(share2, sides2)</code
+	      >(share2, propers2)</code
 	      > :: <code
 	      >([c], [[c]])</code
 	      >.</li
 	    ><li
-	    >Pick shared terms <code
+	    >Using <code
+	      >s1</code
+	      >, pick shared terms <code
 	      >share1</code
 	      > :: <code
 	      >[c]</code
-	      >,
-       by <code
-	      >s1</code
-	      >, from each <code
+	      > from each <code
 	      >cs1</code
 	      >.</li
 	    ><li
-	    >Concat <code
+	    >Concatenate each of <code
+	      >propers2</code
+	      > and <code
 	      >cs1</code
-	      > and each of <code
-	      >sides2</code
 	      >
        where <code
-	      >share1</code
-	      > equals <code
 	      >share2</code
+	      > equals <code
+	      >share1</code
 	      >,</li
 	    ></ol
 	  ></div
@@ -476,8 +491,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    >Construct relmap to join relation.</p
+	  ><dl
+	    ><dt
+	      >join <em
+		>R</em
+		> [-share /P ...]</dt
+	      ><dd
+	      >Join input relation and <em
+		>R</em
+		>.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -506,7 +529,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  > c</td
 		><td class="doc"
 		><p
-		  >Source infomation</p
+		  >Intermediate relmap</p
 		  ></td
 		></tr
 	      ><tr
@@ -516,7 +539,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  ></td
 		><td class="doc"
 		><p
-		  >Shared terms</p
+		  >Shared terms from <code
+		    >-share</code
+		    > option</p
 		  ></td
 		></tr
 	      ><tr
@@ -526,7 +551,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 		  > c</td
 		><td class="doc"
 		><p
-		  >Subrelmap of join operator</p
+		  >Subrelmap <em
+		    >R</em
+		    ></p
 		  ></td
 		></tr
 	      ><tr

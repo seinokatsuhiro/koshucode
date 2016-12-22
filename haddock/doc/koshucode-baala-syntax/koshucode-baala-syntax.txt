@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Term types and related functions.
@@ -54,6 +54,14 @@ enslash :: Map String
 --   TermName GT "a"
 --   </pre>
 stringTermName :: String -> TermName
+
+-- | Convert string to multiple term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; stringTermNames "/a /b /c"
+--   [TermName EQ "a", TermName EQ "b", TermName EQ "c"]
+--   </pre>
+stringTermNames :: String -> [TermName]
 
 -- | Encode term name into string.
 --   

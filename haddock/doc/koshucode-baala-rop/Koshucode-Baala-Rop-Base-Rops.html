@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Rop.Base.Rops</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('rop', 'koshucode-baala-rop', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Base-Rops.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-rop-0.190.0.0: Facility for implementing relation-mapping operators</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Rop.Base.Rops</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    ><code
+	      >id</code
+	      ></a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Append</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Unimplemented</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Built-in relmap operator.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsBuiltin"
+	    >ropsBuiltin</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:consId"
+	    >consId</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapId"
+	    >relmapId</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consAppend"
+	    >consAppend</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consXxx"
+	    >consXxx</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsBuiltin" class="def"
+	    >ropsBuiltin</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
+	    >Rop</a
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html#ropsBuiltin');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Built-in relmap operators.</p
+	    ></div
+	  ></div
+	><h1 id="g:1"
+	><code
+	  >id</code
+	  ></h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consId" class="def"
+	    >consId</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html#consId');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >id</dt
+	      ><dd
+	      >Identity relmap, i.e., output just input relation.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapId" class="def"
+	    >relmapId</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html#relmapId');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >id</code
+	      > relmap.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Append</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consAppend" class="def"
+	    >consAppend</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html#consAppend');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      ><em
+		>R</em
+		> | <em
+		>S</em
+		></dt
+	      ><dd
+	      >Append two relmaps.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Unimplemented</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consXxx" class="def"
+	    >consXxx</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Rops.html#consXxx');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Placeholder for unimplemented operator.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

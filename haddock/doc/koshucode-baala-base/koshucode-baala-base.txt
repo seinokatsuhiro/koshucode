@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Text table
@@ -1518,6 +1518,150 @@ permuteBackward2 :: Select2 a b
 --   "BCA"
 --   </pre>
 permuteOrder :: (Eq a) => [a] -> [a] -> Map [c]
+
+
+-- | Picker is a data for picking target elements based on element names.
+module Koshucode.Baala.Base.List.Picker
+
+-- | Create picker.
+picker :: (Ord n) => [n] -> [n] -> Picker n c
+
+-- | Picker data.
+--   
+--   For example, <b>/a /b /c</b> and <b>/b /c /d /e</b> have left-proper
+--   terms <b>/a</b>, shared terms <b>/b /c</b>, and right-proper terms
+--   <b>/d /e</b>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let pk = picker (words "/a /b /c") (words "/b /c /d /e")
+--   </pre>
+data Picker n c
+Picker :: Bool -> [Int] -> [Int] -> [n] -> [n] -> [n] -> [n] -> Map [c] -> Map [c] -> Map [c] -> Map [c] -> Map [c] -> Map [c] -> ([c] -> ([c], [c])) -> ([c] -> ([c], [c])) -> Picker n c
+
+-- | <b>Test:</b> Whether shared part is empty
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkDisjoint pk
+--   False
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkDisjoint $ picker (words "/a /b /c") (words "/d /e")
+--   True
+--   </pre>
+[pkDisjoint] :: Picker n c -> Bool
+
+-- | <b>Index:</b> Indicies of right-shared part
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkLShareIndex pk
+--   [1, 2]
+--   </pre>
+[pkLShareIndex] :: Picker n c -> [Int]
+
+-- | <b>Index:</b> Indicies of left-shared part
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRShareIndex pk
+--   [0, 1]
+--   </pre>
+[pkRShareIndex] :: Picker n c -> [Int]
+
+-- | <b>Name:</b> Left-proper term names
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkLProperNames pk
+--   ["/a"]
+--   </pre>
+[pkLProperNames] :: Picker n c -> [n]
+
+-- | <b>Name:</b> Left-shared term names
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkLShareNames pk
+--   ["/b","/c"]
+--   </pre>
+[pkLShareNames] :: Picker n c -> [n]
+
+-- | <b>Name:</b> Right-proper term names
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRProperNames pk
+--   ["/d","/e"]
+--   </pre>
+[pkRProperNames] :: Picker n c -> [n]
+
+-- | <b>Name:</b> Right-shared term names
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRShareNames pk
+--   ["/b","/c"]
+--   </pre>
+[pkRShareNames] :: Picker n c -> [n]
+
+-- | <b>Map:</b> Pick left-proper part from left contents
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkLProper pk "ABC"
+--   "A"
+--   </pre>
+[pkLProper] :: Picker n c -> Map [c]
+
+-- | <b>Map:</b> Pick left-shared part from left contents
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkLShare pk "ABC"
+--   "BC"
+--   </pre>
+[pkLShare] :: Picker n c -> Map [c]
+
+-- | <b>Map:</b> Pick right-shared part from right contents
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRShare pk "BCDE"
+--   "BC"
+--   </pre>
+[pkRShare] :: Picker n c -> Map [c]
+
+-- | <b>Map:</b> Pick right-proper part from right contents
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRProper pk "BCDE"
+--   "DE"
+--   </pre>
+[pkRProper] :: Picker n c -> Map [c]
+
+-- | <b>Map:</b> Move shared terms forward.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRForward pk "BCDE"
+--   "BCDE"
+--   </pre>
+[pkRForward] :: Picker n c -> Map [c]
+
+-- | <b>Map:</b> Move shared terms backward.
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRBackward pk "BCDE"
+--   "DEBC"
+--   </pre>
+[pkRBackward] :: Picker n c -> Map [c]
+
+-- | <b>Split:</b> Pick right-shared and right-proper part
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRSplit pk "BCDE"
+--   ("BC", "DE")
+--   </pre>
+[pkRSplit] :: Picker n c -> [c] -> ([c], [c])
+
+-- | <b>Split:</b> Pick right-shared part and right contents
+--   
+--   <pre>
+--   &gt;&gt;&gt; pkRAssoc pk "BCDE"
+--   ("BC", "BCDE")
+--   </pre>
+[pkRAssoc] :: Picker n c -> [c] -> ([c], [c])
 
 
 -- | List utilities.

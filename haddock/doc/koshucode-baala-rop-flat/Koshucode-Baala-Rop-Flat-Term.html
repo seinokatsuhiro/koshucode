@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-flat-0.187.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-rop-flat-0.190.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -257,44 +257,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	  ><div class="doc"
 	  ><p
 	    >Relmap operators for manipulating term names.</p
-	    ><dl
-	    ><dt
-	      ><code
-		>cut</code
-		></dt
-	      ><dd
-	      >Project relation to unspecified terms.</dd
-	      ><dt
-	      ><code
-		>cut-term</code
-		></dt
-	      ><dd
-	      >Project relation to terms not in relmap output.</dd
-	      ><dt
-	      ><code
-		>pick</code
-		></dt
-	      ><dd
-	      >Project relation to specified terms.</dd
-	      ><dt
-	      ><code
-		>pick-term</code
-		></dt
-	      ><dd
-	      >Project relation to terms in relmap output.</dd
-	      ><dt
-	      ><code
-		>rename</code
-		></dt
-	      ><dd
-	      >Change term name.</dd
-	      ><dt
-	      ><code
-		>move</code
-		></dt
-	      ><dd
-	      >Change heading.</dd
-	      ></dl
 	    ></div
 	  ></div
 	><h1 id="g:1"
@@ -309,15 +271,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >pick /P ...</strong
-	      ></p
-	    ><p
-	    >Construct <code
-	      >pick</code
-	      > relmap operator
-   for relational projection by picking terms.</p
+	  ><dl
+	    ><dt
+	      >pick /P ...</dt
+	      ><dd
+	      >Project relation to specified terms.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -370,18 +329,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >cut /P ...</strong
-	      ></p
-	    ><p
-	    >Construct <code
-	      >cut</code
-	      > relmap operator
-   for relational projection by cutting terms.
-   This operator is an inversion of <code
-	      >pick</code
-	      >.</p
+	  ><dl
+	    ><dt
+	      >cut /P ...</dt
+	      ><dd
+	      >Project relation to unspecified terms.
+    This operator is an inversion of <code
+		>pick</code
+		>.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -434,10 +390,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >pick-term R</strong
-	      ></p
+	  ><dl
+	    ><dt
+	      >pick-term <em
+		>R</em
+		></dt
+	      ><dd
+	      ></dd
+	      ></dl
 	    ><p
 	    >Construct <code
 	      >pick-term</code
@@ -496,10 +456,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >cut-term R</strong
-	      ></p
+	  ><dl
+	    ><dt
+	      >cut-term <em
+		>R</em
+		></dt
+	      ><dd
+	      ></dd
+	      ></dl
 	    ><p
 	    >Construct <code
 	      >cut-term</code
@@ -558,27 +522,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Fl
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >move /P ... -to /N ...</strong
-	      ></p
+	  ><dl
+	    ><dt
+	      >move /P ... -to /N ...</dt
+	      ><dd
+	      ></dd
+	      ></dl
 	    ><p
-	    >Construct <code
-	      >move</code
-	      > relmap operator for renaming term names.
-   Terms /P ... of input relation are renamed corresponding terms /N ....
-   The <code
+	    >Rename term names.
+    Terms /P ... of input relation are renamed corresponding terms /N ....
+    The <code
 	      >move</code
 	      > operator provides same functionality as <code
 	      >rename</code
 	      >.
-   Operator <code
+    Operator <code
 	      >move</code
 	      > is suitable for renaming few terms,
-   operator <code
+    operator <code
 	      >rename</code
 	      > for many terms.
-   The following relmaps have same effect:</p
+    The following relmaps have same effect:</p
 	    ><pre
 	    >rename /N /P /N /P ...
 move /P ... -to /N ...</pre
@@ -638,16 +602,16 @@ move /P ... -to /N ...</pre
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >rename /N /P /N /P ...</strong
-	      ></p
+	  ><dl
+	    ><dt
+	      >rename /N /P /N /P ...</dt
+	      ><dd
+	      ></dd
+	      ></dl
 	    ><p
-	    >Construct <code
-	      >rename</code
-	      > relmap operator for renaming term names.
-   Term /P is renamed to term /N for each pair of terms /N /P.
-   The <code
+	    >Rename term names.
+    Term /P is renamed to term /N for each pair of terms /N /P.
+    The <code
 	      >rename</code
 	      > operator provides same functionality as <code
 	      >move</code

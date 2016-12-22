@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-type-0.187.0.0: Additional data types for Koshucode</p
+      >koshucode-baala-type-0.190.0.0: Additional data types for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,11 +62,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Pre &amp; new terms</a
+	    >Presend &amp; new terms</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
 	    >Mapping</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Double mapping</a
 	    ></li
 	  ></ul
 	></div
@@ -76,28 +80,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	><div class="doc"
 	><p
 	  >Term picker is a data for picking target terms
-   based on input heading terms.
-   For example, when picking /a /b from /a /b /c /d /e,
-   use <code
-	    >termPicker</code
-	    > like:</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >let pk = termPicker [&quot;a&quot;, &quot;b&quot;] [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]
-</code
-	      ></strong
-	    ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >pickTerms pk [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;]
-</code
-	      ></strong
-	    >[&quot;1&quot;, &quot;2&quot;]
-</pre
+   based on input heading terms.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -106,88 +89,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a href="#t:TermPicker"
 	    >TermPicker</a
-	    > c = <a href="#v:TermPicker"
-	    >TermPicker</a
-	    > {<ul class="subs"
-	    ><li
-	      ><a href="#v:ssLShareIndex"
-		>ssLShareIndex</a
-		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-		>Int</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssRShareIndex"
-		>ssRShareIndex</a
-		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-		>Int</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssDisjoint"
-		>ssDisjoint</a
-		> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ><li
-	      ><a href="#v:ssLSideNames"
-		>ssLSideNames</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-		>TermName</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssLShareNames"
-		>ssLShareNames</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-		>TermName</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssRShareNames"
-		>ssRShareNames</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-		>TermName</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssRSideNames"
-		>ssRSideNames</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-		>TermName</a
-		>]</li
-	      ><li
-	      ><a href="#v:ssLSide"
-		>ssLSide</a
-		> :: [c] -&gt; [c]</li
-	      ><li
-	      ><a href="#v:ssLShare"
-		>ssLShare</a
-		> :: [c] -&gt; [c]</li
-	      ><li
-	      ><a href="#v:ssRShare"
-		>ssRShare</a
-		> :: [c] -&gt; [c]</li
-	      ><li
-	      ><a href="#v:ssRSide"
-		>ssRSide</a
-		> :: [c] -&gt; [c]</li
-	      ><li
-	      ><a href="#v:ssRSplit"
-		>ssRSplit</a
-		> :: [c] -&gt; ([c], [c])</li
-	      ><li
-	      ><a href="#v:ssRAssoc"
-		>ssRAssoc</a
-		> :: [c] -&gt; ([c], [c])</li
-	      ><li
-	      ><a href="#v:ssRForward"
-		>ssRForward</a
-		> :: [c] -&gt; [c]</li
-	      ><li
-	      ><a href="#v:ssRBackward"
-		>ssRBackward</a
-		> :: [c] -&gt; [c]</li
-	      ></ul
-	    >}</li
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-List-Picker.html#t:Picker"
+	    >Picker</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    > c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -211,9 +120,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    >termPicker</a
 	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
 	    >GetTermNames</a
-	    > l, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    > target, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
 	    >GetTermNames</a
-	    > r) =&gt; l -&gt; r -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    > input) =&gt; target -&gt; input -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
 	    >TermPicker</a
 	    > c</li
 	  ><li class="src short"
@@ -249,65 +158,79 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    >TermPicker</a
 	    > c)</li
 	  ><li class="src short"
-	  ><a href="#v:picker"
-	    >picker</a
-	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
-	    >GetTermNames</a
-	    > t1, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
-	    >GetTermNames</a
-	    > t2) =&gt; t1 -&gt; t2 -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c]</li
-	  ><li class="src short"
-	  ><a href="#v:pickTermsIndex"
-	    >pickTermsIndex</a
+	  ><a href="#v:termsIndex"
+	    >termsIndex</a
 	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
 	    >TermPicker</a
 	    > c -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:pickTerms"
-	    >pickTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	  ><a href="#v:pickDirect"
+	    >pickDirect</a
+	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > target, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > input) =&gt; target -&gt; input -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > [c]</li
+	  ><li class="src short"
+	  ><a href="#v:pickTerms"
+	    >pickTerms</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:cutTerms"
 	    >cutTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c]</li
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:forwardTerms"
 	    >forwardTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c]</li
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:backwardTerms"
 	    >backwardTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c]</li
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:towardTerms"
 	    >towardTerms</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c]</li
+	    > -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:pickTerms2"
+	    >pickTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:cutTerms2"
+	    >cutTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:forwardTerms2"
+	    >forwardTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b</li
+	  ><li class="src short"
+	  ><a href="#v:backwardTerms2"
+	    >backwardTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -316,175 +239,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >data</span
+	    >type</span
 	    > <a name="t:TermPicker" class="def"
 	    >TermPicker</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-List-Picker.html#t:Picker"
+	    >Picker</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#TermPicker');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Data for picking terms.</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:TermPicker" class="def"
-		  >TermPicker</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td colspan="2"
-		><div class="subs fields"
-		  ><p class="caption"
-		    >Fields</p
-		    ><dl
-		    ><dt class="src"
-		      ><a name="v:ssLShareIndex" class="def"
-			>ssLShareIndex</a
-			> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-			>Int</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Indicies of right-shared part</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRShareIndex" class="def"
-			>ssRShareIndex</a
-			> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-			>Int</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Indicies of left-shared part</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssDisjoint" class="def"
-			>ssDisjoint</a
-			> :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-			>Bool</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Whether shared part is empty</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssLSideNames" class="def"
-			>ssLSideNames</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-			>TermName</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Left-side term names</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssLShareNames" class="def"
-			>ssLShareNames</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-			>TermName</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Left-shared term names</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRShareNames" class="def"
-			>ssRShareNames</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-			>TermName</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Right-shared term names</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRSideNames" class="def"
-			>ssRSideNames</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-			>TermName</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Right-side term names</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssLSide" class="def"
-			>ssLSide</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick left-side part from left contents</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssLShare" class="def"
-			>ssLShare</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick left-shared part from left contents</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRShare" class="def"
-			>ssRShare</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick right-shared part from right contents</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRSide" class="def"
-			>ssRSide</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick right-side part from right contents</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRSplit" class="def"
-			>ssRSplit</a
-			> :: [c] -&gt; ([c], [c])</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick right-shared and right-side part</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRAssoc" class="def"
-			>ssRAssoc</a
-			> :: [c] -&gt; ([c], [c])</dt
-		      ><dd class="doc"
-		      ><p
-			>Pick right-shared part and right contents</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRForward" class="def"
-			>ssRForward</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Move shared terms forward.</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ssRBackward" class="def"
-			>ssRBackward</a
-			> :: [c] -&gt; [c]</dt
-		      ><dd class="doc"
-		      ><p
-			>Move shared terms backward.</p
-			></dd
-		      ></dl
-		    ><div class="clear"
-		    ></div
-		    ></div
-		  ></td
-		></tr
-	      ></table
+	    >Data for picking shared and proper terms.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -527,173 +294,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    >termPicker</a
 	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
 	    >GetTermNames</a
-	    > l, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    > target, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
 	    >GetTermNames</a
-	    > r) =&gt; l -&gt; r -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    > input) =&gt; target -&gt; input -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
 	    >TermPicker</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#termPicker');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create term picker from left and right term names.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let ss = termPicker [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;] [&quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]
-</code
-		></strong
-	      ></pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssDisjoint ss
-</code
-		></strong
-	      >False
-</pre
-	    ><p
-	    >Left terms.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssLShareIndex ss
-</code
-		></strong
-	      >[1, 2]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssLShareNames ss
-</code
-		></strong
-	      >[&quot;b&quot;, &quot;c&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssLSide ss &quot;ABC&quot;
-</code
-		></strong
-	      >&quot;A&quot;
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssLShare ss &quot;ABC&quot;
-</code
-		></strong
-	      >&quot;BC&quot;
-</pre
-	    ><p
-	    >Right terms.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRShareIndex ss
-</code
-		></strong
-	      >[0, 1]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRShareNames ss
-</code
-		></strong
-	      >[&quot;b&quot;, &quot;c&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRSideNames ss
-</code
-		></strong
-	      >[&quot;d&quot;, &quot;e&quot;]
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRShare ss &quot;BCDE&quot;
-</code
-		></strong
-	      >&quot;BC&quot;
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRSide ss &quot;BCDE&quot;
-</code
-		></strong
-	      >&quot;DE&quot;
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRSplit ss &quot;BCDE&quot;
-</code
-		></strong
-	      >(&quot;BC&quot;, &quot;DE&quot;)
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRAssoc ss &quot;BCDE&quot;
-</code
-		></strong
-	      >(&quot;BC&quot;, &quot;BCDE&quot;)
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRForward ss &quot;BCDE&quot;
-</code
-		></strong
-	      >&quot;BCDE&quot;
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>ssRBackward ss &quot;BCDE&quot;
-</code
-		></strong
-	      >&quot;DEBC&quot;
-</pre
+	    >Create term picker from left and right term names</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Pre &amp; new terms</h1
+	>Presend &amp; new terms</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:preTerms" class="def"
@@ -707,16 +321,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >List of present terms.</p
+	    >List of present terms.
+   The first argument of <code
+	      ><a href="Koshucode-Baala-Type-Rel-TermPicker.html#v:termPicker"
+		>termPicker</a
+		></code
+	      > is treated as target terms,
+   and the second is terms of input heading.
+   Because firstly target terms are given to relmap operator,
+   secondly input heading is fixed.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>preTerms $ termPicker (words &quot;a b c&quot;) (words &quot;a b d e&quot;)
+		>preTerms $ termPicker &quot;/a /b /c&quot; &quot;/a /b /d /e&quot;
 </code
 		></strong
-	      >[&quot;a&quot;,&quot;b&quot;]
+	      >[TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;]
 </pre
 	    ></div
 	  ></div
@@ -739,10 +361,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>newTerms $ termPicker (words &quot;a b c&quot;) (words &quot;a b d e&quot;)
+		>newTerms $ termPicker &quot;/a /b /c&quot; &quot;/a /b /d /e&quot;
 </code
 		></strong
-	      >[&quot;c&quot;]
+	      >[TermName EQ &quot;c&quot;]
 </pre
 	    ></div
 	  ></div
@@ -765,7 +387,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>preTermsExist $ termPicker (words &quot;d e&quot;) (words &quot;a b c&quot;)
+		>preTermsExist $ termPicker &quot;/d /e&quot; &quot;/a /b /c&quot;
 </code
 		></strong
 	      >False
@@ -775,7 +397,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>preTermsExist $ termPicker (words &quot;c d e&quot;) (words &quot;a b c&quot;)
+		>preTermsExist $ termPicker &quot;/c /d /e&quot; &quot;/a /b /c&quot;
 </code
 		></strong
 	      >True
@@ -801,7 +423,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>newTermsExist $ termPicker (words &quot;a b c&quot;) (words &quot;a b d e&quot;)
+		>newTermsExist $ termPicker &quot;/a /b /c&quot; &quot;/a /b /d /e&quot;
 </code
 		></strong
 	      >True
@@ -811,7 +433,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>newTermsExist $ termPicker (words &quot;a b&quot;) (words &quot;a b d e&quot;)
+		>newTermsExist $ termPicker &quot;/a /b&quot; &quot;/a /b /d /e&quot;
 </code
 		></strong
 	      >False
@@ -822,55 +444,55 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	>Mapping</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:picker" class="def"
-	    >picker</a
-	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
-	    >GetTermNames</a
-	    > t1, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
-	    >GetTermNames</a
-	    > t2) =&gt; t1 -&gt; t2 -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#picker');" href="javascript:void(0);" class="link"
+	  ><a name="v:termsIndex" class="def"
+	    >termsIndex</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    >TermPicker</a
+	    > c -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#termsIndex');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pick contents.</p
+	    >Indices of target terms on input terms.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>picker (words &quot;a c&quot;) (words &quot;a b c&quot;) (words &quot;1 2 3&quot;)
+		>termsIndex $ termPicker &quot;/b /d&quot; &quot;/a /b /c /d&quot;
 </code
 		></strong
-	      >[&quot;1&quot;, &quot;3&quot;]
+	      >[1,3]
 </pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:pickTermsIndex" class="def"
-	    >pickTermsIndex</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#pickTermsIndex');" href="javascript:void(0);" class="link"
+	  ><a name="v:pickDirect" class="def"
+	    >pickDirect</a
+	    > :: (<a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > target, <a href="Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
+	    >GetTermNames</a
+	    > input) =&gt; target -&gt; input -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#pickDirect');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Extract indices of terms.</p
+	    >Pick contents of target terms.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>pickTermsIndex $ termPicker (words &quot;b d&quot;) (words &quot;a b d e&quot;)
+		>pickDirect &quot;/b /d&quot; &quot;/a /b /c /d&quot; &quot;ABCD&quot;
 </code
 		></strong
-	      >[1,2]
+	      >&quot;BD&quot;
 </pre
 	    ></div
 	  ></div
@@ -878,64 +500,96 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	><p class="src"
 	  ><a name="v:pickTerms" class="def"
 	    >pickTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#pickTerms');" href="javascript:void(0);" class="link"
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#pickTerms');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pick terms according to term picker.</p
+	    >Pick target terms from input terms.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>pickTerms (termPicker &quot;/b /d&quot; &quot;/a /b /c /d&quot;) &quot;ABCD&quot;
+</code
+		></strong
+	      >&quot;BD&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:cutTerms" class="def"
 	    >cutTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#cutTerms');" href="javascript:void(0);" class="link"
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#cutTerms');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Cut terms according to term picker.</p
+	    >Cut target terms from input terms.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>cutTerms (termPicker &quot;/b /d&quot; &quot;/a /b /c /d&quot;) &quot;ABCD&quot;
+</code
+		></strong
+	      >&quot;AC&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:forwardTerms" class="def"
 	    >forwardTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#forwardTerms');" href="javascript:void(0);" class="link"
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#forwardTerms');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Move terms forward.</p
+	    >Move target terms forward.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>forwardTerms (termPicker &quot;/b /d&quot; &quot;/a /b /c /d&quot;) &quot;ABCD&quot;
+</code
+		></strong
+	      >&quot;BDAC&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:backwardTerms" class="def"
 	    >backwardTerms</a
-	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#backwardTerms');" href="javascript:void(0);" class="link"
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#backwardTerms');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Move terms backward.</p
+	    >Move target terms backward.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>backwardTerms (termPicker &quot;/b /d&quot; &quot;/a /b /c /d&quot;) &quot;ABCD&quot;
+</code
+		></strong
+	      >&quot;ACBD&quot;
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -944,49 +598,96 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-R
 	    >towardTerms</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
-	    >TermPicker</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [c] <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#towardTerms');" href="javascript:void(0);" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick"
+	    >TermPick</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#towardTerms');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Move terms forward (<code
+	    >Move target terms forward if <code
 	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:True"
 		>True</a
 		></code
-	      >) or backward (<code
+	      > or backward if <code
 	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#v:False"
 		>False</a
 		></code
-	      >).</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let pk = termPicker (words &quot;c b&quot;) (words &quot;a b c d&quot;)
-</code
-		></strong
-	      ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>towardTerms True pk (words &quot;A B C D&quot;)
-</code
-		></strong
-	      >[&quot;C&quot;,&quot;B&quot;,&quot;A&quot;,&quot;D&quot;]
-<code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>towardTerms False pk (words &quot;A B C D&quot;)
-</code
-		></strong
-	      >[&quot;A&quot;,&quot;D&quot;,&quot;C&quot;,&quot;B&quot;]
-</pre
+	      >.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Double mapping</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:pickTerms2" class="def"
+	    >pickTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#pickTerms2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double <code
+	      ><a href="Koshucode-Baala-Type-Rel-TermPicker.html#v:pickTerms"
+		>pickTerms</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cutTerms2" class="def"
+	    >cutTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#cutTerms2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double <code
+	      ><a href="Koshucode-Baala-Type-Rel-TermPicker.html#v:cutTerms"
+		>cutTerms</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:forwardTerms2" class="def"
+	    >forwardTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#forwardTerms2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double <code
+	      ><a href="Koshucode-Baala-Type-Rel-TermPicker.html#v:forwardTerms"
+		>forwardTerms</a
+		></code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:backwardTerms2" class="def"
+	    >backwardTerms2</a
+	    > :: <a href="Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPick2"
+	    >TermPick2</a
+	    > a b <a onclick="showSource('src/Koshucode-Baala-Type-Rel-TermPicker.html#backwardTerms2');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Double <code
+	      ><a href="Koshucode-Baala-Type-Rel-TermPicker.html#v:backwardTerms"
+		>backwardTerms</a
+		></code
+	      >.</p
 	    ></div
 	  ></div
 	></div

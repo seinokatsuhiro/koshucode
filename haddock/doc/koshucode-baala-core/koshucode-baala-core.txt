@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Result of relational calculation.
@@ -813,14 +813,14 @@ instance Data.Default.Class.Default (Koshucode.Baala.Core.Relmap.Global.OpSet' h
 instance Data.Default.Class.Default Koshucode.Baala.Core.Relmap.Global.Feature
 
 
--- | Specialize generic relmaps to specialized relmaps
+-- | Specialize generic relmaps. Generic relmaps are represented by
+--   <a>Relmap</a>, specialized relmaps by <a>Relkit</a>.
 module Koshucode.Baala.Core.Relmap.Specialize
 
--- | Specializes generic relmap to specialized relmap, i.e., <a>Relmap</a>
---   to <a>Relkit</a>. Specialized relmaps have fixed input/output
---   headings. In constrast, generic relmaps do not. Specialized relmaps
---   are also called relkits. This function returns relkit and extended
---   table of relkits.
+-- | Specializes generic relmap to specialized relmap. Specialized relmaps
+--   have fixed input/output headings. In constrast, generic relmaps do
+--   not. Specialized relmaps are also called relkits. This function
+--   returns relkit and extended table of relkits.
 relmapSpecialize :: h c -> RelmapLinkTable' h c -> RelkitTable c -> Maybe Head -> Relmap' h c -> Ab (RelkitTable c, Relkit c)
 
 -- | Table for referencing relmap of <a>RelmapLink</a>.

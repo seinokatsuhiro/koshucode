@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Message list.
@@ -229,42 +229,50 @@ stringTime :: String -> Ab Time
 -- | Message list.
 module Koshucode.Baala.Data.Class.Message
 
--- | Type unmatch
-unmatchType :: String -> Ab a
+-- | <ul>
+--   <li><i>Type unmatch</i> Content = <i>C</i></li>
+--   </ul>
+typeUnmatched :: (MixEncode c) => c -> Ab a
 
--- | Bad argument
+-- | <ul>
+--   <li><i>Bad argument</i> #1 = <i>C</i>, #2 = <i>C</i>, ...</li>
+--   </ul>
 badArg :: (MixEncode c) => [Ab c] -> Ab a
 
--- | Unexpected argument
+-- | <ul>
+--   <li><i>Unexpected argument</i> Expect <i>E</i>, Actual <i>A</i></li>
+--   </ul>
 unexpArg :: (MixEncode c) => [Ab c] -> [String] -> Ab a
 
--- | Not a decimal.
+-- | <ul>
+--   <li><i>Not a decimal</i> Content = <i>C</i></li>
+--   </ul>
 notDec :: (MixEncode c) => c -> Ab a
 
 
--- | Edge content type.
+-- | Edge content types.
 module Koshucode.Baala.Data.Class.Edge
 
--- | Classifiable into <a>Type</a>.
-class CTypeOf c where isA c t = typeOf c == t sameType c1 c2 = typeOf c1 == typeOf c2
+-- | Basis of contents.
+class (Eq c, Ord c, MixEncode c) => Basis c where isA c t = typeOf c == t sameType c1 c2 = typeOf c1 == typeOf c2
 
 -- | Get type of content.
-typeOf :: CTypeOf c => c -> Type
+typeOf :: Basis c => c -> Type
 
 -- | Test content is a some type.
-isA :: CTypeOf c => Test2 c Type
+isA :: Basis c => Test2 c Type
 
 -- | Test two contents are same type.
-sameType :: CTypeOf c => Test2 c c
+sameType :: Basis c => Test2 c c
 
 -- | Get content in calculation.
 type GetContent b c = Ab c -> Ab b
 
 -- | Get content which may be aborted.
-getContent :: (CTypeOf c) => Test c -> (c -> b) -> GetContent b c
+getContent :: (Basis c) => Test c -> (c -> b) -> GetContent b c
 
 -- | Empty: the minimum content.
-class (CTypeOf c) => CEmpty c
+class (Basis c) => CEmpty c
 isEmpty :: CEmpty c => c -> Bool
 empty :: CEmpty c => c
 
@@ -275,22 +283,22 @@ maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 omitEmpty :: (CEmpty c) => Map [Term c]
 
 -- | Maximum content of contents list.
-contMaximum :: (Ord c, CEmpty c) => [c] -> c
+contMaximum :: (CEmpty c) => [c] -> c
 
 -- | End of everything: the maximum content.
-class (CTypeOf c) => CEnd c
+class (Basis c) => CEnd c
 isEnd :: CEnd c => c -> Bool
 end :: CEnd c => c
 
 -- | Minimum content of contents list.
-contMinimum :: (Ord c, CEnd c) => [c] -> c
+contMinimum :: (CEnd c) => [c] -> c
 
 
 -- | Simple content type.
 module Koshucode.Baala.Data.Class.Simple
 
 -- | True or false, affirmed or denied.
-class (CTypeOf c) => CBool c where getBool = getContent isBool gBool putBool = Right . pBool
+class (Basis c) => CBool c where getBool = getContent isBool gBool putBool = Right . pBool
 isBool :: CBool c => c -> Bool
 pBool :: CBool c => Bool -> c
 gBool :: CBool c => c -> Bool
@@ -310,7 +318,7 @@ putTrue :: (CBool c) => Ab c
 putFalse :: (CBool c) => Ab c
 
 -- | Decimal number.
-class (CTypeOf c) => CDec c where getDec = getContent isDec gDec putDec = Right . pDec
+class (Basis c) => CDec c where getDec = getContent isDec gDec putDec = Right . pDec
 isDec :: CDec c => c -> Bool
 gDec :: CDec c => c -> Decimal
 pDec :: CDec c => Decimal -> c
@@ -338,13 +346,13 @@ gRational :: (CDec c) => c -> Rational
 gIntegral :: (CDec c, Integral n) => c -> n
 
 -- | Get rational number from decimal content.
-getRational :: (MixEncode c, CDec c) => GetContent Rational c
+getRational :: (CDec c) => GetContent Rational c
 
 -- | Get truncated integer from decimal content.
-getIntegral :: (MixEncode c, CDec c, Integral n) => GetContent n c
+getIntegral :: (CDec c, Integral n) => GetContent n c
 
 -- | Distance between two points in timeline.
-class (CTypeOf c) => CClock c where getClock = getContent isClock gClock putClock = Right . pClock
+class (Basis c) => CClock c where getClock = getContent isClock gClock putClock = Right . pClock
 isClock :: CClock c => c -> Bool
 gClock :: CClock c => c -> Clock
 pClock :: CClock c => Clock -> c
@@ -352,7 +360,7 @@ getClock :: CClock c => GetContent Clock c
 putClock :: CClock c => Clock -> Ab c
 
 -- | Point in timeline.
-class (CTypeOf c) => CTime c where getTime = getContent isTime gTime putTime = Right . pTime
+class (Basis c) => CTime c where getTime = getContent isTime gTime putTime = Right . pTime
 isTime :: CTime c => c -> Bool
 gTime :: CTime c => c -> Time
 pTime :: CTime c => Time -> c
@@ -360,7 +368,7 @@ getTime :: CTime c => GetContent Time c
 putTime :: CTime c => Time -> Ab c
 
 -- | Code.
-class (CTypeOf c) => CCode c where getCode = getContent isCode gCode putCode = Right . pCode
+class (Basis c) => CCode c where getCode = getContent isCode gCode putCode = Right . pCode
 isCode :: CCode c => c -> Bool
 gCode :: CCode c => c -> String
 pCode :: CCode c => String -> c
@@ -368,7 +376,7 @@ getCode :: CCode c => GetContent String c
 putCode :: CCode c => String -> Ab c
 
 -- | Term name.
-class (CTypeOf c) => CTerm c where getTerm = getContent isTerm gTerm putTerm = Right . pTerm
+class (Basis c) => CTerm c where getTerm = getContent isTerm gTerm putTerm = Right . pTerm
 isTerm :: CTerm c => c -> Bool
 gTerm :: CTerm c => c -> TermName
 pTerm :: CTerm c => TermName -> c
@@ -376,7 +384,7 @@ getTerm :: CTerm c => GetContent TermName c
 putTerm :: CTerm c => TermName -> Ab c
 
 -- | Double-quoted text content.
-class (CTypeOf c) => CText c where getText = getContent isText gText putText = Right . pText
+class (Basis c) => CText c where getText = getContent isText gText putText = Right . pText
 isText :: CText c => c -> Bool
 gText :: CText c => c -> String
 pText :: CText c => String -> c
@@ -407,7 +415,7 @@ pTz :: (CText c) => Text -> c
 module Koshucode.Baala.Data.Class.Complex
 
 -- | List of contents.
-class (CTypeOf c) => CList c where getList = getContent isList gList putList = Right . pList
+class (Basis c) => CList c where getList = getContent isList gList putList = Right . pList
 isList :: CList c => c -> Bool
 gList :: CList c => c -> [c]
 pList :: CList c => [c] -> c
@@ -418,7 +426,7 @@ putList :: CList c => [c] -> Ab c
 pTextList :: (CText c, CList c) => [String] -> c
 
 -- | Set of contents.
-class (CTypeOf c) => CSet c where getSet = getContent isSet gSet putSet = Right . pSet
+class (Basis c) => CSet c where getSet = getContent isSet gSet putSet = Right . pSet
 isSet :: CSet c => c -> Bool
 gSet :: CSet c => c -> [c]
 pSet :: CSet c => [c] -> c
@@ -432,13 +440,13 @@ pTermSet :: (CTerm c, CSet c) => [TermName] -> c
 pTextSet :: (CText c, CSet c) => [String] -> c
 
 -- | Sorted version of <a>gSet</a>.
-gSetSort :: (Ord c, CSet c) => c -> [c]
+gSetSort :: (CSet c) => c -> [c]
 
 -- | Test membership between element and collection contents.
-isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
+isMember :: (CSet c, CList c) => c -> c -> Bool
 
 -- | Tie of terms.
-class (CTypeOf c) => CTie c where getTie = getContent isTie gTie putTie = Right . pTie
+class (Basis c) => CTie c where getTie = getContent isTie gTie putTie = Right . pTie
 isTie :: CTie c => c -> Bool
 gTie :: CTie c => c -> [Term c]
 pTie :: CTie c => [Term c] -> c
@@ -446,7 +454,7 @@ getTie :: CTie c => GetContent [Term c] c
 putTie :: CTie c => [Term c] -> Ab c
 
 -- | Relation of terms.
-class (CTypeOf c) => CRel c where getRel = getContent isRel gRel putRel = Right . pRel
+class (Basis c) => CRel c where getRel = getContent isRel gRel putRel = Right . pRel
 isRel :: CRel c => c -> Bool
 gRel :: CRel c => c -> Rel c
 pRel :: CRel c => Rel c -> c
@@ -460,7 +468,7 @@ dee :: (CRel c) => c
 dum :: (CRel c) => c
 
 -- | Data intepretation.
-class (CTypeOf c) => CInterp c where getInterp = getContent isInterp gInterp putInterp = Right . pInterp
+class (Basis c) => CInterp c where getInterp = getContent isInterp gInterp putInterp = Right . pInterp
 isInterp :: CInterp c => c -> Bool
 gInterp :: CInterp c => c -> Interp
 pInterp :: CInterp c => Interp -> c
@@ -468,7 +476,7 @@ getInterp :: CInterp c => GetContent Interp c
 putInterp :: CInterp c => Interp -> Ab c
 
 -- | Type of content.
-class (CTypeOf c) => CType c where getType = getContent isType gType putType = Right . pType
+class (Basis c) => CType c where getType = getContent isType gType putType = Right . pType
 isType :: CType c => c -> Bool
 gType :: CType c => c -> Type
 pType :: CType c => Type -> c
@@ -480,13 +488,7 @@ putType :: CType c => Type -> Ab c
 module Koshucode.Baala.Data.Class.Content
 
 -- | Generic content class.
-class (Ord c, Show c, Default c, MixEncode c, CTypeOf c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where joinContent = foldM appendContent empty typeOrder c | isEmpty c = 1 | isBool c = 11 | isDec c = 12 | isClock c = 13 | isTime c = 14 | isCode c = 15 | isTerm c = 16 | isText c = 17 | isList c = 21 | isSet c = 22 | isTie c = 23 | isRel c = 24 | isInterp c = 25 | isType c = 27 | isEnd c = 31 | otherwise = error "unknown content"
-
--- | <i>Deprecated: Do not use it.</i>
-appendContent :: CContent c => c -> c -> Ab c
-
--- | <i>Deprecated: Do not use it.</i>
-joinContent :: CContent c => [c] -> Ab c
+class (Show c, Default c, CEmpty c, CEnd c, CBool c, CCode c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CTie c, CRel c) => CContent c where typeOrder c | isEmpty c = 1 | isBool c = 11 | isDec c = 12 | isClock c = 13 | isTime c = 14 | isCode c = 15 | isTerm c = 16 | isText c = 17 | isList c = 21 | isSet c = 22 | isTie c = 23 | isRel c = 24 | isInterp c = 25 | isType c = 27 | isEnd c = 31 | otherwise = error "unknown content"
 
 -- | Order of content type.
 typeOrder :: CContent c => c -> Int
@@ -619,6 +621,9 @@ unkShow :: (Show x) => x -> Ab a
 
 -- | Unknown term name
 unkTerm :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Ab a
+
+-- | Unknown term name
+newTerm :: (GetTermNames t2) => TermPicker c -> t2 -> Ab a
 
 -- | Unmatch blank (bug)
 unmatchBlank :: String -> Int -> String -> [String] -> Ab a
@@ -849,77 +854,77 @@ module Koshucode.Baala.Data.Content
 -- | The Baala content type.
 data Content
 
--- | <i>Edge:</i> Sign of no ordinary type
+-- | <b>1. Edge:</b> Sign of no ordinary type
 
 -- | <i>Warning: Use <tt>empty</tt> instead.</i>
 ContentEmpty :: Content
 
--- | <i>Numeric:</i> Boolean type
+-- | <b>2. Numeric:</b> Boolean type
 
 -- | <i>Warning: Use <tt>pBool</tt> instead.</i>
 ContentBool :: Bool -> Content
 
--- | <i>Numeric:</i> Decimal number type
+-- | <b>3. Numeric:</b> Decimal number type
 
 -- | <i>Warning: Use <tt>pDec</tt> instead.</i>
 ContentDec :: Decimal -> Content
 
--- | <i>Numeric:</i> Clock type
+-- | <b>4. Numeric:</b> Clock type
 
 -- | <i>Warning: Use <tt>pClock</tt> instead.</i>
 ContentClock :: Clock -> Content
 
--- | <i>Numeric:</i> Time type
+-- | <b>5. Numeric:</b> Time type
 
 -- | <i>Warning: Use <tt>pTime</tt> instead.</i>
 ContentTime :: Time -> Content
 
--- | <i>Textual:</i> Code type
+-- | <b>6. Textual:</b> Code type
 
 -- | <i>Warning: Use <tt>pCode</tt> instead.</i>
 ContentCode :: String -> Content
 
--- | <i>Textual:</i> Term name type
+-- | <b>7. Textual:</b> Term name type
 
 -- | <i>Warning: Use <tt>pTerm</tt> instead.</i>
 ContentTerm :: TermName -> Content
 
--- | <i>Textual:</i> Text type
+-- | <b>8. Textual:</b> Text type
 
 -- | <i>Warning: Use <tt>pText</tt> instead.</i>
 ContentText :: String -> Content
 
--- | <i>Recursive, Collective:</i> List type
+-- | <b>9. Recursive, Collective:</b> List type
 
 -- | <i>Warning: Use <tt>pList</tt> instead.</i>
 ContentList :: [Content] -> Content
 
--- | <i>Recursive, Collective:</i> Set type
+-- | <b>10. Recursive, Collective:</b> Set type
 
 -- | <i>Warning: Use <tt>pSet</tt> instead.</i>
 ContentSet :: [Content] -> Content
 
--- | <i>Recursive, Relational:</i> Tie type (set of terms)
+-- | <b>11. Recursive, Relational:</b> Tie type (set of terms)
 
 -- | <i>Warning: Use <tt>pTie</tt> instead.</i>
 ContentTie :: [TermC] -> Content
 
--- | <i>Recursive, Relational:</i> Relation type
+-- | <b>12. Recursive, Relational:</b> Relation type
 
 -- | <i>Warning: Use <tt>pRel</tt> instead.</i>
 ContentRel :: RelC -> Content
 
--- | <i>Meta, Relational:</i> Interpretation type
+-- | <b>13. Meta, Relational:</b> Interpretation type
 
 -- | <i>Warning: Use <tt>pInterp</tt> instead.</i>
 ContentInterp :: Interp -> Content
 
--- | <i>Meta:</i> Type for type
+-- | <b>14. Meta:</b> Type for type
 
 -- | <i>Warning: Use <tt>pType</tt> instead.</i>
 ContentType :: Type -> Content
 
--- | <i>Edge:</i> The end of everything
+-- | <b>15. Edge:</b> The end of everything
 
 -- | <i>Warning: Use <tt>end</tt> instead.</i>
 ContentEnd :: Content
@@ -1061,7 +1066,7 @@ instance GHC.Show.Show Koshucode.Baala.Data.Content.Content
 instance GHC.Classes.Eq Koshucode.Baala.Data.Content.Content
 instance GHC.Classes.Ord Koshucode.Baala.Data.Content.Content
 instance Data.Default.Class.Default Koshucode.Baala.Data.Content.Content
-instance Koshucode.Baala.Data.Class.Edge.CTypeOf Koshucode.Baala.Data.Content.Content
+instance Koshucode.Baala.Data.Class.Edge.Basis Koshucode.Baala.Data.Content.Content
 instance Koshucode.Baala.Data.Class.Content.CContent Koshucode.Baala.Data.Content.Content
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Data.Content.Content
 instance Koshucode.Baala.Data.Class.Edge.CEmpty Koshucode.Baala.Data.Content.Content
@@ -1107,22 +1112,22 @@ coxRunList :: (CContent c) => CopSet c -> Head -> Cox c -> RunList c
 calcContent :: (CContent c) => CopSet c -> CalcContent c
 
 -- | Extract single argument.
-getArg1 :: [Ab c] -> Ab (Ab c)
+getArg1 :: (Basis c) => [Ab c] -> Ab (Ab c)
 
 -- | Extract two arguments.
-getArg2 :: [Ab c] -> Ab (Ab c, Ab c)
+getArg2 :: (Basis c) => [Ab c] -> Ab (Ab c, Ab c)
 
 -- | Extract three arguments.
-getArg3 :: [Ab c] -> Ab (Ab c, Ab c, Ab c)
+getArg3 :: (Basis c) => [Ab c] -> Ab (Ab c, Ab c, Ab c)
 
 -- | Extract single non-abortable argument.
-getRightArg1 :: [Ab c] -> Ab c
+getRightArg1 :: (Basis c) => [Ab c] -> Ab c
 
 -- | Extract two non-abortable arguments.
-getRightArg2 :: [Ab c] -> Ab (c, c)
+getRightArg2 :: (Basis c) => [Ab c] -> Ab (c, c)
 
 -- | Extract three non-abortable arguments.
-getRightArg3 :: [Ab c] -> Ab (c, c, c)
+getRightArg3 :: (Basis c) => [Ab c] -> Ab (c, c, c)
 instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode c => GHC.Show.Show (Koshucode.Baala.Data.Church.Run.Beta c)
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Data.Church.Run.Beta c)
 

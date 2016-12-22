@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Exit process.

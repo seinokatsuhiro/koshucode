@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.187.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.190.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Type</a
+	    >Basis</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
@@ -75,7 +75,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Edge content type.</p
+	  >Edge content types.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -85,8 +85,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="#t:CTypeOf"
-	    >CTypeOf</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > c, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c) =&gt; <a href="#t:Basis"
+	    >Basis</a
 	    > c <span class="keyword"
 	    >where</span
 	    ><ul class="subs"
@@ -125,8 +131,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:getContent"
 	    >getContent</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
 	    > c -&gt; (c -&gt; b) -&gt; <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
@@ -135,8 +141,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a href="#t:CEmpty"
 	    >CEmpty</a
 	    > c <span class="keyword"
@@ -175,16 +181,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:contMaximum"
 	    >contMaximum</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; [c] -&gt; c</li
+	    > c =&gt; [c] -&gt; c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a href="#t:CEnd"
 	    >CEnd</a
 	    > c <span class="keyword"
@@ -205,34 +209,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><li class="src short"
 	  ><a href="#v:contMinimum"
 	    >contMinimum</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
 	    >CEnd</a
-	    > c) =&gt; [c] -&gt; c</li
+	    > c =&gt; [c] -&gt; c</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Type</h1
+	>Basis</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a name="t:CTypeOf" class="def"
-	    >CTypeOf</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > c, <a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c) =&gt; <a name="t:Basis" class="def"
+	    >Basis</a
 	    > c <span class="keyword"
 	    >where</span
-	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#CTypeOf');" href="javascript:void(0);" class="link"
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#Basis');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Classifiable into <code
-	      ><a href="D.html#v:Type"
-		>Type</a
-		></code
-	      >.</p
+	    >Basis of contents.</p
 	    ></div
 	  ><div class="subs minimal"
 	  ><p class="caption"
@@ -285,19 +289,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></div
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:CTypeOf" class="caption collapser" onclick="toggleSection('i:CTypeOf')"
+	  ><p id="control.i:Basis" class="caption collapser" onclick="toggleSection('i:Basis')"
 	    >Instances</p
-	    ><div id="section.i:CTypeOf" class="show"
+	    ><div id="section.i:Basis" class="show"
 	    ><table
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
-		    ><a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-		      >CTypeOf</a
+		    ><a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+		      >Basis</a
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-103');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-102');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -329,8 +333,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:getContent" class="def"
 	    >getContent</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Test"
 	    >Test</a
 	    > c -&gt; (c -&gt; b) -&gt; <a href="Koshucode-Baala-Data-Class-Edge.html#t:GetContent"
@@ -349,8 +353,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a name="t:CEmpty" class="def"
 	    >CEmpty</a
 	    > c <span class="keyword"
@@ -393,7 +397,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-165');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-160');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -441,11 +445,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:contMaximum" class="def"
 	    >contMaximum</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMaximum');" href="javascript:void(0);" class="link"
+	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMaximum');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -459,8 +461,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:CTypeOf"
-	    >CTypeOf</a
+	    > <a href="Koshucode-Baala-Data-Class-Edge.html#t:Basis"
+	    >Basis</a
 	    > c =&gt; <a name="t:CEnd" class="def"
 	    >CEnd</a
 	    > c <span class="keyword"
@@ -503,7 +505,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > <a href="Koshucode-Baala-Data-Content.html#t:Content"
 		      >Content</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-170');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#line-165');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -517,11 +519,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><a name="v:contMinimum" class="def"
 	    >contMinimum</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
 	    >CEnd</a
-	    > c) =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMinimum');" href="javascript:void(0);" class="link"
+	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMinimum');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

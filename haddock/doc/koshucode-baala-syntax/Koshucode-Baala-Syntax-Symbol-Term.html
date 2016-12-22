@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-syntax-0.187.0.0: Syntax for Koshucode</p
+      >koshucode-baala-syntax-0.190.0.0: Syntax for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -148,6 +148,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 	    > -&gt; <a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:stringTermNames"
+	    >stringTermNames</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:termNameString"
 	    >termNameString</a
@@ -665,6 +673,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax
 </code
 		></strong
 	      >TermName GT &quot;a&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:stringTermNames" class="def"
+	    >stringTermNames</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Symbol-Term.html#stringTermNames');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert string to multiple term names.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>stringTermNames &quot;/a /b /c&quot;
+</code
+		></strong
+	      >[TermName EQ &quot;a&quot;, TermName EQ &quot;b&quot;, TermName EQ &quot;c&quot;]
 </pre
 	    ></div
 	  ></div

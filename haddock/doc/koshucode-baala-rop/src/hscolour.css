@@ -1,0 +1,36 @@
+/* Haddock documents of Koshucode */
+
+body {
+  padding: 0px 0px 700px 0px;
+}
+
+pre {
+  font-family: 'Andale Mono', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 150%;
+}
+
+.number {
+  display: inline-block;
+  width: 50px;
+  text-align: right;
+  margin-right: 20px;
+  font-family: sans-serif;
+  color: rgb(60%, 60%, 60%);
+}
+
+.hs-layout      { color: rgb(60%, 60%, 60%); }
+.hs-keyglyph    { color: rgb(80%, 40%, 20%); }
+.hs-keyword     { color: rgb(76%, 27%, 11%); font-weight: bold; }
+.hs-conid,
+.hs-conop       { color: rgb(60%, 0%, 50%); }
+.hs-varid       { color: rgb(0%, 0%, 50%); }
+.hs-varop       { color: rgb(20%, 50%, 80%); font-weight: bold; }
+.hs-definition  { color: rgb(0%, 60%, 80%); font-weight: bold; }
+.hs-str,
+.hs-chr         { color: rgb(0%, 60%, 60%); }
+.hs-num         { color: rgb(0%, 60%, 60%); }
+.hs-comment,
+.hs-comment a   { color: rgb(50%, 50%, 50%); }
+.hs-sel         { color: rgb(100%, 0%, 0%); }
+.hs-cpp         { color: rgb(0%, 0%, 0%); }

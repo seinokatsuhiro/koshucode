@@ -8,14 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-nested
-@version 0.187.0.0
-
-
--- | Messages for relmap operators on nested relations.
-module Koshucode.Baala.Rop.Nest.Message
-
--- | Not a nested relation
-notNestRel :: [TermName] -> Head -> Ab a
+@version 0.190.0.0
 
 
 -- | Relmap operators concerning nested relation.
@@ -156,7 +149,7 @@ relmapJoinUp :: (Ord c) => Intmed c -> [TermName] -> Relmap c
 
 
 -- | Relational operators for nested relations.
-module Koshucode.Baala.Rop.Nest.Rop
+module Koshucode.Baala.Rop.Nest.Rops
 
 -- | Implementation of relational operators.
 --   

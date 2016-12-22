@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.187.0.0
+@version 0.190.0.0
 
 
 -- | Common properties of judgements and relations.
@@ -31,6 +31,7 @@ getTermNames :: GetTermNames a => a -> [TermName]
 -- | Get unique list of term names.
 getTermNamesUnique :: (GetTermNames a) => a -> [TermName]
 instance Koshucode.Baala.Type.Judge.JudgeClass.GetTermNames [Koshucode.Baala.Syntax.Symbol.Term.TermName]
+instance Koshucode.Baala.Type.Judge.JudgeClass.GetTermNames GHC.Base.String
 
 
 -- | Judgements: a symbolic representations of affirmed or denied
@@ -1481,65 +1482,11 @@ instance Koshucode.Baala.Base.MixText.MixEncode.MixEncode Koshucode.Baala.Type.T
 
 
 -- | Term picker is a data for picking target terms based on input heading
---   terms. For example, when picking /a /b from /a /b /c /d /e, use
---   <tt>termPicker</tt> like:
---   
---   <pre>
---   &gt;&gt;&gt; let pk = termPicker ["a", "b"] ["a", "b", "c", "d", "e"]
---   
---   &gt;&gt;&gt; pickTerms pk ["1", "2", "3", "4", "5"]
---   ["1", "2"]
---   </pre>
+--   terms.
 module Koshucode.Baala.Type.Rel.TermPicker
 
--- | Data for picking terms.
-data TermPicker c
-TermPicker :: [Int] -> [Int] -> Bool -> [TermName] -> [TermName] -> [TermName] -> [TermName] -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> [c]) -> ([c] -> ([c], [c])) -> ([c] -> ([c], [c])) -> ([c] -> [c]) -> ([c] -> [c]) -> TermPicker c
-
--- | Indicies of right-shared part
-[ssLShareIndex] :: TermPicker c -> [Int]
-
--- | Indicies of left-shared part
-[ssRShareIndex] :: TermPicker c -> [Int]
-
--- | Whether shared part is empty
-[ssDisjoint] :: TermPicker c -> Bool
-
--- | Left-side term names
-[ssLSideNames] :: TermPicker c -> [TermName]
-
--- | Left-shared term names
-[ssLShareNames] :: TermPicker c -> [TermName]
-
--- | Right-shared term names
-[ssRShareNames] :: TermPicker c -> [TermName]
-
--- | Right-side term names
-[ssRSideNames] :: TermPicker c -> [TermName]
-
--- | Pick left-side part from left contents
-[ssLSide] :: TermPicker c -> [c] -> [c]
-
--- | Pick left-shared part from left contents
-[ssLShare] :: TermPicker c -> [c] -> [c]
-
--- | Pick right-shared part from right contents
-[ssRShare] :: TermPicker c -> [c] -> [c]
-
--- | Pick right-side part from right contents
-[ssRSide] :: TermPicker c -> [c] -> [c]
-
--- | Pick right-shared and right-side part
-[ssRSplit] :: TermPicker c -> [c] -> ([c], [c])
-
--- | Pick right-shared part and right contents
-[ssRAssoc] :: TermPicker c -> [c] -> ([c], [c])
-
--- | Move shared terms forward.
-[ssRForward] :: TermPicker c -> [c] -> [c]
-
--- | Move shared terms backward.
-[ssRBackward] :: TermPicker c -> [c] -> [c]
+-- | Data for picking shared and proper terms.
+type TermPicker c = Picker TermName c
 
 -- | Type for picking terms.
 type TermPick c = TermPicker c -> [c] -> [c]
@@ -1547,112 +1494,37 @@ type TermPick c = TermPicker c -> [c] -> [c]
 -- | Double picker.
 type TermPick2 a b = (TermPick a, TermPick b)
 
--- | Create term picker from left and right term names.
---   
---   <pre>
---   &gt;&gt;&gt; let ss = termPicker ["a", "b", "c"] ["b", "c", "d", "e"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssDisjoint ss
---   False
---   </pre>
---   
---   Left terms.
---   
---   <pre>
---   &gt;&gt;&gt; ssLShareIndex ss
---   [1, 2]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLShareNames ss
---   ["b", "c"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLSide ss "ABC"
---   "A"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssLShare ss "ABC"
---   "BC"
---   </pre>
---   
---   Right terms.
---   
---   <pre>
---   &gt;&gt;&gt; ssRShareIndex ss
---   [0, 1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRShareNames ss
---   ["b", "c"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSideNames ss
---   ["d", "e"]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRShare ss "BCDE"
---   "BC"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSide ss "BCDE"
---   "DE"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRSplit ss "BCDE"
---   ("BC", "DE")
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRAssoc ss "BCDE"
---   ("BC", "BCDE")
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRForward ss "BCDE"
---   "BCDE"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; ssRBackward ss "BCDE"
---   "DEBC"
---   </pre>
-termPicker :: (GetTermNames l, GetTermNames r) => l -> r -> TermPicker c
+-- | Create term picker from left and right term names
+termPicker :: (GetTermNames target, GetTermNames input) => target -> input -> TermPicker c
 
--- | List of present terms.
+-- | List of present terms. The first argument of <a>termPicker</a> is
+--   treated as target terms, and the second is terms of input heading.
+--   Because firstly target terms are given to relmap operator, secondly
+--   input heading is fixed.
 --   
 --   <pre>
---   &gt;&gt;&gt; preTerms $ termPicker (words "a b c") (words "a b d e")
---   ["a","b"]
+--   &gt;&gt;&gt; preTerms $ termPicker "/a /b /c" "/a /b /d /e"
+--   [TermName EQ "a",TermName EQ "b"]
 --   </pre>
 preTerms :: TermPicker c -> [TermName]
 
 -- | List of new terms.
 --   
 --   <pre>
---   &gt;&gt;&gt; newTerms $ termPicker (words "a b c") (words "a b d e")
---   ["c"]
+--   &gt;&gt;&gt; newTerms $ termPicker "/a /b /c" "/a /b /d /e"
+--   [TermName EQ "c"]
 --   </pre>
 newTerms :: TermPicker c -> [TermName]
 
 -- | Test present terms exist.
 --   
 --   <pre>
---   &gt;&gt;&gt; preTermsExist $ termPicker (words "d e") (words "a b c")
+--   &gt;&gt;&gt; preTermsExist $ termPicker "/d /e" "/a /b /c"
 --   False
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; preTermsExist $ termPicker (words "c d e") (words "a b c")
+--   &gt;&gt;&gt; preTermsExist $ termPicker "/c /d /e" "/a /b /c"
 --   True
 --   </pre>
 preTermsExist :: Test (TermPicker c)
@@ -1660,56 +1532,78 @@ preTermsExist :: Test (TermPicker c)
 -- | Test new terms exist.
 --   
 --   <pre>
---   &gt;&gt;&gt; newTermsExist $ termPicker (words "a b c") (words "a b d e")
+--   &gt;&gt;&gt; newTermsExist $ termPicker "/a /b /c" "/a /b /d /e"
 --   True
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; newTermsExist $ termPicker (words "a b") (words "a b d e")
+--   &gt;&gt;&gt; newTermsExist $ termPicker "/a /b" "/a /b /d /e"
 --   False
 --   </pre>
 newTermsExist :: Test (TermPicker c)
 
--- | Pick contents.
+-- | Indices of target terms on input terms.
 --   
 --   <pre>
---   &gt;&gt;&gt; picker (words "a c") (words "a b c") (words "1 2 3")
---   ["1", "3"]
+--   &gt;&gt;&gt; termsIndex $ termPicker "/b /d" "/a /b /c /d"
+--   [1,3]
 --   </pre>
-picker :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Map [c]
+termsIndex :: TermPicker c -> [Int]
 
--- | Extract indices of terms.
+-- | Pick contents of target terms.
 --   
 --   <pre>
---   &gt;&gt;&gt; pickTermsIndex $ termPicker (words "b d") (words "a b d e")
---   [1,2]
+--   &gt;&gt;&gt; pickDirect "/b /d" "/a /b /c /d" "ABCD"
+--   "BD"
 --   </pre>
-pickTermsIndex :: TermPicker c -> [Int]
+pickDirect :: (GetTermNames target, GetTermNames input) => target -> input -> Map [c]
 
--- | Pick terms according to term picker.
-pickTerms :: TermPicker c -> Map [c]
-
--- | Cut terms according to term picker.
-cutTerms :: TermPicker c -> Map [c]
-
--- | Move terms forward.
-forwardTerms :: TermPicker c -> Map [c]
-
--- | Move terms backward.
-backwardTerms :: TermPicker c -> Map [c]
-
--- | Move terms forward (<a>True</a>) or backward (<a>False</a>).
+-- | Pick target terms from input terms.
 --   
 --   <pre>
---   &gt;&gt;&gt; let pk = termPicker (words "c b") (words "a b c d")
---   
---   &gt;&gt;&gt; towardTerms True pk (words "A B C D")
---   ["C","B","A","D"]
---   
---   &gt;&gt;&gt; towardTerms False pk (words "A B C D")
---   ["A","D","C","B"]
+--   &gt;&gt;&gt; pickTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "BD"
 --   </pre>
-towardTerms :: Bool -> TermPicker c -> Map [c]
+pickTerms :: TermPick c
+
+-- | Cut target terms from input terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; cutTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "AC"
+--   </pre>
+cutTerms :: TermPick c
+
+-- | Move target terms forward.
+--   
+--   <pre>
+--   &gt;&gt;&gt; forwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "BDAC"
+--   </pre>
+forwardTerms :: TermPick c
+
+-- | Move target terms backward.
+--   
+--   <pre>
+--   &gt;&gt;&gt; backwardTerms (termPicker "/b /d" "/a /b /c /d") "ABCD"
+--   "ACBD"
+--   </pre>
+backwardTerms :: TermPick c
+
+-- | Move target terms forward if <a>True</a> or backward if <a>False</a>.
+towardTerms :: Bool -> TermPick c
+
+-- | Double <a>pickTerms</a>.
+pickTerms2 :: TermPick2 a b
+
+-- | Double <a>cutTerms</a>.
+cutTerms2 :: TermPick2 a b
+
+-- | Double <a>forwardTerms</a>.
+forwardTerms2 :: TermPick2 a b
+
+-- | Double <a>backwardTerms</a>.
+backwardTerms2 :: TermPick2 a b
 
 
 -- | Heading of relations
