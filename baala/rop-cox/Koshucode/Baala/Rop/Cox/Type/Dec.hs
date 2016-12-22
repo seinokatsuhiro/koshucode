@@ -12,10 +12,11 @@ module Koshucode.Baala.Rop.Cox.Type.Dec
     consToDec, relmapToDec, relkitToDec,
   ) where
 
-import qualified Data.Ratio                   as R
-import qualified Koshucode.Baala.DataPlus     as K
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Rop.Base     as Rop
+import qualified Data.Ratio                        as R
+import qualified Koshucode.Baala.DataPlus          as K
+import qualified Koshucode.Baala.Core              as C
+import qualified Koshucode.Baala.Rop.Base          as Rop
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Implementation of relational operators.
 ropsTypeDec :: (K.CContent c) => [C.Rop c]
@@ -137,14 +138,14 @@ relmapToDec med = C.relmapFlow med . relkitToDec
 -- | Create @to-dec@ relkit.
 relkitToDec :: (K.CContent c) => [K.TermName] -> C.RelkitFlow c
 relkitToDec _ Nothing = Right C.relkitNothing
-relkitToDec ns (Just he1) = Right kit2 where
-      ns1       = K.getTermNames he1
-      ind       = K.selectIndex ns ns1
-      pick      = K.selectElems    ind
-      cut       = K.selectOthers   ind
-      fore      = K.permuteForward ind
-      he2       = K.headMap fore he1
+relkitToDec ns (Just he1)
+    | K.duplicated ns     = Msg.dupTerm ns
+    | K.newTermsExist pk  = Msg.newTerm pk he1
+    | otherwise           = Right kit2
+    where
+      pk        = K.termPicker ns he1
+      he2       = K.headMap (K.forwardTerms pk) he1
       kit2      = C.relkitJust he2 $ C.RelkitLinear False f2
-      f2 cs1    = let cs = K.toDec <$> pick cs1
-                  in cs ++ cut cs1
+      f2 cs1    = let cs = K.toDec <$> K.pickTerms pk cs1
+                  in cs ++ K.cutTerms pk cs1
 
