@@ -3,7 +3,7 @@
 
 -- | Text decomposition by subtext.
 
-module Koshucode.Baala.Rop.Flat.Subtext
+module Koshucode.Baala.Rop.Flat.Applied.Subtext
   ( -- * Relmap
     SubtextPara, consSubtext, relmapSubtext, relkitSubtext,
     -- * Subtext

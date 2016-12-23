@@ -47,10 +47,16 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Rop.Flat
+
+        Koshucode.Baala.Rop.Flat.Applied
+        Koshucode.Baala.Rop.Flat.Applied.Gadget
+        Koshucode.Baala.Rop.Flat.Applied.Peripheral
+        Koshucode.Baala.Rop.Flat.Applied.PoScale
+        Koshucode.Baala.Rop.Flat.Applied.Subtext
+
         Koshucode.Baala.Rop.Flat.Check
         Koshucode.Baala.Rop.Flat.Control
         Koshucode.Baala.Rop.Flat.Elem
-        Koshucode.Baala.Rop.Flat.Gadget
 
         Koshucode.Baala.Rop.Flat.Lattice
         Koshucode.Baala.Rop.Flat.Lattice.Restrict
@@ -60,12 +66,9 @@ library
         Koshucode.Baala.Rop.Flat.Message
         Koshucode.Baala.Rop.Flat.Meta
         Koshucode.Baala.Rop.Flat.Order
-        Koshucode.Baala.Rop.Flat.Peripheral
-        Koshucode.Baala.Rop.Flat.PoScale
         Koshucode.Baala.Rop.Flat.Resource
         Koshucode.Baala.Rop.Flat.Rops
         Koshucode.Baala.Rop.Flat.Source
-        Koshucode.Baala.Rop.Flat.Subtext
         Koshucode.Baala.Rop.Flat.Term
         Koshucode.Baala.Rop.Flat.TermGadget
 

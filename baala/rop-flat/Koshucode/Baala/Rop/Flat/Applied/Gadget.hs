@@ -2,7 +2,7 @@
 
 -- | Gadgets.
 
-module Koshucode.Baala.Rop.Flat.Gadget
+module Koshucode.Baala.Rop.Flat.Applied.Gadget
   ( ropsGadget,
     -- * contents
     consContents, relmapContents,
@@ -20,13 +20,13 @@ module Koshucode.Baala.Rop.Flat.Gadget
     consDumpTree,
   ) where
 
-import qualified Data.Map.Strict                   as Ms
-import qualified Koshucode.Baala.DataPlus          as K
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Rop.Base          as Rop
-import qualified Koshucode.Baala.Rop.Flat.PoScale  as Rop
-import qualified Koshucode.Baala.Rop.Flat.Subtext  as Rop
-import qualified Koshucode.Baala.Rop.Flat.Message  as Msg
+import qualified Data.Map.Strict                           as Ms
+import qualified Koshucode.Baala.DataPlus                  as K
+import qualified Koshucode.Baala.Core                      as C
+import qualified Koshucode.Baala.Rop.Base                  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Applied.PoScale  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Applied.Subtext  as Rop
+import qualified Koshucode.Baala.Rop.Flat.Message          as Msg
 
 
 -- | Gadgets

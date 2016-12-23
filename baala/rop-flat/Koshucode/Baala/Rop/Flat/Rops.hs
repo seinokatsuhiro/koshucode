@@ -9,14 +9,13 @@ module Koshucode.Baala.Rop.Flat.Rops
 import qualified Koshucode.Baala.DataPlus             as K
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Rop.Base             as Rop
+import qualified Koshucode.Baala.Rop.Flat.Applied     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Check       as Rop
 import qualified Koshucode.Baala.Rop.Flat.Control     as Rop
 import qualified Koshucode.Baala.Rop.Flat.Elem        as Rop
 import qualified Koshucode.Baala.Rop.Flat.Lattice     as Rop
-import qualified Koshucode.Baala.Rop.Flat.Gadget      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Meta        as Rop
 import qualified Koshucode.Baala.Rop.Flat.Order       as Rop
-import qualified Koshucode.Baala.Rop.Flat.Peripheral  as Rop
 import qualified Koshucode.Baala.Rop.Flat.Resource    as Rop
 import qualified Koshucode.Baala.Rop.Flat.Source      as Rop
 import qualified Koshucode.Baala.Rop.Flat.Term        as Rop

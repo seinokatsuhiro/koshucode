@@ -3,7 +3,7 @@
 
 -- | Partial-order scale.
 
-module Koshucode.Baala.Rop.Flat.PoScale
+module Koshucode.Baala.Rop.Flat.Applied.PoScale
   ( PoScale, PoScaleCalc,
     poScale, poScaleHeight, poScaleDepth,
     poHeight, poDepth,

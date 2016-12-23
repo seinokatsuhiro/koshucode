@@ -4,7 +4,7 @@
 
 -- | Type-specific operators.
 
-module Koshucode.Baala.Rop.Flat.Peripheral
+module Koshucode.Baala.Rop.Flat.Applied.Peripheral
   ( ropsPeripheral,
     -- * RDF
     consRdf,
