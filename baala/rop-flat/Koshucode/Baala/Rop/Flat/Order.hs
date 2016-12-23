@@ -63,7 +63,7 @@ relmapBackward med = C.relmapFlow med . relkitToward K.backwardTerms2
 
 -- | Create @forward@ or @backward@ relkit.
 relkitToward :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
-relkitToward _ _ Nothing = Right C.relkitNothing
+relkitToward _ _ Nothing = C.relkitUnfixed
 relkitToward (hePick, boPick) ns (Just he1)
     | K.newTermsExist pk   = Msg.newTerm pk he1
     | otherwise            = Right kit
@@ -85,7 +85,7 @@ relmapLexical med = C.relmapFlow med relkitLexical
 
 -- | Create @lexical@ relkit.
 relkitLexical :: C.RelkitFlow c
-relkitLexical Nothing = Right C.relkitNothing
+relkitLexical Nothing = C.relkitUnfixed
 relkitLexical (Just he1) = Right kit where
     ns    = K.getTermNames he1
     pk    = K.termPicker (K.sort ns) ns
@@ -108,7 +108,7 @@ relmapOrder med = C.relmapFlow med . relkitOrder
 
 -- | Create @order@ relkit.
 relkitOrder :: (Ord c) => [K.TermName] -> C.RelkitFlow c
-relkitOrder _ Nothing = Right C.relkitNothing
+relkitOrder _ Nothing = C.relkitUnfixed
 relkitOrder ns (Just he1) = Right kit where
     kit   = C.relkitWhole False he1 flow
     flow  = K.relBodyOrder ns he1

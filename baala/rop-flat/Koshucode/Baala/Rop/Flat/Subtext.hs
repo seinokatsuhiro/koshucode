@@ -53,7 +53,7 @@ relmapSubtext med = C.relmapFlow med . relkitSubtext
 
 -- | Create @subtext@ relkit.
 relkitSubtext :: (K.CContent c) => SubtextPara -> Maybe K.Head -> K.Ab (C.Relkit c)
-relkitSubtext _ Nothing = Right C.relkitNothing
+relkitSubtext _ Nothing = C.relkitUnfixed
 relkitSubtext (n, ns, match, trim) (Just he1) = Right kit where
     pick    = K.pickDirect [n] he1
     he2     = K.headAppend ((K.toTermName . fst) <$> ns) he1

@@ -61,7 +61,7 @@ relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 
 -- | Create @prefix@ relkit.
 relkitPrefix :: K.TermName -> [K.TermName] -> C.RelkitFlow c
-relkitPrefix _ _ Nothing = Right C.relkitNothing
+relkitPrefix _ _ Nothing = C.relkitUnfixed
 relkitPrefix pre ns (Just he1) = Right kit2 where
     he2 =  K.headMapName f he1
     kit2 = C.relkitId $ Just he2
@@ -87,7 +87,7 @@ relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 
 -- | Create @unprefix@ relkit.
 relkitUnprefix :: K.TermName -> C.RelkitFlow c
-relkitUnprefix _ Nothing = Right C.relkitNothing
+relkitUnprefix _ Nothing = C.relkitUnfixed
 relkitUnprefix pre (Just he1) = Right kit2 where
     he2  = K.headMapName (unprefixName pre) he1
     kit2 = C.relkitId $ Just he2
@@ -114,7 +114,7 @@ relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 
 -- | Create @prefix-change@ relkit.
 relkitPrefixChange :: K.TermName2 -> C.RelkitFlow c
-relkitPrefixChange _ Nothing = Right C.relkitNothing
+relkitPrefixChange _ Nothing = C.relkitUnfixed
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
     he2  = K.headMapName f he1
     kit2 = C.relkitId $ Just he2
@@ -137,6 +137,6 @@ relmapWipe med = C.relmapFlow med relkitWipe
 
 -- | Create @wipe@ relkit.
 relkitWipe :: C.RelkitFlow c
-relkitWipe Nothing = Right C.relkitNothing
+relkitWipe Nothing = C.relkitUnfixed
 relkitWipe (Just he1) = Rop.relkitCut ns1 (Just he1) where
     ns1 = (\n -> elem '=' $ K.termNameContent n) `filter` K.getTermNames he1

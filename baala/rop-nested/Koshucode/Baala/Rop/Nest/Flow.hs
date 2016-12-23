@@ -35,7 +35,7 @@ relmapDown med = C.relmapFlow med . relkitDown
 
 -- | Create @down@ relkit.
 relkitDown :: (K.CRel c) => K.TermName -> C.RelkitFlow c
-relkitDown _ Nothing = Right C.relkitNothing
+relkitDown _ Nothing = C.relkitUnfixed
 relkitDown n (Just he1) = Right kit where
     he2       = K.headConsNest n he1 mempty
     kit       = C.relkitWhole False he2 flow
@@ -59,7 +59,7 @@ relmapUp med = C.relmapFlow med . relkitUp
 
 -- | Create @up@ relkit.
 relkitUp :: (K.CRel c) => K.TermName -> C.RelkitFlow c
-relkitUp _ Nothing = Right C.relkitNothing
+relkitUp _ Nothing = C.relkitUnfixed
 relkitUp n (Just he1)
     | K.newTermsExist pk  = Msg.newTerm pk he1
     | K.isSingleton t1    = Right kit2
@@ -93,7 +93,7 @@ relmapChunk med ns ord = C.relmapFlow med $ relkitChunk ns ord
 
 -- | Create @chunk@ relkit.
 relkitChunk :: (Ord c, K.CRel c) => [K.TermName] -> [K.TermName] -> C.RelkitFlow c
-relkitChunk _ _ Nothing = Right C.relkitNothing
+relkitChunk _ _ Nothing = C.relkitUnfixed
 relkitChunk ns ord (Just he1) = Right kit where
     he2       = K.headNests ns he1
     kit       = C.relkitWhole False he2 flow

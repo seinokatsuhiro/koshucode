@@ -80,7 +80,7 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
                        Just b2prop -> map (++ cs1) b2prop
                        Nothing     -> []
 
-relkitMeet _ _ _ = Right C.relkitNothing
+relkitMeet _ _ _ = C.relkitUnfixed
 
 -- | Cartesian product.
 cartesian :: [[c]] -> [[c]] -> [[c]]
@@ -134,7 +134,7 @@ relkitJoin sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
            bo2 <- bmap2 bo1
            Right $ map pick1 bo1 ++ map pick2 bo2
 
-relkitJoin _ _ _ = Right C.relkitNothing
+relkitJoin _ _ _ = C.relkitUnfixed
 
 
 -- ----------------------  Check shared terms

@@ -70,7 +70,7 @@ relkitIf [C.Relkit _ _ kitbT, C.RelkitOutput heA kitbA, C.RelkitOutput heB kitbB
       align = fmap $ K.bodyForward heA heB
 
 relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit hiB' hoB' kitbB)] _
-    | isNothing2 hoA' hoB' = Right C.relkitNothing
+    | isNothing2 hoA' hoB' = C.relkitUnfixed
     | isNothing hoA'       = relkitIf [kitT, C.Relkit hiB' hoB' kitbA, kitB] Nothing
     | isNothing hoB'       = relkitIf [kitT, kitA, C.Relkit hiA' hoA' kitbB] Nothing
 relkitIf _ _ = Msg.unexpAttr "if T A b"
@@ -129,7 +129,7 @@ relkitFix (C.RelkitOutput he2 kitb2) (Just he1)
       confl bmaps = let [bmap2] = bmaps
                         bmap2'  = C.bmapAlign he2 he1 bmap2
                     in C.fixedRelation bmap2'
-relkitFix _ _ = Right C.relkitNothing
+relkitFix _ _ = C.relkitUnfixed
 
 
 -- ----------------------  equal
@@ -153,4 +153,4 @@ relkitEqual (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
            bo2 <- bmap2 bo1
            Right $ if K.Rel he1 bo1 == K.Rel he2 bo2
                    then [[]] else []
-relkitEqual _ _ = Right C.relkitNothing
+relkitEqual _ _ = C.relkitUnfixed

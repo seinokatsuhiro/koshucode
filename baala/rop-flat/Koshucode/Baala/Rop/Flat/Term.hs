@@ -112,10 +112,10 @@ relkitCutTerm = relkitProjTerm K.cutTerms2
 
 relkitProjTerm :: K.TermPick2 K.TypeTerm c -> C.RelkitBinary c
 relkitProjTerm pk (C.RelkitOutput he2 _) = relkitProj pk $ K.getTermNames he2
-relkitProjTerm _ _ = const $ Right C.relkitNothing
+relkitProjTerm _ _ = const $ C.relkitUnfixed
 
 relkitProj :: K.TermPick2 K.TypeTerm c -> [K.TermName] -> C.RelkitFlow c
-relkitProj _ _ Nothing = Right C.relkitNothing
+relkitProj _ _ Nothing = C.relkitUnfixed
 relkitProj (hePick, boPick) ns (Just he1)
     | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit
@@ -151,7 +151,7 @@ relmapMove med = C.relmapFlow med . relkitMove
 
 -- | Create @move@ relkit.
 relkitMove :: ([K.TermName], [K.TermName]) -> C.RelkitFlow c
-relkitMove _ Nothing = Right C.relkitNothing
+relkitMove _ Nothing = C.relkitUnfixed
 relkitMove (ps, ns) (Just he1)
     | K.notSameLength ps ns  = Msg.unevenTerms ps ns
     | K.duplicated ps        = Msg.dupTerm ps   -- from terms

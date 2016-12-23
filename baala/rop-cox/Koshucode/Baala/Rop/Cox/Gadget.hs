@@ -63,7 +63,7 @@ relmapConst med = C.relmapFlow med . relkitConst
 
 -- | Create @const@ relkit.
 relkitConst :: K.Rel c -> C.RelkitFlow c
-relkitConst _ Nothing = Right C.relkitNothing
+relkitConst _ Nothing = C.relkitUnfixed
 relkitConst r _ = Right $ C.relkitConstRel r
 
 
@@ -86,7 +86,7 @@ relmapGeoDatumJp med = C.relmapFlow med . relkitGeoDatumJp
 
 -- | Create @geo-datum-jp@ relkit.
 relkitGeoDatumJp :: (Ord c, K.CContent c) => (K.CopSet c, K.Cox3 c, K.TermName2) -> C.RelkitFlow c
-relkitGeoDatumJp _ Nothing = Right C.relkitNothing
+relkitGeoDatumJp _ Nothing = C.relkitUnfixed
 relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 where
     he2       = K.headAppend [lat, long] he1
     kit2      = C.relkitLineAb False he2 flow
@@ -126,7 +126,7 @@ relmapGeoDegree med = C.relmapFlow med . relkitGeoDegree
 
 -- | Create @geo-degree@ relkit.
 relkitGeoDegree :: (Ord c, K.CContent c) => K.TermName4 -> C.RelkitFlow c
-relkitGeoDegree _ Nothing = Right C.relkitNothing
+relkitGeoDegree _ Nothing = C.relkitUnfixed
 relkitGeoDegree (real, deg, mnt, sec) (Just he1) = Right kit2 where
     he2       = K.headCons real he1
     kit2      = C.relkitLineAb False he2 flow
@@ -170,7 +170,7 @@ relmapInterp med = C.relmapFlow med . relkitInterp
 
 -- | Create @interp@ relkit.
 relkitInterp :: (K.CContent c) => K.Interp -> C.RelkitFlow c
-relkitInterp _ Nothing = Right C.relkitNothing
+relkitInterp _ Nothing = C.relkitUnfixed
 relkitInterp interp (Just he1)
     | interpMatch interp he1 = Right $ C.relkitId (Just he1)
     | otherwise              = Msg.unkTerm (K.interpTerms interp) he1
@@ -203,7 +203,7 @@ relkitRanking
     :: (Ord c, K.CDec c)
     => K.Ranking K.TermName c
     -> (K.TermName, [K.TermName], Int) -> C.RelkitFlow c
-relkitRanking _ _ Nothing = Right C.relkitNothing
+relkitRanking _ _ Nothing = C.relkitUnfixed
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = K.headCons n he1
     kit2  = C.relkitWhole False he2 flow
@@ -280,4 +280,4 @@ relkitRepeat cnt (C.RelkitOutput he2 kitb2) (Just he1)
         loop c bo | c > 0     = loop (c - 1) =<< bmap2' bo
                   | otherwise = Right bo
 
-relkitRepeat _ _ _ = Right C.relkitNothing
+relkitRepeat _ _ _ = C.relkitUnfixed

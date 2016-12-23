@@ -99,7 +99,7 @@ relmapPoScale scale med = C.relmapFlow med . relkitPoScale scale
 
 -- | Create @partial-order-height@ or @partial-order-depth@ relkit.
 relkitPoScale :: (Ord c, K.CDec c) => Rop.PoScaleCalc c -> K.TermName4 -> C.RelkitFlow c
-relkitPoScale _ _ Nothing = Right C.relkitNothing
+relkitPoScale _ _ Nothing = C.relkitUnfixed
 relkitPoScale scale (x,y,z,r) (Just he1) = Right kit2 where
     he2         = K.headFrom [z,r]
     kit2        = C.relkitWhole False he2 flow
@@ -154,7 +154,7 @@ relkitVisitDistance (step1, step2, to, dist) (C.RelkitOutput he2 kitb2) (Just he
       kit3      = C.relkitConflWhole False he3 confl [kitb2]
       confl     = relkitVisitDistanceBody (lenFrom == 1) pkStart pkFrom pkTo heTo
 
-relkitVisitDistance _ _ _ = Right C.relkitNothing
+relkitVisitDistance _ _ _ = C.relkitUnfixed
 
 relkitVisitDistanceBody :: (K.CDec c, K.CRel c, Ord c) =>
   Bool -> K.TermPicker c -> K.TermPicker c -> K.TermPicker c -> K.Head -> [C.BodyMap c] -> K.AbMap [[c]]
@@ -253,7 +253,7 @@ relmapEqlize med = C.relmapFlow med relkitEqlize
 
 -- | Create @eqlize@ relkit.
 relkitEqlize :: (Ord c) => C.RelkitFlow c
-relkitEqlize Nothing = Right C.relkitNothing
+relkitEqlize Nothing = C.relkitUnfixed
 relkitEqlize (Just he1) = Right kit2 where
     kit2      = C.relkitWhole False he1 flow
     flow bo1  = case eqlizeBody Ms.empty bo1 of

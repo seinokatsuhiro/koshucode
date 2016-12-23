@@ -64,7 +64,7 @@ relmapAddClock med = C.relmapFlow med . relkitAddClock
 relkitAddClock :: (K.CContent c)
   => (K.CopSet c, K.TermName, (K.Cox c, K.Cox c, (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c)))
   -> C.RelkitFlow c
-relkitAddClock _ Nothing = Right C.relkitNothing
+relkitAddClock _ Nothing = C.relkitUnfixed
 relkitAddClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = kit where
     pk     = K.termPicker [n] he1
     he2    = n `K.headCons` he1
@@ -125,7 +125,7 @@ relmapOfClock med = C.relmapFlow med . relkitOfClock
 -- | Create @of-clock@ relkit.
 relkitOfClock :: (K.CContent c) =>
   (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
-relkitOfClock _ Nothing = Right C.relkitNothing
+relkitOfClock _ Nothing = C.relkitUnfixed
 relkitOfClock (cops, cox, ns) (Just he1) = kit where
     ns'    = K.catMaybes ns
     pk     = K.termPicker ns' he1
@@ -171,7 +171,7 @@ relmapAltClock med = C.relmapFlow med . relkitAltClock
 relkitAltClock :: (K.CContent c)
   => (K.CopSet c, [K.TermName], (K.MaybeCox c, K.MaybeCox c, K.MaybeCox c, K.MaybeCox c))
   -> C.RelkitFlow c
-relkitAltClock _ Nothing = Right C.relkitNothing
+relkitAltClock _ Nothing = C.relkitUnfixed
 relkitAltClock (cops, ns, (day, hour, minute, sec)) (Just he1) = kit where
     pk     = K.termPicker ns he1
     he2    = K.forwardTerms pk `K.headMap` he1

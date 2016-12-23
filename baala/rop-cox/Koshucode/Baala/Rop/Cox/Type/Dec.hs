@@ -58,7 +58,7 @@ relmapOfDec med = C.relmapFlow med . relkitOfDec
 -- | Create @of-dec@ relkit.
 relkitOfDec :: (K.CContent c) =>
   (K.CopSet c, K.Cox c, [Maybe K.TermName]) -> C.RelkitFlow c
-relkitOfDec _ Nothing = Right C.relkitNothing
+relkitOfDec _ Nothing = C.relkitUnfixed
 relkitOfDec (cops, cox, ns) (Just he1) = Right kit2 where
       he2       = K.catMaybes ns `K.headAppend` he1
       kit2      = C.relkitLineAb False he2 flow
@@ -95,7 +95,7 @@ relmapAltDec med = C.relmapFlow med . relkitAltDec
 relkitAltDec :: (K.CContent c)
   => (K.CopSet c, K.TermName, K.MaybeCox c)
   -> C.RelkitFlow c
-relkitAltDec _ Nothing = Right C.relkitNothing
+relkitAltDec _ Nothing = C.relkitUnfixed
 relkitAltDec (cops, n, fracle) (Just he1) = Right kit2 where
       ns1       = K.getTermNames he1
       ind       = [n] `K.selectIndex` ns1
@@ -137,7 +137,7 @@ relmapToDec med = C.relmapFlow med . relkitToDec
 
 -- | Create @to-dec@ relkit.
 relkitToDec :: (K.CContent c) => [K.TermName] -> C.RelkitFlow c
-relkitToDec _ Nothing = Right C.relkitNothing
+relkitToDec _ Nothing = C.relkitUnfixed
 relkitToDec ns (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.newTermsExist pk  = Msg.newTerm pk he1

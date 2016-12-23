@@ -60,7 +60,7 @@ relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> K.headFrom ns `K.isSubhead` h
 relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `K.selectShare` K.getTermNames he1)
 
 checkTerm :: String -> ([K.TermName] -> K.Head -> Bool) -> [K.TermName] -> C.RelkitFlow c
-checkTerm _ _ _ Nothing = Right C.relkitNothing
+checkTerm _ _ _ Nothing = C.relkitUnfixed
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitId (Just he1)
     | otherwise    = Msg.checkTerm opt ns he1
@@ -88,7 +88,7 @@ relmapDuplicate :: (Ord c) => C.Intmed c -> [K.TermName] -> C.Relmap c
 relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [K.TermName] -> C.RelkitFlow c
-relkitDuplicate _ Nothing = Right C.relkitNothing
+relkitDuplicate _ Nothing = C.relkitUnfixed
 relkitDuplicate ns (Just he1)
     | K.newTermsExist pk  = Msg.newTerm pk he1
     | otherwise           = Right kit2
@@ -128,7 +128,7 @@ consDump :: (K.CRel c, K.MixEncode c) => C.RopCons c
 consDump med = Right $ C.relmapFlow med $ relkitDump
 
 relkitDump :: (K.CRel c, K.MixEncode c) => C.RelkitFlow c
-relkitDump Nothing = Right C.relkitNothing
+relkitDump Nothing = C.relkitUnfixed
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitWholeAb False he1 flow
     flow bo1 = Msg.dumpRel $ K.Rel he1 bo1

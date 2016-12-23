@@ -80,7 +80,7 @@ relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 -- | Create @source-term@ relkit.
 relkitSourceTerm :: String -> C.RelkitBinary c
 relkitSourceTerm cl (C.RelkitOutput he _) _ = Right $ C.relkitSource cl he
-relkitSourceTerm _  _ _ = Right C.relkitNothing
+relkitSourceTerm _  _ _ = C.relkitUnfixed
 
 
 -- ----------------------  dee & dum

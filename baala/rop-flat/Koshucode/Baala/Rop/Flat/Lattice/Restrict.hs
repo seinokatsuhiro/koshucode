@@ -44,7 +44,7 @@ relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
 relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
-relkitSemi _ _ Nothing = Right C.relkitNothing
+relkitSemi _ _ Nothing = C.relkitUnfixed
 relkitSemi isEmpty (C.Relkit _ _ kit2) (Just he1) = kit where
     kit = Right $ C.relkitConflFilter he1 test kit2
     test bo2 = Right $ null bo2 == isEmpty
@@ -111,7 +111,7 @@ relkitFilterMeet which sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
     toSet = Set.fromList . map (K.pkRShare pk)
     test b2set cs1 = K.pkLShare pk cs1 `Set.member` b2set == which
 
-relkitFilterMeet _ _ _ _ = Right C.relkitNothing
+relkitFilterMeet _ _ _ _ = C.relkitUnfixed
 
 
 -- ----------------------  sub
@@ -138,7 +138,7 @@ relkitSub sh kit2@(C.RelkitOutput he2 _) he1'@(Just he1)
       pk  = K.termPicker he1 he2
       kit = relkitFilterMeet True sh kit2 he1'
 
-relkitSub _ _ _ = Right C.relkitNothing
+relkitSub _ _ _ = C.relkitUnfixed
 
 
 -- ----------------------  compose
@@ -160,7 +160,7 @@ relkitCompose m sh kit2@(C.RelkitOutput he2 _) (Just he1) =
     do kitMeet <- m sh kit2 (Just he1)
        kitCut  <- Rop.relkitCut (sharedTerms he1 he2) (C.relkitOutput kitMeet)
        Right (kitMeet K.++ kitCut)
-relkitCompose _ _ _ _ = Right C.relkitNothing
+relkitCompose _ _ _ _ = C.relkitUnfixed
 
 -- | Calculate shared terms.
 --

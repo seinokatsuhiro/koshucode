@@ -95,7 +95,7 @@ relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
                        Just b2prop -> map (++ cs1) b2prop
                        Nothing     -> [fills ++ cs1]
 
-relkitMaybe _ _ _ _ = Right C.relkitNothing
+relkitMaybe _ _ _ _ = C.relkitUnfixed
 
 selectFiller :: (K.CRel c) => c -> K.Type -> c
 selectFiller _ t@(K.TypeRel _) = K.pRel $ K.Rel (K.Head t) []

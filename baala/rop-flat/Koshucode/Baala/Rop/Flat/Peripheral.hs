@@ -66,7 +66,7 @@ relmapTie med = C.relmapFlow med . relkitTie
 
 -- | Create @tie@ relkit.
 relkitTie :: (K.CTie c) => ([K.TermName], K.TermName) -> C.RelkitFlow c
-relkitTie _ Nothing = Right C.relkitNothing
+relkitTie _ Nothing = C.relkitUnfixed
 relkitTie (ns, to) (Just he1) = Right kit where
     pick      = K.pickDirect ns he1
     he2       = K.headCons to he1
@@ -90,7 +90,7 @@ relmapUntie med = C.relmapFlow med . relkitUntie
 
 -- | Create @untie@ relkit.
 relkitUntie :: (K.CTie c) => (K.TermName, [K.TermName]) -> C.RelkitFlow c
-relkitUntie _ Nothing = Right C.relkitNothing
+relkitUntie _ Nothing = C.relkitUnfixed
 relkitUntie (from, ns) (Just he1) = Right kit2 where
     pick      = K.pickDirect [from] he1
     he2       = K.headAppend ns he1
@@ -169,7 +169,7 @@ relmapAdd1 term med = C.relmapFlow med $ relkitAdd1 term
 
 -- | Create term-adding relkit.
 relkitAdd1 :: K.Term c -> Maybe K.Head -> K.Ab (C.Relkit c)
-relkitAdd1 _ Nothing = Right C.relkitNothing
+relkitAdd1 _ Nothing = C.relkitUnfixed
 relkitAdd1 (n, c) (Just he1) = Right kit where
     he2   = K.headCons n he1
     kit   = C.relkitLine False he2 (c :)

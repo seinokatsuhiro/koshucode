@@ -5,7 +5,7 @@
 module Koshucode.Baala.Core.Relkit.Construct
   ( -- * General constructor
     relkit, relkitId,
-    relkitNothing,
+    relkitUnfixed,
     relkitSetCp,
 
     -- * Flow relkit
@@ -56,8 +56,8 @@ relkitJust = relkit . Just
 -- | Indeterminate relkit.
 --   This is used when input heading is indeterminate,
 --   therefore output heading cannot be determinate.
-relkitNothing :: C.Relkit c
-relkitNothing = relkit Nothing C.RelkitId
+relkitUnfixed :: B.Ab (C.Relkit c)
+relkitUnfixed = Right $ relkit Nothing C.RelkitId
 
 -- | Set relkit code position.
 relkitSetCp :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)

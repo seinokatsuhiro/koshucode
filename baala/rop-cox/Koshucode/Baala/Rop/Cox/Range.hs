@@ -63,7 +63,7 @@ relmapRange med = C.relmapFlow med . relkitRange
 
 -- | Create @range@ relkit.
 relkitRange :: (K.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRange _ Nothing = Right C.relkitNothing
+relkitRange _ Nothing = C.relkitUnfixed
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow
@@ -120,7 +120,7 @@ relkitRangeDay = relkitRangeBy K.timeRangeDay
 
 -- | Create /range-by/ relkit.
 relkitRangeBy :: (K.CContent c) => K.RangeBy K.Time -> RangeAttr c -> C.RelkitFlow c
-relkitRangeBy _ _ Nothing = Right C.relkitNothing
+relkitRangeBy _ _ Nothing = C.relkitUnfixed
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow
@@ -173,7 +173,7 @@ relkitRangeSecond = relkitRangeClock 1
 
 -- | Create /range-clock/relkit.
 relkitRangeClock :: (K.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
-relkitRangeClock _ _ Nothing = Right C.relkitNothing
+relkitRangeClock _ _ Nothing = C.relkitUnfixed
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow

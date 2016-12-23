@@ -75,7 +75,7 @@ relkitFor n (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
            bo2 <- bmap2 [cs1]
            Right $ K.pRel (K.Rel he2 bo2) : cut cs1
 
-relkitFor _ _ _ = Right C.relkitNothing
+relkitFor _ _ _ = C.relkitUnfixed
 
 
 
@@ -121,7 +121,7 @@ relkitGroup sh n (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
             b2sub   = K.fromMaybe [] b2maybe
         in K.pRel (K.Rel he2 b2sub) : cs1
 
-relkitGroup _ _ _ _ = Right C.relkitNothing
+relkitGroup _ _ _ _ = C.relkitUnfixed
 
 
 
@@ -156,7 +156,7 @@ relkitSlice n (C.RelkitOutput he2 kitb2) (Just he1) = Right kit3 where
         do let [bmap2] = bmaps
            bo2 <- bmap2 [cs1]
            Right $ K.pRel (K.Rel he2 bo2) : cs1
-relkitSlice _ _ _ = Right C.relkitNothing
+relkitSlice _ _ _ = C.relkitUnfixed
 
 
 -- ----------------------  slice-up
@@ -178,5 +178,5 @@ relkitSliceUp (C.RelkitOutput he2 kitb2) _ = Right kit3 where
     kit3  = C.relkitConflMany False he2 confl [kitb2]
     confl bmaps cs1 = do let [bmap2] = bmaps
                          bmap2 [cs1]
-relkitSliceUp _ _ = Right C.relkitNothing
+relkitSliceUp _ _ = C.relkitUnfixed
 

@@ -61,7 +61,7 @@ relmapAdd med = C.relmapFlow med . relkitAdd
 
 -- | Create @add@ relkit.
 relkitAdd :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
-relkitAdd _ Nothing = Right C.relkitNothing
+relkitAdd _ Nothing = C.relkitUnfixed
 relkitAdd (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.preTermsExist pk  = Msg.reqNewTerm pk he1
@@ -94,7 +94,7 @@ relmapAlt med = C.relmapFlow med . relkitAlt
 
 -- | Create @alt@ relkit.
 relkitAlt :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
-relkitAlt _ Nothing = Right C.relkitNothing
+relkitAlt _ Nothing = C.relkitUnfixed
 relkitAlt (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.newTermsExist pk  = Msg.newTerm pk he1
@@ -127,7 +127,7 @@ relmapFill med = C.relmapFlow med . relkitFill
 
 -- | Create @fill@ relkit.
 relkitFill :: (K.CContent c) => ([K.TermName], K.CopSet c, K.Cox c) -> C.RelkitFlow c
-relkitFill _ Nothing = Right C.relkitNothing
+relkitFill _ Nothing = C.relkitUnfixed
 relkitFill (ns, cops, coxTo) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.newTermsExist pk  = Msg.newTerm pk he1
@@ -172,7 +172,7 @@ relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 
 -- | Create @replace-all@ relkit.
 relkitReplaceAll :: (K.CContent c) => (K.CopSet c, K.Cox c, K.Cox c) -> C.RelkitFlow c
-relkitReplaceAll _ Nothing = Right C.relkitNothing
+relkitReplaceAll _ Nothing = C.relkitUnfixed
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
     kit2     = C.relkitLineAb False he1 flow
     flow cs  = do cFrom  <- K.coxRunCox cops he1 cs coxFrom
@@ -201,7 +201,7 @@ relmapSplit med = C.relmapFlow med . relkitSplit
 
 -- | Create @split@ relkit.
 relkitSplit :: forall c. (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
-relkitSplit _ Nothing = Right C.relkitNothing
+relkitSplit _ Nothing = C.relkitUnfixed
 relkitSplit (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns
     | K.preTermsExist pk  = Msg.reqNewTerm pk he1

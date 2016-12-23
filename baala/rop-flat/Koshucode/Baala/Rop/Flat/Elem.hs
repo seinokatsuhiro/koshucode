@@ -82,7 +82,7 @@ relmapMember med = C.relmapFlow med . relkitMember
 -- | Create @member@ relkit.
 relkitMember :: (Ord c, K.CSet c, K.CList c, K.CText c)
   => K.TermName2 -> C.RelkitFlow c
-relkitMember _ Nothing = Right C.relkitNothing
+relkitMember _ Nothing = C.relkitUnfixed
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | K.termsPN [xi, xsi] []   = relkitMemberCheck  xi xsi he1'
          | K.termsPN [xsi]     [xi] = relkitMemberExpand x  xsi he1'
@@ -98,7 +98,7 @@ relkitMemberCheck xi xsi he1' = Right kit2 where
 
 relkitMemberExpand :: (Ord c, K.CSet c, K.CList c, K.CText c)
   => K.TermName -> Int -> C.RelkitFlow c
-relkitMemberExpand _ _ Nothing = Right C.relkitNothing
+relkitMemberExpand _ _ Nothing = C.relkitUnfixed
 relkitMemberExpand x xsi (Just he1) = Right kit where
     he2     = K.headCons x he1
     kit     = C.relkitMany False he2 flow
@@ -130,7 +130,7 @@ relmapIndexElem from med = C.relmapFlow med . relkitIndexElem from
 
 -- | Create @ix-elem@ or @iz-elem@ relkit.
 relkitIndexElem :: (Ord c, K.CContent c) => Int -> K.TermName3 -> C.RelkitFlow c
-relkitIndexElem _ _ Nothing = Right C.relkitNothing
+relkitIndexElem _ _ Nothing = C.relkitUnfixed
 relkitIndexElem from (i, x, xs) he1'@(Just he1) = kit2 where
     kit2 | K.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand from i x xsi he1'
          | otherwise                 = Msg.unkTerm [i, x, xs] he1
@@ -141,7 +141,7 @@ headIndex he ns = ns `K.selectIndexFull` K.getTermNames he
 
 relkitIndexElemExpand :: forall c. (Ord c, K.CContent c)
   => Int -> K.TermName -> K.TermName -> Int -> C.RelkitFlow c
-relkitIndexElemExpand _ _ _ _ Nothing = Right C.relkitNothing
+relkitIndexElemExpand _ _ _ _ Nothing = C.relkitUnfixed
 relkitIndexElemExpand from i x xsi (Just he1) = Right kit2 where
     he2      = K.headAppend [i, x] he1
     kit2     = C.relkitMany False he2 flow
@@ -182,7 +182,7 @@ relmapUnroll med = C.relmapFlow med . relkitUnroll
 
 -- | Create @unroll@ relkit.
 relkitUnroll :: (K.CTerm c) =>  (K.TermName, K.TermName, [K.TermName]) -> C.RelkitFlow c
-relkitUnroll _ Nothing = Right C.relkitNothing
+relkitUnroll _ Nothing = C.relkitUnfixed
 relkitUnroll (t, c, from) (Just he1) = kit2 where
     kit2 | K.termsPN fromi [ti, ci]  = Right $ C.relkitMany False he2 flow
          | otherwise                 = Msg.unkTerm (t : c : from) he1
@@ -226,7 +226,7 @@ relmapElemEnd med = C.relmapFlow med . relkitElemBy K.takeTailFill
 
 -- | Create @elem-begin@ or @elem-end@ relkit.
 relkitElemBy :: (Ord c, K.CContent c) => (c -> Int -> [c] -> [c]) -> (K.TermName, [K.TermName]) -> C.RelkitFlow c
-relkitElemBy _ _ Nothing = Right C.relkitNothing
+relkitElemBy _ _ Nothing = C.relkitUnfixed
 relkitElemBy f (coll, to) (Just he1) = kit2 where
     kit2 | K.termsPN [colli] toi = Right $ C.relkitLine False he2 flow
          | otherwise = Msg.unkTerm [coll] he1
@@ -258,7 +258,7 @@ relmapUncollect med = C.relmapFlow med . relkitUncollect
 -- | Create @uncollect@ relkit.
 relkitUncollect :: (Ord c, K.CSet c, K.CList c, K.CText c, K.CDec c, K.CEmpty c)
   => (K.TermName, [K.TermName]) -> C.RelkitFlow c
-relkitUncollect _ Nothing = Right C.relkitNothing
+relkitUncollect _ Nothing = C.relkitUnfixed
 relkitUncollect (coll, to) (Just he1) = kit2 where
     kit2 | K.termsPN icoll ito  = Right $ C.relkitLine False he2 flow
          | otherwise            = Msg.unkTerm (coll : to) he1
