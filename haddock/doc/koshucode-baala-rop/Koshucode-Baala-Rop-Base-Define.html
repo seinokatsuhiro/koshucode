@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-0.190.0.0: Facility for implementing relation-mapping operators</p
+      >koshucode-baala-rop-0.191.0.0: Facility for implementing relation-mapping operators</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -90,6 +90,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
 	    >Rop</a
 	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:newCheck"
+	    >newCheck</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    >TermPicker</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
+	    >MapAb</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:preCheck"
+	    >preCheck</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    >TermPicker</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
+	    >MapAb</a
+	    > a</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -187,6 +203,70 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ><div class="doc"
 	  ><p
 	    >Add aliases of relmap operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:newCheck" class="def"
+	    >newCheck</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    >TermPicker</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
+	    >MapAb</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#newCheck');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >New term check.</p
+	    ><ul
+	    ><li
+	      >Target terms are not present in input terms,
+     e.g., abort if targets are <strong
+		>/a</strong
+		> and inputs are <strong
+		>/a /b</strong
+		>.</li
+	      ><li
+	      >Target terms are not duplicated,
+     e.g., abort if targets are <strong
+		>/a /a</strong
+		> and inputs are <strong
+		>/a /b</strong
+		>.</li
+	      ></ul
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:preCheck" class="def"
+	    >preCheck</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-TermPicker.html#t:TermPicker"
+	    >TermPicker</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:MapAb"
+	    >MapAb</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Define.html#preCheck');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term presence check.</p
+	    ><ul
+	    ><li
+	      >Terget terms are present in input terms,
+     e.g., abort if targets are <strong
+		>/c</strong
+		> and inputs are <strong
+		>/a /b</strong
+		>.</li
+	      ><li
+	      >Target terms are not duplicated,
+     e.g., abort if targets are <strong
+		>/a /a</strong
+		> and inputs are <strong
+		>/a /b</strong
+		>.</li
+	      ></ul
 	    ></div
 	  ></div
 	></div

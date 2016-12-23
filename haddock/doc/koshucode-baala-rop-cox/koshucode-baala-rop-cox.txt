@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.190.0.0
+@version 0.191.0.0
 
 
 -- | Relmap operators for dec type.
@@ -154,10 +154,6 @@ convDegree :: Int -> GeoPoint -> GeoPoint
 --   (0.6283185307179585, 498600.0)
 --   </pre>
 convRadian :: Int -> GeoPoint -> GeoPoint
-
-
--- | Message list.
-module Koshucode.Baala.Rop.Cox.Message
 
 
 -- | Generate range of contents.

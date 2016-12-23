@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.190.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.191.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -99,6 +99,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		> :: [<a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 		>Int</a
 		>]</li
+	      ><li
+	      ><a href="#v:pkLNames"
+		>pkLNames</a
+		> :: [n]</li
+	      ><li
+	      ><a href="#v:pkRNames"
+		>pkRNames</a
+		> :: [n]</li
 	      ><li
 	      ><a href="#v:pkLProperNames"
 		>pkLProperNames</a
@@ -200,13 +208,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	      > and <strong
 	      >/b /c /d /e</strong
 	      >
-   have left-proper terms <strong
+   have left-proper names <strong
 	      >/a</strong
 	      >,
-   shared terms <strong
+   shared names <strong
 	      >/b /c</strong
 	      >,
-   and right-proper terms <strong
+   and right-proper names <strong
 	      >/d /e</strong
 	      >.</p
 	    ><pre class="screen"
@@ -314,6 +322,46 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 </pre
 			></dd
 		      ><dt class="src"
+		      ><a name="v:pkLNames" class="def"
+			>pkLNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Left names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkLNames pk
+</code
+			    ></strong
+			  >[&quot;/a&quot;,&quot;/b&quot;,&quot;/c&quot;]
+</pre
+			></dd
+		      ><dt class="src"
+		      ><a name="v:pkRNames" class="def"
+			>pkRNames</a
+			> :: [n]</dt
+		      ><dd class="doc"
+		      ><p
+			><strong
+			  >Name:</strong
+			  > Right names</p
+			><pre class="screen"
+			><code class="prompt"
+			  >&gt;&gt;&gt; </code
+			  ><strong class="userinput"
+			  ><code
+			    >pkRNames pk
+</code
+			    ></strong
+			  >[&quot;/b&quot;,&quot;/c&quot;,&quot;/d&quot;,&quot;/e&quot;]
+</pre
+			></dd
+		      ><dt class="src"
 		      ><a name="v:pkLProperNames" class="def"
 			>pkLProperNames</a
 			> :: [n]</dt
@@ -321,7 +369,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Name:</strong
-			  > Left-proper term names</p
+			  > Left-proper names</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -341,7 +389,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Name:</strong
-			  > Left-shared term names</p
+			  > Left-shared names</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -361,7 +409,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Name:</strong
-			  > Right-proper term names</p
+			  > Right-proper names</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -381,7 +429,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Name:</strong
-			  > Right-shared term names</p
+			  > Right-shared names</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -491,7 +539,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Map:</strong
-			  > Move shared terms forward.</p
+			  > Move shared names forward.</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -513,7 +561,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		      ><p
 			><strong
 			  >Map:</strong
-			  > Move shared terms backward.</p
+			  > Move shared names backward.</p
 			><pre class="screen"
 			><code class="prompt"
 			  >&gt;&gt;&gt; </code
@@ -572,6 +620,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 		  ></td
 		></tr
 	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Picker" class="caption collapser" onclick="toggleSection('i:Picker')"
+	    >Instances</p
+	    ><div id="section.i:Picker" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > n =&gt; <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+		      >Show</a
+		      > (<a href="Koshucode-Baala-Base-List-Picker.html#t:Picker"
+		      >Picker</a
+		      > n c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Base-List-Picker.html#line-178');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    ><code
+		      >Picker (</code
+		      > left-proper <code
+		      >:</code
+		      > left-shared <code
+		      >|</code
+		      > right-shared <code
+		      >:</code
+		      > right-proper <code
+		      >)</code
+		      ></p
+		    ></td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	></div

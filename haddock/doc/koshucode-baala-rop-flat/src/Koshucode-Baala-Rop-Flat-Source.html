@@ -88,27 +88,25 @@
 <a class="number" name="line-79">79</a>
 <a class="number" name="line-80">80</a><a name="relkitSourceTerm"></a><span class='hs-comment'>-- | Create @source-term@ relkit.</span>
 <a class="number" name="line-81">81</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitBinary</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-82">82</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-varid'>pat</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitOutput</span> <span class='hs-varid'>he2</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>kit3</span> <span class='hs-keyword'>where</span>
-<a class="number" name="line-83">83</a>    <span class='hs-varid'>kit3</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitJust</span> <span class='hs-varid'>he2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitSource</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>ns2</span>
-<a class="number" name="line-84">84</a>    <span class='hs-varid'>ns2</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>K</span><span class='hs-varop'>.</span><span class='hs-varid'>getTermNames</span> <span class='hs-varid'>he2</span>
-<a class="number" name="line-85">85</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyword'>_</span>  <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitNothing</span>
-<a class="number" name="line-86">86</a>
+<a class="number" name="line-82">82</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-varid'>cl</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitOutput</span> <span class='hs-varid'>he</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitSource</span> <span class='hs-varid'>cl</span> <span class='hs-varid'>he</span>
+<a class="number" name="line-83">83</a><span class='hs-definition'>relkitSourceTerm</span> <span class='hs-keyword'>_</span>  <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitUnfixed</span>
+<a class="number" name="line-84">84</a>
+<a class="number" name="line-85">85</a>
+<a class="number" name="line-86">86</a><span class='hs-comment'>-- ----------------------  dee &amp; dum</span>
 <a class="number" name="line-87">87</a>
-<a class="number" name="line-88">88</a><span class='hs-comment'>-- ----------------------  dee &amp; dum</span>
-<a class="number" name="line-89">89</a>
-<a class="number" name="line-90">90</a><a name="consDee"></a><span class='hs-comment'>-- | __dee__</span>
+<a class="number" name="line-88">88</a><a name="consDee"></a><span class='hs-comment'>-- | __dee__</span>
+<a class="number" name="line-89">89</a><span class='hs-comment'>--</span>
+<a class="number" name="line-90">90</a><span class='hs-comment'>--   Output the nullary full relation.</span>
 <a class="number" name="line-91">91</a><span class='hs-comment'>--</span>
-<a class="number" name="line-92">92</a><span class='hs-comment'>--   Output the nullary full relation.</span>
-<a class="number" name="line-93">93</a><span class='hs-comment'>--</span>
-<a class="number" name="line-94">94</a><span class='hs-definition'>consDee</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-95">95</a><span class='hs-definition'>consDee</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>K</span><span class='hs-varop'>.</span><span class='hs-varid'>reldee</span>
-<a class="number" name="line-96">96</a>
-<a class="number" name="line-97">97</a><a name="consDum"></a><span class='hs-comment'>-- | __dum__</span>
+<a class="number" name="line-92">92</a><span class='hs-definition'>consDee</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-93">93</a><span class='hs-definition'>consDee</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>K</span><span class='hs-varop'>.</span><span class='hs-varid'>reldee</span>
+<a class="number" name="line-94">94</a>
+<a class="number" name="line-95">95</a><a name="consDum"></a><span class='hs-comment'>-- | __dum__</span>
+<a class="number" name="line-96">96</a><span class='hs-comment'>--</span>
+<a class="number" name="line-97">97</a><span class='hs-comment'>--   Output the nullary empty relation.</span>
 <a class="number" name="line-98">98</a><span class='hs-comment'>--</span>
-<a class="number" name="line-99">99</a><span class='hs-comment'>--   Output the nullary empty relation.</span>
-<a class="number" name="line-100">100</a><span class='hs-comment'>--</span>
-<a class="number" name="line-101">101</a><span class='hs-definition'>consDum</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a class="number" name="line-102">102</a><span class='hs-definition'>consDum</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>K</span><span class='hs-varop'>.</span><span class='hs-varid'>reldum</span>
-<a class="number" name="line-103">103</a>
+<a class="number" name="line-99">99</a><span class='hs-definition'>consDum</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a class="number" name="line-100">100</a><span class='hs-definition'>consDum</span> <span class='hs-varid'>med</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConst</span> <span class='hs-varid'>med</span> <span class='hs-conid'>K</span><span class='hs-varop'>.</span><span class='hs-varid'>reldum</span>
+<a class="number" name="line-101">101</a>
 </pre></body>
 </html>

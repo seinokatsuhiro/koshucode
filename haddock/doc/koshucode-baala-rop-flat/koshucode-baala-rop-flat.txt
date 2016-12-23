@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.190.0.0
+@version 0.191.0.0
 
 
 -- | Message list.
@@ -17,38 +17,11 @@ module Koshucode.Baala.Rop.Flat.Message
 -- | check-term failed
 checkTerm :: String -> [TermName] -> Head -> Ab a
 
--- | Different headings
-diffHead :: [Head] -> Ab a
-
--- | Dump content expression
-dumpCox :: (Show c) => c -> Ab a
-
--- | Dump relation
-dumpRel :: (CRel c, MixEncode c) => Rel c -> Ab a
-
--- | Dump token trees
-dumpTrees :: [Tree] -> Ab a
-
--- | Require Boolean
-reqBool :: Ab a
-
--- | Require relation
-reqRel :: Ab a
-
 -- | Require collection type
 reqCollection :: Ab a
 
--- | Require data interpretation
-reqInterp :: Ab a
-
--- | Require unary function
-reqUnaryFn :: Ab a
-
 -- | Unexpected term names
 unexpTermName :: Ab a
-
--- | Unmatch shared terms.
-unmatchShare :: [TermName] -> [TermName] -> Ab a
 
 
 -- | Operators on collection elements.
@@ -338,7 +311,9 @@ relkitWipe :: RelkitFlow c
 -- | Restrict by relmap
 module Koshucode.Baala.Rop.Flat.Lattice.Restrict
 
--- | Construct relmap of existential filter.
+-- | <ul>
+--   <li><i>some <i>R</i></i> Existential filter.</li>
+--   </ul>
 consSome :: (Ord c) => RopCons c
 
 -- | Relmap of existential filter.
@@ -347,7 +322,9 @@ relmapSome :: (Ord c) => Intmed c -> Map (Relmap c)
 -- | Calculate existential filter.
 relkitSome :: (Ord c) => RelkitBinary c
 
--- | Construct relmap of non-existential filter.
+-- | <ul>
+--   <li><i>none <i>R</i></i> Non-existential filter.</li>
+--   </ul>
 consNone :: (Ord c) => RopCons c
 
 -- | Relmap of non-existential filter.

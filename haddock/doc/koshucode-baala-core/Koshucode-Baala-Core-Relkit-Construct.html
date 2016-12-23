@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.190.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.191.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,10 +62,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Source of relation</a
+	    >Flow relkit</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
+	    >Confluent relkit</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Source of relation</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
 	    >Relation reference</a
 	    ></li
 	  ></ul
@@ -105,24 +113,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Relkit</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:relkitJust"
-	    >relkitJust</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitCore"
-	    >RelkitCore</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	  ><a href="#v:relkitUnfixed"
+	    >relkitUnfixed</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
-	    > c</li
+	    > c)</li
 	  ><li class="src short"
-	  ><a href="#v:relkitNothing"
-	    >relkitNothing</a
-	    > :: <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
-	    >Relkit</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:relkitSetSource"
-	    >relkitSetSource</a
+	  ><a href="#v:relkitSetCp"
+	    >relkitSetCp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 	    >GetCodePos</a
 	    > cp =&gt; cp -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -131,8 +131,152 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Relkit</a
 	    > c)</li
 	  ><li class="src short"
+	  ><a href="#v:relkitLine"
+	    >relkitLine</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+	    >Flow</a
+	    > [c] [c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitMany"
+	    >relkitMany</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+	    >Flow</a
+	    > [c] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitWhole"
+	    >relkitWhole</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+	    >Flow</a
+	    > [[c]] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitLineAb"
+	    >relkitLineAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [c] [c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitManyAb"
+	    >relkitManyAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [c] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitWholeAb"
+	    >relkitWholeAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [[c]] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitFilterAb"
+	    >relkitFilterAb</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbTest"
+	    >AbTest</a
+	    > [c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitConflLine"
+	    >relkitConflLine</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+	    >Confl</a
+	    > c [c] [c] -&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitConflMany"
+	    >relkitConflMany</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+	    >Confl</a
+	    > c [c] [[c]] -&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitConflWhole"
+	    >relkitConflWhole</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+	    >Confl</a
+	    > c [[c]] [[c]] -&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitConflFilter"
+	    >relkitConflFilter</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbTest"
+	    >AbTest</a
+	    > [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
 	  ><a href="#v:relkitConst"
 	    >relkitConst</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitConstRel"
+	    >relkitConstRel</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
 	    >Rel</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
@@ -167,9 +311,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relkitSource</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
 	    >JudgeClass</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
 	    > c</li
 	  ><li class="src short"
@@ -254,63 +398,391 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relkitJust" class="def"
-	    >relkitJust</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitCore"
-	    >RelkitCore</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	  ><a name="v:relkitUnfixed" class="def"
+	    >relkitUnfixed</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitJust');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitUnfixed');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Determinated relkit.</p
+	    >Indeterminate relkit.
+   This is used when input heading is indeterminate,
+   therefore output heading cannot be determinate.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relkitNothing" class="def"
-	    >relkitNothing</a
-	    > :: <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
-	    >Relkit</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitNothing');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Indeterminated relkit.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relkitSetSource" class="def"
-	    >relkitSetSource</a
+	  ><a name="v:relkitSetCp" class="def"
+	    >relkitSetCp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-CodePos.html#t:GetCodePos"
 	    >GetCodePos</a
 	    > cp =&gt; cp -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitSetSource');" href="javascript:void(0);" class="link"
+	    > c) <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitSetCp');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Set relkit source.</p
+	    >Set relkit code position.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
+	>Flow relkit</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitLine" class="def"
+	    >relkitLine</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitLine');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Remove duplication or not</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+		  >Head</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Heading of output relation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+		  >Flow</a
+		  > [c] [c]</td
+		><td class="doc"
+		><p
+		  >Flow function which converts tuples of relation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+		  >Relkit</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Result relkit</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Create non-abortble one-to-one (linear) relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitMany" class="def"
+	    >relkitMany</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+	    >Flow</a
+	    > [c] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitMany');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create non-abortble one-to-many relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitWhole" class="def"
+	    >relkitWhole</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Flow"
+	    >Flow</a
+	    > [[c]] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitWhole');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create non-abortble whole-mapping relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitLineAb" class="def"
+	    >relkitLineAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [c] [c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitLineAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable one-to-one (linear) relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitManyAb" class="def"
+	    >relkitManyAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [c] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitManyAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable one-to-many relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitWholeAb" class="def"
+	    >relkitWholeAb</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:FlowAb"
+	    >FlowAb</a
+	    > [[c]] [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitWholeAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable whole-mapping relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitFilterAb" class="def"
+	    >relkitFilterAb</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitFilterAb');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+		  >Head</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Heading of output relation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbTest"
+		  >AbTest</a
+		  > [c]</td
+		><td class="doc"
+		><p
+		  >Teset function which determins keeping/omitting tuples</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+		  >Relkit</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Result relkit</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Create abortable filtering relkit.</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Confluent relkit</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitConflLine" class="def"
+	    >relkitConflLine</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConflLine');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Remove duplication or not</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+		  >Head</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Heading of output relation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+		  >Confl</a
+		  > c [c] [c]</td
+		><td class="doc"
+		><p
+		  >Confluent function which merges multiple relations</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+		  >RelkitBody</a
+		  > c]</td
+		><td class="doc"
+		><p
+		  >Relkit of subrelmaps</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+		  >Relkit</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Result relkit</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Create abortable one-to-one (linear) confluent relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitConflMany" class="def"
+	    >relkitConflMany</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+	    >Confl</a
+	    > c [c] [[c]] -&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConflMany');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable one-to-many confluent relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitConflWhole" class="def"
+	    >relkitConflWhole</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Confl"
+	    >Confl</a
+	    > c [[c]] [[c]] -&gt; [<a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConflWhole');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable whole-mapping confluent relkit.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitConflFilter" class="def"
+	    >relkitConflFilter</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbTest"
+	    >AbTest</a
+	    > [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitBody"
+	    >RelkitBody</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConflFilter');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create abortable confluent filtering relkit.</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
 	>Source of relation</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relkitConst" class="def"
 	    >relkitConst</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; [[c]] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConst');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -318,6 +790,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >Relkit for constant relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitConstRel" class="def"
+	    >relkitConstRel</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitConstRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relkit outputs constant relation.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -374,9 +862,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relkitSource</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-JudgeClass.html#t:JudgeClass"
 	    >JudgeClass</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relkit-Relkit.html#t:Relkit"
 	    >Relkit</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Core-Relkit-Construct.html#relkitSource');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -386,7 +874,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Relkit for source relmap.</p
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:5"
 	>Relation reference</h1
 	><div class="top"
 	><p class="src"

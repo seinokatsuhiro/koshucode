@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.190.0.0
+@version 0.191.0.0
 
 
 -- | Result of relational calculation.
@@ -395,14 +395,14 @@ data RelkitCore c
 
 -- | <b>Safe flow:</b> Arbitrary relation mapping, i.e., mapping from
 --   multiple tuples to multiple tuples.
-RelkitFull :: Bool -> (Map [[c]]) -> RelkitCore c
+RelkitWhole :: Bool -> (Flow [[c]] [[c]]) -> RelkitCore c
 
 -- | <b>Safe flow:</b> Mapping from single tuple to multiple tuples,
 --   include no tuples.
-RelkitMany :: Bool -> (ManyMap [c]) -> RelkitCore c
+RelkitMany :: Bool -> (Flow [c] [[c]]) -> RelkitCore c
 
 -- | <b>Safe flow:</b> Mapping from single tuple to single tuple.
-RelkitLinear :: Bool -> (Map [c]) -> RelkitCore c
+RelkitLine :: Bool -> (Flow [c] [c]) -> RelkitCore c
 
 -- | <b>Safe flow:</b> Filter tuples
 RelkitTest :: (Test [c]) -> RelkitCore c
@@ -410,17 +410,17 @@ RelkitTest :: (Test [c]) -> RelkitCore c
 -- | <b>Abortable flow:</b> Filter by calculation.
 RelkitAbTest :: (AbTest [c]) -> RelkitCore c
 
--- | <b>Abortable flow:</b> Filter by data.
+-- | <b>Abortable confluence:</b> Filter by data.
 RelkitAbSemi :: (AbTest [[c]]) -> (RelkitBody c) -> RelkitCore c
 
 -- | <b>Abortable confluence:</b> Multiple to multiple.
-RelkitAbFull :: Bool -> ([BodyMap c] -> AbMap [[c]]) -> [RelkitBody c] -> RelkitCore c
+RelkitAbWhole :: Bool -> (Confl c [[c]] [[c]]) -> [RelkitBody c] -> RelkitCore c
 
 -- | <b>Abortable confluence:</b> Single to multiple.
-RelkitAbMany :: Bool -> ([BodyMap c] -> AbManyMap [c]) -> [RelkitBody c] -> RelkitCore c
+RelkitAbMany :: Bool -> (Confl c [c] [[c]]) -> [RelkitBody c] -> RelkitCore c
 
 -- | <b>Abortable confluence:</b> Single to single.
-RelkitAbLinear :: Bool -> ([BodyMap c] -> AbMap [c]) -> [RelkitBody c] -> RelkitCore c
+RelkitAbLine :: Bool -> (Confl c [c] [c]) -> [RelkitBody c] -> RelkitCore c
 
 -- | <b>Connection:</b> Append two mapping.
 RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
@@ -454,6 +454,15 @@ type RelkitTable c = [(RelkitKey, Relkit c)]
 -- | Search key of relkit.
 type RelkitKey = (Maybe Head, [Lexmap])
 
+-- | Flow mapping.
+type Flow from to = from -> to
+
+-- | Abortable flow mapping.
+type FlowAb from to = from -> Ab to
+
+-- | Confluent mapping.
+type Confl c from to = [BodyMap c] -> from -> Ab to
+
 -- | Mapping for body of relation.
 type BodyMap c = AbMap [[c]]
 
@@ -481,17 +490,51 @@ relkit :: Maybe Head -> RelkitCore c -> Relkit c
 -- | Relkit for identity relmap.
 relkitId :: Maybe Head -> Relkit c
 
--- | Determinated relkit.
-relkitJust :: Head -> RelkitCore c -> Relkit c
+-- | Indeterminate relkit. This is used when input heading is
+--   indeterminate, therefore output heading cannot be determinate.
+relkitUnfixed :: Ab (Relkit c)
 
--- | Indeterminated relkit.
-relkitNothing :: Relkit c
+-- | Set relkit code position.
+relkitSetCp :: (GetCodePos cp) => cp -> Map (Relkit c)
 
--- | Set relkit source.
-relkitSetSource :: (GetCodePos cp) => cp -> Map (Relkit c)
+-- | Create non-abortble one-to-one (linear) relkit.
+relkitLine :: Bool -> Head -> Flow [c] [c] -> Relkit c
+
+-- | Create non-abortble one-to-many relkit.
+relkitMany :: Bool -> Head -> Flow [c] [[c]] -> Relkit c
+
+-- | Create non-abortble whole-mapping relkit.
+relkitWhole :: Bool -> Head -> Flow [[c]] [[c]] -> Relkit c
+
+-- | Create abortable one-to-one (linear) relkit.
+relkitLineAb :: Bool -> Head -> FlowAb [c] [c] -> Relkit c
+
+-- | Create abortable one-to-many relkit.
+relkitManyAb :: Bool -> Head -> FlowAb [c] [[c]] -> Relkit c
+
+-- | Create abortable whole-mapping relkit.
+relkitWholeAb :: Bool -> Head -> FlowAb [[c]] [[c]] -> Relkit c
+
+-- | Create abortable filtering relkit.
+relkitFilterAb :: Head -> AbTest [c] -> Relkit c
+
+-- | Create abortable one-to-one (linear) confluent relkit.
+relkitConflLine :: Bool -> Head -> Confl c [c] [c] -> [RelkitBody c] -> Relkit c
+
+-- | Create abortable one-to-many confluent relkit.
+relkitConflMany :: Bool -> Head -> Confl c [c] [[c]] -> [RelkitBody c] -> Relkit c
+
+-- | Create abortable whole-mapping confluent relkit.
+relkitConflWhole :: Bool -> Head -> Confl c [[c]] [[c]] -> [RelkitBody c] -> Relkit c
+
+-- | Create abortable confluent filtering relkit.
+relkitConflFilter :: Head -> AbTest [[c]] -> RelkitBody c -> Relkit c
 
 -- | Relkit for constant relmap.
-relkitConst :: Rel c -> Relkit c
+relkitConst :: Head -> [[c]] -> Relkit c
+
+-- | Relkit outputs constant relation.
+relkitConstRel :: Rel c -> Relkit c
 
 -- | Relkit for relmap which output empty relation.
 relkitConstEmpty :: [TermName] -> Relkit c
@@ -503,7 +546,7 @@ relkitConstSingleton :: [TermName] -> [c] -> Relkit c
 relkitConstBody :: [TermName] -> [[c]] -> Relkit c
 
 -- | Relkit for source relmap.
-relkitSource :: JudgeClass -> [TermName] -> Relkit c
+relkitSource :: JudgeClass -> Head -> Relkit c
 
 -- | Relkit with nested relation index.
 relkitNest :: Token -> [IndexTerm] -> Map (Relkit c)

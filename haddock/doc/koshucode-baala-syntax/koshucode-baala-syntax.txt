@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.190.0.0
+@version 0.191.0.0
 
 
 -- | Term types and related functions.
