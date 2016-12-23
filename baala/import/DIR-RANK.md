@@ -74,7 +74,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    171 judges
+**    172 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -176,6 +176,7 @@ imp : source IMPORT /module /import
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Picker"          /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Picker"          /import "Koshucode.Baala.Base.List.Select"
+|-- IMPORT  /module "Koshucode.Baala.Base.List.Picker"          /import "Koshucode.Baala.Base.List.Set"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Select"          /import "Data.Set"
@@ -1929,35 +1930,33 @@ TABLE : DIR-RANK
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    49 judges
+**    47 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.GeoDatumJp"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Base.Message"
 
-
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Message"           /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.DataPlus"
@@ -1977,7 +1976,6 @@ TABLE : DIR-RANK
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.DataPlus"
@@ -2011,18 +2009,15 @@ Command `./dir-rank.k ../rop-cox/data/IMPORT.k` produces:
     "DataPlus" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Base"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ]
     ] =}
-|-- DIR-RANK  /dir-rank 0  /dir "Koshucode.Baala.Rop.Flat"  /base-rank {= /rank /base /import-dir [ 0 | "Message" | [ ]
-    ] =}
 |-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Rop.Cox.Type"  /base-rank {= /rank /base /import-dir [ 1 | "Clock" | [
     ] ] [ 1 | "Dec" | [ ] ] =}
-|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
-    ] ] [ 1 | "Empty" | [ ] ] [ 1 | "Message" | [ ] ] [ 1 | "Range" | [ ] ] [ 2 | "Calc" | [ ] ] [ 2 | "Filter" | [ ] ]
-    [ 2 | "Gadget" | [ ] ] [ 3 | "Rops" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
+    ] ] [ 1 | "Calc" | [ ] ] [ 1 | "Empty" | [ ] ] [ 1 | "Filter" | [ ] ] [ 1 | "Gadget" | [ ] ] [ 1 | "Range" | [ ] ] [
+    2 | "Rops" | [ ] ] =}
+|-- DIR-RANK  /dir-rank 3  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
+    "Flat" | [ ] ] [ 3 | "Cox" | [ ] ] =}
 
-|-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Rop"  /base-rank {= /rank /base /import-dir [ 0 | "Base" | [ ] ] [ 0 |
-    "Flat" | [ ] ] [ 4 | "Cox" | [ ] ] =}
-
-*** 6 judges
+*** 5 judges
 
 === note
 
@@ -2039,39 +2034,34 @@ TABLE : DIR-RANK
                                              ----- -------------- -----------
                                              0     "Message"      [ ]
                                              
-  0         "Koshucode.Baala.Rop.Flat"       /rank /base          /import-dir
-                                             ----- -------------- -----------
-                                             0     "Message"      [ ]
-                                             
   1         "Koshucode.Baala.Rop.Cox.Type"   /rank /base          /import-dir
                                              ----- -------------- -----------
                                              1     "Clock"        [ ]
                                              1     "Dec"          [ ]
                                              
-  3         "Koshucode.Baala.Rop.Cox"        /rank /base          /import-dir
+  2         "Koshucode.Baala.Rop.Cox"        /rank /base          /import-dir
                                              ----- -------------- -----------
                                              0     "GeoDatumJp"   [ ]
+                                             1     "Calc"         [ ]
                                              1     "Empty"        [ ]
-                                             1     "Message"      [ ]
+                                             1     "Filter"       [ ]
+                                             1     "Gadget"       [ ]
                                              1     "Range"        [ ]
-                                             2     "Calc"         [ ]
-                                             2     "Filter"       [ ]
-                                             2     "Gadget"       [ ]
-                                             3     "Rops"         [ ]
+                                             2     "Rops"         [ ]
                                              
-  4         "Koshucode.Baala.Rop"            /rank /base          /import-dir
+  3         "Koshucode.Baala.Rop"            /rank /base          /import-dir
                                              ----- -------------- -----------
                                              0     "Base"         [ ]
                                              0     "Flat"         [ ]
-                                             4     "Cox"          [ ]
+                                             3     "Cox"          [ ]
                                              
 
 === rel
 
 **
 **  SUMMARY
-**       6 judges on DIR-RANK
-**       6 judges in total
+**       5 judges on DIR-RANK
+**       5 judges in total
 **
 ```
 

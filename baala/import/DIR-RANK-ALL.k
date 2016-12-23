@@ -180,8 +180,8 @@
     [ "Core" ] ] [ 80 | "Lattice" | [ ] ] [ 81 | "Check" | [ "Core" | "Lattice" ] ] [ 81 | "Control" | [ "Core" |
     "Lattice" ] ] [ 82 | "Rops" | [ "Core" | "Lattice" ] ] =}
 |-- DIR-RANK  /dir-rank 85  /dir "Koshucode.Baala.Rop.Cox"  /base-rank {= /rank /base /import-dir [ 0 | "GeoDatumJp" | [
-    ] ] [ 76 | "Range" | [ "Core" ] ] [ 77 | "Message" | [ ] ] [ 78 | "Calc" | [ "Core" ] ] [ 78 | "Filter" | [ "Core" ]
-    ] [ 78 | "Gadget" | [ "Core" ] ] [ 84 | "Empty" | [ "Core" | "Flat" ] ] [ 85 | "Rops" | [ "Core" ] ] =}
+    ] ] [ 76 | "Calc" | [ "Core" ] ] [ 76 | "Filter" | [ "Core" ] ] [ 76 | "Gadget" | [ "Core" ] ] [ 76 | "Range" | [
+    "Core" ] ] [ 84 | "Empty" | [ "Core" | "Flat" ] ] [ 85 | "Rops" | [ "Core" ] ] =}
 
 |-- DIR-RANK  /dir-rank 86  /dir "Koshucode.Baala.Rop.Nest"  /base-rank {= /rank /base /import-dir [ 76 | "Flow" | [
     "Core" ] ] [ 84 | "Confl" | [ "Core" | "Flat" ] ] [ 85 | "Deriv" | [ "Core" | "Flat" ] ] [ 86 | "Rops" | [ "Core" ]
@@ -576,11 +576,10 @@ TABLE : DIR-RANK
   85        "Koshucode.Baala.Rop.Cox"            /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
                                                  0     "GeoDatumJp"         [ ]
+                                                 76    "Calc"               [ "Core" ]
+                                                 76    "Filter"             [ "Core" ]
+                                                 76    "Gadget"             [ "Core" ]
                                                  76    "Range"              [ "Core" ]
-                                                 77    "Message"            [ ]
-                                                 78    "Calc"               [ "Core" ]
-                                                 78    "Filter"             [ "Core" ]
-                                                 78    "Gadget"             [ "Core" ]
                                                  84    "Empty"              [ "Core" | "Flat" ]
                                                  85    "Rops"               [ "Core" ]
                                                  

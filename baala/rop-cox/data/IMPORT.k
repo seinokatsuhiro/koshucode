@@ -7,35 +7,33 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    49 judges
+**    47 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Calc"              /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Flat.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Empty"             /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Filter"            /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Base"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.GeoDatumJp"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Cox.Message"
+|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Gadget"            /import "Koshucode.Baala.Rop.Base.Message"
 
-
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Message"           /import "Koshucode.Baala.Rop.Flat.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Range"             /import "Koshucode.Baala.DataPlus"
@@ -55,7 +53,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.DataPlus"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Rop.Base"
-|-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Clock"        /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Data.Ratio"
 |-- IMPORT  /module "Koshucode.Baala.Rop.Cox.Type.Dec"          /import "Koshucode.Baala.DataPlus"

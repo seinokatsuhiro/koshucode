@@ -7,7 +7,7 @@ name:                koshucode-baala-writer
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.190.0.0
+version:             0.191.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Writers for the Koshu calculator
@@ -64,12 +64,12 @@ library
        , bytestring                == 0.*
        , containers                == 0.5.*
        , text                      == 1.*
-       , koshucode-baala-overture  == 0.190.0.0
-       , koshucode-baala-base      == 0.190.0.0
-       , koshucode-baala-syntax    == 0.190.0.0
-       , koshucode-baala-type      == 0.190.0.0
-       , koshucode-baala-data      == 0.190.0.0
-       , koshucode-baala-core      == 0.190.0.0
+       , koshucode-baala-overture  == 0.191.0.0
+       , koshucode-baala-base      == 0.191.0.0
+       , koshucode-baala-syntax    == 0.191.0.0
+       , koshucode-baala-type      == 0.191.0.0
+       , koshucode-baala-data      == 0.191.0.0
+       , koshucode-baala-core      == 0.191.0.0
 
   ghc-options:         -Wall
 
