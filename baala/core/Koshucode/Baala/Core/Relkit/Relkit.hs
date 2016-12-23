@@ -57,13 +57,13 @@ data RelkitCore c
     | RelkitAbTest        ( B.AbTest  [c] )
                      -- ^ __Abortable flow:__ Filter by calculation.
     | RelkitAbSemi        ( B.AbTest  [[c]] ) (RelkitBody c)
-                     -- ^ __Abortable flow:__ Filter by data.
+                     -- ^ __Abortable confluence:__ Filter by data.
 
     | RelkitAbWhole  Bool ( Confl c [[c]] [[c]] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Multiple to multiple.
     | RelkitAbMany   Bool ( Confl c  [c]  [[c]] ) [RelkitBody c]
                      -- ^ __Abortable confluence:__ Single to multiple.
-    | RelkitAbLine  Bool ( Confl c  [c]   [c] ) [RelkitBody c]
+    | RelkitAbLine   Bool ( Confl c  [c]   [c] )  [RelkitBody c]
                      -- ^ __Abortable confluence:__ Single to single.
 
     | RelkitAppend   (RelkitBody c) (RelkitBody c)

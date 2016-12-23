@@ -5,8 +5,8 @@
 module Koshucode.Baala.Core.Relkit.Construct
   ( -- * General constructor
     relkit, relkitId,
-    relkitJust, relkitNothing,
-    relkitSetSource,
+    relkitNothing,
+    relkitSetCp,
 
     -- * Flow relkit
     relkitLine, relkitMany, relkitWhole,
@@ -49,17 +49,19 @@ relkit ho = C.Relkit Nothing ho . B.Codic []
 relkitId :: Maybe T.Head -> C.Relkit c
 relkitId ho = relkit ho C.RelkitId
 
--- | Determinated relkit.
+-- | Determinate relkit.
 relkitJust :: T.Head -> C.RelkitCore c -> C.Relkit c
-relkitJust ho = relkit $ Just ho
+relkitJust = relkit . Just
 
--- | Indeterminated relkit.
+-- | Indeterminate relkit.
+--   This is used when input heading is indeterminate,
+--   therefore output heading cannot be determinate.
 relkitNothing :: C.Relkit c
 relkitNothing = relkit Nothing C.RelkitId
 
--- | Set relkit source.
-relkitSetSource :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)
-relkitSetSource cp (C.Relkit hi ho (B.Codic _ core)) =
+-- | Set relkit code position.
+relkitSetCp :: (B.GetCodePos cp) => cp -> O.Map (C.Relkit c)
+relkitSetCp cp (C.Relkit hi ho (B.Codic _ core)) =
     C.Relkit hi ho $ B.codic cp core
 
 
@@ -150,10 +152,9 @@ relkitConstBody ns bo = kit where
     kit = relkitJust he $ C.RelkitConst bo
 
 -- | Relkit for source relmap.
-relkitSource :: T.JudgeClass -> [S.TermName] -> C.Relkit c
-relkitSource cl ns = relkitJust he kit where
-    he  = T.headFrom ns
-    kit = C.RelkitSource cl ns
+relkitSource :: T.JudgeClass -> T.Head -> C.Relkit c
+relkitSource cl he = relkitJust he kit where
+    kit = C.RelkitSource cl $ T.getTermNames he
 
 
 -- ----------------------  Relation reference

@@ -43,7 +43,7 @@ relmapSpecialize hook links = spec [] [] where
          -> C.Relmap' h c -> B.Ab (C.RelkitTable c, C.Relkit c)
     spec local keys kdef he1 rmap = s where
         s = case rmap of
-              C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
+              C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p $ T.headFrom ns)
               C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConstRel rel)
 
               C.RelmapAppend rmap1 rmap2 ->
@@ -102,7 +102,7 @@ relmapSpecialize hook links = spec [] [] where
         post lx result =
             Msg.abSpecialize [lx] $ do
                (kdef2, kit) <- result
-               Right (kdef2, C.relkitSetSource lx kit)
+               Right (kdef2, C.relkitSetCp lx kit)
 
         find (S.TLocal cp v eid (p:ps)) =
             case lookup ((p,v)) local of
