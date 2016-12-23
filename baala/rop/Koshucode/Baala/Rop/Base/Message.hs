@@ -7,10 +7,19 @@ module Koshucode.Baala.Rop.Base.Message
 
     -- * Messages
     -- ** Terms
+    checkTerm,
     dupTerm,
     reqNewTerm,
     unevenTerms,
     unmatchShare,
+
+    -- ** Require
+    reqBool,
+    reqCollection,
+    reqInterp,
+    reqRel,
+    reqRelmap,
+    reqUnaryFn,
 
     -- ** Dump
     dumpCox,
@@ -21,11 +30,6 @@ module Koshucode.Baala.Rop.Base.Message
     noAttr,
     notImpl,
     diffHead,
-    reqBool,
-    reqInterp,
-    reqRel,
-    reqRelmap,
-    reqUnaryFn,
     notNestRel,
   ) where
 
@@ -37,6 +41,12 @@ import qualified Koshucode.Baala.Core      as C
 -- ============================================  Messages
 
 -- ---------------------------------  Terms
+
+-- | [check-term failed]
+checkTerm :: String -> [K.TermName] -> K.Head -> K.Ab a
+checkTerm label ns he =
+    K.leftLines "check-term failed"
+         $ detailTermRel label ns he
 
 -- | [Duplicate term names] Duplicate ... in the terms ...
 dupTerm :: (K.GetTermNames t) => t -> K.Ab a
@@ -64,6 +74,36 @@ unmatchShare e a =
     K.leftLines "Unmatch shared terms"
          $ expectActual (ts e) (ts a)
     where ts xs = unwords $ K.termNameString <$> xs
+
+-- ---------------------------------  Require
+
+-- | [Require Boolean]
+reqBool :: K.Ab a
+reqBool = K.leftBecause "Require Boolean"
+
+-- | [Require collection]
+reqCollection :: K.Ab a
+reqCollection = K.leftBecause "Require collection"
+
+-- | [Require data interpretation]
+reqInterp :: K.Ab a
+reqInterp = K.leftBecause "Require data interpretation"
+
+-- | [Require relation]
+reqRel :: K.Ab a
+reqRel = K.leftBecause "Require relation"
+
+-- | [Require no relmaps]
+--   [Require one relmap]
+--   [Require /N/ relmaps]
+reqRelmap :: Int -> K.Ab a
+reqRelmap 0 = K.leftBecause "Require no relmaps"
+reqRelmap 1 = K.leftBecause "Require one relmap"
+reqRelmap n = K.leftBecause $ "Require " ++ show n ++ " relmaps"
+
+-- | [Require unary function]
+reqUnaryFn :: K.Ab a
+reqUnaryFn = K.leftBecause "Require unary function"
 
 -- ---------------------------------  Dump
 
@@ -97,30 +137,6 @@ diffHead = K.leftLines "Different headings" . map showHead
 
 showHead :: K.Head -> String
 showHead = unwords . map K.termNameString . K.getTermNames
-
--- | [Require Boolean]
-reqBool :: K.Ab a
-reqBool = K.leftBecause "Require Boolean"
-
--- | [Require data interpretation]
-reqInterp :: K.Ab a
-reqInterp = K.leftBecause "Require data interpretation"
-
--- | [Require relation]
-reqRel :: K.Ab a
-reqRel = K.leftBecause "Require relation"
-
--- | [Require no relmaps]
---   [Require one relmap]
---   [Require /N/ relmaps]
-reqRelmap :: Int -> K.Ab a
-reqRelmap 0 = K.leftBecause "Require no relmaps"
-reqRelmap 1 = K.leftBecause "Require one relmap"
-reqRelmap n = K.leftBecause $ "Require " ++ show n ++ " relmaps"
-
--- | [Require unary function]
-reqUnaryFn :: K.Ab a
-reqUnaryFn = K.leftBecause "Require unary function"
 
 -- | [Not a nested relation]
 notNestRel :: (K.GetTermNames t) => t -> K.Head -> K.Ab a

@@ -21,7 +21,7 @@ module Koshucode.Baala.Rop.Flat.Term
 import qualified Koshucode.Baala.DataPlus         as K
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Rop.Base         as Rop
-import qualified Koshucode.Baala.Rop.Flat.Message as Msg
+import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 
 -- | Relmap operators for manipulating term names.
