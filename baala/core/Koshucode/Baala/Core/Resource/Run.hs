@@ -91,12 +91,12 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
             Right (ass2, msg1 ++ msg2)
 
 -- | Make a constructor pair of lexmap and relmap.
-relmapCons :: (C.GetGlobal h) => h c -> (C.ConsLexmap, C.ConsRelmap' h c)
+relmapCons :: (C.GetGlobal' h) => h c -> (C.ConsLexmap, C.ConsRelmap' h c)
 relmapCons hook = (consL, consR) where
     consL         = C.consLexmap findSorter
     consR         = C.consRelmap findRop hook
     findSorter n  = C.ropParaze `fmap` findRop n
-    findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
+    findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal' hook
 
 findRelmap :: [C.LexmapClause] -> C.FindDeriv
 findRelmap ds sec name =

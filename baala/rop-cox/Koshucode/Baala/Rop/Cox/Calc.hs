@@ -109,7 +109,7 @@ consFill :: (K.CContent c) => C.RopCons c
 consFill med =
   do ns    <- Rop.getTerms med "-term"
      coxTo <- Rop.getCox med "-with"
-     let cops = C.globalCopset $ C.ropGlobal med
+     let cops = C.globalCopset $ C.getGlobal med
      Right $ relmapFill med (ns, cops, coxTo)
 
 -- | Create @fill@ relmap.
@@ -139,7 +139,7 @@ consReplace med =
        K.unless (K.coxSyntacticArity coxBy == 1) $ do
          K.abortable "relmap-replace" [coxBy] Msg.reqUnaryFn
        let expr n = (n, K.CoxFill [] coxBy [K.CoxTerm [] [n] []])
-           cops   = C.globalCopset $ C.ropGlobal med
+           cops   = C.globalCopset $ C.getGlobal med
        Right $ relmapAlt med (cops, map expr ns)
 
 
@@ -150,7 +150,7 @@ consReplaceAll :: (K.CContent c) => C.RopCons c
 consReplaceAll med =
   do coxFrom <- Rop.getCox med "-from"
      coxTo   <- Rop.getCox med "-to"
-     let cops = C.globalCopset $ C.ropGlobal med
+     let cops = C.globalCopset $ C.getGlobal med
      Right $ relmapReplaceAll med (cops, coxFrom, coxTo)
 
 -- | Create @replace-all@ relmap.

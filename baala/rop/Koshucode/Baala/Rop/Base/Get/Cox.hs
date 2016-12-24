@@ -10,9 +10,7 @@ module Koshucode.Baala.Rop.Base.Get.Cox
   
     -- * Content
     getContent, getContents,
-    getOptContent,
     getFiller,
-  
     getInt,
   ) where
 
@@ -27,24 +25,26 @@ import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- --------------------------------------------  Cox
 
--- | Get relmap attribute as single cox.
+-- | Get required single content expression.
 getCox :: (K.CContent c) => Rop.RopGet (K.Cox c) c
 getCox med = ropBuild med . K.ttreeGroup K.<.> Rop.getTrees med
 
--- | Get optional content expression with default content.
-getOptCox :: (K.CContent c) => c -> Rop.RopGet (K.Cox c) c
-getOptCox c = Rop.getOpt (K.CoxLit [] c) getCox
+ropBuild :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
+ropBuild = C.treeCoxG . C.getGlobal
 
--- | Get optional content expression.
-getMaybeCox :: (K.CContent c) => Rop.RopGet (Maybe (K.Cox c)) c
+-- | Get optional single content expression.
+getMaybeCox :: (K.CContent c) => Rop.RopGet (K.MaybeCox c) c
 getMaybeCox = Rop.getMaybe getCox
 
--- | Get relmap attribute as cox list with term name.
+-- | Get optional content expression with default content.
+getOptCox :: (K.CContent c) => c -> Rop.RopGet (K.Cox c) c
+getOptCox c = Rop.getOpt (K.coxLit c) getCox
+
+-- | Get list of expression terms.
+--   Empty terms are filled with empty contents,
+--   e.g., \/a \/b /E/ is equivalent to \/a () \/b /E/.
 getTermCoxes :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
 getTermCoxes med = ropNamedAlphas med K.<.> Rop.getTermTrees med
-
-ropBuild :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
-ropBuild = C.treeCoxG . C.ropGlobal
 
 ropNamedAlphas :: (K.CContent c) => C.Intmed c -> [(n, K.Tree)] -> K.Ab [(n, K.Cox c)]
 ropNamedAlphas med = mapM (K.sndM $ ropBuild med)
@@ -52,11 +52,11 @@ ropNamedAlphas med = mapM (K.sndM $ ropBuild med)
 
 -- --------------------------------------------  Where
 
--- | Get where attribute as operator set.
+-- | Get @-where@ parameter as operator set.
 getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getWhere u name =
     do wh <- Rop.getOpt [] getWhereBody u name
-       let copset = C.globalCopset $ C.ropGlobal u
+       let copset = C.globalCopset $ C.getGlobal u
        Right $ copset { K.copsetDerived = wh }
 
 getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c

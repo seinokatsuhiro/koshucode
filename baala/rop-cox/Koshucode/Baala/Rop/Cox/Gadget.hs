@@ -77,7 +77,7 @@ consGeoDatumJp med =
        x  <- Rop.getCox med "-x"
        y  <- Rop.getCox med "-y"
        (lat, long) <- Rop.getTerm2 med "-to"
-       let cops = C.globalCopset $ C.ropGlobal med
+       let cops = C.globalCopset $ C.getGlobal med
        Right $ relmapGeoDatumJp med (cops, (n,x,y), (lat,long))
 
 -- | Create @geo-datum-jp@ relmap.

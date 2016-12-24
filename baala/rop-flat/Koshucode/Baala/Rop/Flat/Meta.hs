@@ -74,7 +74,7 @@ relmapKoshuCop med = C.relmapHook med . relkitKoshuCop
 relkitKoshuCop :: (K.CContent c) => K.TermName -> C.RelkitHook c
 relkitKoshuCop name res _ =
     Right $ C.relkitConstBody [name] $ map (K.list1 . K.pText . K.name) $ C.globalCops g
-          where g = C.getGlobal res
+          where g = C.getGlobal' res
 
 
 -- ----------------------  koshu-cop-infix
@@ -94,7 +94,7 @@ relmapKoshuCopInfix med = C.relmapHook med . relkitKoshuCopInfix
 -- | Create @koshu-cop-infix@ relkit.
 relkitKoshuCopInfix :: (K.CContent c) => (K.TermName, Maybe K.TermName, Maybe K.TermName) -> C.RelkitHook c
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
-    g     = C.getGlobal res
+    g     = C.getGlobal' res
     kit2  = C.relkitConst he2 (map put $ C.globalInfix g)
     he2   = K.headFrom $ [name] ++ heightMaybe K.list1        ++ dirMaybe K.list1
     put (n, ih)  = [K.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
@@ -132,7 +132,7 @@ relkitKoshuRop :: (K.CContent c)
     => (Maybe K.TermName, Maybe K.TermName, Maybe K.TermName)
     -> C.RelkitHook c
 relkitKoshuRop (name, group, usage) res _ = Right kit2 where
-    g     = C.getGlobal res
+    g     = C.getGlobal' res
     kit2  = C.relkitConstBody ns bo2
     ns    = K.catMaybes [group, name, usage]
     bo2   = map f $ C.globalRops g
@@ -164,7 +164,7 @@ relkitKoshuProxy :: (K.CContent c)
     => (Maybe K.TermName, Maybe K.TermName)
     -> C.RelkitHook c
 relkitKoshuProxy (proto, uri) res _ = Right kit2 where
-    g     = C.getGlobal res
+    g     = C.getGlobal' res
     kit2  = C.relkitConstBody ns bo2
     ns    = K.catMaybes [proto, uri]
     bo2   = map f $ C.globalProxy g
@@ -201,13 +201,13 @@ consKoshuVersion med =
 relkitKoshuVersion :: (K.CContent c) => K.TermName -> C.RelkitHook c
 relkitKoshuVersion n h _ =
     Right $ C.relkitConstSingleton [n] [ K.pList $ map K.pInt $ apiVersion ver ] where
-        ver = C.globalVersion $ C.getGlobal h
+        ver = C.globalVersion $ C.getGlobal' h
 
 relkitKoshuVersionCheck :: (K.CContent c) => (c, c) -> K.TermName -> C.RelkitHook c
 relkitKoshuVersionCheck (from, to) n h _
     | verC >= from && verC <= to  = Right kitV
     | otherwise                   = Right kitE
-    where ver  = C.globalVersion $ C.getGlobal h
+    where ver  = C.globalVersion $ C.getGlobal' h
           verC = K.pList $ map K.pInt $ apiVersion ver
           kitV = C.relkitConstSingleton [n] [verC] -- todo
           kitE = C.relkitConstEmpty [n]

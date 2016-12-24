@@ -24,14 +24,14 @@ import qualified Koshucode.Baala.Core.Assert.Message   as Msg
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, D.CContent c, T.SelectRel h, C.GetGlobal h)
+runAssertJudges :: (Ord c, D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (C.ShortResultChunks c)
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { S.shortBody = chunks }
 
 -- | Calculate assertion list.
-runAssertDataset :: forall h. forall c. (Ord c, D.CContent c, T.SelectRel h, C.GetGlobal h)
+runAssertDataset :: forall h. forall c. (Ord c, D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [C.ResultChunk c]
 runAssertDataset hook option (S.Short _ sh ass) =
     Right . concat =<< mapM each ass
@@ -47,7 +47,7 @@ runAssertDataset hook option (S.Short _ sh ass) =
       assert True  q p = T.assertAs q p
       assert False q p = T.assertAs q p . D.omitEmpty
 
-runRelmapViaRelkit :: (D.CContent c, T.SelectRel h, C.GetGlobal h)
+runRelmapViaRelkit :: (D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.RelmapLinkTable' h c
   -> C.Relmap' h c -> B.AbMap (T.Rel c)
 runRelmapViaRelkit hook links r (T.Rel he1 bo1) =

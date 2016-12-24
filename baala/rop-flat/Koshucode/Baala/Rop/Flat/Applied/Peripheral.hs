@@ -137,7 +137,7 @@ relkitTermName n (Just he1) = Right kit2 where
 consToday :: (K.CTime c) => C.RopCons c
 consToday med =
   do n <- Rop.getTerm med "-term"
-     let t = C.globalTime $ C.ropGlobal med
+     let t = C.globalTime $ C.getGlobal med
      consAdd1 (n, K.pTime $ K.timeCutClock t) med
 
 -- | [now \/N] Get current local time without time zone at term \/N.
@@ -147,7 +147,7 @@ consToday med =
 consNow :: (K.CTime c) => C.RopCons c
 consNow med =
   do n <- Rop.getTerm med "-term"
-     let tim    = C.globalTime $ C.ropGlobal med
+     let tim    = C.globalTime $ C.getGlobal med
          tag    = (`elem` Rop.getTags med)
          cons f = consAdd1 (n, K.pTime $ f tim) med
      case () of

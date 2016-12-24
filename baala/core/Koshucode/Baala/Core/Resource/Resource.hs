@@ -68,8 +68,8 @@ instance Show (Resource c) where
 instance T.SelectRel Resource where
     selectRel = T.selectRel . resDataset
 
-instance C.GetGlobal Resource where
-    getGlobal Resource { resGlobal = g } = g
+instance C.GetGlobal' Resource where
+    getGlobal' Resource { resGlobal = g } = g
 
 -- | Resource that has no contents.
 instance (D.CContent c) => B.Default (Resource c) where
