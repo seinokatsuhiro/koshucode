@@ -5,7 +5,7 @@
 module Koshucode.Baala.Rop.Base.Get.Cox
   ( -- * Cox
     getCox, getMaybeCox, getOptCox,
-    getTermCoxes,
+    getCoxTerms, getOptCoxTerms,
     getWhere,
   
     -- * Content
@@ -40,19 +40,27 @@ getOptCox c = Rop.getOpt (K.coxLit c) getCox
 -- | Get list of expression terms.
 --   Empty terms are filled with empty contents,
 --   e.g., \/a \/b /E/ is equivalent to \/a () \/b /E/.
-getTermCoxes :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
-getTermCoxes med = buildCoxTerms med K.<.> Rop.getTermTrees med
+getCoxTerms :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
+getCoxTerms = getOptCoxTerms K.empty
+
+-- | Get list of expression terms.
+getOptCoxTerms :: (K.CContent c) => c -> Rop.RopGet [K.Term (K.Cox c)] c
+getOptCoxTerms c med = optCoxTerms c med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
 buildCox = K.treeCox . copset
 
--- | Build terms of content expression.
-buildCoxTerms :: (K.CContent c) => C.Intmed c -> [K.Term K.Tree] -> K.Ab [K.Term (K.Cox c)]
-buildCoxTerms = mapM . K.sndM . buildCox
-
 copset :: C.Intmed c -> K.CopSet c
 copset = C.globalCopset . C.getGlobal
+
+optCox :: (K.CContent c) => c -> C.Intmed c -> [K.Tree] -> K.Ab (K.Cox c)
+optCox c _   [] = Right $ K.coxLit c
+optCox _ med ts = buildCox med $ K.ttreeGroup ts
+
+-- | Build terms of content expression.
+optCoxTerms :: (K.CContent c) => c -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term (K.Cox c)]
+optCoxTerms c = mapM . K.sndM . optCox c
 
 
 -- --------------------------------------------  Where

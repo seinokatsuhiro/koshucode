@@ -10,7 +10,7 @@ module Koshucode.Baala.Rop.Base.Get.Rel
     getTerm, getTerm2, getMaybeTerm,
     getTerms, getTermsCo,
     getTermPairs, getTermsColon,
-    getTermTrees,
+    getTreesTerms,
   ) where
 
 import qualified Koshucode.Baala.DataPlus          as K
@@ -81,6 +81,6 @@ getTermsColon :: Rop.RopGet [[K.TermName]] c
 getTermsColon = Rop.getWithAb K.treesNamesByColon
 
 -- | Get list of tree terms.
-getTermTrees :: Rop.RopGet [K.Term K.Tree] c
-getTermTrees = Rop.getWithAb K.treesTerms1
+getTreesTerms :: Rop.RopGet [K.Term [K.Tree]] c
+getTreesTerms = Rop.getWithAb K.treesTerms
 
