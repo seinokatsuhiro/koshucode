@@ -27,10 +27,7 @@ import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 -- | Get required single content expression.
 getCox :: (K.CContent c) => Rop.RopGet (K.Cox c) c
-getCox med = ropBuild med . K.ttreeGroup K.<.> Rop.getTrees med
-
-ropBuild :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
-ropBuild = C.treeCoxG . C.getGlobal
+getCox med = buildCox med K.<.> Rop.getTree med
 
 -- | Get optional single content expression.
 getMaybeCox :: (K.CContent c) => Rop.RopGet (K.MaybeCox c) c
@@ -44,31 +41,39 @@ getOptCox c = Rop.getOpt (K.coxLit c) getCox
 --   Empty terms are filled with empty contents,
 --   e.g., \/a \/b /E/ is equivalent to \/a () \/b /E/.
 getTermCoxes :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
-getTermCoxes med = ropNamedAlphas med K.<.> Rop.getTermTrees med
+getTermCoxes med = buildCoxTerms med K.<.> Rop.getTermTrees med
 
-ropNamedAlphas :: (K.CContent c) => C.Intmed c -> [(n, K.Tree)] -> K.Ab [(n, K.Cox c)]
-ropNamedAlphas med = mapM (K.sndM $ ropBuild med)
+-- | Build content expression.
+buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
+buildCox = K.treeCox . copset
+
+-- | Build terms of content expression.
+buildCoxTerms :: (K.CContent c) => C.Intmed c -> [K.Term K.Tree] -> K.Ab [K.Term (K.Cox c)]
+buildCoxTerms = mapM . K.sndM . buildCox
+
+copset :: C.Intmed c -> K.CopSet c
+copset = C.globalCopset . C.getGlobal
 
 
 -- --------------------------------------------  Where
 
 -- | Get @-where@ parameter as operator set.
 getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
-getWhere u name =
-    do wh <- Rop.getOpt [] getWhereBody u name
-       let copset = C.globalCopset $ C.getGlobal u
-       Right $ copset { K.copsetDerived = wh }
+getWhere med name =
+    do wh <- Rop.getOpt [] getWhereBody med name
+       let cops = copset med
+       Right $ cops { K.copsetDerived = wh }
 
 getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
-getWhereBody u name =
-    do xs <- Rop.getTreesByColon u name
-       getWhereClause u `mapM` xs
+getWhereBody med name =
+    do xs <- Rop.getTreesByColon med name
+       getWhereClause med K.<#> xs
 
 getWhereClause :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.Ab (K.NamedCox c)
-getWhereClause u trees =
+getWhereClause med trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
-       cox      <- ropBuild u $ K.ttreeGroup bo
+       cox      <- buildCox med $ K.ttreeGroup bo
        let cp = K.getCPs $ head $ K.untrees trees
        case vs of
          [] -> Right (n, cox)
