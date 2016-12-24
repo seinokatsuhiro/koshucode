@@ -51,7 +51,7 @@ instance B.GetCodePos (Beta c) where
 beta :: (B.MixEncode c) => D.CopSet c -> T.Head -> D.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = D.copsetDerived copset
-       deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
+       deriv2  <- B.sequenceSnd (pos O.<$$> deriv)
        cox2    <- pos cox                   -- put term index
        let cox3 = link copset deriv2 cox2   -- substitute free variables
        reduce cox3                          -- beta reduction

@@ -8,6 +8,7 @@ module Koshucode.Baala.Data.Decode.Type
     treesType,
   ) where
 
+import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type                  as T
@@ -113,9 +114,9 @@ treesType = gen where
     dispatch "tuple" xs     = do ts <- mapM (gen. B.list1) xs
                                  Right $ T.TypeTuple ts
     dispatch "tie"   xs     = do ts1 <- D.treesTerms xs
-                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                 ts2 <- B.sequenceSnd (gen O.<$$> ts1)
                                  Right $ T.TypeTie ts2
     dispatch "rel"   xs     = do ts1 <- D.treesTerms xs
-                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                 ts2 <- B.sequenceSnd (gen O.<$$> ts1)
                                  Right $ T.TypeRel ts2
     dispatch n _            = Msg.unkType n

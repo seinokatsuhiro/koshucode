@@ -83,7 +83,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
             trees      <- S.substSlot slots [] $ S.paraPos $ C.assPara ass
             (lx, lxs)  <- consLexmap slots (findRelmap derives) sec trees
             relmap     <- consRelmap lx
-            links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
+            links      <- B.sequenceSnd (consRelmap O.<$$> lxs)
             let msg1    = C.lexMessage lx
                 msg2    = concatMap C.lexMessageList $ map snd lxs
                 ass2    = ass { C.assRelmap  = Just relmap

@@ -6,7 +6,7 @@ module Koshucode.Baala.Base.Prelude.Pair
   ( -- * Map
     mapFst, mapSnd,
     consFst, consSnd,
-    mapFstTo, mapSndTo,
+    mapFstTo,
     -- * Either
     right2, right3, right4,
     -- * Monad
@@ -41,14 +41,6 @@ consSnd x = mapSnd (x:)
 --
 mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
 mapFstTo = fmap . mapFst
-
--- | Apply function to 'snd' element in functor data.
---
---  >>> mapSndTo length $ Just ("aa", "bbbb")
---  Just ("aa", 4)
---
-mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m  (a, c)
-mapSndTo = fmap . fmap
 
 
 -- ----------------------  Either

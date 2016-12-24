@@ -110,7 +110,7 @@ instance D.Basis Content where
     typeOf (ContentText    _)  = T.TypeText
     typeOf (ContentList   cs)  = T.TypeList $ typeSum cs
     typeOf (ContentSet    cs)  = T.TypeSet  $ typeSum cs
-    typeOf (ContentTie    cs)  = T.TypeTie  $ B.mapSndTo D.typeOf cs
+    typeOf (ContentTie    cs)  = T.TypeTie  (D.typeOf O.<$$> cs)
     typeOf (ContentRel     _)  = T.TypeRel []
     typeOf (ContentInterp  _)  = T.TypeInterp
     typeOf (ContentType    _)  = T.TypeType

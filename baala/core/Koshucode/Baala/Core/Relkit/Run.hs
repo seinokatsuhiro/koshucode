@@ -27,7 +27,7 @@ relkitLink kits = linkKit where
     linkKit (C.Relkit hi ho bo) = C.Relkit hi ho $ link bo
 
     kitsRec :: C.RelkitTable c
-    kitsRec = linkKit `B.mapSndTo` kits
+    kitsRec = linkKit O.<$$> kits
 
     link :: O.Map (C.RelkitBody c)
     link (B.Codic cp core) =
@@ -131,7 +131,7 @@ localsLines xs = map desc $ keys xs where
 
 -- | Kye list of double associations.
 keys :: [(a, [(b, c)])] -> [(a, [b])]
-keys = B.mapSndTo (map fst)
+keys = (map fst O.<$$>)
 
 -- | Double lookup.
 lookup2 :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c

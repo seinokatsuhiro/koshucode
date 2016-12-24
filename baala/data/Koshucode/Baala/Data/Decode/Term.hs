@@ -160,5 +160,5 @@ treesTermsCached = name where
 --   This function wraps long branches into group.
 treesTerms1 :: [S.Tree] -> B.Ab [S.Term S.Tree]
 treesTerms1 xs = do xs' <- treesTerms xs
-                    Right $ B.mapSndTo S.ttreeGroup xs'
+                    Right (S.ttreeGroup O.<$$> xs')
 
