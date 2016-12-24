@@ -5,7 +5,7 @@
 module Koshucode.Baala.Rop.Base.Get.Cox
   ( -- * Cox
     getCox, getMaybeCox, getOptCox,
-    getCoxTerms, getOptCoxTerms,
+    getCoxTerms, getNamedCoxTerms, getOptCoxTerms,
     getWhere,
   
     -- * Content
@@ -37,15 +37,22 @@ getMaybeCox = Rop.getMaybe getCox
 getOptCox :: (K.CContent c) => c -> Rop.RopGet (K.Cox c) c
 getOptCox c = Rop.getOpt (K.coxLit c) getCox
 
--- | Get list of expression terms.
+-- | Get list of content expression terms.
 --   Empty terms are filled with empty contents,
---   e.g., \/a \/b /E/ is equivalent to \/a () \/b /E/.
+--   e.g., __\/a__ __\/b__ /E/ is equivalent to __\/a__ () __\/b__ /E/.
 getCoxTerms :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
-getCoxTerms = getOptCoxTerms K.empty
+getCoxTerms = getOptCoxTerms $ const K.empty
 
--- | Get list of expression terms.
-getOptCoxTerms :: (K.CContent c) => c -> Rop.RopGet [K.Term (K.Cox c)] c
-getOptCoxTerms c med = optCoxTerms c med K.<.> Rop.getTreesTerms med
+-- | Get list of content expression terms.
+--   Empty terms are filled with its term name.
+--   e.g., __\/a__ __\/b__ /E/ is equivalent to __\/a__ '\/a __\/b__ /E/.
+getNamedCoxTerms :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
+getNamedCoxTerms = getOptCoxTerms K.pTerm
+
+-- | Get list of content expression terms.
+--   Contents of empty terms can be generated using its term name.
+getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.Term (K.Cox c)] c
+getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
@@ -54,13 +61,14 @@ buildCox = K.treeCox . copset
 copset :: C.Intmed c -> K.CopSet c
 copset = C.globalCopset . C.getGlobal
 
-optCox :: (K.CContent c) => c -> C.Intmed c -> [K.Tree] -> K.Ab (K.Cox c)
-optCox c _   [] = Right $ K.coxLit c
-optCox _ med ts = buildCox med $ K.ttreeGroup ts
+optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.Term (K.Cox c))
+optCox f _   (n, []) = Right (n, K.coxLit $ f n)
+optCox _ med (n, ts) = do cox <- buildCox med $ K.ttreeGroup ts
+                          Right (n, cox)
 
 -- | Build terms of content expression.
-optCoxTerms :: (K.CContent c) => c -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term (K.Cox c)]
-optCoxTerms c = mapM . K.sndM . optCox c
+optCoxTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term (K.Cox c)]
+optCoxTerms f = mapM . optCox f
 
 
 -- --------------------------------------------  Where
