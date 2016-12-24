@@ -31,26 +31,16 @@ type RopGet a c
     -> String       -- ^ Parameter name, e.g., @\"-term\"@
     -> K.Ab a       -- ^ Parameter value
 
--- | Lookup parameter tree.
-lookupTree :: String -> C.Intmed c -> Maybe [K.Tree]
-lookupTree = lookupAttr K.AttrNormal
+-- | Lookup relmap parameter.
+(?) :: C.Intmed c -> String -> Maybe [K.Tree]
+(?) med ('-' : name) = K.AttrNormal name `K.paraLookupSingle` getPara med
+(?) _ _ = K.bug "rop"
 
-lookupAttr :: (String -> K.AttrName) -> String -> C.Intmed c -> Maybe [K.Tree]
-lookupAttr c ('-' : name) = K.paraLookupSingle (c name) . getPara
-lookupAttr _ _ = K.bug "lookupAttr"
-
--- | Get from trees.
+-- | Get relmap parameter.
 getFromTree :: ([K.Tree] -> K.Ab b) -> RopGet b c
 getFromTree f med name =
     do trees <- getTrees med name
        Msg.abAttrTrees trees $ f trees
-
-getFromTreeOption :: b -> ([K.Tree] -> K.Ab b) -> RopGet b c
-getFromTreeOption y f med name =
-    do m <- getMaybe getTrees med name
-       case m of
-         Nothing    -> Right y
-         Just trees -> Msg.abAttrTrees trees $ f trees
 
 
 -- ----------------------  Tree
@@ -64,7 +54,7 @@ getTree med name =
 -- | Get trees from parameter.
 getTrees :: RopGet [K.Tree] c
 getTrees med name =
-    case lookupTree name med of
+    case med ? name of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
@@ -91,24 +81,25 @@ getTags = K.paraTags . getPara
 
 -- | Get @True@ when parameter is given, @False@ otherwise.
 getSwitch :: RopGet Bool c
-getSwitch med name = getFromTreeOption False get med name where
-    get [] = Right True
-    get _  = Msg.unexpAttr $ "Just type only " ++ name
+getSwitch med name =
+    case med ? name of
+      Nothing  -> Right False
+      Just []  -> Right True
+      Just _   -> Msg.unexpAttr $ "Just type only " ++ name
 
 -- | Get parameter whenever given or not.
 getMaybe :: RopGet a c -> RopGet (Maybe a) c
 getMaybe get med name =
-    case lookupTree name med of
+    case med ? name of
       Nothing -> Right Nothing
       Just _  -> Right . Just =<< get med name
 
 -- | Get optional parameter with default value.
-getOpt
-    :: a            -- ^ Default value
-    -> RopGet a c   -- ^ Non-optional getter
-    -> RopGet a c   -- ^ Optional getter
+getOpt :: a            -- ^ Default value
+       -> RopGet a c   -- ^ Non-optional getter
+       -> RopGet a c   -- ^ Optional getter
 getOpt y get med name =
-    case lookupTree name med of
+    case med ? name of
       Nothing -> Right y
       Just _  -> get med name
 
