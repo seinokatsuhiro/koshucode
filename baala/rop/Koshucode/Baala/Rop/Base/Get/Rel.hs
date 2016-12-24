@@ -48,9 +48,9 @@ right x (Left _)  = Right x
 
 -- | Get a term name from named attribute.
 getTerm :: Rop.RopGet K.TermName c
-getTerm = Rop.getFromTree get where
-    get [x] = K.treeFlatName x
-    get _   = Msg.unexpAttr "Require one term"
+getTerm = Rop.getWithAb term where
+    term [x] = K.treeFlatName x
+    term _   = Msg.unexpAttr "Require one term"
 
 -- | Get two term names.
 getTerm2 :: Rop.RopGet (K.TermName, K.TermName) c
@@ -66,21 +66,21 @@ getMaybeTerm = Rop.getMaybe getTerm
 
 -- | Get list of term names from named attribute.
 getTerms :: Rop.RopGet [K.TermName] c
-getTerms = Rop.getFromTree K.treesFlatNames
+getTerms = Rop.getWithAb K.treesFlatNames
 
 -- | Get term names and complement sign (@~@) .
 getTermsCo :: Rop.RopGet (Bool, [K.TermName]) c
-getTermsCo = Rop.getFromTree K.treesFlatNamesCo
+getTermsCo = Rop.getWithAb K.treesFlatNamesCo
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: Rop.RopGet [K.TermName2] c
-getTermPairs = Rop.getFromTree K.treesFlatNamePairs
+getTermPairs = Rop.getWithAb K.treesFlatNamePairs
 
 -- | Get term names groups delimited by colons.
 getTermsColon :: Rop.RopGet [[K.TermName]] c
-getTermsColon = Rop.getFromTree K.treesNamesByColon
+getTermsColon = Rop.getWithAb K.treesNamesByColon
 
 -- | Get list of tree terms.
 getTermTrees :: Rop.RopGet [K.Term K.Tree] c
-getTermTrees = Rop.getFromTree K.treesTerms1
+getTermTrees = Rop.getWithAb K.treesTerms1
 

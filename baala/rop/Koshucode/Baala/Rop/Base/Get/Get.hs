@@ -3,12 +3,13 @@
 -- | Get parameters of relmap operator.
 
 module Koshucode.Baala.Rop.Base.Get.Get
-  ( -- * Datatype
+  ( -- * Type
     RopGet,
-    getFromTree,
 
     -- * Tree
-    getTree, getTrees,
+    getTrees,
+    getWith, getWithAb,
+    getTree, 
     getTreesByColon,
 
     -- * Basic
@@ -23,7 +24,7 @@ import qualified Koshucode.Baala.Syntax.Pattern   as P
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 
--- ----------------------  Datatype
+-- ----------------------  Type
 
 -- | Type for getting something from relmap intermidiate data.
 type RopGet a c
@@ -31,38 +32,40 @@ type RopGet a c
     -> String       -- ^ Parameter name, e.g., @\"-term\"@
     -> K.Ab a       -- ^ Parameter value
 
+
+-- ----------------------  Tree
+
 -- | Lookup relmap parameter.
 (?) :: C.Intmed c -> String -> Maybe [K.Tree]
 (?) med ('-' : name) = K.AttrNormal name `K.paraLookupSingle` getPara med
 (?) _ _ = K.bug "rop"
 
--- | Get relmap parameter.
-getFromTree :: ([K.Tree] -> K.Ab b) -> RopGet b c
-getFromTree f med name =
-    do trees <- getTrees med name
-       Msg.abAttrTrees trees $ f trees
-
-
--- ----------------------  Tree
-
--- | Get trees as single tree.
-getTree :: RopGet K.Tree c
-getTree med name =
-    do trees <- getTrees med name
-       Right $ K.ttreeGroup trees
-
--- | Get trees from parameter.
+-- | Get trees from relmap parameter.
+--   This is the most basic getter
+--   because relmap parameters are syntactically represented as tree list.
 getTrees :: RopGet [K.Tree] c
 getTrees med name =
     case med ? name of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
+-- | Get relmap parameter and convert using function.
+getWith :: ([K.Tree] -> b) -> RopGet b c
+getWith f med name = Right . f =<< getTrees med name
+
+-- | Get relmap parameter and convert using abortable function.
+getWithAb :: ([K.Tree] -> K.Ab b) -> RopGet b c
+getWithAb f med name =
+    do trees <- getTrees med name
+       Msg.abAttrTrees trees $ f trees
+
+-- | Get tree from relmap parameter.
+getTree :: RopGet K.Tree c
+getTree = getWith K.ttreeGroup
+
 -- | Get trees delimited by colon.
 getTreesByColon :: RopGet [[K.Tree]] c
-getTreesByColon med name =
-    do trees <- getTrees med name
-       Right $ K.omit null $ K.divideTreesByColon trees
+getTreesByColon = getWith (K.omit null . K.divideTreesByColon)
 
 
 -- ----------------------  Basic
@@ -111,6 +114,6 @@ getOpt y get med name =
 --   >   ...
 --
 getWord :: RopGet String c
-getWord = getFromTree get where
-    get [P.LText _ s] = Right s
-    get _ = Msg.unexpAttr "Require one word"
+getWord = getWithAb word where
+    word [P.LText _ s] = Right s
+    word _ = Msg.unexpAttr "Require one word"
