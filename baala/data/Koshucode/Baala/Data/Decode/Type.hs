@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Decode specific content.
+-- | Decode specific-type contents.
 
 module Koshucode.Baala.Data.Decode.Type
-  ( treesTexts, treeText,
+  ( treesTexts,
     treesInterp,
     treesType,
   ) where
