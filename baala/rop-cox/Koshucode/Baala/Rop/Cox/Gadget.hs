@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -19,6 +20,9 @@ module Koshucode.Baala.Rop.Cox.Gadget
   
     -- * repeat
     consRepeat,
+  
+    -- * array & unarray
+    consArray, relmapArray, relkitArray,
   ) where
 
 import Prelude hiding (getContents)
@@ -39,6 +43,7 @@ ropsCoxGadget = Rop.rops "cox-gadget"
     , consNumber     K.& [ "number /N -order /P ..."       K.& "-term . -order? -from?" ]
     , consRank       K.& [ "rank /N -order /P ..."         K.& "-term . -order? -from? -dense?" ]
     , consRepeat     K.& [ "repeat I R"                    K.& "-count -relmap/" ]
+    , consArray      K.& [ "array /P /P ... to /N [E] ..." K.& "-term* . -to" ]
     ]
 
 
@@ -281,3 +286,57 @@ relkitRepeat cnt (C.RelkitOutput he2 kitb2) (Just he1)
                   | otherwise = Right bo
 
 relkitRepeat _ _ _ = C.relkitUnfixed
+
+
+-- ----------------------  array
+
+-- | [array /\/P \/P/ ... -to /\/N E/ ...]
+--    Convert tuples of relation to term array.
+consArray :: (K.CContent c) => C.RopCons c
+consArray med =
+  do ps   <- Rop.getTermPairs med "-term"
+     ts   <- Rop.getNamedContentTerms med "-to"
+     let l = length ps
+     Right $ relmapArray med (ps, l, divide l ts)
+
+-- | Create @array@ relmap.
+relmapArray :: (K.CContent c) => C.Intmed c -> ([K.TermName2], Int, [[K.Term c]]) -> C.Relmap c
+relmapArray med = C.relmapFlow med . relkitArray
+
+-- | Create @array@ relkit.
+relkitArray :: forall c. (K.CContent c) => ([K.TermName2], Int, [[K.Term c]]) -> C.RelkitFlow c
+relkitArray _ Nothing = C.relkitUnfixed
+relkitArray (unzip -> (names, vals), l, to) (Just he1) = check kit where
+    name     = K.termPicker names he1
+    val      = K.termPicker vals he1
+    pair cs  = (K.pickTerms name cs, K.pickTerms val cs)
+
+    ns       = fst <$> concat to
+    keys     = snd K.<$$> to
+    pk       = K.termPicker ns he1
+    he2      = K.headFrom ns
+    check    = Rop.preCheck name . Rop.preCheck val . Rop.newCheck pk
+    kit      = Right $ C.relkitWhole False he2 flow
+    flow bo  = let body = pair <$> bo
+               in [values body `concatMap` keys]
+
+    values :: [([c], [c])] -> [c] -> [c]
+    values body key = case select key `K.mapMaybe` body of
+                        [vs] -> vs         -- single key
+                        _    -> empties l  -- no keys or multiple keys
+
+    select :: [c] -> ([c], [c]) -> Maybe [c]
+    select key (ks, vs) | key == ks  = Just vs
+                        | otherwise  = Nothing
+
+-- >>> divide 2 "abcdef"
+-- ["ab","cd","ef"]
+divide :: Int -> [a] -> [[a]]
+divide n = loop where
+    loop [] = []
+    loop xs = take n xs : loop (drop n xs)
+
+-- | List of empties.
+empties :: (K.CEmpty c) => Int -> [c]
+empties n = replicate n K.empty
+
