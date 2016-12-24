@@ -7,6 +7,7 @@ module Koshucode.Baala.Data.Decode.Message
     abLiteral,
     -- * Message
     nothing,
+    missPairTerm,
     oddRelation,
     quoteType,
     reqFlatName,
@@ -30,6 +31,10 @@ abLiteral = B.abortable "literal"
 -- | Nothing
 nothing :: B.Ab a
 nothing = B.leftBecause "Nothing"
+
+-- | Missing pairing term
+missPairTerm :: B.Ab a
+missPairTerm = B.leftBecause "Missing pairing term"
 
 -- | Odd relation literal
 oddRelation :: Int -> Int -> B.Ab a
