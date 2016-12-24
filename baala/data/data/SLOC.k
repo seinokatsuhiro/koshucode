@@ -6,9 +6,9 @@ about /package 'data
 |-- DIR  /code 303  /comment 189  /dir "data/Koshucode/Baala/Data"
 |-- DIR  /code 610  /comment 348  /dir "data/Koshucode/Baala/Data/Church"
 |-- DIR  /code 362  /comment 313  /dir "data/Koshucode/Baala/Data/Class"
-|-- DIR  /code 508  /comment 328  /dir "data/Koshucode/Baala/Data/Decode"
+|-- DIR  /code 511  /comment 341  /dir "data/Koshucode/Baala/Data/Decode"
 
-|-- DIR-TOTAL  /code 1796  /comment 1183
+|-- DIR-TOTAL  /code 1799  /comment 1196
 
 |-- FILE  /code 13   /comment 5    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 5    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
@@ -29,10 +29,10 @@ about /package 'data
 |-- FILE  /code 12   /comment 5    /file "Decode.hs"      /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 110  /comment 68   /file "Content.hs"     /dir "data/Koshucode/Baala/Data/Decode"
 |-- FILE  /code 67   /comment 36   /file "Dataset.hs"     /dir "data/Koshucode/Baala/Data/Decode"
-|-- FILE  /code 47   /comment 32   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Decode"
+|-- FILE  /code 50   /comment 34   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Decode"
 |-- FILE  /code 130  /comment 71   /file "Numeric.hs"     /dir "data/Koshucode/Baala/Data/Decode"
-|-- FILE  /code 79   /comment 75   /file "Term.hs"        /dir "data/Koshucode/Baala/Data/Decode"
-|-- FILE  /code 75   /comment 46   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Decode"
+|-- FILE  /code 78   /comment 86   /file "Term.hs"        /dir "data/Koshucode/Baala/Data/Decode"
+|-- FILE  /code 76   /comment 46   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Decode"
 |-- FILE  /code 14   /comment 6    /file "Message.hs"     /dir "data/Koshucode/Baala/Data"
 
-|-- FILE-TOTAL  /code 1796  /comment 1183
+|-- FILE-TOTAL  /code 1799  /comment 1196

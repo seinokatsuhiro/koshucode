@@ -7,7 +7,7 @@ name:                koshucode-baala-calculator
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.191.0.0
+version:             0.192.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A portable relational calculator
@@ -53,16 +53,16 @@ executable koshu
          base                        == 4.*
        , directory                   == 1.*
        , filepath                    == 1.*
-       , koshucode-baala-overture    == 0.191.0.0
-       , koshucode-baala-base        == 0.191.0.0
-       , koshucode-baala-syntax      == 0.191.0.0
-       , koshucode-baala-data        == 0.191.0.0
-       , koshucode-baala-core        == 0.191.0.0
-       , koshucode-baala-rop-flat    == 0.191.0.0
-       , koshucode-baala-rop-nested  == 0.191.0.0
-       , koshucode-baala-rop-cox     == 0.191.0.0
-       , koshucode-baala-cop         == 0.191.0.0
-       , koshucode-baala-writer      == 0.191.0.0
+       , koshucode-baala-overture    == 0.192.0.0
+       , koshucode-baala-base        == 0.192.0.0
+       , koshucode-baala-syntax      == 0.192.0.0
+       , koshucode-baala-data        == 0.192.0.0
+       , koshucode-baala-core        == 0.192.0.0
+       , koshucode-baala-rop-flat    == 0.192.0.0
+       , koshucode-baala-rop-nested  == 0.192.0.0
+       , koshucode-baala-rop-cox     == 0.192.0.0
+       , koshucode-baala-cop         == 0.192.0.0
+       , koshucode-baala-writer      == 0.192.0.0
 
 library
   -- Modules exported by the library.
@@ -84,14 +84,14 @@ library
          base                        == 4.*
        , directory                   == 1.*
        , filepath                    == 1.*
-       , koshucode-baala-overture    == 0.191.0.0
-       , koshucode-baala-base        == 0.191.0.0
-       , koshucode-baala-syntax      == 0.191.0.0
-       , koshucode-baala-data        == 0.191.0.0
-       , koshucode-baala-core        == 0.191.0.0
-       , koshucode-baala-rop-flat    == 0.191.0.0
-       , koshucode-baala-rop-nested  == 0.191.0.0
-       , koshucode-baala-rop-cox     == 0.191.0.0
-       , koshucode-baala-cop         == 0.191.0.0
-       , koshucode-baala-writer      == 0.191.0.0
+       , koshucode-baala-overture    == 0.192.0.0
+       , koshucode-baala-base        == 0.192.0.0
+       , koshucode-baala-syntax      == 0.192.0.0
+       , koshucode-baala-data        == 0.192.0.0
+       , koshucode-baala-core        == 0.192.0.0
+       , koshucode-baala-rop-flat    == 0.192.0.0
+       , koshucode-baala-rop-nested  == 0.192.0.0
+       , koshucode-baala-rop-cox     == 0.192.0.0
+       , koshucode-baala-cop         == 0.192.0.0
+       , koshucode-baala-writer      == 0.192.0.0
 
