@@ -45,9 +45,9 @@ ropsCoxCalc = Rop.ropAlias
 
 -- ----------------------  add
 
--- | __add \/N E ...__
---
---   Add new terms \/N which has the result of E.
+-- | [add /\/N/ /E/ ...]
+--    Calculate expression /E/ of term /\/N/,
+--    and add terms /\/N/ ... to input relation.
 --
 consAdd :: (K.CContent c) => C.RopCons c
 consAdd med =
@@ -62,25 +62,20 @@ relmapAdd med = C.relmapFlow med . relkitAdd
 -- | Create @add@ relkit.
 relkitAdd :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
 relkitAdd _ Nothing = C.relkitUnfixed
-relkitAdd (cops, cox) (Just he1)
-    | K.duplicated ns     = Msg.dupTerm ns
-    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
-    | otherwise           = Right kit2
-    where
-      (ns, xs)   = unzip cox       -- names and expressions
-      pk         = K.termPicker ns he1
-      he2        = ns `K.headAppend` he1
-      kit2       = C.relkitLineAb False he2 flow
-      flow cs1   = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
-                      Right $ cs2 ++ cs1
+relkitAdd (cops, cox) (Just he1) = Rop.newCheck pk kit where
+    (ns, xs)  = unzip cox    -- terms and expressions
+    pk        = K.termPicker ns he1
+    he2       = ns `K.headAppend` he1
+    kit       = Right $ C.relkitLineAb False he2 flow
+    flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 K.<#> xs
+                   Right $ cs2 ++ cs1
 
 
 -- ----------------------  alt
 
--- | __alt \/P E ...__
---
---   Change present terms \/P whose content is altered
---   to the result of E.
+-- | [alt /\/P/ /E/ ...]
+--    Calculate expression /E/ of term /\/P/,
+--    and alter the contents of present terms /\/P/ ....
 --
 consAlt :: (K.CContent c) => C.RopCons c
 consAlt med =
@@ -95,24 +90,20 @@ relmapAlt med = C.relmapFlow med . relkitAlt
 -- | Create @alt@ relkit.
 relkitAlt :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
 relkitAlt _ Nothing = C.relkitUnfixed
-relkitAlt (cops, cox) (Just he1)
-    | K.duplicated ns     = Msg.dupTerm ns
-    | K.newTermsExist pk  = Msg.newTerm pk he1
-    | otherwise           = Right kit2
-    where
-      (ns, xs)  = unzip cox               -- names and expressions
-      pk        = K.termPicker ns he1
-      he2       = K.forwardTerms pk `K.headMap` he1  -- heading of output relation
-      kit2      = C.relkitLineAb True he2 flow
-      flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 `mapM` xs
-                     Right $ cs2 ++ K.cutTerms pk cs1
+relkitAlt (cops, cox) (Just he1) = Rop.preCheck pk kit where
+    (ns, xs)  = unzip cox
+    pk        = K.termPicker ns he1
+    he2       = K.forwardTerms pk `K.headMap` he1
+    kit       = Right $ C.relkitLineAb True he2 flow
+    flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 K.<#> xs
+                   Right $ cs2 ++ K.cutTerms pk cs1
 
 
 -- ----------------------  fill
 
--- | __fill \/P ... -with E__
---
---   Fill terms \/P ... with the result of E.
+-- | [fill /\/P/ ... -with /E/]
+--    Fill contents of present terms /\/P/ ...
+--    with the result of /E/.
 --
 consFill :: (K.CContent c) => C.RopCons c
 consFill med =
@@ -128,18 +119,14 @@ relmapFill med = C.relmapFlow med . relkitFill
 -- | Create @fill@ relkit.
 relkitFill :: (K.CContent c) => ([K.TermName], K.CopSet c, K.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = C.relkitUnfixed
-relkitFill (ns, cops, coxTo) (Just he1)
-    | K.duplicated ns     = Msg.dupTerm ns
-    | K.newTermsExist pk  = Msg.newTerm pk he1
-    | otherwise           = Right kit2
-    where
-      pk        = K.termPicker ns he1
-      he2       = K.forwardTerms pk `K.headMap` he1
-      kit2      = C.relkitLineAb True he2 flow
-      flow cs1  = do cTo  <- K.coxRunCox cops he1 cs1 coxTo
-                     let fill c | K.isEmpty c = cTo
-                                | otherwise   = c
-                     Right $ map fill (K.pickTerms pk cs1) ++ (K.cutTerms pk cs1)
+relkitFill (ns, cops, coxTo) (Just he1) = Rop.preCheck pk kit where
+    pk        = K.termPicker ns he1
+    he2       = K.forwardTerms pk `K.headMap` he1
+    kit       = Right $ C.relkitLineAb True he2 flow
+    flow cs1  = do cTo <- K.coxRunCox cops he1 cs1 coxTo
+                   let fill c | K.isEmpty c = cTo
+                              | otherwise   = c
+                   Right $ (fill <$> K.pickTerms pk cs1) ++ (K.cutTerms pk cs1)
 
 
 -- ----------------------  replace
