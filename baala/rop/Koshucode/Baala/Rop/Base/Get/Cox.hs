@@ -3,15 +3,15 @@
 -- | Content expressions in relmap attributes.
 
 module Koshucode.Baala.Rop.Base.Get.Cox
-  ( -- * Cox
+  ( -- * Content
+    getContent, getContents,
+    getFiller, getInt,
+    getNamedContentTerms, getOptContentTerms,
+
+    -- * Cox
     getCox, getMaybeCox, getOptCox,
     getCoxTerms, getNamedCoxTerms, getOptCoxTerms,
     getWhere,
-  
-    -- * Content
-    getContent, getContents,
-    getFiller,
-    getInt,
   ) where
 
 import Prelude hiding (getContents)
@@ -21,6 +21,57 @@ import qualified Koshucode.Baala.Syntax.Pattern    as P
 import qualified Koshucode.Baala.Rop.Base.Get.Get  as Rop
 import qualified Koshucode.Baala.Rop.Base.Get.Rel  as Rop
 import qualified Koshucode.Baala.Rop.Base.Message  as Msg
+
+
+-- --------------------------------------------  Content
+
+-- | Get relmap parameter as calculated content.
+getContent :: (K.CContent c) => Rop.RopGet c c
+getContent med name =
+    do tree <- Rop.getTree med name
+       calcTree med tree
+
+-- | Get relmap parameter as list of calculated contents.
+getContents :: (K.CContent c) => Rop.RopGet [c] c
+getContents med name =
+    do trees <- Rop.getTrees med name
+       let trees2 = K.ttreeGroup `map` K.divideTreesByColon trees
+       calcTree med `mapM` trees2
+
+-- | Calculate closed content expression.
+calcTree :: (K.CContent c) => C.Intmed c -> K.CalcContent c
+calcTree = K.calcContent . C.ropCopset
+
+-- | Get relmap parameter as optional content.
+getOptContent :: (K.CContent c) => c -> Rop.RopGet c c
+getOptContent opt = Rop.getOpt opt getContent
+
+-- | Get relmap parameter as filler content, i.e., given content or empty.
+getFiller :: (K.CContent c) => Rop.RopGet c c
+getFiller = getOptContent K.empty
+
+-- | Get decimal integer content.
+getInt :: (K.CContent c) => Rop.RopGet K.DecimalInteger c
+getInt med name =
+    do dec <- K.getDec $ getContent med name
+       Right $ K.decimalNum dec
+
+-- | Get list of content terms.
+getNamedContentTerms :: (K.CContent c) => Rop.RopGet [K.Term c] c
+getNamedContentTerms = getOptContentTerms K.pTerm
+
+-- | Get list of content terms.
+getOptContentTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.Term c] c
+getOptContentTerms f med = optContentTerms f med K.<.> Rop.getTreesTerms med
+
+-- | Build terms of content.
+optContentTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term c]
+optContentTerms f = mapM . optContent f
+
+optContent :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.Term c)
+optContent f _   (n, []) = Right (n, f n)
+optContent _ med (n, ts) = do c <- calcTree med $ K.ttreeGroup ts
+                              Right (n, c)
 
 
 -- --------------------------------------------  Cox
@@ -56,10 +107,7 @@ getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
-buildCox = K.treeCox . copset
-
-copset :: C.Intmed c -> K.CopSet c
-copset = C.globalCopset . C.getGlobal
+buildCox = K.treeCox . C.ropCopset
 
 optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.Term (K.Cox c))
 optCox f _   (n, []) = Right (n, K.coxLit $ f n)
@@ -77,7 +125,7 @@ optCoxTerms f = mapM . optCox f
 getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getWhere med name =
     do wh <- Rop.getOpt [] getWhereBody med name
-       let cops = copset med
+       let cops = C.ropCopset med
        Right $ cops { K.copsetDerived = wh }
 
 getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
@@ -111,39 +159,3 @@ getTreesByEqual trees =
 getTextFromTree :: K.Tree -> K.Ab String
 getTextFromTree (P.LRaw n) = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
-
-
-
-
--- --------------------------------------------  Content
-
--- | Get relmap attribute as calculated content.
-getContent :: (K.CContent c) => Rop.RopGet c c
-getContent med name =
-    do tree <- Rop.getTree med name
-       calcTree med tree
-
--- | Get relmap attribute as list of calculated contents.
-getContents :: (K.CContent c) => Rop.RopGet [c] c
-getContents med name =
-    do trees <- Rop.getTrees med name
-       let trees2 = K.ttreeGroup `map` K.divideTreesByColon trees
-       calcTree med `mapM` trees2
-
-calcTree :: (K.CContent c) => C.Intmed c -> K.CalcContent c
-calcTree = K.calcContent . C.ropCopset
-
--- | Get relmap attribute as optional content.
-getOptContent :: (K.CContent c) => c -> Rop.RopGet c c
-getOptContent opt = Rop.getOpt opt getContent
-
--- | Get relmap attribute as filler content, i.e., given content or empty.
-getFiller :: (K.CContent c) => Rop.RopGet c c
-getFiller = getOptContent K.empty
-
--- | Get decimal integer content.
-getInt :: (K.CContent c) => Rop.RopGet K.DecimalInteger c
-getInt med name =
-    do dec <- K.getDec $ getContent med name
-       Right $ K.decimalNum dec
-
