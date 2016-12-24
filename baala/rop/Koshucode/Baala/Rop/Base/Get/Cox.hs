@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Rop.Base.Get.Cox
   ( -- * Cox
-    getCox, getMaybeCox, getOptionCox,
+    getCox, getMaybeCox, getOptCox,
     getTermCoxes,
     getWhere,
   
@@ -32,8 +32,8 @@ getCox :: (K.CContent c) => Rop.RopGet c (K.Cox c)
 getCox med = ropBuild med . K.ttreeGroup K.<.> Rop.getTrees med
 
 -- | Get optional content expression with default content.
-getOptionCox :: (K.CContent c) => c -> Rop.RopGet c (K.Cox c)
-getOptionCox c = Rop.getOption (K.CoxLit [] c) getCox
+getOptCox :: (K.CContent c) => c -> Rop.RopGet c (K.Cox c)
+getOptCox c = Rop.getOpt (K.CoxLit [] c) getCox
 
 -- | Get optional content expression.
 getMaybeCox :: (K.CContent c) => Rop.RopGet c (Maybe (K.Cox c))
@@ -55,7 +55,7 @@ ropNamedAlphas med = mapM (K.sndM $ ropBuild med)
 -- | Get where attribute as operator set.
 getWhere :: (K.CContent c) => Rop.RopGet c (K.CopSet c)
 getWhere u name =
-    do wh <- Rop.getOption [] getWhereBody u name
+    do wh <- Rop.getOpt [] getWhereBody u name
        let copset = C.globalCopset $ C.ropGlobal u
        Right $ copset { K.copsetDerived = wh }
 
@@ -114,7 +114,7 @@ calcTree = K.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.
 getOptContent :: (K.CContent c) => c -> Rop.RopGet c c
-getOptContent opt = Rop.getOption opt getContent
+getOptContent opt = Rop.getOpt opt getContent
 
 -- | Get relmap attribute as filler content, i.e., given content or empty.
 getFiller :: (K.CContent c) => Rop.RopGet c c

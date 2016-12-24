@@ -84,7 +84,7 @@ relkitUp n (Just he1)
 consChunk :: (Ord c, K.CRel c) => C.RopCons c
 consChunk med =
   do ns  <- Rop.getTerms med "-term"
-     ord <- Rop.getOption [] Rop.getTerms med "-order"
+     ord <- Rop.getOpt [] Rop.getTerms med "-order"
      Right $ relmapChunk med ns ord
 
 -- | Create @chunk@ relmap.

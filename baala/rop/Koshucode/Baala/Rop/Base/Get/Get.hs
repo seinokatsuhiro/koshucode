@@ -13,7 +13,7 @@ module Koshucode.Baala.Rop.Base.Get.Get
 
     -- * Basic
     getTag, getTags,
-    getSwitch, getMaybe, getOption,
+    getSwitch, getMaybe, getOpt,
     getWord,
   ) where
 
@@ -103,11 +103,11 @@ getMaybe get med name =
       Just _  -> Right . Just =<< get med name
 
 -- | Get optional parameter with default value.
-getOption
+getOpt
     :: a             -- ^ Default value
     -> RopGet c a    -- ^ Non-optional getter
     -> RopGet c a    -- ^ Optional getter
-getOption y get med name =
+getOpt y get med name =
     case lookupTree name med of
       Nothing -> Right y
       Just _  -> get med name

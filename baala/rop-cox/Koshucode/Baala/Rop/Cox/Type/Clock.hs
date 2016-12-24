@@ -42,8 +42,8 @@ consAddClock :: (K.CContent c) => C.RopCons c
 consAddClock med =
     do cops     <- Rop.getWhere    med "-where"
        clock    <- Rop.getTerm     med "-clock"
-       times    <- Rop.getOptionCox (K.pInt 1) med "-times"
-       day      <- Rop.getOptionCox (K.pInt 0) med "-day"
+       times    <- Rop.getOptCox (K.pInt 1) med "-times"
+       day      <- Rop.getOptCox (K.pInt 0) med "-day"
        hour     <- Rop.getMaybeCox med "-hour"
        minute   <- Rop.getMaybeCox med "-min"
        sec      <- Rop.getMaybeCox med "-sec"
