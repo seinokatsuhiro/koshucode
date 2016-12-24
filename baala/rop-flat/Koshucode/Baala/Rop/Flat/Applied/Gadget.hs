@@ -3,7 +3,7 @@
 -- | Gadgets.
 
 module Koshucode.Baala.Rop.Flat.Applied.Gadget
-  ( ropsGadget,
+  ( ropsAppliedGadget,
     -- * contents
     consContents, relmapContents,
     -- * partial-order
@@ -25,13 +25,12 @@ import qualified Koshucode.Baala.DataPlus                  as K
 import qualified Koshucode.Baala.Core                      as C
 import qualified Koshucode.Baala.Rop.Base                  as Rop
 import qualified Koshucode.Baala.Rop.Flat.Applied.PoScale  as Rop
-import qualified Koshucode.Baala.Rop.Flat.Applied.Subtext  as Rop
 import qualified Koshucode.Baala.Rop.Base.Message          as Msg
 
 
 -- | Gadgets
-ropsGadget :: (K.CContent c) => [C.Rop c]
-ropsGadget = Rop.rops "gadget"
+ropsAppliedGadget :: (K.CContent c) => [C.Rop c]
+ropsAppliedGadget = Rop.rops "applied"
     [ consContents       K.& [ "contents /N"
                                K.& "-term*" ]
     , consDumpTree       K.& [ "dump-tree X"
@@ -46,8 +45,6 @@ ropsGadget = Rop.rops "gadget"
                                K.& "-relmap/ . -step -to -distance" ]
     , consSize           K.& [ "size /N"
                                K.& "-term" ]
-    , Rop.consSubtext    K.& [ "subtext /N E"
-                               K.& "-term -subtext . -trim?" ]
     ]
 
 

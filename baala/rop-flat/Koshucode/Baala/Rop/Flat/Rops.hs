@@ -26,7 +26,6 @@ ropsFlat :: (K.CContent c) => [C.Rop c]
 ropsFlat = Rop.ropsMeta
         ++ Rop.ropsResource
         ++ Rop.ropsCheck
-        ++ Rop.ropsPeripheral
         ++ Rop.ropsElem
         ++ Rop.ropsControl
         ++ Rop.ropsApplied

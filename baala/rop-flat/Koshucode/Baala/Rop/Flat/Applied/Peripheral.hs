@@ -5,7 +5,7 @@
 -- | Type-specific operators.
 
 module Koshucode.Baala.Rop.Flat.Applied.Peripheral
-  ( ropsPeripheral,
+  ( ropsAppliedPeripheral,
     -- * RDF
     consRdf,
     -- * tie
@@ -27,8 +27,8 @@ import qualified Koshucode.Baala.Rop.Flat.Term      as Rop
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
 
 -- | Implementation of relational operators.
-ropsPeripheral :: (K.CContent c) => [C.Rop c]
-ropsPeripheral = Rop.rops "peripheral"
+ropsAppliedPeripheral :: (K.CContent c) => [C.Rop c]
+ropsAppliedPeripheral = Rop.rops "applied"
     [ consNow       K.& [ "now /N"                K.& "local : -term"
                         , "now /N -utc"           K.& "utc : -term . -utc"
                         , "now /N -zoned"         K.& "zoned : -term . -zoned" ]

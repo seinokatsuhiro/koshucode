@@ -4,7 +4,8 @@
 -- | Text decomposition by subtext.
 
 module Koshucode.Baala.Rop.Flat.Applied.Subtext
-  ( -- * Relmap
+  ( ropsAppliedSubtext,
+    -- * Relmap
     SubtextPara, consSubtext, relmapSubtext, relkitSubtext,
     -- * Subtext
     -- $Subtext
@@ -16,6 +17,14 @@ import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Rop.Base           as Rop
 import qualified Koshucode.Baala.Syntax.Pattern     as P
 import qualified Koshucode.Baala.Rop.Base.Message   as Msg
+
+
+-- | Implementation of relational operators.
+ropsAppliedSubtext :: (K.CContent c) => [C.Rop c]
+ropsAppliedSubtext = Rop.rops "applied"
+    [ consSubtext    K.& [ "subtext /N E"
+                           K.& "-term -subtext . -trim?" ]
+    ]
 
 
 -- --------------------------------------------  Operator
