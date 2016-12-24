@@ -29,7 +29,7 @@ ropsFlat = Rop.ropsMeta
         ++ Rop.ropsPeripheral
         ++ Rop.ropsElem
         ++ Rop.ropsControl
-        ++ Rop.ropsGadget
+        ++ Rop.ropsApplied
         ++ Rop.ropsOrder
         ++ Rop.ropsTerm
         ++ Rop.ropsTermGadget

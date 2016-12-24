@@ -52,6 +52,7 @@ library
         Koshucode.Baala.Rop.Flat.Applied.Gadget
         Koshucode.Baala.Rop.Flat.Applied.Peripheral
         Koshucode.Baala.Rop.Flat.Applied.PoScale
+        Koshucode.Baala.Rop.Flat.Applied.Rops
         Koshucode.Baala.Rop.Flat.Applied.Subtext
 
         Koshucode.Baala.Rop.Flat.Check
