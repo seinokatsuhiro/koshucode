@@ -28,19 +28,19 @@ import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 -- --------------------------------------------  Cox
 
 -- | Get relmap attribute as single cox.
-getCox :: (K.CContent c) => Rop.RopGet c (K.Cox c)
+getCox :: (K.CContent c) => Rop.RopGet (K.Cox c) c
 getCox med = ropBuild med . K.ttreeGroup K.<.> Rop.getTrees med
 
 -- | Get optional content expression with default content.
-getOptCox :: (K.CContent c) => c -> Rop.RopGet c (K.Cox c)
+getOptCox :: (K.CContent c) => c -> Rop.RopGet (K.Cox c) c
 getOptCox c = Rop.getOpt (K.CoxLit [] c) getCox
 
 -- | Get optional content expression.
-getMaybeCox :: (K.CContent c) => Rop.RopGet c (Maybe (K.Cox c))
+getMaybeCox :: (K.CContent c) => Rop.RopGet (Maybe (K.Cox c)) c
 getMaybeCox = Rop.getMaybe getCox
 
 -- | Get relmap attribute as cox list with term name.
-getTermCoxes :: (K.CContent c) => Rop.RopGet c [K.Term (K.Cox c)]
+getTermCoxes :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
 getTermCoxes med = ropNamedAlphas med K.<.> Rop.getTermTrees med
 
 ropBuild :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
@@ -53,13 +53,13 @@ ropNamedAlphas med = mapM (K.sndM $ ropBuild med)
 -- --------------------------------------------  Where
 
 -- | Get where attribute as operator set.
-getWhere :: (K.CContent c) => Rop.RopGet c (K.CopSet c)
+getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getWhere u name =
     do wh <- Rop.getOpt [] getWhereBody u name
        let copset = C.globalCopset $ C.ropGlobal u
        Right $ copset { K.copsetDerived = wh }
 
-getWhereBody :: (K.CContent c) => Rop.RopGet c [K.NamedCox c]
+getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
 getWhereBody u name =
     do xs <- Rop.getTreesByColon u name
        getWhereClause u `mapM` xs
@@ -103,7 +103,7 @@ getContent med name =
        calcTree med tree
 
 -- | Get relmap attribute as list of calculated contents.
-getContents :: (K.CContent c) => Rop.RopGet c [c]
+getContents :: (K.CContent c) => Rop.RopGet [c] c
 getContents med name =
     do trees <- Rop.getTrees med name
        let trees2 = K.ttreeGroup `map` K.divideTreesByColon trees
@@ -121,7 +121,7 @@ getFiller :: (K.CContent c) => Rop.RopGet c c
 getFiller = getOptContent K.empty
 
 -- | Get decimal integer content.
-getInt :: (K.CContent c) => Rop.RopGet c K.DecimalInteger
+getInt :: (K.CContent c) => Rop.RopGet K.DecimalInteger c
 getInt med name =
     do dec <- K.getDec $ getContent med name
        Right $ K.decimalNum dec
