@@ -43,22 +43,26 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 
 -- | Relational data resource
 data Resource c = Resource
-    { resGlobal     :: Global c            -- ^ Global parameter
-    , resOption     :: C.Option c          -- ^ Options
-    , resImport     :: [Resource c]        -- ^ Importing resources
-    , resExport     :: [String]            -- ^ Exporting names
-    , resSlot       :: [S.NamedTrees]      -- ^ Global slots
-    , resLexmap     :: [C.LexmapClause]    -- ^ Source of relmaps
-    , resAssert     :: [ShortAssert c]     -- ^ Assertions of relmaps
-    , resJudge      :: [T.Judge c]         -- ^ Affirmative or denial judgements
-    , resDataset    :: D.Dataset c         -- ^ Dataset
-    , resInputQueue :: InputQueue          -- ^ Input points
-    , resOutput     :: B.IOPoint           -- ^ Output point
-    , resEcho       :: [[S.TokenLine]]     -- ^ Echo text
-    , resLicense    :: [(C.SecNo, String)] -- ^ License text
-    , resMessage    :: [String]            -- ^ Collection of messages
-    , resLastSecNo  :: C.SecNo             -- ^ Last section number
-    , resCacheT     :: D.CacheT            -- ^ Term name cache
+    { resGlobal     :: Global c            -- ^ __Global:__ Global parameter
+    , resLastSecNo  :: C.SecNo             -- ^ __Global:__ Last section number
+    , resCacheT     :: D.CacheT            -- ^ __Global:__ Term name cache
+
+    , resOption     :: C.Option c          -- ^ __Setting:__ Options
+    , resExport     :: [String]            -- ^ __Setting:__ Exporting names
+
+    , resImport     :: [Resource c]        -- ^ __Input:__ Importing resources
+    , resInputQueue :: InputQueue          -- ^ __Input:__ Input points
+    , resJudge      :: [T.Judge c]         -- ^ __Input:__ Affirmative or denial judgements
+    , resDataset    :: D.Dataset c         -- ^ __Input:__ Dataset
+
+    , resSlot       :: [S.NamedTrees]      -- ^ __Calc:__ Global slots
+    , resLexmap     :: [C.LexmapClause]    -- ^ __Calc:__ Source of relmaps
+    , resAssert     :: [ShortAssert c]     -- ^ __Calc:__ Assertions of relmaps
+
+    , resOutput     :: B.IOPoint           -- ^ __Output:__ Output point
+    , resEcho       :: [[S.TokenLine]]     -- ^ __Output:__ Echo text
+    , resLicense    :: [(C.SecNo, String)] -- ^ __Output:__ License text
+    , resMessage    :: [String]            -- ^ __Output:__ Collection of messages
     }
 
 instance Show (Resource c) where
@@ -69,27 +73,31 @@ instance T.SelectRel Resource where
     selectRel = T.selectRel . resDataset
 
 instance C.GetGlobal' Resource where
-    getGlobal' Resource { resGlobal = g } = g
+    getGlobal' = resGlobal
 
 -- | Resource that has no contents.
 instance (D.CContent c) => B.Default (Resource c) where
     def = Resource
            { resGlobal     = global
+           , resLastSecNo  = 0
+           , resCacheT     = D.cacheT
+
            , resOption     = C.option
-           , resImport     = []
            , resExport     = []
+
+           , resImport     = []
+           , resInputQueue = (B.def, [])
+           , resJudge      = []
+           , resDataset    = B.def
+
            , resSlot       = []
            , resLexmap     = []
            , resAssert     = []
-           , resJudge      = []
-           , resDataset    = B.def
-           , resInputQueue = (B.def, [])
+
            , resOutput     = B.IOPointStdout Nothing
            , resEcho       = []
            , resLicense    = []
            , resMessage    = []
-           , resLastSecNo  = 0
-           , resCacheT     = D.cacheT
            }
 
 -- | Abort or resource.
