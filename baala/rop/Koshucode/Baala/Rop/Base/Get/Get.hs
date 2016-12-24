@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Attribute getters: Extract attribute from use of relmap.
+-- | Get parameters of relmap operator.
 
 module Koshucode.Baala.Rop.Base.Get.Get
   ( -- * Datatype
@@ -9,13 +9,12 @@ module Koshucode.Baala.Rop.Base.Get.Get
 
     -- * Tree
     getTree, getTrees,
-    getWordTrees,
     getTreesByColon,
 
     -- * Basic
     getTag, getTags,
-    getOption, getMaybe,
-    getSwitch, getWord,
+    getSwitch, getMaybe, getOption,
+    getWord,
   ) where
 
 import qualified Koshucode.Baala.DataPlus         as K
@@ -28,9 +27,9 @@ import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 -- | Type for getting something from relmap intermidiate data.
 type RopGet c a
-    = C.Intmed c    -- ^ Use of relmap operator
-    -> String       -- ^ Name of keyword, e.g., @\"-term\"@
-    -> K.Ab a       -- ^ Attribute of relmap
+    = C.Intmed c    -- ^ Intermediate relmap
+    -> String       -- ^ Parameter name, e.g., @\"-term\"@
+    -> K.Ab a       -- ^ Parameter value
 
 -- | Lookup parameter tree.
 lookupTree :: String -> C.Intmed c -> Maybe [K.Tree]
@@ -69,25 +68,6 @@ getTrees med name =
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
--- | Get word-and-tree list.
-getWordTrees :: RopGet c [K.Named K.Tree]
-getWordTrees med name =
-    case lookupTree name med of
-      Just trees -> wordTrees trees
-      Nothing    -> Msg.noAttr name
-
-wordTrees :: [K.Tree] -> K.Ab [K.Named K.Tree]
-wordTrees []  = Right []
-wordTrees [_] = Msg.unexpAttr "Require word and tree"
-wordTrees (w : tree : xs) =
-    do w'  <- word w
-       xs' <- wordTrees xs
-       Right $ (w', tree) : xs'
-
-word :: K.Tree -> K.Ab String
-word (P.LText _ w) = Right w
-word _ = Msg.unexpAttr "Require one word"
-
 -- | Get trees delimited by colon.
 getTreesByColon :: RopGet c [[K.Tree]]
 getTreesByColon med name =
@@ -109,12 +89,11 @@ getTag med tag = tag `elem` getTags med
 getTags :: C.Intmed c -> [K.ParaTag]
 getTags = K.paraTags . getPara
 
--- | Get optional parameter with default value.
-getOption :: a -> RopGet c a -> RopGet c a
-getOption y get med name =
-    case lookupTree name med of
-      Nothing -> Right y
-      Just _  -> get med name
+-- | Get @True@ when parameter is given, @False@ otherwise.
+getSwitch :: RopGet c Bool
+getSwitch med name = getFromTreeOption False get med name where
+    get [] = Right True
+    get _  = Msg.unexpAttr $ "Just type only " ++ name
 
 -- | Get parameter whenever given or not.
 getMaybe :: RopGet c a -> RopGet c (Maybe a)
@@ -123,18 +102,23 @@ getMaybe get med name =
       Nothing -> Right Nothing
       Just _  -> Right . Just =<< get med name
 
--- | Get @True@ when attribute is given, @False@ otherwise.
-getSwitch :: C.Intmed c -> String -> K.Ab Bool
-getSwitch med name = getFromTreeOption False get med name where
-    get [] = Right True
-    get _  = Msg.unexpAttr $ "Just type only " ++ name
+-- | Get optional parameter with default value.
+getOption
+    :: a             -- ^ Default value
+    -> RopGet c a    -- ^ Non-optional getter
+    -> RopGet c a    -- ^ Optional getter
+getOption y get med name =
+    case lookupTree name med of
+      Nothing -> Right y
+      Just _  -> get med name
 
--- | Get word from named attribute.
+-- | Get word.
 --
 --   > consXxx :: RopCons c
 --   > consXxx med = do
 --   >   sign <- getWord med "-sign"
 --   >   ...
+--
 getWord :: RopGet c String
 getWord = getFromTree get where
     get [P.LText _ s] = Right s

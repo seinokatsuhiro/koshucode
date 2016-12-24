@@ -6,7 +6,6 @@ module Koshucode.Baala.Rop.Base.Get.Cox
   ( -- * Cox
     getCox, getMaybeCox, getOptionCox,
     getTermCoxes,
-    getNamedCoxes,
     getWhere,
   
     -- * Content
@@ -39,10 +38,6 @@ getOptionCox c = Rop.getOption (K.CoxLit [] c) getCox
 -- | Get optional content expression.
 getMaybeCox :: (K.CContent c) => Rop.RopGet c (Maybe (K.Cox c))
 getMaybeCox = Rop.getMaybe getCox
-
--- | Get relmap attribute as cox list with name.
-getNamedCoxes :: (K.CContent c) => Rop.RopGet c [K.NamedCox c]
-getNamedCoxes med = ropNamedAlphas med K.<.> Rop.getWordTrees med 
 
 -- | Get relmap attribute as cox list with term name.
 getTermCoxes :: (K.CContent c) => Rop.RopGet c [K.Term (K.Cox c)]
