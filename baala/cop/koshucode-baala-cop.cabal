@@ -52,7 +52,6 @@ library
         Koshucode.Baala.Cop.Coxhand
         Koshucode.Baala.Cop.List
         Koshucode.Baala.Cop.Logic
-        Koshucode.Baala.Cop.Message
         Koshucode.Baala.Cop.Misc
         Koshucode.Baala.Cop.Order
         Koshucode.Baala.Cop.Replace

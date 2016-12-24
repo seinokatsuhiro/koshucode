@@ -8,12 +8,12 @@ module Koshucode.Baala.Cop.Text
     copSuffix, copUnsuffix,
   ) where
 
-import qualified Data.Char                       as Ch
-import qualified Koshucode.Baala.Overture        as O
-import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as S
-import qualified Koshucode.Baala.Data            as D
-import qualified Koshucode.Baala.Cop.Message     as Msg
+import qualified Data.Char                        as Ch
+import qualified Koshucode.Baala.Overture         as O
+import qualified Koshucode.Baala.Base             as B
+import qualified Koshucode.Baala.Syntax           as S
+import qualified Koshucode.Baala.Data             as D
+import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
 -- | Content operators on texts.
 copsText :: (D.CContent c) => [D.Cop c]

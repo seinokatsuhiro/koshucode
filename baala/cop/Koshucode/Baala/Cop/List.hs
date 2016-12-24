@@ -8,13 +8,13 @@ module Koshucode.Baala.Cop.List
     -- $Operators
   ) where
 
-import qualified Data.List                       as List
-import qualified Koshucode.Baala.Overture        as O
-import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Data            as D
-import qualified Koshucode.Baala.Cop.Coxhand     as H
-import qualified Koshucode.Baala.Cop.Replace     as Cop
-import qualified Koshucode.Baala.Cop.Message     as Msg
+import qualified Data.List                         as List
+import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Cop.Coxhand       as H
+import qualified Koshucode.Baala.Cop.Replace       as Cop
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 

@@ -16,9 +16,9 @@ module Koshucode.Baala.Cop.Time
     copDayw,
   ) where
 
-import qualified Koshucode.Baala.Overture     as O
-import qualified Koshucode.Baala.Data         as D
-import qualified Koshucode.Baala.Cop.Message  as Msg
+import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 -- | Content operators on clocks and times.

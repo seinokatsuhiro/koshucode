@@ -22,9 +22,9 @@ module Koshucode.Baala.Cop.Type
     copIsType,
   ) where
 
-import qualified Koshucode.Baala.Overture        as O
-import qualified Koshucode.Baala.Data            as D
-import qualified Koshucode.Baala.Cop.Message     as Msg
+import qualified Koshucode.Baala.Overture          as O
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 

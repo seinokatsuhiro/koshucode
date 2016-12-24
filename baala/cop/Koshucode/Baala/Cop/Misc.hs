@@ -7,11 +7,11 @@ module Koshucode.Baala.Cop.Misc
     -- $Operators
   ) where
 
-import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Syntax          as S
-import qualified Koshucode.Baala.Data            as D
-import qualified Koshucode.Baala.Cop.Coxhand     as H
-import qualified Koshucode.Baala.Cop.Message     as Msg
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Syntax            as S
+import qualified Koshucode.Baala.Data              as D
+import qualified Koshucode.Baala.Cop.Coxhand       as H
+import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 -- ----------------------
