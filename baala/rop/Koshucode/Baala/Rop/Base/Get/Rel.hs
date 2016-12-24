@@ -7,7 +7,7 @@ module Koshucode.Baala.Rop.Base.Get.Rel
     getRelmap, getOptRelmap,
 
     -- * Term
-    getTerm, getTerm2, getTermOpt,
+    getTerm, getTerm2, getMaybeTerm,
     getTerms, getTermsCo,
     getTermPairs, getTermsColon,
     getTermTrees,
@@ -61,8 +61,8 @@ getTerm2 med n =
          _     -> Msg.unexpAttr "Require two term"
 
 -- | Get optional term name.
-getTermOpt :: Rop.RopGet c (Maybe K.TermName)
-getTermOpt = Rop.getMaybe getTerm
+getMaybeTerm :: Rop.RopGet c (Maybe K.TermName)
+getMaybeTerm = Rop.getMaybe getTerm
 
 -- | Get list of term names from named attribute.
 getTerms :: Rop.RopGet c [K.TermName]

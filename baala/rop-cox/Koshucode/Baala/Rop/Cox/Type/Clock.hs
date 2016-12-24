@@ -108,13 +108,13 @@ getInteger c = do i <- getInt c
 --
 consOfClock :: (K.CContent c) => C.RopCons c
 consOfClock med =
-  do cops     <- Rop.getWhere   med "-where"
-     content  <- Rop.getCox     med "-content"
-     sign     <- Rop.getTermOpt med "-sign"
-     day      <- Rop.getTermOpt med "-day"
-     hour     <- Rop.getTermOpt med "-hour"
-     minute   <- Rop.getTermOpt med "-min"
-     sec      <- Rop.getTermOpt med "-sec"
+  do cops     <- Rop.getWhere     med "-where"
+     content  <- Rop.getCox       med "-content"
+     sign     <- Rop.getMaybeTerm med "-sign"
+     day      <- Rop.getMaybeTerm med "-day"
+     hour     <- Rop.getMaybeTerm med "-hour"
+     minute   <- Rop.getMaybeTerm med "-min"
+     sec      <- Rop.getMaybeTerm med "-sec"
      Right $ relmapOfClock med (cops, content, [sign, day, hour, minute, sec])
 
 -- | Create @of-clockt@ relmap.
