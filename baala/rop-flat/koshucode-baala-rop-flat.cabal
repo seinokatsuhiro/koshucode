@@ -63,7 +63,6 @@ library
         Koshucode.Baala.Rop.Flat.Lattice.Rop
         Koshucode.Baala.Rop.Flat.Lattice.Tropashko
 
-        Koshucode.Baala.Rop.Flat.Message
         Koshucode.Baala.Rop.Flat.Meta
         Koshucode.Baala.Rop.Flat.Order
         Koshucode.Baala.Rop.Flat.Resource

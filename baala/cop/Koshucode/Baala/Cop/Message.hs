@@ -3,8 +3,8 @@
 -- | Message list.
 
 module Koshucode.Baala.Cop.Message
-  ( module Koshucode.Baala.Rop.Flat.Message,
+  ( module Koshucode.Baala.Rop.Base.Message,
   ) where
 
-import Koshucode.Baala.Rop.Flat.Message
+import Koshucode.Baala.Rop.Base.Message
 
