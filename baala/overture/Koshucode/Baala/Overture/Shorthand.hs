@@ -5,7 +5,7 @@
 module Koshucode.Baala.Overture.Shorthand
  ( -- * Infix operators
    (&),
-   (++),
+   (++), (<++>),
    (<$$>),
    (<#>), (<#!>),
 
@@ -46,6 +46,15 @@ infixr 6 ++
 {-# INLINE (++) #-}
 (++) :: (Monoid a) => a -> a -> a
 (++) = mappend
+
+-- | Same as 'concatMap'.
+--
+--   >>> words <++> ["foo bar", "baz quux"]
+--   ["foo","bar","baz","quux"]
+--
+{-# INLINE (<++>) #-}
+(<++>) :: (a -> [b]) -> [a] -> [b]
+(<++>) = concatMap
 
 infixl 4 <$$>
 
