@@ -7,7 +7,7 @@
 module Koshucode.Baala.Rop.Cox.Gadget
   ( ropsCoxGadget,
   
-    -- * number
+    -- * const
     consConst, relmapConst, relkitConst,
 
     -- * number
@@ -54,11 +54,10 @@ ropsCoxGadget = Rop.rops "cox-gadget"
 
 -- ----------------------  const
 
--- | __const E__
---
---   Output the constant relation E.
---   Especially, @const {= [] =}@ is equivalent to @dee@,
---   @const {= =}@ is equivalent to @dum@.
+-- | [const /E/]
+--     Output the constant relation E.
+--     Especially, @const {= [] =}@ is equivalent to @dee@,
+--     @const {= =}@ is equivalent to @dum@.
 --
 consConst :: (K.CContent c) => C.RopCons c
 consConst med =
@@ -296,7 +295,31 @@ relkitRepeat _ _ _ = C.relkitUnfixed
 -- ----------------------  array
 
 -- | [array /\/P \/P/ ... -to /\/N E/ ...]
---    Convert separate tuples of /\/P \/P/ ... of relation to term array /\/N/ ....
+--     Convert discrete tuples of /\/P \/P/ ...
+--     to term array /\/N/ ....
+--     The first /\/P/ of /\/P \/P/ is a key term
+--     of which content is equal to /E/,
+--     and the second is a value of the key.
+--     When /E/ is omitted, term name content is used,
+--     e.g., @-to \/1 \/2@ means @-to \/1 '\/1 \/2 '\/2@.
+--     The length of /\/P \/P/ ... must be even.
+--     Relmap like @array \/k \/v \/ka \/va -to \/1 \/1a \/2 \/2a ...@
+--     works for multiple key-value pairs.
+--
+--   > RELMAP
+--   >   array /key /val  -to /1 1  /2 2  /3 3  /4 4
+--   >                           :     :     :     :
+--   >                           :.....:.....:.....:.... /key
+--   >
+--   > INPUT                    OUTPUT
+--   >   /group  /key  /val       /group  /1    /2    /3    /4
+--   >   ======= ===== -----      ======= ----- ----- ----- -----
+--   >   'a      1     10         'a      10    20    30    ()
+--   >   'a      2     20         'b      40    50    ()    ()
+--   >   'a      3     30                 .                  .
+--   >   'b      1     40                 :..................:
+--   >   'b      2     50                 term array
+--
 consArray :: (K.CContent c) => C.RopCons c
 consArray med =
   do ps   <- Rop.getTermPairs med "-term"
@@ -312,25 +335,28 @@ relmapArray med = C.relmapFlow med . relkitArray
 relkitArray :: forall c. (K.CContent c) => ([K.TermName2], Int, [[K.Term c]]) -> C.RelkitFlow c
 relkitArray _ Nothing = C.relkitUnfixed
 relkitArray (unzip -> (names, vals), l, to) (Just he1) = check kit where
+    pre      = K.termPicker (names ++ vals) he1
     name     = K.termPicker names he1
     val      = K.termPicker vals he1
-    pair cs  = (K.pickTerms name cs, K.pickTerms val cs)
+    split cs = (K.cutTerms pre cs, (K.pickTerms name cs, K.pickTerms val cs))
 
-    ns       = fst <$> concat to
+    news     = fst <$> concat to
     keys     = snd K.<$$> to
-    pk       = K.termPicker ns he1
-    he2      = K.headFrom ns
+    pk       = K.termPicker news he1
+    he2      = K.headAppend news $ K.headMap (K.cutTerms pre) he1
     check    = Rop.preCheck name . Rop.preCheck val . Rop.newCheck pk
     kit      = Right $ C.relkitWhole False he2 flow
-    flow bo  = let body = pair <$> bo
-               in [values body `concatMap` keys]
+    flow bo  = array <$> K.gatherToAssoc (split <$> bo)
 
-    values :: [([c], [c])] -> [c] -> [c]
+    array :: K.Pair [c] [K.Twin [c]] -> [c]
+    array (group, body) = (values body K.<++> keys) ++ group
+
+    values :: [K.Twin [c]] -> [c] -> [c]
     values body key = case select key `K.mapMaybe` body of
                         [vs] -> vs           -- single key
                         _    -> K.empties l  -- no keys or multiple keys
 
-    select :: [c] -> ([c], [c]) -> Maybe [c]
+    select :: [c] -> K.Pair [c] [c] -> Maybe [c]
     select key (ks, vs) | key == ks  = Just vs
                         | otherwise  = Nothing
 
@@ -345,7 +371,26 @@ divide n = loop where
 -- ----------------------  unarray
 
 -- | [unarray /\/N \/N/ ... -from /\/P E/ ...]
---    Convert term array /\/P/ ... to separate tuples of /\/N \/N/ ....
+--     Convert term array /\/P/ ... 
+--     to discrete tuples of /\/N \/N/ ....
+--
+--   > RELMAP
+--   >   unarray /key /val  -from /1 1  /2 2  /3 3  /4 4
+--   >                               :     :     :     :
+--   >                               :.....:.....:.....:.... /key
+--   >
+--   > INPUT                                 OUTPUT
+--   >   /group  /1    /2    /3    /4          /group  /key  /val
+--   >   ======= ----- ----- ----- -----       ======= ===== -----
+--   >   'a      10    20    30    ()          'a      1     10
+--   >   'b      40    50    ()    ()          'a      2     20
+--   >           .                  .          'a      3     30
+--   >           :..................:          'a      4     ()
+--   >           term array                    'b      1     40
+--   >                                         'b      2     50
+--   >                                         'b      3     ()
+--   >                                         'b      4     ()
+--
 consUnarray :: (K.CContent c) => C.RopCons c
 consUnarray med =
   do ps   <- Rop.getTermPairs med "-term"
