@@ -106,7 +106,7 @@ getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.TermCox c
 getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
-buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
+buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.AbCox c
 buildCox = K.treeCox . C.ropCopset
 
 optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.TermCox c)

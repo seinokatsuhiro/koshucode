@@ -73,7 +73,7 @@ reduce = red [] where
         D.CoxForm   _ _ _ _   -> Msg.adlib "CoxForm"
         D.CoxBlank  _ v       -> Msg.unkGlobalVar $ B.name v
 
-    fill :: [D.NamedCox c] -> D.Cox c -> [B.Ab (D.Cox c)] -> B.Ab (Beta c)
+    fill :: [D.NamedCox c] -> D.Cox c -> [D.AbCox c] -> B.Ab (Beta c)
     fill args (D.CoxCalc cp n f) xs =
                                    do xs2 <- sequence xs
                                       let xs3 = red args `map` xs2
@@ -90,7 +90,7 @@ reduce = red [] where
         D.CoxBlank  _ n         -> Msg.unkCop $ B.name n
         _                       -> Msg.unkShow f1
 
-    substL :: [D.NamedCox c] -> [D.Cox c] -> [B.Ab (D.Cox c)]
+    substL :: [D.NamedCox c] -> [D.Cox c] -> [D.AbCox c]
     substL = map . subst
 
     subst :: [D.NamedCox c] -> B.AbMap (D.Cox c)
@@ -100,7 +100,7 @@ reduce = red [] where
                                           Right $ D.CoxFill cp f' xs'
     subst _ x                        = Right x
 
-    kth :: String -> Int -> [D.NamedCox c] -> B.Ab (D.Cox c)
+    kth :: String -> Int -> [D.NamedCox c] -> D.AbCox c
     kth v 0  _    = Msg.unkGlobalVar v
     kth v k0 args = loop k0 args where
       loop 1 ((v2, x) : _)
@@ -129,7 +129,7 @@ link copset deriv = li where
     normal (n, cop) = (S.BlankNormal n, cop)
 
 -- put term positions for actural heading
-position :: T.Head -> D.Cox c -> B.Ab (D.Cox c)
+position :: T.Head -> D.Cox c -> D.AbCox c
 position he = spos where
     spos e = Msg.abCoxPosition e $ pos e
     pos (D.CoxTerm cp ns _) =

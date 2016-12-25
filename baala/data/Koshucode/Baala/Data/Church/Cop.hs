@@ -30,7 +30,7 @@ data Cop c
     | CopTree S.BlankName (CopTree)     -- ^ Convert 'B.TTree'
 
 -- | Expression-level syntax.
-type CopCox c = [D.Cox c] -> B.Ab (D.Cox c)
+type CopCox c = [D.Cox c] -> D.AbCox c
 
 -- | Tree-level syntax.
 type CopTree  = [S.Tree] -> B.Ab S.Tree

@@ -5,7 +5,8 @@
 module Koshucode.Baala.Data.Church.Cox
   ( -- * Data types
     Cox (..), Cox2, Cox3, Cox4,
-    MaybeCox, NamedCox, TermCox,
+    MaybeCox, AbCox,
+    NamedCox, TermCox,
     CopCalc, CoxTag,
   
     -- * Functions
@@ -56,10 +57,13 @@ type Cox3 c = (Cox c, Cox c, Cox c)
 -- | Expression quadruple.
 type Cox4 c = (Cox c, Cox c, Cox c, Cox c)
 
--- | Maybe expression.
+-- | Maybe content expression.
 type MaybeCox c = Maybe (Cox c)
 
--- | Named expression.
+-- | Abortable content expression.
+type AbCox c = B.Ab (Cox c)
+
+-- | Named content expression.
 type NamedCox c = B.Named (Cox c)
 
 -- | Term name and content expression.

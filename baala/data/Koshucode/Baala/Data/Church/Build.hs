@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Syntax.Pattern         as P
 import qualified Koshucode.Baala.Data.Church.Message    as Msg
 
 -- | Construct content expression from token tree.
-treeCox :: (D.CContent c) => D.CopSet c -> S.Tree -> B.Ab (D.Cox c)
+treeCox :: (D.CContent c) => D.CopSet c -> S.Tree -> D.AbCox c
 treeCox copset =
     convCox findCox            -- convert cox to cox
       B.<.> Right
@@ -75,13 +75,13 @@ convCox find = expand where
                       Right $ D.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (D.CContent c) => S.Tree -> B.Ab (D.Cox c)
+construct :: forall c. (D.CContent c) => S.Tree -> D.AbCox c
 construct = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.getCPs $ B.takeFirst $ B.untree tree
          in cons cp tree
 
-    cons :: [B.CodePos] -> S.Tree -> B.Ab (D.Cox c)
+    cons :: [B.CodePos] -> S.Tree -> D.AbCox c
     cons cp tree@(P.BGroup subtrees)
          = case subtrees of
              f@(P.LText q w) : xs
