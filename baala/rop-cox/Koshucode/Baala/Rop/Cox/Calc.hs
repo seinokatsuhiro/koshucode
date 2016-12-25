@@ -56,11 +56,11 @@ consAdd med =
        Right $ relmapAdd med (cops, cox)
 
 -- | Create @add@ relmap.
-relmapAdd :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.Term (K.Cox c)]) -> C.Relmap c
+relmapAdd :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.TermCox c]) -> C.Relmap c
 relmapAdd med = C.relmapFlow med . relkitAdd
 
 -- | Create @add@ relkit.
-relkitAdd :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
+relkitAdd :: (K.CContent c) => (K.CopSet c, [K.TermCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = C.relkitUnfixed
 relkitAdd (cops, cox) (Just he1) = Rop.newCheck pk kit where
     (ns, xs)  = unzip cox    -- terms and expressions
@@ -84,11 +84,11 @@ consAlt med =
        Right $ relmapAlt med (cops, cox)
 
 -- | Create @alt@ relmap.
-relmapAlt :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.Term (K.Cox c)]) -> C.Relmap c
+relmapAlt :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.TermCox c]) -> C.Relmap c
 relmapAlt med = C.relmapFlow med . relkitAlt
 
 -- | Create @alt@ relkit.
-relkitAlt :: (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
+relkitAlt :: (K.CContent c) => (K.CopSet c, [K.TermCox c]) -> C.RelkitFlow c
 relkitAlt _ Nothing = C.relkitUnfixed
 relkitAlt (cops, cox) (Just he1) = Rop.preCheck pk kit where
     (ns, xs)  = unzip cox
@@ -183,11 +183,11 @@ consSplit med =
        Right $ relmapSplit med (cops, cox)
 
 -- | Create @split@ relmap.
-relmapSplit :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.Term (K.Cox c)]) -> C.Relmap c
+relmapSplit :: (K.CContent c) => C.Intmed c -> (K.CopSet c, [K.TermCox c]) -> C.Relmap c
 relmapSplit med = C.relmapFlow med . relkitSplit
 
 -- | Create @split@ relkit.
-relkitSplit :: forall c. (K.CContent c) => (K.CopSet c, [K.Term (K.Cox c)]) -> C.RelkitFlow c
+relkitSplit :: forall c. (K.CContent c) => (K.CopSet c, [K.TermCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = C.relkitUnfixed
 relkitSplit (cops, cox) (Just he1)
     | K.duplicated ns     = Msg.dupTerm ns

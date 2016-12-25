@@ -91,31 +91,31 @@ getOptCox c = Rop.getOpt (K.coxLit c) getCox
 -- | Get list of content expression terms.
 --   Empty terms are filled with empty contents,
 --   e.g., __\/a__ __\/b__ /E/ is equivalent to __\/a__ () __\/b__ /E/.
-getCoxTerms :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
+getCoxTerms :: (K.CContent c) => Rop.RopGet [K.TermCox c] c
 getCoxTerms = getOptCoxTerms $ const K.empty
 
 -- | Get list of content expression terms.
 --   Empty terms are filled with its term name.
 --   e.g., __\/a__ __\/b__ /E/ is equivalent to __\/a__ '\/a __\/b__ /E/.
-getNamedCoxTerms :: (K.CContent c) => Rop.RopGet [K.Term (K.Cox c)] c
+getNamedCoxTerms :: (K.CContent c) => Rop.RopGet [K.TermCox c] c
 getNamedCoxTerms = getOptCoxTerms K.pTerm
 
 -- | Get list of content expression terms.
 --   Contents of empty terms can be generated using its term name.
-getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.Term (K.Cox c)] c
+getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.TermCox c] c
 getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.Ab (K.Cox c)
 buildCox = K.treeCox . C.ropCopset
 
-optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.Term (K.Cox c))
+optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.TermCox c)
 optCox f _   (n, []) = Right (n, K.coxLit $ f n)
 optCox _ med (n, ts) = do cox <- buildCox med $ K.ttreeGroup ts
                           Right (n, cox)
 
 -- | Build terms of content expression.
-optCoxTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.Term (K.Cox c)]
+optCoxTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.Tree]] -> K.Ab [K.TermCox c]
 optCoxTerms f = mapM . optCox f
 
 
