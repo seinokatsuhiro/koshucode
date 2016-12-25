@@ -21,8 +21,10 @@ module Koshucode.Baala.Rop.Cox.Gadget
     -- * repeat
     consRepeat,
   
-    -- * array & unarray
+    -- * array
     consArray, relmapArray, relkitArray,
+    -- * unarray
+    consUnarray, relmapUnarray, relkitUnarray,
   ) where
 
 import Prelude hiding (getContents)
@@ -43,7 +45,10 @@ ropsCoxGadget = Rop.rops "cox-gadget"
     , consNumber     K.& [ "number /N -order /P ..."       K.& "-term . -order? -from?" ]
     , consRank       K.& [ "rank /N -order /P ..."         K.& "-term . -order? -from? -dense?" ]
     , consRepeat     K.& [ "repeat I R"                    K.& "-count -relmap/" ]
-    , consArray      K.& [ "array /P /P ... to /N [E] ..." K.& "-term* . -to" ]
+    , consArray      K.& [ "array /P /P ... -to /N [E] ..."
+                           K.& "to : -term* . -to" ]
+    , consUnarray    K.& [ "unarray /N /N ... -from /P [E] ..."
+                           K.& "from : -term* . -from" ]
     ]
 
 
@@ -291,7 +296,7 @@ relkitRepeat _ _ _ = C.relkitUnfixed
 -- ----------------------  array
 
 -- | [array /\/P \/P/ ... -to /\/N E/ ...]
---    Convert tuples of relation to term array.
+--    Convert separate tuples of /\/P \/P/ ... of relation to term array /\/N/ ....
 consArray :: (K.CContent c) => C.RopCons c
 consArray med =
   do ps   <- Rop.getTermPairs med "-term"
@@ -339,4 +344,39 @@ divide n = loop where
 -- | List of empties.
 empties :: (K.CEmpty c) => Int -> [c]
 empties n = replicate n K.empty
+
+
+-- ----------------------  unarray
+
+-- | [unarray /\/N \/N/ ... -from /\/P E/ ...]
+--    Convert term array /\/P/ ... to separate tuples of /\/N \/N/ ....
+consUnarray :: (K.CContent c) => C.RopCons c
+consUnarray med =
+  do ps   <- Rop.getTermPairs med "-term"
+     ts   <- Rop.getNamedContentTerms med "-from"
+     let l = length ps
+     Right $ relmapUnarray med (ps, l, divide l ts)
+
+-- | Create @unarray@ relmap.
+relmapUnarray :: (K.CContent c) => C.Intmed c -> ([K.TermName2], Int, [[K.Term c]]) -> C.Relmap c
+relmapUnarray med = C.relmapFlow med . relkitUnarray
+
+-- | Create @unarray@ relkit.
+relkitUnarray :: forall c. (K.CContent c) => ([K.TermName2], Int, [[K.Term c]]) -> C.RelkitFlow c
+relkitUnarray _ Nothing = C.relkitUnfixed
+relkitUnarray (unzip -> (names, vals), _, from) (Just he1) = check kit where
+    news     = names ++ vals
+    new      = K.termPicker news he1
+
+    ns       = fst K.<$$> from
+    keys     = snd K.<$$> from
+    pre      = K.termPicker (concat ns) he1
+    pks      = (`K.termPicker` he1) <$> ns
+    he2      = K.headAppend news $ K.headMap (K.cutTerms pre) he1
+    check    = Rop.newCheck new . Rop.preCheck pre
+    kit      = Right $ C.relkitMany False he2 flow
+
+    flow :: [c] -> [[c]]
+    flow cs = zipWith (f cs) keys pks
+    f cs ks pk = ks ++ K.pickTerms pk cs ++ K.cutTerms pre cs
 
