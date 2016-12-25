@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.191.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.193.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -108,12 +108,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
 	    >Functor</a
 	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b)</li
-	  ><li class="src short"
-	  ><a href="#v:mapSndTo"
-	    >mapSndTo</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c)</li
 	  ><li class="src short"
 	  ><a href="#v:right2"
 	    >right2</a
@@ -260,34 +254,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </code
 		></strong
 	      >Just (2, &quot;bbbb&quot;)
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:mapSndTo" class="def"
-	    >mapSndTo</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c) <a onclick="showSource('src/Koshucode-Baala-Base-Prelude-Pair.html#mapSndTo');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Apply function to <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Tuple.html#v:snd"
-		>snd</a
-		></code
-	      > element in functor data.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>mapSndTo length $ Just (&quot;aa&quot;, &quot;bbbb&quot;)
-</code
-		></strong
-	      >Just (&quot;aa&quot;, 4)
 </pre
 	    ></div
 	  ></div

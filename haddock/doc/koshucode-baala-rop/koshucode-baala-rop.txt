@@ -6,11 +6,16 @@
 --   
 --   Facility for implementing relation-mapping operators
 @package koshucode-baala-rop
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Message list.
 module Koshucode.Baala.Rop.Base.Message
+
+-- | <ul>
+--   <li><i>check-term failed</i></li>
+--   </ul>
+checkTerm :: String -> [TermName] -> Head -> Ab a
 
 -- | <ul>
 --   <li><i>Duplicate term names</i> Duplicate ... in the terms ...</li>
@@ -31,6 +36,38 @@ unevenTerms :: (GetTermNames t1, GetTermNames t2) => t1 -> t2 -> Ab a
 --   <li><i>Unmatch shared terms</i></li>
 --   </ul>
 unmatchShare :: [TermName] -> [TermName] -> Ab a
+
+-- | <ul>
+--   <li><i>Require Boolean</i></li>
+--   </ul>
+reqBool :: Ab a
+
+-- | <ul>
+--   <li><i>Require collection</i></li>
+--   </ul>
+reqCollection :: Ab a
+
+-- | <ul>
+--   <li><i>Require data interpretation</i></li>
+--   </ul>
+reqInterp :: Ab a
+
+-- | <ul>
+--   <li><i>Require relation</i></li>
+--   </ul>
+reqRel :: Ab a
+
+-- | <ul>
+--   <li><i>Require no relmaps</i></li>
+--   <li><i>Require one relmap</i></li>
+--   <li><i>Require <i>N</i> relmaps</i></li>
+--   </ul>
+reqRelmap :: Int -> Ab a
+
+-- | <ul>
+--   <li><i>Require unary function</i></li>
+--   </ul>
+reqUnaryFn :: Ab a
 
 -- | <ul>
 --   <li><i>Dump content expression</i></li>
@@ -63,58 +100,32 @@ notImpl :: Ab a
 diffHead :: [Head] -> Ab a
 
 -- | <ul>
---   <li><i>Require Boolean</i></li>
---   </ul>
-reqBool :: Ab a
-
--- | <ul>
---   <li><i>Require data interpretation</i></li>
---   </ul>
-reqInterp :: Ab a
-
--- | <ul>
---   <li><i>Require relation</i></li>
---   </ul>
-reqRel :: Ab a
-
--- | <ul>
---   <li><i>Require no relmaps</i></li>
---   <li><i>Require one relmap</i></li>
---   <li><i>Require <i>N</i> relmaps</i></li>
---   </ul>
-reqRelmap :: Int -> Ab a
-
--- | <ul>
---   <li><i>Require unary function</i></li>
---   </ul>
-reqUnaryFn :: Ab a
-
--- | <ul>
 --   <li><i>Not a nested relation</i></li>
 --   </ul>
 notNestRel :: (GetTermNames t) => t -> Head -> Ab a
 
 
--- | Attribute getters: Extract attribute from use of relmap.
+-- | Get parameters of relmap operator.
 module Koshucode.Baala.Rop.Base.Get.Get
 
 -- | Type for getting something from relmap intermidiate data.
-type RopGet c a = Intmed c  Use of relmap operator -> String  Name of keyword, e.g., @\"-term\"@ -> Ab a  Attribute of relmap
+type RopGet a c = Intmed c  Intermediate relmap -> String  Parameter name, e.g., @\"-term\"@ -> Ab a  Parameter value
 
--- | Get from trees.
-getFromTree :: ([Tree] -> Ab b) -> RopGet c b
+-- | Get trees from relmap parameter. This is the most basic getter because
+--   relmap parameters are syntactically represented as tree list.
+getTrees :: RopGet [Tree] c
 
--- | Get trees as single tree.
-getTree :: RopGet c Tree
+-- | Get relmap parameter and convert using function.
+getWith :: ([Tree] -> b) -> RopGet b c
 
--- | Get trees from parameter.
-getTrees :: RopGet c [Tree]
+-- | Get relmap parameter and convert using abortable function.
+getWithAb :: ([Tree] -> Ab b) -> RopGet b c
 
--- | Get word-and-tree list.
-getWordTrees :: RopGet c [Named Tree]
+-- | Get tree from relmap parameter.
+getTree :: RopGet Tree c
 
 -- | Get trees delimited by colon.
-getTreesByColon :: RopGet c [[Tree]]
+getTreesByColon :: RopGet [[Tree]] c
 
 -- | Test usage tag.
 getTag :: Intmed c -> ParaTag -> Bool
@@ -122,16 +133,16 @@ getTag :: Intmed c -> ParaTag -> Bool
 -- | Get usage tags.
 getTags :: Intmed c -> [ParaTag]
 
--- | Get optional parameter with default value.
-getOption :: a -> RopGet c a -> RopGet c a
+-- | Get <tt>True</tt> when parameter is given, <tt>False</tt> otherwise.
+getSwitch :: RopGet Bool c
 
 -- | Get parameter whenever given or not.
-getMaybe :: RopGet c a -> RopGet c (Maybe a)
+getMaybe :: RopGet a c -> RopGet (Maybe a) c
 
--- | Get <tt>True</tt> when attribute is given, <tt>False</tt> otherwise.
-getSwitch :: Intmed c -> String -> Ab Bool
+-- | Get optional parameter with default value.
+getOpt :: a -> RopGet a c -> RopGet a c
 
--- | Get word from named attribute.
+-- | Get word.
 --   
 --   <pre>
 --   consXxx :: RopCons c
@@ -139,7 +150,7 @@ getSwitch :: Intmed c -> String -> Ab Bool
 --     sign &lt;- getWord med "-sign"
 --     ...
 --   </pre>
-getWord :: RopGet c String
+getWord :: RopGet String c
 
 
 -- | Attribute getters: Extract attribute from use of relmap.
@@ -153,71 +164,82 @@ module Koshucode.Baala.Rop.Base.Get.Rel
 --     m &lt;- getRelmap med "-relmap"
 --     Right $ relmapMeet med m
 --   </pre>
-getRelmap :: RopGet c (Relmap c)
+getRelmap :: RopGet (Relmap c) c
 
 -- | Get optional relmap.
-getOptRelmap :: Relmap c -> RopGet c (Relmap c)
+getOptRelmap :: Relmap c -> RopGet (Relmap c) c
 
 -- | Get a term name from named attribute.
-getTerm :: RopGet c TermName
+getTerm :: RopGet TermName c
 
 -- | Get two term names.
-getTerm2 :: RopGet c (TermName, TermName)
+getTerm2 :: RopGet (TermName, TermName) c
 
 -- | Get optional term name.
-getTermOpt :: RopGet c (Maybe TermName)
+getMaybeTerm :: RopGet (Maybe TermName) c
 
 -- | Get list of term names from named attribute.
-getTerms :: RopGet c [TermName]
+getTerms :: RopGet [TermName] c
 
 -- | Get term names and complement sign (<tt>~</tt>) .
-getTermsCo :: RopGet c (Bool, [TermName])
+getTermsCo :: RopGet (Bool, [TermName]) c
 
 -- | Get list of term-name pairs from named attribute.
-getTermPairs :: RopGet c [TermName2]
+getTermPairs :: RopGet [TermName2] c
 
 -- | Get term names groups delimited by colons.
-getTermsColon :: RopGet c [[TermName]]
+getTermsColon :: RopGet [[TermName]] c
 
 -- | Get list of tree terms.
-getTermTrees :: RopGet c [Term Tree]
+getTreesTerms :: RopGet [Term [Tree]] c
 
 
 -- | Content expressions in relmap attributes.
 module Koshucode.Baala.Rop.Base.Get.Cox
 
--- | Get relmap attribute as single cox.
-getCox :: (CContent c) => RopGet c (Cox c)
-
--- | Get optional content expression.
-getMaybeCox :: (CContent c) => RopGet c (Maybe (Cox c))
-
--- | Get optional content expression with default content.
-getOptionCox :: (CContent c) => c -> RopGet c (Cox c)
-
--- | Get relmap attribute as cox list with term name.
-getTermCoxes :: (CContent c) => RopGet c [Term (Cox c)]
-
--- | Get relmap attribute as cox list with name.
-getNamedCoxes :: (CContent c) => RopGet c [NamedCox c]
-
--- | Get where attribute as operator set.
-getWhere :: (CContent c) => RopGet c (CopSet c)
-
--- | Get relmap attribute as calculated content.
+-- | Get relmap parameter as calculated content.
 getContent :: (CContent c) => RopGet c c
 
--- | Get relmap attribute as list of calculated contents.
-getContents :: (CContent c) => RopGet c [c]
+-- | Get relmap parameter as list of calculated contents.
+getContents :: (CContent c) => RopGet [c] c
 
--- | Get relmap attribute as optional content.
-getOptContent :: (CContent c) => c -> RopGet c c
-
--- | Get relmap attribute as filler content, i.e., given content or empty.
+-- | Get relmap parameter as filler content, i.e., given content or empty.
 getFiller :: (CContent c) => RopGet c c
 
 -- | Get decimal integer content.
-getInt :: (CContent c) => RopGet c DecimalInteger
+getInt :: (CContent c) => RopGet DecimalInteger c
+
+-- | Get list of content terms.
+getNamedContentTerms :: (CContent c) => RopGet [Term c] c
+
+-- | Get list of content terms.
+getOptContentTerms :: (CContent c) => (TermName -> c) -> RopGet [Term c] c
+
+-- | Get required single content expression.
+getCox :: (CContent c) => RopGet (Cox c) c
+
+-- | Get optional single content expression.
+getMaybeCox :: (CContent c) => RopGet (MaybeCox c) c
+
+-- | Get optional content expression with default content.
+getOptCox :: (CContent c) => c -> RopGet (Cox c) c
+
+-- | Get list of content expression terms. Empty terms are filled with
+--   empty contents, e.g., <b>/a</b> <b>/b</b> <i>E</i> is equivalent to
+--   <b>/a</b> () <b>/b</b> <i>E</i>.
+getCoxTerms :: (CContent c) => RopGet [Term (Cox c)] c
+
+-- | Get list of content expression terms. Empty terms are filled with its
+--   term name. e.g., <b>/a</b> <b>/b</b> <i>E</i> is equivalent to
+--   <b>/a</b> '/a <b>/b</b> <i>E</i>.
+getNamedCoxTerms :: (CContent c) => RopGet [Term (Cox c)] c
+
+-- | Get list of content expression terms. Contents of empty terms can be
+--   generated using its term name.
+getOptCoxTerms :: (CContent c) => (TermName -> c) -> RopGet [Term (Cox c)] c
+
+-- | Get <tt>-where</tt> parameter as operator set.
+getWhere :: (CContent c) => RopGet (CopSet c) c
 
 
 -- | Definition of relmap operators.

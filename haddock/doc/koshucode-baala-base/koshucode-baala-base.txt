@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Text table
@@ -146,14 +146,6 @@ consSnd :: b -> Map (a, [b])
 --   Just (2, "bbbb")
 --   </pre>
 mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
-
--- | Apply function to <a>snd</a> element in functor data.
---   
---   <pre>
---   &gt;&gt;&gt; mapSndTo length $ Just ("aa", "bbbb")
---   Just ("aa", 4)
---   </pre>
-mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m (a, c)
 
 -- | Create right pair from either pair.
 --   
@@ -1875,14 +1867,6 @@ assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
 
 -- | Check which given key is there in assoc list.
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
-
--- | Apply monadic function to <a>snd</a> of pair.
---   
---   <pre>
---   &gt;&gt;&gt; sndM Just ("a", "b")
---   Just ("a","b")
---   </pre>
-sndM :: (Monad m) => (v -> m v') -> (k, v) -> m (k, v')
 
 -- | Lookup association list using Boolean function.
 --   

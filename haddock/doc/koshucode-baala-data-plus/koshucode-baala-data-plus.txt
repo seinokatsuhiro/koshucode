@@ -6,7 +6,7 @@
 --   
 --   This package bundles data and pre-data packages.
 @package koshucode-baala-data-plus
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Bundle of overture, base, syntax, type, and data packages.

@@ -8,20 +8,50 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-flat
-@version 0.191.0.0
+@version 0.193.0.0
 
 
--- | Message list.
-module Koshucode.Baala.Rop.Flat.Message
+-- | Fundamental operators in relational algebra.
+--   
+--   Tropashko's relational lattice is a kind of relational algebra.
+--   Relational algebra is an algebraic formulation for relational model.
+--   In constrast to Codd's original relational algebra, Tropashko lattice
+--   is in more conventional and strict ways. The lattice has fundamental
+--   operators from which other operators are derived.
+module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
 
--- | check-term failed
-checkTerm :: String -> [TermName] -> Head -> Ab a
+-- | <ul>
+--   <li><i>meet <i>R</i> [-share /P ...]</i> Meet input relation and
+--   <i>R</i>.</li>
+--   </ul>
+consMeet :: (Ord c) => RopCons c
 
--- | Require collection type
-reqCollection :: Ab a
+-- | Meet two relations.
+relmapMeet :: (Ord c) => Intmed c -> SharedTerms -> Relmap c -> Relmap c
 
--- | Unexpected term names
-unexpTermName :: Ab a
+-- | Meet two relations.
+relkitMeet :: (Ord c) => SharedTerms -> RelkitBinary c
+
+-- | <ul>
+--   <li><i>join <i>R</i> [-share /P ...]</i> Join input relation and
+--   <i>R</i>.</li>
+--   </ul>
+consJoin :: (Ord c) => RopCons c
+
+-- | Join two relations.
+relmapJoin :: (Ord c) => Intmed c -> SharedTerms -> Relmap c -> Relmap c
+
+-- | Join multiple relations.
+relmapJoinList :: (Ord c) => Intmed c -> [Relmap c] -> Relmap c
+
+-- | Join two relations.
+relkitJoin :: SharedTerms -> RelkitBinary c
+
+-- | Shared terms for composing check.
+type SharedTerms = Maybe [TermName]
+
+-- | Calculate unmatch shared terms.
+unmatchShare :: SharedTerms -> TermPicker c -> Maybe ([TermName], [TermName])
 
 
 -- | Operators on collection elements.
@@ -95,7 +125,10 @@ relkitUncollect :: (Ord c, CSet c, CList c, CText c, CDec c, CEmpty c) => (TermN
 
 
 -- | Text decomposition by subtext.
-module Koshucode.Baala.Rop.Flat.Subtext
+module Koshucode.Baala.Rop.Flat.Applied.Subtext
+
+-- | Implementation of relational operators.
+ropsAppliedSubtext :: (CContent c) => [Rop c]
 
 -- | Type of subtext parameters.
 type SubtextPara = (TermName, [NameDepth], CharMatch, Bool)
@@ -120,47 +153,99 @@ relmapSubtext :: (CContent c) => Intmed c -> SubtextPara -> Relmap c
 relkitSubtext :: (CContent c) => SubtextPara -> Maybe Head -> Ab (Relkit c)
 
 
--- | Fundamental operators in relational algebra.
+-- | Partial-order scale.
+module Koshucode.Baala.Rop.Flat.Applied.PoScale
+
+-- | Mapping from element to subelements and scale. Scale of element is
+--   defined by 1 + the maximum scale of subelements. If elements are
+--   cyclic, scales of these elements are -1.
+type PoScale a = Map a ([a], Maybe Int)
+
+-- | Calculate partial-order scale.
+type PoScaleCalc a = [(a, a)] -> [(a, Int)]
+
+-- | Extract partial-order scale.
+poScale :: PoScale a -> [(a, Int)]
+
+-- | Calculate upward partial-order scale.
 --   
---   Tropashko's relational lattice is a kind of relational algebra.
---   Relational algebra is an algebraic formulation for relational model.
---   In constrast to Codd's original relational algebra, Tropashko lattice
---   is in more conventional and strict ways. The lattice has fundamental
---   operators from which other operators are derived.
-module Koshucode.Baala.Rop.Flat.Lattice.Tropashko
+--   <pre>
+--   &gt;&gt;&gt; poScaleHeight [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",0), ("b",1), ("c",1), ("d",2)]
+--   </pre>
+poScaleHeight :: (Ord a) => PoScaleCalc a
 
--- | <ul>
---   <li><i>meet <i>R</i> [-share /P ...]</i> Meet input relation and
---   <i>R</i>.</li>
---   </ul>
-consMeet :: (Ord c) => RopCons c
+-- | Calculate downward partial-order scale.
+--   
+--   <pre>
+--   &gt;&gt;&gt; poScaleDepth [("a","b"), ("a","c"), ("b","d"), ("c","d")]
+--   [("a",2), ("b",1), ("c",1), ("d",0)]
+--   </pre>
+poScaleDepth :: (Ord a) => PoScaleCalc a
 
--- | Meet two relations.
-relmapMeet :: (Ord c) => Intmed c -> SharedTerms -> Relmap c -> Relmap c
+-- | Calculate partial-order height.
+poHeight :: (Ord a) => [(a, a)] -> PoScale a
 
--- | Meet two relations.
-relkitMeet :: (Ord c) => SharedTerms -> RelkitBinary c
+-- | Calculate partial-order depth.
+poDepth :: (Ord a) => [(a, a)] -> PoScale a
 
--- | <ul>
---   <li><i>join <i>R</i> [-share /P ...]</i> Join input relation and
---   <i>R</i>.</li>
---   </ul>
-consJoin :: (Ord c) => RopCons c
 
--- | Join two relations.
-relmapJoin :: (Ord c) => Intmed c -> SharedTerms -> Relmap c -> Relmap c
+-- | Gadgets.
+module Koshucode.Baala.Rop.Flat.Applied.Gadget
 
--- | Join multiple relations.
-relmapJoinList :: (Ord c) => Intmed c -> [Relmap c] -> Relmap c
+-- | Gadgets
+ropsAppliedGadget :: (CContent c) => [Rop c]
 
--- | Join two relations.
-relkitJoin :: SharedTerms -> RelkitBinary c
+-- | <b>contents /N</b>
+--   
+--   Collect all contents in unary relation.
+consContents :: (Ord c) => RopCons c
 
--- | Shared terms for composing check.
-type SharedTerms = Maybe [TermName]
+-- | Create <tt>contents</tt> relmap.
+relmapContents :: (Ord c) => Intmed c -> TermName -> Relmap c
 
--- | Calculate unmatch shared terms.
-unmatchShare :: SharedTerms -> TermPicker c -> Maybe ([TermName], [TermName])
+-- | <b>partial-order-height /P /P -to /N /N</b>
+consPoHeight :: (Ord c, CDec c) => RopCons c
+
+-- | <b>partial-order-depth /P /P -to /N /N</b>
+consPoDepth :: (Ord c, CDec c) => RopCons c
+
+-- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
+--   relmap.
+relmapPoScale :: (Ord c, CDec c) => PoScaleCalc c -> Intmed c -> TermName4 -> Relmap c
+
+-- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
+--   relkit.
+relkitPoScale :: (Ord c, CDec c) => PoScaleCalc c -> TermName4 -> RelkitFlow c
+
+-- | <b>visit-distance R -step /P ... -to /N -distance /N</b>
+consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
+
+-- | Create <tt>visit-distance</tt> relmap.
+relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
+
+-- | <b>size /N</b>
+--   
+--   Count number of tuples.
+consSize :: (CDec c) => RopCons c
+
+-- | Create <tt>size</tt> relmap.
+relmapSize :: (CDec c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>size</tt> relkit.
+relkitSize :: (CDec c) => TermName -> RelkitFlow c
+
+-- | <b>eqlize</b>
+consEqlize :: (Ord c) => RopCons c
+
+-- | Create <tt>eqlize</tt> relmap.
+relmapEqlize :: (Ord c) => Intmed c -> Relmap c
+
+-- | Create <tt>eqlize</tt> relkit.
+relkitEqlize :: (Ord c) => RelkitFlow c
+
+-- | <b>dump-tree E</b>
+consDumpTree :: (CDec c) => RopCons c
 
 
 -- | Relmap operators for manipulating term names.
@@ -308,6 +393,73 @@ relmapWipe :: Intmed c -> Relmap c
 relkitWipe :: RelkitFlow c
 
 
+-- | Type-specific operators.
+module Koshucode.Baala.Rop.Flat.Applied.Peripheral
+
+-- | Implementation of relational operators.
+ropsAppliedPeripheral :: (CContent c) => [Rop c]
+
+-- | <b>rdf P /S /O</b>
+consRdf :: RopCons c
+
+-- | <b>tie /P ... -to /N</b>
+consTie :: (CTie c) => RopCons c
+
+-- | Create <tt>tie</tt> relmap.
+relmapTie :: (CTie c) => Intmed c -> ([TermName], TermName) -> Relmap c
+
+-- | Create <tt>tie</tt> relkit.
+relkitTie :: (CTie c) => ([TermName], TermName) -> RelkitFlow c
+
+-- | <b>untie /P -to /N ...</b>
+consUntie :: (CTie c) => RopCons c
+
+-- | Create <tt>untie</tt> relmap.
+relmapUntie :: (CTie c) => Intmed c -> (TermName, [TermName]) -> Relmap c
+
+-- | Create <tt>untie</tt> relkit.
+relkitUntie :: (CTie c) => (TermName, [TermName]) -> RelkitFlow c
+
+-- | <b>term-name /N</b>
+consTermName :: (CTerm c) => RopCons c
+
+-- | Create <tt>term-name</tt> relmap.
+relmapTermName :: (CTerm c) => Intmed c -> TermName -> Relmap c
+
+-- | Create <tt>term-name</tt> relkit.
+relkitTermName :: (CTerm c) => TermName -> RelkitFlow c
+
+-- | <b>today /N</b>
+--   
+--   Get today's time at term /N.
+consToday :: (CTime c) => RopCons c
+
+-- | <ul>
+--   <li><i>now /N</i> Get current local time without time zone at term
+--   /N.</li>
+--   <li><i>now /N -zoned</i> Get current local time with time zone at term
+--   /N.</li>
+--   <li><i>now /N -utc</i> Get current UTC.</li>
+--   </ul>
+consNow :: (CTime c) => RopCons c
+
+-- | Add single constant term to each tuples.
+consAdd1 :: Term c -> RopCons c
+
+-- | Create term-adding relmap.
+relmapAdd1 :: Term c -> Intmed c -> Relmap c
+
+-- | Create term-adding relkit.
+relkitAdd1 :: Term c -> Maybe Head -> Ab (Relkit c)
+
+
+-- | Applied operators.
+module Koshucode.Baala.Rop.Flat.Applied.Rops
+
+-- | Applied operators.
+ropsApplied :: (CContent c) => [Rop c]
+
+
 -- | Restrict by relmap
 module Koshucode.Baala.Rop.Flat.Lattice.Restrict
 
@@ -452,103 +604,6 @@ consKoshuResArticle :: (CContent c) => RopCons c
 relkitKoshuResArticle :: (CContent c) => TermName -> RelkitHook c
 
 
--- | Type-specific operators.
-module Koshucode.Baala.Rop.Flat.Peripheral
-
--- | Implementation of relational operators.
-ropsPeripheral :: (CContent c) => [Rop c]
-
--- | <b>rdf P /S /O</b>
-consRdf :: RopCons c
-
--- | <b>tie /P ... -to /N</b>
-consTie :: (CTie c) => RopCons c
-
--- | Create <tt>tie</tt> relmap.
-relmapTie :: (CTie c) => Intmed c -> ([TermName], TermName) -> Relmap c
-
--- | Create <tt>tie</tt> relkit.
-relkitTie :: (CTie c) => ([TermName], TermName) -> RelkitFlow c
-
--- | <b>untie /P -to /N ...</b>
-consUntie :: (CTie c) => RopCons c
-
--- | Create <tt>untie</tt> relmap.
-relmapUntie :: (CTie c) => Intmed c -> (TermName, [TermName]) -> Relmap c
-
--- | Create <tt>untie</tt> relkit.
-relkitUntie :: (CTie c) => (TermName, [TermName]) -> RelkitFlow c
-
--- | <b>term-name /N</b>
-consTermName :: (CTerm c) => RopCons c
-
--- | Create <tt>term-name</tt> relmap.
-relmapTermName :: (CTerm c) => Intmed c -> TermName -> Relmap c
-
--- | Create <tt>term-name</tt> relkit.
-relkitTermName :: (CTerm c) => TermName -> RelkitFlow c
-
--- | <b>today /N</b>
---   
---   Get today's time at term /N.
-consToday :: (CTime c) => RopCons c
-
--- | <ul>
---   <li><i>now /N</i> Get current local time without time zone at term
---   /N.</li>
---   <li><i>now /N -zoned</i> Get current local time with time zone at term
---   /N.</li>
---   <li><i>now /N -utc</i> Get current UTC.</li>
---   </ul>
-consNow :: (CTime c) => RopCons c
-
--- | Add single constant term to each tuples.
-consAdd1 :: Term c -> RopCons c
-
--- | Create term-adding relmap.
-relmapAdd1 :: Term c -> Intmed c -> Relmap c
-
--- | Create term-adding relkit.
-relkitAdd1 :: Term c -> Maybe Head -> Ab (Relkit c)
-
-
--- | Partial-order scale.
-module Koshucode.Baala.Rop.Flat.PoScale
-
--- | Mapping from element to subelements and scale. Scale of element is
---   defined by 1 + the maximum scale of subelements. If elements are
---   cyclic, scales of these elements are -1.
-type PoScale a = Map a ([a], Maybe Int)
-
--- | Calculate partial-order scale.
-type PoScaleCalc a = [(a, a)] -> [(a, Int)]
-
--- | Extract partial-order scale.
-poScale :: PoScale a -> [(a, Int)]
-
--- | Calculate upward partial-order scale.
---   
---   <pre>
---   &gt;&gt;&gt; poScaleHeight [("a","b"), ("a","c"), ("b","d"), ("c","d")]
---   [("a",0), ("b",1), ("c",1), ("d",2)]
---   </pre>
-poScaleHeight :: (Ord a) => PoScaleCalc a
-
--- | Calculate downward partial-order scale.
---   
---   <pre>
---   &gt;&gt;&gt; poScaleDepth [("a","b"), ("a","c"), ("b","d"), ("c","d")]
---   [("a",2), ("b",1), ("c",1), ("d",0)]
---   </pre>
-poScaleDepth :: (Ord a) => PoScaleCalc a
-
--- | Calculate partial-order height.
-poHeight :: (Ord a) => [(a, a)] -> PoScale a
-
--- | Calculate partial-order depth.
-poDepth :: (Ord a) => [(a, a)] -> PoScale a
-
-
 -- | Relmap operators which produce ordered relations.
 module Koshucode.Baala.Rop.Flat.Order
 
@@ -645,64 +700,6 @@ relkitKoshuVersion :: (CContent c) => TermName -> RelkitHook c
 module Koshucode.Baala.Rop.Flat.Lattice
 
 
--- | Gadgets.
-module Koshucode.Baala.Rop.Flat.Gadget
-
--- | Gadgets
-ropsGadget :: (CContent c) => [Rop c]
-
--- | <b>contents /N</b>
---   
---   Collect all contents in unary relation.
-consContents :: (Ord c) => RopCons c
-
--- | Create <tt>contents</tt> relmap.
-relmapContents :: (Ord c) => Intmed c -> TermName -> Relmap c
-
--- | <b>partial-order-height /P /P -to /N /N</b>
-consPoHeight :: (Ord c, CDec c) => RopCons c
-
--- | <b>partial-order-depth /P /P -to /N /N</b>
-consPoDepth :: (Ord c, CDec c) => RopCons c
-
--- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
---   relmap.
-relmapPoScale :: (Ord c, CDec c) => PoScaleCalc c -> Intmed c -> TermName4 -> Relmap c
-
--- | Create <tt>partial-order-height</tt> or <tt>partial-order-depth</tt>
---   relkit.
-relkitPoScale :: (Ord c, CDec c) => PoScaleCalc c -> TermName4 -> RelkitFlow c
-
--- | <b>visit-distance R -step /P ... -to /N -distance /N</b>
-consVisitDistance :: (Ord c, CDec c, CRel c) => RopCons c
-
--- | Create <tt>visit-distance</tt> relmap.
-relmapVisitDistance :: (Ord c, CDec c, CRel c) => Intmed c -> ([TermName], [TermName], TermName, TermName) -> Map (Relmap c)
-
--- | <b>size /N</b>
---   
---   Count number of tuples.
-consSize :: (CDec c) => RopCons c
-
--- | Create <tt>size</tt> relmap.
-relmapSize :: (CDec c) => Intmed c -> TermName -> Relmap c
-
--- | Create <tt>size</tt> relkit.
-relkitSize :: (CDec c) => TermName -> RelkitFlow c
-
--- | <b>eqlize</b>
-consEqlize :: (Ord c) => RopCons c
-
--- | Create <tt>eqlize</tt> relmap.
-relmapEqlize :: (Ord c) => Intmed c -> Relmap c
-
--- | Create <tt>eqlize</tt> relkit.
-relkitEqlize :: (Ord c) => RelkitFlow c
-
--- | <b>dump-tree E</b>
-consDumpTree :: (CDec c) => RopCons c
-
-
 -- | Conditional relmaps.
 module Koshucode.Baala.Rop.Flat.Control
 
@@ -765,6 +762,10 @@ consExclude :: (Ord c) => RopCons c
 --   
 --   Dump input relation and abort.
 consDump :: (CRel c, MixEncode c) => RopCons c
+
+
+-- | Applied relmap operators in Koshucode.
+module Koshucode.Baala.Rop.Flat.Applied
 
 
 -- | Basic relmap operators.

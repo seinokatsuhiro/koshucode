@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Relmap operators for dec type.
@@ -214,11 +214,11 @@ module Koshucode.Baala.Rop.Cox.Gadget
 -- | Implementation of relational operators.
 ropsCoxGadget :: (CContent c) => [Rop c]
 
--- | <b>const E</b>
---   
---   Output the constant relation E. Especially, <tt>const {= [] =}</tt> is
---   equivalent to <tt>dee</tt>, <tt>const {= =}</tt> is equivalent to
---   <tt>dum</tt>.
+-- | <ul>
+--   <li><i>const <i>E</i></i> Output the constant relation E. Especially,
+--   <tt>const {= [] =}</tt> is equivalent to <tt>dee</tt>, <tt>const {=
+--   =}</tt> is equivalent to <tt>dum</tt>.</li>
+--   </ul>
 consConst :: (CContent c) => RopCons c
 
 -- | Create <tt>const</tt> relmap.
@@ -258,6 +258,71 @@ relkitDenseRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow 
 
 -- | <b>repeat I R</b>
 consRepeat :: (Ord c, CContent c) => RopCons c
+
+-- | <ul>
+--   <li><i>array <i>/P /P</i> ... -to <i>/N E</i> ...</i> Convert discrete
+--   tuples of <i>/P /P</i> ... to term array <i>/N</i> .... The first
+--   <i>/P</i> of <i>/P /P</i> is a key term of which content is equal to
+--   <i>E</i>, and the second is a value of the key. When <i>E</i> is
+--   omitted, term name content is used, e.g., <tt>-to /1 /2</tt> means
+--   <tt>-to /1 '/1 /2 '/2</tt>. The length of <i>/P /P</i> ... must be
+--   even. Relmap like <tt>array /k /v /ka /va -to /1 /1a /2 /2a ...</tt>
+--   works for multiple key-value pairs.</li>
+--   </ul>
+--   
+--   <pre>
+--   RELMAP
+--     array /key /val  -to /1 1  /2 2  /3 3  /4 4
+--                             :     :     :     :
+--                             :.....:.....:.....:.... /key
+--   
+--   INPUT                    OUTPUT
+--     /group  /key  /val       /group  /1    /2    /3    /4
+--     ======= ===== -----      ======= ----- ----- ----- -----
+--     'a      1     10         'a      10    20    30    ()
+--     'a      2     20         'b      40    50    ()    ()
+--     'a      3     30                 .                  .
+--     'b      1     40                 :..................:
+--     'b      2     50                 term array
+--   </pre>
+consArray :: (CContent c) => RopCons c
+
+-- | Create <tt>array</tt> relmap.
+relmapArray :: (CContent c) => Intmed c -> ([TermName2], Int, [[Term c]]) -> Relmap c
+
+-- | Create <tt>array</tt> relkit.
+relkitArray :: (CContent c) => ([TermName2], Int, [[Term c]]) -> RelkitFlow c
+
+-- | <ul>
+--   <li><i>unarray <i>/N /N</i> ... -from <i>/P E</i> ...</i> Convert term
+--   array <i>/P</i> ... to discrete tuples of <i>/N /N</i> ....</li>
+--   </ul>
+--   
+--   <pre>
+--   RELMAP
+--     unarray /key /val  -from /1 1  /2 2  /3 3  /4 4
+--                                 :     :     :     :
+--                                 :.....:.....:.....:.... /key
+--   
+--   INPUT                                 OUTPUT
+--     /group  /1    /2    /3    /4          /group  /key  /val
+--     ======= ----- ----- ----- -----       ======= ===== -----
+--     'a      10    20    30    ()          'a      1     10
+--     'b      40    50    ()    ()          'a      2     20
+--             .                  .          'a      3     30
+--             :..................:          'a      4     ()
+--             term array                    'b      1     40
+--                                           'b      2     50
+--                                           'b      3     ()
+--                                           'b      4     ()
+--   </pre>
+consUnarray :: (CContent c) => RopCons c
+
+-- | Create <tt>unarray</tt> relmap.
+relmapUnarray :: (CContent c) => Intmed c -> ([TermName2], Int, [[Term c]]) -> Relmap c
+
+-- | Create <tt>unarray</tt> relkit.
+relkitUnarray :: (CContent c) => ([TermName2], Int, [[Term c]]) -> RelkitFlow c
 
 
 -- | Relation filter.
@@ -343,25 +408,29 @@ module Koshucode.Baala.Rop.Cox.Calc
 -- | Implementation of relational operators.
 ropsCoxCalc :: (CContent c) => [Rop c]
 
--- | <b>add /N E ...</b>
---   
---   Add new terms /N which has the result of E.
+-- | <ul>
+--   <li><i>add <i>/N</i> <i>E</i> ...</i> Calculate expression <i>E</i> of
+--   term <i>/N</i>, and add terms <i>/N</i> ... to input relation.</li>
+--   </ul>
 consAdd :: (CContent c) => RopCons c
 
 -- | Create <tt>add</tt> relmap.
 relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
 
--- | <b>alt /P E ...</b>
---   
---   Change present terms /P whose content is altered to the result of E.
+-- | <ul>
+--   <li><i>alt <i>/P</i> <i>E</i> ...</i> Calculate expression <i>E</i> of
+--   term <i>/P</i>, and alter the contents of present terms <i>/P</i>
+--   ....</li>
+--   </ul>
 consAlt :: (CContent c) => RopCons c
 
 -- | Create <tt>alt</tt> relmap.
 relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
 
--- | <b>fill /P ... -with E</b>
---   
---   Fill terms /P ... with the result of E.
+-- | <ul>
+--   <li><i>fill <i>/P</i> ... -with <i>E</i></i> Fill contents of present
+--   terms <i>/P</i> ... with the result of <i>E</i>.</li>
+--   </ul>
 consFill :: (CContent c) => RopCons c
 
 -- | Create <tt>fill</tt> relmap.

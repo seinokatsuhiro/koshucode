@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.191.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.193.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -169,8 +169,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Maybe</a
 	    > a -&gt; c</li
 	  ><li class="src short"
-	  ><a href="#v:omitEmpty"
-	    >omitEmpty</a
+	  ><a href="#v:maxContents"
+	    >maxContents</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c =&gt; [c] -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:empties"
+	    >empties</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [c]</li
+	  ><li class="src short"
+	  ><a href="#v:cutEmpty"
+	    >cutEmpty</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
 	    >CEmpty</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -178,12 +192,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
 	    > c]</li
-	  ><li class="src short"
-	  ><a href="#v:contMaximum"
-	    >contMaximum</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
-	    >CEmpty</a
-	    > c =&gt; [c] -&gt; c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
@@ -207,8 +215,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:contMinimum"
-	    >contMinimum</a
+	  ><a href="#v:minContents"
+	    >minContents</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
 	    >CEnd</a
 	    > c =&gt; [c] -&gt; c</li
@@ -421,38 +429,89 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><div class="doc"
 	  ><p
 	    >Create empty or non-empty content.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>maybeEmpty pText $ Just &quot;foo&quot; :: Content
+</code
+		></strong
+	      >ContentText &quot;foo&quot;
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>maybeEmpty pText $ Nothing :: Content
+</code
+		></strong
+	      >ContentEmpty
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:omitEmpty" class="def"
-	    >omitEmpty</a
+	  ><a name="v:maxContents" class="def"
+	    >maxContents</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#maxContents');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Maximum content of contents list.
+   If argument is the empty list, returns the <code
+	      ><a href="Koshucode-Baala-Data-Class-Edge.html#v:empty"
+		>empty</a
+		></code
+	      > content.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:empties" class="def"
+	    >empties</a
+	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
+	    >CEmpty</a
+	    > c =&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; [c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#empties');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >List of empties.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>empties 4 :: [Content]
+</code
+		></strong
+	      >[ContentEmpty, ContentEmpty, ContentEmpty, ContentEmpty]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cutEmpty" class="def"
+	    >cutEmpty</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
 	    >CEmpty</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
 	    >Term</a
-	    > c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#omitEmpty');" href="javascript:void(0);" class="link"
+	    > c] <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#cutEmpty');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Cut empty terms.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:contMaximum" class="def"
-	    >contMaximum</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEmpty"
-	    >CEmpty</a
-	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMaximum');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Maximum content of contents list.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
@@ -517,16 +576,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:contMinimum" class="def"
-	    >contMinimum</a
+	  ><a name="v:minContents" class="def"
+	    >minContents</a
 	    > :: <a href="Koshucode-Baala-Data-Class-Edge.html#t:CEnd"
 	    >CEnd</a
-	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#contMinimum');" href="javascript:void(0);" class="link"
+	    > c =&gt; [c] -&gt; c <a onclick="showSource('src/Koshucode-Baala-Data-Class-Edge.html#minContents');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Minimum content of contents list.</p
+	    >Minimum content of contents list.
+   If argument is the empty list, returns the <code
+	      ><a href="Koshucode-Baala-Data-Class-Edge.html#v:end"
+		>end</a
+		></code
+	      > content.</p
 	    ></div
 	  ></div
 	></div

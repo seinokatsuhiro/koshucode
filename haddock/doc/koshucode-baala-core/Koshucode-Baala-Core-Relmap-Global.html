@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.191.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.193.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -273,34 +273,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="#t:GetGlobal"
-	    >GetGlobal</a
+	    > <a href="#t:GetGlobal-39-"
+	    >GetGlobal'</a
 	    > h <span class="keyword"
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:getGlobal"
-		>getGlobal</a
+	      ><a href="#v:getGlobal-39-"
+		>getGlobal'</a
 		> :: h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
 		>Global'</a
 		> h c</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:ropGlobal"
-	    >ropGlobal</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:GetGlobal"
 	    >GetGlobal</a
-	    > h =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
-	    >Global'</a
-	    > h c</li
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:getGlobal"
+		>getGlobal</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal-39-"
+		>GetGlobal'</a
+		> h =&gt; a h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+		>Global'</a
+		> h c</li
+	      ></ul
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:ropCopset"
 	    >ropCopset</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
-	    >GetGlobal</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal-39-"
+	    >GetGlobal'</a
 	    > h =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
 	    >Intmed'</a
 	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
@@ -565,7 +573,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
 		      >Global'</a
 		      > h c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-76');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-60');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -753,9 +761,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
+	    > <a name="t:GetGlobal-39-" class="def"
+	    >GetGlobal'</a
+	    > h <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#GetGlobal%27');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type which has global parameter.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:getGlobal-39-" class="def"
+	      >getGlobal'</a
+	      > :: h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	      >Global'</a
+	      > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#getGlobal%27');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Get global parameter.</p
+	      ></div
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:GetGlobal-39-" class="caption collapser" onclick="toggleSection('i:GetGlobal-39-')"
+	    >Instances</p
+	    ><div id="section.i:GetGlobal-39-" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal-39-"
+		      >GetGlobal'</a
+		      > <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+		      >Resource</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-75');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
 	    > <a name="t:GetGlobal" class="def"
 	    >GetGlobal</a
-	    > h <span class="keyword"
+	    > a <span class="keyword"
 	    >where</span
 	    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#GetGlobal');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -770,7 +832,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><p class="src"
 	    ><a name="v:getGlobal" class="def"
 	      >getGlobal</a
-	      > :: h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
+	      > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal-39-"
+	      >GetGlobal'</a
+	      > h =&gt; a h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
 	      >Global'</a
 	      > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#getGlobal');" href="javascript:void(0);" class="link"
 	      >Source</a
@@ -790,14 +854,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ><span class="inst-left"
 		    ><a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
 		      >GetGlobal</a
-		      > <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
-		      >Resource</a
+		      > <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+		      >Intmed'</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-71');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-135');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><p
+		    >Get global parameter from relmap intermediate data.</p
+		    ></td
 		  ></tr
 		></table
 	      ></div
@@ -805,28 +871,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropGlobal" class="def"
-	    >ropGlobal</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
-	    >GetGlobal</a
-	    > h =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
-	    >Intmed'</a
-	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Global-39-"
-	    >Global'</a
-	    > h c <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#ropGlobal');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Get global parameter from relmap intermediate data.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:ropCopset" class="def"
 	    >ropCopset</a
-	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
-	    >GetGlobal</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal-39-"
+	    >GetGlobal'</a
 	    > h =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
 	    >Intmed'</a
 	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
@@ -925,7 +973,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > (<a href="Koshucode-Baala-Core-Relmap-Global.html#t:OpSet-39-"
 		      >OpSet'</a
 		      > h c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-148');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-153');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -1041,7 +1089,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Feature"
 		      >Feature</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-174');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-179');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1055,7 +1103,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Feature"
 		      >Feature</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-174');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-179');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1069,7 +1117,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Feature"
 		      >Feature</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-174');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-179');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -1083,7 +1131,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      > <a href="Koshucode-Baala-Core-Relmap-Global.html#t:Feature"
 		      >Feature</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-176');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Core-Relmap-Global.html#line-181');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"

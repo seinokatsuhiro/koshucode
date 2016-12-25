@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-0.191.0.0: Facility for implementing relation-mapping operators</p
+      >koshucode-baala-rop-0.193.0.0: Facility for implementing relation-mapping operators</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,10 +66,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 		></li
 	      ><li
 	      ><a href="#g:3"
-		>Dump</a
+		>Require</a
 		></li
 	      ><li
 	      ><a href="#g:4"
+		>Dump</a
+		></li
+	      ><li
+	      ><a href="#g:5"
 		>Others</a
 		></li
 	      ></ul
@@ -92,6 +96,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  >module <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Message.html"
 	    >Koshucode.Baala.Core.Message</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:checkTerm"
+	    >checkTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
 	  ><li class="src short"
 	  ><a href="#v:dupTerm"
 	    >dupTerm</a
@@ -128,6 +144,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
 	    >TermName</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqBool"
+	    >reqBool</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqCollection"
+	    >reqCollection</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqInterp"
+	    >reqInterp</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqRel"
+	    >reqRel</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqRelmap"
+	    >reqRelmap</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:reqUnaryFn"
+	    >reqUnaryFn</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > a</li
 	  ><li class="src short"
@@ -181,38 +235,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    >Ab</a
 	    > a</li
 	  ><li class="src short"
-	  ><a href="#v:reqBool"
-	    >reqBool</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
-	  ><a href="#v:reqInterp"
-	    >reqInterp</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
-	  ><a href="#v:reqRel"
-	    >reqRel</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
-	  ><a href="#v:reqRelmap"
-	    >reqRelmap</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
-	  ><a href="#v:reqUnaryFn"
-	    >reqUnaryFn</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
 	  ><a href="#v:notNestRel"
 	    >notNestRel</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Judge-JudgeClass.html#t:GetTermNames"
@@ -237,6 +259,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	>Messages</h1
 	><h2 id="g:2"
 	>Terms</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:checkTerm" class="def"
+	    >checkTerm</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#checkTerm');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >check-term failed</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:dupTerm" class="def"
@@ -328,131 +374,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	    ></div
 	  ></div
 	><h2 id="g:3"
-	>Dump</h2
-	><div class="top"
-	><p class="src"
-	  ><a name="v:dumpCox" class="def"
-	    >dumpCox</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
-	    >Show</a
-	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpCox');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Dump content expression</dt
-	      ><dd
-	      ></dd
-	      ></dl
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:dumpRel" class="def"
-	    >dumpRel</a
-	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CRel"
-	    >CRel</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
-	    >MixEncode</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpRel');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Dump relation</dt
-	      ><dd
-	      ></dd
-	      ></dl
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:dumpTrees" class="def"
-	    >dumpTrees</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpTrees');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Dump token trees</dt
-	      ><dd
-	      ></dd
-	      ></dl
-	    ></div
-	  ></div
-	><h2 id="g:4"
-	>Others</h2
-	><div class="top"
-	><p class="src"
-	  ><a name="v:noAttr" class="def"
-	    >noAttr</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#noAttr');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Attribute not found</dt
-	      ><dd
-	      ></dd
-	      ></dl
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:notImpl" class="def"
-	    >notImpl</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#notImpl');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Not implemented</dt
-	      ><dd
-	      ></dd
-	      ></dl
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:diffHead" class="def"
-	    >diffHead</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#diffHead');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><dl
-	    ><dt
-	      >Different headings</dt
-	      ><dd
-	      >/T ..., /T ...</dd
-	      ></dl
-	    ></div
-	  ></div
+	>Require</h2
 	><div class="top"
 	><p class="src"
 	  ><a name="v:reqBool" class="def"
@@ -466,6 +388,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	  ><dl
 	    ><dt
 	      >Require Boolean</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reqCollection" class="def"
+	    >reqCollection</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#reqCollection');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Require collection</dt
 	      ><dd
 	      ></dd
 	      ></dl
@@ -552,6 +492,132 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Ba
 	      >Require unary function</dt
 	      ><dd
 	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>Dump</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpCox" class="def"
+	    >dumpCox</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
+	    >Show</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpCox');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Dump content expression</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpRel" class="def"
+	    >dumpRel</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Complex.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-MixText-MixEncode.html#t:MixEncode"
+	    >MixEncode</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpRel');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Dump relation</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:dumpTrees" class="def"
+	    >dumpTrees</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#dumpTrees');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Dump token trees</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><h2 id="g:5"
+	>Others</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:noAttr" class="def"
+	    >noAttr</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#noAttr');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Attribute not found</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:notImpl" class="def"
+	    >notImpl</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#notImpl');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Not implemented</dt
+	      ><dd
+	      ></dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:diffHead" class="def"
+	    >diffHead</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a <a onclick="showSource('src/Koshucode-Baala-Rop-Base-Message.html#diffHead');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Different headings</dt
+	      ><dd
+	      >/T ..., /T ...</dd
 	      ></dl
 	    ></div
 	  ></div

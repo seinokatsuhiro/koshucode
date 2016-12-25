@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Message list.
@@ -19,6 +19,9 @@ abLiteral :: (GetCodePos cp) => Abortable cp b
 
 -- | Nothing
 nothing :: Ab a
+
+-- | Missing pairing term
+missPairTerm :: Ab a
 
 -- | Odd relation literal
 oddRelation :: Int -> Int -> Ab a
@@ -51,7 +54,7 @@ expectActual :: String -> String -> [String]
 expect2Actual :: String -> String -> String -> [String]
 
 
--- | Decode term name.
+-- | Decode terms.
 module Koshucode.Baala.Data.Decode.Term
 
 -- | Term name cache.
@@ -90,21 +93,18 @@ treeFlatNameCached :: CacheT -> Tree -> Ab (CacheT, TermName)
 --   </pre>
 treesFlatNames :: [Tree] -> Ab [TermName]
 
--- | Read list of named token trees from token trees.
+-- | Decode term names with optional complement symbol.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.toTrees "/a 'A3 /b 10" &gt;&gt;= treesTerms
---   Right [ (TermName EQ "a", [TreeL ...]),
---           (TermName EQ "b", [TreeL ...]) ]
+--   &gt;&gt;&gt; S.toTrees "~ /a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (True, [TermName EQ "a",TermName EQ "b"])
 --   </pre>
-treesTerms :: [Tree] -> Ab [Term [Tree]]
-
--- | Cached version of <a>treesTerms</a>.
-treesTermsCached :: CacheT -> [Tree] -> Ab (CacheT, [Term [Tree]])
-
--- | Read list of named token trees from token trees. This function wraps
---   long branches into group.
-treesTerms1 :: [Tree] -> Ab [Term Tree]
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.toTrees "/a /b" &gt;&gt;= treesFlatNamesCo
+--   Right (False, [TermName EQ "a",TermName EQ "b"])
+--   </pre>
+treesFlatNamesCo :: [Tree] -> Ab (Bool, [TermName])
 
 -- | Decode a list of name-and-name pairs.
 --   
@@ -124,21 +124,24 @@ treesFlatNamePairs :: [Tree] -> Ab [TermName2]
 --   </pre>
 treesNamesByColon :: [Tree] -> Ab [[TermName]]
 
--- | Decode term names with optional complement symbol.
+-- | Read list of named token trees from token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; S.toTrees "~ /a /b" &gt;&gt;= treesFlatNamesCo
---   Right (True, [TermName EQ "a",TermName EQ "b"])
+--   &gt;&gt;&gt; S.toTrees "/a 'A3 /b 10" &gt;&gt;= treesTerms
+--   Right [ (TermName EQ "a", [TreeL ...]),
+--           (TermName EQ "b", [TreeL ...]) ]
 --   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; S.toTrees "/a /b" &gt;&gt;= treesFlatNamesCo
---   Right (False, [TermName EQ "a",TermName EQ "b"])
---   </pre>
-treesFlatNamesCo :: [Tree] -> Ab (Bool, [TermName])
+treesTerms :: [Tree] -> Ab [Term [Tree]]
+
+-- | Cached version of <a>treesTerms</a>.
+treesTermsCached :: CacheT -> [Tree] -> Ab (CacheT, [Term [Tree]])
+
+-- | Read list of named token trees from token trees. This function wraps
+--   long branches into group.
+treesTerms1 :: [Tree] -> Ab [Term Tree]
 
 
--- | Decode specific content.
+-- | Decode specific-type contents.
 module Koshucode.Baala.Data.Decode.Type
 
 -- | Get single text from token trees.
@@ -153,14 +156,6 @@ module Koshucode.Baala.Data.Decode.Type
 --   Right ["aabb"]
 --   </pre>
 treesTexts :: Bool -> [Tree] -> Ab [String]
-
--- | Get text from token tree.
---   
---   <pre>
---   &gt;&gt;&gt; S.toTree "aa" &gt;&gt;= treeText False
---   Right "aa"
---   </pre>
-treeText :: Bool -> Tree -> Ab String
 
 -- | Get interpretation from token trees.
 --   
@@ -277,21 +272,41 @@ isEmpty :: CEmpty c => c -> Bool
 empty :: CEmpty c => c
 
 -- | Create empty or non-empty content.
+--   
+--   <pre>
+--   &gt;&gt;&gt; maybeEmpty pText $ Just "foo" :: Content
+--   ContentText "foo"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; maybeEmpty pText $ Nothing :: Content
+--   ContentEmpty
+--   </pre>
 maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 
--- | Cut empty terms.
-omitEmpty :: (CEmpty c) => Map [Term c]
+-- | Maximum content of contents list. If argument is the empty list,
+--   returns the <a>empty</a> content.
+maxContents :: (CEmpty c) => [c] -> c
 
--- | Maximum content of contents list.
-contMaximum :: (CEmpty c) => [c] -> c
+-- | List of empties.
+--   
+--   <pre>
+--   &gt;&gt;&gt; empties 4 :: [Content]
+--   [ContentEmpty, ContentEmpty, ContentEmpty, ContentEmpty]
+--   </pre>
+empties :: (CEmpty c) => Int -> [c]
+
+-- | Cut empty terms.
+cutEmpty :: (CEmpty c) => Map [Term c]
 
 -- | End of everything: the maximum content.
 class (Basis c) => CEnd c
 isEnd :: CEnd c => c -> Bool
 end :: CEnd c => c
 
--- | Minimum content of contents list.
-contMinimum :: (CEnd c) => [c] -> c
+-- | Minimum content of contents list. If argument is the empty list,
+--   returns the <a>end</a> content.
+minContents :: (CEnd c) => [c] -> c
 
 
 -- | Simple content type.

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.191.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.193.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >number</a
+	    >const</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
@@ -71,6 +71,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ><li
 	  ><a href="#g:4"
 	    >repeat</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
+	    >array</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >unarray</a
 	    ></li
 	  ></ul
 	></div
@@ -252,6 +260,86 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consArray"
+	    >consArray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapArray"
+	    >relmapArray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitArray"
+	    >relkitArray</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consUnarray"
+	    >consUnarray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapUnarray"
+	    >relmapUnarray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitUnarray"
+	    >relkitUnarray</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -274,7 +362,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ></div
 	  ></div
 	><h1 id="g:1"
-	>number</h1
+	>const</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consConst" class="def"
@@ -287,22 +375,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >const E</strong
-	      ></p
-	    ><p
-	    >Output the constant relation E.
-   Especially, <code
-	      >const {= [] =}</code
-	      > is equivalent to <code
-	      >dee</code
-	      >,
-   <code
-	      >const {= =}</code
-	      > is equivalent to <code
-	      >dum</code
-	      >.</p
+	  ><dl
+	    ><dt
+	      >const <em
+		>E</em
+		></dt
+	      ><dd
+	      >Output the constant relation E.
+     Especially, <code
+		>const {= [] =}</code
+		> is equivalent to <code
+		>dee</code
+		>,
+     <code
+		>const {= =}</code
+		> is equivalent to <code
+		>dum</code
+		>.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -575,6 +665,227 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    ><strong
 	      >repeat I R</strong
 	      ></p
+	    ></div
+	  ></div
+	><h1 id="g:5"
+	>array</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consArray" class="def"
+	    >consArray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#consArray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >array <em
+		>/P /P</em
+		> ... -to <em
+		>/N E</em
+		> ...</dt
+	      ><dd
+	      >Convert discrete tuples of <em
+		>/P /P</em
+		> ...
+     to term array <em
+		>/N</em
+		> ....
+     The first <em
+		>/P</em
+		> of <em
+		>/P /P</em
+		> is a key term
+     of which content is equal to <em
+		>E</em
+		>,
+     and the second is a value of the key.
+     When <em
+		>E</em
+		> is omitted, term name content is used,
+     e.g., <code
+		>-to /1 /2</code
+		> means <code
+		>-to /1 '/1 /2 '/2</code
+		>.
+     The length of <em
+		>/P /P</em
+		> ... must be even.
+     Relmap like <code
+		>array /k /v /ka /va -to /1 /1a /2 /2a ...</code
+		>
+     works for multiple key-value pairs.</dd
+	      ></dl
+	    ><pre
+	    >RELMAP
+  array /key /val  -to /1 1  /2 2  /3 3  /4 4
+                          :     :     :     :
+                          :.....:.....:.....:.... /key
+
+INPUT                    OUTPUT
+  /group  /key  /val       /group  /1    /2    /3    /4
+  ======= ===== -----      ======= ----- ----- ----- -----
+  'a      1     10         'a      10    20    30    ()
+  'a      2     20         'b      40    50    ()    ()
+  'a      3     30                 .                  .
+  'b      1     40                 :..................:
+  'b      2     50                 term array</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapArray" class="def"
+	    >relmapArray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#relmapArray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >array</code
+	      > relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitArray" class="def"
+	    >relkitArray</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#relkitArray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >array</code
+	      > relkit.</p
+	    ></div
+	  ></div
+	><h1 id="g:6"
+	>unarray</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consUnarray" class="def"
+	    >consUnarray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#consUnarray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >unarray <em
+		>/N /N</em
+		> ... -from <em
+		>/P E</em
+		> ...</dt
+	      ><dd
+	      >Convert term array <em
+		>/P</em
+		> ... 
+     to discrete tuples of <em
+		>/N /N</em
+		> ....</dd
+	      ></dl
+	    ><pre
+	    >RELMAP
+  unarray /key /val  -from /1 1  /2 2  /3 3  /4 4
+                              :     :     :     :
+                              :.....:.....:.....:.... /key
+
+INPUT                                 OUTPUT
+  /group  /1    /2    /3    /4          /group  /key  /val
+  ======= ----- ----- ----- -----       ======= ===== -----
+  'a      10    20    30    ()          'a      1     10
+  'b      40    50    ()    ()          'a      2     20
+          .                  .          'a      3     30
+          :..................:          'a      4     ()
+          term array                    'b      1     40
+                                        'b      2     50
+                                        'b      3     ()
+                                        'b      4     ()</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapUnarray" class="def"
+	    >relmapUnarray</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
+	    > c -&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    >Relmap</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#relmapUnarray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >unarray</code
+	      > relmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitUnarray" class="def"
+	    >relkitUnarray</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >], <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    >, [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
+	    >Term</a
+	    > c]]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    >RelkitFlow</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Gadget.html#relkitUnarray');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Create <code
+	      >unarray</code
+	      > relkit.</p
 	    ></div
 	  ></div
 	></div

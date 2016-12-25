@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Result of relational calculation.
@@ -809,16 +809,19 @@ globalAbort :: Global' h c -> AbortReason -> IO a
 global' :: (Show c, CBool c, CText c) => h c -> Global' h c
 
 -- | Type which has global parameter.
-class GetGlobal h
+class GetGlobal' h
 
 -- | Get global parameter.
-getGlobal :: GetGlobal h => h c -> Global' h c
+getGlobal' :: GetGlobal' h => h c -> Global' h c
 
--- | Get global parameter from relmap intermediate data.
-ropGlobal :: (GetGlobal h) => Intmed' h c -> Global' h c
+-- | Type which has global parameter.
+class GetGlobal a
+
+-- | Get global parameter.
+getGlobal :: (GetGlobal a, GetGlobal' h) => a h c -> Global' h c
 
 -- | Get operator set from <tt>Intmed</tt>.
-ropCopset :: (GetGlobal h) => Intmed' h c -> CopSet c
+ropCopset :: (GetGlobal' h) => Intmed' h c -> CopSet c
 
 -- | Set of relmap and content operators.
 data OpSet' h c
@@ -852,6 +855,7 @@ instance GHC.Classes.Ord Koshucode.Baala.Core.Relmap.Global.Feature
 instance GHC.Classes.Eq Koshucode.Baala.Core.Relmap.Global.Feature
 instance GHC.Show.Show Koshucode.Baala.Core.Relmap.Global.Feature
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Global.Global' h c)
+instance Koshucode.Baala.Core.Relmap.Global.GetGlobal Koshucode.Baala.Core.Relmap.Rop.Intmed'
 instance Data.Default.Class.Default (Koshucode.Baala.Core.Relmap.Global.OpSet' h c)
 instance Data.Default.Class.Default Koshucode.Baala.Core.Relmap.Global.Feature
 
@@ -918,7 +922,7 @@ instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Ass
 module Koshucode.Baala.Core.Assert.Run
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, CContent c, SelectRel h, GetGlobal h) => h c -> Option c -> ShortAsserts' h c -> Ab (ShortResultChunks c)
+runAssertJudges :: (Ord c, CContent c, SelectRel h, GetGlobal' h) => h c -> Option c -> ShortAsserts' h c -> Ab (ShortResultChunks c)
 
 
 -- | Line-like token-level structure of source code.
@@ -1033,55 +1037,55 @@ module Koshucode.Baala.Core.Resource.Resource
 
 -- | Relational data resource
 data Resource c
-Resource :: Global c -> Option c -> [Resource c] -> [String] -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> [Judge c] -> Dataset c -> InputQueue -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> SecNo -> CacheT -> Resource c
+Resource :: Global c -> SecNo -> CacheT -> Option c -> [String] -> [Resource c] -> InputQueue -> [Judge c] -> Dataset c -> [NamedTrees] -> [LexmapClause] -> [ShortAssert c] -> IOPoint -> [[TokenLine]] -> [(SecNo, String)] -> [String] -> Resource c
 
--- | Global parameter
+-- | <b>Global:</b> Global parameter
 [resGlobal] :: Resource c -> Global c
 
--- | Options
-[resOption] :: Resource c -> Option c
-
--- | Importing resources
-[resImport] :: Resource c -> [Resource c]
-
--- | Exporting names
-[resExport] :: Resource c -> [String]
-
--- | Global slots
-[resSlot] :: Resource c -> [NamedTrees]
-
--- | Source of relmaps
-[resLexmap] :: Resource c -> [LexmapClause]
-
--- | Assertions of relmaps
-[resAssert] :: Resource c -> [ShortAssert c]
-
--- | Affirmative or denial judgements
-[resJudge] :: Resource c -> [Judge c]
-
--- | Dataset
-[resDataset] :: Resource c -> Dataset c
-
--- | Input points
-[resInputQueue] :: Resource c -> InputQueue
-
--- | Output point
-[resOutput] :: Resource c -> IOPoint
-
--- | Echo text
-[resEcho] :: Resource c -> [[TokenLine]]
-
--- | License text
-[resLicense] :: Resource c -> [(SecNo, String)]
-
--- | Collection of messages
-[resMessage] :: Resource c -> [String]
-
--- | Last section number
+-- | <b>Global:</b> Last section number
 [resLastSecNo] :: Resource c -> SecNo
 
--- | Term name cache
+-- | <b>Global:</b> Term name cache
 [resCacheT] :: Resource c -> CacheT
+
+-- | <b>Setting:</b> Options
+[resOption] :: Resource c -> Option c
+
+-- | <b>Setting:</b> Exporting names
+[resExport] :: Resource c -> [String]
+
+-- | <b>Input:</b> Importing resources
+[resImport] :: Resource c -> [Resource c]
+
+-- | <b>Input:</b> Input points
+[resInputQueue] :: Resource c -> InputQueue
+
+-- | <b>Input:</b> Affirmative or denial judgements
+[resJudge] :: Resource c -> [Judge c]
+
+-- | <b>Input:</b> Dataset
+[resDataset] :: Resource c -> Dataset c
+
+-- | <b>Calc:</b> Global slots
+[resSlot] :: Resource c -> [NamedTrees]
+
+-- | <b>Calc:</b> Source of relmaps
+[resLexmap] :: Resource c -> [LexmapClause]
+
+-- | <b>Calc:</b> Assertions of relmaps
+[resAssert] :: Resource c -> [ShortAssert c]
+
+-- | <b>Output:</b> Output point
+[resOutput] :: Resource c -> IOPoint
+
+-- | <b>Output:</b> Echo text
+[resEcho] :: Resource c -> [[TokenLine]]
+
+-- | <b>Output:</b> License text
+[resLicense] :: Resource c -> [(SecNo, String)]
+
+-- | <b>Output:</b> Collection of messages
+[resMessage] :: Resource c -> [String]
 
 -- | Abort or resource.
 type AbResource c = Ab (Resource c)
@@ -1150,7 +1154,7 @@ type ShortAsserts c = ShortAsserts' Resource c
 global :: (CContent c) => Global c
 instance GHC.Show.Show (Koshucode.Baala.Core.Resource.Resource.Resource c)
 instance Koshucode.Baala.Type.Rel.Rel.SelectRel Koshucode.Baala.Core.Resource.Resource.Resource
-instance Koshucode.Baala.Core.Relmap.Global.GetGlobal Koshucode.Baala.Core.Resource.Resource.Resource
+instance Koshucode.Baala.Core.Relmap.Global.GetGlobal' Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Data.Class.Content.CContent c => Data.Default.Class.Default (Koshucode.Baala.Core.Resource.Resource.Resource c)
 
 
@@ -1191,9 +1195,6 @@ module Koshucode.Baala.Core.Resource.Include
 -- | Include source code into resource.
 resInclude :: (CContent c) => [Token] -> FilePath -> Resource c -> IxIOPoint -> Bz -> AbResource c
 
--- | Build content expression with global parameter.
-treeCoxG :: (CContent c) => Global c -> Tree -> Ab (Cox c)
-
 
 -- | Read data resource.
 module Koshucode.Baala.Core.Resource.Read
@@ -1221,7 +1222,7 @@ resRun :: (CContent c) => Resource c -> Ab (Result c)
 assembleRelmap :: AbMap (Resource c)
 
 -- | Make a constructor pair of lexmap and relmap.
-relmapCons :: (GetGlobal h) => h c -> (ConsLexmap, ConsRelmap' h c)
+relmapCons :: (GetGlobal' h) => h c -> (ConsLexmap, ConsRelmap' h c)
 
 
 -- | Runtime structure for calculations written in Koshucode.

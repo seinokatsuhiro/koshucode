@@ -8,7 +8,7 @@
 --   in the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-cop
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Replace sublists.
@@ -147,10 +147,6 @@ b2 :: Cox c
 
 -- | Shorthand for the third blank — <tt>b "#3"</tt>
 b3 :: Cox c
-
-
--- | Message list.
-module Koshucode.Baala.Cop.Message
 
 
 -- | Content operators on texts.

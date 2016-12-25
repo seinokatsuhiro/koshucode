@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.191.0.0
+@version 0.193.0.0
 
 
 -- | Exit process.
@@ -578,8 +578,14 @@ hPutEmptyLine :: Handle -> IO ()
 module Koshucode.Baala.Overture.Text
 
 
--- | Shorthand functions.
+-- | Shorthand types and functions.
 module Koshucode.Baala.Overture.Shorthand
+
+-- | Pair of <i>a</i> and <i>b</i>.
+type Pair a b = (a, b)
+
+-- | Pair of <i>a</i> and <i>a</i>.
+type Twin a = (a, a)
 
 -- | Pairing operator.
 --   
@@ -602,6 +608,14 @@ module Koshucode.Baala.Overture.Shorthand
 --   Just "abcdef"
 --   </pre>
 (++) :: (Monoid a) => a -> a -> a
+
+-- | Same as <a>concatMap</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; words &lt;++&gt; ["foo bar", "baz quux"]
+--   ["foo","bar","baz","quux"]
+--   </pre>
+(<++>) :: (a -> [b]) -> [a] -> [b]
 
 -- | Double fmap.
 --   

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.191.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.193.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,7 +58,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Term name</a
+	    >Decode terms</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Term name cache</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Term name</a
+		></li
+	      ><li
+	      ><a href="#g:4"
+		>Term</a
+		></li
+	      ></ul
 	    ></li
 	  ></ul
 	></div
@@ -67,7 +81,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	>Description</p
 	><div class="doc"
 	><p
-	  >Decode term name.</p
+	  >Decode terms.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -125,6 +139,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >TermName</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:treesFlatNamesCo"
+	    >treesFlatNamesCo</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:treesFlatNamePairs"
+	    >treesFlatNamePairs</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:treesNamesByColon"
+	    >treesNamesByColon</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]]</li
+	  ><li class="src short"
 	  ><a href="#v:treesTerms"
 	    >treesTerms</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
@@ -164,43 +210,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
 	    >Tree</a
 	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:treesFlatNamePairs"
-	    >treesFlatNamePairs</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
-	    >TermName2</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:treesNamesByColon"
-	    >treesNamesByColon</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >]]</li
-	  ><li class="src short"
-	  ><a href="#v:treesFlatNamesCo"
-	    >treesFlatNamesCo</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >])</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Term name</h1
+	>Decode terms</h1
+	><h2 id="g:2"
+	>Term name cache</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -233,6 +249,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	    >Empty term name cache.</p
 	    ></div
 	  ></div
+	><h2 id="g:3"
+	>Term name</h2
 	><div class="top"
 	><p class="src"
 	  ><a name="v:treeFlatName" class="def"
@@ -338,6 +356,106 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:treesFlatNamesCo" class="def"
+	    >treesFlatNamesCo</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesFlatNamesCo');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode term names with optional complement symbol.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.toTrees &quot;~ /a /b&quot; &gt;&gt;= treesFlatNamesCo
+</code
+		></strong
+	      >Right (True, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.toTrees &quot;/a /b&quot; &gt;&gt;= treesFlatNamesCo
+</code
+		></strong
+	      >Right (False, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:treesFlatNamePairs" class="def"
+	    >treesFlatNamePairs</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
+	    >TermName2</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesFlatNamePairs');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode a list of name-and-name pairs.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.toTrees &quot;/a /x /b /y&quot; &gt;&gt;= treesFlatNamePairs
+</code
+		></strong
+	      >Right [(TermName EQ &quot;a&quot;, TermName EQ &quot;x&quot;), (TermName EQ &quot;b&quot;, TermName EQ &quot;y&quot;)]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:treesNamesByColon" class="def"
+	    >treesNamesByColon</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
+	    >TermName</a
+	    >]] <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesNamesByColon');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode term names grouped by colons.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.toTrees &quot;/a /b : /p /q : /x /y&quot; &gt;&gt;= treesNamesByColon
+</code
+		></strong
+	      >Right [ [TermName EQ &quot;a&quot;, TermName EQ &quot;b&quot;]
+      , [TermName EQ &quot;p&quot;, TermName EQ &quot;q&quot;]
+      , [TermName EQ &quot;x&quot;, TermName EQ &quot;y&quot;] ]
+</pre
+	    ></div
+	  ></div
+	><h2 id="g:4"
+	>Term</h2
+	><div class="top"
+	><p class="src"
 	  ><a name="v:treesTerms" class="def"
 	    >treesTerms</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
@@ -414,104 +532,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-D
 	  ><p
 	    >Read list of named token trees from token trees.
    This function wraps long branches into group.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:treesFlatNamePairs" class="def"
-	    >treesFlatNamePairs</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName2"
-	    >TermName2</a
-	    >] <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesFlatNamePairs');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Decode a list of name-and-name pairs.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>S.toTrees &quot;/a /x /b /y&quot; &gt;&gt;= treesFlatNamePairs
-</code
-		></strong
-	      >Right [(TermName EQ &quot;a&quot;, TermName EQ &quot;x&quot;), (TermName EQ &quot;b&quot;, TermName EQ &quot;y&quot;)]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:treesNamesByColon" class="def"
-	    >treesNamesByColon</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [[<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >]] <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesNamesByColon');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Decode term names grouped by colons.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>S.toTrees &quot;/a /b : /p /q : /x /y&quot; &gt;&gt;= treesNamesByColon
-</code
-		></strong
-	      >Right [ [TermName EQ &quot;a&quot;, TermName EQ &quot;b&quot;]
-      , [TermName EQ &quot;p&quot;, TermName EQ &quot;q&quot;]
-      , [TermName EQ &quot;x&quot;, TermName EQ &quot;y&quot;] ]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:treesFlatNamesCo" class="def"
-	    >treesFlatNamesCo</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-TTree-Parse.html#t:Tree"
-	    >Tree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:TermName"
-	    >TermName</a
-	    >]) <a onclick="showSource('src/Koshucode-Baala-Data-Decode-Term.html#treesFlatNamesCo');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Decode term names with optional complement symbol.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>S.toTrees &quot;~ /a /b&quot; &gt;&gt;= treesFlatNamesCo
-</code
-		></strong
-	      >Right (True, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>S.toTrees &quot;/a /b&quot; &gt;&gt;= treesFlatNamesCo
-</code
-		></strong
-	      >Right (False, [TermName EQ &quot;a&quot;,TermName EQ &quot;b&quot;])
-</pre
 	    ></div
 	  ></div
 	></div
