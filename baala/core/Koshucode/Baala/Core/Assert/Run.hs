@@ -45,7 +45,7 @@ runAssertDataset hook option (S.Short _ sh ass) =
 
       assert :: (D.CEmpty c) => Bool -> T.AssertType -> T.JudgeOf c
       assert True  q p = T.assertAs q p
-      assert False q p = T.assertAs q p . D.omitEmpty
+      assert False q p = T.assertAs q p . D.cutEmpty
 
 runRelmapViaRelkit :: (D.CContent c, T.SelectRel h, C.GetGlobal' h)
   => h c -> C.RelmapLinkTable' h c

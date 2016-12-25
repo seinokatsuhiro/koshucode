@@ -9,10 +9,10 @@ module Koshucode.Baala.Data.Class.Edge
     getContent,
   
     -- * Empty
-    CEmpty (..), maybeEmpty, omitEmpty, contMaximum,
-    empties,
+    CEmpty (..), maybeEmpty, maxContents,
+    empties, cutEmpty,
     -- * End
-    CEnd (..), contMinimum, 
+    CEnd (..), minContents, 
   ) where
 
 import qualified Koshucode.Baala.Overture             as O
@@ -55,17 +55,21 @@ class (Basis c) => CEmpty c where
     empty       :: c
 
 -- | Create empty or non-empty content.
+--
+--   >>> maybeEmpty pText $ Just "foo" :: Content
+--   ContentText "foo"
+--
+--   >>> maybeEmpty pText $ Nothing :: Content
+--   ContentEmpty
+--
 maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 maybeEmpty f (Just a)   = f a
 maybeEmpty _ (Nothing)  = empty
 
--- | Cut empty terms.
-omitEmpty :: (CEmpty c) => O.Map [S.Term c]
-omitEmpty = B.omit (isEmpty . snd)
-
 -- | Maximum content of contents list.
-contMaximum :: (CEmpty c) => [c] -> c
-contMaximum = B.maximumNull empty
+--   If argument is the empty list, returns the 'empty' content.
+maxContents :: (CEmpty c) => [c] -> c
+maxContents = B.maximumNull empty
 
 -- | List of empties.
 --
@@ -74,6 +78,10 @@ contMaximum = B.maximumNull empty
 --
 empties :: (CEmpty c) => Int -> [c]
 empties n = replicate n empty
+
+-- | Cut empty terms.
+cutEmpty :: (CEmpty c) => O.Map [S.Term c]
+cutEmpty = B.omit (isEmpty . snd)
 
 
 -- --------------------------------------------  End
@@ -84,6 +92,7 @@ class (Basis c) => CEnd c where
     end         :: c
 
 -- | Minimum content of contents list.
-contMinimum :: (CEnd c) => [c] -> c
-contMinimum = B.minimumNull end
+--   If argument is the empty list, returns the 'end' content.
+minContents :: (CEnd c) => [c] -> c
+minContents = B.minimumNull end
 

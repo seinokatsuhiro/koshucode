@@ -112,7 +112,7 @@ judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
            , "clause"       // D.pInt clseq ]
 
 judgeToken :: Int -> S.Token -> D.JudgeC
-judgeToken ln tok = D.affirm "TOKEN" $ D.omitEmpty args where
+judgeToken ln tok = D.affirm "TOKEN" $ D.cutEmpty args where
     args = [ "line"           // D.pInt ln
            , "column"         // D.pInt $ B.cpColumnNo $ head $ B.getCPs tok
            , "token-type"     // D.pText $ S.subtypeName tok

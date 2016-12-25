@@ -90,12 +90,12 @@ copTotal = op where
 
 copMin :: (D.CContent c) => D.CopCalc c
 copMin = op where
-    op [Right c] | D.isList c = Right $ D.contMinimum $ D.gList c
+    op [Right c] | D.isList c = Right $ D.minContents $ D.gList c
     op xs = Msg.badArg xs
 
 copMax :: (D.CContent c) => D.CopCalc c
 copMax = op where
-    op [Right c] | D.isList c = Right $ D.contMaximum $ D.gList c
+    op [Right c] | D.isList c = Right $ D.maxContents $ D.gList c
     op xs = Msg.badArg xs
 
 -- >>> copLength [D.putText "abc"] :: B.Ab D.Content

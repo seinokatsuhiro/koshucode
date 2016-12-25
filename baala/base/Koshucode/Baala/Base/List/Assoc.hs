@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.List.Assoc
   ( -- * Association list
     assocBy,
     assocExist,
-    sndM,
     lookupBy,
     lookupSatisfy,
     assocFinder,
@@ -78,16 +77,6 @@ assocBy p = lead [] where
 -- | Check which given key is there in assoc list.
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
 assocExist k a = Maybe.isJust $ lookup k a
-
--- | Apply monadic function to 'snd' of pair.
---
---   >>> sndM Just ("a", "b")
---   Just ("a","b")
---
-sndM :: (Monad m) => (v -> m v') -> (k, v) -> m (k, v')
-sndM f (k, v) =
-    do v' <- f v
-       return (k, v')
 
 -- | Lookup association list using Boolean function.
 --
