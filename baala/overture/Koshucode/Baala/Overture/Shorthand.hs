@@ -1,9 +1,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Shorthand functions.
+-- | Shorthand types and functions.
 
 module Koshucode.Baala.Overture.Shorthand
- ( -- * Infix operators
+ ( -- * Derived types
+   Pair, Twin,
+
+   -- * Infix operators
    (&),
    (++), (<++>),
    (<$$>),
@@ -17,6 +20,15 @@ module Koshucode.Baala.Overture.Shorthand
 
 import Prelude hiding ((++))
 import qualified Koshucode.Baala.Overture.Type as O
+
+
+-- ============================================  Types
+
+-- | Pair of /a/ and /b/.
+type Pair a b = (a, b)
+
+-- | Pair of /a/ and /a/.
+type Twin a = (a, a)
 
 
 -- ============================================  Infix operators
