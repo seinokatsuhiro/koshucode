@@ -10,6 +10,7 @@ module Koshucode.Baala.Data.Class.Edge
   
     -- * Empty
     CEmpty (..), maybeEmpty, omitEmpty, contMaximum,
+    empties,
     -- * End
     CEnd (..), contMinimum, 
   ) where
@@ -46,7 +47,7 @@ getContent test get (Right c) | test c     = Right $ get c
 getContent _ _ (Left a)                    = Left a
 
 
--- --------------------------------------------  Empty and End
+-- --------------------------------------------  Empty
 
 -- | Empty: the minimum content.
 class (Basis c) => CEmpty c where
@@ -65,6 +66,17 @@ omitEmpty = B.omit (isEmpty . snd)
 -- | Maximum content of contents list.
 contMaximum :: (CEmpty c) => [c] -> c
 contMaximum = B.maximumNull empty
+
+-- | List of empties.
+--
+--   >>> empties 4 :: [Content]
+--   [ContentEmpty, ContentEmpty, ContentEmpty, ContentEmpty]
+--
+empties :: (CEmpty c) => Int -> [c]
+empties n = replicate n empty
+
+
+-- --------------------------------------------  End
 
 -- | End of everything: the maximum content.
 class (Basis c) => CEnd c where

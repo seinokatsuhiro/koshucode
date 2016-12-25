@@ -327,8 +327,8 @@ relkitArray (unzip -> (names, vals), l, to) (Just he1) = check kit where
 
     values :: [([c], [c])] -> [c] -> [c]
     values body key = case select key `K.mapMaybe` body of
-                        [vs] -> vs         -- single key
-                        _    -> empties l  -- no keys or multiple keys
+                        [vs] -> vs           -- single key
+                        _    -> K.empties l  -- no keys or multiple keys
 
     select :: [c] -> ([c], [c]) -> Maybe [c]
     select key (ks, vs) | key == ks  = Just vs
@@ -340,10 +340,6 @@ divide :: Int -> [a] -> [[a]]
 divide n = loop where
     loop [] = []
     loop xs = take n xs : loop (drop n xs)
-
--- | List of empties.
-empties :: (K.CEmpty c) => Int -> [c]
-empties n = replicate n K.empty
 
 
 -- ----------------------  unarray
