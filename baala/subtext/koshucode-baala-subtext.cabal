@@ -7,7 +7,7 @@ name:                koshucode-baala-subtext
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.192.0.0
+version:             0.193.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A text matching library
@@ -68,7 +68,7 @@ library
          base                      == 4.*
        , containers                == 0.*
        , text                      == 1.*
-       , koshucode-baala-overture  == 0.192.0.0
+       , koshucode-baala-overture  == 0.193.0.0
 
   ghc-options:         -Wall
 

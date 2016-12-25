@@ -7,7 +7,7 @@ name:                koshucode-baala-type
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.192.0.0
+version:             0.193.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Additional data types for Koshucode
@@ -83,9 +83,9 @@ library
        , containers                == 0.5.*
        , text                      == 1.*
        , time                      == 1.*
-       , koshucode-baala-overture  == 0.192.0.0
-       , koshucode-baala-base      == 0.192.0.0
-       , koshucode-baala-syntax    == 0.192.0.0
+       , koshucode-baala-overture  == 0.193.0.0
+       , koshucode-baala-base      == 0.193.0.0
+       , koshucode-baala-syntax    == 0.193.0.0
 
   ghc-options:         -Wall
 
