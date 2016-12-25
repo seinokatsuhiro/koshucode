@@ -53,10 +53,10 @@ relkitRun :: forall h. forall c. (D.CContent c, T.SelectRel h)
 relkitRun hook rs (B.Codic cp core) bo1 =
     Msg.abRun cp $
      case core of
-       C.RelkitWhole     u f     -> right u $ f             bo1
-       C.RelkitMany      u f     -> right u $ f `concatMap` bo1
-       C.RelkitLine      u f     -> right u $ f `map`       bo1
-       C.RelkitTest        f     -> Right   $ filter f      bo1
+       C.RelkitWhole     u f     -> right u $ f         bo1
+       C.RelkitMany      u f     -> right u $ f O.<++>  bo1
+       C.RelkitLine      u f     -> right u $ f <$>     bo1
+       C.RelkitTest        f     -> Right   $ filter f  bo1
 
        C.RelkitAbWhole   u f bs  -> monad u $            f (mrun bs)        bo1
        C.RelkitAbLine    u f bs  -> monad u $            f (mrun bs) `mapM` bo1

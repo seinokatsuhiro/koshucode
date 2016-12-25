@@ -74,7 +74,7 @@ relkitMeet sh (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
            case K.pkDisjoint pk of
              True  -> Right $ cartesian bo1 bo2
              False -> let b2map = K.gatherToMap (split2 <$> bo2)
-                      in Right $ step b2map `concatMap` bo1
+                      in Right $ step b2map K.<++> bo1
 
     step b2map cs1 = case pick1 cs1 `K.lookupMap` b2map of
                        Just b2prop -> map (++ cs1) b2prop

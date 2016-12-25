@@ -87,7 +87,7 @@ relkitMaybe sh fill (C.RelkitOutput he2 kitb2) (Just he1) = kit3 where
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
            let b2map = K.gatherToMap (split2 <$> bo2)
-           Right $ step b2map `concatMap` bo1
+           Right $ step b2map K.<++> bo1
 
     heFill = cut2 $ K.headTypes he2
     fills  = selectFiller fill <$> heFill
