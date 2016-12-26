@@ -12,6 +12,7 @@ module Koshucode.Baala.Cop.Coxhand
   ) where
 
 import qualified Koshucode.Baala.Overture   as O
+import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Syntax     as S
 import qualified Koshucode.Baala.Data       as D
 
@@ -20,7 +21,7 @@ import qualified Koshucode.Baala.Data       as D
 
 -- | Create a form with named blanks.
 f :: [String] -> O.Map (D.Cox c)
-f vs = D.coxForm [] Nothing vs
+f = D.coxForm (B.def :: B.CodePos) Nothing
 
 -- | Shorthand for one-blank form — @f [\"\#1\"]@
 f1 :: O.Map (D.Cox c)

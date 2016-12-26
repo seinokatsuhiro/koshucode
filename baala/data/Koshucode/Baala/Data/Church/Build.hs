@@ -204,8 +204,9 @@ convTree find = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePos] -> D.CoxTag -> [String] -> O.Map (D.Cox c)
-coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . D.CoxForm cp0 tag vs where
+coxForm :: (B.GetCodePos cp) => cp -> D.CoxTag -> [String] -> O.Map (D.Cox c)
+coxForm cp0 tag vs = debruijn . outside [] . coxUnfold
+                              . D.CoxForm (B.getCPs cp0) tag vs where
     n = length vs
     outside vars cox = case cox of
        D.CoxLocal cp v i    
