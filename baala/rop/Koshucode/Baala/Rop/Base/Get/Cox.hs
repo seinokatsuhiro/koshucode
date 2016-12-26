@@ -80,7 +80,7 @@ optContent _ med (n, ts) = do c <- calcTree med $ K.ttreeGroup ts
 
 -- | Get required single content expression.
 getCox :: (K.CContent c) => Rop.RopGet (K.Cox c) c
-getCox med = buildCox med K.<.> Rop.getTree med
+getCox med = buildCox med K.<.> Rop.getTrees med
 
 -- | Get optional single content expression.
 getMaybeCox :: (K.CContent c) => Rop.RopGet (K.MaybeCox c) c
@@ -108,12 +108,12 @@ getOptCoxTerms :: (K.CContent c) => (K.TermName -> c) -> Rop.RopGet [K.TermCox c
 getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
-buildCox :: (K.CContent c) => C.Intmed c -> K.Tree -> K.AbCox c
-buildCox = K.treeCox . C.ropCopset
+buildCox :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.AbCox c
+buildCox med = K.treeCox (C.ropCopset med) . K.ttreeGroup
 
 optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.TermCox c)
 optCox f _   (n, []) = Right (n, K.coxLit $ f n)
-optCox _ med (n, ts) = do cox <- buildCox med $ K.ttreeGroup ts
+optCox _ med (n, ts) = do cox <- buildCox med ts
                           Right (n, cox)
 
 -- | Build terms of content expression.
@@ -146,7 +146,7 @@ getLetClause med ts =
     Msg.abPara ts $ do
       (lhs, rhs) <- treesEqDef ts
       (n, vs)    <- getLetHead lhs
-      cox        <- buildCox med $ K.ttreeGroup rhs
+      cox        <- buildCox med rhs
       case vs of
         [] -> Right (n, cox)
         _  -> Right (n, K.coxForm ts (Just n) vs cox)
