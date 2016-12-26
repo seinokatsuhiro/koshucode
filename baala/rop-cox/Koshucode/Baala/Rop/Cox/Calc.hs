@@ -19,6 +19,8 @@ module Koshucode.Baala.Rop.Cox.Calc
     consSplit, relmapSplit, relkitSplit,
     -- * unary
     consUnary, relmapUnary,
+    -- * dump-cox
+    consDumpCox,
   ) where
 
 import qualified Koshucode.Baala.DataPlus          as K
@@ -32,12 +34,12 @@ ropsCoxCalc :: (K.CContent c) => [C.Rop c]
 ropsCoxCalc = Rop.ropAlias
     [ "subst" K.& "alt"
     ] $ Rop.rops "cox-calc"
-    [ consAdd         K.& [ "add /N E ..."               K.& "-cox* . -where?" ]
-    , consAlt         K.& [ "alt /N E ..."               K.& "-cox* . -where?" ]
+    [ consAdd         K.& [ "add /N E ..."               K.& "-cox* . -let?" ]
+    , consAlt         K.& [ "alt /N E ..."               K.& "-cox* . -let?" ]
     , consFill        K.& [ "fill /P ... -with E"        K.& "-term* . -with" ]
     , consReplace     K.& [ "replace /P ... -by F"       K.& "-term* . -by" ]
     , consReplaceAll  K.& [ "replace-all -from E -to E"  K.& ". -from -to" ]
-    , consSplit       K.& [ "split /N E ..."             K.& "-cox* . -where?" ]
+    , consSplit       K.& [ "split /N E ..."             K.& "-cox* . -let?" ]
     , consUnary       K.& [ "unary /N E ..."             K.& "-term -expr*" ]
     , consDumpCox     K.& [ "dump-cox E"                 K.& "-cox*" ]
     ]
@@ -45,13 +47,13 @@ ropsCoxCalc = Rop.ropAlias
 
 -- ----------------------  add
 
--- | [add /\/N/ /E/ ...]
---    Calculate expression /E/ of term /\/N/,
---    and add terms /\/N/ ... to input relation.
+-- | [add /\/N/ /E/ ... -let { /D/ | ... } ]
+--     Calculate expression /E/ of term /\/N/,
+--     and add terms /\/N/ ... to input relation.
 --
 consAdd :: (K.CContent c) => C.RopCons c
 consAdd med =
-    do cops <- Rop.getWhere med "-where"
+    do cops <- Rop.getLet med "-let"
        cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapAdd med (cops, cox)
 
@@ -73,13 +75,13 @@ relkitAdd (cops, cox) (Just he1) = Rop.newCheck pk kit where
 
 -- ----------------------  alt
 
--- | [alt /\/P/ /E/ ...]
---    Calculate expression /E/ of term /\/P/,
---    and alter the contents of present terms /\/P/ ....
+-- | [alt /\/P/ /E/ ... -let { /D/ | ... }]
+--     Calculate expression /E/ of term /\/P/,
+--     and alter the contents of present terms /\/P/ ....
 --
 consAlt :: (K.CContent c) => C.RopCons c
 consAlt med =
-    do cops <- Rop.getWhere med "-where"
+    do cops <- Rop.getLet med "-let"
        cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapAlt med (cops, cox)
 
@@ -102,8 +104,8 @@ relkitAlt (cops, cox) (Just he1) = Rop.preCheck pk kit where
 -- ----------------------  fill
 
 -- | [fill /\/P/ ... -with /E/]
---    Fill contents of present terms /\/P/ ...
---    with the result of /E/.
+--     Fill contents of present terms /\/P/ ...
+--     with the result of /E/.
 --
 consFill :: (K.CContent c) => C.RopCons c
 consFill med =
@@ -171,15 +173,14 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 
 -- ----------------------  split
 
--- | __split \/N E ...__
---
---   Split input relation by the boolean functions E ...,
---   and add terms \/N ... which has the splitted relations.
+-- | [split /\/N E/ ... -let { /D/ | ... }]
+--     Split input relation by the boolean functions E ...,
+--     and add terms \/N ... which has the splitted relations.
 --
 consSplit :: (K.CContent c) => C.RopCons c
 consSplit med =
-    do cops <- Rop.getWhere med "-where"
-       cox <- Rop.getCoxTerms med "-cox"
+    do cops <- Rop.getLet med "-let"
+       cox  <- Rop.getCoxTerms med "-cox"
        Right $ relmapSplit med (cops, cox)
 
 -- | Create @split@ relmap.
@@ -243,7 +244,7 @@ relkitUnary (n, cs) _ = Right kit2 where
 
 -- ----------------------  dump-cox
 
--- | __dump-cox E__
+-- | [dump-cox /E/]
 consDumpCox :: (K.CContent c) => C.RopCons c
 consDumpCox med =
     do cox <- Rop.getCox med "-cox"

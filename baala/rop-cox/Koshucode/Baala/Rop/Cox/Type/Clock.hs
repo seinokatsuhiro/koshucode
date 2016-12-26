@@ -21,13 +21,13 @@ ropsTypeClock :: (K.CContent c) => [C.Rop c]
 ropsTypeClock = Rop.rops "type"
     [ consAddClock
       K.& [ "add-clock /N [-day E] [-hour E] [-min E] [-sec E]"
-            K.& "-clock . -times? -day? -hour? -min? -sec?" ]
+            K.& "-clock . -times? -day? -hour? -min? -sec? -let?" ]
     , consOfClock
       K.& [ "of-clock E [-sign /N] [-day /N] [-hour /N] [-min /N] [-sec /N]"
-            K.& "-content . -sign? -day? -hour? -min? -sec?" ]
+            K.& "-content . -sign? -day? -hour? -min? -sec? -let?" ]
     , consAltClock
       K.&  [ "alt-clock /P ... [-sign E] [-day E] [-hour E] [-min E] [-sec E]"
-             K.& "-clock* . -sign? -day? -hour? -min? -sec?" ]
+             K.& "-clock* . -sign? -day? -hour? -min? -sec? -let?" ]
     ]
 
 
@@ -40,7 +40,7 @@ ropsTypeClock = Rop.rops "type"
 --
 consAddClock :: (K.CContent c) => C.RopCons c
 consAddClock med =
-    do cops     <- Rop.getWhere    med "-where"
+    do cops     <- Rop.getLet      med "-let"
        clock    <- Rop.getTerm     med "-clock"
        times    <- Rop.getOptCox (K.pInt 1) med "-times"
        day      <- Rop.getOptCox (K.pInt 0) med "-day"
@@ -108,7 +108,7 @@ getInteger c = do i <- getInt c
 --
 consOfClock :: (K.CContent c) => C.RopCons c
 consOfClock med =
-  do cops     <- Rop.getWhere     med "-where"
+  do cops     <- Rop.getLet       med "-let"
      content  <- Rop.getCox       med "-content"
      sign     <- Rop.getMaybeTerm med "-sign"
      day      <- Rop.getMaybeTerm med "-day"
@@ -154,7 +154,7 @@ clockContents clock = [sign, day, hour, minute, sec] where
 --
 consAltClock :: (K.CContent c) => C.RopCons c
 consAltClock med =
-    do cops   <- Rop.getWhere    med "-where"
+    do cops   <- Rop.getLet      med "-let"
        ts     <- Rop.getTerms    med "-clock"
        day    <- Rop.getMaybeCox med "-day"
        hour   <- Rop.getMaybeCox med "-hour"

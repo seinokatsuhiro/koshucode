@@ -24,36 +24,32 @@ import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
 
 -- | Implementation of relational operators.
---
---   [@keep E@]
---     Keep tuples @E@ equals true.
--- 
---   [@omit E@]
---     Omit tuples @E@ equals true.
--- 
 ropsCoxFilter :: (K.CContent c) => [C.Rop c]
 ropsCoxFilter = Rop.rops "cox-filter"
     [ consContain       K.& [ "contain E"   K.& "-expr" ]
-    , consFilter True   K.& [ "keep E"      K.& "-in* . -where?" ]
-    , consFilter False  K.& [ "omit E"      K.& "-in* . -where?" ]
+    , consFilter True   K.& [ "keep E"      K.& "-expr* . -let?" ]
+    , consFilter False  K.& [ "omit E"      K.& "-expr* . -let?" ]
     , consOmitAll       K.& [ "omit-all"    K.& "" ]
     ]
 
 
 -- ----------------------  filter
 
--- | [keep E]
---     Keep tuples which expression E is true.
+-- | [keep /E/ -let { /D/ | ... }]
+--     Keep tuples which expression /E/ is true.
 --
---   [omit E]
---     Omit tuples which expression E is true.
---     @omit E@ is equivalent to @keep not E@.
+--   [omit /E/ -let { /D/ | ... }]
+--     Omit tuples which expression /E/ is true.
+--
+--   @omit@ is the inverse operator of @keep@.
+--
+--   > keep E = omit not E
 --
 consFilter :: (K.CContent c) => Bool -> C.RopCons c
-consFilter b med =
-    do cops   <- Rop.getWhere med "-where"
-       coxIn  <- Rop.getCox med "-in"
-       Right $ relmapFilter med (b, cops, coxIn)
+consFilter which med =
+    do cops   <- Rop.getLet med "-let"
+       cox    <- Rop.getCox med "-expr"
+       Right $ relmapFilter med (which, cops, cox)
 
 -- | Create @keep@ and @omit@ relmap.
 relmapFilter :: (K.CContent c) => C.Intmed c -> (Bool, K.CopSet c, K.Cox c) -> C.Relmap c
@@ -62,9 +58,9 @@ relmapFilter med = C.relmapFlow med . relkitFilter
 -- | Create @keep@ and @omit@ relkit.
 relkitFilter :: (K.CContent c) => (Bool, K.CopSet c, K.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = C.relkitUnfixed
-relkitFilter (which, cops, body) (Just he1) = kit where
+relkitFilter (which, cops, cox) (Just he1) = kit where
     kit  = Right $ C.relkitFilterAb he1 test
-    test cs1 = do c <- K.coxRunCox cops he1 cs1 body
+    test cs1 = do c <- K.coxRunCox cops he1 cs1 cox
                   case K.isBool c of
                     True  -> Right $ K.gBool c == which
                     False -> Msg.reqBool
