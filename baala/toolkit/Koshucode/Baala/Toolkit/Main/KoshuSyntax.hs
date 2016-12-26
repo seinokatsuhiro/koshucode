@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.System                  as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Core                    as C
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
@@ -102,17 +103,17 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
              , "   Some tokens are classified into /token-subtype . |}" ]
 
 judgeClause :: Int -> C.Clause -> D.JudgeC
-judgeClause clseq c = D.affirm "CLAUSE" args where
+judgeClause clseq c = T.affirm "CLAUSE" args where
     args = [ "clause"       // D.pInt clseq
            , "clause-type"  // D.pText $ C.clauseTypeText c ]
 
 judgeLine :: Int -> S.TokenLine -> D.JudgeC
-judgeLine clseq (B.CodeLine ln _ _) = D.affirm "LINE" args where
+judgeLine clseq (B.CodeLine ln _ _) = T.affirm "LINE" args where
     args = [ "line"         // D.pInt ln
            , "clause"       // D.pInt clseq ]
 
 judgeToken :: Int -> S.Token -> D.JudgeC
-judgeToken ln tok = D.affirm "TOKEN" $ D.cutEmpty args where
+judgeToken ln tok = T.affirm "TOKEN" $ D.cutEmpty args where
     args = [ "line"           // D.pInt ln
            , "column"         // D.pInt $ B.cpColumnNo $ head $ B.getCPs tok
            , "token-type"     // D.pText $ S.subtypeName tok
@@ -183,19 +184,19 @@ descDict = B.CommentDoc [desc, js] where
              , "   /token-type is one of token types. |}" ]
 
 judgeClauseType :: C.Clause -> D.JudgeC
-judgeClauseType c = D.affirm "CLAUSE-TYPE" args where
+judgeClauseType c = T.affirm "CLAUSE-TYPE" args where
     args = [ "clause-type" // D.pText $ C.clauseTypeText c ]
 
 judgeTokenType :: S.Token -> D.JudgeC
-judgeTokenType t = D.affirm "TOKEN-TYPE" args where
+judgeTokenType t = T.affirm "TOKEN-TYPE" args where
     args = [ "token-type" // D.pText $ S.subtypeName t ]
 
 judgesClauseType :: [D.JudgeC]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause B.def x
     cs  = [ C.CRelmap "" []
-          , C.CAssert D.AssertAffirm "" []
-          , C.CJudge  D.AssertAffirm "" []
+          , C.CAssert T.AssertAffirm "" []
+          , C.CJudge  T.AssertAffirm "" []
           , C.CSlot "" []
           ]
 
@@ -214,7 +215,7 @@ judgesTokenType = map j cs where
 
 -- ----------------------  Utility
 
-putJudges :: (B.MixEncode c) => [D.Judge c] -> IO ()
+putJudges :: (B.MixEncode c) => [T.Judge c] -> IO ()
 putJudges = mapM_ putJudge
 
 putJudge :: (B.MixEncode a) => a -> IO ()

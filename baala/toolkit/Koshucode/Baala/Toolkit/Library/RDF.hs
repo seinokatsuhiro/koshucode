@@ -9,9 +9,10 @@ module Koshucode.Baala.Toolkit.Library.RDF
     RDFTupleType (..),
   ) where
 
-import qualified Data.RDF             as RDF
-import qualified Data.Text            as Tx
-import qualified Koshucode.Baala.Data as D
+import qualified Data.RDF              as RDF
+import qualified Data.Text             as Tx
+import qualified Koshucode.Baala.Type  as T
+import qualified Koshucode.Baala.Data  as D
 
 -- | Type of conversion
 data RDFTupleType
@@ -20,15 +21,15 @@ data RDFTupleType
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 -- | Convert RDF graph to list of judges.
-judgesFromRdf :: (RDF.RDF g, D.CText c) => RDFTupleType -> g -> [D.Judge c]
+judgesFromRdf :: (RDF.RDF g, D.CText c) => RDFTupleType -> g -> [T.Judge c]
 judgesFromRdf k g = map (judgeFromTriple k) $ RDF.triplesOf g
 
 -- | Convert RDF triple to affirmed judge.
-judgeFromTriple :: (D.CText c) => RDFTupleType -> RDF.Triple -> D.Judge c
+judgeFromTriple :: (D.CText c) => RDFTupleType -> RDF.Triple -> T.Judge c
 judgeFromTriple RDFTuple2 (RDF.Triple s p o) =
-    D.affirm (nodeString p) [("s", the s), ("o", the o)]
+    T.affirm (nodeString p) [("s", the s), ("o", the o)]
 judgeFromTriple RDFTuple3 (RDF.Triple s p o) =
-    D.affirm "RDF" [("s", the s), ("p", the p), ("o", the o)]
+    T.affirm "RDF" [("s", the s), ("p", the p), ("o", the o)]
 
 the :: (D.CText c) => RDF.Node -> c
 the = D.pText . nodeString

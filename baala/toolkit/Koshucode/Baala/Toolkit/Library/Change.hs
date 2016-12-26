@@ -20,6 +20,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 import qualified Data.Set                              as S
 import qualified Koshucode.Baala.System                as O
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Type                  as T
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Writer                as W
 import qualified Koshucode.Baala.Toolkit.Library.Input as L
@@ -46,8 +47,8 @@ minusInputJudge inputA inputB =
        return $ L.readJudge textA `minusJudge` L.readJudge textB
 
 -- | Calculate subtraction of judges.
-minusJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
-minusJudge judA judB = map D.denyJudge judC ++ judD where
+minusJudge :: (Ord c) => [T.Judge c] -> [T.Judge c] -> [T.Judge c]
+minusJudge judA judB = map T.denyJudge judC ++ judD where
     setA = S.fromList judA
     setB = S.fromList judB
     judC = S.toList $ setB `S.difference` setA
@@ -82,11 +83,11 @@ updateInput inputB inputC =
        W.putJudgesWith (O.exitCode 0) $ L.readJudge textB `updateJudge` L.readJudge textC
 
 -- | Apply change judges.
-updateJudge :: (Ord c) => [D.Judge c] -> [D.Judge c] -> [D.Judge c]
+updateJudge :: (Ord c) => [T.Judge c] -> [T.Judge c] -> [T.Judge c]
 updateJudge judB judC = judA where
     setB = S.fromList $ judB
-    denC = S.fromList $ map D.affirmJudge $ filter D.isDenial judC
-    affC = S.fromList $ filter D.isAffirmative judC
+    denC = S.fromList $ map T.affirmJudge $ filter T.isDenial judC
+    affC = S.fromList $ filter T.isAffirmative judC
     judA = S.toList $ setB `S.difference` denC `S.union` affC
 
 updateHead :: L.Input -> L.Input -> B.CommentDoc

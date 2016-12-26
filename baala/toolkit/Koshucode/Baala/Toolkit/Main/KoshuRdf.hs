@@ -17,6 +17,7 @@ import System.Console.GetOpt
 import qualified Koshucode.Baala.System                  as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax                  as S
+import qualified Koshucode.Baala.Type                    as T
 import qualified Koshucode.Baala.Data                    as D
 import qualified Koshucode.Baala.Toolkit.Library.RDF     as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
@@ -131,7 +132,7 @@ writeJudges sh js =
        putStrLn ""
        writeShort sh
        let mixes = B.mixTransEncode (S.shortText sh) <$> js
-       B.putMixLines D.judgeBreak mixes
+       B.putMixLines T.judgeBreak mixes
 
 writeShort :: [S.ShortDef] -> IO ()
 writeShort [] = return ()
