@@ -11,7 +11,7 @@ module Koshucode.Baala.Data.Church.Cop
     copNormal, copInternal, copPrefix, copInfix, copPostfix,
   
     -- * Operator set
-    CopSet (..), CopFind, copset,
+    CopSet (..), CopFind,
     copsetFill,
   ) where
 
@@ -93,15 +93,28 @@ data CopSet c = CopSet
 
 -- | Empty operator set.
 instance B.Default (CopSet c) where
-    def = CopSet [] [] [] [] [] O.nothing O.nothing O.nothing []
+    def = copset
+
+instance Monoid (CopSet c) where
+    mempty = copset
+    mappend s1 s2 = copsetFill $ copset
+                    { copsetCopList   = appendOn copsetCopList   s1 s2
+                    , copsetInfixList = appendOn copsetInfixList s1 s2
+                    , copsetCalcList  = appendOn copsetCalcList  s1 s2
+                    , copsetCoxList   = appendOn copsetCoxList   s1 s2
+                    , copsetTreeList  = appendOn copsetTreeList  s1 s2
+                    , copsetDerived   = appendOn copsetDerived   s1 s2
+                    }
+
+appendOn :: (a -> [b]) -> a -> a -> [b]
+appendOn f x y = f x ++ f y
 
 -- | Find content operator from its name.
 type CopFind f = S.BlankName -> Maybe f
 
 -- | Empty operator set.
-{-# DEPRECATED copset "Use 'def' instead." #-}
 copset :: CopSet c
-copset = B.def
+copset = CopSet [] [] [] [] [] O.nothing O.nothing O.nothing []
 
 -- | Complete operator set.
 copsetFill :: O.Map (CopSet c)
