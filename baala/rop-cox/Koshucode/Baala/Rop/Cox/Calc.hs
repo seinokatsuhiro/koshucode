@@ -174,8 +174,21 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 -- ----------------------  split
 
 -- | [split /\/N E/ ... -let { /D/ | ... }]
---     Split input relation by the boolean functions E ...,
---     and add terms \/N ... which has the splitted relations.
+--     Split input relation by the boolean functions /E/ ...,
+--     and add terms /\/N/ ... which has the splitted relations.
+--
+--   > RELMAP
+--   >   split /a ( /x = 1 )
+--   >         /b ( /y = 10 )
+--   > 
+--   > INPUT              OUTPUT
+--   >    /x    /y          /a          /b
+--   >    ----- -----       ----------- -----------
+--   >    1     10          /x    /y    /x    /y
+--   >    2     20          ----- ----- ----- -----
+--   >    3     10          1     10    3     10
+--   >    1     20          1     20
+--   >    2     30
 --
 consSplit :: (K.CContent c) => C.RopCons c
 consSplit med =
@@ -190,34 +203,30 @@ relmapSplit med = C.relmapFlow med . relkitSplit
 -- | Create @split@ relkit.
 relkitSplit :: forall c. (K.CContent c) => (K.CopSet c, [K.TermCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = C.relkitUnfixed
-relkitSplit (cops, cox) (Just he1)
-    | K.duplicated ns     = Msg.dupTerm ns
-    | K.preTermsExist pk  = Msg.reqNewTerm pk he1
-    | otherwise           = Right kit2
-    where
-      (ns, xs)   = unzip cox               -- names and expressions
-      pk         = K.termPicker ns he1
-      he2        = K.headNests ns he1
-      kit2       = C.relkitWholeAb False he2 flow
-      flow bo1   = do let fs2 = K.coxRunList cops he1 <$> xs
-                      cs2 <- split fs2 bo1
-                      Right [cs2]
+relkitSplit (cops, cox) (Just he1) = Rop.newCheck pk kit where
+    (ns, xs)   = unzip cox               -- names and expressions
+    pk         = K.termPicker ns he1
+    he2        = K.headNests ns he1
+    kit        = Right $ C.relkitWholeAb False he2 flow
+    flow bo    = do let fs = K.calcTuple cops he1 <$> xs
+                    cs2 <- split fs bo
+                    Right [cs2]
 
-      split :: [K.RunList c] -> [[c]] -> K.Ab [c]
-      split [] _ = Right []
-      split (f : fs2) bo1 =
-          do bo2 <- run f `mapM` bo1
-             let first = filter fst bo2
-                 rest  = map snd $ K.omit fst bo2
-             rest' <- split fs2 rest
-             let rel = K.Rel he1 $ map snd first
-             Right $ K.pRel rel : rest'
+    split :: [K.CalcTuple c] -> [[c]] -> K.Ab [c]
+    split [] _ = Right []
+    split (f : fs) bo1 =
+        do bo2 <- run f `mapM` bo1
+           let first = filter fst bo2
+               rest  = map snd $ K.omit fst bo2
+           rest' <- split fs rest
+           let rel = K.Rel he1 $ map snd first
+           Right $ K.pRel rel : rest'
 
-      run :: K.RunList c -> [c] -> K.Ab (Bool, [c])
-      run f cs = do c <- f cs
-                    case K.isBool c of
-                      True  -> Right (K.gBool c, cs)
-                      False -> Msg.reqBool
+    run :: K.CalcTuple c -> [c] -> K.Ab (Bool, [c])
+    run f cs = do c <- f cs
+                  case K.isBool c of
+                    True  -> Right (K.gBool c, cs)
+                    False -> Msg.reqBool
 
 
 -- ----------------------  unary

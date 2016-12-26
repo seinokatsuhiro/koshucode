@@ -4,8 +4,8 @@
 -- | Term-content calculation.
 
 module Koshucode.Baala.Data.Church.Run
-  ( RunList,
-    coxRunCox, coxRunList,
+  ( CalcTuple,
+    coxRunCox, calcTuple,
     calcContent,
   
     -- * Getting arguments
@@ -148,22 +148,21 @@ position he = spos where
 -- --------------------------------------------  Run
 
 -- | Tuple-to-content calculation.
-type RunList c = [c] -> B.Ab c
+type CalcTuple c = [c] -> B.Ab c
 
 -- | Calculate content expression with specific tuple.
 coxRunCox :: (D.CContent c) => D.CopSet c -> T.Head -> [c] -> D.Cox c -> B.Ab c
-coxRunCox cops he cs cox = coxRunList cops he cox cs
+coxRunCox cops he cs cox = calcTuple cops he cox cs
 
-coxRunPure :: (D.CContent c) => D.CopSet c -> D.Cox c -> B.Ab c
-coxRunPure cops cox = coxRunList cops mempty cox []
+-- | Create tuple calculator from content expression.
+calcTuple :: (D.CContent c) => D.CopSet c -> T.Head -> D.Cox c -> CalcTuple c
+calcTuple cops he cox cs = coxRun cs =<< beta cops he cox
 
--- | Calculate content expression with specific tuple.
-coxRunList :: (D.CContent c) => D.CopSet c -> T.Head -> D.Cox c -> RunList c
-coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
-
--- | Calculate content expression.
+-- | Calculate token tree as content expression.
 calcContent :: (D.CContent c) => D.CopSet c -> D.CalcContent c
-calcContent cops tree = coxRunPure cops =<< D.treeCox cops tree
+calcContent cops tree =
+    do cox <- D.treeCox cops tree
+       calcTuple cops mempty cox []
 
 -- | Calculate content expression.
 coxRun
