@@ -10,7 +10,6 @@ module Koshucode.Baala.Rop.Base.Get.Get
     getTrees,
     getWith, getWithAb,
     getTree, 
-    getTreesByColon,
 
     -- * Basic
     getTag, getTags,
@@ -62,10 +61,6 @@ getWithAb f med name =
 -- | Get tree from relmap parameter.
 getTree :: RopGet K.Tree c
 getTree = getWith K.ttreeGroup
-
--- | Get trees delimited by colon.
-getTreesByColon :: RopGet [[K.Tree]] c
-getTreesByColon = getWith (K.omit null . K.divideTreesByColon)
 
 
 -- ----------------------  Basic

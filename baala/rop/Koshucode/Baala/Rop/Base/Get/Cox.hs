@@ -8,10 +8,12 @@ module Koshucode.Baala.Rop.Base.Get.Cox
     getFiller, getInt,
     getNamedContentTerms, getOptContentTerms,
 
-    -- * Cox
+    -- * Content expression
     getCox, getMaybeCox, getOptCox,
     getCoxTerms, getNamedCoxTerms, getOptCoxTerms,
-    getWhere, getLet,
+
+    -- * Derived expression
+    getLet,
   ) where
 
 import Prelude hiding (getContents)
@@ -119,9 +121,9 @@ optCoxTerms :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> [K.Term [K.T
 optCoxTerms f = mapM . optCox f
 
 
--- --------------------------------------------  Where
+-- --------------------------------------------  Let
 
--- | Get @-let@ parameter as set of derived functions.
+-- | Get @-let@ style parameter as set of derived functions.
 getLet :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getLet med name =
     do fs <- Rop.getOpt [] getLetBody med name
@@ -156,6 +158,7 @@ getLetHead (n : vs) =
        vs' <- treeRawText K.<#> vs
        Right (n', vs')
 
+-- | Extract definition form: /L/ = /R/
 treesEqDef :: [K.Tree] -> K.Ab (K.Twin [K.Tree])
 treesEqDef ts =
     case K.divideTreesByEqual ts of
@@ -166,16 +169,4 @@ treesEqDef ts =
 treeRawText :: K.Tree -> K.Ab String
 treeRawText (P.LRaw n) = Right n
 treeRawText t          = Msg.abPara t Msg.reqRawText
-
--- | Get @-where@ parameter as operator set.
-getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
-getWhere med name =
-    do wh <- Rop.getOpt [] getWhereBody med name
-       let cops = C.ropCopset med
-       Right $ cops { K.copsetDerived = wh }
-
-getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
-getWhereBody med name =
-    do xs <- Rop.getTreesByColon med name
-       getLetClause med K.<#> xs
 
