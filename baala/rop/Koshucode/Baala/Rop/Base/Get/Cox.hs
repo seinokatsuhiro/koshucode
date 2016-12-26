@@ -11,7 +11,7 @@ module Koshucode.Baala.Rop.Base.Get.Cox
     -- * Cox
     getCox, getMaybeCox, getOptCox,
     getCoxTerms, getNamedCoxTerms, getOptCoxTerms,
-    getWhere,
+    getWhere, getLet,
   ) where
 
 import Prelude hiding (getContents)
@@ -121,6 +121,52 @@ optCoxTerms f = mapM . optCox f
 
 -- --------------------------------------------  Where
 
+-- | Get @-let@ parameter as set of derived functions.
+getLet :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
+getLet med name =
+    do fs <- Rop.getOpt [] getLetBody med name
+       let cops = C.ropCopset med
+       Right $ cops { K.copsetDerived = fs }
+
+getLetBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
+getLetBody med name =
+    do ts <- getLetTrees med name
+       getLetClause med K.<#> ts
+
+-- | Get trees delimited by vertical bar.
+getLetTrees :: Rop.RopGet [[K.Tree]] c
+getLetTrees = Rop.getWith (K.omit null . parse) where
+    parse [P.BSet ts] = K.divideTreesByBar ts
+    parse ts          = [ts]
+
+getLetClause :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.Ab (K.NamedCox c)
+getLetClause med ts =
+    Msg.abPara ts $ do
+      (lhs, rhs) <- treesEqDef ts
+      (n, vs)    <- getLetHead lhs
+      cox        <- buildCox med $ K.ttreeGroup rhs
+      case vs of
+        [] -> Right (n, cox)
+        _  -> Right (n, K.coxForm ts (Just n) vs cox)
+
+getLetHead :: [K.Tree] -> K.Ab (String, [String])
+getLetHead [] = Msg.reqRawText
+getLetHead (n : vs) =
+    do n'  <- treeRawText n
+       vs' <- treeRawText K.<#> vs
+       Right (n', vs')
+
+treesEqDef :: [K.Tree] -> K.Ab (K.Twin [K.Tree])
+treesEqDef ts =
+    case K.divideTreesByEqual ts of
+      [lhs, rhs] -> Right (lhs, rhs)
+      _          -> Msg.abPara ts Msg.reqSingleEqual
+
+-- | Extract raw text from token tree.
+treeRawText :: K.Tree -> K.Ab String
+treeRawText (P.LRaw n) = Right n
+treeRawText t          = Msg.abPara t Msg.reqRawText
+
 -- | Get @-where@ parameter as operator set.
 getWhere :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getWhere med name =
@@ -131,31 +177,5 @@ getWhere med name =
 getWhereBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c
 getWhereBody med name =
     do xs <- Rop.getTreesByColon med name
-       getWhereClause med K.<#> xs
+       getLetClause med K.<#> xs
 
-getWhereClause :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.Ab (K.NamedCox c)
-getWhereClause med trees =
-    do (he, bo) <- getTreesByEqual trees
-       (n, vs)  <- getWhereHead he
-       cox      <- buildCox med $ K.ttreeGroup bo
-       let cp = K.getCPs $ head $ K.untrees trees
-       case vs of
-         [] -> Right (n, cox)
-         _  -> Right (n, K.coxForm cp (Just n) vs cox)
-
-getWhereHead :: [K.Tree] -> K.Ab (String, [String])
-getWhereHead [] = Msg.adlib "getWhereHead"
-getWhereHead (n : vs) =
-    do n'  <- getTextFromTree n
-       vs' <- mapM getTextFromTree vs
-       Right (n', vs')
-
-getTreesByEqual :: [K.Tree] -> K.Ab ([K.Tree], [K.Tree])
-getTreesByEqual trees =
-    case K.divideTreesByEqual trees of
-      [left, right] -> Right (left, right)
-      _             -> Msg.adlib "getTreesByEqual"
-
-getTextFromTree :: K.Tree -> K.Ab String
-getTextFromTree (P.LRaw n) = Right n
-getTextFromTree _ = Msg.adlib "getTextFromTree"

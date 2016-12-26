@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Rop.Base.Message
   ( module Koshucode.Baala.Core.Message,
+    abPara,
 
     -- * Messages
     -- ** Terms
@@ -15,6 +16,8 @@ module Koshucode.Baala.Rop.Base.Message
 
     -- ** Require
     reqBool,
+    reqRawText,
+    reqSingleEqual,
     reqCollection,
     reqInterp,
     reqRel,
@@ -36,6 +39,11 @@ module Koshucode.Baala.Rop.Base.Message
 import Koshucode.Baala.Core.Message
 import qualified Koshucode.Baala.DataPlus  as K
 import qualified Koshucode.Baala.Core      as C
+
+
+-- | Abortable scope for relmap parameter.
+abPara :: (K.GetCodePos cp) => K.Abortable cp b
+abPara = K.abortable "parameter"
 
 
 -- ============================================  Messages
@@ -80,6 +88,14 @@ unmatchShare e a =
 -- | [Require Boolean]
 reqBool :: K.Ab a
 reqBool = K.leftBecause "Require Boolean"
+
+-- | [Require unquoted text]
+reqRawText :: K.Ab a
+reqRawText = K.leftBecause "Require unquoted text"
+
+-- | [Require single equal sign]
+reqSingleEqual :: K.Ab a
+reqSingleEqual = K.leftBecause "Require single equal sign"
 
 -- | [Require collection]
 reqCollection :: K.Ab a
