@@ -10,6 +10,7 @@ import qualified System.Console.GetOpt                 as G
 import qualified System.IO                             as IO
 import qualified Koshucode.Baala.System                as O
 import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Type                  as T
 import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core                  as C
 import qualified Koshucode.Baala.Toolkit.Library.Run   as L
@@ -46,7 +47,7 @@ koshuFilter :: (D.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> IO In
 koshuFilter g withRes =
   do (prog, argv) <- B.progAndArgs
      proxy        <- L.getProxies
-     today        <- D.today
+     today        <- T.today
      case G.getOpt G.Permute options argv of
        (opts, paths, [])
            | has OptHelp     -> O.putSuccess usage

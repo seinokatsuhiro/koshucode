@@ -10,6 +10,7 @@ module Koshucode.Baala.Toolkit.Library.Element
 import qualified Koshucode.Baala.Overture  as O
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Syntax    as S
+import qualified Koshucode.Baala.Type      as T
 import qualified Koshucode.Baala.Data      as D
 import qualified Koshucode.Baala.Core      as C
 
@@ -48,55 +49,55 @@ infixr 0 //
 --     Judges of class @\/pat@ with terms @\/terms@
 --     are read from the resource @\/res@.
 --
-resourceElem :: (D.CContent c) => C.Resource c -> [D.Judge c]
+resourceElem :: (D.CContent c) => C.Resource c -> [T.Judge c]
 resourceElem res = map art js where
-    art  = D.judgeAdd ("point" // path)
+    art  = T.judgeAdd ("point" // path)
     path = D.pText $ B.ioPointText $ B.nioPoint $ head $ C.resIncluded res
     ass  = map S.shortBody $ C.resAssert res
     js   = concat [ elemJudge       $ C.resJudge res
                   , elemAssert      $ ass
                   , elemNamedRelmap $ concatMap C.assLinks ass ]
 
-elemJudge :: (D.CContent c) => O.Map [D.Judge c]
+elemJudge :: (D.CContent c) => O.Map [T.Judge c]
 elemJudge = B.unique . concatMap f where
-    f j = map (term $ D.getClass j) (D.getTerms j)
-    term p (n, c) = D.affirm "KOSHU-JUDGE-TERM"
+    f j = map (term $ T.getClass j) (T.getTerms j)
+    term p (n, c) = T.affirm "KOSHU-JUDGE-TERM"
                     [ "pat"     // D.pText p
                     , "name"    // D.pText $ S.termNameContent n
                     , "content" // c ]
 
-elemAssert :: (D.CContent c) => [C.Assert c] -> [D.Judge c]
+elemAssert :: (D.CContent c) => [C.Assert c] -> [T.Judge c]
 elemAssert = B.unique . concatMap f where
     f (C.Assert _ _ _ _ _ Nothing _) = B.bug "elemAssert"
     f (C.Assert _ t pat _ _ (Just r) _) =
         let p     = "name" // D.pText pat
-            ass   = D.affirm (quality t) [p]
-            rmaps = D.judgeAdd p `map` elemRelmap r
+            ass   = T.affirm (quality t) [p]
+            rmaps = T.judgeAdd p `map` elemRelmap r
         in ass : rmaps
 
-    quality D.AssertAffirm       = "KOSHU-AFFIRM"
-    quality D.AssertDeny         = "KOSHU-DENY"
-    quality D.AssertMultiDeny    = "KOSHU-MULTI-DENY"
-    quality D.AssertChange       = "KOSHU-CHANGE"
-    quality D.AssertMultiChange  = "KOSHU-MULTI-CHANGE"
-    quality D.AssertViolate      = "KOSHU-VIOLATE"
+    quality T.AssertAffirm       = "KOSHU-AFFIRM"
+    quality T.AssertDeny         = "KOSHU-DENY"
+    quality T.AssertMultiDeny    = "KOSHU-MULTI-DENY"
+    quality T.AssertChange       = "KOSHU-CHANGE"
+    quality T.AssertMultiChange  = "KOSHU-MULTI-CHANGE"
+    quality T.AssertViolate      = "KOSHU-VIOLATE"
 
-elemNamedRelmap :: (D.CContent c) => C.RelmapLinkTable c -> [D.Judge c]
+elemNamedRelmap :: (D.CContent c) => C.RelmapLinkTable c -> [T.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f (lx, relmap) = D.judgeAdd ("name" // D.pText $ C.lexName lx)
+    f (lx, relmap) = T.judgeAdd ("name" // D.pText $ C.lexName lx)
                         `map` elemRelmap relmap
 
-elemRelmap :: (D.CContent c) => C.Relmap c -> [D.Judge c]
+elemRelmap :: (D.CContent c) => C.Relmap c -> [T.Judge c]
 elemRelmap relmap = name : f relmap where
-    name          = D.affirm "KOSHU-RELMAP-NAME" []
+    name          = T.affirm "KOSHU-RELMAP-NAME" []
     op lx         = let p = opType lx
                         n = C.lexName lx
-                    in D.affirm p [ "rop" // D.pText n ]
+                    in T.affirm p [ "rop" // D.pText n ]
     opType lx     = case C.lexType lx of
                       C.LexmapBase    -> "KOSHU-RELMAP-BASE"
                       C.LexmapDerived -> "KOSHU-RELMAP-DERIV"
                       C.LexmapLocal   -> "KOSHU-RELMAP-LOCAL"
-    src p xs      = D.affirm "KOSHU-RELMAP-SOURCE"
+    src p xs      = T.affirm "KOSHU-RELMAP-SOURCE"
                       [ "pat"   // D.pText p
                       , "terms" // D.pTermSet xs ]
 

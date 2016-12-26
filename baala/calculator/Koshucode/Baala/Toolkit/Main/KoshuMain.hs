@@ -11,6 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 import qualified Koshucode.Baala.Overture                 as O
 import qualified Koshucode.Baala.System                   as O
 import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Type                     as T
 import qualified Koshucode.Baala.Data                     as D
 import qualified Koshucode.Baala.Core                     as C
 import qualified Koshucode.Baala.Writer                   as W
@@ -55,7 +56,7 @@ data Param c = Param
     , paramProg          :: String
     , paramArgs          :: [String]
     , paramProxy         :: [(String, Maybe String)]
-    , paramNow           :: D.Time
+    , paramNow           :: T.Time
     } deriving (Show)
 
 initParam :: (Show c, D.CContent c, W.ToJSON c) => Z.Parsed -> IO (Param c)
@@ -109,7 +110,7 @@ initParam (Right (z, args)) =
 
       currentTime = case D.stringTime $ unwords $ getReq "now" of
                       Right t -> return t
-                      Left _  -> D.nowZoned
+                      Left _  -> T.nowZoned
 
 
 -- ----------------------  Main
