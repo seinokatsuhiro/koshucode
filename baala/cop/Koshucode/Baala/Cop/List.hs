@@ -11,6 +11,7 @@ module Koshucode.Baala.Cop.List
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Type              as T
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Cop.Coxhand       as H
 import qualified Koshucode.Baala.Cop.Replace       as Cop
@@ -85,7 +86,7 @@ copList argC = do arg <- sequence argC
 
 copTotal :: (D.CContent c) => D.CopCalc c
 copTotal = op where
-    op [Right c] | D.isList c = D.putDec =<< D.decimalSum (map D.gDec $ D.gList c)
+    op [Right c] | D.isList c = D.putDec =<< T.decimalSum (map D.gDec $ D.gList c)
     op xs = Msg.badArg xs
 
 copMin :: (D.CContent c) => D.CopCalc c
@@ -105,7 +106,7 @@ copLength = op where
     op [Right c] | D.isList c  = len c D.gList
                  | D.isSet  c  = len c D.gSet
                  | D.isText c  = len c D.gText
-                 | D.isRel  c  = len c (D.relBody . D.gRel)
+                 | D.isRel  c  = len c (T.relBody . D.gRel)
     op xs = Msg.badArg xs
 
     len c f = Right . D.pInt $ length (f c)
@@ -204,7 +205,7 @@ copTakeOrDrop (f, g) arg =
           then collMap (f $ int n', g $ int n') xs'
           else Msg.badArg arg
     where
-      int = fromInteger . D.decimalNum . D.gDec
+      int = fromInteger . T.decimalNum . D.gDec
 
 
 -- ----------------------  drop-take
@@ -229,7 +230,7 @@ dropTakeCop fg arg =
           then dropTakeDispatch fg arg (int d') (int t') xs'
           else Msg.badArg arg
     where
-      int = fromInteger . D.decimalNum . D.gDec
+      int = fromInteger . T.decimalNum . D.gDec
 
 dropTakeDispatch :: (D.CContent c) => DropTake2 c -> [B.Ab c] -> Int -> Int -> c -> B.Ab c
 dropTakeDispatch (f, g) arg d t xs'
@@ -303,6 +304,6 @@ copReplace rep = op where
 -- term-set {| aaa /x bbb /y ccc |} => { '/x | '/y }
 copTermSet :: (D.CContent c) => D.CopCalc c
 copTermSet [Right c] | D.isInterp c = D.putSet ts where
-                     ts = map D.pTerm $ D.interpTerms $ D.gInterp c
+                     ts = map D.pTerm $ T.interpTerms $ D.gInterp c
 copTermSet xs = Msg.badArg xs
 

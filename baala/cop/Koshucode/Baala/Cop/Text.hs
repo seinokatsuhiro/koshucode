@@ -12,6 +12,7 @@ import qualified Data.Char                        as Ch
 import qualified Koshucode.Baala.Overture         as O
 import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Syntax           as S
+import qualified Koshucode.Baala.Type             as T
 import qualified Koshucode.Baala.Data             as D
 import qualified Koshucode.Baala.Rop.Base.Message as Msg
 
@@ -104,7 +105,7 @@ isText2 x y = D.isText x && D.isText y
 -- char 70 => "F"
 copChar :: (D.CContent c) => D.CopCalc c
 copChar = op where
-    op [Right c] | D.isDec c = D.putText [Ch.chr $ fromInteger $ D.decimalNum $ D.gDec c]
+    op [Right c] | D.isDec c = D.putText [Ch.chr $ fromInteger $ T.decimalNum $ D.gDec c]
     op xs = Msg.badArg xs
 
 -- code-list "abc" => [ 97 : 98 : 99 ]
@@ -227,7 +228,7 @@ wordList :: (D.CContent c) => c -> [String]
 wordList c
     | D.isList c  = concatMap wordList $ D.gList c
     | D.isText c  = [D.gText c]
-    | D.isDec c   = [D.encodeDecimal $ D.gDec c]
+    | D.isDec c   = [T.encodeDecimal $ D.gDec c]
     | otherwise   = []
 
 

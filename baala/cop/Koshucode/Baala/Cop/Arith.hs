@@ -10,6 +10,7 @@ module Koshucode.Baala.Cop.Arith
 
 import qualified Koshucode.Baala.Overture          as O
 import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Type              as T
 import qualified Koshucode.Baala.Data              as D
 import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 
@@ -82,25 +83,25 @@ copsArith =
 
     -- ----------------------  add and subtract
 
-    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 D.FracleLong
-    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 D.FracleLeft
-    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 D.FracleRight
-    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 D.FracleStrict
+    , D.CopCalc  (D.copInfix  "+")    $ copPlus2 T.FracleLong
+    , D.CopCalc  (D.copInfix  ".+")   $ copPlus2 T.FracleLeft
+    , D.CopCalc  (D.copInfix  "+.")   $ copPlus2 T.FracleRight
+    , D.CopCalc  (D.copInfix  ".+.")  $ copPlus2 T.FracleStrict
 
-    , D.CopCalc  (D.copNormal "+")    $ copPlus D.FracleLong
-    , D.CopCalc  (D.copNormal ".+")   $ copPlus D.FracleLeft
-    , D.CopCalc  (D.copNormal "+.")   $ copPlus D.FracleRight
-    , D.CopCalc  (D.copNormal ".+.")  $ copPlus D.FracleStrict
+    , D.CopCalc  (D.copNormal "+")    $ copPlus T.FracleLong
+    , D.CopCalc  (D.copNormal ".+")   $ copPlus T.FracleLeft
+    , D.CopCalc  (D.copNormal "+.")   $ copPlus T.FracleRight
+    , D.CopCalc  (D.copNormal ".+.")  $ copPlus T.FracleStrict
 
-    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 D.FracleLong
-    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 D.FracleLeft
-    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 D.FracleRight
-    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 D.FracleStrict
+    , D.CopCalc  (D.copInfix  "-")    $ copMinus2 T.FracleLong
+    , D.CopCalc  (D.copInfix  ".-")   $ copMinus2 T.FracleLeft
+    , D.CopCalc  (D.copInfix  "-.")   $ copMinus2 T.FracleRight
+    , D.CopCalc  (D.copInfix  ".-.")  $ copMinus2 T.FracleStrict
 
-    , D.CopCalc  (D.copNormal "-")    $ copMinus2 D.FracleLong
-    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 D.FracleLeft
-    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 D.FracleRight
-    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 D.FracleStrict
+    , D.CopCalc  (D.copNormal "-")    $ copMinus2 T.FracleLong
+    , D.CopCalc  (D.copNormal ".-")   $ copMinus2 T.FracleLeft
+    , D.CopCalc  (D.copNormal "-.")   $ copMinus2 T.FracleRight
+    , D.CopCalc  (D.copNormal ".-.")  $ copMinus2 T.FracleStrict
 
     -- ----------------------  multiply and divide
 
@@ -118,22 +119,22 @@ copsArith =
     ]
 
 
-copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab D.Decimal
+copDec :: (Show c, D.CText c, D.CDec c) => B.Ab c -> B.Ab T.Decimal
 copDec (Right c) | D.isDec  c = Right $ D.gDec c
-                 | D.isText c = D.decodeDecimal $ D.gText c
+                 | D.isText c = T.decodeDecimal $ D.gText c
 copDec x = Msg.notNumber (show x)
 
-getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab D.Decimal
+getDecFrom :: (D.CDec c, D.CText c) => c -> B.Ab T.Decimal
 getDecFrom c | D.isDec  c  = Right $ D.gDec c
-             | D.isText c  = D.decodeDecimal $ D.gText c
+             | D.isText c  = T.decodeDecimal $ D.gText c
              | otherwise   = Right 0
 
-getDec1 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab D.Decimal
+getDec1 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab T.Decimal
 getDec1 arg =
     do x' <- D.getRightArg1 arg
        getDecFrom x'
 
-getDec2 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab (D.Decimal, D.Decimal)
+getDec2 :: (D.CDec c, D.CText c) => [B.Ab c] -> B.Ab (T.Decimal, T.Decimal)
 getDec2 arg =
     do (x', y') <- D.getRightArg2 arg
        x <- getDecFrom x'
@@ -143,12 +144,12 @@ getDec2 arg =
 copIntPart :: (D.CText c, D.CDec c) => D.CopCalc c
 copIntPart arg =
     do a <- getDec1 arg
-       D.putDec $ D.decimalIntPart a
+       D.putDec $ T.decimalIntPart a
 
 copFracPart :: (D.CText c, D.CDec c) => D.CopCalc c
 copFracPart arg =
     do a <- getDec1 arg
-       D.putDec $ D.decimalFracPart a
+       D.putDec $ T.decimalFracPart a
 
 copAbs :: (D.CContent c) => D.CopCalc c
 copAbs [Right c] | D.isList c = Right . D.pList =<< mapM copAbs1 (D.gList c)
@@ -184,56 +185,56 @@ copRoundUp       :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundUpAt     :: (D.CText c, D.CDec c) => D.CopCalc c
 copRoundUpPer    :: (D.CText c, D.CDec c) => D.CopCalc c
 
-copRound         = round1 D.decimalRound
-copRoundAt       = round2 D.decimalRoundAt
-copRoundPer      = round2 D.decimalRoundPer
+copRound         = round1 T.decimalRound
+copRoundAt       = round2 T.decimalRoundAt
+copRoundPer      = round2 T.decimalRoundPer
 
-copRoundEven     = round1 D.decimalRoundEven
-copRoundEvenAt   = round2 D.decimalRoundEvenAt
-copRoundEvenPer  = round2 D.decimalRoundEvenPer
+copRoundEven     = round1 T.decimalRoundEven
+copRoundEvenAt   = round2 T.decimalRoundEvenAt
+copRoundEvenPer  = round2 T.decimalRoundEvenPer
 
-copRoundIn       = round1 D.decimalTrunc
-copRoundInAt     = round2 D.decimalTruncAt
-copRoundInPer    = round2 D.decimalTruncPer
-copTruncError    = round1 D.decimalTruncError
+copRoundIn       = round1 T.decimalTrunc
+copRoundInAt     = round2 T.decimalTruncAt
+copRoundInPer    = round2 T.decimalTruncPer
+copTruncError    = round1 T.decimalTruncError
 
-copRoundOut      = round1 D.decimalRoundOut
-copRoundOutAt    = round2 D.decimalRoundOutAt
-copRoundOutPer   = round2 D.decimalRoundOutPer
+copRoundOut      = round1 T.decimalRoundOut
+copRoundOutAt    = round2 T.decimalRoundOutAt
+copRoundOutPer   = round2 T.decimalRoundOutPer
 
-copRoundDown     = round1 D.decimalFloor
-copRoundDownAt   = round2 D.decimalFloorAt
-copRoundDownPer  = round2 D.decimalFloorPer
+copRoundDown     = round1 T.decimalFloor
+copRoundDownAt   = round2 T.decimalFloorAt
+copRoundDownPer  = round2 T.decimalFloorPer
 
-copRoundUp       = round1 D.decimalCeil
-copRoundUpAt     = round2 D.decimalCeilAt
-copRoundUpPer    = round2 D.decimalCeilPer
+copRoundUp       = round1 T.decimalCeil
+copRoundUpAt     = round2 T.decimalCeilAt
+copRoundUpPer    = round2 T.decimalCeilPer
 
-round1 :: (D.CText c, D.CDec c) => O.Map D.Decimal -> [B.Ab c] -> B.Ab c
+round1 :: (D.CText c, D.CDec c) => O.Map T.Decimal -> [B.Ab c] -> B.Ab c
 round1 f arg = 
     do dec <- getDec1 arg
        D.putDec $ f dec
 
-round2 :: (D.CText c, D.CDec c) => O.Bin D.Decimal -> [B.Ab c] -> B.Ab c
+round2 :: (D.CText c, D.CDec c) => O.Bin T.Decimal -> [B.Ab c] -> B.Ab c
 round2 f arg = 
     do (per, dec) <- getDec2 arg
        D.putDec $ f per dec
 
 -- --------------------------------------------  Add and subtract
 
-copPlus :: (Show c, D.CText c, D.CDec c) => D.FracleSide -> D.CopCalc c
+copPlus :: (Show c, D.CText c, D.CDec c) => T.FracleSide -> D.CopCalc c
 copPlus pr xs = fmap D.pDec $ loop xs where
     loop [] = Right 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      (D.decimalAdd pr) n' m'
+                      (T.decimalAdd pr) n' m'
 
-copPlus2 :: (D.CContent c) => D.FracleSide -> D.CopCalc c
+copPlus2 :: (D.CContent c) => T.FracleSide -> D.CopCalc c
 copPlus2 pr [Right xc, Right yc]
-    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
-    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockAdd       (D.gClock xc) (D.gClock yc)
-    | D.isTime  xc && D.isClock yc = D.putTime  =<< D.timeAddClock   (D.gClock yc) (D.gTime  xc) 
-    | D.isClock xc && D.isTime  yc = D.putTime  =<< D.timeAddClock   (D.gClock xc) (D.gTime  yc)
+    | D.isDec   xc && D.isDec   yc = D.putDec   =<< T.decimalAdd pr  (D.gDec   xc) (D.gDec   yc)
+    | D.isClock xc && D.isClock yc = D.putClock =<< T.clockAdd       (D.gClock xc) (D.gClock yc)
+    | D.isTime  xc && D.isClock yc = D.putTime  =<< T.timeAddClock   (D.gClock yc) (D.gTime  xc) 
+    | D.isClock xc && D.isTime  yc = D.putTime  =<< T.timeAddClock   (D.gClock xc) (D.gTime  yc)
 copPlus2 _ xs = Msg.badArg xs
 
 copPlus1 :: (D.CContent c) => D.CopCalc c
@@ -248,13 +249,13 @@ copMul xs = fmap D.pDec $ loop xs where
     loop [] = Right 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      D.decimalMul n' m'
+                      T.decimalMul n' m'
 
-copMinus2 :: (D.CContent c) => D.FracleSide -> D.CopCalc c
+copMinus2 :: (D.CContent c) => T.FracleSide -> D.CopCalc c
 copMinus2 pr [Right xc, Right yc]
-    | D.isDec   xc && D.isDec   yc = D.putDec   =<< D.decimalSub pr (D.gDec   xc) (D.gDec   yc)
-    | D.isClock xc && D.isClock yc = D.putClock =<< D.clockSub      (D.gClock xc) (D.gClock yc)
-    | D.isTime  xc && D.isTime  yc = D.putClock =<< D.timeDiff      (D.gTime  xc) (D.gTime  yc)
+    | D.isDec   xc && D.isDec   yc = D.putDec   =<< T.decimalSub pr (D.gDec   xc) (D.gDec   yc)
+    | D.isClock xc && D.isClock yc = D.putClock =<< T.clockSub      (D.gClock xc) (D.gClock yc)
+    | D.isTime  xc && D.isTime  yc = D.putClock =<< T.timeDiff      (D.gTime  xc) (D.gTime  yc)
 copMinus2 _ xs = Msg.badArg xs
 
 copMinus1 :: (D.CContent c) => D.CopCalc c
@@ -274,12 +275,12 @@ copDiv arg =
 copQuo :: (D.CText c, D.CDec c) => D.CopCalc c
 copQuo arg =
     do (a, b) <- getDec2 arg
-       c <- D.decimalQuo a b
+       c <- T.decimalQuo a b
        D.putDec c
 
 copRem :: (D.CText c, D.CDec c) => D.CopCalc c
 copRem arg =
     do (a, b) <- getDec2 arg
-       c <- D.decimalRem a b
+       c <- T.decimalRem a b
        D.putDec c
 
