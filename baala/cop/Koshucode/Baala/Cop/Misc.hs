@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Content operators.
@@ -85,13 +86,10 @@ treeOrList [x] = x
 treeOrList xs = S.ttreeGroup $ (nameLeaf $ D.copNormal "or") : xs
 
 copFunIf  :: (D.CBool c, D.CEmpty c) => D.CopCalc c
-copFunIf arg =
-    do (testC, conC, altC) <- D.getArg3 arg
-       test <- testC
-       testB <- D.getBool $ Right test
-       case testB of
-         True  -> conC
-         False -> altC
+copFunIf [D.getBool -> Right testB, conC, altC]
+    | testB      = conC
+    | otherwise  = altC
+copFunIf cs = Msg.badArg cs
 
 --  if TEST -> CON | ALT 
 --  if TEST -> CON

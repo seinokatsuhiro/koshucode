@@ -8,7 +8,6 @@ module Koshucode.Baala.Data.Church.Run
     calcCox, calcTree,
 
     -- * Getting arguments
-    getArg1, getArg2, getArg3,
     getRightArg1, getRightArg2, getRightArg3,
   ) where
 
@@ -208,30 +207,18 @@ list !!! index = loop index list where
 
 -- --------------------------------------------  getArgN
 
--- | Extract single argument.
-getArg1 :: (D.Basis c) => [B.Ab c] -> B.Ab (B.Ab c)
-getArg1 [x]       = Right x
-getArg1 xs        = Msg.badArg xs
-
--- | Extract two arguments.
-getArg2 :: (D.Basis c) => [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
-getArg2 [x, y]    = Right (x, y)
-getArg2 xs        = Msg.badArg xs
-
--- | Extract three arguments.
-getArg3 :: (D.Basis c) => [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
-getArg3 [x, y, z] = Right (x, y, z)
-getArg3 xs        = Msg.badArg xs
-
 -- | Extract single non-abortable argument.
 getRightArg1 :: (D.Basis c) => [B.Ab c] -> B.Ab c
-getRightArg1 = getArg1 B.>=> id
+getRightArg1 [Right x] = Right x
+getRightArg1 cs = Msg.badArg cs
 
 -- | Extract two non-abortable arguments.
 getRightArg2 :: (D.Basis c) => [B.Ab c] -> B.Ab (c, c)
-getRightArg2 = getArg2 B.>=> B.right2
+getRightArg2 [Right x, Right y] = Right (x, y)
+getRightArg2 cs = Msg.badArg cs
 
 -- | Extract three non-abortable arguments.
 getRightArg3 :: (D.Basis c) => [B.Ab c] -> B.Ab (c, c, c)
-getRightArg3 = getArg3 B.>=> B.right3
+getRightArg3 [Right x, Right y, Right z] = Right (x, y, z)
+getRightArg3 cs = Msg.badArg cs
 
