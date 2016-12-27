@@ -152,20 +152,21 @@ type CalcTuple c = [c] -> B.Ab c
 
 -- | [Cox-to-Tuple-to-Content]
 --     Create tuple calculator from content expression.
-calcTuple :: (D.CContent c) => D.CopSet c -> T.Head -> D.Cox c -> CalcTuple c
-calcTuple cops he cox cs = coxRun cs =<< beta cops he cox
+calcTuple :: (D.GetCops cops, D.CContent c) => cops c -> T.Head -> D.Cox c -> CalcTuple c
+calcTuple cops he cox cs = coxRun cs =<< beta (D.getCops cops) he cox
 
 -- | [Tuple-to-Cox-to-Content]
 --     Calculate content expression with specific tuple.
-calcCox :: (D.CContent c) => D.CopSet c -> T.Head -> [c] -> D.Cox c -> B.Ab c
-calcCox cops he cs cox = calcTuple cops he cox cs
+calcCox :: (D.GetCops cops, D.CContent c) => cops c -> T.Head -> [c] -> D.Cox c -> B.Ab c
+calcCox cops he cs cox = calcTuple (D.getCops cops) he cox cs
 
 -- | [Tree-to-Content]
 --     Calculate token tree as content expression.
-calcTree :: (D.CContent c) => D.CopSet c -> D.CalcContent c
+calcTree :: (D.GetCops cops, D.CContent c) => cops c -> D.CalcContent c
 calcTree cops tree =
-    do cox <- D.treeCox cops tree
-       calcTuple cops mempty cox []
+    do let cops' = D.getCops cops
+       cox <- D.treeCox cops' tree
+       calcTuple cops' mempty cox []
 
 -- | Calculate content expression.
 coxRun

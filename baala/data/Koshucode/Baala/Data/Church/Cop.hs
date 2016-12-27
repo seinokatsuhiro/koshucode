@@ -13,6 +13,7 @@ module Koshucode.Baala.Data.Church.Cop
     -- * Operator set
     CopSet (..), CopFind,
     copsetFill,
+    GetCops (..),
   ) where
 
 import qualified Koshucode.Baala.Overture         as O
@@ -142,4 +143,11 @@ copsetFill opset = opset2 where
     tree _               =  Nothing
 
     cops  = copsetCopList opset
+
+-- | Get set of content operators.
+class GetCops a where
+    getCops :: a c -> CopSet c
+
+instance GetCops CopSet where
+    getCops = id
 
