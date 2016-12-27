@@ -67,8 +67,8 @@ relkitRange _ Nothing = C.relkitUnfixed
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow
-    flow cs  = do decLow    <- K.getDec $ K.coxRunCox cops he1 cs coxLow
-                  decHigh   <- K.getDec $ K.coxRunCox cops he1 cs coxHigh
+    flow cs  = do decLow    <- K.getDec $ K.calcCox cops he1 cs coxLow
+                  decHigh   <- K.getDec $ K.calcCox cops he1 cs coxHigh
 
                   let low    = K.decimalNum decLow
                       high   = K.decimalNum decHigh
@@ -124,8 +124,8 @@ relkitRangeBy _ _ Nothing = C.relkitUnfixed
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow
-    flow cs  = do timeFrom  <- K.getTime $ K.coxRunCox cops he1 cs from
-                  timeTo    <- K.getTime $ K.coxRunCox cops he1 cs to
+    flow cs  = do timeFrom  <- K.getTime $ K.calcCox cops he1 cs from
+                  timeTo    <- K.getTime $ K.calcCox cops he1 cs to
                   let ts     = map K.pTime $ range timeFrom timeTo
                   Right $ map (: cs) ts
 
@@ -177,8 +177,8 @@ relkitRangeClock _ _ Nothing = C.relkitUnfixed
 relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = K.headCons n he1
     kit2     = C.relkitManyAb False he2 flow
-    flow cs  = do clockFrom  <- K.getClock $ K.coxRunCox cops he1 cs from
-                  clockTo    <- K.getClock $ K.coxRunCox cops he1 cs to
+    flow cs  = do clockFrom  <- K.getClock $ K.calcCox cops he1 cs from
+                  clockTo    <- K.getClock $ K.calcCox cops he1 cs to
                   let range   = K.clockRangeBy $ K.clockStep sec
                       clocks  = map K.pClock $ range clockFrom clockTo
                   Right $ map (: cs) clocks

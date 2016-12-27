@@ -69,7 +69,7 @@ relkitAdd (cops, cox) (Just he1) = Rop.newCheck pk kit where
     pk        = K.termPicker ns he1
     he2       = ns `K.headAppend` he1
     kit       = Right $ C.relkitLineAb False he2 flow
-    flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 K.<#> xs
+    flow cs1  = do cs2 <- K.calcCox cops he1 cs1 K.<#> xs
                    Right $ cs2 ++ cs1
 
 
@@ -97,7 +97,7 @@ relkitAlt (cops, cox) (Just he1) = Rop.preCheck pk kit where
     pk        = K.termPicker ns he1
     he2       = K.forwardTerms pk `K.headMap` he1
     kit       = Right $ C.relkitLineAb True he2 flow
-    flow cs1  = do cs2 <- K.coxRunCox cops he1 cs1 K.<#> xs
+    flow cs1  = do cs2 <- K.calcCox cops he1 cs1 K.<#> xs
                    Right $ cs2 ++ K.cutTerms pk cs1
 
 
@@ -125,7 +125,7 @@ relkitFill (ns, cops, coxTo) (Just he1) = Rop.preCheck pk kit where
     pk        = K.termPicker ns he1
     he2       = K.forwardTerms pk `K.headMap` he1
     kit       = Right $ C.relkitLineAb True he2 flow
-    flow cs1  = do cTo <- K.coxRunCox cops he1 cs1 coxTo
+    flow cs1  = do cTo <- K.calcCox cops he1 cs1 coxTo
                    let fill c | K.isEmpty c = cTo
                               | otherwise   = c
                    Right $ (fill <$> K.pickTerms pk cs1) ++ (K.cutTerms pk cs1)
@@ -164,8 +164,8 @@ relkitReplaceAll :: (K.CContent c) => (K.CopSet c, K.Cox c, K.Cox c) -> C.Relkit
 relkitReplaceAll _ Nothing = C.relkitUnfixed
 relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
     kit2     = C.relkitLineAb False he1 flow
-    flow cs  = do cFrom  <- K.coxRunCox cops he1 cs coxFrom
-                  cTo    <- K.coxRunCox cops he1 cs coxTo
+    flow cs  = do cFrom  <- K.calcCox cops he1 cs coxFrom
+                  cTo    <- K.calcCox cops he1 cs coxTo
                   let replace c | c == cFrom = cTo
                                 | otherwise  = c
                   Right $ map replace cs

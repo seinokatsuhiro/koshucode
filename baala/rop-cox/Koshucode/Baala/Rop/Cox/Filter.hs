@@ -60,7 +60,7 @@ relkitFilter :: (K.CContent c) => (Bool, K.CopSet c, K.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = C.relkitUnfixed
 relkitFilter (which, cops, cox) (Just he1) = kit where
     kit  = Right $ C.relkitFilterAb he1 test
-    test cs1 = do c <- K.coxRunCox cops he1 cs1 cox
+    test cs1 = do c <- K.calcCox cops he1 cs1 cox
                   case K.isBool c of
                     True  -> Right $ K.gBool c == which
                     False -> Msg.reqBool

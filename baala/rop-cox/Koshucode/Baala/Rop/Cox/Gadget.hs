@@ -101,9 +101,9 @@ relkitGeoDatumJp (cops, (coxn,coxx,coxy), (lat,long)) (Just he1) = Right kit2 wh
     kit2      = C.relkitLineAb False he2 flow
     pReal     = K.pDec . K.realDecimal 4
 
-    flow cs   = do cn    <- K.coxRunCox cops he1 cs coxn
-                   cx    <- K.coxRunCox cops he1 cs coxx
-                   cy    <- K.coxRunCox cops he1 cs coxy
+    flow cs   = do cn    <- K.calcCox cops he1 cs coxn
+                   cx    <- K.calcCox cops he1 cs coxx
+                   cy    <- K.calcCox cops he1 cs coxy
 
                    decn  <- K.getDec $ Right cn
                    decx  <- K.getDec $ Right cx

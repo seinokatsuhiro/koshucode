@@ -4,10 +4,9 @@
 -- | Term-content calculation.
 
 module Koshucode.Baala.Data.Church.Run
-  ( CalcTuple,
-    coxRunCox, calcTuple,
-    calcContent,
-  
+  ( CalcTuple, calcTuple,
+    calcCox, calcContent,
+
     -- * Getting arguments
     getArg1, getArg2, getArg3,
     getRightArg1, getRightArg2, getRightArg3,
@@ -147,18 +146,22 @@ position he = spos where
 
 -- --------------------------------------------  Run
 
--- | Tuple-to-content calculation.
+-- | [Tuple-to-Content]
+--      Type for tuple-to-content calculation.
 type CalcTuple c = [c] -> B.Ab c
 
--- | Calculate content expression with specific tuple.
-coxRunCox :: (D.CContent c) => D.CopSet c -> T.Head -> [c] -> D.Cox c -> B.Ab c
-coxRunCox cops he cs cox = calcTuple cops he cox cs
-
--- | Create tuple calculator from content expression.
+-- | [Cox-to-Tuple-to-Content]
+--     Create tuple calculator from content expression.
 calcTuple :: (D.CContent c) => D.CopSet c -> T.Head -> D.Cox c -> CalcTuple c
 calcTuple cops he cox cs = coxRun cs =<< beta cops he cox
 
--- | Calculate token tree as content expression.
+-- | [Tuple-to-Cox-to-Content]
+--     Calculate content expression with specific tuple.
+calcCox :: (D.CContent c) => D.CopSet c -> T.Head -> [c] -> D.Cox c -> B.Ab c
+calcCox cops he cs cox = calcTuple cops he cox cs
+
+-- | [Tree-to-Content]
+--     Calculate token tree as content expression.
 calcContent :: (D.CContent c) => D.CopSet c -> D.CalcContent c
 calcContent cops tree =
     do cox <- D.treeCox cops tree
