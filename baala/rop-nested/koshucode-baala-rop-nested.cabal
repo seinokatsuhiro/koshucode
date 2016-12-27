@@ -7,7 +7,7 @@ name:                koshucode-baala-rop-nested
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.193.0.0
+version:             0.194.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Relation-mapping operators for nested relations
@@ -58,8 +58,8 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                      == 4.*
-       , koshucode-baala-data-plus == 0.193.0.0
-       , koshucode-baala-core      == 0.193.0.0
-       , koshucode-baala-rop       == 0.193.0.0
-       , koshucode-baala-rop-flat  == 0.193.0.0
+       , koshucode-baala-data-plus == 0.194.0.0
+       , koshucode-baala-core      == 0.194.0.0
+       , koshucode-baala-rop       == 0.194.0.0
+       , koshucode-baala-rop-flat  == 0.194.0.0
 

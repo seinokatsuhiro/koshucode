@@ -7,11 +7,12 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    57 judges
+**    62 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Arith"                 /import "Koshucode.Baala.Rop.Base.Message"
 
@@ -27,12 +28,14 @@
 |-- IMPORT  /module "Koshucode.Baala.Cop.Bundle"                /import "Koshucode.Baala.Cop.Type"
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.Coxhand"               /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Cop.Coxhand"               /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Coxhand"               /import "Koshucode.Baala.Syntax"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Coxhand"               /import "Koshucode.Baala.Data"
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Cop.Coxhand"
 |-- IMPORT  /module "Koshucode.Baala.Cop.List"                  /import "Koshucode.Baala.Cop.Replace"
@@ -59,10 +62,12 @@
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Syntax"
+|-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Text"                  /import "Koshucode.Baala.Rop.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Cop.Time"                  /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Cop.Time"                  /import "Koshucode.Baala.Type"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Time"                  /import "Koshucode.Baala.Data"
 |-- IMPORT  /module "Koshucode.Baala.Cop.Time"                  /import "Koshucode.Baala.Rop.Base.Message"
 

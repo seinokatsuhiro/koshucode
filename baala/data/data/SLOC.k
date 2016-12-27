@@ -4,19 +4,19 @@ about /package 'data
 
 |-- DIR  /code 13   /comment 5    /dir "data/Koshucode/Baala"
 |-- DIR  /code 303  /comment 189  /dir "data/Koshucode/Baala/Data"
-|-- DIR  /code 610  /comment 348  /dir "data/Koshucode/Baala/Data/Church"
+|-- DIR  /code 632  /comment 359  /dir "data/Koshucode/Baala/Data/Church"
 |-- DIR  /code 365  /comment 331  /dir "data/Koshucode/Baala/Data/Class"
 |-- DIR  /code 511  /comment 341  /dir "data/Koshucode/Baala/Data/Decode"
 
-|-- DIR-TOTAL  /code 1802  /comment 1214
+|-- DIR-TOTAL  /code 1824  /comment 1225
 
 |-- FILE  /code 13   /comment 5    /file "Data.hs"        /dir "data/Koshucode/Baala"
 |-- FILE  /code 10   /comment 5    /file "Church.hs"      /dir "data/Koshucode/Baala/Data"
-|-- FILE  /code 170  /comment 47   /file "Build.hs"       /dir "data/Koshucode/Baala/Data/Church"
-|-- FILE  /code 71   /comment 61   /file "Cop.hs"         /dir "data/Koshucode/Baala/Data/Church"
-|-- FILE  /code 111  /comment 108  /file "Cox.hs"         /dir "data/Koshucode/Baala/Data/Church"
+|-- FILE  /code 171  /comment 47   /file "Build.hs"       /dir "data/Koshucode/Baala/Data/Church"
+|-- FILE  /code 88   /comment 65   /file "Cop.hs"         /dir "data/Koshucode/Baala/Data/Church"
+|-- FILE  /code 115  /comment 112  /file "Cox.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 90   /comment 66   /file "Message.hs"     /dir "data/Koshucode/Baala/Data/Church"
-|-- FILE  /code 168  /comment 66   /file "Run.hs"         /dir "data/Koshucode/Baala/Data/Church"
+|-- FILE  /code 168  /comment 69   /file "Run.hs"         /dir "data/Koshucode/Baala/Data/Church"
 |-- FILE  /code 14   /comment 6    /file "Class.hs"       /dir "data/Koshucode/Baala/Data"
 |-- FILE  /code 78   /comment 70   /file "Complex.hs"     /dir "data/Koshucode/Baala/Data/Class"
 |-- FILE  /code 44   /comment 21   /file "Content.hs"     /dir "data/Koshucode/Baala/Data/Class"
@@ -35,4 +35,4 @@ about /package 'data
 |-- FILE  /code 76   /comment 46   /file "Type.hs"        /dir "data/Koshucode/Baala/Data/Decode"
 |-- FILE  /code 14   /comment 6    /file "Message.hs"     /dir "data/Koshucode/Baala/Data"
 
-|-- FILE-TOTAL  /code 1802  /comment 1214
+|-- FILE-TOTAL  /code 1824  /comment 1225
