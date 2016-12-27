@@ -6,11 +6,14 @@
 --   
 --   Facility for implementing relation-mapping operators
 @package koshucode-baala-rop
-@version 0.193.0.0
+@version 0.194.0.0
 
 
 -- | Message list.
 module Koshucode.Baala.Rop.Base.Message
+
+-- | Abortable scope for relmap parameter.
+abPara :: (GetCodePos cp) => Abortable cp b
 
 -- | <ul>
 --   <li><i>check-term failed</i></li>
@@ -41,6 +44,16 @@ unmatchShare :: [TermName] -> [TermName] -> Ab a
 --   <li><i>Require Boolean</i></li>
 --   </ul>
 reqBool :: Ab a
+
+-- | <ul>
+--   <li><i>Require unquoted text</i></li>
+--   </ul>
+reqRawText :: Ab a
+
+-- | <ul>
+--   <li><i>Require single equal sign</i></li>
+--   </ul>
+reqSingleEqual :: Ab a
 
 -- | <ul>
 --   <li><i>Require collection</i></li>
@@ -123,9 +136,6 @@ getWithAb :: ([Tree] -> Ab b) -> RopGet b c
 
 -- | Get tree from relmap parameter.
 getTree :: RopGet Tree c
-
--- | Get trees delimited by colon.
-getTreesByColon :: RopGet [[Tree]] c
 
 -- | Test usage tag.
 getTag :: Intmed c -> ParaTag -> Bool
@@ -227,19 +237,19 @@ getOptCox :: (CContent c) => c -> RopGet (Cox c) c
 -- | Get list of content expression terms. Empty terms are filled with
 --   empty contents, e.g., <b>/a</b> <b>/b</b> <i>E</i> is equivalent to
 --   <b>/a</b> () <b>/b</b> <i>E</i>.
-getCoxTerms :: (CContent c) => RopGet [Term (Cox c)] c
+getCoxTerms :: (CContent c) => RopGet [TermCox c] c
 
 -- | Get list of content expression terms. Empty terms are filled with its
 --   term name. e.g., <b>/a</b> <b>/b</b> <i>E</i> is equivalent to
 --   <b>/a</b> '/a <b>/b</b> <i>E</i>.
-getNamedCoxTerms :: (CContent c) => RopGet [Term (Cox c)] c
+getNamedCoxTerms :: (CContent c) => RopGet [TermCox c] c
 
 -- | Get list of content expression terms. Contents of empty terms can be
 --   generated using its term name.
-getOptCoxTerms :: (CContent c) => (TermName -> c) -> RopGet [Term (Cox c)] c
+getOptCoxTerms :: (CContent c) => (TermName -> c) -> RopGet [TermCox c] c
 
--- | Get <tt>-where</tt> parameter as operator set.
-getWhere :: (CContent c) => RopGet (CopSet c) c
+-- | Get <tt>-let</tt> style parameter as set of derived functions.
+getLet :: (CContent c) => RopGet (CopSet c) c
 
 
 -- | Definition of relmap operators.

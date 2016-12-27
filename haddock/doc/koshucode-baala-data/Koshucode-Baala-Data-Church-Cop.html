@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.193.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.194.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -121,11 +121,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >CopCox</a
 	    > c = [<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
 	    >Cox</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)</li
+	    > c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:AbCox"
+	    >AbCox</a
+	    > c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -275,12 +273,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Maybe</a
 	    > f</li
 	  ><li class="src short"
-	  ><a href="#v:copset"
-	    >copset</a
-	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c</li
-	  ><li class="src short"
 	  ><a href="#v:copsetFill"
 	    >copsetFill</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -288,6 +280,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
 	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="#t:GetCops"
+	    >GetCops</a
+	    > a <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:getCops"
+		>getCops</a
+		> :: a c -&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+		>CopSet</a
+		> c</li
+	      ></ul
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -377,7 +385,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 		      >Cop</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-38');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-39');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -391,7 +399,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 		      > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:Cop"
 		      >Cop</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-43');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-44');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -409,11 +417,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >CopCox</a
 	    > c = [<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
 	    >Cox</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c) <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopCox');" href="javascript:void(0);" class="link"
+	    > c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:AbCox"
+	    >AbCox</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#CopCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -698,12 +704,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	      ><tr
 		><td class="src clearfix"
 		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+		      >GetCops</a
+		      > <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+		      >CopSet</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-151');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="http://hackage.haskell.org/package/base/docs/Data-Monoid.html#t:Monoid"
+		      >Monoid</a
+		      > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+		      >CopSet</a
+		      > c)</span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-99');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
 		    ><a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Import.html#t:Default"
 		      >Default</a
 		      > (<a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 		      >CopSet</a
 		      > c)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-95');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-96');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -735,26 +769,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:copset" class="def"
-	    >copset</a
-	    > :: <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#copset');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><div class="warning"
-	    ><p
-	      >Deprecated: Use <code
-		>def</code
-		> instead.</p
-	      ></div
-	    ><p
-	    >Empty operator set.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:copsetFill" class="def"
 	    >copsetFill</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -767,6 +781,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ><div class="doc"
 	  ><p
 	    >Complete operator set.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a name="t:GetCops" class="def"
+	    >GetCops</a
+	    > a <span class="keyword"
+	    >where</span
+	    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#GetCops');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get set of content operators.</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:getCops" class="def"
+	      >getCops</a
+	      > :: a c -&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+	      >CopSet</a
+	      > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#getCops');" href="javascript:void(0);" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:GetCops" class="caption collapser" onclick="toggleSection('i:GetCops')"
+	    >Instances</p
+	    ><div id="section.i:GetCops" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+		      >GetCops</a
+		      > <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
+		      >CopSet</a
+		      ></span
+		    > <a onclick="showSource('src/Koshucode-Baala-Data-Church-Cop.html#line-151');" href="javascript:void(0);" class="link"
+		    >Source</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	></div

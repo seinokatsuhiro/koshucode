@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.193.0.0
+@version 0.194.0.0
 
 
 -- | Message list.
@@ -692,11 +692,17 @@ type Cox3 c = (Cox c, Cox c, Cox c)
 -- | Expression quadruple.
 type Cox4 c = (Cox c, Cox c, Cox c, Cox c)
 
--- | Maybe expression.
+-- | Maybe content expression.
 type MaybeCox c = Maybe (Cox c)
 
--- | Named expression.
+-- | Abortable content expression.
+type AbCox c = Ab (Cox c)
+
+-- | Named content expression.
 type NamedCox c = Named (Cox c)
+
+-- | Term name and content expression.
+type TermCox c = Term (Cox c)
 
 -- | Term-content calculator.
 type CopCalc c = [Ab c] -> Ab c
@@ -738,7 +744,7 @@ CopCox :: BlankName -> (CopCox c) -> Cop c
 CopTree :: BlankName -> (CopTree) -> Cop c
 
 -- | Expression-level syntax.
-type CopCox c = [Cox c] -> Ab (Cox c)
+type CopCox c = [Cox c] -> AbCox c
 
 -- | Tree-level syntax.
 type CopTree = [Tree] -> Ab Tree
@@ -789,16 +795,17 @@ CopSet :: [Cop c] -> [Named InfixHeight] -> [Named (Cop c)] -> [Named (Cop c)] -
 -- | Find content operator from its name.
 type CopFind f = BlankName -> Maybe f
 
--- | Empty operator set.
-
--- | <i>Deprecated: Use <tt>def</tt> instead.</i>
-copset :: CopSet c
-
 -- | Complete operator set.
 copsetFill :: Map (CopSet c)
+
+-- | Get set of content operators.
+class GetCops a
+getCops :: GetCops a => a c -> CopSet c
 instance GHC.Show.Show (Koshucode.Baala.Data.Church.Cop.Cop c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Data.Church.Cop.Cop c)
 instance Data.Default.Class.Default (Koshucode.Baala.Data.Church.Cop.CopSet c)
+instance GHC.Base.Monoid (Koshucode.Baala.Data.Church.Cop.CopSet c)
+instance Koshucode.Baala.Data.Church.Cop.GetCops Koshucode.Baala.Data.Church.Cop.CopSet
 
 
 -- | Bundle of message modules.
@@ -1105,26 +1112,38 @@ instance Koshucode.Baala.Data.Class.Complex.CType Koshucode.Baala.Data.Content.C
 module Koshucode.Baala.Data.Church.Build
 
 -- | Construct content expression from token tree.
-treeCox :: (CContent c) => CopSet c -> Tree -> Ab (Cox c)
+treeCox :: (CContent c) => CopSet c -> Tree -> AbCox c
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [CodePos] -> CoxTag -> [String] -> Map (Cox c)
+coxForm :: (GetCodePos cp) => cp -> CoxTag -> [String] -> Map (Cox c)
 
 
 -- | Term-content calculation.
 module Koshucode.Baala.Data.Church.Run
 
--- | Tuple-to-content calculation.
-type RunList c = [c] -> Ab c
+-- | <ul>
+--   <li><i>Tuple-to-Content</i> Type for tuple-to-content
+--   calculation.</li>
+--   </ul>
+type CalcTuple c = [c] -> Ab c
 
--- | Calculate content expression with specific tuple.
-coxRunCox :: (CContent c) => CopSet c -> Head -> [c] -> Cox c -> Ab c
+-- | <ul>
+--   <li><i>Cox-to-Tuple-to-Content</i> Create tuple calculator from
+--   content expression.</li>
+--   </ul>
+calcTuple :: (GetCops cops, CContent c) => cops c -> Head -> Cox c -> CalcTuple c
 
--- | Calculate content expression with specific tuple.
-coxRunList :: (CContent c) => CopSet c -> Head -> Cox c -> RunList c
+-- | <ul>
+--   <li><i>Tuple-to-Cox-to-Content</i> Calculate content expression with
+--   specific tuple.</li>
+--   </ul>
+calcCox :: (GetCops cops, CContent c) => cops c -> Head -> [c] -> Cox c -> Ab c
 
--- | Calculate content expression.
-calcContent :: (CContent c) => CopSet c -> CalcContent c
+-- | <ul>
+--   <li><i>Tree-to-Content</i> Calculate token tree as content
+--   expression.</li>
+--   </ul>
+calcTree :: (GetCops cops, CContent c) => cops c -> CalcContent c
 
 -- | Extract single argument.
 getArg1 :: (Basis c) => [Ab c] -> Ab (Ab c)

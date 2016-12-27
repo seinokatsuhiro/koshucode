@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.193.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.194.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -84,6 +84,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ><a href="#g:7"
 	    >unary</a
 	    ></li
+	  ><li
+	  ><a href="#g:8"
+	    >dump-cox</a
+	    ></li
 	  ></ul
 	></div
       ><div id="description"
@@ -123,11 +127,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -147,11 +149,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -227,11 +227,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -243,11 +241,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >CContent</a
 	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
 	    >RelkitFlow</a
 	    > c</li
 	  ><li class="src short"
@@ -269,6 +265,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >TermName</a
 	    >, [c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consDumpCox"
+	    >consDumpCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
 	    > c</li
 	  ></ul
 	></div
@@ -311,14 +315,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 		>/N</em
 		> <em
 		>E</em
-		> ...</dt
+		> ... -let { <em
+		>D</em
+		> | ... } </dt
 	      ><dd
 	      >Calculate expression <em
 		>E</em
 		> of term <em
 		>/N</em
 		>,
-    and add terms <em
+     and add terms <em
 		>/N</em
 		> ... to input relation.</dd
 	      ></dl
@@ -334,11 +340,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relmapAdd');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -370,14 +374,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 		>/P</em
 		> <em
 		>E</em
-		> ...</dt
+		> ... -let { <em
+		>D</em
+		> | ... }</dt
 	      ><dd
 	      >Calculate expression <em
 		>E</em
 		> of term <em
 		>/P</em
 		>,
-    and alter the contents of present terms <em
+     and alter the contents of present terms <em
 		>/P</em
 		> ....</dd
 	      ></dl
@@ -393,11 +399,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relmapAlt');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -434,7 +438,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	      >Fill contents of present terms <em
 		>/P</em
 		> ...
-    with the result of <em
+     with the result of <em
 		>E</em
 		>.</dd
 	      ></dl
@@ -546,13 +550,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    ><strong
-	      >split /N E ...</strong
-	      ></p
-	    ><p
-	    >Split input relation by the boolean functions E ...,
-   and add terms /N ... which has the splitted relations.</p
+	  ><dl
+	    ><dt
+	      >split <em
+		>/N E</em
+		> ... -let { <em
+		>D</em
+		> | ... }</dt
+	      ><dd
+	      >Split input relation by the boolean functions <em
+		>E</em
+		> ...,
+     and add terms <em
+		>/N</em
+		> ... which has the splitted relations.</dd
+	      ></dl
+	    ><pre
+	    >RELMAP
+  split /a ( /x = 1 )
+        /b ( /y = 10 )
+
+INPUT              OUTPUT
+   /x    /y          /a          /b
+   ----- -----       ----------- -----------
+   1     10          /x    /y    /x    /y
+   2     20          ----- ----- ----- -----
+   3     10          1     10    3     10
+   1     20          1     20
+   2     30</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -565,11 +590,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relmapSplit');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -591,11 +614,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >CContent</a
 	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
 	    >CopSet</a
-	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-syntax/Koshucode-Baala-Syntax-Symbol-Term.html#t:Term"
-	    >Term</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
+	    > c, [<a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Church-Cox.html#t:TermCox"
+	    >TermCox</a
+	    > c]) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Relkit-Relkit.html#t:RelkitFlow"
 	    >RelkitFlow</a
 	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#relkitSplit');" href="javascript:void(0);" class="link"
 	    >Source</a
@@ -647,6 +668,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	    >Create <code
 	      >unary</code
 	      > relmap.</p
+	    ></div
+	  ></div
+	><h1 id="g:8"
+	>dump-cox</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consDumpCox" class="def"
+	    >consDumpCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-data/Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Rop-Cox-Calc.html#consDumpCox');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >dump-cox <em
+		>E</em
+		></dt
+	      ><dd
+	      ></dd
+	      ></dl
 	    ></div
 	  ></div
 	></div

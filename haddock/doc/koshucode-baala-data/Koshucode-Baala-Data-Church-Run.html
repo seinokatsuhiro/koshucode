@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-data-0.193.0.0: A notational system for relational model</p
+      >koshucode-baala-data-0.194.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -77,19 +77,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RunList"
-	    >RunList</a
+	    > <a href="#t:CalcTuple"
+	    >CalcTuple</a
 	    > c = [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:coxRunCox"
-	    >coxRunCox</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	  ><a href="#v:calcTuple"
+	    >calcTuple</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    > c) =&gt; cops c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:CalcTuple"
+	    >CalcTuple</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:calcCox"
+	    >calcCox</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c) =&gt; cops c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
 	    >Cox</a
@@ -97,27 +111,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	    >Ab</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:coxRunList"
-	    >coxRunList</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	  ><a href="#v:calcTree"
+	    >calcTree</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:RunList"
-	    >RunList</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:calcContent"
-	    >calcContent</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
+	    > c) =&gt; cops c -&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
 	    >CalcContent</a
 	    > c</li
 	  ><li class="src short"
@@ -201,78 +201,94 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Data-C
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RunList" class="def"
-	    >RunList</a
+	    > <a name="t:CalcTuple" class="def"
+	    >CalcTuple</a
 	    > c = [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#RunList');" href="javascript:void(0);" class="link"
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#CalcTuple');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    >Tuple-to-content calculation.</p
+	  ><dl
+	    ><dt
+	      >Tuple-to-Content</dt
+	      ><dd
+	      >Type for tuple-to-content calculation.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:coxRunCox" class="def"
-	    >coxRunCox</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	  ><a name="v:calcTuple" class="def"
+	    >calcTuple</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    > c) =&gt; cops c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:CalcTuple"
+	    >CalcTuple</a
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#calcTuple');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><dl
+	    ><dt
+	      >Cox-to-Tuple-to-Content</dt
+	      ><dd
+	      >Create tuple calculator from content expression.</dd
+	      ></dl
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:calcCox" class="def"
+	    >calcCox</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	    >CContent</a
+	    > c) =&gt; cops c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
 	    >Head</a
 	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
 	    >Cox</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#coxRunCox');" href="javascript:void(0);" class="link"
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#calcCox');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    >Calculate content expression with specific tuple.</p
+	  ><dl
+	    ><dt
+	      >Tuple-to-Cox-to-Content</dt
+	      ><dd
+	      >Calculate content expression with specific tuple.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:coxRunList" class="def"
-	    >coxRunList</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
+	  ><a name="v:calcTree" class="def"
+	    >calcTree</a
+	    > :: (<a href="Koshucode-Baala-Data-Church-Cop.html#t:GetCops"
+	    >GetCops</a
+	    > cops, <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-type/Koshucode-Baala-Type-Rel-Head.html#t:Head"
-	    >Head</a
-	    > -&gt; <a href="Koshucode-Baala-Data-Church-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Church-Run.html#t:RunList"
-	    >RunList</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#coxRunList');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Calculate content expression with specific tuple.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:calcContent" class="def"
-	    >calcContent</a
-	    > :: <a href="Koshucode-Baala-Data-Class-Content.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Data-Church-Cop.html#t:CopSet"
-	    >CopSet</a
-	    > c -&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
+	    > c) =&gt; cops c -&gt; <a href="Koshucode-Baala-Data-Decode-Content.html#t:CalcContent"
 	    >CalcContent</a
-	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#calcContent');" href="javascript:void(0);" class="link"
+	    > c <a onclick="showSource('src/Koshucode-Baala-Data-Church-Run.html#calcTree');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
-	  ><p
-	    >Calculate content expression.</p
+	  ><dl
+	    ><dt
+	      >Tree-to-Content</dt
+	      ><dd
+	      >Calculate token tree as content expression.</dd
+	      ></dl
 	    ></div
 	  ></div
 	><h1 id="g:1"

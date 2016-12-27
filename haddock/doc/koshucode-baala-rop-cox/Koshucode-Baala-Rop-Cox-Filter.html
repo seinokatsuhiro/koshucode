@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-rop-cox-0.193.0.0: Relation-mapping operators with content calculations</p
+      >koshucode-baala-rop-cox-0.194.0.0: Relation-mapping operators with content calculations</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -189,24 +189,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ><div class="doc"
 	  ><p
 	    >Implementation of relational operators.</p
-	    ><dl
-	    ><dt
-	      ><code
-		>keep E</code
-		></dt
-	      ><dd
-	      >Keep tuples <code
-		>E</code
-		> equals true.</dd
-	      ><dt
-	      ><code
-		>omit E</code
-		></dt
-	      ><dd
-	      >Omit tuples <code
-		>E</code
-		> equals true.</dd
-	      ></dl
 	    ></div
 	  ></div
 	><h1 id="g:1"
@@ -227,19 +209,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Rop-Co
 	  ><div class="doc"
 	  ><dl
 	    ><dt
-	      >keep E</dt
+	      >keep <em
+		>E</em
+		> -let { <em
+		>D</em
+		> | ... }</dt
 	      ><dd
-	      >Keep tuples which expression E is true.</dd
+	      >Keep tuples which expression <em
+		>E</em
+		> is true.</dd
 	      ><dt
-	      >omit E</dt
+	      >omit <em
+		>E</em
+		> -let { <em
+		>D</em
+		> | ... }</dt
 	      ><dd
-	      >Omit tuples which expression E is true.
-     <code
-		>omit E</code
-		> is equivalent to <code
-		>keep not E</code
-		>.</dd
+	      >Omit tuples which expression <em
+		>E</em
+		> is true.</dd
 	      ></dl
+	    ><p
+	    ><code
+	      >omit</code
+	      > is the inverse operator of <code
+	      >keep</code
+	      >.</p
+	    ><pre
+	    >keep E = omit not E</pre
 	    ></div
 	  ></div
 	><div class="top"

@@ -9,7 +9,7 @@
 --   calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-cox
-@version 0.193.0.0
+@version 0.194.0.0
 
 
 -- | Relmap operators for dec type.
@@ -329,18 +329,20 @@ relkitUnarray :: (CContent c) => ([TermName2], Int, [[Term c]]) -> RelkitFlow c
 module Koshucode.Baala.Rop.Cox.Filter
 
 -- | Implementation of relational operators.
---   
---   <ul>
---   <li><i><tt>keep E</tt></i> Keep tuples <tt>E</tt> equals true.</li>
---   <li><i><tt>omit E</tt></i> Omit tuples <tt>E</tt> equals true.</li>
---   </ul>
 ropsCoxFilter :: (CContent c) => [Rop c]
 
 -- | <ul>
---   <li><i>keep E</i> Keep tuples which expression E is true.</li>
---   <li><i>omit E</i> Omit tuples which expression E is true. <tt>omit
---   E</tt> is equivalent to <tt>keep not E</tt>.</li>
+--   <li><i>keep <i>E</i> -let { <i>D</i> | ... }</i> Keep tuples which
+--   expression <i>E</i> is true.</li>
+--   <li><i>omit <i>E</i> -let { <i>D</i> | ... }</i> Omit tuples which
+--   expression <i>E</i> is true.</li>
 --   </ul>
+--   
+--   <tt>omit</tt> is the inverse operator of <tt>keep</tt>.
+--   
+--   <pre>
+--   keep E = omit not E
+--   </pre>
 consFilter :: (CContent c) => Bool -> RopCons c
 
 -- | Create <tt>keep</tt> and <tt>omit</tt> relmap.
@@ -409,23 +411,24 @@ module Koshucode.Baala.Rop.Cox.Calc
 ropsCoxCalc :: (CContent c) => [Rop c]
 
 -- | <ul>
---   <li><i>add <i>/N</i> <i>E</i> ...</i> Calculate expression <i>E</i> of
---   term <i>/N</i>, and add terms <i>/N</i> ... to input relation.</li>
+--   <li><i>add <i>/N</i> <i>E</i> ... -let { <i>D</i> | ... } </i>
+--   Calculate expression <i>E</i> of term <i>/N</i>, and add terms
+--   <i>/N</i> ... to input relation.</li>
 --   </ul>
 consAdd :: (CContent c) => RopCons c
 
 -- | Create <tt>add</tt> relmap.
-relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
+relmapAdd :: (CContent c) => Intmed c -> (CopSet c, [TermCox c]) -> Relmap c
 
 -- | <ul>
---   <li><i>alt <i>/P</i> <i>E</i> ...</i> Calculate expression <i>E</i> of
---   term <i>/P</i>, and alter the contents of present terms <i>/P</i>
---   ....</li>
+--   <li><i>alt <i>/P</i> <i>E</i> ... -let { <i>D</i> | ... }</i>
+--   Calculate expression <i>E</i> of term <i>/P</i>, and alter the
+--   contents of present terms <i>/P</i> ....</li>
 --   </ul>
 consAlt :: (CContent c) => RopCons c
 
 -- | Create <tt>alt</tt> relmap.
-relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
+relmapAlt :: (CContent c) => Intmed c -> (CopSet c, [TermCox c]) -> Relmap c
 
 -- | <ul>
 --   <li><i>fill <i>/P</i> ... -with <i>E</i></i> Fill contents of present
@@ -445,23 +448,44 @@ consReplaceAll :: (CContent c) => RopCons c
 -- | Create <tt>replace-all</tt> relmap.
 relmapReplaceAll :: (CContent c) => Intmed c -> (CopSet c, Cox c, Cox c) -> Relmap c
 
--- | <b>split /N E ...</b>
+-- | <ul>
+--   <li><i>split <i>/N E</i> ... -let { <i>D</i> | ... }</i> Split input
+--   relation by the boolean functions <i>E</i> ..., and add terms
+--   <i>/N</i> ... which has the splitted relations.</li>
+--   </ul>
 --   
---   Split input relation by the boolean functions E ..., and add terms /N
---   ... which has the splitted relations.
+--   <pre>
+--   RELMAP
+--     split /a ( /x = 1 )
+--           /b ( /y = 10 )
+--   
+--   INPUT              OUTPUT
+--      /x    /y          /a          /b
+--      ----- -----       ----------- -----------
+--      1     10          /x    /y    /x    /y
+--      2     20          ----- ----- ----- -----
+--      3     10          1     10    3     10
+--      1     20          1     20
+--      2     30
+--   </pre>
 consSplit :: (CContent c) => RopCons c
 
 -- | Create <tt>split</tt> relmap.
-relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [Term (Cox c)]) -> Relmap c
+relmapSplit :: (CContent c) => Intmed c -> (CopSet c, [TermCox c]) -> Relmap c
 
 -- | Create <tt>split</tt> relkit.
-relkitSplit :: (CContent c) => (CopSet c, [Term (Cox c)]) -> RelkitFlow c
+relkitSplit :: (CContent c) => (CopSet c, [TermCox c]) -> RelkitFlow c
 
 -- | <b>unary /N E : ...</b>
 consUnary :: (CContent c) => RopCons c
 
 -- | Create <tt>unary</tt> relmap.
 relmapUnary :: (CContent c) => Intmed c -> (TermName, [c]) -> Relmap c
+
+-- | <ul>
+--   <li><i>dump-cox <i>E</i></i></li>
+--   </ul>
+consDumpCox :: (CContent c) => RopCons c
 
 
 -- | Relational operators with content calculation.

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.193.0.0
+@version 0.194.0.0
 
 
 -- | Result of relational calculation.
@@ -682,6 +682,7 @@ instance GHC.Show.Show (h c) => GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.I
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
 instance Koshucode.Baala.Base.Prelude.Class.Name (Koshucode.Baala.Core.Relmap.Rop.Rop' h c)
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Core.Relmap.Rop.Intmed' h c)
+instance Koshucode.Baala.Data.Church.Cop.GetCops h => Koshucode.Baala.Data.Church.Cop.GetCops (Koshucode.Baala.Core.Relmap.Rop.Intmed' h)
 
 
 -- | Construction of relmaps.
@@ -796,9 +797,6 @@ globalRopsAdd :: [Rop' h c] -> Map (Global' h c)
 -- | List of content operators.
 globalCops :: Global' h c -> [Cop c]
 
--- | Set of content operators.
-globalCopset :: Global' h c -> CopSet c
-
 -- | List of settings of infix operators.
 globalInfix :: Global' h c -> [Named InfixHeight]
 
@@ -819,9 +817,6 @@ class GetGlobal a
 
 -- | Get global parameter.
 getGlobal :: (GetGlobal a, GetGlobal' h) => a h c -> Global' h c
-
--- | Get operator set from <tt>Intmed</tt>.
-ropCopset :: (GetGlobal' h) => Intmed' h c -> CopSet c
 
 -- | Set of relmap and content operators.
 data OpSet' h c
@@ -856,6 +851,7 @@ instance GHC.Classes.Eq Koshucode.Baala.Core.Relmap.Global.Feature
 instance GHC.Show.Show Koshucode.Baala.Core.Relmap.Global.Feature
 instance GHC.Show.Show (Koshucode.Baala.Core.Relmap.Global.Global' h c)
 instance Koshucode.Baala.Core.Relmap.Global.GetGlobal Koshucode.Baala.Core.Relmap.Rop.Intmed'
+instance Koshucode.Baala.Data.Church.Cop.GetCops (Koshucode.Baala.Core.Relmap.Global.Global' h)
 instance Data.Default.Class.Default (Koshucode.Baala.Core.Relmap.Global.OpSet' h c)
 instance Data.Default.Class.Default Koshucode.Baala.Core.Relmap.Global.Feature
 
@@ -1154,6 +1150,7 @@ type ShortAsserts c = ShortAsserts' Resource c
 global :: (CContent c) => Global c
 instance GHC.Show.Show (Koshucode.Baala.Core.Resource.Resource.Resource c)
 instance Koshucode.Baala.Type.Rel.Rel.SelectRel Koshucode.Baala.Core.Resource.Resource.Resource
+instance Koshucode.Baala.Data.Church.Cop.GetCops Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Core.Relmap.Global.GetGlobal' Koshucode.Baala.Core.Resource.Resource.Resource
 instance Koshucode.Baala.Data.Class.Content.CContent c => Data.Default.Class.Default (Koshucode.Baala.Core.Resource.Resource.Resource c)
 

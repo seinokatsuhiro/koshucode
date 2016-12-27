@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.193.0.0
+@version 0.194.0.0
 
 
 -- | Text table
