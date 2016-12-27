@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Data.Church.Run
   ( CalcTuple, calcTuple,
-    calcCox, calcContent,
+    calcCox, calcTree,
 
     -- * Getting arguments
     getArg1, getArg2, getArg3,
@@ -162,8 +162,8 @@ calcCox cops he cs cox = calcTuple cops he cox cs
 
 -- | [Tree-to-Content]
 --     Calculate token tree as content expression.
-calcContent :: (D.CContent c) => D.CopSet c -> D.CalcContent c
-calcContent cops tree =
+calcTree :: (D.CContent c) => D.CopSet c -> D.CalcContent c
+calcTree cops tree =
     do cox <- D.treeCox cops tree
        calcTuple cops mempty cox []
 

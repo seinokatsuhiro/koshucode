@@ -42,7 +42,7 @@ getContents med name =
 
 -- | Calculate closed content expression.
 calcTree :: (K.CContent c) => C.Intmed c -> K.CalcContent c
-calcTree = K.calcContent . C.ropCopset
+calcTree = K.calcTree . C.ropCopset
 
 -- | Get relmap parameter as optional content.
 getOptContent :: (K.CContent c) => c -> Rop.RopGet c c

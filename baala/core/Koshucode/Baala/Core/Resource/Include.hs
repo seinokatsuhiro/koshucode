@@ -134,7 +134,7 @@ resIncludeBody cd res (C.Clause h@C.ClauseHead{ C.clauseSecNo = sec, C.clauseSho
           Right $ res { C.resLicense = C.resLicense << (C.clauseSecNo h, line) }
 
 calcContG :: (D.CContent c) => C.Global c -> D.CalcContent c
-calcContG = D.calcContent . C.globalCopset
+calcContG = D.calcTree . C.globalCopset
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
 paraToIOPoint cd = S.paraSelect unmatch ps where
