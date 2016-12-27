@@ -17,7 +17,6 @@ module Koshucode.Baala.Core.Relmap.Global
     -- * Getting global parameter
     GetGlobal' (..),
     GetGlobal (..),
-    ropCopset,
 
     -- * Operator set
     OpSet' (..),
@@ -130,10 +129,6 @@ class GetGlobal a where
 -- | Get global parameter from relmap intermediate data.
 instance GetGlobal C.Intmed' where
     getGlobal = getGlobal' . C.medHook
-
--- | Get operator set from 'Intmed'.
-ropCopset :: (GetGlobal' h) => C.Intmed' h c -> D.CopSet c
-ropCopset = D.getCops . getGlobal
 
 instance D.GetCops (Global' h) where
     getCops = opsetCop . globalOpset

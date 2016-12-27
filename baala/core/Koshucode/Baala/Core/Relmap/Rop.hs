@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Rop
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
+import qualified Koshucode.Baala.Data                  as D
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
 
@@ -60,4 +61,7 @@ data Intmed' h c = Intmed
 
 instance B.GetCodePos (Intmed' h c) where
     getCPs = B.getCPs . medLexmap
+
+instance (D.GetCops h) => D.GetCops (Intmed' h) where
+    getCops = D.getCops . medHook
 

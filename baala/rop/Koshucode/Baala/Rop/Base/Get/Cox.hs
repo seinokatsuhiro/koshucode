@@ -31,18 +31,14 @@ import qualified Koshucode.Baala.Rop.Base.Message  as Msg
 getContent :: (K.CContent c) => Rop.RopGet c c
 getContent med name =
     do tree <- Rop.getTree med name
-       calcTree med tree
+       K.calcTree med tree
 
 -- | Get relmap parameter as list of calculated contents.
 getContents :: (K.CContent c) => Rop.RopGet [c] c
 getContents med name =
     do trees <- Rop.getTrees med name
-       let trees2 = K.ttreeGroup `map` K.divideTreesByColon trees
-       calcTree med `mapM` trees2
-
--- | Calculate closed content expression.
-calcTree :: (K.CContent c) => C.Intmed c -> K.CalcContent c
-calcTree = K.calcTree . C.ropCopset
+       let trees2 = K.ttreeGroup <$> K.divideTreesByColon trees
+       K.calcTree med K.<#> trees2
 
 -- | Get relmap parameter as optional content.
 getOptContent :: (K.CContent c) => c -> Rop.RopGet c c
@@ -72,7 +68,7 @@ optContentTerms f = mapM . optContent f
 
 optContent :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.Term c)
 optContent f _   (n, []) = Right (n, f n)
-optContent _ med (n, ts) = do c <- calcTree med $ K.ttreeGroup ts
+optContent _ med (n, ts) = do c <- K.calcTree med $ K.ttreeGroup ts
                               Right (n, c)
 
 
@@ -109,7 +105,7 @@ getOptCoxTerms f med = optCoxTerms f med K.<.> Rop.getTreesTerms med
 
 -- | Build content expression.
 buildCox :: (K.CContent c) => C.Intmed c -> [K.Tree] -> K.AbCox c
-buildCox med = K.treeCox (C.ropCopset med) . K.ttreeGroup
+buildCox med = K.treeCox (K.getCops med) . K.ttreeGroup
 
 optCox :: (K.CContent c) => (K.TermName -> c) -> C.Intmed c -> K.Term [K.Tree] -> K.Ab (K.TermCox c)
 optCox f _   (n, []) = Right (n, K.coxLit $ f n)
@@ -127,7 +123,7 @@ optCoxTerms f = mapM . optCox f
 getLet :: (K.CContent c) => Rop.RopGet (K.CopSet c) c
 getLet med name =
     do fs <- Rop.getOpt [] getLetBody med name
-       let cops = C.ropCopset med
+       let cops = K.getCops med
        Right $ cops { K.copsetDerived = fs }
 
 getLetBody :: (K.CContent c) => Rop.RopGet [K.NamedCox c] c

@@ -72,6 +72,9 @@ instance Show (Resource c) where
 instance T.SelectRel Resource where
     selectRel = T.selectRel . resDataset
 
+instance D.GetCops Resource where
+    getCops = D.getCops . resGlobal
+
 instance C.GetGlobal' Resource where
     getGlobal' = resGlobal
 
