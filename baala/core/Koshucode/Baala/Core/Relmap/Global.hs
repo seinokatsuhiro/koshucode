@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Relmap.Global
     globalCommandLine,
     globalFill,
     globalRops, globalRopsAdd,
-    globalCops, globalCopset,
+    globalCops,
     globalInfix,
     globalAbort,
     global',
@@ -75,8 +75,8 @@ globalFill :: (D.CContent c) => O.Map (Global' h c)
 globalFill g = g
 
 -- | List of relmap operators.
-globalRops   :: Global' h c -> [C.Rop' h c]
-globalRops    = opsetRopList . globalOpset
+globalRops :: Global' h c -> [C.Rop' h c]
+globalRops = opsetRopList . globalOpset
 
 -- | Add relmap operators.
 globalRopsAdd :: [C.Rop' h c] -> O.Map (Global' h c)
@@ -85,16 +85,12 @@ globalRopsAdd rops g = g { globalOpset = opsetFill ops' } where
     ops  = globalOpset g
 
 -- | List of content operators.
-globalCops   :: Global' h c -> [D.Cop c]
-globalCops    = D.copsetCopList . globalCopset
-
--- | Set of content operators.
-globalCopset :: Global' h c -> D.CopSet c
-globalCopset  = opsetCop . globalOpset
+globalCops :: Global' h c -> [D.Cop c]
+globalCops = D.copsetCopList . D.getCops
 
 -- | List of settings of infix operators.
-globalInfix  :: Global' h c -> [B.Named B.InfixHeight]
-globalInfix   = D.copsetInfixList . opsetCop . globalOpset
+globalInfix :: Global' h c -> [B.Named B.InfixHeight]
+globalInfix = D.copsetInfixList . opsetCop . globalOpset
 
 -- | Abort with command line.
 globalAbort :: Global' h c -> B.AbortReason -> IO a
@@ -137,7 +133,10 @@ instance GetGlobal C.Intmed' where
 
 -- | Get operator set from 'Intmed'.
 ropCopset :: (GetGlobal' h) => C.Intmed' h c -> D.CopSet c
-ropCopset = globalCopset . getGlobal
+ropCopset = D.getCops . getGlobal
+
+instance D.GetCops (Global' h) where
+    getCops = opsetCop . globalOpset
 
 
 -- ----------------------  Operator set

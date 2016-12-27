@@ -50,7 +50,7 @@ getRangeAttr med =
   do term     <- Rop.getTerm med "-term"
      coxLow   <- Rop.getCox  med "-from"
      coxHigh  <- Rop.getCox  med "-to"
-     let cops = C.globalCopset $ C.getGlobal med
+     let cops = K.getCops $ C.getGlobal med
      Right (term, cops, coxLow, coxHigh)
 
 -- | __range \/N -from E -to E__
