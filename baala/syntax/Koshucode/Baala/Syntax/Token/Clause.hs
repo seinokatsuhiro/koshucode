@@ -17,6 +17,7 @@ module Koshucode.Baala.Syntax.Token.Clause
 
     -- * Abbreviation
     toks,
+    printToks,
     toksPrint,
     clausePrint,
   ) where
@@ -157,6 +158,7 @@ readClauseTokens path =
 toks :: String -> [S.Token]
 toks s = concatMap B.lineTokens $ tokenLinesString (B.codeIxIO s) s
 
+-- | Print token list.
 printToks :: [S.Token] -> IO ()
 printToks ts =
     do putStrLn $ "********** " ++ (B.cpLineText $ B.getCP ts)
@@ -216,7 +218,6 @@ printToks ts =
 --
 toksPrint :: [String] -> IO ()
 toksPrint ss = printToks $ toks $ unlines ss
-
 
 -- | Parse string to clause and print it for inspection.
 --
