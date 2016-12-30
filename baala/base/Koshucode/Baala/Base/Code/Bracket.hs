@@ -99,18 +99,21 @@ indentBranch
     -> a                 -- ^ Close element
     -> [[a]]             -- ^ Code elements indented
     -> B.Ab [[a]]        -- ^ Code Elements with open\/separator\/close elements
-indentBranch size indent open sep close = line 0 0 where
-    line lv i (((size -> Just i') : xs@(k : _)) : ls)
-         | not $ indent k = next lv       i           xs  ls
-         | i' == 0        = next lv       i           xs  ls
-         | i' >  i        = next (lv + 1) i' (open  : xs) ls
-         | i' <  i        = next (lv - 1) i' (close : sep : xs) ls
-         | i' == i        = next lv       i' (sep   : xs) ls
-    line lv i (xs : ls)   = next lv i xs ls
-    line lv _ []
-        | lv == 0         = Right []
-        | lv >  0         = Right [replicate lv close]
-        | otherwise       = Msg.extraCloseBracketInserted
+indentBranch size indent open sep close = line [0] where
+    line iis@(i:_) (((size -> Just i') : xs@(k:_)) : ls)
+         | not $ indent k = next iis                 xs  ls
+         | i' == 0        = next iis                 xs  ls
+         | i' == i        = next iis        (sep   : xs) ls
+         | i' >  i        = next (i' : iis) (open  : xs) ls
+         | i' <  i        = unindent i' iis (sep : xs) ls
+    line is (xs : ls)  = next is xs ls
+    line [0] []        = Right []
+    line is  []        = Right [replicate (length is  - 1) close]
 
-    next lv' i' xs' ls    = do ls' <- line lv' i' ls
-                               Right $ xs' : ls'
+    unindent _ [] _ _ = Msg.extraCloseBracketInserted
+    unindent i' iis@(i:is) xs ls
+        | i' < i      = unindent i' is (close : xs) ls
+        | otherwise   = next iis xs ls
+
+    next is' xs' ls   = do ls' <- line is' ls
+                           Right $ xs' : ls'
