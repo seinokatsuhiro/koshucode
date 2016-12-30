@@ -37,7 +37,7 @@ type NamedTrees = B.Named [Tree]
 
 -- | Wrap trees in group.
 ttreeGroup :: [Tree] -> Tree
-ttreeGroup = B.treeWrap S.BracketGroup
+ttreeGroup = B.codeTreeWrap S.BracketGroup
 
 -- --------------------------------------------  Parser
 
@@ -70,7 +70,7 @@ instance ToTrees [Tree] where
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 tokenTrees :: [S.Token] -> B.Ab [Tree]
-tokenTrees = B.trees S.getBracketType B.BracketNone . S.prepareTokens
+tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Call function with token trees.
 --

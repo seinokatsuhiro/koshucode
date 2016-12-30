@@ -6,13 +6,13 @@
 module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     CodeTree (..),
-    tree, trees,
+    codeTree, codeTrees,
+    codeTreeWrap,
 
     -- * Transformation
     untree, untrees,
     treeLeaves,
     undouble,
-    treeWrap,
     treeLeafMap, treeBranchMap,
   
     -- * Bracket
@@ -44,15 +44,18 @@ instance Functor (CodeTree p) where
 instance (B.GetCodePos a) => B.GetCodePos (CodeTree p a) where
     getCPs t = B.getCP <$> untree t
 
--- | Convert a list of elements to a single tree.
-tree :: (Ord p, B.GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
-tree bracketType zero one =
-    Right . treeWrap one B.<.> trees bracketType zero
+-- | Convert code elements to a single code tree.
+codeTree :: (Ord p, B.GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+codeTree bracketType zero one =
+    Right . codeTreeWrap one B.<.> codeTrees bracketType zero
 
--- | Convert a list of elements to trees.
-trees :: forall a. forall p. (Ord p, B.GetCodePos a)
-      => GetBracketType p a -> Bracket p -> [a] -> B.Ab [CodeTree p a]
-trees bracketType zero xs = result where
+-- | Convert code elements to code trees.
+codeTrees :: forall a. forall p. (Ord p, B.GetCodePos a)
+    => GetBracketType p a     -- ^ Bracket definition
+    -> Bracket p              -- ^ 'BracketNone'
+    -> [a]                    -- ^ List of code elements
+    -> B.Ab [CodeTree p a]    -- ^ Result code trees
+codeTrees bracketType zero xs = result where
     result       = do (ts, _) <- loop xs zero
                       Right ts
     add xs2 p a  = do (ts, xs3) <- loop xs2 p
@@ -72,6 +75,11 @@ trees bracketType zero xs = result where
         | otherwise          = ab Msg.extraCloseBracket
         where px  = bracketType x
               ab  = Msg.abCode [x]
+
+-- | Wrap trees into single tree.
+codeTreeWrap :: p -> [CodeTree p a] -> CodeTree p a
+codeTreeWrap _   [x] = x
+codeTreeWrap one xs  = TreeB one Nothing xs
 
 
 -- ----------------------  Utility
@@ -107,11 +115,6 @@ undouble p = loop where
           [x] -> x
           xs2 -> TreeB n pp xs2
     loop x = x
-
--- | Wrap trees into single tree.
-treeWrap :: p -> [CodeTree p a] -> CodeTree p a
-treeWrap _   [x] = x
-treeWrap one xs  = TreeB one Nothing xs
 
 mapToAllLeaf :: (a -> b) -> CodeTree p a -> CodeTree p b
 mapToAllLeaf f = loop where
