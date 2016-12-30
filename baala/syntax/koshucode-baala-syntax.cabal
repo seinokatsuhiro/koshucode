@@ -84,6 +84,7 @@ library
         Koshucode.Baala.Syntax.Tree.Parse
         Koshucode.Baala.Syntax.Tree.Pattern
         Koshucode.Baala.Syntax.Tree.Split
+        Koshucode.Baala.Syntax.Tree.Subtree
 
   -- Modules included in this library but not exported.
   --other-modules:       
