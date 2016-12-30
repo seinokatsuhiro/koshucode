@@ -41,13 +41,13 @@ instance (B.GetCodePos a) => B.GetCodePos (CodeTree p a) where
     getCPs t = B.getCP <$> untree t
 
 -- | Convert code elements to a single code tree.
-codeTree :: (Ord p, B.GetCodePos a) => B.GetBracketType p a -> B.Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+codeTree :: (Ord p, B.GetCodePos a) => B.GetBracket p a -> B.Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
 codeTree bracketType zero one =
     Right . codeTreeWrap one B.<.> codeTrees bracketType zero
 
 -- | Convert code elements to code trees.
 codeTrees :: forall a. forall p. (Ord p, B.GetCodePos a)
-    => B.GetBracketType p a     -- ^ Bracket definition
+    => B.GetBracket p a         -- ^ Bracket definition
     -> B.Bracket p              -- ^ 'B.BracketNone'
     -> [a]                      -- ^ List of code elements
     -> B.Ab [CodeTree p a]      -- ^ Result code trees

@@ -7,7 +7,7 @@
 module Koshucode.Baala.Base.Code.Bracket
   ( -- * Bracket
     Bracket (..),
-    GetBracketType,
+    GetBracket,
     bracketTable,
 
     -- * Indent
@@ -32,9 +32,9 @@ data Bracket b
 -- ----------------------  Bracket table
 
 -- | Get a bracket type.
-type GetBracketType b a = a -> Bracket b
+type GetBracket b a = a -> Bracket b
 
--- | Create 'GetBracketType' functions
+-- | Create 'GetBracket' functions
 -- from a type-open-close table.
 --
 -- /Example/
@@ -57,7 +57,7 @@ type GetBracketType b a = a -> Bracket b
 bracketTable
     :: (Eq a)
     => [(b, (O.Test a, O.Test a))] -- ^ List of (/type/, (/open/, /close/))
-    -> GetBracketType b a
+    -> GetBracket b a
 bracketTable xs = bracketType where
     bracketTypeTable = map bracketOpen xs ++ map bracketClose xs
     bracketOpen  (n, (isOpen, _))  = (isOpen,  BracketOpen n)

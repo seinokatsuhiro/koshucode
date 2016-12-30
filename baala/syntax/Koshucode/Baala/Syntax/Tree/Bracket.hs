@@ -80,7 +80,7 @@ instance B.Name BracketType where
     name BracketUnknown  = "unknown"
 
 -- | Bracket type of token.
-getBracketType :: B.GetBracketType BracketType S.Token
+getBracketType :: B.GetBracket BracketType S.Token
 getBracketType = B.bracketTable
     [ BracketGroup   # bracketGroup
     , BracketTerm    # bracketTerm
