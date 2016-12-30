@@ -3,7 +3,7 @@
 
 -- | Parser for token tree.
 
-module Koshucode.Baala.Syntax.TTree.Parse
+module Koshucode.Baala.Syntax.Tree.Parse
   ( -- * Type
     Tree, TTree, NamedTrees,
 
@@ -20,7 +20,7 @@ module Koshucode.Baala.Syntax.TTree.Parse
 import qualified Text.PrettyPrint                        as P
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
-import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
+import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 
 
 -- --------------------------------------------  Type

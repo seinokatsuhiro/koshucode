@@ -69,12 +69,6 @@ library
         Koshucode.Baala.Syntax.Symbol.Symbol
         Koshucode.Baala.Syntax.Symbol.Term
 
-        Koshucode.Baala.Syntax.TTree
-        Koshucode.Baala.Syntax.TTree.Bracket
-        Koshucode.Baala.Syntax.TTree.Parse
-        Koshucode.Baala.Syntax.TTree.Pattern
-        Koshucode.Baala.Syntax.TTree.Split
-
         Koshucode.Baala.Syntax.Token
         Koshucode.Baala.Syntax.Token.Clause
         Koshucode.Baala.Syntax.Token.Clip
@@ -84,6 +78,12 @@ library
         Koshucode.Baala.Syntax.Token.Section
         Koshucode.Baala.Syntax.Token.Token
         Koshucode.Baala.Syntax.Token.Utility
+
+        Koshucode.Baala.Syntax.Tree
+        Koshucode.Baala.Syntax.Tree.Bracket
+        Koshucode.Baala.Syntax.Tree.Parse
+        Koshucode.Baala.Syntax.Tree.Pattern
+        Koshucode.Baala.Syntax.Tree.Split
 
   -- Modules included in this library but not exported.
   --other-modules:       

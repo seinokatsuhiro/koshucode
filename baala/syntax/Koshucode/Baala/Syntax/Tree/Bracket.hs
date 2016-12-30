@@ -2,7 +2,7 @@
 
 -- | Bracket type.
 
-module Koshucode.Baala.Syntax.TTree.Bracket
+module Koshucode.Baala.Syntax.Tree.Bracket
   ( -- * Bracket type
     BracketType (..),
     getBracketType,

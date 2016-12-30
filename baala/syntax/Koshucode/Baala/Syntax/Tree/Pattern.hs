@@ -3,7 +3,7 @@
 
 -- | Patterns for token tree.
 
-module Koshucode.Baala.Syntax.TTree.Pattern
+module Koshucode.Baala.Syntax.Tree.Pattern
   ( -- * Leaf
     pattern L,
     pattern LText,
@@ -23,7 +23,7 @@ module Koshucode.Baala.Syntax.TTree.Pattern
 
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
-import qualified Koshucode.Baala.Syntax.TTree.Bracket    as S
+import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 
 -- ---------------------------------  Leaf

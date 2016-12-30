@@ -10,7 +10,7 @@ module Koshucode.Baala.Syntax.Attr.AttrEd
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Syntax.Symbol          as S
 import qualified Koshucode.Baala.Syntax.Token           as S
-import qualified Koshucode.Baala.Syntax.TTree           as S
+import qualified Koshucode.Baala.Syntax.Tree            as S
 import qualified Koshucode.Baala.Syntax.Attr.AttrName   as S
 import qualified Koshucode.Baala.Syntax.Attr.Slot       as S
 import qualified Koshucode.Baala.Syntax.Pattern         as P
