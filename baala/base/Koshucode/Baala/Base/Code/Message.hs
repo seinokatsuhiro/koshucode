@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Code.Message
     abCode,
     -- * Message
     extraCloseBracket,
+    extraCloseBracketInserted,
     extraOpenBracket,
   ) where
 
@@ -16,11 +17,15 @@ import qualified Koshucode.Baala.Base.Abort          as B
 abCode :: (B.GetCodePos cp) => B.Abortable cp b
 abCode = B.abortable "code"
 
--- | Extra close bracket
+-- | [Extra close bracket]
 extraCloseBracket :: B.Ab a
 extraCloseBracket = B.leftBecause "Extra close bracket"
 
--- | Unclosed open bracket
+-- | [Extra closed brackets inserted]
+extraCloseBracketInserted :: B.Ab a
+extraCloseBracketInserted = B.leftBecause "Extra closed brackets inserted"
+
+-- | [Unclosed open bracket]
 extraOpenBracket :: B.Ab a
 extraOpenBracket = B.leftBecause "Unclosed open bracket"
 

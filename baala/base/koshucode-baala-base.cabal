@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Report
 
+        Koshucode.Baala.Base.Code.Bracket
         Koshucode.Baala.Base.Code.Clause
         Koshucode.Baala.Base.Code.Infix
         Koshucode.Baala.Base.Code.Line

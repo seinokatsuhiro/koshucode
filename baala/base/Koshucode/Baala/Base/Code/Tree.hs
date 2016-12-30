@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -14,17 +15,12 @@ module Koshucode.Baala.Base.Code.Tree
     treeLeaves,
     undouble,
     treeLeafMap, treeBranchMap,
-  
-    -- * Bracket
-    Bracket (..),
-    GetBracketType,
-    bracketTable
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.Abort            as B
-import qualified Koshucode.Baala.Base.List             as B
 import qualified Koshucode.Baala.Base.Prelude          as B
+import qualified Koshucode.Baala.Base.Code.Bracket     as B
 import qualified Koshucode.Baala.Base.Code.Message     as Msg
 
 
@@ -45,36 +41,44 @@ instance (B.GetCodePos a) => B.GetCodePos (CodeTree p a) where
     getCPs t = B.getCP <$> untree t
 
 -- | Convert code elements to a single code tree.
-codeTree :: (Ord p, B.GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+codeTree :: (Ord p, B.GetCodePos a) => B.GetBracketType p a -> B.Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
 codeTree bracketType zero one =
     Right . codeTreeWrap one B.<.> codeTrees bracketType zero
 
 -- | Convert code elements to code trees.
 codeTrees :: forall a. forall p. (Ord p, B.GetCodePos a)
-    => GetBracketType p a     -- ^ Bracket definition
-    -> Bracket p              -- ^ 'BracketNone'
-    -> [a]                    -- ^ List of code elements
-    -> B.Ab [CodeTree p a]    -- ^ Result code trees
+    => B.GetBracketType p a     -- ^ Bracket definition
+    -> B.Bracket p              -- ^ 'B.BracketNone'
+    -> [a]                      -- ^ List of code elements
+    -> B.Ab [CodeTree p a]      -- ^ Result code trees
 codeTrees bracketType zero xs = result where
     result       = do (ts, _) <- loop xs zero
                       Right ts
     add xs2 p a  = do (ts, xs3) <- loop xs2 p
                       Right (a : ts, xs3)
 
-    loop :: [a] -> Bracket p -> B.Ab ([CodeTree p a], [a])
+    loop :: [a] -> B.Bracket p -> B.Ab ([CodeTree p a], [a])
     loop [] _ = Right ([], [])
     loop (x : xs2) p
-        | isNotBracket   px  = add xs2 p $ TreeL x
-        | isOpenBracket  px  =
-            do (trees2, cxs3) <- loop xs2 px
-               case (px, cxs3) of
-                 (BracketOpen p2, c : xs3)
-                            -> add xs3 p $ TreeB p2 (Just (x, c)) trees2
-                 _          -> ab Msg.extraOpenBracket
-        | isCloseBracket px  = Right ([], x : xs2)
+        | isNone px  = add xs2 p $ TreeL x
+        | isOpen px  = do (trees2, cxs3) <- loop xs2 px
+                          case (px, cxs3) of
+                            (B.BracketOpen p2, c : xs3)
+                              -> add xs3 p $ TreeB p2 (Just (x, c)) trees2
+                            _ -> ab Msg.extraOpenBracket
+        | isClose px  = Right ([], x : xs2)
         | otherwise          = ab Msg.extraCloseBracket
         where px  = bracketType x
               ab  = Msg.abCode [x]
+
+    isNone (B.BracketNone)     = True
+    isNone _                   = False
+
+    isOpen (B.BracketOpen _)   = True
+    isOpen _                   = False
+
+    isClose (B.BracketClose _) = True
+    isClose _                  = False
 
 -- | Wrap trees into single tree.
 codeTreeWrap :: p -> [CodeTree p a] -> CodeTree p a
@@ -136,63 +140,3 @@ treeBranchMap f = loop where
     loop (TreeL x)        = TreeL x
     loop (TreeB p aa xs)  = f p aa $ map loop xs
 
-
--- ----------------------  Bracket
-
--- | Bracket type.
-data Bracket p
-    = BracketNone       -- ^ None bracket
-    | BracketOpen  p    -- ^ Open bracket
-    | BracketClose p    -- ^ Close bracket
-      deriving (Show, Eq, Ord)
-
-isNotBracket :: O.Test (Bracket p)
-isNotBracket (BracketNone)       = True
-isNotBracket _                   = False
-
-isOpenBracket :: O.Test (Bracket p)
-isOpenBracket (BracketOpen _)    = True
-isOpenBracket _                  = False
-
-isCloseBracket :: O.Test (Bracket p)
-isCloseBracket (BracketClose _)  = True
-isCloseBracket _                 = False
-
-
--- ----------------------  Bracket table
-
--- | Get a bracket type.
-type GetBracketType p a = a -> Bracket p
-
--- | Create 'GetBracketType' functions
--- from a type-open-close table.
---
--- /Example/
---
--- Create bracket/type functions from @()@ and @[]@.
---
---   >>> let bracket n [a, b] = (n, ((== a), (== b)))
---   >>> let pt = bracketTable [ bracket 1 "()", bracket 2 "[]" ]
---
--- Get bracket types for each chars.
--- Types of open brackets are positive integer,
--- and closes are negative.
---
---   >>> map pt "ab(cd[ef])g"
---   [BracketNone, BracketNone,
---    BracketOpen 1, BracketNone, BracketNone,
---     BracketOpen 2, BracketNone, BracketNone, BracketClose 2,
---    BracketClose 1, BracketNone]
---
-bracketTable
-    :: (Eq a)
-    => [(p, (O.Test a, O.Test a))] -- ^ List of (/type/, (/open/, /close/))
-    -> GetBracketType p a
-bracketTable xs = bracketType where
-    bracketTypeTable = map bracketOpen xs ++ map bracketClose xs
-    bracketOpen  (n, (isOpen, _))  = (isOpen,  BracketOpen n)
-    bracketClose (n, (_, isClose)) = (isClose, BracketClose n)
-    bracketType a =
-        case B.lookupSatisfy a bracketTypeTable of
-          Just p  -> p
-          Nothing -> BracketNone
