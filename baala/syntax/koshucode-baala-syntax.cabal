@@ -95,6 +95,7 @@ library
        , containers                == 0.5.*
        , pretty                    == 1.*
        , text                      == 1.*
+       , Glob                      == 0.*
        , koshucode-baala-overture  == 0.194.0.0
        , koshucode-baala-base      == 0.194.0.0
 

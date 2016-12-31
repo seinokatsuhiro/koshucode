@@ -4,8 +4,14 @@
 
 module Koshucode.Baala.Syntax.Tree.Subtree
   ( readSubtreeClauses,
+    SubtreeFilter (..),
+    subtreeId, subtreeEq,
+    subtreeKeep, subtreeOmit,
+    subtreeChain,
+    subtreeFilter,
   ) where
 
+import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
@@ -59,4 +65,76 @@ clauseFirstElem cl =
       ln : _ -> case B.lineTokens ln of
                   [] -> Nothing
                   tok : _ -> Just tok
+
+-- | Subtree filter.
+data SubtreeFilter
+    = SubtreeId                                 -- ^ Identity
+    | SubtreeEq    String                       -- ^ Equality
+    | SubtreeKeep  String (Maybe Glob.Pattern)  -- ^ Glob
+    | SubtreeOmit  String (Maybe Glob.Pattern)  -- ^ Anti-glob
+    | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
+      deriving (Show, Eq)
+
+instance Monoid SubtreeFilter where
+    mempty  = SubtreeId
+    mappend = SubtreeChain
+
+-- | Identity filter.
+subtreeId :: SubtreeFilter
+subtreeId = SubtreeId
+
+-- | Equal filter.
+subtreeEq :: String -> SubtreeFilter
+subtreeEq = SubtreeEq
+
+-- | Glob filter.
+subtreeKeep :: String -> SubtreeFilter
+subtreeKeep s = SubtreeKeep s Nothing
+
+-- | Anti-glob filter.
+subtreeOmit :: String -> SubtreeFilter
+subtreeOmit s = SubtreeOmit s Nothing
+
+-- | Filter chain.
+subtreeChain :: O.Bin SubtreeFilter
+subtreeChain = SubtreeChain
+
+-- | Filter strings by subtree filter.
+--
+--   >>> subtreeFilter subtreeId ["foo", "bar", "foobar"]
+--   ["foo","bar","foobar"]
+--
+--   >>> subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
+--   ["bar"]
+--
+--   >>> subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
+--   ["foo","foobar"]
+--
+--   >>> subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
+--   ["bar","foobar"]
+--
+--   >>> subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--
+--   >>> subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--
+--   >>> subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
+--   ["foo"]
+--
+subtreeFilter :: SubtreeFilter -> O.Map [String]
+subtreeFilter f xs0 = loop xs0 [f] where
+    loop xs []                       = xs
+    loop xs (SubtreeId : fs)         = loop xs fs
+    loop xs (SubtreeEq x : fs)       = loop (filter (== x) xs) fs
+
+    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (Glob.match p `filter` xs) fs
+    loop xs (SubtreeKeep x (Nothing) : fs) = let p = Just $ Glob.compile x
+                                              in loop xs (SubtreeKeep x p : fs)
+
+    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (Glob.match p `B.omit` xs) fs
+    loop xs (SubtreeOmit x (Nothing) : fs) = let p = Just $ Glob.compile x
+                                              in loop xs (SubtreeOmit x p : fs)
+
+    loop xs (SubtreeChain f1 f2 : fs)      = loop xs $ f1 : f2 : fs
 
