@@ -8,9 +8,9 @@
 module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     RawTree (..),
+    treeMapL, treeMapB,
     treeLeaves,
     undouble,
-    treeLeafMap, treeBranchMap,
 
     -- * Code tree
     CodeTree,
@@ -38,17 +38,23 @@ data RawTree p k a
       deriving (Show, Eq, Ord)
 
 instance Functor (RawTree p k) where
-    fmap = treeFmap
+    fmap = treeMapL
 
--- | Mapping function for 'RawTree'.
-treeFmap :: (a -> b) -> RawTree p k a -> RawTree p k b
-treeFmap f = loop where
-    loop (TreeL x)      = TreeL $ f x
-    loop (TreeB n k xs) = TreeB n k $ map loop xs
+-- | Map function to all leaves.
+treeMapL :: (a -> b) -> RawTree p k a -> RawTree p k b
+treeMapL f = loop where
+    loop (TreeL x)        = TreeL $ f x
+    loop (TreeB p k xs)  = TreeB p k $ map loop xs
+
+-- | Map function to all branches.
+treeMapB :: (p -> k -> [RawTree p k a] -> RawTree p k a) -> O.Map (RawTree p k a)
+treeMapB f = loop where
+    loop (TreeL x)        = TreeL x
+    loop (TreeB p k xs)  = f p k $ map loop xs
 
 -- | Collect leaves in tree.
 treeLeaves :: RawTree p k a -> [a]
-treeLeaves (TreeB _ _ ts)  = concatMap treeLeaves ts
+treeLeaves (TreeB _ _ ts)  = treeLeaves O.<++> ts
 treeLeaves (TreeL x)       = [x]
 
 -- | Simplify tree by removing double brackets,
@@ -64,20 +70,6 @@ undouble p = loop where
           [x] -> x
           xs2 -> TreeB n pp xs2
     loop x = x
-
--- | Map function to all leaves.
---   This function is similar to 'fmap',
---   but not map to bracket leaf.
-treeLeafMap :: (a -> a) -> O.Map (RawTree p k a)
-treeLeafMap f = loop where
-    loop (TreeL x)        = TreeL $ f x
-    loop (TreeB p aa xs)  = TreeB p aa $ map loop xs
-
--- | Map function to all branches.
-treeBranchMap :: (p -> k -> [RawTree p k a] -> RawTree p k a) -> O.Map (RawTree p k a)
-treeBranchMap f = loop where
-    loop (TreeL x)        = TreeL x
-    loop (TreeB p aa xs)  = f p aa $ map loop xs
 
 
 -- ============================================  Code tree
@@ -148,8 +140,7 @@ untrees = concatMap untree
 untree :: CodeTree p a -> [a]
 untree = loop where
     loop (TreeL x) = [x]
-    loop (TreeB _ Nothing xs) =
-        concatMap loop xs
+    loop (TreeB _ Nothing xs) = loop O.<++> xs
     loop (TreeB _ (Just (open, close)) xs) =
-        open : concatMap loop xs ++ [close]
+        open : (loop O.<++> xs) ++ [close]
 
