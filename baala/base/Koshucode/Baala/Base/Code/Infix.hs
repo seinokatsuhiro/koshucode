@@ -83,9 +83,9 @@ infixToPrefix :: forall p a.
      -> InfixMapper p a
      -> InfixConv a (B.CodeTree p a) -- ^ Infix-to-prefix conversion.
 infixToPrefix (pre, inf, post) ht group mapper tree =
-    do let tree1 :: InfixTree p a = fmap height tree
+    do let tree1 :: InfixTree p a = B.codeTreeFmap height tree
        tree2     :: InfixTree p a <- mapper binary tree1
-       Right (fmap snd tree2 :: B.CodeTree p a)
+       Right (B.codeTreeFmap snd tree2 :: B.CodeTree p a)
     where
       height :: a -> (InfixHeight, a)
       height x = (ht x, x)
