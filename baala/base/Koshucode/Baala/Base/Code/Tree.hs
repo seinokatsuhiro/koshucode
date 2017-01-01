@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Code.Tree
     treeMapL, treeMapB,
     treeLeaves,
     undouble,
-    ppTree,
+    ppRawTree, ppRawTrees,
 
     -- * Code tree
     CodeTree,
@@ -72,24 +72,28 @@ undouble p = loop where
           xs2 -> TreeB n pp xs2
     loop x = x
 
--- | Pretty print of raw tree.
+-- | Pretty print for single raw tree.
 --   Branches are marked usign right arrow (@>@),
 --   and leaves are marked using hyphen (@-@).
 --
---   >>> mapM_ putStrLn $ ppTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   >>> mapM_ putStrLn $ ppRawTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
 --   > () "Y1"
 --     - "Z1"
 --     > () "Y2"
 --       - "Z2"
 --       - "Z3"
 --
-ppTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
-ppTree = pp 0 where
+ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+ppRawTree = pp 0 where
     pp dp (TreeL z)      = [indent dp ++ "- " ++ show z]
     pp dp (TreeB b y zs) = (indent dp ++ "> " ++ show b ++ " " ++ show y)
                            : (pp (dp + 1) O.<++> zs)
     indent 0  = ""
     indent dp = replicate (2 * dp) ' '
+
+-- | Pretty print for multiple raw trees.
+ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
+ppRawTrees = concatMap ppRawTree
 
 
 -- ============================================  Code tree
