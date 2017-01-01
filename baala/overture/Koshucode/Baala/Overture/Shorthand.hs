@@ -9,6 +9,7 @@ module Koshucode.Baala.Overture.Shorthand
    -- * Infix operators
    (&),
    (++), (<++>),
+   (<?>),
    (<$$>),
    (<#>), (<#!>),
 
@@ -19,6 +20,7 @@ module Koshucode.Baala.Overture.Shorthand
  ) where
 
 import Prelude hiding ((++))
+import qualified Data.Maybe                    as May
 import qualified Koshucode.Baala.Overture.Type as O
 
 
@@ -67,6 +69,10 @@ infixr 6 ++
 {-# INLINE (<++>) #-}
 (<++>) :: (a -> [b]) -> [a] -> [b]
 (<++>) = concatMap
+
+-- | Same as 'May.mapMaybe'.
+(<?>) :: (a -> Maybe b) -> [a] -> [b]
+(<?>) = May.mapMaybe
 
 infixl 4 <$$>
 
