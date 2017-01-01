@@ -1,9 +1,15 @@
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Subtree clause.
 
 module Koshucode.Baala.Syntax.Tree.Subtree
   ( readSubtreeClauses,
+
+    Subtree,
+    SubtreePattern (..),
+    subtree,
+
     SubtreeFilter (..),
     subtreeId, subtreeEq,
     subtreeKeep, subtreeOmit,
@@ -66,6 +72,82 @@ clauseFirstElem cl =
                   [] -> Nothing
                   tok : _ -> Just tok
 
+-- | Subtree.
+type Subtree = B.RawTree [SubtreePattern] String String
+
+-- | Subtree pattern.
+data SubtreePattern
+    = SubtreeL SubtreeFilter                   -- ^ Leaf
+    | SubtreeB SubtreeFilter [SubtreePattern]  -- ^ Branch
+    | SubtreeR SubtreeFilter [SubtreePattern]  -- ^ Recursive branch
+      deriving (Show, Eq)
+
+-- | Select subtree.
+--
+--   >>> let tree = B.TreeB [] "Y1" [B.TreeL "Z1", B.TreeL "Z2", B.TreeB [] "Y2" [B.TreeL "Z3"]]
+--   >>> O.putLines $ B.ppTree tree
+--   > [] "Y1"
+--     - "Z1"
+--     - "Z2"
+--     > [] "Y2"
+--       - "Z3"
+--
+--   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeB (subtreeEq "Y1") [SubtreeL (subtreeEq "Z1")]] [tree])
+--   > [] "Y1"
+--     - "Z1"
+--
+--   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeR (subtreeId) [SubtreeL (subtreeEq "Z3")]] [tree])
+--   > [] "Y1"
+--     > [] "Y2"
+--       - "Z3"
+--
+--   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeR (subtreeId) [SubtreeL (subtreeEq "Z1")]] [tree])
+--   > [] "Y1"
+--     - "Z1"
+--
+subtree :: [SubtreePattern] -> O.Map [Subtree]
+subtree ps ts = subtreeRec $ subtreeOne ps ts
+
+subtreeRec :: O.Map [Subtree]
+subtreeRec ts = p O.<?> ts where
+    p t@(B.TreeL _) = Just t
+    p (B.TreeB ps y zs) =
+        case subtreeRec $ subtreeOne ps zs of
+          []  -> Nothing
+          zs' -> Just $ B.TreeB [] y zs'
+
+subtreeOne :: [SubtreePattern] -> O.Map [Subtree]
+subtreeOne ps0 ts = p1 O.<?> ts where
+    p1 t = maybeHead (p2 t O.<?> ps0)
+
+    p2 t@(B.TreeL _) (SubtreeL f)
+        | nullZ f t  = Nothing
+        | otherwise  = Just t
+    p2 t@(B.TreeB _ y zs) (SubtreeB f ps)
+        | nullY f t  = Nothing
+        | otherwise  = Just $ B.TreeB ps y zs
+    p2 t@(B.TreeB _ y zs) (SubtreeR f ps)
+        | nullY f t  = Nothing
+        | otherwise  = Just $ B.TreeB (SubtreeR f ps : ps) y zs
+    p2 _ _ = Nothing
+
+    nullZ f t = null $ subtreeFilterOn getTreeZ f [t]
+    nullY f t = null $ subtreeFilterOn getTreeY f [t]
+
+maybeHead :: [a] -> Maybe a
+maybeHead []       = Nothing
+maybeHead (a : _)  = Just a
+
+-- | Branch element of tree.
+getTreeY :: B.RawTree b y z -> Maybe y
+getTreeY (B.TreeB _ y _)  = Just y
+getTreeY _                = Nothing
+
+-- | Leaf element of tree.
+getTreeZ :: B.RawTree b y z -> Maybe z
+getTreeZ (B.TreeL z)  = Just z
+getTreeZ _            = Nothing
+
 -- | Subtree filter.
 data SubtreeFilter
     = SubtreeId                                 -- ^ Identity
@@ -123,18 +205,32 @@ subtreeChain = SubtreeChain
 --   ["foo"]
 --
 subtreeFilter :: SubtreeFilter -> O.Map [String]
-subtreeFilter f xs0 = loop xs0 [f] where
+subtreeFilter = subtreeFilterOn Just
+
+subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> O.Map [a]
+subtreeFilterOn get f xs0 = loop xs0 [f] where
     loop xs []                       = xs
     loop xs (SubtreeId : fs)         = loop xs fs
-    loop xs (SubtreeEq x : fs)       = loop (filter (== x) xs) fs
+    loop xs (SubtreeEq x : fs)       = loop (keepOn get (== x) xs) fs
 
-    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (Glob.match p `filter` xs) fs
+    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (keepOn get (Glob.match p) xs) fs
     loop xs (SubtreeKeep x (Nothing) : fs) = let p = Just $ Glob.compile x
                                               in loop xs (SubtreeKeep x p : fs)
 
-    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (Glob.match p `B.omit` xs) fs
+    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (omitOn get (Glob.match p) xs) fs
     loop xs (SubtreeOmit x (Nothing) : fs) = let p = Just $ Glob.compile x
                                               in loop xs (SubtreeOmit x p : fs)
 
     loop xs (SubtreeChain f1 f2 : fs)      = loop xs $ f1 : f2 : fs
+
+keepOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
+keepOn get f = loop where
+    loop (x@(get -> Just x') : xs)
+        | f x'       = x : loop xs
+        | otherwise  = loop xs
+    loop (_ : xs)    = loop xs
+    loop []          = []
+
+omitOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
+omitOn get f = keepOn get (not . f)
 
