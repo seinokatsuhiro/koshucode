@@ -12,6 +12,7 @@ module Koshucode.Baala.Overture.Shorthand
    (<?>),
    (<$$>),
    (<#>), (<#!>),
+   (<#++>),
 
    -- * Functions
    ordEq, compareOn,
@@ -93,6 +94,10 @@ f <$$> x = fmap f <$> x
 {-# INLINE (<#!>) #-}
 (<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
 (<#!>) = mapM_
+
+-- | Monadic concat mappping.
+(<#++>) :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+(<#++>) f a = return . concat =<< (f <#> a)
 
 
 -- ============================================  Function
