@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Code.Tree
     treeMapL, treeMapB,
     treeLeaves,
     undouble,
+    ppTree,
 
     -- * Code tree
     CodeTree,
@@ -30,30 +31,30 @@ import qualified Koshucode.Baala.Base.Code.Message     as Msg
 -- ============================================  Tree
 
 -- | Tree of leaf and branch.
-data RawTree p k a
-    = TreeL a
-      -- ^ __Leaf:__ Terminal of tree.
-    | TreeB p k [RawTree p k a]
-      -- ^ __Branch:__ Bracket-type, open/close leaves, and subtrees.
+data RawTree b y z
+    = TreeL z
+      -- ^ __Leaf:__ Leaf element (@z@).
+    | TreeB b y [RawTree b y z]
+      -- ^ __Branch:__ Branch type (@b@), branch element (@y@), and subtrees.
       deriving (Show, Eq, Ord)
 
 instance Functor (RawTree p k) where
     fmap = treeMapL
 
 -- | Map function to all leaves.
-treeMapL :: (a -> b) -> RawTree p k a -> RawTree p k b
+treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
 treeMapL f = loop where
     loop (TreeL x)        = TreeL $ f x
     loop (TreeB p k xs)  = TreeB p k $ map loop xs
 
 -- | Map function to all branches.
-treeMapB :: (p -> k -> [RawTree p k a] -> RawTree p k a) -> O.Map (RawTree p k a)
+treeMapB :: (b -> y -> [RawTree b y z] -> RawTree b y z) -> O.Map (RawTree b y z)
 treeMapB f = loop where
     loop (TreeL x)        = TreeL x
     loop (TreeB p k xs)  = f p k $ map loop xs
 
 -- | Collect leaves in tree.
-treeLeaves :: RawTree p k a -> [a]
+treeLeaves :: RawTree b y z -> [z]
 treeLeaves (TreeB _ _ ts)  = treeLeaves O.<++> ts
 treeLeaves (TreeL x)       = [x]
 
@@ -63,13 +64,32 @@ treeLeaves (TreeL x)       = [x]
 --   >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 -- 
-undouble :: O.Test p -> O.Map (RawTree p k a)
+undouble :: O.Test b -> O.Map (RawTree b y z)
 undouble p = loop where
     loop (TreeB n pp xs) | p n =
         case map loop xs of
           [x] -> x
           xs2 -> TreeB n pp xs2
     loop x = x
+
+-- | Pretty print of raw tree.
+--   Branches are marked usign right arrow (@>@),
+--   and leaves are marked using hyphen (@-@).
+--
+--   >>> mapM_ putStrLn $ ppTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   > () "Y1"
+--     - "Z1"
+--     > () "Y2"
+--       - "Z2"
+--       - "Z3"
+--
+ppTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+ppTree = pp 0 where
+    pp dp (TreeL z)      = [indent dp ++ "- " ++ show z]
+    pp dp (TreeB b y zs) = (indent dp ++ "> " ++ show b ++ " " ++ show y)
+                           : (pp (dp + 1) O.<++> zs)
+    indent 0  = ""
+    indent dp = replicate (2 * dp) ' '
 
 
 -- ============================================  Code tree
