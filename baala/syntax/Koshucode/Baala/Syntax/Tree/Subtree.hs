@@ -8,7 +8,7 @@ module Koshucode.Baala.Syntax.Tree.Subtree
 
     Subtree,
     SubtreePattern (..),
-    subtree,
+    subtree, subtreeOne,
 
     SubtreeFilter (..),
     subtreeId, subtreeEq,
@@ -116,6 +116,7 @@ subtreeRec ts = p O.<?> ts where
           []  -> Nothing
           zs' -> Just $ B.TreeB [] y zs'
 
+-- | Select subtree.
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree]
 subtreeOne ps0 ts = p1 O.<?> ts where
     p1 t = maybeHead (p2 t O.<?> ps0)
@@ -233,4 +234,3 @@ keepOn get f = loop where
 
 omitOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
 omitOn get f = keepOn get (not . f)
-
