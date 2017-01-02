@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Syntax.Tree.Subtree
   ( readSubtreeClauses,
+    decodeSubtreePattern,
 
     Subtree,
     SubtreePattern (..),
@@ -20,7 +21,11 @@ import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
+import qualified Koshucode.Baala.Syntax.Tree.Parse       as S
+import qualified Koshucode.Baala.Syntax.Tree.Split       as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
+import qualified Koshucode.Baala.Syntax.Tree.Pattern     as P
+import qualified Koshucode.Baala.Base.Message            as Msg
 
 -- | Read subtree clauses from file.
 --
@@ -70,6 +75,43 @@ clauseFirstElem cl =
       ln : _ -> case B.lineTokens ln of
                   [] -> Nothing
                   tok : _ -> Just tok
+
+-- | Decode token trees to subtree patterns.
+--
+--   >>> S.withTrees decodeSubtreePattern "- \"Z1\""
+--   Right [SubtreeL (SubtreeEq "Z1")]
+--
+--   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" )"
+--   Right [SubtreeB (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--
+--   >>> S.withTrees decodeSubtreePattern "> \"Y1\" ( - \"Z1\" | - \"Z2\" )"
+--   Right [ SubtreeB (SubtreeEq "Y1") [ SubtreeL (SubtreeEq "Z1")
+--                                     , SubtreeL (SubtreeEq "Z2") ]]
+--
+--   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - \"Z1\" )"
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--
+decodeSubtreePattern :: [S.Tree] -> B.Ab [SubtreePattern]
+decodeSubtreePattern = pats where
+    pats ts = pat O.<#> S.divideTreesByBar ts
+
+    pat (P.LRaw "-"  : ts) = Right . SubtreeL . fst =<< filt ts
+    pat (P.LRaw ">"  : ts) = SubtreeB </> ts
+    pat (P.LRaw ">>" : ts) = SubtreeR </> ts
+    pat _ = Msg.adlib "Unknown subtree pattern"
+
+    filt []                          = Right (subtreeId, [])
+    filt (P.LQq s : ts)              = subtreeEq s <+> ts
+    filt (P.LRaw "?" : P.LQq s : ts) = subtreeKeep s <+> ts
+    filt (P.LRaw "!" : P.LQq s : ts) = subtreeOmit s <+> ts
+    filt [P.BGroup ts]               = do ps <- pats ts
+                                          Right (subtreeId, ps)
+    filt _ = Msg.adlib "Unknown subtree filter"
+
+    k </> ts = do (f, ps) <- filt ts
+                  Right $ k f ps
+    f <+> ts = do (g, ps) <- filt ts
+                  Right (f O.++ g, ps)
 
 -- | Subtree.
 type Subtree = B.RawTree [SubtreePattern] String String
@@ -159,7 +201,7 @@ data SubtreeFilter
 
 instance Monoid SubtreeFilter where
     mempty  = SubtreeId
-    mappend = SubtreeChain
+    mappend = subtreeChain
 
 -- | Identity filter.
 subtreeId :: SubtreeFilter
@@ -179,7 +221,9 @@ subtreeOmit s = SubtreeOmit s Nothing
 
 -- | Filter chain.
 subtreeChain :: O.Bin SubtreeFilter
-subtreeChain = SubtreeChain
+subtreeChain SubtreeId f = f
+subtreeChain f SubtreeId = f
+subtreeChain f g = SubtreeChain f g
 
 -- | Filter strings by subtree filter.
 --
