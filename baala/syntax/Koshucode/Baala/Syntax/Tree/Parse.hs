@@ -74,13 +74,13 @@ tokenTrees = B.codeTrees S.getBracketType B.BracketNone . S.prepareTokens
 
 -- | Call function with token trees.
 --
---   >>> withTrees id "a"
+--   >>> withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --
-withTrees :: (ToTrees a) => ([Tree] -> b) -> a -> B.Ab b
+withTrees :: (ToTrees a) => ([Tree] -> B.Ab b) -> a -> B.Ab b
 withTrees f a =
     do ts <- toTrees a
-       Right $ f ts
+       f ts
 
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> B.IOAb [[Tree]]
