@@ -194,8 +194,8 @@ getTreeZ _            = Nothing
 data SubtreeFilter
     = SubtreeId                                 -- ^ Identity
     | SubtreeEq    String                       -- ^ Equality
-    | SubtreeKeep  String (Maybe Glob.Pattern)  -- ^ Glob
-    | SubtreeOmit  String (Maybe Glob.Pattern)  -- ^ Anti-glob
+    | SubtreeKeep  String Glob.Pattern          -- ^ Glob
+    | SubtreeOmit  String Glob.Pattern          -- ^ Anti-glob
     | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
       deriving (Show, Eq)
 
@@ -213,11 +213,11 @@ subtreeEq = SubtreeEq
 
 -- | Glob filter.
 subtreeKeep :: String -> SubtreeFilter
-subtreeKeep s = SubtreeKeep s Nothing
+subtreeKeep s = SubtreeKeep s $ Glob.compile s
 
 -- | Anti-glob filter.
 subtreeOmit :: String -> SubtreeFilter
-subtreeOmit s = SubtreeOmit s Nothing
+subtreeOmit s = SubtreeOmit s $ Glob.compile s
 
 -- | Filter chain.
 subtreeChain :: O.Bin SubtreeFilter
@@ -252,18 +252,11 @@ subtreeFilter :: SubtreeFilter -> O.Map [String]
 subtreeFilter = subtreeFilterOn Just
 
 subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> O.Map [a]
-subtreeFilterOn get f xs0 = loop xs0 [f] where
-    loop xs []                       = xs
-    loop xs (SubtreeId : fs)         = loop xs fs
-    loop xs (SubtreeEq x : fs)       = loop (O.keepOn get (== x) xs) fs
-
-    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (O.keepOn get (Glob.match p) xs) fs
-    loop xs (SubtreeKeep x (Nothing) : fs) = let p = Just $ Glob.compile x
-                                              in loop xs (SubtreeKeep x p : fs)
-
-    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (O.omitOn get (Glob.match p) xs) fs
-    loop xs (SubtreeOmit x (Nothing) : fs) = let p = Just $ Glob.compile x
-                                              in loop xs (SubtreeOmit x p : fs)
-
-    loop xs (SubtreeChain f1 f2 : fs)      = loop xs $ f1 : f2 : fs
+subtreeFilterOn get f xs0 = a xs0 [f] where
+    a xs []                        = xs
+    a xs (SubtreeId : fs)          = a xs fs
+    a xs (SubtreeEq x : fs)        = a xs' fs where xs' = O.keepOn get (== x) xs
+    a xs (SubtreeKeep _ p : fs)    = a xs' fs where xs' = O.keepOn get (Glob.match p) xs
+    a xs (SubtreeOmit _ p : fs)    = a xs' fs where xs' = O.omitOn get (Glob.match p) xs
+    a xs (SubtreeChain f1 f2 : fs) = a xs fs' where fs' = f1 : f2 : fs
 
