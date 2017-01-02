@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Miscellaneous functions.
@@ -7,6 +8,7 @@ module Koshucode.Baala.Overture.Misc
  ( IOPath, GetIOPath (..),
    OrElse (..),
    uncons,
+   keepOn, omitOn,
    zero,
    ints,
    printList,
@@ -90,6 +92,19 @@ instance OrElse (Either a b) where
 uncons :: [a] -> Maybe (a, [a])
 uncons (x : xs)  = Just (x, xs)
 uncons []        = Nothing
+
+-- | Keep elements.
+keepOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
+keepOn get f = loop where
+    loop (x@(get -> Just x') : xs)
+        | f x'       = x : loop xs
+        | otherwise  = loop xs
+    loop (_ : xs)    = loop xs
+    loop []          = []
+
+-- | Omit elements.
+omitOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
+omitOn get f = keepOn get (not . f)
 
 -- | 0 of type 'Int'.
 zero :: Int

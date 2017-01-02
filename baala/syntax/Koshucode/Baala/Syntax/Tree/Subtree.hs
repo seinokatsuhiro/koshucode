@@ -1,4 +1,3 @@
-{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Subtree clause.
@@ -212,25 +211,15 @@ subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> O.Map [a]
 subtreeFilterOn get f xs0 = loop xs0 [f] where
     loop xs []                       = xs
     loop xs (SubtreeId : fs)         = loop xs fs
-    loop xs (SubtreeEq x : fs)       = loop (keepOn get (== x) xs) fs
+    loop xs (SubtreeEq x : fs)       = loop (O.keepOn get (== x) xs) fs
 
-    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (keepOn get (Glob.match p) xs) fs
+    loop xs (SubtreeKeep _ (Just p) : fs)  = loop (O.keepOn get (Glob.match p) xs) fs
     loop xs (SubtreeKeep x (Nothing) : fs) = let p = Just $ Glob.compile x
                                               in loop xs (SubtreeKeep x p : fs)
 
-    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (omitOn get (Glob.match p) xs) fs
+    loop xs (SubtreeOmit _ (Just p) : fs)  = loop (O.omitOn get (Glob.match p) xs) fs
     loop xs (SubtreeOmit x (Nothing) : fs) = let p = Just $ Glob.compile x
                                               in loop xs (SubtreeOmit x p : fs)
 
     loop xs (SubtreeChain f1 f2 : fs)      = loop xs $ f1 : f2 : fs
 
-keepOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
-keepOn get f = loop where
-    loop (x@(get -> Just x') : xs)
-        | f x'       = x : loop xs
-        | otherwise  = loop xs
-    loop (_ : xs)    = loop xs
-    loop []          = []
-
-omitOn :: (a -> Maybe b) -> O.Test b -> O.Map [a]
-omitOn get f = keepOn get (not . f)
