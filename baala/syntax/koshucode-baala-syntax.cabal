@@ -81,11 +81,13 @@ library
 
         Koshucode.Baala.Syntax.Tree
         Koshucode.Baala.Syntax.Tree.Bracket
-        Koshucode.Baala.Syntax.Tree.DirTree
         Koshucode.Baala.Syntax.Tree.Parse
         Koshucode.Baala.Syntax.Tree.Pattern
         Koshucode.Baala.Syntax.Tree.Split
-        Koshucode.Baala.Syntax.Tree.Subtree
+
+        Koshucode.Baala.Syntax.Subtree
+        Koshucode.Baala.Syntax.Subtree.DirTree
+        Koshucode.Baala.Syntax.Subtree.Subtree
 
   -- Modules included in this library but not exported.
   --other-modules:       

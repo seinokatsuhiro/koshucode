@@ -2,7 +2,7 @@
 
 -- | Subtree clause.
 
-module Koshucode.Baala.Syntax.Tree.Subtree
+module Koshucode.Baala.Syntax.Subtree.Subtree
   ( readSubtreeClauses,
     decodeSubtreePattern,
 
@@ -21,8 +21,7 @@ import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
-import qualified Koshucode.Baala.Syntax.Tree.Parse       as S
-import qualified Koshucode.Baala.Syntax.Tree.Split       as S
+import qualified Koshucode.Baala.Syntax.Tree             as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 import qualified Koshucode.Baala.Syntax.Tree.Pattern     as P
 import qualified Koshucode.Baala.Base.Message            as Msg

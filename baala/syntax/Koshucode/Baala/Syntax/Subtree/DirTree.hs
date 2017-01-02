@@ -2,14 +2,14 @@
 
 -- | Directory tree.
 
-module Koshucode.Baala.Syntax.Tree.DirTree
+module Koshucode.Baala.Syntax.Subtree.DirTree
   ( dirTrees,
   ) where
 
 import qualified System.Directory                        as Dir
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
-import qualified Koshucode.Baala.Syntax.Tree.Subtree     as S
+import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 -- | Create selective directory trees.
 --
