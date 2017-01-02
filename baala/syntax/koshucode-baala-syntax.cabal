@@ -61,6 +61,11 @@ library
 
         Koshucode.Baala.Syntax.Pattern
 
+        Koshucode.Baala.Syntax.Subtree
+        Koshucode.Baala.Syntax.Subtree.Decode
+        Koshucode.Baala.Syntax.Subtree.DirTree
+        Koshucode.Baala.Syntax.Subtree.Subtree
+
         Koshucode.Baala.Syntax.Symbol
         Koshucode.Baala.Syntax.Symbol.AngleText
         Koshucode.Baala.Syntax.Symbol.Message
@@ -84,10 +89,6 @@ library
         Koshucode.Baala.Syntax.Tree.Parse
         Koshucode.Baala.Syntax.Tree.Pattern
         Koshucode.Baala.Syntax.Tree.Split
-
-        Koshucode.Baala.Syntax.Subtree
-        Koshucode.Baala.Syntax.Subtree.DirTree
-        Koshucode.Baala.Syntax.Subtree.Subtree
 
   -- Modules included in this library but not exported.
   --other-modules:       
