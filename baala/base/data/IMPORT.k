@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    172 judges
+**    177 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.CodePos"        /import "Data.List"
@@ -31,6 +31,11 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort"                /import "Koshucode.Baala.Base.Abort.CodePos"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort"                /import "Koshucode.Baala.Base.Abort.Reason"
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort"                /import "Koshucode.Baala.Base.Abort.Report"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.Code.Bracket"         /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Base.Code.Bracket"         /import "Koshucode.Baala.Base.Abort"
+|-- IMPORT  /module "Koshucode.Baala.Base.Code.Bracket"         /import "Koshucode.Baala.Base.List"
+|-- IMPORT  /module "Koshucode.Baala.Base.Code.Bracket"         /import "Koshucode.Baala.Base.Code.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Clause"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Clause"          /import "Koshucode.Baala.Base.List"
@@ -57,10 +62,11 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Base.Abort"
-|-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Base.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Base.Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Base.Code.Bracket"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code.Tree"            /import "Koshucode.Baala.Base.Code.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Code"                 /import "Koshucode.Baala.Base.Code.Bracket"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code"                 /import "Koshucode.Baala.Base.Code.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code"                 /import "Koshucode.Baala.Base.Code.Infix"
 |-- IMPORT  /module "Koshucode.Baala.Base.Code"                 /import "Koshucode.Baala.Base.Code.Line"
@@ -101,7 +107,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Assoc"           /import "Koshucode.Baala.Overture"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.List"            /import "Koshucode.Baala.Overture"
-
 
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Base.List.Order"           /import "Koshucode.Baala.Base.Prelude"
