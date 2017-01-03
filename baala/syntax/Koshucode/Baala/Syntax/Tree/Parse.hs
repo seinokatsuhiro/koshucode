@@ -18,6 +18,7 @@ module Koshucode.Baala.Syntax.Tree.Parse
   ) where
 
 import qualified Text.PrettyPrint                        as P
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree.Bracket     as S
@@ -67,6 +68,9 @@ instance ToTrees [S.Token] where
 instance ToTrees [Tree] where
     toTrees = Right
 
+instance ToTrees S.TokenClause where
+    toTrees = toTrees . B.clauseTokens
+
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 tokenTrees :: [S.Token] -> B.Ab [Tree]
@@ -85,9 +89,9 @@ withTrees f a =
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> B.IOAb [[Tree]]
 readClauseTrees path =
-    do toks' <- S.readClauseTokens path
-       return $ case toks' of
-         Right toks -> mapM toTrees toks
+    do ls' <- S.readClauses path
+       return $ case ls' of
+         Right ls   -> toTrees O.<#> ls
          Left a     -> Left a
 
 -- --------------------------------------------  Pretty print
