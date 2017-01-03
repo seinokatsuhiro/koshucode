@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | String utility.
+-- | Text utility.
 
 module Koshucode.Baala.Overture.Text.Utility
   ( -- * Trim
@@ -11,6 +11,12 @@ module Koshucode.Baala.Overture.Text.Utility
     padBeginWith, padEndWith,
     stringWidth,
     addSpace,
+
+    -- * Code point
+    isAsciiCode,
+    isNewlineCode,
+    integralLF, integralCR,
+    integralSpace,
 
     -- * Put
     putLn, hPutLn,
@@ -24,7 +30,7 @@ import qualified System.IO                      as IO
 import qualified Koshucode.Baala.Overture.Type  as O
 
 
--- ----------------------  Trim
+-- ============================================  Trim
 
 isSpace :: Char -> Bool
 isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
@@ -59,7 +65,7 @@ trimBoth :: O.StringMap
 trimBoth = trimEnd . trimBegin
 
 
--- ----------------------  Padding
+-- ============================================  Padding
 
 -- | Add spaces to the left.
 --
@@ -118,7 +124,30 @@ addSpace cs@(c : _) | Ch.isSpace c  = cs
 addSpace ""                         = ""
 
 
--- ----------------------  Put
+-- ============================================  Code point
+
+-- | Test ASCII code point.
+isAsciiCode :: (Integral n) => n -> Bool
+isAsciiCode = (<= 127)
+
+-- | Test newline code point.
+isNewlineCode :: (Integral n) => n -> Bool
+isNewlineCode n = (n == integralLF) || (n == integralCR)
+
+-- | Generic code point of line feed character (@'\n'@).
+integralLF :: (Integral n) => n
+integralLF = 10
+
+-- | Generic code point of carriage return character (@'\r'@).
+integralCR :: (Integral n) => n
+integralCR = 13
+
+-- | Generic code point of space character (@' '@).
+integralSpace :: (Integral n) => n
+integralSpace = 32
+
+
+-- ============================================  Put
 
 -- | Print newline.
 putLn :: IO ()
