@@ -5,15 +5,18 @@
 module Koshucode.Baala.Overture.Text.Utility
   ( -- * Trim
     trimBegin, trimEnd, trimBoth,
+
     -- * Padding
     padBegin, padEnd, 
     padBeginWith, padEndWith,
     stringWidth,
     addSpace,
+
     -- * Put
     putLn, hPutLn,
     putShow, putShowLn,
     putLines, hPutLines, 
+    prompt,
   ) where
 
 import qualified Data.Char                      as Ch
@@ -141,3 +144,11 @@ putLines = putStr . unlines
 hPutLines :: IO.Handle -> [String] -> IO ()
 hPutLines h = (IO.hPutStrLn h `mapM_`)
 
+-- | Print prompt (@>>@) and read user input.
+prompt :: IO String
+prompt = do putStr ">> "
+            IO.hFlush IO.stdout
+            s <- getLine
+            case trimBoth s of
+              "" -> prompt
+              s' -> return s'
