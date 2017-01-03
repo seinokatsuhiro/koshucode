@@ -11,8 +11,9 @@ module Koshucode.Baala.Overture.Text.Utility
     stringWidth,
     addSpace,
     -- * Put
+    putLn, hPutLn,
     putShow, putShowLn,
-    putLines, hPutLines, hPutEmptyLine,
+    putLines, hPutLines, 
   ) where
 
 import qualified Data.Char                      as Ch
@@ -116,6 +117,14 @@ addSpace ""                         = ""
 
 -- ----------------------  Put
 
+-- | Print newline.
+putLn :: IO ()
+putLn = putStrLn ""
+
+-- | Print newline.
+hPutLn :: IO.Handle -> IO ()
+hPutLn h = IO.hPutStrLn h ""
+
 -- | Print showing value.
 putShow :: (Show a) => a -> IO ()
 putShow = putStr . show
@@ -132,6 +141,3 @@ putLines = putStr . unlines
 hPutLines :: IO.Handle -> [String] -> IO ()
 hPutLines h = (IO.hPutStrLn h `mapM_`)
 
--- | Print empty line.
-hPutEmptyLine :: IO.Handle -> IO ()
-hPutEmptyLine h = IO.hPutStrLn h ""

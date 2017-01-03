@@ -49,7 +49,7 @@ hPutHead :: IO.Handle -> C.Result c -> IO ()
 hPutHead h result =
     do IO.hPutStrLn h B.emacsModeComment
        O.hPutLines  h $ B.texts $ comm inputs
-       O.hPutEmptyLine h
+       O.hPutLn     h
     where
       inputs = C.inputPoint  `map` C.resultInput result
       itext  = B.ioPointText `map` inputs
@@ -67,19 +67,19 @@ hPutLicense h C.Result { C.resultLicense = ls }
     | null ls    = return ()
     | otherwise  = do mapM_ put ls
                       IO.hPutStrLn h "=== rel"
-                      O.hPutEmptyLine h
+                      O.hPutLn     h
     where
       put license =
           do IO.hPutStrLn h "=== license"
-             O.hPutEmptyLine h
-             O.hPutLines h license
-             O.hPutEmptyLine h
+             O.hPutLn     h
+             O.hPutLines  h license
+             O.hPutLn     h
 
 hPutEcho :: IO.Handle -> C.Result c -> IO ()
 hPutEcho h result =
     do let echo = C.resultEcho result
        O.hPutLines h $ concat echo
-       B.when (echo /= []) $ O.hPutEmptyLine h
+       B.when (echo /= []) $ O.hPutLn h
 
 hPutFoot :: IO.Handle -> B.ExitCode -> W.JudgeCount -> IO ()
 hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
@@ -98,7 +98,7 @@ hPutShort :: IO.Handle -> [S.ShortDef] -> IO ()
 hPutShort _ [] = return ()
 hPutShort h def =
     do O.hPutLines h $ "short" : map shortLine def
-       O.hPutEmptyLine h
+       O.hPutLn    h
     where
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ O.padEnd width a ++
@@ -124,10 +124,10 @@ hPutChunks (lb, encode) h result sh = loop where
 
 hPutNote :: IO.Handle -> [String] -> IO ()
 hPutNote h ls =
-    do IO.hPutStrLn    h "=== note"
-       O.hPutEmptyLine h
-       O.hPutLines     h ls
-       O.hPutEmptyLine h
-       IO.hPutStrLn    h "=== rel"
-       O.hPutEmptyLine h
+    do IO.hPutStrLn h "=== note"
+       O.hPutLn     h
+       O.hPutLines  h ls
+       O.hPutLn     h
+       IO.hPutStrLn h "=== rel"
+       O.hPutLn     h
 
