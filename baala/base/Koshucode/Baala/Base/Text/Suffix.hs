@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.Text.Suffix
 
 import qualified Data.Map.Strict                   as Ms
 import qualified Koshucode.Baala.Overture          as O
-import qualified Koshucode.Baala.Base.List         as B
 
 -- | Remove characters-delimiter prefix.
 --
@@ -30,7 +29,7 @@ unprefix test del s = loop s where
 --   "foo"
 --
 unsuffix :: O.Test Char -> Char -> O.StringMap
-unsuffix test del = B.reverseMap $ unprefix test del
+unsuffix test del = (unprefix test del O./$/)
 
 -- | Two-argument function which returns a constant value.
 --

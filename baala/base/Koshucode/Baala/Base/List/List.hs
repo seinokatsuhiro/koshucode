@@ -20,7 +20,7 @@ module Koshucode.Baala.Base.List.List
 
     -- * Map
     map2, mapAt,
-    reverseMap, omit,
+    omit,
     squeeze, squeezeEmptyLines,
   ) where
 
@@ -118,7 +118,7 @@ takeFill fill = loop where
 --  [0,0,6,7,8]
 
 takeTailFill :: a -> Int -> [a] -> [a]
-takeTailFill fill n = reverseMap $ takeFill fill n
+takeTailFill fill n = (takeFill fill n O./$/)
 
 
 -- ----------------------  Construct
@@ -205,14 +205,6 @@ mapAt f = loop where
     loop 0 (x : xs) = f x : xs
     loop i (x : xs) = x : loop (i - 1) xs
     loop _ []       = []
-
--- | Apply function to reversed list.
---
---   >>> reverseMap (take 3) "abcdefg"
---   "efg"
---
-reverseMap :: O.Map [a] -> O.Map [a]
-reverseMap f = reverse . f . reverse
 
 -- | Omit elements, i.e., anti-'filter'.
 --

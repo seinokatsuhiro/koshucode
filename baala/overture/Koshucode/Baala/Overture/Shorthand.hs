@@ -8,6 +8,7 @@ module Koshucode.Baala.Overture.Shorthand
 
    -- * Infix operators
    (&),
+   (/$/),
    (++), (<++>),
    (<?>),
    (<$$>),
@@ -51,6 +52,17 @@ infixr 0 &
 a & b = (a, b)
 
 infixr 6 ++
+
+-- | Apply function to reversed list, and reverse back.
+--
+--   >>> take 3 $ "abcdefg"
+--   "abc"
+--
+--   >>> take 3 /$/ "abcdefg"
+--   "efg"
+--
+(/$/) :: O.Map [a] -> O.Map [a]
+(/$/) f = reverse . f . reverse
 
 -- | Associative operator of monoid,
 --   same as 'mappend' or infix '<>'.

@@ -193,10 +193,10 @@ copDropTail :: (D.CContent c) => D.CopCalc c
 copDropTail = copTakeOrDrop (dropTail, dropTail)
 
 takeTail :: Int -> [a] -> [a]
-takeTail = B.reverseMap . take
+takeTail n = (take n O./$/)
 
 dropTail :: Int -> [a] -> [a]
-dropTail = B.reverseMap . drop
+dropTail n = (drop n O./$/)
 
 copTakeOrDrop :: (D.CContent c) => TakeDrop2 c -> D.CopCalc c
 copTakeOrDrop (f, g) arg =
@@ -218,7 +218,7 @@ copDropTake = dropTakeCop (dropTake, dropTake)
 
 copDropTakeTail :: (D.CContent c) => D.CopCalc c
 copDropTakeTail = dropTakeCop (dropTake', dropTake') where
-    dropTake' d t = B.reverseMap $ dropTake d t
+    dropTake' d t = (dropTake d t O./$/)
 
 dropTake :: DropTake a
 dropTake d t = take t . drop d
@@ -248,7 +248,7 @@ copPush = push (:) B.<.> D.getRightArg2
 
 copPushTail :: (D.CContent c) => D.CopCalc c
 copPushTail = push f B.<.> D.getRightArg2 where
-    f c = B.reverseMap (c:)
+    f c = ((c :) O./$/)
 
 push :: (D.CContent c) => (c -> [c] -> [c]) -> (c, c) -> B.Ab c
 push f (c, cs)
