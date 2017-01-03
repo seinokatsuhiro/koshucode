@@ -92,7 +92,7 @@ resultShortChunks Result {..}
     | otherwise     = Left  violated
     where
       normal    = resultNormal
-      violated  = S.shortTrim $ B.map2 (filter hasJudge) resultViolated
+      violated  = S.shortTrim (filter hasJudge O.<$$> resultViolated)
 
       hasJudge :: ResultChunk c -> Bool
       hasJudge (ResultJudge js)  = B.notNull js

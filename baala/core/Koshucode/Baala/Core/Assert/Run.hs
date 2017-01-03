@@ -160,7 +160,7 @@ relSortDeep = relApply f where
     f (T.Rel he bo) = T.Rel he $ B.sort bo
 
 relApply :: (D.CRel c) => O.Map (O.Map (T.Rel c))
-relApply f (T.Rel he bo) = f $ T.Rel he $ B.map2 nest bo where
+relApply f (T.Rel he bo) = f $ T.Rel he (nest O.<$$> bo) where
     nest c | D.isRel c = D.pRel $ relApply f $ D.gRel c
            | otherwise = c
 

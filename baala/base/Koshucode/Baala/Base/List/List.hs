@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.List.List
     zipMaybe, zipMaybe2,
 
     -- * Map
-    map2, mapAt,
+    mapAt,
     omit,
     squeeze, squeezeEmptyLines,
   ) where
@@ -71,6 +71,7 @@ takeFirst = take 1
 --
 --   >>> takeLast "abc"
 --   "c"
+--
 takeLast :: [a] -> [a]
 takeLast [] = []
 takeLast xs = [last xs]
@@ -79,7 +80,7 @@ takeLast xs = [last xs]
 --
 --   >>> takeOdd "abcdeft"
 --   "acet"
-
+--
 takeOdd :: [a] -> [a]
 takeOdd []  = []
 takeOdd [x] = [x]
@@ -89,7 +90,7 @@ takeOdd (x : _ : xs) = x : takeOdd xs
 --
 --   >>> takeEven "abcdeft"
 --   "bdf"
-
+--
 takeEven :: [a] -> [a]
 takeEven []  = []
 takeEven [_] = []
@@ -102,7 +103,7 @@ takeEven (_ : x : xs) = x : takeEven xs
 --
 --   >>> takeFill 0 5 [6 .. 8]
 --  [6,7,8,0,0]
-
+--
 takeFill :: a -> Int -> [a] -> [a]
 takeFill fill = loop where
     loop 0 _       = []
@@ -116,7 +117,7 @@ takeFill fill = loop where
 --
 --   >>> takeTailFill 0 5 [6 .. 8]
 --  [0,0,6,7,8]
-
+--
 takeTailFill :: a -> Int -> [a] -> [a]
 takeTailFill fill n = (takeFill fill n O./$/)
 
@@ -190,10 +191,6 @@ zipMaybe2 _  _                     = []
 
 
 -- ----------------------  Map
-
--- | Double 'fmap'.
-map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-map2 = fmap . fmap
 
 -- | Apply function to specific element.
 --
