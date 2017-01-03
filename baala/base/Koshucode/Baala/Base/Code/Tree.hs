@@ -9,7 +9,7 @@ module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     RawTree (..),
     treeMapL, treeMapB,
-    treeLeaves,
+    treeLeaves, treePaths,
     undouble,
     ppRawTree, ppRawTrees,
 
@@ -44,19 +44,29 @@ instance Functor (RawTree p k) where
 -- | Map function to all leaves.
 treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
 treeMapL f = loop where
-    loop (TreeL x)        = TreeL $ f x
-    loop (TreeB p k xs)  = TreeB p k $ map loop xs
+    loop (TreeL z)        = TreeL $ f z
+    loop (TreeB b y xs)  = TreeB b y $ map loop xs
 
 -- | Map function to all branches.
 treeMapB :: (b -> y -> [RawTree b y z] -> RawTree b y z) -> O.Map (RawTree b y z)
 treeMapB f = loop where
-    loop (TreeL x)        = TreeL x
-    loop (TreeB p k xs)  = f p k $ map loop xs
+    loop (TreeL z)        = TreeL z
+    loop (TreeB b y xs)  = f b y $ map loop xs
 
 -- | Collect leaves in tree.
 treeLeaves :: RawTree b y z -> [z]
 treeLeaves (TreeB _ _ ts)  = treeLeaves O.<++> ts
-treeLeaves (TreeL x)       = [x]
+treeLeaves (TreeL z)       = [z]
+
+-- | Convert tree to path list.
+--
+--   >>> treePaths $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   [(["Y1"],"Z1"), (["Y1"],"Z2"), (["Y1","Y2"],"Z3")]
+--
+treePaths :: RawTree b y z -> [([y], z)]
+treePaths = path [] where
+    path p (TreeB _ y xs)  = path (y : p) O.<++> xs
+    path p (TreeL z)       = [(reverse p, z)]
 
 -- | Simplify tree by removing double brackets,
 --   like @((a))@ to @(a)@.
@@ -86,8 +96,8 @@ undouble p = loop where
 ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
 ppRawTree = pp 0 where
     pp dp (TreeL z)      = [indent dp ++ "- " ++ show z]
-    pp dp (TreeB b y zs) = (indent dp ++ "> " ++ show b ++ " " ++ show y)
-                           : (pp (dp + 1) O.<++> zs)
+    pp dp (TreeB b y xs) = (indent dp ++ "> " ++ show b ++ " " ++ show y)
+                           : (pp (dp + 1) O.<++> xs)
     indent 0  = ""
     indent dp = replicate (2 * dp) ' '
 
