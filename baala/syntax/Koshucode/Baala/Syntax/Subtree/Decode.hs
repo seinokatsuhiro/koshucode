@@ -9,6 +9,7 @@ module Koshucode.Baala.Syntax.Subtree.Decode
 
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree             as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
@@ -37,6 +38,7 @@ readSubtreeClauses path =
          Left a -> Left a
          Right ls -> subtreeClause O.<#> ls
 
+-- | Insert open/sep/close to subtree clause.
 subtreeClause :: S.TokenClause -> B.Ab S.TokenClause
 subtreeClause cl = cl' where
     cl' = case clauseFirstElem cl of
@@ -80,13 +82,18 @@ clauseFirstElem cl =
 --   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - \"Z1\" )"
 --   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
 --
+--   >>> S.withTrees decodeSubtreePattern ">> \"Y1\" ( - A B /z \"Z1\" )"
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeText ["A", "B"] (TermName EQ "z")) (SubtreeEq "Z1")]]
+--
 decodeSubtreePattern :: [S.Tree] -> B.Ab [S.SubtreePattern]
 decodeSubtreePattern = pats where
     pats ts = pat O.<#> S.divideTreesByBar ts
 
-    pat (P.LRaw "-"  : ts) = Right . S.SubtreeL . fst =<< filt ts
-    pat (P.LRaw ">"  : ts) = S.SubtreeB </> ts
-    pat (P.LRaw ">>" : ts) = S.SubtreeR </> ts
+    pat (P.LRaw "-" : ts) =
+        case splitClassTerm ts of
+          (ts', term) -> Right . S.SubtreeL term . fst =<< filt ts'
+    pat (P.LRaw ">"  : ts)  = S.SubtreeB </> ts
+    pat (P.LRaw ">>" : ts)  = S.SubtreeR </> ts
     pat _ = Msg.adlib "Unknown subtree pattern"
 
     filt []                          = Right (S.subtreeId, [])
@@ -101,4 +108,10 @@ decodeSubtreePattern = pats where
                   Right $ k f ps
     f <+> ts = do (g, ps) <- filt ts
                   Right (f O.++ g, ps)
+
+splitClassTerm :: [S.Tree] -> ([S.Tree], S.SubtreeTerm)
+splitClassTerm ts0 = loop [] ts0 where
+    loop cs (P.LRaw c : ts)  = loop (c : cs) ts
+    loop cs (P.LTerm n : ts) = (ts, S.subtreeTexts (reverse cs) (S.toTermName n))
+    loop _ _ = (ts0, S.SubtreeNone)
 
