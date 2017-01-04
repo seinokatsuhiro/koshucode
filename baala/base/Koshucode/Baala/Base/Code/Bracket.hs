@@ -92,20 +92,23 @@ bracketTable xs = bracketType where
 --   Right "> aa ( > bb ( - cc cc | - dd | - ee ) | - ff )"
 --
 indentBranch
-    :: (a -> Maybe Int)  -- ^ Function getting indent size
+    :: (Eq a)
+    => (a -> Maybe Int)  -- ^ Function getting indent size
     -> O.Test a          -- ^ Testing indent element
     -> a                 -- ^ Open element
     -> a                 -- ^ Separator element
     -> a                 -- ^ Close element
     -> [[a]]             -- ^ Code elements indented
     -> B.Ab [[a]]        -- ^ Code Elements with open\/separator\/close elements
-indentBranch size indent open sep close = line [0] where
+indentBranch size indent open sep close ls0 = trim <$> line [0] ls0 where
+    trim ((x : xs) : ys) | x == sep = xs : ys
+    trim ls = ls
+
     line iis@(i:_) (((size -> Just i') : xs@(k:_)) : ls)
-         | not $ indent k = next iis                 xs  ls
-         | i' == 0        = next iis                 xs  ls
-         | i' == i        = next iis        (sep   : xs) ls
-         | i' >  i        = next (i' : iis) (open  : xs) ls
-         | i' <  i        = unindent i' iis (sep : xs) ls
+         | not $ indent k = next iis                xs  ls
+         | i' >  i        = next (i' : iis) (open : xs) ls
+         | i' == i        = next iis        (sep  : xs) ls
+         | i' <  i        = unindent i' iis (sep  : xs) ls
     line is (xs : ls)  = next is xs ls
     line [0] []        = Right []
     line is  []        = Right [replicate (length is  - 1) close]
