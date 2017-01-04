@@ -2,7 +2,7 @@
 
 -- | Retrieve via HTTP.
 module Koshucode.Baala.Base.IO.Http
-  ( UriText, HttpProxy,
+  ( HttpProxy,
     uriContent,
     httpExceptionSummary,
   ) where
@@ -15,14 +15,11 @@ import qualified Network.URI                        as URI
 import qualified Koshucode.Baala.Overture           as O
 import qualified Koshucode.Baala.Base.Prelude       as B
 
--- | URI.
-type UriText = String
-
 -- | Pair of protocol name and proxy URI.
-type HttpProxy = (String, Maybe UriText)
+type HttpProxy = (String, Maybe O.IOPath)
 
 -- | Get HTTP content as lazy bytestring.
-uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) B.Bz)
+uriContent :: [HttpProxy] -> O.IOPath -> IO (Either (Int, String) B.Bz)
 uriContent proxies uriText =
     do req <- requestFromURI proxies uriText
        catchHttpException $ do
@@ -30,7 +27,7 @@ uriContent proxies uriText =
          res <- H.httpLbs req man
          return $ Right $ H.responseBody res
 
-requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
+requestFromURI :: [HttpProxy] -> O.IOPath -> IO H.Request
 requestFromURI proxies uriText =
     do req <- H.parseRequest uriText
        case URI.parseURI uriText of
@@ -38,7 +35,7 @@ requestFromURI proxies uriText =
          Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
     where 
-      add :: Maybe UriText -> O.Map H.Request
+      add :: Maybe O.IOPath -> O.Map H.Request
       add proxy req = B.fromMaybe req $ do
           proxy'    <- proxy
           uri       <- URI.parseURI proxy'
@@ -54,7 +51,7 @@ uriPortNumber _         = defaultPortNumber
 defaultPortNumber :: Int
 defaultPortNumber = 80
 
-selectProxy :: [HttpProxy] -> URI.URI -> Maybe UriText
+selectProxy :: [HttpProxy] -> URI.URI -> Maybe O.IOPath
 selectProxy proxies uri =
     do let scheme = URI.uriScheme uri
        proxy <- lookup scheme proxies
