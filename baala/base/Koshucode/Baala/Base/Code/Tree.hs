@@ -9,7 +9,7 @@ module Koshucode.Baala.Base.Code.Tree
   ( -- * Raw tree
     RawTree (..),
     treeMap, treeMapY, treeMapZ,
-    treeLeaves, treePaths,
+    treeListY, treeListZ, treePaths,
     undouble,
 
     -- * Print tree
@@ -62,10 +62,23 @@ treeMapZ f = loop where
     loop (TreeL z)       = TreeL (f z)
     loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
 
--- | Collect leaves in tree.
-treeLeaves :: RawTree b y z -> [z]
-treeLeaves (TreeB _ _ ts)  = treeLeaves O.<++> ts
-treeLeaves (TreeL z)       = [z]
+-- | Collect branch elements.
+--
+--   >>> treeListY $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   ["Y1","Y2"]
+--
+treeListY :: RawTree b y z -> [y]
+treeListY (TreeB _ y xs)  = y : (treeListY O.<++> xs)
+treeListY (TreeL _)       = []
+
+-- | Collect leaf elements.
+--
+--   >>> treeListZ $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   ["Z1","Z2","Z3"]
+--
+treeListZ :: RawTree b y z -> [z]
+treeListZ (TreeB _ _ xs)  = treeListZ O.<++> xs
+treeListZ (TreeL z)       = [z]
 
 -- | Convert tree to path list.
 --
