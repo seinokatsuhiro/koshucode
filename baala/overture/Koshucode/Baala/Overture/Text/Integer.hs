@@ -7,9 +7,11 @@ module Koshucode.Baala.Overture.Text.Integer
     stringDec, stringInt, stringInteger,
     stringHex, stringHexInt, stringHexInteger,
     stringCustomInteger, stringCountInteger,
+
     -- * Encoder
     intLowerHexString, intUpperHexString,
     integralCustomString, integralCountString,
+    digitsLength,
   ) where
 
 import qualified Data.Char                      as Ch
@@ -172,3 +174,24 @@ countDiv x y =
     case quotRem x y of
       (q, r) | r == 0    -> (q - 1, y)
              | otherwise -> (q, r)
+
+-- | Length of digits of integer.
+--
+--   >>> digitsLength 10 12000
+--   5
+--
+--   >>> digitsLength 10 (-500)
+--   4
+--
+--   >>> digitsLength 2 15
+--   4
+--
+digitsLength :: Int -> Int -> Int
+digitsLength b n0
+    | n0 >  0   = loop n0
+    | n0 <  0   = 1 + loop (abs n0)
+    | otherwise = 1
+    where
+      loop 0 = 0
+      loop n = 1 + loop (n `div` b)
+
