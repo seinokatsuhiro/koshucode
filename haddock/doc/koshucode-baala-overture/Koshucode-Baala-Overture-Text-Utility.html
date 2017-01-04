@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.194.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.196.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,6 +66,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ></li
 	  ><li
 	  ><a href="#g:3"
+	    >Code point</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
 	    >Put</a
 	    ></li
 	  ></ul
@@ -75,7 +79,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	>Description</p
 	><div class="doc"
 	><p
-	  >String utility.</p
+	  >Text utility.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -151,6 +155,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >StringMap</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:isAsciiCode"
+	    >isAsciiCode</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isNewlineCode"
+	    >isNewlineCode</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:integralLF"
+	    >integralLF</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n</li
+	  ><li class="src short"
+	  ><a href="#v:integralCR"
+	    >integralCR</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n</li
+	  ><li class="src short"
+	  ><a href="#v:integralSpace"
+	    >integralSpace</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n</li
+	  ><li class="src short"
+	  ><a href="#v:putLn"
+	    >putLn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:hPutLn"
+	    >hPutLn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
 	  ><a href="#v:putShow"
 	    >putShow</a
 	    > :: <a href="http://hackage.haskell.org/package/base/docs/Text-Show.html#t:Show"
@@ -185,13 +237,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >IO</a
 	    > ()</li
 	  ><li class="src short"
-	  ><a href="#v:hPutEmptyLine"
-	    >hPutEmptyLine</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	  ><a href="#v:prompt"
+	    >prompt</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
-	    > ()</li
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -431,7 +483,119 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    ></div
 	  ></div
 	><h1 id="g:3"
+	>Code point</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isAsciiCode" class="def"
+	    >isAsciiCode</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#isAsciiCode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test ASCII code point.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isNewlineCode" class="def"
+	    >isNewlineCode</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#isNewlineCode');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test newline code point.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:integralLF" class="def"
+	    >integralLF</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#integralLF');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Generic code point of line feed character (<code
+	      >'\n'</code
+	      >).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:integralCR" class="def"
+	    >integralCR</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#integralCR');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Generic code point of carriage return character (<code
+	      >'\r'</code
+	      >).</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:integralSpace" class="def"
+	    >integralSpace</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Prelude.html#t:Integral"
+	    >Integral</a
+	    > n =&gt; n <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#integralSpace');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Generic code point of space character (<code
+	      >' '</code
+	      >).</p
+	    ></div
+	  ></div
+	><h1 id="g:4"
 	>Put</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putLn" class="def"
+	    >putLn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#putLn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print newline.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:hPutLn" class="def"
+	    >hPutLn</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	    >IO</a
+	    > () <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#hPutLn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print newline.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:putShow" class="def"
@@ -500,18 +664,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:hPutEmptyLine" class="def"
-	    >hPutEmptyLine</a
-	    > :: <a href="http://hackage.haskell.org/package/base/docs/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
+	  ><a name="v:prompt" class="def"
+	    >prompt</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:IO"
 	    >IO</a
-	    > () <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#hPutEmptyLine');" href="javascript:void(0);" class="link"
+	    > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
+	    >String</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Utility.html#prompt');" href="javascript:void(0);" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Print empty line.</p
+	    >Print prompt (<code
+	      >&gt;&gt;</code
+	      >) and read user input.</p
 	    ></div
 	  ></div
 	></div

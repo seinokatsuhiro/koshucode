@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.194.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.196.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -201,6 +201,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    >String</a
 	    > -&gt; n -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:digitsLength"
+	    >digitsLength</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
 	    ></li
 	  ></ul
 	></div
@@ -562,6 +572,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 </code
 		></strong
 	      >[&quot;&quot;, &quot;A&quot;, &quot;B&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;AA&quot;, &quot;AZ&quot;, &quot;BA&quot;, &quot;CV&quot;, &quot;ALL&quot;, &quot;KOSHU&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:digitsLength" class="def"
+	    >digitsLength</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a onclick="showSource('src/Koshucode-Baala-Overture-Text-Integer.html#digitsLength');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Length of digits of integer.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>digitsLength 10 12000
+</code
+		></strong
+	      >5
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>digitsLength 10 (-500)
+</code
+		></strong
+	      >4
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>digitsLength 2 15
+</code
+		></strong
+	      >4
 </pre
 	    ></div
 	  ></div

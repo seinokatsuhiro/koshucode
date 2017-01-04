@@ -8,7 +8,35 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.194.0.0
+@version 0.196.0.0
+
+
+-- | Suffix and prefix.
+module Koshucode.Baala.Base.Text.Suffix
+
+-- | Remove characters-delimiter prefix.
+--   
+--   <pre>
+--   &gt;&gt;&gt; unprefix (`elem` "0123456789") '-' "12-foo"
+--   "foo"
+--   </pre>
+unprefix :: Test Char -> Char -> StringMap
+
+-- | Remove delimiter-characters suffix.
+--   
+--   <pre>
+--   &gt;&gt;&gt; unsuffix (`elem` "0123456789") '-' "foo-12"
+--   "foo"
+--   </pre>
+unsuffix :: Test Char -> Char -> StringMap
+
+-- | Make names unique by adding integer suffixes.
+--   
+--   <pre>
+--   &gt;&gt;&gt; uniqueNames '-' $ words "a b b c"
+--   ["a", "b-1", "b-2", "c"]
+--   </pre>
+uniqueNames :: Char -> Map [String]
 
 
 -- | Text table
@@ -1815,9 +1843,6 @@ zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
 --   </pre>
 zipMaybe2 :: [Maybe a] -> [b] -> [b]
 
--- | Double <a>fmap</a>.
-map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-
 -- | Apply function to specific element.
 --   
 --   <pre>
@@ -1825,14 +1850,6 @@ map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 --   "abc-efg"
 --   </pre>
 mapAt :: Map a -> Int -> Map [a]
-
--- | Apply function to reversed list.
---   
---   <pre>
---   &gt;&gt;&gt; reverseMap (take 3) "abcdefg"
---   "efg"
---   </pre>
-reverseMap :: Map [a] -> Map [a]
 
 -- | Omit elements, i.e., anti-<a>filter</a>.
 --   
@@ -2267,34 +2284,6 @@ undotsStrings :: [String] -> String
 takeDots :: [String] -> String -> Maybe [String]
 
 
--- | Suffix and prefix.
-module Koshucode.Baala.Base.Text.Suffix
-
--- | Remove characters-delimiter prefix.
---   
---   <pre>
---   &gt;&gt;&gt; unprefix (`elem` "0123456789") '-' "12-foo"
---   "foo"
---   </pre>
-unprefix :: Test Char -> Char -> StringMap
-
--- | Remove delimiter-characters suffix.
---   
---   <pre>
---   &gt;&gt;&gt; unsuffix (`elem` "0123456789") '-' "foo-12"
---   "foo"
---   </pre>
-unsuffix :: Test Char -> Char -> StringMap
-
--- | Make names unique by adding integer suffixes.
---   
---   <pre>
---   &gt;&gt;&gt; uniqueNames '-' $ words "a b b c"
---   ["a", "b-1", "b-2", "c"]
---   </pre>
-uniqueNames :: Char -> Map [String]
-
-
 -- | Bundle of text modules.
 module Koshucode.Baala.Base.Text
 
@@ -2582,79 +2571,50 @@ module Koshucode.Baala.Base.Code.Message
 -- | Abortable scope for code.
 abCode :: (GetCodePos cp) => Abortable cp b
 
--- | Extra close bracket
+-- | <ul>
+--   <li><i>Extra close bracket</i></li>
+--   </ul>
 extraCloseBracket :: Ab a
 
--- | Unclosed open bracket
+-- | <ul>
+--   <li><i>Extra closed brackets inserted</i></li>
+--   </ul>
+extraCloseBracketInserted :: Ab a
+
+-- | <ul>
+--   <li><i>Unclosed open bracket</i></li>
+--   </ul>
 extraOpenBracket :: Ab a
+
+-- | <ul>
+--   <li><i>Unmatched indent size</i></li>
+--   </ul>
+unmatchIndentSize :: Ab a
 
 
 -- | Bundle of message modules.
 module Koshucode.Baala.Base.Message
 
 
--- | Tree structure.
-module Koshucode.Baala.Base.Code.Tree
-
--- | Tree of leaf and branch.
-data CodeTree p a
-
--- | <b>Leaf:</b> Terminal of tree.
-TreeL :: a -> CodeTree p a
-
--- | <b>Branch:</b> Bracket-type, open/close leaves, and subtrees.
-TreeB :: p -> (Maybe (a, a)) -> [CodeTree p a] -> CodeTree p a
-
--- | Convert a list of elements to a single tree.
-tree :: (Ord p, GetCodePos a) => GetBracketType p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
-
--- | Convert a list of elements to trees.
-trees :: (Ord p, GetCodePos a) => GetBracketType p a -> Bracket p -> [a] -> Ab [CodeTree p a]
-
--- | Convert tree to list of tokens.
-untree :: CodeTree p a -> [a]
-
--- | Convert tree to list of tokens.
-untrees :: [CodeTree p a] -> [a]
-
--- | Collect leaves in tree.
-treeLeaves :: CodeTree p a -> [a]
-
--- | Simplify tree by removing double brackets, like <tt>((a))</tt> to
---   <tt>(a)</tt>.
---   
---   <pre>
---   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
---   TreeB 0 Nothing [TreeL "A", TreeL "B"]
---   </pre>
-undouble :: Test p -> Map (CodeTree p a)
-
--- | Wrap trees into single tree.
-treeWrap :: p -> [CodeTree p a] -> CodeTree p a
-
--- | Map function to all leaves. This function is similar to <a>fmap</a>,
---   but not map to bracket leaf.
-treeLeafMap :: (a -> a) -> Map (CodeTree p a)
-
--- | Map function to all branches.
-treeBranchMap :: (p -> Maybe (a, a) -> [CodeTree p a] -> CodeTree p a) -> Map (CodeTree p a)
+-- | Bracket type.
+module Koshucode.Baala.Base.Code.Bracket
 
 -- | Bracket type.
-data Bracket p
+data Bracket b
 
 -- | None bracket
-BracketNone :: Bracket p
+BracketNone :: Bracket b
 
 -- | Open bracket
-BracketOpen :: p -> Bracket p
+BracketOpen :: b -> Bracket b
 
 -- | Close bracket
-BracketClose :: p -> Bracket p
+BracketClose :: b -> Bracket b
 
 -- | Get a bracket type.
-type GetBracketType p a = a -> Bracket p
+type GetBracket b a = a -> Bracket b
 
--- | Create <a>GetBracketType</a> functions from a type-open-close table.
+-- | Create <a>GetBracket</a> functions from a type-open-close table.
 --   
 --   <i>Example</i>
 --   
@@ -2676,14 +2636,128 @@ type GetBracketType p a = a -> Bracket p
 --     BracketOpen 2, BracketNone, BracketNone, BracketClose 2,
 --    BracketClose 1, BracketNone]
 --   </pre>
-bracketTable :: (Eq a) => [(p, (Test a, Test a))] -> GetBracketType p a
-instance GHC.Classes.Ord p => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.Bracket p)
-instance GHC.Classes.Eq p => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.Bracket p)
-instance GHC.Show.Show p => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.Bracket p)
-instance (GHC.Classes.Ord p, GHC.Classes.Ord a) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
-instance (GHC.Classes.Eq p, GHC.Classes.Eq a) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
-instance (GHC.Show.Show p, GHC.Show.Show a) => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
-instance GHC.Base.Functor (Koshucode.Baala.Base.Code.Tree.CodeTree p)
+bracketTable :: (Eq a) => [(b, (Test a, Test a))] -> GetBracket b a
+
+-- | Indent branching function. This inserts open/separator/close elements
+--   by following indent.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let size s = if dropWhile (== '/') s == "" then Just (length s) else Nothing
+--   
+--   &gt;&gt;&gt; let test s = s `elem` ["&gt;", "-"]
+--   
+--   &gt;&gt;&gt; let toks s = takeWhile (== '/') s : words (dropWhile (== '/') s)
+--   
+--   &gt;&gt;&gt; let text = Right . unwords . concat
+--   
+--   &gt;&gt;&gt; let conv ls = text =&lt;&lt; indentBranch size test "(" "|" ")" (toks &lt;$&gt; ls)
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; toks "/&gt; bb"
+--   ["/","&gt;","bb"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; conv ["&gt; aa", "/&gt; bb", "//&gt; cc"]
+--   Right "&gt; aa ( &gt; bb ( &gt; cc ) )"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; conv ["&gt; aa", "/&gt; bb", "/&gt; cc"]
+--   Right "&gt; aa ( &gt; bb | &gt; cc )"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; conv ["&gt; aa", "/&gt; bb", "//- cc", "///cc", "//- dd", "//- ee", "/- ff"]
+--   Right "&gt; aa ( &gt; bb ( - cc cc | - dd | - ee ) | - ff )"
+--   </pre>
+indentBranch :: (a -> Maybe Int) -> Test a -> a -> a -> a -> [[a]] -> Ab [[a]]
+instance GHC.Classes.Ord b => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Bracket.Bracket b)
+instance GHC.Classes.Eq b => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Bracket.Bracket b)
+instance GHC.Show.Show b => GHC.Show.Show (Koshucode.Baala.Base.Code.Bracket.Bracket b)
+
+
+-- | Tree structure.
+module Koshucode.Baala.Base.Code.Tree
+
+-- | Tree of leaf and branch.
+data RawTree b y z
+
+-- | <b>Leaf:</b> Leaf element (<tt>z</tt>).
+TreeL :: z -> RawTree b y z
+
+-- | <b>Branch:</b> Branch type (<tt>b</tt>), branch element (<tt>y</tt>),
+--   and subtrees.
+TreeB :: b -> y -> [RawTree b y z] -> RawTree b y z
+
+-- | Map function to all leaves.
+treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
+
+-- | Map function to all branches.
+treeMapB :: (b -> y -> [RawTree b y z] -> RawTree b y z) -> Map (RawTree b y z)
+
+-- | Collect leaves in tree.
+treeLeaves :: RawTree b y z -> [z]
+
+-- | Convert tree to path list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; treePaths $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   [(["Y1"],"Z1"), (["Y1"],"Z2"), (["Y1","Y2"],"Z3")]
+--   </pre>
+treePaths :: RawTree b y z -> [([y], z)]
+
+-- | Simplify tree by removing double brackets, like <tt>((a))</tt> to
+--   <tt>(a)</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
+--   TreeB 0 Nothing [TreeL "A", TreeL "B"]
+--   </pre>
+undouble :: Test b -> Map (RawTree b y z)
+
+-- | Pretty print for single raw tree. Branches are marked usign right
+--   arrow (<tt>&gt;</tt>), and leaves are marked using hyphen
+--   (<tt>-</tt>).
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapM_ putStrLn $ ppRawTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   &gt; () "Y1"
+--     - "Z1"
+--     &gt; () "Y2"
+--       - "Z2"
+--       - "Z3"
+--   </pre>
+ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
+
+-- | Pretty print for multiple raw trees.
+ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
+
+-- | Tree with open/close brackets.
+type CodeTree b a = RawTree b (Maybe (a, a)) a
+
+-- | Convert code elements to a single code tree.
+codeTree :: (Ord p, GetCodePos a) => GetBracket p a -> Bracket p -> p -> [a] -> Ab (CodeTree p a)
+
+-- | Convert code elements to code trees.
+codeTrees :: (Ord p, GetCodePos a) => GetBracket p a -> Bracket p -> [a] -> Ab [CodeTree p a]
+
+-- | Wrap trees into single tree.
+codeTreeWrap :: p -> [CodeTree p a] -> CodeTree p a
+
+-- | Mapping function for <a>CodeTree</a>.
+codeTreeFmap :: (a -> b) -> CodeTree p a -> CodeTree p b
+
+-- | Convert tree to list of tokens.
+untree :: CodeTree p a -> [a]
+
+-- | Convert tree to list of tokens.
+untrees :: [CodeTree p a] -> [a]
+instance (GHC.Classes.Ord b, GHC.Classes.Ord y, GHC.Classes.Ord z) => GHC.Classes.Ord (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
+instance (GHC.Classes.Eq b, GHC.Classes.Eq y, GHC.Classes.Eq z) => GHC.Classes.Eq (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
+instance (GHC.Show.Show b, GHC.Show.Show y, GHC.Show.Show z) => GHC.Show.Show (Koshucode.Baala.Base.Code.Tree.RawTree b y z)
+instance GHC.Base.Functor (Koshucode.Baala.Base.Code.Tree.RawTree p k)
 instance Koshucode.Baala.Base.Abort.CodePos.GetCodePos a => Koshucode.Baala.Base.Abort.CodePos.GetCodePos (Koshucode.Baala.Base.Code.Tree.CodeTree p a)
 
 

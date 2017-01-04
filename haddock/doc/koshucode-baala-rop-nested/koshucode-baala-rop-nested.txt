@@ -8,7 +8,7 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-rop-nested
-@version 0.194.0.0
+@version 0.196.0.0
 
 
 -- | Relmap operators concerning nested relation.

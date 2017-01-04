@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-overture-0.194.0.0: Preliminary library for Koshucode</p
+      >koshucode-baala-overture-0.196.0.0: Preliminary library for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -114,6 +114,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 	    > :: [a] -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > (a, [a])</li
+	  ><li class="src short"
+	  ><a href="#v:keepOn"
+	    >keepOn</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > b -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a]</li
+	  ><li class="src short"
+	  ><a href="#v:omitOn"
+	    >omitOn</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > b -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a]</li
 	  ><li class="src short"
 	  ><a href="#v:zero"
 	    >zero</a
@@ -205,7 +225,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-String.html#t:String"
 		      >String</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-28');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-30');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc empty"
@@ -282,7 +302,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		      > <a href="http://hackage.haskell.org/package/base/docs/Data-Bool.html#t:Bool"
 		      >Bool</a
 		      ></span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-50');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-52');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -306,7 +326,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		    ><a href="Koshucode-Baala-Overture-Misc.html#t:OrElse"
 		      >OrElse</a
 		      > [a]</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-59');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-61');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -332,7 +352,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
 		      >Maybe</a
 		      > a)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-68');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-70');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -358,7 +378,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		      > (<a href="http://hackage.haskell.org/package/base/docs/Data-Either.html#t:Either"
 		      >Either</a
 		      > a b)</span
-		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-77');" href="javascript:void(0);" class="link"
+		    > <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#line-79');" href="javascript:void(0);" class="link"
 		    >Source</a
 		    ></td
 		  ><td class="doc"
@@ -407,6 +427,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Overtu
 		></strong
 	      >Just ('a', &quot;bcdefg&quot;)
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:keepOn" class="def"
+	    >keepOn</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > b -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#keepOn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Keep elements.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:omitOn" class="def"
+	    >omitOn</a
+	    > :: (a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Test"
+	    >Test</a
+	    > b -&gt; <a href="Koshucode-Baala-Overture-Type.html#t:Map"
+	    >Map</a
+	    > [a] <a onclick="showSource('src/Koshucode-Baala-Overture-Misc.html#omitOn');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Omit elements.</p
 	    ></div
 	  ></div
 	><div class="top"

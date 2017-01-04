@@ -6,7 +6,7 @@
 --   
 --   Additional data types for Koshucode
 @package koshucode-baala-type
-@version 0.194.0.0
+@version 0.196.0.0
 
 
 -- | Common properties of judgements and relations.

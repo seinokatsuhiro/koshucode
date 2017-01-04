@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-data
-@version 0.194.0.0
+@version 0.196.0.0
 
 
 -- | Message list.
@@ -1144,15 +1144,6 @@ calcCox :: (GetCops cops, CContent c) => cops c -> Head -> [c] -> Cox c -> Ab c
 --   expression.</li>
 --   </ul>
 calcTree :: (GetCops cops, CContent c) => cops c -> CalcContent c
-
--- | Extract single argument.
-getArg1 :: (Basis c) => [Ab c] -> Ab (Ab c)
-
--- | Extract two arguments.
-getArg2 :: (Basis c) => [Ab c] -> Ab (Ab c, Ab c)
-
--- | Extract three arguments.
-getArg3 :: (Basis c) => [Ab c] -> Ab (Ab c, Ab c, Ab c)
 
 -- | Extract single non-abortable argument.
 getRightArg1 :: (Basis c) => [Ab c] -> Ab c

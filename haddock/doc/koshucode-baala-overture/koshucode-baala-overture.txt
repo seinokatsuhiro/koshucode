@@ -6,7 +6,7 @@
 --   
 --   Preliminary library for Koshucode.
 @package koshucode-baala-overture
-@version 0.194.0.0
+@version 0.196.0.0
 
 
 -- | Exit process.
@@ -329,6 +329,24 @@ integralCustomString :: (Integral n) => String -> n -> String
 --   </pre>
 integralCountString :: (Integral n) => String -> n -> String
 
+-- | Length of digits of integer.
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 10 12000
+--   5
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 10 (-500)
+--   4
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; digitsLength 2 15
+--   4
+--   </pre>
+digitsLength :: Int -> Int -> Int
+
 
 -- | Unicode general category.
 module Koshucode.Baala.Overture.Text.Category
@@ -482,7 +500,7 @@ type Test2 a b = a -> b -> Bool
 type Bin a = a -> a -> a
 
 
--- | String utility.
+-- | Text utility.
 module Koshucode.Baala.Overture.Text.Utility
 
 -- | Remove space and space-like characters from the beginning of string.
@@ -558,6 +576,27 @@ stringWidth :: String -> Int
 --   </pre>
 addSpace :: StringMap
 
+-- | Test ASCII code point.
+isAsciiCode :: (Integral n) => n -> Bool
+
+-- | Test newline code point.
+isNewlineCode :: (Integral n) => n -> Bool
+
+-- | Generic code point of line feed character (<tt>'\n'</tt>).
+integralLF :: (Integral n) => n
+
+-- | Generic code point of carriage return character (<tt>'\r'</tt>).
+integralCR :: (Integral n) => n
+
+-- | Generic code point of space character (<tt>' '</tt>).
+integralSpace :: (Integral n) => n
+
+-- | Print newline.
+putLn :: IO ()
+
+-- | Print newline.
+hPutLn :: Handle -> IO ()
+
 -- | Print showing value.
 putShow :: (Show a) => a -> IO ()
 
@@ -570,8 +609,8 @@ putLines :: [String] -> IO ()
 -- | Print multiple lines.
 hPutLines :: Handle -> [String] -> IO ()
 
--- | Print empty line.
-hPutEmptyLine :: Handle -> IO ()
+-- | Print prompt (<tt>&gt;&gt;</tt>) and read user input.
+prompt :: IO String
 
 
 -- | Bundle of text modules.
@@ -586,50 +625,6 @@ type Pair a b = (a, b)
 
 -- | Pair of <i>a</i> and <i>a</i>.
 type Twin a = (a, a)
-
--- | Pairing operator.
---   
---   <pre>
---   &gt;&gt;&gt; "a" &amp; "b"
---   ("a", "b")
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; "a" &amp; "b" &amp; "c"
---   ("a", ("b", "c"))
---   </pre>
-(&) :: a -> b -> (a, b)
-
--- | Associative operator of monoid, same as <a>mappend</a> or infix
---   <tt>&lt;&gt;</tt>.
---   
---   <pre>
---   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"
---   Just "abcdef"
---   </pre>
-(++) :: (Monoid a) => a -> a -> a
-
--- | Same as <a>concatMap</a>.
---   
---   <pre>
---   &gt;&gt;&gt; words &lt;++&gt; ["foo bar", "baz quux"]
---   ["foo","bar","baz","quux"]
---   </pre>
-(<++>) :: (a -> [b]) -> [a] -> [b]
-
--- | Double fmap.
---   
---   <pre>
---   &gt;&gt;&gt; length &lt;$$&gt; [("a", "apple"), ("b", "banana"), ("c", "cocoa")]
---   [("a",5), ("b",6), ("c",5)]
---   </pre>
-(<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-
--- | Monadic mapping, same as <a>mapM</a>.
-(<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
-
--- | Execution by monadic mapping, same as <a>mapM_</a>.
-(<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
 
 -- | Test equality using <a>Ord</a> method. This function can be used for
 --   implementing <a>Eq</a> instance.
@@ -711,6 +706,12 @@ orElse :: OrElse a => a -> a -> a
 --   </pre>
 uncons :: [a] -> Maybe (a, [a])
 
+-- | Keep elements.
+keepOn :: (a -> Maybe b) -> Test b -> Map [a]
+
+-- | Omit elements.
+omitOn :: (a -> Maybe b) -> Test b -> Map [a]
+
 -- | 0 of type <a>Int</a>.
 zero :: Int
 
@@ -749,6 +750,73 @@ instance Koshucode.Baala.Overture.Misc.OrElse GHC.Types.Bool
 instance Koshucode.Baala.Overture.Misc.OrElse [a]
 instance Koshucode.Baala.Overture.Misc.OrElse (GHC.Base.Maybe a)
 instance Koshucode.Baala.Overture.Misc.OrElse (Data.Either.Either a b)
+
+
+-- | Infix operators.
+module Koshucode.Baala.Overture.Infix
+
+-- | Pairing operator.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "a" &amp; "b"
+--   ("a", "b")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; "a" &amp; "b" &amp; "c"
+--   ("a", ("b", "c"))
+--   </pre>
+(&) :: a -> b -> (a, b)
+
+-- | Apply function to reversed list, and reverse back.
+--   
+--   <pre>
+--   &gt;&gt;&gt; take 3 $ "abcdefg"
+--   "abc"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; take 3 /$/ "abcdefg"
+--   "efg"
+--   </pre>
+(/$/) :: Map [a] -> Map [a]
+
+-- | Associative operator of monoid, same as <a>mappend</a> or infix
+--   <tt>&lt;&gt;</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; Just "abc" ++ Nothing ++ Just "def"
+--   Just "abcdef"
+--   </pre>
+(++) :: (Monoid a) => a -> a -> a
+
+-- | Same as <a>concatMap</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; words &lt;++&gt; ["foo bar", "baz quux"]
+--   ["foo","bar","baz","quux"]
+--   </pre>
+(<++>) :: (a -> [b]) -> [a] -> [b]
+
+-- | Same as <a>mapMaybe</a>.
+(<?>) :: (a -> Maybe b) -> [a] -> [b]
+
+-- | Double fmap.
+--   
+--   <pre>
+--   &gt;&gt;&gt; length &lt;$$&gt; [("a", "apple"), ("b", "banana"), ("c", "cocoa")]
+--   [("a",5), ("b",6), ("c",5)]
+--   </pre>
+(<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+
+-- | Monadic mapping, same as <a>mapM</a>.
+(<#>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m (t b)
+
+-- | Execution by monadic mapping, same as <a>mapM_</a>.
+(<#!>) :: (Monad m, Traversable t) => (a -> m b) -> t a -> m ()
+
+-- | Monadic concat mappping.
+(<#++>) :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
 
 
 -- | Indexed value.

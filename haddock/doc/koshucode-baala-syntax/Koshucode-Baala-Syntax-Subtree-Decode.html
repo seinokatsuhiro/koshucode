@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Syntax.Subtree.Decode</title
+    ><link href="ocean2.css" rel="stylesheet" type="text/css" title="ocean2"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+function showSource (href) { window.parent.Haddock.showSource('syntax', 'koshucode-baala-syntax', href); }
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Syntax-Subtree-Decode.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html');" href="javascript:void(0);"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-syntax-0.196.0.0: Syntax for Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Syntax.Subtree.Decode</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Decode subtree.</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:readSubtreeClauses"
+	    >readSubtreeClauses</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:IOAb"
+	    >IOAb</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:decodeSubtreePattern"
+	    >decodeSubtreePattern</a
+	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readSubtreeClauses" class="def"
+	    >readSubtreeClauses</a
+	    > :: <a href="http://hackage.haskell.org/package/base/docs/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:IOAb"
+	    >IOAb</a
+	    > [<a href="Koshucode-Baala-Syntax-Token-Clause.html#t:TokenClause"
+	    >TokenClause</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#readSubtreeClauses');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read subtree clauses from file.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>mapM_ (S.printToks . B.clauseTokens) =&lt;&lt; B.abortLeft =&lt;&lt; readSubtreeClauses &quot;subtree.txt&quot;
+</code
+		></strong
+	      >********** &gt; &quot;a1&quot;
+TText /0.10.0/ TextRaw &quot;&gt;&quot;
+TText /0.10.2/ TextQQ &quot;a1&quot;
+TOpen /0.0.0/ &quot;(&quot;
+TText /0.11.2/ TextRaw &quot;-&quot;
+TText /0.11.4/ TextQQ &quot;bb&quot;
+TText /0.0.0/ TextRaw &quot;|&quot;
+TText /0.12.2/ TextRaw &quot;-&quot;
+TText /0.12.4/ TextQQ &quot;cc&quot;
+TClose /0.0.0/ &quot;)&quot;
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:decodeSubtreePattern" class="def"
+	    >decodeSubtreePattern</a
+	    > :: [<a href="Koshucode-Baala-Syntax-Tree-Parse.html#t:Tree"
+	    >Tree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Syntax-Subtree-Subtree.html#t:SubtreePattern"
+	    >SubtreePattern</a
+	    >] <a onclick="showSource('src/Koshucode-Baala-Syntax-Subtree-Decode.html#decodeSubtreePattern');" href="javascript:void(0);" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Decode token trees to subtree patterns.</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.withTrees decodeSubtreePattern &quot;- \&quot;Z1\&quot;&quot;
+</code
+		></strong
+	      >Right [SubtreeL (SubtreeEq &quot;Z1&quot;)]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
+</code
+		></strong
+	      >Right [SubtreeB (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeEq &quot;Z1&quot;)]]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.withTrees decodeSubtreePattern &quot;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; | - \&quot;Z2\&quot; )&quot;
+</code
+		></strong
+	      >Right [ SubtreeB (SubtreeEq &quot;Y1&quot;) [ SubtreeL (SubtreeEq &quot;Z1&quot;)
+                                  , SubtreeL (SubtreeEq &quot;Z2&quot;) ]]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.withTrees decodeSubtreePattern &quot;&gt;&gt; \&quot;Y1\&quot; ( - \&quot;Z1\&quot; )&quot;
+</code
+		></strong
+	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeEq &quot;Z1&quot;)]]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>S.withTrees decodeSubtreePattern &quot;&gt;&gt; \&quot;Y1\&quot; ( - A B /z \&quot;Z1\&quot; )&quot;
+</code
+		></strong
+	      >Right [SubtreeR (SubtreeEq &quot;Y1&quot;) [SubtreeL (SubtreeText [&quot;A&quot;, &quot;B&quot;] (TermName EQ &quot;z&quot;)) (SubtreeEq &quot;Z1&quot;)]]
+</pre
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.16.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -6,7 +6,7 @@
 --   
 --   Syntax for Koshucode
 @package koshucode-baala-syntax
-@version 0.194.0.0
+@version 0.196.0.0
 
 
 -- | Term types and related functions.
@@ -925,6 +925,191 @@ instance GHC.Base.Functor Koshucode.Baala.Syntax.Symbol.Short.Short
 module Koshucode.Baala.Syntax.Symbol
 
 
+-- | Subtree.
+module Koshucode.Baala.Syntax.Subtree.Subtree
+
+-- | Subtree.
+type Subtree = RawTree [SubtreePattern] String String
+
+-- | Subtree output.
+type SubtreeOutput = RawTree [SubtreePattern] String (SubtreeTerm, String)
+
+-- | Subtree pattern.
+data SubtreePattern
+
+-- | Leaf
+SubtreeL :: SubtreeTerm -> SubtreeFilter -> SubtreePattern
+
+-- | Branch
+SubtreeB :: SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+
+-- | Recursive branch
+SubtreeR :: SubtreeFilter -> [SubtreePattern] -> SubtreePattern
+
+-- | Create non-termination leaf pattern.
+subtreeL :: SubtreeFilter -> SubtreePattern
+
+-- | Termination of subtree content.
+data SubtreeTerm
+SubtreeNone :: SubtreeTerm
+SubtreeText :: [String] -> TermName -> SubtreeTerm
+SubtreeSeq :: TermName -> SubtreeTerm
+
+-- | Create text term.
+subtreeText :: (ToTermName n) => String -> n -> SubtreeTerm
+
+-- | Create text term.
+subtreeTexts :: (ToTermName n) => [String] -> n -> SubtreeTerm
+
+-- | Select subtree.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tree = B.TreeB [] "Y1" [B.TreeL "Z1", B.TreeL "Z2", B.TreeB [] "Y2" [B.TreeL "Z3"]]
+--   
+--   &gt;&gt;&gt; O.putLines $ B.ppRawTree tree
+--   &gt; [] "Y1"
+--     - "Z1"
+--     - "Z2"
+--     &gt; [] "Y2"
+--       - "Z3"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeEq "Y1") [subtreeL (subtreeEq "Z1")]] [tree])
+--   &gt; [] "Y1"
+--     - (SubtreeNone,"Z1")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z3")]] [tree])
+--   &gt; [] "Y1"
+--     &gt; [] "Y2"
+--       - (SubtreeNone,"Z3")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z1")]] [tree])
+--   &gt; [] "Y1"
+--     - (SubtreeNone,"Z1")
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.putLines (B.ppRawTree O.&lt;++&gt; subtree [SubtreeB (subtreeId) [SubtreeL (subtreeText "A" "/z") (subtreeEq "Z1")]] [tree])
+--   &gt; [] "Y1"
+--     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
+--   </pre>
+subtree :: [SubtreePattern] -> [Subtree] -> [SubtreeOutput]
+
+-- | Select subtree.
+subtreeOne :: [SubtreePattern] -> Map [Subtree]
+
+-- | Subtree filter.
+data SubtreeFilter
+
+-- | Identity
+SubtreeId :: SubtreeFilter
+
+-- | Equality
+SubtreeEq :: String -> SubtreeFilter
+
+-- | Glob
+SubtreeKeep :: String -> Pattern -> SubtreeFilter
+
+-- | Anti-glob
+SubtreeOmit :: String -> Pattern -> SubtreeFilter
+
+-- | Filter chain
+SubtreeChain :: SubtreeFilter -> SubtreeFilter -> SubtreeFilter
+
+-- | Identity filter.
+subtreeId :: SubtreeFilter
+
+-- | Equal filter.
+subtreeEq :: String -> SubtreeFilter
+
+-- | Glob filter.
+subtreeKeep :: String -> SubtreeFilter
+
+-- | Anti-glob filter.
+subtreeOmit :: String -> SubtreeFilter
+
+-- | Filter chain.
+subtreeChain :: Bin SubtreeFilter
+
+-- | Filter strings by subtree filter.
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter subtreeId ["foo", "bar", "foobar"]
+--   ["foo","bar","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
+--   ["foo","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
+--   ["bar","foobar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
+--   ["bar"]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
+--   ["foo"]
+--   </pre>
+subtreeFilter :: SubtreeFilter -> Map [String]
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
+instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreePattern
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
+instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeTerm
+instance GHC.Show.Show Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeTerm
+instance GHC.Base.Monoid Koshucode.Baala.Syntax.Subtree.Subtree.SubtreeFilter
+
+
+-- | Directory tree.
+module Koshucode.Baala.Syntax.Subtree.DirTree
+
+-- | Create selective directory trees.
+--   
+--   <pre>
+--   &gt;&gt;&gt; O.putLines . B.ppRawTrees =&lt;&lt; dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
+--   &gt; [] "data"
+--     - "SLOC.k"
+--   &gt; [] "Koshucode"
+--     &gt; [] "Baala"
+--       &gt; [] "Syntax"
+--         &gt; [] "Attr"
+--           - "Slot.hs"
+--         &gt; [] "Symbol"
+--           - "Short.hs"
+--           - "Symbol.hs"
+--         - "Symbol.hs"
+--         &gt; [] "Token"
+--           - "Section.hs"
+--         &gt; [] "Tree"
+--           - "Split.hs"
+--           - "Subtree.hs"
+--       - "Syntax.hs"
+--   </pre>
+dirTrees :: [FilePath] -> FilePath -> [SubtreePattern] -> IO [Subtree]
+
+
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Syntax.Token.Token
 
@@ -1358,6 +1543,9 @@ readClauseTokens :: FilePath -> IOAb [[Token]]
 -- | Abbreviated tokenizer.
 toks :: String -> [Token]
 
+-- | Print token list.
+printToks :: [Token] -> IO ()
+
 -- | Tokenize and print for debug.
 --   
 --   Words and quotations.
@@ -1447,7 +1635,7 @@ module Koshucode.Baala.Syntax.Token
 
 
 -- | Bracket type.
-module Koshucode.Baala.Syntax.TTree.Bracket
+module Koshucode.Baala.Syntax.Tree.Bracket
 
 -- | Type of bracket.
 data BracketType
@@ -1519,7 +1707,7 @@ BracketForm :: BracketType
 BracketUnknown :: BracketType
 
 -- | Bracket type of token.
-getBracketType :: GetBracketType BracketType Token
+getBracketType :: GetBracket BracketType Token
 
 -- | Group bracket — <tt>"("</tt> and <tt>")"</tt>
 bracketGroup :: (String, String)
@@ -1544,14 +1732,14 @@ bracketInterp :: (String, String)
 
 -- | Type bracket — <tt>"[-"</tt> and <tt>"-]"</tt>
 bracketType :: (String, String)
-instance GHC.Classes.Ord Koshucode.Baala.Syntax.TTree.Bracket.BracketType
-instance GHC.Classes.Eq Koshucode.Baala.Syntax.TTree.Bracket.BracketType
-instance GHC.Show.Show Koshucode.Baala.Syntax.TTree.Bracket.BracketType
-instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.TTree.Bracket.BracketType
+instance GHC.Classes.Ord Koshucode.Baala.Syntax.Tree.Bracket.BracketType
+instance GHC.Classes.Eq Koshucode.Baala.Syntax.Tree.Bracket.BracketType
+instance GHC.Show.Show Koshucode.Baala.Syntax.Tree.Bracket.BracketType
+instance Koshucode.Baala.Base.Prelude.Class.Name Koshucode.Baala.Syntax.Tree.Bracket.BracketType
 
 
 -- | Patterns for token tree.
-module Koshucode.Baala.Syntax.TTree.Pattern
+module Koshucode.Baala.Syntax.Tree.Pattern
 
 -- | Token leaf.
 
@@ -1590,7 +1778,7 @@ module Koshucode.Baala.Syntax.Pattern
 
 
 -- | Parser for token tree.
-module Koshucode.Baala.Syntax.TTree.Parse
+module Koshucode.Baala.Syntax.Tree.Parse
 
 -- | Tree of tokens.
 type Tree = CodeTree BracketType Token
@@ -1624,10 +1812,10 @@ ttreeGroup :: [Tree] -> Tree
 -- | Call function with token trees.
 --   
 --   <pre>
---   &gt;&gt;&gt; withTrees id "a"
+--   &gt;&gt;&gt; withTrees Right "a"
 --   Right [TreeL (TText /0.1.0/ TextRaw "a")]
 --   </pre>
-withTrees :: (ToTrees a) => ([Tree] -> b) -> a -> Ab b
+withTrees :: (ToTrees a) => ([Tree] -> Ab b) -> a -> Ab b
 
 -- | Read clauses and convert to token trees.
 readClauseTrees :: FilePath -> IOAb [[Tree]]
@@ -1645,13 +1833,14 @@ treesDoc :: [Tree] -> Doc
 --     | TText /1.6/ TextRaw "c"
 --   </pre>
 ppTrees :: (ToTrees a) => a -> IO ()
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees GHC.Base.String
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
-instance Koshucode.Baala.Syntax.TTree.Parse.ToTrees [Koshucode.Baala.Syntax.TTree.Parse.Tree]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees GHC.Base.String
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Token.Token.Token]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees [Koshucode.Baala.Syntax.Tree.Parse.Tree]
+instance Koshucode.Baala.Syntax.Tree.Parse.ToTrees Koshucode.Baala.Syntax.Token.Clause.TokenClause
 
 
 -- | Split token trees.
-module Koshucode.Baala.Syntax.TTree.Split
+module Koshucode.Baala.Syntax.Tree.Split
 
 -- | Split token list by unquoted word. If token list contains the word,
 --   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
@@ -1683,10 +1872,20 @@ splitTokensBy :: Test String -> SplitList3e Token
 -- | Split token trees by quoteless token of given string.
 splitTreesBy :: Test String -> SplitList3e Tree
 
--- | Divide token trees by quoteless token of given string.
+-- | Divide token trees by raw text of given string.
 divideTreesBy :: Test String -> [Tree] -> [[Tree]]
 
 -- | Divide token trees by vertical bar <tt>"|"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees (Right . divideTreesByBar) "a | b x | c y z"
+--   Right [ [ TreeL (TText /0.1.0/ TextRaw "a") ]
+--         , [ TreeL (TText /0.1.4/ TextRaw "b")
+--           , TreeL (TText /0.1.6/ TextRaw "x") ]
+--         , [ TreeL (TText /0.1.10/ TextRaw "c")
+--           , TreeL (TText /0.1.12/ TextRaw "y")
+--           , TreeL (TText /0.1.14/ TextRaw "z") ]]
+--   </pre>
 divideTreesByBar :: [Tree] -> [[Tree]]
 
 -- | Divide token trees by colon <tt>":"</tt>.
@@ -1697,7 +1896,61 @@ divideTreesByEqual :: [Tree] -> [[Tree]]
 
 
 -- | Token trees.
-module Koshucode.Baala.Syntax.TTree
+module Koshucode.Baala.Syntax.Tree
+
+
+-- | Decode subtree.
+module Koshucode.Baala.Syntax.Subtree.Decode
+
+-- | Read subtree clauses from file.
+--   
+--   <pre>
+--   &gt;&gt;&gt; mapM_ (S.printToks . B.clauseTokens) =&lt;&lt; B.abortLeft =&lt;&lt; readSubtreeClauses "subtree.txt"
+--   ********** &gt; "a1"
+--   TText /0.10.0/ TextRaw "&gt;"
+--   TText /0.10.2/ TextQQ "a1"
+--   TOpen /0.0.0/ "("
+--   TText /0.11.2/ TextRaw "-"
+--   TText /0.11.4/ TextQQ "bb"
+--   TText /0.0.0/ TextRaw "|"
+--   TText /0.12.2/ TextRaw "-"
+--   TText /0.12.4/ TextQQ "cc"
+--   TClose /0.0.0/ ")"
+--   </pre>
+readSubtreeClauses :: FilePath -> IOAb [TokenClause]
+
+-- | Decode token trees to subtree patterns.
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "- \"Z1\""
+--   Right [SubtreeL (SubtreeEq "Z1")]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" )"
+--   Right [SubtreeB (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt; \"Y1\" ( - \"Z1\" | - \"Z2\" )"
+--   Right [ SubtreeB (SubtreeEq "Y1") [ SubtreeL (SubtreeEq "Z1")
+--                                     , SubtreeL (SubtreeEq "Z2") ]]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - \"Z1\" )"
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeEq "Z1")]]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; S.withTrees decodeSubtreePattern "&gt;&gt; \"Y1\" ( - A B /z \"Z1\" )"
+--   Right [SubtreeR (SubtreeEq "Y1") [SubtreeL (SubtreeText ["A", "B"] (TermName EQ "z")) (SubtreeEq "Z1")]]
+--   </pre>
+decodeSubtreePattern :: [Tree] -> Ab [SubtreePattern]
+
+
+-- | Subtree.
+module Koshucode.Baala.Syntax.Subtree
 
 
 -- | Parameter.

@@ -31,7 +31,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.194.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.196.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -185,14 +185,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    >Maybe</a
 	    > a] -&gt; [b] -&gt; [b]</li
 	  ><li class="src short"
-	  ><a href="#v:map2"
-	    >map2</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > f, <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b)</li
-	  ><li class="src short"
 	  ><a href="#v:mapAt"
 	    >mapAt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -200,14 +192,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	    > a -&gt; <a href="http://hackage.haskell.org/package/base/docs/Data-Int.html#t:Int"
 	    >Int</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [a]</li
-	  ><li class="src short"
-	  ><a href="#v:reverseMap"
-	    >reverseMap</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
 	    >Map</a
 	    > [a]</li
 	  ><li class="src short"
@@ -663,26 +647,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 	>Map</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:map2" class="def"
-	    >map2</a
-	    > :: (<a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > f, <a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#t:Functor"
-	    >Functor</a
-	    > g) =&gt; (a -&gt; b) -&gt; f (g a) -&gt; f (g b) <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#map2');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Double <code
-	      ><a href="http://hackage.haskell.org/package/base/docs/Data-Functor.html#v:fmap"
-		>fmap</a
-		></code
-	      >.</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:mapAt" class="def"
 	    >mapAt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
@@ -706,32 +670,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-L
 </code
 		></strong
 	      >&quot;abc-efg&quot;
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:reverseMap" class="def"
-	    >reverseMap</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/haddock/doc/koshucode-baala-overture/Koshucode-Baala-Overture-Type.html#t:Map"
-	    >Map</a
-	    > [a] <a onclick="showSource('src/Koshucode-Baala-Base-List-List.html#reverseMap');" href="javascript:void(0);" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Apply function to reversed list.</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>reverseMap (take 3) &quot;abcdefg&quot;
-</code
-		></strong
-	      >&quot;efg&quot;
 </pre
 	    ></div
 	  ></div
