@@ -8,7 +8,7 @@
 module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     RawTree (..),
-    treeMapL, treeMapB,
+    treeMapL, treeMapY,
     treeLeaves, treePaths,
     undouble,
     ppRawTree, ppRawTrees,
@@ -41,17 +41,17 @@ data RawTree b y z
 instance Functor (RawTree p k) where
     fmap = treeMapL
 
--- | Map function to all leaves.
+-- | Map function to leaf element.
 treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
 treeMapL f = loop where
-    loop (TreeL z)        = TreeL $ f z
-    loop (TreeB b y xs)  = TreeB b y $ map loop xs
+    loop (TreeL z)       = TreeL (f z)
+    loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
 
--- | Map function to all branches.
-treeMapB :: (b -> y -> [RawTree b y z] -> RawTree b y z) -> O.Map (RawTree b y z)
-treeMapB f = loop where
-    loop (TreeL z)        = TreeL z
-    loop (TreeB b y xs)  = f b y $ map loop xs
+-- | Map function to branch element.
+treeMapY :: (y1 -> y2) -> RawTree b y1 z -> RawTree b y2 z
+treeMapY f = loop where
+    loop (TreeL z)       = TreeL z
+    loop (TreeB b y xs)  = TreeB b (f y) (loop <$> xs)
 
 -- | Collect leaves in tree.
 treeLeaves :: RawTree b y z -> [z]
@@ -122,23 +122,23 @@ codeTreeFmap f = loop where
     loop (TreeB n (Just (x, y)) xs)  = TreeB n (Just (f x, f y)) $ map loop xs
 
 -- | Convert code elements to a single code tree.
-codeTree :: (Ord p, B.GetCodePos a) => B.GetBracket p a -> B.Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+codeTree :: (Ord b, B.GetCodePos a) => B.GetBracket b a -> B.Bracket b -> b -> [a] -> B.Ab (CodeTree b a)
 codeTree bracketType zero one =
     Right . codeTreeWrap one B.<.> codeTrees bracketType zero
 
 -- | Convert code elements to code trees.
-codeTrees :: forall a. forall p. (Ord p, B.GetCodePos a)
-    => B.GetBracket p a         -- ^ Bracket definition
-    -> B.Bracket p              -- ^ 'B.BracketNone'
+codeTrees :: forall a. forall b. (Ord b, B.GetCodePos a)
+    => B.GetBracket b a         -- ^ Bracket definition
+    -> B.Bracket b              -- ^ 'B.BracketNone'
     -> [a]                      -- ^ List of code elements
-    -> B.Ab [CodeTree p a]      -- ^ Result code trees
+    -> B.Ab [CodeTree b a]      -- ^ Result code trees
 codeTrees bracketType zero xs = result where
     result       = do (ts, _) <- loop xs zero
                       Right ts
     add xs2 p a  = do (ts, xs3) <- loop xs2 p
                       Right (a : ts, xs3)
 
-    loop :: [a] -> B.Bracket p -> B.Ab ([CodeTree p a], [a])
+    loop :: [a] -> B.Bracket b -> B.Ab ([CodeTree b a], [a])
     loop [] _ = Right ([], [])
     loop (x : xs2) p
         | isNone px  = add xs2 p $ TreeL x
@@ -162,16 +162,16 @@ codeTrees bracketType zero xs = result where
     isClose _                  = False
 
 -- | Wrap trees into single tree.
-codeTreeWrap :: p -> [CodeTree p a] -> CodeTree p a
+codeTreeWrap :: b -> [CodeTree b a] -> CodeTree b a
 codeTreeWrap _   [x] = x
 codeTreeWrap one xs  = TreeB one Nothing xs
 
 -- | Convert tree to list of tokens.
-untrees :: [CodeTree p a] -> [a]
+untrees :: [CodeTree b a] -> [a]
 untrees = concatMap untree
 
 -- | Convert tree to list of tokens.
-untree :: CodeTree p a -> [a]
+untree :: CodeTree b a -> [a]
 untree = loop where
     loop (TreeL x) = [x]
     loop (TreeB _ Nothing xs) = loop O.<++> xs
