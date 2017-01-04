@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Code.Message
     extraCloseBracket,
     extraCloseBracketInserted,
     extraOpenBracket,
+    unmatchIndentSize,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort          as B
@@ -29,3 +30,6 @@ extraCloseBracketInserted = B.leftBecause "Extra closed brackets inserted"
 extraOpenBracket :: B.Ab a
 extraOpenBracket = B.leftBecause "Unclosed open bracket"
 
+-- | [Unmatched indent size]
+unmatchIndentSize :: B.Ab a
+unmatchIndentSize = B.leftBecause "Unmatched indent size"

@@ -113,6 +113,7 @@ indentBranch size indent open sep close = line [0] where
     unindent _ [] _ _ = Msg.extraCloseBracketInserted
     unindent i' iis@(i:is) xs ls
         | i' < i      = unindent i' is (close : xs) ls
+        | i  < i'     = Msg.unmatchIndentSize
         | otherwise   = next iis xs ls
 
     next is' xs' ls   = do ls' <- line is' ls
