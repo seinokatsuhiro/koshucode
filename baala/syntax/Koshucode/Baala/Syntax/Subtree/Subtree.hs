@@ -5,9 +5,11 @@
 module Koshucode.Baala.Syntax.Subtree.Subtree
   ( -- * Pattern
     Subtree,
+    SubtreeOutput,
     SubtreePattern (..),
     subtreeL,
     SubtreeTerm (..),
+    subtreeText, subtreeTexts,
     subtree, subtreeOne,
 
     -- * Filter
@@ -24,8 +26,13 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 
 
+-- ============================================  Pattern
+
 -- | Subtree.
 type Subtree = B.RawTree [SubtreePattern] String String
+
+-- | Subtree output.
+type SubtreeOutput = B.RawTree [SubtreePattern] String (SubtreeTerm, String)
 
 -- | Subtree pattern.
 data SubtreePattern
@@ -41,9 +48,17 @@ subtreeL = SubtreeL SubtreeNone
 -- | Termination of subtree content.
 data SubtreeTerm
     = SubtreeNone
-    | SubtreeText S.TermName
+    | SubtreeText [String] S.TermName
     | SubtreeSeq  S.TermName
       deriving (Show, Eq)
+
+-- | Create text term.
+subtreeText :: (S.ToTermName n) => String -> n -> SubtreeTerm
+subtreeText c = subtreeTexts [c]
+
+-- | Create text term.
+subtreeTexts :: (S.ToTermName n) => [String] -> n -> SubtreeTerm
+subtreeTexts cs n = SubtreeText cs $ S.toTermName n
 
 -- | Select subtree.
 --
@@ -57,27 +72,37 @@ data SubtreeTerm
 --
 --   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeB (subtreeEq "Y1") [subtreeL (subtreeEq "Z1")]] [tree])
 --   > [] "Y1"
---     - "Z1"
+--     - (SubtreeNone,"Z1")
 --
 --   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z3")]] [tree])
 --   > [] "Y1"
 --     > [] "Y2"
---       - "Z3"
+--       - (SubtreeNone,"Z3")
 --
 --   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z1")]] [tree])
 --   > [] "Y1"
---     - "Z1"
+--     - (SubtreeNone,"Z1")
 --
-subtree :: [SubtreePattern] -> O.Map [Subtree]
-subtree ps ts = subtreeRec $ subtreeOne ps ts
+--   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeB (subtreeId) [SubtreeL (subtreeText "A" "/z") (subtreeEq "Z1")]] [tree])
+--   > [] "Y1"
+--     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
+--
+subtree :: [SubtreePattern] -> [Subtree] -> [SubtreeOutput]
+subtree ps0 ts = p1 O.<?> ts where
+    p1 t = maybeHead (p2 t O.<?> ps0)
 
-subtreeRec :: O.Map [Subtree]
-subtreeRec ts = p O.<?> ts where
-    p t@(B.TreeL _) = Just t
-    p (B.TreeB ps y zs) =
-        case subtreeRec $ subtreeOne ps zs of
-          []  -> Nothing
-          zs' -> Just $ B.TreeB [] y zs'
+    p2 t@(B.TreeL z) (SubtreeL term f)
+        | nullZ f t  = Nothing
+        | otherwise  = Just $ B.TreeL (term, z)
+    p2 t@(B.TreeB _ y xs) (SubtreeB f ps)
+        | nullY f t  = Nothing
+        | otherwise  = Just $ B.TreeB [] y (subtree ps xs)
+    p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
+        | nullY f t  = Nothing
+        | otherwise  = case subtree (SubtreeR f ps : ps) xs of
+                         []  -> Nothing
+                         xs' -> Just $ B.TreeB [] y xs'
+    p2 _ _ = Nothing
 
 -- | Select subtree.
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree]
@@ -87,16 +112,19 @@ subtreeOne ps0 ts = p1 O.<?> ts where
     p2 t@(B.TreeL _) (SubtreeL _ f)
         | nullZ f t  = Nothing
         | otherwise  = Just t
-    p2 t@(B.TreeB _ y zs) (SubtreeB f ps)
+    p2 t@(B.TreeB _ y xs) (SubtreeB f ps)
         | nullY f t  = Nothing
-        | otherwise  = Just $ B.TreeB ps y zs
-    p2 t@(B.TreeB _ y zs) (SubtreeR f ps)
+        | otherwise  = Just $ B.TreeB ps y xs
+    p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
         | nullY f t  = Nothing
-        | otherwise  = Just $ B.TreeB (SubtreeR f ps : ps) y zs
+        | otherwise  = Just $ B.TreeB (SubtreeR f ps : ps) y xs
     p2 _ _ = Nothing
 
-    nullZ f t = null $ subtreeFilterOn getTreeZ f [t]
-    nullY f t = null $ subtreeFilterOn getTreeY f [t]
+nullZ :: SubtreeFilter -> Subtree -> Bool
+nullZ f t = null $ subtreeFilterOn getTreeZ f [t]
+
+nullY :: SubtreeFilter -> Subtree -> Bool
+nullY f t = null $ subtreeFilterOn getTreeY f [t]
 
 maybeHead :: [a] -> Maybe a
 maybeHead []       = Nothing
@@ -111,6 +139,9 @@ getTreeY _                = Nothing
 getTreeZ :: B.RawTree b y z -> Maybe z
 getTreeZ (B.TreeL z)  = Just z
 getTreeZ _            = Nothing
+
+
+-- ============================================  Filter
 
 -- | Subtree filter.
 data SubtreeFilter
