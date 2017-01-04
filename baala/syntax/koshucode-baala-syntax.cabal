@@ -65,6 +65,7 @@ library
         Koshucode.Baala.Syntax.Subtree.Decode
         Koshucode.Baala.Syntax.Subtree.DirTree
         Koshucode.Baala.Syntax.Subtree.Subtree
+        Koshucode.Baala.Syntax.Subtree.Xml
 
         Koshucode.Baala.Syntax.Symbol
         Koshucode.Baala.Syntax.Symbol.AngleText
@@ -101,6 +102,7 @@ library
        , text                      == 1.*
        , Glob                      == 0.*
        , directory                 == 1.*
+       , tagsoup                   == 0.*
        , koshucode-baala-overture  == 0.196.0.0
        , koshucode-baala-base      == 0.196.0.0
 
