@@ -13,6 +13,7 @@ import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Token            as S
 import qualified Koshucode.Baala.Syntax.Tree             as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
+import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 import qualified Koshucode.Baala.Syntax.Token.Pattern    as P
 import qualified Koshucode.Baala.Syntax.Tree.Pattern     as P
 import qualified Koshucode.Baala.Base.Message            as Msg

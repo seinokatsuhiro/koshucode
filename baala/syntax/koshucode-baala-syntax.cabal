@@ -64,6 +64,7 @@ library
         Koshucode.Baala.Syntax.Subtree
         Koshucode.Baala.Syntax.Subtree.Decode
         Koshucode.Baala.Syntax.Subtree.DirTree
+        Koshucode.Baala.Syntax.Subtree.Filter
         Koshucode.Baala.Syntax.Subtree.Subtree
         Koshucode.Baala.Syntax.Subtree.Xml
 

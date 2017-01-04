@@ -11,22 +11,12 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     SubtreeTerm (..),
     subtreeText, subtreeTexts,
     subtree, subtreeOne,
-
-    -- * Filter
-    SubtreeFilter (..),
-    subtreeId, subtreeEq,
-    subtreeKeep, subtreeOmit,
-    subtreeChain,
-    subtreeFilter,
   ) where
 
-import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
-
-
--- ============================================  Pattern
+import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 
 -- | Subtree.
 type Subtree = B.RawTree [SubtreePattern] String String
@@ -36,13 +26,13 @@ type SubtreeOutput = B.RawTree [SubtreePattern] String (SubtreeTerm, String)
 
 -- | Subtree pattern.
 data SubtreePattern
-    = SubtreeL SubtreeTerm SubtreeFilter       -- ^ Leaf
-    | SubtreeB SubtreeFilter [SubtreePattern]  -- ^ Branch
-    | SubtreeR SubtreeFilter [SubtreePattern]  -- ^ Recursive branch
+    = SubtreeL SubtreeTerm S.SubtreeFilter       -- ^ Leaf
+    | SubtreeB S.SubtreeFilter [SubtreePattern]  -- ^ Branch
+    | SubtreeR S.SubtreeFilter [SubtreePattern]  -- ^ Recursive branch
       deriving (Show, Eq)
 
 -- | Create non-termination leaf pattern.
-subtreeL :: SubtreeFilter -> SubtreePattern
+subtreeL :: S.SubtreeFilter -> SubtreePattern
 subtreeL = SubtreeL SubtreeNone
 
 -- | Termination of subtree content.
@@ -120,11 +110,11 @@ subtreeOne ps0 ts = p1 O.<?> ts where
         | otherwise  = Just $ B.TreeB (SubtreeR f ps : ps) y xs
     p2 _ _ = Nothing
 
-nullZ :: SubtreeFilter -> Subtree -> Bool
-nullZ f t = null $ subtreeFilterOn getTreeZ f [t]
+nullZ :: S.SubtreeFilter -> Subtree -> Bool
+nullZ f t = null $ S.subtreeFilterOn getTreeZ f [t]
 
-nullY :: SubtreeFilter -> Subtree -> Bool
-nullY f t = null $ subtreeFilterOn getTreeY f [t]
+nullY :: S.SubtreeFilter -> Subtree -> Bool
+nullY f t = null $ S.subtreeFilterOn getTreeY f [t]
 
 maybeHead :: [a] -> Maybe a
 maybeHead []       = Nothing
@@ -139,77 +129,3 @@ getTreeY _                = Nothing
 getTreeZ :: B.RawTree b y z -> Maybe z
 getTreeZ (B.TreeL z)  = Just z
 getTreeZ _            = Nothing
-
-
--- ============================================  Filter
-
--- | Subtree filter.
-data SubtreeFilter
-    = SubtreeId                                 -- ^ Identity
-    | SubtreeEq    String                       -- ^ Equality
-    | SubtreeKeep  String Glob.Pattern          -- ^ Glob
-    | SubtreeOmit  String Glob.Pattern          -- ^ Anti-glob
-    | SubtreeChain SubtreeFilter SubtreeFilter  -- ^ Filter chain
-      deriving (Show, Eq)
-
-instance Monoid SubtreeFilter where
-    mempty  = SubtreeId
-    mappend = subtreeChain
-
--- | Identity filter.
-subtreeId :: SubtreeFilter
-subtreeId = SubtreeId
-
--- | Equal filter.
-subtreeEq :: String -> SubtreeFilter
-subtreeEq = SubtreeEq
-
--- | Glob filter.
-subtreeKeep :: String -> SubtreeFilter
-subtreeKeep s = SubtreeKeep s $ Glob.compile s
-
--- | Anti-glob filter.
-subtreeOmit :: String -> SubtreeFilter
-subtreeOmit s = SubtreeOmit s $ Glob.compile s
-
--- | Filter chain.
-subtreeChain :: O.Bin SubtreeFilter
-subtreeChain SubtreeId f = f
-subtreeChain f SubtreeId = f
-subtreeChain f g = SubtreeChain f g
-
--- | Filter strings by subtree filter.
---
---   >>> subtreeFilter subtreeId ["foo", "bar", "foobar"]
---   ["foo","bar","foobar"]
---
---   >>> subtreeFilter (SubtreeEq "bar") ["foo", "bar", "foobar"]
---   ["bar"]
---
---   >>> subtreeFilter (subtreeKeep "foo*") ["foo", "bar", "foobar"]
---   ["foo","foobar"]
---
---   >>> subtreeFilter (subtreeKeep "*bar") ["foo", "bar", "foobar"]
---   ["bar","foobar"]
---
---   >>> subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---
---   >>> subtreeFilter (subtreeOmit "foo*") ["foo", "bar", "foobar"]
---   ["bar"]
---
---   >>> subtreeFilter (subtreeKeep "foo*" O.++ subtreeOmit "*bar") ["foo", "bar", "foobar"]
---   ["foo"]
---
-subtreeFilter :: SubtreeFilter -> O.Map [String]
-subtreeFilter = subtreeFilterOn Just
-
-subtreeFilterOn :: (a -> Maybe String) -> SubtreeFilter -> O.Map [a]
-subtreeFilterOn get f xs0 = a xs0 [f] where
-    a xs []                        = xs
-    a xs (SubtreeId : fs)          = a xs fs
-    a xs (SubtreeEq x : fs)        = a xs' fs where xs' = O.keepOn get (== x) xs
-    a xs (SubtreeKeep _ p : fs)    = a xs' fs where xs' = O.keepOn get (Glob.match p) xs
-    a xs (SubtreeOmit _ p : fs)    = a xs' fs where xs' = O.omitOn get (Glob.match p) xs
-    a xs (SubtreeChain f1 f2 : fs) = a xs fs' where fs' = f1 : f2 : fs
-
