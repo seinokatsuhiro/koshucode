@@ -19,10 +19,10 @@ import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 
 -- | Subtree.
-type Subtree = B.RawTree [SubtreePattern] String String
+type Subtree a = B.RawTree [SubtreePattern] a a
 
 -- | Subtree output.
-type SubtreeOutput = B.RawTree [SubtreePattern] String (SubtreeTerm, String)
+type SubtreeOutput a = B.RawTree [SubtreePattern] a (SubtreeTerm, a)
 
 -- | Subtree pattern.
 data SubtreePattern
@@ -77,7 +77,7 @@ subtreeTexts cs n = SubtreeText cs $ S.toTermName n
 --   > [] "Y1"
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --
-subtree :: [SubtreePattern] -> [Subtree] -> [SubtreeOutput]
+subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
 subtree ps0 ts = p1 O.<?> ts where
     p1 t = maybeHead (p2 t O.<?> ps0)
 
@@ -95,7 +95,7 @@ subtree ps0 ts = p1 O.<?> ts where
     p2 _ _ = Nothing
 
 -- | Select subtree.
-subtreeOne :: [SubtreePattern] -> O.Map [Subtree]
+subtreeOne :: [SubtreePattern] -> O.Map [Subtree String]
 subtreeOne ps0 ts = p1 O.<?> ts where
     p1 t = maybeHead (p2 t O.<?> ps0)
 
@@ -110,10 +110,10 @@ subtreeOne ps0 ts = p1 O.<?> ts where
         | otherwise  = Just $ B.TreeB (SubtreeR f ps : ps) y xs
     p2 _ _ = Nothing
 
-nullZ :: S.SubtreeFilter -> Subtree -> Bool
+nullZ :: S.SubtreeFilter -> Subtree String -> Bool
 nullZ f t = null $ S.subtreeFilterOn getTreeZ f [t]
 
-nullY :: S.SubtreeFilter -> Subtree -> Bool
+nullY :: S.SubtreeFilter -> Subtree String -> Bool
 nullY f t = null $ S.subtreeFilterOn getTreeY f [t]
 
 maybeHead :: [a] -> Maybe a

@@ -32,13 +32,13 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 --           - "Subtree.hs"
 --       - "Syntax.hs"
 --
-dirTrees :: [FilePath] -> FilePath -> [S.SubtreePattern] -> IO [S.Subtree]
+dirTrees :: [FilePath] -> FilePath -> [S.SubtreePattern] -> IO [S.Subtree String]
 dirTrees exclude path ps =
     Dir.withCurrentDirectory path $ do
       ts <- dirTreesOne exclude ps
       dirTreesRec exclude ts
 
-dirTreesOne :: [FilePath] -> [S.SubtreePattern] -> IO [S.Subtree]
+dirTreesOne :: [FilePath] -> [S.SubtreePattern] -> IO [S.Subtree String]
 dirTreesOne exclude ps =
     do fs <- Dir.listDirectory "."
        zs <- tree O.<#> filter (`notElem` exclude) fs
@@ -49,7 +49,7 @@ dirTreesOne exclude ps =
                              True  -> B.TreeB ps f []
                              False -> B.TreeL f
 
-dirTreesRec :: [FilePath] -> [S.Subtree] -> IO [S.Subtree]
+dirTreesRec :: [FilePath] -> [S.Subtree String] -> IO [S.Subtree String]
 dirTreesRec exclude ts = p O.<#++> ts where
     p t@(B.TreeL _) = return [t]
     p (B.TreeB ps y _) =
