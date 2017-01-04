@@ -8,8 +8,9 @@
 module Koshucode.Baala.Base.Code.Tree
   ( -- * Raw tree
     RawTree (..),
-    treeMap, treeMapY, treeMapZ,
+    treeHeight,
     treeListY, treeListZ, treePaths,
+    treeMap, treeMapY, treeMapZ,
     undouble,
 
     -- * Print tree
@@ -44,23 +45,14 @@ data RawTree b y z
 instance Functor (RawTree p k) where
     fmap = treeMapZ
 
--- | Map function to tree elements.
-treeMap :: (b1 -> b2) -> (y1 -> y2) -> (z1 -> z2) -> RawTree b1 y1 z1 -> RawTree b2 y2 z2
-treeMap bmap ymap zmap = loop where
-    loop (TreeL z)       = TreeL (zmap z)
-    loop (TreeB b y xs)  = TreeB (bmap b) (ymap y) (loop <$> xs)
-
--- | Map function to branch element.
-treeMapY :: (y1 -> y2) -> RawTree b y1 z -> RawTree b y2 z
-treeMapY f = loop where
-    loop (TreeL z)       = TreeL z
-    loop (TreeB b y xs)  = TreeB b (f y) (loop <$> xs)
-
--- | Map function to leaf element.
-treeMapZ :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
-treeMapZ f = loop where
-    loop (TreeL z)       = TreeL (f z)
-    loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
+-- | Height of tree.
+--
+--   >>> treeHeight $ TreeB () "Y1" [TreeL "Z1", TreeL "Z2", TreeB () "Y2" [TreeL "Z3"]]
+--   3
+--
+treeHeight :: RawTree b y z -> Int
+treeHeight (TreeL _)      = 1
+treeHeight (TreeB _ _ xs) = 1 + maximum (treeHeight <$> xs)
 
 -- | Collect branch elements.
 --
@@ -89,6 +81,24 @@ treePaths :: RawTree b y z -> [([y], z)]
 treePaths = path [] where
     path p (TreeB _ y xs)  = path (y : p) O.<++> xs
     path p (TreeL z)       = [(reverse p, z)]
+
+-- | Map function to tree elements.
+treeMap :: (b1 -> b2) -> (y1 -> y2) -> (z1 -> z2) -> RawTree b1 y1 z1 -> RawTree b2 y2 z2
+treeMap bmap ymap zmap = loop where
+    loop (TreeL z)       = TreeL (zmap z)
+    loop (TreeB b y xs)  = TreeB (bmap b) (ymap y) (loop <$> xs)
+
+-- | Map function to branch element.
+treeMapY :: (y1 -> y2) -> RawTree b y1 z -> RawTree b y2 z
+treeMapY f = loop where
+    loop (TreeL z)       = TreeL z
+    loop (TreeB b y xs)  = TreeB b (f y) (loop <$> xs)
+
+-- | Map function to leaf element.
+treeMapZ :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
+treeMapZ f = loop where
+    loop (TreeL z)       = TreeL (f z)
+    loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
 
 -- | Simplify tree by removing double brackets,
 --   like @((a))@ to @(a)@.
@@ -126,6 +136,10 @@ ppRawTrees = concatMap ppRawTree
 -- | Pretty print raw tree.
 --
 --   >>> printTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   Height of tree      = 3
+--   Number of branches  = 2
+--   Number of leaves    = 3
+--   .
 --   > () "Y1"
 --     - "Z1"
 --     > () "Y2"
@@ -133,7 +147,15 @@ ppRawTrees = concatMap ppRawTree
 --       - "Z3"
 --
 printTree :: (Show b, Show y, Show z) => RawTree b y z -> IO ()
-printTree = mapM_ putStrLn . ppRawTree
+printTree tree =
+    do putStrLn $ "Height of tree      = " ++ show (treeHeight tree)
+       putStrLn $ "Number of branches  = " ++ num treeListY
+       putStrLn $ "Number of leaves    = " ++ num treeListZ
+       O.putLn
+       putStrLn O.<#!> ppRawTree tree
+       O.putLn
+    where
+      num f = show (length $ f tree)
 
 -- | Pretty print raw trees.
 printTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> IO ()
