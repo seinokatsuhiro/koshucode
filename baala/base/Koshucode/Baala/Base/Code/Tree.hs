@@ -6,12 +6,15 @@
 -- | Tree structure.
 
 module Koshucode.Baala.Base.Code.Tree
-  ( -- * Tree
+  ( -- * Raw tree
     RawTree (..),
     treeMap, treeMapY, treeMapZ,
     treeLeaves, treePaths,
     undouble,
+
+    -- * Print tree
     ppRawTree, ppRawTrees,
+    printTree, printTrees,
 
     -- * Code tree
     CodeTree,
@@ -88,16 +91,12 @@ undouble p = loop where
           xs2 -> TreeB n pp xs2
     loop x = x
 
--- | Pretty print for single raw tree.
+
+-- ============================================  Print tree
+
+-- | Convert single raw tree to printable lines.
 --   Branches are marked usign right arrow (@>@),
 --   and leaves are marked using hyphen (@-@).
---
---   >>> mapM_ putStrLn $ ppRawTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
---   > () "Y1"
---     - "Z1"
---     > () "Y2"
---       - "Z2"
---       - "Z3"
 --
 ppRawTree :: (Show b, Show y, Show z) => RawTree b y z -> [String]
 ppRawTree = pp 0 where
@@ -107,9 +106,25 @@ ppRawTree = pp 0 where
     indent 0  = ""
     indent dp = replicate (2 * dp) ' '
 
--- | Pretty print for multiple raw trees.
+-- | Convert multiple raw trees to printable lines.
 ppRawTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> [String]
 ppRawTrees = concatMap ppRawTree
+
+-- | Pretty print raw tree.
+--
+--   >>> printTree $ TreeB () "Y1" [TreeL "Z1", TreeB () "Y2" [TreeL "Z2", TreeL "Z3"]]
+--   > () "Y1"
+--     - "Z1"
+--     > () "Y2"
+--       - "Z2"
+--       - "Z3"
+--
+printTree :: (Show b, Show y, Show z) => RawTree b y z -> IO ()
+printTree = mapM_ putStrLn . ppRawTree
+
+-- | Pretty print raw trees.
+printTrees :: (Show b, Show y, Show z) => [RawTree b y z] -> IO ()
+printTrees = mapM_ printTree
 
 
 -- ============================================  Code tree
