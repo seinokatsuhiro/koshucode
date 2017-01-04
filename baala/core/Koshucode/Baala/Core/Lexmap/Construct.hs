@@ -174,7 +174,7 @@ consLexmap paraze gslot findDeriv = lexmap 0 where
         markLocalToken _ loc = loc
 
         markLocalRelmap :: O.Map S.Token -> O.Map (S.AttrName, [S.Tree])
-        markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeMapL mark <$> ts)
+        markLocalRelmap mark (n@(S.AttrRelmapLocal _), ts) = (n, B.treeMapZ mark <$> ts)
         markLocalRelmap _ (n, ts) = (n, ts)
 
 -- | Filter by the first element of pairs.

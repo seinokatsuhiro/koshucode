@@ -8,7 +8,7 @@
 module Koshucode.Baala.Base.Code.Tree
   ( -- * Tree
     RawTree (..),
-    treeMapL, treeMapY,
+    treeMapY, treeMapZ,
     treeLeaves, treePaths,
     undouble,
     ppRawTree, ppRawTrees,
@@ -39,19 +39,19 @@ data RawTree b y z
       deriving (Show, Eq, Ord)
 
 instance Functor (RawTree p k) where
-    fmap = treeMapL
-
--- | Map function to leaf element.
-treeMapL :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
-treeMapL f = loop where
-    loop (TreeL z)       = TreeL (f z)
-    loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
+    fmap = treeMapZ
 
 -- | Map function to branch element.
 treeMapY :: (y1 -> y2) -> RawTree b y1 z -> RawTree b y2 z
 treeMapY f = loop where
     loop (TreeL z)       = TreeL z
     loop (TreeB b y xs)  = TreeB b (f y) (loop <$> xs)
+
+-- | Map function to leaf element.
+treeMapZ :: (z1 -> z2) -> RawTree b y z1 -> RawTree b y z2
+treeMapZ f = loop where
+    loop (TreeL z)       = TreeL (f z)
+    loop (TreeB b y xs)  = TreeB b y (loop <$> xs)
 
 -- | Collect leaves in tree.
 treeLeaves :: RawTree b y z -> [z]
