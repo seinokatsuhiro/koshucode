@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 -- | Create selective directory trees.
 --
---   >>> O.putLines . B.ppRawTrees =<< dirTrees "." [S.SubtreeR (subtreeId O.++ subtreeOmit "dist") [S.SubtreeL $ subtreeKeep "S*"]]
+--   >>> O.putLines . B.ppRawTrees =<< dirTrees [] "." [S.SubtreeR (S.subtreeId O.++ S.subtreeOmit "dist") [S.subtreeL $ S.subtreeKeep "S*"]]
 --   > [] "data"
 --     - "SLOC.k"
 --   > [] "Koshucode"
@@ -32,15 +32,16 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 --           - "Subtree.hs"
 --       - "Syntax.hs"
 --
-dirTrees :: FilePath -> [S.SubtreePattern] -> IO [S.Subtree]
-dirTrees path ps = Dir.withCurrentDirectory path $ do
-                    ts <- dirTreesOne ps
-                    dirTreesRec ts
+dirTrees :: [FilePath] -> FilePath -> [S.SubtreePattern] -> IO [S.Subtree]
+dirTrees exclude path ps =
+    Dir.withCurrentDirectory path $ do
+      ts <- dirTreesOne exclude ps
+      dirTreesRec exclude ts
 
-dirTreesOne :: [S.SubtreePattern] -> IO [S.Subtree]
-dirTreesOne ps =
+dirTreesOne :: [FilePath] -> [S.SubtreePattern] -> IO [S.Subtree]
+dirTreesOne exclude ps =
     do fs <- Dir.listDirectory "."
-       zs <- tree O.<#> fs
+       zs <- tree O.<#> filter (`notElem` exclude) fs
        return $ S.subtreeOne ps zs
     where
       tree f = do isDir <- Dir.doesDirectoryExist f
@@ -48,14 +49,14 @@ dirTreesOne ps =
                              True  -> B.TreeB ps f []
                              False -> B.TreeL f
 
-dirTreesRec :: [S.Subtree] -> IO [S.Subtree]
-dirTreesRec ts = p O.<#++> ts where
+dirTreesRec :: [FilePath] -> [S.Subtree] -> IO [S.Subtree]
+dirTreesRec exclude ts = p O.<#++> ts where
     p t@(B.TreeL _) = return [t]
     p (B.TreeB ps y _) =
         Dir.withCurrentDirectory y $ do
-           zs <- dirTreesOne ps
+           zs <- dirTreesOne exclude ps
            case zs of
              [] -> return []
-             _  -> do zs' <- dirTreesRec zs
+             _  -> do zs' <- dirTreesRec exclude zs
                       return [B.TreeB [] y zs']
 
