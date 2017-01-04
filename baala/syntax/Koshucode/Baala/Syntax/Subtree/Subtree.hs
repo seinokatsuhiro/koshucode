@@ -6,6 +6,8 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
   ( -- * Pattern
     Subtree,
     SubtreePattern (..),
+    subtreeL,
+    SubtreeTerm (..),
     subtree, subtreeOne,
 
     -- * Filter
@@ -19,6 +21,7 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
 import qualified System.FilePath.Glob                    as Glob
 import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax.Symbol           as S
 
 
 -- | Subtree.
@@ -26,31 +29,42 @@ type Subtree = B.RawTree [SubtreePattern] String String
 
 -- | Subtree pattern.
 data SubtreePattern
-    = SubtreeL SubtreeFilter                   -- ^ Leaf
+    = SubtreeL SubtreeTerm SubtreeFilter       -- ^ Leaf
     | SubtreeB SubtreeFilter [SubtreePattern]  -- ^ Branch
     | SubtreeR SubtreeFilter [SubtreePattern]  -- ^ Recursive branch
+      deriving (Show, Eq)
+
+-- | Create non-termination leaf pattern.
+subtreeL :: SubtreeFilter -> SubtreePattern
+subtreeL = SubtreeL SubtreeNone
+
+-- | Termination of subtree content.
+data SubtreeTerm
+    = SubtreeNone
+    | SubtreeText S.TermName
+    | SubtreeSeq  S.TermName
       deriving (Show, Eq)
 
 -- | Select subtree.
 --
 --   >>> let tree = B.TreeB [] "Y1" [B.TreeL "Z1", B.TreeL "Z2", B.TreeB [] "Y2" [B.TreeL "Z3"]]
---   >>> O.putLines $ B.ppTree tree
+--   >>> O.putLines $ B.ppRawTree tree
 --   > [] "Y1"
 --     - "Z1"
 --     - "Z2"
 --     > [] "Y2"
 --       - "Z3"
 --
---   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeB (subtreeEq "Y1") [SubtreeL (subtreeEq "Z1")]] [tree])
+--   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeB (subtreeEq "Y1") [subtreeL (subtreeEq "Z1")]] [tree])
 --   > [] "Y1"
 --     - "Z1"
 --
---   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeR (subtreeId) [SubtreeL (subtreeEq "Z3")]] [tree])
+--   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z3")]] [tree])
 --   > [] "Y1"
 --     > [] "Y2"
 --       - "Z3"
 --
---   >>> O.putLines (B.ppTree O.<++> subtree [SubtreeR (subtreeId) [SubtreeL (subtreeEq "Z1")]] [tree])
+--   >>> O.putLines (B.ppRawTree O.<++> subtree [SubtreeR (subtreeId) [subtreeL (subtreeEq "Z1")]] [tree])
 --   > [] "Y1"
 --     - "Z1"
 --
@@ -70,7 +84,7 @@ subtreeOne :: [SubtreePattern] -> O.Map [Subtree]
 subtreeOne ps0 ts = p1 O.<?> ts where
     p1 t = maybeHead (p2 t O.<?> ps0)
 
-    p2 t@(B.TreeL _) (SubtreeL f)
+    p2 t@(B.TreeL _) (SubtreeL _ f)
         | nullZ f t  = Nothing
         | otherwise  = Just t
     p2 t@(B.TreeB _ y zs) (SubtreeB f ps)
