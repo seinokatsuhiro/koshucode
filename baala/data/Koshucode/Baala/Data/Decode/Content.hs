@@ -129,7 +129,7 @@ treesJudge ::
     (D.CContent c)
     => D.CacheT           -- ^ Term name cache
     -> T.AssertType       -- ^ Assertion type
-    -> T.JudgeClass       -- ^ Judgement class
+    -> S.JudgeClass       -- ^ Judgement class
     -> [S.Tree]           -- ^ Trees of terms
     -> B.Ab (D.CacheT, T.Judge c)   -- ^ Error or decoded judgement
 treesJudge cc q cl trees =

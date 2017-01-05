@@ -41,7 +41,7 @@ relmapConst :: C.Intmed' h c -> T.Rel c -> C.Relmap' h c
 relmapConst = C.RelmapConst . C.medLexmap
 
 -- | Relmap for retrieving relation from dataset.
-relmapSource :: C.Intmed' h c -> T.JudgeClass -> [S.TermName] -> C.Relmap' h c
+relmapSource :: C.Intmed' h c -> S.JudgeClass -> [S.TermName] -> C.Relmap' h c
 relmapSource = C.RelmapSource . C.medLexmap
 
 

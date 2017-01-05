@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Core.Relkit   as C
 data Relmap' h c
     = RelmapConst   C.Lexmap (T.Rel c)
                              -- ^ Constant relation
-    | RelmapSource  C.Lexmap T.JudgeClass [S.TermName]
+    | RelmapSource  C.Lexmap S.JudgeClass [S.TermName]
                              -- ^ Retrieve a relation from a dataset
 
     | RelmapCalc    C.Lexmap (C.RelkitConfl c) [Relmap' h c]

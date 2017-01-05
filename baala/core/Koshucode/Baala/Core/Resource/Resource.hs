@@ -121,7 +121,7 @@ resInputPoint Resource { resInputQueue = (q, done) } = ps where
     ip p = C.InputPoint p []
 
 -- | List of all judgement classes.
-resClass :: Resource c -> [T.JudgeClass]
+resClass :: Resource c -> [S.JudgeClass]
 resClass Resource {..} = map (C.assClass . S.shortBody) resAssert
 
 -- | Get feature from resource.

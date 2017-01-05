@@ -44,7 +44,7 @@ data Result c = Result
     , resultLicense    :: [[String]]
     , resultViolated   :: [ShortResultChunks c]
     , resultNormal     :: [ShortResultChunks c]
-    , resultClass      :: [T.JudgeClass]
+    , resultClass      :: [S.JudgeClass]
     } deriving (Show, Eq, Ord)
 
 -- | Input point of data resource.
@@ -71,7 +71,7 @@ instance (Show c) => B.Default (Result c) where
 -- | Chunk of judgements.
 data ResultChunk c
     = ResultJudge  [T.Judge c]             -- ^ List of judges
-    | ResultRel    T.JudgeClass (T.Rel c)  -- ^ Named relation instead of judges
+    | ResultRel    S.JudgeClass (T.Rel c)  -- ^ Named relation instead of judges
     | ResultNote   [String]                -- ^ Commentary note
       deriving (Show, Eq, Ord)
 

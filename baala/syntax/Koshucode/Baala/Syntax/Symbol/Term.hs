@@ -5,6 +5,7 @@
 
 module Koshucode.Baala.Syntax.Symbol.Term
   ( -- * Term
+    JudgeClass,
     Term, term,
 
     -- * Term name
@@ -34,6 +35,9 @@ import qualified Koshucode.Baala.Overture   as O
 
 
 -- ----------------------  Term
+
+-- | Name of judgement class, in other words, name of propositional function.
+type JudgeClass = String
 
 -- | Term type: pair of term name and content.
 type Term c = (TermName, c)

@@ -69,7 +69,7 @@ instance (B.MixEncode c) => B.MixEncode (Rel c) where
 
 -- | Relation with judgement class.
 data JudgeRel c =
-    JudgeRel D.JudgeClass (Rel c)
+    JudgeRel S.JudgeClass (Rel c)
     deriving (Show, Eq, Ord)
 
 
@@ -136,13 +136,13 @@ class SelectRel r where
     selectJudgeRel r cl ns = JudgeRel cl $ selectRel r cl ns
 
 -- | Select relation.
-type RelSelect c = D.JudgeClass -> [S.TermName] -> Rel c
+type RelSelect c = S.JudgeClass -> [S.TermName] -> Rel c
 
 -- | Select judgemental relation.
-type JudgeRelSelect c = D.JudgeClass -> [S.TermName] -> JudgeRel c
+type JudgeRelSelect c = S.JudgeClass -> [S.TermName] -> JudgeRel c
 
 -- | Convert relation to list of judges.
-judgesFromRel :: D.JudgeOf c -> D.JudgeClass -> Rel c -> [D.Judge c]
+judgesFromRel :: D.JudgeOf c -> S.JudgeClass -> Rel c -> [D.Judge c]
 judgesFromRel jof cl (Rel he bo) = map judge bo where
     judge = jof cl . zip names
     names = D.getTermNames he

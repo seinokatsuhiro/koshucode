@@ -152,7 +152,7 @@ relkitConstBody ns bo = kit where
     kit = relkitJust he $ C.RelkitConst bo
 
 -- | Relkit for source relmap.
-relkitSource :: T.JudgeClass -> T.Head -> C.Relkit c
+relkitSource :: S.JudgeClass -> T.Head -> C.Relkit c
 relkitSource cl he = relkitJust he kit where
     kit = C.RelkitSource cl $ T.getTermNames he
 

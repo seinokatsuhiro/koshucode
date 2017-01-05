@@ -4,8 +4,7 @@
 -- | Common properties of judgements and relations.
 
 module Koshucode.Baala.Type.Judge.JudgeClass
-  ( JudgeClass,
-    GetClass (..),
+  ( GetClass (..),
     GetTerms (..),
     GetTermNames (..),
     getTermNamesUnique,
@@ -14,12 +13,9 @@ module Koshucode.Baala.Type.Judge.JudgeClass
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Syntax     as S
 
--- | Name of judgement class, in other words, name of propositional function.
-type JudgeClass = String
-
 -- | Get judge class.
 class GetClass a where
-    getClass :: a -> JudgeClass
+    getClass :: a -> S.JudgeClass
 
 -- | Get term list.
 class GetTerms a where

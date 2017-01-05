@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 data Assert' h c = Assert
     { assSection   :: C.SecNo                -- ^ Section number
     , assType      :: T.AssertType           -- ^ Logical quality
-    , assClass     :: T.JudgeClass           -- ^ Judgement class
+    , assClass     :: S.JudgeClass           -- ^ Judgement class
     , assToken     :: [S.Token]              -- ^ Source token list
     , assPara      :: C.TTreePara
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap

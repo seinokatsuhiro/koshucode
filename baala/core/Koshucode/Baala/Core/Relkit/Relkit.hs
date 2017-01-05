@@ -73,7 +73,7 @@ data RelkitCore c
                      --   output input relation without modification.
     | RelkitConst    [[c]]
                      -- ^ __Source:__ Ignore input, and output constant relation.
-    | RelkitSource   T.JudgeClass [S.TermName]
+    | RelkitSource   S.JudgeClass [S.TermName]
                      -- ^ __Source:__ Ignore input, and output relation from data source.
 
     | RelkitLink     C.RopName RelkitKey (Maybe (RelkitBody c))

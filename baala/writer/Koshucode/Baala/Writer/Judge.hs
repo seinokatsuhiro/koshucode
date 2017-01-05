@@ -17,6 +17,7 @@ import qualified Data.Map                            as Map
 import qualified Koshucode.Baala.Overture            as O
 import qualified Koshucode.Baala.System              as O
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Syntax              as S
 import qualified Koshucode.Baala.Type                as T
 import qualified Koshucode.Baala.Core                as C
 
@@ -80,21 +81,21 @@ when _ False = mempty
 -- ----------------------  Counter
 
 -- | Total and per-judgement counter.
-type JudgeCount = (Int, Map.Map T.JudgeClass Int)
+type JudgeCount = (Int, Map.Map S.JudgeClass Int)
 
 -- | Mix text and judgement counter.
-type JudgeCountMix = (B.MixText, Int, Map.Map T.JudgeClass Int)
+type JudgeCountMix = (B.MixText, Int, Map.Map S.JudgeClass Int)
 
 -- | Zero counters.
 --
 --   >>> judgeCount $ words "A B C"
 --   (0, fromList [("A",0), ("B",0), ("C",0)])
 --
-judgeCount :: [T.JudgeClass] -> JudgeCount
+judgeCount :: [S.JudgeClass] -> JudgeCount
 judgeCount ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Empty and zero counters.
-judgeCountMix :: [T.JudgeClass] -> JudgeCountMix
+judgeCountMix :: [S.JudgeClass] -> JudgeCountMix
 judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Generate judgement counter comment.

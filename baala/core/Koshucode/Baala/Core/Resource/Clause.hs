@@ -42,9 +42,9 @@ data ClauseHead = ClauseHead
 
 -- | Proper part of clause.
 data ClauseBody
-    = CJudge    T.AssertType T.JudgeClass
+    = CJudge    T.AssertType S.JudgeClass
                        [S.Token]    -- ^ __Relational:__ Judge
-    | CAssert   T.AssertType T.JudgeClass
+    | CAssert   T.AssertType S.JudgeClass
                        [S.Token]    -- ^ __Relational:__ Assertion
     | CRelmap   String [S.Token]    -- ^ __Relational:__ Source of relmap
     | CSlot     String [S.Token]    -- ^ __Relational:__ Global slot

@@ -48,12 +48,12 @@ import qualified Koshucode.Baala.Type.Judge.JudgeClass       as D
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm      D.JudgeClass [S.Term c]             -- ^ @|-- P \/x 10 \/y 20@
-    | JudgeDeny        D.JudgeClass [S.Term c]             -- ^ @|-x P \/x 10 \/y 20@
-    | JudgeMultiDeny   D.JudgeClass [S.Term c]             -- ^ @|-xx P \/x 10 \/y 20@
-    | JudgeChange      D.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
-    | JudgeMultiChange D.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
-    | JudgeViolate     D.JudgeClass [S.Term c]             -- ^ @|-v P \/x 10 \/y 20@
+    = JudgeAffirm      S.JudgeClass [S.Term c]             -- ^ @|-- P \/x 10 \/y 20@
+    | JudgeDeny        S.JudgeClass [S.Term c]             -- ^ @|-x P \/x 10 \/y 20@
+    | JudgeMultiDeny   S.JudgeClass [S.Term c]             -- ^ @|-xx P \/x 10 \/y 20@
+    | JudgeChange      S.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-c P \/x 10 +\/y 20@
+    | JudgeMultiChange S.JudgeClass [S.Term c] [S.Term c]  -- ^ @|-cc P \/x 10 +\/y 20@
+    | JudgeViolate     S.JudgeClass [S.Term c]             -- ^ @|-v P \/x 10 \/y 20@
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -96,7 +96,7 @@ judgeNormalize = judgeTermsMap B.sort
 -- ----------------------  Logical quality
 
 -- | Construct judgement from its class and terms.
-type JudgeOf c = D.JudgeClass -> [S.Term c] -> Judge c
+type JudgeOf c = S.JudgeClass -> [S.Term c] -> Judge c
 
 -- | Construct affirmative judgement.
 --
@@ -185,7 +185,7 @@ instance D.GetTerms Judge where
     getTerms = judgeTerms
 
 -- | Return class of judgement.
-judgeClass :: Judge c -> D.JudgeClass
+judgeClass :: Judge c -> S.JudgeClass
 judgeClass (JudgeAffirm      c _)      = c
 judgeClass (JudgeDeny        c _)      = c
 judgeClass (JudgeMultiDeny   c _)      = c

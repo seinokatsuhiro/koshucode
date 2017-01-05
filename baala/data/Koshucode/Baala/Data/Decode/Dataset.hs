@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Data.Decode.Term        as D
 import qualified Koshucode.Baala.Syntax.Pattern          as P
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Ms.Map T.JudgeClass [[S.Term c]])
+data Dataset c = Dataset (Ms.Map S.JudgeClass [[S.Term c]])
 
 instance Show (Dataset c) where
     show = showDataset
@@ -47,7 +47,7 @@ instance T.SelectRel Dataset where
     selectRel = datasetSelect B.def
 
 -- | Retrieve judgement class and its term names.
-datasetClasses :: Dataset c -> Ms.Map T.JudgeClass [S.TermName]
+datasetClasses :: Dataset c -> Ms.Map S.JudgeClass [S.TermName]
 datasetClasses (Dataset ds) = Ms.map termName ds where
     termName ts = B.uniqueConcat (fst O.<$$> ts)
 
