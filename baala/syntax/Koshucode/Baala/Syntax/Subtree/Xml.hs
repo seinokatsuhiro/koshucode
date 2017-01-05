@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | XML tree.
@@ -10,11 +11,14 @@ module Koshucode.Baala.Syntax.Subtree.Xml
     xmlTokens,
     xmlTrees,
     xmlSubtree,
+    xmlData,
   ) where
 
 import qualified Text.HTML.TagSoup                       as X
 import qualified Text.StringLike                         as X
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
@@ -111,4 +115,21 @@ xmlUntoken (XmlTerm  z) = z
 -- | Calculate subtree of XML tree.
 xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
 xmlSubtree = S.subtreeWith xmlKeyString
+
+-- | Extract data from XML output tree.
+xmlData :: XmlTreeOutput String -> [(String, [(S.TermName, String)])]
+xmlData tree = B.gatherToAssoc O.<++> xmlTerms tree
+
+xmlTerms :: XmlTreeOutput String -> [[(String, (S.TermName, String))]]
+xmlTerms = branch where
+    branch t@(B.TreeL _) = [leaf t]
+    branch (B.TreeB _ _ xs) =
+        case B.partitionLB xs of
+          (ls, bs) -> let ts = leaf O.<++> ls
+                      in if null bs
+                         then [ts]
+                         else (ts ++) <$> (branch O.<++> bs)
+
+    leaf (B.TreeL (S.SubtreeText cs n, (_, s))) = (, (n, s)) <$> cs
+    leaf _ = []
 
