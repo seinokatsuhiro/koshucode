@@ -3,22 +3,27 @@
 -- | XML tree.
 
 module Koshucode.Baala.Syntax.Subtree.Xml
-  ( XmlTree,
+  ( XmlTree, XmlTreeOutput,
     XmlToken (..),
     XmlTerm,
     XmlKey (..),
     xmlTokens,
     xmlTrees,
+    xmlSubtree,
   ) where
 
 import qualified Text.HTML.TagSoup                       as X
 import qualified Text.StringLike                         as X
 import qualified Koshucode.Baala.Base                    as B
-
--- | XML tree.
-type XmlTree s = B.RawTree () (XmlTerm s) (XmlTerm s)
+import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
+
+-- | XML tree.
+type XmlTree s = S.Subtree (XmlTerm s)
+
+-- | XML output tree.
+type XmlTreeOutput s = S.SubtreeOutput (XmlTerm s)
 
 -- | XML token.
 data XmlToken s
@@ -36,11 +41,17 @@ type XmlTerm s = (XmlKey s, s)
 
 -- | Key data of XML tree.
 data XmlKey s
-    = XmlElem         -- ^ Element node
+    = XmlElem s       -- ^ Element node
     | XmlAttr s       -- ^ Attribute of element
     | XmlText         -- ^ Text node
     | XmlComment      -- ^ Comment node
       deriving (Show, Eq, Ord)
+
+xmlKeyString :: XmlTerm String -> String
+xmlKeyString (XmlElem s  , _) = s
+xmlKeyString (XmlAttr s  , _) = s
+xmlKeyString (XmlText    , _) = "@text"
+xmlKeyString (XmlComment , _) = "@comment"
 
 -- | Tokenize XML document.
 --
@@ -69,12 +80,12 @@ convertTags = loop [] where
 
 -- | Convert XML tokens to XML tree.
 --
---   >>> mapM_ putStrLn . B.ppRawTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<hello>wonderful</world>")
---   > () (XmlElem,"hello")
+--   >>> B.printTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<hello>wonderful</world>")
+--   > () (XmlElem "hello","hello")
 --     - (XmlText,"wonderful")
 --
---   >>> mapM_ putStrLn . B.ppRawTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<a x='xx' y='yy'>")
---   > () (XmlElem,"a")
+--   >>> B.printTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<a x='xx' y='yy'>")
+--   > () (XmlElem "a","a")
 --     - (XmlAttr "x","xx")
 --     - (XmlAttr "y","yy")
 --
@@ -83,17 +94,21 @@ xmlTrees toks =
     do trees <- B.codeTrees bracket B.BracketNone toks
        Right (modifyTree <$> trees)
     where
-      bracket (XmlOpen n)   = B.BracketOpen  (XmlElem, n)
-      bracket (XmlClose n)  = B.BracketClose (XmlElem, n)
+      bracket (XmlOpen n)   = B.BracketOpen  (XmlElem n, n)
+      bracket (XmlClose n)  = B.BracketClose (XmlElem n, n)
       bracket _             = B.BracketNone
 
 modifyTree :: (X.StringLike s) => XmlTree' s -> XmlTree s
-modifyTree = B.treeMap (const ()) y xmlUntoken where
+modifyTree = B.treeMap (const []) y xmlUntoken where
     y (Just (t, _))  = xmlUntoken t
     y _              = (XmlComment, X.empty)
 
 xmlUntoken :: XmlToken s -> XmlTerm s
-xmlUntoken (XmlOpen  n) = (XmlElem, n)
-xmlUntoken (XmlClose n) = (XmlElem, n)
+xmlUntoken (XmlOpen  n) = (XmlElem n, n)
+xmlUntoken (XmlClose n) = (XmlElem n, n)
 xmlUntoken (XmlTerm  z) = z
+
+-- | Calculate subtree of XML tree.
+xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
+xmlSubtree = S.subtreeWith xmlKeyString
 
