@@ -91,8 +91,9 @@ decodeSubtreePattern = pats where
     pats ts = pat O.<#> S.divideTreesByBar ts
 
     pat (P.LRaw "-" : ts) =
-        case splitClassTerm ts of
-          (ts', term) -> Right . S.SubtreeL term . fst =<< filt ts'
+        do (ts', term) <- splitClassTerm ts
+           (f, _) <- filt ts'
+           Right $ S.SubtreeL term f
     pat (P.LRaw ">"  : ts)  = S.SubtreeB </> ts
     pat (P.LRaw ">>" : ts)  = S.SubtreeR </> ts
     pat _ = Msg.adlib "Unknown subtree pattern"
@@ -110,9 +111,15 @@ decodeSubtreePattern = pats where
     f <+> ts = do (g, ps) <- filt ts
                   Right (f O.++ g, ps)
 
-splitClassTerm :: [S.Tree] -> ([S.Tree], S.SubtreeTerm)
+splitClassTerm :: [S.Tree] -> B.Ab ([S.Tree], S.SubtreeTerm)
 splitClassTerm ts0 = loop [] ts0 where
     loop cs (P.LRaw c : ts)  = loop (c : cs) ts
-    loop cs (P.LTerm n : ts) = (ts, S.subtreeTexts (reverse cs) (S.toTermName n))
-    loop _ _ = (ts0, S.SubtreeNone)
+    loop cs (P.LTerm n : P.LRaw "seq" : ts)
+        = right cs (ts, S.SubtreeSeq (reverse cs) (S.toTermName n))
+    loop cs (P.LTerm n : ts)
+        = right cs (ts, S.subtreeTexts (reverse cs) (S.toTermName n))
+    loop _ _ = Right (ts0, S.SubtreeNone)
 
+    right cs result
+        | null cs    = Msg.adlib "Expect one or more judgement classes"
+        | otherwise  = Right result
