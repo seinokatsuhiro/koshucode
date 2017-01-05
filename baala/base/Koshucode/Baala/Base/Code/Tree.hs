@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Code.Tree
     treeListY, treeListZ, treePaths,
     treeMap, treeMapY, treeMapZ,
     undouble,
+    partitionLB,
 
     -- * Print tree
     ppRawTree, ppRawTrees,
@@ -25,6 +26,7 @@ module Koshucode.Baala.Base.Code.Tree
     untree, untrees,
   ) where
 
+import qualified Data.List                             as Ls
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base.Abort            as B
 import qualified Koshucode.Baala.Base.Prelude          as B
@@ -114,6 +116,13 @@ undouble p = loop where
           xs2 -> TreeB n pp xs2
     loop x = x
 
+-- | Divide branch into leaves and branches.
+partitionLB :: [RawTree b y z] -> ([RawTree b y z], [RawTree b y z])
+partitionLB = Ls.partition isTreeL
+
+isTreeL :: RawTree b y z -> Bool
+isTreeL (TreeL _)      = True
+isTreeL (TreeB _ _ _)  = False
 
 -- ============================================  Print tree
 
