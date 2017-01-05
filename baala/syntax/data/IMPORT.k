@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    164 judges
+**    178 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Attr.Attr"          /import "Data.List"
@@ -78,9 +78,11 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Tree"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Subtree.Subtree"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Subtree.Filter"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Token.Pattern"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Syntax.Tree.Pattern"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Decode"     /import "Koshucode.Baala.Base.Message"
@@ -90,13 +92,26 @@
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.DirTree"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.DirTree"    /import "Koshucode.Baala.Syntax.Subtree.Subtree"
 
-|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Subtree"    /import "System.FilePath.Glob"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Filter"     /import "System.FilePath.Glob"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Filter"     /import "Koshucode.Baala.Overture"
+
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Subtree"    /import "Koshucode.Baala.Overture"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Subtree"    /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Subtree"    /import "Koshucode.Baala.Syntax.Symbol"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Subtree"    /import "Koshucode.Baala.Syntax.Subtree.Filter"
+
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Text.HTML.TagSoup"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Text.StringLike"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Overture"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Syntax.Symbol"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree.Xml"        /import "Koshucode.Baala.Syntax.Subtree.Subtree"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Decode"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.DirTree"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Filter"
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Subtree"
+|-- IMPORT  /module "Koshucode.Baala.Syntax.Subtree"            /import "Koshucode.Baala.Syntax.Subtree.Xml"
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax.Symbol.AngleText"   /import "Koshucode.Baala.Overture"
 
@@ -209,6 +224,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Para"
+|-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Subtree"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Symbol"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Token"
 |-- IMPORT  /module "Koshucode.Baala.Syntax"                    /import "Koshucode.Baala.Syntax.Tree"

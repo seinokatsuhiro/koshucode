@@ -84,9 +84,10 @@
     [ "Base" | "Token" ] ] [ 32 | "Parse" | [ "Base" | "Overture" | "Token" ] ] [ 32 | "Pattern" | [ "Base" | "Token" ]
     ] [ 33 | "Split" | [ "Base" | "Overture" | "Token" ] ] =}
 
-|-- DIR-RANK  /dir-rank 35  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 20 |
-    "Subtree" | [ "Base" | "Overture" ] ] [ 21 | "DirTree" | [ "Base" | "Overture" ] ] [ 35 | "Decode" | [ "Base" |
-    "Overture" | "Token" | "Tree" ] ] =}
+|-- DIR-RANK  /dir-rank 35  /dir "Koshucode.Baala.Syntax.Subtree"  /base-rank {= /rank /base /import-dir [ 4 | "Filter"
+    | [ "Overture" ] ] [ 25 | "Subtree" | [ "Base" | "Overture" | "Symbol" ] ] [ 26 | "DirTree" | [ "Base" | "Overture"
+    ] ] [ 26 | "Xml" | [ "Base" | "Overture" | "Symbol" ] ] [ 35 | "Decode" | [ "Base" | "Overture" | "Symbol" | "Token"
+    | "Tree" ] ] =}
 |-- DIR-RANK  /dir-rank 36  /dir "Koshucode.Baala.Syntax.Attr"  /base-rank {= /rank /base /import-dir [ 0 | "AttrName" |
     [ ] ] [ 25 | "Message" | [ "Base" | "Para" | "Symbol" ] ] [ 35 | "Attr" | [ "Base" | "Overture" | "Para" | "Tree" ]
     ] [ 35 | "Slot" | [ "Base" | "Overture" | "Token" | "Tree" ] ] [ 36 | "AttrEd" | [ "Base" | "Symbol" | "Token" |
@@ -165,9 +166,9 @@
 
 |-- DIR-RANK  /dir-rank 79  /dir "Koshucode.Baala"  /base-rank {= /rank /base /import-dir [ 1 | "System" | [ ] ] [ 3 |
     "Overture" | [ "Text" ] ] [ 11 | "Subtext" | [ "Operator" ] ] [ 19 | "Base" | [ "Abort" | "Code" | "IO" | "List" |
-    "MixText" | "Prelude" | "Text" ] ] [ 38 | "Syntax" | [ "Attr" | "Para" | "Symbol" | "Token" | "Tree" ] ] [ 48 |
-    "Type" | [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 61 | "Data" | [ "Church" | "Class" | "Decode" |
-    "Type" ] ] [ 62 | "DataPlus" | [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 75 | "Core" | [ "Assert" |
+    "MixText" | "Prelude" | "Text" ] ] [ 38 | "Syntax" | [ "Attr" | "Para" | "Subtree" | "Symbol" | "Token" | "Tree" ] ]
+    [ 48 | "Type" | [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ] ] [ 61 | "Data" | [ "Church" | "Class" | "Decode"
+    | "Type" ] ] [ 62 | "DataPlus" | [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 75 | "Core" | [ "Assert" |
     "Lexmap" | "Relkit" | "Relmap" | "Resource" ] ] [ 78 | "Writer" | [ ] ] [ 79 | "Cop" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 79  /dir "Koshucode.Baala.Rop.Base.Get"  /base-rank {= /rank /base /import-dir [ 77 | "Get" | [
     "Core" ] ] [ 78 | "Rel" | [ "Core" ] ] [ 79 | "Cox" | [ "Core" ] ] =}
@@ -380,9 +381,11 @@ TABLE : DIR-RANK
                                                  
   35        "Koshucode.Baala.Syntax.Subtree"     /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
-                                                 20    "Subtree"            [ "Base" | "Overture" ]
-                                                 21    "DirTree"            [ "Base" | "Overture" ]
-                                                 35    "Decode"             [ "Base" | "Overture" | "Token" | "Tree" ]
+                                                 4     "Filter"             [ "Overture" ]
+                                                 25    "Subtree"            [ "Base" | "Overture" | "Symbol" ]
+                                                 26    "DirTree"            [ "Base" | "Overture" ]
+                                                 26    "Xml"                [ "Base" | "Overture" | "Symbol" ]
+                                                 35    "Decode"             [ "Base" | "Overture" | "Symbol" | "Token" | "Tree" ]
                                                  
   36        "Koshucode.Baala.Syntax.Attr"        /rank /base                /import-dir
                                                  ----- -------------------- --------------------------------------------------------------------------------------------------
@@ -550,7 +553,7 @@ TABLE : DIR-RANK
                                                  3     "Overture"           [ "Text" ]
                                                  11    "Subtext"            [ "Operator" ]
                                                  19    "Base"               [ "Abort" | "Code" | "IO" | "List" | "MixText" | "Prelude" | "Text" ]
-                                                 38    "Syntax"             [ "Attr" | "Para" | "Symbol" | "Token" | "Tree" ]
+                                                 38    "Syntax"             [ "Attr" | "Para" | "Subtree" | "Symbol" | "Token" | "Tree" ]
                                                  48    "Type"               [ "Decimal" | "Judge" | "Rel" | "Time" | "Type" ]
                                                  61    "Data"               [ "Church" | "Class" | "Decode" | "Type" ]
                                                  62    "DataPlus"           [ "Base" | "Data" | "Overture" | "Syntax" | "Type" ]
