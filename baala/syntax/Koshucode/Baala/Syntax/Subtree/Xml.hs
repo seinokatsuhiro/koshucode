@@ -4,13 +4,18 @@
 -- | XML tree.
 
 module Koshucode.Baala.Syntax.Subtree.Xml
-  ( XmlTree, XmlTreeOutput,
+  ( -- * XML tree
+    XmlTree,
     XmlToken (..),
     XmlTerm,
     XmlKey (..),
     xmlTokens,
     xmlTrees,
+
+    -- * Conversion
+    XmlTreeOutput,
     xmlSubtree,
+    Value (..),
     xmlData,
   ) where
 
@@ -21,24 +26,13 @@ import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
-type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
+
+-- ============================================  XML tree
 
 -- | XML tree.
 type XmlTree s = S.Subtree (XmlTerm s)
 
--- | XML output tree.
-type XmlTreeOutput s = S.SubtreeOutput (XmlTerm s)
-
--- | XML token.
-data XmlToken s
-    = XmlOpen  s            -- ^ Open tag
-    | XmlClose s            -- ^ Close tag
-    | XmlTerm (XmlTerm s)   -- ^ Terminal token
-      deriving (Show, Eq, Ord)
-
-instance B.GetCodePos (XmlToken s) where
-    getCP  _ = B.def
-    getCPs _ = []
+type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
 
 -- | Terminal of XML tree.
 type XmlTerm s = (XmlKey s, s)
@@ -51,11 +45,16 @@ data XmlKey s
     | XmlComment      -- ^ Comment node
       deriving (Show, Eq, Ord)
 
-xmlKeyString :: XmlTerm String -> String
-xmlKeyString (XmlElem s  , _) = s
-xmlKeyString (XmlAttr s  , _) = s
-xmlKeyString (XmlText    , _) = "@text"
-xmlKeyString (XmlComment , _) = "@comment"
+-- | XML token.
+data XmlToken s
+    = XmlOpen  s            -- ^ Open tag
+    | XmlClose s            -- ^ Close tag
+    | XmlTerm (XmlTerm s)   -- ^ Terminal token
+      deriving (Show, Eq, Ord)
+
+instance B.GetCodePos (XmlToken s) where
+    getCP  _ = B.def
+    getCPs _ = []
 
 -- | Tokenize XML document.
 --
@@ -112,15 +111,33 @@ xmlUntoken (XmlOpen  n) = (XmlElem n, n)
 xmlUntoken (XmlClose n) = (XmlElem n, n)
 xmlUntoken (XmlTerm  z) = z
 
+
+-- ============================================  Conversion
+
+-- | XML output tree.
+type XmlTreeOutput s = S.SubtreeOutput (XmlTerm s)
+
 -- | Calculate subtree of XML tree.
 xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
 xmlSubtree = S.subtreeWith xmlKeyString
 
+xmlKeyString :: XmlTerm String -> String
+xmlKeyString (XmlElem s  , _) = s
+xmlKeyString (XmlAttr s  , _) = s
+xmlKeyString (XmlText    , _) = "@text"
+xmlKeyString (XmlComment , _) = "@comment"
+
+-- | Value of some types.
+data Value
+    = VStr String   -- ^ Text value
+    | VInt Int      -- ^ Integer value
+      deriving (Show, Eq, Ord)
+
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [(String, [(S.TermName, String)])]
+xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term Value])]
 xmlData tree = B.gatherToAssoc O.<++> xmlTerms tree
 
-xmlTerms :: XmlTreeOutput String -> [[(String, (S.TermName, String))]]
+xmlTerms :: XmlTreeOutput String -> [[(S.JudgeClass, (S.Term Value))]]
 xmlTerms = branch where
     branch t@(B.TreeL _) = [leaf t]
     branch (B.TreeB _ _ xs) =
@@ -130,6 +147,6 @@ xmlTerms = branch where
                          then [ts]
                          else (ts ++) <$> (branch O.<++> bs)
 
-    leaf (B.TreeL (S.SubtreeText cs n, (_, s))) = (, (n, s)) <$> cs
+    leaf (B.TreeL (S.SubtreeText cs n, (_, s))) = (, (n, VStr s)) <$> cs
+    leaf (B.TreeL (S.SubtreeSeq  cs n, _))      = (, (n, VInt 0)) <$> cs
     leaf _ = []
-

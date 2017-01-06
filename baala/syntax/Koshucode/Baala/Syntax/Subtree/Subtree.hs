@@ -38,8 +38,8 @@ subtreeL = SubtreeL SubtreeNone
 -- | Termification of subtree content.
 data SubtreeTerm
     = SubtreeNone
-    | SubtreeText [String] S.TermName
-    | SubtreeSeq  S.TermName
+    | SubtreeText [S.JudgeClass] S.TermName
+    | SubtreeSeq  [S.JudgeClass] S.TermName
       deriving (Show, Eq)
 
 -- | Create text term.
