@@ -39,7 +39,7 @@ hPutJudgesWith :: (B.MixEncode c) => C.ResultWriterJudge c
 hPutJudgesWith h result status js =
     do let (mx, cnt, tab) = judgesCountMix result B.mixEncode js $ judgeCountMix []
        B.hPutMix T.judgeBreak h mx
-       O.hPutLines h $ judgeSummary status (cnt, tab)
+       B.hPutMix B.crlfBreak h $ judgeSummary status (cnt, tab)
        return status
 
 -- | Edit judgements to mix text.
@@ -100,7 +100,7 @@ judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Generate judgement counter comment.
 --
---  >>> O.putLines $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+--  >>> B.putMix B.crlfBreak $ judgeSummary (O.exitCode 0) (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 --  **
 --  **  SUMMARY
 --  **       3 judges on A
@@ -109,8 +109,8 @@ judgeCountMix ps = (B.mixEmpty, 0, Map.fromList $ zip ps $ repeat 0)
 --  **      10 judges in total
 --  **
 --
-judgeSummary :: B.ExitCode -> JudgeCount -> [String]
-judgeSummary status (_, tab) = B.texts sumDoc where
+judgeSummary :: B.ExitCode -> JudgeCount -> B.MixText
+judgeSummary status (_, tab) = B.mixLines (B.mix <$> B.texts sumDoc) where
     label | status == B.ExitSuccess = "SUMMARY"
           | otherwise               = "SUMMARY (VIOLATED)"
 

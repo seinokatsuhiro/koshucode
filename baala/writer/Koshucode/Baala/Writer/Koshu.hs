@@ -82,7 +82,7 @@ hPutEcho h result =
        B.when (echo /= []) $ O.hPutLn h
 
 hPutFoot :: IO.Handle -> B.ExitCode -> W.JudgeCount -> IO ()
-hPutFoot h status cnt = O.hPutLines h $ W.judgeSummary status cnt
+hPutFoot h status cnt = B.hPutMix B.crlfBreak h $ W.judgeSummary status cnt
 
 
 -- ----------------------  Chunk
