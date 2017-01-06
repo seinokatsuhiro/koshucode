@@ -20,7 +20,8 @@ module Koshucode.Baala.Base.List.Assoc
   
     -- * Gather
     Gather, gather, --gatherWith,
-    gatherToMap, gatherToMapSwap, gatherToAssoc,
+    gatherToMap, gatherToMapSwap,
+    gatherToAssoc, gatherToAssocOrder,
   ) where
 
 import qualified Data.Map                       as Map
@@ -228,3 +229,12 @@ gatherToMapSwap = foldr gath Map.empty where
 --
 gatherToAssoc :: (Ord k) => [(k,v)] -> [(k, [v])]
 gatherToAssoc = Map.assocs . gatherToMap
+
+-- | Gather values of duplicable associations.
+--
+--   >>> gatherToAssocOrder [(1 :: Int, 'a'), (2, 'b'), (1, 'c')]
+--   [(1,"ac"),(2,"b")]
+--
+gatherToAssocOrder :: (Ord k) => [(k,v)] -> [(k, [v])]
+gatherToAssocOrder xs = reverse O.<$$> gatherToAssoc xs
+
