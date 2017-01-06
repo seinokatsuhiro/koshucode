@@ -90,12 +90,12 @@ decodeSubtreePattern :: [S.Tree] -> B.Ab [S.SubtreePattern]
 decodeSubtreePattern = pats where
     pats ts = pat O.<#> S.divideTreesByBar ts
 
-    pat (P.LRaw "-" : ts) =
-        do (ts', term) <- splitClassTerm ts
-           (f, _) <- filt ts'
-           Right $ S.SubtreeL term f
-    pat (P.LRaw ">"  : ts)  = S.SubtreeB </> ts
-    pat (P.LRaw ">>" : ts)  = S.SubtreeR </> ts
+    pat (P.LRaw "-" : ts) = do (ts', term) <- splitClassTerm ts
+                               (f, _) <- filt ts'
+                               Right $ S.SubtreeL term f
+    pat (P.LRaw ">" : ts) = do (ts', term) <- splitClassTerm ts
+                               S.SubtreeB term </> ts'
+    pat (P.LRaw ">>" : ts) = S.SubtreeR </> ts
     pat _ = Msg.adlib "Unknown subtree pattern"
 
     filt []                          = Right (S.subtreeId, [])

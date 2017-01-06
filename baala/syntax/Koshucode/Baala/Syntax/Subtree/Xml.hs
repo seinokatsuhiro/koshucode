@@ -140,13 +140,16 @@ xmlData tree = B.gatherToAssoc O.<++> xmlTerms tree
 xmlTerms :: XmlTreeOutput String -> [[(S.JudgeClass, (S.Term Value))]]
 xmlTerms = branch where
     branch t@(B.TreeL _) = [leaf t]
-    branch (B.TreeB _ _ xs) =
+    branch (B.TreeB _ term xs) =
         case B.partitionLB xs of
-          (ls, bs) -> let ts = leaf O.<++> ls
+          (ls, bs) -> let ts = val term ++ (leaf O.<++> ls)
                       in if null bs
                          then [ts]
                          else (ts ++) <$> (branch O.<++> bs)
 
-    leaf (B.TreeL (S.SubtreeText cs n, (_, s))) = (, (n, VStr s)) <$> cs
-    leaf (B.TreeL (S.SubtreeSeq  cs n, _))      = (, (n, VInt 0)) <$> cs
-    leaf _ = []
+    leaf (B.TreeL term)   = val term
+    leaf (B.TreeB _ _ _)  = []
+
+    val (S.SubtreeText cs n, (_, s))  = (, (n, VStr s)) <$> cs
+    val (S.SubtreeSeq  cs n, _)       = (, (n, VInt 0)) <$> cs
+    val _                             = []

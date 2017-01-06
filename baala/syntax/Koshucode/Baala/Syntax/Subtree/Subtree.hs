@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Syntax.Subtree.Filter   as S
 -- | Subtree pattern.
 data SubtreePattern
     = SubtreeL SubtreeTerm S.SubtreeFilter       -- ^ Leaf
-    | SubtreeB S.SubtreeFilter [SubtreePattern]  -- ^ Branch
+    | SubtreeB SubtreeTerm S.SubtreeFilter [SubtreePattern]  -- ^ Branch
     | SubtreeR S.SubtreeFilter [SubtreePattern]  -- ^ Recursive branch
       deriving (Show, Eq)
 
@@ -57,7 +57,7 @@ subtreeTexts cs n = SubtreeText cs $ S.toTermName n
 type Subtree a = B.RawTree [SubtreePattern] a a
 
 -- | Subtree with termified elements.
-type SubtreeOutput a = B.RawTree [SubtreePattern] a (SubtreeTerm, a)
+type SubtreeOutput a = B.RawTree [SubtreePattern] (SubtreeTerm, a) (SubtreeTerm, a)
 
 -- | Select subtree.
 --
@@ -69,21 +69,21 @@ type SubtreeOutput a = B.RawTree [SubtreePattern] a (SubtreeTerm, a)
 --     > [] "Y2"
 --       - "Z3"
 --
---   >>> B.printTrees $ subtree [SubtreeB (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
---   > [] "Y1"
+--   >>> B.printTrees $ subtree [SubtreeB SubtreeNone (S.subtreeEq "Y1") [subtreeL (S.subtreeEq "Z1")]] [tree]
+--   > [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --
 --   >>> B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z3")]] [tree]
---   > [] "Y1"
---     > [] "Y2"
+--   > [] (SubtreeNone,"Y1")
+--     > [] (SubtreeNone,"Y2")
 --       - (SubtreeNone,"Z3")
 --
 --   >>> B.printTrees $ subtree [SubtreeR (S.subtreeId) [subtreeL (S.subtreeEq "Z1")]] [tree]
---   > [] "Y1"
+--   > [] (SubtreeNone,"Y1")
 --     - (SubtreeNone,"Z1")
 --
---   >>> B.printTrees $ subtree [SubtreeB (S.subtreeId) [SubtreeL (subtreeText "A" "/z") (S.subtreeEq "Z1")]] [tree]
---   > [] "Y1"
+--   >>> B.printTrees $ subtree [SubtreeB (subtreeText "A" "/y") (S.subtreeId) [SubtreeL (subtreeText "A" "/z") (S.subtreeEq "Z1")]] [tree]
+--   > [] (SubtreeText ["A"] (TermName EQ "y"),"Y1")
 --     - (SubtreeText ["A"] (TermName EQ "z"),"Z1")
 --
 subtree :: [SubtreePattern] -> [Subtree String] -> [SubtreeOutput String]
@@ -98,14 +98,14 @@ subtreeWith get = loop where
         p2 t@(B.TreeL z) (SubtreeL term f)
             | nullZ get f t  = Nothing
             | otherwise      = Just $ B.TreeL (term, z)
-        p2 t@(B.TreeB _ y xs) (SubtreeB f ps)
+        p2 t@(B.TreeB _ y xs) (SubtreeB term f ps)
             | nullY get f t  = Nothing
-            | otherwise      = Just $ B.TreeB [] y (loop ps xs)
+            | otherwise      = Just $ B.TreeB [] (term, y) (loop ps xs)
         p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
             | nullY get f t  = Nothing
             | otherwise      = case loop (SubtreeR f ps : ps) xs of
                                  []  -> Nothing
-                                 xs' -> Just $ B.TreeB [] y xs'
+                                 xs' -> Just $ B.TreeB [] (SubtreeNone, y) xs'
         p2 _ _ = Nothing
 
 -- | Select subtree.
@@ -116,7 +116,7 @@ subtreeOne ps0 ts = p1 O.<?> ts where
     p2 t@(B.TreeL _) (SubtreeL _ f)
         | nullZ id f t  = Nothing
         | otherwise     = Just t
-    p2 t@(B.TreeB _ y xs) (SubtreeB f ps)
+    p2 t@(B.TreeB _ y xs) (SubtreeB _ f ps)
         | nullY id f t  = Nothing
         | otherwise     = Just $ B.TreeB ps y xs
     p2 t@(B.TreeB _ y xs) (SubtreeR f ps)
