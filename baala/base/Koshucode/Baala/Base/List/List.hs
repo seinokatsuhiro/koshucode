@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.List.List
 
     -- * Take
     takeFirst, takeLast,
+    takeMiddle, takeEnd,
     takeOdd, takeEven,
     takeFill, takeTailFill,
   
@@ -75,6 +76,26 @@ takeFirst = take 1
 takeLast :: [a] -> [a]
 takeLast [] = []
 takeLast xs = [last xs]
+
+-- | Take middle /N/ elements.
+--
+--   >>> (`takeMiddle` ['A' .. 'Z']) <$> [-1 .. 7 :: Int]
+--   ["", "", "M", "MN", "LMN", "LMNO", "KLMNO", "KLMNOP", "JKLMNOP"]
+--
+takeMiddle :: Int -> [a] -> [a]
+takeMiddle n xs
+    | l <= n    = xs
+    | otherwise = take n $ drop h xs
+    where l = length xs
+          h = (l - n) `div` 2
+
+-- | Take /N/ elements at the end of the list.
+--
+--   >>> takeEnd 3 "ABCDEFG"
+--   "EFG"
+--
+takeEnd :: Int -> [a] -> [a]
+takeEnd n = (take n O./$/)
 
 -- | Take elements at odd positions, i.e., first, third, ...
 --
