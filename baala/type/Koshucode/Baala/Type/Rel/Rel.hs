@@ -21,8 +21,8 @@ module Koshucode.Baala.Type.Rel.Rel
 import qualified Koshucode.Baala.Overture              as O
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
-import qualified Koshucode.Baala.Type.Judge            as D
-import qualified Koshucode.Baala.Type.Rel.Head         as D
+import qualified Koshucode.Baala.Type.Judge            as T
+import qualified Koshucode.Baala.Type.Rel.Head         as T
 
 
 -- ----------------------  Data
@@ -32,7 +32,7 @@ import qualified Koshucode.Baala.Type.Rel.Head         as D
 --   Body is thoretically a set of tuples,
 --   but implemented using list of list.
 data Rel c = Rel
-    { relHead :: D.Head    -- ^ Heading of relation
+    { relHead :: T.Head    -- ^ Heading of relation
     , relBody :: Body c    -- ^ Body of relation
     } deriving (Show)
 
@@ -40,7 +40,7 @@ data Rel c = Rel
 --   Tuple is a list of contents.
 type Body c = [[c]]
 
-relPair :: Rel c -> (D.Head, Body c)
+relPair :: Rel c -> (T.Head, Body c)
 relPair (Rel he bo) = (he, bo)
 
 -- This order is different from the order of relational lattice.
@@ -56,8 +56,8 @@ instance Functor Rel where
     fmap f (Rel he bo) = let bo' = fmap f `fmap` bo
                          in Rel he bo'
 
-instance D.GetTermNames (Rel c) where
-    getTermNames = D.getTermNames . relHead
+instance T.GetTermNames (Rel c) where
+    getTermNames = T.getTermNames . relHead
 
 instance (B.MixEncode c) => B.MixEncode (Rel c) where
     mixTransEncode sh (Rel he bo) =
@@ -82,17 +82,17 @@ relSort = relSortBody . relSortHead
 -- | Sort head of relation.
 relSortHead :: O.Map (Rel c)
 relSortHead (Rel he bo) = Rel he' bo' where
-    he' = D.headMap B.sort he
-    bo' = D.bodyForward he' he bo
+    he' = T.headMap B.sort he
+    bo' = T.bodyForward he' he bo
 
 -- | Sort body of relation.
 relSortBody :: (Ord c) => O.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
 -- | Sort relation body according to order specification.
-relBodyOrder :: (Ord c) => [S.TermName] -> D.Head -> O.Map [[c]]
+relBodyOrder :: (Ord c, T.GetTermNames he) => [S.TermName] -> he -> O.Map [[c]]
 relBodyOrder ns he = ed where
-    ed    = B.sortByName ords $ D.getTermNames he
+    ed    = B.sortByName ords $ T.getTermNames he
     ords  = (B.orderingCap . S.orderingTermName) <$> ns
 
 
@@ -142,7 +142,7 @@ type RelSelect c = S.JudgeClass -> [S.TermName] -> Rel c
 type JudgeRelSelect c = S.JudgeClass -> [S.TermName] -> JudgeRel c
 
 -- | Convert relation to list of judges.
-judgesFromRel :: D.JudgeOf c -> S.JudgeClass -> Rel c -> [D.Judge c]
+judgesFromRel :: T.JudgeOf c -> S.JudgeClass -> Rel c -> [T.Judge c]
 judgesFromRel jof cl (Rel he bo) = map judge bo where
     judge = jof cl . zip names
-    names = D.getTermNames he
+    names = T.getTermNames he
