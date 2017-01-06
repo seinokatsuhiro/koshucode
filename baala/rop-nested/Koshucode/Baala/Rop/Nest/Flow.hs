@@ -99,7 +99,7 @@ relkitChunk ns ord (Just he1) = Right kit where
     kit       = C.relkitWhole False he2 flow
     flow bo1  = let deg    = length bo1 `ceilingRem` length ns
                     bo1'   = K.sortByName (map K.Asc ord) ns bo1
-                    ch     = K.chunks deg bo1'
+                    ch     = K.dividePer deg bo1'
                     rels   = (K.pRel . K.Rel he1) `map` ch
                 in [rels]
 

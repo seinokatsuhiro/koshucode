@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.List.Split
     splitBy,
 
     -- * Divide
-    chunks,
+    dividePer, divideInto,
     divide, divideBy, wordsBy,
   ) where
 
@@ -115,20 +115,39 @@ splitBy p xs =
 
 -- | Divide list into sublists of given length.
 --
---   >>> chunks 2 "abcdefg"
---   ["ab","cd","ef","g"]
-
-chunks :: Int -> [a] -> [[a]]
-chunks n = loop where
+--   >>> dividePer 7 ['a' .. 'z']
+--   ["abcdefg", "hijklmn", "opqrstu", "vwxyz"]
+--
+dividePer :: Int -> [a] -> [[a]]
+dividePer n = loop where
     loop xs = case splitAt n xs of
                 ([], _)      -> []
                 (taked, xs2) -> taked : loop xs2
+
+-- | Divide list into /N/ portions.
+--
+--   >>> divideInto 4 ['a' .. 'z']
+--   ["abcdefg", "hijklmn", "opqrstu", "vwxyz"]
+--
+divideInto :: Int -> [a] -> [[a]]
+divideInto per xs0
+    | per <= 1   = [xs0]
+    | otherwise  = loop per m xs0
+    where
+      (size, m) = length xs0 `divMod` per
+
+      loop 1 _ xs = [xs]
+      loop i a xs = let (xs1, xs2) = splitAt (size' a) xs
+                    in xs1 : loop (i - 1) (m - 1) xs2
+
+      size' a | a > 0      = size + 1
+              | otherwise  = size
 
 -- | Divide list.
 --
 --   >>> divide '|' "a|bb||ccc|"
 --   ["a", "bb", "", "ccc", ""]
-
+--
 divide :: (Eq a) => a -> [a] -> [[a]]
 divide dv = divideBy (== dv)
 
@@ -136,7 +155,7 @@ divide dv = divideBy (== dv)
 --
 --   >>> divideBy (== '|') "a|bb||ccc|"
 --   ["a", "bb", "", "ccc", ""]
-
+--
 divideBy :: (a -> Bool) -> [a] -> [[a]]
 divideBy p = loop where
     loop xs = case break p xs of
@@ -147,7 +166,7 @@ divideBy p = loop where
 --
 --   >>> wordsBy (== '|') "a|bb||ccc|"
 --   ["a","bb","ccc"]
-
+--
 wordsBy :: (a -> Bool) -> [a] -> [[a]]
 wordsBy p = loop where
     loop s = case dropWhile p s of

@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.List.List
     takeMiddle, takeEnd,
     takeOdd, takeEven,
     takeFill, takeTailFill,
+    takeChunks,
   
     -- * Construct
     list1, list2, list3,
@@ -25,7 +26,8 @@ module Koshucode.Baala.Base.List.List
     squeeze, squeezeEmptyLines,
   ) where
 
-import qualified Koshucode.Baala.Overture       as O
+import qualified Koshucode.Baala.Overture         as O
+import qualified Koshucode.Baala.Base.List.Split  as B
 
 
 -- ----------------------  List
@@ -141,6 +143,17 @@ takeFill fill = loop where
 --
 takeTailFill :: a -> Int -> [a] -> [a]
 takeTailFill fill n = (takeFill fill n O./$/)
+
+-- | Take indexed chunks from /N/ chunks.
+--
+--   >>> takeChunks 20 [10, 0, 19, 20] [0 .. 98 :: Int]
+--   [[50,51,52,53,54], [0,1,2,3,4], [95,96,97,98], []]
+--
+takeChunks :: Int -> [Int] -> [a] -> [[a]]
+takeChunks per ps xs = f <$> ps where
+    f p | p < 0     = []
+        | p >= per  = []
+        | otherwise = B.divideInto per xs !! p
 
 
 -- ----------------------  Construct
