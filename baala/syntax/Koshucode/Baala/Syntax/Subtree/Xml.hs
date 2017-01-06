@@ -126,18 +126,18 @@ xmlKeyString (XmlText    , _) = "@text"
 xmlKeyString (XmlComment , _) = "@comment"
 
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term S.Value])]
+xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term O.Value])]
 xmlData = S.subtreeData . xmlValue
 
-xmlValue :: XmlTreeOutput String -> S.SubtreeOutput S.Value
+xmlValue :: XmlTreeOutput String -> S.SubtreeOutput O.Value
 xmlValue = snd . loop 1 where
     loop i (B.TreeL z)      = (i + 1, B.TreeL (value i z))
     loop i (B.TreeB b y xs) = let (i', xs') = branch (i + 1) [] xs
                               in (i', B.TreeB b (value i y) xs')
 
-    value _ (S.SubtreeNone, _)            = (S.SubtreeNone, S.VEmpty)
-    value _ (S.SubtreeText cs n, (_, s))  = (S.SubtreeText cs n, S.VStr $ O.trimBoth s)
-    value i (S.SubtreeSeq  cs n, _)       = (S.SubtreeSeq  cs n, S.VInt i)
+    value _ (S.SubtreeNone, _)            = (S.SubtreeNone, O.VEmpty)
+    value _ (S.SubtreeText cs n, (_, s))  = (S.SubtreeText cs n, O.VStr $ O.trimBoth s)
+    value i (S.SubtreeSeq  cs n, _)       = (S.SubtreeSeq  cs n, O.VInt i)
 
     branch i xs' [] = (i, reverse xs')
     branch i xs' (x : xs) = case loop i x of

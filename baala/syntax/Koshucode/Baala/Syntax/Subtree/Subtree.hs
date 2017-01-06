@@ -15,8 +15,6 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     SubtreeOutput,
     subtree, subtreeWith,
     subtreeOne,
-
-    Value (..),
     subtreeData,
   ) where
 
@@ -148,27 +146,19 @@ getTreeZ :: B.RawTree b y z -> Maybe z
 getTreeZ (B.TreeL z)  = Just z
 getTreeZ _            = Nothing
 
--- | Value of some types.
-data Value
-    = VEmpty         -- ^ Empty
-    | VInt Int       -- ^ Integer value
-    | VStr String    -- ^ Text value
-    | VList [Value]  -- ^ List of values
-      deriving (Show, Eq, Ord)
-
 -- | Extract data from subtree.
-subtreeData :: SubtreeOutput Value -> [(S.JudgeClass, [S.Term Value])]
+subtreeData :: SubtreeOutput O.Value -> [(S.JudgeClass, [S.Term O.Value])]
 subtreeData tree = gatherData O.<++> subtreeTerms tree
 
-gatherData :: [(S.JudgeClass, S.Term Value)] -> [(S.JudgeClass, [S.Term Value])]
+gatherData :: [(S.JudgeClass, S.Term O.Value)] -> [(S.JudgeClass, [S.Term O.Value])]
 gatherData xs = gatherTerms O.<$$> B.gatherToAssocOrder xs
 
-gatherTerms :: O.Map [(S.Term Value)]
+gatherTerms :: O.Map [(S.Term O.Value)]
 gatherTerms ts = content O.<$$> B.gatherToAssocOrder ts where
     content [c] = c
-    content cs  = VList cs
+    content cs  = O.VList cs
 
-subtreeTerms :: SubtreeOutput Value -> [[(S.JudgeClass, S.Term Value)]]
+subtreeTerms :: SubtreeOutput O.Value -> [[(S.JudgeClass, S.Term O.Value)]]
 subtreeTerms = branch where
     branch t@(B.TreeL _) = [leaf t]
     branch (B.TreeB _ term xs) =

@@ -10,6 +10,7 @@ module Koshucode.Baala.Overture
    module Koshucode.Baala.Overture.Shorthand,
    module Koshucode.Baala.Overture.Text,
    module Koshucode.Baala.Overture.Type,
+   module Koshucode.Baala.Overture.Value,
  ) where
 
 import Koshucode.Baala.Overture.Cache
@@ -19,3 +20,4 @@ import Koshucode.Baala.Overture.Misc
 import Koshucode.Baala.Overture.Shorthand
 import Koshucode.Baala.Overture.Text
 import Koshucode.Baala.Overture.Type
+import Koshucode.Baala.Overture.Value

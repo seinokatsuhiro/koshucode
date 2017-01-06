@@ -61,6 +61,7 @@ library
         Koshucode.Baala.Overture.Text.Utility
 
         Koshucode.Baala.Overture.Type
+        Koshucode.Baala.Overture.Value
 
         Koshucode.Baala.System
         Koshucode.Baala.System.CliParser
