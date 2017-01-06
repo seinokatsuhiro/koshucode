@@ -30,8 +30,8 @@
 |-- DIR-RANK  /dir-rank 1  /dir "Koshucode.Baala.Overture.Text"  /base-rank {= /rank /base /import-dir [ 0 | "Category"
     | [ ] ] [ 0 | "Integer" | [ ] ] [ 0 | "Unicode" | [ ] ] [ 1 | "Utility" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 2  /dir "Koshucode.Baala.Overture"  /base-rank {= /rank /base /import-dir [ 0 | "Cache" | [ ] ]
-    [ 0 | "Index" | [ ] ] [ 0 | "Type" | [ ] ] [ 1 | "Fn" | [ ] ] [ 1 | "Infix" | [ ] ] [ 1 | "Misc" | [ ] ] [ 1 |
-    "Shorthand" | [ ] ] [ 2 | "Text" | [ ] ] =}
+    [ 0 | "Index" | [ ] ] [ 0 | "Type" | [ ] ] [ 0 | "Value" | [ ] ] [ 1 | "Fn" | [ ] ] [ 1 | "Infix" | [ ] ] [ 1 |
+    "Misc" | [ ] ] [ 1 | "Shorthand" | [ ] ] [ 2 | "Text" | [ ] ] =}
 |-- DIR-RANK  /dir-rank 4  /dir "Koshucode.Baala.Base.Prelude"  /base-rank {= /rank /base /import-dir [ 0 | "Case" | [ ]
     ] [ 0 | "Class" | [ ] ] [ 0 | "Import" | [ ] ] [ 1 | "Queue" | [ ] ] [ 4 | "Pair" | [ "Overture" ] ] =}
 
@@ -154,7 +154,7 @@
 |-- DIR-RANK  /dir-rank 77  /dir "Koshucode.Baala.Writer"  /base-rank {= /rank /base /import-dir [ 76 | "Csv" | [ "Base"
     | "Core" | "Data" | "Overture" | "Syntax" | "Type" ] ] [ 76 | "Html" | [ "Base" | "Core" | "Data" | "Overture" |
     "Syntax" | "Type" ] ] [ 76 | "Json" | [ "Core" | "Data" | "Syntax" | "Type" ] ] [ 76 | "Judge" | [ "Base" | "Core" |
-    "Overture" | "Type" ] ] [ 77 | "Koshu" | [ "Base" | "Core" | "Overture" | "Syntax" | "Type" ] ] =}
+    "Overture" | "Syntax" | "Type" ] ] [ 77 | "Koshu" | [ "Base" | "Core" | "Overture" | "Syntax" | "Type" ] ] =}
 |-- DIR-RANK  /dir-rank 78  /dir "Koshucode.Baala.Cop"  /base-rank {= /rank /base /import-dir [ 0 | "Replace" | [ ] ] [
     62 | "Coxhand" | [ "Base" | "Data" | "Overture" | "Syntax" ] ] [ 63 | "Logic" | [ "Data" | "Overture" ] ] [ 77 |
     "Arith" | [ "Base" | "Data" | "Overture" | "Type" ] ] [ 77 | "List" | [ "Base" | "Data" | "Overture" | "Type" ] ] [
@@ -237,6 +237,7 @@ TABLE : DIR-RANK
                                                  0     "Cache"              [ ]
                                                  0     "Index"              [ ]
                                                  0     "Type"               [ ]
+                                                 0     "Value"              [ ]
                                                  1     "Fn"                 [ ]
                                                  1     "Infix"              [ ]
                                                  1     "Misc"               [ ]
@@ -524,7 +525,7 @@ TABLE : DIR-RANK
                                                  76    "Csv"                [ "Base" | "Core" | "Data" | "Overture" | "Syntax" | "Type" ]
                                                  76    "Html"               [ "Base" | "Core" | "Data" | "Overture" | "Syntax" | "Type" ]
                                                  76    "Json"               [ "Core" | "Data" | "Syntax" | "Type" ]
-                                                 76    "Judge"              [ "Base" | "Core" | "Overture" | "Type" ]
+                                                 76    "Judge"              [ "Base" | "Core" | "Overture" | "Syntax" | "Type" ]
                                                  77    "Koshu"              [ "Base" | "Core" | "Overture" | "Syntax" | "Type" ]
                                                  
   78        "Koshucode.Baala.Cop"                /rank /base                /import-dir
