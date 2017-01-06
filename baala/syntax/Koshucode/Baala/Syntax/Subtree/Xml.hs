@@ -1,4 +1,3 @@
-{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | XML tree.
@@ -15,13 +14,11 @@ module Koshucode.Baala.Syntax.Subtree.Xml
     -- * Conversion
     XmlTreeOutput,
     xmlSubtree,
-    Value (..),
     xmlData,
   ) where
 
 import qualified Text.HTML.TagSoup                       as X
 import qualified Text.StringLike                         as X
-import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
@@ -127,29 +124,21 @@ xmlKeyString (XmlAttr s  , _) = s
 xmlKeyString (XmlText    , _) = "@text"
 xmlKeyString (XmlComment , _) = "@comment"
 
--- | Value of some types.
-data Value
-    = VStr String   -- ^ Text value
-    | VInt Int      -- ^ Integer value
-      deriving (Show, Eq, Ord)
-
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term Value])]
-xmlData tree = B.gatherToAssoc O.<++> xmlTerms tree
+xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term S.Value])]
+xmlData = S.subtreeData . xmlValue
 
-xmlTerms :: XmlTreeOutput String -> [[(S.JudgeClass, (S.Term Value))]]
-xmlTerms = branch where
-    branch t@(B.TreeL _) = [leaf t]
-    branch (B.TreeB _ term xs) =
-        case B.partitionLB xs of
-          (ls, bs) -> let ts = val term ++ (leaf O.<++> ls)
-                      in if null bs
-                         then [ts]
-                         else (ts ++) <$> (branch O.<++> bs)
+xmlValue :: XmlTreeOutput String -> S.SubtreeOutput S.Value
+xmlValue = snd . loop 1 where
+    loop i (B.TreeL z)      = (i + 1, B.TreeL (value i z))
+    loop i (B.TreeB b y xs) = let (i', xs') = branch (i + 1) [] xs
+                              in (i', B.TreeB b (value i y) xs')
 
-    leaf (B.TreeL term)   = val term
-    leaf (B.TreeB _ _ _)  = []
+    value _ (S.SubtreeNone, _)            = (S.SubtreeNone, S.VEmpty)
+    value _ (S.SubtreeText cs n, (_, s))  = (S.SubtreeText cs n, S.VStr s)
+    value i (S.SubtreeSeq  cs n, _)       = (S.SubtreeSeq  cs n, S.VInt i)
 
-    val (S.SubtreeText cs n, (_, s))  = (, (n, VStr s)) <$> cs
-    val (S.SubtreeSeq  cs n, _)       = (, (n, VInt 0)) <$> cs
-    val _                             = []
+    branch i xs' [] = (i, reverse xs')
+    branch i xs' (x : xs) = case loop i x of
+                              (i', x') -> branch i' (x' : xs') xs
+

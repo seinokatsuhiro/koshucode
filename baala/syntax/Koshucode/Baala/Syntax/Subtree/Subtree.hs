@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Subtree.
@@ -14,6 +15,9 @@ module Koshucode.Baala.Syntax.Subtree.Subtree
     SubtreeOutput,
     subtree, subtreeWith,
     subtreeOne,
+
+    Value (..),
+    subtreeData,
   ) where
 
 import qualified Koshucode.Baala.Overture                as O
@@ -147,3 +151,32 @@ getTreeY _                = Nothing
 getTreeZ :: B.RawTree b y z -> Maybe z
 getTreeZ (B.TreeL z)  = Just z
 getTreeZ _            = Nothing
+
+-- | Value of some types.
+data Value
+    = VStr String   -- ^ Text value
+    | VInt Int      -- ^ Integer value
+    | VEmpty        -- ^ Empty
+      deriving (Show, Eq, Ord)
+
+-- | Extract data from subtree.
+subtreeData :: SubtreeOutput Value -> [(S.JudgeClass, [S.Term Value])]
+subtreeData tree = B.gatherToAssocOrder O.<++> subtreeTerms tree
+
+subtreeTerms :: SubtreeOutput Value -> [[(S.JudgeClass, S.Term Value)]]
+subtreeTerms = branch where
+    branch t@(B.TreeL _) = [leaf t]
+    branch (B.TreeB _ term xs) =
+        case B.partitionLB xs of
+          (ls, bs) -> let ts = val term ++ (leaf O.<++> ls)
+                      in if null bs
+                         then [ts]
+                         else (ts ++) <$> (branch O.<++> bs)
+
+    leaf (B.TreeL term)   = val term
+    leaf (B.TreeB _ _ _)  = []
+
+    val (SubtreeText cs n, v)  = (, (n, v)) <$> cs
+    val (SubtreeSeq  cs n, v)  = (, (n, v)) <$> cs
+    val (SubtreeNone, _)       = []
+
