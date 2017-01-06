@@ -96,8 +96,8 @@ subtree = subtreeWith id
 -- | Select subtree with string getter.
 subtreeWith :: (a -> String) -> [SubtreePattern] -> [Subtree a] -> [SubtreeOutput a]
 subtreeWith get = loop where
-    loop ps0 ts = p1 O.<?> ts where
-        p1 t = maybeHead (p2 t O.<?> ps0)
+    loop ps0 ts = p1 O.<++> ts where
+        p1 t = p2 t O.<?> ps0
 
         p2 t@(B.TreeL z) (SubtreeL term f)
             | nullZ get f t  = Nothing
@@ -114,8 +114,8 @@ subtreeWith get = loop where
 
 -- | Select subtree.
 subtreeOne :: [SubtreePattern] -> O.Map [Subtree String]
-subtreeOne ps0 ts = p1 O.<?> ts where
-    p1 t = maybeHead (p2 t O.<?> ps0)
+subtreeOne ps0 ts = p1 O.<++> ts where
+    p1 t = p2 t O.<?> ps0
 
     p2 t@(B.TreeL _) (SubtreeL _ f)
         | nullZ id f t  = Nothing
@@ -127,10 +127,6 @@ subtreeOne ps0 ts = p1 O.<?> ts where
         | nullY id f t  = Nothing
         | otherwise     = Just $ B.TreeB (SubtreeR f ps : ps) y xs
     p2 _ _ = Nothing
-
-maybeHead :: [a] -> Maybe a
-maybeHead []       = Nothing
-maybeHead (a : _)  = Just a
 
 nullY :: (a -> String) -> S.SubtreeFilter -> Subtree a -> Bool
 nullY get f t = null $ S.subtreeFilterOn (get <.> getTreeY) f [t]
