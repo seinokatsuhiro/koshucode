@@ -19,6 +19,7 @@ module Koshucode.Baala.Syntax.Subtree.Xml
 
 import qualified Text.HTML.TagSoup                       as X
 import qualified Text.StringLike                         as X
+import qualified Koshucode.Baala.Overture                as O
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
@@ -135,7 +136,7 @@ xmlValue = snd . loop 1 where
                               in (i', B.TreeB b (value i y) xs')
 
     value _ (S.SubtreeNone, _)            = (S.SubtreeNone, S.VEmpty)
-    value _ (S.SubtreeText cs n, (_, s))  = (S.SubtreeText cs n, S.VStr s)
+    value _ (S.SubtreeText cs n, (_, s))  = (S.SubtreeText cs n, S.VStr $ O.trimBoth s)
     value i (S.SubtreeSeq  cs n, _)       = (S.SubtreeSeq  cs n, S.VInt i)
 
     branch i xs' [] = (i, reverse xs')
