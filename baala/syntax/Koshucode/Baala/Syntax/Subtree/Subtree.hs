@@ -150,14 +150,23 @@ getTreeZ _            = Nothing
 
 -- | Value of some types.
 data Value
-    = VStr String   -- ^ Text value
-    | VInt Int      -- ^ Integer value
-    | VEmpty        -- ^ Empty
+    = VEmpty         -- ^ Empty
+    | VInt Int       -- ^ Integer value
+    | VStr String    -- ^ Text value
+    | VList [Value]  -- ^ List of values
       deriving (Show, Eq, Ord)
 
 -- | Extract data from subtree.
 subtreeData :: SubtreeOutput Value -> [(S.JudgeClass, [S.Term Value])]
-subtreeData tree = B.gatherToAssocOrder O.<++> subtreeTerms tree
+subtreeData tree = gatherData O.<++> subtreeTerms tree
+
+gatherData :: [(S.JudgeClass, S.Term Value)] -> [(S.JudgeClass, [S.Term Value])]
+gatherData xs = gatherTerms O.<$$> B.gatherToAssocOrder xs
+
+gatherTerms :: O.Map [(S.Term Value)]
+gatherTerms ts = content O.<$$> B.gatherToAssocOrder ts where
+    content [c] = c
+    content cs  = VList cs
 
 subtreeTerms :: SubtreeOutput Value -> [[(S.JudgeClass, S.Term Value)]]
 subtreeTerms = branch where
