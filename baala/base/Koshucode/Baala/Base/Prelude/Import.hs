@@ -3,15 +3,18 @@
 -- | Reexport list.
 
 module Koshucode.Baala.Base.Prelude.Import
-  ( -- * Control.Monad
+  ( -- * Control.Exception
+    Control.Exception.bracket,
+
+    -- * Control.Monad
     (<.>),
     (Control.Monad.>=>),
-    Control.Monad.sequence,
     Control.Monad.filterM,
     Control.Monad.foldM,
-    Control.Monad.when,
-    Control.Monad.unless,
     Control.Monad.guard,
+    Control.Monad.sequence,
+    Control.Monad.unless,
+    Control.Monad.when,
     --concatMapM,
   
     -- * Data.ByteString
@@ -63,6 +66,7 @@ module Koshucode.Baala.Base.Prelude.Import
     docZero,
   ) where
 
+import qualified Control.Exception
 import qualified Control.Monad
 import qualified Data.ByteString
 import qualified Data.ByteString.Lazy
