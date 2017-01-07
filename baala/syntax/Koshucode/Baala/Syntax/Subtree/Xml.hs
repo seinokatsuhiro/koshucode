@@ -3,12 +3,14 @@
 -- | XML tree.
 
 module Koshucode.Baala.Syntax.Subtree.Xml
-  ( -- * XML tree
-    XmlTree,
+  ( -- * XML token
     XmlToken (..),
     XmlTerm,
     XmlKey (..),
     xmlTokens,
+
+    -- * XML tree
+    XmlTree,
     xmlTrees,
 
     -- * Conversion
@@ -25,23 +27,7 @@ import qualified Koshucode.Baala.Syntax.Symbol           as S
 import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 
 
--- ============================================  XML tree
-
--- | XML tree.
-type XmlTree s = S.Subtree (XmlTerm s)
-
-type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
-
--- | Terminal of XML tree.
-type XmlTerm s = (XmlKey s, s)
-
--- | Key data of XML tree.
-data XmlKey s
-    = XmlElem s       -- ^ Element node
-    | XmlAttr s       -- ^ Attribute of element
-    | XmlText         -- ^ Text node
-    | XmlComment      -- ^ Comment node
-      deriving (Show, Eq, Ord)
+-- ============================================  XML token
 
 -- | XML token.
 data XmlToken s
@@ -53,6 +39,17 @@ data XmlToken s
 instance B.GetCodePos (XmlToken s) where
     getCP  _ = B.def
     getCPs _ = []
+
+-- | Terminal of XML tree.
+type XmlTerm s = (XmlKey s, s)
+
+-- | Key data of XML tree.
+data XmlKey s
+    = XmlElem s       -- ^ Element node
+    | XmlAttr s       -- ^ Attribute of element
+    | XmlText         -- ^ Text node
+    | XmlComment      -- ^ Comment node
+      deriving (Show, Eq, Ord)
 
 -- | Tokenize XML document.
 --
@@ -78,6 +75,14 @@ convertTags = loop [] where
     loop up []                      = XmlClose <$> up
 
     attr (n, v) = XmlTerm (XmlAttr n, v)
+
+
+-- ============================================  XML tree
+
+-- | XML tree.
+type XmlTree s = S.Subtree (XmlTerm s)
+
+type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
 
 -- | Convert XML tokens to XML tree.
 --
