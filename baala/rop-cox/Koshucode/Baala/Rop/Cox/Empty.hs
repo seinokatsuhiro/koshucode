@@ -89,18 +89,16 @@ consMaybe med =
                   top   <- Rop.getMaybe Rop.getInt med "-top"
                   mid   <- Rop.getMaybe Rop.getInt med "-mid"
                   bot   <- Rop.getMaybe Rop.getInt med "-bot"
-                  Right $ K.def { K.portionOrder   = order
-                                , K.portionTop     = top
-                                , K.portionMiddle  = mid
-                                , K.portionBottom  = bot }
+                  Right (order, K.def { K.portionTop     = top
+                                      , K.portionMiddle  = mid
+                                      , K.portionBottom  = bot })
            | t "part"
              -> maybeOnly sh fill rmap $ do
                   order <- Rop.getTerms med "-order"
                   part  <- Rop.getInt med "-part"
                   per   <- Rop.getInt med "-of"
-                  Right $ K.def { K.portionOrder   = order
-                                , K.portionParts   = [part - 1]
-                                , K.portionPer     = Just per }
+                  Right (order, K.def { K.portionParts   = [part - 1]
+                                      , K.portionPer     = Just per })
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
@@ -183,7 +181,7 @@ relkitMaybeOnly ((sh, cops, cox, portion), fill) (C.RelkitOutput he2 kitb2) (Jus
           Just b2prop -> do bo3 <- K.filterM keep ((++ cs1) <$> b2prop)
                             case bo3 of
                               [] -> Right [fills ++ cs1]
-                              _  -> Right $ K.takeEffectPortion portion he3 bo3
+                              _  -> Right $ K.takeRelPortion portion he3 bo3
 
     keep cs = do c <- K.calcCox cops he3 cs cox
                  case K.isBool c of

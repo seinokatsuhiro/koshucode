@@ -6,11 +6,14 @@ module Koshucode.Baala.Type.Rel.Order
   ( -- * Ordering
     relBodyOrder,
 
-    -- * Portion
-    RelPortion (..),
+    -- * Portion of list
+    Portion (..),
     nullPortion,
-    takeEffectPortion,
     takePortion,
+
+    -- * Portion of relation
+    RelPortion,
+    takeRelPortion,
   ) where
 
 import qualified Koshucode.Baala.Overture              as O
@@ -18,62 +21,69 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Syntax                as S
 import qualified Koshucode.Baala.Type.Judge            as T
 
+
+-- ============================================  Ordering
+
 -- | Sort relation body according to order specification.
 relBodyOrder :: (Ord c, T.GetTermNames he) => [S.TermName] -> he -> O.Map [[c]]
 relBodyOrder ns he = edit where
     edit  = B.sortByName ords $ T.getTermNames he
     ords  = (B.orderingCap . S.orderingTermName) <$> ns
 
--- | Portion of relation.
-data RelPortion = RelPortion
-    { portionOrder    :: [S.TermName]  -- ^ Order terms.
-    , portionTop      :: Maybe Int     -- ^ Top /N/ tuples.
-    , portionMiddle   :: Maybe Int     -- ^ Middle /N/ tuples.
-    , portionBottom   :: Maybe Int     -- ^ Bottom /N/ tuples.
-    , portionParts    :: [Int]         -- ^ Indecies of /N/ chunks.
-    , portionPer      :: Maybe Int     -- ^ Divided /N/ chunks.
+
+-- ============================================  Portion of list
+
+-- | Portion description.
+data Portion = Portion
+    { portionTop      :: Maybe Int   -- ^ Top /N/ elements.
+    , portionMiddle   :: Maybe Int   -- ^ Middle /N/ elements.
+    , portionBottom   :: Maybe Int   -- ^ Bottom /N/ elements.
+    , portionParts    :: [Int]       -- ^ Indecies of /N/ chunks.
+    , portionPer      :: Maybe Int   -- ^ Divided /N/ chunks.
     } deriving (Show, Eq, Ord)
 
-instance B.Default RelPortion where
-    def = RelPortion { portionOrder   = []
-                     , portionTop     = Nothing
-                     , portionMiddle  = Nothing
-                     , portionBottom  = Nothing
-                     , portionParts   = []
-                     , portionPer     = Nothing }
+instance B.Default Portion where
+    def = Portion { portionTop     = Nothing
+                  , portionMiddle  = Nothing
+                  , portionBottom  = Nothing
+                  , portionParts   = []
+                  , portionPer     = Nothing }
 
 -- | Test portion is not effective.
-nullPortion :: O.Test RelPortion
-nullPortion RelPortion { portionTop     = Nothing
-                       , portionMiddle  = Nothing
-                       , portionBottom  = Nothing
-                       , portionPer     = Nothing } = True
+nullPortion :: O.Test Portion
+nullPortion Portion { portionTop     = Nothing
+                    , portionMiddle  = Nothing
+                    , portionBottom  = Nothing
+                    , portionPer     = Nothing } = True
 nullPortion _ = False
 
--- | Take effective (non-null) portion of relation.
-takeEffectPortion :: (T.GetTermNames he, Ord c) => RelPortion -> he -> [[c]] -> [[c]]
-takeEffectPortion p he | nullPortion p  = id
-                       | otherwise      = takePortion p he
-
--- | Take portion of relation.
-takePortion :: (T.GetTermNames he, Ord c) => RelPortion -> he -> [[c]] -> [[c]]
-takePortion p@RelPortion { portionOrder = ord } he body
-    = takePortionList p $ relBodyOrder ord he body
-
-takePortionList :: (Ord c) => RelPortion -> [c] -> [c]
-takePortionList p xs = xs' where
+-- | Take portion of list.
+takePortion :: (Ord a) => Portion -> [a] -> [a]
+takePortion p xs = xs' where
     xs' = B.unique (top p ++ mid p ++ bot p ++ parts p)
 
-    top RelPortion { portionTop = Just n } = take n xs
+    top Portion { portionTop = Just n } = take n xs
     top _ = []
 
-    mid RelPortion { portionMiddle = Just n } = B.takeMiddle n xs
+    mid Portion { portionMiddle = Just n } = B.takeMiddle n xs
     mid _ = []
 
-    bot RelPortion { portionBottom = Just n } = B.takeEnd n xs
+    bot Portion { portionBottom = Just n } = B.takeEnd n xs
     bot _ = []
 
-    parts RelPortion { portionParts = ps, portionPer = Just n } =
+    parts Portion { portionParts = ps, portionPer = Just n } =
         concat $ B.takeChunks n ps xs
     parts _ = []
+
+
+-- ============================================  Portion of relation
+
+-- | Portion description for relation.
+type RelPortion = ([S.TermName], Portion)
+
+-- | Take effective (non-null) portion of relation body.
+takeRelPortion :: (T.GetTermNames he, Ord c) => RelPortion -> he -> [[c]] -> [[c]]
+takeRelPortion (ord, p) he body
+    | nullPortion p  = body
+    | otherwise      = takePortion p $ relBodyOrder ord he body
 
