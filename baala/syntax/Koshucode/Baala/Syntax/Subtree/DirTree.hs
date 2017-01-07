@@ -34,7 +34,7 @@ import qualified Koshucode.Baala.Syntax.Subtree.Subtree  as S
 --
 dirTrees :: [FilePath] -> FilePath -> [S.SubtreePattern] -> IO [S.Subtree String]
 dirTrees exclude path ps =
-    Dir.withCurrentDirectory path $ do
+    withCurrentDirectory path $ do
       ts <- dirTreesOne exclude ps
       dirTreesRec exclude ts
 
@@ -53,10 +53,16 @@ dirTreesRec :: [FilePath] -> [S.Subtree String] -> IO [S.Subtree String]
 dirTreesRec exclude ts = p O.<#++> ts where
     p t@(B.TreeL _) = return [t]
     p (B.TreeB ps y _) =
-        Dir.withCurrentDirectory y $ do
+        withCurrentDirectory y $ do
            zs <- dirTreesOne exclude ps
            case zs of
              [] -> return []
              _  -> do zs' <- dirTreesRec exclude zs
                       return [B.TreeB [] y zs']
 
+-- since directory-1.2.3.0
+withCurrentDirectory :: FilePath -> IO a -> IO a
+withCurrentDirectory dir action =
+  B.bracket Dir.getCurrentDirectory Dir.setCurrentDirectory $ \ _ -> do
+    Dir.setCurrentDirectory dir
+    action
