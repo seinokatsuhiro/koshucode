@@ -6,7 +6,7 @@ module Koshucode.Baala.Type.Rel.Rel
   ( -- * Data type
     Rel (..), Body,
     JudgeRel (..),
-    relSort, relBodyOrder,
+    relSort,
   
     -- * Constant
     reldum, reldee, reldau,
@@ -88,12 +88,6 @@ relSortHead (Rel he bo) = Rel he' bo' where
 -- | Sort body of relation.
 relSortBody :: (Ord c) => O.Map (Rel c)
 relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
-
--- | Sort relation body according to order specification.
-relBodyOrder :: (Ord c, T.GetTermNames he) => [S.TermName] -> he -> O.Map [[c]]
-relBodyOrder ns he = ed where
-    ed    = B.sortByName ords $ T.getTermNames he
-    ords  = (B.orderingCap . S.orderingTermName) <$> ns
 
 
 -- ----------------------  Constant

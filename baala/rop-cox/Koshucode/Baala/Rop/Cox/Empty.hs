@@ -10,7 +10,7 @@ module Koshucode.Baala.Rop.Cox.Empty
     -- * maybe
     consMaybe, relmapMaybe, relkitMaybe,
     -- * maybe with restriction
-    MeetOnly, RelPortion (..),
+    MeetOnly,
     relmapMaybeOnly,
     -- * compose-maybe
     consComposeMaybe, relmapComposeMaybe,
@@ -89,18 +89,18 @@ consMaybe med =
                   top   <- Rop.getMaybe Rop.getInt med "-top"
                   mid   <- Rop.getMaybe Rop.getInt med "-mid"
                   bot   <- Rop.getMaybe Rop.getInt med "-bot"
-                  Right $ K.def { portionOrder   = order
-                                , portionTop     = top
-                                , portionMiddle  = mid
-                                , portionBottom  = bot }
+                  Right $ K.def { K.portionOrder   = order
+                                , K.portionTop     = top
+                                , K.portionMiddle  = mid
+                                , K.portionBottom  = bot }
            | t "part"
              -> maybeOnly sh fill rmap $ do
                   order <- Rop.getTerms med "-order"
                   part  <- Rop.getInt med "-part"
                   per   <- Rop.getInt med "-of"
-                  Right $ K.def { portionOrder   = order
-                                , portionParts   = [part - 1]
-                                , portionPer     = Just per }
+                  Right $ K.def { K.portionOrder   = order
+                                , K.portionParts   = [part - 1]
+                                , K.portionPer     = Just per }
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
@@ -149,7 +149,7 @@ selectFiller fill _ = fill
 -- ----------------------  maybe with restriction
 
 -- | Parameter for @meet -only@.
-type MeetOnly c = (Rop.SharedTerms, K.CopSet c, K.Cox c, RelPortion)
+type MeetOnly c = (Rop.SharedTerms, K.CopSet c, K.Cox c, K.RelPortion)
 
 -- | Create @maybe@-with-restriction relmap.
 relmapMaybeOnly :: (K.CContent c) => C.Intmed c -> (MeetOnly c, c) -> K.Map (C.Relmap c)
@@ -183,61 +183,14 @@ relkitMaybeOnly ((sh, cops, cox, portion), fill) (C.RelkitOutput he2 kitb2) (Jus
           Just b2prop -> do bo3 <- K.filterM keep ((++ cs1) <$> b2prop)
                             case bo3 of
                               [] -> Right [fills ++ cs1]
-                              _  -> Right $ applyPortion bo3
+                              _  -> Right $ K.takeEffectPortion portion he3 bo3
 
     keep cs = do c <- K.calcCox cops he3 cs cox
                  case K.isBool c of
                    True  -> Right $ K.gBool c
                    False -> Msg.reqBool
 
-    applyPortion | isEffectivePortion portion = relPortion portion he3
-                 | otherwise = id
-
 relkitMaybeOnly _ _ _ = C.relkitUnfixed
-
--- | Portion of relation.
-data RelPortion = RelPortion
-    { portionOrder    :: [K.TermName] -- ^ Order terms.
-    , portionTop      :: Maybe Int    -- ^ Top /N/ tuples.
-    , portionMiddle   :: Maybe Int    -- ^ Middle /N/ tuples.
-    , portionBottom   :: Maybe Int    -- ^ Bottom /N/ tuples.
-    , portionParts    :: [Int]        -- ^ Indecies of /N/ chunks.
-    , portionPer      :: Maybe Int    -- ^ Divided /N/ chunks.
-    } deriving (Show, Eq, Ord)
-
-instance K.Default RelPortion where
-    def = RelPortion { portionOrder   = []
-                     , portionTop     = Nothing
-                     , portionMiddle  = Nothing
-                     , portionBottom  = Nothing
-                     , portionParts   = []
-                     , portionPer     = Nothing }
-
-isEffectivePortion :: RelPortion -> Bool
-isEffectivePortion RelPortion { portionTop     = Nothing
-                              , portionMiddle  = Nothing
-                              , portionBottom  = Nothing
-                              , portionPer     = Nothing } = False
-isEffectivePortion _ = True
-
--- | Take portion of relation.
-relPortion :: (K.GetTermNames he, Ord c) => RelPortion -> he -> [[c]] -> [[c]]
-relPortion p@RelPortion { portionOrder = ord } he body = body' where
-    body' = K.unique (top p ++ mid p ++ bot p ++ parts p)
-    bodyOrd = K.relBodyOrder ord he body
-
-    top RelPortion { portionTop = Just n } = take n bodyOrd
-    top _ = []
-
-    mid RelPortion { portionMiddle = Just n } = K.takeMiddle n bodyOrd
-    mid _ = []
-
-    bot RelPortion { portionBottom = Just n } = K.takeEnd n bodyOrd
-    bot _ = []
-
-    parts RelPortion { portionParts = ps, portionPer = Just n } =
-        concat $ K.takeChunks n ps bodyOrd
-    parts _ = []
 
 
 -- ----------------------  compose-maybe
