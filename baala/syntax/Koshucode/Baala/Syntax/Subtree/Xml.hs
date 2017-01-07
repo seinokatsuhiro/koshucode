@@ -12,6 +12,7 @@ module Koshucode.Baala.Syntax.Subtree.Xml
     -- * XML tree
     XmlTree,
     xmlTrees,
+    xmlDecode,
 
     -- * Conversion
     XmlTreeOutput,
@@ -85,16 +86,6 @@ type XmlTree s = S.Subtree (XmlTerm s)
 type XmlTree' s = B.CodeTree (XmlTerm s) (XmlToken s)
 
 -- | Convert XML tokens to XML tree.
---
---   >>> B.printTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<hello>wonderful</world>")
---   > () (XmlElem "hello","hello")
---     - (XmlText,"wonderful")
---
---   >>> B.printTrees =<< B.abortLeft (xmlTrees $ xmlTokens "<a x='xx' y='yy'>")
---   > () (XmlElem "a","a")
---     - (XmlAttr "x","xx")
---     - (XmlAttr "y","yy")
---
 xmlTrees :: (Ord s, X.StringLike s) => [XmlToken s] -> B.Ab [XmlTree s]
 xmlTrees toks =
     do trees <- B.codeTrees bracket B.BracketNone toks
@@ -113,6 +104,20 @@ xmlUntoken :: XmlToken s -> XmlTerm s
 xmlUntoken (XmlOpen  n) = (XmlElem n, n)
 xmlUntoken (XmlClose n) = (XmlElem n, n)
 xmlUntoken (XmlTerm  z) = z
+
+-- | Decode XML trees.
+--
+--   >>> B.printTrees =<< B.abortLeft (xmlDecode "<hello>wonderful</world>")
+--   > () (XmlElem "hello","hello")
+--     - (XmlText,"wonderful")
+--
+--   >>> B.printTrees =<< B.abortLeft (xmlDecode "<a x='xx' y='yy'>")
+--   > () (XmlElem "a","a")
+--     - (XmlAttr "x","xx")
+--     - (XmlAttr "y","yy")
+--
+xmlDecode :: (Ord s, X.StringLike s) => s -> B.Ab [XmlTree s]
+xmlDecode = xmlTrees . xmlTokens
 
 
 -- ============================================  Conversion
