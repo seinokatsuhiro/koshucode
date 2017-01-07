@@ -16,8 +16,10 @@ module Koshucode.Baala.Syntax.Subtree.Xml
 
     -- * Conversion
     XmlTreeOutput,
+    RawJudge,
     xmlSubtree,
     xmlData,
+    xmlSubtreeData,
   ) where
 
 import qualified Text.HTML.TagSoup                       as X
@@ -125,6 +127,9 @@ xmlDecode = xmlTrees . xmlTokens
 -- | XML output tree.
 type XmlTreeOutput s = S.SubtreeOutput (XmlTerm s)
 
+-- | Judgement material.
+type RawJudge c = (S.JudgeClass, [S.Term c])
+
 -- | Calculate subtree of XML tree.
 xmlSubtree :: [S.SubtreePattern] -> [XmlTree String] -> [XmlTreeOutput String]
 xmlSubtree = S.subtreeWith xmlKeyString
@@ -136,7 +141,7 @@ xmlKeyString (XmlText    , _) = "@text"
 xmlKeyString (XmlComment , _) = "@comment"
 
 -- | Extract data from XML output tree.
-xmlData :: XmlTreeOutput String -> [(S.JudgeClass, [S.Term O.Value])]
+xmlData :: XmlTreeOutput String -> [RawJudge O.Value]
 xmlData = S.subtreeData . xmlValue
 
 xmlValue :: XmlTreeOutput String -> S.SubtreeOutput O.Value
@@ -153,3 +158,6 @@ xmlValue = snd . loop 1 where
     branch i xs' (x : xs) = case loop i x of
                               (i', x') -> branch i' (x' : xs') xs
 
+-- | Calculate XML subtree and extract data.
+xmlSubtreeData :: [S.SubtreePattern] -> [XmlTree String] -> [RawJudge O.Value]
+xmlSubtreeData ps ts = xmlData O.<++> xmlSubtree ps ts
