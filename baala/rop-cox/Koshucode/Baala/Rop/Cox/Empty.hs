@@ -90,17 +90,17 @@ consMaybe med =
                   mid   <- Rop.getMaybe Rop.getInt med "-mid"
                   bot   <- Rop.getMaybe Rop.getInt med "-bot"
                   Right $ K.def { portionOrder   = order
-                                , portionTop     = fromInteger <$> top
-                                , portionMiddle  = fromInteger <$> mid
-                                , portionBottom  = fromInteger <$> bot }
+                                , portionTop     = top
+                                , portionMiddle  = mid
+                                , portionBottom  = bot }
            | t "part"
              -> maybeOnly sh fill rmap $ do
                   order <- Rop.getTerms med "-order"
                   part  <- Rop.getInt med "-part"
                   per   <- Rop.getInt med "-of"
                   Right $ K.def { portionOrder   = order
-                                , portionParts   = [fromInteger part - 1]
-                                , portionPer     = Just $ fromInteger per }
+                                , portionParts   = [part - 1]
+                                , portionPer     = Just per }
            | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =

@@ -5,7 +5,7 @@
 module Koshucode.Baala.Rop.Base.Get.Cox
   ( -- * Content
     getContent, getContents,
-    getFiller, getInt,
+    getFiller, getInt, getInteger,
     getNamedContentTerms, getOptContentTerms,
 
     -- * Content expression
@@ -48,9 +48,13 @@ getOptContent opt = Rop.getOpt opt getContent
 getFiller :: (K.CContent c) => Rop.RopGet c c
 getFiller = getOptContent K.empty
 
--- | Get decimal integer content.
-getInt :: (K.CContent c) => Rop.RopGet K.DecimalInteger c
-getInt med name =
+-- | Get int content.
+getInt :: (K.CContent c) => Rop.RopGet Int c
+getInt med name = fromInteger <$> getInteger med name
+
+-- | Get integer content.
+getInteger :: (K.CContent c) => Rop.RopGet Integer c
+getInteger med name =
     do dec <- K.getDec $ getContent med name
        Right $ K.decimalNum dec
 

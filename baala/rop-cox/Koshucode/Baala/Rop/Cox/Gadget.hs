@@ -198,7 +198,7 @@ consNumber med =
     do n    <- Rop.getTerm                med "-term"
        ns   <- Rop.getOpt [] Rop.getTerms med "-order"
        from <- Rop.getOpt 0  Rop.getInt   med "-from"
-       Right $ relmapNumber med (n, ns, fromInteger from)
+       Right $ relmapNumber med (n, ns, from)
 
 -- | Create @number@ relmap.
 relmapNumber :: (K.CDec c, Ord c) => C.Intmed c -> (K.TermName, [K.TermName], Int) -> C.Relmap c
@@ -238,7 +238,7 @@ consRank med =
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
-       Right $ relmapRank med (n, ns, fromInteger from)
+       Right $ relmapRank med (n, ns, from)
 
 -- | Create @rank -dense@ relmap.
 relmapDenseRank :: (K.CDec c, Ord c) =>
@@ -264,7 +264,7 @@ relkitGapRank = relkitRanking K.sortByNameGapRank
 -- | __repeat I R__
 consRepeat :: (Ord c, K.CContent c) => C.RopCons c
 consRepeat med =
-  do cnt  <- Rop.getInt    med "-count"
+  do cnt  <- Rop.getInteger med "-count"
      rmap <- Rop.getRelmap med "-relmap"
      Right $ relmapRepeat med cnt rmap
 
