@@ -78,32 +78,30 @@ consMaybe med =
     do rmap <- Rop.getRelmap med "-relmap"
        fill <- Rop.getFiller med "-fill"
        sh   <- Rop.getMaybe Rop.getTerms med "-share"
-       case Rop.getTags med of
-         tags | "only" `elem` tags
-                  -> maybeOnly sh fill rmap $ Right K.def
-
-              | "order" `elem` tags
-                  -> maybeOnly sh fill rmap $ do
-                        order <- Rop.getTerms med "-order"
-                        top   <- Rop.getMaybe Rop.getInt med "-top"
-                        mid   <- Rop.getMaybe Rop.getInt med "-mid"
-                        bot   <- Rop.getMaybe Rop.getInt med "-bot"
-                        Right $ K.def { portionOrder   = order
-                                      , portionTop     = fromInteger <$> top
-                                      , portionMiddle  = fromInteger <$> mid
-                                      , portionBottom  = fromInteger <$> bot }
-
-              | "part" `elem` tags
-                  -> maybeOnly sh fill rmap $ do
-                        order <- Rop.getTerms med "-order"
-                        part  <- Rop.getInt med "-part"
-                        per   <- Rop.getInt med "-of"
-                        return $ K.def { portionOrder   = order
-                                       , portionParts   = [fromInteger part - 1]
-                                       , portionPer     = Just $ fromInteger per }
-
-              | otherwise -> Right $ relmapMaybe med sh fill rmap
-
+       case Rop.getTag med of
+         t | t "plain"
+             -> Right $ relmapMaybe med sh fill rmap
+           | t "only"
+             -> maybeOnly sh fill rmap $ Right K.def
+           | t "order"
+             -> maybeOnly sh fill rmap $ do
+                  order <- Rop.getTerms med "-order"
+                  top   <- Rop.getMaybe Rop.getInt med "-top"
+                  mid   <- Rop.getMaybe Rop.getInt med "-mid"
+                  bot   <- Rop.getMaybe Rop.getInt med "-bot"
+                  Right $ K.def { portionOrder   = order
+                                , portionTop     = fromInteger <$> top
+                                , portionMiddle  = fromInteger <$> mid
+                                , portionBottom  = fromInteger <$> bot }
+           | t "part"
+             -> maybeOnly sh fill rmap $ do
+                  order <- Rop.getTerms med "-order"
+                  part  <- Rop.getInt med "-part"
+                  per   <- Rop.getInt med "-of"
+                  Right $ K.def { portionOrder   = order
+                                , portionParts   = [fromInteger part - 1]
+                                , portionPer     = Just $ fromInteger per }
+           | otherwise -> Msg.unkTag
     where
       maybeOnly sh fill rmap createPortion =
           do cops  <- Rop.getLet med "-let"

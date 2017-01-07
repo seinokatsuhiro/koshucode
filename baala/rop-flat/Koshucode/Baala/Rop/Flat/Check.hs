@@ -38,10 +38,10 @@ ropsCheck = Rop.rops "check"
 consCheckTerm :: C.RopCons c
 consCheckTerm med =
   case Rop.getTag med of
-    tag | tag "just" -> call relmapCheckTermJust "-just"
-        | tag "has"  -> call relmapCheckTermHas  "-has"
-        | tag "but"  -> call relmapCheckTermBut  "-but"
-        | otherwise  -> K.bug "check-term"
+    t | t "just"  -> call relmapCheckTermJust "-just"
+      | t "has"   -> call relmapCheckTermHas  "-has"
+      | t "but"   -> call relmapCheckTermBut  "-but"
+      | otherwise -> Msg.unkTag
     where call f a = do ns <- Rop.getTerms med a
                         Right $ f med ns
 

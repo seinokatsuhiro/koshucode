@@ -12,7 +12,7 @@ module Koshucode.Baala.Rop.Base.Get.Get
     getTree, 
 
     -- * Basic
-    getTag, getTags,
+    getTag,
     getSwitch, getMaybe, getOpt,
     getWord,
   ) where
@@ -70,8 +70,14 @@ getPara :: C.Intmed c -> K.AttrPara
 getPara = C.lexAttr . C.medLexmap
 
 -- | Test usage tag.
-getTag :: C.Intmed c -> K.ParaTag -> Bool
-getTag med tag = tag `elem` getTags med
+--
+--   > case Rop.getTag med of
+--   >   t | t "foo"   -> ...
+--   >     | t "bar"   -> ...
+--   >     | otherwise -> Msg.unkTag
+--
+getTag :: C.Intmed c -> K.Test K.ParaTag
+getTag med = (`elem` getTags med)
 
 -- | Get usage tags.
 getTags :: C.Intmed c -> [K.ParaTag]

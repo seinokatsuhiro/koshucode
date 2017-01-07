@@ -148,13 +148,12 @@ consNow :: (K.CTime c) => C.RopCons c
 consNow med =
   do n <- Rop.getTerm med "-term"
      let tim    = C.globalTime $ C.getGlobal med
-         tag    = (`elem` Rop.getTags med)
          cons f = consAdd1 (n, K.pTime $ f tim) med
-     case () of
-       _ | tag "local"  -> cons K.timeLocalize
-         | tag "zoned"  -> cons id
-         | tag "utc"    -> cons $ K.timeAltZone $ const 0
-         | otherwise    -> Msg.adlib "unknown tag"
+     case Rop.getTag med of
+       t | t "local"  -> cons K.timeLocalize
+         | t "zoned"  -> cons id
+         | t "utc"    -> cons $ K.timeAltZone $ const 0
+         | otherwise  -> Msg.unkTag
 
 
 -- ----------------------  Add term

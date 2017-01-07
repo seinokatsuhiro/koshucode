@@ -34,6 +34,7 @@ module Koshucode.Baala.Rop.Base.Message
     notImpl,
     diffHead,
     notNestRel,
+    unkTag,
   ) where
 
 import Koshucode.Baala.Core.Message
@@ -160,3 +161,6 @@ notNestRel t he =
     K.leftLines "Not a nested relation"
          $ detailTermRel "Given" (K.getTermNames t) he
 
+-- | [BUG: Unknown tag]
+unkTag :: K.Ab a
+unkTag = K.leftBecause "BUG: Unknown tag"
